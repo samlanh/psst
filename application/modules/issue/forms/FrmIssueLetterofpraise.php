@@ -1,6 +1,6 @@
 <?php
 
-class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
+class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
 {
 	protected  $tr;
 
@@ -36,55 +36,21 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     	}
     	$_branch_id->setValue($request->getParam("branch_id"));
     	
-    	$dept = new Zend_Dojo_Form_Element_TextBox('dept_eng');
-    	$dept->setAttribs(array(
+    	$academic_year = new Zend_Dojo_Form_Element_TextBox('academic_year');
+    	$academic_year->setAttribs(array(
     			'dojoType'=>'dijit.form.TextBox',
     			'class'=>'fullside height-text',
-    			'placeholder'=>$this->tr->translate("FACULTY_ENNAME"),
-    			'missingMessage'=>$this->tr->translate("Forget Enter Department")
+    			'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Academic Year")
     	));
     	
-    	$dept_kh = new Zend_Dojo_Form_Element_TextBox('dept_kh');
-    	$dept_kh->setAttribs(array(
+    	$grade = new Zend_Dojo_Form_Element_TextBox('grade');
+    	$grade->setAttribs(array(
     			'dojoType'=>'dijit.form.TextBox',
     			'class'=>'fullside height-text',
-    			'placeholder'=>$this->tr->translate("FACULTY_KHNAME"),
-    			'missingMessage'=>$this->tr->translate("Forget Enter Department")
+    			'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Academic Year")
     	));
-    	
-    	$program_kh = new Zend_Dojo_Form_Element_TextBox('program_kh');
-    	$program_kh->setAttribs(array(
-    			'dojoType'=>'dijit.form.TextBox',
-    			'class'=>'fullside height-text',
-    			'placeholder'=>$this->tr->translate("MAJOR_KHNAME"),
-    			'missingMessage'=>$this->tr->translate("Forget Enter Program")
-    	));
-    	
-    	$program_en = new Zend_Dojo_Form_Element_TextBox('program_en');
-    	$program_en->setAttribs(array(
-    			'dojoType'=>'dijit.form.TextBox',
-    			'class'=>'fullside height-text',
-    			'placeholder'=>$this->tr->translate("MAJOR_ENNAME"),
-    			'missingMessage'=>$this->tr->translate("Forget Enter Program")
-    	));
-    	
-    	$from_date= new Zend_Dojo_Form_Element_DateTextBox('from_date');
-    	$from_date->setAttribs(array(
-    			'dojoType'=>"dijit.form.DateTextBox",
-    			'class'=>'fullside',
-    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-    	));
-    	$from_date->setValue(date("Y-m-d"));
-    	
-    	$to_date= new Zend_Dojo_Form_Element_DateTextBox('to_date');
-    	$date = date("Y-m-d",strtotime("+1 month"));
-    	$to_date->setAttribs(array(
-    			'dojoType'=>"dijit.form.DateTextBox",
-    			'class'=>'fullside',
-    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-    	));
-    	$to_date->setValue($date);
-    	
     	
     	$issue_date= new Zend_Dojo_Form_Element_DateTextBox('issue_date');
     	$issue_date->setAttribs(array(
@@ -156,19 +122,10 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
 
     		$_branch_id->setValue($data["branch_id"]);
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
-    		$dept->setValue($data["dept_eng"]);
-    		$dept_kh->setValue($data["dept_kh"]);
-    		$program_kh->setValue($data["program_kh"]);
-    		$program_en->setValue($data["program_en"]);
     		
-    		$from_date->setValue("");
-    		$to_date->setValue("");
-    		if (!empty($data["from_date"])){
-    			$from_date->setValue($data["from_date"]);
-    		}
-    		if (!empty($data["to_date"])){
-    			$to_date->setValue($data["to_date"]);
-    		}
+    		$academic_year->setValue($data["academic_year"]);
+    		$grade->setValue($data["grade"]);
+    		
     		if (!empty($data["issue_date"])){
     			$issue_date->setValue($data["issue_date"]);
     		}
@@ -181,12 +138,8 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     	
     	$this->addElements(array(
     			$_branch_id,
-    			$dept,
-    			$dept_kh,
-    			$program_kh,
-    			$program_en,
-    			$from_date,
-    			$to_date,
+    			$academic_year,
+    			$grade,
     			$issue_date,
     			$note,
     			$id,

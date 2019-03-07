@@ -1496,49 +1496,264 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    public function getStudentInfo($id){
-    	$db = $this->getAdapter();
+//     public function getStudentInfo($id){
+//     	$db = $this->getAdapter();
     
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$lang = $_db->currentlang();
+//     	$_db = new Application_Model_DbTable_DbGlobal();
+//     	$lang = $_db->currentlang();
     
-    	if($lang==1){// khmer
-    		$label = "name_kh";
-    		$village_name = "village_namekh";
-    		$commune_name = "commune_namekh";
-    		$district_name = "district_namekh";
-    		$province = "province_kh_name";
-    	}else{ // English
-    		$label = "name_en";
-    		$village_name = "village_name";
-    		$commune_name = "commune_name";
-    		$district_name = "district_name";
-    		$province = "province_en_name";
-    	}
+//     	if($lang==1){// khmer
+//     		$label = "name_kh";
+//     		$village_name = "village_namekh";
+//     		$commune_name = "commune_namekh";
+//     		$district_name = "district_namekh";
+//     		$province = "province_kh_name";
+//     	}else{ // English
+//     		$label = "name_en";
+//     		$village_name = "village_name";
+//     		$commune_name = "commune_name";
+//     		$district_name = "district_name";
+//     		$province = "province_en_name";
+//     	}
     
-    	$sql = "SELECT *,
-    	(SELECT CONCAT(f.from_academic,'-',f.to_academic) FROM rms_tuitionfee AS f WHERE f.id=(SELECT g.academic_year FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AND f.`status`=1 GROUP BY f.from_academic,f.to_academic,f.generation)  AS academic_year,
-    	(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
-    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
-    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
-    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+//     	$sql = "SELECT *,
+//     	(SELECT CONCAT(f.from_academic,'-',f.to_academic) FROM rms_tuitionfee AS f WHERE f.id=(SELECT g.academic_year FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AND f.`status`=1 GROUP BY f.from_academic,f.to_academic,f.generation)  AS academic_year,
+//     	(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+//     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+//     	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
+//     	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
+//     	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
+//     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+//     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+//     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
     		
-    	(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
-    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
-    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
-    	(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title,
-    	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex
+//     	(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
+//     	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
+//     	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
+//     	(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title,
+//     	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex
     	
-    	FROM rms_student as s
-    	WHERE s.stu_id =".$id."
-    	AND s.customer_type=1";
+//     	FROM rms_student as s
+//     	WHERE s.stu_id =".$id."
+//     	AND s.customer_type=1";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission();
+//     	return $db->fetchRow($sql);
+//     }
+    
+    function getStudenCetificate($search){
+    	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission();
+    	$currentLang = $dbp->currentlang();
+    	$colunmname='name_en';
+    	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
+    	$dept="c.dept_eng";
+    	$program="c.program_en";
+    	if ($currentLang==1){
+    		$colunmname='name_kh';
+    		$stu_name="st.stu_khname";
+    		$dept="c.dept_kh";
+    		$program="c.program_kh";
+    	}
+    	
+    	$sql="SELECT cd.*,
+				(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
+				$dept AS dept_kh,
+				$program AS program_kh,
+				c.from_date,
+				c.to_date,
+				c.issue_date,
+				st.stu_enname,
+				st.last_name,
+				st.stu_khname,
+				st.stu_code,
+				$stu_name AS stu_name,
+				(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+			FROM 
+				`rms_issuecertificate_detail` AS cd,
+				rms_student AS st,
+				`rms_issuecertificate` AS c
+			WHERE 
+				c.id = cd.certificate_id
+				AND st.stu_id = cd.stu_id
+			";
+    	$where="";
+    	
+    	$from_date =(empty($search['start_date']))? '1': "c.issue_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "c.issue_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    	
+    	
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " c.dept_kh LIKE '%{$s_search}%'";
+    		$s_where[]=" c.dept_en LIKE '%{$s_search}%'";
+    		$s_where[]=" c.program_kh LIKE '%{$s_search}%'";
+    		$s_where[]=" c.program_en LIKE '%{$s_search}%'";
+    		$s_where[]=" st.stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" st.last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" st.stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]=" st.stu_code LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['study_year'];
+    	}
+    	if(!empty($search['group'])){
+    		$where.=' AND c.group_id='.$search['group'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND (SELECT g.degree FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['degree'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade_all'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND c.branch_id='.$search['branch_id'];
+    	}
+    	
+    	$where.=$dbp->getAccessPermission("c.branch_id");
+    	$order=" ORDER BY c.id DESC";
+    	return $db->fetchAll($sql.$where.$order);
+    }
+    function getStudenCetificateById($id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT cd.*,
+	    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+	    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
+	    	c.dept_kh,
+	    	c.dept_eng,
+	    	c.program_kh,
+	    	c.program_en,
+	    	c.from_date,
+	    	c.to_date,
+	    	st.stu_enname,
+	    	st.last_name,
+	    	st.stu_khname,
+	    	st.stu_code,
+	    	st.dob,
+	    	st.photo,
+	    	CONCAT(st.last_name,' ',st.stu_enname) AS stu_name,
+	    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex,
+	    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sexkh
+	    	FROM
+	    	`rms_issuecertificate_detail` AS cd,
+	    	rms_student AS st,
+	    	`rms_issuecertificate` AS c
+	    	WHERE
+	    	c.id = cd.certificate_id
+	    	AND st.stu_id = cd.stu_id AND cd.id=$id LIMIT 1
+    	";
     	return $db->fetchRow($sql);
-    	echo $sql; exit();
+    }
+    
+    function getStudenLetterofpraise($search){
+    	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
+    	$colunmname='name_en';
+    	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
+    	if ($currentLang==1){
+    		$colunmname='name_kh';
+    		$stu_name="st.stu_khname";
+    	}
+    	 
+    	$sql="SELECT cd.*,
+		    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+		    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
+		    	c.issue_date,
+		    	c.academic_year,
+		    	c.grade,
+		    	st.stu_enname,
+		    	st.last_name,
+		    	st.stu_khname,
+		    	st.stu_code,
+		    	$stu_name AS stu_name,
+		    	(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+	    	FROM
+		    	`rms_issue_letterpraise_detail` AS cd,
+		    	rms_student AS st,
+		    	`rms_issue_letterpraise` AS c
+	    	WHERE
+		    	c.id = cd.letterpraise_id
+		    	AND st.stu_id = cd.stu_id";
+    	
+    	$where="";
+    	 
+    	$from_date =(empty($search['start_date']))? '1': "c.issue_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "c.issue_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    	 
+    	 
+    	if(!empty($search['title'])){
+    	$s_where = array();
+    	$s_search = addslashes(trim($search['title']));
+    	$s_where[]=" c.academic_year LIKE '%{$s_search}%'";
+    	$s_where[]=" c.grade LIKE '%{$s_search}%'";
+    	$s_where[] = " (SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+    	$s_where[]=" (SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) LIKE '%{$s_search}%'";
+    	$s_where[]=" st.stu_enname LIKE '%{$s_search}%'";
+    	$s_where[]=" st.last_name LIKE '%{$s_search}%'";
+    	$s_where[]=" st.stu_khname LIKE '%{$s_search}%'";
+    	$s_where[]=" st.stu_code LIKE '%{$s_search}%'";
+    	$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    	$where.=' AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['study_year'];
+    	}
+    	if(!empty($search['group'])){
+    			$where.=' AND c.group_id='.$search['group'];
+    	}
+    	if(!empty($search['degree'])){
+	    	$where.=' AND (SELECT g.degree FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['degree'];
+	    }
+	    if(!empty($search['grade_all'])){
+	    	$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade_all'];
+	    }
+	    if(!empty($search['branch_id'])){
+	   		 $where.=' AND c.branch_id='.$search['branch_id'];
+	    }
+     
+	    $where.=$dbp->getAccessPermission("c.branch_id");
+	    $order=" ORDER BY c.id DESC";
+	    return $db->fetchAll($sql.$where.$order);
+    }
+    
+    function getStudenLetterofpraiseById($id){
+    	$db = $this->getAdapter();
+    	
+   		 $dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
+    	$colunmname='name_en';
+    	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
+    	if ($currentLang==1){
+    		$colunmname='name_kh';
+    		$stu_name="st.stu_khname";
+    	}
+    	$sql="SELECT cd.*,
+    	c.academic_year,
+    	c.grade,
+    	c.issue_date,
+    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
+    	st.stu_enname,
+    	st.last_name,
+    	st.stu_khname,
+    	st.stu_code,
+    	st.dob,
+    	st.photo,
+    	$stu_name AS stu_name,
+    	(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+    	FROM
+    	`rms_issue_letterpraise_detail` AS cd,
+    	rms_student AS st,
+    	`rms_issue_letterpraise` AS c
+    	WHERE
+    	c.id = cd.letterpraise_id
+    	AND st.stu_id = cd.stu_id AND cd.id=$id LIMIT 1
+    	";
+    	return $db->fetchRow($sql);
     }
 }

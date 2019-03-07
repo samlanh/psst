@@ -1088,8 +1088,92 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	
 	function certificateLetterofpraiseAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
-		$result = $db->getStudentInfo($id);
+		$result = $db->getStudenLetterofpraiseById($id);
+		if (empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-student-letterofpraise");
+			exit();
+		}
 		$this->view->rs = $result;
+	}
+	function certificateAction(){
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+		$result = $db->getStudenCetificateById($id);
+		if (empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-student-cetificate");
+			exit();
+		}
+		$this->view->rs = $result;
+	}
+	function rptStudentCetificateAction(){
+		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'branch_id'		=>'',
+					'degree'		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'group'			=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		
+		$this->view->row = $db->getStudenCetificate($search);
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		
+		
+		$this->view->search=$search;
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+	}
+	function rptStudentLetterofpraiseAction(){
+		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'branch_id'		=>'',
+					'degree'		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'group'			=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+	
+		$this->view->row = $db->getStudenLetterofpraise($search);
+	
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+	
+		$this->view->search=$search;
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 }

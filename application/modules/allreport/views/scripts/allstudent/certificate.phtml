@@ -1,0 +1,188 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('CERTIFICATE'));
+$_dbgb = new Application_Model_DbTable_DbGlobal();
+$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+?>
+<div style="margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CERTIFICATE');?></h4>
+			</div>
+			<div class="col-sm-4 text-right">
+			</div>
+		</div>
+	</div>
+	<div class="card-box">
+		<div id="divPrint">
+			<?php $image = $this->baseUrl().'/images/card/certificate/certificate.jpg';?>
+			<style>
+				.certificate{
+					background-image: url('<?php echo $image;?>');
+					background-size: 100%;
+					background-repeat: no-repeat;
+					position: relative;
+					
+					border:solid 1px #ccc;
+					display:inline-block; 
+					line-height: 23px;   
+					width: 27.94cm; 
+					height:19.8cm;   
+					color: #3f3f95; 
+					font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
+				}
+				.one-row-certif{
+					text-align:center; 
+					margin: 0 auto; 
+					padding: 0;
+		
+				}
+					
+				span.value{
+					 font-size: 16px;
+					 display: inline-block;
+					     color: #283d84;
+				}
+				span.student_name {
+				    position: absolute;
+				    top: 287px;
+				    left: 190px;
+				    min-width: 220px;
+				    text-align: center;
+				}
+				
+				span.gender {
+				    position: absolute;
+				    top: 287px;
+				    left: 440px;
+				    min-width: 70px;
+				    text-align: center;
+				}
+					
+				span.dob {
+				    position: absolute;
+				    top: 319px;
+				    left: 248px;
+				    min-width: 220px;
+				    text-align: center;
+				}
+				
+				span.dept {
+					position: absolute;
+					top: 380px;
+					left: 106px;
+					min-width: 410px;
+					text-align: center;
+				}
+				
+				span.duration {
+					position: absolute;
+					top: 413px;
+					left: 208px;
+					font-size: 14px;
+					min-width: 295px;
+					text-align: center;
+					font-family: 'Times New Roman','Khmer OS Battambang';
+					font-weight: 500;
+				}
+				
+				
+				span.student_name_eng {
+				    position: absolute;
+				    top: 287px;
+				    right: 190px;
+				    min-width: 220px;
+				    text-align: center;
+					font-weight: bold;
+				}
+				span.gender_eng {
+					position: absolute;
+					top: 287px;
+					right: 101px;
+					min-width: 60px;
+					text-align: center;
+					font-weight: bold;
+				}
+				span.dob_eng {
+				    position: absolute;
+				    top: 319px;
+				    right: 248px;
+				    min-width: 220px;
+				    text-align: center;
+				}
+				span.dob_eng {
+					position: absolute;
+					top: 319px;
+					right: 125px;
+					min-width: 300px;
+					text-align: center;
+					font-weight: bold;
+				}
+				
+				span.dept_eng {
+					position: absolute;
+					top: 379px;
+					right: 106px;
+					min-width: 410px;
+					text-align: center;
+					font-weight: bold;
+				}
+				
+				span.duration_eng {
+					position: absolute;
+					top: 413px;
+					right: 115px;
+					font-size: 14px;
+					min-width: 330px;
+					text-align: center;
+					font-family: 'Times New Roman','Khmer OS Battambang';
+					font-weight: 500;
+				}
+				
+				.profile-card-block .photo {
+					width: initial;
+					position: absolute;
+					left: 474px;
+					border: solid 1px #4a4a4a;
+					bottom: 110px;
+				}
+				.photo img {
+					width: 100px;
+					height: 127px;
+				}
+			</style>
+			<div class="one-row-certif" >
+				<div class="certificate">
+					<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
+					<span class="value gender"><?php echo $this->rs['sexkh'];?></span>
+					<span class="value dob"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))."-".$month[date("m",strtotime($this->rs['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></span>
+					<span class="value dept"><?php echo $this->rs['dept_kh'];?></span>
+					<span class="value duration"><?php if(!empty($this->rs['from_date']) AND $this->rs['from_date'] != "0000-00-00"){ echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['from_date'])))." ".$month[date("m",strtotime($this->rs['from_date']))]." ".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['from_date'])))." ដល់ ".$_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['to_date'])))." ".$month[date("m",strtotime($this->rs['to_date']))]." ".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['to_date']))); }?></span>
+					
+					<span class="value student_name_eng"><?php echo strtoupper($this->rs['stu_name']);?></span>
+					<span class="value gender_eng"><?php echo $this->rs['sex'];?></span>
+					<span class="value dob_eng"><?php echo date("d",strtotime($this->rs['dob']))."-".date("F",strtotime($this->rs['dob']))."-".date("Y",strtotime($this->rs['dob']));?></span>
+					<span class="value dept_eng"><?php echo $this->rs['dept_eng'];?></span>
+					<span class="value duration_eng"><?php if(!empty($this->rs['from_date'])  AND $this->rs['from_date'] != "0000-00-00"){ echo date("d",strtotime($this->rs['from_date']))."-".date("F",strtotime($this->rs['from_date']))."-".date("Y",strtotime($this->rs['from_date']))." To ".date("d",strtotime($this->rs['to_date']))."-".date("F",strtotime($this->rs['to_date']))."-".date("Y",strtotime($this->rs['to_date'])); }?></span>
+					
+					
+					<?php 
+					if(!empty($this->rs['photo'])){
+						if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+							?>
+							<div class="profile-card-block">
+								<div class="photo">
+									<img  src="<?php echo $image;?>" alt="profile-image" >
+								</div>
+							</div>
+					<?php 	
+						}
+					}?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

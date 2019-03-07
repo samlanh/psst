@@ -67,18 +67,6 @@
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAJOR_KHNAME");?></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("program_kh");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAJOR_ENNAME");?></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("program_en");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TERM_STUDY");?></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -87,6 +75,12 @@
 			                <div class="col-md-6 col-sm-6 col-xs-12">
 			                	<?php echo $frm->getElement("to_date");?>
 			                </div>
+		                </div>
+		             </div>
+		              <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ISSUE_DATE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("issue_date");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -187,8 +181,6 @@ function getGroupInfo(){
 	if(group=='' || group==-1){
 		 dijit.byId('dept_kh').set('value',""); 
 		    dijit.byId('dept_eng').set('value',"");  
-		    dijit.byId('program_kh').set('value',"");  
-		    dijit.byId('program_en').set('value',""); 
 		return false;
 	}
 	
@@ -199,11 +191,8 @@ function getGroupInfo(){
 			},
 		handleAs:"json",
 		load: function(data) {
-		    dijit.byId('dept_kh').set('value',data.degree_kh); 
-		    dijit.byId('dept_eng').set('value',data.degree_eng);  
-		    dijit.byId('program_kh').set('value',data.grade_kh);  
-		    dijit.byId('program_en').set('value',data.grade_eng);   
-		   
+		    dijit.byId('dept_kh').set('value',data.degree_kh+" ("+data.grade_kh+")"); 
+		    dijit.byId('dept_eng').set('value',data.degree_eng+" ("+data.grade_eng+")");  
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {

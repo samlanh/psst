@@ -1,5 +1,5 @@
 <?php
-class Issue_IndexController extends Zend_Controller_Action {
+class Issue_LetterofpraiseController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */
@@ -21,17 +21,17 @@ class Issue_IndexController extends Zend_Controller_Action {
 				);
 			}
 			
-			$db = new Issue_Model_DbTable_DbCertification();
+			$db = new Issue_Model_DbTable_DbLetterofpraise();
 			$rs_rows= $db->getAllIssueCertification($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 				
-			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","STATUS");
+			$collumns = array("BRANCH","GROUP_CODE","ACADEMIC_YEAR","GROUP","ISSUE_DATE","STATUS");
 			$link=array(
-					'module'=>'issue','controller'=>'index','action'=>'edit',
+					'module'=>'issue','controller'=>'letterofpraise','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link,'dept_kh'=>$link,'program_kh'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link));
 			
 			$this->view->search = $search;
 		}catch (Exception $e){
@@ -40,29 +40,30 @@ class Issue_IndexController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 		
-		$frm = new Issue_Form_FrmIssueCertificate();
+		$frm = new Issue_Form_FrmIssueLetterofpraise();
 		$frm->FrmIssueCertificate(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
 	}
 	public function addAction(){
-		$_db = new Issue_Model_DbTable_DbCertification();
+		$_db = new Issue_Model_DbTable_DbLetterofpraise();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
+				
 				$sms="INSERT_SUCCESS";
-				$checkExist = $_db->checkGroupIssueCertificate($_data);
+				$checkExist = $_db->checkGroupIssueLetterpraise($_data);
 				if(!empty($checkExist)){
 					$sms = "RECORD_EXIST";
-					Application_Form_FrmMessage::Sucessfull($sms,"/issue/index");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
 					exit();
 				}
 				
-				$_db->addIssueCertificate($_data);
+				$_db->addIssueLetterpraise($_data);
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/issue/index");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,"/issue/index/add");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise/add");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -70,20 +71,20 @@ class Issue_IndexController extends Zend_Controller_Action {
 			}
 		}
 		
-		$frm = new Issue_Form_FrmIssueCertificate();
+		$frm = new Issue_Form_FrmIssueLetterofpraise();
 		$frm->FrmIssueCertificate(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
 	}
 	
 	public function editAction(){
-		$_db = new Issue_Model_DbTable_DbCertification();
+		$_db = new Issue_Model_DbTable_DbLetterofpraise();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="EDIT_SUCCESS";
-				$_db->updateIssueCertificate($_data);
-				Application_Form_FrmMessage::Sucessfull($sms,"/issue/index");
+				$_db->updateIssueLetterpraise($_data);
+				Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -92,47 +93,17 @@ class Issue_IndexController extends Zend_Controller_Action {
 		
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
-		$row =$_db->getIssueCertificationById($id);
+		$row =$_db->getIssueLetterofpraiseById($id);
 		$this->view->row = $row;
 		
-		$this->view->rowdetail =$_db->getIssueCetifStudent($id);
+		$this->view->rowdetail =$_db->getIssueLetterofpraiseStudent($id);
 		
-		$frm = new Issue_Form_FrmIssueCertificate();
+		$frm = new Issue_Form_FrmIssueLetterofpraise();
 		$frm->FrmIssueCertificate($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
 	}
-	function getgroupcompleteAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			
-			$branch_id = empty($data['branch_id'])?0:$data['branch_id'];
-			$_dbgb = new Application_Model_DbTable_DbGlobal();
-			$group = $_dbgb->getAllCompleteGroupByBranch($branch_id);
-			
-			print_r(Zend_Json::encode($group));
-			exit();
-		}
-	}
 	
-	function getAllStudentAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$student = $db->getAllPassStudentGroup($data['group']);
-			print_r(Zend_Json::encode($student));
-			exit();
-		}
-	}
-	function getgroupinfoAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$student = $db->getStudentGroupInfoById($data['group']);
-			print_r(Zend_Json::encode($student));
-			exit();
-		}
-	}
 	
 }
 

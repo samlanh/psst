@@ -11,16 +11,16 @@ class Global_Model_DbTable_DbDistrict extends Zend_Db_Table_Abstract
     
 	public function addDistrict($_data){
 		$_arr=array(
-				'code'	  => $_data['code'],
+				'code'	  	  => $_data['code'],
 				'pro_id'	  => $_data['province_name'],
-				'district_name'	  => $_data['district_name'],
-				'district_namekh'	  => $_data['district_namekh'],
-				//'displayby'	  => $_data['display'],
-				'status'	  => $_data['status'],
+				'district_name'=> $_data['district_name'],
+				'district_namekh'=> $_data['district_namekh'],
+				'status'	  => 1,
 				'modify_date' => Zend_Date::now(),
 				'user_id'	  => $this->getUserId()
 		);
 		if(!empty($_data['id'])){
+			$_arr['status']=$_data['status'];
 			$where = 'dis_id = '.$_data['id'];
 			return  $this->update($_arr, $where);
 		}else{
@@ -28,16 +28,14 @@ class Global_Model_DbTable_DbDistrict extends Zend_Db_Table_Abstract
 		}
 	}
 	public function addDistrictByAjax($_data){
-		$_arr=array(
+			$_arr=array(
 				'pro_id'	  		=> $_data['province_names'],
 				'district_name'	  	=> $_data['pop_district_name'],
 				'district_namekh'	=> $_data['pop_district_namekh'],
-				//'displayby'	  => $_data['display'],
 				'status'	  		=> 1,
 				'modify_date' 		=> Zend_Date::now(),
 				'user_id'	  		=> $this->getUserId()
-		);
-		
+			);
 			return  $this->insert($_arr);
 	}
 	public function getDistrictById($id){

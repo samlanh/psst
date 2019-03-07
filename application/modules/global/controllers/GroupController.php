@@ -31,7 +31,6 @@ class Global_GroupController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			
 			$collumns = array("BRANCH","GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","NOTE","PROCESS_TYPE","STATUS");
-			//"START_DATE","END_DATE",
 			$link=array(
 					'module'=>'global','controller'=>'group','action'=>'edit',
 			);
@@ -39,15 +38,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
-// 		$frm = new Application_Form_FrmOther();
-// 		$this->view->add_major = $frm->FrmAddMajor(null);
-// 		$frm = new Global_Form_FrmSearchMajor();
-// 		$frm = $frm->frmSearchTeacher();
-// 		Application_Model_Decorator::removeAllDecorator($frm);
-// 		$this->view->frm_search = $frm;
-		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
@@ -56,7 +47,7 @@ class Global_GroupController extends Zend_Controller_Action {
 	function addAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			try {
+			try{
 				$sms="INSERT_SUCCESS";
 				$db= new Global_Model_DbTable_DbGroup();
 				$group_id= $db->AddNewGroup($data);
@@ -349,7 +340,7 @@ class Global_GroupController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
     		$group = $db->getAllGroupByBranch($data['branch_id']);
-    		if (empty($data['noaddnew'])){
+    		if(!empty($data['noaddnew'])){
     			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		}
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));

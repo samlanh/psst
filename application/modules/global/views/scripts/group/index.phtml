@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('GROUP'));
-	$url_copy =$this->url(array('module'=>'global','controller'=>'group','action'=>'copy'));
 	$formList = new Application_Form_Frmtable();	
     $frm =  $this->form_search;
     $urlCopy = $this->baseUrl()."/global/group/copy/id/";
@@ -46,7 +45,7 @@
                 	</div>
                 	<div class="col-md-3 col-sm-3 col-xs-12">
                 		<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />	
-	                   		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	                   	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                 	</div>
                 </div>
 			</form>
@@ -57,9 +56,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-	dojo.require("dijit.form.CheckBox"); 
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');
@@ -74,14 +70,12 @@
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-
 	var row=0;
 	var url="";
 	$(function(){
 		$.contextMenu({
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
-			
 				var m = "clicked: " + key;
 				if(key=="edit"){
 					url='<?php echo $urlEdit;?>';

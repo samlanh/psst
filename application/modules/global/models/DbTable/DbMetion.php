@@ -17,9 +17,7 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 			ms.status,
 			(SELECT first_name FROM `rms_users` WHERE id=ms.user_id LIMIT 1) as user_name 
 			 FROM `rms_metionscore_setting` AS ms
-    	WHERE
-    	1
-    	";
+    	WHERE 1 ";
     	$where = "";
     	if(!empty($search['search'])){
     		$s_where=array();
@@ -58,7 +56,6 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 				foreach ($ids as $i){
 					$arr = array(
 							'metion_score_id'	=>$id,
-// 							'min_score'			=>$data['min_score'.$i],
 							'max_score'			=>$data['max_score'.$i],
 							'metion_grade'		=>$data['metion_grade'.$i],
 							'metion_in_khmer'	=>$data['metion_khmer'.$i],
@@ -69,7 +66,8 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 				}
     		}
     	}catch(Exception $e){
-    		echo $e->getMessage();
+    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 	}
 	
@@ -120,7 +118,6 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 					if (!empty($data['detailid'.$i])){
 						$arr = array(
 								'metion_score_id'	=>$id,
-								//'min_score'			=>$data['min_score'.$i],
 								'max_score'			=>$data['max_score'.$i],
 								'metion_grade'		=>$data['metion_grade'.$i],
 								'metion_in_khmer'	=>$data['metion_khmer'.$i],
@@ -132,7 +129,6 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 					}else{
 						$arr = array(
 								'metion_score_id'	=>$id,
-								//'min_score'			=>$data['min_score'.$i],
 								'max_score'			=>$data['max_score'.$i],
 								'metion_grade'		=>$data['metion_grade'.$i],
 								'metion_in_khmer'	=>$data['metion_khmer'.$i],
@@ -144,7 +140,8 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 				}
 			}
     	}catch(Exception $e){
-    		echo $e->getMessage();
+    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 	}
 	function getMentionSettingById($id=null){
@@ -176,6 +173,3 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 		return null;
 	}
 }
-
-
-

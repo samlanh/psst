@@ -10,19 +10,19 @@
 	    overflow-y: auto;
 	    max-height: 300px;
 	}
-	.tab-content.vertical div.tab-pane {
+	.tab-content.vertical div.tab-pane{
 	    overflow-y: auto;
 	    max-height: 300px;
 	}
-	.tab-content.vertical div.tab-pane {
+	.tab-content.vertical div.tab-pane{
     	min-height: 0px !important;
 	}
 	.tablesorter tr td{
 		border: 1px solid #000;	
 	}
-	.card-box-border {
+	.card-box-border{
     	background-color: #ffffff;
-    	border: 1px solid rgba(98, 103, 115, 0.2);
+    	border:1px solid rgba(98, 103, 115, 0.2);
     	padding: 10px;
     	margin-bottom: 20px;
     	color: #000;
@@ -113,6 +113,7 @@ label {
 table.collape tbody td{padding: 0px !important;}
 .hover:hover{background: #ddd;}
 #lbl_header {display: initial !important;}
+tr.head-td th{padding: 5px 2px;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -1054,7 +1055,7 @@ function addRow() {
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
 			template+='<td style="width:70px"><input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td style="width:50px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
 			template+='<option value="0"></option>';	
 			<?php if(!empty($this->rsdiscount))foreach($this->rsdiscount as $rsdis){?>

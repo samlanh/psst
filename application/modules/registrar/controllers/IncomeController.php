@@ -2,8 +2,6 @@
 
 class Registrar_IncomeController extends Zend_Controller_Action
 {
-	const REDIRECT_URL = '/registrar/expense';
-	
     public function init()
     {
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -30,10 +28,8 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		}
     		
     		$this->view->adv_search = $search;
-    		
     		$_db = new Application_Model_DbTable_DbGlobal();
     		$user_type=$_db->getUserType();
-    		
 			$rs_rows= $db->getAllIncome($search);//call frome model
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
@@ -46,7 +42,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$frm = new Registrar_Form_FrmSearchexpense();
     	$frm = $frm->AdvanceSearch();
@@ -71,11 +66,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$user_type=$_db->getUserType();
-// 		if($user_type!=1){
-// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-// 		}
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
     	$this->view->payment_method = $payment_method;
@@ -103,16 +93,12 @@ class Registrar_IncomeController extends Zend_Controller_Action
 				$db->updateIncome($data);				
 				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/income");		
 			} catch (Exception $e) {
-				$this->view->msg = $this->tr->translate("EDIT_FAIL");
+				Application_Form_FrmMessage::message("APPLICATION_ERRRO");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$user_type=$_db->getUserType();
-// 		if($user_type!=1){
-// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-// 		}
-		
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbIncome();
 		$row  = $db->getIncomeById($id);
@@ -161,5 +147,3 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	}
     }
 }
-
-

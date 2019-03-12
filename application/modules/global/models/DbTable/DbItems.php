@@ -104,7 +104,7 @@
 					'type'			=> $_data['type'],
 					'create_date' 	=> date("Y-m-d H:i:s"),
 					'modify_date' 	=> date("Y-m-d H:i:s"),
-// 					'status'		=> $_data['status'],
+					'status'		=> 1,
 					'user_id'	 	=> $this->getUserId()
 			);
 			if ($_data['type']==1){

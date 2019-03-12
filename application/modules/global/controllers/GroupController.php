@@ -24,6 +24,7 @@ class Global_GroupController extends Zend_Controller_Action {
 						'status'=>-1,
 						);
 			}
+			$this->view->adv_search = $search;
 			$db = new Global_Model_DbTable_DbGroup();
 			$rs_rows= $db->getAllGroups($search);
 			$glClass = new Application_Model_GlobalClass();

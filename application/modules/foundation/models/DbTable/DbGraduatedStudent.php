@@ -20,17 +20,15 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	public function getAllStudentDrop($search){
+	public function getAllStudentGraduated($search){
 		$_db = $this->getAdapter();
 		$sql = "SELECT 
 					gs.id,
 					g.group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS academic,
-					(select rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
-					
-					(select name_en from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
-					
-					(select name_en from rms_view where type=5 and key_code = gs.type) as type,
+					(SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
+					(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
+					(SELECT name_en from rms_view where type=5 and key_code = gs.type LIMIT 1) as type,
 					gs.note,
 					gs.create_date,
 					(select first_name from rms_users where id = gs.user_id) as user,
@@ -39,13 +37,10 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					`rms_graduated_student` as gs,
 					rms_group as g
 				WHERE 
-					g.id=gs.group_id 
-			";
+					g.id=gs.group_id ";
 		
 		$order_by = " order by id DESC";
-		
 		$where=" ";
-		
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}
@@ -67,13 +62,16 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		}
 		
 		if(!empty($search['study_year'])){
-			$where.=" AND rms_group.academic_year=".$search['study_year'];
+			$where.=" AND g.academic_year=".$search['study_year'];
 		}
 		if(!empty($search['grade'])){
-			$where.=" AND rms_group.grade=".$search['grade'];
+			$where.=" AND g.grade=".$search['grade'];
 		}
 		if(!empty($search['session'])){
-			$where.=" AND rms_group.session=".$search['session'];
+			$where.=" AND g.session=".$search['session'];
+		}
+		if(!empty($search['group'])){
+			$where.=" AND g.id=".$search['group'];
 		}
 		
 		return $_db->fetchAll($sql.$where.$order_by);
@@ -90,7 +88,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	public function addDropStudent($_data){
+	public function addGraduatedStudent($_data){
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		
@@ -100,19 +98,16 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						'group_id'		=>$_data['from_group'],
 						'type'			=>$_data['type'],
 						'note'			=>$_data['note'],
-						'status'		=>$_data['status'],
+						'status'		=>1,
 						'array_checkbox'=>$_data['identity'],
 						'create_date'	=>date("Y-m-d"),
 					);
 				$id = $this->insert($_arr);
-
-		///////////////////////////////////////////////////////////////////////////////////////////		
 				
 				$this->_name='rms_group_detail_student';
 					$idsss=explode(',', $_data['identity']);
 					foreach ($idsss as $k){
 						$stu=array(
-								//'is_pass'		=>1,
 								'type'			=>2,// drop
 								'stop_type'		=>2,// graduated
 						);
@@ -120,9 +115,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						$this->update($stu, $where);
 					}
 					
-
-				$this->_name = 'rms_student';
-
+					$this->_name = 'rms_student';
 					$idss=explode(',', $_data['identity']);
 					foreach ($idss as $j){
 						$array=array(
@@ -132,37 +125,30 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						$this->update($array, $where);
 					}
 					
-				$this->_name = 'rms_group';
-					$group=array(
+						$this->_name = 'rms_group';
+						$group=array(
 							'is_use'	=>0,
 							'is_pass'	=>2,
-							);
-					$where=" id=".$_data['from_group'];
-					$this->update($group, $where);
-					
-				return $_db->commit();
-				
+						);
+						$where=" id=".$_data['from_group'];
+						$this->update($group, $where);
+					return $_db->commit();
 			}catch(Exception $e){
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
-	}
-	
+	}	
 	function getGroupDetail($group_id){
 		$db = $this->getAdapter();
 		$sql="select academic_year,grade,session,degree,room_id from rms_group where rms_group.id=".$group_id;
 		return $db->fetchRow($sql);
-		
 	}
 	function getAllStudentOldGroup($from_group){
 		$db = $this->getAdapter();
 		$sql="select gd_id,stu_id from rms_group_detail_student where group_id=$from_group and is_pass=0  ";
 		return $db->fetchAll($sql);
-	}
-	
+	}	
 	public function updateDropStudent($_data,$id){
-		
 		$_db= $this->getAdapter();
  		$_db->beginTransaction();
 		try{	
@@ -176,12 +162,10 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						'array_checkbox'=>$_data['identity'],
 				);
 				$where=" id = ".$id;
-				$this->update($_arr, $where);
-				
+				$this->update($_arr, $where);				
 				
 				$this->_name='rms_group_detail_student';
 				$StudentOldGroup = $this->getAllStudentOldGroup($_data['from_group']);
-				
 				if(!empty($StudentOldGroup)){
 					foreach($StudentOldGroup as $result){
 						$arra=array(
@@ -189,11 +173,9 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 								'stop_type'		=>0,// active
 								);
 						$where=" gd_id=".$result['gd_id'];
-						
 						$this->update($arra, $where);
 					}
 				}
-				
 				$this->_name='rms_student';
 				if(!empty($StudentOldGroup)){
 					foreach($StudentOldGroup as $result){
@@ -204,17 +186,13 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						$this->update($arra, $where);
 					}
 				}
-				
-				
 				if(empty($_data['identity'])){
 					$_data['identity'] = $_data['old_array_checkbox'];
 				}
-				
 				if(!empty($_data['identity'])){
 					$idsss=explode(',', $_data['identity']);
 					foreach ($idsss as $k){
 						if(!empty($_data['checkbox'.$k])){
-							
 							$this->_name='rms_group_detail_student';
 							$is_pass=array(
 									'type'			=>2,// drop
@@ -222,8 +200,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 							);
 							$where = " stu_id=".$_data['stu_id_'.$k];
 							$this->update($is_pass, $where);
-							
-							
 							$this->_name = 'rms_student';
 							$array=array(
 									'is_subspend'=>2,
@@ -233,8 +209,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						}
 					}
 				}
-				
-	
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
@@ -244,7 +218,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 				$this->update($group, $where);
 								
 			}else{  //////// status == 0 => deactive    ===> so update all student to old info
-
 				$_arr=array(
 						'user_id'=>$this->getUserId(),
 						'status'=>$_data['status']
@@ -262,11 +235,9 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 								'stop_type'		=>0,// active
 						);
 						$where=" gd_id=".$result['gd_id'];
-				
 						$this->update($arra, $where);
 					}
 				}
-				
 				$this->_name='rms_student';
 				if(!empty($StudentOldGroup)){
 					foreach($StudentOldGroup as $result){
@@ -277,8 +248,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						$this->update($arra, $where);
 					}
 				}
-				
-
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1, // true 
@@ -286,38 +255,32 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 				);
 				$where=" id=".$_data['from_group'];
 				$this->update($group, $where);
-			}
-			
+			}			
 			return $_db->commit();
-			
 		}catch(Exception $e){
 			$_db->rollBack();
-			echo $e->getMessage();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-	}
-	
+	}	
 	function getAllStudentFromGroup($from_group){
 		$db=$this->getAdapter();
-		$sql="select 
+		$sql="SELECT 
 					gds.stu_id as stu_id,
 					st.stu_enname,
 					st.stu_khname,
 					st.stu_code,
 			 		(select name_en from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
-			 from 
+			 FROM 
 					rms_group_detail_student as gds,
 					rms_student as st 
-			 where 
+			 WHERE 
 					gds.stu_id=st.stu_id 
 					and st.is_subspend = 0 
 					and gds.type=1 
 					and is_pass=0
-					and gds.group_id=$from_group
-			";
+					and gds.group_id=$from_group ";
 		return $db->fetchAll($sql);
 	}
-	
 	function getAllStudentFromGroupUpdate($from_group){
 		$db=$this->getAdapter();
 		$sql="select 

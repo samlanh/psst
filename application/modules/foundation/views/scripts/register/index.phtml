@@ -22,9 +22,9 @@
 	    			<div class="col-sm-4 text-right">
 	    			</div>
 	    		</div>
-	    	</div>
+	    </div>
 		<div class="card-box">
-			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<form id='foundation_class' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("adv_search");?>
@@ -84,9 +84,7 @@
 
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
-	dojo.require("dijit.form.FilteringSelect"); 
 
-	dojo.require("dojo.html");
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){

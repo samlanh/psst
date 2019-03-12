@@ -1,9 +1,7 @@
 <?php
-class Foundation_GraduatedstudentController extends Zend_Controller_Action {
-	
+class Foundation_GraduatedstudentController extends Zend_Controller_Action {	
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -13,13 +11,15 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		}else{
 			$search=array(
 					'title'	=>'',
+					'branch_id'=>'',
 					'study_year' => '',
+					'group'	=>'',
 					'grade'	=>'',
 					'session' => '',
 			);
 		}
 		$db_student= new Foundation_Model_DbTable_DbGraduatedStudent();
-		$rs_rows = $db_student->getAllStudentDrop($search);
+		$rs_rows = $db_student->getAllStudentGraduated($search);
 		$glClass = new Application_Model_GlobalClass();
 		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		$list = new Application_Form_Frmtable();
@@ -34,46 +34,35 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 				'module'=>'foundation','controller'=>'graduatedstudent','action'=>'edit',
 		);
 		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'grade'=>$link,'session'=>$link,'to_group_code'=>$link));
-
-		$this->view->adv_search = $search;
+		$this->view-> adv_search = $search;
 	}
 	function addAction(){
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
 				$_add = new Foundation_Model_DbTable_DbGraduatedStudent();
- 				$_add->addDropStudent($data);
+ 				$_add->addGraduatedStudent($data);
  				if(!empty($data['save_close'])){
  					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent");
  				}
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				echo $e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
-		$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-		
+		$db = new Foundation_Model_DbTable_DbGraduatedStudent();		
 		$this->view->row = $add =$db->getfromGroup();
 		$this->view->rs = $add =$db->gettoGroup();
-		$g_new=$db->getGroupNewAll();
-		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
-		$this->view->g_new=$g_new;
+		
 		
 		$this->view->academy = $db->getAllYears();
-		$this->view->drop_type = $db->getDropType();
 		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $_db->getAllDegreeName();
-		
-		$db=new Application_Model_DbTable_DbGlobal();
-		$this->view->rs_session=$db->getSession();
-		
-		$room =  $db->getRoom();
-		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
-		$this->view->room = $room;
-		
+		$_db = new Application_Model_DbTable_DbGlobal();		
+		$this->view->branch_name = $_db->getAllBranch();
+		$rs = $_db->getViewById(9);
+		unset($rs[0]);
+		$this->view->rstype = $rs;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");

@@ -477,7 +477,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   					AND s.exam_type=1
 			   					AND sm.student_id=gs.stu_id 
 			   			LIMIT 1) AS avg_formonth
-			   			
 			   	FROM
 				   	`rms_student` AS st,
 				   	`rms_group` AS g,

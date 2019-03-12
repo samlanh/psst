@@ -62,17 +62,6 @@
             <div class="col-md-2 col-sm-2 col-xs-12">
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-            	<button onclick="getResultsemester1();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("RESULT_SEMESTER1");?></button>
-            	<button onclick="getHonorsemester1();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("HONOR_SEMESTER1");?></button>
-            	<button onclick="getResultsemester2();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("RESULT_SEMESTER2");?></button>
-		      	<button onclick="getHonorsemester2();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("HONOR_SEMESTER2");?></button>
-		     	<button onclick="getResultyearly();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("YEARLY_EXAM");?></button>
-           		<button onclick="getHonoryearly();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("HONOR_YEARLY");?></button>
-	       		<input type="hidden" name="group_id" id="group_id" dojoType="dijit.form.TextBox" />
-            </div>
-        </div>
 	</form>	
 <style>
 .hidden{
@@ -120,8 +109,7 @@
 					<div id="exportExcel">
 						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family:Times New Roman,Khmer OS Battambang">
 						  <thead>
-							  <tr style="font-size:14px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
-								<td class="hidden"></td>
+							  <tr style="font-size:14px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
 								<td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
@@ -137,11 +125,7 @@
 						  </thead>
 						  <?php $i=0; 
 						  foreach($this->rs as $rs)if (!empty($this->rs)){ $i++;?>
-							  <tr style="font-size:12px; height: 18px;"​ align="center" class='hover padding '>
-								<td class="hidden">
-									<input style="height: 15px;margin-top: 5px;" type="radio" onClick="setValue(<?php echo $i?>)" name="check_box" id="check_box<?php echo $i?>" />
-									<input type="hidden" name="group_id<?php echo $i;?>" id="group_id<?php echo $i;?>" value="<?php echo $rs['id'];?>" dojoType="dijit.form.TextBox" />
-								</td>
+							  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; height: 24px;"​ align="center" class='hover padding context-menu-one'>
 								<td><?php echo $i;?></td>
 								<td><a style="text-align:left;text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['branch_name']; ?></a></td>
 								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
@@ -341,46 +325,65 @@ function getallGrade(){
 	});
 }
 
-function setValue(index){
-	if(dojo.byId('check_box'+index).checked){
-		group_id = dijit.byId('group_id'+index).get('value');
-		dijit.byId('group_id').attr('value',group_id);
-	}
+
+<?php
+	$urlResultSemester1 = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
+	$urlHonorSemester1 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
+	$urlResultSemester2 = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
+	$urlHonorSemester2 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
+	$urlResultYearly = $this->baseUrl()."/allreport/score/rpt-resultbyyear/id/";
+	$urlHonorYearly = $this->baseUrl()."/allreport/score/yearly-outstanding-student/id/";
+	
+	$type1 = "/type/1";
+	$type2 = "/type/2";
+	$type3 = "/type/3";
+?>
+var row=0;
+var url="";
+var type="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			if(key=="rpt-resultbysemester1"){
+				url='<?php echo $urlResultSemester1;?>';
+				type='<?php echo $type1;?>';
+			}else if(key=="semester-outstanding-student1"){
+				url='<?php echo $urlHonorSemester1;?>';
+				type='<?php echo $type1;?>';
+			}else if(key=="rpt-resultbysemester2"){
+				url='<?php echo $urlResultSemester2;?>';
+				type='<?php echo $type2;?>';
+			}else if(key=="semester-outstanding-student2"){
+				url='<?php echo $urlHonorSemester2;?>';
+				type='<?php echo $type2;?>';
+			}else if(key=="rpt-resultbyyear"){
+				url='<?php echo $urlResultYearly;?>';
+				type='<?php echo $type3;?>';
+			}else if(key=="yearly-outstanding-student"){
+				url='<?php echo $urlHonorYearly;?>';
+				type='<?php echo $type3;?>';
+			}  
+			gotoAction();
+		},
+		items: {
+			"rpt-resultbysemester1": {name: "<?php echo $tr->translate("RESULT_SEMESTER1");?>", icon: "fa-file-text-o",},
+			"semester-outstanding-student1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
+			"rpt-resultbysemester2": {name: "<?php echo $tr->translate("RESULT_SEMESTER2");?>", icon: "fa-file-text-o"},
+			"semester-outstanding-student2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
+			"rpt-resultbyyear": {name: "<?php echo $tr->translate("YEARLY_EXAM");?>", icon: "fa-file-text-o"},
+			"yearly-outstanding-student": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
 }
-function getResultsemester1(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbysemester'));?>'+'/id/'+id+'/type/1','_blank');
+var recordid ='';
+function gotoAction(){
+	window.open(url+row+type);
 }
-function getHonorsemester1(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'semester-outstanding-student'));?>'+'/id/'+id+'/type/1','_blank');
-}
-function getResultsemester2(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbysemester'));?>'+'/id/'+id+'/type/2','_blank');
-}
-function getHonorsemester2(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'semester-outstanding-student'));?>'+'/id/'+id+'/type/2','_blank');
-}
-function getResultyearly(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbyyear'));?>'+'/id/'+id+'/type/3','_blank');
-}
-function getHonoryearly(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student'));?>'+'/id/'+id+'/type/3','_blank');
-}
-function getCertificate(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-certificate'));?>'+'/id/'+id+'/type/3','_blank');
-}
+
+
 
 </script>

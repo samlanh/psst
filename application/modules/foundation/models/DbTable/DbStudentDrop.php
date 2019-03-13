@@ -171,7 +171,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		}
 	}
 	public function updateStudentDrop($_data){
-		$db= $this->getAdapter();
+		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{	
 			$_arr=array(

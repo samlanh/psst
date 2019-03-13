@@ -161,7 +161,6 @@
 								<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>
 								<th><?php echo $tr->translate("NOTE");?></th>
 								<th><?php echo $tr->translate("TEACHER");?></th>
-               				
                				</tr>
                			</thead>
 						<tbody id="table_row"></tbody>
@@ -394,21 +393,21 @@ function AllRefresh(){
 }
 function getRefreshItems(){
 	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
-		dojo.xhrPost({
-			url: url_getItems,
-			content:{
-				'items_type':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				dept_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('degree').set('store',dept_store);  
-			   document.getElementsByClassName("overlay")[0].style.display="none";
+	dojo.xhrPost({
+		url: url_getItems,
+		content:{
+			'items_type':1
 			},
-			error: function(err) {
-				document.getElementsByClassName("overlay")[0].style.display="none";
-			}
-		});
+		handleAs:"json",
+		load: function(data) {
+			dept_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('degree').set('store',dept_store);  
+		   document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
 }
 var teacher_option = '';
 var url_gettecher = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getteacher"));?>';										

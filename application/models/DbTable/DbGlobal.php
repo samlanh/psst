@@ -311,10 +311,17 @@ function getAllgroupStudy($teacher_id=null){
 
 function getAllgroupStu($branch_id=null){
 	$db = $this->getAdapter();
-	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
-	FROM `rms_group` AS `g` where branch_id=$branch_id ";
-	$sql.=" AND g.status =1 AND group_code!=''";
+	$sql ="SELECT 
+				g.id,
+				CONCAT(g.group_code,' ',(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY f.from_academic,f.to_academic,f.generation,f.branch_id limit 1) ) AS name
+			FROM 
+				rms_group AS g 
+			where 
+				branch_id=$branch_id 
+				AND g.status =1 
+				AND group_code!=''
+				and g.is_pass!=1
+		";
 	return $db->fetchAll($sql);
 }
 

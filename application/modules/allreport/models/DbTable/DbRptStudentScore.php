@@ -456,6 +456,16 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id=g.teacher_id LIMIT 1) AS teacher_name,
+			   	(SELECT s.max_score 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=$semester
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=2
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1) AS max_score,
 			   	(SELECT sm.total_avg 
 			   		FROM `rms_score_monthly` AS sm,
 			   			  rms_score s

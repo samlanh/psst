@@ -2041,6 +2041,7 @@ function getAllgroupStudyNotPass($action=null){
   	}else if ($mentiontype==3){// Excellent/Very  Good/Good
   		$column="sd.mention_in_english";
   	}//,sd.max_score
+  	$score = empty($score)?0:$score;
   	$sql="SELECT $column AS mention
 			FROM `rms_metionscore_setting_detail` AS sd,
 			`rms_metionscore_setting` AS s

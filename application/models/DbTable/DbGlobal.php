@@ -1947,11 +1947,28 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT * FROM rms_group_detail_student WHERE stu_id=$student_id AND group_id=$group_id";
   	return $db->fetchRow($sql);
   }
-  function getAllGroupByBranch($branch_id=null){
+//   function getAllGroupByBranch($branch_id=null){
+//   	$db = $this->getAdapter();
+//   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+//   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+//   	FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ";
+//   	if (!empty($branch_id)){
+//   		$sql.=" AND g.branch_id = $branch_id";
+//   	}
+//   	$sql.=" ORDER BY `g`.`id` DESC ";
+//   	return $db->fetchAll($sql);
+//   }
+  function getAllGroupByBranch($branch_id=null,$forfilterreport=null){
   	$db = $this->getAdapter();
   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-  	FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ";
+  	FROM `rms_group` AS `g` WHERE status=1 ";
+  	
+  	if (!empty($forfilterreport)){
+  		$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+  	}else{
+  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
+  	}
   	if (!empty($branch_id)){
   		$sql.=" AND g.branch_id = $branch_id";
   	}

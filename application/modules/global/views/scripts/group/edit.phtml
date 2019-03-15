@@ -171,9 +171,9 @@
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_COMPLETED_GROUP");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select name="is_pass" id="is_pass" class="fullside" dojoType="dijit.form.FilteringSelect">
-							    <option value="0" <?php if($this->rs['is_pass']==0) echo 'selected="selected"';?>><?php echo $tr->translate("NOT_USE");?></option>
-							    <option value="1" <?php if($this->rs['is_pass']==1) echo 'selected="selected"';?>><?php echo $tr->translate("COMPLETED");?></option>
-							    <option value="2" <?php if($this->rs['is_pass']==2) echo 'selected="selected"';?>><?php echo $tr->translate("STUDYING");?></option>
+		                		<?php if (!empty($this->statustype)) foreach ($this->statustype as $rs){?>
+							    <option value="<?php echo $rs['id'];?>" <?php if($this->rs['is_pass']==$rs['id']) echo 'selected="selected"';?>><?php echo $rs['name'];?></option>
+							    <?php }?>
 							</select>
 		                </div>
 		             </div>

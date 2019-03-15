@@ -146,6 +146,9 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->grade_name=$d_row;
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
 		
+		$this->view->statustype = $_dbgb->getViewById(9);
+		
+		
 		$tsub= new Global_Form_FrmAddClass();
 		$frm_group=$tsub->FrmAddGroup($row);
 		Application_Model_Decorator::removeAllDecorator($frm_group);
@@ -340,7 +343,8 @@ class Global_GroupController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllGroupByBranch($data['branch_id']);
+    		$forfilter=empty($data['forfilter'])?null:$data['forfilter'];
+    		$group = $db->getAllGroupByBranch($data['branch_id'],$forfilter);
     		if(!empty($data['noaddnew'])){
     			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		}

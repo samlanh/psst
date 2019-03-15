@@ -310,7 +310,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':1,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {

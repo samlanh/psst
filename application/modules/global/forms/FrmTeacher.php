@@ -85,7 +85,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$start_date = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$start_date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
-				'required'=>true,
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
 		));
@@ -94,7 +93,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$end_date = new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$end_date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
-				'required'=>true,
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
 		));

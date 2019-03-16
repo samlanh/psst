@@ -589,7 +589,22 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$allacademicyear->setMultiOptions($opt);
 		$allacademicyear->setValue($request->getParam("allacademicyear"));
 		
-		$this->addElements(array($item,$finished_status,$term_test,$term,$stuname_con,
+		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
+		$is_pass->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
+				'required'=>false
+		));
+		$opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$rs = $db->getViewById(9);
+		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
+		$is_pass->setMultiOptions($opt);
+		$is_pass->setValue($request->getParam("is_pass"));
+		
+		$this->addElements(array($is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,

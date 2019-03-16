@@ -314,6 +314,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.=' AND g.branch_id='.$search['branch_id'];
 		}
+		if(!empty($search['is_pass']) AND $search['is_pass']>-1){
+			$where.=' AND g.is_pass='.$search['is_pass'];
+		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');

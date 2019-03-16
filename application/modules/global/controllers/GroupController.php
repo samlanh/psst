@@ -121,7 +121,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
 	
-		
 		$_db = new Accounting_Model_DbTable_DbFee();
 		$tution = $_db->getFeeById($row['academic_year']);
 		$schoolOption = $tution['school_option'];
@@ -133,22 +132,15 @@ class Global_GroupController extends Zend_Controller_Action {
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
-			
 			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
-			
 		}
-		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
-		
 		$this->view->statustype = $_dbgb->getViewById(9);
-		
-		
 		$tsub= new Global_Form_FrmAddClass();
 		$frm_group=$tsub->FrmAddGroup($row);
 		Application_Model_Decorator::removeAllDecorator($frm_group);

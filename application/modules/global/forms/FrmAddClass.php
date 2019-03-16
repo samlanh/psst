@@ -192,6 +192,21 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$optionDegree = $_dbgb->getAllDegreeMent(21);//Education Level
 		if(!empty($optionDegree))foreach($optionDegree AS $row) $calture_opt[$row['id']]=$row['name'];
 		$_calture->setMultiOptions($calture_opt);
+		
+		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
+		$is_pass->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
+				'required'=>false
+		));
+		$opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$rs = $db->getViewById(9);
+		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
+		$is_pass->setMultiOptions($opt);
+		
 			
 		$id = new Zend_Form_Element_hidden('id');
 		if($data!=null){
@@ -204,7 +219,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_time->setValue($data['time']);
 			$_note->setValue($data['note']);
 		}
-		$this->addElements(array($id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array($is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
 	

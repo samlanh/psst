@@ -454,70 +454,70 @@ div.img-back {
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
 <script type="text/javascript">
-	dojo.require("dijit.layout.BorderContainer");
-	dojo.require("dijit.layout.TabContainer");
-	dojo.require('dijit.form.NumberTextBox');
-	dojo.require("dojo.number");
-	
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require('dijit.form.TextBox');
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	
-	
-	item_store = getDataStorefromJSON('id','name');
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("dijit.layout.TabContainer");
+dojo.require('dijit.form.NumberTextBox');
+dojo.require("dojo.number");
+
+dojo.require("dijit.form.DateTextBox");
+dojo.require('dijit.form.TextBox');
+dojo.require("dijit.form.Textarea");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ObjectStore");
+
+
+item_store = getDataStorefromJSON('id','name');
 require(["dojo/ready"], function(ready){
-		ready(function(){
-			getbranchinfo();
-			getallstudentname();
-			getgradebyDegree(-1,1,2);
-			getAllAcademicByBranch();
-			getReceiptNo('','');
-		});
+	ready(function(){
+		getbranchinfo();
+		getallstudentname();
+		getgradebyDegree(-1,1,2);
+		getAllAcademicByBranch();
+		getReceiptNo('','');
+	});
 
-		new dijit.form.FilteringSelect({
-			autoComplete: false,
-			queryExpr: "*${0}*",                     
-			id: "old_stu",
-			name: "old_stu",   
-			required:true,        
-			class: 'fullside', 
-			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
-			onChange: function() {  
-				getOldStudentInfo();
-				getCreditMemo();
-				stu_id = dijit.byId('old_stu').get('value');
-				getPaymentHistory(stu_id);
-			}
-		}, "old_stu");
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "old_stu",
+		name: "old_stu",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() {  
+			getOldStudentInfo();
+			getCreditMemo();
+			stu_id = dijit.byId('old_stu').get('value');
+			getPaymentHistory(stu_id);
+		}
+	}, "old_stu");
 
-		new dijit.form.FilteringSelect({
-			store: item_store,
-			autoComplete: false,
-			queryExpr: "*${0}*",                     
-			id: "item",
-			name: "item",   
-			required:false,        
-			class: 'fullside', 
-			onChange: function() {  
-				addRow();
-			}
-		}, "item");
+	new dijit.form.FilteringSelect({
+		store: item_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "item",
+		name: "item",   
+		required:false,        
+		class: 'fullside', 
+		onChange: function() {  
+			addRow();
+		}
+	}, "item");
 
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                     
-			id: "study_year",
-			name: "study_year",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-			onChange: function() {  
-				academic_year = dijit.byId('study_year').get('value');
-			}
-		}, "study_year");
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "study_year",
+		name: "study_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			academic_year = dijit.byId('study_year').get('value');
+		}
+	}, "study_year");
 });	
 
 url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
@@ -1094,7 +1094,7 @@ function deleteRecord(index) {
 	dojo.query("#row"+index).remove();
 }
  function getValidate(key){
-	 service_type = dijit.byId('service_type_'+key).get('value');
+	 //service_type = dijit.byId('service_type_'+key).get('value');
 	 onepayment = dijit.byId('onepayment_'+key).get('value');
 	 if(onepayment == 0){
 		 amount= dijit.byId('qty_'+key).get('value');
@@ -1260,7 +1260,7 @@ function readMoneyInKhmer(netTotal){
 //get service fee or balance fee that student not yet pay
 var url_service_fee = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getservicefee')); ?>";
 function getservicefee(key){
-		service_type = dijit.byId('service_type_'+key).get('value');
+		//service_type = dijit.byId('service_type_'+key).get('value');
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');
  		branch_id = dijit.byId('branch_id').get('value');
@@ -1294,7 +1294,15 @@ function getservicefee(key){
 	 				dijit.byId("remark"+key).attr("value",'');
 	 				dijit.byId("price_"+key).attr("value",data.price);
 	 				dijit.byId("onepayment_"+key).attr("value",data.onepayment);
-	 				calculateTotal(key);
+					
+					// is_product=0;
+					// if(data.items_type==3){
+						// is_product=1;
+					// }
+					// dijit.byId("is_product_"+key).attr("value",is_product);
+					// dijit.byId("is_product_set_"+key).attr("value",data.is_set);
+	 				
+					calculateTotal(key);
  					if(data.validate!=null){
  						dijit.byId("date_start_"+key).attr("value",data.validate);
  	 	 			}else{

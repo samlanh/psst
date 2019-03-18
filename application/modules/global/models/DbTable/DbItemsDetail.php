@@ -50,11 +50,14 @@
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	
-	public function getItemsDetailById($degreeId,$type=null){
+	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
 		$db = $this->getAdapter();
-		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId AND ide.is_productseat=0";
-		if (!empty($type)){
+		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId ";
+		if(!empty($type)){
 			$sql.=" AND ide.items_type=$type";
+		}
+		if(empty($is_set)){
+			$sql.=" AND ide.is_productseat=0 ";
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('ide.schoolOption');

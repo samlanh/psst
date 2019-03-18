@@ -125,146 +125,198 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				//$this->_name='rms_student';
-					$customer_type=1;
-					if($data['student_type']==1){//existing student
-						$rs_stu = $gdb->getStudentinfoById($stu_id);
-					}elseif($data['student_type']==2){//testing student
-						$rs_stu = $gdb->getStudentTestinfoById($stu_id);
-						$arr = array(
-								'is_registered'=>1,
-								);
-						$this->_name='rms_student_test_result';
-						$where="id = ".$rs_stu['id'];
-						$this->update($arr, $where);
-						
-						$dbg = new Application_Model_DbTable_DbGlobal();
-						$stu_code = $dbg->getnewStudentId($data['branch_id'],$rs_stu['degree']);
-						
-						$arr = array(
-							'customer_type' =>1,
-							'stu_code'=>$stu_code,
-							'academic_year'=>$data['study_year'],
-							'create_date'=>date("Y-m-d H:i:s")
-						);
-						$this->_name='rms_student';
-						$where="stu_id = ".$data['old_stu'];
-						$this->update($arr, $where);
-						
-					}elseif($data['student_type']==3){//from crm
-						$rs_stu = $gdb->getStudentinfoById($stu_id);
-						$_dbgb = new Application_Model_DbTable_DbGlobal();
-						$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
-						$arr = array(
-								'customer_type' =>4,
-								'is_studenttest' =>1,
-								'serial' => $newSerial,
-								'create_date'=>date("Y-m-d"),
-								'create_date_stu_test'=>date("Y-m-d"),
-						);
-						$this->_name='rms_student';
-						$where="stu_id = ".$stu_id;
-						$this->update($arr, $where);
-					}
-				
-					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
-					if($cut_credit_memo<0){
-						$credit_after=abs($cut_credit_memo);
-						$cut_credit_memo = $data['grand_total'];
-					}else{
-						$cut_credit_memo = $data['credit_memo'];
-						$credit_after = 0;
-					}
+				$customer_type=1;
+				if($data['student_type']==1){//existing student
+					$rs_stu = $gdb->getStudentinfoById($stu_id);
+				}elseif($data['student_type']==2){//testing student
+					$rs_stu = $gdb->getStudentTestinfoById($stu_id);
+					$arr = array(
+							'is_registered'=>1,
+							);
+					$this->_name='rms_student_test_result';
+					$where="id = ".$rs_stu['id'];
+					$this->update($arr, $where);
+					
+					$dbg = new Application_Model_DbTable_DbGlobal();
+					$stu_code = $dbg->getnewStudentId($data['branch_id'],$rs_stu['degree']);
 					
 					$arr = array(
-						'balance_due'=>0
-						);
-					$this->_name='rms_student_payment';
-					$where="student_id = ".$stu_id;
-					$this->update($arr, $where);//clear old balance
-					
-					$arr=array(
-						'branch_id'		=> $data['branch_id'],
-						'revenue_type'  => $data['customer_type'],
-						'data_from'		=> $data['student_type'],
-						'student_id'	=> $data['old_stu'],
-						'receipt_number'=> $receipt_number,
-						'penalty'		=> $data['penalty'],
-						'grand_total'	=> $data['grand_total'],
-						'credit_memo'	=> $cut_credit_memo,
-						'memo_id'		=> $data['credit_memo'],
-						'paid_amount'	=> $data['paid_amount'],
-						'balance_due'	=> $data['balance_due'],
-						'amount_in_khmer'=> $data['money_in_khmer'],
-						'payment_method'=> $data['payment_method'],
-						'number'	    => $data['number'],
-						'note'			=> $data['note'],
-						'create_date'	=> $paid_date,
-						'user_id'		=> $this->getUserId(),
-						'academic_year'	=> $data['study_year'],
-						'group_id'      => $rs_stu['group_id'],
-						'paystudent_type'=> $rs_stu['is_stu_new'],
-						'degree'		=> $rs_stu['degree'],
-						'grade'			=> $rs_stu['grade'],
-						'session'		=> $rs_stu['session'],
-						'degree_culture'=> $rs_stu['calture'],
-						'room_id'		=> $rs_stu['room'],
+						'customer_type' =>1,
+						'stu_code'=>$stu_code,
+						'academic_year'=>$data['study_year'],
+						'create_date'=>date("Y-m-d H:i:s")
 					);
-					$paymentid = $this->insert($arr);
+					$this->_name='rms_student';
+					$where="stu_id = ".$data['old_stu'];
+					$this->update($arr, $where);
+					
+				}elseif($data['student_type']==3){//from crm
+					$rs_stu = $gdb->getStudentinfoById($stu_id);
+					$_dbgb = new Application_Model_DbTable_DbGlobal();
+					$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
+					$arr = array(
+							'customer_type' =>4,
+							'is_studenttest' =>1,
+							'serial' => $newSerial,
+							'create_date'=>date("Y-m-d"),
+							'create_date_stu_test'=>date("Y-m-d"),
+					);
+					$this->_name='rms_student';
+					$where="stu_id = ".$stu_id;
+					$this->update($arr, $where);
+				}
 			
-					if($data['student_type']==1 AND $data['customer_type']==1){ // only old_student can have credit_memo
-						if(!empty($data['credit_memo_id'])){
-							if($data['credit_memo']>0){
-								$array=array(
-										'total_amountafter'=>$credit_after,
-								);
-								$this->_name='rms_creditmemo';
-								$where = " id = ".$rs_stu['credit_memo_id'];
-								$this->update($array, $where);
-							}
+				$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
+				if($cut_credit_memo<0){
+					$credit_after=abs($cut_credit_memo);
+					$cut_credit_memo = $data['grand_total'];
+				}else{
+					$cut_credit_memo = $data['credit_memo'];
+					$credit_after = 0;
+				}
+				
+				$arr = array(
+					'balance_due'=>0
+					);
+				$this->_name='rms_student_payment';
+				$where="student_id = ".$stu_id;
+				$this->update($arr, $where);//clear old balance
+				
+				$arr=array(
+					'branch_id'		=> $data['branch_id'],
+					'revenue_type'  => $data['customer_type'],
+					'data_from'		=> $data['student_type'],
+					'student_id'	=> $data['old_stu'],
+					'receipt_number'=> $receipt_number,
+					'penalty'		=> $data['penalty'],
+					'grand_total'	=> $data['grand_total'],
+					'credit_memo'	=> $cut_credit_memo,
+					'memo_id'		=> $data['credit_memo'],
+					'paid_amount'	=> $data['paid_amount'],
+					'balance_due'	=> $data['balance_due'],
+					'amount_in_khmer'=> $data['money_in_khmer'],
+					'payment_method'=> $data['payment_method'],
+					'number'	    => $data['number'],
+					'note'			=> $data['note'],
+					'create_date'	=> $paid_date,
+					'user_id'		=> $this->getUserId(),
+					'academic_year'	=> $data['study_year'],
+					'group_id'      => $rs_stu['group_id'],
+					'paystudent_type'=> $rs_stu['is_stu_new'],
+					'degree'		=> $rs_stu['degree'],
+					'grade'			=> $rs_stu['grade'],
+					'session'		=> $rs_stu['session'],
+					'degree_culture'=> $rs_stu['calture'],
+					'room_id'		=> $rs_stu['room'],
+				);
+				$paymentid = $this->insert($arr);
+		
+				if($data['student_type']==1 AND $data['customer_type']==1){ // only old_student can have credit_memo
+					if(!empty($data['credit_memo_id'])){
+						if($data['credit_memo']>0){
+							$array=array(
+									'total_amountafter'=>$credit_after,
+							);
+							$this->_name='rms_creditmemo';
+							$where = " id = ".$rs_stu['credit_memo_id'];
+							$this->update($array, $where);
 						}
 					}
-					
-				    /*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
+				}
+				
+				/*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 // 					$dbpush = new  Application_Model_DbTable_DbGlobal();
 // 					$dbpush->getTokenUser(null,$id, 1);
-					
+				
+				$this->_name="rms_student_paymentdetail";
+				$ids = explode(',', $data['identity']);
+				$dbitem = new Global_Model_DbTable_DbItemsDetail();
+				if(!empty($ids))foreach ($ids as $i){
+					$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
 					$this->_name="rms_student_paymentdetail";
-					$ids = explode(',', $data['identity']);
-					$dbitem = new Global_Model_DbTable_DbItemsDetail();
-					if(!empty($ids))foreach ($ids as $i){
-						$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
-		             	$this->_name="rms_student_paymentdetail";
-		             	if(!empty($spd_id)){
-		             		$arr = array(
-		             				'is_start'=>0
-		             		);
-		             		$where=" id = ".$spd_id;
-		             		$this->update($arr,$where);
-		             	}
-		             	
-		             	$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i]);
-							$_arr = array(
-								'payment_id'	=>$paymentid,
-								'service_type'	=>$rs_item['items_type'],
-								'itemdetail_id'	=>$data['item_id'.$i],
-								'payment_term'	=>$data['term_'.$i],
-								'fee'			=>$data['price_'.$i],
-								'qty'			=>$data['qty_'.$i],
-								'qty_balance'	=>$data['qty_'.$i],
-								'subtotal'		=>$data['subtotal_'.$i],
-								'extra_fee'		=>$data['extra_fee'.$i],
-								'discount_type'=>$data['discount_type'.$i],
-								'discount_percent'=>$data['discount_'.$i],
-								'discount_amount'=>$data['discount_amount'.$i],
-								'paidamount'	=>$data['total_amount'.$i],
-								'is_onepayment'=>$data['onepayment_'.$i],
-								'start_date'	=>$data['date_start_'.$i],
-								'validate'		=>$data['validate_'.$i],
-								'is_start'		=>1,
-								'note'			=>$data['remark'.$i],
-								'is_parent'     =>$spd_id,
-							);
-						$this->insert($_arr);
+					if(!empty($spd_id)){
+						$arr = array(
+								'is_start'=>0
+						);
+						$where=" id = ".$spd_id;
+						$this->update($arr,$where);
+					}
+					
+					$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
+						$_arr = array(
+							'payment_id'	=>$paymentid,
+							'service_type'	=>$rs_item['items_type'],
+							'itemdetail_id'	=>$data['item_id'.$i],
+							'payment_term'	=>$data['term_'.$i],
+							'fee'			=>$data['price_'.$i],
+							'qty'			=>$data['qty_'.$i],
+							'qty_balance'	=>$data['qty_'.$i],
+							'subtotal'		=>$data['subtotal_'.$i],
+							'extra_fee'		=>$data['extra_fee'.$i],
+							'discount_type'	=>$data['discount_type'.$i],
+							'discount_percent'=>$data['discount_'.$i],
+							'discount_amount'=>$data['discount_amount'.$i],
+							'paidamount'	=>$data['total_amount'.$i],
+							'is_onepayment'	=>$data['onepayment_'.$i],
+							'start_date'	=>$data['date_start_'.$i],
+							'validate'		=>$data['validate_'.$i],
+							'is_start'		=>1,
+							'note'			=>$data['remark'.$i],
+							'is_parent'     =>$spd_id,
+						);
+					$this->insert($_arr);
+					
+			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
+					if($rs_item['items_type']==3){ // product
+						if($rs_item['is_productseat']==1){ // product set
+							$sql="select 
+										set.pro_id as product_set_id,
+										set.subpro_id as pro_id,
+										set.qty as set_qty,
+										idt.cost,
+										lo.price
+									from 
+										rms_itemsdetail as idt,
+										rms_product_setdetail as `set`,
+										rms_product_location as lo
+									where
+										idt.id = set.subpro_id
+										and set.subpro_id = lo.pro_id
+										and set.pro_id = ".$rs_item['id']."
+										and lo.brand_id = ".$data['branch_id'];
+							$result = $db->fetchAll($sql);
+							if(!empty($result)){foreach ($result as $row){
+								$arr_sale = array(
+										'payment_id'		=>$paymentid,
+										'is_product_set'	=>1,
+										'product_set_id'	=>$row['product_set_id'],
+										'pro_id'			=>$row['pro_id'],
+										'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
+										'qty_after'			=>$row['set_qty'] * $data['qty_'.$i],
+										'cost'				=>$row['cost'],
+										'price'				=>$row['price'],
+										'user_id'			=>$this->getUserId(),
+									);
+								$this->_name="rms_saledetail";
+								$this->insert($arr_sale);
+							}}
+						}else{ // product normal
+							$arr_sale = array(
+									'payment_id'		=>$paymentid,
+									'is_product_set'	=>0,
+									'product_set_id'	=>$row['product_set_id'],
+									'pro_id'			=>$row['pro_id'],
+									'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
+									'qty_after'			=>$row['set_qty'] * $data['qty_'.$i],
+									'cost'				=>$row['cost'],
+									'price'				=>$row['price'],
+									'user_id'			=>$this->getUserId(),
+								);
+							$this->_name="rms_saledetail";
+							$this->insert($arr_sale);
+						}
+					}
+						
 						
 				// បង់លើផលិតផល
 				// $this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
@@ -1110,17 +1162,28 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$item_type = $rs_pro['items_type'];
     	$is_set = $rs_pro['is_productseat'];
     	if($item_type==1 OR $item_type==2){//grade or service
-    		$sql="SELECT tfd.id,tfd.tuition_fee AS price,
-				(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
-				(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-					WHERE sp.student_id = $student_id AND spd.itemdetail_id = $item_id 
-				 ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate 
-    		 
-    		 FROM 
-    		 	rms_tuitionfee AS tf,
-    		 	rms_tuitionfee_detail AS tfd 
-    		  WHERE tf.id = tfd.fee_id
-    				AND tfd.class_id = $item_id AND tfd.payment_term = $termid ";
+    		$sql="SELECT 
+    					tfd.id,
+    					tfd.tuition_fee AS price,
+						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
+						(SELECT is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as is_set,
+    					(SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as items_type,
+						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
+							WHERE sp.student_id = $student_id 
+								AND spd.itemdetail_id = $item_id 
+							 	AND spd.is_start=1 
+							 	AND sp.`id`=spd.`payment_id` 
+							 	AND sp.is_void=0 
+						 	ORDER BY 
+						 		spd.validate DESC LIMIT 1) AS validate 
+    		 		FROM 
+    		 			rms_tuitionfee AS tf,
+    		 			rms_tuitionfee_detail AS tfd 
+    		  		WHERE 
+    		  			tf.id = tfd.fee_id
+    					AND tfd.class_id = $item_id 
+    					AND tfd.payment_term = $termid 
+    			";
     		if($item_type==1){// grade
     			$sql.=" AND tf.type =1 AND tf.id = $year ";
     		}
@@ -1132,24 +1195,43 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}elseif ($item_type==3){//product
     		if($is_set==1){//for set
     			$sql="SELECT
-    			 price,
-    			is_onepayment as onepayment,
-    			(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    				WHERE sp.student_id = $student_id AND spd.itemdetail_id = $item_id
-    				   ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate
-    					FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
+    			 			price,
+    						is_onepayment as onepayment,
+    						is_productseat as is_set,
+    						items_type,
+    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
+    							WHERE sp.student_id = $student_id 
+    								AND spd.itemdetail_id = $item_id
+    				  				ANd spd.is_start=1 
+    				  				AND sp.`id`=spd.`payment_id` 
+    				  				AND sp.is_void=0 
+    				  			ORDER BY spd.validate DESC LIMIT 1) AS validate
+    					FROM 
+    						`rms_itemsdetail` 
+    					WHERE 
+    						id=$item_id LIMIT 1
+    				";
     		}else{
     			$sql="SELECT
-    		 	price,
-    			(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
-    			(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    			WHERE sp.student_id = $student_id AND spd.itemdetail_id = $item_id
-    			ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate
-    			FROM `rms_product_location` WHERE pro_id=$item_id AND brand_id = $branch_id LIMIT 1";
+    		 				price,
+    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
+    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as is_set,
+    						(SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as items_type,
+    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
+				    			WHERE sp.student_id = $student_id 
+					    			AND spd.itemdetail_id = $item_id
+					    			ANd spd.is_start=1 
+					    			AND sp.`id`=spd.`payment_id` 
+					    			AND sp.is_void=0 
+				    			ORDER BY spd.validate DESC LIMIT 1) AS validate
+    					FROM 
+    						`rms_product_location` 
+    					WHERE 
+    						pro_id=$item_id 
+    						AND brand_id = $branch_id LIMIT 1
+    				";
     		}
-    		
     		return $db->fetchRow($sql);
-    		
     	}
     }
     

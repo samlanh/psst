@@ -698,9 +698,13 @@ function getAllgroupStudyNotPass($action=null){
    	$sql="SELECT room_id,room_name FROM rms_room ";
    	return $db->fetchAll($sql.'ORDER  BY room_id DESC');
    }
-   public function getAllRoom(){
+   public function getAllRoom($branch_id=null){
    	$db = $this->getAdapter();
-   	$sql=" SELECT room_id AS id ,room_name As name FROM `rms_room` WHERE is_active=1 AND room_name!='' order by room_id DESC ";
+   	$sql=" SELECT room_id AS id ,room_name As name FROM `rms_room` WHERE is_active=1 AND room_name!='' ";
+	if (!empty($branch_id)){
+		$sql.=" AND branch_id =$branch_id";
+	}
+	$sql.=" order by room_id DESC ";
    	return $db->fetchAll($sql);
    }
    public function getAllDegreeMent(){

@@ -348,10 +348,10 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $options;
 	}
 	
-	public function getAllTeacherOption($schoolOption=null){
+	public function getAllTeacherOption($schoolOption=null,$branch_id=null){
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$teacher = $this->getAllTeacher($schoolOption);
+		$teacher = $this->getAllTeacher($schoolOption,$branch_id);
 		array_unshift($teacher,array('id' => -1,"name"=>$tr->translate("ADD_NEW")));
 		$teacher_options = '<option value="">'.$tr->translate("SELECT_TEACHER").'</option>';
 		if(!empty($teacher))foreach($teacher as $value){
@@ -416,7 +416,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	function getAllTeacher($schoolOptin=null){
+	function getAllTeacher($schoolOptin=null,$branch_id=null){
 		$db = $this->getAdapter();
 		$sql = " SELECT id,
 				teacher_name_kh  as name 
@@ -424,6 +424,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			WHERE status=1 and staff_type=1 and teacher_name_kh!='' ";
 		if (!empty($schoolOptin)){
 			$sql.=" AND schoolOption =$schoolOptin";
+		}
+		if (!empty($branch_id)){
+			$sql.=" AND branch_id =$branch_id";
 		}
 		return $db->fetchAll($sql);
 	}
@@ -433,44 +436,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	public function addTeacherAjax($_data){
-		$this->_name='rms_teacher';
-		
-		$_db = new Global_Model_DbTable_DbTeacher();
-		$teacher_code = $_db->getTeacherCode();
-		
-		try{
-			$db = $this->getAdapter();
-			$arr = array(
-					'teacher_code' => $teacher_code,
-					'teacher_name_kh' => $_data['kh_name'],
-					'teacher_name_en' => $_data['kh_name'],
-					'sex' => $_data['sex'],
-					'dob' => $_data['dob'],
-					'nationality'  => $_data['nationality'],
-			        'tel'   => $_data['phone'],
-					'address' => $_data['address'],
-					'note' => $_data['note'],
-		
-					'branch_id' => 1,
-			        'create_date' => Zend_Date::now(),
-			        'user_id'	  => $this->getUserId(),
-			);
-			$id = $this->insert($arr);
-			
-			$teacher_option = $this->getAllTeacherOption();
-			
-			$array = array(
-						'id'=>$id,
-						'new_teacher_option'=>$teacher_option,
-					);
-			
-			return $array;
-			
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
+	
 	
 }
 

@@ -7,11 +7,15 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
+    dojo.require("dojo.data.ObjectStore");
+	dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require('dijit.form.TextBox');
 	dojo.require('dijit.form.Textarea');
+	dojo.require("dojo.html");
+	
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -190,7 +194,7 @@
 
 var grade_store  = getDataStorefromJSON('id','name',);
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
+var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?>  );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var teacher_storeass= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -325,6 +329,7 @@ dojo.ready(function(){
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
+		 getRefreshRoom();
     });
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
@@ -412,6 +417,7 @@ function getRefreshTeacher(){
 	dijit.byId('teacher_ass').reset();
 	teacher_option = '';
 	academic_year = dijit.byId('academic_year').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
 	if(academic_year=='' || academic_year==-1){
 		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		dijit.byId('teacher_ass').set('store',teacher_store);  
@@ -426,7 +432,7 @@ function getRefreshTeacher(){
 	dojo.xhrPost({
 		url:url_gettecher,
 		content:{
-			'academic_year':academic_year
+			'academic_year':academic_year,'branch_id':branch_id
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -450,11 +456,20 @@ function getRefreshTeacher(){
 		}
 	});
 }
+
 var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';										
 function getRefreshRoom(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id == -1){
+		return false;
+	}
+	alert(branch_id);
 	dojo.xhrPost({
 		url: url_getRoom,
 		handleAs:"json",
+		content:{
+				'branch_id':branch_id
+				},
 		load: function(data) {
 			room_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('room').set('store',room_store);  

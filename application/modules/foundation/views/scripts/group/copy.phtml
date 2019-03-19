@@ -7,10 +7,14 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require('dijit.form.Textarea');
-    dojo.require('dijit.form.NumberTextBox');
-    dojo.require("dijit.form.CheckBox"); 
+    dojo.require("dojo.data.ObjectStore");
+	dojo.require("dijit.form.FilteringSelect");
+    dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require('dijit.form.NumberTextBox');
+	dojo.require('dijit.form.TextBox');
+	dojo.require('dijit.form.Textarea');
+	dojo.require("dojo.html");
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -369,16 +373,18 @@ dojo.ready(function(){
 		}
 	}, "academic_year");
 	
-	dijit.byId('room').attr('value','<?php echo $this->rs['room_id'];?>');
+	
 	dijit.byId('grade').attr('value','<?php echo $this->rs['grade'];?>');
 	getallGrade();
-	getValue();
+	
 
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
+		 getRefreshRoom();
     });
 	 getAllAcademicByBranch();
+	 getRefreshRoom();
 });
 
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
@@ -513,15 +519,25 @@ function getallGrade(){
 			}
 		});
 }
-var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';										
+var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';		
+var oldBranch = '<?php echo $this->rs['branch_id'];?>';								
 function getRefreshRoom(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id == -1){
+		return false;
+	}
 	dojo.xhrPost({
 		url: url_getRoom,
 		handleAs:"json",
+		content:{
+				'branch_id':branch_id
+				},
 		load: function(data) {
 			room_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('room').set('store',room_store);  
-		    
+		    if(oldBranch == branch_id){
+				 dijit.byId('room').set('value','<?php echo $this->rs['room_id'];?>');
+			}
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -537,6 +553,7 @@ function getRefreshTeacher(){
 	dijit.byId('teacher_ass').reset();
 	teacher_option = '';
 	academic_year = dijit.byId('academic_year').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
 	if(academic_year=='' || academic_year==-1){
 		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		dijit.byId('teacher_ass').set('store',teacher_store);  
@@ -552,7 +569,7 @@ function getRefreshTeacher(){
 	dojo.xhrPost({
 		url:url_gettecher,
 		content:{
-			'academic_year':academic_year
+			'academic_year':academic_year,'branch_id':branch_id
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -810,20 +827,7 @@ function getSubjectByDegree(){
 		}
 	});
 }
-function getValue(){
-	var par='';
-	if(dojo.byId('is_parent').checked){
-		par = 1;
-		dijit.byId('parent').attr('value','');
-		dijit.byId("parent").set('readOnly',true);
-		 dijit.byId('parent').set('required',false);  
-	}else{
-		par=0;
-		dijit.byId("parent").set('readOnly',false);
-		 dijit.byId('parent').set('required',true);  
-	}
-	$('#par').val(par);
-}
+
 
 function hideDialogGrade() {		
 	dijit.byId("popup_grate").hide();

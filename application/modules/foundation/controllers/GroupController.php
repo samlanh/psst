@@ -125,11 +125,11 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		$_dggroup = new Foundation_Model_DbTable_DbGroup();
 		if (!empty($schoolOption)){
 			$db = new Foundation_Model_DbTable_DbGroup();
-			$teacher = $_dggroup->getAllTeacher($schoolOption);
+			$teacher = $_dggroup->getAllTeacher($schoolOption,$row['branch_id']);
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
-			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption);
+			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption,$row['branch_id']);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -176,12 +176,12 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		$_dggroup = new Foundation_Model_DbTable_DbGroup();
 		if (!empty($schoolOption)){
 			$db = new Foundation_Model_DbTable_DbGroup();
-			$teacher = $_dggroup->getAllTeacher($schoolOption);
+			$teacher = $_dggroup->getAllTeacher($schoolOption,$row['branch_id']);
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
 				
-			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption);
+			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption,$row['branch_id']);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		
@@ -264,20 +264,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function addTeacherPopupAction(){
-    	if($this->getRequest()->isPost()){
-    		try{
-    			$data = $this->getRequest()->getPost();
-    			$db = new Foundation_Model_DbTable_DbGroup();
-    			$teacher = $db->addTeacherAjax($data);
-    			print_r(Zend_Json::encode($teacher));
-    			exit();
-    		}catch(Exception $e){
-    			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		}
-    	}
-    }
+    
     function getteacherAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -288,7 +275,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		
     		if (!empty($schoolOption)){
 	    		$db = new Foundation_Model_DbTable_DbGroup();
-	    		$teacher = $db->getAllTeacher($schoolOption);
+	    		$teacher = $db->getAllTeacher($schoolOption,$data['branch_id']);
 	    		
 	    		array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 	    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
@@ -319,7 +306,8 @@ class Foundation_GroupController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$model = new Application_Model_DbTable_DbGlobal();
-    		$room = $model->getAllRoom();
+    		$room = $model->getAllRoom($data['branch_id']);
+			
     		array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
     		print_r(Zend_Json::encode($room));

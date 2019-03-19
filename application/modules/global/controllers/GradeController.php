@@ -3,7 +3,6 @@ class Global_GradeController extends Zend_Controller_Action {
 	const REDIRECT_URL = '/global/grade';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -32,7 +31,6 @@ class Global_GradeController extends Zend_Controller_Action {
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);
 	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'ordering'=>$link));
-	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -53,16 +51,11 @@ class Global_GradeController extends Zend_Controller_Action {
     			if($_major_id==-1){
     				$sms = "RECORD_EXIST";
     			}
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
-    			}else{
-    				Application_Form_FrmMessage::message($sms);
-    			}
+    			Application_Form_FrmMessage::message($sms);
     		}catch (Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
-    			
     	}
     	$type=1; //Degree
     	$frm = new Global_Form_FrmItemsDetail();
@@ -78,7 +71,8 @@ class Global_GradeController extends Zend_Controller_Action {
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
     }
-public function editAction(){
+    
+	public function editAction(){
     	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){

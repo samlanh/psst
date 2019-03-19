@@ -15,13 +15,13 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-	    					'title' 			=> '',
-	    					'academic_year' 	=> '',
-	    					'branch_id'			=>'',
-    						'school_option'		=>-1,
-    						'is_finished_search' => '',
-    						'status' 			=>-1,
-    					);
+	    				'title' 			=> '',
+	    				'academic_year' 	=> '',
+	    				'branch_id'			=>'',
+    					'school_option'		=>-1,
+    					'is_finished_search' => '',
+    					'status' 			=>-1,
+    				);
     		}
     		$db = new Accounting_Model_DbTable_DbFee();
     		$rs_rows= $db->getAllTuitionFee($search);
@@ -30,7 +30,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","School Option","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
     		$link=array(
-    				'module'=>'accounting','controller'=>'fee','action'=>'edit',
+    			'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'class'=>$link,'generation'=>$link));
     	}catch (Exception $e){
@@ -38,10 +38,8 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}    	
     	$this->view->adv_search = $search;
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->branch = $_db->getAllBranch();
-    	
+    	$this->view->branch = $_db->getAllBranch();    	
     	$frm = new Accounting_Form_FrmFee();
     	$frm->FrmTutionfee();
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -52,24 +50,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
-//     public function headAddRecordTuitionFee($rs,$key){
-//     	$result[$key] = array(
-//     						'id' 	  	=> $rs['id'],
-//     						'branch'	=> $rs['branch'],
-//     						'academic'	=> $rs['academic'],
-//     						'generation'=> $rs['generation'],	
-//     						'class'		=>'',
-//     		            	//'session'	=> '',
-//     						//'time'		=> $rs['time'],
-//     						'month'		=>'',
-//     						'quarter'	=>'',
-// 			    			'semester'	=>'',
-// 			    			'year'		=>'',
-//     						'date'		=>$rs['create_date'],
-//     						'status'	=>''
-//     				);
-//     	return $result[$key];
-//     }
     public function addAction()
     {
     	if($this->getRequest()->isPost()){
@@ -86,7 +66,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-	   			echo $e->getMessage();exit();
     		}
     	}
     	
@@ -96,10 +75,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$this->view->frm_fee = $frm;
     	
     	$dbgb = new Application_Model_DbTable_DbGlobal();
-//     	$d_row= $dbgb->getAllGradeStudy();
-// //     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-//     	array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
-//     	$this->view->grade_name=$d_row;
     	
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
@@ -132,12 +107,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_fee = $frm;
 		 
-// 		$dbgb = new Application_Model_DbTable_DbGlobal();
-// 		$d_row= $dbgb->getAllGradeStudy();
-// 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
-// 		$this->view->grade_name=$d_row;
-		$this->view->all_grade = $_db->getAllGradeStudyOption(1,$schoolOption);
-		
+		$this->view->all_grade = $_db->getAllGradeStudyOption(1,$schoolOption);		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 
@@ -170,7 +140,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	   $this->view->rows =$rs_rows;
 			   
 	}
-	
 	function copyAction(){
 		$_db = new Accounting_Model_DbTable_DbFee();
 		if($this->getRequest()->isPost()){
@@ -196,11 +165,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		$this->view->frm_fee = $frm;
 		 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-// 		$d_row= $dbgb->getAllGradeStudy();
-// // 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
-// 		$this->view->grade_name=$d_row;
-// 		$this->view->all_grade = $dbgb ->getAllGradeStudyOption();
 		$schoolOption = $row['school_option'];
 		$this->view->all_grade = $_db->getAllGradeStudyOption(1,$schoolOption);
 		

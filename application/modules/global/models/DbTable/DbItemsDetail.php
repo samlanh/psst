@@ -4,7 +4,6 @@
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	return $_dbgb->getUserId();
     }
-	
 	function getAllItemsDetail($search = '',$items_type=null){
 		$db = $this->getAdapter();
 		$sql = " SELECT 
@@ -23,7 +22,7 @@
 					WHERE 
 						1
 				";
-		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
+		$orderby = " ORDER BY ide.items_id DESC,ide.ordering DESC, ide.id DESC ";
 		$where = ' ';
 		if(!empty($items_type)){
 			$where.= " AND ide.items_type = ".$db->quote($items_type);
@@ -46,10 +45,8 @@
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getSchoolOptionAccess('ide.schoolOption');
-		
 		return $db->fetchAll($sql.$where.$orderby);
 	}
-	
 	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
 		$db = $this->getAdapter();
 		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId ";
@@ -137,7 +134,6 @@
 			Application_Form_FrmMessage::message("Application Error!");
 		}
 	}	
-	// For Module Product Stock
 	public function AddProduct($_data){
 		$_db= $this->getAdapter();
 		try{
@@ -215,14 +211,10 @@
 		$branch_id = $result["branch_id"];
 		$string="";
 		$location="";
-// 		if ($level!==1 AND $branch_id !==1){
 		if ($level!=1){
-// 			$string = " AND $branch_id IN (pl.brand_id)";
 			$string = $dbgb->getAccessPermission('pl.brand_id');
-// 			$location = " AND $branch_id IN ((SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id )) ";
 			$location = $dbgb->getAccessPermission('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id LIMIT 1 )');
 		}
-		
 		
 		$sql = " SELECT ide.id,ide.code,ide.title,
 			(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
@@ -258,10 +250,8 @@
 		if($search['product_type_search']>-1){
 			$where.= " AND ide.product_type = ".$db->quote($search['product_type_search']);
 		}
-// 		echo $sql.$where.$location.$orderby;exit();
 		return $db->fetchAll($sql.$where.$location.$orderby);
 	}
-	
 	
 	function getProductLocation($id){
 		$db = $this->getAdapter();
@@ -269,13 +259,10 @@
 		SELECT pl.*,
 		(SELECT s.`branch_namekh` FROM `rms_branch` AS s WHERE pl.`brand_id` = s.`br_id` LIMIT 1  ) AS branch_name
 		FROM `rms_product_location` AS pl WHERE pl.pro_id = $id";
-		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$location = $dbgb->getAccessPermission('pl.`brand_id`');
 		return $db->fetchAll($sql.$location);
 	}
-	
-	
 	public function updateProduct($_data){
 		$_db= $this->getAdapter();
 		try{
@@ -327,8 +314,6 @@
 			$id =  $_data["id"];
 			$where = $_db->quoteInto("id=?", $id);
 			$this->update($_arr, $where);
-			
-
 			
 			if ($level==1 AND $branch_id==1){ // only main Branch and Admin user
 				// For Product Location Section
@@ -387,10 +372,8 @@
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
-	
 	
 	public function addProductSet($_data){
 		$_db= $this->getAdapter();
@@ -440,7 +423,6 @@
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	public function updateProductSet($_data){
@@ -474,7 +456,6 @@
 			$id =  $_data["id"];
 			$where = $_db->quoteInto("id=?", $id);
 			$this->update($_arr, $where);
-			
 			
 			$identitys = explode(',',$_data['identity']);
 			$detailId="";
@@ -522,12 +503,10 @@
 					}
 				}
 			}
-	
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	function getAllProductSet($search = '',$items_type=null){
@@ -571,9 +550,6 @@
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
-// 		if($search['product_type_search']>-1){
-// 			$where.= " AND ide.product_type = ".$db->quote($search['product_type_search']);
-// 		}
 		return $db->fetchAll($sql.$where.$location.$orderby);
 	}
 	function getProductSetDetailById($id){
@@ -647,15 +623,12 @@
 					$this->insert($arr);
 				}
 			}
-				
 			return $id;
-				
 		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
-	
 	
 	public function AddGradeByAjax($_data){//To Items Detail
 		$_db= $this->getAdapter();
@@ -668,8 +641,6 @@
 					'items_type'=> 1,
 					'title'	  => $_data['major_enname'],
 					'shortcut' => $_data['shortcut'],
-// 					'note'    => $_data['note'],
-// 					'ordering'    => $_data['ordering'],
 					'schoolOption'    => $schooloption,
 					'create_date' => date("Y-m-d H:i:s"),
 					'modify_date' => date("Y-m-d H:i:s"),
@@ -682,11 +653,8 @@
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
-	
-	
 	
 	function CheckProductHasExit($data){
 		$db = $this->getAdapter();

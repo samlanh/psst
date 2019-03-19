@@ -44,6 +44,13 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			
     	));
     	
+    	$ordering = new Zend_Dojo_Form_Element_TextBox('ordering');
+    	$ordering->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'required'=>'true',
+    			'class'=>' fullside height-text',
+    	));
+    	
     	$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
     	$start_date->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
@@ -141,7 +148,6 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	
     	$id = new Zend_Form_Element_Hidden('id');
     	
-    	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
     	$advance_search->setAttribs(array(
@@ -194,13 +200,15 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			$_schoolOption->setValue($data["schoolOption"]);
     		}
     		$_type->setValue($data["type"]);
+    		
+    		$ordering->setValue($data["ordering"]);
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
-    		
     	}
     	
     	$this->addElements(array(
+    			$ordering,
     			$title,
     			$title_en,
     			$_shortcut,
@@ -222,4 +230,3 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	return $this;
     }
 }
-

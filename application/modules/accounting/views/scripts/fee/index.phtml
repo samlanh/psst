@@ -8,12 +8,8 @@
 	$formList = new Application_Form_Frmtable();
 	$urlCopy = $this->baseUrl()."/accounting/fee/copy/id/";
 	$urlEdit = $this->baseUrl()."/accounting/fee/edit/id/";
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>	
-
-<script type="text/javascript">
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.data.ItemFileWriteStore");  
-</script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -64,105 +60,94 @@
 		</div>
 	</div>
 </div>
-
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dijit.form.CheckBox"); 
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
 
-	dojo.ready(function(){ 
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                     
-			id: "academic_year",
-			name: "academic_year",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-			onChange: function() {  
-				academic_year = dijit.byId('academic_year').get('value');
-			}
-		}, "academic_year");
-		
-		getAllAcademicByBranch();
-	});
-
-	url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
-	function getAllAcademicByBranch(){
-		dijit.byId('academic_year').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('academic_year').set('store',academic_store);  
-			dijit.byId('branch_id').focus();
-			return false;
+dojo.ready(function(){ 
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "academic_year",
+		name: "academic_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			academic_year = dijit.byId('academic_year').get('value');
 		}
-		dojo.xhrPost({
-			url: url_getacademic,
-			content:{
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data){
-				academic_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('academic_year').set('store',academic_store);  
-				
-				dijit.byId('academic_year').attr("value","<?php echo $this->adv_search['academic_year']?>");
+	}, "academic_year");
+	
+	getAllAcademicByBranch();
+});
+
+url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+function getAllAcademicByBranch(){
+	dijit.byId('academic_year').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('academic_year').set('store',academic_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getacademic,
+		content:{
+			'branch_id':branch_id
 			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
-
-
-	function copyRecord(url){
-		 id = dijit.byId('recordcopy').get('value');
-		 if(id!=''){
-			window.location.href = url+'/id/'+id;
-		 }else{
-			alert('Please select record you want to copy');
-			return false;
-		 }
-	}
-
-	function setValue(index){
-		var recordcopy = $('input[name=copy]:checked').val();
-		dijit.byId('recordcopy').attr('value',recordcopy);
-	}
-	var row=0;
-	var url="";
-	$(function(){
-		$.contextMenu({
-			selector: '.context-menu-one', 
-			callback: function(key, options) {
+		handleAs:"json",
+		load: function(data){
+			academic_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('academic_year').set('store',academic_store);  
 			
-				var m = "clicked: " + key;
-				if(key=="edit"){
-					url='<?php echo $urlEdit;?>';
-				}else if(key=="copy"){
-					url='<?php echo $urlCopy;?>';
-				}
-				
-				gotoAction();
-				//window.console && console.log(m) || alert(m); 
-			},
-			items: {
-				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
-				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
-			}
-		});
+			dijit.byId('academic_year').attr("value","<?php echo $this->adv_search['academic_year']?>");
+		},
+		error: function(err) {
+		}
 	});
-	function setrowdata(index){
-		row = index;
-	}
-
-	var recordid ='';
-	function gotoAction(){
-		window.location.href =url+row;
-		 //window.open(url+row);
-	}
-</script> 
- 
- 
+}
+function copyRecord(url){
+	 id = dijit.byId('recordcopy').get('value');
+	 if(id!=''){
+		window.location.href = url+'/id/'+id;
+	 }else{
+		alert('Please select record you want to copy');
+		return false;
+	 }
+}
+function setValue(index){
+	var recordcopy = $('input[name=copy]:checked').val();
+	dijit.byId('recordcopy').attr('value',recordcopy);
+}
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $urlEdit;?>';
+			}else if(key=="copy"){
+				url='<?php echo $urlCopy;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+			"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	window.location.href =url+row;
+}
+</script>

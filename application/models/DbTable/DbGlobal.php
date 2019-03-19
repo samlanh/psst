@@ -1603,7 +1603,7 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($schooloption)){
   		$sql.=" AND $schooloption IN (m.schoolOption) ";
   	}
-  	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC, m.title ASC';
+  	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';
   	return $db->fetchAll($sql);
   }
   

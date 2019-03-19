@@ -9,16 +9,24 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     }
     function getAllTuitionFee($search=null){
     	$db=$this->getAdapter();
+    	
+    	$session_lang=new Zend_Session_Namespace('lang');
+    	$lang = $session_lang->lang_id;
+    	$field = 'name_en';
+    	if ($lang==1){
+    		$field = 'name_kh';
+    	}
+    	
     	$sql = "SELECT t.id,
-    	(select CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
-    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
-    	(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
-    	t.create_date,
-    	(select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished,
-    	t.status,
-    	(select CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
-    	FROM `rms_tuitionfee` AS t
-    	WHERE t.type=1	";
+	    	(SELECT CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
+	    		CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
+	    	(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
+	    		t.create_date,
+	    	(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,
+	    	t.status,
+	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
+    		FROM `rms_tuitionfee` AS t
+    		WHERE t.type=1	";
     	$where =" ";
     	 
     	if(!empty($search['title'])){
@@ -31,25 +39,20 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	if(!empty($search['academic_year'])){
     		$where.=" AND t.id=".$search['academic_year'];
     	}
-    	 
     	if(!empty($search['branch_id'])){
     		$where.=" AND t.branch_id=".$search['branch_id'];
-    	}
-    	 
+    	}    	 
     	if($search['is_finished_search']!=""){
     		$where.=" AND t.is_finished=".$search['is_finished_search'];
     	}
     	if($search['school_option']>0){
     		$where.=" AND t.school_option=".$search['school_option'];
     	}
-    	 
     	if($search['status']>-1){
     		$where.=" AND t.status=".$search['status'];
     	}
-    	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
-    	 
     	$order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
     	return $db->fetchAll($sql.$where.$order);
     }

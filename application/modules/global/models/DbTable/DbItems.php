@@ -1,5 +1,4 @@
 <?php class Global_Model_DbTable_DbItems extends Zend_Db_Table_Abstract{
-
 	protected $_name = 'rms_items';
     public function getUserId(){
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -12,6 +11,8 @@
 					d.id,
 					d.title,
 					d.title_en,
+					d.shortcut,
+					d.ordering,
 					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = d.schoolOption LIMIT 1) AS schoolOption,
 					(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
 					d.create_date,
@@ -22,8 +23,7 @@
 				WHERE 
 					1 
 			";
-		$orderby = " ORDER BY d.type ASC, d.id DESC ";
-// 		(SELECT dt.title FROM `rms_itemstype` AS dt WHERE dt.id = d.type LIMIT 1) AS degreetype,
+		$orderby = " ORDER BY d.type ASC, d.ordering DESC,d.id DESC ";
 		$where = ' ';
 		if(!empty($type)){
 			$where.= " AND d.type = ".$db->quote($type);
@@ -39,15 +39,11 @@
 		if(!empty($search['schoolOption_search'])){
 			$where.= " AND d.schoolOption  = ".$db->quote($search['schoolOption_search']);
 		}
-// 		if(!empty($search['type_search'])){
-// 			$where.= " AND d.type = ".$db->quote($search['type_search']);
-// 		}
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
-// 		$sql.=$dbp->getAccessPermission('g.branch_id');
 		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
 		
 		return $db->fetchAll($sql.$where.$orderby);
@@ -58,7 +54,6 @@
 			(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
 			d.status FROM `rms_items` AS d WHERE 1 ";
 		$orderby = " ORDER BY d.type ASC, d.id DESC ";
-		// 		(SELECT dt.title FROM `rms_itemstype` AS dt WHERE dt.id = d.type LIMIT 1) AS degreetype,
 		$where = ' ';
 		if(!empty($type)){
 			$where.= " AND d.type = ".$db->quote($type);
@@ -71,12 +66,6 @@
 			$s_where[] = " d.shortcut LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-// 		if(!empty($search['schoolOption_search'])){
-// 			$where.= " AND d.schoolOption  = ".$db->quote($search['schoolOption_search']);
-// 		}
-		//if(!empty($search['type_search'])){
-		// 	$where.= " AND d.type = ".$db->quote($search['type_search']);
-		//}
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
@@ -101,6 +90,7 @@
 					'title'	  		=> $_data['title'],
 					'title_en'	  	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
+					'ordering'		=> $_data['ordering'],
 					'type'			=> $_data['type'],
 					'create_date' 	=> date("Y-m-d H:i:s"),
 					'modify_date' 	=> date("Y-m-d H:i:s"),
@@ -130,7 +120,6 @@
 						$this->insert($arr);
 					}
 				}
-				
 			}else{
 				$schooloption="";
 				if (!empty($_data['selector'])){
@@ -161,7 +150,7 @@
 					'shortcut' 		=> $_data['shortcut'],
 					'type'			=> $_data['type'],
 // 					'schoolOption'  => $_data['schoolOption'],
-// 					'create_date' 	=> date("Y-m-d H:i:s"),
+					'ordering'		=> $_data['ordering'],
 					'modify_date' 	=> date("Y-m-d H:i:s"),
 					'status'		=> $_data['status'],
 					'user_id'	  	=> $this->getUserId()
@@ -172,7 +161,6 @@
 				$id = $_data["id"];
 				$where = $this->getAdapter()->quoteInto("id=?",$id);
 				$this->update($_arr, $where);
-				
 				
 				$identitys = explode(',',$_data['identity']);
 				$detailId="";
@@ -231,7 +219,6 @@
 						}
 					}
 				}
-				
 			}else{
 				$schooloption="";
 				if (!empty($_data['selector'])){
@@ -255,7 +242,6 @@
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
 		}
-		
 	}
 	
 	public function addItemsajax($_data,$type=null){
@@ -273,8 +259,6 @@
 	public function updateItemsDetailByItems($_data){
 		$_db= $this->getAdapter();
 		try{
-			
-			
 			$_arr = array(
 					'items_type'=> $_data['type'],
 			);
@@ -292,21 +276,16 @@
 				}
 				$_arr['schoolOption'] = $schooloption;
 			}
-			
 			$this->_name = "rms_itemsdetail";
 			$id_items = $_data["id"];
 			$where = $this->getAdapter()->quoteInto("items_id=?",$id_items);
 			$this->update($_arr, $where);
-// 			print_r($_data);exit();
-// 			return $id_items;
 				
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
-	
 	public function getDeptSubjectById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_dept_subject_detail WHERE dept_id = ".$db->quote($id);

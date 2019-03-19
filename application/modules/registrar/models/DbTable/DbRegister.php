@@ -304,12 +304,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							$arr_sale = array(
 									'payment_id'		=>$paymentid,
 									'is_product_set'	=>0,
-									'product_set_id'	=>$row['product_set_id'],
-									'pro_id'			=>$row['pro_id'],
-									'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
-									'qty_after'			=>$row['set_qty'] * $data['qty_'.$i],
-									'cost'				=>$row['cost'],
-									'price'				=>$row['price'],
+									'product_set_id'	=>$data['item_id'.$i],
+									'pro_id'			=>$data['item_id'.$i],
+									'qty'				=>$data['qty_'.$i], // (qty buy)
+									'qty_after'			=>$data['qty_'.$i],
+									'cost'				=>$rs_item['cost'],
+									'price'				=>$data['price_'.$i],
 									'user_id'			=>$this->getUserId(),
 								);
 							$this->_name="rms_saledetail";
@@ -520,13 +520,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$rows = $this->getParentIDToUpdateBack($payment_id);
 				if(!empty($rows)){foreach ($rows as $id_update_back){
 					$arr = array(
-						'is_start' => 1,
+							'is_start' => 1,
 						);
 					$where = ' id = '.$id_update_back['is_parent'];
 					$this->update($arr, $where);
 				}}
 				
 				$where = " payment_id = $payment_id";
+				$this->delete($where);
+				
+				$this->_name='rms_saledetail';
 				$this->delete($where);
 				
 				$gdb = new  Application_Model_DbTable_DbGlobal();
@@ -615,7 +618,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								$this->update($arr,$where);
 						}
 						
-						$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i]);
+						$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
 						   $_arr = array(
 								'payment_id'	=>$payment_id,
 								'service_type'	=>$rs_item['items_type'],
@@ -638,7 +641,61 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'is_parent'     =>$spd_id,
 						    );
 						$this->insert($_arr);
-					  }
+						
+						////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////
+						if($rs_item['items_type']==3){ // product
+							if($rs_item['is_productseat']==1){ // product set
+								$sql="select
+								set.pro_id as product_set_id,
+								set.subpro_id as pro_id,
+								set.qty as set_qty,
+								idt.cost,
+								lo.price
+								from
+								rms_itemsdetail as idt,
+								rms_product_setdetail as `set`,
+								rms_product_location as lo
+								where
+								idt.id = set.subpro_id
+								and set.subpro_id = lo.pro_id
+								and set.pro_id = ".$rs_item['id']."
+								and lo.brand_id = ".$data['branch_id'];
+								$result = $db->fetchAll($sql);
+								if(!empty($result)){
+									foreach ($result as $row){
+										$arr_sale = array(
+												'payment_id'		=>$payment_id,
+												'is_product_set'	=>1,
+												'product_set_id'	=>$row['product_set_id'],
+												'pro_id'			=>$row['pro_id'],
+												'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
+												'qty_after'			=>$row['set_qty'] * $data['qty_'.$i],
+												'cost'				=>$row['cost'],
+												'price'				=>$row['price'],
+												'user_id'			=>$this->getUserId(),
+										);
+										$this->_name="rms_saledetail";
+										$this->insert($arr_sale);
+									}
+								}
+							}else{ // product normal
+								$arr_sale = array(
+										'payment_id'		=>$payment_id,
+										'is_product_set'	=>0,
+										'product_set_id'	=>$data['item_id'.$i],
+										'pro_id'			=>$data['item_id'.$i],
+										'qty'				=>$data['qty_'.$i], // (qty buy)
+										'qty_after'			=>$data['qty_'.$i],
+										'cost'				=>$rs_item['cost'],
+										'price'				=>$data['price_'.$i],
+										'user_id'			=>$this->getUserId(),
+								);
+								$this->_name="rms_saledetail";
+								$this->insert($arr_sale);
+							}
+						}
+						
+				}
 			 	$db->commit();//if not errore it do....
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
@@ -1214,9 +1271,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		}else{
     			$sql="SELECT
     		 				price,
-    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
-    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as is_set,
-    						(SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as items_type,
+    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as onepayment,
+    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
+    						(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
     						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
 				    			WHERE sp.student_id = $student_id 
 					    			AND spd.itemdetail_id = $item_id

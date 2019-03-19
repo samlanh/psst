@@ -79,6 +79,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'missingMessage'=>'Invalid Module!',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'class'=>'fullside height-text',));
 		
 		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
@@ -105,7 +107,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'onChange'=>'getallGrade();getStudentNo()',
-		
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 		));
 		$rs_degree = $_dbgb->getAllFecultyName();
 		$arr_opt = array();
@@ -116,7 +119,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_academic->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>false,
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 		));
 		
 		$_academic->setValue($request->getParam("academic_year"));
@@ -130,7 +135,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
 		$_type->setAttribs(array('dojoType'=>$this->filter,
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>false,
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 		));
 		
 		$_type->setValue($request->getParam("type"));
@@ -148,6 +155,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$room->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 		
 		));
 		$rs_roow = $_dbgb->getAllRoom();
@@ -156,7 +165,11 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$room->setMultiOptions($arr_room);
 		
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
-		$session->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$session->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+				));
 		$opt_session = array(
 				1=>$tr->translate('MORNING'),
 				2=>$tr->translate('AFTERNOON'),
@@ -170,7 +183,10 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'required'=>'true',
 				'class'=>'fullside',));
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('gender');
-		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$_sex->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',));
 		$sex_opt = array(
 				1=>$tr->translate("MALE"),
 				2=>$tr->translate("FEMALE"));
@@ -212,7 +228,6 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if($data!=null){
 			$id->setValue($data['id']);
 			$_branch_id->setValue($data['branch_id']);
-			//$_type->setValue($data['type']);
  			$_goup->setValue($data['group_code']);
 			$session->setValue($data['session']);
 			$_calture->setValue($data['calture']);
@@ -252,7 +267,10 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_reason->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',));
 		$_status_opt = array(
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
@@ -263,6 +281,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'onChange'=>'getallGrade();getStudentNo()',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 	
 		));
 		$rs_degree = $_dbgb->getAllFecultyName();
@@ -274,7 +294,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_academic->setAttribs(array('dojoType'=>$this->filter,'readOnly'=>'readOnly',
 				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>false,
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 		));
 	
 		$_academic->setValue($request->getParam("academic_year"));
@@ -288,7 +310,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
 		$_type->setAttribs(array('dojoType'=>$this->filter,
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>false,
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 		));
 	
 		$_type->setValue($request->getParam("type"));
@@ -303,6 +327,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$room->setAttribs(array('readOnly'=>'readOnly',
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 	
 		));
 		$rs_roow = $_dbgb->getAllRoom();
@@ -311,7 +337,10 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$room->setMultiOptions($arr_room);
 	
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
-		$session->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly'));
+		$session->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside','readOnly'=>'readOnly',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',));
 		$opt_session = array(
 				1=>$tr->translate('MORNING'),
 				2=>$tr->translate('AFTERNOON'),
@@ -325,7 +354,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'required'=>'true',
 				'class'=>'fullside',));
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('gender');
-		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly'));
+		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'readOnly'=>'readOnly'));
 		$sex_opt = array(
 				1=>$tr->translate("MALE"),
 				2=>$tr->translate("FEMALE"));
@@ -342,7 +372,6 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
-		// 		$calture_opt = $db->getAllDegree();
 	
 		$calture_opt = array(""=>$this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
 		$optionDegree = $_dbgb->getAllDegreeMent(21);//Education Level
@@ -367,6 +396,4 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$this->addElements(array($id,$degree,$_status,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
-	
-	
 }

@@ -187,12 +187,8 @@
 	</div>
 </div>
 <script type="text/javascript">
-//dojo.require("dojo.data.ObjectStore");
-//dojo.require("dojo.data.ItemFileWriteStore"); 
-//dojo.require("dijit.form.FilteringSelect"); 
-//dojo.require("dojo.html");
 
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
+var grade_store  = getDataStorefromJSON('id','name',);
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
@@ -221,7 +217,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: teacher_storeass,
 		queryExpr: "*${0}*",
-		autoComplete: true,                  
+		autoComplete: false,                  
 		required: false,
 		id: "teacher_ass",
 		name: "teacher_ass",           
@@ -239,7 +235,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: subject_store,
 		queryExpr: "*${0}*",
-		autoComplete: true,                  
+		autoComplete: false,                  
 		required: false,
 		id: "subject_id",
 		name: "subject_id",           

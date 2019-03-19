@@ -80,9 +80,6 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		$this->view->room = $room;
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $_dbgb->getAllGradeStudy();
-		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->grade_name=$d_row;
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
 		
 		$tsub= new Global_Form_FrmAddClass();
@@ -136,9 +133,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $_dbgb->getAllGradeStudy();
-		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->grade_name=$d_row;
+		
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
 		$this->view->statustype = $_dbgb->getViewById(9);
 		$tsub= new Global_Form_FrmAddClass();

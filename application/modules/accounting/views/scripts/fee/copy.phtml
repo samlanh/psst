@@ -126,8 +126,6 @@ table .set-style td, table .set-style th {
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-					 	iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'accounting','controller'=>"fee",'action'=>'index'),null,true); ?>';" />
 					<input type="button"  onclick="alertBeforeSubmit();" label="<?php echo $tr->translate('SAVE_CLOSE');?>" id="save_close" name="save_close" dojoType="dijit.form.Button" 
 				 		iconClass="dijitEditorIcon dijitEditorIconSave"/>
                	</div>
@@ -179,9 +177,7 @@ function alertBeforeSubmit(){
 function hideAlert(){
 	dijit.byId("popup_alert").hide();
 }
-
 function submitDataClose(){
-	
 	if(dijit.byId('frm_fee').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
@@ -202,11 +198,9 @@ function submitDataClose(){
 function validateGrade(){
 	var identity = $('#identity').val();
 	if(identity==''){
-		//alert("សូមជ្រើសរើសថ្នាក់សិក្សា !");
 		dijit.byId("grade").focus();
 		return false;
 	}
-	
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++) {
 		grade = dijit.byId('class_'+arrays[i]).get('value');
@@ -245,7 +239,6 @@ var title = 0;
 tmp = '';
 temp='';
 function addRow() {
-	//var //grade = '<?php //echo $this->all_grade; ?>';
 	grade=dijit.byId("grade").get("value");
 	if(grade==''){return false;}
 	var iden = $("#identity").val();
@@ -278,14 +271,12 @@ function addRow() {
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="50px" align="center">'+no+'</td>';
 			template+='<td width="20%">&nbsp;'+label_grade+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="class_'+col+'" name="class_'+col+'" value="'+grade+'" /></td>';
-			//template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
-			//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++;
 				template+='<td width="11%"><input type="text" class="fullside" required="true" value="0" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
-			template+='<td width="25%"> <input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
+			template+='<td width="25%"><input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
 			
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -300,10 +291,10 @@ function addRow() {
 		});
  }
 dojo.ready(function(){
-	// initailize();
 	 new dijit.form.FilteringSelect({
 			store: grade_store,
-			autoComplete: true,                        
+			autoComplete: false,  
+			queryExpr:"*${0}*",
 			id: "grade",
 			name: "grade",  
 			class: 'fullside',  
@@ -352,7 +343,6 @@ function getAllGradeBySchoolOption(){
 		    dijit.byId('grade').set('store',grade_store);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -377,7 +367,7 @@ function initailize(){
 	}
 		template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td width="20%" ><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+gradeoption+'</select></td>';			
+		template+='<td width="20%" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+gradeoption+'</select></td>';			
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;
 			template+='<td width="11%" ><input type="text" id="fee'+col+'_'+column+'"  required="true" class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';

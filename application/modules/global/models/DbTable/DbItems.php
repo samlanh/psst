@@ -135,6 +135,21 @@
 				$id =  $this->insert($_arr);
 			}
 			
+			if(!empty($_data['identity1'])){
+				$idss = explode(',', $_data['identity1']);
+				foreach ($idss as $j){
+					$arr = array(
+							'degree_id'		=> $id,
+							'comment_id'	=> $_data['comment_'.$j],
+							'note'   		=> $_data['remark'.$j],
+							'create_date' 	=> date("Y-m-d"),
+							'user_id'		=> $this->getUserId()
+					);
+					$this->_name='rms_degree_comment';
+					$this->insert($arr);
+				}
+			}
+			
 			return $id;	
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -236,6 +251,58 @@
 				$where = $this->getAdapter()->quoteInto("id=?",$id);
 				$this->update($_arr, $where);
 			}
+			
+		//////////////////////// degree comment ////////////////////////////////////	
+			$identitys1 = explode(',',$_data['identity1']);
+			$oldId="";
+			if(!empty($identitys1)){
+				foreach($identitys1 as $j){
+					if(empty($oldId)){
+						if(!empty($_data['old_id_'.$j])){
+							$oldId = $_data['old_id_'.$j];
+						}
+					}else{
+						if(!empty($_data['old_id_'.$j])){
+							$oldId= $oldId.",".$_data['old_id_'.$j];
+						}
+					}
+				}
+			}
+			
+			$this->_name='rms_degree_comment';
+			$where = 'degree_id = '.$id;
+			if(!empty($oldId)){
+				$where.=" AND id NOT IN ($oldId) ";
+			}
+			$this->delete($where);
+			
+			if(!empty($_data['identity1'])){
+				$this->_name='rms_degree_comment';
+				$ids1 = explode(',', $_data['identity1']);
+				foreach ($ids1 as $k){
+					if (!empty($_data['old_id_'.$k])){
+						$arr = array(
+								'degree_id'		=> $id,
+								'comment_id'	=> $_data['comment_'.$k],
+								'note'   		=> $_data['remark'.$k],
+								'create_date' 	=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
+						);
+						$where =" id =".$_data['old_id_'.$k];
+						$this->update($arr, $where);
+					}else{
+						$arr = array(
+								'degree_id'		=> $id,
+								'comment_id'	=> $_data['comment_'.$k],
+								'note'   		=> $_data['remark'.$k],
+								'create_date' 	=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
+						);
+						$this->insert($arr);
+					}
+				}
+			}
+			
 			$this->updateItemsDetailByItems($_data);
 			return $id;
 		}catch(exception $e){
@@ -291,5 +358,21 @@
 		$sql = "SELECT * FROM rms_dept_subject_detail WHERE dept_id = ".$db->quote($id);
 		$row=$db->fetchAll($sql);
 		return $row;
+	}
+	public function getDDegreeCommentById($id){
+		$db = $this->getAdapter();
+		$sql = "SELECT 
+					*,
+					(select comment from rms_comment where rms_comment.id = comment_id limit 1 ) as comment 
+				FROM 
+					rms_degree_comment 
+				WHERE 
+					degree_id = ".$db->quote($id);
+		return $db->fetchAll($sql);
+	}
+	public function getAllComment(){
+		$db = $this->getAdapter();
+		$sql = "SELECT id,comment FROM rms_comment WHERE status = 1 order by id ASC";
+		return $db->fetchAll($sql);
 	}
 }

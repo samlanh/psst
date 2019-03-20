@@ -57,6 +57,9 @@ class Global_DegreeController extends Zend_Controller_Action {
     		}
     	}
     	
+    	$db = new Global_Model_DbTable_DbItems();
+    	$this->view->comment = $db->getAllComment();
+    	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -84,6 +87,12 @@ class Global_DegreeController extends Zend_Controller_Action {
     	if (empty($row)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     	}
+    	
+    	$this->view->row_comment = $db->getDDegreeCommentById($id);;
+    	
+    	$db = new Global_Model_DbTable_DbItems();
+    	$this->view->comment = $db->getAllComment();
+    	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

@@ -483,7 +483,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				2=>$tr->translate("FEMALE"));
 		$_sex->setMultiOptions($sex_opt);
 		
-		$db = new Global_Model_DbTable_DbGroup();
+		$db = new Foundation_Model_DbTable_DbGroup();
 		$rs_year = $db->getAllYears();
 		$opt_year = array() ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
 		if(!empty($rs_year))foreach($rs_year AS $row) $opt_year[$row['id']]=$row['years'];
@@ -602,7 +602,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$name_kh->setValue($data['stu_khname']);
 			$_sex->setValue($data['sex']);
 			$student_id->setValue($data['stu_code']);
-			$_academic_year->setValue($data['academic_year']);
+			
+			//$data['academic_id'] when right click on student go to stutrandrop
+			$academicyear = empty($data['academic_id'])?$data['academic_year']:$data['academic_id'];
+			$_academic_year->setValue($academicyear);
 			$session->setValue($data['session']);
 			$degree->setValue($data['degree']);
 	//		$reason->setValue($data['reason']);

@@ -269,7 +269,10 @@ dojo.ready(function(){
 	if(know_by==''){
 		dijit.byId('know_by').attr('value',0);
 	}
-	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
+	<?php 
+	////$data['academic_id'] when right click on student go to stutrandrop
+	$academicyear = empty( $this->rs['academic_id'])? $this->rs['academic_year']: $this->rs['academic_id'];?>
+	dijit.byId('academic_year').attr('value',"<?php echo $academicyear;?>");
 }); 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';

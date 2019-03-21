@@ -77,6 +77,7 @@
 		if (!empty($type)){
 			$sql.=" AND d.type=$type";
 		}
+
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
 		
@@ -134,22 +135,22 @@
 				$this->_name = "rms_items";
 				$id =  $this->insert($_arr);
 			}
-			
-			if(!empty($_data['identity1'])){
-				$idss = explode(',', $_data['identity1']);
-				foreach ($idss as $j){
-					$arr = array(
-							'degree_id'		=> $id,
-							'comment_id'	=> $_data['comment_'.$j],
-							'note'   		=> $_data['remark'.$j],
-							'create_date' 	=> date("Y-m-d"),
-							'user_id'		=> $this->getUserId()
-					);
-					$this->_name='rms_degree_comment';
-					$this->insert($arr);
+			if($_data['type']==1){
+				if(!empty($_data['identity1'])){
+					$idss = explode(',', $_data['identity1']);
+					foreach ($idss as $j){
+						$arr = array(
+								'degree_id'		=> $id,
+								'comment_id'	=> $_data['comment_'.$j],
+								'note'   		=> $_data['remark'.$j],
+								'create_date' 	=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
+						);
+						$this->_name='rms_degree_comment';
+						$this->insert($arr);
+					}
 				}
 			}
-			
 			return $id;	
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -164,7 +165,6 @@
 					'title_en'	  	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
 					'type'			=> $_data['type'],
-// 					'schoolOption'  => $_data['schoolOption'],
 					'ordering'		=> $_data['ordering'],
 					'modify_date' 	=> date("Y-m-d H:i:s"),
 					'status'		=> $_data['status'],
@@ -253,56 +253,57 @@
 			}
 			
 		//////////////////////// degree comment ////////////////////////////////////	
-			$identitys1 = explode(',',$_data['identity1']);
-			$oldId="";
-			if(!empty($identitys1)){
-				foreach($identitys1 as $j){
-					if(empty($oldId)){
-						if(!empty($_data['old_id_'.$j])){
-							$oldId = $_data['old_id_'.$j];
-						}
-					}else{
-						if(!empty($_data['old_id_'.$j])){
-							$oldId= $oldId.",".$_data['old_id_'.$j];
+		if($_data['type']==1){
+				$identitys1 = explode(',',$_data['identity1']);
+				$oldId="";
+				if(!empty($identitys1)){
+					foreach($identitys1 as $j){
+						if(empty($oldId)){
+							if(!empty($_data['old_id_'.$j])){
+								$oldId = $_data['old_id_'.$j];
+							}
+						}else{
+							if(!empty($_data['old_id_'.$j])){
+								$oldId= $oldId.",".$_data['old_id_'.$j];
+							}
 						}
 					}
 				}
-			}
-			
-			$this->_name='rms_degree_comment';
-			$where = 'degree_id = '.$id;
-			if(!empty($oldId)){
-				$where.=" AND id NOT IN ($oldId) ";
-			}
-			$this->delete($where);
-			
-			if(!empty($_data['identity1'])){
+				
 				$this->_name='rms_degree_comment';
-				$ids1 = explode(',', $_data['identity1']);
-				foreach ($ids1 as $k){
-					if (!empty($_data['old_id_'.$k])){
-						$arr = array(
-								'degree_id'		=> $id,
-								'comment_id'	=> $_data['comment_'.$k],
-								'note'   		=> $_data['remark'.$k],
-								'create_date' 	=> date("Y-m-d"),
-								'user_id'		=> $this->getUserId()
-						);
-						$where =" id =".$_data['old_id_'.$k];
-						$this->update($arr, $where);
-					}else{
-						$arr = array(
-								'degree_id'		=> $id,
-								'comment_id'	=> $_data['comment_'.$k],
-								'note'   		=> $_data['remark'.$k],
-								'create_date' 	=> date("Y-m-d"),
-								'user_id'		=> $this->getUserId()
-						);
-						$this->insert($arr);
-					}
+				$where = 'degree_id = '.$id;
+				if(!empty($oldId)){
+					$where.=" AND id NOT IN ($oldId) ";
 				}
+				$this->delete($where);
+				
+				if(!empty($_data['identity1'])){
+					$this->_name='rms_degree_comment';
+					$ids1 = explode(',', $_data['identity1']);
+					foreach ($ids1 as $k){
+						if (!empty($_data['old_id_'.$k])){
+							$arr = array(
+									'degree_id'		=> $id,
+									'comment_id'	=> $_data['comment_'.$k],
+									'note'   		=> $_data['remark'.$k],
+									'create_date' 	=> date("Y-m-d"),
+									'user_id'		=> $this->getUserId()
+							);
+							$where =" id =".$_data['old_id_'.$k];
+							$this->update($arr, $where);
+						}else{
+							$arr = array(
+									'degree_id'		=> $id,
+									'comment_id'	=> $_data['comment_'.$k],
+									'note'   		=> $_data['remark'.$k],
+									'create_date' 	=> date("Y-m-d"),
+									'user_id'		=> $this->getUserId()
+							);
+							$this->insert($arr);
+						}
+					}
+				}							
 			}
-			
 			$this->updateItemsDetailByItems($_data);
 			return $id;
 		}catch(exception $e){

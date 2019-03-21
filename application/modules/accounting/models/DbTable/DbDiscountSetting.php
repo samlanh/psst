@@ -22,13 +22,14 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				'start_date'  => $_data['start_date'],
 				'end_date'	  => $_data['end_date'],
 				'create_date' => Zend_Date::now(),
-				'status'  	  => $_data['status'],
+				'status'  	  => 1,
 				'user_id'	  => $this->getUserId()
 		);
 		$this->insert($_arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}	
 	public function addNewDiscountPopup($_data){
@@ -83,7 +84,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['title'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
-			$s_where[] = " (SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=disname_id ) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT dis_name AS name FROM `rms_discount` WHERE disco_id=disname_id ) LIKE '%{$s_search}%'";
 			$s_where[] = " dis_max LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
@@ -93,14 +94,16 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('g.branch_id');
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	public function addDiscounttionset($_data){//ajax
 		$_arr=array(
-				'dis_name' => $_data['dis_name'],
-				'create_date' => Zend_Date::now(),
-				'status'   => 1,
-				'user_id'	  => $this->getUserId()
+			'dis_name' => $_data['dis_name'],
+			'create_date' => Zend_Date::now(),
+			'status'   => 1,
+			'user_id'	  => $this->getUserId()
 		);
 		return  $this->insert($_arr);
 	}

@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_SERVICE"));
 	$frm_items= $this->frm_items;
+	$baseurl = $this->baseUrl();
 ?>	
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
@@ -92,10 +93,7 @@
 		             <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-								iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"grade",'action'=>'index'),null,true); ?>';" />
-							<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
+		               		<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
 						 		iconClass="dijitEditorIcon dijitEditorIconSave" />
 		               	</div>
 		             </div>
@@ -106,8 +104,6 @@
  </div>
  <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
     dojo.require("dijit.form.Textarea");
     dojo.require("dojo.data.ItemFileWriteStore");  
     dojo.require('dijit.form.NumberTextBox');
@@ -119,13 +115,14 @@
     	new dijit.form.FilteringSelect({
     		name: "items_id",
     		id: "items_id",
+    		queryExpr: "*${0}*",
+			autoComplete: false,
     		searchAttr: "name",
     		class: 'fullside',
     		onChange: function() {
     			checkaddItems();
     	    }
     		}, "items_id");
-    	
     });
     function checkaddItems(){
     	dept_id = dijit.byId('items_id').get('value');
@@ -152,27 +149,4 @@
 				}
 			});
 	}
-</script>
-<script>
-function submitDataClose(){
-	items_id = dijit.byId('items_id').get('value');
-	if(items_id==0){
-		alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
-	}
-	if(dijit.byId('office_receipt').validate()) {
-		dijit.byId('save_close').set('disabled',true);
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/service";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
 </script>

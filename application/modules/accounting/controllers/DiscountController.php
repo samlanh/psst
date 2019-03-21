@@ -2,7 +2,6 @@
 class Accounting_DiscountController extends Zend_Controller_Action {
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -11,13 +10,15 @@ class Accounting_DiscountController extends Zend_Controller_Action {
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
-						'title' => $_data['title'],
-						'status' => $_data['status_search']);
+					'title' => $_data['title'],
+					'status' => $_data['status_search']
+				);
 			}
 			else{
 				$search = array(
-						'title' => '',
-						'status' => -1);
+					'title' => '',
+					'status' => -1
+				);
 			}
  			$db = new Accounting_Model_DbTable_DbDiscount();
  			$rs_rows= $db->getAllDiscount($search);
@@ -25,9 +26,9 @@ class Accounting_DiscountController extends Zend_Controller_Action {
  			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("DISCOUNT_TYPR","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("DISCOUNT_TYPE","CREATED_DATE","BY_USER","STATUS");
 			$link=array(
-					'module'=>'accounting','controller'=>'discount','action'=>'edit',
+				'module'=>'accounting','controller'=>'discount','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('dis_name'=>$link,'doc_name'=>$link));
 		}catch (Exception $e){
@@ -42,7 +43,7 @@ class Accounting_DiscountController extends Zend_Controller_Action {
 	public function addAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			try {
+			try{
 				$sms="INSERT_SUCCESS";
 				$_dbmodel = new Accounting_Model_DbTable_DbDiscount();
 				$_discount = $_dbmodel->addNewDiscount($_data);
@@ -54,9 +55,8 @@ class Accounting_DiscountController extends Zend_Controller_Action {
 				}else{
 					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/discount/add");
 				}
-				Application_Form_FrmMessage::message($sms);				
-					
-			}catch (Exception $e) {
+				Application_Form_FrmMessage::message($sms);									
+			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}		
@@ -79,13 +79,4 @@ class Accounting_DiscountController extends Zend_Controller_Action {
 		$db = new Accounting_Model_DbTable_DbDiscount();
 		$this->view->rs=$db->getDiscountById($id);
 	}
-// 	function addcompositionAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Accounting_Model_DbTable_DbDiscount();
-// 			$id = $db->addDiscounttion($data);
-// 			print_r(Zend_Json::encode($id));
-// 			exit();
-// 		}
-// 	}
 }

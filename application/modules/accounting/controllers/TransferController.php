@@ -6,7 +6,6 @@ class Accounting_TransferController extends Zend_Controller_Action {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
-
     public function indexAction()
     {	
     	$db = new Accounting_Model_DbTable_DbTransferstock();
@@ -17,28 +16,26 @@ class Accounting_TransferController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    					'title' => '',
-    					'start_date' =>date("Y-m-d"),
-    					'end_date' =>date("Y-m-d"),
+    				'title' => '',
+    				'start_date' =>date("Y-m-d"),
+    				'end_date' =>date("Y-m-d"),
     			);
     		}
     		$rs_rows= $db->getAllTransfer($search);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("TRANSFER_NUMBER","TRANSFER_DATE","FROM_LOCATION","TO_LOCATION","NOTE","BY_USER","STATUS");
     		$link=array(
-    				'module'=>'accounting','controller'=>'transfer','action'=>'edit',
+    			'module'=>'accounting','controller'=>'transfer','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('transfer_no'=>$link,'transfer_date'=>$link,'fromlocation'=>$link,'tolocation'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	 
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
     }
 	public function addAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();
@@ -64,7 +61,6 @@ class Accounting_TransferController extends Zend_Controller_Action {
 		$frm = $fm->Frmbranch();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
-		
 	}
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();

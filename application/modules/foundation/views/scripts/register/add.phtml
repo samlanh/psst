@@ -729,7 +729,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,                      
 	    id: "group",
 	    name: "group",  
@@ -754,7 +754,7 @@ dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: false,                     
 		id: "academic_year",
 		name: "academic_year",
@@ -767,7 +767,7 @@ dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
 	    queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,                        
 	    id: "grade",
 	    name: "grade",  
@@ -783,12 +783,11 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,
 	    id: "fa_job",
 	    name: "fa_job",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
 	    onChange: function() {          
@@ -807,7 +806,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,              
 	    id: "mo_job",
 	    name: "mo_job",  
@@ -830,7 +829,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,                     
 	    id: "gu_job",
 	    name: "gu_job",  
@@ -853,12 +852,11 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: nation_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,
 	    id: "nation",
 	    name: "nation",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -878,12 +876,11 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: nation_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,
 	    id: "studen_national",
 	    name: "studen_national",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -902,12 +899,11 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: nation_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,
 	    id: "fa_national",
 	    name: "fa_national",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -929,12 +925,11 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: nation_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,
 	    id: "mom_nation",
 	    name: "mom_nation",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -953,12 +948,11 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: nation_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: true,
 	    id: "guardian_national",
 	    name: "guardian_national",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function(){          
@@ -977,7 +971,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: language_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: false,                        
 	    id: "lang_level",
 	    name: "lang_level",  
@@ -995,7 +989,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: knowby_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
+		autoComplete:false,                     
 		required: false,                        
 	    id: "know_by",
 	    name: "know_by",  
@@ -1073,6 +1067,9 @@ dojo.ready(function(){
 		getStudentNo();
 		oldRow();
 		dijit.byId('nation').attr("value",1);
+		dijit.byId('fa_national').attr("value",1);
+		//dijit.byId('nation').attr("value",1);
+		//dijit.byId('nation').attr("value",1);
 }); 
 
 

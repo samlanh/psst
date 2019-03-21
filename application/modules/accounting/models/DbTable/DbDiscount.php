@@ -68,7 +68,6 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 					status
 				FROM 
 					rms_discount ";
-		
 		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE dis_name!="" ';
 		if(empty($search)){

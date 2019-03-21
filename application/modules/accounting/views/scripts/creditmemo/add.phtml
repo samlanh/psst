@@ -97,9 +97,7 @@ $frm = $this->frm_credit;
 			<div class="clearfix"></div>
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-				 iconClass="dijitIconClear"/>
-					<input type="button"  onclick="submitDataClose()" label="<?php echo $tr->translate("SAVECLOSE");?>" name='save_close' id='save_close' value='save_close' dojoType="dijit.form.Button"
+               		<input type="button"  onclick="submitDataClose()" label="<?php echo $tr->translate("SAVECLOSE");?>" name='save_close' id='save_close' value='save_close' dojoType="dijit.form.Button"
 				 iconClass="dijitIconDelete"/>
 					<input type="submit" label="<?php echo $tr->translate("SAVENEW")?>" name='save_new' id='save_new' value='save_new' dojoType="dijit.form.Button"
 				 iconClass="dijitIconNewTask"/>
@@ -117,7 +115,6 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.store.Memory");
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		autoComplete: false,
@@ -153,13 +150,9 @@ function getallstudentname(){//
 		    dijit.byId('student_id').set('store',student_store);  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-</script>
-
-<script>
 function submitDataClose(){
 	student_id = dijit.byId('student_id').get('value');
     if(student_id==0){

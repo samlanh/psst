@@ -6,7 +6,6 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	
     public function indexAction()
     {
     	try{
@@ -22,10 +21,8 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     					'status' =>-1,
     			);
     		}
-    		
     		$db = new Accounting_Model_DbTable_DbServiceCharge();
     		$service= $db->getAllServiceFee($search);
-    		
     		$collumns = array("BRANCH","ACADEMIC_YEAR","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'servicecharge','action'=>'edit',

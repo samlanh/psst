@@ -83,20 +83,13 @@
 		                	<?php echo $frm_items->getElement("note");?>
 		                </div>
 		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_items->getElement("status");?>
-		                </div>
-		             </div>
 		             <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="submit"  onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
+		               		<input type="submit"  onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
 							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
 		               	</div>
 		             </div>
 		         </div>
@@ -111,9 +104,8 @@
     dojo.require("dojo.data.ItemFileWriteStore");  
     dojo.require('dijit.form.NumberTextBox');
     dojo.ready(function(){
-        
     });
-    var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree));?> );
+    var rs_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rsservice));?> );
     require(["dojo/ready"], function(ready){
     	
     	new dijit.form.FilteringSelect({
@@ -121,11 +113,12 @@
     		id: "items_id",
     		searchAttr: "name",
     		class: 'fullside',
+    		queryExpr: "*${0}*",
+			autoComplete: false,   
     		onChange: function() {
     			checkaddItems();
     	    }
-    		}, "items_id");
-    	
+    	}, "items_id");
     });
     function checkaddItems(){
     	dept_id = dijit.byId('items_id').get('value');
@@ -143,36 +136,36 @@
 					},
 				handleAs:"json",
 				load: function(data) {
-					dept_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('items_id').set('store',dept_store);  
+					rs_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('items_id').set('store',rs_store);  
 				   document.getElementsByClassName("overlay")[0].style.display="none";
 				},
 				error: function(err) {
 					document.getElementsByClassName("overlay")[0].style.display="none";
 				}
-			});
+		});
 	}
 </script>
 <script>
-function submitDataClose(){
-	items_id = dijit.byId('items_id').get('value');
-	if(items_id==0){
-		alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
+	function submitDataClose(){
+		items_id = dijit.byId('items_id').get('value');
+		if(items_id==0){
+			alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
+		}
+		if(dijit.byId('office_receipt').validate()) {
+			dijit.byId('save_close').set('disabled',true);
+			dijit.byId('save_new').set('disabled',true);
+			var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>';
+			dojo.xhrPost({
+			    url: url_submit,	
+				form: dojo.byId("office_receipt"),		    
+				load: function(data) {
+					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+					window.location.href ="<?php echo $this->baseUrl();?>/accounting/service";
+				},
+				error: function(e) {
+				}
+			});
+		}
 	}
-	if(dijit.byId('office_receipt').validate()) {
-		dijit.byId('save_close').set('disabled',true);
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/service";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
 </script>

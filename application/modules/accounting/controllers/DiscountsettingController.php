@@ -3,7 +3,6 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -27,7 +26,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
   			$rs_rows= $db->getAllDiscountset($search);
         	
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","DISCOUNT_TYPR","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","DISCOUNT_TYPE","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discountsetting','action'=>'edit',
 			);
@@ -89,17 +88,11 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		$db = new Accounting_Model_DbTable_DbDiscountSetting();
 		$rows = $db->getDiscountsetById($id);
 		$this->view->rs= $rows;
 		
-		$model = new Application_Model_DbTable_DbGlobal();
-		$disc = $model->getAllDiscount();
-		array_unshift($disc, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->discount = $disc;
-		
-		$model = new Application_Model_DbTable_DbGlobal();
+		$model = new Application_Model_DbTable_DbGlobal();		
 		$dis = $model->getAllDiscount();
 		$this->view->discount = $dis;
 		

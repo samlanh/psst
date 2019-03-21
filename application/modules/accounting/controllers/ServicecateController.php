@@ -1,10 +1,8 @@
 <?php
 class Accounting_ServicecateController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	const REDIRECT_URL = '/accounting/servicecate';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -32,19 +30,19 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$link=array(
     			'module'=>'accounting','controller'=>'servicecate','action'=>'edit',
     	);
-    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'schoolOption'=>$link));
+    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
-    	
     }
     function addAction(){
     	if($this->getRequest()->isPost()){
     		try {
     			$sms="INSERT_SUCCESS";
     			$_data = $this->getRequest()->getPost();
+    			$_data['ordering']=1;
     			$db = new Global_Model_DbTable_DbItems();
     			$degree_id= $db->AddDegree($_data);
     			if($degree_id==-1){
@@ -70,22 +68,23 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
-    
     public function editAction(){
     	$db = new Global_Model_DbTable_DbItems();
     	$id= $this->getRequest()->getParam("id");
+    	$type =2; //service category
     	if($this->getRequest()->isPost()){
     		try {
     			$_data = $this->getRequest()->getPost();
+    			$_data['ordering']=1;
     			$db->UpdateDegree($_data);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS",'/accounting/servicecate');
     			exit();
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("EDIT_FAIL");
     		}
     	}
-    	$type =2; //service category
+    	
     	$row =$db->getDegreeById($id,$type);
     	if (empty($row)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
@@ -102,9 +101,5 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$frm->FrmAddDegree($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
-    	
-    	
     }
-    
 }
-

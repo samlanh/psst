@@ -16,14 +16,21 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$oder);
     }
     function getAllServiceFee($search){
-	    try{		
+	    try{
+	    	$session_lang=new Zend_Session_Namespace('lang');
+	    	$lang = $session_lang->lang_id;
+	    	$field = 'name_en';
+	    	if ($lang==1){
+	    		$field = 'name_kh';
+	    	}
+	    			
 	    $db=$this->getAdapter();
     	$sql = "SELECT t.id,
 	    	(SELECT CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
 	    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic,
 	    	t.create_date,
-	    	(select name_en from rms_view where type=12 and key_code=t.is_finished LIMIT 1) as is_finished,
-	    	(select name_kh from rms_view where type=1 and key_code = t.status) as status,
+	    	(select $field from rms_view where type=12 and key_code=t.is_finished LIMIT 1) as is_finished,
+	    	(select $field from rms_view where type=1 and key_code = t.status) as status,
 	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id LIMIT 1) as user
 	    	
     	FROM `rms_tuitionfee` AS t
@@ -79,7 +86,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    				'to_academic'=>$_data['to_academic'],
 	    				'note'=>$_data['note'],
 	    				'type'=>2,
-	    				'status'=>$_data['status'],
+	    				'status'=>1,
 	    				'create_date'=>date('Y-m-d'),
 	    				'user_id'=>$this->getUserId()
 	    				);

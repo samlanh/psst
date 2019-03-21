@@ -1,12 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("SERVICE"));
-	
-	$url_copy =$this->url(array('module'=>'accounting','controller'=>'service','action'=>'copy'));
-	$formList = new Application_Form_Frmtable();
 	$urlCopy = $this->baseUrl()."/accounting/service/copy/id/";
 	$urlEdit = $this->baseUrl()."/accounting/service/edit/id/";
-	 $frm =  $this->frm_items;?>
+	$frm =  $this->frm_items;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -42,17 +39,10 @@
 		</div>
 	</div>
 </div>
-
-
-
-
- 
 <script type="text/javascript">
-dojo.require("dijit.form.CheckBox"); 
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');
 		 if(id!=''){
@@ -62,28 +52,23 @@ dojo.require("dijit.form.DateTextBox");
 			return false;
 		 }
 	}
-
 	function setValue(index){
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-
 	var row=0;
 	var url="";
 	$(function(){
 		$.contextMenu({
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
-			
 				var m = "clicked: " + key;
 				if(key=="edit"){
 					url='<?php echo $urlEdit;?>';
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
 				}
-				
 				gotoAction();
-				//window.console && console.log(m) || alert(m); 
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
@@ -94,12 +79,8 @@ dojo.require("dijit.form.DateTextBox");
 	function setrowdata(index){
 		row = index;
 	}
-
 	var recordid ='';
 	function gotoAction(){
 		window.location.href =url+row;
-		 //window.open(url+row);
 	}
-</script> 
-
-
+</script>

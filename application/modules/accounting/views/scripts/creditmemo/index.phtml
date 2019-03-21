@@ -1,14 +1,10 @@
 <?php 
-$frm = $this->frm_search;
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$urlEdit = $this->baseUrl()."/accounting/creditmemo/edit/id/";
-$urlTransfer = $this->baseUrl()."/accounting/transfercredit/transfer/id/";
+	$frm = $this->frm_search;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$urlEdit = $this->baseUrl()."/accounting/creditmemo/edit/id/";
+	$urlTransfer = $this->baseUrl()."/accounting/transfercredit/transfer/id/";
 ?>
 <title><?php echo $tr->translate("CREDIT_MEMO");?></title>
-<script>
-	dojo.require('dijit.form.Button');
-	dojo.require("dijit.form.DateTextBox");
-</script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -55,6 +51,7 @@ $urlTransfer = $this->baseUrl()."/accounting/transfercredit/transfer/id/";
 	</div>
 </div>
 <script>
+	dojo.require("dijit.form.DateTextBox");
 var row=0;
 var url="";
 var indexkey="";
@@ -75,7 +72,6 @@ $(function(){
 		items: {
 			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "c o p y"},
 			"transfer": {name: "<?php echo $tr->translate("TRANSFER_TO");?>", icon: "copy", accesskey: "c o p y"},
-			
 		}
 	});
 });
@@ -90,4 +86,3 @@ function gotoAction(){
 	 window.open(url+row, '_blank');
 }
 </script>
-

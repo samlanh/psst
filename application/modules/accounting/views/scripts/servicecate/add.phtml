@@ -4,15 +4,6 @@
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
  	$frm_degree= $this->frm_degree;
 ?>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox");
-//dojo.require("dojo.NodeList-manipulate");
-</script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
@@ -72,12 +63,6 @@ ul.opt-school {
 		                	<?php echo $frm_degree->getElement("note");?>
 		                </div>
 		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("status");?>
-		                </div>
-		             </div>
 		         </div>
 		         <div class="col-md-4 col-sm-4 col-xs-12">
 		         	<div class="form-group">
@@ -86,12 +71,12 @@ ul.opt-school {
 	                </div>
 	                <div class="form-group">
 	                	<span><input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
-	                	<ul class="opt-school">
-	                		<?php $identityCheck = ""; if (!empty($this->schoolOption)) foreach ($this->schoolOption as $rs){?>
-	                		<li class="opt-items"> <input checked="checked" type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
-	                			<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
-	                		<?php }?>
-	                	</ul>
+		                	<ul class="opt-school">
+		                		<?php $identityCheck = ""; if (!empty($this->schoolOption)) foreach ($this->schoolOption as $rs){?>
+		                		<li class="opt-items"> <input checked="checked" type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
+		                			<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
+		                		<?php }?>
+		                	</ul>
 	                	<input type="hidden" id="identityCheck" name="identityCheck" value="<?php echo $identityCheck;?>" />
 	                </div>
 		         </div>
@@ -108,43 +93,28 @@ ul.opt-school {
     	</form>
     </div>
 </div>
-
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script type="text/javascript">
+	dojo.require("dijit.form.Textarea");
+	dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.Textarea")
+</script>
 
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-//dojo.require('dojox.form.BusyButton');
 dojo.ready(function(){
-	/*getValue();*/
 });
-
-/*function getValue(){
-	var par='';
-	if(dojo.byId('is_parent').checked){
-		par = 1;
-		dijit.byId('parent').attr('value','');
-		dijit.byId("parent").set('readOnly',true);
-		 dijit.byId('parent').set('required',false);  
-	}else{
-		par=0;
-		dijit.byId("parent").set('readOnly',false);
-		 dijit.byId('parent').set('required',true);  
-	}
-	$('#par').val(par);
-}*/
 function CheckAllTotal(index){
 	if(index==0){
-			if($('#check_all').is(":checked")){
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = true;  
-				});
-			}else{
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = false;  
-				});
-			}
+		if($('#check_all').is(":checked")){
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = true;  
+			});
+		}else{
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = false;  
+			});
+		}
 	}else{
 		var a = $("input:checked").val();
 		 var identity = [];

@@ -32,6 +32,15 @@ table .set-style td, table .set-style th {
     		</div>
     	</div>
     	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+    		<script type="dojo/method" event="onSubmit">   
+   				if(this.validate()) {
+			    	dijit.byId('save_close').set('disabled',true);
+    				return true;
+  				 }else {
+    				return false;
+   				}
+				</script>
+    		
     		<div class="card-box">
     			<div class="col-md-4 col-sm-4 col-xs-12">
 		    		<div class="form-group">
@@ -76,7 +85,7 @@ table .set-style td, table .set-style th {
 		             <div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 		                <label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SERVICE");?> </label>
 		                 <div class="col-md-5 col-sm-5 col-xs-12">
-		                		<input id="service" name="service" />
+		                	<input id="service" name="service" />
 		                </div>
 		                 <div class="clearfix"></div>
 	             	</div>
@@ -96,10 +105,7 @@ table .set-style td, table .set-style th {
     		<div class="clearfix"></div>
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-					 	iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'accounting','controller'=>"servicecharge",'action'=>'index'),null,true); ?>';" />
-					<input type="submit"  label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" name="save_close" dojoType="dijit.form.Button" 
+               		<input type="submit"  label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" name="save_close" dojoType="dijit.form.Button" 
 				 		iconClass="dijitEditorIcon dijitEditorIconSave"/>
                	</div>
              </div>
@@ -229,11 +235,12 @@ dojo.ready(function(){
 	 initailize();
 	 new dijit.form.FilteringSelect({
 			store: service_store,
-			autoComplete: true,   
+			queryExpr: "*${0}*",
+			autoComplete: false, 
 			required:false,                     
 			id: "service",
 			name: "service",  
-			class: 'fullside',  
+			class: 'fullside',
 			placeHolder:"<?php echo $tr->translate("SELECT_SERVICE");?>",          
 			onChange: function() {  
 				make_id = dijit.byId('service').get('value');
@@ -265,7 +272,7 @@ function initailize(){
 	}
 		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> class="fullside" id="class_'+col+'" name="class_'+col+'">'+service+'</select></td>';			
+		template+='<td width="20%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> class="fullside" id="class_'+col+'" name="class_'+col+'">'+service+'</select></td>';			
 		
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;

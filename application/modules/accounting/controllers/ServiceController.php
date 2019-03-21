@@ -1,7 +1,5 @@
 <?php
 class Accounting_ServiceController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
-	private $type = array(1=>'service',2=>'program');
 	const REDIRECT_URL = '/accounting/service';
 	public function init()
 	{
@@ -41,7 +39,6 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	
     	$frm = new Global_Form_FrmItemsDetail();
     	$frm->FrmAddItemsDetail(null,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -77,9 +74,8 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$d_row = $_dbgb->getAllItems(2);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	$this->view->degree = $d_row;
+    	$this->view->rsservice = $d_row;
     }
-    
     public function editAction(){
     	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
@@ -109,7 +105,6 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     	$d_row = $_dbgb->getAllItems(2);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
-		
     }
     public function copyAction(){
     	$db = new Global_Model_DbTable_DbItemsDetail();
@@ -130,7 +125,6 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
-    			
     	}
     	$type=2; //Service
     	$row =$db->getItemsDetailById($id,$type);
@@ -148,23 +142,5 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     	$d_row = $_dbgb->getAllItems(2);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
-    
     }
-// function submitAction(){
-// 	if($this->getRequest()->isPost()){
-// 		try{
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Accounting_Model_DbTable_DbService();
-// 			$row = $db->AddServiceType($data);
-// 			$result = array("id"=>$row);
-// 			print_r(Zend_Json::encode($row));
-// 			exit();
-// 		}catch(Exception $e){
-// 			Application_Form_FrmMessage::message("INSERT_FAIL");
-// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 		}
-// 	}
-// }
-
-
 }

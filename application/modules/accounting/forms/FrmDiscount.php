@@ -13,7 +13,6 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		$this->filter = 'dijit.form.FilteringSelect';
 		$this->text = 'dijit.form.TextBox';
 		$this->t_num = 'dijit.form.NumberTextBox';
-		//$this->tarea = 'dijit.form.Textarea';
 		$this->tarea = 'dijit.form.SimpleTextarea';
 	}
 	public function FrmDiscountsetting($data=null){
@@ -21,9 +20,10 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$_discount = new Zend_Dojo_Form_Element_FilteringSelect('disname_id');
-		$_discount->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				 
-		));
+		$_discount->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',));
 		$degree_opt = $db->getAllDegree();
 		$_discount->setMultiOptions($degree_opt);
 		
@@ -53,6 +53,9 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		
@@ -67,7 +70,6 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		
 		$_dismax = new Zend_Dojo_Form_Element_NumberTextBox('dis_max');
 		$_dismax->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside','required'=>'true',));
-		
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -89,6 +91,4 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		return $this;
 		
 	}
-	
-	
 }

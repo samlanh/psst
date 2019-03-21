@@ -55,7 +55,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'required'=>'true',
 				'onChange'=>'getAllGroupByBranch();getAllAcademicByBranch();',
 				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
+				'class'=>'fullside height-text',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'));
 		if (count($optionBranch)==1){
 			$_branch_id->setAttribs(array('readonly'=>'readonly'));
 			if(!empty($optionBranch))foreach($optionBranch AS $row){
@@ -159,14 +161,17 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$session->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'required'=>'true',
-				'class'=>'fullside',));
+				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'));
 		
 		$degree =  new Zend_Dojo_Form_Element_FilteringSelect('degree');
 		$degree->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'onChange'=>'getallGrade();getStudentNo()',
-	
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'
 		));
 		$rs_degree = $_db->getAllFecultyName();
 		$arr_opt = array();
@@ -182,14 +187,17 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
+				'class'=>'fullside height-text',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'));
 		
 		
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');
 		$room->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
-		
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'
 		));
 		$rs_roow = $_db->getAllRoom();
 		$arr_room = array(-1=>$tr->translate("SELECT_ROOM"));
@@ -535,6 +543,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'value'=>'now',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'onChange'=>'getallGrade();getStudentNo()',
 	
 		));
@@ -549,6 +559,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'onChange'=>'getallGrade();getStudentNo()',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'
 	
 		));
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -561,6 +573,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'readonly'=>'readonly',
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'
 	
 		));
 		$rs_roow = $_db->getAllRoom();
@@ -572,6 +586,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$stu_stop->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'
 		
 		));
 		$_db = new Foundation_Model_DbTable_DbStudentDrop();

@@ -273,7 +273,39 @@ dojo.ready(function(){
 								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
 							</tr>
 							</table>
-								
+							<?php $show=1;
+							if ($show==2){
+							?>
+							<br />
+							<table cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 3px #4839bd;" border="1" >	
+								<tr>
+									<td colspan="<?php echo count($this->rating);?>" align="center">ការវាយតម្លៃរបស់គ្រូ/Evaluation</td>
+								</tr>
+								<tr>
+									<td colspan="<?php echo count($this->rating);?>" align="center">កម្រិតពិន្ទុនៃការវាយតម្លៃ/Rating Scale</td>
+								</tr>
+								<tr>
+									<?php if (!empty($this->rating)) foreach ($this->rating as $rating){?>
+									<td align="center">&nbsp;<?php echo $rating['id']."=".$rating['name'];?>&nbsp;</td>
+									<?php }?>
+								</tr>
+								<?php if (!empty($this->evaluation)){?>
+								<tr>
+									<td valign="top" colspan="<?php echo count($this->rating);?>" align="center">
+										<table cellpadding="5"​ valign="top" style="margin:0 auto; width:100%;" >
+										<?php  foreach ($this->evaluation as $evaluation){ $i++; ?>
+										
+											<tr>
+												<td valign="top" style="padding: 0 5px;  border-bottom: solid 1px #4839bd;">&nbsp;<?php echo $i.".".$evaluation['comments']?>&nbsp;</td>
+												<td style="border-left: solid 1px #4839bd; border-bottom: solid 1px #4839bd;" width="10%" align="center">&nbsp;<?php echo $evaluation['rating_id']?>&nbsp;</td>
+											</tr>
+											<?php }?>
+										</table>
+									</td>
+								</tr>
+							<?php }?>
+							</table>
+							<?php }?>
 					</td>
 				</tr>
 			</table>

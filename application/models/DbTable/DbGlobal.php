@@ -2160,5 +2160,11 @@ function getAllgroupStudyNotPass($action=null){
   	";
   	return $db->fetchAll($sql);
   }
+  
+  function getRatingValuation(){
+  	$db = $this->getAdapter();
+  	$sql="SELECT r.id,r.rating AS `name` FROM `rms_rating` AS r ";
+  	return $db->fetchAll($sql);
+  }
 }
 ?>

@@ -447,6 +447,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$rs = $db->getExamByExamIdAndStudent($data);
     	$this->view->rs = $rs;
+    	
+    	$evaluation = $db->getStudentEvaluation($data);
+    	$this->view->evaluation = $evaluation;
 //     	if (empty($rs)){
 //     		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
 //     		exit();
@@ -465,6 +468,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$subject =$db->getSubjectByGroup($data['group_id'],null,$data['exam_type']);
     	$this->view->subject = $subject;
     	$this->view-> month = $db->getAllMonth();
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rating = $db->getRatingValuation();
     }
     
     function rptAssessmenttermAction(){

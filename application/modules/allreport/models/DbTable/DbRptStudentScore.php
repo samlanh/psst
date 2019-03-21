@@ -1549,5 +1549,38 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	}
    
    
-   
+   	function getStudentEvaluation($data){
+   		$db = $this->getAdapter();
+   		$sql="SELECT ed.*,
+			(SELECT cm.comment FROM `rms_comment` AS cm WHERE cm.id = ed.comment_id LIMIT 1) AS comments
+			 FROM `rms_student_evaluation_detail` AS ed,
+			 `rms_student_evaluation` AS e
+			WHERE 
+			e.id = ed.evaluation_id 
+			AND e.status=1
+   		";
+   		if (!empty($data['group_id'])){
+   			$sql.=" AND e.group_id=".$data['group_id'];
+   		}
+   		if (!empty($data['stu_id'])){
+   			$sql.=" AND e.student_id=".$data['stu_id'];
+   		}
+   		if (!empty($data['exam_type'])){
+   			$sql.=" AND e.for_type=".$data['exam_type'];
+   	
+   			if ($data['exam_type']==1){
+   				if (!empty($data['for_month'])){
+   					$sql.=" AND e.for_month=".$data['for_month'];
+   				}
+   			}else if ($data['exam_type']==2){
+   				if (!empty($data['for_semester'])){
+   					$sql.=" AND e.for_semester=".$data['for_semester'];
+   				}
+   			}
+   		}
+   		 
+   		 
+   		$sql.=" ORDER BY e.id DESC";
+   		return $db->fetchAll($sql);
+   	}
 }

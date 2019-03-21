@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_EVALUATION"));
+	echo $this->headTitle($tr->translate("ADD_STUDENT_EVALUATION"));
 	$current_month = date("m");
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>	
@@ -9,7 +9,7 @@
 		<div class="card-box">
            <div class="col-sm-12 border-botom">
 		   		<div class="col-sm-8 pd-0">
-		   			<h4 class="m-b-0"><i class="fa fa-file-text-o " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_NEW_STUDENT_EVALUATION');?></h4>
+		   			<h4 class="m-b-0"><i class="fa fa-file-text-o " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDENT_EVALUATION');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -18,6 +18,17 @@
 		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    			if(this.validate()){
+				var rowId = $('#identity').val();
+				if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+						var row_id = dijit.byId('rating_id_'+rowIDArray[n]).get('value');
+						if(row_id==-1){
+							alert("Please Select Rating !");
+							return false;
+						}
+					}
+				}
 				var r = confirm("Are you sure to submit ?");
 				if(r == true){
 					loadingBlock();
@@ -160,9 +171,10 @@
 								<tr>
 									<td width="5%"></td>
 									<td width="60%"></td>
-									<td width="10%"></td>
-									<td width="25%"></td>
+									<td width="17%"></td>
+									<td width="18%"></td>
 								</tr>
+								<?php /*?>
 								<tr>
 									<td colspan="4">
 										<table width="100%" style="font-size:14px;">
@@ -177,8 +189,9 @@
 										</table>
 									</td>
 								</tr>
+								<?php */?>
 								<tr id="head-title" class="head-td" align="center" height="30px">
-									<td><?php echo $tr->translate('NO');?></td>
+									<td><?php echo $tr->translate('N_O');?></td>
 									<td><?php echo $tr->translate('COMMENT');?></td>
 									<td><?php echo $tr->translate('RATING');?></td>
 									<td><?php echo $tr->translate('NOTE');?></td>
@@ -187,7 +200,7 @@
 							<tbody id="table_row" style="font-size:13px;">
 									
 							</tbody>
-							<input type="text" name="identity" id="identity"  value="" >
+							<input type="hidden" name="identity" id="identity"  value="" >
 						</table>
 		    		</div>
 		    	</div>
@@ -315,8 +328,16 @@ function getCommentByDegree(){
 						label_comment = data[i]['comment'];
 						template1+='<td width="5%" align="center">'+no1+'</td>';
 						template1+='<td width="60%" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+col1+'" name="comment_id_'+col1+'" value="'+data[i]['id']+'" /></td>';
-						template1+='<td width="10%" > <input type="text" required="1" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.NumberTextBox" placeholder="Rating Score"/></td>';
-						template1+='<td width="25%" > <input type="text" name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="សម្គាល់"/></td>';
+						//template1+='<td width="10%" > <input type="text" required="1" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.NumberTextBox" placeholder="Rating Score"/></td>';
+						
+						template1+='<td width="17%"><select name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.FilteringSelect" >';
+							template1+='<option value="-1"><?php echo $tr->translate("SELECT")?></option>';
+							<?php if($this->rating){foreach($this->rating as $rating){?>
+							template1+='<option value="<?php echo $rating['id']?>"><?php echo $rating['id'].'-'.$rating['rating']?></option>';
+							<?php }}?>
+						template1+='</select></td>';
+						
+						template1+='<td width="18%" > <input type="text" name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="សម្គាល់"/></td>';
 						tmp1='<tr id="row'+col1+'">';
 						tmp1+="</tr>";
 						dojo.query("#table_row").append(tmp1);

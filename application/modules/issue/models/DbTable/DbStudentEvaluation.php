@@ -53,95 +53,54 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
-   public function updateStudentScore($_data){
+   public function updateStudentScore($_data,$id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{			
 			$_arr = array(
-					'branch_id'=>$_data['branch_id'],
-					'title_score'=>$_data['title'],
-					'group_id'=>$_data['group'],
-					'max_score'=>$_data['max_score'],
-			        'exam_type'=>$_data['exam_type'],
-					'date_input'=>date("Y-m-d"),
-					'note'=>$_data['note'],
-					'user_id'=>$this->getUserId(),
-					'type_score'=>1, 
-					'for_academic_year'=>$_data['year_study'],
-					'for_semester'=>$_data['for_semester'],
-					'for_month'=>$_data['for_month'],
-			);
-		$where="id=".$_data['score_id'];
-		$this->update($_arr, $where);
-		
-		$id=$_data['score_id'];
-		$this->_name='rms_score_detail';
-		$this->delete("score_id=".$_data['score_id']);
-		
-		$this->_name='rms_score_monthly';
-		$this->delete("score_id=".$_data['score_id']);
-		$old_studentid = 0;
-		
-		if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				$total_score = 0;
-				$rssubject = $_data['selector'];
-				$subject_amt = 1 ;
-				
-				if(!empty($ids))foreach ($ids as $i){
+					'branch_id'		=>$_data['branch_id'],
+					'group_id'		=>$_data['group'],
+			        'student_id'	=>$_data['student'],
 					
-					foreach ($rssubject as $subject){
-						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
-							$arr = array(
-									'score_id'=>$id,
-									'student_id'=>$old_studentid,
-									'total_score'=>$total_score,
-									'amount_subject'=>$subject_amt,
-									'total_avg' =>number_format($total_score/$subject_amt,2)
-							);
-							$this->_name='rms_score_monthly';
-							$this->insert($arr);
-							$total_score = 0;
-						}
-							
-						$old_studentid=$_data['student_id'.$i];
-						$subject_amt = $_data['amount_subject'.$i];
-						$total_score = $total_score+$_data["score_".$i."_".$subject];
-						
-						$arr=array(
-								'score_id'=>$id,
-								'group_id'=>$_data['group'],
-								'student_id'=>$_data['student_id'.$i],
-								'amount_subject'=>$_data['amount_subject'.$i],
-								'subject_id'=> $subject,
-								'score'=> $_data["score_".$i."_".$subject],
-								'status'=>1,
-								'user_id'=>$this->getUserId(),
-								'is_parent'=> 1
-						);
-						$this->_name='rms_score_detail';
-						$this->insert($arr);
-					}
-				}
-			}
-			if(!empty($ids)){
-				if($total_score>0){
-					$arr = array(
-						'score_id'=>$id,
-						'student_id'=>$old_studentid,
-						'total_score'=>$total_score,
-						'amount_subject'=>$subject_amt,
-						'total_avg' =>number_format($total_score/$subject_amt,2)
+					'for_type'		=>$_data['for_type'],
+					'for_month'		=>$_data['for_month'],
+					'for_semester'	=>$_data['for_semester'],
+					
+					'issue_date'	=>$_data['issue_date'],
+					'return_date'	=>$_data['return_date'],
+					'teacher_comment'=>$_data['teacher_comment'],
+					'feedback'		=>$_data['feedback'],
+					'note'			=>$_data['note'],
+					
+					'modify_date'	=>date("Y-m-d H:i:s"),
+					'user_id'		=>$this->getUserId(),
+					
+					'status'		=>$_data['status']
+				);
+			$where=" id = $id ";
+			$this->update($_arr, $where);
+			
+			$this->_name='rms_student_evaluation_detail';
+			$where = " evaluation_id = $id ";
+			$this->delete($where);
+		
+			if(!empty($_data['identity'])){
+				$ids = explode(',', $_data['identity']);
+				foreach ($ids as $i){
+					$arr=array(
+							'evaluation_id'	=>$id,
+							'comment_id'	=>$_data['comment_id_'.$i],
+							'rating_id'		=>$_data['rating_id_'.$i],
+							'note'			=>$_data['remark'.$i],
 					);
-					$this->_name='rms_score_monthly';
+					$this->_name='rms_student_evaluation_detail';
 					$this->insert($arr);
 				}
 			}
-		  $db->commit();
+			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
 		}
    }
 	
@@ -150,36 +109,53 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		
+		if ($currentLang==1){// khmer
+			$title='title';
+			$view="name_kh";
+			$branch="school_namekh";
+			$student="stu_khname as name";
+		}else{
+			$title='title_en';
+			$view="name_en";
+			$branch="school_nameen";
+			$student="CONCAT(last_name,'',stu_enname) as name";
 		}
 		
-		$sql="SELECT s.id,
-			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
-			s.title_score,
-			(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
-			s.for_semester,
-			(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
-			s.max_score,
-			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
-			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
-			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			(SELECT name_en FROM rms_view WHERE type=1 AND key_code = s.status LIMIT 1) as status
-				FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 ";
+		$sql="SELECT se.id,
+					(SELECT $branch FROM `rms_branch` WHERE br_id = se.branch_id LIMIT 1) As branch_name,
+					(SELECT $view FROM `rms_view` WHERE TYPE=19 AND key_code = se.for_type LIMIT 1) as for_type,
+					se.for_semester,
+					(SELECT month_kh FROM `rms_month` WHERE rms_month.id = se.for_month  LIMIT 1) as for_month,
+					s.stu_code,
+					$student,
+					group_code AS  group_id,
+					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
+					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+					(SELECT CONCAT(name_en,'-',name_kh) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+					(SELECT $view FROM rms_view WHERE type=1 AND key_code = se.status LIMIT 1) as status
+				FROM 
+					rms_student_evaluation AS se,
+					rms_group AS g,
+					rms_student as s
+				WHERE 
+					se.group_id=g.id 
+					and s.stu_id = se.student_id
+			";
 		$where ='';
-		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': " se.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " se.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		
 		if(!empty($search['title'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
-			$s_where[]=" s.title_score LIKE '%{$s_search}%'";
-			$s_where[]=" s.note LIKE '%{$s_search}%'";
+			$s_where[]=" s.stu_code LIKE '%{$s_search}%'";
+			$s_where[]=" s.last_name LIKE '%{$s_search}%'";
+			$s_where[]=" s.stu_khname LIKE '%{$s_search}%'";
+			$s_where[]=" s.stu_enname LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if($search['degree']>0){
@@ -198,13 +174,32 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			$where.=" AND `g`.`room_id` =".$search['room'];
 		}
 		if(!empty($search['group'])){
-			$where.=" AND `s`.`group_id` =".$search['group'];
+			$where.=" AND `se`.`group_id` =".$search['group'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission('s.branch_id');
-		$order=" ORDER BY id DESC ";
+		$where.=$dbp->getAccessPermission('se.branch_id');
+		$order=" ORDER BY se.id DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
+	
+	function getStudentEvaluationById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT * from rms_student_evaluation where id = $id limit 1 ";
+		return $db->fetchRow($sql);
+	}
+	function getStudentEvaluationDetailById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT 
+					sed.*,
+					(select comment from rms_comment where rms_comment.id = sed.comment_id) as comment
+				from 
+					rms_student_evaluation_detail as sed
+				where 
+					sed.evaluation_id = $id 
+			";
+		return $db->fetchAll($sql);
+	}
+	
 	
 	function getGroupName($academic,$session){
 		$db=$this->getAdapter();

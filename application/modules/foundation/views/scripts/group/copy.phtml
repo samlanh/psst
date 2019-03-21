@@ -522,6 +522,7 @@ function getallGrade(){
 var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';		
 var oldBranch = '<?php echo $this->rs['branch_id'];?>';								
 function getRefreshRoom(){
+	dijit.byId('room').reset();
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id == -1){
 		return false;

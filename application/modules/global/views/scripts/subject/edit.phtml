@@ -1,8 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_SUBJECT')); 
-?>	
-<?php  $subject_exam= $this->frm_subject_exam;?>
+	$subject_exam= $this->frm_subject_exam;
+?>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -84,7 +84,7 @@
 				     <div class="card-box mt-20">
 			             <div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 			               	<input type="submit" value="<?php echo $tr->translate("GO_EDIT");?>" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" onclick="dijit.byId('add_subject_exam').submit();"/>
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
 			             </div>
 			         </div>
 		         </div>

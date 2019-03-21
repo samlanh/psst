@@ -1,8 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_OCCUPATION')); 
+	$rs=$this->rs;
 ?>
-<?php $rs=$this->rs;?>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -16,6 +16,7 @@
 		<form id='edit_occupation'  action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded" dojoType="dijit.form.Form">
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
+					dijit.byId("save_close").attr("disabled",true);
     				return true;
    				}else {
     				return false;
@@ -36,15 +37,15 @@
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
-    								<option value="1" <?php if ($rs["status"]==1){echo "selected='selected'";}?> label="<?php echo $tr->translate('ACTIVE');?>" ><?php echo $tr->translate('ACTIVE');?></option>
-    								<option value="0" <?php if ($rs["status"]==0){echo "selected='selected'";}?> label="<?php echo $tr->translate('DEACTIVE');?>" ><?php echo $tr->translate('DEACTIVE');?></option>
+    							<option value="1" <?php if ($rs["status"]==1){echo "selected='selected'";}?> label="<?php echo $tr->translate('ACTIVE');?>" ><?php echo $tr->translate('ACTIVE');?></option>
+    							<option value="0" <?php if ($rs["status"]==0){echo "selected='selected'";}?> label="<?php echo $tr->translate('DEACTIVE');?>" ><?php echo $tr->translate('DEACTIVE');?></option>
 							</select>
 	                   </div>
 	                </div>
 	                 <div class="clearfix"></div>
 				         <div class="card-box mt-20">
 			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-			               		<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+			               		<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />
 			               	</div>
 			             </div>

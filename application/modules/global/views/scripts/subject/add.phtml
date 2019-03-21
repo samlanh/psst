@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('ADD_NEW_SUBJECT')); 
-?>	
-<?php  
+	echo $this->headTitle($tr->translate('ADD_NEW_SUBJECT'));  
 	$subject_exam= $this->frm_subject_exam;
 ?>
 <div class="card">
@@ -43,7 +41,7 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select class="fullside" name="parent" id="parent" autoComplete='false' queryExpr="*${0}*",
-		                	 dojoType="dijit.form.FilteringSelect" >
+		                	 	dojoType="dijit.form.FilteringSelect" >
 								<option value="0"></option>
 								<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
 										<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
@@ -95,23 +93,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 var degree_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree_store));?> );
 
 require(["dojo/ready"], function(ready){
-	dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-		    store: degree_store,
-		    autoComplete: true,                        
-		    required: true,
-		    id: "access_type",
-		    name: "access_type",           
-		    class: "full height-text", 
-		    placeHolder:"Select Degree",          
-		    onChange: function() {  
-		    	dept_id = dijit.byId('access_type').get('value');
-		    	if(dept_id==-1){
-		    			dijit.byId("popup_add_degree").show();		    		
-			    }
-		    }
-		}, "access_type");
-	});
 	ready(function(){
 		getValue();
 		dijit.byId("parent").set('readOnly',true);
@@ -130,43 +111,5 @@ function getValue(){
 		dijit.byId('parent').set('required',true);  
 	}
 	$('#par').val(par);
-}
-var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
-function addDept(){
-	if(dijit.byId('frm_degree').validate()) {
-			dojo.xhrPost({
-				url:url_add_dept,
-				form: dojo.byId("frm_degree"),
-				handleAs:"json",
-				load: function(data) {
-					var Itemmake = { 
-					   	 id: data,
-						 name: dijit.byId('fac_enname').get('value')
-					};
-				addDataToSelectbox(dijit.byId('access_type'), degree_store, Itemmake, data);
-				dijit.byId('frm_degree').reset();
-				dijit.byId("popup_add_degree").hide();
-			},
-			error: function(err) {
-			}
-		});
-	}
-}
-function submitDataClose(){
-	if(dijit.byId('add_subject_exam').validate()) {
-		dijit.byId('save_close').set('disabled',true);
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("add_subject_exam"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/global/subject";
-			},
-			error: function(e) {
-			}
-		});
-	}
 }
 </script>

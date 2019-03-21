@@ -2,7 +2,6 @@
 
 class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 {
-
     protected $_name = 'rms_subject';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
@@ -58,10 +57,8 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> $_data['status'],
-				//'score_percent'   	=> $_data['score_percent'],
 				'is_parent'   		=> $_data['par'],
-				'schoolOption'   			=> $_data['schoolOption'],
-				//'access_type'   	=> $_data['access_type'],
+				'schoolOption'   	=> $_data['schoolOption'],
 				'shortcut'			=> $_data['score_percent'],
 				'user_id'	  		=> $this->getUserId()
 		);
@@ -127,7 +124,6 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$return = array('data'=>$subject_id,'option'=>$option);
 		return   $return;
 	}
-	
 	public function addSubjectajax($_data){
 		$this->_name="rms_subject";
 		$_arr=array(

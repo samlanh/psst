@@ -1,16 +1,13 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("SUBJECT"));
-?>	
-<?php $frm =  $this->frm_search;?>
+	$frm =  $this->frm_search;
+?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-                   <!-- <div class="col-md-2 col-sm-2 col-xs-12">
-						<?php //echo $frm->getElement('subjec_name');?>
-					 </div> --> 
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("title");?>
 					 </div>
@@ -31,6 +28,3 @@
 		</div>
 	</div>
 </div>
-
-
-

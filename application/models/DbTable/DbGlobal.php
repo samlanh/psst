@@ -320,8 +320,7 @@ function getAllgroupStu($branch_id=null){
 				branch_id=$branch_id 
 				AND g.status =1 
 				AND group_code!=''
-				and g.is_pass!=1
-		";
+				and g.is_pass!=1";
 	return $db->fetchAll($sql);
 }
 

@@ -1,5 +1,5 @@
 <?php
-class Global_CommentController extends Zend_Controller_Action {
+class Issue_CommentController extends Zend_Controller_Action {
     public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
@@ -16,7 +16,7 @@ class Global_CommentController extends Zend_Controller_Action {
 						'status_search' 	=> -1
 					);
 			}
-			$db = new Global_Model_DbTable_DbComment();
+			$db = new Issue_Model_DbTable_DbComment();
 			$rs_rows= $db->getAllComment($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
@@ -24,7 +24,7 @@ class Global_CommentController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			$collumns = array("COMMENT","CREATED_DATE","BY_USER","STATUS");
 			$link=array(
-					'module'=>'global','controller'=>'comment','action'=>'edit',
+					'module'=>'issue','controller'=>'comment','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('comment'=>$link));
 		}catch (Exception $e){
@@ -41,15 +41,15 @@ class Global_CommentController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try {
 				$sms="INSERT_SUCCESS";
-				$_dbmodel = new Global_Model_DbTable_DbComment();
+				$_dbmodel = new Issue_Model_DbTable_DbComment();
 				$_occupa = $_dbmodel->addComment($_data);
 				if($_occupa==-1){
 					$sms = "RECORD_EXIST";
 				}
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/global/comment");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/comment");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,"/global/comment/add");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/comment/add");
 				}
 				Application_Form_FrmMessage::message($sms);				
 					
@@ -65,16 +65,16 @@ class Global_CommentController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
-				$db = new Global_Model_DbTable_DbComment();
+				$db = new Issue_Model_DbTable_DbComment();
 				$db->updateComment($data,$id);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/comment/index");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/comment/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		
-		$db = new Global_Model_DbTable_DbComment();
+		$db = new Issue_Model_DbTable_DbComment();
 		$this->view->rs=$db->getCommentById($id);
 	}
 }

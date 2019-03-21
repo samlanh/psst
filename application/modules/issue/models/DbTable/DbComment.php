@@ -1,6 +1,6 @@
 <?php
 
-class Global_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
+class Issue_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_comment';
     public function getUserId(){

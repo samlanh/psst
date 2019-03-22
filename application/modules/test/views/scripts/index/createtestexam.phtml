@@ -249,9 +249,10 @@ $frm = $this->form;
 </div>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
     dojo.require("dojo.data.ItemFileWriteStore");  
     dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.form.NumberTextBox");
 </script>
 <script>
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -259,16 +260,6 @@ var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_J
 var student_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 require(["dojo/ready"], function(ready){
-
-	/*new dijit.form.FilteringSelect({
-		name: "stu_test_id",
-		id: "stu_test_id",
-		searchAttr: "name",
-		class: 'fullside',
-		onChange: function() {
-			
-	    }
-	}, "stu_test_id");*/
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: grade_store,
@@ -279,7 +270,6 @@ require(["dojo/ready"], function(ready){
 			class: "fullside", 
 			placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
 			onChange: function() {  
-				
 			}
 		}, "grade");
 
@@ -291,20 +281,14 @@ require(["dojo/ready"], function(ready){
 			name: "grade_result",           
 			class: "fullside", 
 			placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
-			onChange: function() {  
-				
+			onChange: function() {  				
 			}
 		}, "grade_result");
 		
 		getAllGrade();	
 		getAllGradeResult();
-		
 	});
-	
 });
-
-
-
 var url_get_stu = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'getstudenttestbybranch')); ?>';
 function getStudntTestByBranch(){
 	branch_id = dijit.byId('branch_id').get('value');

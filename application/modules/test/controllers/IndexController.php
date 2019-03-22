@@ -107,7 +107,6 @@ class Test_IndexController extends Zend_Controller_Action
     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
     		exit();
     	}
-    	
     	$this->view->testresult = $db->getAllTestResult($id);
     	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -165,7 +164,6 @@ class Test_IndexController extends Zend_Controller_Action
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			 
     		}
     	}
     	
@@ -193,7 +191,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$frm->FrmEnterResultTest($row,$result,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->form = $frm;
-    	
     }
     function getstudenttestbybranchAction(){
     	if($this->getRequest()->isPost()){

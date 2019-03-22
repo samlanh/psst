@@ -50,7 +50,6 @@ tr#head-title {
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require('dijit.form.NumberTextBox');
     dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
     dojo.require("dojo.data.ItemFileWriteStore");  
     dojo.require("dijit.form.Textarea");
 </script>
@@ -64,7 +63,6 @@ tr#head-title {
 					dijit.byId("branch_id").focus();
 					return false;
 				}
-				
 				loadingBlock();
 				return true;
 			}else {
@@ -239,7 +237,6 @@ tr#head-title {
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("district_name");?>
 				                   		<input id="district_name"/>
 				                   </div>
 				                </div>
@@ -351,7 +348,6 @@ tr#head-title {
 				             </div>
 				        </div>
 				        <div class="card-box">
-			               	
 				    	</div>
 				    	<div class="card-box">
 				    		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -374,95 +370,11 @@ tr#head-title {
 				       </div>
 				   </div>
 				   <!--/.Panel 1-->
-				    <!--Panel 2-->
-			        <div class="tab-pane fade in " id="panel22" role="tabpanel">
-			        	<div class="card-box">
-				        	<div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("COUSE_WANT_STUDY");?> 
-				                   </label>
-				                </div>
-				                
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("degree");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE")?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input input id="grade" />
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SESSION")?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("session");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_DATE")?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("test_date");?>
-				                   </div>
-				                </div>
-				            </div>
-				            <div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TEST_RESULT");?> 
-				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RESULT_DATE")?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("result_date");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SCORE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("score");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("degree_result");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE")?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input input id="grade_result" />
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE")?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("note");?>
-				                   </div>
-				                </div>
-				            </div>
-				        </div>
-			        </div>
-			        <!--/.Panel 2-->
 	       		</div>
 	      	 </div>
 	        <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-					 iconClass="dijitIconClear"/>
-					<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
+               		<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
 					<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
 	    		</div>
 	    	</div>
@@ -594,7 +506,6 @@ function AllRefresh(){
 	if(commune_name!='' || commune_name!=-1){
 		filterVillage();
 	}
-	
 }
 
 url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
@@ -614,7 +525,6 @@ function filterDistrict(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});	
 }
@@ -635,7 +545,6 @@ function filterCommune(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -656,11 +565,9 @@ function filterVillage(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -675,7 +582,6 @@ var maxSize = 0;
 $("#photo").change(function(){
     readURL(this);
 });
-
 function typethisamename(){
 	parent_name = dijit.byId('parent_name').get('value');
 	dijit.byId('emergency_name').set('value',parent_name);
@@ -700,31 +606,9 @@ function getSerailCodeByBranch(){
 			dijit.byId('serial').set('value',data);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-require(["dojo/ready"], function(ready){
-	new dijit.form.FilteringSelect({
-		name: "nationality",
-		id: "nationality",
-		searchAttr: "name",
-		class: 'fullside',
-		onChange: function() {
-			popupNation(1);
-	    }
-		}, "nationality");
-	
-	new dijit.form.FilteringSelect({
-		name: "nation",
-		id: "nation",
-		searchAttr: "name",
-		class: 'fullside',
-		onChange: function() {
-			popupNation(2);
-	    }
-		}, "nation");
-});
 function popupNation(key){
 	dijit.byId("save_nation").attr("disabled",false);
 	if(key==1){
@@ -782,12 +666,11 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 					   HideloadingBlock();
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
 	}
-		dojo.require("dojo.data.ItemFileWriteStore");  
 		var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 		var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 		dojo.ready(function(){
@@ -814,7 +697,31 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 				onChange: function() {  
 				}
 			}, "grade_result");
-			getAllGrade();				 
+			getAllGrade();	
+
+			new dijit.form.FilteringSelect({
+				name: "nationality",
+				id: "nationality",
+				searchAttr: "name",
+				autoComplete:false,
+				queryExpr:'*${0}*',
+				class: 'fullside',
+				onChange: function() {
+					popupNation(1);
+			    }
+				}, "nationality");
+			
+			new dijit.form.FilteringSelect({
+				name: "nation",
+				id: "nation",
+				searchAttr: "name",
+				autoComplete:false,
+				queryExpr:'*${0}*',
+				class: 'fullside',
+				onChange: function() {
+					popupNation(2);
+			    }
+			}, "nation");			 
 		});
 		
 		var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
@@ -836,7 +743,6 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 					dijit.byId('grade').set('store',grade_store);  
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 		}
@@ -858,27 +764,18 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 					dijit.byId('grade_result').set('store',grade_result_store);  
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 		}
 </script>
- 
  <script>
- dojo.require("dojo.data.ItemFileWriteStore");  
- dojo.require("dojo.NodeList-manipulate");
-	dojo.ready(function(){ 
-	//	addRow();
-	});
-
 	var col= 0; var no=0;
 	var title = 0;
-	var all_stu = '<?php //echo $this->all_stu; ?>';
+	var all_stu = '';
 	function addRow() {
 		col++;no++;
 		template='';
 		temp = "";
-	
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
@@ -936,9 +833,7 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 	shutter.autoplay = false;
 	shutter.src = navigator.userAgent.match(/Firefox/) ? '<?php echo $this->baseUrl();?>/webcam/shutter.ogg' : '<?php echo $this->baseUrl();?>/webcam/shutter.mp3';
 	function take_snapshot() {
-		// play sound effect
 		shutter.play();
-		// take snapshot and get image data
 		Webcam.snap( function(data_uri) {
 			  $('#profile_wiew').attr('src',data_uri);
 			  SaveSnap();
@@ -946,11 +841,9 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 	}
 	function SaveSnap(){
 	    var url_upload = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'webcam')); ?>';	
-
 	    var base64image = document.getElementById("profile_wiew").src;
 	    Webcam.upload( base64image, url_upload, function(code, text) {
 	    	  console.log('Save successfully');
-	    	  //console.log(text);
 	    	  uploadcomplete(event);
 	    	 });
 	}

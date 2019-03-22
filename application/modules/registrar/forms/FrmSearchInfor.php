@@ -162,8 +162,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		}
 		$term_test->setMultiOptions($optterm);
 		$term_test->setValue($request->getParam("term_test"));
-		
-		
 
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
 		$_session->setAttribs(array(
@@ -217,7 +215,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false,
+				'required'=>'false',
 				'onchange'=>'getallGrade();'
 		));
 		$_degree->setValue($request->getParam('degree'));

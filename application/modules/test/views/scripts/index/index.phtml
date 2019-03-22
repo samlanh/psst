@@ -9,7 +9,6 @@
 	$urledit = $this->baseUrl()."/test/index/edit/id/";
 ?>
 <script>
-	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.DateTextBox");
 </script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -122,9 +121,8 @@
 	function setrowdata(index){
 		row = index;
 	}
-
 	var recordid ='';
 	function gotoAction(){
-		 window.open(url+row);
+	 	window.open(url+row);
 	}
 </script> 

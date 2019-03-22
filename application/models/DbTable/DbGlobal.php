@@ -1699,7 +1699,7 @@ function getAllgroupStudyNotPass($action=null){
   	if ($level!=1){
   		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
   	}
-  	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+  	$sql.=" ORDER BY i.items_id ASC, i.ordering DESC ";
   	//return $sql;
   	return $db->fetchAll($sql);
   }

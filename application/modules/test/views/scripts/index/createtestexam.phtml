@@ -1,27 +1,24 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-
-if ($this->type==1){
-	if (!empty($this->detailscore)){
-		$title = $tr->translate('UPDATE_TEST_EXAM_KH_RESULT');
-	}else{$title = $tr->translate('CREATE_TEST_EXAM_KH');
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	if ($this->type==1){
+		if (!empty($this->detailscore)){
+			$title = $tr->translate('UPDATE_TEST_EXAM_KH_RESULT');
+		}else{$title = $tr->translate('CREATE_TEST_EXAM_KH');
+		}
+	}else if ($this->type==2){
+		if (!empty($this->detailscore)){
+			$title = $tr->translate('UPDATE_TEST_EXAM_EN_RESULT');
+		}else{$title = $tr->translate('CREATE_TEST_EXAM_EN');
+		}
+	}else if ($this->type==3){
+		if (!empty($this->detailscore)){
+			$title = $tr->translate('UPDATE_TEST_EXAM_UNIV_RESULT');
+		}else{
+			$title = $tr->translate('CREATE_TEST_EXAM_UNIV');
+		}
 	}
-	
-}else if ($this->type==2){
-	if (!empty($this->detailscore)){
-		$title = $tr->translate('UPDATE_TEST_EXAM_EN_RESULT');
-	}else{$title = $tr->translate('CREATE_TEST_EXAM_EN');
-	}
-}else if ($this->type==3){
-	if (!empty($this->detailscore)){
-		$title = $tr->translate('UPDATE_TEST_EXAM_UNIV_RESULT');
-	}else{$title = $tr->translate('CREATE_TEST_EXAM_UNIV');
-	}
-	
-}
-
-echo $this->headTitle($title);
-$frm = $this->form;
+	echo $this->headTitle($title);
+	$frm = $this->form;
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div class="card">
@@ -55,11 +52,9 @@ $frm = $this->form;
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-file-code-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;
 		    			<?php echo $title;?>
-		    			
 		    			</h4>
 	    			</div>
-	    			<div class="col-sm-4 text-right">
-	    			</div>
+	    			<div class="col-sm-4 text-right"></div>
 	    		</div>
 	    	</div>
 	    	<div class="card-box">
@@ -68,13 +63,12 @@ $frm = $this->form;
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
 	                   </label>
 	                </div>
-	               
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("branch_id");?>
-	                   		<?php echo $frm->getElement("id");?>
+                   		<?php echo $frm->getElement("branch_id");?>
+                   		<?php echo $frm->getElement("id");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -105,7 +99,6 @@ $frm = $this->form;
 	                   		<?php echo $frm->getElement("test_date");?>
 	                   </div>
 	                </div>
-	                
 	             </div>
 	             <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
@@ -191,7 +184,7 @@ $frm = $this->form;
 											<td>&nbsp;<input  dojoType="dijit.form.TextBox" class="fullside" name="subjecttest_id_<?php echo $i;?>" id="subjecttest_id_<?php echo $i;?>" value="<?php echo $rs['subjecttest_id'];?>" type="hidden"><?php echo $subjectitle;?>&nbsp;</td>
 											<td><input dojoType="dijit.form.NumberTextBox" onKeyup="CalculateTotalScore()" class="fullside" name="score_<?php echo $i;?>" id="score_<?php echo $i;?>" value="<?php echo $rs['score'];?>" type="text"></td>	
 											<td>
-												<select dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
+												<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
 													<option value="1" <?php if ($rs['comment']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("GOOD")?></option>
 													<option value="2" <?php if ($rs['comment']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("GOOD_FAIR")?></option>
 													<option value="3" <?php if ($rs['comment']==3){ echo 'selected="selected"';}?>><?php echo $tr->translate("FAIR")?></option>
@@ -201,7 +194,6 @@ $frm = $this->form;
 											</td>
 											<td><input  dojoType="dijit.form.TextBox" class="fullside" name="note_<?php echo $i;?>" id="note_<?php echo $i;?>" value="<?php echo $rs['note'];?>" type="text"></td>
 										</tr>
-											
 										<?php }?>
 									<?php }else{?>
 										<?php for ($i=1; $i<=2; $i++){
@@ -218,7 +210,7 @@ $frm = $this->form;
 											<td>&nbsp;<input  dojoType="dijit.form.TextBox" class="fullside" name="subjecttest_id_<?php echo $i;?>" id="subjecttest_id_<?php echo $i;?>" value="<?php echo $i;?>" type="hidden"><?php echo $subjectitle;?>&nbsp;</td>
 											<td><input dojoType="dijit.form.NumberTextBox" onKeyup="CalculateTotalScore()" class="fullside" name="score_<?php echo $i;?>" id="score_<?php echo $i;?>" value="" type="text"></td>	
 											<td>
-												<select dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
+												<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
 													<option value="1"><?php echo $tr->translate("GOOD")?></option>
 													<option value="2"><?php echo $tr->translate("GOOD_FAIR")?></option>
 													<option value="3"><?php echo $tr->translate("FAIR")?></option>
@@ -237,11 +229,7 @@ $frm = $this->form;
 	         <?php }?>
 	         <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-						iconClass="dijitIconClear"/>
-					<input type="button" label="<?php echo $tr->translate("GO_BACK")?>" id="back" dojoType="dijit.form.Button" 
-						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'test','controller'=>"index",'action'=>'index'),null,true); ?>';" />
-					<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
+               		<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
 	    		</div>
 	    	</div>
 	    </form>
@@ -263,7 +251,8 @@ require(["dojo/ready"], function(ready){
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: grade_store,
-			autoComplete: true,                        
+			autoComplete:false,
+			queryExpr:'*${0}*',                     
 			required: false,
 			id: "grade",
 			name: "grade",           
@@ -275,7 +264,8 @@ require(["dojo/ready"], function(ready){
 
 		new dijit.form.FilteringSelect({
 			store: grade_result_store,
-			autoComplete: true,                        
+			autoComplete:false,
+			queryExpr:'*${0}*',                  
 			required: false,
 			id: "grade_result",
 			name: "grade_result",           
@@ -306,7 +296,6 @@ function getStudntTestByBranch(){
 			dijit.byId('stu_test_id').set('store',student_store);  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -334,11 +323,9 @@ function getAllGrade(){
 			<?php }?>
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getAllGradeResult(){
 	dijit.byId('grade_result').set('value',''); 
@@ -360,11 +347,9 @@ function getAllGradeResult(){
 			<?php }?>
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 function CalculateTotalScore(){
 	var rowId = $('#identity').val();
 	if(rowId==""){
@@ -378,10 +363,7 @@ function CalculateTotalScore(){
 		}else{
 			totalscore+= parseFloat(dijit.byId('score_'+rowIDArray[n]).get('value'));
 		}
-		
 	}
 	dijit.byId('score').set('value',totalscore); 
 }
 </script>
-
-

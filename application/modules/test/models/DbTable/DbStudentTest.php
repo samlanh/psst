@@ -69,29 +69,20 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'from_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
 						'student_option'	=>$data['student_option'],
-					
-// 						'address'	=>$data['address'],
 						'home_num'	=>$data['home_num'],
 						'street_num'	=>$data['street_num'],
 						'village_name'	=>$data['village_name'],
 						'commune_name'	=>$data['commune_name'],
 						'district_name'	=>$data['district_name'],
 						'province_id'	=>$data['province_id'],
-					
 						'tel'		=>$data['phone'],
 						'email'		=>$data['email'],
-						
-// 						'if_employed_where'	=>$data['if_employed_where'],
-// 						'position'			=>$data['position'],
 						'guardian_khname'		=>$data['parent_name'],
 						'guardian_tel'		=>$data['parent_tel'],
 						'photo'				=>$photo,
-						
-					
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],
 						'emergency_tel'			=>$data['emergency_tel'],
-						
 						'user_id'	=>$this->getUserId(),
 						'customer_type'	=>4,
 						'is_studenttest'	=>1,
@@ -119,34 +110,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 							$this->insert($arr);
 						}
 					}
-					//Skip check Letter
-// 					$arrayScore = array(
-// 							'stu_test_id'	=>$stutest_id,
-// 							'degree'	=>$data['degree'],
-// 							'grade'	=>$data['grade'],
-// 							'test_date'		=>$data['test_date'],
-// 							'note'		=>$data['note'],
-// 							'create_date' => date("Y-m-d H:i:s"),
-// 							'modify_date' => date("Y-m-d H:i:s"),
-// 							'user_id'	=>$this->getUserId(),
-// 					);
-						
-// 					if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
-					
-// 						$arrayScore['score']=$data['score'];
-// 						$arrayScore['degree_result']=$data['degree_result'];
-// 						$arrayScore['grade_result']=$data['grade_result'];
-// 						$arrayScore['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
-// 						$arrayScore['updated_result']=1;
-// 					}
-// 					$this->_name="rms_student_test_result";
-// 					$this->insert($arrayScore);
 			return $stutest_id;		
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();exit();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
-		
  	}
  	
 	function updateStudentTest($data){
@@ -173,25 +141,19 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'from_school'=>$data['old_school'],
 					'old_grade'	=>$data['old_grade'],
 					'student_option'	=>$data['student_option'],
-						
 					'home_num'	=>$data['home_num'],
 					'street_num'	=>$data['street_num'],
 					'village_name'	=>$data['village_name'],
 					'commune_name'	=>$data['commune_name'],
 					'district_name'	=>$data['district_name'],
 					'province_id'	=>$data['province_id'],
-						
 					'tel'		=>$data['phone'],
 					'email'		=>$data['email'],
-			
 					'guardian_khname'		=>$data['parent_name'],
 					'guardian_tel'		=>$data['parent_tel'],
-// 					'photo'				=>$photo,
-			
 					'emergency_name'		=>$data['emergency_name'],
 					'relationship_to_student'=>$data['relationship_to_student'],
 					'emergency_tel'			=>$data['emergency_tel'],
-			
 					'user_id'	=>$this->getUserId(),
 					'is_studenttest'	=>1,
 					'modify_date' => date("Y-m-d H:i:s")
@@ -214,16 +176,15 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$this->_name='rms_student';
 			$this->update($array, $where);
 			
-			
 			$testresult = $this->getAllTestResult($id);
 			if (!empty($testresult)) foreach ($testresult as $result){
 				if (!empty($data['default_'.$result['id']])){
 					$arr_res = array(
-							'is_current'=>1,
+						'is_current'=>1,
 					);
 				}else{
 					$arr_res = array(
-							'is_current'=>0,
+						'is_current'=>0,
 					);
 				}
 				$this->_name='rms_student_test_result';
@@ -254,10 +215,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			}
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
 	}
-	
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM rms_student WHERE stu_id=$id AND customer_type =4 AND is_studenttest=1 ";
@@ -299,9 +259,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name,
 				'$print'
 			 FROM `rms_student` AS s
-			WHERE s.is_studenttest =1
-		";
-// 		s.customer_type =4
+			WHERE s.is_studenttest =1 ";
 		if (!empty($search['txtsearch'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['txtsearch']));
@@ -317,20 +275,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_search'])){
 			$where .= " AND s.branch_id = ".$search['branch_search'];
 		}
-// 		if(!empty($search['degree'])){
-// 			$where .= " and degree = ".$search['degree'];
-// 		}
-// 		if(!empty($search['term_test'])){
-// 			$where .= " AND term_test ='".$search['term_test']."'";
-// 		}
-// 		if(!empty($search['result_status'])){
-// 			$where .= " and updated_result = ".$search['result_status'];
-// 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		
 		$order=" ORDER BY s.stu_id desc ";
-
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	

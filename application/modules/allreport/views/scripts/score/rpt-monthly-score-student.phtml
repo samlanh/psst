@@ -278,31 +278,88 @@ dojo.ready(function(){
 							<?php 
 							if ($show==2){
 							?>
-							<br />
-							<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd; border-bottom:solid 1px #4839bd; color: #4839bd; line-height: 24px;" border="1" >	
-								<tr style="background: #ffdbdb; ">
-									<td class="red" colspan="<?php echo count($this->rating);?>" align="center">ការវាយតម្លៃរបស់គ្រូ/Evaluation</td>
-								</tr>
-								<tr style="background: #ffdbdb;">
-									<td class="red" colspan="<?php echo count($this->rating);?>" align="center">កម្រិតពិន្ទុនៃការវាយតម្លៃ/Rating Scale</td>
-								</tr>
-								<tr style="background: #ffdbdb; font-size: 12px;">
-									<?php if (!empty($this->rating)) foreach ($this->rating as $rating){?>
-									<td class="red" align="center" style="white-space: nowrap;">&nbsp;<?php echo $rating['id']."=".$rating['name'];?>&nbsp;</td>
-									<?php }?>
-								</tr>
-							</table>
 							<?php if (!empty($this->evaluation)){?>
-								<table cellpadding="5"​ valign="top" style="width:100%; font-size: 12px;color: #4839bd; border-collapse:collapse; margin:0 auto; border: solid 3px #4839bd; border-top:solid 1px #4839bd;" border="1" >
-								<?php $k=0; foreach ($this->evaluation as $evaluation){ $k++; ?>
-								
-									<tr>
-										<td width="90%" valign="top" style="padding: 0 5px;  ">&nbsp;<span style="display: inline-block; width: 20px;"><?php echo $k.".";?></span><?php echo $evaluation['comments']?>&nbsp;</td>
-										<td  width="10%" align="center">&nbsp;<strong><?php echo $evaluation['rating_id']?></strong>&nbsp;</td>
-									</tr>
-									<?php }?>
-								</table>
-							<?php }?>
+								<br />
+									<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd; border-bottom:solid 1px #4839bd; color: #4839bd; line-height: 24px;" border="1" >	
+										<tr style="background: #ffdbdb; ">
+											<td class="red" colspan="<?php echo count($this->rating);?>" align="center">ការវាយតម្លៃរបស់គ្រូ/Evaluation</td>
+										</tr>
+										<tr style="background: #ffdbdb;">
+											<td class="red" colspan="<?php echo count($this->rating);?>" align="center">កម្រិតពិន្ទុនៃការវាយតម្លៃ/Rating Scale</td>
+										</tr>
+										<tr style="background: #ffdbdb; font-size: 12px;">
+											<?php if (!empty($this->rating)) foreach ($this->rating as $rating){?>
+											<td class="red" align="center" style="white-space: nowrap;">&nbsp;<?php echo $rating['id']."=".$rating['name'];?>&nbsp;</td>
+											<?php }?>
+										</tr>
+									</table>
+							
+									<table cellpadding="5"​ valign="top" style="width:100%; font-size: 12px;color: #4839bd; border-collapse:collapse; margin:0 auto; border: solid 3px #4839bd; border-top:solid 1px #4839bd;" border="1" >
+									<?php $k=0; foreach ($this->evaluation as $evaluation){ $k++; ?>
+									
+										<tr>
+											<td width="90%" valign="top" style="padding: 0 5px;  ">&nbsp;<span style="display: inline-block; width: 20px;"><?php echo $k.".";?></span><?php echo $evaluation['comments']?>&nbsp;</td>
+											<td  width="10%" align="center">&nbsp;<strong><?php echo $evaluation['rating_id']?></strong>&nbsp;</td>
+										</tr>
+										<?php }?>
+									</table>
+									
+									<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+										<tr>
+											<td width="40%">
+											បានឃើញ និងឯកភាព/Seen and Approved<br />
+											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+											ប្រធានកម្មវិធីសិក្សា/Program Manager
+											</td>
+											<td width="20%">
+											&nbsp;
+											</td>
+											<td width="40%">
+											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+											គ្រូបន្ទុកថ្នាក់/Homeroom Teacher
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3" style="height: 40px;">
+											</td>
+										</tr>
+										<tr style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+											<td width="40%" align="center">
+											<br />
+											<br />
+											<br />
+											<?php echo $this->rs['teacher'];?>
+											</td>
+											<td width="20%">
+											&nbsp;
+											</td>
+											<td width="40%" align="center">
+												<?php echo $this->rs['teacher'];?>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3" style="font-weight: bold;">
+											មតិយោបល់ ឬ សំណូមពរមាតាបិតា /អាណាព្យាបាលសិស្ស/Comments or Request of Parents or Guardians:
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
+											</td>
+										</tr>
+										<tr>
+											<td width="40%">
+												សូមប្រគល់សៀវភៅតាមដាននេះមកសាលាត្រឹមថ្ងៃទី: <strong><?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['return_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['return_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['return_date'])));?></strong><br />
+												Please return this book to school by: <strong><?php echo date("F",strtotime($this->evaluation[0]['return_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['return_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['return_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['return_date']));?><br /></strong>
+											</td>
+											<td width="20%">
+											&nbsp;
+											</td>
+											<td width="40%">
+											ថ្ងៃទី  ខែ   ឆ្នាំ Date<br />
+												ហត្ថលេខា និងឈ្មោះ / Signature and Name
+											</td>
+										</tr>
+									</table>
+								<?php }?>
 							<?php }?>
 					</td>
 				</tr>
@@ -493,6 +550,7 @@ dojo.ready(function(){
 							<?php 
 							if ($show==2){
 							?>
+							<?php if (!empty($this->evaluation)){?>
 							<br />
 							<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd; border-bottom:solid 1px #4839bd; color: #4839bd; line-height: 24px;" border="1" >	
 								<tr style="background: #ffdbdb; ">
@@ -507,7 +565,6 @@ dojo.ready(function(){
 									<?php }?>
 								</tr>
 							</table>
-							<?php if (!empty($this->evaluation)){?>
 								<table cellpadding="5"​ valign="top" style="width:100%; font-size: 12px;color: #4839bd; border-collapse:collapse; margin:0 auto; border: solid 3px #4839bd; border-top:solid 1px #4839bd;" border="1" >
 								<?php $k=0; foreach ($this->evaluation as $evaluation){ $k++; ?>
 								
@@ -517,7 +574,7 @@ dojo.ready(function(){
 									</tr>
 									<?php }?>
 								</table>
-							<?php }?>
+							
 							<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
 								<tr>
 									<td width="40%">
@@ -573,8 +630,8 @@ dojo.ready(function(){
 									</td>
 								</tr>
 							</table>
-							
-							<?php }?>	
+							<?php }?>
+						<?php }?>	
 					</td>
 				</tr>
 			</table>

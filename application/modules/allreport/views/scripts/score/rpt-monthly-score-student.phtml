@@ -314,7 +314,7 @@ dojo.ready(function(){
 											<td width="20%">
 											&nbsp;
 											</td>
-											<td width="40%">
+											<td width="40%" align="center">
 											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
 											គ្រូបន្ទុកថ្នាក់/Homeroom Teacher
 											</td>
@@ -328,7 +328,7 @@ dojo.ready(function(){
 											<br />
 											<br />
 											<br />
-											<?php echo $this->rs['teacher'];?>
+											<?php //echo $this->rs['teacher'];?>
 											</td>
 											<td width="20%">
 											&nbsp;
@@ -340,21 +340,26 @@ dojo.ready(function(){
 										<tr>
 											<td colspan="3" style="font-weight: bold;">
 											មតិយោបល់ ឬ សំណូមពរមាតាបិតា /អាណាព្យាបាលសិស្ស/Comments or Request of Parents or Guardians:
-												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
-												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
-												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
 											</td>
 										</tr>
+									</table>
+									<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
 										<tr>
-											<td width="40%">
+											<td width="45%" style="white-space: nowrap;">
 												សូមប្រគល់សៀវភៅតាមដាននេះមកសាលាត្រឹមថ្ងៃទី: <strong><?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['return_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['return_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['return_date'])));?></strong><br />
 												Please return this book to school by: <strong><?php echo date("F",strtotime($this->evaluation[0]['return_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['return_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['return_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['return_date']));?><br /></strong>
 											</td>
-											<td width="20%">
+											<td width="10%">
 											&nbsp;
 											</td>
-											<td width="40%">
-											ថ្ងៃទី  ខែ   ឆ្នាំ Date<br />
+											<td width="45%" align="center">
+											ថ្ងៃទី<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ខែ
+											<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ឆ្នាំ
+											<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											Date<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span><br />
 												ហត្ថលេខា និងឈ្មោះ / Signature and Name
 											</td>
 										</tr>
@@ -574,62 +579,81 @@ dojo.ready(function(){
 									</tr>
 									<?php }?>
 								</table>
-							
-							<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
-								<tr>
-									<td width="40%">
-									បានឃើញ និងឯកភាព/Seen and Approved<br />
-									ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
-									ប្រធានកម្មវិធីសិក្សា/Program Manager
-									</td>
-									<td width="20%">
-									&nbsp;
-									</td>
-									<td width="40%">
-									ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
-									គ្រូបន្ទុកថ្នាក់/Homeroom Teacher
-									</td>
-								</tr>
-								<tr>
-									<td colspan="3" style="height: 40px;">
-									</td>
-								</tr>
-								<tr style="font-family: 'Times New Roman','Khmer OS Muol Light';">
-									<td width="40%" align="center">
-									<br />
-									<br />
-									<br />
-									<?php echo $this->rs['teacher'];?>
-									</td>
-									<td width="20%">
-									&nbsp;
-									</td>
-									<td width="40%" align="center">
-										<?php echo $this->rs['teacher'];?>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="3" style="font-weight: bold;">
-									មតិយោបល់ ឬ សំណូមពរមាតាបិតា /អាណាព្យាបាលសិស្ស/Comments or Request of Parents or Guardians:
-										<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
-										<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
-										<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #000;">&nbsp;</span>
-									</td>
-								</tr>
-								<tr>
-									<td width="40%">
-										សូមប្រគល់សៀវភៅតាមដាននេះមកសាលាត្រឹមថ្ងៃទី: <strong><?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['return_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['return_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['return_date'])));?></strong><br />
-										Please return this book to school by: <strong><?php echo date("F",strtotime($this->evaluation[0]['return_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['return_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['return_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['return_date']));?><br /></strong>
-									</td>
-									<td width="20%">
-									&nbsp;
-									</td>
-									<td width="40%">
-									ថ្ងៃទី  ខែ   ឆ្នាំ Date<br />
-										ហត្ថលេខា និងឈ្មោះ / Signature and Name
-									</td>
-								</tr>
-							</table>
+									<?php if (!empty($this->evaluation[0]['teacher_comment'])){?>
+									<div style=" border: solid 3px #4839bd; margin: 20px 0;  padding: 10px;  color: #4839bd;  font-size: 12px;   line-height: 20px;">
+										<strong style="font-family: 'Times New Roman','Khmer OS Muol Light';">មតិយោបល់របស់គ្រូ / Teacher's Comments:</strong><br />
+										<?php echo $this->evaluation[0]['teacher_comment'];?>
+									</div>
+									<?php }?>
+									<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+										<tr style="white-space: nowrap;">
+											<td width="33%">
+											&nbsp;
+											</td>
+											<td width="33%" valign="top">
+											<br /><br />
+											បានឃើញ និងឯកភាព/Seen and Approved<br />
+											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+											ប្រធានកម្មវិធីសិក្សា/Program Manager
+											</td>
+											<td width="33%" align="center" valign="top">
+											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+											គ្រូបន្ទុកថ្នាក់/Homeroom Teacher
+											</td>
+										</tr>
+										<tr style="white-space: nowrap;">
+											<td width="33%" colspan="2">
+												បានឃើញ និងឯកភាព/Seen and Approved<br />
+												<div style="display: inline-block;width: 130px;height: 50px;">
+													<!--for sign nature image -->
+													
+												</div>
+												<div style="display: inline-block; white-space:nowrap; min-width: 50px; height: 30px">
+												ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+												</div><br />
+												នាយិកាសាលា/Directress
+											</td>
+											<td width="33%" align="center" style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+												<?php echo $this->rs['teacher'];?>
+											</td>
+										</tr>
+										<tr style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+											<td width="33%">
+											&nbsp;
+											</td>
+											<td width="33%" align="center">
+											<?php echo $this->rs['teacher'];?>
+											</td>
+											
+											
+										</tr>
+										<tr>
+											<td colspan="3" style="font-weight: bold;">
+											មតិយោបល់ ឬ សំណូមពរមាតាបិតា /អាណាព្យាបាលសិស្ស/Comments or Request of Parents or Guardians:
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											</td>
+										</tr>
+									</table>
+									<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+										<tr>
+											<td width="45%" style="white-space: nowrap;">
+												សូមប្រគល់សៀវភៅតាមដាននេះមកសាលាត្រឹមថ្ងៃទី: <strong><?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['return_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['return_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['return_date'])));?></strong><br />
+												Please return this book to school by: <strong><?php echo date("F",strtotime($this->evaluation[0]['return_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['return_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['return_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['return_date']));?><br /></strong>
+											</td>
+											<td width="10%">
+											&nbsp;
+											</td>
+											<td width="45%" align="center">
+											ថ្ងៃទី<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ខែ
+											<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ឆ្នាំ
+											<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											Date<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span><br />
+												ហត្ថលេខា និងឈ្មោះ / Signature and Name
+											</td>
+										</tr>
+									</table>
 							<?php }?>
 						<?php }?>	
 					</td>

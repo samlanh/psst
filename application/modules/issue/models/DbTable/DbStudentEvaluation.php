@@ -12,6 +12,34 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+		///////////////////////////// check before submit //////////////////////////////////	
+			$branch=$_data['branch_id'];
+			$group=$_data['group'];
+			$student=$_data['student'];
+			$for_type=$_data['for_type'];
+			$for_month=$_data['for_month'];
+			$for_semester=$_data['for_semester'];
+			
+			$sql="select 
+						id 
+					from 
+						rms_student_evaluation 
+					where 
+						branch_id = $branch
+						and group_id = $group
+						and student_id = $student
+						and for_type = $for_type
+						and for_month = $for_month
+						and for_semester = $for_semester
+					limit 1	
+				";
+			$result = $db->fetchOne($sql);
+			if(!empty($result)){
+				return -1;
+			}
+			
+		////////////////////////////////////////////////////////////////////////////////////////	
+			
 			$_arr = array(
 					'branch_id'		=>$_data['branch_id'],
 					'group_id'		=>$_data['group'],
@@ -183,7 +211,15 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 	
 	function getStudentEvaluationById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * from rms_student_evaluation where id = $id limit 1 ";
+		$sql="SELECT 
+					se.*,
+					(select is_pass from rms_group as g where g.id = se.group_id) as is_pass 
+				from 
+					rms_student_evaluation as se
+				where 
+					id = $id 
+				limit 1 
+			";
 		return $db->fetchRow($sql);
 	}
 	function getStudentEvaluationDetailById($id){

@@ -52,7 +52,11 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbStudentEvaluation();
 			try {
-				$rs =  $db->addStudentEvaluation($_data);
+				$rs = $db->addStudentEvaluation($_data);
+				if($rs==-1){
+					Application_Form_FrmMessage::message("RECORD_EXIST");
+					return 0;
+				}
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/studentevaluation/add");
 				}else {
@@ -95,9 +99,13 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		}
 		
 		$db = new Issue_Model_DbTable_DbStudentEvaluation();
-		$this->view->row = $db->getStudentEvaluationById($id);
+		$this->view->row = $row = $db->getStudentEvaluationById($id);
 		$this->view->row_detail = $db->getStudentEvaluationDetailById($id);
 		$this->view->rating = $db->getAllRating();
+		
+		if($row['is_pass']==1){
+			Application_Form_FrmMessage::Sucessfull("Can not edit because this group is finished !!!","/issue/studentevaluation");
+		}
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();

@@ -116,7 +116,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
     	}
-    	if(!empty($search['stu_type'])){
+    	if(!empty($search['stu_type']) AND $search['stu_type']>-1){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();

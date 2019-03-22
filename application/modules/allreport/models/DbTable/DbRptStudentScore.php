@@ -1189,7 +1189,9 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
 			(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
 			(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+			(SELECT rms_items.title_en FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree_en,
 			(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+			(SELECT rms_itemsdetail.title_en FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade_en,
 			g.`id` as group_id,
 			`g`.`semester` AS `semester`,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
@@ -1552,7 +1554,10 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	function getStudentEvaluation($data){
    		$db = $this->getAdapter();
    		$sql="SELECT ed.*,
-			(SELECT cm.comment FROM `rms_comment` AS cm WHERE cm.id = ed.comment_id LIMIT 1) AS comments
+			(SELECT cm.comment FROM `rms_comment` AS cm WHERE cm.id = ed.comment_id LIMIT 1) AS comments,
+			e.issue_date,
+			e.return_date,
+			e.teacher_comment
 			 FROM `rms_student_evaluation_detail` AS ed,
 			 `rms_student_evaluation` AS e
 			WHERE 
@@ -1578,8 +1583,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    				}
    			}
    		}
-   		 
-   		 
    		$sql.=" ORDER BY e.id DESC";
    		return $db->fetchAll($sql);
    	}

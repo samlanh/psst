@@ -27,7 +27,7 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'));
 			}
 			$this->view->search = $search;
-			$rs_rows = $db->getAllScore($search);
+			$rs_rows = $db->getAllStudentEvaluation($search);
 			
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH_NAME","TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_ID","STUDENT_NAME","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");

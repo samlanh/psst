@@ -104,12 +104,11 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 		}
    }
 	
-	function getAllScore($search=null){
+	function getAllStudentEvaluation($search=null){
 		$db=$this->getAdapter();
 		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		
 		if ($currentLang==1){// khmer
 			$title='title';
 			$view="name_kh";

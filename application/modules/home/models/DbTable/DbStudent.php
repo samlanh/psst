@@ -466,5 +466,49 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			ORDER BY s.id DESC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
+	function getStudyHistoryByStudent($stu_id){
+		$db = $this->getAdapter();
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		if ($currentLang==1){// khmer
+			$title='title';
+			$view="name_kh";
+			$branch="school_namekh";
+			$student="stu_khname as name";
+			$teacher="teacher_name_kh";
+		}else{
+			$title='title_en';
+			$view="name_en";
+			$branch="school_nameen";
+			$student="CONCAT(last_name,'',stu_enname) as name";
+			$teacher="teacher_name_en";
+		}
+		$sql="SELECT
+					g.group_code,
+					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
+					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+					(SELECT $view FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+					(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher,
+					(SELECT $view FROM `rms_view` WHERE TYPE=12 AND key_code = gds.is_pass LIMIT 1) as is_pass_label,
+					gds.is_pass,
+					gds.type
+				FROM
+					rms_group_detail_student AS gds,
+					rms_group AS g,
+					rms_student as s
+				WHERE 
+					gds.group_id = g.id
+					AND gds.stu_id = s.stu_id
+					and gds.stu_id = $stu_id
+					and gds.status=1
+				order by 
+					gds.is_pass DESC,
+					gds.date ASC
+						
+			";
+		return $db->fetchAll($sql);
+	}
 }
 

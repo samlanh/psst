@@ -151,9 +151,22 @@ display: table-cell !important;
 	<table width="100%">
 		<tr>
 			<td align="center">
+				<div><span><?php echo $tr->translate("STUDENT_CARD_BACK");?></span></div>
 				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printSelected();"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
-				<input type="button" onclick="printIDCard();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
+					type="button" onclick="printSelected('');"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
+				<input type="button" onclick="printIDCard('print_student_card');" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<div><span><?php echo $tr->translate("STUDENT_CARD_FRONT");?></span></div>
+				<button dojoType="dijit.form.Button" id="printselected_front" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					type="button" onclick="printSelected(1);"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
+				<input type="button" onclick="printIDCard('print_student_card_front');" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
 				
 				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
 					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
@@ -202,13 +215,6 @@ display: table-cell !important;
 						border:solid 1px #eee;				
 
 					}	
-					.card-content-student-print-front<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
-						background-image: url('<?php echo $imagebg_front;?>');
-						background-size: 100%;
-						background-repeat: no-repeat;
-						position: relative;		
-						border:solid 1px #eee;				
-					}
 			
 					<?php }?>
 					
@@ -305,6 +311,134 @@ display: table-cell !important;
 					font-size: 10px;	
 				}	
 				
+				
+	</style>
+	<div class="main-card-block" style=" padding: 0;"><!-- text-align:center; margin: 0 auto; -->
+		<?php $con=4;$i=0; $student= count($this->rs);
+			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
+					<?php 
+					$prefix="";
+					$validDate="";
+						$stu_name = $row['stu_enname']." ".$row['last_name'];
+						$image = $this->baseUrl().'/images/no-profile.png';
+						if(!empty($row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							}
+							
+						}
+						$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+						if (!empty($bg)){
+							if ($bg['display_by']==2){
+								$stu_name = $row['stu_khname'];
+							}
+							$prefix = $bg['card_prefix'];
+							$validDate = $bg['valid'];
+						}
+						?>
+					<?php if ($key==0){?>
+					<div class="one-row-persone" >
+					<?php } ?>
+						<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+							
+							<div class="name-card-block">
+								<ul class="list-data">
+									<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+									<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
+									<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
+									<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
+								</ul>
+								<ul class="list-data-secondrow">
+									<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span> <span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
+									<li><span class="title_value parent-name">&nbsp;<?php echo $row['father_enname'];?></span></li>
+									<li><span class="title_value parent-job">&nbsp;<?php echo $row['fath_job'];?></span></li>
+									<li><span class="title_value parent-name">&nbsp;<?php echo $row['mother_enname'];?></span></li>
+									<li><span class="title_value parent-job">&nbsp;<?php echo $row['moth_job'];?></span></li>
+									<li style=" line-height: 21px; "><span class="title_value home_num">&nbsp;<?php echo $row['home_num'];?></span> <span class="title_value street_num">&nbsp;<?php echo $row['street_num'];?></span> <span class="title_value commnue">&nbsp;<?php echo $row['commune_name'];?></span>  <span class="title_value district">&nbsp;<?php echo $row['district_name'];?></span></li>
+								</ul>
+							</div>
+						</div>
+					<?php if (($i%2)==0){?>
+							<?php if ($key>0){?>
+							</div>
+							<div class="one-row-persone" >
+							<?php } ?>
+						<?php }?>
+						
+						<?php if (count($this->rs)==$i){?>
+						</div>
+						<?php }?>
+			<?php }
+				}?>
+		</div>
+	</div>
+		
+		<div id="print_student_card_front" >
+			<style>
+					<?php 
+					$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+						$imagebg_front = $this->baseUrl().'/images/card/default_front_card_bg.jpg';
+						$color = "000000";
+						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
+						if(!empty($bg['background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+							$image = $this->baseUrl().'/images/card/'.$bg['background'];
+							}
+							if (!empty($bg['colorcode'])){
+								$color = str_replace("#", "", $bg['colorcode']);
+							}
+						}
+						if(!empty($bg['front_background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bg['front_background'])){
+								$imagebg_front = $this->baseUrl().'/images/card/'.$bg['front_background'];
+							}
+						}
+						?>
+						
+					.card-content-student-print-front<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+						background-image: url('<?php echo $imagebg_front;?>');
+						background-size: 100%;
+						background-repeat: no-repeat;
+						position: relative;		
+						border:solid 1px #eee;				
+					}
+			
+					<?php }?>
+					
+					.name-card-block ul.list-data {
+					    list-style-type: none;
+					    padding: 0;
+					    width: 100%;
+					    position: absolute;
+					    top: 12px;
+					    color: #000;
+					    font-weight: bold;
+					    font-size: 11px;
+					}	
+				
+
+				.name-card-block ul.list-data-secondrow {
+					    list-style-type: none;
+					    padding: 0;
+					    width: 100%;
+					    position: absolute;
+					    top: 126px;
+					    color: #000;
+					    font-weight: bold;
+					    font-size: 11px;
+					}	
+
+				.name-card-block ul.list-data li,.name-card-block ul.list-data-secondrow li{
+					line-height: 23px;
+					text-align: left;   
+				}
+		
+				span.title_value{
+					display:inline-block;
+				}
+				
 				.name-card-block-front ul.list-data {
 					list-style-type: none;
 					padding: 0;
@@ -365,6 +499,7 @@ display: table-cell !important;
 					right:20px;
 				}	
 	</style>
+	<div class="main-card-block" style=" padding: 0;"><!-- text-align:center; margin: 0 auto; -->
 		<?php $con=4;$i=0; $student= count($this->rs);
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 					<?php 
@@ -388,8 +523,10 @@ display: table-cell !important;
 						}
 						?>
 						
-						<div class="main-card-block" style="text-align:center; margin: 0 auto; padding: 0;">
+						
+							<?php if ($key==0){?>
 							<div class="one-row-persone" >
+							<?php } ?>
 								<div class="card-content-student-print-front <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 									<div class="profile-card-block">
 										<div class="photo">
@@ -410,32 +547,21 @@ display: table-cell !important;
 										<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
 									</div>
 								</div>
-								
-								<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-									
-									<div class="name-card-block">
-										<ul class="list-data">
-											<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
-											<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
-											<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
-											<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
-										</ul>
-										<ul class="list-data-secondrow">
-											<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span> <span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
-											<li><span class="title_value parent-name">&nbsp;<?php echo $row['father_enname'];?></span></li>
-											<li><span class="title_value parent-job">&nbsp;<?php echo $row['fath_job'];?></span></li>
-											<li><span class="title_value parent-name">&nbsp;<?php echo $row['mother_enname'];?></span></li>
-											<li><span class="title_value parent-job">&nbsp;<?php echo $row['moth_job'];?></span></li>
-											<li style=" line-height: 21px; "><span class="title_value home_num">&nbsp;<?php echo $row['home_num'];?></span> <span class="title_value street_num">&nbsp;<?php echo $row['street_num'];?></span> <span class="title_value commnue">&nbsp;<?php echo $row['commune_name'];?></span>  <span class="title_value district">&nbsp;<?php echo $row['district_name'];?></span></li>
-										</ul>
-									</div>
+							<?php if (($i%2)==0){?>
+								<?php if ($key>0){?>
 								</div>
-							</div>
+								<div class="one-row-persone" >
+								<?php } ?>
+							<?php }?>
 							
-						</div>
-		<?php }
-			}?>
-		</div>		
+							<?php if (count($this->rs)==$i){?>
+							</div>
+							<?php }?>
+			<?php }
+				}?>
+			
+			</div>
+		</div>			
 	</div>
 </div>
 <?php /////////////////////////////////////////////////// pick up card //////////////////////////////////////////////////////////?>
@@ -749,9 +875,9 @@ function getallGrade(){
 		   			];
 			return (monthName[m-1]);
 	}	
-	function printIDCard(){
+	function printIDCard(indexprint){
 		loadingBlock();
-	  	 var contents = document.getElementById("print_student_card").innerHTML;
+	  	 var contents = document.getElementById(indexprint).innerHTML;
 	 	  var frame1 = document.createElement('iframe');
 	    frame1.name = "frame1";
 	    frame1.style.position = "absolute";
@@ -771,16 +897,22 @@ function getallGrade(){
 	    }, 10000);
 	   return false;
 	}
-	function printSelected(){
+	function printSelected(typecard){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'idselected'));
     	?>
-
+    	var urlink="";
+		if(typecard==1){
+			var urlink="?front_card=1";
+		}
     	 id_selected = dijit.byId('id_selected').get('value');
 		 if(id_selected!=''){
-			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
+			window.open(
+					'<?php echo $url_copy;?>'+'/id/'+id_selected+urlink,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
 		 }else{
 			alert('Please select record you want to print');
 			return false;

@@ -11,6 +11,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	public function idselectedAction(){
 		$id=$this->getRequest()->getParam('id');
+		$front_card=$this->getRequest()->getParam('front_card');
+		$this->view->front = empty($front_card)?"":$front_card;
 		$k = 0;
 		$condition = '';
 		$ids = explode(',', $id);

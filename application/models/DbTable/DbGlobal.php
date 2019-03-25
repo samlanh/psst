@@ -1683,7 +1683,7 @@ function getAllgroupStudyNotPass($action=null){
   	if($category_id!=null AND $category_id>0 AND $category_id!=''){
   		$sql.=" AND i.items_id=".$category_id;
   	}
-  	if($student_id!=null){
+  	if($student_id!=null AND !empty($student_id)){
   		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
   	}
   	 
@@ -1699,7 +1699,7 @@ function getAllgroupStudyNotPass($action=null){
   	if ($level!=1){
   		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
   	}
-  	$sql.=" ORDER BY i.items_id ASC, i.ordering DESC ";
+  	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
   	//return $sql;
   	return $db->fetchAll($sql);
   }

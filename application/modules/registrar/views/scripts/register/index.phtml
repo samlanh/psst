@@ -80,7 +80,6 @@
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {  
-
 			}
 		}, "grade_all");
 		getallGrade();
@@ -110,13 +109,11 @@
 			handleAs:"json",
 			load: function(data) {
 				academic_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('study_year').set('store',academic_store);  
-				if(oldBranch==branch_id){
+				//if(oldBranch==branch_id){
 					dijit.byId('study_year').set('value','<?php echo $this->adv_search['study_year']?>');  
-				}
+				//}
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -137,12 +134,10 @@
 				dijit.byId('grade_all').attr('value','<?php echo $this->adv_search['grade_all']?>');  
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
 </script>
-
 <?php if(!empty($this->customer_payment)){?>
 <table width="100%"  border="1" style="border: 1px solid #CCCCCC;border-collapse: collapse;margin-top: 50px;">
 	
@@ -178,7 +173,6 @@
 		<td><?php echo $tr->translate("USER");?></td>
 		<td><?php echo $tr->translate("STATUS");?></td>
 	</tr>
-	
 	<?php $i=0;foreach ($this->customer_payment as $rs){$i++;?>
 		<tr class="hover" align="center" style="background: none repeat scroll 0 0 #FFFFFF;line-height: 25px;">
 			<td><?php echo $i;?></td>
@@ -198,10 +192,4 @@
 		</tr>
 	<?php }?>
 </table>
-
 <?php }?>
-
-
-
-
-

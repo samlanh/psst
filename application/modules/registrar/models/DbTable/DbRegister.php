@@ -733,8 +733,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				WHERE 
 					s.stu_id=sp.student_id 
 					$user 
-					$branch_id 
-			";
+					$branch_id ";
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -750,11 +749,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$s_where[]= " sp.grade LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	
     	if(($search['branch_id']>0)){
     		$where.= " AND sp.branch_id = ".$search['branch_id'];
     	}
-    	
     	if(!empty($search['degree'])){
     		$where.=" AND sp.degree=".$search['degree'];
     	}
@@ -1428,7 +1425,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	function getStudentPaymentHistory($studentid){
 		$db = $this->getAdapter();
-		$sql = "SELECT 
+		$sql="SELECT 
     			  spd.id,
 				  spd.fee,
 				  spd.qty,
@@ -1459,7 +1456,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					item.id=spd.itemdetail_id
     				AND s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND sp.student_id = $studentid ORDER BY create_date DESC,item.id ASC";
+    				AND sp.student_id = $studentid ORDER BY create_date DESC,sp.id DESC, item.id ASC ";
 			return $db->fetchAll($sql);
 	}
 	

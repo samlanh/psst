@@ -151,7 +151,6 @@ display: table-cell !important;
 	<table width="100%">
 		<tr>
 			<td align="center">
-				<div><span><?php echo $tr->translate("STUDENT_CARD_BACK");?></span></div>
 				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
 					type="button" onclick="printSelected('');"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
 				<input type="button" onclick="printIDCard('print_student_card');" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
@@ -159,15 +158,6 @@ display: table-cell !important;
 		</tr>
 		<tr>
 			<td align="center">
-				<div><span><?php echo $tr->translate("STUDENT_CARD_FRONT");?></span></div>
-				<button dojoType="dijit.form.Button" id="printselected_front" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printSelected(1);"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
-				<input type="button" onclick="printIDCard('print_student_card_front');" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
-				
 				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
 					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
 				<input type="button" onclick="printPickup();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_PICKUP");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
@@ -215,7 +205,14 @@ display: table-cell !important;
 						border:solid 1px #eee;				
 
 					}	
-			
+						 
+					.card-content-student-print-front<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+						background-image: url('<?php echo $imagebg_front;?>');
+						background-size: 100%;
+						background-repeat: no-repeat;
+						position: relative;		
+						border:solid 1px #eee;				
+					}
 					<?php }?>
 					
 					.name-card-block ul.list-data {
@@ -311,10 +308,70 @@ display: table-cell !important;
 					font-size: 10px;	
 				}	
 				
+					    .name-card-block-front ul.list-data {
+					list-style-type: none;
+					padding: 0;
+					width: 100%;
+					position: absolute;
+					top: 93.5px;
+					color: #000000;
+					font-weight: bold;
+					font-size: 11px;
+				}	
+				.name-card-block-front ul.list-data li{
+					line-height: 24px;	
+					text-align: left;												
+				}
+				.name-card-block-front span.title_value.student-name,
+				.name-card-block-front span.title_value.grade{
+					margin-left:60px;
+					min-width:160px;
+					text-align: center;										
+				}
+				.name-card-block-front span.title_value.studentcode,
+				.name-card-block-front span.title_value.acadimicyear{
+					margin-left:70px;
+					min-width:150px;
+					text-align: center;										
+				}
+				.one-row-persone{
+					margin-bottom:5px;
+					margin-top:5px;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 220px;
+					left:-68px;
+					
+				}
+				.photo img {
+					width: 70.7px;
+					height: 92px;
+				}
+				
+				.validdate .issue_date{
+					position: absolute;
+					top: 240px;
+					color: #000000;
+					font-size:10px;
+				}
+				.validdate .issue_date.day{
+					right:95px;
+				}
+				.validdate .issue_date.month{
+					right:50px;
+					min-width:40px;
+					text-align: center;
+				}	
+				.validdate .issue_date.year{
+					right:20px;
+				}	
 				
 	</style>
-	<div class="main-card-block" style=" padding: 0;"><!-- text-align:center; margin: 0 auto; -->
-		<?php $con=4;$i=0; $student= count($this->rs);
+	<div class="main-card-block" style=" padding: 0; text-align:center; margin: 0 auto;">
+		<?php $con=4;$i=0; $student= count($this->rs); $amount=4;
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 					<?php 
 					$prefix="";
@@ -358,10 +415,10 @@ display: table-cell !important;
 								</ul>
 							</div>
 						</div>
-					<?php if (($i%2)==0){?>
-							<?php if ($key>0){?>
+					<?php if ($i==$amount){?>
+								<?php if ($key>0){ $amount =$amount+4;?>
 							</div>
-							<div class="one-row-persone" >
+							<div class="one-row-persone" <?php if ($amount>8){?> style=" padding-top: 10px;"<?php }?>>
 							<?php } ?>
 						<?php }?>
 						
@@ -370,137 +427,8 @@ display: table-cell !important;
 						<?php }?>
 			<?php }
 				}?>
-		</div>
-	</div>
-		
-		<div id="print_student_card_front" >
-			<style>
-					<?php 
-					$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
-						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						$imagebg_front = $this->baseUrl().'/images/card/default_front_card_bg.jpg';
-						$color = "000000";
-						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
-						if(!empty($bg['background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
-							$image = $this->baseUrl().'/images/card/'.$bg['background'];
-							}
-							if (!empty($bg['colorcode'])){
-								$color = str_replace("#", "", $bg['colorcode']);
-							}
-						}
-						if(!empty($bg['front_background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bg['front_background'])){
-								$imagebg_front = $this->baseUrl().'/images/card/'.$bg['front_background'];
-							}
-						}
-						?>
-						
-					.card-content-student-print-front<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
-						background-image: url('<?php echo $imagebg_front;?>');
-						background-size: 100%;
-						background-repeat: no-repeat;
-						position: relative;		
-						border:solid 1px #eee;				
-					}
-			
-					<?php }?>
-					
-					.name-card-block ul.list-data {
-					    list-style-type: none;
-					    padding: 0;
-					    width: 100%;
-					    position: absolute;
-					    top: 12px;
-					    color: #000;
-					    font-weight: bold;
-					    font-size: 11px;
-					}	
 				
-
-				.name-card-block ul.list-data-secondrow {
-					    list-style-type: none;
-					    padding: 0;
-					    width: 100%;
-					    position: absolute;
-					    top: 126px;
-					    color: #000;
-					    font-weight: bold;
-					    font-size: 11px;
-					}	
-
-				.name-card-block ul.list-data li,.name-card-block ul.list-data-secondrow li{
-					line-height: 23px;
-					text-align: left;   
-				}
-		
-				span.title_value{
-					display:inline-block;
-				}
-				
-				.name-card-block-front ul.list-data {
-					list-style-type: none;
-					padding: 0;
-					width: 100%;
-					position: absolute;
-					top: 93.5px;
-					color: #000000;
-					font-weight: bold;
-					font-size: 11px;
-				}	
-				.name-card-block-front ul.list-data li{
-					line-height: 24px;	
-					text-align: left;												
-				}
-				.name-card-block-front span.title_value.student-name,
-				.name-card-block-front span.title_value.grade{
-					margin-left:60px;
-					min-width:160px;
-					text-align: center;										
-				}
-				.name-card-block-front span.title_value.studentcode,
-				.name-card-block-front span.title_value.acadimicyear{
-					margin-left:70px;
-					min-width:150px;
-					text-align: center;										
-				}
-				.one-row-persone{
-					margin-bottom:30px;
-				}
-				.profile-card-block .photo {
-					text-align: center;
-					width: 100%;
-					position: absolute;
-					top: 220px;
-					left:-68px;
-					
-				}
-				.photo img {
-					width: 70.7px;
-					height: 92px;
-				}
-				
-				.validdate .issue_date{
-					position: absolute;
-					top: 240px;
-					color: #000000;
-					font-size:10px;
-				}
-				.validdate .issue_date.day{
-					right:95px;
-				}
-				.validdate .issue_date.month{
-					right:50px;
-					min-width:40px;
-					text-align: center;
-				}	
-				.validdate .issue_date.year{
-					right:20px;
-				}	
-	</style>
-	<div class="main-card-block" style=" padding: 0;"><!-- text-align:center; margin: 0 auto; -->
-		<?php $con=4;$i=0; $student= count($this->rs);
+				<?php $con=4;$i=0; $student= count($this->rs);$amount=4;
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 					<?php 
 					$prefix="";
@@ -547,10 +475,10 @@ display: table-cell !important;
 										<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
 									</div>
 								</div>
-							<?php if (($i%2)==0){?>
-								<?php if ($key>0){?>
+							<?php if ($i==$amount){?>
+								<?php if ($key>0){ $amount =$amount+4;?>
 								</div>
-								<div class="one-row-persone" >
+								<div class="one-row-persone" <?php if ($amount>8){?> style=" padding-top: 10px;"<?php }?>>
 								<?php } ?>
 							<?php }?>
 							
@@ -559,9 +487,9 @@ display: table-cell !important;
 							<?php }?>
 			<?php }
 				}?>
-			
-			</div>
-		</div>			
+		</div>
+	</div>
+		
 	</div>
 </div>
 <?php /////////////////////////////////////////////////// pick up card //////////////////////////////////////////////////////////?>

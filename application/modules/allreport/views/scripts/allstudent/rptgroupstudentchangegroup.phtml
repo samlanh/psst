@@ -32,8 +32,7 @@
                 	<?php echo $frm->getElement("branch_id");?>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-12">
-                	<?php //echo $frm->getElement("study_year");?>
-		           		<input id="study_year" />
+		           	<input id="study_year" />
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-12">
                 	<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_id" name="change_id" type="text">
@@ -59,16 +58,12 @@
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td width="28%" >
 				</td>
 				<td width="44%" align="center">
-					<span style="color:#000; font-size: 20px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></span><br />
+					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></span><br />
 				</td>
-				<td width="28%" align="right">
-				</td>
+				<td width="28%" align="right"></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -79,7 +74,7 @@
 					<?php $total_stu=0; if(!empty($this->rs))foreach ($this->rs as $key =>$stu){										
 					?>
 						<?php if((($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])) AND  $key>0 ){?>											
-						<tr class="hover" style="font-size:14px;height: 25px;"​>
+						<tr class="hover" style="font-size:12px;height: 25px;"​>
 							<td align="right" colspan="4" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
 							<td align="center"><strong><?php echo number_format($i,0);?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
 						</tr>
@@ -94,7 +89,7 @@
 							if(($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])){
 								$ac=0;$i=1;
 						?>
-						<tr style="font-size:14px; height: 45px;" align="center" >
+						<tr style="font-size:12px; height: 45px;" align="center" >
 							<td colspan="5" style="border: 1px solid white;border-bottom: 1px solid black;">
 								<span">
 									<span style="background-color: rgba(249,249,249,1);white-space: nowrap;color: red;padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;">&nbsp;<?php echo $stu["academic_year"]?> &nbsp; <?php echo $stu["from_group_code"];?> &nbsp; <?php echo $stu["session"];?>&nbsp;</span> &nbsp; To &nbsp; <span style="color: red;background-color: rgba(249,249,249,1);padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;">&nbsp;<?php echo $stu["to_academic_year"]?> &nbsp; <?php echo $stu["to_group_code"];?> &nbsp; <?php echo $stu["to_session"];?>&nbsp; </span> &nbsp; <?php echo $tr->translate("TYPE")?> : <span style="background-color: rgba(249,249,249,1);white-space: nowrap;color: red;padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;"><?php echo $stu["change_type"];?> </span>         
@@ -102,7 +97,7 @@
 								<br>
 							</td>
 						</tr>
-						<tr style="font-size:14px; height: 20px;background: #ccd9ff !important;line-height: 25px;" align="center" >
+						<tr style="font-size:12px; height: 20px;background: #ccd9ff !important;line-height: 25px;" align="center" >
 							<td style="width: 10%;"><?php echo $tr->translate("N_O");?></td>
 							<td style="width: 15%;"><?php echo $tr->translate("STUDENT_ID");?></td>
 							<td style="width: 30%;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
@@ -119,7 +114,7 @@
 						 	  $to_grade=$stu["to_grade"];
 						?>
 						
-						<tr class="hover" style="font-size:13px;height: 22px;"​ align="center">
+						<tr class="hover" style="font-size:12px;height: 22px;"​ align="center">
 							<td><?php echo $i;?></td>
 							<td align="left">&nbsp;<?php echo $stu['stu_code'];?></td>
 							<td align="left">&nbsp;<?php echo $stu['stu_khname'];?></td>
@@ -128,7 +123,7 @@
 						</tr>
 					<?php }?>
 					<?php if(!empty($this->rs)){?>
-						<tr class="hover" style="font-size:15px;height: 30px;font-weight: bold;"​>
+						<tr class="hover" style="font-size:12px;height: 30px;font-weight: bold;"​>
 							<td align="right" colspan="4" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
 							<td align="center"><?php echo number_format($i,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
 						</tr>
@@ -142,7 +137,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td width="35%" align="center">
 								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
@@ -162,7 +157,6 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.FilteringSelect"); 
 

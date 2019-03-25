@@ -6,7 +6,7 @@
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
-.line-height{line-height:25px !important;}
+.line-height{line-height:20px !important;}
 .table-width{width:40% !important}
 .hover:hover{ background:#ccc;}
 table.content-data tr.style-head,
@@ -77,23 +77,17 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td width="15%" align="center">
 				</td>
 				<td width="70%"  align="center">
 					<ul>
-						<li>
-						<span​​ style=" font-weight:200;color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></span>
-						</li>
-						<li>
-						<span​​ style=" font-weight:200;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></span>
-						</li>
+						<li><span​​ style=" font-weight:200;color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></span></li>
+						<?php if(!empty($this->search['start_date'])){?>
+							<li><span​​ style=" font-weight:200;color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));?></span></li>
+						<?php }?>
 					</ul>
 				</td>
-				<td width="15%" align="center">
-				</td>
+				<td width="15%" align="center"></td>
 			</tr>
 		<style>
 			table tr th{
@@ -112,7 +106,7 @@ table.tb-footer tr.style-head {
 			table.content-data-main{
 				width:100%;
 				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
+				font-size:12px;
 				white-space: nowrap;
 				margin:0 auto;
 				color:#4839bd;
@@ -124,7 +118,7 @@ table.tb-footer tr.style-head {
 				width:100%;
 				border:1px solid #4839bd; 
 				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
+				font-size:12px;
 				white-space: nowrap;
 				margin:0 auto;
 				color:#4839bd;
@@ -132,13 +126,13 @@ table.tb-footer tr.style-head {
 			}
 			table.content-data-main  tr.style-head,
 			table.content-data  tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+			   line-height: 20px; padding:1px 0px; white-space: nowrap; 
 				background: #ccd9ff;
 				text-align: center;
 			}
 			table.content-data tr.style-rowdata {
 				font-size:12px; 
-				height: 23px;
+				height: 20px;
 			}
 			td.border,
 			table.content-data-main tr.style-head td {
@@ -146,9 +140,9 @@ table.tb-footer tr.style-head {
 			}
 		</style>
 			<tr>
-				<td colspan="3">
+				<td colspan="3" valign="top">
 				<div id="exportExcel">
-					<table class="content-data-main" cellpadding="4"​ border="0" >
+					<table class="content-data-main" cellpadding="2"​ border="0" >
 					<?php $i=0;$degree="";$count=0; 
 						$all_total = 0;$all_drop = 0; $all_female=0; $all_femaledrop=0;
 						$female=0;$male=0;
@@ -163,12 +157,11 @@ table.tb-footer tr.style-head {
 							if ($row['sex_key']==2){ $all_female++;}
 						}
 					?>
-						
 						<?php if($degree!=$row['degree_id']){?>
 							<?php if ($key>0){?>
 							<tr>
 								<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
+									<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px;white-space:nowrap;">
 										<tr>
 											<td valign="top" style="width:33%;">
 												<span>
@@ -192,8 +185,8 @@ table.tb-footer tr.style-head {
 							<tr><td colspan="14" style="">&nbsp;</td></tr>
 							<?php }?>
 								<tr style="border:0px solid #fff;">
-									<td colspan="14" >
-										<table width="100%" class="line-height" style="color:#4839bd; white-space: nowrap;line-height: 19px;font-size: 14px;">
+									<td colspan="14" valign="top">
+										<table width="100%" class="line-height" style="color:#4839bd; white-space: nowrap;line-height: 19px;font-size: 12px;">
 											<tr>
 												<td width="10%" ><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 												<td width="15%" ><?php echo $row['academic_year'];?></td>
@@ -241,7 +234,7 @@ table.tb-footer tr.style-head {
 					<?php }?>	
 						<tr>
 							<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
+								<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px;white-space:nowrap;">
 									<tr>
 										<td valign="top" style="width:33%;">
 											<span>
@@ -264,7 +257,7 @@ table.tb-footer tr.style-head {
 						</tr>
 						<tr><td colspan="14" style="border:1px solid #fff;">&nbsp;</td></tr>
 					</table>	
-					<table border="0" align="right" width="60%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang'; margin:0 auto; white-space:nowrap;">
+					<table border="0" align="right" width="60%" style="color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Battambang'; margin:0 auto; white-space:nowrap;">
 						<tr>
 							<td width="15%" >
 								<?php echo $tr->translate("TOTAL_STUDYING_STUDENT");?>
@@ -317,7 +310,7 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td width="35%" align="center">
 								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />

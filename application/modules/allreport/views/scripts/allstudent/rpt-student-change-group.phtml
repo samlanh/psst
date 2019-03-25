@@ -31,14 +31,8 @@ table.tb-footer tr.style-head {
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("study_year");?>
             	<input id="study_year" />
             </div>
-            <!-- 
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("grade_bac");?>
-            </div>
-             -->
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("session");?>
             </div>
@@ -54,19 +48,13 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td  width="28%">
 				</td>
 				<td width="44%" align="center">
-					<span style="font-family: Arial Black;color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></span><br /><br >
+					<span style="font-family: Arial Black;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></span>
 				</td>
 				<td width="28%" align="right">
 				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
@@ -86,7 +74,7 @@ table.tb-footer tr.style-head {
 				width:100%;
 				border:1px solid #000; 
 				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
+				font-size:12px;
 				white-space: nowrap;
 				margin:0 auto;
 			}
@@ -167,13 +155,13 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr >
 				<td align="center" width="25%">
-					<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY");?></span>
+					<span style="font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';""><?php echo $tr->translate("VERIFIED_BY");?></span>
 				</td>
 				<td  width="50%">
 					&nbsp;
 				</td>
 				<td align="center"  width="25%">
-					<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY");?></span>
+					<span style="font-size: 12px;text-align: right;font-family:'Times New Roman','Khmer OS Muol Light';""><?php echo $tr->translate("PREPARED_BY");?></span>
 				</td>
 			</tr>
 		</table>
@@ -181,11 +169,9 @@ table.tb-footer tr.style-head {
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dijit.form.FilteringSelect"); 
 
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -212,31 +198,29 @@ dojo.ready(function(){
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
 function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
-			alert(err);
+		dijit.byId('study_year').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('study_year').set('store',academic_store);  
+			dijit.byId('branch_id').focus();
+			return false;
 		}
-	});
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				academic_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('study_year').set('store',academic_store);  
+			    if(oldBranch==branch_id){
+			    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
+			    }
+			},
+			error: function(err) {
+			}
+		});
 }
-
 </script>

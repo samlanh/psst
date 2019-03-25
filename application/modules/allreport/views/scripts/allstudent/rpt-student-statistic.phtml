@@ -56,20 +56,14 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
 				<td width="15%" align="center">
 				</td>
 				<td width="70%"  align="center">
-					<span style=" color:#4839bd; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
-					<span style=" color:#4839bd; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></span>
+					<span style=" color:#4839bd; font-size:14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
+					<span style=" color:#4839bd; font-size:14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></span>
 				</td>
 				<td width="15%" align="center">
 				</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
@@ -97,7 +91,7 @@ table.tb-footer tr.style-head {
 				margin:0 auto;
 			}
 			table.content-data thead tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 20px; 
 				background: #ccd9ff;
 				text-align: center;
 			}
@@ -107,10 +101,10 @@ table.tb-footer tr.style-head {
 			}
 		</style>
 			<tr>
-				<td colspan="3">
+				<td colspan="3" valign="top">
 				<div id="exportExcel">
 				<?php if (!empty($this->rs)){?>
-					<table class="content-data" cellpadding="4"​  border="1" >
+					<table class="content-data" cellpadding="1"​  border="1" >
 						<thead>
 							<tr class="style-head">
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
@@ -172,23 +166,15 @@ table.tb-footer tr.style-head {
 				</div>	
 				</td>
 			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
 			<tr >
 				<td colspan="3" width="100%">
-					<table width="100%" style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+					<table width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td  width="25%" align="center">
 								<span style="font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
 								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
-							<td  width="50%">
-								&nbsp;
-							</td>
+							<td  width="50%">&nbsp;</td>
 							<td align="center"  width="25%">
 								<span ><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
 								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('PREPARED_BY')?></span>

@@ -56,8 +56,7 @@ table.tb-footer tr.style-head {
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12"></div>
              </div>
 	</form>
 	<div id="divPrint">
@@ -70,7 +69,7 @@ table.tb-footer tr.style-head {
 					<td width="15%" align="center">
 					</td>
 					<td width="70%"  align="center">
-						<span style="color:#4839bd; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
+						<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
 						<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center">
@@ -166,7 +165,7 @@ table.tb-footer tr.style-head {
 				</tr>
 				<tr>
 					<td colspan="3" style="border:1px solid #fff;">
-						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
 							<tr>
 								<td width="35%" align="center">
 									<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />

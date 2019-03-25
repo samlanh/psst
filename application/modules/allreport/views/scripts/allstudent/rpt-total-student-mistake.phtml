@@ -101,7 +101,7 @@ table.tb-footer tr.style-head {
 					width:100%;
 					border:1px solid #4839bd; 
 					font-family:'Times New Roman','Khmer OS Battambang';
-					font-size:13px;
+					font-size:12px;
 					white-space: nowrap;
 					margin:0 auto;
 					color: #4839bd;
@@ -140,7 +140,7 @@ table.tb-footer tr.style-head {
 						?>
 						<tr>
 							<td align="right" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<span​​ style="color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
+								<span​​ style="color:#000; font-size: 12px;font-family: 'Times New Roman','Khmer OS Battambang';">
 								<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span>
 							</td>
@@ -149,8 +149,8 @@ table.tb-footer tr.style-head {
 						<thead>										
 						<tr>
 							<td align="center" colspan="7" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<span​​ style=" font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
-								<span​​ style=" font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';">
+								<span​​ style=" font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
+								<span​​ style=" font-size: 12px;font-family:'Times New Roman','Khmer OS Muol light';">
 									<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 									<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
 									<br />
@@ -181,32 +181,28 @@ table.tb-footer tr.style-head {
 							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_code'];?></a></td>
 							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_khname'];?>&nbsp;</a></td>
 							<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
-							<?php $s=0; $m=0; $b=0;$el=0; 
-							//for($k=0;$k<$amount_day;$k++){?>
-								<?php //if(date('D',strtotime("$start_date +$k day"))=="Sun"){ }else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
-									<?php  
-											$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], null, $rs['group_id']);
-											$lateAttedence = $db->getAttendenceFoul($rs['group_id'],$rs['stu_id']);
-											$late_foul = 0;
-											if (!empty($lateAttedence)){
-												$late_foul = $lateAttedence['count_foul_att'];
-											}
-											if (!empty($mistake_status)) foreach ($mistake_status as $sta){
-												if ($sta['mistake_type']==1){
-													$s=$sta['count_mistack']+$late_foul;
-												}
-												else if ($sta['mistake_type']==2){
-													$m = $sta['count_mistack'];
-												}
-												else if ($sta['mistake_type']==3){
-													$b = $sta['count_mistack'];
-												}else{
-													echo " ";
-												}
-											}
-										?>
-								<?php //}?>
-							<?php //}?>
+							<?php $s=0; $m=0; $b=0;$el=0; ?>
+							<?php  
+								$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], null, $rs['group_id']);
+								$lateAttedence = $db->getAttendenceFoul($rs['group_id'],$rs['stu_id']);
+								$late_foul = 0;
+								if (!empty($lateAttedence)){
+									$late_foul = $lateAttedence['count_foul_att'];
+								}
+								if (!empty($mistake_status)) foreach ($mistake_status as $sta){
+									if ($sta['mistake_type']==1){
+										$s=$sta['count_mistack']+$late_foul;
+									}
+									else if ($sta['mistake_type']==2){
+										$m = $sta['count_mistack'];
+									}
+									else if ($sta['mistake_type']==3){
+										$b = $sta['count_mistack'];
+									}else{
+										echo " ";
+									}
+								}
+								?>
 							<td align="center"><?php echo $s+$late_foul;?></td>
 							<td align="center"><?php echo $m;?></td>
 							<td align="center"><?php echo $b;?></td>
@@ -215,7 +211,7 @@ table.tb-footer tr.style-head {
 						}?>
 						<tr>
 							<td align="right" colspan="7" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<span​​ style="font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 13px;">
+								<span​​ style="font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;">
 								<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span><br />
 							</td>
@@ -224,14 +220,8 @@ table.tb-footer tr.style-head {
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
 				<td colspan="3" width="100%">
-					<table width="100%" style="ont-size: 14px;font-family: 'Times New Roman','Khmer OS Muol Light'; color: #4839bd;">
+					<table width="100%" style="font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol Light'; color: #4839bd;">
 						<tr>
 							<td  width="25%" align="center">
 								<span><?php echo $tr->translate('VERIFIED_BY')?></span>
@@ -250,7 +240,6 @@ table.tb-footer tr.style-head {
 	</div>
 </div>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.FilteringSelect"); 
 
@@ -283,7 +272,6 @@ dojo.ready(function(){
 	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
-		    
 	    }
 	}, "group");
 	
@@ -296,7 +284,6 @@ dojo.ready(function(){
 		class: 'fullside',  
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
-
 		}
 	}, "grade_all");
 	getallGrade();
@@ -334,7 +321,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -362,7 +348,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -384,7 +369,6 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

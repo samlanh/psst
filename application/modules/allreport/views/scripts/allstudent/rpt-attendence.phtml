@@ -14,7 +14,6 @@
 	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 	$amount_day =$diff/ (60*60*24);
 	$amount_day = $amount_day + 1;
-	
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 ?>	
 <style>
@@ -74,12 +73,9 @@
             	<div class="col-md-2 col-sm-2 col-xs-12">
             		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
             	</div>
-            	<div class="col-md-2 col-sm-2 col-xs-12">
-            	</div>
-            	<div class="col-md-2 col-sm-2 col-xs-12">
-            	</div>
-            	<div class="col-md-2 col-sm-2 col-xs-12">
-            	</div>
+            	<div class="col-md-2 col-sm-2 col-xs-12"></div>
+            	<div class="col-md-2 col-sm-2 col-xs-12"></div>
+            	<div class="col-md-2 col-sm-2 col-xs-12"></div>
             </div>
          </div>
 	</form>
@@ -134,7 +130,7 @@
 							?>					
 							<tr>
 								<td align="right" colspan="<?php echo $amount_day+7;?>" style=" border: 1px solid #fff; border-top: 1px solid #000;">
-									<span​​ style="color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
+									<span​​ style="color:#000; font-size: 12px;font-family: 'Times New Roman','Khmer OS Battambang';">
 									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 									</span>
 								</td>
@@ -142,12 +138,12 @@
 							<?php }$i=0; ?>
 							<tr>
 								<td align="center" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<strong style="font-weight:200;color:#000; font-size: 18px;font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
+									<strong style="font-weight:200;color:#000; font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
 								</td>
 							</tr>
 							<tr>
 								<td align="left" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<table width="50%" style="white-space:nowrap;line-height:20px;font-size:14px;font-family: 'Times New Roman','Khmer OS Battambang';">
+									<table width="50%" style="white-space:nowrap;line-height:20px;font-size:12px;font-family: 'Times New Roman','Khmer OS Battambang';">
 										<tr>
 											<td width="30%"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 											<td width="70%">: <?php echo $rs['academic_year'];?></td>
@@ -168,7 +164,7 @@
 								</td>
 							</tr>
 							</thead>
-							<tr style="font-size:14px; line-height: 18px; background: #ccd9ff; " align="center" >
+							<tr style="font-size:12px; line-height: 18px; background: #ccd9ff; " align="center" >
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
@@ -181,7 +177,7 @@
 								<?php }?>
 								<td colspan="4" style="font-family: 'Times New Roman','Khmer OS Muol Light';">&nbsp;<?php echo $tr->translate("TOTAL_ATTENDENCE");?>&nbsp;</td>
 							</tr>
-							<tr style="font-size:14px; line-height: 18px; font-family: 'Times New Roman','Khmer OS Muol Light'; " align="center">
+							<tr style="font-size:12px; line-height: 18px; font-family: 'Times New Roman','Khmer OS Muol Light'; " align="center">
 								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("ABSENT");?>&nbsp;</td>
 								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("PERMISSION");?>&nbsp;</td>
 								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("LATE");?>&nbsp;</td>
@@ -228,7 +224,7 @@
 							}?>
 							<tr>
 								<td align="right" colspan="<?php echo $amount_day+7;?>" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<span style="font-family: 'Times New Roman','Khmer OS Muol Light';font-weight:200;color:#000; font-size: 15px;">
+									<span style="font-family: 'Times New Roman','Khmer OS Muol Light';font-weight:200;color:#000; font-size: 12px;">
 									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<strong><?php echo $i ?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 									</span><br />
 								</td>
@@ -251,7 +247,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" style="border:1px solid #fff;">
-						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
 							<tr>
 								<td width="35%" align="center">
 									<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
@@ -272,7 +268,7 @@
 
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.FilteringSelect"); 
 

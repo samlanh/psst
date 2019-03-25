@@ -84,12 +84,9 @@ table.tb-footer tr.style-head {
 				<td width="28%" align="left">
 				</td>
 				<td width="44%" align="center">
-					<span style="font-weight:200;color:#4839bd; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></span>
+					<span style="font-weight:200;color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></span>
 				</td>
 				<td align="right" width="28%"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" valign="top" id="exportExcel">
@@ -141,10 +138,10 @@ table.tb-footer tr.style-head {
 								<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("ROOM");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 							  </tr>
 						  </thead>
 						  <?php $i=0; 
@@ -159,10 +156,10 @@ table.tb-footer tr.style-head {
 						    <td>&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
 						    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
 						  </tr>
 						  <?php 
 						  	$all_student = $all_student+$rs['Num_Student'];
@@ -189,7 +186,7 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
+					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 12">
 						<tr>
 							<td width="35%" align="center">
 								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />

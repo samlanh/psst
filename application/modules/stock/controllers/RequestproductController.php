@@ -1,15 +1,10 @@
 <?php
 class Stock_RequestproductController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
-	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
 	public function indexAction(){
 		try{
@@ -18,26 +13,28 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    					'title' => '',
-    					'request_for' => -1,
-    					'for_section' => -1,
-    					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d'),
-    					'status_search'=>1,
-    				);
+    				'title' => '',
+    				'branch_id'=>'',
+    				'request_for' => -1,
+    				'for_section' => -1,
+    				'start_date'  => date('Y-m-d'),
+    				'end_date'    => date('Y-m-d'),
+    				'status_search'=>1,
+    			);
     		}
 			$db =  new Accounting_Model_DbTable_DbRequestProduct();
 			$rows = $db->getAllRequest($search);
 			$rs_rows=new Application_Model_GlobalClass();
 			$rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("REQUEST_NO","REQUEST_FOR","FOR_SECTION","PURPOSE","REQUEST_DATE","TOTAL","USER","STATUS");
+			$collumns = array("BRANCH","REQUEST_NO","REQUEST_FOR","FOR_SECTION","PURPOSE","REQUEST_DATE","TOTAL","USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'requestproduct','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_for'=>$link,'purpose'=>$link,));
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error");
 		}
 		$_pur =  new Accounting_Model_DbTable_DbRequestProduct();
 		$req_for = $_pur->getAllRequestFor();
@@ -45,12 +42,12 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		
 		$for_section = $_pur->getAllForSection();
 		$this->view->for_section = $for_section;
+		
 		$this->view->search = $search;
 		$form=new Accounting_Form_FrmSearchProduct();
 		$form=$form->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){
@@ -67,7 +64,6 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
 		

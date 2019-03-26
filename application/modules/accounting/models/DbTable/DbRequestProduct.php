@@ -13,47 +13,46 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="SELECT 
     				id,
+    				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id= branch_id LIMIT 1) AS branch_name,
     				request_no,
-    				(select title from rms_request_for as rf where rf.id = request_for) as request_for,
-    				(select title from rms_for_section as fs where fs.id = for_section) as for_section,
+    				(SELECT title from rms_request_for as rf where rf.id = request_for LIMIT 1) as request_for,
+    				(SELECT title from rms_for_section as fs where fs.id = for_section  LIMIT 1) as for_section,
     				purpose,
     				request_date,
-			       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id)AS total_qty,
+			       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id  LIMIT 1) AS total_qty,
 			       (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name,
 			       status
 			   FROM 
     				rms_request_order 
-    			WHERE 
-    				1
-    		";
-    	//(SELECT name_en FROM rms_view WHERE key_code=rms_request_order.status AND rms_view.type=1 LIMIT 1) AS `status`
-    	$where="";
-    	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
-    	if(!empty($search['title'])){
-    		$s_where=array();
-    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
-    		$s_where[]= " REPLACE(request_no,' ','') LIKE '%{$s_search}%'";
-    		$s_where[]="  REPLACE(request_name,' ','') LIKE '%{$s_search}%'";
-    		$s_where[]= " REPLACE(purpose,' ','') LIKE '%{$s_search}%'";
-    		$where.=' AND ('.implode(' OR ', $s_where).')';
-    	}
-    	if($search['status_search']==1 OR $search['status_search']==0){
-    		$where.=" AND status=".$search['status_search'];
-    	}
-    	
-    	if($search['request_for']>0){
-    		$where.=" AND request_for=".$search['request_for'];
-    	}
-    	if($search['for_section']>0){
-    		$where.=" AND for_section=".$search['for_section'];
-    	}
-    	
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('branch_id');
-    	$order=" ORDER BY id DESC";
-    	//echo $where;
+    			WHERE 1 ";
+	    	$where="";
+	    	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
+	    	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
+	    	$where = " AND ".$from_date." AND ".$to_date;
+	    	if(!empty($search['title'])){
+	    		$s_where=array();
+	    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+	    		$s_where[]= " REPLACE(request_no,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]= " REPLACE(request_name,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]= " REPLACE(purpose,' ','') LIKE '%{$s_search}%'";
+	    		$where.=' AND ('.implode(' OR ', $s_where).')';
+	    	}
+	    	if($search['status_search']==1 OR $search['status_search']==0){
+	    		$where.=" AND status=".$search['status_search'];
+	    	}
+	    	if($search['request_for']>0){
+	    		$where.=" AND request_for=".$search['request_for'];
+	    	}
+	    	if($search['for_section']>0){
+	    		$where.=" AND for_section=".$search['for_section'];
+	    	}
+	    	if(!empty($search['branch_id'])){
+	    		$where.=" AND branch_id=".$search['branch_id'];
+	    	}
+	    	
+	    	$dbp = new Application_Model_DbTable_DbGlobal();
+	    	$sql.=$dbp->getAccessPermission('branch_id');
+	    	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
 
@@ -79,7 +78,6 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     		return $row;
     	}
     }
-    
     public function addRequest($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
@@ -92,10 +90,10 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					"for_section"   => 	$data["for_section"],
 					"purpose"     	=> 	$data["purpose"],
 					"branch_id"     => 	$data["branch"],
-					"request_date"  => 	date("Y-m-d",strtotime($data['request_date'])),
+					"request_date"  => 	$data['request_date'],
 					"create_date"   => 	date("Y-m-d H:i:s"),
 					"user_id"       => 	$this->getUserId(),
-					"status"        => 	$data['status'],
+					"status"        => 	1,
 			);
 			$this->_name="rms_request_order";
 			$request_id = $this->insert($arr); 
@@ -107,42 +105,39 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 				{
 					$data_item= array(
 							'request_id'	=>  $request_id,
-							'branch_id'		=> 	$data['branch_id_'.$i],
+							'branch_id'		=> 	$data['branch'],
 							'pro_id'		=>  $data['product_name_'.$i],
 							'qty_curr'		=> 	$data['curr_qty'.$i],
 							'qty_request'	=>  $data['request_qty'.$i],
 							'qty_receive'	=>  $data['receive_qty'.$i],
 							'price'			=> 	$data['cost_'.$i],
-							'pro_type'		=>  2,//type product cut stock later
+							'pro_type'		=>  2,
 							'create_date'	=>  date("Y-m-d H:i:s"),
 							'remark'  		=> 	$data['note_'.$i],
 							'user_id'		=> 	$this->getUserId(),
-							'status'		=> 	$data['status'],
+							'status'		=> 	1,
 					);
 					$this->_name='rms_request_orderdetail';
 					$this->insert($data_item);
-					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i]); 
+					$rows=$this->getProQtyByLocation($data['branch'], $data['product_name_'.$i]); 
 					if($rows){
-							$datatostock= array(
-									'pro_qty' 	=> $rows["pro_qty"]-$data['receive_qty'.$i],
-									'date'		=> date("Y-m-d H:i:s"),
-									'user_id'	=> $this->getUserId()
-							);
-							$this->_name="rms_product_location";
-							$where=" id = ".$rows['id'];
-							$this->update($datatostock, $where);
-					}else{
-// 						echo "heer";exit();
+						$datatostock= array(
+							'pro_qty' 	=> $rows["pro_qty"]-$data['receive_qty'.$i],
+							'date'		=> date("Y-m-d H:i:s"),
+							'user_id'	=> $this->getUserId()
+						);
+						$this->_name="rms_product_location";
+						$where=" id = ".$rows['id'];
+						$this->update($datatostock, $where);
 					}
 				 }
 			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
-			Application_Form_FrmMessage::message('INSERT_FAIL');
 			$err =$e->getMessage();
-			echo $err;exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			Application_Form_FrmMessage::message('INSERT_FAIL');
 		}
 	}
     

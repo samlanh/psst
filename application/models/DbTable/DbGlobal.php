@@ -724,7 +724,6 @@ function getAllgroupStudyNotPass($action=null){
    	if ($lang==1){
    		$field = 'name_kh';
    	}
-//    	$sql="SELECT key_code,CONCAT(name_en,'-',name_kh) AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
    	$sql="SELECT key_code,$field AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
    	return $db->fetchAll($sql);
    }
@@ -800,9 +799,7 @@ function getAllgroupStudyNotPass($action=null){
     } 
    public function getAccessPermission($branch_str='branch_id'){
 	   	$session_user=new Zend_Session_Namespace('authstu');
-// 	   	$branch_id = $session_user->branch_id;
 	   	$branch_list = $session_user->branch_list;
-	  
 	   	$result="";
 	   	if(!empty($branch_list)){
 		   	$level = $session_user->level;

@@ -12,13 +12,15 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     function getAllSupPurchase($search=null){
     	$db = $this->getAdapter();
     	$sql="SELECT sp.id,
-    	(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
-    	sp.supplier_no,s.sup_name,
-    	 (SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
-		        sp.amount_due,sp.date,sp.status
-		     		   FROM rms_supplier AS s,
-		     		   rms_purchase AS sp
-					WHERE s.id=sp.sup_id ";
+    		 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
+    		 sp.supplier_no,s.sup_name,
+    	 	(SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
+		    sp.amount_due,sp.date,
+		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name,    
+		    sp.status
+     		   FROM rms_supplier AS s,
+     		   rms_purchase AS sp
+			WHERE s.id=sp.sup_id ";
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
@@ -31,12 +33,8 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_where[]= " s.tel LIKE '%{$s_search}%'";
     		$s_where[]= " s.email LIKE '%{$s_search}%'";
     		$s_where[]= " sp.amount_due LIKE '%{$s_search}%'";
-    		 
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-//     	if(!empty($search['product'])){
-//     		$where.=" AND spd.pro_id=".$search['product'];
-//     	}
     	if(!empty($search['supplier_id'])){
     		$where.=" AND s.id=".$search['supplier_id'];
     	}
@@ -46,11 +44,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND sp.status=".$search['status_search'];
     	}
-    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$sql.=$dbp->getAccessPermission('sp.branch_id');
     	$order=" ORDER BY id DESC";
-    	//echo $where;
     	return $db->fetchAll($sql.$where.$order);
     }
     function getAllProductsetbyId($pro_id){
@@ -114,50 +110,48 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			$this->insert($_arrs);
     		}
     	}
-    	
     }
-    
     public function addPurchase($_data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-	    		$_arr = array(
-	    				'sup_name'		=>$_data['supplier_name'],
-	    				'purchase_no'	=>$_data['purchase_no'],
-	    				'sex'			=>$_data['sex'],
-	    				'tel'			=>$_data['phone'],
-	    				'email'			=>$_data['email'],
-	    				'address'		=>$_data['address'],
-	    				'status'		=>$_data['status'],
-	    				'date'			=>date("Y-m-d"),
-	    				'user_id'		=>$this->getUserId()
-	    				);
-	    		$this->_name='rms_supplier';
-	    		if(!empty($_data['is_new_cu'])){
-	    			$sup_id=$_data['sup_id'];
-	    			$where=" id =".$_data['sup_id'];
-	    			$this->update($_arr, $where);
-	    		}else{
-	    			$sup_id = $this->insert($_arr);
-	    		}
+    		$_arr = array(
+    				'sup_name'		=> $_data['supplier_name'],
+    				'purchase_no'	=> $_data['purchase_no'],
+    				'sex'			=> $_data['sex'],
+    				'tel'			=> $_data['phone'],
+    				'email'			=> $_data['email'],
+    				'address'		=> $_data['address'],
+    				'status'		=> 1,
+    				'date'			=> $_data['purchase_date'],
+    				'user_id'		=> $this->getUserId()
+    				);
+    		$this->_name='rms_supplier';
+    		if(!empty($_data['is_new_cu'])){
+    			$sup_id=$_data['sup_id'];
+    			$where=" id =".$_data['sup_id'];
+    			$this->update($_arr, $where);
+    		}else{
+    			$sup_id = $this->insert($_arr);
+    		}
 	    		//Purchasing Order Product
 	    		
-	    		$dbgb = new Application_Model_DbTable_DbGlobal();
-	    		$purchase_no = $dbgb->getPuchaseNo($_data['branch']);
-	    		$this->_name='rms_purchase';
-	    		$_arr = array(
-	    				'sup_id'		=>$sup_id,
-	    				'supplier_no'	=>$purchase_no,
-	    				'amount_due'	=>$_data['amount_due'],
-	    				'amount_due_after'=>$_data['amount_due'],
-	    				'branch_id'		=>$_data['branch'],
-	    				'date'			=>date("Y-m-d"),
-	    				'status'		=>$_data['status'],
-	    				'user_id'		=>$this->getUserId(),
-	    				'create_date'			=>date("Y-m-d H:i:s"),
-	    				'modify_date'			=>date("Y-m-d H:i:s"),
-	    		);
-	    		$sup_proid=$this->insert($_arr);
+    		$dbgb = new Application_Model_DbTable_DbGlobal();
+    		$purchase_no = $dbgb->getPuchaseNo($_data['branch']);
+    		$this->_name='rms_purchase';
+    		$_arr = array(
+    				'sup_id'		=>$sup_id,
+    				'supplier_no'	=>$purchase_no,
+    				'amount_due'	=>$_data['amount_due'],
+    				'amount_due_after'=>$_data['amount_due'],
+    				'branch_id'		=>$_data['branch'],
+    				'date'			=>$_data['purchase_date'],
+    				'status'		=>$_data['status'],
+    				'user_id'		=>$this->getUserId(),
+    				'create_date'	=>date("Y-m-d H:i:s"),
+    				'modify_date'	=>date("Y-m-d H:i:s"),
+    		);
+    		$sup_proid=$this->insert($_arr);
 	    		
 	    		$this->_name='rms_purchase_detail';
 	    		$ids = explode(',', $_data['identity']);
@@ -168,7 +162,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    						'pro_id'=>$_data['product_name_'.$i],
 	    						'qty'	=>$_data['qty_'.$i],
 	    						'cost'	=>$_data['cost_'.$i],
-	    						'date'	=>date("Y-m-d"),
+	    						'date'	=>$_data['purchase_date'],
 	    						'amount'=>$_data['amount_'.$i],
 	    						'note'	=>$_data['note_'.$i],
 	    				);
@@ -180,6 +174,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		   	}catch (Exception $e){
 		   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		   		$db->rollBack();
+		   		Application_Form_FrmMessage::message("INSERT_FAIL");
 		   	}
     }
     function updateProductCost($pro_id,$branch,$qty,$total_amount_purchase){
@@ -198,7 +193,6 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$result = $db->fetchRow($sql);
     	
     	if(!empty($result)){
-    		
     		$total_amount_in_stock = $result['pro_qty'] * $result['cost'];
     		$total_qty_sum = $result['pro_qty'] + $qty;
     		
@@ -250,20 +244,23 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{ 
-    		$this->updateStockBack($_data['id']);//to back history data
+    		$oldrs = $this->getSupplierById($_data['id']);
+    		$old_status = $oldrs['status'];
+    		if($old_status==1){//if old po active
+    			$this->updateStockBack($_data['id']);//to back history data
+    		}
+    		
     		$this->_name = "rms_supplier";
 	    		$_arr = array(
 	    				'sup_name'		=>$_data['supplier_name'],
 	    				'purchase_no'	=>$_data['purchase_no'],
-	    				//'sup_old_new'	=>$_data['category_id'],
 	    				'sex'			=>$_data['sex'],
 	    				'tel'			=>$_data['phone'],
 	    				'email'			=>$_data['email'],
 	    				'address'		=>$_data['address'],
 	    				'amount_due'	=>$_data['amount_due'],
-// 	    				'amount_due_after'	=>$_data['amount_due'],
-	    				'status'		=>$_data['status'],
-	    				'date'			=>date("Y-m-d"),
+	    				'status'		=>1,
+	    				'date'			=>$_data['purchase_date'],
 	    				'user_id'		=>$this->getUserId()
 	    				);
 	    		 
@@ -274,15 +271,15 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		//Purchasing Order Product
 	    		$this->_name='rms_purchase';
 	    		$_arr = array(
-	    				'sup_id'		=>$sup_id,
-	    				'supplier_no'	=>$_data['purchase_no'],
-	    				'amount_due'	=>$_data['amount_due'],
-	    				'amount_due_after'=>$_data['amount_due'],
-	    				'branch_id'		=>$_data['branch_id'],
-	    				'date'			=>date("Y-m-d"),
-	    				'status'		=>$_data['status'],
-	    				'user_id'		=>$this->getUserId(),
-	    				'modify_date'			=>date("Y-m-d H:i:s"),
+	    				'sup_id'		=> $sup_id,
+	    				'supplier_no'	=> $_data['purchase_no'],
+	    				'amount_due'	=> $_data['amount_due'],
+	    				'amount_due_after'=> $_data['amount_due'],
+	    				'branch_id'		=> $_data['branch_id'],
+	    				'date'			=> $_data['purchase_date'],
+	    				'status'		=> $_data['status'],
+	    				'user_id'		=> $this->getUserId(),
+	    				'modify_date'	=> date("Y-m-d H:i:s"),
 	    		);
 	    		$where=" id =".$_data['id'];
 	    		$this->update($_arr, $where);
@@ -294,18 +291,20 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		foreach ($ids as $i){
 	    			$this->_name='rms_purchase_detail';
     				$_arr = array(
-    						'supproduct_id'	=>$_data['id'],
-    						'pro_id'		=>$_data['product_name_'.$i],
-    						'qty'			=>$_data['qty_'.$i],
-    						'cost'			=>$_data['cost_'.$i],
-    						'date'			=>date("Y-m-d"),
-    						'amount'		=>$_data['amount_'.$i],
-    						'note'			=>$_data['note_'.$i],
+    					'supproduct_id'=> $_data['id'],
+    					'pro_id'	   => $_data['product_name_'.$i],
+    					'qty'		   => $_data['qty_'.$i],
+    					'cost'		   => $_data['cost_'.$i],
+    					'date'		   => date("Y-m-d"),
+    					'amount'	   => $_data['amount_'.$i],
+    					'note'		   => $_data['note_'.$i],
     				);
     				$this->insert($_arr);
     				
-    				$this->updateProductCost($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i],$_data['amount_'.$i]);
-	    			$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
+    				if($_data['status']==1){
+    					$this->updateProductCost($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i],$_data['amount_'.$i]);
+	    				$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
+    				}
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){
@@ -341,22 +340,12 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     
     function getPurchaseCode($branch_id=null){
-//     	$db = $this->getAdapter();
-//     	$sql="SELECT id FROM rms_purchase WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
-//     	$acc_no = $db->fetchOne($sql);
-//     	$new_acc_no= (int)$acc_no+1;
-//     	$acc_no= strlen((int)$acc_no+1);
-//     	$pre='PU-';
-//     	for($i = $acc_no;$i<4;$i++){
-//     		$pre.='0';
-//     	}
-//     	return $pre.$new_acc_no;
     	$db = new Application_Model_DbTable_DbGlobal();
     	return $db->getPuchaseNo($branch_id);
     }
     function getSuplierName(){
     	$db=$this->getAdapter();
-    	$sql="SELECT id,sup_name FROM rms_supplier WHERE STATUS=1 ORDER BY id DESC";
+    	$sql="SELECT id,sup_name FROM rms_supplier WHERE status=1 ORDER BY id DESC";
     	return $db->fetchAll($sql);
     }
     function getSuplierInfo($id){

@@ -1,7 +1,5 @@
 <?php
 class Stock_PurchaseController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
-	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -18,33 +16,33 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'title' => '',
-    							'product' => '',
-    							'branch_id' => '',
-    					        'supplier_id'=>'',
-    							'start_date'=> date('Y-m-d'),
-    							'end_date'=>date('Y-m-d'),
-    							'status_search'=>1,
-    					);
+    				'title' => '',
+    				'product' => '',
+    				'branch_id' => '',
+    				'supplier_id'=>'',
+    				'start_date'=> date('Y-m-d'),
+    				'end_date'=>date('Y-m-d'),
+    				'status_search'=>-1,
+    				);
     		}
 			$db =  new Stock_Model_DbTable_DbPurchase();
 			$rows = $db->getAllSupPurchase($search);
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","TEL","EMAIL","TOTAL","DATE","STATUS");
+			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","TEL","EMAIL","AMOUNT_DUE","DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'purchase','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array( 'branch_name'=>$link,'supplier_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
 			}catch (Exception $e){
+				Application_Form_FrmMessage::message("Application Error");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 			$form=new Accounting_Form_FrmSearchProduct();
 			$form=$form->FrmSearchProduct();
 			Application_Model_Decorator::removeAllDecorator($form);
 			$this->view->form_search=$form;
-		
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){
@@ -52,7 +50,6 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			try{
 				$db = new Stock_Model_DbTable_DbPurchase();
 				$row = $db->addPurchase($_data);
-				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/purchase");
 				}else{
@@ -62,23 +59,15 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
 		$_pur = new Stock_Model_DbTable_DbPurchase();
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
-		$this->view->bran_name=$_pur->getAllBranch();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
-		$branch = $model->getAllBranchName();
-		array_unshift($branch, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$branch = $model->getAllBranch();
 		$this->view->branchopt = $branch;
-		
-		$fm = new Global_Form_Frmbranch();
-		$frm = $fm->Frmbranch();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_branch = $frm;
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();
@@ -88,6 +77,23 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$_data['id']=$id;
+			try{
+				$db = new Stock_Model_DbTable_DbPurchase();
+				$row = $db->updatePurchase($_data,$id);
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase/add");
+				}
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
 		$_pur = new Stock_Model_DbTable_DbPurchase();
 		$row = $_pur->getSupplierById($id);
 		if (empty($row)){
@@ -97,33 +103,12 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("This Purchase Already Payment","/stock/purchase");
 			exit();
 		}
-		
 		$haspay = $_pur->checkHaspayment($id);
 		if (!empty($haspay)){
 			Application_Form_FrmMessage::Sucessfull("This Purchase has paid on some payment ready","/stock/purchase");
 			exit();
 		}
 		
-		if($this->getRequest()->isPost()){
-			$_data = $this->getRequest()->getPost();
-			$_data['id']=$id;
-			try{
-				$db = new Stock_Model_DbTable_DbPurchase();
-				$row = $db->updatePurchase($_data,$id);
-		
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase/add");
-				}
-		
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
-			}
-		}
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->row_sup=$row;

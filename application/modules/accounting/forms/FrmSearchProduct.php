@@ -136,12 +136,10 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		));
 		$location->setValue($request->getParam("location"));
 		$opt_ls = array(''=>$this->tr->translate("SELECT_LOCATION"));
-// 		$opt_l=new Accounting_Model_DbTable_DbProduct();
-// 		$row=$opt_l->getLocation();
 		$row = $_dbg->getAllBranch();
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name'];
 		$location->setMultiOptions($opt_ls);
-		//branc controll 
+		
 		$branch_id= new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$branch_id->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -160,9 +158,6 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$cate->setValue($request->getParam("category_id"));
 		
 		$opt_ls = array(''=>$this->tr->translate("PRODUCT_CATEGORY"));
-// 		$opt_l=new Accounting_Model_DbTable_DbProduct();
-// 		$row=$opt_l->getProductCategory();
-		
 		
 		$row =  $_dbg->getAllItems(3);
 		

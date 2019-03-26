@@ -142,5 +142,15 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	}
     }
     
+    function getBorrowHistoryAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Library_Model_DbTable_DbBorrowbook();
+    		$history= $db->getBorrowHistory($data['stu_id']); // type => 1=borrow , 2=return
+    		print_r(Zend_Json::encode($history));
+    		exit();
+    	}
+    }
+    
 }
 

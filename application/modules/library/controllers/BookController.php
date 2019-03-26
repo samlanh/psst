@@ -27,7 +27,7 @@ protected $tr;
     	    }
     	    $rs_rows =$db->getAllBook($search);
     	    $list = new Application_Form_Frmtable();
-    	    $collumns = array("BOOK_NAME","AUTHOR_NAME","CATEGORY","BLOCK_NAME","CREATE_DATE","USER","STATUS");
+    	    $collumns = array("BOOK_NAME","AUTHOR_NAME","CATEGORY","BLOCK_NAME","NOT_BORROW","BORROW","CREATE_DATE","USER","STATUS");
     	    $link=array(
     	    		'module'=>'library','controller'=>'book','action'=>'edit',
     	    );
@@ -127,25 +127,7 @@ protected $tr;
     	$this->view->frm_cat = $frm_search;
     }
     
-    function addCategoryAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Library_Model_DbTable_DbCategory();
-    		$id = $_dbmodel->ajaxAddCategory($_data);
-    		print_r(Zend_Json::encode($id));
-    		exit();
-    	}
-    }
     
-    function addBlockAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Library_Model_DbTable_DbCategory();
-    		$id = $_dbmodel->ajaxAddBlock($_data);
-    		print_r(Zend_Json::encode($id));
-    		exit();
-    	}
-    }
 	public function copyAction(){
 		$id = $this->getRequest()->getParam("id");
     	$db = new Library_Model_DbTable_DbBook();
@@ -153,24 +135,30 @@ protected $tr;
     		$_data = $this->getRequest()->getPost();
     		$_data['id']=$id;
     		try {
-    			$db = new Library_Model_DbTable_DbBook();
     			$db->addBook($_data);
-    			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/book/add");
+    			if(!empty($_data['save_close'])){
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/book/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/book/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/book/index");
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
     	}
-    	$this->view->cat=$db->getCategoryAll();
-    	$this->view->block=$db->getBlockAll();
+    	 
+    	$cat=$db->getCategoryAll();
+    	array_unshift($cat, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->cat=$cat;
+    	$block=$db->getBlockAll();
+    	array_unshift($block, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->block=$block;
+    	
     	$row=$db->getBookRowById($id);
     	$this->view->row=$row;
-    	$this->view->row=$row;
+    	$this->view->row_detail=$db->getBookRowDetailById($id);;
+    	
     	$frm_major = new Library_Form_FrmBook();
     	$frm_search = $frm_major->frmBook($row);
     	Application_Model_Decorator::removeAllDecorator($frm_search);
@@ -180,6 +168,26 @@ protected $tr;
     	$frm_search = $frm_major->FrmCategory();
     	Application_Model_Decorator::removeAllDecorator($frm_search);
     	$this->view->frm_cat = $frm_search;
+	}
+	
+	function addCategoryAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$_dbmodel = new Library_Model_DbTable_DbCategory();
+			$id = $_dbmodel->ajaxAddCategory($_data);
+			print_r(Zend_Json::encode($id));
+			exit();
+		}
+	}
+	
+	function addBlockAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$_dbmodel = new Library_Model_DbTable_DbCategory();
+			$id = $_dbmodel->ajaxAddBlock($_data);
+			print_r(Zend_Json::encode($id));
+			exit();
+		}
 	}
 }
 

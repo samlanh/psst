@@ -125,7 +125,8 @@ $baseurl = $this->baseUrl();
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: book_detail_store,
-			autoComplete: true,                        
+			autoComplete: false,          
+			queryExpr: "*${0}*",			
 			id: "book_detail",
 			name: "book_detail",  
 			style:'',         
@@ -150,6 +151,19 @@ $baseurl = $this->baseUrl();
 	var url_get_borrow_detail = '<?php echo $this->url(array('module'=>'library','controller'=>'returnbook','action'=>'get-bookdetail')); ?>';
 	function addRow() { 
 		book_id = dijit.byId('book_detail').get('value');
+		if(book_id==''){return false;}
+		
+		identity = $('#identity').val();
+		if(identity!=''){
+			arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				book = dijit.byId('book_id'+arrays[i]).get('value');
+				if(book_id==book){
+					alert("Already select !!! ");
+					return false;
+				}
+			}
+		}
 		dojo.xhrPost({
 			url:url_get_borrow_detail,
 			content:{

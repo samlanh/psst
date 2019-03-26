@@ -5,6 +5,9 @@
 	$baseurl = $this->baseUrl();
 ?>	
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script type="text/javascript">
+    dojo.require("dijit.form.DateTextBox");
+</script>
 <?php $frm =  $this->frm_search;
 	  $frm_b =  $this->frm_bor;
 ?>
@@ -40,10 +43,10 @@
                  </div>
                  <div class="form-group">
                     <div class="col-md-3 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement('start_date');?>
+                    	<?php echo $frm_b->getElement('start_date');?>
                     </div>
 					<div class="col-md-3 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement('end_date');?>
+                    	<?php echo $frm_b->getElement('end_date');?>
                     </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>

@@ -210,25 +210,6 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		return $cate_tree_array;
 	}
 	
-	function getCategoryById($id){
-		$db=$this->getAdapter();
-		$sql="SELECT id,`name`,parent_id,remark,`status` FROM rms_bcategory  WHERE id=$id";
-		return $db->fetchRow($sql);
-	}
-	
-	function getBookNo(){
-		$db=$this->getAdapter();
-		$sql="SELECT id FROM rms_book WHERE 1 ORDER BY id DESC";
-		$row=$db->fetchOne($sql);
-		$fex='b';
-		if(!empty($row)){
-			for($i=0;$i<4;$i++){
-				$fex.='0';
-			}
-		}
-		return $fex.$row;
-	}
-	
 	function getCategoryAll(){
 		$db=$this->getAdapter();
 		$sql="SELECT id,`name` FROM rms_bcategory WHERE  `status` = 1";
@@ -289,59 +270,46 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	
-	function getBookTitlePurchase(){
-		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(title) AS name FROM rms_book WHERE `status`=1 AND title!=''";
-		$rows=$db->fetchAll($sql);
-		array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("ADD_NEW")));
-		array_unshift($rows,array('id' => '',"name"=>$this->tr->translate("SELECT_TITLE")));
-		$options = '';
-		if(!empty($rows))foreach($rows as $value){
-			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
-		}
-		return $options;
-	}
-	
 	function getBorrowNo(){
 		$db=$this->getAdapter();
-		$sql="SELECT id FROM rms_borrow WHERE 1 ORDER BY id DESC";
-		$row=$db->fetchOne($sql);
-		if(empty($row)){
-			$row=floatVal('1.0'.rand(1,9));
+		$sql="SELECT count(id) FROM rms_borrow limit 1 ";
+		$qty=$db->fetchOne($sql);
+		
+		$qty_new = $qty+1;
+		$lenght = strlen($qty_new);
+		
+		$prefix='';
+		for($i=$lenght;$i<5;$i++){
+			$prefix.='0';
 		}
-		$fex='';
-		if(!empty($row)){
-			for($i=0;$i<4;$i++){
-				$fex.='0';
-			}
-		}
-		return $fex.$row;
+		return $prefix.$qty_new;
 	}
 	
-	public function getBookQty($book_id){
+	function getBorrowHistory($stu_id){
 		$db=$this->getAdapter();
-		$sql=" SELECT id,book_no,qty_after FROM rms_book WHERE id=$book_id AND `status`=1 ";
-		$row = $db->fetchRow($sql);
-		if(empty($row)){
-			$session_user=new Zend_Session_Namespace('authstu');
-			$userName=$session_user->user_name;
-			$GetUserId= $session_user->user_id;
-			$array = array(
-					'qty'		=>	0,
-					'qty_after'	=>	0,
-					'date'		=>	date('Y-m-d'),
-					'status'	=>	1,
-					"user_id"   =>  $GetUserId,
-			);
-			$this->_name="rms_book";
-			$this->insert($array);
-			$sql=" SELECT id,book_no,qty_after FROM rms_book WHERE id=$book_id AND `status`=1 ";
-			return $row = $db->fetchRow($sql);
-		}else{
-	
-			return $row;
-		}
+		$sql="SELECT 
+					b.borrow_no,
+					DATE_FORMAT(b.borrow_date, '%d-%m-%Y') AS borrow_date,
+					(select title from rms_book where bd.book_id = rms_book.id ) as book_name,
+					bd.barcode,
+					bd.serial,
+					brd.is_return
+				FROM 
+					rms_borrow as b,
+					rms_borrowdetails as brd,
+					rms_book_detail as bd 
+				WHERE 
+					b.id = brd.borr_id
+					and bd.id = brd.book_id 
+					and b.borrow_type=1
+					and b.stu_id = $stu_id
+				ORDER BY
+					brd.is_return ASC,
+					b.id ASC,
+					bd.book_id ASC,
+					bd.id ASC	
+			";
+		return $db->fetchAll($sql);
 	}
 	
 }

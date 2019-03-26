@@ -5,11 +5,7 @@ echo $this->headTitle($tr->translate("ADD_BORROW_BOOK"));
 $baseurl = $this->baseUrl();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-	dojo.require("dijit.form.Textarea");
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-</script>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -37,7 +33,7 @@ $baseurl = $this->baseUrl();
 					dijit.byId('book_detail').focus();
 					return false;
 				}			
-				loading();
+				loadingBlock();
 				return true;
 			}else {
 				return false;
@@ -86,7 +82,7 @@ $baseurl = $this->baseUrl();
 										</select>
 									</span>
 									<span id="span_card_id">
-										<input dojoType="dijit.form.ValidationTextBox"   name="card_id" id="card_id" value="" class="fullside" type="text" >
+										<input dojoType="dijit.form.TextBox" name="card_id" id="card_id" value="" class="fullside" type="text" >
 									</span>
 							   </div>
 							</div>
@@ -96,7 +92,7 @@ $baseurl = $this->baseUrl();
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<span id="span_stu_name">
-									<select   name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent(2);"  queryExpr="*${0}*" autoComplete="false" >
+									<select   name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent(2);getBorrowHistory();"  queryExpr="*${0}*" autoComplete="false" >
 										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 										<?php 
 										if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
@@ -163,27 +159,69 @@ $baseurl = $this->baseUrl();
 					</div>
 				</div>	
 	            <div class="col-md-6 col-sm-12 col-xs-12">
-	            	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
-	                   </label>
-	                </div>
-					<div class="form-group">
-						<div class="col-md-5 col-sm-12 col-xs-12">
-							<select name="book" id="book" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="getBookDetail();" >
-								<?php if(!empty($this->book_title)){echo $this->book_title;} ?>
-							</select>
-						</div>
-						<div class="col-md-7 col-sm-12 col-xs-12">
-							<input id="book_detail" />
-						</div>
+					<div class="card-box">
+						<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+							<li class="nav-item active">
+								<a class="nav-link " data-toggle="tab" href="#panel21" role="tab">
+									<i class="fa fa-book ml-2"></i> <?php echo $tr->translate("BOOK_INFORMATION");?>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+									<i class="fa fa-history ml-2"></i> <?php echo $tr->translate("BORROW_HISTORY");?>
+								</a>
+							</li>
+						</ul>
 					</div>
-					<div class="form-group">
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
-							</table>
+					
+					<div class="tab-content vertical">
+						<!--Panel 1-->
+						<div class="tab-pane fade in active" id="panel21" role="tabpanel">
+							 <div class="card-box">
+								<div class="form-group">
+									<div class="col-md-5 col-sm-12 col-xs-12">
+										<select name="book" id="book" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="getBookDetail();" >
+											<?php if(!empty($this->book_title)){echo $this->book_title;} ?>
+										</select>
+									</div>
+									<div class="col-md-7 col-sm-12 col-xs-12">
+										<input id="book_detail" />
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
+											<tr id="head-title" class="head-td" align="right"></tr>
+										</table>
+									</div>
+									<input type="hidden" name="identity" id="identity"  value="" >
+								</div>
+							 </div>
 						</div>
-						<input type="hidden" name="identity" id="identity"  value="" >
+						<!--/.Panel 1-->
+						<!--Panel 2-->
+						<div class="tab-pane fade in " id="panel22" role="tabpanel">
+							<div class="card-box">
+								<div class="form-group">
+									<table border="1" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+										<thead>
+											<tr id="head-title" class="head-td" align="right">
+												<th><?php echo $tr->translate("N_O");?></th>
+												<th><?php echo $tr->translate("BORROW_NO");?></th>
+												<th><?php echo $tr->translate("BORROW_DATE");?></th>
+												<th><?php echo $tr->translate("BOOK_NAME");?></th>
+												<th><?php echo $tr->translate("BARCODE");?></th>
+												<th><?php echo $tr->translate("STATUS");?></th>
+											</tr>
+										</thead>
+										<tbody id="table_row_history">
+										
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<!--/.Panel 2-->
 					</div>
 	           	</div>
 	        </div>
@@ -206,12 +244,13 @@ $baseurl = $this->baseUrl();
 $techer= $this->frm_techer;
 ?>
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-//dojo.require('dojox.form.BusyButton');
-dojo.require("dojo.html");
+dojo.require("dijit.form.Textarea");
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.NumberTextBox");
+	
 var book_detail_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->book_detail));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -228,10 +267,7 @@ dojo.ready(function(){
 			addRow();
 		}
 	}, "book_detail");
-
-
 	hideControll();
-			
 });
 
 var col = 0;
@@ -244,6 +280,19 @@ var template = '';
 function addRow() { 
 	book_detail=dijit.byId("book_detail").get("value");
 	if(book_detail==''){return false;}
+	
+	identity = $('#identity').val();
+	if(identity!=''){
+		arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			book = dijit.byId('book_id'+arrays[i]).get('value');
+			if(book_detail==book){
+				alert("Already select !!! ");
+				return false;
+			}
+		}
+	}
+	
 	label_book_detail = dijit.byId("book_detail").attr('displayedValue');
 	col++;no++;
 	template='';
@@ -296,14 +345,6 @@ function setNameStudent(type){
 		if(stu_id !='' || stu_id!=0){
 			dijit.byId("stu_id").attr("value",stu_id);
 		}
-	}
-	
-}
-
-function setValue(){
-	stu_name=dijit.byId("stu_name").get("value");
-	if(stu_name!='' || stu_name !=0){
-		dijit.byId("stu_id").attr("value",stu_name);
 	}
 }
 
@@ -375,14 +416,56 @@ function getBookDetail(){
 		}
 	});
 }
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
+tmp1="";
+template1="";
+var no1=0;
+var col1=0;
+var url_get_borrow_history = '<?php echo $this->url(array('module'=>'library','controller'=>'borrowbook','action'=>'get-borrow-history')); ?>';
+function getBorrowHistory(){
+	stu_id=dijit.byId("stu_name").get("value");
+	dojo.query("#table_row_history").append('');
+	if(stu_id>0){
+		dojo.xhrPost({
+			url:url_get_borrow_history,
+			content:{
+				'stu_id':stu_id,
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data){
+					for(j=0;j<data.length;j++){
+						if(data[j]['is_return']==1){
+							label="<?php echo $tr->translate("IS_RETURN")?>";
+						}else{
+							label="<?php echo $tr->translate("NOT_RETURN")?>";
+						}
+						template1="";
+						no1++;col1++;
+						template1+='<td width="" align="center">'+no1+'</td>';
+						template1+='<td width="">&nbsp;'+data[j]['borrow_no']+'</td>';
+						template1+='<td width="">&nbsp;'+data[j]['borrow_date']+'</td>';
+						template1+='<td align="left">&nbsp;'+data[j]['book_name']+'</td>';
+						template1+='<td align="left">&nbsp;'+data[j]['barcode']+'</td>';
+						template1+='<td width="">&nbsp;'+label+'</td>';
+						tmp1='<tr align="center" style="height:25px;" id="rows'+col1+'">';
+						tmp1+="</tr>";
+
+						dojo.query("#table_row_history").append(tmp1);
+						dojo.html.set(dojo.byId("rows"+col1),template1 , {
+							 parseContent: true,
+						});
+					}
+				}
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
 }
 
+
 </script>
-<div class="overlay">
- <div class="overlay-load">
-  <div class="overlay-msg">
-     </div>
- </div>
-</div>
+
+
+

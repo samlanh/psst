@@ -5,6 +5,9 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 	echo $this->headTitle(''); 
 	$frm =  $this->frm_search;
 ?>
+<script type="text/javascript">
+    dojo.require("dijit.form.DateTextBox");
+</script>
 <style>
 .hover:hover{background: #ddd;}
 </style>
@@ -14,27 +17,27 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 			<div class="card-box">
 				<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'library','controller'=>'neardayreturnbook','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<div class="form-group">
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<?php echo $frm->getElement("title");?>
                     	</div>
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<?php echo $frm->getElement("is_type_bor")?>
                     	</div>
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<?php echo $frm->getElement("student_name")?>
                     	</div>
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<?php echo $frm->getElement("cood_book");?>
                     	</div>
                     </div>
                     <div class="form-group">
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" class='fullside' type="text">
                     	</div>
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<?php echo $frm->getElement('status_search');?>
                     	</div>
-                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<div class="col-md-3 col-sm-2 col-xs-12">
                     		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                     	</div>
                     	<div class="col-md-2 col-sm-2 col-xs-12">

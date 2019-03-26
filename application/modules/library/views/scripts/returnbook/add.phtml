@@ -30,7 +30,7 @@ $baseurl = $this->baseUrl();
 						dijit.byId('book_detail').focus();
 						return false;
 					}			
-					loading();
+					loadingBlock();
 					return true;
 				}else {
 					return false;
@@ -106,18 +106,17 @@ $baseurl = $this->baseUrl();
 </div>
 	
 <script>
-	dojo.require("dojo.date.locale");
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.store.Memory");
-	dojo.require("dojo.html");
 	dojo.require("dojo.NodeList-manipulate");
 	
 	var book_detail_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->book_detail));?> );
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: book_detail_store,
-			autoComplete: true,                        
+			autoComplete: false,    
+			queryExpr: "*${0}*",			
 			id: "book_detail",
 			name: "book_detail",  
 			style:'',         
@@ -143,6 +142,19 @@ $baseurl = $this->baseUrl();
 	function addRow() { 
 		book_id = dijit.byId('book_detail').get('value');
 		if(book_id==''){return false;}
+		
+		identity = $('#identity').val();
+		if(identity!=''){
+			arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				book = dijit.byId('book_id'+arrays[i]).get('value');
+				if(book_id==book){
+					alert("Already select !!! ");
+					return false;
+				}
+			}
+		}
+		
 		dojo.xhrPost({
 			url:url_get_borrow_detail,
 			content:{
@@ -226,14 +238,6 @@ $baseurl = $this->baseUrl();
 			}
 		});
 	}
-	function loading(){
-		document.getElementsByClassName("overlay")[0].style.display="block";
-	}
 
 </script>
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-		</div>
-	</div>
-</div>
+

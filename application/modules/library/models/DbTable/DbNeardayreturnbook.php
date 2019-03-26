@@ -71,7 +71,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
     	}
 		
 		if($search["cood_book"]>0){
-			$where.=' AND bd.book_id='.$search["cood_book"];
+			$where.=' AND bdt.book_id='.$search["cood_book"];
 		}
 		
 		$order=" ORDER BY b.stu_id DESC ";

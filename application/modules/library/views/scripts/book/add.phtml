@@ -9,18 +9,20 @@
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
     dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.data.ItemFileWriteStore");
 </script>
-
-<script>
-dojo.require("dojo.data.ItemFileWriteStore");
-</script>
-<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <div class="card">
 	<div class="card-content collapse show">
 		<form  id='frm_book' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
 			<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 				if(this.validate()) {
-					loading();
+					identity = dijit.byId('identity').get('value');
+					if(identity==''){
+						alert('Please Add Book !!! ');
+						dijit.byId('barcode').focus();
+						return false;
+					}
+					loadingBlock();
 					return true;
 				} else {
 					return false;
@@ -118,7 +120,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 								<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
 						
-						<input type="hidden" name="identity" id="identity"  />
+						<input type="text" name="identity" id="identity" dojoType="dijit.form.TextBox" />
 		         	</div>
 	           </div>
 	        </div>
@@ -223,18 +225,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	</div>
 </div>
 
-<div class="overlay">
- <div class="overlay-load">
-  <div class="overlay-msg">
-     </div>
- </div>
-</div>
-
 <script>
-$('#frm_book').submit(function() {
-	
- 
-});
+
 function showAddCat(){
 	cat_id=dijit.byId("cat_id").get("value");
 	if(cat_id==-1){
@@ -260,7 +252,7 @@ var url_make = '<?php echo $this->url(array('module'=>'library','controller'=>'b
 var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->cat))?>);
 function addCategory(){
 	if(dijit.byId('frm_category').validate()){
-		dijit.byId('save_close_cate').set('disabled',true);
+		loadingBlock();
 		dojo.xhrPost({
 			url:url_make,
 			form: dojo.byId("frm_category"),
@@ -273,11 +265,13 @@ function addCategory(){
 				addDataToSelectbox(dijit.byId('cat_id'), book_store, Itemcat, data);
 				dijit.byId('frm_category').reset();
 				dijit.byId("pop_category").hide();
+				HideloadingBlock();
 			},
 			error: function(err) {
 				alert(err);
 			}
 		});
+		
 	}
 }
 
@@ -285,7 +279,7 @@ var url_add_block = '<?php echo $this->url(array('module'=>'library','controller
 var cat_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
 function addBlock(){
 	if(dijit.byId('frm_popup_block').validate()){
-		dijit.byId('btn_save_close').set('disabled',true);
+		loadingBlock();
 		dojo.xhrPost({
 			url:url_add_block,
 			form: dojo.byId("frm_popup_block"),
@@ -298,6 +292,7 @@ function addBlock(){
 				addDataToSelectbox(dijit.byId('block_id'), cat_store, Itemcat, data);
 				dijit.byId('frm_popup_block').reset();
 				dijit.byId("pop_block").hide();
+				HideloadingBlock();
 			},
 			error: function(err) {
 				alert(err);
@@ -314,9 +309,6 @@ function hideCategory(){
 function hideBlock(){
 	dijit.byId('frm_popup_block').reset();
 	dijit.byId("pop_block").hide();
-}
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
 var col = 0;
@@ -368,4 +360,14 @@ function addRow() {
 	dijit.byId('barcode').focus();
 }
 
+function deleteRecord(index){
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
 </script>

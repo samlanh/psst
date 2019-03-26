@@ -50,6 +50,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 	function addAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+			if (empty($_data)){
+				Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/global/lecturer");
+				exit();
+			}
 			try {
 				$sms="INSERT_SUCCESS";
 				$dbmodel = new Global_Model_DbTable_DbTeacher();
@@ -101,6 +105,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
+				if (empty($data)){
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/global/lecturer");
+					exit();
+				}
 				$data['id'] = $id;
 				$db = new Global_Model_DbTable_DbTeacher();
 				$db->updateStaff($data);
@@ -156,10 +164,19 @@ class Global_LecturerController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
+				if (empty($data)){
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/global/lecturer");
+					exit();
+				}
 				$data['id'] = $id;
+			
 				$db = new Global_Model_DbTable_DbTeacher();
-				$db->AddNewStaff($data);
-				Application_Form_FrmMessage::Sucessfull("COPY_SUCCESS","/global/lecturer");
+				$idss = $db->AddNewStaff($data);
+				$sms = "COPY_SUCCESS";
+				if($idss==-1){
+					$sms = "RECORD_EXIST";
+				}
+				Application_Form_FrmMessage::Sucessfull($sms,"/global/lecturer");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 	

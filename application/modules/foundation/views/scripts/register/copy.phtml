@@ -1787,6 +1787,7 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+			temp+='<th><?php echo $tr->translate("ATTACHMENT");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -1801,6 +1802,14 @@ date_format = '"dd/MM/yyyy"';
 			template+='<td width="20%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+
+			template+='<td width="15%">';
+				template+='<div id="attachment'+col+'" class="form-group" style=" margin-bottom: 5px !important;">';
+					template+='<div class="input-group input-file" name="attachment'+col+'">';
+						template+='<input type="text" class="form-control" placeholder="<?php echo $tr->translate('CHOOSE_FILE');?>..." value="" />';
+					template+='</div>';
+				template+='</div> <div class="clearfix"></div>';
+			template+='</td>';
 		
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -1812,6 +1821,7 @@ date_format = '"dd/MM/yyyy"';
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
+		bs_input_file();
 	}
 	
 	function initialize() {
@@ -1828,6 +1838,7 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+			temp+='<th><?php echo $tr->translate("ATTACHMENT");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -1842,7 +1853,15 @@ date_format = '"dd/MM/yyyy"';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
-		
+
+			template+='<td width="15%">';
+				template+='<div id="attachment'+col+'" class="form-group" style=" margin-bottom: 5px !important;">';
+					template+='<div class="input-group input-file" name="attachment'+col+'">';
+						template+='<input type="text" class="form-control" placeholder="<?php echo $tr->translate('CHOOSE_FILE');?>..." value="" />';
+					template+='</div>';
+				template+='</div> <div class="clearfix"></div>';
+			template+='</td>';
+			
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -1859,7 +1878,7 @@ date_format = '"dd/MM/yyyy"';
 		dijit.byId('date_end_'+col).attr('value',"<?php echo $row['date_end'];?>");
 		dijit.byId('is_receive_'+col).attr('value',"<?php echo $row['is_receive'];?>");
 		dijit.byId('note_'+col).attr('value',"<?php echo $row['note'];?>");
-		
+		bs_input_file();
 		
 		<?php }}?>
 	}
@@ -1979,6 +1998,30 @@ function readURLguardian(input) {
     $("#father_photo").change(function(){
         readURLfather(this);
     });	
+
+    function bs_input_file() {
+    	$(".input-file").before(
+    		function() {
+    		if ( ! $(this).prev().hasClass('input-ghost') ) {
+    			var element = $("<input  type='file' accept='.xlsx,.xls,image/*,.doc, .docx,.txt,.pdf' class='input-ghost' style='visibility:hidden; height:0'>");
+    			element.attr("name",$(this).attr("name"));
+    			element.change(function(){
+    				element.next(element).find('input').val((element.val()).split('\\').pop());
+    			});
+    			$(this).find("button.btn-choose").click(function(){
+    				element.click();
+    			});
+    			
+    			$(this).find('input').css("cursor","pointer");
+    			$(this).find('input').mousedown(function() {
+    				$(this).parents('.input-file').prev().click();
+    				return false;
+    			});
+    			return element;
+    		}
+    	}
+    	);
+    }
 </script>
 <div class="overlay">
 	<div class="overlay-load">

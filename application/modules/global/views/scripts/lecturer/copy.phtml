@@ -68,13 +68,26 @@ input.btn_borwse_image {
 					dijit.byId('password').focus();
 					return false;
 				}
+					
+				branch=dijit.byId('branch_id').get('value');
+				if(branch=='' || branch==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
+					dijit.byId('branch_id').focus(); 
+					return false;
+				}
+				
+				schoolOption=dijit.byId("schoolOption").get("value");
+                if(schoolOption==-1 || schoolOption==''){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
+					dijit.byId('schoolOption').focus();
+                    return false;
+				}
 				loadingBlock();
-				dijit.byId("save_close").attr("disabled",true);		
 				return true;
 			}else {
 				return false;
 			}
-		</script>
+			</script>
 			<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 		            <li class="nav-item active">
@@ -274,6 +287,13 @@ input.btn_borwse_image {
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO_EXPER");?> 
 	                   </label>
 	                </div>
+	                 <div class="form-group">
+	                 	<label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SCHOOL_OPTION");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                		<?php echo $frm->getElement("schoolOption");?>
+						</div>
+		             </div>
 	                <div class="form-group">
 	                 	<label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CULTURE_LEVEL");?>
 	                   </label>
@@ -394,7 +414,7 @@ input.btn_borwse_image {
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"lecturer",'action'=>'index'),null,true); ?>';" />
-					<input type="button" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+					<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					 
                	</div>
@@ -896,6 +916,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+			temp+='<th><?php echo $tr->translate("ATTACHMENT");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -910,6 +931,14 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="20%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+
+			template+='<td width="10%">';
+			template+='<div id="attachment'+col+'" class="form-group" style=" margin-bottom: 5px !important;">';
+				template+='<div class="input-group input-file" name="attachment'+col+'">';
+					template+='<input type="text" class="form-control" placeholder="<?php echo $tr->translate('CHOOSE_FILE');?>..." value="" />';
+				template+='</div>';
+			template+='</div> <div class="clearfix"></div>';
+		template+='</td>';
 		
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -927,7 +956,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		dijit.byId('date_end_'+col).attr('value',"<?php echo $row['date_end'];?>");
 		dijit.byId('is_receive_'+col).attr('value',"<?php echo $row['is_receive'];?>");
 		dijit.byId('note_'+col).attr('value',"<?php echo $row['note'];?>");
-		
+		bs_input_file();
 		<?php }}?>
 	}
 	
@@ -950,6 +979,7 @@ function addRow(){
 		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+		temp+='<th><?php echo $tr->translate("ATTACHMENT");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -964,6 +994,14 @@ function addRow(){
 		template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
 		template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 		template+='<td width="20%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+
+		template+='<td width="10%">';
+			template+='<div id="attachment'+col+'" class="form-group" style=" margin-bottom: 5px !important;">';
+				template+='<div class="input-group input-file" name="attachment'+col+'">';
+					template+='<input type="text" class="form-control" placeholder="<?php echo $tr->translate('CHOOSE_FILE');?>..." value="" />';
+				template+='</div>';
+			template+='</div> <div class="clearfix"></div>';
+		template+='</td>';
 	
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -975,6 +1013,7 @@ function addRow(){
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
+	bs_input_file();
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -1004,6 +1043,29 @@ function checkStaffType(){
 	}
 }
 
+function bs_input_file() {
+	$(".input-file").before(
+		function() {
+		if ( ! $(this).prev().hasClass('input-ghost') ) {
+			var element = $("<input  type='file' accept='.xlsx,.xls,image/*,.doc, .docx,.txt,.pdf' class='input-ghost' style='visibility:hidden; height:0'>");
+			element.attr("name",$(this).attr("name"));
+			element.change(function(){
+				element.next(element).find('input').val((element.val()).split('\\').pop());
+			});
+			$(this).find("button.btn-choose").click(function(){
+				element.click();
+			});
+			
+			$(this).find('input').css("cursor","pointer");
+			$(this).find('input').mousedown(function() {
+				$(this).parents('.input-file').prev().click();
+				return false;
+			});
+			return element;
+		}
+	}
+	);
+}
 </script>
 <div class="overlay">
 	<div class="overlay-load">

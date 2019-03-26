@@ -11,7 +11,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		try{
 			$title = trim($_data['name']);
-			$sql="SELECT id FROM rms_document_type WHERE status =".$_data['status'];
+			$sql="SELECT id FROM rms_document_type WHERE status =1 ";
 			$sql.=" AND name='".$title."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){

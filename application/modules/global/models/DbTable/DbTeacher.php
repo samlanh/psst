@@ -11,6 +11,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();		
 		$_db->beginTransaction();
 			try{
+				
 					$part= PUBLIC_PATH.'/images/photo/';
 					if (!file_exists($part)) {
 						mkdir($part, 0777, true);
@@ -27,12 +28,15 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						else
 							$string = "Image Upload failed";
 					}
+					
 			////////////////////////////////////////////////////////////////////////	
 					$teacher_code = $this->getTeacherCode();
+					
 					$sql="SELECT id FROM rms_teacher WHERE sex =".$_data['sex'];
 					$sql.=" AND teacher_name_kh='".$_data['kh_name']."'";
 					$sql.=" AND dob='".$_data['dob']."'";
 					$rs = $_db->fetchOne($sql);
+					
 					if(!empty($rs)){
 						return -1;
 					}
@@ -76,12 +80,18 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					        'create_date' 		 => date("Y-m-d"),
 					        'user_id'	  		 => $this->getUserId(),
 						);
+					
 						$id = $this->insert($_arr);
+						
 						
 						$this->_name = 'rms_teacher_document';
 						if(!empty($_data['identity'])){
-						$ids = explode(',', $_data['identity']);
-						foreach ($ids as $i){
+							$part= PUBLIC_PATH.'/images/document/teacher/';
+							if (!file_exists($part)) {
+								mkdir($part, 0777, true);
+							}
+							$ids = explode(',', $_data['identity']);
+							foreach ($ids as $i){
 								$_arr = array(
 										'stu_id'		=>$id,
 										'document_type'	=>$_data['document_type_'.$i],
@@ -90,9 +100,20 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 										'is_receive'	=>$_data['is_receive_'.$i],
 										'note'			=>$_data['note_'.$i],
 										'type'			=>2,
-								);
-							$this->insert($_arr);
-						}}
+									);
+								$name = $_FILES['attachment'.$i]['name'];
+								if (!empty($name)){
+									$ss = 	explode(".", $name);
+									$image_name = "teacher_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+									$tmp = $_FILES['attachment'.$i]['tmp_name'];
+									if(move_uploaded_file($tmp, $part.$image_name)){
+										$photo = $image_name;
+										$_arr['attachment_file'] = $photo;
+									}
+								}
+								$this->insert($_arr);
+							}
+						}
 						$_db->commit();
 			}catch(Exception $e){
 	    		$_db->rollBack();
@@ -161,25 +182,86 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					}
 					$where=" id = ".$_data['id'];
 					$this->update($_arr,$where);	
-									
+
+					
+					//Teacher Document Block
+					$detailidlist = '';
+					if(!empty($_data['identity'])){
+						$ids = explode(',', $_data['identity']);
+						foreach ($ids as $i){
+							if (empty($detailidlist)){
+								if (!empty($_data['detailid'.$i])){
+									$detailidlist= $_data['detailid'.$i];
+								}
+							}else{
+								if (!empty($_data['detailid'.$i])){
+									$detailidlist = $detailidlist.",".$_data['detailid'.$i];
+								}
+							}
+						}
+					}
+					
 					$this->_name = 'rms_teacher_document';
 					$where="stu_id = ".$_data["id"];
-					$this->delete($where);
-					if(!empty($_data['identity'])){
-					$ids = explode(',', $_data['identity']);
-					foreach ($ids as $i){
-						$_arr = array(
-							'stu_id'		=>$_data["id"],
-							'document_type'	=>$_data['document_type_'.$i],
-							'date_give'		=>$_data['date_give_'.$i],
-							'date_end'		=>$_data['date_end_'.$i],
-							'is_receive'	=>$_data['is_receive_'.$i],
-							'note'			=>$_data['note_'.$i],
-							'type'			=>2,
-						);
-						$this->insert($_arr);
+					if (!empty($detailidlist)){ // check if has old payment detail  detail id
+						$where.=" AND id NOT IN (".$detailidlist.")";
 					}
-				}
+					$this->delete($where);
+					
+					if(!empty($_data['identity'])){
+						$part= PUBLIC_PATH.'/images/document/teacher/';
+						if (!file_exists($part)) {
+							mkdir($part, 0777, true);
+						}
+						$ids = explode(',', $_data['identity']);
+						foreach ($ids as $i){
+							if (!empty($_data['detailid'.$i])){
+								$_arr = array(
+										'stu_id'		=>$_data["id"],
+										'document_type'	=>$_data['document_type_'.$i],
+										'date_give'		=>$_data['date_give_'.$i],
+										'date_end'		=>$_data['date_end_'.$i],
+										'is_receive'	=>$_data['is_receive_'.$i],
+										'note'			=>$_data['note_'.$i],
+										'type'			=>2,
+								);
+								$name = $_FILES['attachment'.$i]['name'];
+								if (!empty($name)){
+									$ss = 	explode(".", $name);
+									$image_name = "teacher_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+									$tmp = $_FILES['attachment'.$i]['tmp_name'];
+									if(move_uploaded_file($tmp, $part.$image_name)){
+										$photo = $image_name;
+										$_arr['attachment_file'] = $photo;
+									}
+								}
+								$where=" id=".$_data['detailid'.$i];
+								$this->update($_arr, $where);
+							}else{	
+								$_arr = array(
+										'stu_id'		=>$_data["id"],
+										'document_type'	=>$_data['document_type_'.$i],
+										'date_give'		=>$_data['date_give_'.$i],
+										'date_end'		=>$_data['date_end_'.$i],
+										'is_receive'	=>$_data['is_receive_'.$i],
+										'note'			=>$_data['note_'.$i],
+										'type'			=>2,
+								);
+								$name = $_FILES['attachment'.$i]['name'];
+								if (!empty($name)){
+									$ss = 	explode(".", $name);
+									$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+									$tmp = $_FILES['attachment'.$i]['tmp_name'];
+									if(move_uploaded_file($tmp, $part.$image_name)){
+										$photo = $image_name;
+										$_arr['attachment_file'] = $photo;
+									}
+								}
+								$this->insert($_arr);
+							}
+							
+						}
+					}
 			$_db->commit();
 		}catch(Exception $e){
     		$_db->rollBack();

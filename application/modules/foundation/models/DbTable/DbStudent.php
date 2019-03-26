@@ -374,8 +374,12 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				
 				$this->_name = 'rms_student_document';
 				if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				foreach ($ids as $i){
+					$part= PUBLIC_PATH.'/images/document/student/';
+					if (!file_exists($part)) {
+						mkdir($part, 0777, true);
+					}
+					$ids = explode(',', $_data['identity']);
+					foreach ($ids as $i){
 						$_arr = array(
 								'stu_id'		=>$id,
 								'document_type'	=>$_data['document_type_'.$i],
@@ -384,6 +388,16 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'is_receive'	=>$_data['is_receive_'.$i],
 								'note'			=>$_data['note_'.$i],
 						);
+						$name = $_FILES['attachment'.$i]['name'];
+						if (!empty($name)){
+							$ss = 	explode(".", $name);
+							$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+							$tmp = $_FILES['attachment'.$i]['tmp_name'];
+							if(move_uploaded_file($tmp, $part.$image_name)){
+								$photo = $image_name;
+								$_arr['attachment_file'] = $photo;
+							}
+						}
 						$this->insert($_arr);
 					}
 				}
@@ -586,22 +600,82 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where = " stu_id = ".$_data["id"];
 			$this->update($arra, $where);
 			
+			//Student Document Block
+			$detailidlist = '';
+			if(!empty($_data['identity'])){
+				$ids = explode(',', $_data['identity']);
+	    		foreach ($ids as $i){
+	    			if (empty($detailidlist)){
+	    				if (!empty($_data['detailid'.$i])){
+	    					$detailidlist= $_data['detailid'.$i];
+	    				}
+	    			}else{
+	    				if (!empty($_data['detailid'.$i])){
+	    					$detailidlist = $detailidlist.",".$_data['detailid'.$i];
+	    				}
+	    			}
+	    		}
+			}
+			
 			$this->_name = 'rms_student_document';
 			$where="stu_id = ".$_data["id"];
+			if (!empty($detailidlist)){ // check if has old payment detail  detail id
+				$where.=" AND id NOT IN (".$detailidlist.")";
+			}
 			$this->delete($where);
 			
 			if(!empty($_data['identity'])){
-			$ids = explode(',', $_data['identity']);
-			foreach ($ids as $i){
-					$_arr = array(
-							'stu_id'		=>$_data["id"],
-							'document_type'	=>$_data['document_type_'.$i],
-							'date_give'		=>$_data['date_give_'.$i],
-							'date_end'		=>$_data['date_end_'.$i],
-							'is_receive'	=>$_data['is_receive_'.$i],
-							'note'			=>$_data['note_'.$i]
-					);
-					$this->insert($_arr);
+				$part= PUBLIC_PATH.'/images/document/student/';
+				if (!file_exists($part)) {
+					mkdir($part, 0777, true);
+				}
+				
+				$ids = explode(',', $_data['identity']);
+				foreach ($ids as $i){
+					if (!empty($_data['detailid'.$i])){
+						$_arr = array(
+								'stu_id'		=>$_data["id"],
+								'document_type'	=>$_data['document_type_'.$i],
+								'date_give'		=>$_data['date_give_'.$i],
+								'date_end'		=>$_data['date_end_'.$i],
+								'is_receive'	=>$_data['is_receive_'.$i],
+								'note'			=>$_data['note_'.$i]
+						);
+						$name = $_FILES['attachment'.$i]['name'];
+						if (!empty($name)){
+							$ss = 	explode(".", $name);
+							$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+							$tmp = $_FILES['attachment'.$i]['tmp_name'];
+							if(move_uploaded_file($tmp, $part.$image_name)){
+								$photo = $image_name;
+								$_arr['attachment_file'] = $photo;
+							}
+						}
+						$where=" id=".$_data['detailid'.$i];
+						$this->update($_arr, $where);
+						
+					}else{
+						$_arr = array(
+								'stu_id'		=>$_data["id"],
+								'document_type'	=>$_data['document_type_'.$i],
+								'date_give'		=>$_data['date_give_'.$i],
+								'date_end'		=>$_data['date_end_'.$i],
+								'is_receive'	=>$_data['is_receive_'.$i],
+								'note'			=>$_data['note_'.$i]
+						);
+						$name = $_FILES['attachment'.$i]['name'];
+						if (!empty($name)){
+							$ss = 	explode(".", $name);
+							$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+							$tmp = $_FILES['attachment'.$i]['tmp_name'];
+							if(move_uploaded_file($tmp, $part.$image_name)){
+								$photo = $image_name;
+								$_arr['attachment_file'] = $photo;
+							}
+						}
+						$this->insert($_arr);
+					}
+					
 				}
 			}
 			$db->commit();//if not errore it do....

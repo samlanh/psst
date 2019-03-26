@@ -51,6 +51,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
+				if (empty($_data)){
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
+					exit();
+				}
 				$id_existing = $db->ifStudentIdExisting($_data['student_id']);
 				if(!empty($id_existing)){
 					print_r("<script type='text/javascript'>
@@ -127,6 +131,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
+				if (empty($data)){
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
+					exit();
+				}
 				$data["id"]=$id;
 				$row=$db->updateStudent($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
@@ -259,8 +267,19 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
+				if (empty($data)){
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
+					exit();
+				}
+				
 				$data["id"]=$id;
-				$row=$db->addStudent($data);
+// 				$row=$db->addStudent($data);
+				$exist = $db->addStudent($data);
+				if($exist==-1){
+					Application_Form_FrmMessage::Sucessfull("RECORD_EXIST","/foundation/register/index");
+					exit();
+				}
+				
 				Application_Form_FrmMessage::Sucessfull("COPY_SUCCESS","/foundation/register/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("COPY_FAIL");

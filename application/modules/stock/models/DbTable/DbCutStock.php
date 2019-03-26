@@ -68,28 +68,28 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$branch_id = $data['branch_id'];
     	
     	$sql=" SELECT 
-			spd.*,
-			sp.branch_id,
-			sp.receipt_number,
-			sp.create_date AS payment_date,
-			(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS student_name,
-			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
-			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
-			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
-			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
-			(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
-			FROM `rms_student_payment` AS sp,
-			`rms_student_paymentdetail` AS spd
-			WHERE spd.payment_id = sp.id
-			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
-			AND is_void=0
-			AND qty_balance >0
-			AND sp.student_id=$student_id
-			AND sp.branch_id=$branch_id";
-    	if (!empty($data['bypuchase_no'])){
-    		$s_search=addslashes(trim($data['bypuchase_no']));
-    		$sql.= " AND sp.receipt_number LIKE '%{$s_search}%'";
-    	}
+				spd.*,
+				sp.branch_id,
+				sp.receipt_number,
+				sp.create_date AS payment_date,
+				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS student_name,
+				(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
+				(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
+				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
+				(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
+				(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
+				FROM `rms_student_payment` AS sp,
+				`rms_saledetail` AS spd
+				WHERE spd.payment_id = sp.id
+				AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
+				AND sp.is_void=0
+				AND spd.qty_after >0
+				AND sp.student_id=$student_id
+				AND sp.branch_id=$branch_id";
+	    	if (!empty($data['bypuchase_no'])){
+	    		$s_search=addslashes(trim($data['bypuchase_no']));
+	    		$sql.= " AND sp.receipt_number LIKE '%{$s_search}%'";
+	    	}
     	$rs = $db->fetchAll($sql);
     	$stuName="";
     	$stuCode="";
@@ -124,7 +124,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
 		    			if (!empty($allproduct)) foreach ($allproduct as $pro){ 
 		    				$selected="";
-		    				if ($row['itemdetail_id']==$pro['id']){
+		    				if ($row['pro_id']==$pro['id']){
 		    					$selected='Selected="Selected"';
 		    				}
 		    				$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
@@ -136,10 +136,10 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-    			<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
+    			<label id="duelabel'.$no.'">'.number_format($row['qty_after'],2).'</label>
+    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_after'].'" >
     			</td>
-    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
+    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
     			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
     			<td >
     				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
@@ -165,13 +165,13 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$branch_id = $data['branch_id'];
     	
     	$sql="SELECT 
-    		SUM(spd.`qty_balance`) AS all_balance
+    		SUM(spd.`qty_after`) AS all_balance
 			FROM `rms_student_payment` AS sp,
-			`rms_student_paymentdetail` AS spd
+			`rms_saledetail` AS spd
 			WHERE spd.payment_id = sp.id
-			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
-			AND is_void=0
-			AND qty_balance >0
+			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
+			AND sp.is_void=0
+			AND spd.qty_after >0
 			AND sp.student_id=$student_id
 			AND sp.branch_id=$branch_id";
 //     	$sql = "SELECT SUM(inv.`amount_due_after`) AS all_balance FROM `rms_purchase` AS inv 
@@ -207,13 +207,13 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			$qtyreceive = $_data['qty_receive'.$i];
     			
     			if (!empty($stupaydetail)){
-    				$qtyfter = $stupaydetail['qty_balance']-$qtyreceive;
+    				$qtyfter = $stupaydetail['qty_after']-$qtyreceive;
     				// update Purchase Balance
     				$array=array(
-    						'qty_balance'=>$qtyfter,
+    						'qty_after'=>$qtyfter,
     				);
     				$where="id=".$_data['paymentdetail_id'.$i]." AND payment_id =".$_data['payment_id'.$i];
-    				$this->_name="rms_student_paymentdetail";
+    				$this->_name="rms_saledetail";
     				$this->update($array, $where);
     			}
     			
@@ -245,7 +245,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT spd.* 
 			FROM`rms_student_payment` AS sp,
-			`rms_student_paymentdetail` AS spd
+			`rms_saledetail` AS spd
 			WHERE  spd.payment_id = sp.id
 			AND sp.branch_id=$branch_id
 			AND spd.id = $st_paydetail";
@@ -319,7 +319,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT ct.*,
 (SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
-(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE sp.id = (SELECT spd.payment_id FROM `rms_student_paymentdetail` AS spd WHERE spd.id = ct.student_paymentdetail_id LIMIT 1) LIMIT 1) AS receipt_number
+(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE sp.id = (SELECT spd.payment_id FROM `rms_saledetail` AS spd WHERE spd.id = ct.student_paymentdetail_id LIMIT 1) LIMIT 1) AS receipt_number
     	 FROM `rms_cutstock_detail` AS ct
 				WHERE ct.cutstock_id=$cutstockid";
     	return $db->fetchAll($sql);
@@ -328,16 +328,10 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="SELECT ct.*,
     	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
-(SELECT p.qty FROM `rms_student_paymentdetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty,
-(SELECT p.qty_balance FROM `rms_student_paymentdetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty_balance
+(SELECT p.qty FROM `rms_saledetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty,
+(SELECT p.qty_after FROM `rms_saledetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty_after
     	 FROM `rms_cutstock_detail` AS ct
     	WHERE ct.cutstock_id=$cutstockid AND ct.student_paymentdetail_id=$stu_paymetdetail_id ";
-//     	$sql="SELECT pd.*,
-//     	(SELECT p.supplier_no FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS supplier_no,
-//     	(SELECT p.amount_due_after FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS amount_due_after,
-//     	(SELECT p.amount_due FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS amount_due,
-//     	(SELECT p.date FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS date
-//     	FROM `rms_purchase_payment_detail` AS pd WHERE pd.payment_id =$cutstockid AND pd.purchase_id =$purchase_id LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
     public function getStudentProductPaymentDetailEdit($data){
@@ -354,28 +348,31 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	
     	$student_id = $data['student_id'];
     	$branch_id = $data['branch_id'];
+    	
     	$sql="
-    	SELECT
-	    	spd.*,
-	    	(SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS branch_id,
-	    	(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS receipt_number,
-	    	(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
+    	SELECT 
+				spd.*,
+				(SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS branch_id,
+				(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS receipt_number,
+	    		(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
+	    		
+	    		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
+	    		(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
+	    		(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
+	    		(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
 	    	
-	    	(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
-	    	(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
-	    	(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
-	    	(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
+	    		(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
+	    		(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
 	    	
-	    	
-	    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
-	    	(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
-	    	FROM  `rms_student_paymentdetail` AS spd
-	    	WHERE (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
-	    	AND (SELECT sp.is_void FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=0
-	    	AND spd.qty_balance >0
-	    	AND (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$student_id
-	    	AND (SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$branch_id 
-    	"; 
+				FROM
+				`rms_saledetail` AS spd
+				WHERE 
+				(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
+		    	AND (SELECT sp.is_void FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=0
+		    	AND spd.qty_after >0
+		    	AND (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$student_id
+	    		AND (SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$branch_id 
+    	";
     	if (!empty($data['bypuchase_no'])){
     		$s_search=addslashes(trim($data['bypuchase_no']));
     		$sql.= " AND (SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIKE '%{$s_search}%'";
@@ -383,6 +380,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	if (!empty($listSaleidpaid)){
     		$sql.=" OR spd.`id` IN ($listSaleidpaid) ";
     	}
+    	
     	$rs = $db->fetchAll($sql);
     
     	$string='';
@@ -392,9 +390,9 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$stuName="";
     	$stuCode="";
     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
-    	
     	$allproduct = $this->getAllProducts(1);
     	if(!empty($rs)){
+    	
 	    	foreach ($rs as $key => $row){
 		    	if (empty($identity)){
 		    		$identity=$no;
@@ -449,7 +447,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="detailid'.$no.'" id="detailid'.$no.'" value="'.$rowpaymentdetail['id'].'" >
 				    	</td>
 				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$rowpaymentdetail['qty_receive'].'" style="text-align: center;" ></td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['qty_balance'].'" style="text-align: center;" ></td>
+				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['qty_after'].'" style="text-align: center;" ></td>
 				    	<td >
 				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="'.date("Y-m-d",strtotime($rowpaymentdetail['remide_date'])).'" >
 				    	</td>
@@ -474,7 +472,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    	<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
 						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
 						    		$selected="";
-						    		if ($row['itemdetail_id']==$pro['id']){
+						    		if ($row['pro_id']==$pro['id']){
 						    			$selected='Selected="Selected"';
 						    		}
 						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
@@ -486,11 +484,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-				    		<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
+				    		<label id="duelabel'.$no.'">'.number_format($row['qty_after'],2).'</label>
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_after'].'" >
 				    	</td>
 				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0" style="text-align: center;" ></td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
+				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
 				    	<td >
 				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
 				    	</td>
@@ -548,18 +546,18 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     				$qtyreceive=$rowpaymentdetail['qty_receive'];
     				
     				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
-    				//     				echo $dueafters;exit();
+    				$qtyfter = $stupaydetail['qty_after']+$qtyreceive;
+    				
     				if (!empty($paymenttailbysale['tolalpayamount'])){
     					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
     					$qtyfter =$duevalu;
     				}
     				
     				$array=array(
-    						'qty_balance'=>$qtyfter,
+    						'qty_after'=>$qtyfter,
     				);
     				$where="id=".$pay_detail['student_paymentdetail_id'];
-    				$this->_name="rms_student_paymentdetail";
+    				$this->_name="rms_saledetail";
     				$this->update($array, $where);
     				
     				//return product to stock
@@ -596,13 +594,13 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			$qtyreceive = $_data['qty_receive'.$i];
     			 
     			if (!empty($stupaydetail)){
-    				$qtyfter = $stupaydetail['qty_balance']-$qtyreceive;
+    				$qtyfter = $stupaydetail['qty_after']-$qtyreceive;
     				// update Purchase Balance
     				$array=array(
-    						'qty_balance'=>$qtyfter,
+    						'qty_after'=>$qtyfter,
     				);
     				$where="id=".$_data['paymentdetail_id'.$i]." AND payment_id =".$_data['payment_id'.$i];
-    				$this->_name="rms_student_paymentdetail";
+    				$this->_name="rms_saledetail";
     				$this->update($array, $where);
     			}
     			if (!empty($_data['detailid'.$i])){
@@ -665,7 +663,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     				$qtyreceive=$rowpaymentdetail['qty_receive'];
     				
     				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
+    				$qtyfter = $stupaydetail['qty_after']+$qtyreceive;
     				//     				echo $dueafters;exit();
     				if (!empty($paymenttailbysale['tolalpayamount'])){
     					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
@@ -673,10 +671,10 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     				}
     				
     				$array=array(
-    						'qty_balance'=>$qtyfter,
+    						'qty_after'=>$qtyfter,
     				);
     				$where="id=".$pay_detail['student_paymentdetail_id'];
-    				$this->_name="rms_student_paymentdetail";
+    				$this->_name="rms_saledetail";
     				$this->update($array, $where);
     				
     				//return product to stock

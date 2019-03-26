@@ -3,7 +3,6 @@
 	echo $this->headTitle($tr->translate("EDIT_PRODUCT_CATEGORY"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
  	$frm_degree= $this->frm_degree;
- 	
  	$category='';
  	if(!empty($this->row['schoolOption'])){
  		$category =  explode(",",$this->row['schoolOption']);
@@ -18,7 +17,6 @@
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
     dojo.require("dijit.form.Textarea");
 </script>
 <style>
@@ -72,22 +70,9 @@ ul.opt-school {
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("shortcut");?>
 		                	<input type="hidden" id="type" name="type" value="3" />
+		                	<input type="hidden" id="ordering" name="ordering" value="1" />
 		                </div>
 		             </div>
-		             <!-- 
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php //echo $frm_degree->getElement("type");?>
-		                </div>
-		             </div>
-		            
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("School Option");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php //echo $frm_degree->getElement("schoolOption");?>
-		                </div>
-		             </div>  -->
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -120,9 +105,7 @@ ul.opt-school {
 		         <div class="clearfix"></div>
 		         <div class="card-box mt-20">
 	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               		 <input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-							iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"degree",'action'=>'index'),null,true); ?>';" />
-						<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" 
+	               	<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" 
 						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
 	               	</div>
 	             </div>
@@ -130,44 +113,21 @@ ul.opt-school {
 		</form>
     </div>
 </div>
-
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-//dojo.require('dojox.form.BusyButton');
-dojo.require("dojo.html");
 dojo.ready(function(){
-	/*getValue();*/
+	
 });
-
-
-/*function getValue(){
-	var par='';
-	if(dojo.byId('is_parent').checked){
-		par = 1;
-		dijit.byId('parent').attr('value','');
-		dijit.byId("parent").set('readOnly',true);
-		 dijit.byId('parent').set('required',false);  
-	}else{
-		par=0;
-		dijit.byId("parent").set('readOnly',false);
-		 dijit.byId('parent').set('required',true);  
-	}
-	$('#par').val(par);
-}*/
 function CheckAllTotal(index){
 	if(index==0){
-			if($('#check_all').is(":checked")){
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = true;  
-				});
-			}else{
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = false;  
-				});
-			}
+		if($('#check_all').is(":checked")){
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = true;  
+			});
+		}else{
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = false;  
+			});
+		}
 	}else{
 		var a = $("input:checked").val();
 		 var identity = [];

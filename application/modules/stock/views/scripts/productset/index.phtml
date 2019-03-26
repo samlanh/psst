@@ -1,7 +1,7 @@
 <?php
-$request = Zend_Controller_Front::getInstance ()->getRequest ();
-$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-$frm =  $this->frm_items;
+	$request = Zend_Controller_Front::getInstance ()->getRequest ();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
+	$frm =  $this->frm_items;
 ?>
 <title><?php echo $tr->translate("PRODUCTSET");?></title>
 <meta charset="utf-8">
@@ -12,8 +12,7 @@ $frm =  $this->frm_items;
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-cubes " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PRODUCTSET');?></h4>
     			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
+    			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
 		<div class="card-box">
@@ -37,7 +36,7 @@ $frm =  $this->frm_items;
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+							showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
                 </div>
 			</form>
@@ -50,6 +49,3 @@ $frm =  $this->frm_items;
 <script type="text/javascript">
 	dojo.require("dijit.form.DateTextBox");
 </script>
-
-
- 

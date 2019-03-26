@@ -61,7 +61,6 @@ input.btn_borwse_image {
     	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
-						
 					items_id = dijit.byId('items_id').get('value');
 					if(items_id=="" || items_id==-1){
 						alert("<?php echo $tr->translate("PLEASE_PRODUCT_CATEGORY");?>");
@@ -102,6 +101,13 @@ input.btn_borwse_image {
 		                	<input type="hidden" id="items_type" name="items_type" value="3" />
 		                </div>
 		             </div>
+		             <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm_items->getElement("product_type");?>
+	                   </div>
+	                </div>
 					<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_CATEGORY");?> </label>
 		                <div class="col-md-4 col-sm-4 col-xs-12">
@@ -111,13 +117,6 @@ input.btn_borwse_image {
 		                <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
 		            	</div>
 		             </div>
-		             <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("product_type");?>
-	                   </div>
-	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ONE_PAYMENT");?>
 	                   </label>
@@ -150,8 +149,8 @@ input.btn_borwse_image {
 								</div>
 								<div class="button_browse">
 								<div id='preview'></div>	
-										<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-										<input class="btn_borwse_image" type="file" id="images" name="images" />
+									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+									<input class="btn_borwse_image" type="file" id="images" name="images" />
 								</div>
 							</div>
 		                </div>
@@ -192,10 +191,7 @@ input.btn_borwse_image {
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-								iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"grade",'action'=>'index'),null,true); ?>';" />
-							<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
+		               		<input type="submit"  label="<?php echo $tr->translate("SAVE_NEW");?>" id="submitButton" dojoType="dijit.form.Button" 
 						 		iconClass="dijitEditorIcon dijitEditorIconSave" />
 		               	</div>
 		             </div>
@@ -205,9 +201,6 @@ input.btn_borwse_image {
  </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.DateTextBox");
-    dojo.require("dijit.form.CheckBox");
     dojo.require("dijit.form.NumberTextBox");
     dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -216,7 +209,8 @@ input.btn_borwse_image {
 	dojo.ready(function(){ 
 		new dijit.form.FilteringSelect({
 			store: branch_store,
-			autoComplete: true,                        
+			autoComplete: false,
+    		queryExpr: "*${0}*",                        
 			required: false,
 			id: "branch",
 			name: "branch",           
@@ -225,14 +219,12 @@ input.btn_borwse_image {
 			onChange: function() {  
 				branch_id = dijit.byId('branch').get('value');
 				if(branch_id==-1){
-					//dijit.byId("popup_add_branch").show();
 				}else{
 					addRow();
 				}
 			}
 		}, "branch");
 		oldRow();
-
 		$("#title").keyup(function(){
 			deplicateItem();
 		});
@@ -257,12 +249,11 @@ input.btn_borwse_image {
 			 for(var i=0;i< arrays.length;i++) {
 				 readychoose = dijit.byId('brand_name_'+arrays[i]).get('value');
 				 if(readychoose==branch){
-						alert("<?php echo $tr->translate("Choosen ready")?>");
+					alert("<?php echo $tr->translate("Choosen ready")?>");
 					 return false;
 				 }
 			}
 		}
-			
 			branch_lable = dijit.byId("branch").attr('displayedValue');
 			col++;no++;
 			template='';
@@ -334,19 +325,18 @@ input.btn_borwse_image {
 		<?php }?>
 	}
 	function deleteRecord(index) {
-			var identity = $('#identity').val();
-			var arrays = identity.split(',');
-			for(var i=0;i<arrays.length;i++) {
-			if(arrays[i] == index) arrays.splice(i,1);
-			}
-			var strings = arrays.join(',');
-			$('#identity').val(strings);
-			dojo.query("#row"+index).remove();
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
 	}
 	function readURL(input) {
-	    if (input.files && input.files[0]) {
+	    if(input.files && input.files[0]) {
 	        var reader = new FileReader();
-	        
 	        reader.onload = function (e) {
 	            $('#profile_wiew').attr('src', e.target.result);
 	        }
@@ -365,7 +355,6 @@ input.btn_borwse_image {
 	           alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
 	     	   maxSize = 1;
 	           return false;
-	           //$("#lblSize").html( iSize + "Gb"); 
 	       }else{ 
 	           iSize = (Math.round((iSize / 1024) * 100) / 100);
 	           if(iSize>5){
@@ -382,9 +371,7 @@ input.btn_borwse_image {
 	    }
 	    maxSize = 0;
 	    readURL(this);
-	   
 	});
-
 
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree));?> );
     require(["dojo/ready"], function(ready){
@@ -392,14 +379,15 @@ input.btn_borwse_image {
     	new dijit.form.FilteringSelect({
     		name: "items_id",
     		id: "items_id",
+    		autoComplete: false,
+    		queryExpr: "*${0}*",
     		searchAttr: "name",
     		class: 'fullside',
     		onChange: function() {
     			checkaddItems();
     			deplicateItem();
     	    }
-    		}, "items_id");
-    	
+    	}, "items_id");
     });
     function checkaddItems(){
     	dept_id = dijit.byId('items_id').get('value');
@@ -429,7 +417,6 @@ function getRefreshItems(){
 var is_deplicate=1;
 function deplicateItem(){
 	var url_deplicate = '<?php echo $this->url(array("module"=>"stock","controller"=>"product","action"=>"deplicatepro"));?>';										
-		//loadingBlock();
 		category = dijit.byId('items_id').get('value');
 		titles = dijit.byId('title').get('value');
 		if(category=="" || category==-1){

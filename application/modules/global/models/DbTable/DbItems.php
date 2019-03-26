@@ -52,8 +52,8 @@
 		$db = $this->getAdapter();
 		$sql = "SELECT d.id,d.title,d.title_en,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
-			d.status FROM `rms_items` AS d WHERE 1 ";
-		$orderby = " ORDER BY d.type ASC, d.id DESC ";
+				d.status FROM `rms_items` AS d WHERE 1 ";
+		
 		$where = ' ';
 		if(!empty($type)){
 			$where.= " AND d.type = ".$db->quote($type);
@@ -69,6 +69,7 @@
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
+		$orderby = " ORDER BY d.type ASC, d.id DESC ";
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	public function getDegreeById($degreeId,$type=null){
@@ -86,7 +87,6 @@
 	public function AddDegree($_data){
 		$_db= $this->getAdapter();
 		try{
-			
 			$_arr=array(
 					'title'	  		=> $_data['title'],
 					'title_en'	  	=> $_data['title_en'],

@@ -6,11 +6,8 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.CheckBox");
 </script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
@@ -50,6 +47,7 @@ ul.opt-school {
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("title");?>
+		                	<input type="hidden" id="ordering" name="ordering" value="1" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -97,60 +95,35 @@ ul.opt-school {
 		         <div class="clearfix"></div>
 		         <div class="card-box mt-20">
 	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               		 <input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+	               		<input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
 						<input type="submit"  label="<?php echo $tr->translate("SAVE_NEW");?>" id="save_new" name="save_new" 
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
 	               	</div>
 	             </div>
 	    	</div>
     	</form>
     </div>
 </div>
-
-
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-//dojo.require('dojox.form.BusyButton');
-dojo.ready(function(){
-	/*getValue();*/
-});
-
-/*function getValue(){
-	var par='';
-	if(dojo.byId('is_parent').checked){
-		par = 1;
-		dijit.byId('parent').attr('value','');
-		dijit.byId("parent").set('readOnly',true);
-		 dijit.byId('parent').set('required',false);  
-	}else{
-		par=0;
-		dijit.byId("parent").set('readOnly',false);
-		 dijit.byId('parent').set('required',true);  
-	}
-	$('#par').val(par);
-}*/
 function CheckAllTotal(index){
 	if(index==0){
-			if($('#check_all').is(":checked")){
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = true;  
-				});
-			}else{
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = false;  
-				});
-			}
+		if($('#check_all').is(":checked")){
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = true;  
+			});
+		}else{
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = false;  
+			});
+		}
 	}else{
 		var a = $("input:checked").val();
-		 var identity = [];
-	     $(':checkbox:checked').each(function(i){
+		var identity = [];
+	    $(':checkbox:checked').each(function(i){
 	    	 identity[i] = $(this).val();
-	     });
-	     var allidentity = $("#identityCheck").val();
+	    });
+	    var allidentity = $("#identityCheck").val();
 		if(identity == allidentity ){
 			$('#check_all').prop('checked', true); // checks it
 		}else{

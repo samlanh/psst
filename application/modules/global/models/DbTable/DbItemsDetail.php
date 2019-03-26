@@ -161,22 +161,25 @@
 					}
 			}
 			
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+			$itemsCode = $dbgb->getItemsDetailCodeByItemsType(3);
+			
 			$_arr=array(
-					'items_id'=> $_data['items_id'],
-					'items_type'=> $_data['items_type'],
-					'code'=> $_data['code'],
-					'title'	  => $_data['title'],
-					'title_en'=> $_data['title'],
-					'note'    => $_data['note'],
-					'product_type' => $_data['product_type'],
+					'items_id'		=> $_data['items_id'],
+					'items_type'	=> $_data['items_type'],
+					'code'			=> $itemsCode,
+					'title'	 	 	=> $_data['title'],
+					'title_en'		=> $_data['title'],
+					'note'    		=> $_data['note'],
+					'product_type' 	=> $_data['product_type'],
 					'is_onepayment' => $_data['is_onepayment'],
-					'cost'    => $_data['cost'],
-					'schoolOption'    => $schooloption,
-					'images'    => $photo,
-					'create_date' => date("Y-m-d H:i:s"),
-					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> 1,
-					'user_id'	  => $this->getUserId()
+					'cost'    		=> $_data['cost'],
+					'schoolOption'  => $schooloption,
+					'images'   	 	=> $photo,
+					'create_date' 	=> date("Y-m-d H:i:s"),
+					'modify_date' 	=> date("Y-m-d H:i:s"),
+					'status'		=> 1,
+					'user_id'	 	=> $this->getUserId()
 			);
 			$this->_name = "rms_itemsdetail";
 			$id =  $this->insert($_arr);
@@ -224,11 +227,14 @@
 			WHEN  ide.product_type = 1 THEN '".$tr->translate("PRODUCT_FOR_SELL")."'
 			WHEN  ide.product_type = 2 THEN '".$tr->translate("OFFICE_MATERIAL")."'
 			END AS product_type,
+			CASE    
+			WHEN  ide.is_onepayment = 0 THEN '".$tr->translate("IS_VALIDATE")."'
+			WHEN  ide.is_onepayment = 1 THEN '".$tr->translate("ONE_PAYMENTONLY")."'
+			END AS is_onepayment,
 			ide.modify_date,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 0
-			";
-		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
+			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 0 ";
+		
 		$where = ' ';
 		if(!empty($items_type)){
 			$where.= " AND ide.items_type = ".$db->quote($items_type);
@@ -241,15 +247,20 @@
 			$s_where[] = " ide.cost LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
+		
 		if(!empty($search['items_search'])){
 			$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
 		}
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
+		if($search['is_onepayment']>-1){
+			$where.= " AND is_onepayment = ".$db->quote($search['is_onepayment']);
+		}
 		if($search['product_type_search']>-1){
 			$where.= " AND ide.product_type = ".$db->quote($search['product_type_search']);
 		}
+		$orderby = " ORDER BY ide.ordering ASC, ide.id DESC ";
 		return $db->fetchAll($sql.$where.$location.$orderby);
 	}
 	
@@ -374,7 +385,6 @@
 			Application_Form_FrmMessage::message("Application Error!");
 		}
 	}
-	
 	public function addProductSet($_data){
 		$_db= $this->getAdapter();
 		try{
@@ -418,7 +428,6 @@
 					$this->insert($_arrss);
 				}
 			}
-				
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -434,7 +443,6 @@
 				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
 				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
-	
 			$_arr=array(
 					'items_id'=> $_data['items_id'],
 					'items_type'=> $_data['items_type'],
@@ -447,7 +455,6 @@
 					'is_productseat' => 1,
 					'price'    => $_data['price'],
 					'schoolOption'    => $schooloption,
-// 					'create_date' => date("Y-m-d H:i:s"),
 					'modify_date' => date("Y-m-d H:i:s"),
 					'status'=> 1,
 					'user_id'	  => $this->getUserId()
@@ -485,19 +492,19 @@
 				foreach ($ids as $i){
 					if (!empty($_data['detailid'.$i])){
 						$_arrss = array(
-								'pro_id'=>$id,
-								'subpro_id'=>$_data['product_'.$i],
-								'qty'=>$_data['qty_'.$i],
-								'remark'=>$_data['note_'.$i],
+							'pro_id'=>$id,
+							'subpro_id'=>$_data['product_'.$i],
+							'qty'=>$_data['qty_'.$i],
+							'remark'=>$_data['note_'.$i],
 						);
 						$where =" id =".$_data['detailid'.$i];
 						$this->update($_arrss, $where);
 					}else{
 						$_arrss = array(
-								'pro_id'=>$id,
-								'subpro_id'=>$_data['product_'.$i],
-								'qty'=>$_data['qty_'.$i],
-								'remark'=>$_data['note_'.$i],
+							'pro_id'=>$id,
+							'subpro_id'=>$_data['product_'.$i],
+							'qty'=>$_data['qty_'.$i],
+							'remark'=>$_data['note_'.$i],
 						);
 						$this->insert($_arrss);
 					}
@@ -519,20 +526,17 @@
 		$branch_id = $result["branch_id"];
 		$string="";
 		$location="";
-	
-		$sql = " SELECT ide.id,ide.code,ide.title,
+		$sql = "SELECT ide.id,ide.code,ide.title,
 			(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 			ide.price,
 			ide.modify_date,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 1
-		";
+			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 1 ";
 		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
 		$where = ' ';
 		if(!empty($items_type)){
 			$where.= " AND ide.items_type = ".$db->quote($items_type);
 		}
-		
 		$from_date =(empty($search['start_date']))? '1': " ide.modify_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " ide.modify_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
@@ -541,6 +545,7 @@
 		$s_where = array();
 		$s_search = addslashes(trim($search['advance_search']));
 			$s_where[] = " ide.title LIKE '%{$s_search}%'";
+			$s_where[] = " ide.code LIKE '%{$s_search}%'";
 			$s_where[] = " ide.price LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}

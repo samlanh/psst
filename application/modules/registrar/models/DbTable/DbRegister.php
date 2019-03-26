@@ -1208,8 +1208,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getServiceFee($year,$item_id,$termid,$student_id,$branch_id){
     	$db=$this->getAdapter();
-//     	$branch = new Application_Model_DbTable_DbGlobal();
-//     	$branch_id = $branch->getAccessPermission();
     	
     	$sql="SELECT items_type,is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
     	$rs_pro=$db->fetchRow($sql);

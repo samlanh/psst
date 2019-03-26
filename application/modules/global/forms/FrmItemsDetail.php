@@ -92,6 +92,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_product_type->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	
@@ -108,7 +110,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_price->setAttribs(array(
     			'dojoType'=>'dijit.form.NumberTextBox',
     			'class'=>' fullside height-text',
-    			'placeholder'=>$this->tr->translate("PRICE"),
+    			'required'=>'true',
+    			'placeholder'=>$this->tr->translate("SELL_PRICE"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Price")
     	));
     	
@@ -140,6 +143,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_items_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_items_search->setValue($request->getParam("items_search"));
@@ -152,18 +157,27 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_product_type_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_product_type_search->setValue($request->getParam("product_type_search"));
     	
     	$_arr = array(
+    			-1=>$this->tr->translate("SELECT_TYPE"),
     			0=>$this->tr->translate("IS_VALIDATE"),
     			1=>$this->tr->translate("ONE_PAYMENTONLY"));
+    	if($request->getActionName()!='index'){
+    		unset($_arr[-1]);
+    	}
+    	
     	$_onepayment = new Zend_Dojo_Form_Element_FilteringSelect("is_onepayment");
     	$_onepayment->setMultiOptions($_arr);
     	$_onepayment->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_onepayment->setValue($request->getParam("is_onepayment"));
@@ -198,7 +212,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_branch_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    	
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_branch_search->setValue($request->getParam("branch_search"));
@@ -212,7 +227,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
     		$_onepayment->setValue($data["is_onepayment"]);
-    		$code->setValue($data["code"]);
+    		if($request->getActionName()=='edit'){
+    			$code->setValue($data["code"]);
+    		}
     		if ($data["items_type"]==3){ // product
 	    		$_product_type->setValue($data["product_type"]);
 	    		$_cost->setValue($data["cost"]);

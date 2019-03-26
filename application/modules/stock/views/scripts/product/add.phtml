@@ -77,13 +77,11 @@ input.btn_borwse_image {
 					}
 					if(is_deplicate==2){
 						alert("<?php echo $tr->translate("This Product Already Existing");?>");
-						$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Existing");?>");
+						$("#msg_deplicate").html("<?php echo $tr->translate("This Product Already Existing");?>");
 						dijit.byId("title").focus();
 						return false;
 					}
 					loadingBlock();
-                	//dijit.byId("save_new").attr("disabled",true);
-					//dijit.byId("save_close").attr("disabled",true);
 					return true;
 				}else {
 					return false;
@@ -105,6 +103,13 @@ input.btn_borwse_image {
 		                	<input type="hidden" id="items_type" name="items_type" value="3" />
 		                </div>
 		             </div>
+		             <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm_items->getElement("product_type");?>
+	                   </div>
+	                </div>
 					<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_CATEGORY");?> </label>
 		                <div class="col-md-4 col-sm-4 col-xs-12">
@@ -114,13 +119,6 @@ input.btn_borwse_image {
 		                <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
 		            	</div>
 		             </div>
-		             <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("product_type");?>
-	                   </div>
-	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ONE_PAYMENT");?>
 	                   </label>
@@ -137,7 +135,7 @@ input.btn_borwse_image {
 	                </div>
 		            <div class="form-group">
 		             	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" style=" vertical-align: top;"><?php echo $tr->translate("IMAGE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12 text-center" style="padding-left: 40%;">
+		                 <div class="col-md-7 col-sm-7 col-xs-12 text-center" style="padding-left: 40%;">
 		                	<?php 
 							$images = $this->baseUrl().'/images/noimage.jpg';
 							?>
@@ -190,8 +188,7 @@ input.btn_borwse_image {
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+		               		<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
 							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -211,7 +208,8 @@ input.btn_borwse_image {
 	dojo.ready(function(){ 
 		new dijit.form.FilteringSelect({
 			store: branch_store,
-			autoComplete: true,                        
+			autoComplete: false,
+			queryExpr: "*${0}*",                    
 			required: false,
 			id: "branch",
 			name: "branch",           
@@ -220,7 +218,6 @@ input.btn_borwse_image {
 			onChange: function() {  
 				branch_id = dijit.byId('branch').get('value');
 				if(branch_id==-1){
-					//dijit.byId("popup_add_branch").show();
 				}else{
 					addRow();
 				}
@@ -251,12 +248,11 @@ input.btn_borwse_image {
 			 for(var i=0;i< arrays.length;i++) {
 				 readychoose = dijit.byId('brand_name_'+arrays[i]).get('value');
 				 if(readychoose==branch){
-						alert("<?php echo $tr->translate("Choosen ready")?>");
+					alert("<?php echo $tr->translate("Choosen ready")?>");
 					 return false;
 				 }
 			}
 		}
-			
 			branch_lable = dijit.byId("branch").attr('displayedValue');
 			col++;no++;
 			template='';
@@ -324,7 +320,6 @@ input.btn_borwse_image {
 	           alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
 	     	   maxSize = 1;
 	           return false;
-	           //$("#lblSize").html( iSize + "Gb"); 
 	       }else{ 
 	           iSize = (Math.round((iSize / 1024) * 100) / 100);
 	           if(iSize>5){
@@ -341,23 +336,22 @@ input.btn_borwse_image {
 	    }
 	    maxSize = 0;
 	    readURL(this);
-	   
 	});
 
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree));?> );
     require(["dojo/ready"], function(ready){
-    	
     	new dijit.form.FilteringSelect({
     		name: "items_id",
     		id: "items_id",
+    		autoComplete: false,
+    		queryExpr: "*${0}*",     
     		searchAttr: "name",
     		class: 'fullside',
     		onChange: function() {
     			checkaddItems();
     			deplicateItem();
     	    }
-    		}, "items_id");
-    	
+    	}, "items_id");
     });
     function checkaddItems(){
     	dept_id = dijit.byId('items_id').get('value');
@@ -387,7 +381,6 @@ function getRefreshItems(){
 var is_deplicate=1;
 function deplicateItem(){
 	var url_deplicate = '<?php echo $this->url(array("module"=>"stock","controller"=>"product","action"=>"deplicatepro"));?>';										
-		//loadingBlock();
 		category = dijit.byId('items_id').get('value');
 		titles = dijit.byId('title').get('value');
 		if(category=="" || category==-1){

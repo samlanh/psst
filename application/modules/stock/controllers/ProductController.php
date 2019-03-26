@@ -1,7 +1,5 @@
 <?php
 class Stock_ProductController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
-	private $type = array(1=>'service',2=>'program');
 	const REDIRECT_URL = '/stock/product';
 	public function init()
 	{
@@ -21,10 +19,11 @@ class Stock_ProductController extends Zend_Controller_Action {
 	    	}
 	    	else{
 	    		$search = array(
-	    				'advance_search' => "",
-	    				'items_search'=>"",
-	    				'product_type_search'=>-1,
-	    				'status_search' => -1
+    				'advance_search' => "",
+    				'items_search'=>"",
+    				'is_onepayment'=>-1,
+    				'product_type_search'=>-1,
+    				'status_search' => -1
 	    		);
 	    	}
 	    	$type=3; //Product
@@ -32,7 +31,7 @@ class Stock_ProductController extends Zend_Controller_Action {
 	    	$glClass = new Application_Model_GlobalClass();
 	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("CODE","PRODUCT_NAME","PRODUCT_CATEGORY","UNIT_COST","QTY","TYPE","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("CODE","PRODUCT_NAME","PRODUCT_CATEGORY","UNIT_COST","QTY","TYPE","ONE_PAYMENT","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'stock','controller'=>'product','action'=>'edit',
 	    	);
@@ -66,7 +65,6 @@ class Stock_ProductController extends Zend_Controller_Action {
     		}catch (Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$type=3; //Product
@@ -77,12 +75,12 @@ class Stock_ProductController extends Zend_Controller_Action {
     	
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	
-    	$model = new Application_Model_DbTable_DbGlobal();
-    	$branch = $model->getAllBranch();
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$branch = $db->getAllBranch();
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
     	
-    	$d_row = $model->getAllItems(3);
+    	$d_row = $db->getAllItems(3);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
     }
@@ -124,17 +122,7 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$d_row = $model->getAllItems(3);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
-		
     }
-// 	function addNewProCateAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Accounting_Model_DbTable_DbProduct();
-// 			$pro_cate = $db->AddProCate($data);
-// 			print_r(Zend_Json::encode($pro_cate));
-// 			exit();
-// 		}
-// 	}
     public function copyAction(){
     	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
@@ -142,7 +130,7 @@ class Stock_ProductController extends Zend_Controller_Action {
     		try{
     			$_data = $this->getRequest()->getPost();
     			$db->AddProduct($_data);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/index");
     			exit();
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("Application Error");
@@ -172,7 +160,6 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$d_row = $model->getAllItems(3);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
-    
     }
     
     function deplicateproAction(){
@@ -182,7 +169,7 @@ class Stock_ProductController extends Zend_Controller_Action {
     		$pro_cate = $db->CheckProductHasExit($data);
     		print_r(Zend_Json::encode($pro_cate));
     		exit();
-    		}
+    	}
     }
     function getproductbyacateAction(){
     	if($this->getRequest()->isPost()){

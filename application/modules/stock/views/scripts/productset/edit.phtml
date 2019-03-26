@@ -3,7 +3,6 @@
 	echo $this->headTitle($tr->translate('EDIT_PRODUCTSET')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm_items= $this->frm_items;
-	
 	if(!empty($this->pro_detail)){
 		$result = 1;
 	}else{
@@ -74,7 +73,7 @@ fieldset{  background:none;}
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRICE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELL_PRICE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("price");?>
@@ -123,8 +122,7 @@ fieldset{  background:none;}
 	        <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('GO_EDIT');?>"  dojoType="dijit.form.Button" 
+               		<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('GO_EDIT');?>"  dojoType="dijit.form.Button" 
 						 iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -133,11 +131,10 @@ fieldset{  background:none;}
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.Textarea");
+	dojo.require('dijit.form.NumberTextBox');
 var product_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->productlist));?> );
 	dojo.ready(function(){ 
 		new dijit.form.FilteringSelect({
@@ -148,7 +145,6 @@ var product_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			id: "product",
 			name: "product",  
 			class: 'fullside',  
-
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
 				product   = dijit.byId('product').get('value');
@@ -167,7 +163,6 @@ var product_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		}
 	});	
 </script>
-
 <script type="text/javascript">
 var template = '';
 var productopt = '<?php echo $this->productopt; ?>';
@@ -200,7 +195,6 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
-			/*temp+='<th id="lbl_titlemetion" width="100px"><?php //echo $tr->translate("UNIT_PRICE");?></th>';*/
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -208,8 +202,7 @@ function addRow() {
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="15px" align="center">'+no+'</td>';
 			template+='<td><input type="hidden" dojoType="dijit.form.TextBox" value="'+product_id+'" id="product_'+col+'" name="product_'+col+'" />'+productoption+'</td>';	
-			template+='<td> <input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" /><label id="subsub"></label></td>';
-			//template+='<td><input type="text" required="true" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td width="70px"> <input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" /><label id="subsub"></label></td>';
 			template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -232,7 +225,6 @@ function oldRow() {
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
-		/*temp+='<th id="lbl_titlemetion" width="100px"><?php //echo $tr->translate("PRICE");?></th>';*/
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
@@ -240,9 +232,8 @@ function oldRow() {
 		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="15px" align="center">'+no+'</td>';
 		template+='<td><input type="hidden" dojoType="dijit.form.TextBox" value="" id="product_'+col+'" name="product_'+col+'" /><?php echo $rs['title'];?></td>';	
-		template+='<td> <input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['qty'];?>" /> </td>';
-		//template+='<td><input type="text" required="true" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
-		template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" value="<?php echo $rs['remark'];?>"/><input type="hidden" value="<?php echo $rs['id'];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';
+		template+='<td width="70px"><input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['qty'];?>" /> </td>';
+		template+='<td><input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" value="<?php echo $rs['remark'];?>"/><input type="hidden" value="<?php echo $rs['id'];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -254,7 +245,6 @@ function oldRow() {
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
-	/*dijit.byId("price_"+col).attr('value','<?php //echo $rs['pro_price'];?>');*/
 	dijit.byId("product_"+col).attr('value','<?php echo $rs['subpro_id'];?>');
 	<?php }?>
 }

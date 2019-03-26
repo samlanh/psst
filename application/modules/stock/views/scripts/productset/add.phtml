@@ -12,6 +12,7 @@ fieldset{  background:none;}
 	width: 99%;
 }
 </style>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -32,6 +33,10 @@ fieldset{  background:none;}
                         dijit.byId('product').focus();
                         return false;
 					}
+				if(dijit.byId('items_id').get('value')==-1){
+					dijit.byId('items_id').focus();
+					return false;
+				}
 				loadingBlock();
 				return true;
 			} else {
@@ -39,7 +44,7 @@ fieldset{  background:none;}
 			}
 			</script>
 			<div class="card-box">
-				<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-5 col-sm-5 col-xs-12">
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_CODE");?>
 	                   </label>
@@ -56,11 +61,14 @@ fieldset{  background:none;}
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_CATEGORY");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("items_id");?>
-	                   </div>
+	                     <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_CATEGORY");?>
+	                     </label>
+	                     <div class="col-md-5 col-sm-5 col-xs-12">
+	                   		<input id="items_id" />
+	                   	 </div>
+		                 <div class="col-md-2 col-sm-2 col-xs-12">
+			                <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
+			            </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ONE_PAYMENT");?>
@@ -70,28 +78,21 @@ fieldset{  background:none;}
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRICE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELL_PRICE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("price");?>
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("status");?>
-	                   </div>
-	                </div>
 	            </div>
-	            <div class="col-md-8 col-sm-8 col-xs-12">
+	            <div class="col-md-7 col-sm-7 col-xs-12">
 	            	<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 		                <label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("PRODUCT");?> </label>
 		                 <div class="col-md-5 col-sm-5 col-xs-12">
 		                		<input id="product" name="product" />
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-xs-12">
-                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshProduct();"/>
                    		</div>
 		                 <div class="clearfix"></div>
 	             	</div>
@@ -105,10 +106,6 @@ fieldset{  background:none;}
 								<th><?php echo $tr->translate("NOTE");?></th>
 							</tr>
 						</table>
-						<!-- 
-						<input type="button" label="<?php //echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-						 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-						 -->
 				 		<input type="hidden" id="identity" name="identity" />
 	            	</div>
 	            	 <div class="form-group">
@@ -125,8 +122,7 @@ fieldset{  background:none;}
 	        <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+               		<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave" />
 					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -135,35 +131,33 @@ fieldset{  background:none;}
 		</form>
 	</div>
 </div>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require("dijit.form.Textarea");
 	var product_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->productlist));?> );
-	var pro_cate_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cat_rows));?> );
+	var cate_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cat_rows));?> );
 	dojo.ready(function(){ 
 		
 		new dijit.form.FilteringSelect({
-			store: pro_cate_store,
+			store: cate_store,
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: true,                        
-			required: true,                      
-		    id: "category_id",
-		    name: "category_id",  
+		    id: "items_id",
+		    name: "items_id",  
 		    tabindex: "1",         
 		    class: 'fullside',  
 		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY");?>", 
 		    onChange: function() {          
-		    	category_id = dijit.byId('category_id').get('value');
-			    if(category_id==-1){
-			   		dijit.byId("popup_pro_cate").show();
+		    	items_id = dijit.byId('items_id').get('value');
+			    if(items_id==-1){
+			    	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/productcate/add?rightclick=true";?>','_blank');
 			    }
 		   }
-		}, "category_id");
+		}, "items_id");
 
 		new dijit.form.FilteringSelect({
 			store: product_store,
@@ -173,7 +167,6 @@ dojo.require("dijit.form.Textarea");
 			id: "product",
 			name: "product",  
 			class: 'fullside',  
-
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
 				product   = dijit.byId('product').get('value');
@@ -184,12 +177,11 @@ dojo.require("dijit.form.Textarea");
 				}
 			}
 		}, "product");
-
 		addRow();
 		dijit.byId('is_onepayment').set('value',1);
 	});	
 
-	function getRefreshGroup(){
+	function getRefreshProduct(){
 		var url_getgroup = '<?php echo $this->url(array("module"=>"stock","controller"=>"productset","action"=>"refreshproduct"));?>';										
 			loadingBlock();
 			dojo.xhrPost({
@@ -205,8 +197,26 @@ dojo.require("dijit.form.Textarea");
 				}
 			});
 	}
+function getRefreshItems(){
+	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
+	loadingBlock();
+	dojo.xhrPost({
+		url: url_getItems,
+		content:{
+			'items_type':3
+			},
+		handleAs:"json",
+		load: function(data) {
+			cate_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('items_id').set('store',cate_store);  
+		   document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
 </script>
-
 <script type="text/javascript">
 	var template = '';
 	var col = 0;
@@ -246,7 +256,7 @@ dojo.require("dijit.form.Textarea");
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
 				template+='<td><input type="hidden" dojoType="dijit.form.TextBox" value="'+product_id+'" id="product_'+col+'" name="product_'+col+'" />'+productoption+'</td>';			
-				template+='<td> <input class="fullside" type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
+				template+='<td width="70px"><input class="fullside" type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";
@@ -260,19 +270,17 @@ dojo.require("dijit.form.Textarea");
 			     parseContent: true,
 			});
 	 }
-	function deleteRecord(index) {
+function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++) {
-	if(arrays[i] == index) arrays.splice(i,1);
+		if(arrays[i] == index) arrays.splice(i,1);
 	}
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
-	}
-	
-</script>
-<script>
+}	
+
 function submitDataClose(){
 	if(dijit.byId('suspend_service').validate()) {
 		var identity = $('#identity').val();
@@ -280,6 +288,10 @@ function submitDataClose(){
             alert('<?php echo $tr->translate('PLEASE_SELECT_PRODUCT');?>');
             dijit.byId('product').focus();
             return false;
+		}
+		if(dijit.byId('items_id').get('value')==-1){
+			dijit.byId('items_id').focus();
+			return false;
 		}
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);

@@ -78,6 +78,49 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     
     function getAllBookList($search=null){
     	$db=$this->getAdapter();
+    	$sql="SELECT
+			    	b.id,
+			    	b.title,
+			    	b.author,
+			    	b.publisher,
+			    	b.note,
+			    	(SELECT bb.block_name FROM rms_blockbook AS bb WHERE bb.id=b.block_id LIMIT 1) AS  block_name,
+			    	(SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id ) AS cat_name,
+			    	b.date,
+			    	(SELECT CONCAT(rms_users.first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id) AS user_name,
+			    	b.user_id,
+			    	(SELECT rms_view.name_en FROM rms_view WHERE rms_view.key_code=b.status AND rms_view.type=1 LIMIT 1 ) AS `status`,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id limit 1) as total_book,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 limit 1) as total_available,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 limit 1) as total_borrow,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_broken=1 limit 1) as total_broken
+    			FROM
+			    	rms_book AS b
+    			WHERE
+			    	b.title!=''
+    		";
+    	$order = " order by b.id ASC ";
+    	$where = '';
+    	if(!empty($search["title"])){
+    		$s_where=array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[]="  b.title LIKE '%{$s_search}%'";
+    		$s_where[]="  b.author LIKE '%{$s_search}%'";
+    		$s_where[]="  b.publisher LIKE '%{$s_search}%'";
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
+    	if($search["block_id"]>0){
+    		$where.=' AND b.block_id='.$search["block_id"];
+    	}
+    	$db_cat = new Library_Model_DbTable_DbCategory();
+    	if($search["parent"]>0){
+    		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
+    	}
+    	return $db->fetchAll($sql.$where.$order);
+    }
+    
+    function getAllBookListDetail($search=null){
+    	$db=$this->getAdapter();
     	$sql="SELECT 
     				b.id,
     				b.title,
@@ -130,6 +173,35 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
     	} 
     	return $db->fetchAll($sql.$where.$order);
+    }
+    function getAllBookDetailById($id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT
+			    	b.id,
+			    	b.title,
+			    	bd.serial,
+			    	bd.barcode,
+			    	bd.is_borrow,
+			    	bd.is_broken,
+			    	bd.note,
+			    	b.author,
+			    	b.publisher,
+			    	(SELECT bb.block_name FROM rms_blockbook AS bb WHERE bb.id=b.block_id LIMIT 1) AS  block_name,
+			    	(SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id ) AS  cat_name,
+			    	b.date,
+			    	(SELECT CONCAT(rms_users.first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id) AS user_name,
+			    	b.user_id,
+			    	(SELECT rms_view.name_en FROM rms_view WHERE rms_view.key_code=b.status AND rms_view.type=1 LIMIT 1 ) AS `status`
+    			FROM
+			    	rms_book AS b,
+			    	rms_book_detail as bd
+    			WHERE
+			    	b.id = bd.book_id
+			    	and b.status=1
+			    	and b.id = $id
+    		";
+    	$order = " order by b.id ASC , bd.id ASC ";
+    	return $db->fetchAll($sql.$order);
     }
     
     function getBorrowDetail($search=null){

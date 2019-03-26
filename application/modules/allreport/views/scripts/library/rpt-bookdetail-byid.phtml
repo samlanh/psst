@@ -2,19 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm =  $this->frm_search;
 ?>	
-<title><?php echo $tr->translate('BOOK_LIST_REPORT');?></title>
-<div style="width: 28cm;margin: 0 auto;">
-<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-book-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table width="70%">
-		<tr>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement('parent');?></td>
-			<td><?php echo $frm->getElement('block_id');?></td>
-			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>	
-</div>
+<title><?php echo $tr->translate('BOOK_LIST_DETAIL_REPORT');?></title>
 <style>
 .hover:hover{background: #ddd;}
 </style>
@@ -34,46 +22,45 @@
 							<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 						</td>
 						<td align="center" width="70%">
-							<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BOOK_LIST_REPORT"); ?></strong><br />
+							<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BOOK_LIST_DETAIL_REPORT"); ?></strong><br />
 						</td>
 						<td width="15%" >
 							&nbsp;
 						</td>
+						
 					</tr>
 					<tr>
 						<td colspan="3" id="exportExcel">
 							<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
 								<thead>
 								<tr align="center" style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
-									<td rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
-									<td rowspan="2"><?php echo $tr->translate("BOOK_NAME"); ?></td>
-									<td rowspan="2"><?php echo $tr->translate("AUTHOR"); ?></td>
-									<td rowspan="2"><?php echo $tr->translate("PUBLISHER"); ?></td>
-									<td rowspan="2"><?php echo $tr->translate("CATEGORY"); ?></td>
-									<td rowspan="2"><?php echo $tr->translate("BLOCK_NAME"); ?></td>
-									<td rowspan="2"><?php echo $tr->translate("USER"); ?></td>
-									<td colspan="4"><?php echo $tr->translate("SUMMARY").' ('.($tr->translate("BOOK_QTY")).')'; ?></td>
-								</tr>
-								<tr align="center" style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
-									<td><?php echo $tr->translate("TOTAL"); ?></td>
-									<td><?php echo $tr->translate("NOT_BORROW"); ?></td>
-									<td><?php echo $tr->translate("BORROW"); ?></td>
-									<td><?php echo $tr->translate("BROKEN"); ?></td>
+									<td><?php echo $tr->translate("N_O"); ?></td>
+									<td><?php echo $tr->translate("BOOK_NAME"); ?></td>
+									<td><?php echo $tr->translate("SERIAL_NO"); ?></td>
+									<td><?php echo $tr->translate("AUTHOR"); ?></td>
+									<td><?php echo $tr->translate("PUBLISHER"); ?></td>
+									<td><?php echo $tr->translate("CATEGORY"); ?></td>
+									<td><?php echo $tr->translate("BLOCK_NAME"); ?></td>
+									<td><?php echo $tr->translate("USER"); ?></td>
+									<td colspan="2"><?php echo $tr->translate("STATUS"); ?></td>
 								</tr>
 								</thead>
+								<?php  
+									$is_borrow = array(1=>$tr->translate("BORROW"),0=>$tr->translate("NOT_BORROW"));
+									$is_broken = array(1=>$tr->translate("BROKEN"),0=>$tr->translate("NOT_BROKEN"));
+								?> 
 							<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->book_list)){foreach ($this->book_list AS $row) { $i++; ?>
-								<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;" style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" >
+								<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
 									<td><?php echo $i;?></td>
 									<td align="left">&nbsp;<?php echo $row['title'];?></td>
+									<td align="left">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?></td>
 									<td align="left">&nbsp;<?php echo $row['author'];?></td>
 									<td>&nbsp;<?php echo $row['publisher'];?></td>
 									<td>&nbsp;<?php echo $row['cat_name'];?></td>
 									<td>&nbsp;<?php echo $row['block_name'];?></td>
 									<td>&nbsp;<?php echo $row['user_name'];?></td>
-									<td>&nbsp;<?php echo $row['total_book'];?></td>
-									<td>&nbsp;<?php echo $row['total_available'];?></td>
-									<td>&nbsp;<?php echo $row['total_borrow'];?></td>
-									<td>&nbsp;<?php echo $row['total_broken'];?></td>
+									<td style="<?php if($row['is_borrow']==1){echo 'color:blue;';}?>">&nbsp;<?php echo $is_borrow[$row['is_borrow']];?></td>
+									<td style="<?php if($row['is_broken']==1){echo 'color:red;';}?>">&nbsp;<?php echo $is_broken[$row['is_broken']];?></td>
 								</tr>
 							<?php }}?>
 							</table>
@@ -102,37 +89,7 @@
 				</table>						
 			</div>		
 </div>
-<?php
-	$urlBookDetail = $this->baseUrl()."/allreport/library/rpt-bookdetail-byid/id/";
-?>
 <script type="text/javascript">
-
-var row=0;
-var url="";
-$(function(){
-	$.contextMenu({
-		selector: '.context-menu-one', 
-		callback: function(key, options) {
-			var m = "clicked: " + key;
-			if(key=="rpt-bookdetail-byid"){
-				url='<?php echo $urlBookDetail;?>';
-			}
-			gotoAction();
-		},
-		items: {
-			"rpt-bookdetail-byid": {name: "<?php echo $tr->translate("DETAIL_INFORMATION");?>", icon: "fa-book",},
-		}
-	});
-});
-function setrowdata(index){
-	row = index;
-}
-
-var recordid ='';
-function gotoAction(){
-	window.open(url+row);
-}
-
 function doPrint() {
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();

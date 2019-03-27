@@ -276,8 +276,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		if (!empty($schoolOption)){
 	    		$db = new Foundation_Model_DbTable_DbGroup();
 	    		$teacher = $db->getAllTeacher($schoolOption,$data['branch_id']);
-	    		
-	    		array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+	    		if (empty($data['has_addnew'])){
+	    			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+	    		}
 	    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 	    		print_r(Zend_Json::encode($teacher));
 	    		exit();
@@ -307,8 +308,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$model = new Application_Model_DbTable_DbGlobal();
     		$room = $model->getAllRoom($data['branch_id']);
-			
-    		array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			if (empty($data['has_addnew'])){
+    			array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			}
     		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
     		print_r(Zend_Json::encode($room));
     		exit();

@@ -987,6 +987,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'nation_search' =>'',
 						'student_option_search' =>'',
 						'province_search' =>'',
+						'type_exam' => '',
 						'result_status' => '',
 						'register_status' => '',
 						'start_date'=> date('Y-m-d'),

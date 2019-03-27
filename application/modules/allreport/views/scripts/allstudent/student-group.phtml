@@ -34,7 +34,8 @@
             	<input id="group" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("teacher");?>
+            	<?php //echo $frm->getElement("teacher");?>
+            	<input id="teacher" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("study_status");?>
@@ -51,7 +52,8 @@
             	<?php echo $frm->getElement("session");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("room");?>
+            	<?php //echo $frm->getElement("room");?>
+            	<input id="room" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -213,7 +215,37 @@ dojo.require("dijit.form.FilteringSelect");
 dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var room_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
+
+	new dijit.form.FilteringSelect({
+		store: teacher_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,
+		id: "teacher",
+		name: "teacher",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
+		onChange: function() {  
+		}
+	}, "teacher");
+
+	new dijit.form.FilteringSelect({
+		store: room_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                     
+		id: "room",
+		name: "room",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ROOM");?>",          
+		onChange: function() {
+			  
+		}
+	}, "room");
+	
 	new dijit.form.FilteringSelect({
 		store: academic_store,
 		queryExpr: "*${0}*",
@@ -225,6 +257,7 @@ dojo.ready(function(){
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 		onChange: function() {  
 			academic_year = dijit.byId('study_year').get('value');
+			getRefreshTeacher();
 		}
 	}, "study_year");
 	new dijit.form.FilteringSelect({
@@ -260,6 +293,7 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
+		 getRefreshRoom();
     });
 	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
@@ -381,4 +415,65 @@ var recordid ='';
 function gotoAction(){
 	window.open(url+row);
 }
+var olstudy_year = '<?php echo $this->search['study_year']?>';  
+var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getteacher"));?>';										
+function getRefreshTeacher(){
+	dijit.byId('teacher').reset();
+	academic_year = dijit.byId('study_year').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
+	if(academic_year=='' || academic_year==-1){
+		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('teacher').set('store',teacher_store);  
+		return false;
+	}
+	if(academic_year=='' || academic_year == -1){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_gettecher,
+		content:{
+			'academic_year':academic_year,'branch_id':branch_id,'has_addnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    teacher_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher').set('store',teacher_store);  
+		    if(olstudy_year==academic_year){
+		    	dijit.byId('teacher').set('value','<?php echo $this->search['teacher']?>');  
+		    }
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err){
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
+var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';										
+function getRefreshRoom(){
+	dijit.byId('room').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id == -1){
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getRoom,
+		handleAs:"json",
+		content:{
+				'branch_id':branch_id,'has_addnew':1
+				},
+		load: function(data) {
+			room_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('room').set('store',room_store);  
+		    if(oldBranch==branch_id){
+		    	dijit.byId('room').set('value','<?php echo $this->search['room']?>');  
+		    }
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
 </script>

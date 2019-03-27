@@ -312,6 +312,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($search['user'])){
 				$where.= " AND str.user_id = ".$search['user'];
 			}
+			if(!empty($search['type_exam'])){
+				$where .= " and str.test_type = ".$search['type_exam'];
+			}
 			if(!empty($search['degree_search'])){
 				$where .= " and str.degree_result = ".$search['degree_search'];
 			}

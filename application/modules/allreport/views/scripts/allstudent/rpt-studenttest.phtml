@@ -40,6 +40,15 @@ table.content-data thead tr.style-head {
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text">
                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<select name="type_exam" id="type_exam" class="fullside" dojoType="dijit.form.FilteringSelect" >
+			   				<option value="" <?php if($this->search['type_exam']==""){echo "selected='selected'";}?>><?php echo $tr->translate("TYPE_TEST"); ?></option>
+			   				<option value="1" <?php if($this->search['type_exam']==1){echo "selected='selected'";}?>><?php echo $tr->translate("CREATE_TEST_EXAM_KH"); ?></option>
+			   				<option value="2" <?php if($this->search['type_exam']==2){echo "selected='selected'";}?>><?php echo $tr->translate("CREATE_TEST_EXAM_EN"); ?></option>
+			   				<option value="3" <?php if($this->search['type_exam']==3){echo "selected='selected'";}?>><?php echo $tr->translate("CREATE_TEST_EXAM_UNIV"); ?></option>
+			   				
+			   			</select>
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
 			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>><?php echo $tr->translate("RESULT_TEST_TYPE"); ?></option>

@@ -1,11 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('CREATE_SUPPLIER')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->frm;
 ?>	
 <script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
  <style>
@@ -110,48 +108,43 @@ span.oldsup input[type=checkbox] {
 	          <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave" />
-					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-							 iconClass="dijitEditorIcon dijitEditorIconSave" />
+               		<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+					 	iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+						 iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>  
 		</form>
     </div>
  </div>
-
 <script>
 dojo.ready(function(){ 
 	$("#supplier_name").keyup(function(){
 		deplicateItem();
 	});
 });	
-
 var is_deplicate=1;
 function deplicateItem(){
 	var url_deplicate = '<?php echo $this->url(array("module"=>"stock","controller"=>"supplier","action"=>"deplicate"));?>';										
-		supplier_name = dijit.byId('supplier_name').get('value');
-		dojo.xhrPost({
-			url: url_deplicate,
-			content:{
-				'supplier_name':supplier_name
-				},
-			handleAs:"json",
-			load: function(data) {
-				if(data==2){
-					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Supplier Already Existing");?>");
-					dijit.byId("supplier_name").focus();
-				}else{
-					$( "#msg_deplicate" ).html("");
-				}
-				is_deplicate=data;
+	supplier_name = dijit.byId('supplier_name').get('value');
+	dojo.xhrPost({
+		url: url_deplicate,
+		content:{
+			'supplier_name':supplier_name
 			},
-			error: function(err) {
-				document.getElementsByClassName("overlay")[0].style.display="none";
+		handleAs:"json",
+		load: function(data) {
+			if(data==2){
+				$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Supplier Already Existing");?>");
+				dijit.byId("supplier_name").focus();
+			}else{
+				$( "#msg_deplicate" ).html("");
 			}
-		});
+			is_deplicate=data;
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
 }
 </script>
-
-

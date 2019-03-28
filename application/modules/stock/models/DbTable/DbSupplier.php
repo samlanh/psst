@@ -7,7 +7,6 @@ class Stock_Model_DbTable_DbSupplier extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
-    	 
     }
     function getAllSupplier($search=null){
     	$db = $this->getAdapter();
@@ -35,25 +34,24 @@ class Stock_Model_DbTable_DbSupplier extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-	    		$_arr = array(
-	    				'sup_name'		=>$_data['supplier_name'],
-	    				'sex'			=>$_data['sex'],
-	    				'tel'			=>$_data['tel'],
-	    				'email'			=>$_data['email'],
-	    				'address'		=>$_data['address'],
-	    				'note'		=>$_data['note'],
-	    				'status'		=>1,
-	    				'date'			=>date("Y-m-d"),
-	    				'create_date'			=>date("Y-m-d H:i:s"),
-	    				'modify_date'			=>date("Y-m-d H:i:s"),
-	    				'user_id'		=>$this->getUserId()
-	    				);
-	    		$this->_name='rms_supplier';
-	    		$sup_id = $this->insert($_arr);
-    			$db->commit();
+	    	$_arr = array(
+	    		'sup_name'		=> $_data['supplier_name'],
+	    		'sex'			=> $_data['sex'],
+	    		'tel'			=> $_data['tel'],
+	    		'email'			=> $_data['email'],
+	    		'address'		=> $_data['address'],
+	    		'note'			=> $_data['note'],
+	    		'status'		=> 1,
+	    		'date'			=> date("Y-m-d"),
+	    		'create_date'	=> date("Y-m-d"),
+	    		'modify_date'	=> date("Y-m-d H:i:s"),
+	    		'user_id'		=> $this->getUserId()
+	    	);
+	    	$this->_name='rms_supplier';
+	    	$sup_id = $this->insert($_arr);
+    		$db->commit();
 		   	}catch (Exception $e){
 		   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		   		echo $e->getMessage();
 		   		$db->rollBack();
 		   	}
     }
@@ -67,15 +65,15 @@ class Stock_Model_DbTable_DbSupplier extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
     	try{
     		$_arr = array(
-    				'sup_name'		=>$_data['supplier_name'],
-    				'sex'			=>$_data['sex'],
-    				'tel'			=>$_data['tel'],
-    				'email'			=>$_data['email'],
-    				'address'		=>$_data['address'],
-    				'note'		=>$_data['note'],
-    				'status'		=>$_data['status'],
-    				'modify_date'			=>date("Y-m-d H:i:s"),
-    				'user_id'		=>$this->getUserId()
+    			'sup_name'		=> $_data['supplier_name'],
+    			'sex'			=> $_data['sex'],
+    			'tel'			=> $_data['tel'],
+    			'email'			=> $_data['email'],
+    			'address'		=> $_data['address'],
+    			'note'		    => $_data['note'],
+    			'status'		=> $_data['status'],
+    			'modify_date'	=> date("Y-m-d H:i:s"),
+    			'user_id'		=> $this->getUserId()
     		);
     		$this->_name='rms_supplier';
     		$where = " id = ".$_data['id'];
@@ -83,11 +81,9 @@ class Stock_Model_DbTable_DbSupplier extends Zend_Db_Table_Abstract
     		$db->commit();
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     		$db->rollBack();
     	}
     }
-    
     public function checkDeplicateRecord($_data){
     	$db = $this->getAdapter();
     	$sql="SELECT s.* FROM `rms_supplier` AS s WHERE s.sup_name='".$_data['supplier_name']."'";
@@ -102,5 +98,4 @@ class Stock_Model_DbTable_DbSupplier extends Zend_Db_Table_Abstract
 			return 2;
 		}
     }
-    
 }

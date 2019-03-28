@@ -6,9 +6,6 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
-	}
 	public function indexAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -126,7 +123,6 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Stock_Model_DbTable_DbPurchase();
     		$row = $db->getSuplierInfo($data['sup_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($row));
     		exit();
     	}

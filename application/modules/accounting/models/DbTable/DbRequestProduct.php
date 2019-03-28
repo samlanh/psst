@@ -140,27 +140,26 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 		}
 	}
-    
  	function updateRequest($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$rows=$this->getRequestDetail($data['id']);
-			if(!empty($rows)){
-				foreach ($rows as $row){
-					$qty=$this->getProQtyByLocation($row['branch_id'], $row['pro_id']); 
-					//print_r($qty);exit();
-					if($qty){
-						$datat= array(
+			$rsold = $this->getRequestById($data['id']);
+			if($rsold['status']==1){//if befor status = active
+				$rows=$this->getRequestDetail($data['id']);
+				if(!empty($rows)){
+					foreach ($rows as $row){
+						$qty=$this->getProQtyByLocation($row['branch_id'], $row['pro_id']); 
+						if($qty){
+							$datat= array(
 								'pro_qty' 	=> $qty["pro_qty"]+$row['qty_receive'],
 								'date'		=> date("Y-m-d H:i:s"),
 								'user_id'	=> $this->getUserId()
-						);
-						$this->_name="rms_product_location";
-						$where=" id = ".$qty['id'];
-						$this->update($datat, $where);
-					}else{
-					
+							);
+							$this->_name="rms_product_location";
+							$where=" id = ".$qty['id'];
+							$this->update($datat, $where);
+						}
 					}
 				}
 			}
@@ -195,16 +194,18 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							'qty_request'	=>  $data['request_qty'.$i],
 							'qty_receive'	=>  $data['receive_qty'.$i],
 							'price'			=> 	$data['cost_'.$i],
-							'pro_type'		=> 2,//type product cut stock later
-							'create_date'	=>  	date("Y-m-d H:i:s"),
+							'pro_type'		=>  2,
+							'create_date'	=>  date("Y-m-d H:i:s"),
 							'remark'  		=> 	$data['note_'.$i],
 							'user_id'		=> 	$this->getUserId(),
 							'status'		=> 	$data['status'],
 					);
 					$this->_name='rms_request_orderdetail';
 					$this->insert($data_item);
-					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i]); 
-					if($rows){
+					
+					if($data['status']==1){
+						$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i]); 
+						if(!empty($rows)){
 							$datatostock= array(
 									'pro_qty' 	=> $rows["pro_qty"]-$data['receive_qty'.$i],
 									'date'		=> date("Y-m-d H:i:s"),
@@ -213,21 +214,18 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							$this->_name="rms_product_location";
 							$where=" id = ".$rows['id'];
 							$this->update($datatostock, $where);
-					}else{
-						
+						}
 					}
 				 }
 			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
-			Application_Form_FrmMessage::message('INSERT_FAIL');
 			$err =$e->getMessage();
-			echo $err;exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			Application_Form_FrmMessage::message('INSERT_FAIL');
 		}
 	}
-	
 	function getRequestById($id){
 		$db=$this->getAdapter();
 		$sql="SELECT * FROM rms_request_order WHERE id=$id";
@@ -242,44 +240,6 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 				WHERE request_id=$id";
 		return $db->fetchAll($sql);
 	}
-	
-//     function getProductNames(){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-//  				WHERE p.id=pl.pro_id AND p.status=1  ";
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$sql.=$dbp->getAccessPermission('brand_id');
-//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-//         $rows=$db->fetchAll($sql);
-        
-//         array_unshift($rows,array('id' => '',"name"=>"Please select product name"));
-//         $options = '';
-//         if(!empty($rows))foreach($rows as $value){
-//         	$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
-//         }
-//         return $options;
-//     }
-    
-//     function getProductName(){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-//     	WHERE p.id=pl.pro_id AND p.status=1  ";
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$sql.=$dbp->getAccessPermission('brand_id');
-//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-//     	return $db->fetchAll($sql);
-//     }
-    
-//     function getProducCutStockLater(){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-// 		    	WHERE p.id=pl.pro_id AND p.status=1
-// 		    	AND p.pro_type=2";
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$sql.=$dbp->getAccessPermission('brand_id');
-//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-//     	return $db->fetchAll($sql);
-//     }
 
     function getRequestCode($branch_id=null){
     	$db = $this->getAdapter();
@@ -300,63 +260,6 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
-     
-//     function getProductById($id){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT * FROM rms_product WHERE id=$id";
-//     	return $db->fetchRow($sql);
-//     }
-    
-//     function getAllBranch(){
-//     	$db = $this->getAdapter();
-//     	$sql="select br_id as id, CONCAT(branch_nameen) as name from rms_branch where status=1 ";
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$sql.=$dbp->getAccessPermission('br_id');
-//     	return $db->fetchAll($sql);
-//     }
-    
-//     public function ajaxAddProduct($data){
-//     	$db = $this->getAdapter();
-//     	$session_user=new Zend_Session_Namespace('authstu');
-//     	$userName=$session_user->user_name;
-//     	$GetUserId= $session_user->user_id;
-//     	$_arr = array(
-//     			'pro_name'	=>$data['product_name'],
-//     			'pro_code'	=>$data['product_code'],
-//     			'cat_id'	=>$data['category_id'],
-//     			'pro_price'	=>$data['pro_price'],
-//     			'pro_des'	=>$data['descript'],
-//     			'pro_type'	=>$data['pro_type'],
-//     			'status'	=>$data['p_status'],
-//     			'date'		=>date("Y-m-d"),
-//     			'user_id'	=>$this->getUserId()
-//     	);
-//     	$this->_name = "rms_product";
-//     	$pro_id = $this->insert($_arr);
-//     	$_arr = array(
-//     			'pro_id'=>$pro_id,
-//     			'brand_id'=>$data['location_id'],
-//     			'pro_qty'=>0,
-//     			'total_amount'=>0,
-//     			'note'=>'',
-//     	);
-//     	$this->_name='rms_product_location';
-//     	$this->insert($_arr);
-//     	$array = array(
-//     			'ser_cate_id'	=>$pro_id,
-//     			'title'			=>$data['product_name'],
-//     			'description'	=>$data['descript'],
-//     			'price'			=>$data['pro_price'],
-//     			'status'		=>1,
-//     			'create_date'	=>date("Y-m-d H:i:s"),
-//     			'user_id'		=>$this->getUserId(),
-//     			'type'			=>1, // type=1 => product
-//     			'pro_type'		=>$data['pro_type'], // 1=cut stock , 2=cut stock later
-//     	);
-//     	$this->_name='rms_program_name';
-//     	$this->insert($array);
-//     	return $pro_id;
-//     }
     
     function getProductQty($location,$pro_id){
     	$db=$this->getAdapter();
@@ -388,7 +291,6 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 			  AND p.status = 1 
 			  AND pl.brand_id = $branch_id
     		";
-//     	$sql.=" AND p.product_type=2";
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);
     }
@@ -402,8 +304,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 			    	rms_request_for AS rf
     			WHERE
     				status=1
-    				and title != ''
-    		";
+    				and title != '' ";
     	return $db->fetchAll($sql);
     }
     
@@ -416,11 +317,9 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     				rms_for_section AS fs
     			WHERE
 			    	status=1
-			    	and title != ''
-    		";
+			    	and title != '' ";
     	return $db->fetchAll($sql);
     }
-    
     function addNewRequestFor($data){
     	$this->_name="rms_request_for";
     	$arr = array(
@@ -440,5 +339,4 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	);
     	return $this->insert($arr);
     }
-    
 }

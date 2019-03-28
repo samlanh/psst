@@ -1,9 +1,7 @@
 <?php
-$request = Zend_Controller_Front::getInstance ()->getRequest ();
-
-$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-echo $this->headTitle($tr->translate('REQUEST_STOCK'));
-$frm = $this->form_search;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
+	echo $this->headTitle($tr->translate('REQUEST_STOCK'));
+	$frm = $this->form_search;
 ?>
 <meta charset="utf-8">
 <div class="card pb-10 pt-10 pl-10 pr-10">

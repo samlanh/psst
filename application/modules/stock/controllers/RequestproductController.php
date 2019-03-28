@@ -19,7 +19,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     				'for_section' => -1,
     				'start_date'  => date('Y-m-d'),
     				'end_date'    => date('Y-m-d'),
-    				'status_search'=>1,
+    				'status_search'=>-1,
     			);
     		}
 			$db =  new Accounting_Model_DbTable_DbRequestProduct();
@@ -79,84 +79,65 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		$this->view->for_section = $for_section;
 		
 		$model = new Application_Model_DbTable_DbGlobal();
-		$branch = $model->getAllBranchName();
+		$branch = $model->getAllBranch();
 		$this->view->branchopt = $branch;
-		
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal(2);//
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		$this->view->product= $d_row;
-		
 	}
-	
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try{
-					$db = new Accounting_Model_DbTable_DbRequestProduct();
-					$row = $db->updateRequest($_data);
-					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/requestproduct");
-					}else{
-						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/requestproduct");
-					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				}catch(Exception $e){
-					Application_Form_FrmMessage::message("INSERT_FAIL");
-					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-					echo $e->getMessage();
+				$db = new Accounting_Model_DbTable_DbRequestProduct();
+				$row = $db->updateRequest($_data);
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/requestproduct");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/requestproduct");
 				}
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
-			$this->view->row=$_pur->getRequestById($id);
-			$this->view->row_detail=$_pur->getRequestDetail($id);
-			
-			$this->view->rq_code=$_pur->getRequestCode();
-			
-			$req_for = $_pur->getAllRequestFor();
-			array_unshift($req_for, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-			$this->view->rq_for = $req_for;
-			
-			$for_section = $_pur->getAllForSection();
-			array_unshift($for_section, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-			$this->view->for_section = $for_section;
-			
-			$model = new Application_Model_DbTable_DbGlobal();
-			$branch = $model->getAllBranchName();
-			$this->view->branchopt = $branch;
-			
-			$db = new Global_Model_DbTable_DbItemsDetail();
-			$d_row= $db->getAllProductsNormal(2);//
-			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
-			$this->view->product= $d_row;
+		}
+		$_pur = new Accounting_Model_DbTable_DbRequestProduct();
+		$this->view->row=$_pur->getRequestById($id);
+		$this->view->row_detail=$_pur->getRequestDetail($id);
+		$this->view->rq_code=$_pur->getRequestCode();
+		$req_for = $_pur->getAllRequestFor();
+		array_unshift($req_for, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->rq_for = $req_for;
+		
+		$for_section = $_pur->getAllForSection();
+		array_unshift($for_section, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		$this->view->for_section = $for_section;
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$branch = $model->getAllBranch();
+		$this->view->branchopt = $branch;
+		
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$d_row= $db->getAllProductsNormal(2);//
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+		$this->view->product= $d_row;
 	}
-
     function getSupplierInfoAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbPurchase();
     		$row = $db->getSuplierInfo($data['sup_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($row));
     		exit();
     	}
     }
-    
-//     function addProductAction(){
-//     	if($this->getRequest()->isPost()){
-//     		$_data = $this->getRequest()->getPost();
-//     		$_dbmodel = new Accounting_Model_DbTable_DbPurchase();
-//     		$id = $_dbmodel->ajaxAddProduct($_data);
-//     		print_r(Zend_Json::encode($id));
-//     		exit();
-//     	}
-//     }
-    
     function getProductqtyAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -166,7 +147,6 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function getProBylocationAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -178,7 +158,6 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function addRequestForAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -188,7 +167,6 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function addForSectionAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -202,12 +180,8 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     		$branch_id = $data['branch_id'];
-//     		$_dbcht = new Stock_Model_DbTable_DbCutStock();
-//     		$itemsCode = $_dbcht->getCutStockode($branch_id);
-    		
     		$_pur = new Accounting_Model_DbTable_DbRequestProduct();
     		$itemsCode=$_pur->getRequestCode($branch_id);
-    		
     		print_r(Zend_Json::encode($itemsCode));
     		exit();
     	}

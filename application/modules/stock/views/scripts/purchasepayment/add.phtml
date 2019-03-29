@@ -342,10 +342,16 @@ span.oldsup input[type=checkbox] {
 				discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
+
+				dijit.byId('payment_amount'+rowIDArray[n]).set('value', parseFloat(amountrowafterdis).toFixed(2));
+				
+
 				balance = balance + parseFloat(amountrowafterdis);
 			}
 		}
+		dijit.byId('amount').attr('value',balance.toFixed(2));
 		dijit.byId('balance').attr('value',balance.toFixed(2));
+
 	}
 	function checkAmout(){
 		amount_paid = parseFloat(dijit.byId('amount').get('value'));

@@ -1,7 +1,5 @@
 <?php 
-     $url_save = $this->url(array('module'=>'stock','controller'=>'transfer','action'=>'edit'));
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
-     $status_view=$this->status_view;
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
      $result = $this->rs;
 ?>
@@ -53,13 +51,12 @@
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TRANSFER_NUMBER");?> 
-	                   </label>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TRANSFER_NUMBER");?></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
-										<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
-											<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
-											<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
+							<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
+							<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
+							<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -115,8 +112,7 @@
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
 	            	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?> 
-	                   </label>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select onchange="chcekcProductLocation();" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 									<option></option>
@@ -141,8 +137,7 @@
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" value="Clear" label="<?php echo $tr->translate("CLEAR");?>" dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-					<input type="submit" value="save_new" id="save_new" name="save_close" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save_new" id="save_new" name="save_close" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>  
@@ -195,12 +190,10 @@ function initailize(){
 	dojo.html.set(dojo.byId("row"+index),template , {
 	     parseContent: true,
 	});
-	
 	dijit.byId('currqty_'+index).attr('value',<?php echo $row['curr_qty']+$row['qty']?>);
 	dijit.byId('qty_'+index).attr('value',<?php echo $row['qty']?>);
 	dijit.byId('remark_'+index).attr('value','<?php echo $row['note']?>');
 	dijit.byId('pro_id_'+index).attr('value',<?php echo $row['pro_id']?>);
-	
 	<?php } }?>
 }
 <?php $url_product =  $this->url(array('module'=>'','controller'=>'ajax','action'=>'get-product-name')); ?>

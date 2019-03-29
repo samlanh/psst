@@ -40,7 +40,6 @@ class Stock_TransferController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
     }
 	public function addAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();
@@ -56,10 +55,8 @@ class Stock_TransferController extends Zend_Controller_Action {
 		}
 		$this->view->tran_no = $db->getTransferNo();
 		$db = new Application_Model_DbTable_DbGlobal();
-// 		$this->view->rsproduct = $db->getallProductName();
 		
-		$branch = $db->getAllBranchName();
-//     	array_unshift($branch, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		$branch = $db->getAllBranch();
     	$this->view->branchopt = $branch;
 		
 		$fm = new Global_Form_Frmbranch();
@@ -70,7 +67,6 @@ class Stock_TransferController extends Zend_Controller_Action {
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();
 		$this->view->rsproduct =$d_row;
-		
 	}
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();
@@ -89,8 +85,7 @@ class Stock_TransferController extends Zend_Controller_Action {
 		$this->view->rs = $row;
 		$this->view->rsdetail = $db->getTransferByIdDetail($id,$row['from_location']);
 		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->rsbranch = $db->getAllBranchName();
-// 		$this->view->rsproduct = $db->getallProductName();
+		$this->view->rsbranch = $db->getAllBranch();
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();

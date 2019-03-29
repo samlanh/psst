@@ -146,7 +146,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				'amount_due_after'=>$_data['amount_due'],
     				'branch_id'		=>$_data['branch'],
     				'date'			=>$_data['purchase_date'],
-    				'status'		=>$_data['status'],
+    				'status'		=>1,
     				'user_id'		=>$this->getUserId(),
     				'create_date'	=>date("Y-m-d H:i:s"),
     				'modify_date'	=>date("Y-m-d H:i:s"),

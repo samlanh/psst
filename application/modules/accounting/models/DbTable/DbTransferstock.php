@@ -61,8 +61,9 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
+    			$tran_no = $this->getTransferNo();
 	    		$_arr = array(
-	    				'transfer_no'=>$_data['transfer_no'],
+	    				'transfer_no'=>$tran_no,
 	    				'transfer_date'=>$_data['date'],
 	    				'from_location'=>$_data['f_branch'],
 	    				'to_location'=>$_data['branch'],
@@ -77,10 +78,11 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 	    		$ids = explode(',', $_data['identity']);
 	    		foreach ($ids as $i){
     				$_arr = array(
-    						'transferid'=>$tranid,
-    						'pro_id'=>$_data['pro_id_'.$i],
-    						'qty'=>$_data['qty_'.$i],
-    						'note'=>$_data['remark_'.$i],);
+    					'transferid'=> $tranid,
+    					'pro_id'	=> $_data['pro_id_'.$i],
+    					'qty'		=> $_data['qty_'.$i],
+    					'note'		=> $_data['remark_'.$i],
+    				);
     				$this->_name='rms_transferdetail';
     				$this->insert($_arr);
     				
@@ -124,7 +126,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     							$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['f_branch']);
     							$this->_name="rms_product_location";
     							if(!empty($qty_stock)){
-    								$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
+    								$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];//ត្រូវគុណចំនួនត្រូវផ្ទេរជាមួយនឹងបរិមាណទំនិញក្នុងមួយ setទើបត្រូវ
     								$array = array(
     										'pro_qty'=>$qty,
     								);
@@ -161,7 +163,6 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	}catch (Exception $e){
     		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();exit();
     		return false;
     	}
     }
@@ -178,13 +179,14 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     function getTransferNo(){
     	$db = $this->getAdapter();
     	$sql="SELECT (id+1)FROM `rms_transferstock` ORDER BY id DESC  LIMIT 1";
-    	$trans_no = $db->fetchOne($sql);
-    	$acc_length = strlen((int)$trans_no);
-    	$pre=0;
-    	for($i = $acc_length;$i<5;$i++){
-    		$pre.='0';
-    	}
-    	return $pre.$trans_no;
+    	$acc_no = $db->fetchOne($sql);
+	    $new_acc_no= (int)$acc_no+1;
+	  	$acc_no= strlen((int)$acc_no+1);
+	  	$pre="";
+	  	for($i = $acc_no;$i<5;$i++){
+	  		$pre.='0';
+	  	}
+    	return $pre.$new_acc_no;
     }
     function getProductLocation($pro_id,$location_id){
     	$db = $this->getAdapter();

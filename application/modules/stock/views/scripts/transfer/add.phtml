@@ -24,8 +24,7 @@
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-exchange " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_TRANSFER_PRODUCT');?></h4>
     			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
+    			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
 		<form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
@@ -42,7 +41,7 @@
              		if(to_location==from_location){
 						alert("ទីតាំងដែលត្រូវផ្ទេរទៅមិនអាចដូចគ្នាបានទេ !");
 						dijit.byId('branch').focus();
-               		 return false;
+               			return false;
 					}
 					dijit.byId('save_new').set('disabled',true);
 					return true;
@@ -52,20 +51,6 @@
 			</script>
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TRANSFER_NUMBER");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox"  readonly="readonly" class="fullside" id="transfer_no" name="transfer_no" type="text" value="<?php echo $this->tran_no;?>" required="required" >
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="" type="text" required="required" >
-	                   </div>
-	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_LOCATION");?> 
 	                   </label>
@@ -81,43 +66,46 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TRANSFER_NUMBER");?> 
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.ValidationTextBox"  readonly="readonly" class="fullside" id="transfer_no" name="transfer_no" type="text" value="<?php echo $this->tran_no;?>" required="required" >
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> 
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="" type="text" required="required" >
+	                   </div>
+	                </div>
+	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("REMARK");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="" type="text"  >
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-						       <option value="1"><?php echo $tr->translate("ACTIVE");?></option>
-						       <option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
-							</select>
-	                   </div>
-	                </div>
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
 	            	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?> 
-	                   </label>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select onchange="chcekcProductLocation();"queryExpr="*${0}*" autoComplete="false"  name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-									<option value=""><?php echo $tr->translate("SELECT_PRODUCT");?> </option>
-									<?php 
-								    if(!empty($this->rsproduct)){
-								   	 foreach($this->rsproduct as $rs){?>
-								    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-								    <?php }}
-								  ?>
+								<option value=""><?php echo $tr->translate("SELECT_PRODUCT");?> </option>
+								<?php 
+							    if(!empty($this->rsproduct)){
+							   	 foreach($this->rsproduct as $rs){?>
+							    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+							    <?php }}
+							  	?>
 							</select>
 	                   </div>
 	                   <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
 	                	<table id="table_row" border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
+							<tr id="head-title" class="head-td" align="center" style="height: 30px;"></tr>
 						</table>
 						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
 	                </div>
@@ -126,8 +114,7 @@
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" value="Clear" label="<?php echo $tr->translate("CLEAR");?>" dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-					<input type="submit" value="save_new" id="save_new" name="save_close" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save_new" id="save_new" name="save_close" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>  
@@ -170,7 +157,6 @@
 		}
 		index++;
 		getcurrentproduct(pro_id,location_id,index);
-		
 				if(index==1){
 					temp='';
 					temp+='<td ><?php echo $tr->translate("NUM");?></td>';
@@ -184,9 +170,9 @@
 				pro_name = dijit.byId("pro_id").attr('displayedValue')
 				template='<td width="2%" align="center">'+index+'</td>';
 				template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-				template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
-				template+='<td ><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
-				template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+				template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+				template+='<td width="100px"><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+				template+='<td width="100px"><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 				template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
 			tmp='<tr id="row'+index+'">';
 			tmp+="</tr>";
@@ -233,28 +219,25 @@
 				getProductName();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
-	
 	function getcurrentproduct(pro_id,location_id,index){
 		if(location_id=='' || location_id==-1){
 			return false;}
-		dojo.xhrPost({
-			url:url_getproduct,
-			content:{
-				'pro_id':pro_id,
-				'location_id':location_id
+			dojo.xhrPost({
+				url:url_getproduct,
+				content:{
+					'pro_id':pro_id,
+					'location_id':location_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId("currqty_"+index).attr("value",data.pro_qty);
 				},
-			handleAs:"json",
-			load: function(data) {
-				dijit.byId("currqty_"+index).attr("value",data.pro_qty);
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+				error: function(err) {
+				}
+			});
 	}
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
@@ -271,7 +254,8 @@
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 		store: branch_store,
-		autoComplete: true,                        
+		autoComplete: false,
+		queryExpr: "*${0}*",                         
 		required: true,
 		id: "branch",
 		name: "branch",           
@@ -287,13 +271,14 @@
 		
 		new dijit.form.FilteringSelect({
 		store: to_store,
-		autoComplete: true,                        
+		autoComplete: false,
+		queryExpr: "*${0}*",                          
 		required: true,
 		id: "f_branch",
 		name: "f_branch",           
 		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
-		onChange: function() {  
+		onChange: function(){  
 			branch_id = dijit.byId('f_branch').get('value');
 			if(branch_id==-1){
 				dijit.byId("popup_add_branch").show();
@@ -302,8 +287,8 @@
 		}, "f_branch");
 		
 	});
-	var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
-	function addBranch(){
+var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
+function addBranch(){
 		dojo.xhrPost({
 				url:url_addbranch,
 				form: dojo.byId("frm_add_tran"),
@@ -325,86 +310,5 @@
 			error: function(err) {
 			}
 	});
-	}
-	function Caltweenty(){
-	}
+}
 </script>
-<?php  $frm = $this->frm_branch;?>
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:800px" id="popup_add_branch" >
-	<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		 <script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-			} else {
-				return false;
-			}
-		</script>
-		<table cellspacing="10" style="margin: 0 auto; width:100%">
-			<tr>
-				<td>
-					<fieldset>
-						<legend align="center"><strong><?php echo $tr->translate("បន្ថែមសាខា");?></strong></legend>
-						<table cellspacing="10" width="100%" >
-							<tr>
-								<td>
-									<table width="100%" cellspacing="10">
-										<tr>
-											<td><?php echo $tr->translate("CODE")?></td>
-											<td><?php echo $frm->getElement("branch_code");?></td>
-										</tr>
-										<tr>
-											<td><strong><?php echo $tr->translate("BRANCH_NAME")?></strong></td>
-											<td><?php echo $frm->getElement("branch_nameen");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PREFIX_CODE");?></td>
-											<td><?php echo $frm->getElement("prefix_code");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("MAIN_BRANCH")?></td>
-											<td><?php echo $frm->getElement("main_branch_id");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("ADDRESS")?></td>
-											<td><?php echo $frm->getElement("br_address");?></td>
-										</tr>
-									</table>
-								</td>
-								<td align="center" valign="top">
-									<table width="100%" cellspacing="10">
-										<tr>		
-											<td><?php echo $tr->translate("PHONE")?></td>
-											<td><?php echo $frm->getElement("branch_tel");?></td>	
-										</tr>
-										<tr>		
-											<td><?php echo $tr->translate("BRANCH_FAX")?></td>
-											<td><?php echo $frm->getElement("fax");?></td>	
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("NOTE")?></td>
-											<td><?php echo $frm->getElement("branch_note");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("STATUS")?></td>
-											<td><?php echo $frm->getElement("branch_status");?></td>
-										</tr>
-									</table>
-								</td>							
-							</tr>
-							<tr>
-								<td colspan="2" align="center" >
-									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
-									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
-									<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
-									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addBranch();"/>
-								</td>
-							</tr>
-						</table>	
-					</fieldset>
-				</td>			
-			</tr>
-		</table>	
-		</form>
-	</div>
-</div>

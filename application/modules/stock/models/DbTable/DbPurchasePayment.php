@@ -1,20 +1,16 @@
 <?php
 class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 {
-
     protected $_name = 'rms_for_section';
-    
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
-    
     function getAllSuplier(){
     	$db=$this->getAdapter();
     	$sql="SELECT id,sup_name as name FROM rms_supplier WHERE STATUS=1 ORDER BY id DESC";
     	return $db->fetchAll($sql);
     }
-    
     function getPuchasePaymentCode(){
     	$db = $this->getAdapter();
     	$sql ="SELECT id AS number FROM `rms_purchase_payment` ORDER BY id DESC LIMIT 1 ";
@@ -29,8 +25,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	$last = '';
     	return $pre.$new_acc_no.$last;
     }
-    
-    
     function getAllPurchasePayment($search){
     	$db = $this->getAdapter();
     	try{
@@ -45,8 +39,7 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 					(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code = pp.paid_by AND v.type=8 LIMIT 1) AS paid_by,
 					pp.date_payment,
 					pp.status
-				FROM `rms_purchase_payment` AS pp WHERE 1
-    		";
+				FROM `rms_purchase_payment` AS pp WHERE 1 ";
     		$from_date =(empty($search['start_date']))? '1': " pp.date_payment >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
     		$to_date = (empty($search['end_date']))? '1': " pp.date_payment <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
     		$sql.= " AND  ".$from_date." AND ".$to_date;
@@ -58,7 +51,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     			$s_where[]= " pp.balance LIKE '%{$s_search}%'";
     			$s_where[]= " pp.total_paid LIKE '%{$s_search}%'";
     			$s_where[]= " pp.total_due LIKE '%{$s_search}%'";
-    			 
     			$where.=' AND ('.implode(' OR ', $s_where).')';
     		}
     		if(!empty($search['supplier_search'])){
@@ -73,11 +65,10 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     		$dbp = new Application_Model_DbTable_DbGlobal();
     		$where.=$dbp->getAccessPermission('pp.branch_id');
     		$order=" ORDER BY pp.id DESC";
-    		
     		return $db->fetchAll($sql.$where.$order);
-    		
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		Application_Form_FrmMessage::message("Application Error");
     	}
     }
     function getPurchaseBySupplier($data){
@@ -93,7 +84,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     		$sql.=" AND p.supplier_no ='".addslashes(trim($data['bypuchase_no']))."'";
     	}
     	$rs = $db->fetchAll($sql);
-    	
     	$string='';
     	$no = $data['keyindex'];
     	$identity='';
@@ -126,7 +116,7 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     			<td><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="discount'.$no.'" id="discount'.$no.'" value="0" style="text-align: center;" >
     			<input type="hidden" dojoType="dijit.form.TextBox" name="discount_amount'.$no.'" id="discount_amount'.$no.'" value="" >
     			</td>
-    			<td><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="payment_amount'.$no.'" id="payment_amount'.$no.'" value="0" style="text-align: center;" ></td>
+    			<td><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="payment_amount'.$no.'" id="payment_amount'.$no.'" value="'.$row['amount_due_after'].'" style="text-align: center;" ></td>
     			<td><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['amount_due_after'].'" style="text-align: center;" ></td>
     			</tr>
     			';$no++;
@@ -139,7 +129,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	if (!empty($userbalace)){
     		$all_balance = $userbalace;
     	}
-    	//<td><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="credit'.$no.'" id="credit'.$no.'" value="0" style="text-align: center;" ></td>
     	$array = array('stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'all_balance'=>$all_balance);
     	return $array;
     }
@@ -160,14 +149,12 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	FROM `rms_purchase_payment_detail` AS pd WHERE pd.payment_id =$payment_id AND pd.purchase_id =$purchase_id LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
-    
     function getSumPaymentReceiptDetailByPurchaseId($purchase_id,$paymentdetailid){
     	$db = $this->getAdapter();
     	$sql="SELECT SUM(pd.`payment_amount`) AS tolalpayamount FROM `rms_purchase_payment_detail` AS pd WHERE pd.`purchase_id`=$purchase_id AND pd.`id` != $paymentdetailid AND (SELECT p.`status`=1 FROM `rms_purchase_payment` AS p WHERE p.`id` = pd.`payment_id` LIMIT 1) =1";
     	return $db->fetchRow($sql);
     }
     function getPurchaseBySupplierEdit($data){
-    	
     	$rows = $this->getPurchasePaymentDetail($data['payment_id']);
     	$listSaleidpaid ='';
     	if (!empty($rows)) foreach ($rows as $paymentdetail){
@@ -176,7 +163,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     		}else{$listSaleidpaid=$listSaleidpaid.",".$paymentdetail['purchase_id'];
     		}
     	}
-    	
     	$db = $this->getAdapter();
     	$supplier_id = $data['supplier_id'];
     	$branch_id = $data['branch_id'];
@@ -184,15 +170,12 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	 
     	$from_date =(empty($data['start_date']))? '1': " p.date >= '".date("Y-m-d",strtotime($data['start_date']))." 00:00:00'";
     	$to_date = (empty($data['end_date']))? '1': " p.date <= '".date("Y-m-d",strtotime($data['end_date']))." 23:59:59'";
-//     	$sql.= " AND  ".$from_date." AND ".$to_date;
     	if (!empty($data['bypuchase_no'])){
     		$sql.=" AND p.supplier_no ='".addslashes(trim($data['bypuchase_no']))."'";
     	}
-    	
     	if (!empty($listSaleidpaid)){
     		$sql.=" OR p.`id` IN ($listSaleidpaid) ";
     	}
-    	
     	$rs = $db->fetchAll($sql);
     	 
     	$string='';
@@ -206,7 +189,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     				$identity=$no;
     			}else{$identity=$identity.",".$no;
     			}
-    			
     			$rowpaymentdetail = $this->getPaymentReceiptDetailByPaymentIdAndPurchaseId($data['payment_id'], $row['id']);
     			if (!empty($rowpaymentdetail)){
     				$discoun_amont =  ($rowpaymentdetail['due_amount']*$rowpaymentdetail['discount'])/100;
@@ -292,25 +274,26 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql);
     }
     
-    
     public function addPaymentReceipt($_data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
     	try{
     		$receipt_no = $this->getPuchasePaymentCode();
     		$_arr=array(
-    				'branch_id'	  => $_data['branch_id'],
-    				'receipt_no'	  => $receipt_no,
-    				'supplier_id'	      => $_data['supplier_id'],
-    				'balance'      => $_data['balance'],
-    				'total_paid'=> $_data['total_paid'],
-    				'total_discount'	  => $_data['total_discount'],
-    				'total_due'      => $_data['total_due'],
-    				'date_payment'      => $_data['date_payment'],
-    				'paid_by'      => $_data['paid_by'],
-    				'create_date'=> date("Y-m-d H:i:s"),
-    				'modify_date'	  => date("Y-m-d H:i:s"),
-    				'status'=> 1,
-    				'user_id'  =>$this->getUserId(),
-    				'note'=>$_data['note'],
+    			'branch_id'	  => $_data['branch_id'],
+    			'receipt_no'  => $receipt_no,
+    			'supplier_id'  => $_data['supplier_id'],
+    			'balance'      => $_data['balance'],
+    			'total_paid'   => $_data['total_paid'],
+    			'total_discount'=> $_data['total_discount'],
+    			'total_due'      => $_data['total_due'],
+    			'date_payment'   => $_data['date_payment'],
+    			'paid_by'        => $_data['paid_by'],
+    			'create_date'    => date("Y-m-d H:i:s"),
+    			'modify_date'	 => date("Y-m-d H:i:s"),
+    			'status'         => 1,
+    			'user_id'        => $this->getUserId(),
+    			'note'           => $_data['note'],
     		);
     		$this->_name ='rms_purchase_payment';
     		$payment_id =  $this->insert($_arr);
@@ -329,7 +312,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     				}else{
     					$is_payment=1;
     				}
-    				
     				// update Purchase Balance
     				$array=array(
     						'is_paid'=>$is_payment,
@@ -339,7 +321,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     				$this->_name="rms_purchase";
     				$this->update($array, $where);
     			}
-    			
     			$arrs = array(
     					'payment_id'=>$payment_id,
     					'purchase_id'=>$_data['purchase_id'.$i],
@@ -351,31 +332,32 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     			$this->_name ='rms_purchase_payment_detail';
     			$this->insert($arrs);
     		}
+    		$db->commit();
     		return $payment_id;
-    
     	}catch(Exception $e){
+    		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		Application_Form_FrmMessage::message("INSERT_FAIL");
     	}
     }
     
     public function updatePaymentReceipt($_data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
     	try{
-//     		$receipt_no = $this->getPuchasePaymentCode();
     		$_arr=array(
-    				'branch_id'	  => $_data['branch_id'],
-//     				'receipt_no'	  => $receipt_no,
-    				'supplier_id'	      => $_data['supplier_id'],
-    				'balance'      => $_data['balance'],
-    				'total_paid'=> $_data['total_paid'],
-    				'total_discount'	  => $_data['total_discount'],
+    				'branch_id'	     => $_data['branch_id'],
+    				'supplier_id'	 => $_data['supplier_id'],
+    				'balance'        => $_data['balance'],
+    				'total_paid'     => $_data['total_paid'],
+    				'total_discount' => $_data['total_discount'],
     				'total_due'      => $_data['total_due'],
-    				'date_payment'      => $_data['date_payment'],
-    				'paid_by'      => $_data['paid_by'],
-//     				'create_date'=> date("Y-m-d H:i:s"),
-    				'modify_date'	  => date("Y-m-d H:i:s"),
-    				'status'=> 1,
-    				'user_id'  =>$this->getUserId(),
-    				'note'=>$_data['note'],
+    				'date_payment'   => $_data['date_payment'],
+    				'paid_by'        => $_data['paid_by'],
+    				'modify_date'	 => date("Y-m-d H:i:s"),
+    				'status'         => 1,
+    				'user_id'        => $this->getUserId(),
+    				'note'           => $_data['note'],
     		);
     		$this->_name ='rms_purchase_payment';
     		$payment_id = $_data['id'];
@@ -392,18 +374,15 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     				$duevalu=$rowpaymentdetail['payment_amount'];
     				$paymenttailbysale = $this->getSumPaymentReceiptDetailByPurchaseId($pay_detail['purchase_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
     				$dueafters = $purchase['amount_due_after']+$duevalu;
-//     				echo $dueafters;exit();
     				if (!empty($paymenttailbysale['tolalpayamount'])){
     					$duevalu = ($rowpaymentdetail['amount_due']-$paymenttailbysale['tolalpayamount']);
     					$dueafters =$duevalu;
     				}
-    				
     				if ($dueafters>0){
     					$is_payments=0;
     				}else{
     					$is_payments=1;
     				}
-    				
     				// update Purchase Balance
     				$array=array(
     						'is_paid'=>$is_payments,
@@ -412,12 +391,9 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     						'branch_id'=>$_data['branch_id'],
     				);
     				$this->updatePurchase($array);
-    				
     			}
     		}
-    		
     		$ids = explode(',', $_data['identity']);
-    		
     		$detailidlist = '';
     		foreach ($ids as $i){
     			if (empty($detailidlist)){
@@ -451,7 +427,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     				}else{
     					$is_payment=1;
     				}
-    
     				// update Purchase Balance
     				$array=array(
     						'is_paid'=>$is_payment,
@@ -461,7 +436,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     				$this->_name="rms_purchase";
     				$this->update($array, $where);
     			}
-    			 
     			if (!empty($_data['detailid'.$i])){
 	    			$arrs = array(
 	    					'payment_id'=>$payment_id,
@@ -476,21 +450,23 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 	    			$this->update($arrs, $where);
     			}else{
     				$arrs = array(
-    						'payment_id'=>$payment_id,
-    						'purchase_id'=>$_data['purchase_id'.$i],
-    						'due_amount'=>$_data['due_val'.$i],
-    						'discount'=>$_data['discount'.$i],
-    						'payment_amount'=>$_data['payment_amount'.$i],
-    						'remain'=>$_data['remain'.$i],
+    					'payment_id'=>$payment_id,
+    					'purchase_id'=>$_data['purchase_id'.$i],
+    					'due_amount'=>$_data['due_val'.$i],
+    					'discount'=>$_data['discount'.$i],
+    					'payment_amount'=>$_data['payment_amount'.$i],
+    					'remain'=>$_data['remain'.$i],
     				);
     				$this->_name ='rms_purchase_payment_detail';
     				$this->insert($arrs);
     			}
     		}
+    		$db->commit();
     		return $payment_id;
-    
     	}catch(Exception $e){
+    		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		Application_Form_FrmMessage::message("Application Error");
     	}
     }
     function voidPaymentReceipt($id,$branch_id){
@@ -520,13 +496,11 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 	    				$duevalu = ($rowpaymentdetail['amount_due']-$paymenttailbysale['tolalpayamount']);
 	    				$dueafters =$duevalu;
 	    			}
-	    	
 	    			if ($dueafters>0){
 	    				$is_payments=0;
 	    			}else{
 	    				$is_payments=1;
 	    			}
-	    	
 	    			// update Purchase Balance
 	    			$array=array(
 	    					'is_paid'=>$is_payments,
@@ -535,14 +509,12 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 	    					'branch_id'=>$branch_id,
 	    			);
 	    			$this->updatePurchase($array);
-	    	
 	    		}
 	    	}
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
-    
     function updatePurchase($data){
     	$db=$this->getAdapter();
     	$array=array(
@@ -560,7 +532,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	WHERE s.id=sp.sup_id AND sp.status=1 AND sp.id=$id AND sp.branch_id =$branch_id";
     	return $db->fetchRow($sql);
     }
-    
     function getPurchasePaymentById($id){
     	$db=$this->getAdapter();
     	$sql="SELECT pp.* FROM `rms_purchase_payment` AS pp WHERE pp.id = $id ";
@@ -568,10 +539,4 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	$sql.=$dbp->getAccessPermission('pp.branch_id');
     	return $db->fetchRow($sql);
     }
-    
-    
-    
 }
-
-
-

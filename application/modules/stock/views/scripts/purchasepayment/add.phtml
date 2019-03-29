@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_PURCHASE_PAYMENT')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
 	$frm = $this->frm_payment;
 ?>	
  <style>
@@ -96,7 +94,6 @@ span.oldsup input[type=checkbox] {
 	                   		<?php echo $frm->getElement("receipt_no");?>
 	                   </div>
 	                </div>
-	               
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> 
 	                   </label>
@@ -112,7 +109,7 @@ span.oldsup input[type=checkbox] {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT");?> 
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAID_AMOUNT");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("amount");?>
@@ -165,10 +162,6 @@ span.oldsup input[type=checkbox] {
 							</table>
 							<input type="hidden" id="identity" name="identity" />
 							<input type="hidden" name="old_identity" id="old_identity"  value="" >
-						<!-- 
-						<input type="button" label="<?php //echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" id="btn_add_row"
-									 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-						 -->
 						 </div>
 	          		</div>
 	          </div>
@@ -212,11 +205,10 @@ span.oldsup input[type=checkbox] {
 	          <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave" />
+               		<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+					 	iconClass="dijitEditorIcon dijitEditorIconSave" />
 					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-							 iconClass="dijitEditorIcon dijitEditorIconSave" />
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>  
 		</form>
@@ -272,21 +264,18 @@ span.oldsup input[type=checkbox] {
 			load: function(data) {
 				keyindex=data.keyindex;
 				$("#old_identity").val(data.identity);
-				//alert(data.stringrow);
 				dojo.html.set(dojo.byId("table_row"),data.stringrow , {
 				     parseContent: true,
-					});
+				});
 				dijit.byId('all_balance').set('value',data.all_balance);
 				calBalance();
 				HideloadingBlock();
 			},
 			error: function(err) {
-				alert(err);
 				HideloadingBlock();
 			}
 		});
 	}
-	
 	function CheckAllTotal(index){
 		var total = 0;
 		var descriptionr="";
@@ -319,7 +308,6 @@ span.oldsup input[type=checkbox] {
 					$('#check_all').attr('checked', true); // checks it
 				}
 			if($('#mfdid_'+index).is(":checked")){
-				
 			}else{
 				dijit.byId('payment_amount'+index).set('value',0);
 				calculateAmountCheckByKeyup();
@@ -329,7 +317,6 @@ span.oldsup input[type=checkbox] {
 		calculateAmountCheck();
 		calBalance();
 	}
-
 	function ResetPayment(){
 		var old_identity = $("#old_identity").val();
 		var rowIDArray = old_identity.split(',');
@@ -350,19 +337,15 @@ span.oldsup input[type=checkbox] {
 		}
 		var rowIDArray = rowId.split(',');
 		for(var n = 0; n < rowIDArray.length; n++) {
-			//balance+= parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
 			if($('#mfdid_'+rowIDArray[n]).is(":checked")){
 				amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
 				discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
-		
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
-		
 				balance = balance + parseFloat(amountrowafterdis);
 			}
 		}
 		dijit.byId('balance').attr('value',balance.toFixed(2));
-
 	}
 	function checkAmout(){
 		amount_paid = parseFloat(dijit.byId('amount').get('value'));
@@ -395,16 +378,13 @@ span.oldsup input[type=checkbox] {
 				amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
 				discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
-
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
 				amount_paid = amount_paid - parseFloat(amountrowafterdis);
-				
 				totaldis+=  totaldis+parseFloat(amountrowdis);
 				if(amount_paid>=0){
 					payment+= amountrowafterdis;
 					dijit.byId('payment_amount'+rowIDArray[n]).set('value',amountrowafterdis.toFixed(2));
 					dijit.byId('remain'+rowIDArray[n]).set('value',0);
-					
 					due+= 0;
 				}else{
 					remain = Math.abs(amount_paid);
@@ -415,7 +395,6 @@ span.oldsup input[type=checkbox] {
 					due+= remain;
 					break;
 				}
-				
 			}
 		}
 		calculateLastTotal();
@@ -435,10 +414,8 @@ span.oldsup input[type=checkbox] {
 		var rowIDArray = rowId.split(',');
 		var amountrowdis = 0;
 		for(var n = 0; n < rowIDArray.length; n++) {
-			//credit+= parseFloat(dijit.byId('credit'+rowIDArray[n]).get('value'));
 			payment+= parseFloat(dijit.byId('payment_amount'+rowIDArray[n]).get('value'));
 			due+= parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
-
 			amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
 			discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
 			amountrowafterdis = ((amountrow*parseFloat(discount))/100).toFixed(2);
@@ -446,13 +423,11 @@ span.oldsup input[type=checkbox] {
 		}
 		dijit.byId('total_discount').attr('value',totaldis);
 		dijit.byId('total_paid').attr('value',payment.toFixed(2));
-		//dijit.byId('total_credit').attr('value',credit.toFixed(2));
 		dijit.byId('total_due').attr('value',due.toFixed(2));
 	}
 	function calculateamount(index){
 		var due = dijit.byId('due_val'+index).get('value');
 		var discount = dijit.byId('discount'+index).get('value');
-		//var credit = dijit.byId('credit'+index).get('value');
 		var payment = dijit.byId('payment_amount'+index).get('value');
 		var paid =0;
 		var subtotal=0;
@@ -463,13 +438,11 @@ span.oldsup input[type=checkbox] {
 			discount=0;
 			dijit.byId('discount'+index).set('value',0);
 		}
-		//paid = parseFloat(payment)+ parseFloat(credit);
 		paid = parseFloat(payment);
 		subtotal= parseFloat(due) - ((parseFloat(due)*parseFloat(discount))/100).toFixed(2);
 		dijit.byId('discount_amount'+index).set('value',((parseFloat(due)*parseFloat(discount))/100).toFixed(2));
 		if(paid > subtotal){
 			dijit.byId('payment_amount'+index).set('value',subtotal.toFixed(2));
-			//dijit.byId('credit'+index).set('value',0);
 			dijit.byId('remain'+index).set('value',0);
 		}else{
 			dijit.byId('remain'+index).set('value',(subtotal-paid).toFixed(2));
@@ -482,7 +455,6 @@ span.oldsup input[type=checkbox] {
 		if(rowId==""){
 			return false;
 		}
-		//var credit=0;
 		var payment=0;
 		var amount = 0;
 		var due = 0;
@@ -491,7 +463,6 @@ span.oldsup input[type=checkbox] {
 		var amountrow = 0;
 		var rowIDArray = rowId.split(',');
 			for(var n = 0; n < rowIDArray.length; n++) {
-				//credit+= parseFloat(dijit.byId('credit'+rowIDArray[n]).get('value'));
 				payment+= parseFloat(dijit.byId('payment_amount'+rowIDArray[n]).get('value'));
 				due+= parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
 		
@@ -500,14 +471,10 @@ span.oldsup input[type=checkbox] {
 				amountrowafterdis = ((amountrow*parseFloat(discount))/100).toFixed(2);
 				totaldis= totaldis+parseFloat(amountrowafterdis);
 			}
-//		amount = (parseFloat(credit)+parseFloat(payment)).toFixed(2);
 		amount = parseFloat(payment).toFixed(2);
 		dijit.byId('total_discount').attr('value',totaldis.toFixed(2));
 		dijit.byId('total_paid').attr('value',payment.toFixed(2));
-		//dijit.byId('total_credit').attr('value',credit.toFixed(2));
 		dijit.byId('total_due').attr('value',due.toFixed(2));
 		dijit.byId('amount').attr('value',parseFloat(amount).toFixed(2));
 	}
 </script>
-
-

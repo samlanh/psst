@@ -17,11 +17,8 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 	public function FrmAddPurchasePayment($data=null){
 	
 		$request=Zend_Controller_Front::getInstance()->getRequest();
-		 
 		$_dbpayment = new Stock_Model_DbTable_DbPurchasePayment();
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		
-		
 		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
 		$optionBranch = $_dbgb->getAllBranch();
 		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
@@ -30,6 +27,8 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',  
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		
@@ -52,46 +51,47 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_supplier_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'onChange'=>'getSupplierInfo()',
 				'class'=>'fullside height-text',));
 		
 		$_balance = new Zend_Dojo_Form_Element_NumberTextBox('balance');
 		$_balance->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>' fullside height-text',
-				'readonly'=>'readonly',
-				'placeholder'=>$this->tr->translate("BALANCE"),
-				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>' fullside height-text',
+			'readonly'=>'readonly',
+			'placeholder'=>$this->tr->translate("BALANCE"),
+			'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
 		
 		$_total_paid = new Zend_Dojo_Form_Element_NumberTextBox('total_paid');
 		$_total_paid->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>' fullside height-text',
-				'readonly'=>'readonly',
-				'placeholder'=>$this->tr->translate("TOTAL_PAID"),
-				'missingMessage'=>$this->tr->translate("Forget Enter Total Paid")
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>' fullside height-text',
+			'readonly'=>'readonly',
+			'placeholder'=>$this->tr->translate("TOTAL_PAID"),
+			'missingMessage'=>$this->tr->translate("Forget Enter Total Paid")
 		));
 		
 		$_total_discount = new Zend_Dojo_Form_Element_NumberTextBox('total_discount');
 		$_total_discount->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>' fullside height-text',
-				'readonly'=>'readonly',
-				'placeholder'=>$this->tr->translate("TOTAL_DISCOUNT"),
-				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>' fullside height-text',
+			'readonly'=>'readonly',
+			'placeholder'=>$this->tr->translate("TOTAL_DISCOUNT"),
+			'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
 		
 		$_total_due = new Zend_Dojo_Form_Element_NumberTextBox('total_due');
 		$_total_due->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>' fullside height-text',
-				'readonly'=>'readonly',
-				'placeholder'=>$this->tr->translate("TOTAL_DUE"),
-				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>' fullside height-text',
+			'readonly'=>'readonly',
+			'placeholder'=>$this->tr->translate("TOTAL_DUE"),
+			'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
-		
 		
 		$_date_payment= new Zend_Dojo_Form_Element_DateTextBox('date_payment');
 		$_date_payment->setAttribs(array(
@@ -110,8 +110,6 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
 		$_all_balance->setValue(0);
-// 		$_date = $request->getParam("start_date");
-// 		$_date_payment->setValue($_date);
 		
 		$_amount = new Zend_Dojo_Form_Element_NumberTextBox('amount');
 		$_amount->setAttribs(array(
@@ -123,7 +121,6 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		));
 		$_amount->setValue(0);
 		
-		
 		$_arr_optview = array();
 		$optionView = $_dbgb->getViewById(8);
 		if(!empty($optionView))foreach($optionView AS $row) $_arr_optview[$row['key_code']]=$row['view_name'];
@@ -133,14 +130,15 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
-		
+				'class'=>'fullside height-text',
+			));
 		
 		$note=  new Zend_Form_Element_Textarea('note');
 		$note->setAttribs(array(
 				'dojoType'=>'dijit.form.Textarea',
 				'class'=>'fullside',
-				'style'=>'font-family: inherit;  min-height:100px !important;'));
+				'style'=>'font-family: inherit;  min-height:100px !important;'
+		));
 		
 		$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("VOID"));
 		$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -149,16 +147,14 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
-		
 		$id = new Zend_Form_Element_Hidden('id');
-		
 		//searh
 		
 		$_adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
 		$_adv_search->setAttribs(array(
-				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside height-text',
-				'placeholder'=>$this->tr->translate("SEARCH")."...",
+			'dojoType'=>'dijit.form.TextBox',
+			'class'=>'fullside height-text',
+			'placeholder'=>$this->tr->translate("SEARCH")."...",
 		));
 		$_adv_search->setValue($request->getParam("adv_search"));
 		
@@ -170,6 +166,8 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_branch_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$_branch_search->setValue($request->getParam("branch_search"));
@@ -227,6 +225,8 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_paid_by_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$_paid_by_search->setValue($request->getParam("paid_by_search"));
@@ -237,6 +237,8 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_status_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'missingMessage'=>'Invalid Module!',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'class'=>'fullside height-text',));
 		$_status_search->setValue($request->getParam("status_search"));
 		
@@ -250,6 +252,8 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_user_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		if ($userinfo['level']!=1){

@@ -1,16 +1,11 @@
 <?php
 class Stock_PurchasepaymentController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
-	private $type = array(1=>'service',2=>'program');
 	const REDIRECT_URL = '/stock/purchasepayment';
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
 	public function indexAction(){
 		try{
@@ -19,14 +14,14 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'branch_search' => '',
-    							'adv_search' => '',
-    					        'supplier_search'=>'',
-    							'paid_by_search'=>'',
-    							'start_date'=> date('Y-m-d'),
-    							'end_date'=>date('Y-m-d'),
-    							'status_search'=>1,
-    					);
+    				'branch_search' => '',
+    				'adv_search' => '',
+    				'supplier_search'=>'',
+    				'paid_by_search'=>'',
+    				'start_date'=> date('Y-m-d'),
+    				'end_date'=>date('Y-m-d'),
+    				'status_search'=>'',
+    			);
     		}
 			$db =  new Stock_Model_DbTable_DbPurchasePayment();
 			$rows = $db->getAllPurchasePayment($search);
@@ -41,12 +36,12 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'receipt_no'=>$link,'supplier_name'=>$link,));
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("Application Error");
 			}
 			$frm = new Stock_Form_FrmPurchasePayment();
 			$frm->FrmAddPurchasePayment(null);
 			Application_Model_Decorator::removeAllDecorator($frm);
 			$this->view->frm_payment = $frm;
-		
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){
@@ -54,7 +49,6 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
 			try{
 				$db = new Stock_Model_DbTable_DbPurchasePayment();
 				$row = $db->addPaymentReceipt($_data);
-				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
 				}else{
@@ -64,16 +58,12 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
-		
-		
 		$frm = new Stock_Form_FrmPurchasePayment();
 		$frm->FrmAddPurchasePayment(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_payment = $frm;
-		
+		$this->view->frm_payment = $frm;		
 	}
 	
 	public function editAction(){
@@ -101,19 +91,15 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
 				}
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
-		
 		$frm = new Stock_Form_FrmPurchasePayment();
 		$frm->FrmAddPurchasePayment($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_payment = $frm;
-	
 	}
-	
 	function voidAction(){
 		$db = new Stock_Model_DbTable_DbPurchasePayment();
 		$id=$this->getRequest()->getParam('id');

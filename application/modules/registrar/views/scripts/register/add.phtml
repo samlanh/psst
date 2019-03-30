@@ -1283,7 +1283,8 @@ function getservicefee(key){
 	 				dijit.byId("remark"+key).attr("value",'');
 	 				dijit.byId("price_"+key).attr("value",data.price);
 	 				dijit.byId("onepayment_"+key).attr("value",data.onepayment);
-					
+	 				dijit.byId("service_type_"+key).attr("value",data.items_type);
+	 				
 					calculateTotal(key);
  					if(data.validate!=null){
  						dijit.byId("date_start_"+key).attr("value",data.validate);
@@ -1368,9 +1369,14 @@ function printSave(new_stu_id,new_receipt,submit){
 					  temp+='</tr>';
 					i=1;  
 					for(var n = 0; n < rowIDArray.length; n++) {
+						var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
+						var term_label = "-";
+						if(items_type!=3){
+							term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
+						}
 					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+dojo.byId('item_label_'+rowIDArray[n]).innerHTML+'</td>'; 
-					  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("term_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';

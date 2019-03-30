@@ -102,7 +102,7 @@ table tr td strong{
 							    <td><?php echo $i;?></td>
 							    <?php ?>
 							    <td style="text-align: left;"><?php echo $rs['service'];?></td>
-							    <td><?php echo $rs['payment_term']; ?></td>
+							    <td><?php if ($rs['items_type']!=3) { echo $rs['payment_term']; }else{ echo "-";}?></td>
 							    <td><?php echo number_format($rs['qty'],2)?></td>
 							    <td><?php echo number_format($rs['fee'],2);?></td>
 							    <td><?php echo number_format($rs['extra_fee'],2);?></td>

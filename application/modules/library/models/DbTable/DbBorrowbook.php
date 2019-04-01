@@ -258,7 +258,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 	
 	function getBookDetail($book_id=0,$type=1){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(serial,' - ',barcode) as name FROM rms_book_detail WHERE is_broken=0  ";
+		$sql="SELECT id,CONCAT(serial,' - ',barcode) as name FROM rms_book_detail WHERE is_broken=0 and status=1 ";
 		if($book_id>0){
 			$sql.=" and book_id = $book_id ";
 		}
@@ -290,6 +290,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 					b.borrow_no,
 					DATE_FORMAT(b.borrow_date, '%d-%m-%Y') AS borrow_date,
+					DATE_FORMAT(b.return_date, '%d-%m-%Y') AS return_date,
 					(select title from rms_book where bd.book_id = rms_book.id ) as book_name,
 					bd.barcode,
 					bd.serial,

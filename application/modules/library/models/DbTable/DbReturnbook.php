@@ -220,18 +220,16 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 	
 	function getReturnBookNo(){
 		$db=$this->getAdapter();
-		$sql="SELECT id FROM rms_bookreturn WHERE 1 ORDER BY id DESC";
-		$row=$db->fetchOne($sql);
-		if(empty($row)){
-			$row=floatVal('1.0'.rand(1,9));
+		$sql="SELECT count(id) FROM rms_bookreturn limit 1";
+		$qty=$db->fetchOne($sql);
+		$qty_new = $qty+1;
+		$lenght = strlen($qty_new);
+		
+		$prefix='';
+		for($i=$lenght;$i<5;$i++){
+			$prefix.='0';
 		}
-		$fex='';
-		if(!empty($row)){
-			for($i=0;$i<4;$i++){
-				$fex.='0';
-			}
-		}
-		return $fex.$row;
+		return $prefix.$qty_new;
 	}
 	
 	function getBookDetail($book_id=0){

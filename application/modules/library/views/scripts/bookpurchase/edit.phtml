@@ -166,7 +166,7 @@ function addRow() {
 		template+='<td width="20%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="hidden">'+serial_no+'&nbsp;</td>';	
 		template+='<td width="20%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="hidden">'+barcode+'&nbsp;</td>';	
 		template+='<td width="30%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="hidden">'+note+'&nbsp;</td>';
-	tmp='<tr id="row'+col+'">';
+	tmp='<tr height="30px" id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 
@@ -214,7 +214,7 @@ function initialize() {
 			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="text"/></td>';	
 			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="text"/></td>';	
 			template+='<td width="30%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="text" /></td>';
-		tmp='<tr id="row'+col+'">';
+		tmp='<tr height="30px" id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 

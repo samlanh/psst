@@ -209,6 +209,7 @@ $baseurl = $this->baseUrl();
 												<th><?php echo $tr->translate("N_O");?></th>
 												<th><?php echo $tr->translate("BORROW_NO");?></th>
 												<th><?php echo $tr->translate("BORROW_DATE");?></th>
+												<th><?php echo $tr->translate("RETURN_DATE");?></th>
 												<th><?php echo $tr->translate("BOOK_NAME");?></th>
 												<th><?php echo $tr->translate("BARCODE");?></th>
 												<th><?php echo $tr->translate("STATUS");?></th>
@@ -306,7 +307,7 @@ function addRow() {
 		template+='<td width="10%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="10%" align="center">'+no+'</td>';
 		template+='<td width="80%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="book_id'+col+'" name="book_id'+col+'" value="'+book_detail+'" /></td>';
-	tmp='<tr id="row'+col+'">';
+	tmp='<tr height="30px" id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 
@@ -434,19 +435,22 @@ function getBorrowHistory(){
 			load: function(data) {
 				if(data){
 					for(j=0;j<data.length;j++){
+						style_color="";
 						if(data[j]['is_return']==1){
 							label="<?php echo $tr->translate("IS_RETURN")?>";
 						}else{
 							label="<?php echo $tr->translate("NOT_RETURN")?>";
+							style_color="color:red;";
 						}
 						template1="";
 						no1++;col1++;
 						template1+='<td width="" align="center">'+no1+'</td>';
 						template1+='<td width="">&nbsp;'+data[j]['borrow_no']+'</td>';
 						template1+='<td width="">&nbsp;'+data[j]['borrow_date']+'</td>';
+						template1+='<td width="">&nbsp;'+data[j]['return_date']+'</td>';
 						template1+='<td align="left">&nbsp;'+data[j]['book_name']+'</td>';
 						template1+='<td align="left">&nbsp;'+data[j]['barcode']+'</td>';
-						template1+='<td width="">&nbsp;'+label+'</td>';
+						template1+='<td style="'+style_color+'">&nbsp;'+label+'</td>';
 						tmp1='<tr align="center" style="height:25px;" id="rows'+col1+'">';
 						tmp1+="</tr>";
 

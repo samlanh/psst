@@ -23,8 +23,8 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     				b.author,
     				(SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id limit 1) AS cat_name,
     			  	(SELECT c.block_name FROM rms_blockbook AS c WHERE c.id=b.block_id limit 1) AS block_name,
-    			  	(select count(id) from rms_book_detail as bdt where b.id = bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 limit 1) as available,
-			      	(select count(id) from rms_book_detail as bdt where b.id = bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 limit 1) as borrow,
+    			  	(select count(id) from rms_book_detail as bdt where b.id = bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 and status=1 limit 1) as available,
+			      	(select count(id) from rms_book_detail as bdt where b.id = bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 and status=1 limit 1) as borrow,
 			        b.date,
 			      	(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
 			      	(select $label from rms_view where type=1 and key_code = b.status) as status
@@ -146,6 +146,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 						'serial'	=> $data['serial_'.$i],
 						'barcode'	=> $data['barcode_'.$i],
 						'note'	  	=> $data['note_'.$i],
+						'status'	=> $data['status_'.$i],
 					);
 					$where =" id =".$data['old_'.$i];
 					$this->update($arr, $where);
@@ -155,6 +156,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 						'serial'	=> $data['serial_'.$i],
 						'barcode'	=> $data['barcode_'.$i],
 						'note'	  	=> $data['note_'.$i],
+						'status'	=> $data['status_'.$i],
 					);
 					$this->insert($array);
 				}
@@ -189,15 +191,16 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 	
 	function getBookNo(){
 		$db=$this->getAdapter();
-		$sql="SELECT id FROM rms_book WHERE 1 ORDER BY id DESC";
-		$row=$db->fetchOne($sql);
-		$fex='b';
-		if(!empty($row)){
-			for($i=0;$i<4;$i++){
-				$fex.='0';
-			}
+		$sql="SELECT count(id) FROM rms_book limit 1";
+		$qty=$db->fetchOne($sql);
+		$qty_new = $qty+1;
+		$lenght = strlen($qty_new);
+		
+		$prefix='';
+		for($i=$lenght;$i<5;$i++){
+			$prefix.='0';
 		}
-		return $fex.$row;
+		return $prefix.$qty_new;
 		
 	}
 	

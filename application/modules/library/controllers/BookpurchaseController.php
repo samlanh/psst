@@ -59,7 +59,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$b=$this->view->book_title=$db_cat->getBookTitlePurchase();
+    	$b=$this->view->book_title=$db_cat->getBookTitle();
     	
     	$db=new Library_Model_DbTable_DbPurchasebook();
     	$this->view->po_no=$db->getPONo();
@@ -106,7 +106,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$b=$this->view->book_title=$db_cat->getBookTitlePurchase();
+    	$b=$this->view->book_title=$db_cat->getBookTitle();
     	
     	$this->view->row=$db->getPurchaseById($id);
     	$this->view->row_detail=$db->getPurchaseDetailById($id);

@@ -190,15 +190,17 @@ $baseurl = $this->baseUrl();
 						temp+='<th><?php echo $tr->translate("DEL");?></th>';
 						temp+='<th><?php echo $tr->translate("N_O");?></th>';
 						temp+='<th><?php echo $tr->translate("BOOK");?></th>';
-						temp+='<th><?php echo $tr->translate("DETAIL");?> ( Borrow Code , Code , Name , Return Date)</th>';
+						temp+='<th><?php echo $tr->translate("DETAIL");?> ( Borrow Code , Code , Name )</th>';
+						temp+='<th><?php echo $tr->translate("RETURN_DATE");?></th>';
 						dojo.query("#head-title").append(temp);
 						title=1;
 					}
 						template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 						template+='<td width="5%" align="center">'+no+'<input type="hidden" dojoType="dijit.form.TextBox" id="borrow_detail_id'+col+'" name="borrow_detail_id'+col+'" value="'+data.borrow_detail_id+'" /></td>';
 						template+='<td width="20%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" id="book_id'+col+'" name="book_id'+col+'" value="'+book_detail+'" /></td>';
-						template+='<td width="70%">'+data.borrow_no+" , "+code+" , "+name+" , "+data.return_date+'</td>';
-					tmp='<tr id="row'+col+'">';
+						template+='<td width="53%">'+data.borrow_no+" , "+code+" , "+name+'</td>';
+						template+='<td width="17%" align="center">'+data.return_date+'</td>';
+					tmp='<tr height="30px" id="row'+col+'">';
 					tmp+="</tr>";
 					dojo.query("#table_row").append(tmp);
 
@@ -234,15 +236,17 @@ $baseurl = $this->baseUrl();
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
 				temp+='<th><?php echo $tr->translate("BOOK");?></th>';
-				temp+='<th><?php echo $tr->translate("DETAIL");?> ( Borrow Code , Code , Name , Return Date)</th>';
+				temp+='<th><?php echo $tr->translate("DETAIL");?> ( Borrow Code , Code , Name )</th>';
+				temp+='<th><?php echo $tr->translate("RETURN_DATE");?></th>';
 				dojo.query("#head-title").append(temp);
 				title=1;
 			}
 				template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="5%" align="center">'+no+'<input type="hidden" dojoType="dijit.form.TextBox" id="borrow_detail_id'+col+'" name="borrow_detail_id'+col+'" value="'+borrow_detail_id+'" /></td>';
 				template+='<td width="20%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" id="book_id'+col+'" name="book_id'+col+'" value="'+book_id+'" /></td>';
-				template+='<td width="70%">'+borrow_no+" , "+code+" , "+name+" , "+return_date+'</td>';
-			tmp='<tr id="row'+col+'">';
+				template+='<td width="53%">'+borrow_no+" , "+code+" , "+name+'</td>';
+						template+='<td width="17%" align="center">'+return_date+'</td>';
+			tmp='<tr height="30px" id="row'+col+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
 

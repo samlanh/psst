@@ -149,6 +149,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		}
     	}else{
     		$no++;
+    		//constraints="{datePattern:'dd/MM/yyyy'}"
     	}
     	$all_balance =0;
     	$userbalace = $this->getCurrentBalanceByStudent($data);

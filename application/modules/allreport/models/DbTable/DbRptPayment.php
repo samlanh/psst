@@ -11,6 +11,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     public function getStudentPaymentByid($id){
     	$db = $this->getAdapter();
     	$sql = "select 
+    				s.stu_id,
     				s.branch_id,
     				s.stu_code,
     				s.stu_khname,

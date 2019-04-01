@@ -52,7 +52,6 @@
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dijit.form.DateTextBox");
 	dojo.ready(function(){
@@ -115,7 +114,6 @@
 			    }
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -139,59 +137,44 @@
 			}
 		});
 	}
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="issue"){
+					url='<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/";?>';
+				}else if(key=="void"){
+					url='<?php echo $this->baseUrl()."/registrar/register/edit/id/";?>';
+				}
+				gotoAction();
+			},
+			items: {
+				"issue": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "edit", accesskey: "e"},
+				"void": {name: "<?php echo $tr->translate("VOID");?>", icon: "copy"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row,'_blank');
+	}
 </script>
-<?php if(!empty($this->customer_payment)){?>
-<table width="100%"  border="1" style="border: 1px solid #CCCCCC;border-collapse: collapse;margin-top: 50px;">
-	
-	<style>
-		tr.tdheader {
-		    background: url(../images/tbheader-bg1.jpg) repeat-x scroll center top #F1F1F1;
-		    border: 1px solid #CCCCCC;
-		    color: #333333;
-		    font-family: 'Kh Battambang','Khmer Battambang',Times New Roman;
-		    font-size: 12px;
-		    font-weight: bold;
-		    line-height: 30px;
-		    padding: 2px 2px 2px 2px;
-		    text-align: center;
-		    cursor: pointer;
-		}
-		.hover:hover{background: red;}
- 	</style>
-
-	<tr class="tdheader" align="center">
-		<td><?php echo $tr->translate("N_O");?></td>
-		<td><?php echo $tr->translate("RECEIPT");?></td>
-		<td><?php echo $tr->translate("NAME_KH");?></td>
-		<td><?php echo $tr->translate("NAME_EN");?></td>
-		<td><?php echo $tr->translate("SEX");?></td>
-		<td><?php echo $tr->translate("DOB");?></td>
-		<td><?php echo $tr->translate("PHONE");?></td>
-		<td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
-		<td><?php echo $tr->translate("FINE");?></td>
-		<td><?php echo $tr->translate("DEDUCT");?></td>
-		<td><?php echo $tr->translate("NET_AMOUNT");?></td>
-		<td><?php echo $tr->translate("CREATE_DATE");?></td>
-		<td><?php echo $tr->translate("USER");?></td>
-		<td><?php echo $tr->translate("STATUS");?></td>
-	</tr>
-	<?php $i=0;foreach ($this->customer_payment as $rs){$i++;?>
-		<tr class="hover" align="center" style="background: none repeat scroll 0 0 #FFFFFF;line-height: 25px;">
-			<td><?php echo $i;?></td>
-			<td><?php echo $rs['receipt_no'];?></td>
-			<td><a href="<?php echo $this->baseUrl()."/registrar/register/editcustomerpayment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['name_kh'];?></a></td>
-			<td><a href="<?php echo $this->baseUrl()."/registrar/register/editcustomerpayment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['name_en'];?></a></td>
-			<td><?php echo $rs['sex'];?></td>
-			<td><?php echo date("d-M-Y",strtotime($rs['dob']));?></td>
-			<td><?php echo $rs['phone'];?></td>
-			<td><?php echo $rs['grand_total'];?></td>
-			<td><?php echo $rs['fine'];?></td>
-			<td><?php echo $rs['deduct'];?></td>
-			<td><?php echo $rs['net_amount'];?></td>
-			<td><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
-			<td><?php echo $rs['user'];?></td>
-			<td><?php echo $rs['status'];?></td>
-		</tr>
-	<?php }?>
-</table>
-<?php }?>

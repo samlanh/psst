@@ -247,9 +247,5 @@ function readMoneyInKhmer(netTotal){
 	khmer_amount = 'ដុល្លារគត់';
 	if(netTotal==0){khmer_amount='';}
 	dojo.byId("lb_read_khmer").innerHTML=money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng;
-	
-
-    //read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
-    //dojo.byId("lb_read_khmer").innerHTML = money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'+read_eng
 }
 </script>

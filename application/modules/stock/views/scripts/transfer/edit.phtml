@@ -1,4 +1,5 @@
 <?php 
+     $url_save = $this->url(array('module'=>'stock','controller'=>'transfer','action'=>'edit'));
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
      $result = $this->rs;
@@ -51,26 +52,10 @@
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TRANSFER_NUMBER");?></label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
-							<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
-							<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
-							<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" >
-	                   </div>
-	                </div>
-	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_LOCATION");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+	                   		<select autoComplete='false' queryExpr="*${0}*"  name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 							   <?php 
 							    if(!empty($this->rsbranch)){
 							    foreach($this->rsbranch as $rs){?>
@@ -83,13 +68,30 @@
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_LOCATION");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="to_location" id="to_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+	                   		<select autoComplete='false' queryExpr="*${0}*" name="to_location" id="to_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 							    <?php 
 							    if(!empty($this->rsbranch)){
 							   	 foreach($this->rsbranch as $rs){?>
 							    	<option <?php if($result['to_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 							    <?php }}?>
 							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TRANSFER_NUMBER");?> 
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
+										<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
+											<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
+											<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> 
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" >
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -112,9 +114,10 @@
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
 	            	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?></label>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?> 
+	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select onchange="chcekcProductLocation();" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+	                   		<select autoComplete='false' queryExpr="*${0}*" onchange="chcekcProductLocation();" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 									<option></option>
 									<?php 
 								    if(!empty($this->rsproduct)){
@@ -174,9 +177,9 @@ function initailize(){
 	pro_name='';
 	template='<td width="2%" align="center">'+index+'</td>';
 	template+='<td ><?php echo $row['pro_name'];?><input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-	template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
-	template+='<td ><input onkeyup="checkCurrentStock('+index+')"  dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
-	template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+	template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+	template+='<td width="100px"><input onkeyup="checkCurrentStock('+index+')"  dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+	template+='<td width="100px"><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 	template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
 	
 	tmp='<tr id="row'+index+'">';
@@ -190,10 +193,12 @@ function initailize(){
 	dojo.html.set(dojo.byId("row"+index),template , {
 	     parseContent: true,
 	});
+	
 	dijit.byId('currqty_'+index).attr('value',<?php echo $row['curr_qty']+$row['qty']?>);
 	dijit.byId('qty_'+index).attr('value',<?php echo $row['qty']?>);
 	dijit.byId('remark_'+index).attr('value','<?php echo $row['note']?>');
 	dijit.byId('pro_id_'+index).attr('value',<?php echo $row['pro_id']?>);
+	
 	<?php } }?>
 }
 <?php $url_product =  $this->url(array('module'=>'','controller'=>'ajax','action'=>'get-product-name')); ?>
@@ -240,9 +245,9 @@ function getProductName() {
 			pro_name = dijit.byId("pro_id").attr('displayedValue')
 			template='<td width="2%" align="center">'+index+'</td>';
 			template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-			template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
-			template+='<td ><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
-			template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+			template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+			template+='<td width="100px"><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+			template+='<td width="100px"><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 			template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
 		tmp='<tr id="row'+index+'">';
 		tmp+="</tr>";
@@ -289,11 +294,10 @@ function chcekcProductLocation(){
 			getProductName();
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
-
 function getcurrentproduct(pro_id,location_id,index){
 	if(location_id=='' || location_id==-1){
 		return false;}
@@ -308,7 +312,7 @@ function getcurrentproduct(pro_id,location_id,index){
 			dijit.byId("currqty_"+index).attr("value",data.pro_qty);
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }

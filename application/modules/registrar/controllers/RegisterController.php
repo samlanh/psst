@@ -42,18 +42,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);
     		$letter=array('module'=>'registrar','controller'=>'register','action'=>'congratulationletter',);
     		
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('បោះ.អាហារូ'=>$letter,'branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
-    	
-    		$this->view->customer_payment = $db->getCustomerPayment($search);
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('បោះ.អាហារូ'=>$letter,'branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
     	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-//     	$db = new Registrar_Model_DbTable_DbRegister();
-//     	$db->resetReceipt();
     }
     public function addAction(){
       if($this->getRequest()->isPost()){
@@ -91,7 +88,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $rs = $db->getStudentProfileblog(1);
     }
     public function editAction(){
-    	$id=$this->getRequest()->getParam('id');
+    	$id=$this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -108,28 +105,22 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if(empty($rspayment)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
     	}
-    	$this->view->payment =$rspayment;
-    	$this->view->rs_detail = $db->getStudentPaymentDetailServiceByID($id);
-//     	print_r($db->getStudentPaymentDetailServiceByID($id));
-    	 
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rsbranch = $_db->getAllBranch();
-    	$this->view->exchange_rate = $_db->getExchangeRate();
-    	$this->view->all_paymentterm = $_db->getAllTerm();
-    	$this->view->rs_type = $_db->getAllItems();
-    	$this->view->rsdiscount = $_db->getAllDiscountName();
-    	$this->view->rs_paymenttype = $_db->getViewById(8,null);
-    
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->all_year = $db->getAllYears();
-    	 
+    	$this->view->payment = $rspayment;
+    	
+    	$db = new Allreport_Model_DbTable_DbRptPayment();
+    	$rs = $db->getStudentPaymentByid($id);
+    	$this->view->rr = $rs;
+    	$this->view->row =  $db->getPaymentReciptDetail($id);
+    	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	 
-    	//     	$db = new Application_Model_DbTable_DbGlobal();
-    	//     	$rs = $_db->getStudentProfileblog(1);
-       
-       
+    	
+    	$branch_id=null;
+    	if(!empty($rs)){
+    		$branch_id = $rs['branch_id'];
+    	}
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt($branch_id);
     }
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){

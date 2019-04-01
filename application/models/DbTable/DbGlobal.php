@@ -728,9 +728,7 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    function getAllBranchName(){
-   	$db = $this->getAdapter();
-   	$sql=" SELECT br_id AS id,branch_nameen as name FROM `rms_branch` WHERE STATUS=1 AND (branch_namekh!='' OR branch_nameen!='') ";
-   	return $db->fetchAll($sql);
+   	return $this->getAllBranch();
    }
    
    function getAllDiscount($option=null){

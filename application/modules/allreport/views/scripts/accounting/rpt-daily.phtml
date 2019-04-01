@@ -194,7 +194,7 @@ table.tb-footer tr.style-head {
 										    <td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
 											<td><?php echo number_format($rs['paid_amount'],2); ?></td>
 											<td><?php echo number_format($rs['balance_due'],2); ?></td>
-										    <td><?php echo date('d-M-Y (H:i:s)', strtotime($rs['create_date'])); ?></td>
+										    <td><?php echo date('d-m-Y (H:i)', strtotime($rs['create_date'])); ?></td>
 										   	<td><?php echo $rs['note']; ?></td>
 										    <td><?php echo $rs['user_id'];?></td>
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $rs['void_status'];?></td>

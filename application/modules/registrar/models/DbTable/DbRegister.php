@@ -115,8 +115,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     
 	function addRegister($data){
-		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
-		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
+		$db = $this->getAdapter();
+		$db->beginTransaction();
 		//$paid_date = $data['paid_date'];
 		$paid_date = date("Y-m-d H:i:s");
 				
@@ -243,7 +243,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 					
 					$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
-						$_arr = array(
+					$_arr = array(
 							'payment_id'	=>$paymentid,
 							'service_type'	=>$rs_item['items_type'],
 							'itemdetail_id'	=>$data['item_id'.$i],
@@ -306,7 +306,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 									'is_product_set'	=>0,
 									'product_set_id'	=>$data['item_id'.$i],
 									'pro_id'			=>$data['item_id'.$i],
-									'qty'				=>$data['qty_'.$i], // (qty buy)
+									'qty'				=>$data['qty_'.$i],
 									'qty_after'			=>$data['qty_'.$i],
 									'cost'				=>$rs_item['cost'],
 									'price'				=>$data['price_'.$i],
@@ -316,16 +316,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							$this->insert($arr_sale);
 						}
 					}
-						
-						
 				// បង់លើផលិតផល
 				// $this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
 				}
 				$db->commit();
-			}catch (Exception $e){
-				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
+		}catch (Exception $e){
+			$db->rollBack();//
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 	}
 	
 	
@@ -428,7 +426,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function updatePaymentInfoBack($payment_id,$type){
 		$db = $this->getAdapter();
 		$sql="select * from rms_student_paymentdetail where payment_id = $payment_id ";
-//	if $type=1 we use fetchAll cuz student pay both or service (service AND tuition fee) more than 1 row, $type=2 fetchRow cuz student pay only tuition fee
 		$id_old_record = $db->fetchAll($sql);
 		if(!empty($id_old_record)){
 			foreach ($id_old_record as $result){
@@ -496,6 +493,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				if(!empty($data['credit_memo_id'])){//check again because it old code
 					$this->updateCreditMemoBack($data);
 				}				
+				
+				$where = " payment_id = $payment_id";
+				$this->_name='rms_saledetail';
+				$this->delete($where);
 				// update payment and validate of service and tuition fee info back ,  and update stock back to origin	
 				$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
 				$db->commit();
@@ -503,205 +504,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}catch (Exception $e){
 				$db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
 			}
-		}
-		try{
-			//update is_void=0 ,if this record already set is_void=1 for last time so we update it to is_void=0	so this record is use
-				$paid_date = $data['paid_date'];
-				$this->_name='rms_student_payment';
-				$array=array(
-					'is_void'=>0,
-				);
-				$where = " id = $payment_id ";
-				$this->update($array, $where);
-								
-				$this->_name='rms_student_paymentdetail';
-				$rows = $this->getParentIDToUpdateBack($payment_id);
-				if(!empty($rows)){foreach ($rows as $id_update_back){
-					$arr = array(
-							'is_start' => 1,
-						);
-					$where = ' id = '.$id_update_back['is_parent'];
-					$this->update($arr, $where);
-				}}
-				
-				$where = " payment_id = $payment_id";
-				$this->delete($where);
-				
-				$this->_name='rms_saledetail';
-				$this->delete($where);
-				
-				$gdb = new  Application_Model_DbTable_DbGlobal();
-				$customer_type=1;
-				$stu_code = $data['old_stu'];
-				if($data['student_type']==1){//existing student
-					$rs_stu = $gdb->getStudentinfoById($stu_code);
-				}elseif($data['student_type']==2){//testing student
-					$rs_stu = $gdb->getStudentTestinfoById($stu_code);
-					$arr = array(
-							'is_registered'=>1,
-					);
-					$this->_name='rms_student_test_result';
-					$where="id = ".$rs_stu['id'];
-					$this->update($arr, $where);
-				
-					$arr = array(
-							'customer_type' =>1,
-					);
-					$this->_name='rms_student';
-					$where="stu_id = ".$stu_code;
-					$this->update($arr, $where);
-				
-				}elseif($data['student_type']==3){//from crm
-					$rs_stu = $gdb->getStudentinfoById($stu_code);
-					$arr = array(
-							'customer_type' =>4,
-							'is_studenttest'=>1
-					);
-					$this->_name='rms_student';
-					$where="stu_id = ".$stu_code;
-					$this->update($arr, $where);
-				}
-					
-					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
-					if($cut_credit_memo<0){
-						$credit_after=abs($cut_credit_memo);
-						$cut_credit_memo = $data['grand_total'];
-					}else{
-						$cut_credit_memo = $data['credit_memo'];
-						$credit_after = 0;
-					}
-					
-					$this->_name='rms_student_payment';
-					$arr=array(
-						'branch_id'		=> $data['branch_id'],
-						'revenue_type'  => $data['customer_type'],
-						'data_from'		=> $data['student_type'],
-						'student_id'	=> $data['old_stu'],
-// 						'receipt_number'=> $receipt_number,
-						'penalty'		=> $data['penalty'],
-						'grand_total'	=> $data['grand_total'],
-						'credit_memo'	=> $cut_credit_memo,
-						'memo_id'		=> $data['credit_memo'],
-						'paid_amount'	=> $data['paid_amount'],
-						'balance_due'	=> $data['balance_due'],
-						'amount_in_khmer'=> $data['money_in_khmer'],
-						'payment_method'=> $data['payment_method'],
-						'number'	    => $data['number'],
-						'note'			=> $data['note'],
-						'create_date'	=> $paid_date,
-						'user_id'		=> $this->getUserId(),
-						'academic_year'	=> $data['study_year'],
-						'group_id'      => $rs_stu['group_id'],
-						'paystudent_type'=> $rs_stu['is_stu_new'],
-						'degree'		=> $rs_stu['degree'],
-						'grade'			=> $rs_stu['grade'],
-						'session'		=> $rs_stu['session'],
-						'degree_culture'=> $rs_stu['calture'],
-						'room_id'		=> $rs_stu['room'],
-					);
-					$where = " id = $payment_id";
-					$this->update($arr, $where);
-					
-					$this->_name="rms_student_paymentdetail";
-					$ids = explode(',', $data['identity']);
-					$dbitem = new Global_Model_DbTable_DbItemsDetail();
-					if(!empty($ids))foreach ($ids as $i){
-						$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
-						$this->_name="rms_student_paymentdetail";
-						if(!empty($spd_id)){
-								$arr = array(
-									'is_start'=>0
-								);
-								$where=" id = ".$spd_id;
-								$this->update($arr,$where);
-						}
-						
-						$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
-						   $_arr = array(
-								'payment_id'	=>$payment_id,
-								'service_type'	=>$rs_item['items_type'],
-								'itemdetail_id'	=>$data['item_id'.$i],
-								'payment_term'	=>$data['term_'.$i],
-								'fee'			=>$data['price_'.$i],
-								'qty'			=>$data['qty_'.$i],
-						   		'qty_balance'	=>$data['qty_'.$i],
-								'subtotal'		=>$data['subtotal_'.$i],
-								'extra_fee'		=>$data['extra_fee'.$i],
-								'discount_type'=>$data['discount_type'.$i],
-								'discount_percent'=>$data['discount_'.$i],
-								'discount_amount'=>$data['discount_amount'.$i],
-								'paidamount'	=>$data['total_amount'.$i],
-								'is_onepayment'=>$data['onepayment_'.$i],
-								'start_date'	=>$data['date_start_'.$i],
-								'validate'		=>$data['validate_'.$i],
-								'is_start'		=>1,
-								'note'			=>$data['remark'.$i],
-								'is_parent'     =>$spd_id,
-						    );
-						$this->insert($_arr);
-						
-						////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////
-						if($rs_item['items_type']==3){ // product
-							if($rs_item['is_productseat']==1){ // product set
-								$sql="select
-								set.pro_id as product_set_id,
-								set.subpro_id as pro_id,
-								set.qty as set_qty,
-								idt.cost,
-								lo.price
-								from
-								rms_itemsdetail as idt,
-								rms_product_setdetail as `set`,
-								rms_product_location as lo
-								where
-								idt.id = set.subpro_id
-								and set.subpro_id = lo.pro_id
-								and set.pro_id = ".$rs_item['id']."
-								and lo.brand_id = ".$data['branch_id'];
-								$result = $db->fetchAll($sql);
-								if(!empty($result)){
-									foreach ($result as $row){
-										$arr_sale = array(
-												'payment_id'		=>$payment_id,
-												'is_product_set'	=>1,
-												'product_set_id'	=>$row['product_set_id'],
-												'pro_id'			=>$row['pro_id'],
-												'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
-												'qty_after'			=>$row['set_qty'] * $data['qty_'.$i],
-												'cost'				=>$row['cost'],
-												'price'				=>$row['price'],
-												'user_id'			=>$this->getUserId(),
-										);
-										$this->_name="rms_saledetail";
-										$this->insert($arr_sale);
-									}
-								}
-							}else{ // product normal
-								$arr_sale = array(
-										'payment_id'		=>$payment_id,
-										'is_product_set'	=>0,
-										'product_set_id'	=>$data['item_id'.$i],
-										'pro_id'			=>$data['item_id'.$i],
-										'qty'				=>$data['qty_'.$i], // (qty buy)
-										'qty_after'			=>$data['qty_'.$i],
-										'cost'				=>$rs_item['cost'],
-										'price'				=>$data['price_'.$i],
-										'user_id'			=>$this->getUserId(),
-								);
-								$this->_name="rms_saledetail";
-								$this->insert($arr_sale);
-							}
-						}
-						
-				}
-			 	$db->commit();//if not errore it do....
-			}catch (Exception $e){
-				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
-				echo $e->getMessage();exit();
-			}
-					
+		}					
 	}
     function getAllStudentRegister($search=null){
     	$_db  = new Application_Model_DbTable_DbGlobal();
@@ -771,32 +575,32 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function getCustomerPayment($search){
-    	$db=$this->getAdapter();
-    	$sql="SELECT
-			    	*,
-			    	(select name_en from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
-			    	(select name_en from rms_view where type=10 and key_code=is_void LIMIT 1) as status,
-			    	(select first_name from rms_users as u where u.id=user_id LIMIT 1) as user
-			    FROM
-			    	rms_customer_payment
-			    WHERE 1 ";
+//     function getCustomerPayment($search){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT
+// 			    	*,
+// 			    	(select name_en from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
+// 			    	(select name_en from rms_view where type=10 and key_code=is_void LIMIT 1) as status,
+// 			    	(select first_name from rms_users as u where u.id=user_id LIMIT 1) as user
+// 			    FROM
+// 			    	rms_customer_payment
+// 			    WHERE 1 ";
     	 
-    	$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
+//     	$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
+//     	$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
+//     	$where = " AND ".$from_date." AND ".$to_date;
     	 
-    	if(!empty($search['adv_search'])){
-    		$s_where=array();
-    		$s_search=addslashes(trim($search['adv_search']));
-    		$s_where[]= " name_kh LIKE '%{$s_search}%'";
-    		$s_where[]=" name_en LIKE '%{$s_search}%'";
-    		$s_where[]=" receipt_no LIKE '%{$s_search}%'";
-    		$where.=' AND ('.implode(' OR ', $s_where).')';
-    	}
-    	$order=" ORDER BY id DESC";
-    	return $db->fetchAll($sql.$where.$order);
-    }
+//     	if(!empty($search['adv_search'])){
+//     		$s_where=array();
+//     		$s_search=addslashes(trim($search['adv_search']));
+//     		$s_where[]= " name_kh LIKE '%{$s_search}%'";
+//     		$s_where[]=" name_en LIKE '%{$s_search}%'";
+//     		$s_where[]=" receipt_no LIKE '%{$s_search}%'";
+//     		$where.=' AND ('.implode(' OR ', $s_where).')';
+//     	}
+//     	$order=" ORDER BY id DESC";
+//     	return $db->fetchAll($sql.$where.$order);
+//     }
     function getRegisterById($id){
     	$db=$this->getAdapter();
     	$sql=" SELECT 
@@ -1301,6 +1105,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		 s.stu_khname,
 	    		 s.sex,
 	    		 s.stu_code,
+	    		 s.stu_id,
 	    		 s.is_stu_new,
 	    		 (SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
 	    		 

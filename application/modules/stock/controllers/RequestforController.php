@@ -7,7 +7,6 @@ class Stock_RequestforController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	
 	public function indexAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -29,30 +28,28 @@ class Stock_RequestforController extends Zend_Controller_Action {
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('title'=>$link));
     		$this->view->search = $search;
 		}catch (Exception $e){
-			
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error");
 		}
 	}
-	
     public function addAction()
     {
     	$db = new Stock_Model_DbTable_DbRequestfor();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		try {
+    		try{
     			$db->addNewRequestFor($_data);
     			if(!empty($_data['save_close'])){
     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/requestfor/index");
     			}else{
     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/requestfor/add");
     			}
-    		} catch (Exception $e) {
+    		}catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     }
-    
 	public function editAction(){
     	$db = new Stock_Model_DbTable_DbRequestfor();
     	$id=$this->getRequest()->getParam('id');
@@ -65,7 +62,6 @@ class Stock_RequestforController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$this->view->row = $db->getRequestforById($id);

@@ -350,7 +350,6 @@ function getbranchinfo(){
 					getReceiptNo();
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});	
 		} 
@@ -382,11 +381,7 @@ function printSave(new_receipt){
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
-		//dojo.byId("lb_receipt_no").innerHTML = dijit.byId("serailno").get('value');
-		//dojo.byId("lb_name").innerHTML =  dijit.byId("student_id").attr('displayedValue');
 		dojo.byId("lb_date").innerHTML = dijit.byId("date_payment").attr('displayedValue');
-		//dojo.byId("lb_amount").innerHTML = dijit.byId("amount").attr('displayedValue');
-		//dojo.byId("lb_due").innerHTML = dijit.byId("total_due").attr('displayedValue');
 	template="";
 	temp='';
     temp='<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">'

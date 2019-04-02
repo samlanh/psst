@@ -222,13 +222,14 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
+    	$_branch_search->setValue($request->getParam("branch_search"));
     	if (count($optionBranch)==1){
     		$_branch_search->setAttribs(array('readonly'=>'readonly'));
     		if(!empty($optionBranch))foreach($optionBranch AS $row){
     			$_branch_search->setValue($row['id']);
     		}
     	}
-    	$_branch_search->setValue($request->getParam("branch_search"));
+    	
     	
     	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("OTHER"));
     	$_ask_for_search = new Zend_Dojo_Form_Element_FilteringSelect("ask_for_search");

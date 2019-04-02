@@ -27,7 +27,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_branch_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	if (count($optionBranch)==1){
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
@@ -68,7 +69,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_sex->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			
     			'class'=>'fullside height-text',));
     	
     	
@@ -78,7 +79,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_ask_for->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	
     	$_arr_opt_know = array(""=>$this->tr->translate("PLEASE_SELECT"));
@@ -89,7 +91,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_know_by->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	
     	$_from_school = new Zend_Dojo_Form_Element_TextBox('old_school');
@@ -131,14 +134,11 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_crm_status->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	
-    	
     	$id = new Zend_Form_Element_Hidden('id');
-    	
-    	
-    	
     	$kh_name_stu = new Zend_Dojo_Form_Element_TextBox('kh_name_stu');
     	$kh_name_stu->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
@@ -170,7 +170,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_sex_stu->setMultiOptions($_arr);
     	$_sex_stu->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'missingMessage'=>'Invalid Module!',
+    			
     			'class'=>'fullside height-text',));
     	
     	$_age_stu = new Zend_Dojo_Form_Element_NumberTextBox('age_stu');
@@ -179,7 +179,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("AGE"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Age")
-    	
     	));
     	
     	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
@@ -190,9 +189,9 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_degree->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'onChange'=>'getAllGrade();',
-    			'missingMessage'=>'Invalid Module!',
-    			'class'=>'fullside height-text',));
-    	
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
     	 
     	$_arr = array(1=>$this->tr->translate("MALE"),2=>$this->tr->translate("FEMALE"));
     	$_sex_stu = new Zend_Dojo_Form_Element_FilteringSelect("sex_stu");
@@ -200,9 +199,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_sex_stu->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			
     			'class'=>'fullside height-text',));
-    	
     	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
@@ -221,7 +219,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_branch_search->setMultiOptions($_arr_opt_branch);
     	$_branch_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	if (count($optionBranch)==1){
     		$_branch_search->setAttribs(array('readonly'=>'readonly'));
@@ -237,7 +236,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_ask_for_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	
     	$_ask_for_search->setValue($request->getParam("ask_for_search"));
@@ -250,7 +250,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_know_by_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	$_know_by_search->setValue($request->getParam("know_by_search"));
     	
@@ -263,7 +264,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_status_search->setMultiOptions($_arr);
     	$_status_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	$_status_search->setValue($request->getParam("status_search"));
     	
@@ -275,9 +277,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			'class'=>'fullside',));
     	$_date = $request->getParam("start_date");
-    	if(empty($_date)){
-    		//$_date = date("Y-m-d");
-    	}
     	$start_date->setValue($_date);
     		
     	$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
@@ -300,15 +299,12 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_crm_list->setMultiOptions($_arr_opt_crm);
     	$_crm_list->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'missingMessage'=>'Invalid Module!',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	$_crm_list->setValue($request->getParam("crm_list"));
     	
-    	
     	if(!empty($data)){
-    		
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["kh_name"]);
     		$_first_name->setValue($data["first_name"]);
@@ -338,14 +334,12 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
 				$_crm_status,
     			$id,
     			$note,
-    			
     			$kh_name_stu,
     			$_first_name_stu,
     			$_last_name_stu,
     			$_sex_stu,
     			$_age_stu,
     			$_degree,
-    			
     			$advance_search,
     			$_ask_for_search,
     			$_branch_search,
@@ -361,8 +355,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     function FrmAddCRMContactHistory($data){
     	
     	$request=Zend_Controller_Front::getInstance()->getRequest();
-    	
-    	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	$userinfo = $_dbgb->getUserInfo();
     	
@@ -388,7 +380,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_proccess->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	
     	$next_contact= new Zend_Dojo_Form_Element_DateTextBox('next_contact');
@@ -414,16 +407,15 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_user_contact->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	$_user_contact->setValue($userinfo['user_id']);
-    	
     	
     	if ($userinfo['level']!=1){
     		$contact_date->setAttribs(array(
     				'readonly'=>"readonly",
     		));
-    		
     		$_user_contact->setAttribs(array(
     				'readonly'=>"readonly",
     		));
@@ -432,7 +424,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     		$crm_id->setValue($data["id"]);
     		$_proccess->setValue($data["crm_status"]);
     	}
-    	
     	
     	$this->addElements(array(
     			$contact_date,
@@ -445,4 +436,3 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	return $this;
     }
 }
-

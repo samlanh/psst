@@ -1,15 +1,14 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT'));
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 ?>
 <style>
-.hover:hover{ background:#ccc;}
-table.content-data tr.style-head,
-table.tb-footer tr.style-head {
-   font-weight: bold !important;
-}
+	.hover:hover{ background:#ccc;}
+	table.content-data tr.style-head,
+	table.tb-footer tr.style-head {
+	   font-weight: bold !important;
+	}
 </style>
 <div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<div class="card-box">
@@ -115,9 +114,6 @@ table.tb-footer tr.style-head {
 				</tr>
 				<tr class="line"><td colspan="3"></td></tr>
 				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
 					<td width="25%">
 					</td>
 					<td align="center" width="50%">
@@ -125,9 +121,6 @@ table.tb-footer tr.style-head {
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td width="25%"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
 				</tr>
 				<tr>			
 					 <td colspan="3" id="exportExcel">

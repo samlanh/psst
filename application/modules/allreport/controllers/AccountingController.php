@@ -105,7 +105,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->row_detail = $db->getStudentPaymentDetail($search,3);
 			
 			$this->view->row = $db->getStudentPayment($search);
-			
 			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
 			$this->view->rsincome = $db->getAllOtherIncome($search);
 			
@@ -121,7 +120,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	function rptStudentpaymentdetailAction(){
 		try{
@@ -1179,21 +1178,18 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	
-			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-			$user_type=$db->getUserType();
+		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+		$user_type=$db->getUserType();
 	
 			if(!empty($search['all_payment'])){
 				$data1=$this->view->row = $db->getDailyReport($search);
-				$data3=$this->view->change_product = $db->getAllChangeProduct($search);
 				$user_type=$db->getUserType();
-					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
-					$this->view->income = $_db->getAllOtherIncome($search);
+				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+				$this->view->income = $_db->getAllOtherIncome($search);
 						
-					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
-					$this->view->expense = $_db1->getAllOtherExpense($search);
-				$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
+				$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+				$this->view->expense = $_db1->getAllOtherExpense($search);
 			}
-	
 			if(!empty($search['student_payment'])){
 				$data1=$this->view->row = $db->getDailyReport($search);
 			}
@@ -1205,17 +1201,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
 					$this->view->expense = $_db1->getAllOtherExpense($search);
 			}
-			if(!empty($search['change_product'])){
-				$data3=$this->view->change_product = $db->getAllChangeProduct($search);
-			}
-			if(!empty($search['clear_balance'])){
-				$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
-			}
-	
-	
 		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

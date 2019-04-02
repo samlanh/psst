@@ -59,8 +59,8 @@
 				<td width="15%" align="center">
 				</td>
 				<td width="70%" align="center">
-					<strong style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOME_STATEMENT')?></strong><br />
-					<strong style="color:#000; font-size: 13px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMESTATEMENT')?></strong><br />
+					<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="15%" align="center"></td>
 			</tr>
@@ -71,11 +71,11 @@
 				<td colspan="3">
 					<table class="padd" width="100%" align="left" border="0" style="white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
 						<thead>
-							<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
-								<td width="22%" style="text-align: left;" ><?php echo $tr->translate('ALL_INCOME')?></td>
-								<td width="13%" style=""></td>
-								<td width="31%" style=""></td>
-								<td width="34%" style=""><?php echo $tr->translate('')?></td>
+							<tr style="font-size:13px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
+								<td width="20%" style="text-align: right;" ><?php echo $tr->translate('ALL_INCOME')?></td>
+								<td width="20%" style=""></td>
+								<td width="20%" style=""></td>
+								<td width="40%" style=""><?php echo $tr->translate('')?></td>
 							</tr>
 						</thead>
 						  <?php 
@@ -87,10 +87,10 @@
 							$no=0;
 						 ?>
 						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-							<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+							<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
 								<td style=""></td>
-								<td style="text-align: right;"><?php echo $rs['category_name'];?></td>
-								<td style="white-space: nowrap;">...................................................................................</td>
+								<td style="text-align:left;"><?php echo $rs['category_name'];?></td>
+								<td style="white-space: nowrap;">.............................................</td>
 								<td style=""><?php echo number_format($rs['total_paidamount'],2);?></td>
 							</tr>
 								<?php 
@@ -99,25 +99,25 @@
 								 	$credit_memo = $credit_memo + $rs['credit_memo'];
 						 	 	?>
 						  <?php }}if($total_penalty>0){ ?>
-					  		<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+					  		<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
 								<td style=""></td>
-								<td style="text-align: right;"><?php echo $tr->translate('FINE');?></td>
-								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style="text-align: left;"><?php echo $tr->translate('FINE');?></td>
+								<td style="white-space: nowrap;width:200px;">.............................................</td>
 								<td style=""><?php echo number_format($total_penalty,2);?></td>
 							</tr>
 						  <?php }if($credit_memo>0){?>
-						  	<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+						  	<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
 								<td style=""></td>
-								<td style="text-align: right;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
-								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style="text-align: left;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
+								<td style="white-space: nowrap;width:200px;">.............................................</td>
 								<td style=""><?php echo number_format($credit_memo,2);?></td>
 							</tr>
 						  <?php }?>
 						   <?php if(!empty($this->rsincome)){ foreach($this->rsincome as $key => $rs){?>
-							  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+							  <tr class="hover" style="font-size:13px; height: 20px;" align="center" >
 								<td style=""></td>
-								<td style="text-align: right;"><?php echo $rs['income_category'];?></td>
-								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style="text-align: left;"><?php echo $rs['income_category'];?></td>
+								<td style="white-space: nowrap;width:200px;">.............................................</td>
 								<td style=""><?php echo number_format($rs['total_income'],2);?></td>
 							  </tr>
 								<?php 
@@ -126,16 +126,11 @@
 						 	 	?>
 							<tr>
 								<td colspan="3"></td>
-								<td><strong style="border-bottom: 5px double #000;font-size:17px;">$&nbsp;<?php echo number_format($total_income,2);?></strong></td>
+								<td><strong style="border-bottom: 2px solid #000;font-size:13px;">$&nbsp;<?php echo number_format($total_income,2);?></strong></td>
 							</tr>
 					</table>
 				</td>	
 			</tr>	
-			<tr>
-				<td colspan="3">
-					&nbsp;
-				</td>	
-			</tr>
 			<tr>
 				<td colspan="3">
 					<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
@@ -147,19 +142,19 @@
 							<td colspan="3" id="exportExcel">
 								<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
 									<thead>
-										<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
-											<td width="22%" style="text-align: left;" ><?php echo $tr->translate('ALL_EXPENSE')?></td>
-											<td width="13%" style=""></td>
-											<td width="31%" style=""></td>
-											<td width="34%" align="left" style=""><?php echo $tr->translate('')?></td>
+										<tr style="font-size:13px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
+											<td width="20%" style="text-align: right;" ><?php echo $tr->translate('ALL_EXPENSE')?></td>
+											<td width="20%" style=""></td>
+											<td width="20%" style=""></td>
+											<td width="40%" style=""><?php echo $tr->translate('')?></td>
 										</tr>
 									</thead>
 								<?php $i=0;
 									$total_expense = 0;
 								if(!empty($this->rsexpense)){foreach ($this->rsexpense AS $row) { $i++;?>
-									<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+									<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
 										<td style=""></td>
-										<td style="text-align: right;"><?php echo $row['account_name'];?></td>
+										<td style="text-align: left;"><?php echo $row['account_name'];?></td>
 										<td style="white-space: nowrap;">...................................................................................</td>
 										<td align="left" style="color:red">&nbsp;&nbsp;<?php echo number_format($row['total_expense'],2);?></td>
 									</tr>
@@ -168,7 +163,7 @@
 									<tr>
 										<td colspan="3"></td>
 										<td align="left" >
-											<strong style="border-bottom: 5px double red;font-size:17px;color:red">$&nbsp;<?php echo number_format($total_expense,2);?></strong>
+											<strong style="border-bottom: 2px solid #000;font-size:13px;color:#000">$&nbsp;<?php echo number_format($total_expense,2);?></strong>
 										</td>
 									</tr>	
 								</table>	
@@ -190,26 +185,17 @@
 							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
 						</style>
 						<tr>
-							<td colspan="3" id="exportExcel">
+							<td id="exportExcel">
 								<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
-									<thead>
-										<tr style="font-size:16px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
-											<td width="22%" style="text-align: left;" ><?php echo $tr->translate('NET_INCOME')?></td>
-											<td width="13%" style=""></td>
-											<td width="31%" style=""></td>
-											<td width="34%" align="left" style=""><?php echo $tr->translate('')?></td>
-										</tr>
-									</thead>
 									<?php 
 										$grand_total = $total_income - $total_expense;
 									?>
-									
 									<tr>
-										<td style=""></td>
-										<td style="text-align: right;font-size:17px;font-weight:bold;"><?php echo $tr->translate('NET_INCOME')?></td>
-										<td style="white-space: nowrap;">...................................................................................</td>
-										<td align="left" >
-											<strong style="border-bottom: 5px double #000;font-size:17px;<?php if($grand_total<0){echo 'color:red;';}?>">$&nbsp;<?php echo number_format($grand_total,2);?></strong>
+										<td width="20%" align="right"><strong><?php echo $tr->translate('NET_INCOME_OR_NET_LOST')?></strong></td>
+										<td width="20%" style="text-align: right;font-size:13px;font-weight:bold;"></td>
+										<td width="20%" style="white-space: nowrap;"></td>
+										<td width="40%" align="left" >
+											<strong style="border-bottom: 5px double #000;font-size:13px;<?php if($grand_total<0){echo 'color:red;';}?>">$&nbsp;<?php echo number_format($grand_total,2);?></strong>
 										</td>
 									</tr>	
 								</table>	
@@ -230,7 +216,7 @@
 							<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
 						</tr>
 						<tr style="text-align: center;">
-							<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
+							<td width="30%" style="font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
 							<td width="30%">ប្រធានគណនេយ្យ</td>
 							<td width="30%">បេឡាករ</td>
 						</tr>

@@ -1,9 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("STUDENT_PAYMENT_RECEIPT"));
-	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$session_user=new Zend_Session_Namespace('authstu');
-	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>
 <style>
@@ -73,8 +70,6 @@ table.tb-footer tr.style-head {
 						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
 						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
 						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
-						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
-						<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="7" id="clear_balance" name="clear_balance"  <?php if(!empty($this->search['clear_balance'])){if($this->search['clear_balance']==7){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENT_CLEAR_BALANCE");?>
 					</div>
 				</td>
 			</tr>
@@ -121,13 +116,13 @@ table.tb-footer tr.style-head {
 					<td width="15%" align="center">
 					</td>
 					<td align="center"  width="70%">
-						<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></span><br />
-						<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span><br />
+						<div style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></div>
+						<?php if(!empty($this->search["start_date"])){?><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';line-height: 22px;"><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span><?php }?>
 					</td>
 					<td width="15%">&nbsp;</td>
 				</tr>
 				<tr>
-					<td colspan="3" id="exportExcel">
+					<td colspan="3" id="exportExcel" valign="top">
 						<table  style="width:100%; white-space: nowrap; !important;">
 							<?php if (!empty($this->row)){  ?>
 							<tr>
@@ -135,27 +130,20 @@ table.tb-footer tr.style-head {
 							</tr>
 							<?php }?>
 							<tr>
-								<td colspan="2">
+								<td colspan="2" valign="top">
 									<table class="content-data" align="center">
 										 <?php 
-										 	$i=0; $total=0;$total_paid=0;$total_balance=0;
-										 	$comple_b=0; $isset =0; $total_other_income=0;
-										 	$total_other_expense=0;
+										 	$i=0;
 										 	$total_income_dollar=0;
-										 	$total_income_kh = 0;
 										 	$total_expense_dollar = 0;
 										 	$total_expense_kh =0;
 										 	$total_payment=0;
 										 	$fine = 0;
 										 	$credit_memo = 0;
-										 	$deduct = 0;
-										 	$total_payment_change_product = 0;
-										 	$total_credit_memo_change_product = 0;
-										 	
 										 	$net_amount = 0;
 											$paid_amount = 0;
 											$balance = 0;
-										 	if (!empty($this->row)){  
+										 if (!empty($this->row)){  
 										 ?>
 										  <thead>
 											  <tr class="style-head" style="font-size:10px;" align="center">
@@ -233,7 +221,7 @@ table.tb-footer tr.style-head {
 											<td><?php echo $tr->translate('USER')?></td>
 										</tr>
 										<style> td{padding:0 3px; }</style>
-									<?php $i=0;$total_income_kh=0;foreach($this->income as $row){ $i++;?>
+									<?php $i=0;foreach($this->income as $row){ $i++;?>
 										<tr class="style-rowdata hover" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
 											<td style="text-align: left;"><?php echo $row['title'];?></td>
@@ -279,110 +267,44 @@ table.tb-footer tr.style-head {
 											<td><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 											<td><?php echo $row['name'];?></td>
 										</tr>
-											<?php 
-												$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
-											?> 
-										 <?php } ?>
+										<?php 
+											$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
+										?> 
+									 <?php } ?>
 									</table>
 								</td>
 							</tr>
 							<?php }?>
-							<?php if(!empty($this->change_product)){?>
-							<tr>
-								<td colspan="2"><strong><?php echo $tr->translate("CHANGE_PRODUCT");?></strong></td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<table class="content-data" border="1" align="center">
-										<thead>
-											<tr class="style-head" style="font-size:10px;" align="center">
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('NAME')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL_PAYMENT')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('CREDIT_MEMO')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('CREATE_DATE')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
-												<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
-											</tr>
-									   </thead>
-										 <style> td{padding:0 3px; }</style>
-									<?php $i=0;foreach($this->change_product as $row){ $i++;?>
-										<tr class="style-rowdata hover" style="font-size:10px; height: 20px;border: 1px solid #000;" align="center" >
-											<td><?php echo $i;?></td>
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$row['id']))?>"><?php echo $row['receipt_no'];?></a></td>
-											<td><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$row['id']))?>"><?php echo $row['name'];?></a></td>
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['total_payment']>0){echo number_format($row['total_payment'],2);}?></td>	
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['credit_memo']>0){echo number_format($row['credit_memo'],2);}?></td>
-											<td><?php echo date('d-M-Y',strtotime($row['create_date']));?></td>
-											<td><?php echo $row['user'];?></td>
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php echo $row['status'];?></td>
-										</tr>
-											<?php 
-												if($row['is_void']==0){
-													$total_payment_change_product = $total_payment_change_product + $row['total_payment'];
-													$total_credit_memo_change_product = $total_credit_memo_change_product + $row['credit_memo'];
-												}
-											?> 
-									<?php } ?>
-									</table>
-									<table width="100%" style="margin-top: 5px;">
-										<?php if(!empty($this->change_product)){?>
-											<tr>
-												<td colspan="3">
-													<table width="29.2%" border="1" align="right" style="white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';font-size:10px;">
-												  		<tr style="background-color: #ccc;" align="center">
-											 				<td style=" width: 38%; font-weight:bold;">&nbsp;<?php echo $tr->translate("TOTAL_PAYMENT"); ?>&nbsp;</td>
-											 				<td style=" width: 38%; font-weight:bold;">&nbsp;<?php echo $tr->translate("CREDIT_MEMO"); ?>&nbsp;</td>
-												  		</tr>
-												  		<tr style="font-size:10px; height: 23px;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
-															<td style=" color:#F00; "><?php echo number_format($total_payment_change_product,2);?></td>
-															<td style=" color:#F00; "><?php echo number_format($total_credit_memo_change_product,2);?></td>
-												  		</tr>
-													</table>
-												</td>
-											</tr>
-										<?php }?>
-									</table>
-								</td>
-							</tr>
-							<?php }?>
-							<?php if(!empty($this->row) || !empty($this->stu_test) || !empty($this->income) || !empty($this->expense) || !empty($this->change_product) || !empty($this->clear_balance)){?>
-							<tr>
-								<td colspan="2"><span><?php echo $tr->translate("TOTAL_INCOME");?></span></td>
-							</tr>
+							<?php if(!empty($this->row) || !empty($this->income) || !empty($this->expense)){?>
 							<tr>
 								<td colspan="2">
 								<?php 
-									$final_total_income = $net_amount + $fine + $total_income_dollar + $total_payment_change_product - $credit_memo - $total_expense_dollar ;
+									$final_total_income = $net_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
 								?>								
-									<table width="100%" border="1"  style="margin-top:5px;white-space:nowrap;">
-										<tr style="background-color: #ccd9ff;font-size:12px; color:#000; height: 23px;font-family: 'Times New Roman','Khmer OS Battambang'; "​ align="center">
-							 				<td colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>&nbsp;</td>
-							 				<td rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
-							 				<td rowspan="2">&nbsp;<?php echo $tr->translate("CHANGE_PRODUCT"); ?>&nbsp;</td>
-							 				<td rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
+									<table width="50%" style="margin-top:5px;white-space:nowrap;font-size:13px;">
+								  		<tr>
+								  			<td><?php echo $tr->translate("FINE");?></td>
+								  			<td><?php echo '$ '.number_format($fine,2);?></td>
+								  			<td><?php echo $tr->translate("BALANCE");?></td>
+								  			<td><?php echo '$ '.number_format($balance,2);?></td>
 								  		</tr>
-								  		<tr align="center" style="font-size:12px; color:#000; height: 23px; background-color: #ccd9ff;font-family: 'Times New Roman','Khmer OS Battambang';"​ >
-							 				<td><?php echo $tr->translate("FINE");?></td>
-							 				<td><?php echo $tr->translate("NET_AMOUNT");?></td>
-							 				<td><?php echo $tr->translate("CREDIT_MEMO");?>(-)</td>
-											<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
-											<td><?php echo $tr->translate("BALANCE");?></td>
-							  			</tr>
-								  		<tr style="font-size:12px; color:#000; height: 23px;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
-							 				<td><?php echo '$ '.number_format($fine,2);?></td>
-							 				<td><?php echo '$ '.number_format($credit_memo,2);?></td>
-							 				<td><?php echo '$ '.number_format($total_payment,2);?></td>						 				
-											<td><?php echo '$ '.number_format($paid_amount,2);?></td>
-											<td><?php echo '$ '.number_format($balance,2);?></td>
-											<td style=" color:#F00; font-weight:bold;"><?php echo number_format($total_income_dollar,2);?> $​ </td>
-											<td style=" color:#F00; font-weight:bold;"><?php echo number_format($total_payment_change_product,2);?> $ </td>
-											<td style=" color:#F00; font-weight:bold;"><?php echo number_format($total_expense_dollar,2);?> $ </td>
+								  		<tr>
+								  			<td><?php echo $tr->translate("NET_AMOUNT");?></td>
+								  			<td><?php echo '$ '.number_format($total_payment,2);?></td>	
+								  			<td><?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
+								  			<td style=" color:#F00; font-weight:bold;"><?php echo '$ '.number_format($total_income_dollar,2);?></td>
 								  		</tr>
-								  		<tr style="font-size:12px; color:#000; height: 23px;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
-							  				<td> Net Amount ($)</td>
-											<td colspan="7" style=" color:#006d1f; font-weight:bold;font-size: 14px;"> <?php echo number_format($final_total_income,2);?> $ </td>
+								  		<tr>
+								  			<td><?php echo $tr->translate("CREDIT_MEMO");?>(-)</td>
+								  			<td><?php echo '$ '.number_format($credit_memo,2);?></td>
+								  			<td><?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
+								  			<td style=" color:#F00; font-weight:bold;"><?php echo '$ '.number_format($total_expense_dollar,2);?></td>
+								  		</tr>
+								  		<tr>
+								  			<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
+								  			<td><?php echo '$ '.number_format($paid_amount,2);?></td>
+								  			<td><?php echo $tr->translate("GRAND_TOTAL");?></td>
+											<td colspan="7" style="border-bottom:5px double #000;color:#006d1f; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
 								  		</tr>
 								    </table>
 									<?php }?>
@@ -392,22 +314,22 @@ table.tb-footer tr.style-head {
 						<table style="width:100%;font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap; !important;">
 							<tr>
 								<td colspan="3" >
-										<style type="text/css">
-											body{font-family: 'Times New Roman','Khmer OS Battambang'; }
-											table{ border-collapse:collapse; margin:0 auto;
-											border-color:#000; }
-											.padd tr td{  text-align:center}
-											.padd tr th{  background-color: #e4e4e4; }
-											table { page-break-inside:auto }
-											tr{ page-break-inside:avoid; page-break-after:auto }
-											th,td{ padding:0 1px;}
+									<style type="text/css">
+										body{font-family: 'Times New Roman','Khmer OS Battambang'; }
+										table{ border-collapse:collapse; margin:0 auto;
+										border-color:#000; }
+										.padd tr td{  text-align:center}
+										.padd tr th{  background-color: #e4e4e4; }
+										table { page-break-inside:auto }
+										tr{ page-break-inside:avoid; page-break-after:auto }
+										th,td{ padding:0 1px;}
 										table { page-break-inside:auto }
 										tr{ page-break-inside:avoid; page-break-after:auto; }
 										#header {
 										  display: table-header-group;
 										  page-break-inside:avoid; page-break-after:auto;
 										}
-										</style>
+									</style>
 								</td>
 							</tr>
 							<tr >

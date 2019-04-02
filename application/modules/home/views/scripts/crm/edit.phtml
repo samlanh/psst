@@ -1,8 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_CRM"));
-	$baseurl = $this->baseUrl();
-	$frm_items= $this->frm_crm;
+	$frm_items = $this->frm_crm;
 ?>
 <style>
 table.history-record {
@@ -30,8 +29,7 @@ table.history-record tbody tr td {
 		    	<div class="col-sm-8 pd-0">
 	    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_CRM');?></h4>
     			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
+    			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
     	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
@@ -42,6 +40,11 @@ table.history-record tbody tr td {
 						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
 						return false;
 					}
+					identity = $("#identity").val();
+					if(identity==''){
+						dijit.byId('kh_name_stu').focus();
+						return false;
+					}
 					loadingBlock();
 					return true;
 				}else {
@@ -50,7 +53,6 @@ table.history-record tbody tr td {
 			</script>
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-					
 					<div class="form-group">
 		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -92,7 +94,6 @@ table.history-record tbody tr td {
 	                   		<?php echo $frm_items->getElement("tel");?>
 	                   </div>
 	                </div>
-	                
 		             <div class="form-group">
 		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ASK_FOR");?> </label>
 		               <div class="col-md-7 col-sm-7 col-xs-12">
@@ -105,15 +106,12 @@ table.history-record tbody tr td {
 		                	<input value="<?php echo $this->prevconcern;?>" type="text" id="e15" name="prev_concern"  style="width: 100%">
 		                </div>
 		             </div>
-		             
-		             
 		             <div class="form-group">
 		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("KNOW_BY");?> </label>
 		               <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("know_by");?>
 		                </div>
 		             </div>
-	                
 	                <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_SCHOOL");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -137,8 +135,7 @@ table.history-record tbody tr td {
 		         </div>
 				<div class="col-md-8 col-sm-8 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFORMATION");?> 
-	                   </label>
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFORMATION");?></label>
 	                </div>
 	                <div class="bd-bg">
 		                <div class="form-group">
@@ -167,15 +164,14 @@ table.history-record tbody tr td {
 		                   </div>
 		                   <div class="col-md-3 col-sm-3 col-xs-12">
 		                   		<input type="button" label="<?php echo $tr->translate('Add To Record');?>" dojoType="dijit.form.Button" 
-												iconClass="dijitIconEditProperty" onclick="addRow();" />
+									iconClass="dijitIconEditProperty" onclick="addRow();" />
 		                   </div>
 		                </div>
 	                 </div>
 	               <div class="form-group">
 		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
+							<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
-						
 						<input type="hidden" name="identity" id="identity"  />
 		         	 </div>
 					<div class="form-group">
@@ -192,7 +188,6 @@ table.history-record tbody tr td {
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_HISTORY");?> 
 	                   </label>
 	                </div>
-	                
 	                <div class="form-group">
 	                	<table class="history-record" >
 	                		<thead>
@@ -219,12 +214,10 @@ table.history-record tbody tr td {
 	                </div>
 	                <?php }?>
 		         </div>
-		         
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+		               		<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
 		               	</div>
 		             </div>
@@ -272,7 +265,7 @@ dojo.require("dijit.form.Textarea");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
+dojo.require("dojo.NodeList-manipulate");
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -280,21 +273,19 @@ var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_J
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: grade_store,
-		autoComplete: true,                        
+		autoComplete: false,
+		queryExpr:'*${0}*',                        
 		required: false,
 		id: "grade",
 		name: "grade",           
 		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
-		onChange: function() {  
-			
+		onChange:function(){  
 		}
 	}, "grade");
-	
 	getAllGrade();	
 	initailize();
 });
-
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getAllGrade(){
 	dijit.byId('grade').set('value',''); 
@@ -308,31 +299,37 @@ function getAllGrade(){
 			'dept_id':dept_id
 			},
 		handleAs:"json",
-		load: function(data) {
+		load: function(data){
 			grade_store  = getDataStorefromJSON('id','name', data);
 			dijit.byId('grade').set('store',grade_store);  
 		},
-		error: function(err) {
-			alert(err);
+		error: function(err){
 		}
 	});
 }
-
 var col = 0;
 var no = 0;
 var title = 0;
 tmp = '';
 temp='';
-function addRow() {
-
+function addRow(){
 	kh_name_stu = dijit.byId('kh_name_stu').get('value');
 	first_name_stu = dijit.byId('first_name_stu').get('value');
 	last_name_stu = dijit.byId('last_name_stu').get('value');
 	sex_stu = dijit.byId('sex_stu').get('value');
 	age_stu = dijit.byId('age_stu').get('value');
-	degree = dijit.byId('degree').get('value');
-	grade = dijit.byId('grade').get('value');
 
+	degree = dijit.byId('degree').get('value');
+	if(degree==''){
+		dijit.byId('degree').focus();
+		return false;
+	}
+	grade = dijit.byId('grade').get('value');
+	if(grade==''){
+		dijit.byId('grade').focus();
+		return false;
+	}
+	
 	degreelabel = dijit.byId("degree").attr('displayedValue');
 	gradelabel = dijit.byId("grade").attr('displayedValue');
 	sex_stulabel = dijit.byId("sex_stu").attr('displayedValue');
@@ -356,7 +353,6 @@ function addRow() {
 		temp+='<th ><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
 		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
-		
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -369,8 +365,6 @@ function addRow() {
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="'+age_stu+'" type="hidden">'+age_stu+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
-
-		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -390,8 +384,7 @@ function addRow() {
 	age_stu = dijit.byId('age_stu').set('value','');
 	grade = dijit.byId('grade').set('value','');
 }
-
-function initailize() {
+function initailize(){
 	<?php if (!empty($this->rowdetail)) foreach ($this->rowdetail as $rs){?>
 	col++;no++;
 	template='';
@@ -399,13 +392,12 @@ function initailize() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>';
-		temp+='<th ><?php echo $tr->translate("First Name");?></th>';
-		temp+='<th ><?php echo $tr->translate("Last Name");?></th>';
-		temp+='<th ><?php echo $tr->translate("SEX");?></th>';
-		temp+='<th ><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
-		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
-		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
-		
+		temp+='<th><?php echo $tr->translate("First Name");?></th>';
+		temp+='<th><?php echo $tr->translate("Last Name");?></th>';
+		temp+='<th><?php echo $tr->translate("SEX");?></th>';
+		temp+='<th><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
+		temp+='<th><?php echo $tr->translate("DEGREE");?></th>';
+		temp+='<th><?php echo $tr->translate("GRADE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -418,8 +410,6 @@ function initailize() {
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="<?php echo $rs['age'];?>" type="hidden"><?php echo $rs['age'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="<?php echo $rs['crm_degree'];?>" type="hidden"><?php echo $rs['degree_title'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="<?php echo $rs['crm_grade'];?>" type="hidden"><?php echo $rs['grade_title'];?>&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="detailid'+col+'" id="detailid'+col+'" value="<?php echo $rs['stu_id'];?>" type="hidden"></td>';
-
-		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -432,9 +422,7 @@ function initailize() {
 	     parseContent: true,
 	});
 	<?php } ?>
-
 }
-
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');

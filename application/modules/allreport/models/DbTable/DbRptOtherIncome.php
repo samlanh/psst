@@ -17,7 +17,7 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
 	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income) as income_category,
 	    			(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
 	    			(select CONCAT(first_name) from rms_users as u where u.id = user_id)  as name
-    			 from 
+    			 FROM 
     				ln_income  
     			WHERE 
     				status=1 ";
@@ -49,7 +49,6 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$where.= $_db->getAccessPermission();
-    	
     	return $db->fetchAll($sql.$where.$order);
     }
     function getAllOtherIncomebyCate($search){

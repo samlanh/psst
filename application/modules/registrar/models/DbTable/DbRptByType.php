@@ -45,7 +45,8 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 	    	$where.=" GROUP BY i.id ";
 	    	return $db->fetchAll($sql.$where);
 		}catch(Exception $e){
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	

@@ -30,7 +30,8 @@ table.content-data thead tr.style-head {
 				 		<?php echo $frm_items->getElement("branch_search");?>
 				 	</div>
 				 		<div class="col-md-2 col-sm-2 col-xs-12">
-				 		<?php echo $frm_items->getElement("crm_list");?>
+				 		<?php //echo $frm_items->getElement("crm_list");?>
+				 		<input id="crm_list" />
 				 	</div>
 				 		<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("ask_for_search");?>
@@ -176,3 +177,61 @@ table.content-data thead tr.style-head {
 			</table>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.FilteringSelect");   
+</script>
+<script>
+var crm_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: crm_store,
+		autoComplete: true,                        
+		required: false,
+		id: "crm_list",
+		name: "crm_list",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('PLEASE_SELECT');?>",          
+		onChange: function() {  
+		}
+	}, "crm_list");
+
+	 var branch_id = dijit.byId('branch_search');
+	 branch_id.on('change', function(evt) {
+		 getCRMByBranch();
+    });
+	 getCRMByBranch();
+});
+
+url_getacademic= '<?php echo $this->url(array('module'=>'home','controller'=>'crm','action'=>'getcrmbybranch'));?>';
+var oldBranch = "<?php echo $this->search['branch_search']?>";
+function getCRMByBranch(){
+	dijit.byId('crm_list').reset();
+	branch_id = dijit.byId('branch_search').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var crm_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('crm_list').set('store',crm_store);  
+		dijit.byId('branch_search').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getacademic,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			crm_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('crm_list').set('store',crm_store);  
+		    if(oldBranch==branch_id){
+		    	dijit.byId('crm_list').set('value','<?php echo $this->search['crm_list']?>');  
+		    }
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+</script>

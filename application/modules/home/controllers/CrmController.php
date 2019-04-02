@@ -163,4 +163,15 @@ class Home_CrmController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_crmhistory = $frm;
 	}
+	
+	function getcrmbybranchAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Home_Model_DbTable_DbCRM();
+			$group = $db->getAllCrmFilter($data['branch_id']);
+			array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("PLEASE_SELECT")));
+			print_r(Zend_Json::encode($group));
+			exit();
+		}
+	}
 }

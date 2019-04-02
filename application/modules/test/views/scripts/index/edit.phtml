@@ -617,33 +617,35 @@ dojo.ready(function(){
 			}
 		}, "grade_result");
 
-		new dijit.form.FilteringSelect({
-			name: "nationality",
-			id: "nationality",
-			autoComplete:false,
-			queryExpr:'*${0}*',
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(1);
-		    }
-			}, "nationality");
-		new dijit.form.FilteringSelect({
-			name: "nation",
-			id: "nation",
-			autoComplete:false,
-			queryExpr:'*${0}*',
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(2);
-		    }
-			}, "nation");
+		
 		
 		filterDistrict();
 		oldRow();
 });
+new dijit.form.FilteringSelect({
+	name: "nationality",
+	id: "nationality",
+	autoComplete:false,
+	queryExpr:'*${0}*',
+	searchAttr: "name",
+	class: 'fullside',
+	onChange: function() {
+		popupNation(1);
+    }
+	}, "nationality");
+new dijit.form.FilteringSelect({
+	name: "nation",
+	id: "nation",
+	autoComplete:false,
+	queryExpr:'*${0}*',
+	searchAttr: "name",
+	class: 'fullside',
+	onChange: function() {
+		popupNation(2);
+    }
+	}, "nation");
 
+	
 function AllRefresh(){
 	loadingBlock();
 	pro_id = dijit.byId('province_id').get('value');

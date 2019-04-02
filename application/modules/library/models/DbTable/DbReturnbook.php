@@ -18,8 +18,8 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
     	$sql=" SELECT 
     				ret.id,
     				ret.return_no,
-			     	ret.return_date,
 			     	ret.note,
+			     	ret.return_date,
 					(SELECT first_name FROM rms_users WHERE id=ret.user_id LIMIT 1) AS user_name,
 					(SELECT name_en FROM rms_view WHERE key_code=ret.status LIMIT 1) AS `status`
 				FROM 
@@ -38,6 +38,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  ret.return_no LIKE '%{$s_search}%'";
+    		$s_where[]="  ret.note LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	
@@ -45,14 +46,8 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.status='.$search["status_search"];
     	}
     	
-    	if($search["student_name"]>0){
-    		$where.=' AND bor.stu_id='.$search["student_name"];
-    	}
-    	if(!empty($search["is_type_bor"])){
-    		$where.=' AND bor.borrow_type='.$search["is_type_bor"];
-    	}
     	
-    	$order=" ORDER BY id DESC";
+    	$order=" ORDER BY ret.id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
  
@@ -249,6 +244,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 				WHERE 
 					b.id = bd.borr_id
 					and b.stu_id = s.stu_id
+					and bd.is_return = 0
 					and bd.book_id = $book_id
 			";
 		return $db->fetchRow($sql);

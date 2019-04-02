@@ -18,8 +18,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	   	}else{
     			$search = array(
 	    				'title'	        =>	'',
-		    			'cood_book'	    =>	0,
-		    			'status_search'	=>	1,
+		    			'status_search'	=>	-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d') 
 	    		);
@@ -28,7 +27,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$glClass = new Application_Model_GlobalClass();
 			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BOOK_NO","BROKEN_DATE","NOTE","STATUS","USER");
+			$collumns = array("BOOK_NO","NOTE","BROKEN_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'brokenbook','action'=>'edit',
 			);

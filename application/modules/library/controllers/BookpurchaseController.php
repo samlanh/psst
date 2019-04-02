@@ -18,14 +18,14 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	   	}else{
     			$search = array(
 	    				'title'	        =>	'',
-		    			'status_search'	=>	1,
+		    			'status_search'	=>	-1,
     					'start_date'	=> date('Y-m-d'),
     					'end_date'		=>date('Y-m-d') 
 	    		);
     	    }
     	    $rs_row=$db->getAllPurchase($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PO_NUMBER","DATE_ORDER","NOTE","USER","STATUS");
+			$collumns = array("PO_NUMBER","NOTE","DATE_ORDER","USER","STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'bookpurchase','action'=>'edit',
 			);

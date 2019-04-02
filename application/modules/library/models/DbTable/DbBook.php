@@ -23,8 +23,10 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     				b.author,
     				(SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id limit 1) AS cat_name,
     			  	(SELECT c.block_name FROM rms_blockbook AS c WHERE c.id=b.block_id limit 1) AS block_name,
-    			  	(select count(id) from rms_book_detail as bdt where b.id = bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 and status=1 limit 1) as available,
-			      	(select count(id) from rms_book_detail as bdt where b.id = bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 and status=1 limit 1) as borrow,
+    			  	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.status=1 limit 1) as total_book,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 and bdt.status=1 limit 1) as total_available,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 and bdt.status=1 limit 1) as total_borrow,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_broken=1 and bdt.status=1 limit 1) as total_broken,
 			        b.date,
 			      	(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
 			      	(select $label from rms_view where type=1 and key_code = b.status) as status

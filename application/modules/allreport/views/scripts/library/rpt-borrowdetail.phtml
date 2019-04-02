@@ -24,6 +24,13 @@
 					<option value="0" <?php if($this->search['is_return']==0){echo "selected";}?>><?php echo $tr->translate('NOT_RETURN');?></option>
 				</select>
 			</td>
+			<td>
+				<select name="is_broken" id="is_broken" class="fullside" dojoType="dijit.form.FilteringSelect" >
+					<option value="-1"><?php echo $tr->translate('STATUS');?></option>
+					<option value="1" <?php if($this->search['is_broken']==1){echo "selected";}?>><?php echo $tr->translate('BROKEN');?></option>
+					<option value="0" <?php if($this->search['is_broken']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BROKEN');?></option>
+				</select>
+			</td>
 	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 	    </tr>
 	</table>
@@ -71,11 +78,12 @@
 							<td><?php echo $tr->translate("BORROW_DATE"); ?></td>
 							<td><?php echo $tr->translate("RETURN_DATE"); ?></td>
 							<td><?php echo $tr->translate("USER"); ?></td>
-							<td><?php echo $tr->translate("STATUS"); ?></td>
+							<td colspan="2"><?php echo $tr->translate("STATUS"); ?></td>
 						</tr>
 						</thead>
 						<?php $total=0;$name="";$code="";
 							$is_return = array(1=>$tr->translate("IS_RETURN"),0=>$tr->translate("NOT_RETURN"));
+							$is_broken = array(1=>$tr->translate("BROKEN"),0=>$tr->translate("NOT_BROKEN"));
 						?>
 					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->borr_detail))foreach ($this->borr_detail AS $row) { $i++;
 							if($row['borrow_type']==1){
@@ -99,6 +107,7 @@
 							<td style="<?php if($row['is_return']==0){echo 'color:red;';}?>">&nbsp;<?php echo date("d-M-Y",strtotime($row['return_date']));?>&nbsp;</td>
 							<td><?php echo $row['user_name'];?></td>	
 							<td style="<?php if($row['is_return']==0){echo 'color:red;';}?>">&nbsp;<?php echo $is_return[$row['is_return']];?></td>
+							<td style="<?php if($row['is_broken']==1){echo 'color:red;';}?>">&nbsp;<?php echo $is_broken[$row['is_broken']];?></td>
 						</tr>
 					<?php }?>	 
 					</table>	

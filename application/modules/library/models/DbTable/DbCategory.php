@@ -10,50 +10,45 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
  
     public function getAllCategoryVandy($parent = 0, $spacing ='', $cate_tree_array = '',$status='',$search){
     	$db=$this->getAdapter();
-    	if (!is_array($cate_tree_array))
-    		$cate_tree_array = array();
-    	$sql="SELECT c.`id`,
-    	c.name,
-    	c.`parent_id`,c.`status`,
-    	c.remark,(SELECT first_name FROM rms_users WHERE rms_users.id=c.user_id LIMIT 1) AS user_name  
-    	FROM `rms_bcategory` AS c WHERE  1 ";
-//     	(SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND c.`status`=v.`key_code` LIMIT 1) AS status
+    	if (!is_array($cate_tree_array)){$cate_tree_array = array();}
+    		
+    	$sql="SELECT 
+    				c.`id`,
+			    	c.name,
+			    	c.`parent_id`,
+			    	c.remark,(SELECT first_name FROM rms_users WHERE rms_users.id=c.user_id LIMIT 1) AS user_name,
+			    	c.`status` 
+		    	FROM 
+    				`rms_bcategory` AS c 
+    			WHERE  1 
+    		";
         if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = trim(addslashes($search['title']));
     		$s_where[] = " c.`name` LIKE '%{$s_search}%'";
     		$sql .=' AND ('.implode(' OR ',$s_where).')';
     	} 
-    	if (@$search["status"]!=''){
-    		$sql.=" AND c.`status`='".$search["status"]."'";
+    	if ($search["status_search"]>-1){
+    		$sql.=" AND c.`status`='".$search["status_search"]."'";
     	}
-    	if (@$search["parent"]>0){
+    	if ($search["parent"]>0){
     		$sql.=" AND c.`id`='".$search["parent"]."'";
-    	}else{
-    		//$sql.=" AND c.`parent_id`=$parent";
     	}
-    	if (@$search["name"]!=''){
-    		$sql.=" AND c.`name`='".$search["name"]."'";
-    	}else{
-    		//$sql.=" AND c.`parent_id`=$parent";
-    	}
-    	if(@$search["parent"]=='' and @$search["name"]=='' and @$search["status"]==''){
-    		$sql.=" AND c.`parent_id`=$parent";
-    	}
-    	 
     	$sql.=" ORDER BY c.id ASC";
-    	$query = $db->fetchAll($sql);
-    	$stmt = $db->query($sql);
-    	$rowCount = count($query);
-    	$id='';
-    	if ($rowCount > 0) {
-    		foreach ($query as $row){
-    			$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name'],"status" => $row['status'],"remark" => $row['remark'],"user_name" => $row['user_name'],$status);
-    			$cate_tree_array = $this->getAllCategoryVandy($id=$row['id'], $spacing. '  - ', $cate_tree_array,$status,$search='');
-    		}
-    	}
-    	//echo $sql;
-    	return $cate_tree_array;
+    	return $db->fetchAll($sql);
+    	 
+//     	$sql.=" ORDER BY c.id ASC";
+//     	$query = $db->fetchAll($sql);
+//     	$stmt = $db->query($sql);
+//     	$rowCount = count($query);
+//     	$id='';
+//     	if ($rowCount > 0) {
+//     		foreach ($query as $row){
+//     			$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name'],"status" => $row['status'],"remark" => $row['remark'],"user_name" => $row['user_name'],$status);
+//     			$cate_tree_array = $this->getAllCategoryVandy($id=$row['id'], $spacing. '  - ', $cate_tree_array,$status,$search='');
+//     		}
+//     	}
+//     	return $cate_tree_array;
     }
 	public function add($data){
 			$db = $this->getAdapter();

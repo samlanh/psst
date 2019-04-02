@@ -256,15 +256,15 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		return $options;
 	}
 	
-	function getBookDetail($book_id=0,$type=1){
+	function getBookDetail($book_id=0,$type=null){
 		$db=$this->getAdapter();
 		$sql="SELECT id,CONCAT(serial,' - ',barcode) as name FROM rms_book_detail WHERE is_broken=0 and status=1 ";
 		if($book_id>0){
 			$sql.=" and book_id = $book_id ";
 		}
-		if($type==1){ // borrow
+		if($type==0){ // borrow
 			$sql.=" and is_borrow=0 ";
-		}else{  // return
+		}else if($type==1){  // return
 			$sql.=" and is_borrow=1 ";
 		}
 		return $db->fetchAll($sql);

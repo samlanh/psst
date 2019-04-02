@@ -42,6 +42,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
            			and bd.book_id = bdt.id
            			and b.status = 1
            			and bdt.is_broken = 0
+           			and bdt.status = 1
            			and bd.is_return = 0
 			";
 		$where = '';
@@ -52,9 +53,11 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 			$s_where[]="  b.card_id LIKE '%{$s_search}%'";
 			$s_where[]="  b.name LIKE '%{$s_search}%'";
 			$s_where[]="  b.phone LIKE '%{$s_search}%'";
-			$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
 			$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[]= "(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]="  bdt.serial LIKE '%{$s_search}%'";
+			$s_where[]="  bdt.barcode LIKE '%{$s_search}%'";
+			$s_where[]="  CONCAT(bdt.serial,' - ',bdt.barcode) LIKE '%{$s_search}%'";
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 		}
 		 
@@ -110,7 +113,15 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 	
 	function getIsTypeBorowName(){
 		$db=$this->getAdapter();
-		$sql="SELECT key_code AS id , name_en AS `name`  FROM rms_view  WHERE `type`=13";
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+		}else{ // English
+			$label = "name_en";
+		}
+		$sql="SELECT key_code AS id , $label AS `name`  FROM rms_view  WHERE `type`=13";
 		return $db->fetchAll($sql);
 	}
 	

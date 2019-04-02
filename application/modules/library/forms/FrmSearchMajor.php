@@ -123,7 +123,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true','class'=>'fullside',
 		));
-		$option = array("0"=>$this->tr->translate("Select Type Borrow"));
+		$option = array("0"=>$this->tr->translate("SELECT_BORROWER_TYPE"));
 		$result = $db_stu->getIsTypeBorowName();
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['id']]=$row['name'];

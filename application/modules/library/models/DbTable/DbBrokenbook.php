@@ -18,10 +18,10 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
     	$sql=" SELECT 
     				b.id,
     				b.broke_no,
+    				note,
         		  	DATE_FORMAT(b.date_broken, '%d/%m/%Y'),
-        		  	note,
-				  	(SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`,
-				  	(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name
+        		  	(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
+				  	(SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
 			   	FROM 
 			   		rms_bookbroken AS b
 				WHERE 
@@ -35,6 +35,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  b.broke_no LIKE '%{$s_search}%'";
+    		$s_where[]="  b.note LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if($search["status_search"]>-1){

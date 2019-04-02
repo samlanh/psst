@@ -27,7 +27,7 @@ protected $tr;
     	    }
     	    $rs_rows =$db->getAllBook($search);
     	    $list = new Application_Form_Frmtable();
-    	    $collumns = array("BOOK_NAME","AUTHOR_NAME","CATEGORY","BLOCK_NAME","NOT_BORROW","BORROW","CREATE_DATE","USER","STATUS");
+    	    $collumns = array("BOOK_NAME","AUTHOR_NAME","CATEGORY","BLOCK_NAME","TOTAL","NOT_BORROW","BORROW","BROKEN","CREATE_DATE","USER","STATUS");
     	    $link=array(
     	    		'module'=>'library','controller'=>'book','action'=>'edit',
     	    );

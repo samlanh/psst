@@ -90,10 +90,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
 			    	(SELECT CONCAT(rms_users.first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id) AS user_name,
 			    	b.user_id,
 			    	(SELECT rms_view.name_en FROM rms_view WHERE rms_view.key_code=b.status AND rms_view.type=1 LIMIT 1 ) AS `status`,
-			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id limit 1) as total_book,
-			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 limit 1) as total_available,
-			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 limit 1) as total_borrow,
-			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_broken=1 limit 1) as total_broken
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.status=1 limit 1) as total_book,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=0 and bdt.is_broken=0 and bdt.status=1 limit 1) as total_available,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_borrow=1 and bdt.is_broken=0 and bdt.status=1 limit 1) as total_borrow,
+			    	(select count(id) from rms_book_detail as bdt where b.id=bdt.book_id and bdt.is_broken=1 and bdt.status=1 limit 1) as total_broken
     			FROM
 			    	rms_book AS b
     			WHERE
@@ -143,6 +143,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     			WHERE 
     				b.id = bd.book_id
     				and b.status=1
+    				and bd.status=1
     		";
     	$order = " order by b.id ASC , bd.id ASC ";
     	$where = '';
@@ -154,6 +155,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where[]="  b.publisher LIKE '%{$s_search}%'";
     		$s_where[]="  bd.serial LIKE '%{$s_search}%'";
     		$s_where[]="  bd.barcode LIKE '%{$s_search}%'";
+    		$s_where[]="  CONCAT(bd.serial,' - ',bd.barcode) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if($search["cood_book"]>0){
@@ -198,6 +200,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     			WHERE
 			    	b.id = bd.book_id
 			    	and b.status=1
+			    	and bd.status=1
 			    	and b.id = $id
     		";
     	$order = " order by b.id ASC , bd.id ASC ";
@@ -221,6 +224,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
      				bd.is_return,
      				bdt.serial,
      				bdt.barcode,
+     				bdt.is_broken,
      				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
      				(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,        
      				(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
@@ -246,11 +250,14 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where[]="  b.borrow_no LIKE '%{$s_search}%'";
     		$s_where[]="  b.card_id LIKE '%{$s_search}%'";
     		$s_where[]="  b.name LIKE '%{$s_search}%'";
+    		$s_where[]="  b.phone LIKE '%{$s_search}%'";
+    		$s_where[]=" (SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT stu_khname FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-     		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
+    		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bdt.book_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]="  bdt.serial LIKE '%{$s_search}%'";
+    		$s_where[]="  bdt.barcode LIKE '%{$s_search}%'";
+    		$s_where[]="  CONCAT(bdt.serial,' - ',bdt.barcode) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	
@@ -261,6 +268,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	
     	if($search["is_return"]>-1){
     		$where.=' AND bd.is_return='.$search["is_return"];
+    	}
+    	
+    	if($search["is_broken"]>-1){
+    		$where.=' AND bdt.is_broken='.$search["is_broken"];
     	}
     	
     	if($search["student_name"]>0){
@@ -321,8 +332,12 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where[]="  a.return_no LIKE '%{$s_search}%'";
     		$s_where[]="  c.card_id LIKE '%{$s_search}%'";
     		$s_where[]="  c.name LIKE '%{$s_search}%'";
+    		$s_where[]=" (SELECT name_kh FROM rms_view WHERE rms_view.key_code=c.borrow_type AND rms_view.type=13 LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.stu_id=c.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT stu_khname FROM rms_student WHERE rms_student.stu_id=c.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]="  e.serial LIKE '%{$s_search}%'";
+    		$s_where[]="  e.barcode LIKE '%{$s_search}%'";
+    		$s_where[]="  CONCAT(e.serial,' - ',e.barcode) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
 
@@ -472,6 +487,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where[]="  rms_book.title LIKE '%{$s_search}%'";
     		$s_where[]="  bdt.serial LIKE '%{$s_search}%'";
     		$s_where[]="  bdt.barcode LIKE '%{$s_search}%'";
+    		$s_where[]="  CONCAT(bdt.serial,' - ',bdt.barcode) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	 
@@ -527,6 +543,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where[]="  b.title LIKE '%{$s_search}%'";
     		$s_where[]="  bdt.serial LIKE '%{$s_search}%'";
     		$s_where[]="  bdt.barcode LIKE '%{$s_search}%'";
+    		$s_where[]="  CONCAT(bdt.serial,' - ',bdt.barcode) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     

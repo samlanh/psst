@@ -371,28 +371,24 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		}
 		$end_date->setValue($_date);
 		
-		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
-		$branch_id->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false,
-				'onchange'=>'getAllAcademicByBranch();'
-		));
-		$branch_id->setValue($request->getParam("branch_id"));
-		$db = new Accounting_Model_DbTable_DbTuitionFee();
-		$rows= $db->getAllBranch();
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_LOCATION")));
-		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
-		$branch_id->setMultiOptions($opt);
-		if (count($rows)==1){
-			$branch_id->setAttribs(array('readonly'=>'readonly'));
-			if(!empty($rows))foreach($rows AS $row){
-				$branch_id->setValue($row['id']);
-			}
-		}
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionBranch = $_dbgb->getAllBranch();
+    	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+    	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+    	$_branch_id->setMultiOptions($_arr_opt_branch);
+    	$_branch_id->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside height-text',));
+    	if (count($optionBranch)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
+		
 		
 		$_stu_code = new Zend_Dojo_Form_Element_FilteringSelect('stu_code');
 		$_stu_code->setAttribs(array(
@@ -604,7 +600,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		$this->addElements(array($is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
-					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$branch_id,$start_date,
+					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
 				

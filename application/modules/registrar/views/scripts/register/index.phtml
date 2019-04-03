@@ -1,9 +1,9 @@
-<title>Register</title>
 <?php 
     $request=Zend_Controller_Front::getInstance()->getRequest();
     $tr = Application_Form_FrmLanguages::getCurrentlanguage();
     $frm =  $this->form_search;
 ?>
+<title><?php echo $tr->translate("REGISTER")?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">

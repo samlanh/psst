@@ -346,8 +346,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
     function getacademicAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
+    		$degree = empty($data['degree'])?null:$data['degree']; 
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllYearByBranch($data['branch_id']);
+    		$group = $db->getAllYearByBranch($data['branch_id'],$degree);
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
     		print_r(Zend_Json::encode($group));
     		exit();

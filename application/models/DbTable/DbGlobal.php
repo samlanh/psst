@@ -919,7 +919,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
-   function getAllYearByBranch($branch=1){
+   function getAllYearByBranch($branch=1,$degree=null){
    	$db = $this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
@@ -928,6 +928,16 @@ function getAllgroupStudyNotPass($action=null){
    	AND type=1
    	AND is_finished=0 $branch_id ";
    	$sql.=" AND branch_id=$branch ";
+   	
+   	if (!empty($degree)){
+   		$dbdeg = new Global_Model_DbTable_DbItems();
+   		$type=1; //Degree
+   		$row =$dbdeg->getDegreeById($degree,$type);
+   		if (!empty($row['schoolOption'])){
+   			$sql.=" AND school_option IN (".$row['schoolOption'].") ";
+   		}
+   	}
+   	
    	$sql.=" GROUP BY from_academic,to_academic,generation";
    	$order=' ORDER BY id DESC';
    	return $db->fetchAll($sql.$order);

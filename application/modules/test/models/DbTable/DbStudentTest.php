@@ -429,6 +429,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$array = array(
 					'stu_test_id'	=>$data['stu_test_id'],
 					'test_type'	=>$type,//General English
+					'academic_year'	=>$data['academic_year'],
 					'degree'	=>$data['degree'],
 					'grade'	=>$data['grade'],
 					'test_date'		=>$data['test_date'],

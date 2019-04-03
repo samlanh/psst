@@ -306,7 +306,11 @@ function getAllGrade(){
 	if(dept_id==''){
 		return false;
 	}
-	dijit.byId('degree_result').set('value',dept_id);
+	<?php if(!empty($this->detailscore['degree_result'])){?>
+		dijit.byId('degree_result').set('value','<?php echo $this->detailscore['degree_result'] ?>');
+	<?php }else{?>
+		dijit.byId('degree_result').set('value',dept_id);
+	<?php }?>
 	dojo.xhrPost({
 		url:url_get_grade,
 		content:{

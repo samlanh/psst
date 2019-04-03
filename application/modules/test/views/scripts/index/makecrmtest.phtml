@@ -408,12 +408,10 @@ function getSerailCodeByBranch(){
 			dijit.byId('serial').set('value',data);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
 require(["dojo/ready"], function(ready){
-	
 	new dijit.form.FilteringSelect({
 		name: "nationality",
 		id: "nationality",
@@ -482,74 +480,25 @@ function addNationBy(){
 				   dijit.byId("popup_nation").hide();
 				   HideloadingBlock();
 			},
-			error: function(err) {
-				alert(err);
+			error: function(err){
 			}
 		});
 	}
 }
-	/*
-		dojo.require("dojo.data.ItemFileWriteStore");  
-		var grade_store  = getDataStorefromJSON('id','name', <?php //print_r(Zend_Json::encode($this->dept));?> );
-		
-		dojo.ready(function(){
-			new dijit.form.FilteringSelect({
-				store: grade_store,
-				autoComplete: true,                        
-				required: false,
-				id: "grade",
-				name: "grade",           
-				class: "fullside", 
-				placeHolder:"Select grade",          
-				onChange: function() {  
-					
-				}
-			}, "grade");
-			
-			getAllGrade();				 
-		});
-		
-		var url_get_grade = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
-		function getAllGrade(){
-			dijit.byId('grade').set('value',''); 
-			dept_id = dijit.byId('degree').get('value');
-			if(dept_id==''){
-				return false;
-			}
-			dojo.xhrPost({
-				url:url_get_grade,
-				content:{
-					'dept_id':dept_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					grade_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('grade').set('store',grade_store);  
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
- 
-	*/
 </script>
- 
  <script>
  dojo.require("dojo.data.ItemFileWriteStore");  
  dojo.require("dojo.NodeList-manipulate");
 	dojo.ready(function(){ 
 		addRow();
 	});
-
 	var col= 0; var no=0;
 	var title = 0;
-	var all_stu = '<?php //echo $this->all_stu; ?>';
+	var all_stu = '';
 	function addRow() {
 		col++;no++;
 		template='';
 		temp = "";
-	
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
@@ -560,8 +509,7 @@ function addNationBy(){
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
 			dojo.query("#head-title").append(temp);
 			title=1;
-		}
-			
+		}			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="required" id="school_name'+col+'" name="school_name'+col+'" value="" type="text"  ></td>';	
@@ -583,14 +531,11 @@ function addNationBy(){
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
-		
-		if(arrays[i] == index) arrays.splice(i,1);
-			
+		for(var i=0;i<arrays.length;i++) {		
+			if(arrays[i] == index) arrays.splice(i,1);			
 		}
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
 	}
 </script>
- 

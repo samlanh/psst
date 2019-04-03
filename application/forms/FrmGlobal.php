@@ -79,8 +79,19 @@ class Application_Form_FrmGlobal{
 	}
 	function getLetterHeaderReport($branch_id){
 		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
-		$branch_id = empty($branch_id)?1:$branch_id;
+		//$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
+		if (empty($branch_id)){
+			$optionBranch = $db->getAllBranch();
+			if (count($optionBranch)==1){
+				if(!empty($optionBranch))foreach($optionBranch AS $row){
+					$branch_id = $row['id'];
+				}
+			}else {
+				$branch_id = 1;
+			}
+			
+		}
 		$rs = $db->getBranchInfo($branch_id);
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
 		

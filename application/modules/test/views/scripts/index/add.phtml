@@ -437,7 +437,6 @@ dojo.ready(function(){
 		id: "district_name",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
 			onChange: function() {
 				district_name = dijit.byId('district_name').get('value');
 				if(district_name==-1){
@@ -456,7 +455,6 @@ dojo.ready(function(){
 		id: "commune_name",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
 			onChange: function() {
 				commune_name = dijit.byId('commune_name').get('value');
 				if(commune_name==-1){
@@ -477,7 +475,6 @@ dojo.ready(function(){
 		id: "village_name",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
 			onChange: function() {
 				vill = dijit.byId('village_name').get('value');
 				if(vill==-1){
@@ -488,6 +485,7 @@ dojo.ready(function(){
 		filterDistrict();
 		dijit.byId('nationality').attr('value',1);
 		dijit.byId('nation').attr('value',1);
+		getSerailCodeByBranch();
 });
 
 function AllRefresh(){
@@ -808,9 +806,8 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		var arrays = identity.split(',');
 		for(var i=0;i<arrays.length;i++) {
 		
-		if(arrays[i] == index) arrays.splice(i,1);
-			
-		}
+			if(arrays[i] == index) arrays.splice(i,1);
+			}
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();

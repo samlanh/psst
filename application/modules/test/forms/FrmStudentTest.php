@@ -26,6 +26,13 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
+				
+		if (count($optionBranch)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
     	
     	$kh_name = new Zend_Dojo_Form_Element_TextBox('kh_name');
     	$kh_name->setAttribs(array(
@@ -243,9 +250,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_degree_result->setMultiOptions($_arr_opt);
     	$_degree_result->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>false,
     			'onChange'=>'getAllGradeResult();',
-    			
     			'class'=>'fullside height-text',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',));
@@ -472,6 +478,36 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',));
     	$_branch_search->setValue($request->getParam("branch_search"));
+		if (count($optionBranch)==1){
+    		$_branch_search->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_search->setValue($row['id']);
+    		}
+    	}
+		
+		
+		$_arr = array(
+			""=>$this->tr->translate("TYPE_TEST"),
+			1=>$this->tr->translate("CREATE_TEST_EXAM_KH"),
+			2=>$this->tr->translate("CREATE_TEST_EXAM_EN"),
+			3=>$this->tr->translate("CREATE_TEST_EXAM_UNIV")
+		);
+    	$_type_exam = new Zend_Dojo_Form_Element_FilteringSelect("type_exam");
+    	$_type_exam->setMultiOptions($_arr);
+    	$_type_exam->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
+    	$_type_exam->setValue($request->getParam("type_exam"));
+		if($userinfo['level']!=1){
+			$_type_exam->setAttribs(array('readonly'=>'readonly'));
+			if(!empty($userinfo['schoolOption'])){
+				
+				$_type_exam->setValue($userinfo['schoolOption']);
+			}
+		}
+		
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["stu_khname"]);
@@ -558,7 +594,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$_status_search,
     			$start_date,
     			$end_date,
-    			$_branch_search
+    			$_branch_search,
+				$_type_exam,
     			));
     	return $this;
     }

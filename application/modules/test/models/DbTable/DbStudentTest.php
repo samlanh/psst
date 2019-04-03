@@ -576,7 +576,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getTestResultById($id,$type=null){
+	function getTestResultById($id,$type=null,$stu_id=null){
 		$db = $this->getAdapter();
 		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
@@ -598,6 +598,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		str.id = $id ";
 		if (!empty($type)){
 			$sql.=" AND test_type=$type ";
+		}
+		if (!empty($stu_id)){
+			$sql.=" AND str.stu_test_id=$stu_id ";
 		}
 		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);

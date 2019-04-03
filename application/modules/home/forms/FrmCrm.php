@@ -83,7 +83,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	
-    	$_arr_opt_know = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_know = array(""=>$this->tr->translate("KNOW_BY"));
     	$optionKnowBy = $_dbgb->getAllKnowBy();
     	if(!empty($optionKnowBy))foreach($optionKnowBy AS $row) $_arr_opt_know[$row['id']]=$row['name'];
     	$_know_by = new Zend_Dojo_Form_Element_FilteringSelect("know_by");
@@ -231,7 +231,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	}
     	
     	
-    	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("OTHER"));
+    	$_arr = array(""=>$this->tr->translate("ASK_FOR"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("OTHER"));
     	$_ask_for_search = new Zend_Dojo_Form_Element_FilteringSelect("ask_for_search");
     	$_ask_for_search->setMultiOptions($_arr);
     	$_ask_for_search->setAttribs(array(
@@ -243,7 +243,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	
     	$_ask_for_search->setValue($request->getParam("ask_for_search"));
     	
-    	$_arr_opt_know = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_know = array(""=>$this->tr->translate("KNOW_BY"));
     	$optionKnowBy = $_dbgb->getAllKnowBy();
     	if(!empty($optionKnowBy))foreach($optionKnowBy AS $row) $_arr_opt_know[$row['id']]=$row['name'];
     	$_know_by_search = new Zend_Dojo_Form_Element_FilteringSelect("know_by_search");

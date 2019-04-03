@@ -7,6 +7,11 @@
 	$urlCreateExamUniver = $this->baseUrl()."/test/index/createtestexam?type=3&id=";
 	$urlProfile = $this->baseUrl()."/test/index/profile/id/";
 	$urledit = $this->baseUrl()."/test/index/edit/id/";
+	
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	$userinfo = $_dbgb->getUserInfo();
+
+	
 ?>
 <script>
 	dojo.require("dijit.form.DateTextBox");
@@ -110,9 +115,22 @@
 				gotoAction();
 			},
 			items: {
+				<?php if($userinfo['level']==1){ ?>
 				"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
 				"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
 				"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+				<?php }else{ 
+					if(!empty($userinfo['schoolOption'])){?>
+						<?php if($userinfo['schoolOption']==1){ ?>
+						"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
+						<?php }else if($userinfo['schoolOption']==2){ ?>
+						"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
+						<?php }else if($userinfo['schoolOption']==3){ ?>
+						"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+						<?php }?>
+				<?php } 
+				}?>
+				
 				"profile": {name: "<?php echo $tr->translate("STUDENT_PROFILE");?>", icon: "fa fa-user"},
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "fa fa-edit"},
 			}

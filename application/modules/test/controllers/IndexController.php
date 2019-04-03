@@ -94,7 +94,6 @@ class Test_IndexController extends Zend_Controller_Action
     			$db->updateStudentTest($data);
     			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);
     			exit();
-    				
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -178,7 +177,7 @@ class Test_IndexController extends Zend_Controller_Action
     	
     	if (!empty($test)){
     		$db = new Test_Model_DbTable_DbStudentTest();
-    		$result  = $db->getTestResultById($test,$type);
+    		$result  = $db->getTestResultById($test,$type,$id);
     		if (empty($result)){
     			Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
     		}

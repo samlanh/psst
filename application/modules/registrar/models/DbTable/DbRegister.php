@@ -521,7 +521,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				sp.receipt_number,
 	    			s.stu_code,
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
-	    			s.sex,
+	    			(SELECT name_en FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
 	    	        (SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 			        (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,

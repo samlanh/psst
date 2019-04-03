@@ -4,7 +4,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	const REDIRECT_URL ='/registrar';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -32,7 +31,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$this->view->adv_search=$search;
     		$rs_rows= $db->getAllStudentRegister($search);
     		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
+    		//$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
     		
     		$collumns = array("BRANCH_NAME","RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","FINE",
@@ -40,9 +39,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     							"PAYMENT_METHOD","NUMBER","DATE_PAY","USER","STATUS","VOID_BY");
     		
     		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);
-    		$letter=array('module'=>'registrar','controller'=>'register','action'=>'congratulationletter',);
-    		
-    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('បោះ.អាហារូ'=>$letter,'branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

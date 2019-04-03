@@ -540,7 +540,6 @@ dojo.ready(function(){
 		value:"<?php echo $this->rs['district_name'];?>",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
 			onChange: function() {
 				district_name = dijit.byId('district_name').get('value');
 				if(district_name==-1){
@@ -559,7 +558,6 @@ dojo.ready(function(){
 		id: "commune_name",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
 			onChange: function() {
 				commune_name = dijit.byId('commune_name').get('value');
 				if(commune_name==-1){
@@ -580,7 +578,6 @@ dojo.ready(function(){
 		id: "village_name",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
 			onChange: function() {
 				vill = dijit.byId('village_name').get('value');
 				if(vill==-1){
@@ -613,11 +610,8 @@ dojo.ready(function(){
 			class: "fullside", 
 			placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
 			onChange: function() {  
-				
 			}
 		}, "grade_result");
-
-		
 		
 		filterDistrict();
 		oldRow();
@@ -730,7 +724,6 @@ function filterVillage(){
 			    document.getElementsByClassName("overlay")[0].style.display="none";	
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 }
@@ -818,7 +811,7 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 						  dijit.byId('nationality').set('store', nation_store);
 						  nation =  dijit.byId('nationality').get('value');
 						  if(nation!=""){
-						  dijit.byId('nationality').set('value', nation);
+						  	dijit.byId('nationality').set('value', nation);
 						  }
 					   }
 					   dijit.byId('frm_nation_kh').reset();
@@ -853,7 +846,6 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 					dijit.byId('grade').set('store',grade_store);  
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 		}
@@ -875,7 +867,6 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 					dijit.byId('grade_result').set('store',grade_result_store);  
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 		}
@@ -889,7 +880,6 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		col++;no++;
 		template='';
 		temp = "";
-	
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
@@ -901,7 +891,6 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="required" id="school_name'+col+'" name="school_name'+col+'" value="" type="text"  ></td>';	
@@ -924,10 +913,8 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		for(var i=0;i<arrays.length;i++) {
-		
-		if(arrays[i] == index) arrays.splice(i,1);
-			
-		}
+			if(arrays[i] == index) arrays.splice(i,1);
+			}
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
@@ -974,7 +961,6 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		dijit.byId("remark_"+col).attr("value",'<?php echo $rs_detail['note']?>');
 	<?php }?>
 	}
-
 	Webcam.set({
 		width: 320,
 		height: 240,
@@ -990,9 +976,7 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 	shutter.autoplay = false;
 	shutter.src = navigator.userAgent.match(/Firefox/) ? '<?php echo $this->baseUrl();?>/webcam/shutter.ogg' : '<?php echo $this->baseUrl();?>/webcam/shutter.mp3';
 	function take_snapshot() {
-		// play sound effect
 		shutter.play();
-		// take snapshot and get image data
 		Webcam.snap( function(data_uri) {
 			  $('#profile_wiew').attr('src',data_uri);
 			  SaveSnap();
@@ -1000,11 +984,9 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 	}
 	function SaveSnap(){
 	    var url_upload = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'webcam')); ?>';	
-
 	    var base64image = document.getElementById("profile_wiew").src;
 	    Webcam.upload( base64image, url_upload, function(code, text) {
 	    	  console.log('Save successfully');
-	    	  //console.log(text);
 	    	  uploadcomplete(event);
 	    	 });
 	}

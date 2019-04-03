@@ -386,7 +386,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'queryExpr'=>'*${0}*',));
     	$_degree_search->setValue($request->getParam("degree_search"));
     	
-    	$_arr_opt_nation = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_nation = array(""=>$this->tr->translate("NATIONALITY"));
     	$optionNation = $_dbgb->getViewByType(21);//Nation
     	if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
     	$_nation_search = new Zend_Dojo_Form_Element_FilteringSelect("nation_search");
@@ -400,7 +400,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'queryExpr'=>'*${0}*',));
     	$_nation_search->setValue($request->getParam("nation_search"));
     	
-    	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>
+    	$_arr = array(""=>$this->tr->translate("OCCUPATION"),1=>
     			$this->tr->translate("STUDENT"),
     			2=>$this->tr->translate("STAFF"),
     			3=>$this->tr->translate("OWN_BUSSINESS"));

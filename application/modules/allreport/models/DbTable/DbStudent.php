@@ -309,6 +309,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(($search['branch_search']>0)){
 				$where.= " AND st.branch_id = ".$search['branch_search'];
 			}
+			if(!empty($search['nation_search'])){
+				$where .= " and st.nationality = ".$search['nation_search'];
+			}
 			if(!empty($search['user'])){
 				$where.= " AND str.user_id = ".$search['user'];
 			}

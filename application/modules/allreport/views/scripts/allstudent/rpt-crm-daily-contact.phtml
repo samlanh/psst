@@ -193,7 +193,7 @@ dojo.ready(function(){
 		id: "crm_list",
 		name: "crm_list",           
 		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate('PLEASE_SELECT');?>",          
+		placeHolder:"<?php echo $tr->translate('STUDENTTEST');?>",          
 		onChange: function() {  
 		}
 	}, "crm_list");
@@ -230,7 +230,6 @@ function getCRMByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

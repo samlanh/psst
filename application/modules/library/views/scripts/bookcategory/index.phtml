@@ -47,19 +47,19 @@
 							<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
 							<th class="tdheader header"><?php echo $tr->translate("CATEGORY_NAME");?></th>
 							<th class="tdheader header"><?php echo $tr->translate("REMARK");?>
-							<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
 							<th class="tdheader header"><?php echo $tr->translate("USER");?>
+							<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
 						</tr>
 					</thead>
-			     <?php $i=1; 
+			     <?php $i=1;
 						if(!empty($this->cate)) foreach($this->cate as $key=>$row){?>
 						
 						<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';">
 						    <td  style="text-align: center;"><?php echo $i++;?></td>
 							<td ><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['name'];?></a></td>
 							<td ><?php echo $row['remark'];?></td>
-							<td  align="center"><?php if($row['status']==1){echo  $imgtick;} else{echo $imgnone;};?></td>
 							<td ><?php echo $row['user_name'];?></td>
+							<td  align="left"><?php echo $row['status'];?></td>
 						</tr>
 					<?php } ?>
 			</table>

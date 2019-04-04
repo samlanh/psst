@@ -92,12 +92,12 @@ table.tb-footer tr.style-head {
 			</style>	
 		<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 			<tr>
-					<td colspan="3"><?php echo $this->rsheader;?></td>
-				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
 			<tr>
 				<td width="15%" align="center">
 				</td>
@@ -108,151 +108,136 @@ table.tb-footer tr.style-head {
 				<td width="15%" align="center"></td>
 			</tr>
 			<tr>
-					<td>&nbsp;</td>
-				</tr>
+				<td>&nbsp;</td>
+			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-							<?php if(!empty($this->all_memo)){?>
-				            <table style="border-collapse:collapse;" width="100%"  cellspacing="0">
-				                <tr>
-				                    <td style="font-size:18px;">Credit Memo</td>
-				                </tr>
-				            </table>
-							<table class="content-data" border="1">
-								<thead>
-									<tr class="style-head" align="center">
-										<td><?php echo $tr->translate("N_O");?></td>
-										<td><?php echo $tr->translate("BRANCH_NAME");?></td>
-										<td><?php echo $tr->translate("STUDENT_CODE");?></td>
-										<td><?php echo $tr->translate("STUDENT_NAME");?></td>
-										<td><?php echo $tr->translate("TOTAL_AMOUNT");?></td>
-										<td><?php echo $tr->translate("START_DATE");?></td>
-										<td><?php echo $tr->translate("END_DATE");?></td>
-										<td><?php echo $tr->translate("NOTE");?></td>
-										<td><?php echo $tr->translate("PAID_TRANSFER");?></td>
-										<td><?php echo $tr->translate("BY_USER");?></td>
-										<td><?php echo $tr->translate("STATUS");?></td>
-									</tr>
-								</thead>
-								<?php $num=1; $d_balance = 0;
-								if(!empty($this->all_memo)){ foreach($this->all_memo as $key=>$rs){ $key=$key+1; ?>
-								<tr class="style-rowdata hover" align="center">
-									<td><?php echo $key; ?></td>
-									<td align="left"><?php echo $rs['branch_name']; ?></td>
-									<td align="left"><?php echo $rs['stu_code']; ?></td>
-									<td align="left"><?php echo $rs['student_name']; ?></td>
-									<td><?php echo "$ ".number_format($rs["total_amount"],2);?></td>
-									<td><?php echo $rs['date']; ?></td>
-									<td><?php echo $rs['end_date']; ?></td>
-									<td><?php echo $rs['note']; ?></td>
-									<td><?php echo $rs['paid_transfer']; ?></td>
-									<td><?php echo $rs['user_name']; ?></td>
-									<?php if($rs['status']==1){ ?>
-										<td><?php echo $tr->translate("ACTIVE");?></td>
-									<?php }else{ ?> 
-										<td><?php echo $tr->translate("DEACTIVE");?></td>
-									<?php } ?>
-								</tr>
-								<?php
-									$d_balance = $d_balance+$rs["total_amount"];
-								}}
-								?>
-								</table>
-								<table width="20%" align="right" style="margin-top: 5px;border-collapse: collapse;">
-								<tbody>			                
-					                <tr style="font-size:14px; height: 30px;border: 1px solid #000;" align="center" >
-										<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
-										<td bgcolor="#b0bdfd" style="border: 1px solid #000;white-space: nowrap;">ចំនួនទឹកប្រាក់សរុប</td>
-									</tr>
-									<tr style="font-size:14px; height: 30px;border: 1px solid #000;font-weight: bold;" align="center" >
-										<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
-										<td style="border: 1px solid #000;"><?php echo "$ ".number_format($d_balance,2);?></td>
-									</tr>
-				                </tbody>
-				           		</table>
-								</table>
-							<?php }?>
-							
-							<?php if(!empty($this->all_memo_transfer)){?>
-				            <table style="border-collapse:collapse;" width="100%"  cellspacing="0">
-				                <tr>
-				                    <td style="font-size:18px;">Credit Memo Transfer</td>
-				                </tr>
-				            </table>
-				            <table class="content-data" border="1">
-								<thead>
+					<?php if(!empty($this->all_memo)){?>
+						<table style="border-collapse:collapse;" width="100%"  cellspacing="0">
+							<tr>
+								<td style="font-size:18px;">Credit Memo</td>
+							</tr>
+						</table>
+						<table class="content-data" border="1">
+							<thead>
 								<tr class="style-head" align="center">
 									<td><?php echo $tr->translate("N_O");?></td>
 									<td><?php echo $tr->translate("BRANCH_NAME");?></td>
 									<td><?php echo $tr->translate("STUDENT_CODE");?></td>
-									<td><?php echo $tr->translate("INFORS_TO");?></td>
-									<td><?php echo $tr->translate("STUDENT_CODE");?></td>
-									<td><?php echo $tr->translate("INFORS_RECEIVE");?></td>
+									<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 									<td><?php echo $tr->translate("TOTAL_AMOUNT");?></td>
-									<td><?php echo $tr->translate("REASON_TO");?></td>
-									<td><?php echo $tr->translate("REASON_RESIVE");?></td>
+									<td><?php echo $tr->translate("START_DATE");?></td>
+									<td><?php echo $tr->translate("END_DATE");?></td>
+									<td><?php echo $tr->translate("NOTE");?></td>
+									<td><?php echo $tr->translate("PAID_TRANSFER");?></td>
 									<td><?php echo $tr->translate("BY_USER");?></td>
 									<td><?php echo $tr->translate("STATUS");?></td>
 								</tr>
-								</thead>
-								<?php $num=1; $d_balance = 0;
-								if(!empty($this->all_memo_transfer)){ foreach($this->all_memo_transfer as $key=>$rs){ $key=$key+1; ?>
-								<tr class="style-rowdata hover" align="center">
-									<td><?php echo $key; ?></td>
-									<td><?php echo $rs['branch_name']; ?></td>
-									<td><?php echo $rs['stu_id']; ?></td>
-									<td><?php echo $rs['stu_idname']; ?></td>
-									<td><?php echo $rs['stu_idto']; ?></td>
-									<td><?php echo $rs['stu_name']; ?></td>
-									<td><?php echo "$ ".number_format($rs["total_amount"],2);?></td>
-									<td><?php echo $rs['prob']; ?></td>
-									<td><?php echo $rs['problem']; ?></td>
-									<td><?php echo $rs['user_name']; ?></td>
-									<?php if($rs['status']==1){ ?>
-										<td><?php echo $tr->translate("ACTIVE");?></td>
-									<?php }else{ ?> 
-										<td><?php echo $tr->translate("DEACTIVE");?></td>
-									<?php } ?>
+							</thead>
+							<?php $num=1; $d_balance = 0;
+							if(!empty($this->all_memo)){ foreach($this->all_memo as $key=>$rs){ $key=$key+1; ?>
+							<tr class="style-rowdata hover" align="center">
+								<td><?php echo $key; ?></td>
+								<td align="left"><?php echo $rs['branch_name']; ?></td>
+								<td align="left"><?php echo $rs['stu_code']; ?></td>
+								<td align="left"><?php echo $rs['student_name']; ?></td>
+								<td><?php echo "$ ".number_format($rs["total_amount"],2);?></td>
+								<td><?php echo $rs['date']; ?></td>
+								<td><?php echo $rs['end_date']; ?></td>
+								<td><?php echo $rs['note']; ?></td>
+								<td><?php echo $rs['paid_transfer']; ?></td>
+								<td><?php echo $rs['user_name']; ?></td>
+								<?php if($rs['status']==1){ ?>
+									<td><?php echo $tr->translate("ACTIVE");?></td>
+								<?php }else{ ?> 
+									<td><?php echo $tr->translate("DEACTIVE");?></td>
+								<?php } ?>
+							</tr>
+							<?php
+								$d_balance = $d_balance+$rs["total_amount"];
+							}}
+							?>
+						</table>
+						<table width="20%" align="right" style="margin-top: 5px;border-collapse: collapse;">
+							<tbody>			                
+								<tr style="font-size:14px; height: 30px;border: 1px solid #000;" align="center" >
+									<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
+									<td bgcolor="#b0bdfd" style="border: 1px solid #000;white-space: nowrap;">ចំនួនទឹកប្រាក់សរុប</td>
 								</tr>
-								<?php
-									$d_balance = $d_balance+$rs["total_amount"];
-								}}
-								?>
-							</table>
-							<table width="20%" align="right" style="margin-top: 5px;border-collapse: collapse;">
-								<tbody>			                
-					                <tr style="font-size:14px; height: 30px;border: 1px solid #000;font-weight: bold;" align="center" >
-										<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
-										<td bgcolor="#b0bdfd" style="border: 1px solid #000;white-space: nowrap;">ចំនួនទឹកប្រាក់សរុប</td>
-									</tr>
-									<tr style="font-size:14px; height: 30px;border: 1px solid #000;font-weight: bold;" align="center" >
-										<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
-										<td style="border: 1px solid #000;"><?php echo "$ ".number_format($d_balance,2);?></td>
-									</tr>
-				                </tbody>
-			           		</table>
-							<?php }?>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-			  <tr>
-				<td colspan="3" width="100%">
-					<table width="100%" style="font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
-						<tr>
-							<td  width="25%" align="center">
-								<span><?php echo $tr->translate('VERIFIED_BY')?></span>
-							</td>
-							<td  width="50%">
-								&nbsp;
-							</td>
-							<td align="center"  width="25%">
-								<span><?php echo $tr->translate('PREPARED_BY')?></span>
-							</td>
-						</tr>
-					</table>
+								<tr style="font-size:14px; height: 30px;border: 1px solid #000;font-weight: bold;" align="center" >
+									<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
+									<td style="border: 1px solid #000;"><?php echo "$ ".number_format($d_balance,2);?></td>
+								</tr>
+							</tbody>
+						</table>
+					<?php }?>
+							
+					<?php if(!empty($this->all_memo_transfer)){?>
+						<table style="border-collapse:collapse;" width="100%"  cellspacing="0">
+							<tr>
+								<td style="font-size:18px;">Credit Memo Transfer</td>
+							</tr>
+						</table>
+						<table class="content-data" border="1">
+							<thead>
+							<tr class="style-head" align="center">
+								<td><?php echo $tr->translate("N_O");?></td>
+								<td><?php echo $tr->translate("BRANCH_NAME");?></td>
+								<td><?php echo $tr->translate("STUDENT_CODE");?></td>
+								<td><?php echo $tr->translate("INFORS_TO");?></td>
+								<td><?php echo $tr->translate("STUDENT_CODE");?></td>
+								<td><?php echo $tr->translate("INFORS_RECEIVE");?></td>
+								<td><?php echo $tr->translate("TOTAL_AMOUNT");?></td>
+								<td><?php echo $tr->translate("REASON_TO");?></td>
+								<td><?php echo $tr->translate("REASON_RESIVE");?></td>
+								<td><?php echo $tr->translate("BY_USER");?></td>
+								<td><?php echo $tr->translate("STATUS");?></td>
+							</tr>
+							</thead>
+							<?php $num=1; $d_balance = 0;
+							if(!empty($this->all_memo_transfer)){ foreach($this->all_memo_transfer as $key=>$rs){ $key=$key+1; ?>
+							<tr class="style-rowdata hover" align="center">
+								<td><?php echo $key; ?></td>
+								<td><?php echo $rs['branch_name']; ?></td>
+								<td><?php echo $rs['stu_id']; ?></td>
+								<td><?php echo $rs['stu_idname']; ?></td>
+								<td><?php echo $rs['stu_idto']; ?></td>
+								<td><?php echo $rs['stu_name']; ?></td>
+								<td><?php echo "$ ".number_format($rs["total_amount"],2);?></td>
+								<td><?php echo $rs['prob']; ?></td>
+								<td><?php echo $rs['problem']; ?></td>
+								<td><?php echo $rs['user_name']; ?></td>
+								<?php if($rs['status']==1){ ?>
+									<td><?php echo $tr->translate("ACTIVE");?></td>
+								<?php }else{ ?> 
+									<td><?php echo $tr->translate("DEACTIVE");?></td>
+								<?php } ?>
+							</tr>
+							<?php
+								$d_balance = $d_balance+$rs["total_amount"];
+							}}
+							?>
+						</table>
+						<table width="20%" align="right" style="margin-top: 5px;border-collapse: collapse;">
+							<tbody>			                
+								<tr style="font-size:14px; height: 30px;border: 1px solid #000;font-weight: bold;" align="center" >
+									<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
+									<td bgcolor="#b0bdfd" style="border: 1px solid #000;white-space: nowrap;">ចំនួនទឹកប្រាក់សរុប</td>
+								</tr>
+								<tr style="font-size:14px; height: 30px;border: 1px solid #000;font-weight: bold;" align="center" >
+									<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="6"></td>
+									<td style="border: 1px solid #000;"><?php echo "$ ".number_format($d_balance,2);?></td>
+								</tr>
+							</tbody>
+						</table>
+					<?php }?>
 				</td>
 			</tr>
+			<tr>
+				<td colspan="3" width="100%">
+					<?php echo $this->rsfooteracc;?>
+				</td>
+			</tr>
+		</table>
 	</div>	
 </div>

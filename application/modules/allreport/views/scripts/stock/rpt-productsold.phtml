@@ -174,31 +174,23 @@ table.tb-footer tr.style-head {
 								}}
 								?>	  
 						</table>
-							<table width="40%" border="1" style="font-family:'Times New Roman','Khmer OS Battambang'; margin-top:15px;border: 1px solid #000;border-collapse: collapse;float:right"  >
-					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px; " align="center">
-					               <td width="33%"><?php echo $tr->translate('GRAND_TOTAL')?></td>
-					               <td width="33%"><?php echo $tr->translate('TOTAL_UNIT_PRICE')?></td>
-					               <td width="33%"><?php echo $tr->translate('PROFIT')?></td>
-					           </tr>
-					           <tr align="center" style="font-size:12px; height: 20px;line-height: 30px;font-weight: bold;" align="center">
-					               <td>&nbsp;$&nbsp;<?php echo number_format($grand_total,2);?>&nbsp;</td>
-					               <td>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</td>
-					               <td>&nbsp;$&nbsp;<?php echo number_format($profit,2);?>&nbsp;</td>
-					           </tr>
-					     	</table>
-					     <table width="100%" style="font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
-							<tr>
-								<td  width="25%" align="center">
-									<span><?php echo $tr->translate('VERIFIED_BY')?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span><?php echo $tr->translate('PREPARED_BY')?></span>
-								</td>
-							</tr>
+						<table width="40%" border="1" style="font-family:'Times New Roman','Khmer OS Battambang'; margin-top:15px;border: 1px solid #000;border-collapse: collapse;float:right"  >
+						   <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px; " align="center">
+							   <td width="33%"><?php echo $tr->translate('GRAND_TOTAL')?></td>
+							   <td width="33%"><?php echo $tr->translate('TOTAL_UNIT_PRICE')?></td>
+							   <td width="33%"><?php echo $tr->translate('PROFIT')?></td>
+						   </tr>
+						   <tr align="center" style="font-size:12px; height: 20px;line-height: 30px;font-weight: bold;" align="center">
+							   <td>&nbsp;$&nbsp;<?php echo number_format($grand_total,2);?>&nbsp;</td>
+							   <td>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</td>
+							   <td>&nbsp;$&nbsp;<?php echo number_format($profit,2);?>&nbsp;</td>
+						   </tr>
 						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<?php echo $this->rsfooteracc;?>
 					</td>
 				</tr>
 			</table>

@@ -70,6 +70,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	function submitlistAction(){
 		if($this->getRequest()->isPost()){
@@ -121,6 +122,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	function rptStudentpaymentdetailAction(){
 		try{
@@ -216,13 +218,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'),
 				);
 			}
-		$this->view->search = $search;
-		$db = new Allreport_Model_DbTable_DbSuspendService();
-		$this->view->rs = $db->getStudetnSuspendServiceDetail($search);
-		
-		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbSuspendService();
+			$this->view->rs = $db->getStudetnSuspendServiceDetail($search);
+			
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -276,6 +279,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -332,6 +336,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -370,6 +375,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -417,6 +423,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -484,6 +491,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$row=0;$indexterm=1;$key=0;
@@ -580,6 +588,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$row=0;$indexterm=1;$key=0;
@@ -739,6 +748,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 				$frm = new Application_Form_FrmGlobal();
 				$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+				$this->view->rsfooteracc = $frm->getFooterAccount();
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
@@ -787,16 +797,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			if($formdata['paid_type']==0){
 				$this->view->all_memo= $db->getAllCreditmemo($formdata);
 				$this->view->all_memo_transfer = $_db->getAllTransfer($formdata);
+			}else if($formdata['paid_type']==1){
+				$this->view->all_memo= $db->getAllCreditmemo($formdata);
+			}else if($formdata['paid_type']==2){
+				$this->view->all_memo_transfer= $_db->getAllTransfer($formdata);
+			}
 				
-				}else if($formdata['paid_type']==1){
-					$this->view->all_memo= $db->getAllCreditmemo($formdata);
-				}else if($formdata['paid_type']==2){
-					$this->view->all_memo_transfer= $_db->getAllTransfer($formdata);
-				}
-				
-		$branch_id = empty($formdata['branch_id'])?null:$formdata['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$branch_id = empty($formdata['branch_id'])?null:$formdata['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
@@ -1067,6 +1077,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
@@ -1174,12 +1185,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				);
 			}
 	
-		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-	
-		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-		$user_type=$db->getUserType();
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+			
+			$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+			//echo $this->view->rsfooteracc;exit();
+			
+			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+			$user_type=$db->getUserType();
 	
 			if(!empty($search['all_payment'])){
 				$data1=$this->view->row = $db->getDailyReport($search);

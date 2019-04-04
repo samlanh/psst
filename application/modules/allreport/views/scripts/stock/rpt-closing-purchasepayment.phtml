@@ -88,7 +88,7 @@
 						  page-break-inside:avoid; page-break-after:auto;
 						}tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }							
 					</style>
-					<tr>
+				<tr>
 					 <td colspan="3" id="exportExcel">
 						<form id="list" name="list" action="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'closingpurchasepayment')); ?>" dojoType="dijit.form.Form" method="post">
 							<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
@@ -157,25 +157,9 @@
 						</form>
 					</td>
 				</tr>
-				
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
 				<tr >
 					<td colspan="3" width="100%">
-						<table boder="1" width="100%" style="font-family:'Khmer OS Battambang';">
-							<tr>
-								<td  width="25%" align="center">
-									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->rsfooteracc;?>
 					</td>
 				</tr>
 			</table>

@@ -27,6 +27,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->book_list= $db->getAllBookList($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -69,6 +72,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->book_list = $db->getAllBookListDetail($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -101,6 +107,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->borr_detail= $db->getBorrowDetail($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -131,6 +140,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->return_detail= $db->getReturnBookDetail($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -160,6 +172,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->pur_detail= $db->getPurchaseDetail($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -189,6 +204,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->broken_detail= $db->getBrokenDetail($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -218,6 +236,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			}
 			$db = new Library_Model_DbTable_DbNeardayreturnbook();
 			$abc = $this->view->row = $db->getReturnBookLate($search);
+			
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			echo $e->getMessage();

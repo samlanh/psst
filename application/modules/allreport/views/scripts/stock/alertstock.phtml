@@ -72,9 +72,8 @@ table.tb-footer tr.style-head {
 				<tr>
 					<td>&nbsp;</td>
 				</tr>
-					<tr>
 					<style>
-					table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+						table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
 						tr{ page-break-inside:avoid; page-break-after:auto }
 						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
 						#header {
@@ -106,75 +105,62 @@ table.tb-footer tr.style-head {
 							height: 23px;
 						}
 					</style>
-						<tr​>
-							<td  colspan="3"​  id="exportExcel" >
-								<table class="content-data" cellpadding="5"​ border="1" >
-									<thead>
-										<tr class="style-head" align="center">
-											<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
-									   </tr>
-								   </thead>
-								<?php 
-									$branch_name =''; $i=0;$totalpaid=0;$totalbalance=0; 
-									$cost_price=0;
-									if(!empty($this->pro_loc))foreach ($this->pro_loc AS $rs) { 
-										if($rs['pro_qty']<=5){
-										$i++;
-											if($branch_name!=$rs['brand_name']){
-										?>
-											<tr class="hover" style="font-size:15px; height: 18px;"​ align="center">
-												  <td colspan="9" ><?php echo $rs['brand_name']; ?></td>
-											</tr>
-										<?php } $branch_name=$rs['brand_name'];?>
-											<tr class="style-rowdata hover" align="center">
-												<td> <?php echo $i; ?></td>
-												<td><?php echo $rs['category_name'];?></td>
-												<td style="color:red;"><?php echo $rs['pro_code'];?></td>
-												<td style="color:red;" align="center">&nbsp;<?php echo $rs['pro_name'];?></td>
-												<td style="color:red;"><?php echo number_format($rs['pro_qty'],0); ?></td>
-												<td>&nbsp;<?php echo $rs['pro_price'];?></td>
-												<td>&nbsp;<?php echo number_format($rs['pro_price']*$rs['pro_qty'],2);
-												$cost_price =$cost_price+($rs['pro_price']*$rs['pro_qty']);
-												?></td>
-												<td><?php echo $rs['status']; ?></td>
-											</tr>
-									<?php }?>
-								<?php
-									}
-								?>
-							</table>
-						</tr>
-					</tr>
-					
-					</td>
-				</table>
 				<tr>
-				<td colspan="8" align="right">&nbsp;<?php echo $tr->translate('TOTAL_UNIT_PRICE');?><strong><?php echo  " $ ".number_format($cost_price,2);?></strong>&nbsp;</td>
+					<td  colspan="3"​  id="exportExcel" >
+						<table class="content-data" cellpadding="5"​ border="1" >
+							<thead>
+								<tr class="style-head" align="center">
+									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+							   </tr>
+						   </thead>
+						<?php 
+							$branch_name =''; $i=0;$totalpaid=0;$totalbalance=0; 
+							$cost_price=0;
+							if(!empty($this->pro_loc))foreach ($this->pro_loc AS $rs) { 
+								if($rs['pro_qty']<=5){
+								$i++;
+									if($branch_name!=$rs['brand_name']){
+								?>
+									<tr class="hover" style="font-size:15px; height: 18px;"​ align="center">
+										  <td colspan="9" ><?php echo $rs['brand_name']; ?></td>
+									</tr>
+								<?php } $branch_name=$rs['brand_name'];?>
+									<tr class="style-rowdata hover" align="center">
+										<td> <?php echo $i; ?></td>
+										<td><?php echo $rs['category_name'];?></td>
+										<td style="color:red;"><?php echo $rs['pro_code'];?></td>
+										<td style="color:red;" align="center">&nbsp;<?php echo $rs['pro_name'];?></td>
+										<td style="color:red;"><?php echo number_format($rs['pro_qty'],0); ?></td>
+										<td>&nbsp;<?php echo $rs['pro_price'];?></td>
+										<td>&nbsp;<?php echo number_format($rs['pro_price']*$rs['pro_qty'],2);
+										$cost_price =$cost_price+($rs['pro_price']*$rs['pro_qty']);
+										?></td>
+										<td><?php echo $rs['status']; ?></td>
+									</tr>
+							<?php }?>
+						<?php
+							}
+						?>
+						</table>
+					</td>
+				</tr>
+			
+				<tr>
+					<td colspan="3" align="right">&nbsp;<?php echo $tr->translate('TOTAL_UNIT_PRICE');?><strong><?php echo  " $ ".number_format($cost_price,2);?></strong>&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="3" width="100%">
-						<table width="100%" style="font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
-							<tr>
-								<td  width="25%" align="center">
-									<span><?php echo $tr->translate('VERIFIED_BY');?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span><?php echo $tr->translate('PREPARED_BY')?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->rsfooteracc;?>
 					</td>
-				</tr>		
+				</tr>	
+			</table>
 		</div>		
 	</div>
 </div>

@@ -156,22 +156,11 @@ table.tb-footer tr.style-head {
 							<td style="border-bottom: 2px double #000;border-right: 1px solid #fff;"><strong><?php echo number_format($total_amount,2);?></strong></td>
 						</tr>
 					</table>
-					<table  width="100%" style="font-family:'Times New Roman','Khmer OS Battambang';">
-						<tr>
-							<td colspan="3">&nbsp;</td>
-						</tr>
-						<tr>
-							<td  width="25%" align="center">
-								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
-							</td>
-							<td  width="50%">
-								&nbsp;
-							</td>
-							<td align="center"  width="25%">
-								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
-							</td>
-						</tr>
-					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<?php echo $this->rsfooteracc;?>
 				</td>
 			</tr>
 		</table>

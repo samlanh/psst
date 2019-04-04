@@ -127,15 +127,15 @@ table.tb-footer tr.style-head {
 							</thead>
 							<?php $i=0;$degree=0; if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
 							<tr class="style-rowdata hover" >
-								<td>
+								<td align="center">
 									<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 									<input type="hidden" name="staff_id<?php echo $i;?>" id="staff_id<?php echo $i;?>" value="<?php echo $row['id'];?>" dojoType="dijit.form.TextBox" />
 								</td>
-								<td ><?php echo $i;?></td>
+								<td align="center"><?php echo $i;?></td>
 								<td ><?php echo $row['branch_name'];?></td>
 								<td ><?php echo $row['teacher_code'];?></td>
-								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['teacher_name_kh'];?>&nbsp;</td>
-								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['sex'];?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $row['teacher_name_kh'];?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $row['sex'];?>&nbsp;</td>
 								<td ><?php echo $row['nationality'];?></td>
 								<td ><?php echo $row['staff_type_title'];?></td>
 								<td ><?php echo $row['degree'];?></td>
@@ -149,31 +149,13 @@ table.tb-footer tr.style-head {
 						</table>	
 				</td>
 			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
 			<tr >
 				<td colspan="3" width="100%">
-					<table width="100%" style="font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
-						<tr>
-							<td  width="25%" align="center">
-								<span><?php echo $tr->translate('VERIFIED_BY')?></span>
-							</td>
-							<td  width="50%">
-								&nbsp;
-							</td>
-							<td align="center"  width="25%">
-								<span><?php echo $tr->translate('PREPARED_BY')?></span>
-							</td>
-						</tr>
-					</table>
+					<?php echo $this->rsfooteracc;?>
 				</td>
 			</tr>
 		</table>
-		</div>
+	</div>
 </div>
 <table width="100%">
 	<tr>

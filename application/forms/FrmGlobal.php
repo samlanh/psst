@@ -123,4 +123,26 @@ class Application_Form_FrmGlobal{
 		</table>";
 		return $str;
 	}
+	
+	function getFooterAccount($spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$str="<table width='100%' style='font-size: $font_size;font-family:$font_family'>";
+			for($i=1;$i<=$spacing;$i++){
+				$str.="<tr><td>&nbsp;</td></tr>";
+			}
+		$str.="	<tr>
+					<td width='25%' align='center'>
+						<span>".$tr->translate('APPROVED_BY')."</span>
+					</td>
+					<td width='50%' align='center'>
+						<span>".$tr->translate('VERIFIED_BY')."</span>
+					</td>
+					<td width='25%' align='center'>
+						<span>".$tr->translate('PREPARED_BY')."</span>
+					</td>
+				</tr>
+			</table>";
+		return $str;
+	}
+	
 }

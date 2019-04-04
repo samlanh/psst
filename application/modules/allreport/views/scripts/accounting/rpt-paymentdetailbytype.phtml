@@ -12,14 +12,14 @@
 </style>
 <div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<div class="card-box">
-       		<div class="col-sm-12 border-botom">
-		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
-    		</div>
-    	</div>
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></h4>
+			</div>
+			<div class="col-sm-4 text-right">
+			</div>
+		</div>
+	</div>
 	<form id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-paymentdetailbytype')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
         	<div class="col-md-2 col-sm-2 col-xs-12">
@@ -72,9 +72,9 @@
         	</div>
         </div>
 	</form>
-<div id="divPrint">
+	<div id="divPrint">
 		<style> 
-		th,td{ padding:0 1px;}
+			th,td{ padding:0 1px;}
 			table{ border-collapse:collapse; margin:0 auto;
 			border-color:#000; }
 			.padd tr td{  text-align:center}
@@ -107,228 +107,216 @@
 				font-size:12px; 
 				height: 23px;
 			}									
-	  </style>
+		</style>
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
-				<tr>
-					<td colspan="3"><?php echo $this->rsheader;?></td>
-				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td width="25%">
-					</td>
-					<td align="center" width="50%">
-						<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></span><br />
-						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
-					</td>
-					<td width="25%"></td>
-				</tr>
-				<tr>			
-					 <td colspan="3" id="exportExcel">
-						<table class="content-data" width="100%"  align="center" style="white-space:nowrap;">
-							<style> td{padding:0 3px; }</style>
-							  <?php 
-								$grand_total =0;  
-								$all_grandtotal =0;
-								$i=0; 
-								$type='';
-								$other_income = 0;
-						 		$payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);
-							  ?>
-						  <?php if(!empty($this->row_detail)) foreach($this->row_detail as $key => $rs){ $i++;?>
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td width="25%">
+				</td>
+				<td align="center" width="50%">
+					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></span><br />
+					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
+				</td>
+				<td width="25%"></td>
+			</tr>
+			<tr>			
+				 <td colspan="3" id="exportExcel">
+					<table class="content-data" width="100%"  align="center" style="white-space:nowrap;">
+						<style> td{padding:0 3px; }</style>
 						  <?php 
-						  if($rs['items_id']!=$type){
-						  if($key>0){?>
-							</table>
-							<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
-								  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-									<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;</td>
-									<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
-								  </tr>
-							 </table><br /><br />
-							<table class="content-data"  width="100%"  align="center" >
-							  <?php $i=1;
-							  	$grand_total=0;
-						  	  }
-							  ?>
-							  <thead>
-							  		<tr class="style-head" style="font-size:10px;" align="center">
-									    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-									    <td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
-										<td>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</td>
-										<td><?php echo $tr->translate('PAID_DATE');?></td>
-										<td><?php echo $tr->translate('RECEIPT_NO');?></td>
-										<td>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
-										<td><?php echo $tr->translate('SERVICE_NAME');?></td>
-										<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
-										<td><?php echo $tr->translate('QTY');?></td>
-										<td><?php echo $tr->translate('PRICE');?></td>
-										<td><?php echo $tr->translate('Deduct/Extra');?></th>
-										<td><?php echo $tr->translate('Disc Type');?></td>
-										<td><?php echo $tr->translate('DISCOUND');?></td>
-										<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
-										<td><?php echo $tr->translate('PERIOD');?></td>
-										<td><?php echo $tr->translate('REMARK');?></td>
-										<td><?php echo $tr->translate('STATUS');?></td>
-										<th><?php echo $tr->translate('USER');?></td>
-								  </tr>
-							  </thead>
-						  <?php 
-						   }
-						   $type = $rs['items_id'];
-						   ?>
-						   <tr class="hover" style="font-size:11px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
-							  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
-							    <td style="text-align:center;"><?php echo $rs['stu_code']; ?></td>
-							    <td style="text-align:left"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></td>
-							    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
-							    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-							    <td style="text-align:left"><?php echo $rs['category']; ?></td>
-								<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
-							    <?php 
-									$total_day=strtotime($rs['validate'])-strtotime($rs['start_date']);
-									$day=(int)($total_day/(60*60*24));
-									$qty_month = number_format($day/30);
-									$qty_day = $day%30;
-								?>
-								<td align="center">
-								<?php 
-									if($rs['payment_id']>0){
-										if($rs['payment_id']==5){
-											if($qty_month>0){
-												echo $qty_month." month+".$qty_day." days";
-											}else{
-												echo $qty_day." days";
-											}
-										}else{
-											echo $payment_term[$rs['payment_id']];
-										}
-									}
-								?>
-								</td>
-							    <td><?php echo $rs['qty'];?></td>
-							    <td><?php echo number_format($rs['fee'],2); ?></td>
-							    <td><?php echo $rs['extra_fee'];?></td>
-							    <td><?php echo $rs['discount_type']; ?> </td>
-							    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';}
-									  if($rs['discount_amount']>0){
-									    echo $rs['discount_amount'];
-									   }
-							    	?>
-							    </td>
-							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
-							    <td><?php if($rs['is_onepayment']==0){
-							    		echo date('d/m/Y', strtotime($rs['start_date']));
-							    		echo "-".date('d/m/Y', strtotime($rs['validate']));
-							    	}?>
-							    </td>
-							    <td style="font-size: 9px;"><?php echo $rs['note'];?></td>
-							   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status'];?></td>
-								<td><?php echo $rs['user']; ?></td>
-						 </tr>
-						  <?php 
-						  	if($rs['is_void']==0){
-						  		$grand_total = $grand_total+$rs['paidamount'];
-						  		$all_grandtotal = $all_grandtotal+$rs['paidamount'];
-						  	}
+							$grand_total =0;  
+							$all_grandtotal =0;
+							$i=0; 
+							$type='';
+							$other_income = 0;
+							$payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);
 						  ?>
-						  <?php } ?>
-						   </table>
-					</td>
-				</tr>
-				<tr>	
-					<td colspan="3">
+					  <?php if(!empty($this->row_detail)) foreach($this->row_detail as $key => $rs){ $i++;?>
+					  <?php 
+					  if($rs['items_id']!=$type){
+					  if($key>0){?>
+						</table>
 						<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
 							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-								<td style="width:146px;  ">&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;</td>
+								<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;</td>
 								<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
 							  </tr>
-						 </table>
-					</td>
-				</tr>
-				<?php if(!empty($this->rsincome)){?>
-				<tr>
-					<td colspan="3">
-						<strong><?php echo $tr->translate('OTHER_INCOME')?></strong>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" >
-						<table class="content-data" cellpadding="5"​ align="center">
-							<tr class="style-head" style="font-size:10px;" align="center">
-								<td><?php echo $tr->translate('N_O')?></td>
-								<td><?php echo $tr->translate('CATEGORY')?></td>
-								<td><?php echo $tr->translate('INCOME_TITLE')?></td>
-								<td><?php echo $tr->translate('INVOICE_NO')?></td>
-								<td><?php echo $tr->translate('PAID_DATE')?></td>
-								<td><?php echo $tr->translate('TOTAL')?></td>
-								<td><?php echo $tr->translate('USER')?></td>
-							</tr>
-						<?php $i=0;
-						$other_income = 0;
-						foreach ($this->rsincome AS $row) { $i++;
-							$other_income = $other_income + $row['total_amount'];
-						?>
-							<tr class="style-rowdata hover" style="font-size:11px; height: 20px;border-bottom: 1px solid #000;" align="center" >
-								<td><?php echo $i;?></td>
-								<td><?php echo $row['income_category'];?></td>	
-								<td><?php echo $row['title'];?></td>
-								<td><?php echo $row['invoice'];?></td>
-								<td><?php echo date('d-m-Y',strtotime($row['date']));?></td>
-								<td><?php echo number_format($row['total_amount'],2);?></td>
-								<td><?php echo $row['name'];?></td>
-							</tr>
-						<?php }?>	
-						</table>
-					</td>
-				</tr>	
-				<?php 
-				  }
-					$credit_memo=0;
-					$penalty=0;
-					if(!empty($this->row)){
-						foreach ($this->row as $payment){
-							$credit_memo = $credit_memo + $payment['credit_memo'];
-							$penalty = $penalty + $payment['penalty'];
+						 </table><br /><br />
+						<table class="content-data"  width="100%"  align="center" >
+						  <?php $i=1;
+							$grand_total=0;
+						  }
+						  ?>
+						  <thead>
+								<tr class="style-head" style="font-size:10px;" align="center">
+									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
+									<td>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</td>
+									<td><?php echo $tr->translate('PAID_DATE');?></td>
+									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
+									<td>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
+									<td><?php echo $tr->translate('SERVICE_NAME');?></td>
+									<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
+									<td><?php echo $tr->translate('QTY');?></td>
+									<td><?php echo $tr->translate('PRICE');?></td>
+									<td><?php echo $tr->translate('Deduct/Extra');?></th>
+									<td><?php echo $tr->translate('Disc Type');?></td>
+									<td><?php echo $tr->translate('DISCOUND');?></td>
+									<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
+									<td><?php echo $tr->translate('PERIOD');?></td>
+									<td><?php echo $tr->translate('REMARK');?></td>
+									<td><?php echo $tr->translate('STATUS');?></td>
+									<th><?php echo $tr->translate('USER');?></td>
+							  </tr>
+						  </thead>
+					  <?php 
+					   }
+					   $type = $rs['items_id'];
+					   ?>
+					   <tr class="hover" style="font-size:11px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
+							<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
+							<td style="text-align:center;"><?php echo $rs['stu_code']; ?></td>
+							<td style="text-align:left"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></td>
+							<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
+							<td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
+							<td style="text-align:left"><?php echo $rs['category']; ?></td>
+							<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+							<?php 
+								$total_day=strtotime($rs['validate'])-strtotime($rs['start_date']);
+								$day=(int)($total_day/(60*60*24));
+								$qty_month = number_format($day/30);
+								$qty_day = $day%30;
+							?>
+							<td align="center">
+							<?php 
+								if($rs['payment_id']>0){
+									if($rs['payment_id']==5){
+										if($qty_month>0){
+											echo $qty_month." month+".$qty_day." days";
+										}else{
+											echo $qty_day." days";
+										}
+									}else{
+										echo $payment_term[$rs['payment_id']];
+									}
+								}
+							?>
+							</td>
+							<td><?php echo $rs['qty'];?></td>
+							<td><?php echo number_format($rs['fee'],2); ?></td>
+							<td><?php echo $rs['extra_fee'];?></td>
+							<td><?php echo $rs['discount_type']; ?> </td>
+							<td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';}
+								  if($rs['discount_amount']>0){
+									echo $rs['discount_amount'];
+								   }
+								?>
+							</td>
+							<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
+							<td><?php if($rs['is_onepayment']==0){
+									echo date('d/m/Y', strtotime($rs['start_date']));
+									echo "-".date('d/m/Y', strtotime($rs['validate']));
+								}?>
+							</td>
+							<td style="font-size: 9px;"><?php echo $rs['note'];?></td>
+							<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status'];?></td>
+							<td><?php echo $rs['user']; ?></td>
+					 </tr>
+					  <?php 
+						if($rs['is_void']==0){
+							$grand_total = $grand_total+$rs['paidamount'];
+							$all_grandtotal = $all_grandtotal+$rs['paidamount'];
 						}
+					  ?>
+					  <?php } ?>
+					   </table>
+				</td>
+			</tr>
+			<tr>	
+				<td colspan="3">
+					<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
+						  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+							<td style="width:146px;  ">&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;</td>
+							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
+						  </tr>
+					 </table>
+				</td>
+			</tr>
+			<?php if(!empty($this->rsincome)){?>
+			<tr>
+				<td colspan="3">
+					<strong><?php echo $tr->translate('OTHER_INCOME')?></strong>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" >
+					<table class="content-data" cellpadding="5"​ align="center">
+						<tr class="style-head" style="font-size:10px;" align="center">
+							<td><?php echo $tr->translate('N_O')?></td>
+							<td><?php echo $tr->translate('CATEGORY')?></td>
+							<td><?php echo $tr->translate('INCOME_TITLE')?></td>
+							<td><?php echo $tr->translate('INVOICE_NO')?></td>
+							<td><?php echo $tr->translate('PAID_DATE')?></td>
+							<td><?php echo $tr->translate('TOTAL')?></td>
+							<td><?php echo $tr->translate('USER')?></td>
+						</tr>
+					<?php $i=0;
+					$other_income = 0;
+					foreach ($this->rsincome AS $row) { $i++;
+						$other_income = $other_income + $row['total_amount'];
+					?>
+						<tr class="style-rowdata hover" style="font-size:11px; height: 20px;border-bottom: 1px solid #000;" align="center" >
+							<td><?php echo $i;?></td>
+							<td><?php echo $row['income_category'];?></td>	
+							<td><?php echo $row['title'];?></td>
+							<td><?php echo $row['invoice'];?></td>
+							<td><?php echo date('d-m-Y',strtotime($row['date']));?></td>
+							<td><?php echo number_format($row['total_amount'],2);?></td>
+							<td><?php echo $row['name'];?></td>
+						</tr>
+					<?php }?>	
+					</table>
+				</td>
+			</tr>	
+			<?php 
+			  }
+				$credit_memo=0;
+				$penalty=0;
+				if(!empty($this->row)){
+					foreach ($this->row as $payment){
+						$credit_memo = $credit_memo + $payment['credit_memo'];
+						$penalty = $penalty + $payment['penalty'];
 					}
-				?>
-				<tr>
-					<td colspan="1"></td>
-					<td >
-						<div>&nbsp;</div>
-						<table   align="right" style="width:100%; margin-right:0.5%; white-space:nowrap;">
-							<tr style="font-size:12px; background:#ccd9ff; height: 20px;" align="center">
-								<td><?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>(+)</td>
-								<td><?php echo $tr->translate('FINE');?>(+)</td>
-								<td><?php echo $tr->translate('OTHER_INCOME');?>(+)</td>
-								<td><?php echo $tr->translate('Credit Memo');?>(-)</td>
-								<td><?php echo $tr->translate('NET_AMOUNT');?>(=)</td>
-							</tr>
-							<tr align="center" style=" height:18px; font-size:12px; padding: 1px;" >
-								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal,2)?></span></td>
-								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($penalty,2)?></span></td>
-								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($other_income,2)?></span></td>
-								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($credit_memo,2)?></span></td>
-								<td><div style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal+$penalty+$other_income-$credit_memo,2)?></div></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" width="100%">
-						<table width="100%" style="font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
-							<tr>
-								<td  width="25%" align="center">
-									<span><?php echo $tr->translate('VERIFIED_BY')?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span ><?php echo $tr->translate('PREPARED_BY')?></span>
-								</td>
-							</tr>
-						</table>
+				}
+			?>
+			<tr>
+				<td colspan="1"></td>
+				<td >
+					<div>&nbsp;</div>
+					<table   align="right" style="width:100%; margin-right:0.5%; white-space:nowrap;">
+						<tr style="font-size:12px; background:#ccd9ff; height: 20px;" align="center">
+							<td><?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>(+)</td>
+							<td><?php echo $tr->translate('FINE');?>(+)</td>
+							<td><?php echo $tr->translate('OTHER_INCOME');?>(+)</td>
+							<td><?php echo $tr->translate('Credit Memo');?>(-)</td>
+							<td><?php echo $tr->translate('NET_AMOUNT');?>(=)</td>
+						</tr>
+						<tr align="center" style=" height:18px; font-size:12px; padding: 1px;" >
+							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal,2)?></span></td>
+							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($penalty,2)?></span></td>
+							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($other_income,2)?></span></td>
+							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($credit_memo,2)?></span></td>
+							<td><div style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal+$penalty+$other_income-$credit_memo,2)?></div></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" width="100%">
+					<?php echo $this->rsfooteracc;?>
 				</td>
 			</tr>
 		</table>

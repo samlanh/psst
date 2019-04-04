@@ -80,7 +80,7 @@
 					<td>&nbsp;</td>
 				</tr>
 				<style>
-					table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+					table{ page-break-inside:auto;font-family:Times New Roman,'Khmer OS Battambang'; }
 						tr{ page-break-inside:avoid; page-break-after:auto }
 						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
 						#header {
@@ -96,7 +96,7 @@
 					<div id="exportExcel">
 						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-							<tr style="font-weight:bold;font-size:12px; height: 20px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
+							<tr style="font-weight:bold;font-size:13px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
 								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_ID"); ?></th>
 								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</th>
@@ -119,7 +119,7 @@
 							$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
 							$day=(int)($total_day/(60*60*24));
 						?>
-							<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
+							<tr class="hover" style="font-size:12px; height: 22px;border: 1px solid #000;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $i;?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>	
@@ -147,29 +147,10 @@
 						</div>							
 					</td>
 				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
 				<tr >
 					<td colspan="3">
-						<table width="100%" style="font-family: 'Khmer OS Battambang';">
-							<tr>
-								<td align="center" width="25%">
-									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY');?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY');?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->rsfooteracc;?>
 					</td>
-						
 				</tr>
 		</table>		
 	</div>		

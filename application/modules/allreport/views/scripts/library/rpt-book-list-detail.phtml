@@ -43,78 +43,63 @@
 					  page-break-inside:avoid; page-break-after:auto;
 					}
 		</style>
-				<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
-					<tr>
-						<td width="15%" align="center">
-							<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-						</td>
-						<td align="center" width="70%">
-							<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BOOK_LIST_DETAIL_REPORT"); ?></strong><br />
-						</td>
-						<td width="15%" >
-							&nbsp;
-						</td>
-						
-					</tr>
-					<tr>
-						<td colspan="3" id="exportExcel">
-							<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
-								<thead>
-								<tr align="center" style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
-									<td><?php echo $tr->translate("N_O"); ?></td>
-									<td><?php echo $tr->translate("BOOK_NAME"); ?></td>
-									<td><?php echo $tr->translate("SERIAL_NO"); ?></td>
-									<td><?php echo $tr->translate("AUTHOR"); ?></td>
-									<td><?php echo $tr->translate("PUBLISHER"); ?></td>
-									<td><?php echo $tr->translate("CATEGORY"); ?></td>
-									<td><?php echo $tr->translate("BLOCK_NAME"); ?></td>
-									<td><?php echo $tr->translate("USER"); ?></td>
-									<td colspan="2"><?php echo $tr->translate("STATUS"); ?></td>
-								</tr>
-								</thead>
-								<?php  
-									$is_borrow = array(1=>$tr->translate("BORROW"),0=>$tr->translate("NOT_BORROW"));
-									$is_broken = array(1=>$tr->translate("BROKEN"),0=>$tr->translate("NOT_BROKEN"));
-								?> 
-							<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->book_list)){foreach ($this->book_list AS $row) { $i++; ?>
-								<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
-									<td><?php echo $i;?></td>
-									<td align="left">&nbsp;<?php echo $row['title'];?></td>
-									<td align="left">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?></td>
-									<td align="left">&nbsp;<?php echo $row['author'];?></td>
-									<td>&nbsp;<?php echo $row['publisher'];?></td>
-									<td>&nbsp;<?php echo $row['cat_name'];?></td>
-									<td>&nbsp;<?php echo $row['block_name'];?></td>
-									<td>&nbsp;<?php echo $row['user_name'];?></td>
-									<td style="<?php if($row['is_borrow']==1){echo 'color:blue;';}?>">&nbsp;<?php echo $is_borrow[$row['is_borrow']];?></td>
-									<td style="<?php if($row['is_broken']==1){echo 'color:red;';}?>">&nbsp;<?php echo $is_broken[$row['is_broken']];?></td>
-								</tr>
-							<?php }}?>
-							</table>
-							
-							<table width="100%">
-								<tr>
-									<td colspan="3">&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="3">&nbsp;</td>
-								</tr>
-								<tr >
-									<td align="center" width="25%">
-										<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-									</td>
-									<td  width="50%">
-										&nbsp;
-									</td>
-									<td align="center"  width="25%">
-										<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-									</td>
-								</tr>
-							</table>				
-						</td>
-					</tr>				
-				</table>						
-			</div>		
+		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+			<tr>
+				<td width="15%" align="center">
+					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+				</td>
+				<td align="center" width="70%">
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BOOK_LIST_DETAIL_REPORT"); ?></strong><br />
+				</td>
+				<td width="15%" >
+					&nbsp;
+				</td>
+				
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel">
+					<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+						<thead>
+						<tr align="center" style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
+							<td><?php echo $tr->translate("N_O"); ?></td>
+							<td><?php echo $tr->translate("BOOK_NAME"); ?></td>
+							<td><?php echo $tr->translate("SERIAL_NO"); ?></td>
+							<td><?php echo $tr->translate("AUTHOR"); ?></td>
+							<td><?php echo $tr->translate("PUBLISHER"); ?></td>
+							<td><?php echo $tr->translate("CATEGORY"); ?></td>
+							<td><?php echo $tr->translate("BLOCK_NAME"); ?></td>
+							<td><?php echo $tr->translate("USER"); ?></td>
+							<td colspan="2"><?php echo $tr->translate("STATUS"); ?></td>
+						</tr>
+						</thead>
+						<?php  
+							$is_borrow = array(1=>$tr->translate("BORROW"),0=>$tr->translate("NOT_BORROW"));
+							$is_broken = array(1=>$tr->translate("BROKEN"),0=>$tr->translate("NOT_BROKEN"));
+						?> 
+					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->book_list)){foreach ($this->book_list AS $row) { $i++; ?>
+						<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
+							<td><?php echo $i;?></td>
+							<td align="left">&nbsp;<?php echo $row['title'];?></td>
+							<td align="left">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?></td>
+							<td align="left">&nbsp;<?php echo $row['author'];?></td>
+							<td>&nbsp;<?php echo $row['publisher'];?></td>
+							<td>&nbsp;<?php echo $row['cat_name'];?></td>
+							<td>&nbsp;<?php echo $row['block_name'];?></td>
+							<td>&nbsp;<?php echo $row['user_name'];?></td>
+							<td style="<?php if($row['is_borrow']==1){echo 'color:blue;';}?>">&nbsp;<?php echo $is_borrow[$row['is_borrow']];?></td>
+							<td style="<?php if($row['is_broken']==1){echo 'color:red;';}?>">&nbsp;<?php echo $is_broken[$row['is_broken']];?></td>
+						</tr>
+					<?php }}?>
+					</table>
+				</td>
+			</tr>		
+			<tr>
+				<td colspan="3">
+					<?php echo $this->rsfooteracc;?>
+				</td>
+			</tr>			
+		</table>						
+	</div>		
 </div>
 <script type="text/javascript">
 function doPrint() {

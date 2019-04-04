@@ -88,7 +88,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		try {
+    		try{
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->updateRegister($_data,$id);
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register');
@@ -340,9 +340,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
+    		$db = new Application_Model_DbTable_DbGlobal();
     		$student_id = empty($data['student_id'])?null:$data['student_id'];
-    		$grade = $db->getAllGrade($data['dept_id'],$student_id);
+    		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
+    		$grade = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}

@@ -481,6 +481,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		
 		if($data['void']==1){  // void
 			try{	
+				$rsold = $this->getStudentPaymentByID($payment_id);
+				if($rsold['data_from']==2){
+					
+				}
+				
 				$this->_name='rms_student_payment';
 				$arra=array(
 					'is_void'=>$data['void'],
@@ -633,9 +638,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql.=$dbl->getAccessPermission(" sp.branch_id ");
     	return $db->fetchRow($sql);
     }
-    function getAllGrade($grade_id,$student_id){
+    function getAllGrade($grade_id,$student_id,$is_stutested){
     	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllGradeStudyByDegree($grade_id,$student_id);
+    	return $db->getAllGradeStudyByDegree($grade_id,$student_id,$is_stutested);
     }
     function getPaymentTerm($generat,$payment_term,$grade){
 //     	$db = $this->getAdapter();

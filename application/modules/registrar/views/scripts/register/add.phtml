@@ -461,11 +461,9 @@ div.img-back {
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-	//dojo.require("dojo.data.ObjectStore");
-	//dojo.require("dijit.layout.BorderContainer");
-	//dojo.require("dijit.layout.TabContainer");
 
 item_store = getDataStorefromJSON('id','name');
+student_store = getDataStorefromJSON('id','name');
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		getbranchinfo();
@@ -552,16 +550,20 @@ function getgradebyDegree(dept_id,a,type=1){
 		dept_id = dijit.byId("category").get("value");
 	}
 	student_id = dijit.byId("old_stu").get("value");
+	is_stutested=0;
+	if(dijit.byId('student_type').get('value')==2){
+		is_stutested  = 1;
+	}
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
 			'dept_id':dept_id,
-			'student_id':student_id
+			'student_id':student_id,
+			'is_stutested':is_stutested
 			},
 		handleAs:"json",
 		load: function(data) {
 			if(type==1){
-				
 			}else{
 				item_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('item').set('store',item_store);  	

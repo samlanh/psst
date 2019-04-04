@@ -1052,7 +1052,6 @@ function getAllgroupStudyNotPass($action=null){
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
 	   	if($result==0){//មិនទាន់គិតធ្វើតេស និងចេញលទ្ធផល
-// 	   		echo 2;exit();
 	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
 	   		FROM rms_student
 	   		WHERE
@@ -1060,9 +1059,8 @@ function getAllgroupStudyNotPass($action=null){
 	   		if (!empty($branch)){
 	   			$sql.=" AND branch_id = $branch";
 	   		}
-	   		$sql.=" ORDER BY stu_id DESC";
+	   		$sql.=" GROUP BY stu_id ORDER BY stu_id DESC";
 	   	}else{//ban ធ្វើតេស
-// 	   		echo 1;exit();
 	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
 	   		FROM rms_student,rms_student_test_result AS result
 	   		WHERE
@@ -1071,7 +1069,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		if (!empty($branch)){
 	   			$sql.=" AND branch_id = $branch";
 	   		}
-	   		$sql.=" ORDER BY stu_id DESC";
+	   		$sql.=" GROUP BY stu_id ORDER BY stu_id DESC";
 	   	}
 	   
 	   	return $db->fetchAll($sql);
@@ -1668,7 +1666,7 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-  function getAllGradeStudyByDegree($category_id=null,$student_id=null){
+  function getAllGradeStudyByDegree($category_id=null,$student_id=null,$is_stutested=null){
   	$db = $this->getAdapter();
 //   	$sql="SELECT i.id,
 //   	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
@@ -1689,7 +1687,11 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND i.items_id=".$category_id;
   	}
   	if($student_id!=null AND !empty($student_id)){
-  		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
+  		if(empty($is_stutested)){
+  			$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
+  		}else{//will check expired of result test later
+  			$sql.=" AND (i.items_type !=1 OR i.id IN ((SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result )))";
+  		}
   	}
   	 
   	$branchlist = $this->getAllSchoolOption();
@@ -1705,7 +1707,6 @@ function getAllgroupStudyNotPass($action=null){
   		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
   	}
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
-  	//return $sql;
   	return $db->fetchAll($sql);
   }
   

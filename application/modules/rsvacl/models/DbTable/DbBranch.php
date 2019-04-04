@@ -30,7 +30,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			else
     				$string = "Image Upload failed";
     		}
-    		$sql="SELECT br_id FROM rms_branch WHERE 1";
+    		$sql="SELECT br_id FROM rms_branch WHERE 1 ";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
     		if (!empty($_data['main_branch_id'])){
     			$sql." AND parent =".$_data['main_branch_id'];

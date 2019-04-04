@@ -31,7 +31,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 			$link=array(
 					      'module'=>'rsvacl','controller'=>'branch','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns,
+			$this->view->list=$list->getCheckList(10, $collumns,
 					$rs_rowshow,array('school_namekh'=>$link,'school_nameen'=>$link,
 							'parent_name'=>$link,'branch_nameen'=>$link,'prefix'=>$link));
 		}catch (Exception $e){
@@ -101,7 +101,36 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 		$this->view->frm_branch=$update;
 		Application_Model_Decorator::removeAllDecorator($update);
 	}
+	function copyAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db = new RsvAcl_Model_DbTable_DbBranch();
+		if($this->getRequest()->isPost())
+		{
+			$data = $this->getRequest()->getPost();
+			try{
+				$branch_id= $db->addbranch($data);
+				$sms = "INSERT_SUCCESS";
+				if($branch_id==-1){
+					$sms = "RECORD_EXIST";
+				}
+				Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/branch/index");
+			}catch (Exception $e){
+				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
 	
+		$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
+		$this->view->schoolOption = $_dbmodel->getAllSchoolOption();
+	
+		$row=$db->getBranchById($id);
+		$this->view->rs = $row;
+		$frm= new RsvAcl_Form_Frmbranch();
+		$update=$frm->FrmBranch($row);
+		$this->view->frm_branch=$update;
+		Application_Model_Decorator::removeAllDecorator($update);
+	}
 	function addbranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

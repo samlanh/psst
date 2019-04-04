@@ -1,6 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("BRANCH_LIST"));
+	$urledit = $this->baseUrl()."/rsvacl/branch/edit/id/";
+	$urlcopy = $this->baseUrl()."/rsvacl/branch/copy/id/";
 ?>	
 <?php $frm =  $this->frm_branch;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -25,4 +27,46 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+function copyRecord(url){
+	 id = dijit.byId('recordcopy').get('value');
+	 if(id!=''){
+		window.location.href = url+'/id/'+id;
+	 }else{
+		alert('Please select record you want to copy');
+		return false;
+	 }
+}
+function setValue(index){
+	var recordcopy = $('input[name=copy]:checked').val();
+	dijit.byId('recordcopy').attr('value',recordcopy);
+}
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $urledit;?>';
+			}else if(key=="copy"){
+				url='<?php echo $urlcopy;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+			"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	window.open(url+row,'_blank');
+}
+</script>
 

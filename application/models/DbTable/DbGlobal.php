@@ -937,7 +937,11 @@ function getAllgroupStudyNotPass($action=null){
    			$sql.=" AND school_option IN (".$row['schoolOption'].") ";
    		}
    	}
-   	
+   	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		$sql .=' AND school_option IN ('.$user['schoolOption'].')';
+  	}
    	$sql.=" GROUP BY from_academic,to_academic,generation";
    	$order=' ORDER BY id DESC';
    	return $db->fetchAll($sql.$order);
@@ -1549,8 +1553,9 @@ function getAllgroupStudyNotPass($action=null){
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND s.id = '.$user['schoolOption'];
+  		$sql .=' AND s.id IN ('.$user['schoolOption'].')';
   	}
+	
   	return $db->fetchAll($sql);
   }
   function getAllDegreetype(){
@@ -1604,12 +1609,13 @@ function getAllgroupStudyNotPass($action=null){
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND '.$user['schoolOption'].' IN (m.schoolOption)';
+  		$sql .=' AND m.schoolOption IN ('.$user['schoolOption'].')';
   	}
   	if (!empty($schooloption)){
-  		$sql.=" AND $schooloption IN (m.schoolOption) ";
+  		$sql.=" AND m.schoolOption IN ($schooloption) ";
   	}
-  	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';
+  	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';	
+
   	return $db->fetchAll($sql);
   }
   
@@ -1660,7 +1666,7 @@ function getAllgroupStudyNotPass($action=null){
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+  		$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
   	}
   	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
   	return $db->fetchAll($sql);
@@ -1704,8 +1710,9 @@ function getAllgroupStudyNotPass($action=null){
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+  		$sql .=' AND i.schoolOption IN ( '.$user['schoolOption'].')';
   	}
+	
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
   	return $db->fetchAll($sql);
   }

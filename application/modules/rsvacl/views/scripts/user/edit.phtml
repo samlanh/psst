@@ -49,6 +49,16 @@ ul.opt-school {
 						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
 						return false;
 					}
+
+					var schoptcheckIde = [];
+	    			 $('.schoptcheck:checked').each(function(i){
+	    				 schoptcheckIde[i] = $(this).val();
+	     			});
+					if(schoptcheckIde==""){
+						alert("<?php echo $tr->translate("PLEASE_CHECK_SCHOOLOPTION");?>");
+						return false;
+					}
+
 					if(dojo.byId('password').value != dojo.byId('con_password').value ){
 						alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 						dojo.byId('password').value = '';
@@ -151,11 +161,12 @@ ul.opt-school {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("School Option");?>
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("School Option");?> 
 	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="schoolOption" />
-	                   </div>
+	                </div>
+	               <div class="form-group">
+	                	<ul class="opt-school" id="lbl_checkoption">
+	                	</ul>
 	                </div>
 	             </div>
 	             <div class="col-md-4 col-sm-4 col-xs-12">
@@ -222,16 +233,14 @@ ul.opt-school {
 </div>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">	
-	dojo.require("dijit.form.ValidationTextBox");
-	dojo.require('dijit.form.Form');
-	dojo.require('dijit.form.FilteringSelect');	
-	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.CheckBox");
-	dojo.require("dojo.data.ObjectStore");
+
+	dojo.require("dijit.form.ValidationTextBox");
+	//dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
 
 var usertype_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->user_type));?> );
-var schooloptionstore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->schoolOption));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: usertype_store,
@@ -248,15 +257,6 @@ dojo.ready(function(){
 			}
 		}
 	}, "user_type");
-
-	new dijit.form.FilteringSelect({
-		store: schooloptionstore,
-		autoComplete: true,                        
-		id: "schoolOption",
-		name: "schoolOption",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("PLEASE_SELECT");?>",          
-	}, "schoolOption");
 
 	getSchoolOption();
 });
@@ -319,42 +319,31 @@ function Checkchange(){
 		  dijit.byId('con_password').set('readonly',true); 
 	  }
 }
-var oldBranch = '<?php echo $this->user_edit['branch_id'];?>';
 var oldschoolOption = '<?php echo $this->user_edit['schoolOption'];?>';
-
 var url_getoptionSchool = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"getschooloptionbybranchlist")); ?>';
 function getSchoolOption(){
-	/*
-	var url_getoptionSchool = '<?php //echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"getschooloption")); ?>';
-	branch_id = dijit.byId('branch_id').get('value');
-		dojo.xhrPost({
-			url: url_getoptionSchool,
-			content:{
-				'branch_id':branch_id,
-			},
-			handleAs:"json",
-			load: function(data) {
-				schooloptionstore  = getDataStorefromJSON('id','name', data );
-			    dijit.byId('schoolOption').set('store', schooloptionstore);
-			    if(branch_id == oldBranch){
-			    	dijit.byId('schoolOption').set('value',oldschoolOption)
-			    }
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});*/
+	dojo.query("#lbl_checkoption").append('');
 	dojo.xhrPost({
 		url:url_getoptionSchool,
 		form: dojo.byId("frmUser"),
 		handleAs:"json",
 		load: function(data) {
-			schooloptionstore  = getDataStorefromJSON('id','name', data );
-		    dijit.byId('schoolOption').set('store', schooloptionstore);
-		    //if(branch_id == oldBranch){
-		    dijit.byId('schoolOption').reset();
-		    	dijit.byId('schoolOption').set('value',oldschoolOption)
-		    //}
+			temp='';
+			for(var i=0;i<data.length;i++) {
+				
+				var checkedlabel="";	
+					if(oldschoolOption!=''){ 
+						var rowIDArray = oldschoolOption.split(',');
+						for(var n = 0; n < rowIDArray.length; n++){
+							if(data[i].id==rowIDArray[n]){
+								checkedlabel="checked";	
+								break;
+							}
+						}
+					}
+				temp+='<li class="opt-items"><input class="schoptcheck" '+checkedlabel+' type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" /> <span style="vertical-align: top;">'+data[i].name+'</span></li>';
+			}
+				dojo.query("#lbl_checkoption").append(temp);
 			
 		},
 		error: function(err) {

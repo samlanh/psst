@@ -38,7 +38,6 @@ class RsvAcl_UserController extends Zend_Controller_Action
         foreach ($rs_rows as $key =>$rs){
         	$_rs[$key] =array(
         	'id'=>$rs['id'],
-        	'branch_name'=>$rs['branch_name'],
         	'name'=>$rs['last_name'].' '.$rs['name'],
         	'user_name'=>$rs['user_name'],
         	'user_type'=>$rs['users_type'],
@@ -52,11 +51,11 @@ class RsvAcl_UserController extends Zend_Controller_Action
         else{
         	$result = Application_Model_DbTable_DbGlobal::getResultWarning();
         }
-        $collumns = array("BRANCH_NAME","LASTNAME_FIRSTNAME","USER_NAME","USER_TYPE","STATUS");
+        $collumns = array("LASTNAME_FIRSTNAME","USER_NAME","USER_TYPE","STATUS");
         $link=array(
         		'module'=>'rsvacl','controller'=>'user','action'=>'edit',
         );
-        $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'branch_name'=>$link,'user_name'=>$link,'name'=>$link));
+        $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'user_name'=>$link,'name'=>$link));
     	$this->view->user_type = $_data['user_type'];
     	$this->view->txtsearch = $_data['txtsearch'];
     	

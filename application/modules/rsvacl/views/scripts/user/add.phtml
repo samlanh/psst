@@ -38,6 +38,16 @@ ul.opt-school {
 						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
 						return false;
 					}
+
+ 					var schoptcheckIde = [];
+	    			 $('.schoptcheck:checked').each(function(i){
+	    				 schoptcheckIde[i] = $(this).val();
+	     			});
+					if(schoptcheckIde==""){
+						alert("<?php echo $tr->translate("PLEASE_CHECK_SCHOOLOPTION");?>");
+						return false;
+					}
+
 					if(dojo.byId('password').value != dojo.byId('con_password').value ){
 						alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 						dojo.byId('password').value = '';
@@ -118,8 +128,7 @@ ul.opt-school {
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                	<ul class="opt-school">
-	                		<label id="lbl_checkoption"></label>
+	                	<ul class="opt-school" id="lbl_checkoption">
 	                	</ul>
 	                </div>
 	             </div>
@@ -247,7 +256,7 @@ function getSchoolOption(){
 			load: function(data) {
 				temp='';
 				for(var i=0;i<data.length;i++) {
-					temp+='<li class="opt-items"><input checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" /> <span style="vertical-align: top;">'+data[i].name+'</span></li>';
+					temp+='<li class="opt-items"><input class="schoptcheck" checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" /> <span style="vertical-align: top;">'+data[i].name+'</span></li>';
 				}
 				dojo.query("#lbl_checkoption").append(temp);
 			},

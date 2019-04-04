@@ -116,7 +116,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
  	}
- 	
 	function updateStudentTest($data){
 		$db=$this->getAdapter();
 		try{

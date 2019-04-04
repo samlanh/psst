@@ -120,13 +120,18 @@
 				"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
 				"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
 				<?php }else{ 
-					if(!empty($userinfo['schoolOption'])){?>
-						<?php if($userinfo['schoolOption']==1){ ?>
-						"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
-						<?php }else if($userinfo['schoolOption']==2){ ?>
-						"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
-						<?php }else if($userinfo['schoolOption']==3){ ?>
-						"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+					if(!empty($userinfo['schoolOption'])){
+						$schoolOption = explode(",",$userinfo['schoolOption']);
+						foreach($schoolOption as $scp){
+						?>
+							<?php if($scp==1){ ?>
+							"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
+							<?php }else if($scp==2){ ?>
+							"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
+							<?php }else if($scp==3){ ?>
+							"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+							<?php }?>
+						
 						<?php }?>
 				<?php } 
 				}?>

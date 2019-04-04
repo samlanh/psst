@@ -41,6 +41,11 @@
 					dijit.byId("grade").focus();
 					return false;
 				}
+				if(dijit.byId('academic_year').get("value")==''){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
+					dijit.byId("academic_year").focus();
+					return false;
+				}
 				loadingBlock();
 				return true;
 			}else {

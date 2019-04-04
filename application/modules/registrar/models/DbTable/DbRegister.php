@@ -429,7 +429,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$id_old_record = $db->fetchAll($sql);
 		if(!empty($id_old_record)){
 			foreach ($id_old_record as $result){
-				if($result['is_parent']>0 && $result['type'] != 4){
+				if($result['is_parent']>0 && $result['service_type'] != 4){
 					$this->_name="rms_student_paymentdetail";
 					$array = array(
 							'is_start'=>1,
@@ -483,7 +483,29 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			try{	
 				$rsold = $this->getStudentPaymentByID($payment_id);
 				if($rsold['data_from']==2){
+					$arr = array(
+						'is_registered'=>0,
+					);
+					$this->_name='rms_student_test_result';
+					$where="stu_test_id = ".$data['old_stu']." AND degree_result=".$rsold['degree_id']." AND grade_result=".$rsold['grade'];
+					$this->update($arr, $where);//reverse to tested student
 					
+					$arr = array(
+						'customer_type'=>4 //reverse to tested student
+					);
+				}elseif($rsold['data_from']==3){
+					$arr = array(
+						'customer_type' =>3, //reverse to crm
+						'is_studenttest' =>0,
+					);
+				}
+				$this->_name='rms_student';
+				$where='stu_id = '.$data['old_stu'];
+				$this->update($arr, $where);
+				
+				// update payment and validate of service and tuition fee info back ,  and update stock back to origin
+				if($rsold['is_void']==0){
+					$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
 				}
 				
 				$this->_name='rms_student_payment';
@@ -502,13 +524,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$where = " payment_id = $payment_id";
 				$this->_name='rms_saledetail';
 				$this->delete($where);
-				// update payment and validate of service and tuition fee info back ,  and update stock back to origin	
-				$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
+
 				$db->commit();
 				return 0;
 			}catch (Exception $e){
 				$db->rollBack();
+				Application_Form_FrmMessage::message("UPDATE_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				exit();
 			}
 		}					
 	}
@@ -1112,8 +1135,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		 s.stu_code,
 	    		 s.stu_id,
 	    		 s.is_stu_new,
+	    		 sp.degree as degree_id,
 	    		 (SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
-	    		 
 	    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 	    		 (select first_name from rms_users as u where u.id=sp.user_id) as first_name,
 	    		 (select last_name from rms_users as u where u.id=sp.user_id) as last_name

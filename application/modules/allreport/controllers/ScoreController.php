@@ -44,6 +44,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id= empty($search['branch_id'])?1:$search['branch_id'];
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	$this->view->rsfooteracc = $frm->getFooterAccount();
     }
     function rptScoreDetailAction(){//តាមមុខវិជ្ជាលម្អិត
     	$id=$this->getRequest()->getParam("id");

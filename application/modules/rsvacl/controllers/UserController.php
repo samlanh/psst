@@ -23,7 +23,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
         $this->view->activelist =$this->activelist;       
         $this->view->user_typelist =$this->user_typelist;   
         $this->view->active =-1;
-       
+        $tr = Application_Form_FrmLanguages::getCurrentlanguage();
         if($this->getRequest()->isPost()){     	
         	$_data=$this->getRequest()->getPost();
         }else{
@@ -36,8 +36,13 @@ class RsvAcl_UserController extends Zend_Controller_Action
         $rs_rows = $db_user->getUserList($_data);
         $_rs = array();
         foreach ($rs_rows as $key =>$rs){
+        	$branch=$tr->translate("FULLCONTROL");
+        	if ($rs['typeid']!=1){
+        		$branch= count(explode(",",$rs['branch_list']))." ".$tr->translate("BRANCH");
+        	}
         	$_rs[$key] =array(
         	'id'=>$rs['id'],
+        	'branch_access'=>$branch,
         	'name'=>$rs['last_name'].' '.$rs['name'],
         	'user_name'=>$rs['user_name'],
         	'user_type'=>$rs['users_type'],
@@ -51,11 +56,11 @@ class RsvAcl_UserController extends Zend_Controller_Action
         else{
         	$result = Application_Model_DbTable_DbGlobal::getResultWarning();
         }
-        $collumns = array("LASTNAME_FIRSTNAME","USER_NAME","USER_TYPE","STATUS");
+        $collumns = array("BRANCH_ACCESS","LASTNAME_FIRSTNAME","USER_NAME","USER_TYPE","STATUS");
         $link=array(
         		'module'=>'rsvacl','controller'=>'user','action'=>'edit',
         );
-        $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'user_name'=>$link,'name'=>$link));
+        $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_access'=>$link,'user_type'=>$link,'user_name'=>$link,'name'=>$link));
     	$this->view->user_type = $_data['user_type'];
     	$this->view->txtsearch = $_data['txtsearch'];
     	

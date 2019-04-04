@@ -118,7 +118,9 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		u.`last_name` ,
 		u.`first_name` AS name,
 		u.`user_name` ,
+		u.`branch_list` ,
 		(SELECT user_type FROM `rms_acl_user_type` WHERE user_type_id=u.user_type LIMIT 1) aS users_type,
+		u.user_type as typeid,
 		u.`active` as status,
 		u.`branch_list` 
 		FROM `rms_users` AS u

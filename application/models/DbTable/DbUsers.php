@@ -248,37 +248,35 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	function insertUser($data){
 		$db = $this->getAdapter();
 		try{
-		$branchList="";
-		if (!empty($data['selector'])){
-			foreach ($data['selector'] as $rs){
-				if (empty($branchList)){
-					$branchList = $rs;
-				}else { $branchList = $branchList.",".$rs;
+				$branchList="";
+				if (!empty($data['selector'])){
+					foreach ($data['selector'] as $rs){
+						if (empty($branchList)){
+							$branchList = $rs;
+						}else { $branchList = $branchList.",".$rs;
+						}
+					}
 				}
-			}
-		}
-		$sql="SELECT id FROM rms_users WHERE user_name ='".$data['user_name']."'";
-		//echo $sql; exit();
-		//$sql.=" AND password='".$data['password']."'";
-		$rs = $db->fetchOne($sql);
-		if(!empty($rs)){
-			return -1;
-		}
-		$_user_data=array(
-	    	'last_name'=>$data['last_name'],
-			'first_name'=>$data['first_name'],
-			'user_name'=>$data['user_name'],
-			'password'=> MD5($data['password']),
-			'user_type'=> $data['user_type'],
-// 			'branch_id'=>$data['branch_id'],
-			'branch_list'=>$branchList,
-			'schoolOption'=>$data['schoolOption'],
-			'active'=> 1			
-	    ); 
-		return  $this->insert($_user_data);
+				$sql="SELECT id FROM rms_users WHERE user_name ='".$data['user_name']."'";
+				$rs = $db->fetchOne($sql);
+				if(!empty($rs)){
+					return -1;
+				}
+			$schooloption= implode(',', $data['schooloptoncheck']);
+			$_user_data = array(
+		    	'last_name'=>$data['last_name'],
+				'first_name'=>$data['first_name'],
+				'user_name'=>$data['user_name'],
+				'password'=> MD5($data['password']),
+				'user_type'=> $data['user_type'],
+				'branch_list'=>$branchList,
+				'schoolOption'=>$schooloption,
+				'active'=> 1			
+		    ); 
+			return $this->insert($_user_data);
 		}catch (Exception $e){
-			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Form_FrmMessage::message($this->tr->translate("INSERT_SUCCSS"));
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	

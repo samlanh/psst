@@ -5,7 +5,6 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 	public function init()
 	{
 		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
-		/* Initialize action controller here */
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -133,8 +132,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 	}
 	function addbranchAction(){
     	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-		
+    		$data=$this->getRequest()->getPost();		
     		$db = new RsvAcl_Model_DbTable_DbBranch();
     		$gty= $db->addajaxs($data);
     		print_r(Zend_Json::encode($gty));
@@ -142,4 +140,3 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
     	}   
     }
 }
-

@@ -10,22 +10,16 @@ class RsvAcl_UserController extends Zend_Controller_Action
 	
     public function init()
     {
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db=new Application_Model_DbTable_DbGlobal();
     	$sql = "SELECT u.user_type_id AS id,u.user_type AS name FROM `rms_acl_user_type` u where u.`status`=1";
     	$this->user_typelist = $db->getGlobalDb($sql);
-// 		foreach ($results as $key => $r){
-// 			$this->user_typelist[$r['id']] = $r['name'];    
-// 		}		
     }
-	
     public function indexAction()
     {
 		$db_user=new Application_Model_DbTable_DbUsers();
-                
         $this->view->activelist =$this->activelist;       
         $this->view->user_typelist =$this->user_typelist;   
         $this->view->active =-1;
@@ -64,7 +58,6 @@ class RsvAcl_UserController extends Zend_Controller_Action
         );
         $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'branch_name'=>$link,'user_name'=>$link,'name'=>$link));
     	$this->view->user_type = $_data['user_type'];
-    //	$this->view->active = $_data['active'];
     	$this->view->txtsearch = $_data['txtsearch'];
     	
     	$frm = new Global_Form_FrmItems();
@@ -74,9 +67,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
     }
 	public function addAction()
 	{
-			// action body
 			$db_user=new Application_Model_DbTable_DbUsers();
-		
 			if($this->getRequest()->isPost()){
 				$userdata=$this->getRequest()->getPost();
 				try {
@@ -87,10 +78,8 @@ class RsvAcl_UserController extends Zend_Controller_Action
 					}
 					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL);
 				} catch (Exception $e) {
-					$this->view->msg = $sms;
 				}
 			}
-			
 			$db  = new Application_Model_DbTable_DbGlobal();
 			$this->view->rs_branch = $db->getAllBranch();
 			
@@ -99,11 +88,9 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			array_unshift($user_type, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 			$this->view->user_type = $user_type;
 			$this->view->schoolOption = $db->getAllSchoolOption();
-			//echo $db->getAllSchoolOption(); exit();
 	}
 	public function editAction()
 	    {
-	        // action body
 	    	$db_user=new Application_Model_DbTable_DbUsers();
 	    	if($this->getRequest()->isPost()){
 				$userdata=$this->getRequest()->getPost();	
@@ -115,7 +102,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 					}			
 					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL);		
 				} catch (Exception $e) {
-					$this->view->msg = $sms;
+					
 				}
 			}
 			$us_id = $this->getRequest()->getParam('id');

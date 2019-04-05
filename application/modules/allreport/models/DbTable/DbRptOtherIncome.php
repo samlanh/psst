@@ -61,10 +61,10 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	FROM
     		ln_income
     	WHERE
-    		status=1 ";
+    		status=1 AND total_amount>0 ";
     	
     	$where= ' ';
-    	$order=" ORDER BY id DESC ";
+    	$order=" GROUP BY cate_income ORDER BY id DESC ";
     	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;

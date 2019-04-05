@@ -35,14 +35,16 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 					
 				WHERE i.id = d.items_id
 					AND s.id = sp.payment_id
-					AND d.id = sp.itemdetail_id ";
+					AND d.id = sp.itemdetail_id
+	    			AND sp.paidamount>0
+	    			AND s.is_void=0 ";
 	    	
 	    	$where = " AND ".$from_date." AND ".$to_date;
 	    	
 	    	if(!empty($search['branch_id']) AND $search['branch_id']>0){
 	    		$where.=" AND s.branch_id = ".$search['branch_id'] ;
 	    	}
-	    	$where.=" GROUP BY i.id ";
+	    	$where.=" GROUP BY i.id ORDER BY i.type ASC , i.ordering DESC ";
 	    	return $db->fetchAll($sql.$where);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

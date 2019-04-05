@@ -5,7 +5,6 @@
 ?>
 <title><?php echo $tr->translate('RPT_INCOMEBYCATE');?></title>
 <script>
-	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.DateTextBox");
 </script>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
@@ -59,8 +58,8 @@
 				<td width="15%" align="center">
 				</td>
 				<td width="70%" align="center">
-					<strong style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></strong><br />
-					<strong style="color:#000; font-size: 13px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></strong><br />
+					<strong style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="15%" align="center"></td>
 			</tr>
@@ -72,7 +71,7 @@
 					<table class="padd" width="100%" align="left" style="white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
 						<thead>
 							<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
-								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('CATE_INCOME')?></td>
+								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 								<td style=""></td>
 								<td style=""><?php echo $tr->translate('RPT_ALLPAYMENTREPORT')?></td>
 							</tr>

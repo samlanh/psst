@@ -95,6 +95,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'payment_by'=>-1,
 						'study_year'=>-1,
 						'item'=>'',
+						'service'=>'',
 						'group'=>'',
 						'degree'=>-1,
 						'grade_all'=>-1,
@@ -123,6 +124,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->rs_type = $_db->getAllItems();
 	}
 	function rptStudentpaymentdetailAction(){
 		try{

@@ -983,6 +983,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'advance_search' =>'',
 						'user'=>'',
 						'branch_search'=>0,
+						'study_year' =>'',
 						'degree_search' =>'',
 						'nation_search' =>'',
 						'student_option_search' =>'',

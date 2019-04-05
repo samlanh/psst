@@ -20,6 +20,9 @@ table.content-data thead tr.style-head {
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("branch_search");?>
                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input id="study_year" />
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("degree_search");?>
                    </div>
@@ -28,9 +31,6 @@ table.content-data thead tr.style-head {
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<?php echo $frm->getElement("student_option_search");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-    	               	<?php echo $frm->getElement("province_search");?>
                    </div>
                 </div>
                 <div class="form-group">
@@ -42,6 +42,9 @@ table.content-data thead tr.style-head {
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("type_exam");?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("province_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
@@ -134,6 +137,7 @@ table.content-data thead tr.style-head {
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>&nbsp;</td>
 											<td colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
@@ -156,6 +160,7 @@ table.content-data thead tr.style-head {
 												    <td align="left">&nbsp;<?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
 												    <td><?php echo $rs['sex']; ?></td>
 												    <td><?php echo $rs['tel']; ?></td>
+												     <td><?php echo $rs['academic']; ?></td>
 												     <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
@@ -237,7 +242,67 @@ table.content-data thead tr.style-head {
 <?php 
 	$urlStudentProfile = $this->baseUrl()."/test/index/profile/id/";
 ?>
-<script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.FilteringSelect"); 
+
+dojo.require("dojo.html");
+var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: academic_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "study_year",
+		name: "study_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			academic_year = dijit.byId('study_year').get('value');
+		}
+	}, "study_year");
+	
+	 var branch_id = dijit.byId('branch_search');
+	 branch_id.on('change', function(evt) {
+		 getAllAcademicByBranch();
+    });
+	 getAllAcademicByBranch();
+});
+
+
+url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+var oldBranch = "<?php echo $this->search['branch_search']?>";
+function getAllAcademicByBranch(){
+	dijit.byId('study_year').reset();
+	branch_id = dijit.byId('branch_search').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('study_year').set('store',academic_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getacademic,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			academic_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('study_year').set('store',academic_store);  
+		    if(oldBranch==branch_id){
+		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
+		    }
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
 var row=0;
 var url="";
 $(function(){

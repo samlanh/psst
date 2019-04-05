@@ -268,6 +268,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$to_date = (empty($search['end_date']))? '1': "str.create_date <= '".$search['end_date']." 23:59:59'";
 	
 			$sql=" SELECT st.*,
+					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=str.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic,
 					(SELECT $label FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 					(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
@@ -306,8 +307,12 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$s_where[]= " st.tel LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
+			
 			if(($search['branch_search']>0)){
 				$where.= " AND st.branch_id = ".$search['branch_search'];
+			}
+			if(!empty($search['study_year'])){
+				$where .= " and str.academic_year = ".$search['study_year'];
 			}
 			if(!empty($search['nation_search'])){
 				$where .= " and st.nationality = ".$search['nation_search'];
@@ -334,6 +339,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$where .= " and str.updated_result = ".$search['result_status'];
 			}
 			$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
+			
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

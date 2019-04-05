@@ -297,6 +297,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getAllStudentDetail($search);
 		$this->view->search=$search;
+		
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 // 	public function rptStudentattendenceAction(){
 // 		if($this->getRequest()->isPost()){
@@ -360,6 +363,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
+		
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	
 	public function rptTotalStudentMistakeAction(){
@@ -397,6 +403,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	
 	function mistakeCertificateAction(){
@@ -628,6 +635,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	public function rptStudentGroupAction()
 	{
@@ -893,7 +901,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -938,6 +946,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($row['branch_search'])?null:$row['branch_search'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	
 	function rptCrmDailyContactAction(){
@@ -965,6 +974,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -1088,6 +1098,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	
 	function certificateLetterofpraiseAction(){

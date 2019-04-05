@@ -41,43 +41,43 @@ class Registrar_Model_DbTable_DbInternalincomeincome extends Zend_Db_Table_Abstr
 		$where=" id = ".$data['id'];
 		$this->update($arr, $where);
 	}
-	function getIncomeById($id){
-		$db = $this->getAdapter();
-		$sql=" SELECT * FROM ln_internalincome where id=$id ";
-		return $db->fetchRow($sql);
-	}
-	function getAllIncome($search=null){
-		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('authstu');
-		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
-		$where = " WHERE ".$from_date." AND ".$to_date;
+// 	function getIncomeById($id){
+// 		$db = $this->getAdapter();
+// 		$sql=" SELECT * FROM ln_internalincome where id=$id ";
+// 		return $db->fetchRow($sql);
+// 	}
+// 	function getAllIncome($search=null){
+// 		$db = $this->getAdapter();
+// 		$session_user=new Zend_Session_Namespace('authstu');
+// 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
+// 		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+// 		$where = " WHERE ".$from_date." AND ".$to_date;
 		
-		$sql=" SELECT id,
-				title,
-				receiver,
-				invoice,
-				total_amount,
-				description,
-				date,
-				status 
-			FROM 
-				ln_internalincome ";
+// 		$sql=" SELECT id,
+// 				title,
+// 				receiver,
+// 				invoice,
+// 				total_amount,
+// 				description,
+// 				date,
+// 				status 
+// 			FROM 
+// 				ln_internalincome ";
 		
-		if (!empty($search['adv_search'])){
-				$s_where = array();
-				$s_search = trim(addslashes($search['adv_search']));
-				$s_where[] = " title LIKE '%{$s_search}%'";
-				$s_where[] = " total_amount LIKE '%{$s_search}%'";
-				$s_where[] = " invoice LIKE '%{$s_search}%'";
-				$where .=' AND ('.implode(' OR ',$s_where).')';
-			}
-			if($search['status']>-1){
-				$where.= " AND status = ".$search['status'];
-			}
-	       $order=" order by id desc ";
-			return $db->fetchAll($sql.$where.$order);
-	}
+// 		if (!empty($search['adv_search'])){
+// 				$s_where = array();
+// 				$s_search = trim(addslashes($search['adv_search']));
+// 				$s_where[] = " title LIKE '%{$s_search}%'";
+// 				$s_where[] = " total_amount LIKE '%{$s_search}%'";
+// 				$s_where[] = " invoice LIKE '%{$s_search}%'";
+// 				$where .=' AND ('.implode(' OR ',$s_where).')';
+// 			}
+// 			if($search['status']>-1){
+// 				$where.= " AND status = ".$search['status'];
+// 			}
+// 	       $order=" order by id desc ";
+// 			return $db->fetchAll($sql.$where.$order);
+// 	}
 	function getAllExpenseReport($search=null){
 		$db = $this->getAdapter();
 		$session_user=new Zend_Session_Namespace('authstu');
@@ -125,11 +125,11 @@ class Registrar_Model_DbTable_DbInternalincomeincome extends Zend_Db_Table_Abstr
 // 		}
 // 		return $pre.$id;
 // 	}
-	function getInvoiceNo(){
-		$db = $this->getAdapter();
-		$sql = " select count(id) from ln_internalincome ";
-		$amount = $db->fetchOne($sql);
-	}
+// 	function getInvoiceNo(){
+// 		$db = $this->getAdapter();
+// 		$sql = " select count(id) from ln_internalincome ";
+// 		$amount = $db->fetchOne($sql);
+// 	}
 	
 	function getCateIncome(){ // $type = rms_view type
 		$db=$this->getAdapter();

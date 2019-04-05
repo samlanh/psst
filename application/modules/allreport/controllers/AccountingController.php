@@ -1125,42 +1125,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	function rptInternaltransactionAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-				$search['adv_search']=$search['txtsearch'];
-				$search['status']=1;
-			}else{
-				$search=array(
-						'txtsearch' =>'',
-						"adv_search"=>'',
-						"status"=>-1,
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
-			$this->view->row = $db->getAllexspan($search);
-			
-			$db = new Registrar_Model_DbTable_DbInternalincomeincome();
-			
-			$this->view->adv_search = $search;
-			$_db = new Application_Model_DbTable_DbGlobal();
-			$user_type=$_db->getUserType();
-			
-			$this->view->rsrevenue= $db->getAllIncome($search);//call frome model
-			
-			$this->view->search = $search;
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-	}
 	public function rptDailyAction()
 	{
 		try{

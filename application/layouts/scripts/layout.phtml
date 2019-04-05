@@ -167,7 +167,7 @@ $teacher_id = $session_t->teacher_id;
 		}
 	</style>
 </head>
-<body class="nav-md soria footer_fixed ">
+<body class="nav-md soria footer_fixed " onload="myFunction()">
 	<div class="container body">
     	<div class="main_container">
         	<div class="col-md-3 left_col ">
@@ -808,6 +808,14 @@ function changeLange(lang){
 </script>
 
 <script type="text/javascript">
+function myFunction(){
+	loadingBlock();
+	 setTimeout(function () {
+		HideloadingBlock();
+	}, 800);
+}
+	
+	
 function loadingBlock(){
   document.getElementsByClassName("overlay")[0].style.display="block";
 }

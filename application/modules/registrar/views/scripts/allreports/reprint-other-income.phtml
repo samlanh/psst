@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Reprint Student test Payment'); 
+	$this->headTitle('បង្កាន់ដៃបង់ប្រាក់'); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
@@ -11,21 +11,35 @@ table tr td strong{
 }
 .defaulheight{line-height: 22px !important;}
 </style>
-<table width="100%" style="margin: 0px; font-family:'khmer os battambang';">
-   <tr>
-       <td colspan="5">
-			<div class="menureport">
-				<ul>
-					<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
-					<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
-					<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
-				</ul>
+<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+	<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+		<i class="fa fa-print"></i>
+	</div>
+	<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+	<div class="ptss__settings">
+		<div class="ptss__single-setting" id="ptss__layout">
+			<div class="ptss__setting-control">
+				<div class="ptss__layout-wrapper">
+					<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+				</div>
 			</div>
-      </td>
-	</tr>
-</table>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;width:22cm;padding:1cm;">
-		<div id="divPrint">
+		</div>
+	</div>
+</div>
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+   		<div class="col-sm-12 border-botom">
+	    	<div class="col-sm-8 pd-0">
+    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('បង្កាន់ដៃបង់ប្រាក់');?></h4>
+   			</div>
+   			<div class="col-sm-4 text-right">
+   			</div>
+   		</div>
+   	</div>
+   	<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+   		<div id="divPrint">
 			<?php 
 			$amount_print = $this->data['receipt_print'];
 			for($prin=0;$prin<$amount_print;$prin++){?>
@@ -127,7 +141,9 @@ table tr td strong{
 			<?php }//}?>
 			
 	</div>	
+   	</div>
 </div>
+    	
 <script type="text/javascript">
 dojo.ready(function(){
 });	
@@ -151,5 +167,32 @@ function readMoneyInKhmer(netTotal){
 
     read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
     dojo.byId("lbl_moneykhmer").innerHTML = money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'+read_eng
+}
+
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function hideleft(){
+	(dojo.style("leftmenu","display") == "none") ? 'show':'hide'();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,fullscreen=yes, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
 </script>

@@ -703,6 +703,7 @@ function getAllgroupStudyNotPass($action=null){
 	if (!empty($branch_id)){
 		$sql.=" AND branch_id =$branch_id";
 	}
+	$sql.= $this->getAccessPermission();
 	$sql.=" order by room_id DESC ";
    	return $db->fetchAll($sql);
    }
@@ -1988,6 +1989,7 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($branch_id)){
   		$sql.=" AND g.branch_id = $branch_id";
   	}
+  	$sql.= $this->getAccessPermission('g.branch_id');
   	$sql.=" ORDER BY `g`.`id` DESC ";
   	return $db->fetchAll($sql);
   }

@@ -250,13 +250,18 @@ class Foundation_GroupController extends Zend_Controller_Action {
     function getgroupAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Foundation_Model_DbTable_DbStudent();
-    		$group = $db->getAllgroup();
-    		$degree = $db->getAllFecultyName();    		
-    		array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+    		//$db = new Foundation_Model_DbTable_DbStudent();
+    		//$group = $db->getAllgroup();
     		
+    		//$degree = $db->getAllFecultyName();    		
+    		//array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+    		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
     		$model = new Application_Model_DbTable_DbGlobal();
-    		$room = $model->getAllRoom();
+    		
+    		$group = $model->getAllGroupByBranch($branch_id);
+    		array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+    		$degree = $model->getAllItems(1,null);
+    		$room = $model->getAllRoom($branch_id);
     		array_unshift($room, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_ROOM")));
     		
     		$result = array('group'=>$group,'degree'=>$degree,'room'=>$room);

@@ -382,6 +382,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
+    	$_branch_id->setValue($request->getParam("branch_id"));
     	if (count($optionBranch)==1){
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
     		if(!empty($optionBranch))foreach($optionBranch AS $row){

@@ -151,21 +151,24 @@ function addRow() {
 	col++;no++;
 	template='';
 	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th ><?php echo $tr->translate("BOOK_NAME");?></th>';
 		temp+='<th ><?php echo $tr->translate("SERIAL_NO");?></th>';
 		temp+='<th ><?php echo $tr->translate("BARCODE");?></th>';
 		temp+='<th ><?php echo $tr->translate("NOTE");?></th>';
+		temp+='<th ><?php echo $tr->translate("STATUS");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
-		template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="5%" align="center">'+no+'</td>';
 		template+='<td width="20%" align="center"><input dojoType="dijit.form.TextBox" class="fullside" name="book_id'+col+'" id="book_id'+col+'" value="'+book+'" type="hidden">'+book_name+'</td>';
-		template+='<td width="20%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="hidden">'+serial_no+'&nbsp;</td>';	
-		template+='<td width="20%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="hidden">'+barcode+'&nbsp;</td>';	
-		template+='<td width="30%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="hidden">'+note+'&nbsp;</td>';
+		template+='<td width="18%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="hidden">'+serial_no+'&nbsp;</td>';	
+		template+='<td width="17%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="hidden">'+barcode+'&nbsp;</td>';	
+		template+='<td width="20%">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="hidden">'+note+'&nbsp;</td>';
+		template+='<td width="20%"><select class="fullside" name="status_'+col+'" id="status_'+col+'" dojoType="dijit.form.FilteringSelect" >';
+			template+='<option value="1"><?php echo $tr->translate("ACTIVE");?></option>';
+			template+='<option value="0"><?php echo $tr->translate("DEACTIVE");?></option>';
+		template+='</select></td>';
 	tmp='<tr height="30px" id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -199,21 +202,24 @@ function initialize() {
 		col++;no++;
 		template='';
 		if(title!=1){
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th ><?php echo $tr->translate("BOOK_NAME");?></th>';
 			temp+='<th ><?php echo $tr->translate("SERIAL_NO");?></th>';
 			temp+='<th ><?php echo $tr->translate("BARCODE");?></th>';
 			temp+='<th ><?php echo $tr->translate("NOTE");?></th>';
+			temp+='<th ><?php echo $tr->translate("STATUS");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center"><input dojoType="dijit.form.TextBox" name="old_'+col+'" id="old_'+col+'" value="'+book_id+'" type="hidden">'+no+'</td>';
 			template+='<td width="20%" align="center"><input dojoType="dijit.form.TextBox" class="fullside" name="book_id'+col+'" id="book_id'+col+'" value="'+book+'" type="hidden">'+book_name+'</td>';
-			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="text"/></td>';	
-			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="text"/></td>';	
-			template+='<td width="30%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="text" /></td>';
+			template+='<td width="17%"><input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="text"/></td>';	
+			template+='<td width="18%"><input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="text"/></td>';	
+			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="text" /></td>';
+			template+='<td width="20%"><select class="fullside" name="status_'+col+'" id="status_'+col+'" dojoType="dijit.form.FilteringSelect" >';
+				template+='<option value="1"><?php echo $tr->translate("ACTIVE");?></option>';
+				template+='<option value="0"><?php echo $tr->translate("DEACTIVE");?></option>';
+			template+='</select></td>';
 		tmp='<tr height="30px" id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -225,7 +231,11 @@ function initialize() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 			 parseContent: true,
 		});
+		
+		dijit.byId('status_'+col).attr('value',"<?php echo $row['status']?>");
+		
 		dijit.byId('barcode').focus();
+		
 	<?php }}?>
 }
 

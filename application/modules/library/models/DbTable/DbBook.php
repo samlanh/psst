@@ -319,7 +319,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 	function getPurchaseToday(){
 		$date=date('Y-m-d');
 		$db=$this->getAdapter();
-		$sql="SELECT count(bd.id) FROM rms_bookpurchase as b,rms_bookpurchasedetails as bd WHERE b.id=bd.purchase_id AND b.date_purchase='$date'";
+		$sql="SELECT count(bd.id) FROM rms_bookpurchase as b,rms_bookpurchasedetails as bd WHERE b.id=bd.purchase_id AND b.date_purchase='$date' and bd.status=1 ";
 		return $db->fetchOne($sql);
 	}
 	

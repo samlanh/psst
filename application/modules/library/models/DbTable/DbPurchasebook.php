@@ -145,10 +145,11 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 				{
 					if (!empty($data['old_'.$i])){
 						$arr = array(
-								'book_id'	=> $data['book_id'.$i],
-								'serial'	=> $data['serial_'.$i],
-								'barcode'	=> $data['barcode_'.$i],
-								'note'	  	=> $data['note_'.$i],
+							'book_id'	=> $data['book_id'.$i],
+							'serial'	=> $data['serial_'.$i],
+							'barcode'	=> $data['barcode_'.$i],
+							'note'	  	=> $data['note_'.$i],
+							'status'	=> $data['status_'.$i],
 						);
 						$this->_name='rms_book_detail';
 						$where =" id =".$data['old_'.$i];
@@ -160,6 +161,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 							'serial'	=>  $data['serial_'.$i],
 							'barcode'	=>  $data['barcode_'.$i],
 							'note'  	=> 	$data['note_'.$i],
+							'status'	=> $data['status_'.$i],
 						);
 						$this->_name='rms_book_detail';
 						$book_id = $this->insert($array);
@@ -169,6 +171,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 						'purchase_id'	=>  $id,
 						'book_id'		=> 	$book_id,
 						'note'  		=> 	$data['note_'.$i],
+						'status'		=> $data['status_'.$i],
 					);
 					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);

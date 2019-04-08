@@ -318,9 +318,9 @@ function addRow() {
 	barcode = dijit.byId('barcode').get('value');
 	note = dijit.byId('note').get('value');
 
-	if(serial_no=="" || barcode==""){
-		alert("<?php echo $tr->translate("Please Enter Serial No !!! ");?>");
-		dijit.byId('serial_no').focus();
+	if(barcode==""){
+		alert("<?php echo $tr->translate("Please Enter Barcode !!! ");?>");
+		dijit.byId('barcode').focus();
 		return false;
 	}
 	col++;no++;

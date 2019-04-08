@@ -232,23 +232,21 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 					bd.id as borrow_detail_id,
 					b.*,
-					s.stu_khname,
-					s.last_name,
-					s.stu_enname,
-					s.stu_code,
+					(select s.stu_khname from rms_student as s where b.stu_id = s.stu_id) as stu_khname,
+					(select s.last_name from rms_student as s where b.stu_id = s.stu_id) as last_name,
+					(select s.stu_enname from rms_student as s where b.stu_id = s.stu_id) as stu_enname,
+					(select s.stu_code from rms_student as s where b.stu_id = s.stu_id) as stu_code,
 					DATE_FORMAT(b.return_date, '%d-%m-%Y') AS return_date
 				FROM 
 					rms_borrow as b,
-					rms_borrowdetails as bd,
-					rms_student as s
+					rms_borrowdetails as bd
 				WHERE 
 					b.id = bd.borr_id
-					and b.stu_id = s.stu_id
 					and bd.is_return = 0
 					and bd.book_id = $book_id
 			";
 		return $db->fetchRow($sql);
-	}
+	}// can not join with student => because of borrower type
 	
 }
 

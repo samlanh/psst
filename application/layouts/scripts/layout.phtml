@@ -810,13 +810,6 @@ function changeLange(lang){
 
 <script type="text/javascript">
 
-$(function() {
-	loadingBlock();
-    $(".overlay").fadeOut(2000, function() {
-        $("div.container.body").fadeIn(1000);     
-    });
-});
-	
 function loadingBlock(){
   document.getElementsByClassName("overlay")[0].style.display="block";
 }
@@ -826,6 +819,11 @@ function HideloadingBlock(){
 jQuery(function () {
 	'use strict';
 	
+	loadingBlock();
+    $(".overlay").fadeOut(2000, function() {
+        $("div.container.body").fadeIn(1000);     
+    });
+    
 	jQuery(".ptss__toggle-btn").click(function () {	
 		jQuery('.js-ptss-frame').toggleClass('is-opened');
 	});

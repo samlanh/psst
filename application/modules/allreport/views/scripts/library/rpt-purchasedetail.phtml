@@ -60,6 +60,7 @@
 							<td><?php echo $tr->translate("BLOCK_BOOK"); ?></td>
 							<td><?php echo $tr->translate("ORDER_DATE"); ?></td>
 							<td><?php echo $tr->translate("USER"); ?></td>
+							<td><?php echo $tr->translate("STATUS"); ?></td>
 						</tr>
 						 </thead>
 						 <?php $total=0;$amount=0;$net_total=0;?>
@@ -73,7 +74,8 @@
 							<td><?php echo $row['cat_name'];?></td>	
 							<td><?php echo $row['block_name'];?></td>	
 							<td><?php echo date("d-M-Y",strtotime($row['date_purchase']));?>&nbsp;</td>
-							<td><?php echo $row['user_name'];?></td>	
+							<td><?php echo $row['user_name'];?></td>
+							<td><?php echo $row['status'];?></td>							
 						</tr>
 					<?php }?>	 
 					</table>	

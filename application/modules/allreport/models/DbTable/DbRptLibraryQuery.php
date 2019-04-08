@@ -463,7 +463,8 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
 			    	rms_book.title AS book_name,
 			    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id LIMIT 1) AS user_name,
 			    	bdt.serial,
-			    	bdt.barcode
+			    	bdt.barcode,
+			    	(select name_kh from rms_view where type=1 and key_code = bd.status) as status
     			FROM 
     				rms_bookpurchase AS b,
     				rms_bookpurchasedetails AS bd,

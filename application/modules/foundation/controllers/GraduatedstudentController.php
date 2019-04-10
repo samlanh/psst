@@ -29,7 +29,7 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
-		$collumns = array("FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TYPE","NOTE","CREATE_DATE","USER","STATUS");
+		$collumns = array("BRANCH","GROUP","ACADEMIC_YEAR","GRADE","SESSION","TYPE","NOTE","CREATE_DATE","USER","STATUS");
 		$link=array(
 				'module'=>'foundation','controller'=>'graduatedstudent','action'=>'edit',
 		);
@@ -51,16 +51,10 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$db = new Foundation_Model_DbTable_DbGraduatedStudent();		
-		$this->view->row = $add =$db->getfromGroup();
-		$this->view->rs = $add =$db->gettoGroup();
 		
-		
-		$this->view->academy = $db->getAllYears();
-		
-		$_db = new Application_Model_DbTable_DbGlobal();		
-		$this->view->branch_name = $_db->getAllBranch();
-		$rs = $_db->getViewById(9);
+		$_dbgb = new Application_Model_DbTable_DbGlobal();		
+		$this->view->branch_name = $_dbgb->getAllBranch();
+		$rs = $_dbgb->getViewById(9);
 		unset($rs[0]);
 		$this->view->rstype = $rs;
 	}
@@ -71,7 +65,7 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-				$db->updateDropStudent($data,$id);
+				$db->updateGraduateStudent($data);
 				
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/graduatedstudent/index");
 			}catch(Exception $e){
@@ -82,26 +76,13 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		$db= new Foundation_Model_DbTable_DbGraduatedStudent();
 		$result = $db->getAllDropById($id);
 		$this->view->rs = $result;
-		
 		$this->view->studentpass = $db->selectStudentPass($result['group_id']);
-		$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-		$this->view->row = $db->getfromGroup();
-		$g_new=$db->getGroupNewAll();
-		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
-		$this->view->g_new=$g_new;
-		$this->view->rows = $db->gettoGroup();
-		$this->view->academy = $db->getAllYears();
-		$this->view->drop_type = $db->getDropType();
 		
-		//$test = $db->getAllStudentFromGroup(4);
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $_db->getAllFecultyName();
-		$db=new Application_Model_DbTable_DbGlobal();
-		$this->view->rs_session=$db->getSession();
-		$room =  $db->getRoom();
-		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
-		$this->view->room = $room;
+		$_dbgb = new Application_Model_DbTable_DbGlobal();		
+		$this->view->branch_name = $_dbgb->getAllBranch();
+		$rs = $_dbgb->getViewById(9);
+		unset($rs[0]);
+		$this->view->rstype = $rs;
 	}
 	
 	

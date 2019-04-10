@@ -14,8 +14,10 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
     	
     	$sql="SELECT 
+    			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				  s.stu_code AS code,
 				  s.stu_enname AS name,
+				  s.last_name AS last_name,
 				  s.tel,
 				 (SELECT name_en from rms_view where rms_view.type=2 and key_code=s.sex LIMIT 1)AS sex,
 				 (SELECT name_en from rms_view where type=4 and key_code =s.session LIMIT 1) as session,
@@ -40,6 +42,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     			  and s.stu_id = sp.student_id
     			  and spd.is_suspend = 0 
     			  AND spd.is_onepayment =0 ";
+    	$sql.=" AND s.is_subspend=0 ";//check 
     	
      	$order=" ORDER by item.items_id  ASC ";
      	$where=" ";

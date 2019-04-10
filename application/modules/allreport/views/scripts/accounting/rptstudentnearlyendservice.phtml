@@ -97,20 +97,21 @@
 						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
 							<tr style="font-weight:bold;font-size:13px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
-								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_ID"); ?></th>
-								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</th>
-								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</th>
-								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</th>
-							    <th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</th>
-								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_TYPE"); ?></th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_NAME"); ?></th>
-							    <th style="border: 1px solid #000;"><?php echo $tr->translate("PAID_DATE"); ?></th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("START_DATE"); ?></th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("VALIDATE"); ?></th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?></th>
+								<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
+								<td><?php echo $tr->translate("STUDENT_ID"); ?></td>
+								<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</td>
+								<td><?php echo $tr->translate("SERVICE_TYPE"); ?></td>
+								<td><?php echo $tr->translate("SERVICE_NAME"); ?></td>
+							    <td><?php echo $tr->translate("PAID_DATE"); ?></td>
+								<td><?php echo $tr->translate("START_DATE"); ?></td>
+								<td><?php echo $tr->translate("VALIDATE"); ?></td>
+								<td><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?></td>
 							</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
@@ -121,8 +122,9 @@
 						?>
 							<tr class="hover" style="font-size:12px; height: 22px;border: 1px solid #000;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $i;?></td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>	
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name']." ".$row['last_name'];?></td>	
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['tel'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['group_name'];?></td>

@@ -21,14 +21,29 @@
 		<form action="<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit" >			
 				if(this.validate()) {
+					branch_id=dijit.byId('branch_id').get('value');
+                	if(branch_id==0 || branch_id==''){
+                        alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
+						dijit.byId('branch_id').focus();
+						return false;	
+                	}
+					var identity = [];
+	    			 $('.checkbox:checked').each(function(i){
+	    				 identity[i] = $(this).val();
+	     			});
+					if(identity==""){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT");?>");
+						return false;
+					}
+
                	 	from_group=dijit.byId('from_group').get('value');
                 	if(from_group==0 || from_group==''){
                         alert('Please Select Form Group !');
 						dijit.byId('from_group').focus();
 						return false;	
                 	}
-					dijit.byId("save_new").set('disabled',true);	
-					dijit.byId("save_close").set('disabled',true);	
+					loadingBlock();
+					return true;
 				}else {
 					return false;
 				}
@@ -68,28 +83,26 @@
 		               	 <input dojoType="dijit.form.ValidationTextBox" class="fullside" id="note" name="note" type="text" />
 		                </div>
 		             </div>
-		         </div>
-		         <div class="col-md-8 col-sm-8 col-xs-12">
-		    		<div class="form-group">
+		             <div class="form-group">
 		                <label class="control-label  col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("DETAIL");?> </label>
 		             </div>
 		             <div class="form-group">
 		                <div class="col-md-12 col-sm-12 col-xs-12">
-		                	<label id="lblfromgroup" name="detail_from_group" style="background:#fff;height:70px;display:block; font-size: 14px; padding: 10px; border: solid 1px #ccc;white-space: normal;"></label>
+		                	<div id="lblfromgroup">
+		                	</div>
 		                </div>
 		             </div>
 		         </div>
-		     </div>
-		     <div class="card-box">
-	    		<div class="col-md-12 col-sm-12 col-xs-12">
-	    			<div class="form-group">
+		         <div class="col-md-8 col-sm-8 col-xs-12">
+		    		
+		            <div class="form-group">
 		                <label class="control-label text-center bold col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("STUDENT_LIST");?> </label>
 		             </div>
 		             <div class="form-group">
-		             	<div id="data_table" style="height: 300px !important;overflow: scroll;"> </div>
+		             	<div id="data_table" > </div>
 		             </div>
-	    		</div>
-	    	</div>
+		         </div>
+		     </div>
 	    	<div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
@@ -102,6 +115,50 @@
 		</form>
 	</div>
 </div>
+<style>
+.fixed_header{
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+  display:block;
+  width: 100%;
+  overflow: auto;
+  height: 300px;
+}
+
+.fixed_header thead tr {
+   display: block;
+}
+.fixed_header thead tr td{
+	text-align: center;
+}
+.fixed_header thead {
+  background: #02014a;
+  color:#fff;
+}
+
+.fixed_header th, .fixed_header td {
+  padding: 5px;
+  text-align: left;
+  width: 200px;
+}
+.fixed_header td.center {
+    text-align: center;
+}
+div#lblfromgroup div.info{
+	    background: #fdfbbd;
+    border: solid 1px #02014a;
+    white-space: normal;
+    display: block;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px !important;
+    color: #02014a;
+}
+</style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -159,39 +216,56 @@ function getStudentFromGroup(){
 			},
 		handleAs:"json",
 		load: function(respone) {
-			tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table" >'
-				+'<thead><tr style="background:#0077c5;color:#fff;height: 30px;font-size:13px;text-align:center;"><th><?php echo $tr->translate('NUM');?></th>'
-				+'<th><?php echo $tr->translate('STUDENT_ID');?></th>'
-				+'<th><?php echo $tr->translate('STUDENT_NAMEKHMER');?></th>'
-				+'<th><?php echo $tr->translate('NAME_EN');?></th>'
-				+'<th colspan="2"><?php echo $tr->translate('SEX');?></th>'
-				+'<th style="white-space:nowrap; border-right: 0px none;" colspan="1"><input style="height: 13px;" type="checkBox" value="0"  name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></th>'
-				+'<th style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></th></tr>'
-				+'</thead>';
+			tem='<table border="1" id="table"  class="fixed_header">'
+				+'<thead><tr ><td style="width: 20px;"><?php echo $tr->translate('NUM');?></td>'
+				+'<td ><?php echo $tr->translate('STUDENT_ID');?></td>'
+				+'<td><?php echo $tr->translate('STUDENT_NAMEKHMER');?></td>'
+				+'<td><?php echo $tr->translate('NAME_EN');?></td>'
+				+'<td ><?php echo $tr->translate('SEX');?></td>'
+				+'<td style="width: 20px;"><input style=" height: initial;"  type="checkBox" value="0"  name="check_all" onclick=" CheckAll(0);;" id="check_all"/> </td> '
+				+'</tr>'
+				+'</thead>'
+				+'<tbody>';
 			if(respone!=""){
 				num=0;
 				for(var i=0;i<respone.length;i++){
 					inx = i+1;
-						tem += '<tr style="border:1px solid #000;">';
-					    tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
-						tem += '<td>&nbsp;<label>'+respone[i].stu_code+'</label></td>';
-						tem += '<td>&nbsp;<label>'+respone[i].stu_khname+'</label></td>';
-						tem += '<td>&nbsp;<label>'+respone[i].stu_enname+'</label></td>';
-						tem += '<td colspan="2" align="center">&nbsp;<label>'+respone[i].sex+'</label></td>';
-						tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
+						tem += '<tr >';
+					    tem += '<td style="width: 20px;" class="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
+						tem += '<td>'+respone[i].stu_code+'</td>';
+						tem += '<td>'+respone[i].stu_khname+'</td>';
+						tem += '<td>'+respone[i].stu_enname+' '+respone[i].last_name+'</td>';
+						tem += '<td class="center">'+respone[i].sex+'</td>';
+						tem += '<td class="center" style="width: 20px;"><input class="checkbox" style="height: initial;" type="checkBox" value="'+respone[i].stu_id+'"  name="selector[]" id="checkbox'+inx+'"/></td>';
 					    tem += '</tr>';
-					    if($("#identity").val()!="") {
-							var identity = $("#identity").val();
-							$("#identity").val(identity+','+inx);
-						}else {$("#identity").val(inx);}
 				}
 			}
+			tem+='</tbody>';
 			tem+='</table>';
 			dojo.byId('data_table').innerHTML = tem;
 		},
 		error: function(err) {
 		}
 	});
+}
+function CheckAll(index){
+	if(index==0){
+			if($('#check_all').is(":checked")){
+				$('.checkbox').each(function() { //loop through each checkbox
+		            this.checked = true;  
+				});
+			}else{
+				$('.checkbox').each(function() { //loop through each checkbox
+		            this.checked = false;  
+				});
+			}
+	}else{
+		var a = $("input:checked").val();
+		 var identity = [];
+	     $('.checkbox:checked').each(function(i){
+	    	 identity[i] = $(this).val();
+	     });
+	}
 }
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(type){
@@ -204,39 +278,14 @@ function toStudentGroup(type){
 			},
 		handleAs:"json",
 		load: function(data) {
-			dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span style="color:red;"><?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
-			if(type==1){
-				$('#identity').val('');
-			}
+			dojo.byId('lblfromgroup').innerHTML='<div class="info"><span class="bold"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<br /><span class="bold">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<br /><span class="bold">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span class="bold"><?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
 		},
 		error: function(err) {
 		}
 	});
 }
-function setValue(i){
-	$('#identity').val('');
-	for(var j=1;j<=i;j++){
-		if(dojo.byId('checkbox'+j).checked){
-			if($("#identity").val()!="") {
-				var iden = $("#identity").val();
-				$("#identity").val(iden+','+j);
-			} else{
-				$("#identity").val(j);
-			}
-		}
-	}
-}
-function check(i){
-	if(dojo.byId('checkall').checked){
-		for(var j=1;j<=i;j++){
-			$("#checkbox"+j).attr('checked', 'checked');
-		}
-	}else{
-		for(var j=1;j<=i;j++){
-			$("#checkbox"+j).removeAttr("checked");
-		}
-	}
-}
+
+
 function clear(){
 	dojo.byId('lblfromgroup').innerHTML='';
 	dojo.byId('lbltogroup').innerHTML='';

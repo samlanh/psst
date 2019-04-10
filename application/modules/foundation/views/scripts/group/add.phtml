@@ -323,6 +323,7 @@ dojo.ready(function(){
 			academic_year = dijit.byId('academic_year').get('value');
 			getAllDegreeByAcademicSchoolOption();
 			getSubject();
+			getRefreshTeacher();
 		}
 	}, "academic_year");
 	addRow();
@@ -330,6 +331,7 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
 		 getRefreshRoom();
+		 getRefreshTeacher();
     });
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
@@ -418,17 +420,17 @@ function getRefreshTeacher(){
 	teacher_option = '';
 	academic_year = dijit.byId('academic_year').get('value');
 	branch_id = dijit.byId('branch_id').get('value');
-	if(academic_year=='' || academic_year==-1){
+	if(branch_id=='' || branch_id==-1){
 		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		dijit.byId('teacher_ass').set('store',teacher_store);  
 		dijit.byId('teacher_id').set('store',teacher_store);  
-		dijit.byId('academic_year').focus();
+		//dijit.byId('academic_year').focus();
 		teacher_option="";
 		return false;
 	}
-	if(academic_year=='' || academic_year == -1){
-		return false;
-	}
+	//if(academic_year=='' || academic_year == -1){
+		//return false;
+	//}
 	dojo.xhrPost({
 		url:url_gettecher,
 		content:{

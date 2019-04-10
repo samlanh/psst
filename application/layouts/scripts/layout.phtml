@@ -81,6 +81,7 @@ $teacher_id = $session_t->teacher_id;
     <link href="<?php echo $this->baseUrl()."/datatable/"?>responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
     <script src="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.js" type="text/javascript"></script>
     <script src="<?php echo $this->baseUrl()."/datatable/"?>dataTables.responsive.min.js" type="text/javascript"></script>
+    <!-- 
     <script>
     $(document).ready(function() {
         $('#datatable-responsive').DataTable( {
@@ -90,6 +91,7 @@ $teacher_id = $session_t->teacher_id;
         } );
     } );
     </script>
+     -->
 	<?php }?>
 	<?php if ($module=="allreport" AND ($action=="rpt-score-bac-monthly" OR $action=="rpt-student-group")){?>
 	<link href="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.css" rel="stylesheet" type="text/css" />
@@ -162,7 +164,7 @@ $teacher_id = $session_t->teacher_id;
 		    </div>
 		</div>
 	</div>	
-	<div class="container body" style="display:none;">
+	<div class="container body" style="display: none;">
     	<div class="main_container">
         	<div class="col-md-3 left_col ">
           		<div class="left_col scroll-view">
@@ -680,7 +682,6 @@ function changeLange(lang){
 </script>
 
 <script type="text/javascript">
-
 function loadingBlock(){
   document.getElementsByClassName("overlay")[0].style.display="block";
 }
@@ -692,9 +693,15 @@ jQuery(function () {
 	
 	loadingBlock();
     $(".overlay").fadeOut(2000, function() {
-        $("div.container.body").fadeIn(1000);     
+    	$("div.container.body").fadeIn(1000);  
+	    $('#datatable-responsive').DataTable( {
+	       	responsive: true,
+	    	 "dom": '<"top"i>rt<"bottom"flp><"clear">',
+	       	searching: false,
+	     } );
+    	//$("div.container.body").css("visibility", "visible");
+           
     });
-    
 	jQuery(".ptss__toggle-btn").click(function () {	
 		jQuery('.js-ptss-frame').toggleClass('is-opened');
 	});

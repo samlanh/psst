@@ -276,6 +276,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		FROM rms_teacher AS t WHERE t.id =$id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getAccessPermission('t.branch_id');
+		$sql.= $dbp->getSchoolOptionAccess('t.schoolOption');
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -353,6 +354,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getAccessPermission('g.branch_id');		
+		$where.= $dbp->getSchoolOptionAccess('g.schoolOption');
 		
 		return $db->fetchAll($sql.$where.$order_by);
 	}

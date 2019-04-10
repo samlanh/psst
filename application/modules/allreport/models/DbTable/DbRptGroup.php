@@ -250,6 +250,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	}
 	   	$dbp = new Application_Model_DbTable_DbGlobal();
 	   	$where.=$dbp->getAccessPermission('g.branch_id');
+	   	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
 	   	
 	   	$order = ' ORDER BY `g`.`is_pass` ASC ,`g`.`group_code` ASC ';
 	   	return $db->fetchAll($sql.$where.$order);

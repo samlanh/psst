@@ -275,19 +275,20 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		
     		$_db = new Accounting_Model_DbTable_DbFee();
-    		$row = $_db->getFeeById($data['academic_year']);
-    		$schoolOption = $row['school_option'];
-    		
-    		if (!empty($schoolOption)){
-	    		$db = new Foundation_Model_DbTable_DbGroup();
-	    		$teacher = $db->getAllTeacher($schoolOption,$data['branch_id']);
-	    		if (empty($data['has_addnew'])){
-	    			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
-	    		}
-	    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
-	    		print_r(Zend_Json::encode($teacher));
-	    		exit();
+    		$schoolOption = null;
+    		if (!empty($data['academic_year'])){
+	    		$row = $_db->getFeeById($data['academic_year']);
+	    		$schoolOption = $row['school_option'];
     		}
+    		
+    		$db = new Foundation_Model_DbTable_DbGroup();
+    		$teacher = $db->getAllTeacher($schoolOption,$data['branch_id']);
+    		if (empty($data['has_addnew'])){
+    			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+    		}
+    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+    		print_r(Zend_Json::encode($teacher));
+    		exit();
     	}
     }
     

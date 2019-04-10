@@ -83,6 +83,7 @@
 							<thead>
 							<tr style="font-size:12px; font-weight: bold; background: #ccd9ff; height: 20px;" align="center" >
 								<th rowspan="2">&nbsp;No.&nbsp;</th>
+								<th rowspan="2">&nbsp;Branch&nbsp;</th>
 								<th rowspan="2">&nbsp;Student Code&nbsp;</th>
 								<th rowspan="2">&nbsp;Student Name&nbsp;</th>
 								<th rowspan="2">&nbsp;Sex&nbsp;</th>
@@ -120,6 +121,7 @@
 						<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
 							<tr style="font-size:9px; height: 23px;" align="center" >
 								<td ><?php echo $i;?></td>
+								<td ><?php echo $row['branch_name'];?></td>
 								<td ><?php echo $row['stu_code'];?></td>
 								<td align="left">&nbsp;<?php echo $row['name'];?>&nbsp;</td>
 								<td ><?php echo $row['sex'];?></td>	

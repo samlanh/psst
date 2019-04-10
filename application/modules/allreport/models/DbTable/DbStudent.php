@@ -340,6 +340,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$where.=$dbp->getAccessPermission("st.branch_id");
+			$sql.= $dbp->getSchoolOptionAccess('str.test_type');
 			
 			$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
 			

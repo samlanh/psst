@@ -357,7 +357,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			where 
     				stu_id ='.$stu_id;
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('s.group_id');
+    	$sql.=$dbp->getAccessPermission('rms_student.group_id');
+    	$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = rms_student.degree LIMIT 1)');
     	return $db->fetchAll($sql);
     }
     public function getAllStudentSelected($stu_id){
@@ -421,6 +422,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	stu_id =".$stu_id;
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('s.group_id');
+    	$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree LIMIT 1)');
     	return $db->fetchAll($sql);
     }
     public function getAllAmountStudent($search){
@@ -475,6 +477,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
+    	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = rms_student.degree LIMIT 1)');
     	
     	$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_khname ASC ";
     	if(empty($search)){
@@ -738,6 +741,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAllStudentDetail($search){
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,CONCAT(stu_khname," - ",stu_enname," ",last_name)AS name,
+    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
     	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
     	(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
     	tel,email,stu_code,home_num,street_num,
@@ -761,6 +765,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("branch_id");
+    	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = rms_student.degree LIMIT 1)');
     	$order=" order by stu_id DESC";
     	 
     	if(empty($search)){
@@ -1470,6 +1475,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("g.branch_id");
+    	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
     	$group_by = " GROUP BY g.branch_id,g.`academic_year`,
 			g.`degree`,g.`grade`,g.`session`";
     	$order_by = " ORDER BY g.branch_id DESC,g.`academic_year` ASC,

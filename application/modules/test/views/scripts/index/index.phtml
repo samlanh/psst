@@ -10,8 +10,6 @@
 	
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$userinfo = $_dbgb->getUserInfo();
-
-	
 ?>
 <script>
 	dojo.require("dijit.form.DateTextBox");
@@ -135,7 +133,6 @@
 						<?php }?>
 				<?php } 
 				}?>
-				
 				"profile": {name: "<?php echo $tr->translate("STUDENT_PROFILE");?>", icon: "fa-user"},
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit"},
 			}

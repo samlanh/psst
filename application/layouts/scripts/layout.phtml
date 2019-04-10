@@ -27,9 +27,6 @@ $teacher_id = $session_t->teacher_id;
 	$session_user=new Zend_Session_Namespace('authstu');
 	$arr_module = $session_user->arr_acl;
 	$user_id = $session_user->user_id;
-// 	if(empty($user_id)){
-// 		Application_Form_FrmMessage::redirectUrl("/");
-// 	}
 	if(empty($username)){
 		$username =  $session_t->teacher_name;
 	}
@@ -37,11 +34,7 @@ $teacher_id = $session_t->teacher_id;
     $them_style='soria';
 	$level=$session_user->level;
 	if($level!=1 AND $module=='rsvacl'){
-		//Application_Form_FrmMessage::redirectUrl("/home");	
 	}
-// 	$news = $ddgb->getAllNew(10);
-// 	$notread = $ddgb->getNewNotreadByUser();
-// 	$notread = empty($notread)?0:$notread;
 	
 	$dbNotification = new Application_Model_DbTable_DbNotification();
 	$stu_doc = $dbNotification->getStuDocumentAlert();
@@ -66,11 +59,7 @@ $teacher_id = $session_t->teacher_id;
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/webcam/webcamjs/webcam.min.js"></script>
 	<?php }?>
 	<!-- export library -->
-	<?php if($module=='allreport' OR $action=='allreports' OR $action=='studentnearlyendservice' OR 
-		$action=='studentpaymentlate' OR $controller=='allreports' OR $controller=='rptproductsold' OR
-		$controller=='studentnearlyendservice' OR $controller=='studentpaymentlate' ){?>
 	
-	<?php } ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
@@ -139,7 +128,6 @@ $teacher_id = $session_t->teacher_id;
    <script src="<?php echo $base_url;?>js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
    <script>dojoConfig = {parseOnLoad: true}</script>
    <script>
-		//require(["dijit/form/Form","dijit/form/FilteringSelect","dijit/form/Button","dijit/Dialog"]);
    		require(["dijit/form/Form","dijit/form/FilteringSelect","dijit/form/Button","dijit/Dialog"]);
 		<?php if ($module=="allreport"){?>
 			dojo.require("dijit.form.DateTextBox");
@@ -269,12 +257,6 @@ $teacher_id = $session_t->teacher_id;
 						                  <?php if(!empty($stu_nogroup)){?>
 						                  	<?php foreach($stu_nogroup as $key=> $stunogro){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$stunogro['stu_id'];
-// 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-// 					                          	if (!empty($stunogro['photo'])){
-// 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$stunogro['photo'])) {
-// 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$stunogro['photo'];
-// 					                          		}
-// 					                          	}
 					                          	$style="";
 					                          	if (!empty($stunogro['branch_logo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/'.$stunogro['branch_logo'])) {
@@ -286,10 +268,7 @@ $teacher_id = $session_t->teacher_id;
 				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $stunogro['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-				                         	 	<!-- <div class="pull-left profile-list ">
-					                              <img src="<?php //echo $profileimg;?>" />
-					                            </div> 
-					                            -->
+				                         	 	
 					                            <div class="media-body">
 					                              <?php if (!empty($stunogro['stu_code'])){?>
 					                              <span ><?php echo $stunogro['stu_code'];?>  
@@ -331,12 +310,6 @@ $teacher_id = $session_t->teacher_id;
 						                  </li>
 						                  	<?php foreach($stuproductNew as $key=> $rspro){
 				                          	$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
-// 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-// 					                          	if (!empty($rspro['photo'])){
-// 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rspro['photo'])) {
-// 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rspro['photo'];
-// 					                          		}
-// 					                          	}
 					                          	$style="";
 					                          	if (!empty($rspro['pro_images'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/proimage/'.$rspro['pro_images'])) {
@@ -348,11 +321,6 @@ $teacher_id = $session_t->teacher_id;
 				                          		<span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rspro['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-				                         	 	<!-- 
-				                         	 	<div class="pull-left profile-list ">
-					                              <img src="<?php //echo $profileimg;?>" />
-					                            </div>
-				                         	 	 -->
 					                            <div class="media-body">
 					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
 					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
@@ -370,12 +338,6 @@ $teacher_id = $session_t->teacher_id;
 						                  </li>
 						                  	<?php foreach($stuproduct as $key=> $rspro){
 				                          	$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
-// 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-// 					                          	if (!empty($rspro['photo'])){
-// 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rspro['photo'])) {
-// 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rspro['photo'];
-// 					                          		}
-// 					                          	}
 					                          	$style="";
 						                  		if (!empty($rspro['pro_images'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/proimage/'.$rspro['pro_images'])) {
@@ -390,11 +352,6 @@ $teacher_id = $session_t->teacher_id;
 				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rspro['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <!-- 
-					                            <div class="pull-left profile-list ">
-					                              <img src="<?php //echo $profileimg;?>" />
-					                            </div>
-					                             -->
 					                            <div class="media-body">
 					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
 					                               <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
@@ -436,12 +393,6 @@ $teacher_id = $session_t->teacher_id;
 						                  <?php if(!empty($stu_doc)){?>
 						                  	<?php foreach($stu_doc as $key=> $rsdoc){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rsdoc['stu_id'];
-// 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-// 					                          	if (!empty($rsdoc['photo'])){
-// 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rsdoc['photo'])) {
-// 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rsdoc['photo'];
-// 					                          		}
-// 					                          	}
 					                          	$style="";
 					                          	if (!empty($rsdoc['branch_logo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rsdoc['branch_logo'])) {
@@ -456,11 +407,6 @@ $teacher_id = $session_t->teacher_id;
 				                         	  <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rsdoc['branch_name'];?></span>
 				                         	 	<a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <!-- 
-					                            <div class="pull-left profile-list ">
-					                              <img src="<?php //echo $profileimg;?>" />
-					                            </div>
-					                             -->
 					                            <div class="media-body">
 					                            <?php if (!empty($rsdoc['stu_code'])){?>
 					                              <span ><?php echo $rsdoc['stu_code'];?>  
@@ -504,12 +450,6 @@ $teacher_id = $session_t->teacher_id;
 						                  <?php if(!empty($teacher_doc)){?>
 						                  	<?php foreach($teacher_doc as $key=> $rsdoc){
 				                          	$url = $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
-// 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-// 					                          	if (!empty($rsdoc['photo'])){
-// 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rsdoc['photo'])) {
-// 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rsdoc['photo'];
-// 					                          		}
-// 					                          	}
 					                          	$style="";
 					                          	if (!empty($rsdoc['branch_logo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rsdoc['branch_logo'])) {
@@ -524,11 +464,6 @@ $teacher_id = $session_t->teacher_id;
 				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rsdoc['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <!-- 
-					                            <div class="pull-left profile-list ">
-					                              <img src="<?php //echo $profileimg;?>" />
-					                            </div>
-					                             -->
 					                            <div class="media-body">
 					                              <span ><?php echo $rsdoc['teacher_code'];?>  
 					                              </span><br />
@@ -570,12 +505,6 @@ $teacher_id = $session_t->teacher_id;
 						                  <?php if(!empty($creditNotif)){?>
 						                  	<?php foreach($creditNotif as $key=> $rscrd){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rscrd['id'];
-// 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-// 					                          	if (!empty($rsdoc['photo'])){
-// 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rscrd['photo'])) {
-// 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rscrd['photo'];
-// 					                          		}
-// 					                          	}
 					                          	$style="";
 					                          	if (!empty($rscrd['branch_logo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rscrd['branch_logo'])) {
@@ -590,11 +519,6 @@ $teacher_id = $session_t->teacher_id;
 				                         	  <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rscrd['branch_name'];?></span>
 				                         	 	<a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <!-- 
-					                            <div class="pull-left profile-list ">
-					                              <img src="<?php //echo $profileimg;?>" />
-					                            </div>
-					                             -->
 					                            <div class="media-body">
 					                            <?php if (!empty($rscrd['stu_code'])){?>
 					                              <span ><?php echo $rscrd['stu_code'];?>  
@@ -625,56 +549,6 @@ $teacher_id = $session_t->teacher_id;
 						                   <?php }?>
 						               </ul>
 					            </li>
-					              <!-- 
-					              <li role="presentation" class="dropdown">
-					                  <a title="<?php //echo $tr->translate("NEWS");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
-					                    <i class="fa fa-globe"></i>
-					                    <span id="countNews" class="badge bg-green"><?php //if ($notread>0){ echo $notread;}?></span>
-					                  </a>
-					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><?php //echo $tr->translate("NEWS");?></h4>
-						                  </li>
-						                   <?php //if(!empty($news)){?>
-					                  		<?php //foreach($news as $key=> $announ){
-				                          	//$url = $this->url(array('module'=>'home','controller'=>'index','action'=>'news'), null, true)."/id/".$announ['id'];
-					                          	///$images = $this->baseUrl().'/images/no-photo.png';
-					                          	//if (!empty($announ['image_feature'])){
-					                          		//if (file_exists(PUBLIC_PATH.'/images/news/'.$announ['image_feature'])) {
-					                          			//$images = $this->baseUrl().'/images/news/'.$announ['image_feature'];
-					                          		//}
-					                          	//}
-				                          	?>
-				                          <li class="event <?php //if ($announ['is_read']!=1){ echo 'unread';}?>" title="<?php //echo $announ['title'];?>">
-				                         	 <a href="<?php //echo $url;?>">
-					                            <div class="pull-left profile-list ">
-					                              <img src="<?php //echo $images;?>" />
-					                            </div>
-					                            <div class="media-body">
-					                              <span class="title" ><?php //echo $announ['title'];?></span>
-					                              <p> <small><?php //echo $tr->translate("PUBLISH_DATE")." : ".date("d/M/Y",strtotime($announ['publish_date'])); ?></small>
-					                              <p>
-					                              	<?php //echo  mb_substr(strip_tags($announ['description']),0,70, "utf-8")."...";?>
-					                              </p>
-					                              
-					                              </p>
-					                            </div>
-				                            </a>
-				                          </li>
-				                          <?php //}?>
-				                          <li>
-						                      <div class="text-center">
-						                        <a href="<?php //echo $this->baseUrl()."/home/index/allnews"?>">
-						                          <strong><?php //echo $tr->translate("SHOW_ALL");?></strong>
-						                          <i class="fa fa-angle-right"></i>
-						                        </a>
-						                      </div>
-						                    </li>
-				                           <?php //}?>
-					                  </ul>
-					              </li>
-					               -->
-				              
 				              <li class="">
 				                  	<a onclick="dijit.byId('popupCalculator').show();" href="javascript:;" title="<?php echo $tr->translate("CALCULATOR");?>"  class="user-profile " >
                                         <i class="fa fa-calculator"></i>
@@ -691,7 +565,6 @@ $teacher_id = $session_t->teacher_id;
        		 	<div style="clear:both;"></div>
              	<?php if($module!='allreport' AND ($module!='home' OR $controller=="crm") AND $module!='default' ){?>
              		<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
-							
 								<?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' ){?>
 									<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
 									<a title="<?php echo $tr->translate('ADD_NEW');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
@@ -705,8 +578,6 @@ $teacher_id = $session_t->teacher_id;
 									</a>
 									</div>
 								<?php }?>
-							
-							
 							 <?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
 								<div class="ptss__header add-edit-action">
 								<a  class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 

@@ -589,7 +589,8 @@
 		$user = $dbgb->getUserInfo();
 		$level = $user['level'];
 		if ($level!=1){
-			$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+			//$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+			$sql .=' AND i.schoolOption IN ( '.$user['schoolOption'].')';
 		}
 		$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
 		return $db->fetchAll($sql);

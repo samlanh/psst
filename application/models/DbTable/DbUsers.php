@@ -156,26 +156,31 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		
 		//loop display only branch are available in current user
 		$userInfo = $_db->getUserInfo();
-		$branchList = empty($userInfo['branch_list'])?"":$userInfo['branch_list'];
-		$bra = explode(",", $branchList);
-		$resutl = array();
-		if (!empty($bra)){
-			$array = array();
-			foreach ($bra as $ss) {
-				$array[$ss] = $ss;
-			}
-			if (!empty($row)) foreach ($row as $key => $rs){
-				$exp = explode(",", $rs['branch_list']);
-				foreach ($exp as $ss){
-					if (in_array($ss, $array)) {
-						$resutl[$key] = $rs;
-						break;
+		if($userInfo['level']!=1){
+			$branchList = empty($userInfo['branch_list'])?"":$userInfo['branch_list'];
+			$bra = explode(",", $branchList);
+			$resutl = array();
+			if (!empty($bra)){
+				$array = array();
+				foreach ($bra as $ss) {
+					$array[$ss] = $ss;
+				}
+				if (!empty($row)) foreach ($row as $key => $rs){
+					$exp = explode(",", $rs['branch_list']);
+					foreach ($exp as $ss){
+						if (in_array($ss, $array)) {
+							$resutl[$key] = $rs;
+							break;
+						}
 					}
 				}
 			}
+			return $resutl;
+		}else{
+			return $row;
 		}
 		
-		return $resutl;
+		
 	}
 	
 	function getUserListBy($search, $start, $limit){        

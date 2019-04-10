@@ -119,8 +119,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['stu_type']) AND $search['stu_type']>-1){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAllStudentpro($search){
@@ -205,8 +205,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){
@@ -218,14 +218,19 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where=' WHERE status=1 AND customer_type=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
-    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
-    	$where .= " AND ".$from_date." AND ".$to_date;    	
+    	   	
     	$order=" GROUP BY branch_id,(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1)  
 		ORDER BY stu_id,degree,grade,academic_year DESC";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
     	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
+    		return $db->fetchAll($sql.$where.$order);
     	}
+    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    	
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -269,8 +274,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['stu_type'])){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAmountStudent($year=null){//count to dashboard
@@ -352,6 +356,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student 
     			where 
     				stu_id ='.$stu_id;
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('s.group_id');
     	return $db->fetchAll($sql);
     }
     public function getAllStudentSelected($stu_id){
@@ -413,6 +419,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	rms_student as s
     	where
     	stu_id =".$stu_id;
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('s.group_id');
     	return $db->fetchAll($sql);
     }
     public function getAllAmountStudent($search){
@@ -508,8 +516,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			$where.=' AND is_subspend!=0';
     		}
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAllStudentgep($search){
@@ -550,17 +558,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	FROM rms_student ";
     	$where=' WHERE status=1 AND degree IN(5,6,7,8) ';
     
-//     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
-    	$where .=" AND ".$to_date;
-    	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
     	$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
     	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
+    		return $db->fetchAll($sql.$where.$order);
     	}
+    	//     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$where .=" AND ".$to_date;
+    	
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -678,14 +686,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    		   ';
 	    	$where="";
 	    	
+	    	$dbp = new Application_Model_DbTable_DbGlobal();
+	    	$where.=$dbp->getAccessPermission('h.branch_id');
+	    	
+	    	$order="  order by s.`stu_id`,h.degree,h.grade,h.academic_year DESC";
+	    	if(empty($search)){
+	    		return $db->fetchAll($sql.$where.$order);
+	    	}
 	    	$from_date =(empty($search['start_date']))? '1': "h.create_date >= '".$search['start_date']." 00:00:00'";
 	    	$to_date = (empty($search['end_date']))? '1': "h.create_date <= '".$search['end_date']." 23:59:59'";
 	    	$where .= " AND ".$from_date." AND ".$to_date;
 	    	
-	    	$order="  order by s.`stu_id`,h.degree,h.grade,h.academic_year DESC";
-	    	if(empty($search)){
-	    		return $db->fetchAll($sql.$order);
-	    	}
 	    	if(!empty($search['title'])){
 	    		$s_where = array();
 	    		$s_search = addslashes(trim($search['title']));
@@ -747,14 +758,18 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT name_en FROM rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1)AS sex
     	FROM rms_student ';
     	$where=' WHERE customer_type=1 ';    	 
-    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
-    	$where .= " AND ".$from_date." AND ".$to_date;
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("branch_id");
     	$order=" order by stu_id DESC";
     	 
     	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
+    		return $db->fetchAll($sql.$where.$order);
     	}
+    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    	
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -780,8 +795,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.=' AND group_id='.$search['group'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission("branch_id");
+    	
     	
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -1647,6 +1661,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	c.id = cd.certificate_id
 	    	AND st.stu_id = cd.stu_id AND cd.id=$id LIMIT 1
     	";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission("c.branch_id");
     	return $db->fetchRow($sql);
     }
     
@@ -1755,6 +1771,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	c.id = cd.letterpraise_id
     	AND st.stu_id = cd.stu_id AND cd.id=$id LIMIT 1
     	";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission("c.branch_id");
     	return $db->fetchRow($sql);
     }
 }

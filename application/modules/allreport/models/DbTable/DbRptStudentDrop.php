@@ -41,18 +41,20 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    		and stdp.status=1 
 		    		AND type !=0 
     		";
-
-    	$from_date =(empty($search['start_date']))? '1': " date_stop >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
+    	$where="";
+    	
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("stdp.branch_id");
+    	
     	$order=" order by id DESC";
     	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
+    		return $db->fetchAll($sql.$where.$order);
     	}
+    	$from_date =(empty($search['start_date']))? '1': " date_stop >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";
+    	$where.= " AND ".$from_date." AND ".$to_date;
     	
-    	if(empty($search)){
-    		return $db->fetchAll($sql);
-    	}
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -144,6 +146,10 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['day'])){
     		$where.=' AND  gr.day_id ='.$search['day'];
     	}
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("gr.branch_id");
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -194,7 +200,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.=' AND gr.group_id='.$search['group'];
     	}
-    
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("gr.branch_id");
     	return $db->fetchAll($sql.$where.$order);
     	 
     }

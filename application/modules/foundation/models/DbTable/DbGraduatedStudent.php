@@ -42,6 +42,10 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		
 		$order_by = " order by id DESC";
 		$where=" ";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('gs.branch_id');
+		
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}

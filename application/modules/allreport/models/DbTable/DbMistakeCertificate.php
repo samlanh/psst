@@ -56,6 +56,8 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 				WHERE 
 					s.`stu_id` = $stu_id
 			";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission("s.branch_id");
 		return $db->fetchRow($sql);
 	}
 	

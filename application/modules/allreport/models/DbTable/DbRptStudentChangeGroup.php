@@ -66,9 +66,11 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
     	//echo $sql;exit();
     	
     	$where=' ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("rms_group.branch_id");
     	$order=" order by rms_student_change_group.id DESC";
     	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
+    		return $db->fetchAll($sql.$where.$order);
     	}
     	if(!empty($search['title'])){
     		$s_where = array();

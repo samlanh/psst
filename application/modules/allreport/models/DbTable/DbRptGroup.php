@@ -140,6 +140,10 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				$sql.=' and g.type=1 ';
 			}  
 			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
+			
+			$dbp = new Application_Model_DbTable_DbGlobal();
+			$sql.=$dbp->getAccessPermission("gr.branch_id");
+			
 		   	if(empty($search)){
 		   		return $db->fetchAll($sql.$order);
 		   	}
@@ -290,7 +294,12 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			   	FROM 
 		   			`rms_group` `g` 
 		   		WHERE 
-		   			`g`.`id`=".$id." LIMIT 1";
+		   			`g`.`id`=".$id." ";
+	   	
+	   	$dbp = new Application_Model_DbTable_DbGlobal();
+	   	$sql.=$dbp->getAccessPermission("g.branch_id");
+	   	$sql.="  LIMIT 1 ";
+	   	
 	   	return $db->fetchRow($sql);
 	}
 	

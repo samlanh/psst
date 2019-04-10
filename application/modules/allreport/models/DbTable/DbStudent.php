@@ -338,6 +338,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if($search['result_status']!=''){
 				$where .= " and str.updated_result = ".$search['result_status'];
 			}
+			$dbp = new Application_Model_DbTable_DbGlobal();
+			$where.=$dbp->getAccessPermission("st.branch_id");
+			
 			$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
 			
 			return $db->fetchAll($sql.$where.$order);

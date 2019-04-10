@@ -115,9 +115,11 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	
     	//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
     	$where  = '';
-    	//echo $sql;exit();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("st.branch_id");
+    	
    		 if(empty($search)){
-    		return $db->fetchAll($sql.$order);
+    		return $db->fetchAll($sql.$where.$order);
     	}
     	
     	if(!empty($search['title'])){

@@ -831,8 +831,9 @@ function getAllgroupStudyNotPass($action=null){
 	   	$slist = explode(",", $schooloptionlist);
 	   	$sql="";
 	   	$s_where = array();
-	   	foreach ($slist as $option){
-	   		$s_where[] = " $schooloption_coloum IN ($option)";
+	   	foreach ($slist as $option_id){
+// 	   		$s_where[] = " $schooloption_coloum IN ($option)";
+	   		$s_where[] = " $option_id IN ($schooloption_coloum)";
 	   	}
 	   	$sql .=' AND ( '.implode(' OR ',$s_where).')';
 	   	return $sql;

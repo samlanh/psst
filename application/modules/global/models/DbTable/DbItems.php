@@ -69,6 +69,9 @@
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.= $dbp->getSchoolOptionAccess('d.schoolOption');
+		
 		$orderby = " ORDER BY d.type ASC, d.id DESC ";
 		return $db->fetchAll($sql.$where.$orderby);
 	}

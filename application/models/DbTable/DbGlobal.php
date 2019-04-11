@@ -1535,28 +1535,31 @@ function getAllgroupStudyNotPass($action=null){
 //   	}
 //   	return $db->fetchAll($sql);
 //   }
+ function getSchoolOptionListByBranch($branchlist){
+ 	$db = $this->getAdapter();
+ 	$sql="SELECT  GROUP_CONCAT(DISTINCT schooloptionlist)  FROM rms_branch  WHERE br_id IN($branchlist)";
+ 	$rs = $db->fetchOne($sql);
+ 	$str = implode(',',array_unique(explode(',', $rs)));
+ 	return   $str;
+ }
   function getAllSchoolOption($branchlist=null){
   	$db = $this->getAdapter();
   	$this->_name = "rms_schooloption";
-  	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
-  	$session_user=new Zend_Session_Namespace('authstu');
-  	$branchlist = empty($branchlist)?$session_user->branch_list:$branchlist;
-  	if($branchlist!=1 AND $branchlist !=null){
-  		$bran = explode(",", $branchlist);
-  		$s_where = array();
-  		foreach ($bran as $branch){
-  			$branchinfo = $this->getBranchInfo($branch);
-  			$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
-  			$s_where[] = " s.id IN ($schooloption)";
-  		}
-  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-  	}
+  	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1 ";
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND s.id IN ('.$user['schoolOption'].')';
+  		$session_user=new Zend_Session_Namespace('authstu');
+  		$branchlist = empty($branchlist)?$session_user->branch_list:$branchlist;
+  		if($branchlist !=null){
+	  		$schooloption = $this->getSchoolOptionListByBranch($branchlist);
+	  		$sql .=' AND s.id IN ('.$schooloption.')';
+  		}
+  		if (!empty($user['schoolOption'])){
+  			$sql .=' AND s.id IN ('.$user['schoolOption'].')';
+  		}
+	  	
   	}
-	
   	return $db->fetchAll($sql);
   }
   function getAllDegreetype(){
@@ -1565,27 +1568,8 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
   	return $db->fetchAll($sql);
   }
-  
-//   function getAllItems($type=null,$branch=null){
-//   	$db = $this->getAdapter();
-//   	$this->_name = "rms_items";
-//   	$sql="SELECT m.id, m.title AS name FROM $this->_name AS m WHERE m.status=1 ";
-//   	if (!empty($type)){
-//   		$sql.=" AND m.type=$type";
-//   	}
-//   	if($branch!==1 AND $branch !=null){
-//   		$branchinfo = $this->getBranchInfo($branch);
-//   		$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
-//   		$ids = explode(",", $schooloption);
-//   		$s_where = array();
-//   		if (!empty($ids)) foreach ($ids as $i){
-//   			$s_where[] = " $i IN (m.schoolOption)";
-//   		}
-//   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-//   	}
-//   	return $db->fetchAll($sql);
-//   }
-  function getAllItems($type=null,$branch=null,$schooloption=null){
+
+  function getAllItems($type=null,$branchlists=null,$schooloption=null){
   	$db = $this->getAdapter();
   	
   	$currentLang = $this->currentlang();
@@ -1599,24 +1583,37 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($type)){
   		$sql.=" AND m.type=$type";
   	}
-  	$branchlist = $this->getAllSchoolOption($branch);
-  	if (!empty($branchlist)){ 
-  		foreach ($branchlist as $i){
-  		  $s_where[] = $i['id']." IN (m.schoolOption)";
-  		}
-  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-  	}
-//  $sql .=' AND 2 IN (m.schoolOption)';
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND m.schoolOption IN ('.$user['schoolOption'].')';
+  		$SchoolOptionarr = $this->getAllSchoolOption($branchlists);
+  		if (!empty($SchoolOptionarr)){
+  			$s_where = array();
+  			foreach ($SchoolOptionarr as $i){
+  				$s_where[] = $i['id']." IN (m.schoolOption)";
+  			}
+  			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  		}
+  		
+  		if (!empty($user['schoolOption'])){
+	  		$userSchO = explode(",", $user['schoolOption']);
+	  		$s_wheres = array();
+	  		foreach ($userSchO as $schooloptionId){
+	  			$s_wheres[] = $schooloptionId." IN (m.schoolOption)";
+	  		}
+	  		$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
+  		}
   	}
+  	
   	if (!empty($schooloption)){
-  		$sql.=" AND m.schoolOption IN ($schooloption) ";
+  		$schooloptionParam = explode(",", $schooloption);
+  		$s_whereee = array();
+  		foreach ($schooloptionParam as $schooloptionId){
+  			$s_whereee[] = $schooloptionId." IN (m.schoolOption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
   	}
   	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';	
-
   	return $db->fetchAll($sql);
   }
   
@@ -1700,19 +1697,28 @@ function getAllgroupStudyNotPass($action=null){
   			$sql.=" AND (i.items_type !=1 OR i.id IN ((SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result )))";
   		}
   	}
-  	 
-  	$branchlist = $this->getAllSchoolOption();
-  	if (!empty($branchlist)){
-  		foreach ($branchlist as $i){
-  			$s_where[] = $i['id']." IN (i.schoolOption)";
-  		}
-  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-  	}
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$sql .=' AND i.schoolOption IN ( '.$user['schoolOption'].')';
+  		if (!empty($user['schoolOption'])){
+	  		$userSchO = explode(",", $user['schoolOption']);
+	  		$s_wheres = array();
+	  		foreach ($userSchO as $schooloptionId){
+	  			$s_wheres[] = $schooloptionId." IN (i.schoolOption)";
+	  		}
+	  		$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
+  		}
+  		
+  		$branchlist = $this->getAllSchoolOption();
+  		if (!empty($branchlist)){
+  			foreach ($branchlist as $i){
+  				$s_where[] = $i['id']." IN (i.schoolOption)";
+  			}
+  			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  		}
   	}
+  	
+  	
 	
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
   	return $db->fetchAll($sql);

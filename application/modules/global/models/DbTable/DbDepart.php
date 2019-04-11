@@ -9,22 +9,21 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
     }
 	public function addNewDepartment($_data){
 		$db = $this->getAdapter();
-		$db->beginTransaction();
 		try{
-  		$sql="SELECT depart_id FROM rms_department where status =".$_data['status'];
-  		$sql.=" AND depart_namekh='".$_data['depart_namekh']."'";
-  		$rs = $db->fetchOne($sql);
-  		if(!empty($rs)){
-  			return -1;
-  		}
-  		$arr = array(
-  				'depart_namekh'	=> $_data['depart_namekh'],
-  				'depart_nameen'	=> $_data['depart_nameen'],
-  				'create_date' 	=> Zend_Date::now(),
-  				'status'		=> 1,
-				'user_id'		=> $this->getUserId()
-  		);
-		$this->insert($arr);
+	  		$sql="SELECT depart_id FROM rms_department where status =1 ";
+	  		$sql.=" AND depart_namekh='".$_data['depart_namekh']."'";
+	  		$rs = $db->fetchOne($sql);
+	  		if(!empty($rs)){
+	  			return -1;
+	  		}
+	  		$arr = array(
+	  				'depart_namekh'	=> $_data['depart_namekh'],
+	  				'depart_nameen'	=> $_data['depart_nameen'],
+	  				'create_date' 	=> Zend_Date::now(),
+	  				'status'		=> 1,
+					'user_id'		=> $this->getUserId()
+	  		);
+			$this->insert($arr);
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

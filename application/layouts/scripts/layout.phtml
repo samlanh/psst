@@ -694,12 +694,15 @@ jQuery(function () {
 	loadingBlock();
     $(".overlay").fadeOut(2000, function() {
     	$("div.container.body").fadeIn(1000);  
+
+   	 <?php if ( (($module!='home' OR $controller=="crm") AND ( $action=="index")) OR $module=='allreport'){?>
 	    $('#datatable-responsive').DataTable( {
 	       	responsive: true,
 	    	 "dom": '<"top"i>rt<"bottom"flp><"clear">',
 	       	searching: false,
 	     } );
     	//$("div.container.body").css("visibility", "visible");
+    <?php }?>
            
     });
 	jQuery(".ptss__toggle-btn").click(function () {	

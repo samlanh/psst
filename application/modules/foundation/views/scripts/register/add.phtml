@@ -731,7 +731,6 @@ var room_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enco
 var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 dojo.ready(function(){
-
 	new dijit.form.FilteringSelect({
 		store: degree_store,
 		queryExpr: "*${0}*",
@@ -1112,10 +1111,8 @@ dojo.ready(function(){
 		 branch_id.on('change', function(evt) {
 			 getRefreshGroup();
 	    });
-		    
+		 getRefreshGroup();	    
 }); 
-
-
 function AllRefresh(){
 	loadingBlock();
 	student_province = dijit.byId('student_province').get('value');

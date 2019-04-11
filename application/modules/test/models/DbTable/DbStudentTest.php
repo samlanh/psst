@@ -278,7 +278,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		
 		$order=" ORDER BY s.stu_id desc ";
-		echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	

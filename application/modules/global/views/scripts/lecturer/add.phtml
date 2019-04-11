@@ -436,7 +436,8 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 		getTeacherID();
 		new dijit.form.FilteringSelect({
 			store: position_store,
-			autoComplete: true,                        
+			autoComplete:false,
+			queryExpr:'*${0}*',                       
 		    id: "staff_position",
 		    name: "staff_position",  
 		    class: 'fullside',  
@@ -451,7 +452,8 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 
 		new dijit.form.FilteringSelect({
 			store: department_store,
-			autoComplete: true,                        
+			autoComplete:false,
+			queryExpr:'*${0}*',                        
 		    id: "department",
 		    name: "department",  
 		    class: 'fullside',  
@@ -527,7 +529,6 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			}, "village_name");
 			filterDistrict();
 			dijit.byId('province_id').attr('value',12)
-			//initialize();
 			oldRow();
 	});
 </script>
@@ -611,7 +612,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 					dijit.byId('code').attr('value',data);
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -647,7 +648,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			    document.getElementsByClassName("overlay")[0].style.display="none";
 			},
 			error: function(err) {
-				alert(err);
+				
 				document.getElementsByClassName("overlay")[0].style.display="none";
 			}
 		});
@@ -675,7 +676,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			    document.getElementsByClassName("overlay")[0].style.display="none";	
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});	
 	}
@@ -698,7 +699,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			    document.getElementsByClassName("overlay")[0].style.display="none";	
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -721,7 +722,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			    document.getElementsByClassName("overlay")[0].style.display="none";	
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -863,7 +864,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 						   HideloadingBlock();
 					},
 					error: function(err) {
-						alert(err);
+						
 					}
 				});
 			}
@@ -888,7 +889,6 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			   dijit.byId("popup_doc_type").hide();
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 		}
@@ -952,7 +952,7 @@ function addRow(){
 	bs_input_file();
 }
 function oldRow(){
-	<?php if(!empty($this->doc)){ //echo '111111';exit();
+	<?php if(!empty($this->doc)){ 
 		foreach($this->doc as $row){ 
 	?>
 	col++;no++;
@@ -1017,7 +1017,6 @@ function popupDocType(index){
 		dijit.byId("popup_doc_type").show();
 	}
 }
-
 function checkStaffType(){
 	staff_type = dijit.byId('staff_type').get('value');
 	if(staff_type==1){

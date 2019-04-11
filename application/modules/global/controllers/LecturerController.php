@@ -153,7 +153,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-		//print_r($this->view->row); exit();
 	}
 	
 	public function copyAction()
@@ -179,9 +178,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull($sms,"/global/lecturer");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
-	
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -211,8 +208,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
-	
-		//print_r($this->view->row); exit();
 	}
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){
@@ -223,7 +218,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 	function addDoctypeAction(){
 		if($this->getRequest()->isPost()){
 			try{
@@ -243,8 +237,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Global_Model_DbTable_DbTeacher();
-			$teacher = $db->getAllDepartment();
-			print_r(Zend_Json::encode($teacher));
+			$row = $db->getAllDepartment();
+			array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			print_r(Zend_Json::encode($row));
 			exit();
 		}
 	}

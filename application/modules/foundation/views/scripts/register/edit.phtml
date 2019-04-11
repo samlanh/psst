@@ -1325,7 +1325,8 @@ dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
 		store: group_store,
-	    autoComplete: true,                        
+		autoComplete:false,
+		queryExpr:'*${0}*',                         
 	    id: "group",
 	    name: "group",  
 	    value:'<?php echo $this->rs['group_id'];?>' ,       
@@ -1371,7 +1372,8 @@ dojo.ready(function(){
 	initialize();
 	
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
+		autoComplete:false,
+		queryExpr:'*${0}*',                      
 	    id: "grade",
 	    name: "grade",
 	    required : "false",          
@@ -1384,7 +1386,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		autoComplete:false,
+		queryExpr:'*${0}*',                         
 	    id: "fa_job",
 	    name: "fa_job",  
 	    tabindex: "17",         
@@ -1409,7 +1412,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		autoComplete:false,
+		queryExpr:'*${0}*',                         
 	    id: "mo_job",
 	    name: "mo_job",  
 	    tabindex: "17",         
@@ -1434,7 +1438,8 @@ dojo.ready(function(){
 	}
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		autoComplete:false,
+		queryExpr:'*${0}*',                        
 	    id: "gu_job",
 	    name: "gu_job",  
 	    tabindex: "17",         
@@ -1510,7 +1515,6 @@ dojo.ready(function(){
 	    id: "nation",
 	    name: "nation",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -1540,8 +1544,6 @@ dojo.ready(function(){
 		required: true,
 	    id: "studen_national",
 	    name: "studen_national",  
-	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -1568,8 +1570,6 @@ dojo.ready(function(){
 		required: true,
 	    id: "fa_national",
 	    name: "fa_national",  
-	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -1596,8 +1596,6 @@ dojo.ready(function(){
 		required: true,
 	    id: "mom_nation",
 	    name: "mom_nation",  
-	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -1624,8 +1622,6 @@ dojo.ready(function(){
 		required: true,
 	    id: "guardian_national",
 	    name: "guardian_national",  
-	    queryExpr: "*${0}*",
-		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 	    onChange: function() {          
@@ -1721,15 +1717,12 @@ dojo.ready(function(){
 			}
 		}, "room");
 
-		
-		
-
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getRefreshGroup();
     });
-	//dijit.byId('academic_year').attr('value',"<?php //echo $this->rs['academic_year']?>");
 	getRefreshGroup();
+	//dijit.byId('academic_year').attr('value',"<?php //echo empty($this->rs['academic_year'])?$this->rs['stu_academic_year']:$this->rs['academic_year'];?>");
 	//getAllGroupByBranch();
 	//getAllAcademicByBranch();
 }); 
@@ -1757,7 +1750,7 @@ function filterDistrict(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});	
 }
@@ -1781,7 +1774,6 @@ function filterCommune(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -1805,7 +1797,7 @@ function filterVillage(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -1847,13 +1839,11 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 				    }
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 	}
-	
-	url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
-	function getAllAcademicByBranch(){
+url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+function getAllAcademicByBranch(){
 		dijit.byId('academic_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
@@ -1866,22 +1856,19 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			url: url_getacademic,
 			content:{
 				'branch_id':branch_id
-				},
+			},
 			handleAs:"json",
 			load: function(data){
 				academic_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('academic_year').set('store',academic_store);  
+				dijit.byId('academic_year').attr('value',"<?php echo empty($this->rs['academic_year'])?$this->rs['stu_academic_year']:$this->rs['academic_year'];?>");
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
-
-	
-	
 </script>
-
 <style>
  @media (min-width: 1401px) and (max-width: 1601px){
 	#mainTabContainer{
@@ -1891,7 +1878,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 }
 </style>
 <script>
-
 var url_add_lang = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-langlevel")); ?>';
 function addLanguage(){
 	if(dijit.byId('frm_lang_level').validate()){	
@@ -1900,16 +1886,15 @@ function addLanguage(){
 			form: dojo.byId("frm_lang_level"),
 			handleAs:"json",
 			load: function(data) {
-			var Itemmake = { 
-					 id: dijit.byId('title').get('value'),
-					 name: dijit.byId('title').get('value')
-				   };
-		   addDataToSelectbox(dijit.byId('lang_level'), language_store, Itemmake, dijit.byId('title').get('value'));
-		   dijit.byId('frm_lang_level').reset();
-		   dijit.byId("popup_lang_level").hide();
+				var Itemmake = { 
+						 id: dijit.byId('title').get('value'),
+						 name: dijit.byId('title').get('value')
+					   };
+			   addDataToSelectbox(dijit.byId('lang_level'), language_store, Itemmake, dijit.byId('title').get('value'));
+			   dijit.byId('frm_lang_level').reset();
+			   dijit.byId("popup_lang_level").hide();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -1932,12 +1917,10 @@ function addKnowBy(){
 		   dijit.byId("popup_know_by").hide();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}	
 }
-
 var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-doctype")); ?>';
 function addDocType(){
 	if(dijit.byId('frm_doc_type').validate()){
@@ -1946,22 +1929,20 @@ function addDocType(){
 			form: dojo.byId("frm_doc_type"),
 			handleAs:"json",
 			load: function(data) {
-			var Itemmake = { 
-					 id: dijit.byId('title_doc_type').get('value'),
-					 name: dijit.byId('title_doc_type').get('value')
-				   };
-			index = $("#popup_index").val();	   
-		   addDataToSelectbox(dijit.byId('document_type_'+index), doctype_store, Itemmake, dijit.byId('title_doc_type').get('value'));
-		   dijit.byId('frm_doc_type').reset();
-		   dijit.byId("popup_doc_type").hide();
+				var Itemmake = { 
+						 id: dijit.byId('title_doc_type').get('value'),
+						 name: dijit.byId('title_doc_type').get('value')
+					   };
+				index = $("#popup_index").val();	   
+			   addDataToSelectbox(dijit.byId('document_type_'+index), doctype_store, Itemmake, dijit.byId('title_doc_type').get('value'));
+			   dijit.byId('frm_doc_type').reset();
+			   dijit.byId("popup_doc_type").hide();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
 }
-
 function hideDialog() {		
 	dijit.byId("popup_lang_level").hide();
 }
@@ -1977,7 +1958,6 @@ function hideDialog3() {
 function hideDialog4() {		
 	dijit.byId("popup_nation").hide();
 }
-
 var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var nation_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
@@ -1999,65 +1979,44 @@ function addNationBy(){
 		handleAs:"json",
 		load: function(data) {
 			var Itemmake = { 
-			    		id: data,
-				        name: dijit.byId('title_kh').get('value')
-				   };
-		if(type==1){	   
-	 		addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-			//dijit.byId('guardian_national').attr('value',fa_job);
-			//dijit.byId('studen_national').attr('value',mo_job);
-			//dijit.byId('mom_nation').attr('value',fa_job);
-			//dijit.byId('fa_national').attr('value',fa_job);
-		}else if(type==2){
-			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-	 		//dijit.byId('nation').attr('value',mo_job);
-			//dijit.byId('guardian_national').attr('value',fa_job);
-			//dijit.byId('mom_nation').attr('value',fa_job);
-			//dijit.byId('fa_national').attr('value',fa_job);
-		}else if(type==3){
-			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-	 		//dijit.byId('nation').attr('value',mo_job);
-			//dijit.byId('guardian_national').attr('value',fa_job);
-			//dijit.byId('studen_national').attr('value',mo_job);
-			//dijit.byId('mom_nation').attr('value',fa_job);
-		}else if(type==4){
-			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-	 		//dijit.byId('nation').attr('value',mo_job);
-			//dijit.byId('guardian_national').attr('value',fa_job);
-			//dijit.byId('studen_national').attr('value',mo_job);
-			//dijit.byId('fa_national').attr('value',fa_job);
-		}else if(type==5){
-			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-			//dijit.byId('nation').attr('value',mo_job);
-			//dijit.byId('studen_national').attr('value',mo_job);
-			//dijit.byId('mom_nation').attr('value',fa_job);
-			//dijit.byId('fa_national').attr('value',fa_job);
-		}
-	    dijit.byId('frm_nation_kh').reset();
-	    dijit.byId("popup_nation").hide();
+	    		id: data,
+		        name: dijit.byId('title_kh').get('value')
+		   };
+			if(type==1){	   
+		 		addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			}else if(type==2){
+				addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			}else if(type==3){
+				addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			}else if(type==4){
+				addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			}else if(type==5){
+				addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+		 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			}
+		    dijit.byId('frm_nation_kh').reset();
+		    dijit.byId("popup_nation").hide();
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 	}
@@ -2098,16 +2057,14 @@ function addJob(){
 				dijit.byId('mo_job').attr('value',mo_job);
 				dijit.byId('fa_job').attr('value',fa_job);
 			}
-	    dijit.byId('frm_add_tran1').reset();
-	    dijit.byId("popup_dept2").hide();
+		    dijit.byId('frm_add_tran1').reset();
+		    dijit.byId("popup_dept2").hide();
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
 </script>
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept2" >
 		<form style="background-color: buttonface;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -2277,7 +2234,6 @@ function addJob(){
 		</form>
 	</div>
 </div>
-
 <script type="text/javascript">
 	function getInfoBygroup(){
 		
@@ -2289,7 +2245,6 @@ function addJob(){
 			dijit.byId('calture').set('readOnly',false);
 			dijit.byId('session').set('readOnly',false);
 			dijit.byId('group').focus();
-			//alert("Please Select Group");
 			return false;
 		}
 		
@@ -2315,7 +2270,7 @@ function addJob(){
 				dijit.byId('room').set('readOnly',true);
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -2331,37 +2286,8 @@ function addJob(){
 		getRefreshItems();
 		getAllAcademicByBranch();
 		document.getElementsByClassName("overlay")[0].style.display="none";
-		/*
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			return false;
-		}
-		
-		dojo.xhrPost({
-			url: url_getgroup,
-			content:{ 
-				'branch_id': branch_id
-			},
-			handleAs:"json",
-			load: function(data) {
-				group_store  = getDataStorefromJSON('id','name', data.group);
-			    dijit.byId('group').set('store',group_store);  
-			    degree_store  = getDataStorefromJSON('id','name', data.degree);
-			    dijit.byId('degree').set('store',degree_store);
-			   // room_store  = getDataStorefromJSON('id','name', data.room);
-			    //dijit.byId('room').set('store',room_store);  
-			      
-			    document.getElementsByClassName("overlay")[0].style.display="none";
-			},
-			error: function(err) {
-				alert("err here ");
-				document.getElementsByClassName("overlay")[0].style.display="none";
-			}
-		});
-		*/
-	}
-
-	function getRefreshItems(){
+}
+function getRefreshItems(){
 		dijit.byId('degree').reset();   
 		var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
 		dojo.xhrPost({
@@ -2371,8 +2297,8 @@ function addJob(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				degree_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('degree').set('store',degree_store);  
+			   degree_store  = getDataStorefromJSON('id','name', data);
+			   dijit.byId('degree').set('store',degree_store);  
 			   document.getElementsByClassName("overlay")[0].style.display="none";
 			},
 			error: function(err) {
@@ -2410,8 +2336,7 @@ function addJob(){
 	}
 	  function readURL(input) {
 	        if (input.files && input.files[0]) {
-	            var reader = new FileReader();
-	            
+	            var reader = new FileReader();	            
 	            reader.onload = function (e) {
 	                $('#profile_wiew').attr('src', e.target.result);
 	            }
@@ -2420,32 +2345,6 @@ function addJob(){
 	    }
 	    var maxSize = 0;
 	    $("#photo").change(function(){
-	    	/*var iSize = ($("#photo")[0].files[0].size / 1024); 
-	        if (iSize / 1024 > 1) 
-	        { 
-	           if (((iSize / 1024) / 1024) > 1) 
-	           { 
-	               iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
-	               maxSize = 0;
-	               //$("#lblSize").html( iSize + "Gb"); 
-	           }else{ 
-	               iSize = (Math.round((iSize / 1024) * 100) / 100);
-	               if(iSize>5){
-	                   alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
-	                /*   maxSize = 1;
-	                   $('#profile_wiew').attr('src', "<?php //echo $this->baseUrl().'/images/no-profile.png';?>");
-	                   return false;
-	               }
-	               //$("#lblSize").html( iSize + "Mb"); 
-	           } 
-	        } 
-	        else 
-	        {
-	           iSize = (Math.round(iSize * 100) / 100);
-	           maxSize = 0;
-	           //$("#lblSize").html( iSize  + "kb"); 
-	        }    */
-	        
 	        readURL(this);
 	    });
 		
@@ -2501,12 +2400,11 @@ date_format = '"dd/MM/yyyy"';
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-
 		bs_input_file();
 	}
 	
 function initialize() {  
-		<?php if(!empty($this->row)){ //echo '111111';exit();
+		<?php if(!empty($this->row)){ 
 			foreach($this->row as $row){ 
 		?>
 		col++;no++;
@@ -2546,7 +2444,7 @@ function initialize() {
 					template+='</span>';
 					<?php }
 					}?>
-				template+='</div>';
+			template+='</div>';
 			template+='</div> <div class="clearfix"></div>';
 			template+='<input type="hidden" id="detailid'+col+'" name="detailid'+col+'"  value="<?php echo $row['id'];?>" />';
 			template+='<input type="hidden" id="old_file'+col+'" name="old_file'+col+'"  value="<?php echo $row['attachment_file'];?>" />';
@@ -2562,17 +2460,14 @@ function initialize() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		
 		dijit.byId('document_type_'+col).attr('value',"<?php echo $row['document_type'];?>");
 		dijit.byId('date_give_'+col).attr('value',"<?php echo $row['date_give'];?>");
 		dijit.byId('date_end_'+col).attr('value',"<?php echo $row['date_end'];?>");
 		dijit.byId('is_receive_'+col).attr('value',"<?php echo $row['is_receive'];?>");
 		dijit.byId('note_'+col).attr('value',"<?php echo $row['note'];?>");
 		bs_input_file();
-		
 		<?php }}?>
 	}
-	
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
@@ -2590,7 +2485,6 @@ function initialize() {
 			$('#popup_index').val(index);
 			dijit.byId("popup_doc_type").show();
 		}
-		
 	}	
 		
 	function PrintDiv(keydiv) {
@@ -2640,7 +2534,6 @@ function initialize() {
 			    }
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -2658,7 +2551,6 @@ function initialize() {
     $("#guardian_photo").change(function(){
         readURLguardian(this);
     });
-	
 	
 	function readURLmother(input) {
         if (input.files && input.files[0]) {
@@ -2714,7 +2606,6 @@ function initialize() {
     	);
     }
 function getStudentNo(){
-	
 }
 </script>
 <div class="overlay">

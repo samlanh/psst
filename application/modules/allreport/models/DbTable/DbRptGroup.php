@@ -200,10 +200,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	(SELECT	$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 				   	(SELECT $label FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
-				   	
 				   	(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student AS s  
 	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status=1  LIMIT 1) AS Num_Student,
-	   					
 	   				(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student as s 
 	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status =1 AND sg.stop_type!=0 LIMIT 1) AS student_drop
 				FROM 
@@ -250,7 +248,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	}
 	   	$dbp = new Application_Model_DbTable_DbGlobal();
 	   	$where.=$dbp->getAccessPermission('g.branch_id');
-	   	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
+	   	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
 	   	
 	   	$order = ' ORDER BY `g`.`is_pass` ASC ,`g`.`group_code` ASC ';
 	   	return $db->fetchAll($sql.$where.$order);

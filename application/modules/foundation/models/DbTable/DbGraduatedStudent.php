@@ -24,7 +24,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		$_db = $this->getAdapter();
 		$sql = "SELECT 
 					gs.id,
-					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=gs.branch_id LIMIT 1) AS branch_name,
+					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
 					g.group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS academic,
 					(SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
@@ -44,7 +44,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		$where=" ";
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission('gs.branch_id');
+		$where.=$dbp->getAccessPermission('g.branch_id');
 		
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
@@ -66,7 +66,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
-			$where.=" AND gs.branch_id=".$search['branch_id'];
+			$where.=" AND g.branch_id=".$search['branch_id'];
 		}
 		if(!empty($search['study_year'])){
 			$where.=" AND g.academic_year=".$search['study_year'];

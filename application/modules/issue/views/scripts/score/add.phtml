@@ -194,7 +194,6 @@
 <script type="text/javascript">
 dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
-dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 
 dojo.ready(function(){
@@ -299,7 +298,6 @@ function filterStudent(){
 					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
 					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
-				
 					
 				  for(j=0;j<subject.length;j++){
 					  if(exam_type==1){//for month
@@ -353,7 +351,6 @@ function filterStudent(){
 						var identity = $("#identity").val();
 						$("#identity").val(identity+','+inx);
 					} else {$("#identity").val(inx);}
-					
 				}
 				temp+='</table>';
 
@@ -377,8 +374,6 @@ function checkScore(index,subject_id){
 	score_input = dijit.byId('score_'+index+'_'+subject_id).get('value');
 	max_score = dijit.byId('max_score_'+index+'_'+subject_id).get('value');
 	if(score_input>max_score){
-		//alert("Can not input bigger than max score = "+max_score);
-		//dijit.byId('score_'+index+'_'+subject_id).attr('value',max_score);
 	}
 }
 
@@ -396,7 +391,6 @@ function CheckSubjectExam(subject_id){
 			}
 		}
 	}else{
-		
 		if(rowId!=''){ 
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
@@ -461,7 +455,6 @@ function getInfoBygroup(){
 			dijit.byId('session').set('readOnly',true);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -484,7 +477,6 @@ function getSubjectByGroup(){
 		   filterStudent()
 	   },		
 	    error: function(err) {
-		 
 	    }
 	});
 }
@@ -509,7 +501,6 @@ function getAllGroupByBranch(){
 		    dijit.byId('group').set('store',group_store);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

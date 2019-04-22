@@ -332,7 +332,7 @@ function getCommentByDegree(){
 						label_comment = data[i]['comment'];
 						template1+='<td width="5%" align="center">'+no1+'</td>';
 						template1+='<td width="60%" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+col1+'" name="comment_id_'+col1+'" value="'+data[i]['id']+'" /></td>';
-						template1+='<td width="17%" > <input type="text" required="1" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.NumberTextBox" placeholder="Rating Score"/></td>';
+						template1+='<td width="17%" > <input type="text" required="1" queryExpr="*${0}*" autoComplete="false" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.NumberTextBox" placeholder="Rating Score"/></td>';
 						template1+='<td width="18%" > <input type="text" name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="សម្គាល់"/></td>';
 						tmp1='<tr id="row'+col1+'">';
 						tmp1+="</tr>";

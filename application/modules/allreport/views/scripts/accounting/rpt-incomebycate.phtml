@@ -58,8 +58,8 @@
 				<td width="15%" align="center">
 				</td>
 				<td width="70%" align="center">
-					<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></strong><br />
-					<strong style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					<div style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
+					<strong style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?>For <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="15%" align="center"></td>
 			</tr>
@@ -73,7 +73,7 @@
 							<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
 								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 								<td style=""></td>
-								<td style=""><?php echo $tr->translate('RPT_ALLPAYMENTREPORT')?></td>
+								<td style=""><?php echo $tr->translate('TOTAL_INCOME')?></td>
 							</tr>
 						</thead>
 						  <?php 
@@ -134,14 +134,14 @@
 					<br />
 					<table width="100%" style="font-size:12px;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr style="text-align: center;">
-							<td width="30%">បានឃើញនិង ឯកភាព</td>
-							<td width="30%">បានពិនិត្យ</td>
-							<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
+							<td width="30%"><?php echo $tr->translate("CHECKANDAPPROVED");?></td>
+							<td width="30%"><?php echo $tr->translate("VERIFIED_BY");?></td>
+							<td width="30%"><?php echo $tr->translate("CREATE_WORK_DATE");?></td>
 						</tr>
 						<tr style="text-align: center;">
-							<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
-							<td width="30%">ប្រធានគណនេយ្យ</td>
-							<td width="30%">បេឡាករ</td>
+							<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
+							<td width="30%"><?php echo $tr->translate("ACCOUNTANT_MNG");?></td>
+							<td width="30%"><?php echo $tr->translate("CASHIER");?></td>
 						</tr>
 					</table>
 				</td>	

@@ -40,7 +40,6 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

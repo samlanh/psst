@@ -318,19 +318,16 @@ function getCommentByDegree(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);
 				if(data){
 					for(i=0;i<data.length;i++){
-						//alert(data[i]['comment']);
 						
 						template1='';
 						col1++;no1++;
 						label_comment = data[i]['comment'];
 						template1+='<td width="5%" align="center">'+no1+'</td>';
 						template1+='<td width="60%" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+col1+'" name="comment_id_'+col1+'" value="'+data[i]['id']+'" /></td>';
-						//template1+='<td width="10%" > <input type="text" required="1" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.NumberTextBox" placeholder="Rating Score"/></td>';
 						
-						template1+='<td width="17%"><select name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.FilteringSelect" >';
+						template1+='<td width="17%"><select queryExpr="*${0}*" autoComplete="false" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.FilteringSelect" >';
 							template1+='<option value="-1"><?php echo $tr->translate("SELECT")?></option>';
 							<?php if($this->rating){foreach($this->rating as $rating){?>
 							template1+='<option value="<?php echo $rating['id']?>"><?php echo $rating['id'].'-'.$rating['rating']?></option>';
@@ -404,11 +401,9 @@ function getInfoBygroup(){
 			dijit.byId('session').set('readOnly',true);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
@@ -430,7 +425,6 @@ function getAllGroupByBranch(){
 		    dijit.byId('group').set('store',group_store);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -456,7 +450,6 @@ function getStudentByGroup(){
 		    dijit.byId('student').set('store',student_store);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

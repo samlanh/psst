@@ -138,7 +138,7 @@
 										<?php echo $tr->translate("COMMENT");?>
 									</label>
 									<div class="col-md-11 col-sm-12 col-xs-12">
-										<select name="comment" id="comment" class="fullside" onchange="addRowComment();" dojoType="dijit.form.FilteringSelect" >
+										<select queryExpr="*${0}*" autoComplete="false" name="comment" id="comment" class="fullside" onchange="addRowComment();" dojoType="dijit.form.FilteringSelect" >
 											<option value="-1">Select Comment</option>
 											<?php if(!empty($this->comment)){foreach($this->comment as $comment){?>
 												<option value="<?php echo $comment['id']?>"><?php echo $comment['comment']?></option>

@@ -912,7 +912,7 @@ function getPaymentHistory(student_id){
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('START_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('END_DATE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('REMARK');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('NOTE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('STATUS');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('USER');?></th>'
 			+'</thead>';
@@ -1065,7 +1065,7 @@ function addRow() {
 			template+='<td style="width:170px;font-size:12px;"><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='';
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:140px;" />';
-			template+='<input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			template+='<input type="text" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -1272,6 +1272,7 @@ function getservicefee(key){
 			dijit.byId("price_"+key).set('readOnly',true);
 		}
 		study_year = dijit.byId('study_year').get('value');
+		alert(1);
  		dojo.xhrPost({
  				url:url_service_fee,
  				content:{
@@ -1283,6 +1284,7 @@ function getservicefee(key){
  				},
  				handleAs:"json",
  				load: function(data) {
+ 					alert(data);
 	 				dijit.byId("remark"+key).attr("value",'');
 	 				dijit.byId("price_"+key).attr("value",data.price);
 	 				dijit.byId("onepayment_"+key).attr("value",data.onepayment);
@@ -1296,6 +1298,7 @@ function getservicefee(key){
  	 	 	 		}
  			},
  			error: function(err) {
+ 	 			alert("alert+"+err);
  			}
  	});
  }

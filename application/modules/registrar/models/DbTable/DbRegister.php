@@ -1066,8 +1066,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		  		WHERE 
     		  			tf.id = tfd.fee_id
     					AND tfd.class_id = $item_id 
-    					AND tfd.payment_term = $termid 
-    			";
+    					AND tfd.payment_term = $termid ";
     		if($item_type==1){// grade
     			$sql.=" AND tf.type =1 AND tf.id = $year ";
     		}
@@ -1093,8 +1092,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     					FROM 
     						`rms_itemsdetail` 
     					WHERE 
-    						id=$item_id LIMIT 1
-    				";
+    						id=$item_id LIMIT 1 ";
     		}else{
     			$sql="SELECT
     		 				price,
@@ -1112,8 +1110,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     						`rms_product_location` 
     					WHERE 
     						pro_id=$item_id 
-    						AND brand_id = $branch_id LIMIT 1
-    				";
+    						AND brand_id = $branch_id LIMIT 1 ";
     		}
     		return $db->fetchRow($sql);
     	}

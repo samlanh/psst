@@ -1673,11 +1673,6 @@ function getAllgroupStudyNotPass($action=null){
   
   function getAllGradeStudyByDegree($category_id=null,$student_id=null,$is_stutested=null){
   	$db = $this->getAdapter();
-//   	$sql="SELECT i.id,
-//   	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
-//   	FROM `rms_itemsdetail` AS i
-//   	WHERE i.status =1 ";
-
   	$currentLang = $this->currentlang();
   	$colunmname='i.title_en';
   	if ($currentLang==1){
@@ -1718,9 +1713,6 @@ function getAllgroupStudyNotPass($action=null){
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
   	}
-  	
-  	
-	
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
   	return $db->fetchAll($sql);
   }

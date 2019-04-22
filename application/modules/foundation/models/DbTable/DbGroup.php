@@ -138,7 +138,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('g.branch_id');
-		$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
+		$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;

@@ -16,13 +16,19 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		try{
 	    	$_db = new Application_Model_DbTable_DbGlobal();
+	    	$lang = $_db->currentlang();
+	    	$field = 'title_en';
+	    	if ($lang==1){//kh
+	    		$field = 'title';
+	    	}
+	    	
 	    	$branch_id = $_db->getAccessPermission('s.branch_id');
 	    	$user_level = $_db->getUserAccessPermission('s.user_id');
         	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 	    	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 	    	
 	    	$sql=" SELECT 
-				    i.title AS category_name,
+				    i.$field AS category_name,
 				    i.type,
 				    SUM(s.penalty) AS total_penalty,
 				    SUM(s.credit_memo) AS credit_memo,
@@ -46,6 +52,7 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 	    	}
 	    	$where.=" GROUP BY i.id ORDER BY i.type ASC , i.ordering DESC ";
 	    	return $db->fetchAll($sql.$where);
+	    	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

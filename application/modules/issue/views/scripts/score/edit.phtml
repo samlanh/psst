@@ -434,7 +434,6 @@ function getInfoBygroup(){
 			dijit.byId('session').set('readOnly',true);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -488,7 +487,6 @@ function getAllGroupByBranch(){
 		    dijit.byId('group').attr("value",<?php echo $this->score['group_id'];?>);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

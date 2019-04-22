@@ -132,7 +132,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		try{
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = $_db->getAccessPermission('sp.branch_id');
-			//$user_level = $_db->getUserAccessPermission('sp.user_id');
 	
 			$db=$this->getAdapter();
 			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
@@ -200,6 +199,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$order=" ORDER By sp.id DESC ";
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}   
 // 	function getAllStudentTest($search=null){

@@ -344,7 +344,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -968,7 +967,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 	public function rptIncomestatementAction(){
@@ -1158,15 +1157,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 			
 			$this->view->rsfooteracc = $frm->getFooterAccount();
-		
-			//echo $this->view->rsfooteracc;exit();
 			
 			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-			$user_type=$db->getUserType();
 	
 			if(!empty($search['all_payment'])){
 				$data1=$this->view->row = $db->getDailyReport($search);
-				$user_type=$db->getUserType();
 				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
 				$this->view->income = $_db->getAllOtherIncome($search);
 						

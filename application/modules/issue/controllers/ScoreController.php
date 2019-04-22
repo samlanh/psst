@@ -79,9 +79,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-// 		$result= $db_global->getAllgroupStudy();
-// 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
-// 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
@@ -127,9 +124,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-// 		$result = $db_global->getAllgroupStudy();
-// 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
-// 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
 		
 		$db = new Issue_Model_DbTable_DbScore();
@@ -138,13 +132,8 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-// 			$db = new Issue_Model_DbTable_DbScore();
-// 			$grade = $db->getAllGrade($data['degree']);
-			
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$grade = $_dbgb->getAllGradeStudyByDegree($data['degree']);
-			//print_r($grade);exit();
-			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}
@@ -177,4 +166,3 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 	}
 }
-

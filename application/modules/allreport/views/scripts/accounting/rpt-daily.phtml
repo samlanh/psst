@@ -15,7 +15,7 @@ table.tb-footer tr.style-head {
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT");?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT");?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
@@ -136,7 +136,6 @@ table.tb-footer tr.style-head {
 										 	$i=0;
 										 	$total_income_dollar=0;
 										 	$total_expense_dollar = 0;
-										 	$total_expense_kh =0;
 										 	$total_payment=0;
 										 	$fine = 0;
 										 	$credit_memo = 0;
@@ -181,7 +180,7 @@ table.tb-footer tr.style-head {
 											<td><?php echo number_format($rs['grand_total'],2); ?></td>
 										    <td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
 											<td><?php echo number_format($rs['paid_amount'],2); ?></td>
-											<td><?php echo number_format($rs['balance_due'],2); ?></td>
+											<td <?php if($rs['balance_due']>0){echo"style='background:#efb6b6;'";}?>><?php echo number_format($rs['balance_due'],2); ?></td>
 										    <td><?php echo date('d-m-Y (H:i)', strtotime($rs['create_date'])); ?></td>
 										   	<td><?php echo $rs['note']; ?></td>
 										    <td><?php echo $rs['user_id'];?></td>
@@ -257,7 +256,7 @@ table.tb-footer tr.style-head {
 											<td><?php echo $tr->translate('USER')?></td>
 										</tr>
 										 <style>td{padding:0 3px; }</style>
-										<?php $i=0;$total_expense_kh=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;?>
+										<?php $i=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;?>
 										<tr class="style-rowdata hover" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
 											<td style=" text-align: left;">&nbsp;<a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['title']; ?></a></td>
@@ -413,6 +412,7 @@ table.tb-footer tr.style-head {
 			}
 		});
 	}
+	
 	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
 	function getAllAcademicByBranch(){
 		branch_id = dijit.byId("branch_id").attr("value");

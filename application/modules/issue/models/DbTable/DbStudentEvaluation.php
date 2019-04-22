@@ -39,7 +39,6 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			}
 			
 		////////////////////////////////////////////////////////////////////////////////////////	
-			
 			$_arr = array(
 					'branch_id'		=>$_data['branch_id'],
 					'group_id'		=>$_data['group'],
@@ -128,7 +127,7 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
 	

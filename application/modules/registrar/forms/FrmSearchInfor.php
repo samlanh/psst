@@ -284,7 +284,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		));
 		$user->setValue($request->getParam('user'));
 		$opt_user = array(''=>$this->tr->translate("USER"));
-		$opt_all_user=$db_years->getAllUser();
+		$opt_all_user=$db->getAllUser();
 		if(!empty($opt_all_user))foreach ($opt_all_user As $row)$opt_user[$row['id']]=$row['name'];
 		$user->setMultiOptions($opt_user);
 		

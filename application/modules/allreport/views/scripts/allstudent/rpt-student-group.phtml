@@ -48,7 +48,7 @@
 				<tr>
 					<td style="width:30%;" rowspan="2">
 						<?php $logo = $this->baseUrl().'/images/logo.png';
-					if (!empty($this->rr['branch_logo'])){
+					if (file_exists(PUBLIC_PATH."/images/".$this->rr['branch_logo'])){
 						$logo = $this->baseUrl().'/images/'.$this->rr['branch_logo'];
 					}
 					?>

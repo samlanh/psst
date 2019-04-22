@@ -28,13 +28,14 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     			'onChange'=>'getCompleteGroup();',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
+    	$_branch_id->setValue($request->getParam("branch_id"));
     	if (count($optionBranch)==1){
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
     		if(!empty($optionBranch))foreach($optionBranch AS $row){
     			$_branch_id->setValue($row['id']);
     		}
     	}
-    	$_branch_id->setValue($request->getParam("branch_id"));
+    	
     	
     	$dept = new Zend_Dojo_Form_Element_TextBox('dept_eng');
     	$dept->setAttribs(array(

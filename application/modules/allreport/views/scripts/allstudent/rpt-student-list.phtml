@@ -58,7 +58,9 @@ table.tb-footer tr.style-head {
 			<table style="background:#fff; margin: 0 auto; width: 100%;color:#4839bd;font-family:Times New Roman,Khmer OS Battambang;" >
 				<?php $logo = $this->baseUrl().'/images/logo.png';
 					if (!empty($this->rr['branch_logo'])){
-						$logo = $this->baseUrl().'/images/'.$this->rr['branch_logo'];
+						if (file_exists(PUBLIC_PATH."/images/".$this->rr['branch_logo'])){
+							$logo = $this->baseUrl().'/images/'.$this->rr['branch_logo'];
+						}
 					}
 					?>
 				<tr>

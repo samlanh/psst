@@ -31,14 +31,12 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			
 			$this->view->search=$search;
 			$rs_rows = $db->getAllAttendence($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array( "GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","ATTENDANCE_DATE","SUBJECT","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'studentattendance','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('branch_name'=>$link,'group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -84,6 +82,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 	
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		$_model = new Issue_Model_DbTable_DbStudentAttendance();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
@@ -100,6 +99,10 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			}
 		}
 		$result = $_model->getAttendencetByID($id);
+		if (empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/studentattendance");
+			exit();
+		}
 		$this->view->row=$result;
 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		$db_global=new Application_Model_DbTable_DbGlobal();

@@ -82,6 +82,7 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['score_id']=$id;
@@ -98,7 +99,12 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		}
 		
 		$db = new Issue_Model_DbTable_DbStudentEvaluation();
-		$this->view->row = $row = $db->getStudentEvaluationById($id);
+		$row = $db->getStudentEvaluationById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/studentevaluation");
+			exit();
+		}
+		$this->view->row = $row;
 		$this->view->row_detail = $db->getStudentEvaluationDetailById($id);
 		$this->view->rating = $db->getAllRating();
 		

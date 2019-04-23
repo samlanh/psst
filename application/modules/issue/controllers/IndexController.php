@@ -23,10 +23,7 @@ class Issue_IndexController extends Zend_Controller_Action {
 			
 			$db = new Issue_Model_DbTable_DbCertification();
 			$rs_rows= $db->getAllIssueCertification($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-				
 			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'index','action'=>'edit',
@@ -93,6 +90,10 @@ class Issue_IndexController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		$row =$_db->getIssueCertificationById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/index");
+			exit();
+		}
 		$this->view->row = $row;
 		
 		$this->view->rowdetail =$_db->getIssueCetifStudent($id);

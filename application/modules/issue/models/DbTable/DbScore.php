@@ -208,8 +208,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	function getAllScore($search=null){
 		$db=$this->getAdapter();
 		
-		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbgb->currentlang();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
 		if ($currentLang==1){
 			$colunmname='title';
@@ -227,9 +227,11 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			(SELECT name_en FROM rms_view WHERE type=1 AND key_code = s.status LIMIT 1) as status
-				FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 ";
+			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
+				";
+		$sql.=$dbp->caseStatusShowImage("s.status");
+		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1  ";
+		
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
@@ -260,7 +262,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if(!empty($search['group'])){
 			$where.=" AND `s`.`group_id` =".$search['group'];
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);
@@ -268,7 +269,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getScoreById($score_id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_score WHERE id=$score_id";
+		$sql="SELECT * FROM rms_score WHERE id=$score_id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 	function getHomeWorkDetailScoreById($score_id){

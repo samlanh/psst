@@ -50,8 +50,8 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
     function getAllDiscipline($search=null){
     	$db=$this->getAdapter();
     	
-    	$dbgb = new Application_Model_DbTable_DbGlobal();
-    	$currentLang = $dbgb->currentlang();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
     	$colunmname='title_en';
     	if ($currentLang==1){
     		$colunmname='title';
@@ -68,7 +68,11 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
     	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
     	(SELECT
     	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
-    	sa.`date_attendence`,sa.`status` FROM `rms_student_attendence` AS sa ";
+    	sa.`date_attendence` ";
+    	
+    	$sql.=$dbp->caseStatusShowImage("sa.status");
+    	$sql.=" FROM `rms_student_attendence` AS sa ";
+    	
     	$where =' WHERE sa.`type` = 2 ';
     	$from_date =(empty($search['start_date']))? '1': " sa.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sa.date_attendence <= '".$search['end_date']." 23:59:59'";
@@ -92,7 +96,6 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
     	if(!empty($search['room'])){
     		$where.=" AND (select `g`.`room_id` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1 )=".$search['room'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('sa.`branch_id`');
     	$order=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$where.$order);

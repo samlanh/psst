@@ -23,7 +23,6 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 			}
 			$db = new Foundation_Model_DbTable_DbRescheduleGroup();
 			$rs_rows= $db->getAllRescheduleGroup($search);
-			$glClass = new Application_Model_GlobalClass();
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH_NAME","STUDY_YEAR","GROUP","DAY","FROM_HOUR","TO_HOUR","SUBJECT","TEACHER","DATE","USER","STATUS");
 			$link=array(
@@ -97,6 +96,7 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 	
 	function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
@@ -116,11 +116,18 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 		}
 		
 		$_db = new Foundation_Model_DbTable_DbRescheduleGroup();
+		$row =$_db->getRescheduleById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/reschedulegroup");
+			exit();
+		}
+		$this->view->row_g = $row;
+		
 		$this->view->degree = $rows = $_db->getAllFecultyName();
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
 		$this->view->group_code=$_db->getGroupName();
-		$this->view->row_g=$_db->getRescheduleById($id);
+		
 		
 		$this->view->parent_subject = $_db->getParentSubject();
 		$this->view->subject = $_db->getAllSubjectStudy();
@@ -173,13 +180,19 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		
 		$_db = new Foundation_Model_DbTable_DbRescheduleGroup();
+		$row =$_db->getRescheduleById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/reschedulegroup");
+			exit();
+		}
+		$this->view->row_g=$row;
+		
 		$this->view->degree = $rows = $_db->getAllFecultyName();
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
 		$this->view->group_code=$_db->getGroupName();
-		$this->view->row_g=$_db->getRescheduleById($id);
+		
 		
 		$this->view->parent_subject = $_db->getParentSubject();
 		$this->view->subject = $_db->getAllSubjectStudy();

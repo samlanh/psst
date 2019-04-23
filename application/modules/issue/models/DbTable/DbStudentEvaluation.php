@@ -134,8 +134,8 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 	function getAllStudentEvaluation($search=null){
 		$db=$this->getAdapter();
 		
-		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbgb->currentlang();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
 		if ($currentLang==1){// khmer
 			$title='title';
 			$view="name_kh";
@@ -160,16 +160,17 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 					(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 					(SELECT CONCAT(name_en,'-',name_kh) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-					(SELECT $view FROM rms_view WHERE type=1 AND key_code = se.status LIMIT 1) as status
-				FROM 
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
+				
+			";
+		$sql.=$dbp->caseStatusShowImage("se.status");
+		$sql.=" FROM 
 					rms_student_evaluation AS se,
 					rms_group AS g,
 					rms_student as s
 				WHERE 
 					se.group_id=g.id 
-					and s.stu_id = se.student_id
-			";
+					and s.stu_id = se.student_id ";
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " se.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " se.create_date <= '".$search['end_date']." 23:59:59'";
@@ -202,7 +203,6 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 		if(!empty($search['group'])){
 			$where.=" AND `se`.`group_id` =".$search['group'];
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('se.branch_id');
 		$order=" ORDER BY se.id DESC ";
 		return $db->fetchAll($sql.$where.$order);

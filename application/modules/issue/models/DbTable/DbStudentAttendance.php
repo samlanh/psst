@@ -11,8 +11,8 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     function getAllAttendence($search=null){
     	$db=$this->getAdapter();
     	
-    	$dbgb = new Application_Model_DbTable_DbGlobal();
-    	$currentLang = $dbgb->currentlang();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
     	$colunmname='title_en';
     	if ($currentLang==1){
     		$colunmname='title';
@@ -27,7 +27,9 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
     	(SELECT
     	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
-    	sa.`date_attendence`, sa.`status` FROM `rms_student_attendence` AS sa ";
+    	sa.`date_attendence` ";
+    	$sql.=$dbp->caseStatusShowImage("sa.`status`");
+    	$sql.=" FROM `rms_student_attendence` AS sa ";
     	$where =' WHERE sa.`type` = 1 ';
     	$from_date =(empty($search['start_date']))? '1': " sa.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sa.date_attendence <= '".$search['end_date']." 23:59:59'";
@@ -52,9 +54,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		}
     	$order=" ORDER BY id DESC ";
     	
-    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('sa.branch_id');
-    	
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function addStudentAttendece($_data){
@@ -252,7 +252,9 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 	}
 	function getAttendencetByID($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM `rms_student_attendence` sa WHERE  sa.`id`=".$id." AND sa.type=1";
+		$sql="SELECT * FROM `rms_student_attendence` sa WHERE  sa.`id`=".$id." AND sa.type=1 ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('sa.branch_id');
 		return $db->fetchRow($sql);
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){

@@ -85,6 +85,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		$_model = new Issue_Model_DbTable_DbScore();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
@@ -109,6 +110,10 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		
 		$this->view->score_id = $id;
 		$row = $_model->getScoreById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/score");
+			exit();
+		}
 		$this->view->score = $row;
 		$this->view->student= $_model->getStudentSccoreforEdit($id);
 		$this->view->rows_scor=$_model->getScoreStudents($id);

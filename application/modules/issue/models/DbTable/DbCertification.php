@@ -10,18 +10,18 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
     }
     function getAllIssueCertification($search){
     	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql = "SELECT c.id,
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
 			c.dept_kh,
 			c.from_date,
 			c.to_date,
-			c.issue_date,
-			c.status
-			 FROM `rms_issuecertificate` AS c 
-			 WHERE 1
+			c.issue_date 
     	";
-    
+    	
+    	$sql.=$dbp->caseStatusShowImage("c.status");
+    	$sql.=" FROM `rms_issuecertificate` AS c WHERE 1 ";
     	$where ='';
     	if(!empty($search['adv_search'])){
 	    	$s_where = array();
@@ -41,7 +41,6 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
 	    if($search['status_search']>-1){
 	    	$where.=' AND c.status='.$search['status_search'];
 	    }
-	    $dbp = new Application_Model_DbTable_DbGlobal();
 	    $where.=$dbp->getAccessPermission('c.branch_id');
 	    $order =  ' ORDER BY c.`id` DESC ' ;
 	    return $db->fetchAll($sql.$where.$order);

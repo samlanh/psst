@@ -18,8 +18,6 @@ class Issue_CommentController extends Zend_Controller_Action {
 			}
 			$db = new Issue_Model_DbTable_DbComment();
 			$rs_rows= $db->getAllComment($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("COMMENT","CREATED_DATE","BY_USER","STATUS");

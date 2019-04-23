@@ -191,6 +191,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	
 	function getAllRescheduleGroup($search){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = "SELECT gr.group_id,
 			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
 			(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')') 
@@ -200,9 +201,10 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
        		gr.from_hour,gr.to_hour,
        		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
        		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
-       		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS user,
-       		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS status
-     		FROM rms_group_reschedule AS gr  WHERE gr.status=1";
+       		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS user
+     		";
+		$sql.=$dbp->caseStatusShowImage("gr.status");
+		$sql.=" FROM rms_group_reschedule AS gr  WHERE gr.status=1 ";
 		$where =' ';
 		$order =  ' ORDER BY `gr`.`id` DESC ' ;
 		if(!empty($search['title'])){
@@ -226,6 +228,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['group'])){
 			$where.=' AND gr.group_id='.$search['group'];
 		}
+		$where.=$dbp->getAccessPermission('gr.branch_id');
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
@@ -386,8 +389,10 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	
 	function getRescheduleById($id){
 		$db=$this->getAdapter();
+		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$sql="SELECT gr.*   FROM rms_group_reschedule AS gr  
    			  WHERE gr.group_id=$id";
+		$sql.=$dbgb->getAccessPermission('gr.branch_id');
 		return $db->fetchAll($sql);
 	}
 	

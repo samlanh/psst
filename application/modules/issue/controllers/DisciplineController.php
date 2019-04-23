@@ -31,14 +31,12 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 			
 			$this->view->search=$search;
 			$rs_rows = $db->getAllDiscipline($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array( "BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","MISTAKE_DATE","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'discipline','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -86,6 +84,7 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 	
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		$_model = new Issue_Model_DbTable_DbStudentdiscipline();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();

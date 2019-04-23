@@ -47,14 +47,11 @@ class Issue_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 					id,
 					comment,
 					create_date,
-					(SELECT CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
-					status
-				FROM 
-					rms_comment 
-				WHERE 
-					comment != '' 
+					(SELECT CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
 			";
-		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM `rms_comment` AS c WHERE comment != '' ";
 		$order = ' ORDER BY id DESC '; 
 		$where = ' ';
 		if(empty($search)){

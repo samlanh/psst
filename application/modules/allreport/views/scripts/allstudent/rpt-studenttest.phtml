@@ -82,8 +82,8 @@ table.content-data thead tr.style-head {
 								<td width="15%" align="center">
 								</td>
 								<td align="center"  width="70%">
-									<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></span><br />
-									<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." ".$tr->translate("TO")." ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span>
+									<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></span><br />
+									<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." ".$tr->translate("TO")." ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span>
 								</td>
 								<td width="15%">&nbsp;</td>
 							</tr>
@@ -92,7 +92,7 @@ table.content-data thead tr.style-head {
 										<style> 
 											th,td{ padding:0 1px;}
 											body{font-family: "Times New Roman",Arial,'Kh Battambang','Khmer Battambang'; }
-											table{ border-collapse:collapse; margin:0 auto;
+											table{ border-collapse:collapse; margin:0 auto; color:#4839bd;
 											border-color:#000; }
 											tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 											
@@ -101,18 +101,20 @@ table.content-data thead tr.style-head {
 											table.content-data{
 												border-collapse:collapse;
 												width:100%;
-												border:1px solid #000; 
+												border:1px solid #4839bd; 
 												font-family:'Times New Roman','Khmer OS Battambang';
 												font-size:13px;
 												white-space: nowrap;
 												margin:0 auto;
+												color: #4839bd;
 											}
-											table.content-data thead tr.style-head {
+											table.content-data  tr.style-head {
 											   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
 												background: #ccd9ff;
+												font-weight: bold;
 											}
 											table.content-data tr.style-rowdata {
-												font-size:12px; 
+												font-size:11px; 
 												height: 23px;
 											}
 										</style>
@@ -131,7 +133,7 @@ table.content-data thead tr.style-head {
 										 ?>
 										  <tr class="style-head" style="height: 20px;background:#ccd9ff;" align="center">
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-										    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
+										    <td style="line-height: 18px; white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
@@ -144,7 +146,7 @@ table.content-data thead tr.style-head {
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
+											<td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
 										  </tr>
 										 <tr class="style-head" style="height: 20px;background:#ccd9ff;" align="center">
 										 	<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
@@ -154,21 +156,21 @@ table.content-data thead tr.style-head {
 										 <?php foreach($this->row as $rs){ $i++;?>
 											  <tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center" style="height: 20px;"​ >
 												    <td><?php echo $i;?></td>
-												    <td><?php echo $rs['serial']; ?></td>
+												    <td style="line-height: 18px; white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['serial']; ?></td>
 												    <td><?php echo $rs['stu_code']; ?></td>
 												    <td align="left">&nbsp;<?php echo $rs['stu_khname']; ?></td>
 												    <td align="left">&nbsp;<?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
 												    <td><?php echo $rs['sex']; ?></td>
 												    <td><?php echo $rs['tel']; ?></td>
-												     <td><?php echo $rs['academic']; ?></td>
-												     <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
+												    <td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['academic']; ?></td>
+												    <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
 												    <td><?php echo $rs['note_result']; ?></td>
 													<td><?php echo $rs['user_id'];?></td>								    
-												    <td <?php if($rs['updated_result_de']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
-												    <td <?php if($rs['is_registered']==0){echo "style='color:red'";}?>>&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    
+												    <td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
+												    <td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['is_registered']==0){echo " color:red;";}?>">&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    
 											  		<td>&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
 											  </tr>
 											  <?php 
@@ -179,7 +181,7 @@ table.content-data thead tr.style-head {
 										  <?php }}?>
 									</table>
 									<?php if (!empty($this->row)){?>
-									<table width="40%"  align="right" style=" white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 14px; margin-top: 10px;">
+									<table width="40%"  align="right" style=" color:#4839bd; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 14px; margin-top: 10px;">
 										<tr align="right">
 											<td>
 												<ul style=" list-style: none; padding: 0;">

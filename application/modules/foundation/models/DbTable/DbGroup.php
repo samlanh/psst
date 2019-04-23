@@ -253,8 +253,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		
-		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbgb->currentlang();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
 		if ($currentLang==1){
 			$colunmname='title';
@@ -271,9 +271,10 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			`g`.`note`,
-			(select name_kh from rms_view where type=9 and key_code=is_pass) as group_status,
-			g.status
-			FROM `rms_group` AS `g`";
+			(select name_kh from rms_view where type=9 and key_code=is_pass) as group_status ";
+		
+		$sql.=$dbp->caseStatusShowImage("g.status");
+		$sql.=" FROM `rms_group` AS `g` ";
 		
 		$where =' WHERE 1 ';
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
@@ -316,7 +317,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['is_pass']) AND $search['is_pass']>-1){
 			$where.=' AND g.is_pass='.$search['is_pass'];
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
 		$order =  ' ORDER BY `g`.`id` DESC ' ;

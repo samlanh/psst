@@ -27,8 +27,6 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			$this->view->adv_search = $search;
 			$db = new Foundation_Model_DbTable_DbGroup();
 			$rs_rows= $db->getAllGroups($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			
 			$collumns = array("BRANCH","GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","NOTE","PROCESS_TYPE","STATUS");

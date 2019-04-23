@@ -161,8 +161,8 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
     function getAllScore($search=null){
     	$db=$this->getAdapter();
     
-    	$dbgb = new Application_Model_DbTable_DbGlobal();
-    	$currentLang = $dbgb->currentlang();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
     	$colunmname='title_en';
     	if ($currentLang==1){
     		$colunmname='title';
@@ -175,12 +175,12 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=seng.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
 				g.group_code,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-    			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-				seng.status		
-				FROM `rms_score_eng` AS seng,
-						rms_group AS g
-				WHERE  seng.group_id=g.id
+    			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
 				 ";
+    	$sql.=$dbp->caseStatusShowImage("seng.status");
+    	$sql.=" FROM `rms_score_eng` AS seng,
+						rms_group AS g
+				WHERE  seng.group_id=g.id ";
     	$where ='';
     	$from_date =(empty($search['start_date']))? '1': " seng.for_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " seng.for_date <= '".$search['end_date']." 23:59:59'";
@@ -205,7 +205,6 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     			$where.=" AND `seng`.`group_id` =".$search['group'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('seng.branch_id');
     	$order=" GROUP BY seng.id_multiscore ORDER BY seng.id DESC ";
     	return $db->fetchAll($sql.$where.$order);

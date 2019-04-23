@@ -21,8 +21,6 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		}
 		$db_student= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$rs_rows = $db_student->selectAllStudentChangeGroup($search);
-		$glClass = new Application_Model_GlobalClass();
-		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		$list = new Application_Form_Frmtable();
 		
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -30,7 +28,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
-		$collumns = array("FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
+		$collumns = array("BRANCH","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
 		$link=array(
 				'module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit',
 		);

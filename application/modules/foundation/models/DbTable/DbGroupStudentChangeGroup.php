@@ -31,8 +31,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	
 	public function selectAllStudentChangeGroup($search){
 		$_db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = "SELECT 
 					gscg.id,
+					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 					(select group_code from rms_group where rms_group.id=gscg.from_group) as group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=gscg.from_group) limit 1) AS academic,
 					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
@@ -45,15 +47,14 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session limit 1) as to_session,
 				
 					moving_date,
-					gscg.note,
-					gscg.status
-				FROM 
+					gscg.note
+			";
+		$sql.=$dbp->caseStatusShowImage("gscg.status");
+		$sql.=" FROM 
 					`rms_group_student_change_group` as gscg,
 					rms_group as g
 				WHERE 
-					g.id=gscg.to_group 
-		
-			";
+					g.id=gscg.to_group ";
 		$order_by=" order by id DESC";
 		$where=" ";
 		if(empty($search)){

@@ -54,8 +54,8 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	public function getAllStudentDrop($search){
 		$_db = $this->getAdapter();
 		
-		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbgb->currentlang();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
 		if ($currentLang==1){
 			$colunmname='title';
@@ -76,9 +76,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room,
 				date_stop,
 				reason,
-				(SELECT first_name FROM `rms_users` WHERE id=S.user_id LIMIT 1) AS user_name,
-				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
-				FROM `rms_student_drop` AS s where 1 ";
+				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name
+				 ";
+// 		$sql.=$dbp->caseStatusShowImage("s.status");
+		$sql.=" FROM `rms_student_drop` AS s WHERE 1 ";
 		$where = "";
 		$from_date =(empty($search['start_date']))? '1': " s.date_stop >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " s.date_stop <= '".$search['end_date']." 23:59:59'";
@@ -110,11 +111,14 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=" AND s.session=".$search['session'];
 		}
+		$where.=$dbp->getAccessPermission('s.branch_id');
 		return $_db->fetchAll($sql.$where.$order_by);
 	}
 	public function getStudentDropById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_student_drop WHERE id =".$id;
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('s.branch_id');
 		return $db->fetchRow($sql);
 	}
 	public function addStudentDrop($_data){

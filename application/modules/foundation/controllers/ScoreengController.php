@@ -27,8 +27,6 @@ class Foundation_ScoreengController extends Zend_Controller_Action {
 			}
 			$this->view->search = $search;
 			$rs_rows = $db->getAllScore($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH_NAME","TITLE","DATE","STUDY_YEAR","GROUP","DEGREE","GRADE","STATUS");
 			$link=array(

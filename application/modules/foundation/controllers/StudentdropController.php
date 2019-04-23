@@ -32,9 +32,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			
 			$db_student= new Foundation_Model_DbTable_DbStudentDrop();
 			$rs_rows = $db_student->getAllStudentDrop($search);
+			
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAMEKHMER","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER","STATUS");
+			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAMEKHMER","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER");
 			$link=array(
 					'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 			);
@@ -85,9 +86,13 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 	public function editAction(){
 		try{	
 			$id=$this->getRequest()->getParam("id");
+			$id = empty($id)?0:$id;
 			$db= new Foundation_Model_DbTable_DbStudentDrop();
 			$row = $this->view->row = $db->getStudentDropById($id);
-			
+			if (empty($row)){
+				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentdrop/index");
+				exit();
+			}
 			if($this->getRequest()->isPost())
 			{
 				try{

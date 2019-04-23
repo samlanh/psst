@@ -23,8 +23,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		}
 		$db_student= new Foundation_Model_DbTable_DbGraduatedStudent();
 		$rs_rows = $db_student->getAllStudentGraduated($search);
-		$glClass = new Application_Model_GlobalClass();
-		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		$list = new Application_Form_Frmtable();
 		$collumns = array("BRANCH","GROUP","ACADEMIC_YEAR","GRADE","SESSION","TYPE","NOTE","CREATE_DATE","USER","STATUS");
 		$link=array(
@@ -66,6 +64,7 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost())
 		{
 			try{
@@ -81,6 +80,10 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		}	
 		$db= new Foundation_Model_DbTable_DbGraduatedStudent();
 		$result = $db->getAllDropById($id);
+		if (empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/foundation/graduatedstudent");
+			exit();
+		}
 		$this->view->rs = $result;
 		$this->view->studentpass = $db->selectStudentPass($result['group_id']);
 		

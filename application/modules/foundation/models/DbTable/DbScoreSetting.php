@@ -8,14 +8,16 @@ class Foundation_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
     }
     function getAllScoreSetting($search = '',$items_type=null){
     	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql = " SELECT 
 				s.id,
 				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.title,s.note,s.create_date,s.status
-				FROM `rms_scoreengsetting` AS s
-				WHERE 1
+				s.title,s.note,s.create_date
     		";
+    	$sql.=$dbp->caseStatusShowImage("s.status");
+    	$sql.=" FROM `rms_scoreengsetting` AS s
+				WHERE 1 ";
     	$orderby = " ORDER BY s.id DESC";
     	$where = ' ';
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
@@ -34,7 +36,6 @@ class Foundation_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
     	if($search['status_search']>-1){
     		$where.= " AND s.status = ".$db->quote($search['status_search']);
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
     	return $db->fetchAll($sql.$where.$orderby);
     }

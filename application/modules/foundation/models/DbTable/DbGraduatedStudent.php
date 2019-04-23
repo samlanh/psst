@@ -22,9 +22,10 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	
 	public function getAllStudentGraduated($search){
 		$_db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = "SELECT 
 					gs.id,
-					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
+					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=gs.branch_id LIMIT 1) AS branch_name,
 					g.group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS academic,
 					(SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
@@ -32,20 +33,17 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					(SELECT name_en from rms_view where type=5 and key_code = gs.type LIMIT 1) as type,
 					gs.note,
 					gs.create_date,
-					(select first_name from rms_users where id = gs.user_id) as user,
-					gs.status
-				FROM 
+					(select first_name from rms_users where id = gs.user_id) as user
+				 ";
+		$sql.=$dbp->caseStatusShowImage("gs.status");
+		$sql.=" FROM 
 					`rms_graduated_student` as gs,
 					rms_group as g
 				WHERE 
 					g.id=gs.group_id ";
-		
 		$order_by = " order by id DESC";
 		$where=" ";
-		
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission('g.branch_id');
-		
+		$where.=$dbp->getAccessPermission('gs.branch_id');
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}
@@ -86,6 +84,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	public function getAllDropById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_graduated_student WHERE id =".$id;
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 	

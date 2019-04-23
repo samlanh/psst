@@ -70,7 +70,10 @@
                 			$title=$tr->translate("JOBS");
                 		}else if ($rs=="test"){
                 			$title=$tr->translate("STUDENTTEST");
-                		}else{
+                		}else if ($rs=="issue"){
+                			$title=$tr->translate("STUDENT_AFFAIR");
+                		}
+                		else{
                 			$title=$tr->translate(strtoupper($rs));
                 		}
                 	?>
@@ -115,19 +118,4 @@
                 	}?>
                 </ul>
               </div>
-
             </div>
-            <!-- /sidebar menu -->
-
-            <!-- /menu footer buttons -->
-            <!-- 
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" onClick="toggleFullScreen(document.body)" title="<?php //echo $tr->translate("FullScreen");?>">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="<?php //echo $tr->translate("SIGN_OUT");?>" href="<?php //echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-            </div>
-             -->
-            <!-- /menu footer buttons -->

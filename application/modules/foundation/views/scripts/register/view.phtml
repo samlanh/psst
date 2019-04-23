@@ -12,16 +12,8 @@
 	if(!empty($this->rs['photo'])){
 		$photo=$this->baseUrl().'/images/'.$this->rs['photo'];
 	}
-	//print_r($photo); exit();
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-<script type="dojo/method" event="onSubmit">			
-	if(this.validate()) {
-				return true;
-			} else {
-				return false;
-			}
-</script>
 <style>
 tr.head td h2 {
     font-size: 16px !important;
@@ -44,11 +36,6 @@ table#exportExcel tr td {
 }
 </style>
 <script type="text/javascript">
-dojo.require("dijit.form.NumberTextBox");
-dojo.ready(function(){
-	 
-}); 
- 
 </script>
 <table width="100%">
 <div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
@@ -98,19 +85,11 @@ dojo.ready(function(){
 		  		 </style>
 				<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
 					<tr class="head">
-						<td width="40%" valign="middle">
-							<img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 60px;display: inline-block;margin-right: 10px;">
-							<div style=" display: inline-block;    vertical-align: top;">
-							<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" ><?php echo $tr->translate("CUSTOMER_BRANCH");?></h2>
-					   		<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Times New Roman';"><?php echo $tr->translate("CUSTOMER_BRANCH_EN");?></h2>
-							</div>
-					   </td>
+						<td width="40%" valign="middle"></td>
+					   <td width="30%" align="center"></td>
 					   <td width="30%" align="center">
-					   		
-					   </td>
-					   <td width="30%" align="center">
-					   		<h2 style="font-size:16px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
-					   		<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Battambang';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+					   		<h2 style="font-size:16px; line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
+					   		<h2 style="font-size:14px; line-height: 14px; font-weight: initial; font-family:'Khmer OS Battambang';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
 					   		<img alt="" src="<?php echo $this->baseUrl()."/images/sign.PNG"?>" style=" width: 120px;">
 					   </td>
 					</tr>
@@ -133,7 +112,6 @@ dojo.ready(function(){
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
-								
 								<tr>
 									<td width="10%" class="title padding-left">នាមត្រកូល-ខ្លួន</td>
 									<td width="1%">:</td>
@@ -169,9 +147,7 @@ dojo.ready(function(){
 									<td >:</td>
 									<td class="value"><?php $this->rs['email'];?></label></td>
 								</tr>
-								
 								<tr><td colspan="9">&nbsp;</td></tr>
-								
 								<tr>
 						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
 						    			II. ព័ត៌មានការសិក្សា
@@ -202,16 +178,13 @@ dojo.ready(function(){
 									<td >:</td>
 									<td colspan="7" class="value"><?php echo $this->rs['remark'];?></label></td>
 								</tr>
-						    	
 						    	<tr><td colspan="9">&nbsp;</td></tr>
-
 						    	<tr>
 						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
 						    			III. ព័ត៌មានមាតាបិតា
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
-								
 								<tr>
 									<td class="title">ឈ្មោះឪពុក</td>
 									<td >:</td>
@@ -231,7 +204,6 @@ dojo.ready(function(){
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['father_phone'];?></label></td>
 								</tr>
-								
 								<tr>
 									<td class="title">ឈ្មោះម្ដាយ</td>
 									<td >:</td>
@@ -251,16 +223,13 @@ dojo.ready(function(){
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['mother_phone'];?></label></td>
 								</tr>
-								
 						    	<tr><td colspan="9">&nbsp;</td></tr>
-
 						    	<tr>
 						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
 						    			IV. ព័ត៌មានអាណាព្យាបាល
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
-								
 								<tr>
 									<td class="title">ឈ្មោះអាណាព្យាបាល</td>
 									<td >:</td>
@@ -315,4 +284,3 @@ function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
 </script>
-

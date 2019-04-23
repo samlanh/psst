@@ -26,8 +26,6 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	    	}
 	    	$type=2; //Service
 	    	$rs_rows= $db->getAllItemsDetail($search,$type);
-	    	$glClass = new Application_Model_GlobalClass();
-	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
 	    	$collumns = array("SERVICE_NAME","SERVICE_NAME_EN","SHORTCUT","ORDERING","SERVICE_TYPE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(

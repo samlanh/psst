@@ -20,15 +20,12 @@ class Global_SubjectController extends Zend_Controller_Action {
 					);
 			}
 			$rs_rows = $db->getAllSujectName($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
-			 
 			$list = new Application_Form_Frmtable();
 			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","SHORTCUT","SCHOOL_OPTION","MODIFY_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'subject','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('shortcut'=>$link,'subject_titlekh'=>$link,'subject_titleen'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('shortcut'=>$link,'subject_titlekh'=>$link,'subject_titleen'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

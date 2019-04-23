@@ -15,13 +15,15 @@
 						(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 						ide.create_date,
 						ide.modify_date,
-						(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-						ide.status 
-					FROM 
-						`rms_itemsdetail` AS ide 
-					WHERE 
-						1
+						(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
+						 
+					
 				";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("ide.status");
+		$sql.=" FROM `rms_itemsdetail` AS ide WHERE 1 ";
+		
 		$orderby = " ORDER BY ide.items_id DESC,ide.ordering DESC, ide.id DESC ";
 		$where = ' ';
 		if(!empty($items_type)){
@@ -43,7 +45,6 @@
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
 		
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getSchoolOptionAccess('ide.schoolOption');
 		return $db->fetchAll($sql.$where.$orderby);
 	}
@@ -232,9 +233,10 @@
 			WHEN  ide.is_onepayment = 1 THEN '".$tr->translate("ONE_PAYMENTONLY")."'
 			END AS is_onepayment,
 			ide.modify_date,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 0 ";
-		
+			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
+			  ";
+		$sql.=$dbgb->caseStatusShowImage("ide.status");
+		$sql.=" FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 0 ";
 		$where = ' ';
 		if(!empty($items_type)){
 			$where.= " AND ide.items_type = ".$db->quote($items_type);
@@ -530,8 +532,10 @@
 			(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 			ide.price,
 			ide.modify_date,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 1 ";
+			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
+			  ";
+		$sql.=$dbgb->caseStatusShowImage("ide.status");
+		$sql.=" FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 1 ";
 		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
 		$where = ' ';
 		if(!empty($items_type)){

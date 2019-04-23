@@ -16,13 +16,12 @@
 					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = d.schoolOption LIMIT 1) AS schoolOption,
 					(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
 					d.create_date,
-					d.modify_date,
-					d.status 
-				FROM 
-					`rms_items` AS d 
-				WHERE 
-					1 
+					d.modify_date
 			";
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbgb->caseStatusShowImage("d.status");
+		$sql.=" FROM `rms_items` AS d  WHERE 1 ";
+		
 		$orderby = " ORDER BY d.type ASC, d.ordering DESC,d.id DESC ";
 		$where = ' ';
 		if(!empty($type)){
@@ -51,9 +50,11 @@
 	function getAllItemsOption($search = '',$type=null){
 		$db = $this->getAdapter();
 		$sql = "SELECT d.id,d.title,d.title_en,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
-				d.status FROM `rms_items` AS d WHERE 1 ";
-		
+			(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
+				  ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("d.status");
+		$sql.=" FROM `rms_items` AS d WHERE 1 ";
 		$where = ' ';
 		if(!empty($type)){
 			$where.= " AND d.type = ".$db->quote($type);
@@ -69,7 +70,6 @@
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getSchoolOptionAccess('d.schoolOption');
 		
 		$orderby = " ORDER BY d.type ASC, d.id DESC ";

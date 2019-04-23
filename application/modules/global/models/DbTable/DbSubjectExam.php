@@ -81,11 +81,12 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					shortcut,
 					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
 					date,
-					(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) as user_name,
-					status
-				FROM 
-					rms_subject   
-				WHERE 1 ";
+					(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) as user_name
+			 ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM `rms_subject` AS ide WHERE 1 ";
+		
 		$order=" order by id DESC";
 		$where = '';
 		if(empty($search)){

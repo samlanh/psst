@@ -68,12 +68,14 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 					WHEN  types = 1 THEN '".$tr->translate("STUDENT_DOCUMENT")."'
 					WHEN  types = 2 THEN '".$tr->translate("TEACHER_DOCUMENT")."'
 					END types,
-				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
-					status
-				FROM 
-					rms_document_type ";
-		$order = ' ORDER BY id DESC '; 
+				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
+				";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM `rms_document_type` ";
 		$where = ' WHERE name!="" ';
+		$order = ' ORDER BY id DESC ';
 		if(empty($search)){
 			return $db->fetchAll($sql.$order);
 		}

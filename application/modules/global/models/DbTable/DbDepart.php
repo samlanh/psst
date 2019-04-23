@@ -55,9 +55,12 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 				  depart_namekh,
 				  depart_nameen,
 				  create_date,
-				  status,
 				  (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
-				  FROM `rms_department` where 1";
+				";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM `rms_department`  WHERE 1 ";
+		
 		$where = '';
 		$order = ' ORDER BY id DESC ';
 		if(empty($search)){

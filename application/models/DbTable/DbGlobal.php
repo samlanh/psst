@@ -121,7 +121,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$session_user=new Zend_Session_Namespace('authstu');
    	return $session_user->user_id;
    }
-   
+   public  function caseStatusShowImage($status="status"){
+   	$base_url = Zend_Controller_Front::getInstance()->getBaseUrl();
+   	$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
+   	$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
+   	$string=", CASE
+   	WHEN  $status = 1 THEN '$imgtick'
+   	WHEN  $status = 0 THEN '$imgnone'
+   	END AS status ";
+   	return $string;
+   }
    function getAllUser($branchId=null){
 	   	$db = $this->getAdapter();
 	   	$sql="SELECT

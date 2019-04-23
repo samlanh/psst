@@ -23,8 +23,6 @@ class Global_GradeController extends Zend_Controller_Action {
 	    	}
 	    	$type=1; //Degree
 	    	$rs_rows= $db->getAllItemsDetail($search,$type);
-	    	$glClass = new Application_Model_GlobalClass();
-	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
 	    	$collumns = array("MAJOR_KHNAME","MAJOR_ENNAME","SHORTCUT","ORDERING","DEGREE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(

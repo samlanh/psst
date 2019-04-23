@@ -27,8 +27,6 @@ class Global_DocumentController extends Zend_Controller_Action {
 			}
  			$db = new Global_Model_DbTable_DbDocument();
  			$rs_rows= $db->getAllDocument($search);
- 			$glClass = new Application_Model_GlobalClass();
- 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("DOCUMENT_NAME","CREATED_DATE","DOCUMENT_TYPE","BY_USER","STATUS");

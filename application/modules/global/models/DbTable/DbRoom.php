@@ -69,6 +69,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 	
 	function getAllRooms($search){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = " SELECT 
 					room_id AS id,
 					(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id =branch_id LIMIT 1) AS branch,
@@ -76,12 +77,12 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 					floor,
 					max_std,
 					modify_date,
-					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id LIMIT 1 )AS user_name,
-					is_active as status
-				FROM 
-					rms_room
-				WHERE 
-					room_name != '' ";
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id LIMIT 1 )AS user_name
+					";
+		
+		$sql.=$dbp->caseStatusShowImage("is_active");
+		$sql.=" FROM rms_room AS g WHERE room_name != '' ";
+		
 		$order=" order by id DESC ";
 		$where = '';
 		if(!empty($search['title'])){
@@ -98,7 +99,6 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND is_active = ".$search['status'];
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getAccessPermission('branch_id');
 		return $db->fetchAll($sql.$where.$order);	
 	}	

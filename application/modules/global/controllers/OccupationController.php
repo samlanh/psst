@@ -20,8 +20,6 @@ class Global_OccupationController extends Zend_Controller_Action {
 			}
 			$db = new Global_Model_DbTable_DbOccupation();
 			$rs_rows= $db->getAllOccupation($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("OCCUPATION_KHNAME","CREATED_DATE","BY_USER","STATUS");

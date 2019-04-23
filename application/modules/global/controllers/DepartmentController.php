@@ -20,11 +20,9 @@ class Global_DepartmentController extends Zend_Controller_Action {
 			}
  			$db = new Global_Model_DbTable_DbDepart();
  			$rs_rows= $db->getAllDepartment($search);
- 			$glClass = new Application_Model_GlobalClass();
- 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("KH_NAME","NAME_EN","CREATE_DATE","STATUS","USER");
+			$collumns = array("KH_NAME","NAME_EN","CREATE_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'department','action'=>'edit',
 			);

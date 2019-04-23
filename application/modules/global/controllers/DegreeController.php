@@ -23,8 +23,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     	}
     	$type=1; //Degree
         $rs_rows = $db_dept->getAllItems($search,$type);
-        $glClass = new Application_Model_GlobalClass();
-        $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+
     	$list = new Application_Form_Frmtable();
     	$collumns = array("FACULTY_KHNAME","FACULTY_ENNAME","SHORTCUT","ORDERING","SCHOOL_OPTION","BY_USER","CREATE_DATE","MODIFY_DATE","STATUS");
     	$link=array(

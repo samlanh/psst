@@ -58,14 +58,14 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	}
 	function getAllOccupation($search){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = " SELECT 
 					occupation_id AS id,
 					occu_name,
 					create_date,
-					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
-					status
-				FROM 
-					rms_occupation ";
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name";
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM rms_occupation ";
 		
 		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE occu_name!="" ';

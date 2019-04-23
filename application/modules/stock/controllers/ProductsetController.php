@@ -24,9 +24,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
     		}
     		$type=3; //Product
 			$db =  new Global_Model_DbTable_DbItemsDetail();
-			$rows = $db->getAllProductSet($search,$type);
-			$rs_rows=new Application_Model_GlobalClass();
-			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
+			$rs_rows = $db->getAllProductSet($search,$type);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("PRODUCT_CODE","PRODUCT_NAME","PRODUCT_CATEGORY","PRICE",
 					"DATE","BY_USER","STATUS");

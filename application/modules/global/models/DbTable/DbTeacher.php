@@ -305,6 +305,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		
 		$sql = 'SELECT g.id, 
 				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 				g.teacher_code, 
@@ -318,9 +320,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				g.tel,
 				g.email,
 				g.note,
-				(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = g.schoolOption LIMIT 1) AS schoolOption,
-				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1 LIMIT 1) AS `status`
-				FROM rms_teacher AS g WHERE 1';
+				(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = g.schoolOption LIMIT 1) AS schoolOption
+				';
+		$sql.=$dbp->caseStatusShowImage("g.status");
+		$sql.=" FROM rms_teacher AS g WHERE 1 ";
 		
 		$where='';
 		if(!empty($search['title'])){
@@ -352,7 +355,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		}
 		$order_by=" ORDER BY id DESC";
 		
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getAccessPermission('g.branch_id');		
 		$where.= $dbp->getSchoolOptionAccess('g.schoolOption');
 		

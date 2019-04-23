@@ -25,10 +25,13 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
 		    	(CASE WHEN branch_id=0 THEN '$label' ELSE (SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = act.branch_id LIMIT 1) END) AS branch_name,
 		    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
 		    	act.`publish_date`,
-		    	act.`status`,
 		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
-		    	FROM `ln_news` AS act
-		    	WHERE act.`status`";
+		    	";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->caseStatusShowImage("act.`status`");
+    	$sql.=" FROM `ln_news` AS act WHERE 1 ";
+    	
     	$where='';
     	$from_date =(empty($search['start_date']))? '1': " act.publish_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " act.publish_date <= '".$search['end_date']." 23:59:59'";

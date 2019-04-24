@@ -9,6 +9,7 @@
 	table.tb-footer tr.style-head {
 	   font-weight: bold !important;
 	}
+	.hideprintdate{display:none !important;}
 </style>
 <div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<div class="card-box">
@@ -82,6 +83,7 @@
 	</form>
 	<div id="divPrint">
 		<style> 
+			.hideprintdate{display:block;}
 			th,td{ padding:0 1px;}
 			table{ border-collapse:collapse; margin:0 auto;
 			border-color:#000; }
@@ -128,7 +130,9 @@
 					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></span><br />
 					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 				</td>
-				<td width="25%"></td>
+				<td width="25%">
+					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+				</td>
 			</tr>
 			<tr>			
 				 <td colspan="3" id="exportExcel">
@@ -317,7 +321,7 @@
 							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($penalty,2)?></span></td>
 							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($other_income,2)?></span></td>
 							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($credit_memo,2)?></span></td>
-							<td><div style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal+$penalty+$other_income-$credit_memo,2)?></div></td>
+							<td><div style="color: red;border-bottom:3px double #000;font-weight: bold;font-size: 14px;">$ <?php echo number_format($all_grandtotal+$penalty+$other_income-$credit_memo,2)?></div></td>
 						</tr>
 					</table>
 				</td>

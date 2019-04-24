@@ -9,6 +9,7 @@ table.content-data tr.style-head,
 table.tb-footer tr.style-head {
    font-weight: bold !important;
 }
+.hideprintdate{display:none !important;}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
@@ -78,11 +79,12 @@ table.tb-footer tr.style-head {
 <style>
 .hover:hover{ background: #ddd;}
 </style>
-		<div id="divPrint" >
+	<div id="divPrint" >
 			<style>
 				table{
 					font-family:'Times New Roman','Khmer OS Battambang';
 				}
+				.hideprintdate{display:block;}
 				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 				table.content-data{
 					border-collapse:collapse;
@@ -119,7 +121,9 @@ table.tb-footer tr.style-head {
 						<div style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></div>
 						<?php if(!empty($this->search["start_date"])){?><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';line-height: 22px;"><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span><?php }?>
 					</td>
-					<td width="15%">&nbsp;</td>
+					<td width="15%">&nbsp;
+						<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel" valign="top">
@@ -303,7 +307,7 @@ table.tb-footer tr.style-head {
 								  			<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
 								  			<td><?php echo '$ '.number_format($paid_amount,2);?></td>
 								  			<td><?php echo $tr->translate("GRAND_TOTAL");?></td>
-											<td colspan="7" style="border-bottom:5px double #000;color:#006d1f; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
+											<td colspan="7" style="border-bottom:5px double #000;color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
 								  		</tr>
 								    </table>
 									<?php }?>

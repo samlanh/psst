@@ -7,6 +7,9 @@
 <script>
 	dojo.require("dijit.form.DateTextBox");
 </script>
+<style>
+.hideprintdate{display:none !important;}
+</style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
 		<div class="col-sm-12 border-botom">
@@ -35,6 +38,7 @@
 	</form>
 	<div id="divPrint">
 			<style type="text/css">
+				.hideprintdate{display:block;font-size:8px;white-space:nowrap;}
 				table{ 
 					border-collapse:collapse; margin:0 auto;
 					border-color:#000;
@@ -55,13 +59,13 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td width="15%" align="center">
+				<td width="20%" align="center">
 				</td>
-				<td width="70%" align="center">
-					<div style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
+				<td width="60%" align="center">
+					<div style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
 					<strong style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?>For <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
-				<td width="15%" align="center"></td>
+				<td width="20%" align="center"><label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>

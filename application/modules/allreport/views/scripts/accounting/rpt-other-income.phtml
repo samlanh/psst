@@ -9,6 +9,7 @@ table.content-data tr.style-head,
 table.tb-footer tr.style-head {
    font-weight: bold !important;
 }
+.hideprintdate{display:none !important;}
 </style>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 		<div class="card-box">
@@ -49,6 +50,7 @@ table.tb-footer tr.style-head {
 		</form>		
 	<div id="divPrint">
 		<style>
+			.hideprintdate{display:block;font-size:10px;white-space:nowrap;}
 			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			table{
 				font-family:'Times New Roman','Khmer OS Battambang';
@@ -84,16 +86,15 @@ table.tb-footer tr.style-head {
 					</tr>
 					<tr class="line"><td colspan="3"></td></tr>
 					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td width="15%" align="center">
+						<td width="20%" align="center">
 						</td>
-						<td width="70%" align="center">
-							<span style="padding-left: 0px;  color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_OTHER_INCOME')?></span><br />
+						<td width="60%" align="center">
+							<span style="padding-left: 0px;  color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_OTHER_INCOME')?></span><br />
 							<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>     
 						</td>
-						<td width="15%" align="center"></td>
+						<td width="20%" align="center">
+							<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+						</td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
@@ -112,7 +113,11 @@ table.tb-footer tr.style-head {
 									<td><?php echo $tr->translate('DATE')?></td>
 									<td><?php echo $tr->translate('USER')?></td>
 								</tr>
-							<?php $i=0; foreach ($this->row AS $row) { $i++;?>
+							<?php $i=0; 
+								  $total_income = 0;
+							foreach ($this->row AS $row) { $i++;
+								$total_income = $total_income+$row['total_amount'];
+							?>
 								<tr class="style-rowdata hover" >
 									<td align="center"><?php echo $i;?></td>
 									<td><?php echo $row['branch_name'];?></td>
@@ -124,7 +129,12 @@ table.tb-footer tr.style-head {
 									<td align="center"><?php echo date('d-m-Y',strtotime($row['date']));?></td>
 									<td><?php echo $row['name'];?></td>
 								</tr>
-							<?php }?>	
+							<?php }?>
+							<tr>
+								<td colspan="6" style="border: 1px solid #fff;border-top: 1px solid #000;"></td>
+								<td>$ <?php echo number_format($total_income,2);?></td>
+								<td colspan="2" style="border: 1px solid #fff;border-top: 1px solid #000;"></td>
+							</tr>	
 							</table>	
 						</td>
 					</tr>

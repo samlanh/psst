@@ -25,10 +25,8 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		}
     		$db = new Accounting_Model_DbTable_DbFee();
     		$rs_rows= $db->getAllTuitionFee($search);
-    		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","School Option","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","School Option","CREATED_DATE","PROCESS_TYPE","BY_USER","STATUS");
     		$link=array(
     			'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
@@ -93,6 +91,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		}
 
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$row = $_db->getFeeById($id);
 		$this->view->rs = $row;
 		$schoolOption = $row['school_option'];

@@ -22,8 +22,6 @@ class Accounting_DiscountController extends Zend_Controller_Action {
 			}
  			$db = new Accounting_Model_DbTable_DbDiscount();
  			$rs_rows= $db->getAllDiscount($search);
- 			$glClass = new Application_Model_GlobalClass();
- 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("DISCOUNT_TYPE","CREATED_DATE","BY_USER","STATUS");

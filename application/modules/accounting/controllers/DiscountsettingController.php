@@ -74,6 +74,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost())
 		{
 			$_data = $this->getRequest()->getPost();
@@ -90,6 +91,10 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 		}
 		$db = new Accounting_Model_DbTable_DbDiscountSetting();
 		$rows = $db->getDiscountsetById($id);
+		if (empty($rows)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/accounting/discountsetting");
+			exit();
+		}
 		$this->view->rs= $rows;
 		
 		$model = new Application_Model_DbTable_DbGlobal();		

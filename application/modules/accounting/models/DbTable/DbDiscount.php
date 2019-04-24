@@ -60,14 +60,16 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 	}
 	function getAllDiscount($search){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = " SELECT 
 					disco_id AS id,
 					dis_name,
 					create_date,
-				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
-					status
-				FROM 
-					rms_discount ";
+				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
+			";
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM rms_discount ";
+		
 		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE dis_name!="" ';
 		if(empty($search)){

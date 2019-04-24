@@ -45,6 +45,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 	public function getDiscountsetById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_dis_setting WHERE discount_id = ".$db->quote($id);
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -64,7 +66,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$this->update($_arr, $where);
 	}
 	function getAllDiscountset($search){
-	$db = $this->getAdapter();
+		
+		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = " SELECT 
 					g.discount_id AS id,
 					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1)AS branch,
@@ -72,10 +76,11 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 					g.dis_max,
 					g.start_date,
 					g.end_date,
-					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id LIMIT 1 )AS user_name,
-					(SELECT name_kh FROM rms_view WHERE TYPE=1 AND key_code =g.status LIMIT 1) AS status
-					FROM 
-					rms_dis_setting AS g ";
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id LIMIT 1 )AS user_name
+					";
+		$sql.=$dbp->caseStatusShowImage("g.status");
+		$sql.=" FROM rms_dis_setting AS g ";
+		
 		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE disname_id!="" ';
 		if(empty($search)){
@@ -94,7 +99,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
+		
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		return $db->fetchAll($sql.$where.$order);
 	}	

@@ -53,7 +53,7 @@ ol{margin: 10px;}
     	</div>
     	 <form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
-  				 if(this.validate()) {
+  				 if(this.validate()){
 					branch_id = dijit.byId('branch_id').get('value');
 					if(branch_id==''){
 						alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
@@ -101,30 +101,29 @@ ol{margin: 10px;}
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="degree" name="degree" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"><?php echo $tr->translate("SELECT_DEGREE")?></option>
+		                	<select id="degree" name="degree" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" >
+								<option value="-1"><?php echo $tr->translate("SELECT_DEGREE")?></option>
 								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
-									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
+								<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
 								<?php }}?>
-								</select>
+							</select>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="grade" name="grade" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"><?php echo $tr->translate("SELECT_GRADE")?></option>
-									<?php if(!empty($this->grade)){foreach ($this->grade as $grade){?>
-										<option value="<?php echo $grade['id'];?>"><?php echo $grade['name'];?></option>
-									<?php }}?>
-								</select>
+		                	<select id="grade" name="grade" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false">
+								<option value="-1"><?php echo $tr->translate("SELECT_GRADE")?></option>
+								<?php if(!empty($this->grade)){foreach ($this->grade as $grade){?>
+									<option value="<?php echo $grade['id'];?>"><?php echo $grade['name'];?></option>
+								<?php }}?>
+							</select>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<!-- <select id="session" name="session" onchange="filterStudent();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  > -->
-		                	<select id="session" name="session"  class="fullside" dojoType="dijit.form.FilteringSelect" type="text" readonly="readonly" >
+		                	<select id="session" name="session"  class="fullside" dojoType="dijit.form.FilteringSelect" type="text" readonly="readonly" queryExpr="*${0}*" autoComplete="false">
 								<option value="-1"><?php echo $tr->translate("CHOOSE_SESSION")?></option>
 							<?php if(!empty($this->session)){foreach ($this->session as $session){?>
 								<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
@@ -143,43 +142,34 @@ ol{margin: 10px;}
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ROOM_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect"   queryExpr="*${0}*" autoComplete="false">
-							   		<option value="-1"><?php echo $tr->translate("SELECT_ROOM")?></option>
-							   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
-							   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
-							   		<?php }}?>
-							   </select>
+		                	<select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false">
+						   		<option value="-1"><?php echo $tr->translate("SELECT_ROOM")?></option>
+						   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
+						   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
+						   		<?php }}?>
+						   </select>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-										<option value="1">ទី 1</option>
-										<option value="2">ទី 2</option>
-								</select>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
-										<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
-								</select>
+								<option value="1">ទី 1</option>
+								<option value="2">ទី 2</option>
+							</select>
 		                </div>
 		             </div>
 		         </div>
-		          <div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label  col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-		             </div>
-		             <div class="form-group">
-		                <div class="col-md-12 col-sm-12 col-xs-12">
-		                	<textarea class="fullside"  style="font-family:'Khmer Os Battambang';height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
-		                </div>
-		             </div>
-		           </div>
+	          	<div class="col-md-4 col-sm-4 col-xs-12">
+	    		<div class="form-group">
+	                <label class="control-label  col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+	             </div>
+	             <div class="form-group">
+	                <div class="col-md-12 col-sm-12 col-xs-12">
+	                	<textarea class="fullside"  style="font-family:'Khmer Os Battambang';height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
+	                </div>
+	             </div>
+	           </div>
 	    	</div>
 	    	<div class="card-box">
 	    		 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -192,8 +182,7 @@ ol{margin: 10px;}
 	    		 	</div>
 	    		 </div>
 	    		  <div class="col-md-12 col-sm-12 col-xs-12">
-	    		  	<labal id="liststudent">
-					</labal>
+	    		  	<labal id="liststudent"></labal>
 					<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
 					</table>
 	    		 </div>
@@ -201,7 +190,7 @@ ol{margin: 10px;}
 	    	<div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-              		 <input type="hidden" name="identity" id="identity"  value="" >
+              		<input type="hidden" name="identity" id="identity"  value="" >
 					<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
@@ -211,12 +200,11 @@ ol{margin: 10px;}
 	    </form>
     </div>
  </div>
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.DateTextBox");
 
 	var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade));?> );
@@ -224,7 +212,8 @@ dojo.require("dijit.form.DateTextBox");
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 		    store:years_store,
-		    autoComplete: true,                        
+		    queryExpr: "*${0}*",
+			autoComplete: false,                             
 		    required: true,
 		    id: "year_study",
 		    name: "year_study",   
@@ -243,7 +232,6 @@ function filterStudent(){
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
-
 	if(year==''){
 		return false;
 	}
@@ -270,7 +258,7 @@ function filterStudent(){
 				str='';
 				column = 0;
 				str='';
-				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
+				for(i=0;i<data.length;i++){ 
 					inx = i+1;
 					num++;
 					var gender='';
@@ -305,7 +293,7 @@ function filterStudent(){
 						str+='</td>';
 						str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value=""></td>';
 					str+='</tr>';
-				    if(inx!=1) {//identity set value 1,2,3,4,5
+				    if(inx!=1) {
 						var identity = $('#identity').val();
 						$('#identity').val(identity+','+inx);
 					} else {
@@ -321,18 +309,15 @@ function filterStudent(){
 	    error: function(err) {
 	    }
 	});
-	
 }
 function gender(sex){
 	if(sex==1){
 		sex='Male';
 	}else sex='Female';
-	return sex;
+		return sex;
 }
 </script>
-
-
-<script> //validate controll form 
+<script> 
 function AllowOnlyNumbers(e) {
     e = (e) ? e : window.event;
     var key = null;
@@ -363,22 +348,15 @@ function AllowOnlyNumbers(e) {
     ];
 
     key = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
-
     if (key && key < 48 || key > 57) {
-        //Allow: Ctrl + char for action save, print, copy, ...etc
         if ((e.ctrlKey && charsKeys.indexOf(key) != -1) ||
-            //Fix Issue: f1 : f12 Or Ctrl + f1 : f12, in Firefox browser
             (navigator.userAgent.indexOf("Firefox") != -1 && ((e.ctrlKey && e.keyCode && e.keyCode > 0 && key >= 112 && key <= 123) || (e.keyCode && e.keyCode > 0 && key && key >= 112 && key <= 123)))) {
             return true
         }
-            // Allow: Special Keys
         else if (specialKeys.indexOf(key) != -1) {
-            //Fix Issue: right arrow & Delete & ins in FireFox
             if ((key == 39 || key == 45 || key == 46 || key == 109)) {
-                //return (navigator.userAgent.indexOf("Firefox") != -1 && e.keyCode != undefined && e.keyCode > 0);
                 return true
             }
-                //DisAllow : "#" & "$" & "%"
             else if (e.shiftKey && (key == 35 || key == 36 || key == 37)) {
                 return false;
             }
@@ -394,13 +372,11 @@ function AllowOnlyNumbers(e) {
         return true;
        }
     }
-//////////////////////////////////////////////////
 function getInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
 	if(group==''){
-		//alert("Please Select Group");
-		 document.getElementById("table_row").innerHTML = '';
+		document.getElementById("table_row").innerHTML = '';
 		dijit.byId('group').focus();
 		return false;
 	}
@@ -410,7 +386,7 @@ function getInfoBygroup(){
 			'group_id': group
 		},
 		handleAs:"json",
-		load: function(data) {
+		load: function(data){
 			dijit.byId('year_study').set('value',data.academic_year);
 			dijit.byId('year_study').set('readOnly',true);
 			dijit.byId('degree').set('value',data.degree);
@@ -422,12 +398,10 @@ function getInfoBygroup(){
 			dijit.byId('room').set('value',data.room_id);
 			filterStudentBygroup();
 		},
-		error: function(err) {
-			alert(err);
+		error:function(err){
 		}
 	});
 }
-
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(){
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
@@ -450,7 +424,7 @@ function filterStudentBygroup(){
 				str='';
 				column = 0;
 				str='';
-				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
+				for(i=0;i<data.length;i++){
 					inx = i+1;
 					num++;
 					var gender='';
@@ -486,7 +460,7 @@ function filterStudentBygroup(){
 						str+='</td>';
 						str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
 					str+='</tr>';
-				    if(inx!=1) {//identity set value 1,2,3,4,5
+				    if(inx!=1) {
 						var identity = $('#identity').val();
 						$('#identity').val(identity+','+inx);
 					} else {
@@ -519,11 +493,9 @@ function CheckAll(){
 	}else{
 		 var arrays = identity.split(',');
 		 if(arrays!=""){
-	    	 for(var i=1;i<= arrays.length;i++) {
-	    		
+	    	 for(var i=1;i<= arrays.length;i++){
 	    		 if($("#check_all").is(':checked')){
 	    			 if($('#have_mistake'+i).is(':checked')){
-
 	    				 if(check_type==1){
 	    					 $('#mistake_types'+i).attr('checked', true); 
 	    				 }else if(check_type==2){
@@ -531,8 +503,6 @@ function CheckAll(){
 	    				 }else{
 	    					 $('#mistake_typeb'+i).attr('checked', true); 
 	    				 }
-		    			 
-	    			 	//$('input[value="'+check_type+'"]').attr("checked",true);
 	    			 }
 	    		 }else{
 	    			 $('input[value="'+check_type+'"]').attr("checked",false);
@@ -576,14 +546,13 @@ function getAllGroupByBranch(){
 		url: url_getgroup,
 		content:{
 			'branch_id':branch_id,'noaddnew':1
-			},
+		},
 		handleAs:"json",
 		load: function(data) {
 		    group_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('group').set('store',group_store);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

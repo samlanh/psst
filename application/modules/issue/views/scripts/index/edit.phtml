@@ -124,12 +124,12 @@
     </div>
 </div>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -141,7 +141,6 @@ dojo.ready(function(){
 	    name: "group",  
 	    class: 'fullside', 
 	    readOnly: true,
-	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
 	    	getStudetnOptionByGroup();
@@ -162,10 +161,9 @@ function getCompleteGroup(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
 		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		 dijit.byId('group').set('store',group_store);  
+		dijit.byId('group').set('store',group_store);  
 		return false;
 	}
-	
 	dojo.xhrPost({
 		url:url_getgroup,
 		content:{
@@ -185,16 +183,14 @@ function getCompleteGroup(){
 		}
 	});
 }
-
 var url_getgroupinfo = '<?php echo $this->url(array("module"=>"issue","controller"=>"index","action"=>"getgroupinfo"));?>';										
 function getGroupInfo(){
 	group = dijit.byId('group').get('value');
 	if(group=='' || group==-1){
-		 dijit.byId('dept_kh').set('value',""); 
-		    dijit.byId('dept_eng').set('value',"");  
+		dijit.byId('dept_kh').set('value',""); 
+		dijit.byId('dept_eng').set('value',"");  
 		return false;
-	}
-	
+	}	
 	dojo.xhrPost({
 		url: url_getgroupinfo,
 		content:{
@@ -202,15 +198,13 @@ function getGroupInfo(){
 			},
 		handleAs:"json",
 		load: function(data) {
-
 			if(oldgroup_id==group){
-				 dijit.byId('dept_kh').set('value','<?php echo $this->row['dept_kh'];?>'); 
+				dijit.byId('dept_kh').set('value','<?php echo $this->row['dept_kh'];?>'); 
 			    dijit.byId('dept_eng').set('value','<?php echo $this->row['dept_eng'];?>');  
 			}else{
 				dijit.byId('dept_kh').set('value',data.degree_kh+" ("+data.grade_kh+")"); 
 			    dijit.byId('dept_eng').set('value',data.degree_eng+" ("+data.grade_eng+")"); 
 			} 
-		   
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -237,10 +231,9 @@ function getStudetnOptionByGroup(){
 		url: url_studentgroup,
 		content:{
 			'group':group
-			},
+		},
 		handleAs:"json",
-		load: function(data) {
-			
+		load: function(data){
 			var student = '';
 			student+='<select multiple id="public-methods" name="public-methods[]">';
 			i = 0, size = data.length;
@@ -258,16 +251,13 @@ function getStudetnOptionByGroup(){
 			if(oldgroup_id==group){
 				initialize();
 			}
-			
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
-		error: function(err) {
+		error: function(err){
 			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
-	});
-	
+	});	
 }
-
 function initialize(){
 	var objess = [];
 	<?php if (!empty($this->rowdetail)){?>

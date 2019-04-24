@@ -44,16 +44,14 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 					'group_id'		=>$_data['group'],
 					'degree_id'		=>$_data['degree'],
 			        'student_id'	=>$_data['student'],
-					
 					'for_type'		=>$_data['for_type'],
 					'for_month'		=>$_data['for_month'],
 					'for_semester'	=>$_data['for_semester'],
-					
 					'issue_date'	=>$_data['issue_date'],
 					'return_date'	=>$_data['return_date'],
 					'teacher_comment'=>$_data['teacher_comment'],
 					'note'			=>$_data['note'],
-					
+					'status'		=>1,
 					'create_date'	=>date("Y-m-d H:i:s"),
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'user_id'		=>$this->getUserId(),
@@ -88,20 +86,16 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 					'branch_id'		=>$_data['branch_id'],
 					'group_id'		=>$_data['group'],
 			        'student_id'	=>$_data['student'],
-					
 					'for_type'		=>$_data['for_type'],
 					'for_month'		=>$_data['for_month'],
 					'for_semester'	=>$_data['for_semester'],
-					
 					'issue_date'	=>$_data['issue_date'],
 					'return_date'	=>$_data['return_date'],
 					'teacher_comment'=>$_data['teacher_comment'],
 					'feedback'		=>$_data['feedback'],
 					'note'			=>$_data['note'],
-					
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'user_id'		=>$this->getUserId(),
-					
 					'status'		=>$_data['status']
 				);
 			$where=" id = $id ";

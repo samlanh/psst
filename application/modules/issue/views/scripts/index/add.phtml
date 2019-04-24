@@ -103,7 +103,7 @@
 								<div id="rowdata"></div>
 							</div>
 							 <div class="clearfix"></div>
-			         	</div>
+			         </div>
 		         </div>
     		</div>
     		<div class="clearfix"></div>
@@ -119,11 +119,12 @@
 </div>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.data.ObjectStore");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
+
 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -136,7 +137,6 @@ dojo.ready(function(){
 	    name: "group",  
 	    class: 'fullside', 
 	    readonly:false,
-	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
 	    	getStudetnOptionByGroup();
@@ -149,6 +149,7 @@ dojo.ready(function(){
 
 var url_getgroup = '<?php echo $this->url(array("module"=>"issue","controller"=>"index","action"=>"getgroupcomplete"));?>';										
 function getCompleteGroup(){
+	
 	 dijit.byId('group').reset();  
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -156,7 +157,6 @@ function getCompleteGroup(){
 		 dijit.byId('group').set('store',group_store);  
 		return false;
 	}
-	
 	dojo.xhrPost({
 		url:url_getgroup,
 		content:{
@@ -166,7 +166,6 @@ function getCompleteGroup(){
 		load: function(data) {
 			group_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('group').set('store',group_store);  
-		   
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -195,7 +194,7 @@ function getGroupInfo(){
 		    dijit.byId('dept_eng').set('value',data.degree_eng+" ("+data.grade_eng+")");  
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
-		error: function(err) {
+		error: function(err){
 			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
 	});
@@ -243,6 +242,5 @@ function getStudetnOptionByGroup(){
 			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
 	});
-	
 }
 </script>

@@ -14,10 +14,10 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search' => '',
-						'branch_id' => '',
-						'group' => '',
-						'status_search' => -1,
+					'adv_search' => '',
+					'branch_id' => '',
+					'group' => '',
+					'status_search' => -1,
 				);
 			}
 			
@@ -35,9 +35,7 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
-		
 		$frm = new Issue_Form_FrmIssueLetterofpraise();
 		$frm->FrmIssueCertificate(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
@@ -48,7 +46,6 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				
 				$sms="INSERT_SUCCESS";
 				$checkExist = $_db->checkGroupIssueLetterpraise($_data);
 				if(!empty($checkExist)){
@@ -56,7 +53,6 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
 					exit();
 				}
-				
 				$_db->addIssueLetterpraise($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
@@ -88,7 +84,6 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		$row =$_db->getIssueLetterofpraiseById($id);
@@ -105,7 +100,4 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
 	}
-	
-	
 }
-

@@ -1,9 +1,7 @@
 <?php
 class Issue_StudentattendanceController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
-     	/* Initialize action controller here */
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -32,7 +30,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			$this->view->search=$search;
 			$rs_rows = $db->getAllAttendence($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array( "GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","ATTENDANCE_DATE","SUBJECT","STATUS");
+			$collumns = array("BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","ATTENDANCE_DATE","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'studentattendance','action'=>'edit',
 			);
@@ -40,6 +38,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -50,7 +49,6 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
-		
 	}
 	public	function addAction(){
 		$db = new Issue_Model_DbTable_DbStudentAttendance();
@@ -88,11 +86,8 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try {
-				//if(isset($_data['save_close'])){
-					$rs =  $_model->updateStudentAttendence($_data);
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/studentattendance");
-				//} 
-		
+				$rs =  $_model->updateStudentAttendence($_data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/studentattendance");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -113,9 +108,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->group = $db_global->getAllgroupStudyNotPass($result['group_id']);
 		$this->view->room = $row =$db_global->getAllRoom();
 		$this->view->grade = $db_global->getAllGrade();
-		
 	}
-	
 	function getSubjectAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

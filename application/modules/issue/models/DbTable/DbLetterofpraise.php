@@ -112,7 +112,6 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 			$where=" id =".$id;
 			$this->update($_arr, $where);
 			
-			
 			$where1 = " letterpraise_id = $id ";
 			$this->_name='rms_issue_letterpraise_detail';
 			$this->delete($where1);
@@ -130,7 +129,6 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 				$this->_name='rms_issue_letterpraise_detail';
 				$this->insert($arr);
 			}
-				
 			$_db->commit();
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

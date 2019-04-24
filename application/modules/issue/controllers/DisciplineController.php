@@ -1,15 +1,11 @@
 <?php
 class Issue_DisciplineController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
      /* Initialize action controller here */
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
 	public function indexAction(){
 		try{
@@ -40,6 +36,7 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -68,10 +65,8 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$this->view->group = $db->getAllgroupStudy();
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		
 		$branch = $db_global->getAllBranch();
 		$this->view->branch = $branch;
 		

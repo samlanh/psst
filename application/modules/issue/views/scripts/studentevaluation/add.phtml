@@ -76,7 +76,7 @@
 		            <div class="form-group">
 		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
 								<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 									<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
 								<?php }}?>
@@ -88,7 +88,7 @@
 							<?php echo $tr->translate("FOR_SEMESTER");?>
 						</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+							<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" queryExpr="*${0}*" autoComplete="false">								
 								<option value="1"><?php echo $tr->translate("SEMESTER1");?></option>
 								<option value="2"><?php echo $tr->translate("SEMESTER2");?></option>
 							</select>
@@ -129,7 +129,7 @@
 					<div class="form-group">
 						<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> </label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<select id="session" name="session" onchange="" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+							<select id="session" name="session" onchange="" class="fullside" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false"  >
 								<option value="-1"><?php echo $tr->translate("CHOOSE_SESSION");?></option>
 							<?php if(!empty($this->session)){foreach ($this->session as $session){?>
 								<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>

@@ -105,21 +105,17 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{
-// 			$session_user=new Zend_Session_Namespace('authstu');
-// 			$branch_id = $session_user->branch_id;
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],
 					'group_id'=>$_data['group'],
-// 					'mistake_date'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'date_attendence'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'date_create'=>date("Y-m-d"),
 					'modify_date'=>date("Y-m-d"),			
 					'for_semester'=> $_data['for_semester'],
 					'note'=>$_data['note'],
-					'status'=>$_data['status'],
-// 					'for_session'=>$_data['session_type'],
+					'status'=>1,
 					'user_id'=>$this->getUserId(),
-					'type'=>2, //for displince
+					'type'=>2, 
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new  Application_Model_DbTable_DbGlobal();
@@ -131,14 +127,11 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 						if (!empty($_data['mistake_type'.$i])){
 							$dbpush->getTokenUser($_data['student_id'.$i],null, 3);
 							$arr = array(
-// 									'discipline_id'=>$id,
 									'attendence_id'=>$id,
 									'stu_id'=>$_data['student_id'.$i],
-// 									'mistake_type'=>$_data['mistake_type'.$i],
 									'attendence_status'=>$_data['mistake_type'.$i],
 									'description'=>$_data['comment'.$i],
 							);
-// 							$this->_name ='rms_student_discipline_detail';
 							$this->_name ='rms_student_attendence_detail';
 							$this->insert($arr);
 						}
@@ -161,13 +154,11 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],
 					'group_id'=>$_data['group'],
-// 					'mistake_date'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'date_attendence'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'modify_date'=>date("Y-m-d"),
 					'for_semester'=> $_data['for_semester'],
 					'note'=>$_data['note'],
 					'status'=>$_data['status'],
-// 					'for_session'=>$_data['session_type'],
 					'user_id'=>$this->getUserId(),
 					'type'=>2, //for displince
 			);
@@ -175,7 +166,6 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 			$db->getProfiler()->setEnabled(true);
 			$this->update($_arr, $where);
 			
-// 		   $this->_name='rms_student_discipline_detail';
 		   $this->_name ='rms_student_attendence_detail';
 		   $this->delete("attendence_id=".$_data['id']);
 		  
@@ -185,26 +175,21 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 					if(isset($_data['have_mistake'.$i])){
 						if (!empty($_data['mistake_type'.$i])){
 							$arr = array(
-// 									'discipline_id'=>$_data['id'],
 									'attendence_id'=>$_data['id'],
 									'stu_id'=>$_data['student_id'.$i],
-									//'mistake_type'=>$_data['mistake_type'.$i],
 									'attendence_status'=>$_data['mistake_type'.$i],
 									'description'=>$_data['comment'.$i],
 							);
-// 							$this->_name ='rms_student_discipline_detail';
 							$this->_name ='rms_student_attendence_detail';
 							$this->insert($arr);
 						}
 					}
 				}
 			}
-// 			exit();
 		  $db->commit();
 		}catch (Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
 	function getStudyYears(){

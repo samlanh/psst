@@ -14,13 +14,12 @@ class Issue_IndexController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search' => '',
-						'branch_id' => '',
-						'group' => '',
-						'status_search' => -1,
+					'adv_search' => '',
+					'branch_id' => '',
+					'group' => '',
+					'status_search' => -1,
 				);
 			}
-			
 			$db = new Issue_Model_DbTable_DbCertification();
 			$rs_rows= $db->getAllIssueCertification($search);
 			$list = new Application_Form_Frmtable();
@@ -34,7 +33,6 @@ class Issue_IndexController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		
 		$frm = new Issue_Form_FrmIssueCertificate();
@@ -54,7 +52,6 @@ class Issue_IndexController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull($sms,"/issue/index");
 					exit();
 				}
-				
 				$_db->addIssueCertificate($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,"/issue/index");
@@ -66,14 +63,12 @@ class Issue_IndexController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		$frm = new Issue_Form_FrmIssueCertificate();
 		$frm->FrmIssueCertificate(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
-	}
-	
-	public function editAction(){
+  }
+public function editAction(){
 		$_db = new Issue_Model_DbTable_DbCertification();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();

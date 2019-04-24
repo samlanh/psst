@@ -24,7 +24,6 @@
 					 	<input id="group" />
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<?php //echo $frm->getElement("study_year");?>
 					 	<input id="study_year" />
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
@@ -95,7 +94,6 @@ dojo.ready(function(){
 	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
-		    
 	    }
 	}, "group");
 	
@@ -132,7 +130,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -149,7 +146,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -160,7 +157,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

@@ -39,17 +39,19 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     	
     	$dept = new Zend_Dojo_Form_Element_TextBox('dept_eng');
     	$dept->setAttribs(array(
-    			'dojoType'=>'dijit.form.TextBox',
+    			'dojoType'=>'dijit.form.ValidationTextBox',
     			'class'=>'fullside height-text',
+    			'required'=>true,
     			'placeholder'=>$this->tr->translate("FACULTY_ENNAME"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Department")
     	));
     	
     	$dept_kh = new Zend_Dojo_Form_Element_TextBox('dept_kh');
     	$dept_kh->setAttribs(array(
-    			'dojoType'=>'dijit.form.TextBox',
+    			'dojoType'=>'dijit.form.ValidationTextBox',
     			'class'=>'fullside height-text',
     			'placeholder'=>$this->tr->translate("FACULTY_KHNAME"),
+    			'required'=>true,
     			'missingMessage'=>$this->tr->translate("Forget Enter Department")
     	));
     	

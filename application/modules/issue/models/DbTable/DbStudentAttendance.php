@@ -7,10 +7,8 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
-	
     function getAllAttendence($search=null){
     	$db=$this->getAdapter();
-    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$currentLang = $dbp->currentlang();
     	$colunmname='title_en';
@@ -18,16 +16,16 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     		$colunmname='title';
     	}
     	$sql="SELECT sa.`id`,
-    	(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sa.branch_id LIMIT 1) AS branch_name,
-    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS group_name,
-    	(SELECT (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS academy,
-    	(SELECT (SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS degree,
-    	(SELECT (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS grade,
-    	(SELECT g.semester FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS semester,
-    	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
-    	(SELECT
-    	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
-    	sa.`date_attendence` ";
+	    	(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sa.branch_id LIMIT 1) AS branch_name,
+	    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS group_name,
+	    	(SELECT (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS academy,
+	    	(SELECT (SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS degree,
+	    	(SELECT (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS grade,
+	    	(SELECT g.semester FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS semester,
+	    	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
+	    	(SELECT
+	    	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
+	    	sa.`date_attendence` ";
     	$sql.=$dbp->caseStatusShowImage("sa.`status`");
     	$sql.=" FROM `rms_student_attendence` AS sa ";
     	$where =' WHERE sa.`type` = 1 ';
@@ -62,21 +60,19 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{
-// 			$session_user=new Zend_Session_Namespace('authstu');
-// 			$branch_id = $session_user->branch_id;
 			$_arr = array(
-					'branch_id'=>$_data['branch_id'],
-					'group_id'=>$_data['group'],
-					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
-					'date_create'=>date("Y-m-d"),
-					'modify_date'=>date("Y-m-d"),
-					'subject_id'=>$_data['subject'],
-					'for_semester'=> $_data['for_semester'],
-					'note'=>$_data['note'],
-					'status'=>$_data['status'],
-					'user_id'=>$this->getUserId(),
-					'for_session'=>$_data['session_type'],
-					'type'=>1, //for attendence
+				'branch_id'=>$_data['branch_id'],
+				'group_id'=>$_data['group'],
+				'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
+				'date_create'=>date("Y-m-d"),
+				'modify_date'=>date("Y-m-d"),
+				'subject_id'=>$_data['subject'],
+				'for_semester'=> $_data['for_semester'],
+				'note'=>$_data['note'],
+				'status'=>1,
+				'user_id'=>$this->getUserId(),
+				'for_session'=>$_data['session_type'],
+				'type'=>1, //for attendence
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
@@ -88,10 +84,10 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 							$dbpush->getTokenUser($_data['student_id'.$i],null, 2);
 						}
 						$arr = array(
-								'attendence_id'=>$id,
-								'stu_id'=>$_data['student_id'.$i],
-								'attendence_status'=>$_data['attedence'.$i],
-								'description'=>$_data['comment'.$i],
+							'attendence_id'=>$id,
+							'stu_id'=>$_data['student_id'.$i],
+							'attendence_status'=>$_data['attedence'.$i],
+							'description'=>$_data['comment'.$i],
 						);
 						$this->_name ='rms_student_attendence_detail';
 						$this->insert($arr);
@@ -100,19 +96,15 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			}
 		  $db->commit();
 		}catch (Exception $e){
-			
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			$db->rollBack();
 		}
    }
    public function updateStudentAttendence($_data){
-		//print_r($_data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-// 			$session_user=new Zend_Session_Namespace('authstu');
-// 			$branch_id = $session_user->branch_id;
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],
 					'group_id'=>$_data['group'],
@@ -138,17 +130,16 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 				if(!empty($ids))foreach ($ids as $i){
 					if ($_data['attedence'.$i]!=1){
 						$arr = array(
-								'attendence_id'=>$_data['id'],
-								'stu_id'=>$_data['student_id'.$i],
-								'attendence_status'=>$_data['attedence'.$i],
-								'description'=>$_data['comment'.$i],
+							'attendence_id'=>$_data['id'],
+							'stu_id'=>$_data['student_id'.$i],
+							'attendence_status'=>$_data['attedence'.$i],
+							'description'=>$_data['comment'.$i],
 						);
 						$this->_name ='rms_student_attendence_detail';
 						$this->insert($arr);
 					}
 				}
 			}
-// 			exit();
 		  $db->commit();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -167,8 +158,6 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$order);
 	}
-	
-
 	function getAllYears(){
 		$db = $this->getAdapter();
 		$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
@@ -176,7 +165,6 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);
 	}
-
 	function getGroupName($academic,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
@@ -199,14 +187,12 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 				WHERE sd.score_id =$id ";
 		return $db->fetchAll($sql);
 	}
-
 	function getAllGrade($degree){
 		$db = $this->getAdapter();
 		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$degree;
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);
 	}
-	
 	function getStudent($year,$grade,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex
@@ -218,14 +204,12 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$order=" ORDER BY stu_code DESC";
 		return $db->fetchAll($sql.$order);
 	}
-	
 	function getStudentByGroup($group_id){
 		$db=$this->getAdapter();
 		$sql="SELECT 
 				sgh.`stu_id`,
 				 s.stu_code AS stu_code,
 				CONCAT(s.stu_enname,' - ',s.stu_khname) AS stu_name,
-				
 				s.sex AS sex
 			 FROM 
 			 	`rms_group_detail_student` AS sgh,
@@ -236,12 +220,9 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 				AND sgh.status = 1
 				AND sgh.type = 1
 				AND sgh.`group_id`=".$group_id;
-		
 		$order=" ORDER BY s.stu_khname ASC";
-		
 		return $db->fetchAll($sql.$order);
 	}
-	
 	function getSubjectBygroup($group_id){
 		$db=$this->getAdapter();
 		$sql="SELECT gsd.`subject_id` as id,
@@ -259,7 +240,6 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){
 		$db = $this->getAdapter();
-// 		$sql="SELECT sdd.`mistake_type`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_discipline_detail` AS sdd WHERE sdd.`discipline_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		return $db->fetchRow($sql);
 	}
@@ -273,13 +253,11 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			g.status=1 
 			AND g.is_pass!=1
 			ORDER BY group_code ASC,g.degree ASC ";
-
 		return $db->fetchAll($sql);
 	}
 	function getAttendeceStatus($att_id , $stu_id){
 		$db = $this->getAdapter();
-		$sql = "
-				select 
+		$sql = "select 
 					attendence_status,
 					description 
 				from 
@@ -289,10 +267,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					sad.attendence_id = sa.id
 					and sa.type = 1
 					and sa.id = $att_id
-					and sad.stu_id = $stu_id
-			";
-		
+					and sad.stu_id = $stu_id ";
 		return $db->fetchRow($sql);
 	}
 }
-

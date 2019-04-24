@@ -8,7 +8,7 @@
 		<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Issue Letter Of Praise');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_ISSUE_HORNOR');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -43,12 +43,8 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.DateTextBox");
 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -80,7 +76,6 @@ function getCompleteGroup(){
 		 dijit.byId('group').set('store',group_store);  
 		return false;
 	}
-	
 	dojo.xhrPost({
 		url:url_getgroup,
 		content:{
@@ -93,7 +88,6 @@ function getCompleteGroup(){
 		    if(oldBranch == branch_id ){
 		    	 dijit.byId('group').set('value','<?php echo $this->search['group'];?>'); 
 		    }
-		   
 		},
 		error: function(err) {
 			document.getElementsByClassName("overlay")[0].style.display="none";s

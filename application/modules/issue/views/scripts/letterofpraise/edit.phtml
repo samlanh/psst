@@ -97,7 +97,6 @@
 								</tr>
 							</thead>
 							<tbody id="table_row">
-							
 							</tbody>
 						</table>
 						<input type="hidden" name="identity" id="identity"  />
@@ -109,7 +108,7 @@
 	        <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		 <input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
-				dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
             </div>
         </form>
@@ -121,7 +120,6 @@ dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -132,7 +130,6 @@ dojo.ready(function(){
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
-	    readOnly: true,
 	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
@@ -157,7 +154,6 @@ function getCompleteGroup(){
 		 dijit.byId('group').set('store',group_store);  
 		return false;
 	}
-	
 	dojo.xhrPost({
 		url:url_getgroup,
 		content:{
@@ -177,7 +173,6 @@ function getCompleteGroup(){
 		}
 	});
 }
-
 var url_getgroupinfo = '<?php echo $this->url(array("module"=>"issue","controller"=>"index","action"=>"getgroupinfo"));?>';										
 function getGroupInfo(){
 	group = dijit.byId('group').get('value');
@@ -186,7 +181,6 @@ function getGroupInfo(){
 	     dijit.byId('grade').set('value',"");   
 		return false;
 	}
-	
 	dojo.xhrPost({
 		url: url_getgroupinfo,
 		content:{
@@ -194,7 +188,6 @@ function getGroupInfo(){
 			},
 		handleAs:"json",
 		load: function(data) {
-
 			if(oldgroup_id==group){
 				 dijit.byId('academic_year').set('value','<?php echo $this->row['academic_year'];?>'); 
 			    dijit.byId('grade').set('value','<?php echo $this->row['grade'];?>');  
@@ -202,7 +195,6 @@ function getGroupInfo(){
 				dijit.byId('academic_year').set('value',data.year); 
 			    dijit.byId('grade').set('value',data.group_code);  
 			} 
-		   
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -210,7 +202,6 @@ function getGroupInfo(){
 		}
 	});
 }
-
 var col = 0;
 var url_studentgroup = "<?php echo $this->url(array('module'=>'issue','controller'=>'index','action'=>'get-all-student')); ?>";
 function getStudetnOptionByGroup(){
@@ -238,7 +229,6 @@ function getStudetnOptionByGroup(){
 					template+='<td align="center"><input style="width:100%;  text-align:center;" dojoType="dijit.form.NumberTextBox" class="fullside" name="rank_'+col+'" id="rank_'+col+'"  value="" type="text"></td>';	
 					template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';
 				template+='</tr>';
-
 				if($("#identity").val()!="") {
 					var identity = $("#identity").val();
 					$("#identity").val(identity+','+col);
@@ -247,7 +237,6 @@ function getStudetnOptionByGroup(){
 			dojo.html.set(dojo.byId("table_row"),template , {
 			     parseContent: true,
 			});
-
 			if(oldgroup_id == group){
 				initailize();
 		   	}
@@ -272,7 +261,6 @@ function CheckAll(index){
 				});
 			}
 	}else{
-		 // Unchecks it
 		var a = $('.checkedrow:checked').length;
 		if(a == b ){
 			$('#check_all').attr('checked', true); // checks it
@@ -281,7 +269,6 @@ function CheckAll(index){
 		}
 	}
 }
-
 function initailize(){
 	var identitys = $("#identity").val();
 	var arrray = identitys.split(',');
@@ -296,5 +283,4 @@ function initailize(){
 	}
 	<?php }?>
 }
-
 </script>

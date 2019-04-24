@@ -46,9 +46,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	public function fullResultAction(){
-		
-	}
+	
 	public	function addAction(){
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);

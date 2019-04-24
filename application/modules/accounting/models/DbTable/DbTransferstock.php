@@ -9,13 +9,16 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     }
     function getAllTransfer($search=null){  
     	$db=$this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql = "SELECT s.id,s.transfer_no,s.transfer_date,
     	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=s.from_location LIMIT 1) as fromlocation,
     	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=s.to_location LIMIT 1) as tolocation,
     	s.note,
-    	(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) as user_name,
-    	s.status
-    	FROM `rms_transferstock` AS s WHERE 1 ";
+    	(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) as user_name ";
+    	
+    	$sql.=$dbp->caseStatusShowImage("s.status");
+    	$sql.=" FROM `rms_transferstock` AS s WHERE 1 ";
+    	
     	//(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code=s.status ) as status
     	$from_date =(empty($search['start_date']))? '1': " s.transfer_date>= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " s.transfer_date <= '".$search['end_date']." 23:59:59'";
@@ -27,6 +30,8 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 	    	$s_where[] = " s.note LIKE '%{$s_search}%'";
 	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
+// 	    $where.=$dbp->getAccessPermission('s.from_location');
+	    
     	$order=" ORDER BY s.id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }

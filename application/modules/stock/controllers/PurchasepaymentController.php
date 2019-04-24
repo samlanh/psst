@@ -24,9 +24,7 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
     			);
     		}
 			$db =  new Stock_Model_DbTable_DbPurchasePayment();
-			$rows = $db->getAllPurchasePayment($search);
-			$rs_rows=new Application_Model_GlobalClass();
-			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
+			$rs_rows = $db->getAllPurchasePayment($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","RECEIPT_NO","SUPPLIER_NAME","BALANCE","TOTAL_PAID","TOTAL_DUE","PAID_BY",
 					"DATE","STATUS");

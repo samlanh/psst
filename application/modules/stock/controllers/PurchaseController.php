@@ -24,14 +24,12 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     		}
 			$db =  new Stock_Model_DbTable_DbPurchase();
 			$rows = $db->getAllSupPurchase($search);
-			$rs_rows=new Application_Model_GlobalClass();
-			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","TEL","EMAIL","AMOUNT_DUE","DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'purchase','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array( 'branch_name'=>$link,'supplier_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rows,array( 'branch_name'=>$link,'supplier_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Application Error");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -74,6 +72,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;

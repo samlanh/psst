@@ -23,15 +23,13 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     			);
     		}
 			$db =  new Accounting_Model_DbTable_DbRequestProduct();
-			$rows = $db->getAllRequest($search);
-			$rs_rows=new Application_Model_GlobalClass();
-			$rows=$rs_rows->getImgActive($rows, BASE_URL);
+			$rs_rows = $db->getAllRequest($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","REQUEST_NO","REQUEST_FOR","FOR_SECTION","PURPOSE","REQUEST_DATE","TOTAL","USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'requestproduct','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_for'=>$link,'purpose'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('request_no'=>$link,'request_for'=>$link,'purpose'=>$link,));
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error");
@@ -90,12 +88,13 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try{
 				$db = new Accounting_Model_DbTable_DbRequestProduct();
-				$row = $db->updateRequest($_data);
+				 $db->updateRequest($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/requestproduct");
 				}else{
@@ -108,7 +107,12 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 			}
 		}
 		$_pur = new Accounting_Model_DbTable_DbRequestProduct();
-		$this->view->row=$_pur->getRequestById($id);
+		$row = $_pur->getRequestById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/stock/requestproduct");
+			exit();
+		}
+		$this->view->row= $row;
 		$this->view->row_detail=$_pur->getRequestDetail($id);
 		$this->view->rq_code=$_pur->getRequestCode();
 		$req_for = $_pur->getAllRequestFor();

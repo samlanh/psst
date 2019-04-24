@@ -11,14 +11,17 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     }
     function getAllAdjustStock($search=null){
     	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	
     	$sql="SELECT id,
     			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
     			adjust_no,request_name,note,request_date,
     		   (SELECT SUM(rd.qty_after) FROM rms_adjuststock_detail AS rd WHERE rd.adjuststock_id=rms_adjuststock.id LIMIT 1)AS total_qty,
-    		   status,
 			   (SELECT first_name FROM rms_users WHERE id=rms_adjuststock.user_id LIMIT 1) AS user_name
-			   FROM 
-    		rms_adjuststock WHERE 1 ";
+    		 ";
+    	$sql.=$dbp->caseStatusShowImage("status");
+    	$sql.=" FROM rms_adjuststock WHERE 1 ";
+    	
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
@@ -37,7 +40,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	if($search['branch_id']>0 and !empty($search['branch_id'])){
     		$where.=" AND branch_id=".$search['branch_id'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	
     	$sql.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
@@ -218,7 +221,9 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
  	}
 	function getAdjustStockById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_adjuststock WHERE id=$id";
+		$sql="SELECT * FROM rms_adjuststock WHERE id=$id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission("branch_id");
 		return $db->fetchRow($sql);
 	}
 	

@@ -23,8 +23,6 @@ class Stock_TransferController extends Zend_Controller_Action {
     			);
     		}
     		$rs_rows= $db->getAllTransfer($search);
-    		$rs_row=new Application_Model_GlobalClass();
-    		$rs_rows=$rs_row->getImgActive($rs_rows, BASE_URL);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("TRANSFER_NUMBER","TRANSFER_DATE","FROM_LOCATION","TO_LOCATION","NOTE","BY_USER","STATUS");
     		$link=array(
@@ -81,7 +79,12 @@ class Stock_TransferController extends Zend_Controller_Action {
 			}
 		}
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$row = $db->getTransferById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/stock/transfer");
+			exit();
+		}
 		$this->view->rs = $row;
 		$this->view->rsdetail = $db->getTransferByIdDetail($id,$row['from_location']);
 		$db = new Application_Model_DbTable_DbGlobal();

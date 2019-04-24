@@ -11,20 +11,21 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     }
     function getAllRequest($search=null){
     	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql="SELECT 
-    				id,
-    				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id= branch_id LIMIT 1) AS branch_name,
-    				request_no,
-    				(SELECT title from rms_request_for as rf where rf.id = request_for LIMIT 1) as request_for,
-    				(SELECT title from rms_for_section as fs where fs.id = for_section  LIMIT 1) as for_section,
-    				purpose,
-    				request_date,
-			       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id  LIMIT 1) AS total_qty,
-			       (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name,
-			       status
-			   FROM 
-    				rms_request_order 
-    			WHERE 1 ";
+    			id,
+    			(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id= branch_id LIMIT 1) AS branch_name,
+    			request_no,
+    			(SELECT title from rms_request_for as rf where rf.id = request_for LIMIT 1) as request_for,
+    			(SELECT title from rms_for_section as fs where fs.id = for_section  LIMIT 1) as for_section,
+    			purpose,
+    			request_date,
+			    (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id  LIMIT 1) AS total_qty,
+			    (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name
+		";
+    	$sql.=$dbp->caseStatusShowImage("status");
+    	$sql.=" FROM rms_request_order  WHERE 1 ";
+    	
 	    	$where="";
 	    	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
 	    	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
@@ -50,7 +51,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 	    		$where.=" AND branch_id=".$search['branch_id'];
 	    	}
 	    	
-	    	$dbp = new Application_Model_DbTable_DbGlobal();
+	    	
 	    	$sql.=$dbp->getAccessPermission('branch_id');
 	    	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
@@ -229,6 +230,8 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 	function getRequestById($id){
 		$db=$this->getAdapter();
 		$sql="SELECT * FROM rms_request_order WHERE id=$id";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 	

@@ -22,11 +22,9 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
     		}
 			$db =  new Accounting_Model_DbTable_DbAdjustStock();
 			$rows = $db->getAllAdjustStock($search);
-			$rs_rows=new Application_Model_GlobalClass();
-			$rows=$rs_rows->getImgActive($rows, BASE_URL);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","ADJUST_NO","TITLE","NOTE","DATE","TOTAL","STATUS","USER");
+			$collumns = array("BRANCH_NAME","ADJUST_NO","TITLE","NOTE","DATE","TOTAL","USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
 			);
@@ -74,6 +72,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
@@ -92,7 +91,12 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 				}
 			}
 			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
-			$this->view->row=$_pur->getAdjustStockById($id);
+			$row =$_pur->getAdjustStockById($id);
+			if (empty($row)){
+				Application_Form_FrmMessage::Sucessfull("No Record","/stock/adjuststock");
+				exit();
+			}
+			$this->view->row = $row;
 			$this->view->row_detail=$_pur->getAdjustStockDetail($id);
 			$this->view->rq_code=$_pur->getAjustCode();
 			 

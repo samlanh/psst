@@ -23,18 +23,19 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    	if ($lang==1){
 	    		$field = 'name_kh';
 	    	}
-	    			
+	    $dbp = new Application_Model_DbTable_DbGlobal();
 	    $db=$this->getAdapter();
     	$sql = "SELECT t.id,
 	    	(SELECT CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
 	    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic,
 	    	t.create_date,
 	    	(select $field from rms_view where type=12 and key_code=t.is_finished LIMIT 1) as is_finished,
-	    	(select $field from rms_view where type=1 and key_code = t.status) as status,
 	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id LIMIT 1) as user
-	    	
-    	FROM `rms_tuitionfee` AS t
-    		WHERE t.type=2 ";
+    	 ";
+    	
+    	$sql.=$dbp->caseStatusShowImage("t.status");
+    	$sql.=" FROM `rms_tuitionfee` AS t WHERE t.type=2 ";
+    	
     	$where =" ";
     	 
     	if(!empty($search['title'])){
@@ -56,7 +57,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	if($search['status']>-1){
     		$where.=" AND t.status=".$search['status'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	
     	$where.=$dbp->getAccessPermission();
     	 
     	$order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
@@ -168,7 +169,10 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     }
     public function getServiceChargeById($service_id){
     	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM rms_tuitionfee WHERE type=2 AND id=$service_id LIMIT 1";
+    	$sql = "SELECT * FROM rms_tuitionfee WHERE type=2 AND id=$service_id ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$sql.=" LIMIT 1";
     	return $db->fetchRow($sql);
     }
     function getServiceFeebyId($service_id){    	

@@ -259,6 +259,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     function getAllCutStock($search){
     	$db = $this->getAdapter();
     	try{
+    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		
     		$sql="
     		SELECT
     		pp.id,
@@ -267,10 +269,10 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS student_name,
     		pp.balance,
     		pp.total_received,pp.total_qty_due,
-    		pp.received_date,
-    		pp.status
-    		FROM `rms_cutstock` AS pp WHERE 1
-    		";
+    		pp.received_date ";
+    		$sql.=$dbp->caseStatusShowImage("pp.status");
+    		$sql.=" FROM `rms_cutstock` AS pp WHERE 1 ";
+    		
     		$from_date =(empty($search['start_date']))? '1': " pp.received_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
     		$to_date = (empty($search['end_date']))? '1': " pp.received_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
     		$sql.= " AND  ".$from_date." AND ".$to_date;
@@ -294,7 +296,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		if(!empty($search['branch_search'])){
     			$where.=" AND pp.branch_id=".$search['branch_search'];
     		}
-    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		
     		$where.=$dbp->getAccessPermission('pp.branch_id');
     		$order=" ORDER BY pp.id DESC";
     
@@ -307,12 +309,14 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     function getCutStockBYId($id){
     	$db = $this->getAdapter();
     	$sql="SELECT pp.*,
-(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_khname,
-(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_enname,
-(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS last_name,
-(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_code,
-(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name
+			(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_khname,
+			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_enname,
+			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS last_name,
+			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_code,
+			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name
     	FROM rms_cutstock AS pp WHERE pp.id = $id ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('pp.branch_id');
     	$sql.=" LIMIT 1";
     	return $db->fetchRow($sql);
     }

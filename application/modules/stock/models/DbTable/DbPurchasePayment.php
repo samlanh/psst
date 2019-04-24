@@ -28,6 +28,7 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     function getAllPurchasePayment($search){
     	$db = $this->getAdapter();
     	try{
+    		$dbp = new Application_Model_DbTable_DbGlobal();
     		$sql="
     			SELECT
 					pp.id,
@@ -37,9 +38,11 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 					pp.balance,
 					pp.total_paid,pp.total_due,
 					(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code = pp.paid_by AND v.type=8 LIMIT 1) AS paid_by,
-					pp.date_payment,
-					pp.status
-				FROM `rms_purchase_payment` AS pp WHERE 1 ";
+					pp.date_payment
+				 ";
+    		$sql.=$dbp->caseStatusShowImage("pp.status");
+    		$sql.=" FROM `rms_purchase_payment` AS pp WHERE 1 ";
+    		
     		$from_date =(empty($search['start_date']))? '1': " pp.date_payment >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
     		$to_date = (empty($search['end_date']))? '1': " pp.date_payment <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
     		$sql.= " AND  ".$from_date." AND ".$to_date;
@@ -62,7 +65,6 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     		if(!empty($search['branch_search'])){
     			$where.=" AND pp.branch_id=".$search['branch_search'];
     		}
-    		$dbp = new Application_Model_DbTable_DbGlobal();
     		$where.=$dbp->getAccessPermission('pp.branch_id');
     		$order=" ORDER BY pp.id DESC";
     		return $db->fetchAll($sql.$where.$order);

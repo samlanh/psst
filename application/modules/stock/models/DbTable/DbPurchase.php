@@ -11,16 +11,19 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getAllSupPurchase($search=null){
     	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql="SELECT sp.id,
     		 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
     		 sp.supplier_no,s.sup_name,
     	 	(SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
 		    sp.amount_due,sp.date,
-		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name,    
-		    sp.status
-     		   FROM rms_supplier AS s,
+		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name 
+     		    ";
+    	$sql.=$dbp->caseStatusShowImage("sp.status");
+    	$sql.=" FROM rms_supplier AS s,
      		   rms_purchase AS sp
 			WHERE s.id=sp.sup_id ";
+    	
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
@@ -44,8 +47,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND sp.status=".$search['status_search'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('sp.branch_id');
+    	$where.=$dbp->getAccessPermission('sp.branch_id');
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }

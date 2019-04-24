@@ -29,15 +29,13 @@ class Stock_CutstockController extends Zend_Controller_Action {
     		}
 			$db =  new Stock_Model_DbTable_DbCutStock();
 			$rows = $db->getAllCutStock($search);
-			$rs_rows=new Application_Model_GlobalClass();
-			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","RECEIPT_NO","STUDENT","BALANCE","TOTAL_RECEIVED","TOTAL_QTY_DUE",
 					"DATE","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'cutstock','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'receipt_no'=>$link,'supplier_name'=>$link,));
+			$this->view->list=$list->getCheckList(10, $collumns, $rows,array('branch_name'=>$link,'receipt_no'=>$link,'supplier_name'=>$link,));
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
@@ -80,6 +78,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id = $this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$db = new Stock_Model_DbTable_DbCutStock();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();

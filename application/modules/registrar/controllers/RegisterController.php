@@ -60,7 +60,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		}else{
       			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
       		}
-      		
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -68,16 +67,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
-       print_r($_db->getProductbyBranch());
        $this->view->rsbranch = $_db->getAllBranch();
        $this->view->exchange_rate = $_db->getExchangeRate();
        $this->view->all_paymentterm = $_db->getAllTerm();
        $this->view->rs_type = $_db->getAllItems();
        $this->view->rsdiscount = $_db->getAllDiscountName();
        $this->view->rs_paymenttype = $_db->getViewById(8,null);
-       
-//        $db = new Registrar_Model_DbTable_DbRegister();
-//        $this->view->all_year = $db->getAllYears();
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
@@ -87,15 +82,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $grade = $db->getAllGradeStudyByDegree(7);
-	   
-// 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $student_id = 1;
-// 	   $is_stutested = null;
-// 	   $grade = $db->getAllGradeStudyByDegree(4,$student_id,$is_stutested);
-// 	   $rsproduct = $db->getProductbyBranch();
-// 	   $abc = array_merge($grade,$rsproduct);
-// 	  print_r($abc);
-	   
     }
     public function editAction(){
     	$id=$this->getRequest()->getParam("id");
@@ -132,86 +118,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt($branch_id);
     }
-    public function addkentridgeAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try {
-    			$db = new Registrar_Model_DbTable_DbRegister();
-    			$db->addRegister($_data);
-    			if(isset($_data['save_new'])){
-    				Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     			echo $e->getMessage();exit();
-    		}
-    	}
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->all_student_name = $db->getAllStudent();
-    	$this->view->all_dept = $_db->getAllDegreeName();
-    	$this->view->exchange_rate = $_db->getExchangeRate();
-    	$this->view->deduct = $_db->getDeduct();
-    	 
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
-    	 
-    	$this->view->all_student_test = $db->getAllStudentTested();
-    	 
-    	$this->view->all_year = $db->getAllYears();
-    	$this->view->all_session = $db->getAllSession();
-    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
-    	$this->view->all_service = $db->getAllService();
-    	$this->view->all_product = $db->getAllProductName();
-    	$this->view->all_room = $db->getAllRoom();
-    	$test = $this->view->branch_info = $db->getBranchInfo();
-    	$db = new Foundation_Model_DbTable_DbStudent();
-    	$this->view->group = $db->getAllgroup();
-    }
-    public function addnewworldAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try {
-    			$db = new Registrar_Model_DbTable_DbRegister();
-    			$db->addRegister($_data);
-    			if(isset($_data['save_new'])){
-    				Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();exit();
-    		}
-    	}
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->all_dept = $_db->getAllDegreeName();
-    	$this->view->exchange_rate = $_db->getExchangeRate();
-    	$this->view->deduct = $_db->getDeduct();
-    	 
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
-    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-    	 
-    	$this->view->all_student_test = $db->getAllStudentTested();
-    	 
-    	$this->view->all_year = $db->getAllYears();
-    	$this->view->all_session = $db->getAllSession();
-    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
-    	$this->view->all_service = $db->getAllService();
-    	$this->view->all_product = $db->getAllProductName();
-    	$this->view->all_room = $db->getAllRoom();
-    	 
-    	$this->view->startdate_enddate = $db->getAllStartDateEndDate();
-    	 
-    	$test = $this->view->branch_info = $db->getBranchInfo();
-    	$db = new Foundation_Model_DbTable_DbStudent();
-    	$this->view->group = $db->getAllgroup();
-    }
-    
     public function editcustomerpaymentAction(){
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
@@ -225,9 +131,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			echo $e->getMessage();
-    			 
+    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));   			 
     		}
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -247,9 +151,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($user_type_id!=1 AND $current_date>$payment_date){
     		Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit", self::REDIRECT_URL . '/register/index');
     	}
-    	// for loop in initialize
     	$this->view->customer_payment_detail = $db->getCustomerPaymentDetailByID($id);
-    	// for information in  register
     	 
     	$this->view->service_only = $db->getServiceOnlyByID($id);
     	 
@@ -272,62 +174,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
-    }
-    
-    public function editkentridgeAction(){
-    	$id=$this->getRequest()->getParam('id');
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try {
-    			$db = new Registrar_Model_DbTable_DbRegister();
-    			$db->updateRegister($_data,$id);
-    			if(isset($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			echo $e->getMessage();exit();
-    		}
-    	}
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$form_row=$db->getRegisterById($id);
-    	$is_start=$form_row['is_start'];
-    	if($is_start==0 || $form_row['is_void']>0){
-    		Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not Edit'), self::REDIRECT_URL . '/register/index');
-    	}
-    
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->all_dept = $_db->getAllDegreeName();
-    	 
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	 
-    	$this->view->teacher = $db->getTeacherEdit($id);
-    	 
-    	$this->view->payment = $db->getStudentPaymentByID($id);
-    	 
-    	// for loop in initialize
-    	$this->view->payment_detail_service = $db->getStudentPaymentDetailServiceByID($id);
-    	// for information in  register
-    	$this->view->payment_detail_register = $db->getStudentPaymentDetailRegisterByID($id);
-    	 
-    	$this->view->service_only = $db->getServiceOnlyByID($id);
-    	 
-    	$this->view->product_only = $db->getProductOnlyByID($id);
-    	 
-    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
-    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-    	$this->view->all_year = $db->getAllYears();
-    	$this->view->all_session = $db->getAllSession();
-    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
-    	$this->view->all_service = $db->getAllService();
-    	$this->view->all_room = $db->getAllRoom();
-    
-    	$test = $this->view->branch_info = $db->getBranchInfo();
-    	 
-    	$db = new Foundation_Model_DbTable_DbStudent();
-    	$this->view->group = $db->getAllgroup();
     }
     public function clearbalanceAction(){
     	$id=$this->getRequest()->getParam('id');
@@ -357,9 +203,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$student_id = empty($data['student_id'])?null:$data['student_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
     		$grade = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
-//     		$rsproduct = $db->getProductbyBranch();
-//     		$rs = array_unshift($grade,$rsproduct);
-    		print_r(Zend_Json::encode($grade));
+    		$rsproduct = $db->getProductbyBranch();
+    		$rs = array_merge($grade,$rsproduct);
+    		print_r(Zend_Json::encode($rs));
     		exit();
     	}
     }

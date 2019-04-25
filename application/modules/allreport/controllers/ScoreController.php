@@ -543,9 +543,312 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
+    public function rptReschedulebygroupAction(){
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' =>'',
+    				'study_year' =>'',
+    				'branch_id' 	=>'',
+    				'group' =>'',
+    				'room' 	=>'',
+    				'grade' =>'',
+    				'session' =>'',
+    				'start_date'=>date("Y-m-d"),
+    				'end_date'=>date("Y-m-d")
+    		);
+    	}
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    	$group= new Allreport_Model_DbTable_DbRptStudentDrop();
+    	$rs_rows = $group->getAllReschedulebygroup($search);
+    	$this->view->rs = $rs_rows;
+    	$this->view->search=$search;
+    }
+    public function rptRescheduleGroupAction(){
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' =>'',
+    				'branch_id' =>'',
+    				'study_year' =>'',
+    				'subject' =>'',
+    				'group' =>'',
+    				//'session' =>'',
+    				'session' =>'',
+    				'subject' =>'',
+    				'teacher' =>'',
+    				'day' =>'',
+    				'start_date'=>date("Y-m-d"),
+    				'end_date'=>date("Y-m-d")
+    		);
+    	}
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    	$group= new Allreport_Model_DbTable_DbRptStudentDrop();
+    	$this->view->rs = $rs_rows = $group->getAllRescheduleGroup($search);
+    	$this->view->search=$search;
+    	$db_glob = new Application_Model_GlobalClass();
+    	$this->view->opttime = $db_glob->getHoursStudy();
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    public function rptAttendenceAction(){
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'session' 		=>'',
+    				'group' 		=>'',
+    				'branch_id'		=>0,
+    				'degree'		=>0,
+    				'start_date'	=> date('Y-m-d'),
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    	$this->view->search = $search;
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$this->view->student = $db->getStudentAttendence($search);
+    
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister(null,"action");
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$db_global=new Application_Model_DbTable_DbGlobal();
+    	$result= $db_global->getAllgroupStudy();
+    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+    	$this->view->group = $result;
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    public function rptStudentMistakeAction(){
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'session' 		=>'',
+    				'group' 		=>'',
+    				'branch_id'		=>0,
+    				'degree'		=>0,
+    				'start_date'	=> date('Y-m-d'),
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$group= new Allreport_Model_DbTable_DbRptAllStudent();
+    	$this->view->student = $rs_rows = $group->getStudentMistake($search);
+    	$this->view->search = $search;
+    
+    	$db_global=new Application_Model_DbTable_DbGlobal();
+    	$result= $db_global->getAllgroupStudy();
+    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+    	$this->view->group = $result;
+    
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view->rsfooteracc = $frm->getFooterAccount();
+    }
+    public function rptTotalStudentMistakeAction(){
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'session' 		=>'',
+    				'group' 		=>'',
+    				'branch_id'		=>0,
+    				'degree'		=>0,
+    		);
+    	}
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$group= new Allreport_Model_DbTable_DbRptAllStudent();
+    	$this->view->student = $rs_rows = $group->getStudentMistake($search);
+    	$this->view->search=$search;
+    	$this->view->datasearch = $search;
+    
+    	$db_global=new Application_Model_DbTable_DbGlobal();
+    	$result= $db_global->getAllgroupStudy();
+    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+    	$this->view->group = $result;
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	$this->view->rsfooteracc = $frm->getFooterAccount();
+    }
+    function mistakeCertificateAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$stu_id=$this->getRequest()->getParam("stu_id");
+    
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'start_date'	=> null,
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    	$this->view->search=$search;
+    	$this->view->stu_id = $stu_id;
+    	$this->view->group_id = $group_id;
+    
+    	$db = new Allreport_Model_DbTable_DbMistakeCertificate();
+    	$row = $db->getStudentInfo($group_id,$stu_id);
+    	$this->view->student_info = $row;
+    
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    function rptStudentLetterofpraiseAction(){
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'branch_id'		=>'',
+    				'degree'		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'group'			=>'',
+    				'start_date'	=> date('Y-m-d'),
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    
+    	$this->view->row = $db->getStudenLetterofpraise($search);
+    
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$this->view->search=$search;
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    function rptStudentCetificateAction(){
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'branch_id'		=>'',
+    				'degree'		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'group'			=>'',
+    				'start_date'	=> date('Y-m-d'),
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    
+    	$this->view->row = $db->getStudenCetificate($search);
+    
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    
+    	$this->view->search=$search;
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    function certificateLetterofpraiseAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$result = $db->getStudenLetterofpraiseById($id);
+    	if (empty($result)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-student-letterofpraise");
+    		exit();
+    	}
+    	$this->view->rs = $result;
+    }
+    function certificateAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$result = $db->getStudenCetificateById($id);
+    	if (empty($result)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-student-cetificate");
+    		exit();
+    	}
+    	$this->view->rs = $result;
+    }
+    public function rptTotalattendanceAction()
+    {
+    	$id=$this->getRequest()->getParam("id");
+    	if(empty($id)){
+    		$this->_redirect("/allreport/allstudent/student-group");
+    	}
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'txtsearch' => "",
+    				'study_type'=>1);
+    	}
+    	$this->view->search = $search;
+    	$db = new Allreport_Model_DbTable_DbRptGroup();
+    	$row = $db->getStudentGroup($id,$search,1);
+    	$this->view->rs = $row;
+    	$rs= $db->getGroupDetailByID($id);
+    	$this->view->rr = $rs;
+    
+    	$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
 }
-
-
-
-
-

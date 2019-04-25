@@ -15,9 +15,7 @@
 	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 	$amount_day =$diff/ (60*60*24);
 	$amount_day = $amount_day + 1;
-	
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-	
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
@@ -31,7 +29,7 @@
     			</div>
     		</div>
     	</div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-mistake')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
         	<div class="col-md-2 col-sm-2 col-xs-12">
         		<?php echo $frm->getElement("title");?>
@@ -40,11 +38,9 @@
         		<?php echo $frm->getElement("branch_id");?>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php //echo $frm->getElement("study_year");?>
         		<input id="study_year" />
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php //echo $frm->getElement("group");?>
         		<input id="group" />
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
@@ -118,7 +114,6 @@
 								<?php if ($old_groupid!=$rs['group_id']){ ?>
 								<?php if ($key>0){ 
 								?>
-							
 								<tr>
 									<td align="right" colspan="<?php echo $amount_day+5;?>" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 										<span​​ style="font-weight:bold;color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">

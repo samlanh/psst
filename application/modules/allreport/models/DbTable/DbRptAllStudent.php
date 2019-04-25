@@ -1775,10 +1775,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	`rms_issue_letterpraise` AS c
     	WHERE
     	c.id = cd.letterpraise_id
-    	AND st.stu_id = cd.stu_id AND cd.id=$id LIMIT 1
-    	";
+    	AND st.stu_id = cd.stu_id AND cd.id=$id  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission("c.branch_id");
+    	$sql." LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
 }

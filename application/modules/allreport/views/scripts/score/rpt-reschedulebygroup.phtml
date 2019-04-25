@@ -30,11 +30,9 @@
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("study_year");?>
             	<input id="study_year" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("group");?>
             	<input id="group" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
@@ -67,14 +65,13 @@
 			<td width="25%" align="left">
 			</td>
 			<td align="center">
-				<strong style="font-weight:bold;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
+				<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
 				<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 			</td>
 			<td width="25%" align="right">
 			</td>
 		</tr>
 	</table>	
-	
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 		<style>
@@ -118,9 +115,6 @@
 					$frm = new Application_Form_FrmGlobal();
 					$rsheader = $frm->getLetterHeaderReport($branch_id);
 					?>
-					<tr>
-						<td colspan="3">&nbsp;</td>
-					</tr>
 					<tr>
 						<td colspan="3">&nbsp;</td>
 					</tr>
@@ -200,9 +194,8 @@
 					 	}else{
 					 		$h_label='hr';
 					 	}
-					 	
 					 	$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id'])
-					 	?>
+					 ?>
 					 <tr>
 					    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 20px;" colspan="2"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
 					 </tr>
@@ -210,13 +203,6 @@
 					 <tr >
 					 	<td  style="border: 1px solid #fff;">&nbsp;</td>
 					 </tr>
-					 <!-- 
-					  <tr >
-					 	<td colspan="7" align="right" style="border: 1px solid #fff;">
-					 	Phnom Penh,&nbsp;<?php //echo date('d F Y');?>
-					 	</td>
-					 </tr>
-					  -->
 					</table>											
 					</td>
 				</tr>
@@ -238,23 +224,6 @@
 					</td>
 				</tr>
 				<?php  }?>
-				
-			<!-- 
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
-				<td align="center" width="25%">
-					<span style="font-size: 14px;"><?php //echo $tr->translate('VERIFIED_BY')?></span>
-				</td>
-				<td  width="50%">
-					&nbsp;
-				</td>
-				<td align="center"  width="25%">
-					<span style="font-size: 14px;text-align: right;"><?php //echo $tr->translate('PREPARED_BY')?></span>
-				</td>
-			</tr>
-			 -->
 		</table>
 	</div>		
 </div>
@@ -262,7 +231,6 @@
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
 
 dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -330,7 +298,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -358,7 +325,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

@@ -1727,7 +1727,7 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getProductbyBranch($branch_id=null){
   	$db = $this->getAdapter();
-  	$sql="SELECT t.id,title FROM `rms_itemsdetail` AS t,
+  	$sql="SELECT t.id,title AS name FROM `rms_itemsdetail` AS t,
 		      `rms_product_location`
 			   WHERE t.id=rms_product_location.pro_id ";
   	$sql.=$this->getAccessPermission("brand_id");

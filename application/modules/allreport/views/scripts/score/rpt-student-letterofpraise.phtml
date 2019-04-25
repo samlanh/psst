@@ -59,18 +59,14 @@ display: table-cell !important;
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
+				<tr class="line">
+					<td colspan="3"></td>
 				</tr>
 				<tr>
 					<td colspan="3" align="center">
-						<strong style=" font-weight:200; color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_LETTEROFPRAISE");?></strong><br />
+						<strong style=" font-weight:200; color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_LETTEROFPRAISE");?></strong><br />
 						<strong  style=" font-weight:200; color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
 				</tr>
 				<style>
 					table tr th{
@@ -85,7 +81,6 @@ display: table-cell !important;
 					}
 					.hidden{visibility: hidden; display: none;}
 					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-					
 					table.content-data{
 						border-collapse:collapse;
 						width:100%;
@@ -129,7 +124,6 @@ display: table-cell !important;
 									<td><?php echo $tr->translate("ISSUE_DATE");?></td>
 								</tr>
 							</thead>
-							
 							<tbody>
 								<?php if (!empty($this->row)) $i=0; foreach ($this->row as $rs){ $i++?>
 								 <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" class="context-menu-one style-rowdata hover">
@@ -172,9 +166,8 @@ display: table-cell !important;
 		</div>
 </div>
 <?php 
-$urlCertificate = $this->baseUrl()."/allreport/allstudent/certificate-letterofpraise/id/";
+$urlCertificate = $this->baseUrl()."/allreport/score/certificate-letterofpraise/id/";
 ?>
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 
@@ -203,12 +196,10 @@ function gotoAction(){
 	window.open(url+row);
 }
 
-
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
-
 dojo.require("dojo.html");
+
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -254,7 +245,6 @@ dojo.ready(function(){
 		}
 	}, "grade_all");
 	getallGrade();
-	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
@@ -288,7 +278,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -316,11 +305,10 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
-
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 function getallGrade(){
@@ -338,28 +326,9 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
-}
-
-	function getKHMonthByNumber(m){
-		var monthName=[
-		      			"មករា",
-		      			"កុម្ភៈ",
-		      			"មីនា",
-		      			"មេសា",
-		      			"ឧសភា",
-		      			"មិថុនា",
-		      			"កក្កដា",
-		      			"សីហា",
-		      			"កញ្ញា",
-		      			"តុលា",
-		      			"វិច្ឆិកា",
-		      			"ធ្នូ",
-		   			];
-			return (monthName[m-1]);
-	}	
+}	
 	function printIDCard(){
 		loadingBlock();
 	  	 var contents = document.getElementById("print_student_card").innerHTML;
@@ -386,9 +355,8 @@ function getallGrade(){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'idselected'));
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'idselected'));
     	?>
-
     	 id_selected = dijit.byId('id_selected').get('value');
 		 if(id_selected!=''){
 			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
@@ -397,23 +365,18 @@ function getallGrade(){
 			return false;
 		 }
 	}
-	
 	function print(){
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('print_student_card').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
 	}
-
-
 	function printPickupCardSelected(){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'pickupselected'));
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'pickupselected'));
     	?>
-
     	 id_selected = dijit.byId('id_selected').get('value');
-    	 //alert(id_selected);
 		 if(id_selected!=''){
 			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
 		 }else{
@@ -421,11 +384,10 @@ function getallGrade(){
 			return false;
 		 }
 	}
-	
 	function printPickup(){
 	    loadingBlock();
-	  	 var contents = document.getElementById("PickupCard").innerHTML;
-	 	  var frame1 = document.createElement('iframe');
+	  	var contents = document.getElementById("PickupCard").innerHTML;
+	    var frame1 = document.createElement('iframe');
 	    frame1.name = "frame1";
 	    frame1.style.position = "absolute";
 	    frame1.style.top = "-1000000px";
@@ -444,7 +406,6 @@ function getallGrade(){
 	    }, 10000);
 	   return false;
 	}
-	
 	function checkAllStudent(array_length){
 		dijit.byId('id_selected').attr('value','');
 		if(dojo.byId('checkall').checked){

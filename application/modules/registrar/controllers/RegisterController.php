@@ -68,6 +68,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
+       print_r($_db->getProductbyBranch());
        $this->view->rsbranch = $_db->getAllBranch();
        $this->view->exchange_rate = $_db->getExchangeRate();
        $this->view->all_paymentterm = $_db->getAllTerm();
@@ -86,6 +87,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $grade = $db->getAllGradeStudyByDegree(7);
+	   
+// 	   $db = new Application_Model_DbTable_DbGlobal();
+// 	   $student_id = 1;
+// 	   $is_stutested = null;
+// 	   $grade = $db->getAllGradeStudyByDegree(4,$student_id,$is_stutested);
+// 	   $rsproduct = $db->getProductbyBranch();
+// 	   $abc = array_merge($grade,$rsproduct);
+// 	  print_r($abc);
+	   
     }
     public function editAction(){
     	$id=$this->getRequest()->getParam("id");
@@ -347,6 +357,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$student_id = empty($data['student_id'])?null:$data['student_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
     		$grade = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
+//     		$rsproduct = $db->getProductbyBranch();
+//     		$rs = array_unshift($grade,$rsproduct);
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}

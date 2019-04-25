@@ -1697,9 +1697,9 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if($student_id!=null AND !empty($student_id)){
   		if(empty($is_stutested)){
-  			$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
+  			$sql.=" AND (i.items_type =2 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
   		}else{//will check expired of result test later
-  			$sql.=" AND (i.items_type !=1 OR i.id IN ((SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result )))";
+  			$sql.=" AND (i.items_type =2 OR i.id IN ((SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result )))";
   		}
   	}
   	$user = $this->getUserInfo();
@@ -1725,7 +1725,17 @@ function getAllgroupStudyNotPass($action=null){
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
   	return $db->fetchAll($sql);
   }
-  
+  function getProductbyBranch($branch_id=null){
+  	$db = $this->getAdapter();
+  	$sql="SELECT t.id,title FROM `rms_itemsdetail` AS t,
+		      `rms_product_location`
+			   WHERE t.id=rms_product_location.pro_id ";
+  	$sql.=$this->getAccessPermission("brand_id");
+  	if($branch_id!=null){
+  		$sql.=' brand_id='.$branch_id;
+  	}
+  	return $db->fetchAll($sql);
+  }
   public function getAllGradeStudyOption($type=1){
   	$rows = $this->getAllGradeStudy($type);
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();

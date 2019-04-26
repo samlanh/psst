@@ -5,7 +5,6 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	
-	
 	$day = array(
 		"Mon" =>'ច័ន្ទ',
 		"Tue" =>'អង្គារ',
@@ -16,18 +15,18 @@
 		"Sun" =>'អាទិត្យ',
 	);
 	$month = array(
-				"01"=>"មករា",
-				"02"=>"កុម្ភៈ",
-				"03"=>"មីនា",
-				"04"=>"មេសា",
-				"05"=>"ឧសភា",
-				"06"=>"មិថុនា",
-				"07"=>"កក្កដា",
-				"08"=>"សីហា",
-				"09"=>"កញ្ញា",
-				"10"=>"តុលា",
-				"11"=>"វិច្ឆិកា",
-				"12"=>"ធ្នូ"
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
 			);
 ?>
 <style>
@@ -39,14 +38,14 @@ table.tb-footer tr.style-head {
 </style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
-       		<div class="col-sm-12 border-botom">
-		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_RESULT_LIST');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
-    		</div>
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_RESULT_LIST');?></h4>
+    	   </div>
+    	   <div class="col-sm-4 text-right">
+    	   </div>
     	</div>
+    </div>
 <form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly')); ?>" dojoType="dijit.form.Form" method="post">
 	<div class="form-group">
     	<div class="col-md-2 col-sm-2 col-xs-12">
@@ -77,7 +76,7 @@ table.tb-footer tr.style-head {
 		   	</select>
     	</div>
     	<div class="col-md-2 col-sm-2 col-xs-12">
-    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">	
+    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" autoComplete="false" queryExpr="*${0}*">	
     			<option value="-1"><?php echo $tr->translate("FOR_SEMESTER");?></option>							
 				<option value="1" <?php if($this->search['for_semester']==1){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
 				<option value="2" <?php if($this->search['for_semester']==2){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
@@ -90,7 +89,7 @@ table.tb-footer tr.style-head {
     		<?php echo $frm->getElement("room");?>
     	</div>
     	<div class="col-md-2 col-sm-2 col-xs-12">
-    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" autoComplete="false" queryExpr="*${0}*">								
 				<option><?php echo $tr->translate("CHOOSE");?></option>
 				<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 					<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month']?></option>
@@ -148,9 +147,6 @@ table.tb-footer tr.style-head {
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
 				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td style="height: 10px">&nbsp;</td>
-				</tr>
 				<tr>
 					<td width="28%" align="left">
 					</td>
@@ -211,14 +207,12 @@ table.tb-footer tr.style-head {
 			</table>
 		</div>
 	</div>
-	
-	<?php 
-		$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
-		$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
-		$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
-		$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
-	?>
-	
+<?php 
+	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
+	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
+	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
+?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
 <script type="text/javascript">
 var row=0;
@@ -340,7 +334,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -370,7 +363,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -392,11 +384,9 @@ function getallGrade(){
 			dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 function setValue(index){
 	if(dojo.byId('check_box'+index).checked){
 		group_id = dijit.byId('group_name'+index).get('value');

@@ -118,7 +118,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
     		from rms_score as s,rms_score_detail as sd
    			where s.id=sd.score_id and s.group_id=$group_id and s.parent_id=$subject_id GROUP BY s.subject_id ";
    	return $db->fetchAll($sql);
-   
    }
    public function getStundetScoreGroup($search){ // List លទ្ធផលដែលបានបញ្ចូលទាំងអស់មក
    	$db = $this->getAdapter();
@@ -161,21 +160,17 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    			WHERE 
    				g.`id`=s.`group_id` 
    				AND s.status = 1 
-   				AND s.type_score=1 
-   		";
+   				AND s.type_score=1 ";
    		
    		$where='';
-//    	$from_date =(empty($search['for_month']))? '1': " s.formonth >= '".$search['for_month']." 00:00:00'";
-//    	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
-//    	$where = " AND ".$from_date;
 	   	if(!empty($search['title'])){
-	   				$s_where=array();
-	   				$s_search=addslashes(trim($search['title']));
-	   				$s_where[]= " s.title_score LIKE '%{$s_search}%'";
-	   				$s_where[]=" g.group_code LIKE '%{$s_search}%'";
-	   				$s_where[]=" s.note LIKE '%{$s_search}%'";
-	   				$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
-	   				$where.=' AND ('.implode(' OR ', $s_where).')';
+   			$s_where=array();
+   			$s_search=addslashes(trim($search['title']));
+   			$s_where[]= " s.title_score LIKE '%{$s_search}%'";
+   			$s_where[]=" g.group_code LIKE '%{$s_search}%'";
+   			$s_where[]=" s.note LIKE '%{$s_search}%'";
+   			$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
+   			$where.=' AND ('.implode(' OR ', $s_where).')';
 	   	}
 	   	if(!empty($search['branch_id'])){
 	   		$where.= " AND s.branch_id =".$search['branch_id'];
@@ -210,7 +205,10 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	if($search['for_semester']>0){
 	   		$where.= " AND s.for_semester =".$search['for_semester'];
 	   	}
-   		$order = "  ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
+	   	$dbp = new Application_Model_DbTable_DbGlobal();
+	   	$where.=$dbp->getAccessPermission('s.branch_id');
+	   	
+   		$order = " ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
    		return $db->fetchAll($sql.$where.$order);
    }
    public function getStundetScoreDetailGroup($search,$id=null,$limit){ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា
@@ -241,7 +239,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
 		   	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
 		   	(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 ) AS grade,
 		   	
 		   	`g`.`semester` AS `semester`,
 		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
@@ -264,8 +262,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AVG(sd.score) AS average,
 		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
 		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
-		   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass
-		   		   	   
+		   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) AS average_pass
    		FROM 
    			`rms_score` AS s,
 		   	`rms_score_detail` AS sd,
@@ -277,13 +274,11 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND sd.`is_parent`=1
 		   	AND s.`id`=sd.`score_id`
 		   	AND s.status = 1
-		   	AND s.type_score=1  
-   	";
+		   	AND s.type_score=1 ";
    	if (!empty($id)){
    		$sql.=" AND s.id = $id ";
    	}
    	$where='';
-   
    	if (!empty($search['branch_id'])){
    		$where.= " AND g.`branch_id` =".$search['branch_id'];
    	} 
@@ -1053,7 +1048,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	$_db = new Application_Model_DbTable_DbGlobal();
    	$where.= $_db->getAccessPermission('branch_id');
    	
-   	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
+   	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
    	return $db->fetchAll($sql.$where.$order);
    }
    public function getStundetInfo($id,$group_id){ // fro student score by teacher input

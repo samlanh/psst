@@ -57,14 +57,14 @@
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
-							$semester_str = array(1=>"I",2=>"II");
-							 $old_groupid=0; $i=0; $count_fail=0;  $old_totalscore = 0; $old_rank=0;
-							 $duplicate=0;$count_pass=0;
-							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
-								if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
-							?>
-							<?php if ($old_groupid!=$rs['group_id']){  ?>
-						    <?php $i=0; $count_fail=0;?>
+					$semester_str = array(1=>"I",2=>"II");
+					 $old_groupid=0; $i=0; $count_fail=0;  $old_totalscore = 0; $old_rank=0;
+					 $duplicate=0;$count_pass=0;
+					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
+						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
+					?>
+					<?php if ($old_groupid!=$rs['group_id']){  ?>
+				    <?php $i=0; $count_fail=0;?>
 				<tr>
 					<td colspan="3">
 						<?php echo $this->header;?>
@@ -155,19 +155,19 @@
 									<td align="right" colspan="9" style="  border: 1px solid #fff; border-right: 1px solid #fff;">
 										<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Fasthand';font-size: 14px">
 											<tr>
-												<td valign="top" width="33%" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">បានឃើញ និងឯកភាព</td>
+												<td valign="top" width="33%" style="font-family:'Khmer MEF2';font-size:14px;text-align: center;">បានឃើញ និងឯកភាព</td>
 												<td width="33%" valign="top">សិស្សលើមធ្យមភាគ</td>
 												<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
 											</tr>
 											<tr>
-												<td valign="top" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">ជ.នាយិកាសាលា</td>
+												<td valign="top" style="font-family:'Khmer MEF2';font-size:14px;text-align: center;">ជ.នាយិកាសាលា</td>
 												<td valign="top"> សិស្សក្រោមមធ្យមភាគ</td>
 												<td valign="top" style="color:red; text-align: center;">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
 											</tr>
 											<tr>
-												<td valign="top"  style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">នាយករង</td>
+												<td valign="top"  style="font-family:'Khmer MEF2';font-size:14px;text-align: center;">នាយករង</td>
 												<td valign="top" >សិស្សមិនចាត់ថ្នាក់</td>
-												<td valign="top" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;"><br /><br /><br /><?php echo @$this->studentgroup[0]['teacher_name'];?></td>
+												<td valign="top" style="font-family:'Khmer MEF2';font-size:14px;text-align: center;"><br /><br /><br /><?php echo @$this->studentgroup[0]['teacher_name'];?></td>
 											</tr>
 										</table>
 									</td>

@@ -33,10 +33,7 @@
 				"2"=>"២",
 			); 
 ?>	
-<script type="text/javascript">
-dojo.ready(function(){
-});
-</script>
+<script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint">
 		<style type="text/css">
@@ -109,9 +106,9 @@ dojo.ready(function(){
 				
 				<tr>
 					<td>
-						<table width="100%" border="0" style="background-image: url('logo.png');">
+						<table width="100%" border="0" style="background-image: url('logo.png');" border="1">
 							<tr>
-								<td colspan="3" align="center" style="font-family: Khmer OS Muol Light;font-size: 30px;">
+								<td colspan="3" align="center" style="font-family: Khmer OS Muol Light;font-size: 25px;">
 									ព្រះរាជាណាចក្រកម្ពុជា <br />
 									ជាតិ សាសនា ព្រះមហាក្សត្រ <br />
 									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/style.png'?>">
@@ -137,14 +134,14 @@ dojo.ready(function(){
 										</tr>
 									</table>
 								</td>
-								<td align="center" style="font-family: Khmer OS Muol Light;font-size: 25px;">
-									<span style="font-size: 28px;">តារាងកិត្តិយស </span><br />
+								<td align="center" style="font-family: Khmer OS Muol Light;font-size: 22px;">
+									<span style="font-size: 25px;">តារាងកិត្តិយស </span><br />
 									ប្រចាំឆមាស <?php echo $semester[$this->studentgroup[0]['for_semester']];?><br />
 									ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
-									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?>
+									<span style="white-space: nowrap;">ថ្នាក់  <?php echo $this->studentgroup[0]['group_code'];?></span>
 								</td>
 								<script type="text/javascript">
-									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
+									year = convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
 									dojo.byId('academic_year').innerHTML=year;
 								</script>
 								<td></td>
@@ -183,7 +180,6 @@ dojo.ready(function(){
 								</td>
 								<td>&nbsp;</td>
 							</tr>	
-							
 							<tr>
 								<td>
 									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 17px;">
@@ -202,7 +198,7 @@ dojo.ready(function(){
 											<td class="number">លេខ <?php echo $rank2;?></td>
 										</tr>
 										<tr align="center">
-											<td style=""  class="studentname" >
+											<td class="studentname" >
 												<?php if(!empty($this->studentgroup[1])){if(!empty($this->studentgroup[1]['stu_khname'])){echo $this->studentgroup[1]['stu_khname'];}else{echo $this->studentgroup[1]['stu_enname'];}}?>
 											</td>
 										</tr>
@@ -314,7 +310,7 @@ dojo.ready(function(){
 							</tr>
 							<tr>	
 								<td colspan="3">
-									<table " cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
+									<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
 										<tr>
 											<td width="35%" align="center">
 												<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
@@ -355,7 +351,6 @@ dojo.ready(function(){
 						</table>
 					</td>
 				</tr>
-				
 		</table>
 	</div>
 </div>

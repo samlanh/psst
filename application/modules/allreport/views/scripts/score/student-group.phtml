@@ -4,11 +4,6 @@
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
-	
-	/*$urlStudentGroup = $this->baseUrl()."/allreport/allstudent/rpt-student-group/id/";
-	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
-	$urlTotalAtt = $this->baseUrl()."/allreport/allstudent/rpt-totalattendance/id/";
-	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";*/
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -73,18 +68,11 @@
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td width="28%" align="left">
-				</td>
+				<td width="28%" align="left"></td>
 				<td width="44%" align="center">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';"><p><?php echo $tr->translate("SCORE_SEMESTER_YEAR");?></p></strong>
+					<p><strong style="font-weight:normal;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("SCORE_SEMESTER_YEAR");?></strong></p>
 				</td>
 				<td align="right" width="28%"></td>
-			</tr>
-			<tr>
-				<td >&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" valign="top" id="exportExcel">
@@ -106,7 +94,7 @@
 					<div id="exportExcel">
 						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family:Times New Roman,Khmer OS Battambang">
 						  <thead>
-							  <tr style="font-size:14px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
+							  <tr style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
 								<td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
@@ -136,8 +124,8 @@
 								<td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp; <?php echo $tr->translate("STUDENT_UNIT");?></td>
 							  </tr>
 						  <?php 
-						  	$all_student = $all_student+$rs['Num_Student'];
-						  	$drop_student = $drop_student+$rs['student_drop'];
+							  	$all_student = $all_student+$rs['Num_Student'];
+							  	$drop_student = $drop_student+$rs['student_drop'];
 							} ?>
 						</table>
 						<br>
@@ -212,7 +200,6 @@
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 		    onChange: function() {  
-			    
 		    }
 		}, "group");
 		
@@ -225,6 +212,7 @@
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {  
+				
 			}
 		}, "grade");
 		getallGrade();
@@ -315,10 +303,15 @@
 <?php
 	$urlResultSemester1 = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
 	$urlHonorSemester1 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
+	$urlHonorSemester1_nophoto = $this->baseUrl()."/allreport/score/semester-outstanding-student-nophoto/id/";
+	
 	$urlResultSemester2 = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
 	$urlHonorSemester2 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
+	$urlHonorSemester2_nophoto = $this->baseUrl()."/allreport/score/semester-outstanding-student-nophoto/id/";
+	
 	$urlResultYearly = $this->baseUrl()."/allreport/score/rpt-resultbyyear/id/";
 	$urlHonorYearly = $this->baseUrl()."/allreport/score/yearly-outstanding-student/id/";
+	$urlHonorYearly_nophoto = $this->baseUrl()."/allreport/score/yearly-outstanding-student-nophoto/id/";
 	
 	$type1 = "/type/1";
 	$type2 = "/type/2";
@@ -343,11 +336,25 @@
 				}else if(key=="semester-outstanding-student1"){
 					url='<?php echo $urlHonorSemester1;?>';
 					type='<?php echo $type1;?>';
-				}else if(key=="semester-outstanding-student2"){
+				}
+				else if(key=="semester-outstanding-student1-nophoto"){
+					url='<?php echo $urlHonorSemester1_nophoto;?>';
+					type='<?php echo $type1;?>';
+				} 
+				else if(key=="semester-outstanding-student2"){
 					url='<?php echo $urlHonorSemester2;?>';
 					type='<?php echo $type2;?>';
-				}else if(key=="yearly-outstanding-student"){
+				}
+				else if(key=="semester-outstanding-student2-nophoto"){
+					url='<?php echo $urlHonorSemester2_nophoto;?>';
+					type='<?php echo $type2;?>';
+				}
+				else if(key=="yearly-outstanding-student"){
 					url='<?php echo $urlHonorYearly;?>';
+					type='<?php echo $type3;?>';
+				}
+				else if(key=="yearly-outstanding-student-nophoto"){
+					url='<?php echo $urlHonorYearly_nophoto;?>';
 					type='<?php echo $type3;?>';
 				}  
 				gotoAction();
@@ -357,8 +364,11 @@
 				"rpt-resultbysemester2": {name: "<?php echo $tr->translate("RESULT_SEMESTER2");?>", icon: "fa-file-text-o"},
 				"rpt-resultbyyear": {name: "<?php echo $tr->translate("YEARLY_EXAM");?>", icon: "fa-file-text-o"},
 				"semester-outstanding-student1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
+				"semester-outstanding-student1-nophoto": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?> (No Photo)", icon: "fa-file-text-o"},
 				"semester-outstanding-student2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
+				"semester-outstanding-student2-nophoto": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?> (No Photo)", icon: "fa-file-text-o"},
 				"yearly-outstanding-student": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
+				"yearly-outstanding-student-nophoto": {name: "<?php echo $tr->translate("HONOR_YEARLY");?> (No Photo)", icon: "fa-file-text-o"},
 			}
 		});
 	});

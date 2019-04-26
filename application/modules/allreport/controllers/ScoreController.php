@@ -7,7 +7,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction(){	
-		
 	}
     function rptScoreBacMonthlyAction(){
     	if($this->getRequest()->isPost()){
@@ -15,18 +14,18 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search = array(
-    				'title'=>'',
-    				'branch_id'=> '',
-    				'room'=>0,
-    				'exam_type'=>-1,
-    				'for_semester'=>-1,
-    				'group' => '',
-    				'study_year'=> '',
-    				'grade'=> 0,
-    				'degree'=>0,
-    				'session'=> 0,
-    				'for_month'=>date('m'),
-    			);
+    			'title'=>'',
+    			'branch_id'=> '',
+    			'room'=>0,
+    			'exam_type'=>-1,
+    			'for_semester'=>-1,
+    			'group' => '',
+    			'study_year'=> '',
+    			'grade'=> 0,
+    			'degree'=>0,
+    			'session'=> 0,
+    			'for_month'=>date('m'),
+    		);
     	}
     	
     	$this->view->search=$search;
@@ -69,7 +68,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
     	}
     	$this->view->search=$search;
-    	
     	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
@@ -343,11 +341,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
-    
     function veiwAction(){
-    	
     }
-    
     function rptScoreListMonthlyAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
@@ -380,7 +375,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
-    
     function rptSubjectScoredetailAction(){//for kentridge
     	
     	if($this->getRequest()->isPost()){

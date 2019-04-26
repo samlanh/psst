@@ -116,7 +116,6 @@
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("STATUS");?></th>
 											</tr>
 										</thead>
 										<tbody id="table_row">
@@ -253,7 +252,6 @@ function addRow() {
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_SHORT");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("NOTE");?></th>';
-		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("STATUS");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -264,7 +262,6 @@ function addRow() {
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
-		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1"><?php echo $tr->translate("ACTIVE")?></option><option value="0"><?php echo $tr->translate("DEACTIVE")?></option></select><input style="width:10px;" dojoType="dijit.form.TextBox" class="fullside" name="oldindex_'+col+'" id="oldindex_'+col+'" value="'+col+'" type="hidden"></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -368,7 +365,6 @@ function Initailize() {
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_SHORT");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("NOTE");?></th>';
-		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("STATUS");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -379,7 +375,6 @@ function Initailize() {
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"><input type="hidden" value="<?php echo $rows['id'];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';		
-		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1"><?php echo $tr->translate("ACTIVE")?></option><option value="0"><?php echo $tr->translate("DEACTIVE")?></option></select><input style="width:10px;" dojoType="dijit.form.TextBox" class="fullside" name="oldindex_'+col+'" id="oldindex_'+col+'" value="'+col+'" type="hidden"></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -393,7 +388,6 @@ function Initailize() {
 	});
 	dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 	dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
-	dijit.byId('status_'+col).attr('value','<?php echo $rows['status'];?>');
 	dijit.byId('scoreinclass_'+col).attr('value','<?php echo $rows['score_in_class'];?>');
 	dijit.byId('scoreoutclass_'+col).attr('value','<?php echo $rows['score_out_class'];?>');
 	dijit.byId('scoreshort_'+col).attr('value','<?php echo $rows['score_short'];?>');

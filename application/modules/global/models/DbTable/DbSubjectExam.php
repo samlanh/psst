@@ -79,6 +79,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					subject_titlekh,
 					subject_titleen,
 					shortcut,
+					(select subject_titlekh from rms_subject as s where s.id = ide.parent limit 1) as parent,
 					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
 					date,
 					(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) as user_name

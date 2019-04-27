@@ -679,8 +679,8 @@ input.btn_borwse_image {
 				                </div>
 								<div class="form-group">
 									<div class="col-md-12 col-sm-12 col-xs-12">
-										<table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-											<tr id="head-title" class="head-td"  align="right" style="font-size:12px;"></tr>
+										<table border="1" id="table_row" width="100%" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
+											<tr id="head-title" class="head-td"  align="right" style="font-size:11px;"></tr>
 										</table>
 										<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 												iconClass="dijitIconEditProperty" onclick="addRow();" />
@@ -1871,10 +1871,10 @@ date_format = '"dd/MM/yyyy"';
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
+			temp+='<th><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+			temp+='<th><?php echo $tr->translate("DATE_GIVE");?></th>';
+			temp+='<th><?php echo $tr->translate("RECEIVED");?></th>';
+			temp+='<th><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			temp+='<th><?php echo $tr->translate("ATTACHMENT");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -1882,7 +1882,7 @@ date_format = '"dd/MM/yyyy"';
 			}
 			template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center">'+no+'</td>';
-			template+='<td width="25%"><select class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" value="0" onChange="popupDocType('+col+');" dojoType="dijit.form.FilteringSelect" >';	
+			template+='<td width="20%"><select class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" value="0" onChange="popupDocType('+col+');" dojoType="dijit.form.FilteringSelect" >';	
 				<?php if(!empty($this->doc_type)){foreach($this->doc_type as $doc_type){?>
 					template+='<option value="'+'<?php echo $doc_type['id']?>'+'"><?php echo $doc_type['name'];?></option>';
 				<?php }}?>
@@ -1890,7 +1890,7 @@ date_format = '"dd/MM/yyyy"';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
-			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+			template+='<td width="10%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
 			template+='<td width="15%">';
 				template+='<div id="attachment'+col+'" class="form-group" style=" margin-bottom: 5px !important;">';
 					template+='<div class="input-group input-file" name="attachment'+col+'">';
@@ -1899,7 +1899,7 @@ date_format = '"dd/MM/yyyy"';
 				template+='</div> <div class="clearfix"></div>';
 			template+='</td>';
 		
-		tmp='<tr id="row'+col+'">';
+		tmp='<tr id="row'+col+'" style="font-size:11px;">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 		if($("#identity").val()!="") {
@@ -1922,10 +1922,10 @@ date_format = '"dd/MM/yyyy"';
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
+			temp+='<th><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+			temp+='<th><?php echo $tr->translate("DATE_GIVE");?></th>';
+			temp+='<th><?php echo $tr->translate("RECEIVED");?></th>';
+			temp+='<th><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			temp+='<th><?php echo $tr->translate("ATTACHMENT");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -1933,21 +1933,21 @@ date_format = '"dd/MM/yyyy"';
 			}
 			template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center">'+no+'</td>';
-			template+='<td width="25%"><label style="padding: 1px 1px;font-weight:normal;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
+			template+='<td width="20%"><label style="padding: 1px 1px;font-weight:normal;font-size:12px;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
 			template+='</td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
-			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
-			template+='<td width="10%">';
+			template+='<td width="10%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+			template+='<td width="15%">';
 				template+='<div id="attachment'+col+'" class="form-group" style=" margin-bottom: 5px !important;">';
 					template+='<div class="input-group input-file" name="attachment'+col+'">';
-						template+='<input type="text" class="form-control" placeholder="<?php echo $tr->translate('CHOOSE_FILE');?>..." value="" />';
+						template+='<input type="text" style="font-size:12px;" class="form-control" placeholder="<?php echo $tr->translate('CHOOSE_FILE');?>..." value="" />';
 					template+='</div>';
 				template+='</div> <div class="clearfix"></div>';
 			template+='</td>';
 			
-		tmp='<tr id="row'+col+'">';
+		tmp='<tr id="row'+col+'" style="font-size:11px;">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 		if($("#identity").val()!="") {

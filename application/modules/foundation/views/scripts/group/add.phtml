@@ -450,7 +450,7 @@ function getRefreshTeacher(){
 		    }
 		    dojo.query("#table_row").append("");
 		    $("#identity1").val("");
-		    addRow();
+		    //addRow();
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err){
@@ -524,6 +524,7 @@ var title = 1;
 tmp = '';
 temp='';
 function addRow() {
+	alert(1);
 	col++;no++;
 	template='';
 	if(title!=1){

@@ -8,13 +8,9 @@
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.data.ObjectStore");
-	dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.NumberTextBox');
-	dojo.require('dijit.form.TextBox');
 	dojo.require('dijit.form.Textarea');
-	dojo.require("dojo.html");
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -205,14 +201,10 @@
     		 <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"group",'action'=>'index'),null,true); ?>';" />
-					<input type="submit" value="save" name="save" id="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save" name="save" id="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
-             
 		</form>
 	</div>
 </div>
@@ -276,11 +268,11 @@
 	</div>
 </div>
 <?php 
-$techer= $this->frm_techer;
+	$techer= $this->frm_techer;
 ?>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.html");
+//dojo.require("dojo.html");
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -705,7 +697,6 @@ function getSubject(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
-			alert(err);
 			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
 	});

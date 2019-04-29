@@ -678,7 +678,7 @@ input.btn_borwse_image {
 				                   </label>
 				                </div>
 								<div class="form-group">
-									<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="col-md-12 col-sm-12 col-xs-12" style=" height: 400px;  overflow-y: auto; overflow-x: hidden;">
 										<table border="1" id="table_row" width="100%" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
 											<tr id="head-title" class="head-td"  align="right" style="font-size:11px;"></tr>
 										</table>
@@ -1933,7 +1933,7 @@ date_format = '"dd/MM/yyyy"';
 			}
 			template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center">'+no+'</td>';
-			template+='<td width="20%"><label style="padding: 1px 1px;font-weight:normal;font-size:12px;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
+			template+='<td width="20%"><label style="padding: 1px 1px; white-space: normal; font-weight:normal;font-size:12px;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
 			template+='</td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';

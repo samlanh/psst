@@ -45,7 +45,7 @@
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_GROUP");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<select dojoType="dijit.form.FilteringSelect" required="required" readOnly="readOnly"  class="fullside" id="from_group" name="from_group" type="text" onchange="toStudentGroup(1);getStudentFromGroup();">
+		                   		<select dojoType="dijit.form.FilteringSelect" required="required" readOnly="readOnly"  class="fullside" id="from_group" name="from_group" type="text" queryExpr="*${0}*" autoComplete="false" onchange="toStudentGroup(1);getStudentFromGroup();">
 									<option value="0" placeholder="select group">Select Year </option>
 									<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 										<option value="<?php echo $_row['id']?>"<?php if($_row['id']==$this->rs['from_group']) echo 'selected="selected"';?>><?php echo $_row['group_code']?></option>
@@ -64,42 +64,35 @@
 		                </div>
 						
 						<div class="form-group">
-							<div class="col-md-9 col-sm-6 col-xs-6">
-		                   </div>
+						   <div class="col-md-9 col-sm-6 col-xs-6"></div>
 						   <div class="col-md-1 col-sm-2 col-xs-2">
 								<strong><?php echo $tr->translate("NOTE")?> :</strong>
 		                   </div>
 		                   <div class="col-md-2 col-sm-10 col-xs-10 right">
-		                   		<input type="checkbox" onclick="return false;" checked > <?php echo $tr->translate("PASS")?> / <?php echo $tr->translate("CHANGE")?>
+		                   		<input type="checkbox" onclick="return false;" checked ><?php echo $tr->translate("PASS")?> / <?php echo $tr->translate("CHANGE")?>
 		                   </div>
 		                </div>
 						<div class="form-group">
-							<div class="col-md-6 col-sm-6 col-xs-6">
-		                   </div>
-		                   <div class="col-md-4 col-sm-10 col-xs-10 right">
-		                   </div>
+							<div class="col-md-6 col-sm-6 col-xs-6"></div>
+		                   <div class="col-md-4 col-sm-10 col-xs-10 right"></div>
 						   <div class="col-md-2 col-sm-2 col-xs-2" style="white-space:nowrap;">
 		                   		<input type="checkbox"  onclick="return false;"> <?php echo $tr->translate("FAIL")?> / <?php echo $tr->translate("NOT_CHANGE")?>
 		                   </div>
 		                </div>
-						
 		                <div class="form-group">
-		                   <div id="data_table" style="min-height: 300px !important;overflow-y: auto;border: solid 1px #d0d0d0ee; padding: 5px 10px;" class="col-md-12 col-sm-12 col-xs-12">
-		                   </div>
+		                   <div id="data_table" style="min-height: 300px !important;overflow-y: auto;border: solid 1px #d0d0d0ee; padding: 5px 10px;" class="col-md-12 col-sm-12 col-xs-12"></div>
 						   <input type="text" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
 		                </div>
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog">
 		            	<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TO_GROUP");?> 
-		                   </label>
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TO_GROUP");?></label>
 		                </div>
-		                
 		                <div class="form-group">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_GROUP");?> <span class="required">*</span> :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   			<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" onchange="toStudentGroup(2);popupAddGroup();">
+	                   			<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" queryExpr="*${0}*" autoComplete="false" onchange="toStudentGroup(2);popupAddGroup();">
 									<option value="-1"><?php echo $tr->translate("ADD_NEW")?></option>
 									<?php if(!empty($this->row))foreach ($this->rows as $_row){?>
 										<option value="<?php echo $_row['id']?>" <?php if($_row['id']==$this->rs['to_group']) echo 'selected="selected"';?>><?php echo $_row['group_code']?></option>
@@ -121,7 +114,7 @@
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text">
+		                   		<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text" queryExpr="*${0}*" autoComplete="false">
 									<?php if(!empty($this->change_type)){foreach ($this->change_type as $rs){?>
 										<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->rs['change_type']){echo 'selected="selected"';}?>><?php echo $rs['name']?></option>
 									<?php }}?>
@@ -177,8 +170,8 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.DateTextBox");
 dojo.ready(function(){
 	toStudentGroup(1);
 	toStudentGroup(2);
@@ -233,7 +226,6 @@ function getStudentFromGroup(){
 			setpassstudent();
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

@@ -205,56 +205,56 @@ function getRefreshGroup(){
 	});
 }
 var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-all-student')); ?>";
-	function getStudentFromGroup(){
-			from_group = dijit.byId('from_group').get('value');
-			if(from_group==0 || from_group==""){
-				dojo.byId('data_table').innerHTML = "";
-				return false;
-			}
-			dijit.byId('all_student').attr('value','');
-			dojo.xhrPost({
-				url:url_get_all_student_from_group,
-				content:{
-					'from_group':from_group
-					},
-				handleAs:"json",
-				load: function(respone) {
-					tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table" >'
-						+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
-							+'<td><?php echo $tr->translate('CODE');?></td>'
-							+'<td><?php echo $tr->translate('NAME_KH');?></td>'
-							+'<td><?php echo $tr->translate('NAME_EN');?></td>'
-							+'<td colspan="2"><?php echo $tr->translate('SEX');?></td>'
-							+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
-							+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td></tr>'
-						+'</thead>';
-					if(respone!=""){
-						num=0;
-						all_student = respone.length;
-						dijit.byId('all_student').attr('value',all_student);
-						for(var i=0;i<respone.length;i++){
-							inx = i+1;
-							tem += '<tr style="border:1px solid #000;">';
-							tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
-							tem += '<td>&nbsp;<label>'+respone[i].stu_code+'</label></td>';
-							tem += '<td>&nbsp;<label>'+respone[i].stu_khname+'</label></td>';
-							tem += '<td>&nbsp;<label>'+respone[i].last_name+" "+respone[i].stu_enname+'</label></td>';
-							tem += '<td colspan="2" align="center">&nbsp;<label>'+respone[i].sex+'</label></td>';
-							tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
-							tem += '</tr>';
-							if($("#identity").val()!="") {
-								var identity = $("#identity").val();
-								$("#identity").val(identity+','+inx);
-							} else {$("#identity").val(inx);}
-						}
-					}
-					tem+='</table>';
-					dojo.byId('data_table').innerHTML = tem;
-				},
-				error: function(err) {
-				}
-			});
+function getStudentFromGroup(){
+	from_group = dijit.byId('from_group').get('value');
+	if(from_group==0 || from_group==""){
+		dojo.byId('data_table').innerHTML = "";
+		return false;
 	}
+	dijit.byId('all_student').attr('value','');
+	dojo.xhrPost({
+		url:url_get_all_student_from_group,
+		content:{
+			'from_group':from_group
+			},
+		handleAs:"json",
+		load: function(respone) {
+			tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table" >'
+				+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
+					+'<td><?php echo $tr->translate('CODE');?></td>'
+					+'<td><?php echo $tr->translate('NAME_KH');?></td>'
+					+'<td><?php echo $tr->translate('NAME_EN');?></td>'
+					+'<td colspan="2"><?php echo $tr->translate('SEX');?></td>'
+					+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
+					+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td></tr>'
+				+'</thead>';
+			if(respone!=""){
+				num=0;
+				all_student = respone.length;
+				dijit.byId('all_student').attr('value',all_student);
+				for(var i=0;i<respone.length;i++){
+					inx = i+1;
+					tem += '<tr style="border:1px solid #000;">';
+					tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
+					tem += '<td>&nbsp;<label>'+respone[i].stu_code+'</label></td>';
+					tem += '<td>&nbsp;<label>'+respone[i].stu_khname+'</label></td>';
+					tem += '<td>&nbsp;<label>'+respone[i].last_name+" "+respone[i].stu_enname+'</label></td>';
+					tem += '<td colspan="2" align="center">&nbsp;<label>'+respone[i].sex+'</label></td>';
+					tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
+					tem += '</tr>';
+					if($("#identity").val()!="") {
+						var identity = $("#identity").val();
+						$("#identity").val(identity+','+inx);
+					} else {$("#identity").val(inx);}
+				}
+			}
+			tem+='</table>';
+			dojo.byId('data_table').innerHTML = tem;
+		},
+		error: function(err) {
+		}
+	});
+}
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(type){
 	if(type==1){
@@ -330,14 +330,13 @@ dojo.ready(function(){
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "from_group",
 	    name: "from_group",  
 	    class: 'fullside', 
 	    readonly:false,
 	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-	    onChange: function() {  
+	    onChange: function(){  
 	    	group_id = dijit.byId('from_group').get('value');
 	    	toStudentGroup(1);
 	    	getStudentFromGroup();
@@ -347,7 +346,6 @@ dojo.ready(function(){
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "to_group",
 	    name: "to_group",  
 	    class: 'fullside', 

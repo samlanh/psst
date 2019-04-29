@@ -119,15 +119,15 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$this->update($arra, $where);
 			}else{
 				$_arr= array(
-						'user_id'		=>$this->getUserId(),
-						'from_group'	=>$_data['from_group'],
-						'to_group'		=>$_data['to_group'],
-						'change_type'	=>$_data['change_type'],
-						'moving_date'	=>$_data['moving_date'],
-						'note'			=>$_data['note'],
-						'status'		=>$_data['status'],
-						'array_checkbox'=>$_data['identity'],
-						);
+					'user_id'		=>$this->getUserId(),
+					'from_group'	=>$_data['from_group'],
+					'to_group'		=>$_data['to_group'],
+					'change_type'	=>$_data['change_type'],
+					'moving_date'	=>$_data['moving_date'],
+					'note'			=>$_data['note'],
+					'status'		=>$_data['status'],
+					'array_checkbox'=>$_data['identity'],
+				);
 				$id = $this->insert($_arr);
 			}
 				
@@ -155,7 +155,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							'grade'			=>$group_detail['grade'],
 							'academic_year'	=>$group_detail['academic_year'],
 							'room'			=>$group_detail['room_id'],
-							);
+						);
 							if($_data['change_type']==2){
 								$array['is_stu_new']=0;
 							}
@@ -205,16 +205,16 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$this->_name = 'rms_group';
 			$group=array(
 					'is_use'	=>1,
-					'is_pass'	=>0,
+					'is_pass'	=>2,
 			);
 			$where=" id=".$_data['to_group'];
 			$this->update($group, $where);
 			
 			return $_db->commit();
 		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	
@@ -250,7 +250,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id = ".$id;
 				$this->update($_arr, $where);
 				
-				
 				$this->_name='rms_group_detail_student';
 				$StudentOldGroup = $this->getAllStudentOldGroup($_data['from_group']);
 				if(!empty($StudentOldGroup)){
@@ -276,7 +275,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				}else{
 					$stu_type=3;	// eng and other subject
 				}
-				
 				if(empty($_data['identity'])){
 					$_data['identity'] = $_data['old_array_checkbox'];
 				}
@@ -300,7 +298,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'stu_id'	=>$_data['stu_id_'.$k],
 								'user_id'	=>$this->getUserId(),
 								'status'	=>1,
-								//'date'		=>date('Y-m-d'),
 								'type'		=>1,
 								'old_group'	=>$_data['from_group'],
 							);
@@ -346,7 +343,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['from_group'];
 				$this->update($from_group, $where);
 				
-				
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
@@ -356,7 +352,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$this->update($group, $where);
 				
 			}else{  //////// status == 0 => deactive    ===> so update all student to old info
-
 				$_arr=array(
 						'user_id'=>$this->getUserId(),
 						'status'=>$_data['status']
@@ -377,7 +372,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$this->update($arra, $where);
 					}
 				}
-				
 			//////////////////////// delete record student that added to new group //////////////////////////////////////	
 				$this->_name='rms_group_detail_student';
 				$where = "old_group = ".$_data['from_group']." and group_id = ".$_data['old_to_group'];
@@ -397,7 +391,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 					$idsss=explode(',', $_data['old_iden']); // old_identity all student that updated to new group 
 					foreach ($idsss as $k){
-						
 						$this->_name = 'rms_student';
 						$array=array(
 								'session'		=>$group_detail['session'],
@@ -410,11 +403,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						);
 						$where = " stu_id=".$_data['old_student'.$k];
 						$this->update($array, $where);
-					
 					}
 				}
-				
-				
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>0,
@@ -430,12 +420,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['from_group'];
 				$this->update($from_group, $where);
 			}
-			
 			return $_db->commit();
 			
 		}catch(Exception $e){
 			$_db->rollBack();
-			echo $e->getMessage();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}

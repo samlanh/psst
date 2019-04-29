@@ -5,15 +5,6 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	
-	$day = array(
-		"Mon" =>'ច័ន្ទ',
-		"Tue" =>'អង្គារ',
-		"Wed" =>'ពុធ',
-		"Thu" =>'ព្រហស្បតិ៍',
-		"Fri" =>'សុក្រ',
-		"Sat" =>'សៅរ៍',
-		"Sun" =>'អាទិត្យ',
-	);
 	$month = array(
 		"01"=>"មករា",
 		"02"=>"កុម្ភៈ",
@@ -350,7 +341,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {

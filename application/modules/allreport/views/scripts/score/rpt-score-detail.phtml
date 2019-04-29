@@ -12,19 +12,19 @@
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	$dbgb = new Application_Model_DbTable_DbGlobal();
 	$month = array(
-				"01"=>"មករា",
-				"02"=>"កុម្ភៈ",
-				"03"=>"មីនា",
-				"04"=>"មេសា",
-				"05"=>"ឧសភា",
-				"06"=>"មិថុនា",
-				"07"=>"កក្កដា",
-				"08"=>"សីហា",
-				"09"=>"កញ្ញា",
-				"10"=>"តុលា",
-				"11"=>"វិច្ឆិកា",
-				"12"=>"ធ្នូ"
-			);
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
@@ -97,19 +97,6 @@
         		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
         	</div>
         </div>
-        <!-- 
-        <div class="form-group">
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php //echo $frm->getElement("degree");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php //echo $frm->getElement("grade");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        	<?php //echo $frm->getElement("session");?>
-        	</div>
-        </div>
-         -->
      </form>
 	<div id="divPrint">
 		<style type="text/css">
@@ -165,23 +152,22 @@
 				 if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");$m = $m+1;}
 				 else{$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;}
 				 	$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']);
-				 	
 				?>
 				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 				<?php $i=0; $count_fail=0;?>
 					<tr>
 						<td align="center" width="32%" rowspan="2">
-							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<strong​​ style="color:#4839bd; font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("MINISTRY_INPHNOMPENH");?><br />
 								<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
 								<?php echo $tr->translate("CUSTOMER_BRANCH");?>
 							</strong>
 						</td>
 						<td align="center" width="36%">
-							<strong​​ style="color:#4839bd; font-size: 14px;font-family: 'Times New Roman','Khmer OS Muol Light';"></strong>
+							<strong​​ style="color:#4839bd; font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol Light';"></strong>
 						</td>
 						<td align="center" width="32%" valign="top">
-							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<strong​​ style="color:#4839bd; font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("NATIONALITY_OFKINGDOM");?><br />
 								<?php echo $tr->translate("NATION_RELIGION_KING");?>
 							</strong>
@@ -189,19 +175,15 @@
 					</tr>
 					<tr>
 						<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-							<strong​​ style="color:#4839bd; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<strong​​ style="color:#4839bd; font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
 							</strong><br />
-							<strong​​ style="color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';">
+							<strong​​ style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
-								<!--<?php //echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['degree'];?></span> ,-->
 								<?php if($rs['exam_type']!=2){echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_month'];?></span><?php }?>
 								<br />
 								<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
 								<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
-							 	<!--<?php //echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['for_semester'];?></span> ,
-							 	<?php //echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['room_name'];?></span> ,
-							 	<?php //echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['session'];?></span> -->
 							</strong>
 						</td>
 						<td align="center" valign="top"></td>
@@ -216,7 +198,6 @@
 						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: 2px solid #5a71b5;"  border="1" >
 							<tr class="cheader" align="center" >
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("NUM");?></td>
-								<!--<td style="width:100px;" rowspan="<?php //echo $colspan;?>"><?php //echo $tr->translate("ID_NUMBER");?></td> -->
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("SEX");?></td>
 								<?php if($this->data['scoreresulttye']==1){?>
@@ -246,7 +227,6 @@
 							<?php } $i++;?>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-								<!-- <td align="center" style="white-space:nowrap;">&nbsp;<?php //echo $rs['stu_code'];?>&nbsp;</td> -->
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
@@ -264,15 +244,14 @@
 										$amount_subject = $score['amount_subject'];
 									?>
 								</td>
-								<?php }
-								?>
+								<?php } ?>
 								<?php }
 									if($rs['average']==$old_totalscore){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
-									}//
+									}
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
 								?>
 								<td align="center"><?php
@@ -283,15 +262,12 @@
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
 								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?>
 								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],1);?>
 								&nbsp;</td>
 								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php //echo $dbgb->calCulateGradeKhmerMention($average,$rs['max_score']);?>
 								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],2);?>
 								&nbsp;</td>
 								<td class="red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php //echo $dbgb->calCulateGradeEnglishMention($average,$rs['max_score']);?>
 								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],3);?>
 								&nbsp;
 								</td>
@@ -310,7 +286,6 @@
 									}?>
 								</td>
 							</tr>
-							
 							<?php 
 								$old_totalscore = $rs['average'];
 								$old_groupid=$rs['group_id']; ?>
@@ -334,24 +309,22 @@
 											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">បានឃើញ និងឯកភាព</td>
+											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">បានឃើញ និងឯកភាព</td>
 											<td width="33%" valign="top">&nbsp;</td>
 											<td width="33%" style="color:#1949d6;white-space: nowrap;font-family:'Khmer os battambang'" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
 										</tr>
 										<tr>
-											<td valign="top" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
 											<td valign="top">&nbsp;</td>
 											<td valign="top" style="color:red; text-align: center;font-family:'Khmer os battambang'">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
 										</tr>
 										<tr>
-											<td valign="top"  style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">នាយករង</td>
+											<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">នាយករង</td>
 											<td valign="top" ></td>
-											<td valign="top" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;"><br /><br /><?php echo $rs['teacher']?></td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><br /><br /><?php echo $rs['teacher']?></td>
 										</tr>
 									</table>
-								
 							<?php }?>
-						
 						<?php
 						if($this->data['scoreresulttye']==1 AND $show_subject==0){
 							$string=",";
@@ -370,7 +343,6 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.html");
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
@@ -398,8 +370,7 @@
 		    readonly:false,
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function() {  
-			    
+		    onChange: function(){  
 		    }
 		}, "group");
 		
@@ -440,7 +411,6 @@
 			    }
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -468,7 +438,6 @@
 			    }
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}

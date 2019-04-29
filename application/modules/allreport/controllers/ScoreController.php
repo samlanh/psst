@@ -744,6 +744,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     				'study_year' 	=>'',
     				'grade_all' 	=>'',
     				'group'			=>'',
+    				'student'			=>'',
     				'start_date'	=> date('Y-m-d'),
     				'end_date'		=> date('Y-m-d'),
     		);
@@ -776,6 +777,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     				'study_year' 	=>'',
     				'grade_all' 	=>'',
     				'group'			=>'',
+    				'student'			=>'',
     				'start_date'	=> date('Y-m-d'),
     				'end_date'		=> date('Y-m-d'),
     		);
@@ -803,7 +805,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Allreport_Model_DbTable_DbRptAllStudent();
     	$result = $db->getStudenLetterofpraiseById($id);
     	if (empty($result)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-student-letterofpraise");
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-student-letterofpraise");
     		exit();
     	}
     	$this->view->rs = $result;
@@ -814,7 +816,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Allreport_Model_DbTable_DbRptAllStudent();
     	$result = $db->getStudenCetificateById($id);
     	if (empty($result)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-student-cetificate");
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-student-cetificate");
     		exit();
     	}
     	$this->view->rs = $result;

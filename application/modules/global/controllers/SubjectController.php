@@ -121,13 +121,20 @@ class Global_SubjectController extends Zend_Controller_Action {
 	function getsubjectAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			if (!empty($data['schoolOption'])){
-				$db = new Application_Model_DbTable_DbGlobal();
-				$subject = $db->getAllSubjectStudy($data['schoolOption']);
-				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
-				print_r(Zend_Json::encode($subject));
-				exit();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$data['schoolOption'] = empty($data['schoolOption'])?null:$data['schoolOption'];
+// 			$subject = $db->getAllSubjectStudy($data['schoolOption']);
+			if (!empty($data['academic_year'])){
+				$_dbfee = new Accounting_Model_DbTable_DbFee();
+				$row = $_dbfee->getFeeById($data['academic_year']);
+				$data['schoolOption'] = $row['school_option'];
+			}else if (!empty($data['branch_id'])){
+				$data['schoolOption'] = $db->getSchoolOptionListByBranch($data['branch_id']);
 			}
+			$subject = $db->getAllSubjectName($data['schoolOption']);
+			array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+			print_r(Zend_Json::encode($subject));
+			exit();
 		}
 	}
 }

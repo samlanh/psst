@@ -351,21 +351,7 @@ function getAllgroupStudyNotPass($action=null){
    		$db = $this->getAdapter();
    		return $this->getAllItems(null);
    }   
-   public function getAllSubjectStudy($schoolOption=null){
-   	$db = $this->getAdapter();
-
-	   	$lang = $this->currentlang();
-	   	$field = 'subject_titleen';
-	   	if ($lang==1){
-	   		$field = 'subject_titlekh';
-	   	}
-   		$sql = " SELECT id,$field as name,shortcut FROM `rms_subject` WHERE
-   		is_parent=1 AND status = 1 and subject_titlekh!='' ";
-   		if (!empty($schoolOption)){
-   			$sql.=" AND schoolOption = $schoolOption";
-   		}
-   		return $db->fetchAll($sql);
-   }
+  
    
    
    function getAllDept($search, $start, $limit){
@@ -1362,17 +1348,64 @@ function getAllgroupStudyNotPass($action=null){
   }
    
   
-  public function getAllSubjectName(){
+  public function getAllSubjectName($schooloption=null){
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
   	$field = 'subject_titleen';
   	if ($lang==1){
   		$field = 'subject_titlekh';
   	}
-  	$sql=" SELECT id ,$field AS name FROM `rms_subject` WHERE STATUS=1 AND subject_titlekh != '' order by id DESC ";
+  	$sql=" SELECT id ,$field AS name FROM `rms_subject` WHERE status=1 AND subject_titlekh != ''  ";
+  	
+  	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		$SchoolOptionarr = $this->getAllSchoolOption();
+  		if (!empty($SchoolOptionarr)){
+  			$s_where = array();
+  			foreach ($SchoolOptionarr as $i){
+  				$s_where[] = $i['id']." IN (schoolOption)";
+  			}
+  			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  		}
+  	
+  		if (!empty($user['schoolOption'])){
+  			$userSchO = explode(",", $user['schoolOption']);
+  			$s_wheres = array();
+  			foreach ($userSchO as $schooloptionId){
+  				$s_wheres[] = $schooloptionId." IN (schoolOption)";
+  			}
+  			$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
+  		}
+  	}
+  	 
+  	if (!empty($schooloption)){
+  		$schooloptionParam = explode(",", $schooloption);
+  		$s_whereee = array();
+  		foreach ($schooloptionParam as $schooloptionId){
+  			$s_whereee[] = $schooloptionId." IN (schoolOption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
+  	}
+  	$sql.=" ORDER BY $field ASC";
   	return $db->fetchAll($sql);
   }
-   
+  
+//   public function getAllSubjectStudy($schoolOption=null){
+//   	$db = $this->getAdapter();
+  
+//   	$lang = $this->currentlang();
+//   	$field = 'subject_titleen';
+//   	if ($lang==1){
+//   		$field = 'subject_titlekh';
+//   	}
+//   	$sql = " SELECT id,$field as name,shortcut FROM `rms_subject` WHERE
+//   	is_parent=1 AND status = 1 and subject_titlekh!='' ";
+//   	if (!empty($schoolOption)){
+//   	$sql.=" AND schoolOption = $schoolOption";
+//   	}
+//   	return $db->fetchAll($sql);
+//   } 
   public function getAllTeahcerName(){
   	$db = $this->getAdapter();
   	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' order by id DESC ";
@@ -2198,6 +2231,38 @@ function getAllgroupStudyNotPass($action=null){
   	$db = $this->getAdapter();
   	$sql="SELECT r.id,r.rating AS `name` FROM `rms_rating` AS r ";
   	return $db->fetchAll($sql);
+  }
+  
+  function getAllStudentList($branchid=null,$data=array()){
+  	$db=$this->getAdapter();
+  
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	$sql=" SELECT s.stu_id AS id,
+	  	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
+	  	FROM rms_student AS s
+	  	WHERE
+	  	(stu_enname!='' OR s.stu_khname!='')
+	  	AND s.status=1 AND s.is_subspend=0 AND s.customer_type=1 ";
+  	
+  	$sql.= $this->getAccessPermission("s.branch_id");
+	  	if(!empty($branchid)){
+	  		$sql.=" AND s.branch_id=".$branchid;
+	  	}
+	  	if(!empty($data['study_year'])){
+	  		$sql.=" AND s.academic_year=".$data['study_year'];
+	  	}
+	  	if(!empty($data['group'])){
+	  		$sql.=" AND s.group_id=".$data['group'];
+	  	}
+	  	if(!empty($data['degree'])){
+	  		$sql.=" AND s.degree=".$data['degree'];
+	  	}
+	  	if(!empty($data['grade_all'])){
+	  		$sql.=" AND s.grade=".$data['grade_all'];
+	  	}
+	  	$sql.=" ORDER BY s.degree DESC,s.stu_khname ASC";
+  		$rows = $db->fetchAll($sql);
+  		return $rows;
   }
 }
 ?>

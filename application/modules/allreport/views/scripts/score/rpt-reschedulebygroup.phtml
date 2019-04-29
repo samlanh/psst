@@ -36,7 +36,8 @@
             	<input id="group" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("room");?>
+            	<?php //echo $frm->getElement("room");?>
+            	<input id="room" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("grade");?>
@@ -232,6 +233,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var room_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: academic_store,
@@ -246,6 +249,19 @@ dojo.ready(function(){
 			academic_year = dijit.byId('study_year').get('value');
 		}
 	}, "study_year");
+	new dijit.form.FilteringSelect({
+		store: room_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                     
+		id: "room",
+		name: "room",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ROOM");?>",          
+		onChange: function() {
+			  
+		}
+	}, "room");
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -266,10 +282,38 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
+		 getRefreshRoom();
     });
 	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
+	 getRefreshRoom();
 });
+
+var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';										
+function getRefreshRoom(){
+	dijit.byId('room').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id == -1){
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getRoom,
+		handleAs:"json",
+		content:{
+				'branch_id':branch_id,'has_addnew':1
+				},
+		load: function(data) {
+			room_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('room').set('store',room_store);  
+		    dijit.byId('room').set('value','<?php echo $this->search['room']?>');  
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
 function getAllAcademicByBranch(){

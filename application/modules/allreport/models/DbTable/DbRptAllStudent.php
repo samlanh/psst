@@ -1630,6 +1630,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['grade_all'])){
     		$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade_all'];
     	}
+    	if(!empty($search['student'])){
+    		$where.=' AND st.stu_id ='.$search['student'];
+    	}
+    	
     	if(!empty($search['branch_id'])){
     		$where.=' AND c.branch_id='.$search['branch_id'];
     	}
@@ -1735,6 +1739,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    if(!empty($search['grade_all'])){
 	    	$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade_all'];
 	    }
+	    
+	    if(!empty($search['student'])){
+	    	$where.=' AND st.stu_id ='.$search['student'];
+	    }
+	    
 	    if(!empty($search['branch_id'])){
 	   		 $where.=' AND c.branch_id='.$search['branch_id'];
 	    }

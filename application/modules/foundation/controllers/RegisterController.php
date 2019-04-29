@@ -468,5 +468,17 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 	}
 	
+	function getstudentlistAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
+			$rows = $db->getAllStudentList($branch_id,$data);
+			
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	
 	
 }

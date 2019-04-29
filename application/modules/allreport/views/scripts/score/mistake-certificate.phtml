@@ -35,12 +35,10 @@
 				}
 				.hover:hover{background: #ccc;}
 				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-				
 			</style>
-		
 			<tr>
-				<td style="border:5px solid #000;     padding: 10px;">
-					<table width="100%" border="0" style="text-align:center;font-family: Khmer OS Muol;padding:15px;">
+				<td style="">
+					<table width="100%" border="0" style="text-align:center;font-family: Khmer OS Muol Light;padding:15px;">
 						<tr>
 							<td colspan="3"><?php echo $this->rsheader;?></td>
 						</tr>
@@ -48,40 +46,12 @@
 						<tr>
 							<td>&nbsp;</td>
 						</tr>
-						<!-- 
-						<tr>
-							<td width="12%" rowspan="3" valign="top" style="white-space:nowrap;">
-								<img style="width: 100%;" alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"><br />
-								<div style="font-size:8px;">សាលាសម្រាប់វរសិស្ស</div>
-								<div style="font-size:13px;font-family:Mistral;">School for the Elite</div>
-							</td>
-							
-							<td width="76%" style="font-size: 17px;">
-								<?php //echo $tr->translate("CUSTOMER_BRANCH")?>
-							</td>
-							
-							<td  width="12%" rowspan="3" >
-								<table width="100%">
-									<tr>
-										<td >
-											<div style="border:1px solid #000;height: 140px;width:100px;"></div>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td style="font-size: 18px;font-family: Time New Roman;font-weight: bold;">
-								<?php //echo $tr->translate("CUSTOMER_BRANCH");?>
-							</td>
-						</tr>
-						 -->
 						<tr>
 							<td style="font-size: 14px;">&nbsp;
 							</td>
 						</tr>
 						<tr>
-							<td align="center" colspan="3" style="font-size: 14px;font-family: Khmer OS Muol;">
+							<td align="center" colspan="3" style="font-size: 14px;font-family: Khmer OS Muol Light;">
 								<div style="margin-top: -30px;">សលាកបត្រព័ត៌មាន<br />
 								ឆ្នាំសិក្សា <span style="font-weight:bold;"><?php 
 									$academic_year='';
@@ -123,8 +93,8 @@
 												
 												អាសយដ្ឋានបច្ចុប្បន្នផ្ទះលេខ &nbsp;<?php echo $this->student_info['home_num']?> ផ្លូវ <?php echo $this->student_info['street_num']?> សង្កាត់ <?php echo $this->student_info['commune_name']?> ខណ្ឌ <?php echo $this->student_info['district_name']?> រាជធានី <?php echo $this->student_info['province_name']?><br />
 											
-												ឈ្មោះឪពុក &nbsp; <?php echo $this->student_info['father_enname']?> &nbsp; មុខរបរ &nbsp; <?php echo $this->student_info['fa_job']?> &nbsp; លេខទូរស័ព្ទ &nbsp; <?php echo $this->student_info['father_phone']?><br />
-												ឈ្មោះម្តាយ &nbsp; <?php echo $this->student_info['mother_enname']?> &nbsp; មុខរបរ &nbsp; <?php echo $this->student_info['mo_job']?> &nbsp; លេខទូរស័ព្ទ &nbsp; <?php echo $this->student_info['mother_phone']?><br />
+												ឈ្មោះឪពុក &nbsp; <?php echo $this->student_info['father_enname']?> &nbsp; មុខរបរ &nbsp; <?php echo $this->student_info['fa_job']?> &nbsp; លេខទូរសព្ទ&nbsp; <?php echo $this->student_info['father_phone']?><br />
+												ឈ្មោះម្តាយ &nbsp; <?php echo $this->student_info['mother_enname']?> &nbsp; មុខរបរ &nbsp; <?php echo $this->student_info['mo_job']?> &nbsp; លេខទូរសព្ទ&nbsp; <?php echo $this->student_info['mother_phone']?><br />
 												លេខទូរស័ព្ទផ្ទះ.......................................................................................................<br />
 												ប្រវត្តិសុខភាព ........................................................................................................
 											</div>
@@ -133,7 +103,6 @@
 											</div>
 										</td>
 									</tr>
-									
 								</table>	
 							</td>
 						</tr>
@@ -149,19 +118,19 @@
 				<td>
 					<table width="100%" border="1" style="border-collapse:collapse; border:1px solid #000; font-family: Khmer OS Battambang; ">
 						<tr style="font-size:13px;">
-							<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
+							<td rowspan="2" align="center" style="font-family: Khmer OS Muol Light;">
 								កាលបរិច្ឆេទ	
 							</td>
-							<td colspan="3" align="center" style="font-family: Khmer OS Muol;">
+							<td colspan="3" align="center" style="font-family: Khmer OS Muol Light;">
 								កំហុស
 							</td>
-							<td colspan="2" align="center" style="font-family: Khmer OS Muol;">
+							<td colspan="2" align="center" style="font-family: Khmer OS Muol Light;">
 								អវត្តមាន
 							</td>
-							<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
+							<td rowspan="2" align="center" style="font-family: Khmer OS Muol Light;">
 								របាយបញ្ហា
 							</td>
-							<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
+							<td rowspan="2" align="center" style="font-family: Khmer OS Muol Light;">
 								ផ្សេងៗ
 							</td>
 						</tr>
@@ -178,104 +147,99 @@
 							$p=0;
 							$attendences = $db_mistack->getAttendenceBydate(null, $group_id, $stu_id);
 						?>	
-								<?php 
-									if (!empty($attendences)){
-										foreach ($attendences as $attendence){
-										$attendence_year='';
-										$sp_attendence_year = str_split(date("Y",strtotime($attendence['date_attendence'])));
-										foreach ($sp_attendence_year as $cos){
-											$attendence_year.=$number[$cos];
+						<?php 
+							if (!empty($attendences)){
+								foreach ($attendences as $attendence){
+								$attendence_year='';
+								$sp_attendence_year = str_split(date("Y",strtotime($attendence['date_attendence'])));
+								foreach ($sp_attendence_year as $cos){
+									$attendence_year.=$number[$cos];
+								}
+								$att_m='';
+								$sp_att_m = str_split(date("m",strtotime($attendence['date_attendence'])));
+								foreach ($sp_att_m as $cos){
+									$att_m.=$number[$cos];
+								}
+								$att_d='';
+								$sp_att_d = str_split(date("d",strtotime($attendence['date_attendence'])));
+								foreach ($sp_att_d as $cos){
+									$att_d.=$number[$cos];
+								}
+								$permission = "";
+								$absent = "";
+								$small = "";
+								$medium = "";
+								$big = "";
+								$descri_added="";
+								if ($attendence['type']==1){ // attendence
+									if($attendence['attendence_status']==3){
+										$permission = $number['1'];$p++;
+									}
+									if($attendence['attendence_status']==2){
+										$absent = $number['1'];$at++;
+									}
+									if($attendence['attendence_status']==4){
+										$small = $number['1'];$s++;
+										if ($attendence['for_session']==1){
+											$descri_added = "(មកយឺត ពេលព្រឹក)";
+										}else if ($attendence['for_session']==2){
+											$descri_added = "(មកយឺត ពេលល្ងាច)";
 										}
-										$att_m='';
-										$sp_att_m = str_split(date("m",strtotime($attendence['date_attendence'])));
-										foreach ($sp_att_m as $cos){
-											$att_m.=$number[$cos];
+									}
+									if($attendence['attendence_status']==5){
+										$small = $number['1'];$s++;
+										if ($attendence['for_session']==1){
+											$descri_added = "(ចេញមុន  ពេលព្រឹក)";
+										}else if ($attendence['for_session']==2){
+											$descri_added = "(ចេញមុន  ពេលល្ងាច)";
 										}
-										$att_d='';
-										$sp_att_d = str_split(date("d",strtotime($attendence['date_attendence'])));
-										foreach ($sp_att_d as $cos){
-											$att_d.=$number[$cos];
-										}
-										$permission = "";
-										$absent = "";
-										$small = "";
-										$medium = "";
-										$big = "";
-										$descri_added="";
-										if ($attendence['type']==1){ // attendence
-											if($attendence['attendence_status']==3){
-												$permission = $number['1'];$p++;
-											}
-											if($attendence['attendence_status']==2){
-												$absent = $number['1'];$at++;
-											}
-											if($attendence['attendence_status']==4){
-												$small = $number['1'];$s++;
-												if ($attendence['for_session']==1){
-													$descri_added = "(មកយឺត ពេលព្រឹក)";
-												}else if ($attendence['for_session']==2){
-													$descri_added = "(មកយឺត ពេលល្ងាច)";
-												}
-											}
-											if($attendence['attendence_status']==5){
-												$small = $number['1'];$s++;
-												if ($attendence['for_session']==1){
-													$descri_added = "(ចេញមុន  ពេលព្រឹក)";
-												}else if ($attendence['for_session']==2){
-													$descri_added = "(ចេញមុន  ពេលល្ងាច)";
-												}
-											}
-										}else{
-											if($attendence['attendence_status']==1){
-												$small = $number['1'];$s++;
-											}
-											if($attendence['attendence_status']==2){
-												$medium = $number['1'];$m++;
-											}
-											if($attendence['attendence_status']==3){
-												$big = $number['1'];$l++;
-											}
-											
-										}
-									?>
-								<tr style="font-size:13px;">
-									<td align="center"><?php echo $att_d."-".$att_m."-".$attendence_year;?></td>
-									<td align="center"><?php echo $small;?></td>
-									<td align="center"><?php echo $medium;?></td>
-									<td align="center"><?php echo $big;?></td>
-									<td align="center"><?php echo $permission;?></td>
-									<td align="center"><?php echo $absent; ?></td>
-									<td>&nbsp;<?php echo $attendence['description']." ".$descri_added;?></td>
-									<td><?php echo "";?></td>
-								</tr> 
-								<?php }
-								}?>
-						<?php //}?>
+									}
+								}else{
+									if($attendence['attendence_status']==1){
+										$small = $number['1'];$s++;
+									}
+									if($attendence['attendence_status']==2){
+										$medium = $number['1'];$m++;
+									}
+									if($attendence['attendence_status']==3){
+										$big = $number['1'];$l++;
+									}
+									
+								}
+							?>
+							<tr style="font-size:13px;">
+								<td align="center"><?php echo $att_d."-".$att_m."-".$attendence_year;?></td>
+								<td align="center"><?php echo $small;?></td>
+								<td align="center"><?php echo $medium;?></td>
+								<td align="center"><?php echo $big;?></td>
+								<td align="center"><?php echo $permission;?></td>
+								<td align="center"><?php echo $absent; ?></td>
+								<td>&nbsp;<?php echo $attendence['description']." ".$descri_added;?></td>
+								<td><?php echo "";?></td>
+							</tr> 
+						<?php }
+					}?>
 					<?php 
 						$count_s='';
 						$sp_count_s = str_split($s);
 						foreach ($sp_count_s as $cos){
 							$count_s.=$number[$cos];
 						}
-						
 						$count_m='';
 						$sp_count_m = str_split($m);
 						foreach ($sp_count_m as $cm){
 							$count_m.=$number[$cm];
 						}
-						
 						$count_l='';
 						$sp_count_l = str_split($l);
 						foreach ($sp_count_l as $cl){
 							$count_l.=$number[$cl];
 						}
-						
 						$count_p='';
 						$sp_count_p = str_split($p);
 						foreach ($sp_count_p as $cp){
 							$count_p.=$number[$cp];
 						}
-						
 						$count_at='';
 						$sp_count_at = str_split($at);
 						foreach ($sp_count_at as $cat){
@@ -283,18 +247,10 @@
 						}
 					?>
 						<tr align="center" style="font-size:13px;">
-							<td>
-								សរុប
-							</td>
-							<td>
-								<?php echo $count_s." ដង";?>
-							</td>
-							<td>
-								<?php echo $count_m." ដង";?>
-							</td>
-							<td>
-								<?php echo $count_l." ដង";?>
-							</td>
+							<td>សរុប</td>
+							<td><?php echo $count_s." ដង";?></td>
+							<td><?php echo $count_m." ដង";?></td>
+							<td><?php echo $count_l." ដង";?></td>
 							<td><?php echo $count_p." ដង";?></td>
 							<td><?php echo $count_at." ដង";?></td>
 						</tr>
@@ -309,7 +265,6 @@
 					<table width="100%">
 						<tr>
 							<td width="40%">&nbsp;
-								
 							</td>
 							<td width="60%">
 								<table width="100%" border="0"  style="font-size:14px;font-family:Khmer OS Battambang;" >
@@ -332,7 +287,7 @@
 									</tr>
 									<tr>
 										<td></td>
-										<td colspan="2" style="font-family: Khmer OS Muol;">
+										<td colspan="2" style="font-family: Khmer OS Muol Light;">
 											ប្រធានផ្នែក វិន័យ
 										</td>
 									</tr>
@@ -341,7 +296,7 @@
 									</tr>
 									<tr>
 										<td width="30%"></td>
-										<td width="30%" align="right" style="font-family: Khmer OS Muol;">ឈុំ សារិ</td>
+										<td width="30%" align="right" style="font-family: Khmer OS Muol Light;">ឈុំ សារិ</td>
 										<td width="40%" colspan="1"></td>
 									</tr>
 								</table>

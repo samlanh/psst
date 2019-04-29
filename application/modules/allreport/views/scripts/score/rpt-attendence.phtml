@@ -28,7 +28,7 @@
     			</div>
     		</div>
     	</div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-attendence')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<script type="dojo/method" event="onSubmit">
 			if(this.validate()) {
                 start_date=dijit.byId("start_date").get("value");
@@ -265,10 +265,8 @@
 			</table>
 		</div>
 </div>
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.FilteringSelect"); 
 
@@ -369,7 +367,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {

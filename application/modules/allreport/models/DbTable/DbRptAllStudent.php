@@ -966,26 +966,26 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql="SELECT 
 					g.id as group_id,
 					g.`group_code`,
-					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year, 
-					 
-					 (SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-					
-		
-					 (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
-					 `g`.`semester` AS `semester`,
-					  (SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-					  sdd.`stu_id`, st.`stu_code`, st.`stu_enname`, st.`stu_khname`, st.`sex` 
+					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year, 
+					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 LIMIT 1) AS grade,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
+					`g`.`semester` AS `semester`,
+					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+					 sdd.`stu_id`, st.`stu_code`, 
+					 st.`stu_enname`,
+					 st.last_name,
+					 st.`stu_khname`,
+					 st.`sex` 
 				FROM 
 					 `rms_group` AS g, `rms_student` AS st, 
-					 rms_student_attendence AS sd, 
+					  rms_student_attendence AS sd, 
 					 `rms_student_attendence_detail` AS sdd 
 				WHERE 
 					 (sd.type=2 OR sdd.`attendence_status` IN (4,5)) 
 					 AND sd.`id` = sdd.`attendence_id` 
 					 AND sd.group_id = g.id AND sd.status=1 
-					 AND st.`stu_id` = sdd.`stu_id` AND st.is_subspend = 0 
-    			";
+					 AND st.`stu_id` = sdd.`stu_id` ";
     	
     	$from_date =(empty($search['start_date']))? '1': "sd.`date_attendence` >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sd.`date_attendence` <= '".$search['end_date']." 23:59:59'";
@@ -1641,34 +1641,34 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     function getStudenCetificateById($id){
     	$db = $this->getAdapter();
     	$sql="SELECT cd.*,
-	    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-	    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
-	    	c.dept_kh,
-	    	c.dept_eng,
-	    	c.program_kh,
-	    	c.program_en,
-	    	c.from_date,
-	    	c.to_date,
-	    	c.issue_date,
-	    	st.stu_enname,
-	    	st.last_name,
-	    	st.stu_khname,
-	    	st.stu_code,
-	    	st.dob,
-	    	st.photo,
-	    	CONCAT(st.last_name,' ',st.stu_enname) AS stu_name,
-	    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex,
-	    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sexkh
+			    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1 ) AS branch_name,
+			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1 ) AS group_code,
+			    	c.dept_kh,
+			    	c.dept_eng,
+			    	c.program_kh,
+			    	c.program_en,
+			    	c.from_date,
+			    	c.to_date,
+			    	c.issue_date,
+			    	st.stu_enname,
+			    	st.last_name,
+			    	st.stu_khname,
+			    	st.stu_code,
+			    	st.dob,
+			    	st.photo,
+			    	CONCAT(st.last_name,' ',st.stu_enname) AS stu_name,
+			    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1 ) as sex,
+			    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1 ) as sexkh
 	    	FROM
-	    	`rms_issuecertificate_detail` AS cd,
-	    	rms_student AS st,
-	    	`rms_issuecertificate` AS c
+	    		`rms_issuecertificate_detail` AS cd,
+	    		rms_student AS st,
+	    		`rms_issuecertificate` AS c
 	    	WHERE
 	    	c.id = cd.certificate_id
-	    	AND st.stu_id = cd.stu_id AND cd.id=$id LIMIT 1
-    	";
+	    	AND st.stu_id = cd.stu_id AND cd.id=$id ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission("c.branch_id");
+    	$sql." LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
     

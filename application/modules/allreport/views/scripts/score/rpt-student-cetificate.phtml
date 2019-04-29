@@ -172,7 +172,7 @@ display: table-cell !important;
 		</div>
 </div>
 <?php 
-$urlCertificate = $this->baseUrl()."/allreport/allstudent/certificate/id/";
+$urlCertificate = $this->baseUrl()."/allreport/score/certificate/id/";
 ?>
 
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
@@ -191,7 +191,7 @@ $(function(){
 			gotoAction();
 		},
 		items: {
-			"certificate": {name: "<?php echo $tr->translate("CERTIFICATE");?>", icon: "fa-card",},
+			"certificate": {name: "<?php echo $tr->translate("PRINT_CERTIFICATE");?>", icon: "fa-print",},
 		}
 	});
 });
@@ -288,7 +288,7 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -316,7 +316,7 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -338,7 +338,7 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -397,13 +397,11 @@ function getallGrade(){
 			return false;
 		 }
 	}
-	
 	function print(){
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('print_student_card').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
 	}
-
 
 	function printPickupCardSelected(){
 		<?php 
@@ -413,7 +411,6 @@ function getallGrade(){
     	?>
 
     	 id_selected = dijit.byId('id_selected').get('value');
-    	 //alert(id_selected);
 		 if(id_selected!=''){
 			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
 		 }else{
@@ -444,7 +441,6 @@ function getallGrade(){
 	    }, 10000);
 	   return false;
 	}
-	
 	function checkAllStudent(array_length){
 		dijit.byId('id_selected').attr('value','');
 		if(dojo.byId('checkall').checked){

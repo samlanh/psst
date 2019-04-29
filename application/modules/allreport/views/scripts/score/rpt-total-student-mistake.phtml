@@ -127,9 +127,6 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>			
-			<tr>
 				<td colspan="3" id="exportExcel">
 					<table class="content-data" cellpadding="5"​  border="1" >							
 						<?php $i=0; $old_groupid=0; if (!empty($this->student)) foreach ($this->student as $key => $rs){
@@ -147,39 +144,41 @@ table.tb-footer tr.style-head {
 						</tr>
 						<?php }$i=0; ?>	
 						<thead>										
-						<tr>
-							<td align="center" colspan="7" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<span​​ style=" font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
-								<span​​ style=" font-size: 12px;font-family:'Times New Roman','Khmer OS Muol light';">
-									<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
-									<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
-									<br />
-									<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
-									<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
-								 	<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['semester'];?></span> , 
-								 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
-								 	, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
-								</span>
-							</td>
-						</tr>						
-						<tr class="style-head" >
-							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-							<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
-							<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
-							<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
-							<td colspan="3" style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $tr->translate("DISCIPLINE_TYPE");?>&nbsp;</td>
-						</tr>							
-						<tr class="style-head">
-							<td style="width: 40px;">&nbsp;<?php echo $tr->translate("SMALL_MISTACK");?>&nbsp;</td>
-							<td style="width: 40px;">&nbsp;<?php echo $tr->translate("MEDIUM_MISTACK");?>&nbsp;</td>
-							<td style="width: 40px;">&nbsp;<?php echo $tr->translate("BIG_MISTACK");?>&nbsp;</td>
-						</tr>
+							<tr>
+								<td align="center" colspan="7" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<span​​ style=" font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
+									<span​​ style=" font-size: 12px;font-family:'Times New Roman','Khmer OS Muol light';">
+										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
+										<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
+										<br />
+										<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
+										<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
+									 	<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['semester'];?></span> , 
+									 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
+									 	, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
+									</span>
+								</td>
+							</tr>						
+							<tr class="style-head" >
+								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								<td rowspan="2">Name in Latin</td>
+								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
+								<td colspan="3" style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $tr->translate("DISCIPLINE_TYPE");?>&nbsp;</td>
+							</tr>							
+							<tr class="style-head">
+								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("SMALL_MISTACK");?>&nbsp;</td>
+								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("MEDIUM_MISTACK");?>&nbsp;</td>
+								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("BIG_MISTACK");?>&nbsp;</td>
+							</tr>
 						</thead>
 						<?php } $i++;?>
 						<tr class="style-rowdata hover">
 							<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_code'];?></a></td>
 							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_khname'];?>&nbsp;</a></td>
+							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['last_name'].' '.$rs['stu_enname'];?>&nbsp;</a></td>
 							<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 							<?php $s=0; $m=0; $b=0;$el=0; ?>
 							<?php  
@@ -230,7 +229,6 @@ table.tb-footer tr.style-head {
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){

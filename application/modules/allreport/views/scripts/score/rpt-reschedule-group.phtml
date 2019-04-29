@@ -130,9 +130,6 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td width="25%" align="left">
 				</td>
 				<td align="center">
@@ -141,9 +138,6 @@ table.tb-footer tr.style-head {
 				</td>
 				<td width="25%" align="right">
 				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
@@ -225,9 +219,6 @@ table.tb-footer tr.style-head {
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
 			<tr >
 				<td colspan="3" style="border:1px solid #fff;">
 					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
@@ -249,17 +240,15 @@ table.tb-footer tr.style-head {
 	</div>		
 </div>
 <script type="text/javascript">
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+
 $( document ).ready(function() {
 	if('<?php echo $this->search['session']?>'){
 	 dijit.byId("session").set("value","<?php echo $this->search['session']?>");
 	}
 });
 
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
-
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -280,7 +269,6 @@ dojo.ready(function(){
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -325,7 +313,7 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -342,7 +330,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -353,7 +341,7 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }

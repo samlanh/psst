@@ -23,7 +23,7 @@ class Issue_IndexController extends Zend_Controller_Action {
 			$db = new Issue_Model_DbTable_DbCertification();
 			$rs_rows= $db->getAllIssueCertification($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","STATUS");
+			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'index','action'=>'edit',
 			);

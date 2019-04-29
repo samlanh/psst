@@ -16,7 +16,8 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
 			c.academic_year,
 			c.grade,
-			c.issue_date
+			c.issue_date,
+			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user
     	";
     	$sql.=$dbp->caseStatusShowImage("c.status");
     	$sql.=" FROM `rms_issue_letterpraise` AS c WHERE 1 ";

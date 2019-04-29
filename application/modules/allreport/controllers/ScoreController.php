@@ -750,7 +750,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     
     	$this->view->row = $db->getStudenLetterofpraise($search);
-    
     	$form=new Registrar_Form_FrmSearchInfor();
     	$forms=$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($forms);

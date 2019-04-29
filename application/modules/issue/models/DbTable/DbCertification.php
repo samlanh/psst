@@ -17,7 +17,8 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
 			c.dept_kh,
 			c.from_date,
 			c.to_date,
-			c.issue_date 
+			c.issue_date,
+			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user 
     	";
     	
     	$sql.=$dbp->caseStatusShowImage("c.status");

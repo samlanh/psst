@@ -30,20 +30,14 @@
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td style="width:200px;">
 				</td>
 				<td align="center" style="color:#4839bd;">
-					<span style="font-size: 18px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?></span><br />
-					<span style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';white-space: nowrap;"><?php echo $tr->translate("ACADEMIC_YEAR");?> : <?php echo $this->rr['academic'];?></span><br />
-					<span style="font-size: 15px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDY_GROUP");?> : <?php echo $this->rr['group_code'];?> </span><br />
+					<span style="font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?></span><br />
+					<span style="font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';white-space: nowrap;"><?php echo $tr->translate("ACADEMIC_YEAR");?> : <?php echo $this->rr['academic'];?></span><br />
+					<span style="font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDY_GROUP");?> : <?php echo $this->rr['group_code'];?> </span><br />
 				</td>
 				<td style="width:200px;"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
@@ -81,17 +75,17 @@
 					</style>
 					<table class="content-data" cellpadding="3" border="1">
 						<thead>
-						<tr class="style-head" >
-							<td><?php echo $tr->translate("NUM");?></td>
-							<td><?php echo $tr->translate("STUDENT_ID");?></td>
-							<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-							<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
-							<td><?php echo $tr->translate("SEX");?></td>
-							<td align="center"><?php echo $tr->translate("ABSENT");?></td>
-							<td align="center"><?php echo $tr->translate("PERMISSION");?></td>
-							<td align="center"><?php echo $tr->translate("LATE");?></td>
-							<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>			
-						</tr>
+							<tr class="style-head" >
+								<td><?php echo $tr->translate("NUM");?></td>
+								<td><?php echo $tr->translate("STUDENT_ID");?></td>
+								<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
+								<td><?php echo $tr->translate("SEX");?></td>
+								<td align="center"><?php echo $tr->translate("ABSENT");?></td>
+								<td align="center"><?php echo $tr->translate("PERMISSION");?></td>
+								<td align="center"><?php echo $tr->translate("LATE");?></td>
+								<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>			
+							</tr>
 						</thead>
 						<?php  
 						$db = new Home_Model_DbTable_DbStudent();
@@ -106,14 +100,16 @@
 							<td><?php echo $i;?></td>
 							<td><?php echo $row['stu_code'];?></td>
 							<td align="left"><?php echo $row['kh_name'];?></td>
-							<td align="left"><?php echo $row['en_name'];?></td>
-							<td><?php echo $row['sex'];
-								if($row['gender']==1){
-									$male=$male+1;
-								}else{
-									$femle=$femle+1;
-								}
-							?></td>
+							<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
+							<td>
+								<?php echo $row['sex'];
+									if($row['gender']==1){
+										$male=$male+1;
+									}else{
+										$femle=$femle+1;
+									}
+								?>
+							</td>
 							<?php 
 							$attentence_status = $db->getSumStatusAttendence($row['stu_id'], $row['group_id']);
 							$absent=0;
@@ -161,16 +157,16 @@
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
+					<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 12px">
 						<tr>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
+								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
 							<td width="30%">&nbsp;</td>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
+								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>

@@ -121,6 +121,7 @@ display: table-cell !important;
 									<td><?php echo $tr->translate("SEX");?></td>
 									<td><?php echo $tr->translate("GROUP");?></td>
 									<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+									<td><?php echo $tr->translate("RANK");?></td>
 									<td><?php echo $tr->translate("ISSUE_DATE");?></td>
 								</tr>
 							</thead>
@@ -134,6 +135,7 @@ display: table-cell !important;
 								 	<td align="center"><?php echo $rs['sex'];?></td>
 								 	<td align="center"><?php echo $rs['group_code'];?></td>
 								 	<td align="center"><?php echo $rs['academic_year'];?></td>
+								 	<td align="center"><?php echo $rs['rank'];?></td>
 								 	<td align="center"><?php echo date("d-M-Y",strtotime($rs['issue_date']));?></td>
 								 </tr>
 								 <?php }?>

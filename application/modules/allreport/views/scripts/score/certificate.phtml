@@ -1,6 +1,6 @@
 <?php 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate('CERTIFICATE'));
+echo $this->headTitle($tr->translate('PRINT_CERTIFICATE'));
 $_dbgb = new Application_Model_DbTable_DbGlobal();
 $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 ?>
@@ -8,7 +8,7 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 	<div class="card-box">
 		<div class="col-sm-12 border-botom">
 			<div class="col-sm-8 pd-0">
-				<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CERTIFICATE');?></h4>
+				<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PRINT_CERTIFICATE');?></h4>
 			</div>
 			<div class="col-sm-4 text-right">
 			</div>
@@ -75,7 +75,6 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					min-width: 410px;
 					text-align: center;
 				}
-				
 				span.duration {
 					position: absolute;
 					top: 413px;
@@ -86,8 +85,6 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					font-family: 'Times New Roman','Khmer OS Battambang';
 					font-weight: 500;
 				}
-				
-				
 				span.student_name_eng {
 				    position: absolute;
 				    top: 287px;
@@ -139,7 +136,6 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					font-family: 'Times New Roman','Khmer OS Battambang';
 					font-weight: 500;
 				}
-				
 				.profile-card-block .photo {
 					width: initial;
 					position: absolute;
@@ -151,7 +147,6 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					width: 100px;
 					height: 127px;
 				}
-				
 				span.issue_date {
 					position: absolute;
 					bottom: 77px;
@@ -170,18 +165,14 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					<span class="value dob"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))."-".$month[date("m",strtotime($this->rs['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></span>
 					<span class="value dept"><?php echo $this->rs['dept_kh'];?></span>
 					<span class="value duration"><?php if(!empty($this->rs['from_date']) AND $this->rs['from_date'] != "0000-00-00"){ echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['from_date'])))." ".$month[date("m",strtotime($this->rs['from_date']))]." ".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['from_date'])))." ដល់ ".$_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['to_date'])))." ".$month[date("m",strtotime($this->rs['to_date']))]." ".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['to_date']))); }?></span>
-					
 					<span class="value student_name_eng"><?php echo strtoupper($this->rs['stu_name']);?></span>
 					<span class="value gender_eng"><?php echo $this->rs['sex'];?></span>
 					<span class="value dob_eng"><?php echo date("d",strtotime($this->rs['dob']))."-".date("F",strtotime($this->rs['dob']))."-".date("Y",strtotime($this->rs['dob']));?></span>
 					<span class="value dept_eng"><?php echo $this->rs['dept_eng'];?></span>
 					<span class="value duration_eng"><?php if(!empty($this->rs['from_date'])  AND $this->rs['from_date'] != "0000-00-00"){ echo date("d",strtotime($this->rs['from_date']))."-".date("F",strtotime($this->rs['from_date']))."-".date("Y",strtotime($this->rs['from_date']))." To ".date("d",strtotime($this->rs['to_date']))."-".date("F",strtotime($this->rs['to_date']))."-".date("Y",strtotime($this->rs['to_date'])); }?></span>
-					
 					<?php if(!empty($this->rs['issue_date'])  AND $this->rs['issue_date'] != "0000-00-00"){?>
 					<span class="value issue_date"><?php echo date("d/F/Y",strtotime($this->rs['issue_date']));?></span>
 					<?php }?>
-					
-					
 					<?php 
 					if(!empty($this->rs['photo'])){
 						if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){

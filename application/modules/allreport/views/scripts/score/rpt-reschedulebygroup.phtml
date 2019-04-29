@@ -4,11 +4,11 @@
 	$frm =  $this->form_search;
 	$db_sub=new Allreport_Model_DbTable_DbRptStudentDrop();
 	$day = array(
-			1=>'Monday',
-			2 =>'Tuesday',
-			3 =>'Wednesday',
-			4=>'Thursday',
-			5=>'Friday',
+		1=>'Monday',
+		2 =>'Tuesday',
+		3 =>'Wednesday',
+		4=>'Thursday',
+		5=>'Friday',
 	);
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
@@ -68,8 +68,7 @@
 				<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
 				<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 			</td>
-			<td width="25%" align="right">
-			</td>
+			<td width="25%" align="right"></td>
 		</tr>
 	</table>	
 	<div id="divPrint">
@@ -134,7 +133,6 @@
 				<td colspan="3">
 					<table border="1" cellpadding="5"​ style="color: #4839bd; margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;" >
 						<thead>
-							
 							<tr>
 								<td align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
 								<ul class="subject">
@@ -232,7 +230,6 @@
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -314,7 +311,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {

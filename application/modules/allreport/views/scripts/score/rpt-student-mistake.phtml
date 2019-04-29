@@ -356,7 +356,7 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -373,7 +373,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -384,7 +384,7 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -406,7 +406,7 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }

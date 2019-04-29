@@ -201,7 +201,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
        		gr.from_hour,gr.to_hour,
        		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
        		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
-       		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS user
+       		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT first_name FROM rms_users WHERE rms_users.id = gr.user_id) AS user
      		";
 		$sql.=$dbp->caseStatusShowImage("gr.status");
 		$sql.=" FROM rms_group_reschedule AS gr  WHERE gr.status=1 ";

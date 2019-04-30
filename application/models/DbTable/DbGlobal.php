@@ -1355,7 +1355,7 @@ function getAllgroupStudyNotPass($action=null){
   	if ($lang==1){
   		$field = 'subject_titlekh';
   	}
-  	$sql=" SELECT id ,$field AS name FROM `rms_subject` WHERE status=1 AND subject_titlekh != ''  ";
+  	$sql=" SELECT id ,$field AS name,shortcut FROM `rms_subject` WHERE status=1 AND subject_titlekh != ''  ";
   	
   	$user = $this->getUserInfo();
   	$level = $user['level'];
@@ -1391,7 +1391,8 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-//   public function getAllSubjectStudy($schoolOption=null){
+  public function getAllSubjectStudy($schoolOption=null){
+  	return $this->getAllSubjectName();
 //   	$db = $this->getAdapter();
   
 //   	$lang = $this->currentlang();
@@ -1405,7 +1406,7 @@ function getAllgroupStudyNotPass($action=null){
 //   	$sql.=" AND schoolOption = $schoolOption";
 //   	}
 //   	return $db->fetchAll($sql);
-//   } 
+  } 
   public function getAllTeahcerName(){
   	$db = $this->getAdapter();
   	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' order by id DESC ";
@@ -1742,7 +1743,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		$userSchO = explode(",", $user['schoolOption']);
 	  		$s_wheres = array();
 	  		foreach ($userSchO as $schooloptionId){
-	  			$s_wheres[] = $schooloptionId." IN (i.schoolOption)";
+	  			$s_wheres[] = $schooloptionId." IN (i.schoolOption) ";
 	  		}
 	  		$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
   		}

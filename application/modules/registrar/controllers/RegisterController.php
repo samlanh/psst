@@ -82,6 +82,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $grade = $db->getAllGradeStudyByDegree(7);
+	   
+// 	   $db = new Application_Model_DbTable_DbGlobal();
+// 	   $student_id = 1;
+// 	   $is_stutested = 0;
+// 	   $rs = $db->getAllGradeStudyByDegree(-1,$student_id,$is_stutested);
+// 	   print_r($rs);exit();
     }
     public function editAction(){
     	$id=$this->getRequest()->getParam("id");

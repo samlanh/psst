@@ -8,13 +8,10 @@
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.data.ObjectStore");
-	dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.NumberTextBox');
-	dojo.require('dijit.form.TextBox');
 	dojo.require('dijit.form.Textarea');
-	dojo.require("dojo.html");
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -84,7 +81,6 @@
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("YEARS");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php //echo $frm->getElement("academic_year");?>
 		                	<input id="academic_year" name="academic_year" />
 		                </div>
 		             </div>
@@ -114,7 +110,6 @@
 		             </div>
 	    		</div>
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
-	    			 
 		    		 <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -156,50 +151,21 @@
 		                	<?php echo $frm->getElement("notes");?>
 		                </div>
 		             </div>
-	    			<!-- 
-	    			<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("START_DATE");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php //echo $this->rs['start_date'];?>" type="text">
-		                </div>
-		             </div>
-		               <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("AMOUNT_MONTH");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountmonth" id="amountmonth" value="<?php //echo $this->rs['amount_month'];?>" onkeyup="setEndDate();" type="text">
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("END_DATE");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" value="<?php //echo $this->rs['expired_date'];?>" >
-		                </div>
-		             </div>
-	    			 
-		              <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("STATUS");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
-							    <option value="1" <?php //if($this->rs['status']==1) echo 'selected="selected"';?>><?php //echo $tr->translate("ACTIVE");?></option>
-							    <option value="0" <?php //if($this->rs['status']==0) echo 'selected="selected"';?>><?php //echo $tr->translate("DEACTIVE");?></option>
-							</select>
-		                </div>
-		             </div>-->
 	    		</div>	
 	    	</div>
 	    	<div class="card-box">
                	<div class="col-sm-12">
                		<table  border="1" style="border-collapse: collapse; border:1px solid #ccc;  width:100%;   white-space: nowrap;">
 						<thead>
-						<tr id="head-title" class="head-td" align="right">
-							<th><?php echo $tr->translate("DEL");?></th>
-							<th><?php echo $tr->translate("N_O");?></th>
-							<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-							<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>
-							<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>
-							<th><?php echo $tr->translate("NOTE");?></th>
-							<th><?php echo $tr->translate("TEACHER");?></th>
-						</tr>
+							<tr id="head-title" class="head-td" align="right">
+								<th><?php echo $tr->translate("DEL");?></th>
+								<th><?php echo $tr->translate("N_O");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
+								<th><?php echo $tr->translate("NOTE");?></th>
+								<th><?php echo $tr->translate("TEACHER");?></th>
+							</tr>
 						</thead>
 						<tbody id="table_row">
 						
@@ -217,10 +183,7 @@
     		 <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"group",'action'=>'index'),null,true); ?>';" />
-					<input type="submit" value="save" name="save" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save" name="save" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -660,7 +623,7 @@ function Initailize() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-		temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
+		temp+='<th><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>';
 		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
@@ -704,7 +667,7 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
 		temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
-		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
 		dojo.query("#head-title").append(temp);

@@ -8,14 +8,10 @@
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.data.ObjectStore");
-	dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.NumberTextBox');
-	dojo.require('dijit.form.TextBox');
-	dojo.require('dijit.form.Textarea');
-	dojo.require("dojo.html");
-	
+	dojo.require('dijit.form.Textarea');	
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -161,8 +157,8 @@
                					<th><?php echo $tr->translate("DEL");?></th>
 								<th><?php echo $tr->translate("N_O");?></th>
 								<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-								<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>
-								<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
 								<th><?php echo $tr->translate("NOTE");?></th>
 								<th><?php echo $tr->translate("TEACHER");?></th>
                				</tr>
@@ -180,8 +176,7 @@
     	<div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+               		<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -424,13 +419,9 @@ function getRefreshTeacher(){
 		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		dijit.byId('teacher_ass').set('store',teacher_store);  
 		dijit.byId('teacher_id').set('store',teacher_store);  
-		//dijit.byId('academic_year').focus();
 		teacher_option="";
 		return false;
 	}
-	//if(academic_year=='' || academic_year == -1){
-		//return false;
-	//}
 	dojo.xhrPost({
 		url:url_gettecher,
 		content:{
@@ -450,7 +441,6 @@ function getRefreshTeacher(){
 		    }
 		    dojo.query("#table_row").append("");
 		    $("#identity1").val("");
-		    //addRow();
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err){
@@ -524,15 +514,14 @@ var title = 1;
 tmp = '';
 temp='';
 function addRow() {
-	alert(1);
 	col++;no++;
 	template='';
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
-		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
 		dojo.query("#head-title").append(temp);

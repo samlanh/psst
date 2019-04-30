@@ -1758,15 +1758,17 @@ function getAllgroupStudyNotPass($action=null){
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
   	return $db->fetchAll($sql);
   }
-  function getProductbyBranch($branch_id=null){
+  function getProductbyBranch($category_id=null){
   	$db = $this->getAdapter();
   	$sql="SELECT t.id,title AS name FROM `rms_itemsdetail` AS t,
 		      `rms_product_location`
-			   WHERE t.id=rms_product_location.pro_id ";
+			   WHERE t.id=rms_product_location.pro_id AND t.product_type=1 ";
   	$sql.=$this->getAccessPermission("brand_id");
-  	if($branch_id!=null){
-  		$sql.=' brand_id='.$branch_id;
+  	
+  	if($category_id!=null AND $category_id>0 ){
+  		$sql.=' AND t.items_id='.$category_id;
   	}
+  	$sql.=" GROUP BY t.id ";
   	return $db->fetchAll($sql);
   }
   public function getAllGradeStudyOption($type=1){

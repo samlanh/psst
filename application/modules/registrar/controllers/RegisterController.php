@@ -202,9 +202,22 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$db = new Application_Model_DbTable_DbGlobal();
     		$student_id = empty($data['student_id'])?null:$data['student_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
-    		$grade = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
-    		$rsproduct = $db->getProductbyBranch();
-    		$rs = array_merge($grade,$rsproduct);
+    		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
+    		print_r(Zend_Json::encode($rs));
+    		exit();
+    	}
+    }
+    function getGradeproductAction(){//filter product with current grade fo student 
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$student_id = empty($data['student_id'])?null:$data['student_id'];
+    		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
+    		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
+    		$rsproduct = $db->getProductbyBranch($data['dept_id']);
+    		if(!empty($rsproduct) AND  !empty($rs)){
+    			$rs = array_merge($rs,$rsproduct);
+    		}
     		print_r(Zend_Json::encode($rs));
     		exit();
     	}

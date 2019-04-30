@@ -170,44 +170,47 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		
 		$sql=" SELECT
-		spd.id,		 
-		spd.fee,
-		spd.qty,
-		spd.subtotal,
-		spd.extra_fee,
-		(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
-		spd.discount_percent,
-		spd.discount_amount,	
-		spd.paidamount,		
-		spd.note,
-		spd.start_date,
-		spd.validate,
-		spd.is_start,	
-		spd.is_onepayment,	
-		sp.student_id,
-		sp.receipt_number,
-		sp.create_date,
-		sp.is_void,
-		s.stu_code,
-		s.stu_khname,
-		s.stu_enname,
-		p.title,
-		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,
-		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS `user`,
-		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-		(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
-		FROM
-		rms_student_payment AS sp,
-		rms_student_paymentdetail AS spd,
-		rms_student AS s,
-		rms_itemsdetail AS p
-		WHERE
-			s.stu_id = sp.student_id
-			AND sp.id=spd.payment_id
-			ANd p.id = spd.itemdetail_id
-			AND p.items_type=1
-			AND s.customer_type=1
-			AND s.stu_id=$stu_id ORDER BY sp.id DESC ";
+					spd.id,		 
+					spd.fee,
+					spd.qty,
+					spd.subtotal,
+					spd.extra_fee,
+					(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
+					spd.discount_percent,
+					spd.discount_amount,	
+					spd.paidamount,		
+					spd.note,
+					spd.start_date,
+					spd.validate,
+					spd.is_start,	
+					spd.is_onepayment,	
+					sp.student_id,
+					sp.receipt_number,
+					sp.create_date,
+					sp.is_void,
+					s.stu_code,
+					s.stu_khname,
+					s.stu_enname,
+					p.title,
+					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,
+					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS `user`,
+					(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
+					(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
+				FROM
+					rms_student_payment AS sp,
+					rms_student_paymentdetail AS spd,
+					rms_student AS s,
+					rms_itemsdetail AS p
+				WHERE
+					s.stu_id = sp.student_id
+					AND sp.id=spd.payment_id
+					ANd p.id = spd.itemdetail_id
+					
+					AND s.customer_type=1
+					AND s.stu_id=$stu_id 
+				ORDER BY 
+					sp.id DESC 
+			";
 		return $db->fetchAll($sql);
 	}
 	 
@@ -223,43 +226,43 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		
 		$sql=" SELECT
-		spd.id,
-		spd.fee,
-		spd.qty,
-		spd.subtotal,		
-		spd.extra_fee,
-		spd.discount_percent,	
-		spd.paidamount,
-		spd.note,
-		spd.start_date,
-		spd.validate,
-		spd.is_start,
-		sp.receipt_number,
-		sp.create_date,
-		sp.is_void,
-		s.stu_code,
-		s.stu_khname,
-		s.stu_enname,
-		p.title AS service_name,
- 		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,		
-		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = sp.grade LIMIT 1) AS items_name,			  
-		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
-		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-		(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
-		FROM
-		rms_student_payment AS sp,
-		rms_student_paymentdetail AS spd,
-		rms_student AS s,
-		rms_itemsdetail AS p
-		WHERE
-		s.stu_id = sp.student_id
-		AND sp.id=spd.payment_id
-		AND p.id = spd.itemdetail_id
-		AND p.items_type=2
-		AND spd.is_suspend=0 
-		
-		AND s.customer_type=1
-		AND s.stu_id=$stu_id";
+					spd.id,
+					spd.fee,
+					spd.qty,
+					spd.subtotal,		
+					spd.extra_fee,
+					spd.discount_percent,	
+					spd.paidamount,
+					spd.note,
+					spd.start_date,
+					spd.validate,
+					spd.is_start,
+					sp.receipt_number,
+					sp.create_date,
+					sp.is_void,
+					s.stu_code,
+					s.stu_khname,
+					s.stu_enname,
+					p.title AS service_name,
+			 		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,		
+					(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = spd.itemdetail_id LIMIT 1) AS items_name,			  
+					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+					(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
+					(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
+				FROM
+					rms_student_payment AS sp,
+					rms_student_paymentdetail AS spd,
+					rms_student AS s,
+					rms_itemsdetail AS p
+				WHERE
+					s.stu_id = sp.student_id
+					AND sp.id=spd.payment_id
+					AND p.id = spd.itemdetail_id
+					AND p.items_type=2
+					AND spd.is_suspend=0 
+					AND s.customer_type=1
+					AND s.stu_id=$stu_id
+			";
 		return $db->fetchAll($sql);
 	}
 	 

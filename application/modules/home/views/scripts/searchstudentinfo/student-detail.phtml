@@ -408,56 +408,70 @@ label.title {
 										$total_receive = 0;
 									?>	
 									<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
-										  <thead>
-											  <tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+										<thead>
+											<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:11px; height: 20px; align="center" >
 											    <td><?php echo $tr->translate('N_O');?></td>
 												<td><?php echo $tr->translate('SERVICE_CATE');?></td>
 												<td><?php echo $tr->translate('SERVICE_NAME');?></td>
+												
+												<?php /*?>
 												<td><?php echo $tr->translate('PAID_DATE');?></td>
 												<td><?php echo $tr->translate('RECEIPT_NO');?></td>
 												<td><?php echo $tr->translate('SCHOLARSHIP');?></td>
 												<td><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></td>
+												<td><?php echo $tr->translate('LATE_FEE');?></td>
 												<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
 												<td><?php echo $tr->translate('QTY');?></td>
 												<td><?php echo $tr->translate('PRICE');?></td>
-												<td><?php echo $tr->translate('LATE_FEE');?></td>
+												
 												<td><?php echo $tr->translate('EXTRA_FEE');?></td>
 												<td><?php echo $tr->translate('DISCOUND');?></td>
 												<td><?php echo $tr->translate('DISCOUNT');?></td>
 												<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
+												<td><?php echo $tr->translate('REMARK');?></td>
+												<td><?php echo $tr->translate('USER');?></td>
+												<td><?php echo $tr->translate('STATUS');?></td>
+												<?php */?>
+												
 												<td><?php echo $tr->translate('START_DATE');?></td>
 												<td><?php echo $tr->translate('END_DATE');?></td>
-												<td><?php echo $tr->translate('REMARK');?></td>
-												<td><?php echo $tr->translate('STATUS');?></td>
-												<td><?php echo $tr->translate('USER');?></td>
-											  </tr>
-										 </thead>
+												
+											</tr>
+										</thead>
 										<style> 
 											td{padding:0 2px; }
 											.hover:hover{background: #ccc;}
 										</style>
 										  <?php $i=0;if(!empty($this->service)){foreach($this->service as $rs){ $i++;?>
-										  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
+										  <tr class="hover" style="font-size:10px; color:#000; height: 18px;"​ align="center">
 										  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
 										    <td style="text-align:left"><?php echo $rs['category']; ?></td>
-										    <td style="text-align:left"><?php// echo $rs['title']; ?></td>
-										    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
+										    <td style="text-align:left"><?php echo $rs['items_name']; ?></td>
+										    
+										    <?php /*?>
+											<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-										    <td align="center"><?php //echo $rs['scholarship_percent']; ?>%</td>
+											<td align="center"><?php //echo $rs['scholarship_percent']; ?>%</td>
 										    <td align="center"><?php //echo $rs['scholarship_amount']; ?></td>
-										    <td align="center"><?php echo $rs['payment_term']; ?></td>
+											<td><?php //if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+											<td align="center"><?php echo $rs['payment_term']; ?></td>
 										    <td><?php echo $rs['qty'];?></td>
 										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-										    <td><?php //if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+										    
 										    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
 										    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
 										    <td><?php //echo $rs['discount_fix']; ?> </td>
 										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
+											<td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
+											<td><?php echo $rs['user']; ?></td>
+											<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
+											<?php */?>
+										    
 										    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
 										    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
-										    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
-										   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
-										  	 <td><?php echo $rs['user']; ?></td>
+										    
+										   	
+										  	
 										  </tr>
 										  <?php 
 										 	if($rs['is_void']==0){

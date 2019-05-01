@@ -978,7 +978,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					 st.`stu_khname`,
 					 st.`sex` 
 				FROM 
-					 `rms_group` AS g, `rms_student` AS st, 
+					 `rms_group` AS g,
+					 `rms_student` AS st, 
 					  rms_student_attendence AS sd, 
 					 `rms_student_attendence_detail` AS sdd 
 				WHERE 
@@ -1155,12 +1156,20 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     function getAttendenceFoul($group_id,$stu_id){//Ã¡Å¾â‚¬Ã¡Å¸â€ Ã¡Å¾Â Ã¡Å¾Â»Ã¡Å¾Å¸ Ã¡Å¾ËœÃ¡Å¾â‚¬Ã¡Å¾â„¢Ã¡Å¾ÂºÃ¡Å¾ï¿½ Ã¡Å¾â€œÃ¡Å¾Â·Ã¡Å¾â€žÃ¡Å¾â€¦Ã¡Å¸ï¿½Ã¡Å¾â€°Ã¡Å¾ËœÃ¡Å¾Â»Ã¡Å¾â€œ
     	$db = $this->getAdapter();
-    	$sql="SELECT sade.*,sta.`date_attendence`,sta.`group_id`,COUNT(sade.`attendence_status`) AS count_foul_att
-    	FROM rms_student_attendence_detail AS sade,
-    	`rms_student_attendence` AS sta
-    	WHERE sta.`id` = sade.`attendence_id`
-    	AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id AND sade.`attendence_status` IN (4,5) LIMIT 1
-			";
+    	$sql="SELECT 
+    				sade.*,
+    				sta.`date_attendence`,
+    				sta.`group_id`,
+    				COUNT(sade.`attendence_status`) AS count_foul_att
+		    	FROM 
+		    		rms_student_attendence_detail AS sade,
+		    		`rms_student_attendence` AS sta
+		    	WHERE 
+		    		sta.`id` = sade.`attendence_id`
+		    		AND sade.`stu_id`=$stu_id 
+		    		AND sta.`group_id`=$group_id 
+		    		AND sade.`attendence_status` IN (4,5) LIMIT 1
+		";
     	$where="";
     	return $db->fetchRow($sql.$where);
     }

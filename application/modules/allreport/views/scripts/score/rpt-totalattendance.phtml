@@ -76,15 +76,23 @@
 					<table class="content-data" cellpadding="3" border="1">
 						<thead>
 							<tr class="style-head" >
-								<td><?php echo $tr->translate("NUM");?></td>
-								<td><?php echo $tr->translate("STUDENT_ID");?></td>
-								<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-								<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
-								<td><?php echo $tr->translate("SEX");?></td>
-								<td align="center"><?php echo $tr->translate("ABSENT");?></td>
+								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_ID");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								<td rowspan="2"><?php echo $tr->translate("NAME_ENGLISH");?></td>
+								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
+								<td colspan="4" align="center"><?php echo $tr->translate("ABSENT");?></td>
+								<td colspan="3" align="center"><?php echo $tr->translate("DISCIPLINE_TYPE");?></td>
+							</tr>
+							<tr class="style-head" >
+								<td align="center"><?php echo $tr->translate("NO_PERMISSION");?></td>
 								<td align="center"><?php echo $tr->translate("PERMISSION");?></td>
 								<td align="center"><?php echo $tr->translate("LATE");?></td>
-								<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>			
+								<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>	
+								
+								<td align="center"><?php echo $tr->translate("SMALL_MISTACK");?></td>
+								<td align="center"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
+								<td align="center"><?php echo $tr->translate("BIG_MISTACK");?></td>	
 							</tr>
 						</thead>
 						<?php  
@@ -141,10 +149,38 @@
 									}
 								}
 							?>
-							<td width="10%" align="center"><?php echo $absent;?></td>
-							<td width="10%" align="center"><?php echo $permission;?></td>
-							<td width="10%" align="center"><?php echo $late;?></td>
-							<td width="10%" align="center"><?php echo $early_leave;?></td>
+							<td align="center"><?php echo $absent;?></td>
+							<td align="center"><?php echo $permission;?></td>
+							<td align="center"><?php echo $late;?></td>
+							<td align="center"><?php echo $early_leave;?></td>
+							
+							<?php $s=0; $m=0; $b=0;$el=0; ?>
+							<?php  
+								$_db = new Allreport_Model_DbTable_DbRptAllStudent();
+								$mistake_status = $_db->getTotalStatusMistake($row['stu_id'], null, $row['group_id']);
+								$lateAttedence = $_db->getAttendenceFoul($row['group_id'],$row['stu_id']);
+								$late_foul = 0;
+								if (!empty($lateAttedence)){
+									$late_foul = $lateAttedence['count_foul_att'];
+								}
+								if (!empty($mistake_status)) foreach ($mistake_status as $sta){
+									if ($sta['mistake_type']==1){
+										$s=$sta['count_mistack']+$late_foul;
+									}
+									else if ($sta['mistake_type']==2){
+										$m = $sta['count_mistack'];
+									}
+									else if ($sta['mistake_type']==3){
+										$b = $sta['count_mistack'];
+									}else{
+										echo " ";
+									}
+								}
+							?>
+							    
+							<td align="center"><?php echo $s;?></td>
+							<td align="center"><?php echo $m;?></td>
+							<td align="center"><?php echo $b;?></td>
 						</tr>
 						<?php }?>	
 					</table>	

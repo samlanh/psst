@@ -24,14 +24,12 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 	      		'status' => -1);   		
 	  		 }
            $rs_rows= $db->getAllBranch($search);
-           $glClass = new Application_Model_GlobalClass();
-			$rs_rowshow = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("USING","TITLE","BRANCH","SCHOOL_OPTION","NOTE","STATUS");
 			$link=array(
 					      'module'=>'rsvacl','controller'=>'pickupcard','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rowshow,array('title'=>$link,'branch_name'=>$link,'prefix'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'prefix'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -73,7 +71,14 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 	}
 	function editAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$_dbmodel = new RsvAcl_Model_DbTable_DbPickupCard();
+		$row=$_dbmodel->getCardmgById($id);
+		$this->view->rs = $row;
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/pickupcard/index");
+			exit();
+		}
 		if($this->getRequest()->isPost()){//check condition return true click submit button
 			$_data = $this->getRequest()->getPost();	
 			try {
@@ -94,8 +99,7 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 			}
 		}
 	
-		$row=$_dbmodel->getCardmgById($id);
-		$this->view->rs = $row;
+		
 		
 		$fm = new RsvAcl_Form_FrmPickupCard();
 		$frm = $fm->FrmCardmg($row);

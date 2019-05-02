@@ -154,7 +154,12 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
     	b.title,
     	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.branch_id LIMIT 1) as branch_name,
     	(SELECT sp.title FROM `rms_schooloption` AS sp WHERE sp.id = b.schoolOption LIMIT 1) AS schoolOption,
-    	b.note,b.status FROM rms_pickupcard AS b  ";
+    	b.note   ";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->caseStatusShowImage("b.status");
+    	$sql.=" FROM rms_pickupcard AS b ";
+    	
     	$where = ' WHERE  b.title !="" ';   	
     	if(!empty($search['adv_search'])){
     		$s_where=array();
@@ -167,6 +172,9 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND b.status = ".$search['status'];
 		}
+		
+		$where.= $dbp->getAccessPermission('b.branch_id');
+		
     	$order=' ORDER BY b.id DESC';
    		return $db->fetchAll($sql.$where.$order);
    }
@@ -176,7 +184,10 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT * FROM
     	$this->_name ";
-    	$where = " WHERE `id`= $id" ;  
+    	$where = " WHERE `id`= $id";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->caseStatusShowImage("status");
+    	
    		return $db->fetchRow($sql.$where);
     }
     

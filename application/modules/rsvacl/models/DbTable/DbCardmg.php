@@ -198,7 +198,12 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				WHEN  b.card_type = 3 THEN '".$tr->translate("STAFF")."'
 				END AS card_type,
 				b.valid,
-    	b.note,b.status FROM rms_cardbackground AS b  ";
+    	b.note  ";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->caseStatusShowImage("b.status");
+    	$sql.=" FROM rms_cardbackground AS b ";
+    	
     	$where = ' WHERE  b.title !="" ';   	
     	if(!empty($search['adv_search'])){
     		$s_where=array();
@@ -212,8 +217,8 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 			$where.= " AND b.status = ".$search['status'];
 		}
     	$order=' ORDER BY b.id DESC';
-   //echo $sql.$where;
-   return $db->fetchAll($sql.$where.$order);
+    	$where.= $dbp->getAccessPermission('b.branch_id');
+  		 return $db->fetchAll($sql.$where.$order);
    }
       
  function getCardmgById($id){
@@ -221,7 +226,11 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT * FROM
     	$this->_name ";
-    	$where = " WHERE `id`= $id" ;  
+    	$where = " WHERE `id`= $id";  
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->caseStatusShowImage("status");
+    	
    		return $db->fetchRow($sql.$where);
     }
     

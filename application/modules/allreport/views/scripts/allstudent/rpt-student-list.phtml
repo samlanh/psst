@@ -53,7 +53,7 @@ table.tb-footer tr.style-head {
             </div>
         </div>
 	</form>
-	<div id="divPrint">
+	<div id="divPrint" class="overflow-report">
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table style="background:#fff; margin: 0 auto; width: 100%;color:#4839bd;font-family:Times New Roman,Khmer OS Battambang;" >
 				<?php $logo = $this->baseUrl().'/images/logo.png';
@@ -198,7 +198,8 @@ table.tb-footer tr.style-head {
 									<?php echo $row['tel'];?>
 								</td>
 							</tr>
-							<?php }?>	
+							<?php }?>
+														
 							</tbody>
 							<tr>
 								<td colspan="14" style="border:1px solid #fff;border-top:1px solid #4839bd;">

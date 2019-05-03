@@ -130,7 +130,12 @@ $teacher_id = $session_t->teacher_id;
 		    outline: none;
 		    background: url(<?php echo $this->baseUrl()."/admin/3.5.0/"?>select2.png) right top no-repeat;
 		}
-    </style>
+    	.overflow-report{
+    		overflow-x:scroll;
+			height:fit-content;	
+		}	
+	
+	</style>
     <?php if($module=='home' AND $controller=="index" AND $action=="index"){?>
 	
    <?php }else{?>   

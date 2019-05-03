@@ -1,5 +1,5 @@
 <?php
-class Foundation_ItemsengscoreController extends Zend_Controller_Action {
+class Issue_ItemsengscoreController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */
@@ -9,7 +9,7 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Foundation_Model_DbTable_DbItemsScoreEng();
+			$db = new Issue_Model_DbTable_DbItemsScoreEng();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
@@ -19,14 +19,12 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 						'status'=> -1,
 					);
 			}
-			$rs_rows = $db->getAllItesmScoreEn($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
+			$rs = $db->getAllItesmScoreEn($search);
 			 
 			$list = new Application_Form_Frmtable();
 			$collumns = array("ITEMS_ENG_KH","ITEMS_ENG_EN","NOTE","STATUS");
 			$link=array(
-					'module'=>'foundation','controller'=>'itemsengscore','action'=>'edit',
+					'module'=>'issue','controller'=>'itemsengscore','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('title'=>$link,'title_en'=>$link,'subject_titleen'=>$link));
 	
@@ -45,12 +43,12 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try {
 				$sms="INSERT_SUCCESS";
-				$_dbmodel = new Foundation_Model_DbTable_DbItemsScoreEng();
+				$_dbmodel = new Issue_Model_DbTable_DbItemsScoreEng();
 				$subject_id = $_dbmodel->addItemsScoreEng($_data);
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/foundation/itemsengscore");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/itemsengscore");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,"/foundation/itemsengscore/add");
+					Application_Form_FrmMessage::Sucessfull($sms,"/issue/itemsengscore/add");
 				}
 				Application_Form_FrmMessage::message($sms);
 			} catch (Exception $e) {
@@ -60,7 +58,7 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 			}
 		}
 		
-		$subject_exam=new Foundation_Form_FrmItemsScoreEngExam();
+		$subject_exam=new Issue_Form_FrmItemsScoreEngExam();
 		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam();
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
 		$this->view->frm_subject_exam = $frm_subject_exam;
@@ -69,12 +67,12 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 	{
 		$id = $this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
-		$_dbmodel = new Foundation_Model_DbTable_DbItemsScoreEng();
+		$_dbmodel = new Issue_Model_DbTable_DbItemsScoreEng();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
 				$subject_id = $_dbmodel->addItemsScoreEng($_data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/itemsengscore");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/itemsengscore");
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				$err =$e->getMessage();
@@ -83,10 +81,10 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 		}
 		$row = $_dbmodel->getItemsEnByID($id);
 		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/itemsengscore");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issue/itemsengscore");
 			exit();
 		}
-		$subject_exam=new Foundation_Form_FrmItemsScoreEngExam();
+		$subject_exam=new Issue_Form_FrmItemsScoreEngExam();
 		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam($row);
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
 		$this->view->frm_subject_exam = $frm_subject_exam;

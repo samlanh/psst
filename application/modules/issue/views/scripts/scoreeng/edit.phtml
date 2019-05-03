@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_SCOREENG"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	$db = new Foundation_Model_DbTable_DbScoreEng();
+	$db = new Issue_Model_DbTable_DbScoreEng();
 ?>	
 <style>
 		select{ width:100%;}
@@ -162,7 +162,7 @@ span.note_score {
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -178,8 +178,9 @@ dojo.require('dijit.form.NumberTextBox');
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var scoreSetting_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var subject = [];
 dojo.ready(function(){
-	var subject = [];
+	
 	new dijit.form.FilteringSelect({
 		store: academic_store,
 		queryExpr: "*${0}*",
@@ -222,8 +223,8 @@ dojo.ready(function(){
 		}, "group");
 		getAllAcademicByBranch();
 		getAllGroupByBranch();
-		getScoreSetting();
-		getDetailScoreSetting();
+		//getScoreSetting();
+		//getDetailScoreSetting();
 });
 
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
@@ -256,7 +257,7 @@ function getAllAcademicByBranch(){
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_scoresetting = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'get-scoresetting')); ?>';
+var url_scoresetting = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'get-scoresetting')); ?>';
 function getScoreSetting(){
 	branch_id = dijit.byId('branch_id').get('value');
 	dijit.byId('scoreSetting').reset();
@@ -277,7 +278,7 @@ function getScoreSetting(){
 		}
 	});
 }
-var url_scoresettingdetail = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'get-scoresettingdetail')); ?>';
+var url_scoresettingdetail = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'get-scoresettingdetail')); ?>';
 var oldScoreSetting = '<?php echo $this->score['score_setting']?>';
 var oldGroup = '<?php echo $this->score['group_id']?>';
 function getDetailScoreSetting(){
@@ -325,7 +326,7 @@ function getDetailScoreSetting(){
 	});
 }
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
+var url_dept = '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-grade')); ?>';
 function filterGrade(){
 	degree = dijit.byId('degree').get('value');
 		dojo.xhrPost({
@@ -344,7 +345,7 @@ function filterGrade(){
 		});
 }
 	var inx=0;
-	var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
+	var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
@@ -573,7 +574,7 @@ function gender(sex){
 </script>
 <script> 
 function getInfoBygroup(){
-	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
+	url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
 	if(group==''){
 		return false;

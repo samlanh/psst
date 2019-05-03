@@ -1,6 +1,6 @@
 <?php
 
-class Foundation_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
+class Issue_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_exametypeeng';
     public function getUserId(){
@@ -10,9 +10,13 @@ class Foundation_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
     function getAllItesmScoreEn($search=null){
     	$db = $this->getAdapter();
     	$sql = " SELECT
-			en.id,en.title,en.title_en,en.note,en.status
-			 FROM `rms_exametypeeng` AS en
-			 WHERE 1 ";
+			en.id,en.title,en.title_en,en.note
+			 ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->caseStatusShowImage("en.status");
+    	$sql.=" FROM `rms_exametypeeng` AS en
+			 WHERE 1  ";
+    	
     	$order=" order by en.id DESC";
     	$where = '';
     	if(empty($search)){

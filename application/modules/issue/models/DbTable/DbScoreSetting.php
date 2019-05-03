@@ -1,5 +1,5 @@
 <?php
-class Foundation_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
+class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_scoreengsetting';
     public function getUserId(){

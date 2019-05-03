@@ -1,6 +1,6 @@
 <?php
 
-class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
+class Issue_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_score';
     public function getUserId(){

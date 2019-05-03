@@ -1,5 +1,5 @@
 <?php 
-Class Foundation_Form_FrmItemsScoreEngExam extends Zend_Dojo_Form {
+Class Issue_Form_FrmItemsScoreEngExam extends Zend_Dojo_Form {
 	protected $tr;
 	protected $tvalidate ;//text validate
 	protected $filter;

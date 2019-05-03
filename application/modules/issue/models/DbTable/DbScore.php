@@ -262,6 +262,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if(!empty($search['group'])){
 			$where.=" AND `s`.`group_id` =".$search['group'];
 		}
+		if(!empty($search['branch_id'])){
+			$where.=" AND `s`.`branch_id` =".$search['branch_id'];
+		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);

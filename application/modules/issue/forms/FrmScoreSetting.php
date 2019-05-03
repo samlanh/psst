@@ -1,6 +1,6 @@
 <?php
 
-class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
+class Issue_Form_FrmScoreSetting extends Zend_Dojo_Form
 {
 	protected  $tr;
 	protected $filter;

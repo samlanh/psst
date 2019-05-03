@@ -1,6 +1,6 @@
 <?php
-class Foundation_ScoreengsettingController extends Zend_Controller_Action {
-	const REDIRECT_URL = '/foundation/scoreengsetting';
+class Issue_ScoreengsettingController extends Zend_Controller_Action {
+	const REDIRECT_URL = '/issue/scoreengsetting';
 	public function init()
 	{
 		header('content-type: text/html; charset=utf8');
@@ -10,7 +10,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
 	public function indexAction()
     {
     	try{
-	    	$db = new Foundation_Model_DbTable_DbScoreSetting();
+	    	$db = new Issue_Model_DbTable_DbScoreSetting();
 	    	if($this->getRequest()->isPost()){
 	    		$search=$this->getRequest()->getPost();
 	    	}
@@ -29,7 +29,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
 	    	$list = new Application_Form_Frmtable();
 	    	$collumns = array("BRANCH","TITLE","NOTE","CREATE_DATE","STATUS",);
 	    	$link=array(
-	    			'module'=>'foundation','controller'=>'scoreengsetting','action'=>'edit',
+	    			'module'=>'issue','controller'=>'scoreengsetting','action'=>'edit',
 	    	);
 	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link ,'title'=>$link ,'degree'=>$link));
 	    	
@@ -38,13 +38,13 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     	
-    	$frm = new Foundation_Form_FrmScoreSetting();
+    	$frm = new Issue_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting(null,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
     }  
     public function addAction(){
-    	$db = new Foundation_Model_DbTable_DbScoreSetting();
+    	$db = new Issue_Model_DbTable_DbScoreSetting();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -60,7 +60,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	$frm = new Foundation_Form_FrmScoreSetting();
+    	$frm = new Issue_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
@@ -69,7 +69,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
     public function editAction(){
     	$id = $this->getRequest()->getParam("id");
     	$id = empty($id)?0:$id;
-    	$db = new Foundation_Model_DbTable_DbScoreSetting();
+    	$db = new Issue_Model_DbTable_DbScoreSetting();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -91,7 +91,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
     		exit();
     	}
     	$this->view->detail = $db->getScoreSettingDetail($id);
-    	$frm = new Foundation_Form_FrmScoreSetting();
+    	$frm = new Issue_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
@@ -99,7 +99,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
     
     public function copyAction(){
     	$id = $this->getRequest()->getParam("id");
-    	$db = new Foundation_Model_DbTable_DbScoreSetting();
+    	$db = new Issue_Model_DbTable_DbScoreSetting();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -113,7 +113,7 @@ class Foundation_ScoreengsettingController extends Zend_Controller_Action {
     	}
     	$row = $db->getScoreSettingById($id);
     	$this->view->detail = $db->getScoreSettingDetail($id);
-    	$frm = new Foundation_Form_FrmScoreSetting();
+    	$frm = new Issue_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;

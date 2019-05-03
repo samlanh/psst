@@ -248,7 +248,7 @@ function getAllAcademicByBranch(){
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_scoresetting = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'get-scoresetting')); ?>';
+var url_scoresetting = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'get-scoresetting')); ?>';
 function getScoreSetting(){
 	branch_id = dijit.byId('branch_id').get('value');
 	dijit.byId('scoreSetting').reset();
@@ -266,7 +266,7 @@ function getScoreSetting(){
 		}
 	});
 }
-var url_scoresettingdetail = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'get-scoresettingdetail')); ?>';
+var url_scoresettingdetail = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'get-scoresettingdetail')); ?>';
 function getDetailScoreSetting(){
 	scoreSetting = dijit.byId('scoreSetting').get('value');
 	if(scoreSetting==''){
@@ -304,7 +304,7 @@ function getDetailScoreSetting(){
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
+var url_dept = '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-grade')); ?>';
 function filterGrade(){
 	degree = dijit.byId('degree').get('value');
 		dojo.xhrPost({
@@ -323,7 +323,7 @@ function filterGrade(){
 		});
 }
 var inx=0;
-var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
+var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
@@ -474,7 +474,7 @@ function gender(sex){
 </script>
 <script> //validate controll form 
 function getInfoBygroup(){
-		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
+		url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
 		if(group==''){
 			alert("Please Select Group");

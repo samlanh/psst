@@ -107,8 +107,18 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
 		$colunmname='title_en';
+		$vill = 'village_name';
+		$comm = 'commune_name';
+		$dist = 'district_name';
+		$prov = 'province_en_name';
+		$view = 'name_en';
 		if ($currentLang==1){
 			$colunmname='title';
+			$vill = 'village_namekh';
+			$comm = 'commune_namekh';
+			$dist = 'district_namekh';
+			$prov = 'province_kh_name';
+			$view = 'name_kh';
 		}
 		
  		$sql = "SELECT s.*,
@@ -120,20 +130,20 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT branch_tel FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_tel,
 				(SELECT email FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS email_branch,
 				(SELECT website FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS website,
-				(SELECT name_kh from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
+				(SELECT $view from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
 			
- 				(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
-    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+ 				(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    			(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
     			
-    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
-    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
-    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
+    			(SELECT $view FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
+    			(SELECT $view FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
+    			(SELECT $view FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
     			
  				(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-				(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
-		    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
-		    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
-				(SELECT province_en_name FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
+				(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+		    	(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+		    	(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+				(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
 				
 				(SELECT CONCAT(g.group_code,' ',
 				(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation))  AS NAME 
@@ -507,7 +517,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					and gds.stu_id = $stu_id
 					and gds.status=1
 				order by 
-					gds.is_pass DESC,
+					gds.is_pass ASC,
 					gds.date ASC
 						
 			";

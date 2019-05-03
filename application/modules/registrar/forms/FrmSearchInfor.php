@@ -351,6 +351,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'placeholder'=>$this->tr->translate("START_DATE")
 				));
 		$_date = $request->getParam("start_date");
 		
@@ -364,6 +365,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'placeholder'=>$this->tr->translate("END_DATE")
 				));
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){

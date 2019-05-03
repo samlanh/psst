@@ -158,9 +158,6 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("user");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    		<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
                    </div>
@@ -300,7 +297,7 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
-			required: true,                        
+			required: false,                        
 			id: "grade_all",
 			name: "grade_all",  
 			class: 'fullside',  

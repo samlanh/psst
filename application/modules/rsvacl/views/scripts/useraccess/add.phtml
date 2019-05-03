@@ -42,10 +42,10 @@ table.user td{
 					<td>
 						<fieldset>
 							<legend><?php echo $tr->translate("USER_ACCESS_EDIT");?></legend>
-							<table cellspacing="20" align="center">
+							<table cellspacing="20" align="center" width="40%">
 								<tr>
-									<td><?php echo $tr->translate("USER_TYPE");?></td>
-									<td class="add-edit">
+									<td width="40%" align="center"><?php echo $tr->translate("USER_TYPE");?></td>
+									<td width="60%" class="add-edit">
 										<input type="text" required="true" name="user_type" id="user_type" placeholder="User Type" 
 											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs[0]['user_type'];?>"
 											missingMessage="Invalid User type!" class='fullside' disabled/>
@@ -57,6 +57,7 @@ table.user td{
 				</tr>
 				<tr>
 					<td>
+						<?php /*?>
 						<fieldset>
 							<legend><?php echo $tr->translate("SEARCH");?></legend>
 							<form name="frmsearch" action="" method="post">
@@ -93,6 +94,8 @@ table.user td{
 								</table>
 							</form>
 						</fieldset>
+						<?php */?>
+						&nbsp;
 					</td>
 				</tr>
 				<tr>

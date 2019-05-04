@@ -212,14 +212,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			else{
 				$search=array(
-						'title' => '',
-						'service'=>'',
-						'study_year'=>'',
-						'service_type'=>-1,
-						'grade_all'=>-1,
-						'degree'=>-1,
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
+					'adv_search' =>'',
 				);
 			}
 			$this->view->search = $search;

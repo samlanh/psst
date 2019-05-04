@@ -169,75 +169,20 @@ Class Foundation_Form_Frmservicesuspend extends Zend_Dojo_Form {
 		));
 		//$_is_hold->setValue(1);
 	
-		$_year_one = new Zend_Dojo_Form_Element_TextBox('is_year_one');
-		$_year_one->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
-				'class'=>'fullside',
-				'Onchange'=>"getNewStudent();"));
-	
-		$_studid = new Zend_Dojo_Form_Element_TextBox('stu_id');
-		$_studid->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',
-				'style'=>'color:red;','readonly'=>'true'));
-	
-		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
-		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readonly'=>'true'));
-		$sex_opt = array(
-				1=>$this->tr->translate("MALE"),
-				2=>$this->tr->translate("FEMALE"));
-		$_sex->setMultiOptions($sex_opt);
-	
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$rows = $_db->getAllFecultyName();
-		$opt = '' ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
-		if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name'];
-			
-		$_dept = new Zend_Dojo_Form_Element_FilteringSelect("dept");
-		$_dept->setMultiOptions($opt);
-		$_dept->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',
-				'onchange'=>'changeMajor();'));
-	
-		$opt_marjor = array(-1=>$this->tr->translate("SELECT_MAJOR"));
-		$_major = new Zend_Dojo_Form_Element_FilteringSelect("major");
-		$_major->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside'));
-	
-		$_term = new Zend_Dojo_Form_Element_FilteringSelect("payment_term");
-		$opt_term = $_db->getAllPaymentTerm();
-		// 		  $opt_term = array(
-		// 		  		1=>$this->tr->translate('QUARTER'),
-		// 		  		2=>$this->tr->translate('SEMESTER'),
-		// 		  		3=>$this->tr->translate('YEAR'),
-		// 		  		4=>$this->tr->translate('OTHER')
-		// 		  );
-		$_term->setMultiOptions($opt_term);
-		$_term->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',
-				'onchange'=>'paymentTerm();'
-		));
-	
 	
 	
 		$id = new Zend_Form_Element_hidden('id');
 		if($data!=null){
 			$id->setValue($data['stu_id']);
-			$_studid->setValue($data['stu_code']);
 			$_invoice_no->setValue($data['receipt_number']);
 			$this->_khname->setValue($data['stu_khname']);
 			$this->_enname->setValue($data['stu_enname']);
-			$_sex->setValue($data['sex']);
 			$_session->setValue($data['session']);
 			$generation->setValue($data['academic_year']);
-			$_term->setValue($data['payment_term']);
 		}
 		$this->addElements(array(
-				$id,$generation, $_year_one,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,$metion,
-				$_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_is_hold ));
+				$id,$generation,$_invoice_no, $_pay_date, $_khname, $_enname,$_dob,$_degree,$metion,
+				$_phone,$_batch,$_year,$_session,$_is_hold ));
 	
 		return $this;
 	}

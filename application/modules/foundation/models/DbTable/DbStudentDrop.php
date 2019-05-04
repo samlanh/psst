@@ -126,23 +126,22 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$_db->beginTransaction();
 		try{	
 			$_arr= array(
-					'branch_id'	=>$_data['branch_id'],
-					'stu_id'	=>$_data['studentid'],
-					'studentname'=>$_data['studentname'],
-					'type'		=>$_data['type'],
-					'date_stop'	=>$_data['datestop'],
-					'reason'	=>$_data['reason'],
-					'create_date'=>date('Y-m-d'),
-					'gender'	=>$_data['gender'],
-					
-					'group'		=>$_data['group'],
-					'academic_year'	=>$_data['academic_year'],
-					'calture'	=>$_data['calture'],
-					'session'	=>$_data['session'],
-					'degree'	=>$_data['degree'],
-					'grade'		=>$_data['grade'],
-					'room'		=>$_data['room'],
-					'user_id'	=>$this->getUserId(),
+				'branch_id'	 => $_data['branch_id'],
+				'stu_id'	 => $_data['studentid'],
+				'studentname'=> $_data['studentname'],
+				'type'		 => $_data['type'],
+				'date_stop'	 => $_data['datestop'],
+				'reason'	 => $_data['reason'],
+				'create_date'=> date('Y-m-d'),
+				'gender'	 => $_data['gender'],
+				'group'		 => $_data['group'],
+				'academic_year'	=> $_data['academic_year'],
+				'calture'	 => $_data['calture'],
+				'session'	 => $_data['session'],
+				'degree'	 => $_data['degree'],
+				'grade'		 => $_data['grade'],
+				'room'		 => $_data['room'],
+				'user_id'	 => $this->getUserId(),
 				);
 			$id = $this->insert($_arr);
 			
@@ -153,13 +152,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			);
 			$this->update($arr, $where);
 				
-// 			$this->_name='rms_student_payment';
-// 			$where=" student_id=".$_data['studentid'];
-// 			$arr=array(
-// 				'is_suspend'	=>	$_data['type'],
-// 			);
-// 			$this->update($arr, $where);
-				
 			$this->_name='rms_group_detail_student';
 			$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
 			$ar=array(
@@ -169,9 +161,8 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			$_db->commit();
 			
 		}catch(Exception $e){
-			$_db->rollBack();
 			Application_Form_FrmMessage::message("INSERT_FAIL");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function updateStudentDrop($_data){

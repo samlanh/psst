@@ -53,7 +53,7 @@
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" dojoType="dijit.form.FilteringSelect" required="true" id="branch_id" name="branch_id" type="text" onchange="getAllGroupByBranch();">
+		                	<select autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" required="true" id="branch_id" name="branch_id" type="text" onchange="getAllGroupByBranch();">
 								<option value="-1"><?php echo $tr->translate("SELECT_BRANCH")?></option>
 								<?php if(!empty($this->branch_name)){foreach($this->branch_name as $name){?>
 									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
@@ -70,7 +70,7 @@
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
+		                	<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
 								<?php if(!empty($this->rstype)){foreach ($this->rstype as $rs){?>
 									<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 								<?php }}?>
@@ -94,7 +94,6 @@
 		             </div>
 		         </div>
 		         <div class="col-md-8 col-sm-8 col-xs-12">
-		    		
 		            <div class="form-group">
 		                <label class="control-label text-center bold col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("STUDENT_LIST_REPORT");?> </label>
 		             </div>
@@ -163,9 +162,6 @@ div#lblfromgroup div.info{
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.NumberTextBox");
-	//dojo.require("dijit.form.Textarea");
-	//dojo.require("dijit.form.DateTextBox");
-	//dojo.require("dijit.form.CheckBox");
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
@@ -195,7 +191,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':0
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -250,15 +246,15 @@ function getStudentFromGroup(){
 }
 function CheckAll(index){
 	if(index==0){
-			if($('#check_all').is(":checked")){
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = true;  
-				});
-			}else{
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = false;  
-				});
-			}
+		if($('#check_all').is(":checked")){
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = true;  
+			});
+		}else{
+			$('.checkbox').each(function() { //loop through each checkbox
+	            this.checked = false;  
+			});
+		}
 	}else{
 		var a = $("input:checked").val();
 		 var identity = [];
@@ -277,15 +273,13 @@ function toStudentGroup(type){
 			'type'	  :type,
 			},
 		handleAs:"json",
-		load: function(data) {
+		load: function(data){
 			dojo.byId('lblfromgroup').innerHTML='<div class="info"><span class="bold"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<br /><span class="bold">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<br /><span class="bold">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span class="bold"><?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
 		},
 		error: function(err) {
 		}
 	});
 }
-
-
 function clear(){
 	dojo.byId('lblfromgroup').innerHTML='';
 	dojo.byId('lbltogroup').innerHTML='';
@@ -297,22 +291,4 @@ function clear(){
 	dijit.byId("note").attr("value",'');
 	clear1();
 }
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
-}
 </script>
-	<div class="overlay">
-		<div class="overlay-load">
-			<div class="overlay-msg">
-		    </div>
-		</div>
-	</div>
-<style>
-	.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-	.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-	           text-align: center;
-	           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
-	           background-repeat: no-repeat;          
-	}
-	.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>

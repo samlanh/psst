@@ -173,7 +173,7 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 			<div class="col-md-3">
                 <div class="text-center card-box-border">
                    <div class="member-card">
-                      	<span class="user-badge bg-warning" <?php if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>><?php echo ($key+1).".) ";echo $rs['status_student'];?></span>
+                      	<span class="user-badge bg-warning" <?php if($rs['is_subspend']==1 OR $rs['is_subspend']==2){echo 'style="background: red !important;"';}?><?php if($rs['is_subspend']==3){echo 'style="background: gold !important;"';}?>><?php echo ($key+1).".) ";echo $rs['status_student'];?></span>
                        	<ul class="nav navbar-right panel_toolbox stusearch">
 	                      <li class="dropdown">
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>

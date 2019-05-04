@@ -64,10 +64,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				}
 			}
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
-// 			$this->view->type = $db->getAllDropType();
-						
 			$db_global = new Application_Model_DbTable_DbGlobal();
-// 			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->session=$db_global->getSession();

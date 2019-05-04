@@ -7,18 +7,16 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			
-		
 		if($this->getRequest()->isPost()){
 			$search = $this->getRequest()->getPost();
 		}else{
 			$search=array(
-					'title'	=>'',
-					'branch_id'=>'',
-					'study_year' => '',
-					'group'	=>'',
-					'grade'	=>'',
-					'session' => '',
+				'title'	=>'',
+				'branch_id'=>'',
+				'study_year' => '',
+				'group'	=>'',
+				'grade'	=>'',
+				'session' => '',
 			);
 		}
 		$db_student= new Foundation_Model_DbTable_DbGraduatedStudent();
@@ -46,9 +44,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$_add = new Foundation_Model_DbTable_DbGraduatedStudent();
  				$_add->addGraduatedStudent($data);
- 				if(!empty($data['save_close'])){
- 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent");
- 				}
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -71,7 +66,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 				$db->updateGraduateStudent($data);
-				
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/graduatedstudent/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
@@ -93,8 +87,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		unset($rs[0]);
 		$this->view->rstype = $rs;
 	}
-	
-	
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -104,7 +96,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 // 	function getAllStudentAction(){
 // 		if($this->getRequest()->isPost()){
 // 			$data=$this->getRequest()->getPost();
@@ -117,7 +108,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 // 			exit();
 // 		}
 // 	}
-	
 // 	function getAllStudentUpdateAction(){
 // 		if($this->getRequest()->isPost()){
 // 			$data=$this->getRequest()->getPost();
@@ -129,7 +119,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 // 			exit();
 // 		}
 // 	}	
-	
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -139,7 +128,6 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
     function addGroupAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -149,17 +137,4 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
     		exit();
     	}
     }
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-

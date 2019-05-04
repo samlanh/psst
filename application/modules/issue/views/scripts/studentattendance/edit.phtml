@@ -520,7 +520,7 @@ function getSubjectByGroup(type=null){
 		}
 	});
 }
-var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
+var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(type=null){
 	group = dijit.byId('group').get('value');
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
@@ -622,14 +622,9 @@ function initailize(){
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	<?php if (!empty($this->allstudentBygroup)) { foreach ($this->allstudentBygroup as $key=> $row){
 			$student_att = $_model->getAttendeceStatus($this->row['id'],$row['stu_id']);
+			$gender = $row['sex'];
 		?>
 			inx = parseFloat(<?php echo $key?>)+1;
-
-			<?php if ($row['sex']==1){
-				$gender = $tr->translate("MALE");
-				}else{
-					$gender = $tr->translate("FEMALE");
-				}?>
 			<?php if ($key<1){?>
 			str+='<tr class="head-td">';
 				str+='<th><?php echo $tr->translate("NUM");?></th>';

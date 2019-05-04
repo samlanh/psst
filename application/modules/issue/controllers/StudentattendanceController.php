@@ -99,7 +99,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			exit();
 		}
 		$this->view->row=$result;
-		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
+// 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->row_year=$db_global->getAllYear();
@@ -108,6 +108,9 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->group = $db_global->getAllgroupStudyNotPass($result['group_id']);
 		$this->view->room = $row =$db_global->getAllRoom();
 		$this->view->grade = $db_global->getAllGrade();
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->allstudentBygroup = $db->getAllStudentByGroupForEdit($result['group_id']);
 	}
 	function getSubjectAction(){
 		if($this->getRequest()->isPost()){
@@ -137,15 +140,15 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		}
 	}
 	
-	function getStudentBygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendance();
-			$data=$db->getStudentByGroup($data['group']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+// 	function getStudentBygroupAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Issue_Model_DbTable_DbStudentAttendance();
+// 			$data=$db->getStudentByGroup($data['group']);
+// 			print_r(Zend_Json::encode($data));
+// 			exit();
+// 		}
+// 	}
 	
 	function getsubjectbygroupAction(){
 		if($this->getRequest()->isPost()){

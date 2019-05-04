@@ -2238,8 +2238,14 @@ function getAllgroupStudyNotPass($action=null){
   
   function getAllStudentList($branchid=null,$data=array()){
   	$db=$this->getAdapter();
-  
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	
+  	$currentLang = $this->currentlang();
+  	$orderyby=",CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ASC";
+  	if ($currentLang==1){
+  		$orderyby=",s.stu_khname ASC";
+  	}
+  	
   	$sql=" SELECT s.stu_id AS id,
 	  	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
 	  	FROM rms_student AS s
@@ -2247,7 +2253,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	(stu_enname!='' OR s.stu_khname!='')
 	  	AND s.status=1 AND s.is_subspend=0 AND s.customer_type=1 ";
   	
-  	$sql.= $this->getAccessPermission("s.branch_id");
+  		$sql.= $this->getAccessPermission("s.branch_id");
 	  	if(!empty($branchid)){
 	  		$sql.=" AND s.branch_id=".$branchid;
 	  	}
@@ -2263,9 +2269,61 @@ function getAllgroupStudyNotPass($action=null){
 	  	if(!empty($data['grade_all'])){
 	  		$sql.=" AND s.grade=".$data['grade_all'];
 	  	}
-	  	$sql.=" ORDER BY s.degree DESC,s.stu_khname ASC";
+	  	$sql.=" ORDER BY s.degree DESC".$orderyby;
   		$rows = $db->fetchAll($sql);
   		return $rows;
+  }
+  
+  function getAllStudentByGroup($group_id){
+  	$db=$this->getAdapter();
+  	$currentLang = $this->currentlang();
+  	$coloum="name_en";
+  	if ($currentLang==1){
+  		$coloum="name_kh";
+  	}
+  	$sql="SELECT
+		  	gds.stu_id as stu_id,
+		  	st.stu_enname,
+		  	st.last_name,
+		  	st.stu_khname,
+		  	st.stu_code,
+		  	CONCAT(st.stu_enname,' - ',st.stu_khname) AS stu_name,
+		  	(select $coloum from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
+	  	FROM
+		  	rms_group_detail_student as gds,
+		  	rms_student as st
+	  	WHERE
+		  	gds.stu_id=st.stu_id
+		  	and st.is_subspend = 0
+		  	and gds.type=1
+		  	and is_pass=0
+		  	and gds.group_id=$group_id ";
+  	return $db->fetchAll($sql);
+  }
+  
+  function getAllStudentByGroupForEdit($group_id){
+  	$db=$this->getAdapter();
+  	$currentLang = $this->currentlang();
+  	$coloum="name_en";
+  	if ($currentLang==1){
+  		$coloum="name_kh";
+  	}
+  	$sql="SELECT
+	  	gds.stu_id as stu_id,
+	  	st.stu_enname,
+	  	st.stu_khname,
+	  	st.stu_code,
+	  	st.last_name,
+	  	CONCAT(st.stu_enname,' - ',st.stu_khname) AS stu_name,
+	  	(SELECT $coloum FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) AS sex
+  	FROM
+	  	rms_group_detail_student as gds,
+	  	rms_student as st
+  	WHERE
+	  	gds.stu_id=st.stu_id
+	  	and gds.group_id=$group_id";
+  	//and gds.is_pass=0
+  	return $db->fetchAll($sql);
   }
 }
 ?>

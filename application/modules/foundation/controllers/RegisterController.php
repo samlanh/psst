@@ -480,5 +480,19 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 	}
 	
+	function getStudentBygroupAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			if (!empty($data['edit'])){//for all page edit 
+				$data=$db->getAllStudentByGroupForEdit($data['group']);
+			}else{
+				$data=$db->getAllStudentByGroup($data['group']);
+			}
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	
 	
 }

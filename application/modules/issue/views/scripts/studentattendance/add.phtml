@@ -488,7 +488,7 @@ function getSubjectByGroup(){
 	   }
 	});
 }
-var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
+var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(){
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	group = dijit.byId('group').get('value');

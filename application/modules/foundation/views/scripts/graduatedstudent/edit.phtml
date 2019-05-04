@@ -208,7 +208,7 @@ div#lblfromgroup div.info{
 		
 	}); 
 var oldbranch ='<?php echo $this->rs['branch_id']?>';
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('from_group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -221,7 +221,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':1,'forfilter':1
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -238,7 +238,7 @@ function getAllGroupByBranch(){
 	});
 }
 	
-var url_get_all_student_from_group_update = "<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'get-all-student-update')); ?>";
+var url_get_all_student_from_group_update = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
 function getStudentFromGroup(){
 
 		from_group = dijit.byId('from_group').get('value');
@@ -249,7 +249,7 @@ function getStudentFromGroup(){
 		dojo.xhrPost({
 			url:url_get_all_student_from_group_update,
 			content:{
-				'from_group':from_group
+				'group':from_group,'edit':1
 				},
 			handleAs:"json",
 			load: function(respone) {

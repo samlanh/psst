@@ -87,6 +87,14 @@ class Foundation_GroupController extends Zend_Controller_Action {
 	}
 	function editAction(){
 		$db= new Foundation_Model_DbTable_DbGroup();
+		$id=$this->getRequest()->getParam("id");
+		
+		$row = $group_info = $db->getGroupById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+			exit();
+		}
+		$this->view->rs = $row;
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
@@ -98,14 +106,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			}
 		}
 		
-		$id=$this->getRequest()->getParam("id");
 		
-		$row = $group_info = $db->getGroupById($id);
-		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
-			exit();
-		}
-		$this->view->rs = $row;
 		if($group_info['is_pass']==1){
 			//Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
 		}
@@ -141,7 +142,13 @@ class Foundation_GroupController extends Zend_Controller_Action {
 	}
 	function copyAction(){
 		$db= new Foundation_Model_DbTable_DbGroup();
-		
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		$row = $db->getGroupById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD",self::REDIRECT_URL."/index");
+			exit();
+		}
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
@@ -154,12 +161,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			} catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-// 				$err =$e->getMessage();
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		$id=$this->getRequest()->getParam("id");
-		$row = $db->getGroupById($id);
+		
 		$this->view->row = $db->getGroupSubjectById($id);
 		$this->view->rs = $row;
 		$model = new Application_Model_DbTable_DbGlobal();

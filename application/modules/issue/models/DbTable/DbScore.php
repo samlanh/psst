@@ -272,7 +272,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getScoreById($score_id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_score WHERE id=$score_id ";
+		$sql="SELECT s.*,(SELECT g.is_pass FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) as is_pass FROM rms_score AS s WHERE s.id=$score_id ";
+// 		$sql.=" AND (SELECT g.is_pass FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1)=2"; // only group studying
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);

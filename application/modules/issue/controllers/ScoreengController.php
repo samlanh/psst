@@ -70,6 +70,19 @@ class Issue_ScoreengController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam('id');
 		$id = empty($id)?0:$id;
 		$_model = new Issue_Model_DbTable_DbScoreEng();
+		
+		$this->view->score_id = $id;
+		$row = $_model->getScoreById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::MessageBacktoOldHistory("NO_RECORD");
+			exit();
+		}
+		if ($row['is_pass']==1){
+			Application_Form_FrmMessage::MessageBacktoOldHistory("CLASS_COMPLETED_CAN_NOT_EDIT");
+			exit();
+		}
+		$this->view->score = $row;
+		
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
@@ -81,14 +94,7 @@ class Issue_ScoreengController extends Zend_Controller_Action {
 			}
 		}
 		
-		$this->view->score_id = $id;
-		$row = $_model->getScoreById($id);
-		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issue/scoreeng");
-			exit();
-		}
 		
-		$this->view->score = $row;
 		$scoresetting = $_model->getScoreSettingDetail($row['score_setting']);
 		$this->view->scoresettingdetail = $scoresetting;
 		

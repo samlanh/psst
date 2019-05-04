@@ -9,7 +9,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
     }
     function checkGroupExits($_data){
     	$db = $this->getAdapter();
-    	$sql="SELECT id FROM rms_group WHERE academic_year =".$_data['academic_year'];
+    	$sql="SELECT id FROM rms_group WHERE branch_id =".$_data['branch_id']." AND academic_year =".$_data['academic_year'];
     	$sql.=" AND group_code='".$_data['group_code']."'";
     	$sql.=" AND degree='".$_data['degree']."'";
     	$rs = $db->fetchOne($sql);
@@ -22,12 +22,12 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$sql="SELECT id FROM rms_group WHERE branch_id =".$_data['branch_id'];
-			$sql.=" AND group_code='".$_data['group_code']."'";
-			$rs = $db->fetchOne($sql);
-			if(!empty($rs)){
-				return -1;
-			}
+// 			$sql="SELECT id FROM rms_group WHERE branch_id =".$_data['branch_id'];
+// 			$sql.=" AND group_code='".$_data['group_code']."'";
+// 			$rs = $db->fetchOne($sql);
+// 			if(!empty($rs)){
+// 				return -1;
+// 			}
 			$_arr=array(
 					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],
@@ -70,8 +70,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$db->commit();
 			//return true;
 		}catch (Exception $e){
-			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
 		}
 	}
 	

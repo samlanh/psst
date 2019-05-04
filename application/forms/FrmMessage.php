@@ -10,6 +10,16 @@ class Application_Form_FrmMessage extends Zend_Form
     	
     }
 	
+    public static function MessageBacktoOldHistory($msg)
+    {
+    	$tr= Application_Form_FrmLanguages::getCurrentlanguage();
+    	$msg = $tr->translate($msg);
+    	echo '<script language="javascript">
+    	alert("'.$msg.'");
+    	window.history.back();
+    	</script>';
+    }
+    
 	public static function Sucessfull($msg,$url)
 	{
 		$tr= Application_Form_FrmLanguages::getCurrentlanguage();

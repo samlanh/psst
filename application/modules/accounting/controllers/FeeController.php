@@ -71,7 +71,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$frm->FrmTutionfee();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_fee = $frm;
-    	$dbgb = new Application_Model_DbTable_DbGlobal();
+    	
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
     }

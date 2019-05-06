@@ -69,34 +69,13 @@ class IndexController extends Zend_Controller_Action
 					$session_user->branch_id= $user_info['branch_id'];
 					$session_user->branch_list= $user_info['branch_list'];
 					$session_user->schoolOption= $user_info['schoolOption'];
-					
-// 					$session_user->url_report = $db_user->getArrAclReport($user_info['user_type']);
-// 					for($i=0; $i<count($arr_acl);$i++){
-// 						$arr_module[$i]=$arr_acl[$i]['module'];
-// 						if($arr_acl[$i]['module'] == 'exchange'){
-// 							if($arr_acl[$i]['action'] == "index" || $arr_acl[$i]['action'] == "add" || $arr_acl[$i]['action'] == "edited" ) {
-// 								continue;
-// 							}
-// 							$arr_actin[$a_i++] = $arr_acl[$i]['action'];
-// 						}
-// 					}					
-// 					$arr_module=$this->sortMenu($arr_module);
-					
-// 					$session_user->arr_acl = $arr_acl;
-// 					$session_user->arr_module = $arr_module;
-// 					$session_user->arr_actin = $arr_actin;
 						
 					$session_user->lock();
 					$log=new Application_Model_DbTable_DbUserLog();
 					$log->insertLogin($user_id);
 					foreach ($arr_module AS $i => $d){
-// 						if($d !== 'user'){
-// 							$url = '/' . $arr_module[2];
-// 						}
-// 						else{
-							$url = self::REDIRECT_URL;
-							break;
-// 						}
+						$url = self::REDIRECT_URL;
+						break;
 					}	
 					Application_Form_FrmMessage::redirectUrl("/home");	
 					exit();										

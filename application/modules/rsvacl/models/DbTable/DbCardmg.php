@@ -223,13 +223,13 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
       
  function getCardmgById($id){
  		
+	 	$dbp = new Application_Model_DbTable_DbGlobal();
+	 	$sql_string = $dbp->caseStatusShowImage("status");
+ 	
     	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM
+    	$sql = "SELECT * $sql_string FROM
     	$this->_name ";
     	$where = " WHERE `id`= $id";  
-    	
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->caseStatusShowImage("status");
     	
    		return $db->fetchRow($sql.$where);
     }

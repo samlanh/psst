@@ -5,7 +5,6 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 	public function init()
 	{
 		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
-		/* Initialize action controller here */
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -40,7 +39,6 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 		$frm = $fm->FrmCardmg();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
-  
 	}	
 	function addAction()
 	{
@@ -61,7 +59,6 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
-				echo $e->getMessage();exit();
 			}
 		}
 
@@ -72,6 +69,22 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 	}
 	function editAction(){
 		$_dbmodel = new RsvAcl_Model_DbTable_DbCardmg();
+		if($this->getRequest()->isPost()){//check condition return true click submit button
+			$_data = $this->getRequest()->getPost();	
+			try {
+				$sms = "EDIT_SUCCESS";
+				$branch_id= $_dbmodel->updateCardMG($_data);
+				if($branch_id==-1){
+					$sms = "RECORD_EXIST";
+				}
+				if(!empty($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/cardmg/index");
+				}
+			}catch (Exception $e) {
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
+			}
+		}
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		$row=$_dbmodel->getCardmgById($id);
@@ -81,35 +94,10 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 			exit();
 		}
 		
-		if($this->getRequest()->isPost()){//check condition return true click submit button
-			$_data = $this->getRequest()->getPost();	
-			try {
-				$sms = "EDIT_SUCCESS";
-				
-				$branch_id= $_dbmodel->updateCardMG($_data);
-				if($branch_id==-1){
-					$sms = "RECORD_EXIST";
-				}
-				
-				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/cardmg/index");
-				}
-			}catch (Exception $e) {
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
-				echo $e->getMessage();exit();
-			}
-		}
-	
-		
-		
 		$fm = new RsvAcl_Form_FrmCardMg();
 		$frm = $fm->FrmCardmg($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
-		
-		
-		
 	}
 	
 	function addbranchAction(){

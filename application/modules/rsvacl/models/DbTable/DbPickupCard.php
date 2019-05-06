@@ -180,13 +180,15 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
    }
       
  function getCardmgById($id){
- 		
+ 	$dbp = new Application_Model_DbTable_DbGlobal();
+	 	$sql_str=$dbp->caseStatusShowImage("status");
+	 	
     	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM
+    	$sql = "SELECT *
+			$sql_str
+    	 FROM
     	$this->_name ";
-    	$where = " WHERE `id`= $id";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->caseStatusShowImage("status");
+    	$where = " WHERE `id`= $id ";
     	
    		return $db->fetchRow($sql.$where);
     }

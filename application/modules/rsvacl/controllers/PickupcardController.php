@@ -5,7 +5,6 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 	public function init()
 	{
 		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
-		/* Initialize action controller here */
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -71,14 +70,8 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 	}
 	function editAction(){
 		$id=$this->getRequest()->getParam("id");
-		$id = empty($id)?0:$id;
 		$_dbmodel = new RsvAcl_Model_DbTable_DbPickupCard();
-		$row=$_dbmodel->getCardmgById($id);
-		$this->view->rs = $row;
-		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/pickupcard/index");
-			exit();
-		}
+		
 		if($this->getRequest()->isPost()){//check condition return true click submit button
 			$_data = $this->getRequest()->getPost();	
 			try {
@@ -88,27 +81,27 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 				if($branch_id==-1){
 					$sms = "RECORD_EXIST";
 				}
-				
 				if(!empty($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/pickupcard/index");
 				}
 			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
-				echo $e->getMessage();exit();
 			}
 		}
-	
+		$id = empty($id)?0:$id;
 		
+		$row=$_dbmodel->getCardmgById($id);
+		
+		$this->view->rs = $row;
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/pickupcard/index");
+			exit();
+		}
 		
 		$fm = new RsvAcl_Form_FrmPickupCard();
 		$frm = $fm->FrmCardmg($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
-		
-		
-		
 	}
-	
 }
-

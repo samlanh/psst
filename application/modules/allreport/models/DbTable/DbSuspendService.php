@@ -29,7 +29,7 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
 	   				(SELECT $branch from rms_branch where br_id = ss.branch_id LIMIT 1) as branch,
 			  	 	s.stu_code AS code,
 			   		s.stu_khname as kh_name,
-			   		s.stu_enname AS en_name,
+			   		CONCAT(s.last_name,' ',s.stu_enname) AS en_name,
 			   		ss.create_date,
 			   		(SELECT CONCAT(first_name) from rms_users where rms_users.id = ss.user_id) as user,
 			   		(select $label from rms_view as v where v.type=1 and v.key_code = ss.status) as status,
@@ -46,11 +46,11 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
 	   				and ssd.spd_id = spd.id
 	   		";
 			
-			$order = ' ORDER BY ss.id DESC ';
+			$order = ' ORDER BY ss.id DESC,spd.itemdetail_id ASC ';
 			
 			$from_date =(empty($search['start_date']))? '1': " ss.create_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': " ss.create_date <= '".$search['end_date']." 23:59:59'";
-			$where= " AND ".$from_date." AND ".$to_date;
+			$where = " AND ".$from_date." AND ".$to_date;
 			
 			if(!empty($search['branch_id'])){
 		   		$where.=" AND ss.branch_id=".$search['branch_id'];
@@ -66,6 +66,7 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
 		   		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
 		   		$where .=' AND ( '.implode(' OR ',$s_where).')';
 		   	}
+		   	//echo $sql.$where.$order;
 			return $db->fetchAll($sql.$where.$order);
 		}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

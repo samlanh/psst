@@ -18,6 +18,8 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			else{
 				$search=array(
 					'adv_search' =>'',
+					'start_date' =>date("Y-m-d"),
+					'end_date' =>date("Y-m-d"),
 				);
 			}
 			$db =  new Foundation_Model_DbTable_DbSuspendservice();

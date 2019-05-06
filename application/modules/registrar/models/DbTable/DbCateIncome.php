@@ -13,40 +13,82 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}
 	
+	function getAllCateIncome($search=null,$parent = 0, $spacing = '', $cate_tree_array = ''){
+		$db = $this->getAdapter();
+		$sql="select
+					id,
+					category_name as name,
+					parent,
+					account_code,
+					create_date,
+					(select name_en from rms_view where type=1 and key_code = status) as status,
+					(select first_name from rms_users where rms_users.id = user_id) as user
+				from
+					rms_cate_income_expense
+				where
+					parent = $parent
+			";
+		$order = " ORDER BY id desc ";
+		$where = '';
+	
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = $search['adv_search'];
+			$s_where[]=" category_name LIKE '%{$s_search}%'";
+			$s_where[]=" account_code LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if($search['status']>-1){
+			$where.= " AND status = ".$search['status'];
+		}
+		$rows = $db->fetchAll($sql.$where.$order);
+		if (!is_array($cate_tree_array)){
+			$cate_tree_array = array();
+		}
+		if (count($rows) > 0) {
+			foreach ($rows as $row){
+				$cate_tree_array[] = array("id" => $row['id'],"parent" => $row['parent'], "name" => $spacing . $row['name'],"account_code" => $row['account_code'],"create_date" => $row['create_date'],"user" => $row['user'],"status" => $row['status']);
+				$cate_tree_array = $this->getAllCateIncome($search,$row['id'], $spacing . ' - ', $cate_tree_array);
+			}
+		}
+		return $cate_tree_array;
+	}
+	
 	function addCateIncome($data){
 		$_db= $this->getAdapter();
 		try{
 			$sql="SELECT id FROM rms_cate_income_expense WHERE category_name ='".$data['title']."'";
-			//echo $sql; exit();
-			//$sql.=" AND category_name='".$data['title']."'";
 			$rs = $_db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
 			}
-		$array = array(
-					'category_name'	=>$data['title'],
-					'account_code'	=>$data['acc_code'],
-					'user_id'		=>$this->getUserId(),
-					'create_date'	=>date('Y-m-d'),
-				);
-		$this->insert($array);
-		$_db->commit();
+			$array = array(
+				'category_name'	=>$data['title'],
+				'parent'		=>$data['parent'],
+				'account_code'	=>$data['acc_code'],
+				'user_id'		=>$this->getUserId(),
+				'create_date'	=>date('Y-m-d'),
+			);
+			$this->insert($array);
 		}catch(Exception $e){
-			$_db->rollBack();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
 		}
-		//print_r($data); exit();
  	 }
  	 
 	 function updateCateIncome($data){
-		$arr = array(
+	 	try{
+			$arr = array(
 					'category_name'	=>$data['title'],
+					'parent'		=>$data['parent'],
 					'account_code'	=>$data['acc_code'],
 					'status'		=>$data['status'],
 					'user_id'		=>$this->getUserId(),
 				);
-		$where=" id = ".$data['id'];
-		$this->update($arr, $where);
+			$where=" id = ".$data['id'];
+			$this->update($arr, $where);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
 	}
 	
 	function getCateIncomeById($id){
@@ -55,41 +97,29 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	function getAllCateIncome($search=null){
-		$db = $this->getAdapter();
-		$sql=" SELECT 
-					ci.id,
-					ci.category_name,
-					ci.account_code,
-					(select first_name from rms_users where rms_users.id = ci.user_id) as user,
-					create_date,
-					ci.status
-			FROM 
-				rms_cate_income_expense as ci 
-			where 1 ";
-		$where = " ";
-		if (!empty($search['adv_search'])){
-			$s_where = array();
-			$s_search = trim(addslashes($search['adv_search']));
-			$s_where[] = " category_name LIKE '%{$s_search}%'";
-			$s_where[] = " account_code LIKE '%{$s_search}%'";
-			$where .=' AND ('.implode(' OR ',$s_where).')';
+	public function getParentCateIncome($cate_id='',$parent = 0, $spacing = '', $cate_tree_array = ''){
+		$db=$this->getAdapter();
+		if (!is_array($cate_tree_array))
+			$cate_tree_array = array();
+		$sql = " SELECT id , category_name as name from rms_cate_income_expense where status=1 AND `parent` = $parent ";
+		if (!empty($cate_id)){
+			$sql.=" AND id != $cate_id";
 		}
-		if($search['status']>-1){
-			$where.= " AND status = ".$search['status'];
+		$query = $db->fetchAll($sql);
+		$rowCount = count($query);
+	
+		$id='';
+		if ($rowCount > 0) {
+			foreach ($query as $row){
+				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+				$cate_tree_array = $this->getParentCateIncome($cate_id,$row['id'], $spacing . ' - ', $cate_tree_array);
+			}
 		}
-		
-        $order=" order by id desc ";
-		return $db->fetchAll($sql.$where.$order);
+		return $cate_tree_array;
 	}
 	
 	
-	
 }
-
-
-
-
 
 
 

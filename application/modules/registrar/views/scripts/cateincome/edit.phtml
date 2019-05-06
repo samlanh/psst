@@ -36,6 +36,18 @@ $frm = $this->frm_expense;
 	                  	 	<input type="text" name="title" id="title" required="1" value="<?php echo $this->rs['category_name'];?>" dojoType="dijit.form.ValidationTextBox" class="fullside" />
 	                   </div>
 	                </div>
+					<div class="form-group">
+					    <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT");?> :
+					    </label>
+					    <div class="col-md-7 col-sm-7 col-xs-12">
+							<select name="parent" id="parent"  dojoType="dijit.form.FilteringSelect" class="fullside" >
+								<option value=""></option>
+								<?php if(!empty($this->parent)){foreach($this->parent as $parent){?>
+								<option value="<?php echo $parent['id']?>" <?php if($parent['id']==$this->rs['parent']){echo "selected";}?>><?php echo $parent['name']?></option>
+								<?php }}?>
+							</select>
+					    </div>
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACCOUNT_CODE");?> :
 	                   </label>

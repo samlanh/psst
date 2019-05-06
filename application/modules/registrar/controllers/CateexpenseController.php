@@ -30,15 +30,8 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
     		
     		$this->view->adv_search = $search;
     		
-			$rs_rows= $db->getAllCateExpense($search);//call frome model
-    		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-    		$list = new Application_Form_Frmtable();
-    		$collumns = array("TITLE","ACCOUNT_CODE","USER","CREATE_DATE","STATUS");
-    		$link=array(
-    				'module'=>'registrar','controller'=>'cateexpense','action'=>'edit',
-    		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('account_name'=>$link,'account_code'=>$link));
+			$rs_rows= $db->getAllCateIncome($search);//call frome model
+			$this->view->row = $rs_rows;
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -71,7 +64,8 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
 				echo $e->getMessage();
 			}
 		}
-		
+		$db = new Registrar_Model_DbTable_DbCateExpense();
+		$this->view->parent = $db->getParentCateExpense();
     }
  
     public function editAction()
@@ -94,6 +88,7 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
 		$row  = $db->getCateExpenseById($id);
 		$this->view->rs = $row;
 		
+		$this->view->parent = $db->getParentCateExpense($id);
     }
 
 }

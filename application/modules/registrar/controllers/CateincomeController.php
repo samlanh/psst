@@ -28,14 +28,7 @@ class Registrar_CateincomeController extends Zend_Controller_Action
     		$this->view->adv_search = $search;
     		
 			$rs_rows= $db->getAllCateIncome($search);//call frome model
-    		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-    		$list = new Application_Form_Frmtable();
-    		$collumns = array("TITLE","ACCOUNT_CODE","USER","CREATE_DATE","STATUS");
-    		$link=array(
-    				'module'=>'registrar','controller'=>'cateincome','action'=>'edit',
-    		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('category_name'=>$link));
+			$this->view->row = $rs_rows;
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -51,7 +44,7 @@ class Registrar_CateincomeController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
 			$db = new Registrar_Model_DbTable_DbCateIncome();				
-			try {
+			try{
 				$sms="INSERT_SUCCESS";
 				$cate = $db->addCateIncome($data);
 				if($cate==-1){
@@ -62,13 +55,14 @@ class Registrar_CateincomeController extends Zend_Controller_Action
 				}else{
 					Application_Form_FrmMessage::Sucessfull($sms,'/registrar/cateincome/add');
 				}				
-			} catch (Exception $e) {
+			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				echo $e->getMessage();
 			}
 		}
-		
+		$db = new Registrar_Model_DbTable_DbCateIncome();
+		$this->view->parent = $db->getParentCateIncome();
     }
  
     public function editAction()
@@ -91,6 +85,7 @@ class Registrar_CateincomeController extends Zend_Controller_Action
 		$row  = $db->getCateIncomeById($id);
 		$this->view->rs = $row;
 		
+		$this->view->parent = $db->getParentCateIncome($id);
     }
 
 }

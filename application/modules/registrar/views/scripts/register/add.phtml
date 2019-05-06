@@ -645,63 +645,82 @@ function getMonthByNumber(m){
 		<style>
 			.hearder_table{height:25px !important;}
 			.defaulheight{line-height: 20px !important;}
+			.bold{
+				font-weight:bold;
+				}
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px;">
+			<style>
+				.noted{
+				    white-space: pre-wrap;     
+					word-wrap: break-word;      
+					word-break: break-all;
+					white-space: pre;
+					font:12px 'Khmer OS Battambang';
+					border: 1px solid #000;
+                    line-height:20px;
+					font-weight: normal !important;
+					padding:2px;
+				    white-space: normal;
+				}
+				.boxnorefund{
+					color: #fff;
+    				background: #d42727;
+    				border: 2px solid fff;
+    				font-size: 11px;
+    				padding:10px 2px;
+   	 				border-radius: 2px;
+    				border: 6px double #fff;
+    				font-weight:bold !important;
+    				font-family:Times New Roman;	
+				}
+			</style>
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;">
 				<tr>
-					<td colspan="10"  style="" align="center" valign="top">
+					<td style="" align="center" valign="top">
 						<label id="lbl_header"></label>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="10"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-top:-10px" >
+					<td style="" align="center" valign="bottom">
+						<table  width="100%" style="font-size: 10px;" >
 							<tr>
 								<td width="25%">&nbsp;
+									<div class="boxnorefund">Non-Refundable / Transferable</div>
 								</td>
-								<td width="50%" valign="top" align="center" style="font-size: 16px;line-height: 20px">
-									<div style="font-family:Khmer OS Muol Light;">បង្កាន់ដៃបង់ប្រាក់</div>
+								<td width="50%" valign="top" align="center" style="font-size: 14px;line-height: 20px">
+									<div style="font-family:'Khmer OS Muol Light';">បង្កាន់ដៃបង់ប្រាក់</div>
 									<div style="font-family:Times New Roman;">Official Receipt</div>
 								</td>
 								<td width="25%" valign="top" align="left">
-									<div style="font-size: 15px;font-family:Times New Roman;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
-									<div style="font-size: 14px;font-weight: bold;font-family: Times New Roman">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
+									<div style="font-size: 14px;font-family:Times New Roman;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
+									<div style="font-size: 12px;font-weight: bold;font-family: Times New Roman">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
 									<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+									<div style="font-size: 10px;font-weight: bold;">By User : 
+											<?php 
+												   $session_user=new Zend_Session_Namespace('authstu');
+												   $last_name=$session_user->last_name;
+												   $username = $session_user->first_name;
+												   echo "".$last_name." ".$username;
+												?></div>
 								</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
-				<style>
-					.bold{
-						font-weight:bold;
-						}
-						.noted{
-						    white-space: pre-wrap;     
-							word-wrap: break-word;      
-							word-break: break-all;
-							white-space: pre;
-							font:12px 'Khmer OS Battambang';
-							border: 1px solid #000;
-		                    line-height:20px;
-							font-weight: normal !important;
-							padding:2px;
-						    white-space: normal;
-						}
-				</style>
 				<tr>
-					<td colspan="10" valign="top">
+					<td valign="top">
 						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;">
 							<tr>
-								<td>Student's ID </td>
+								<td>Student ID </td>
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
-								<td>Dob</td>
+								<td>DOB</td>
 								<td> : &nbsp;&nbsp;<label id="lb_dob" class="one bold"></label> </td>
 								<td>Grade</td>
 								<td> : &nbsp;<label id="lb_grade" class="one bold"></label> </td>
 							</tr>
 							<tr>
-								<td>Student's Name</td>
+								<td>Student Name</td>
 								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
 								<td>Tel</td>
 								<td> : &nbsp;&nbsp;<label id="lb_phone" class="one bold"></label> </td>
@@ -736,21 +755,26 @@ function getMonthByNumber(m){
 										</tr>
 										<tr>
 											<td align="center">Cashier</td>
+											<td align="center">Head of Cashier</td>
 											<td align="center">Customer</td>
-											<td align="center">Verified By</td>
 										</tr>
 										<tr>
 											<td  align="center">
-												<div style="margin-top:60px;font-size:10px;"></div>
-												<?php 
-												   $session_user=new Zend_Session_Namespace('authstu');
-												   $last_name=$session_user->last_name;
-												   $username = $session_user->first_name;
-												   echo "".$last_name." ".$username;
-												?>
+												<div style="font-size:10px;border-bottom: 1px solid #000;margin-top:50px;" >
+													<?php 
+												  	 echo "".$last_name." ".$username;
+													?>
+												</div>
+												Signature/Name/Date
 											</td>
-											<td align="center"></td>
-											<td align="center"></td>
+											<td align="center" valign="bottom">
+												<div style="border-bottom: 1px solid #000;width:85%;margin:0 auto;" ></div>
+												Signature/Name/Date
+											</td>
+											<td align="center" valign="bottom" >
+												<div style="border-bottom: 1px solid #000;width:85%;margin:0 auto;" ></div>
+												Signature/Name/Date
+											</td>
 										</tr>
 									</table>
 								</td>
@@ -1037,7 +1061,7 @@ function addRow() {
 				<?php if(!empty($this->all_paymentterm))foreach($this->all_paymentterm as $term){?>
 					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
 				<?php }?>
-			template+='</select><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/></td>';
+			template+='</select></td>';
 			column = 0;
 			
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
@@ -1057,7 +1081,7 @@ function addRow() {
 			template+='<td style="width:170px;font-size:12px;"><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='';
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:140px;" />';
-			template+='<input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			template+='<input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -1236,7 +1260,7 @@ function readMoneyInKhmer(netTotal){
 	money_english=read_money_in_english(netTotal);
 	read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
 	
-	english_amount = 'Dollar Only';
+	english_amount = ' Dollar Only';
 	if(netTotal==0){english_amount='';}
 	read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+english_amount+')'
 	khmer_amount = 'ដុល្លារគត់';
@@ -1361,7 +1385,7 @@ function printSave(new_stu_id,new_receipt,submit){
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Amt</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Code</strong></td>';
 					  temp+='</tr>';
 					i=1;  
 					for(var n = 0; n < rowIDArray.length; n++) {
@@ -1371,7 +1395,12 @@ function printSave(new_stu_id,new_receipt,submit){
 							term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 						}
 					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+dojo.byId('item_label_'+rowIDArray[n]).innerHTML+'</td>'; 
+					  
+					  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
+					  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
+						  item_label='Tuition Fee';
+						}
+					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
 					  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';

@@ -9,6 +9,7 @@ $frm = $this->frm_expense;
 		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'cateincome','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				loadingBlock();
 				return true;
 			}else {
 				return false;

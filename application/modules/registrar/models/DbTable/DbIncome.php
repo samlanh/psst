@@ -24,13 +24,12 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				'cheqe_no'		=>$data['cheqe_no'],
 				'description'	=>$data['note'],
 				'date'			=>$data['date'],
-				'status'		=>$data['status'],
 				'user_id'		=>$this->getUserId(),
 				'create_date'	=>date('Y-m-d'),
 			);
 		$this->insert($array);
  	} 	 
-	 function updateIncome($data){
+	function updateIncome($data){
 		$arr = array(
 				'branch_id'		=>$data['branch_id'],
 				'title'			=>$data['title'],
@@ -55,44 +54,57 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	}
 	function getAllIncome($search=null){
 		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('authstu');
-		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
-		$where = " WHERE ".$from_date." AND ".$to_date;
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+		}else{ // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+		}
+		
 		
 		$sql=" SELECT id,
-				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
+				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
 				(select cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
-				title, invoice,
-				(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
+				title,
+				invoice,
+				(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
 				total_amount,
 				cheqe_no,
 				description,
 				date,
-				status 
+				(SELECT $label FROM `rms_view` WHERE rms_view.type=1 and rms_view.key_code = ln_income.status) AS status 
 			FROM 
-				ln_income ";
+				ln_income 
+		";
+		
+		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+		$where = " WHERE ".$from_date." AND ".$to_date;
 		
 		if (!empty($search['adv_search'])){
-				$s_where = array();
-				$s_search = trim(addslashes($search['adv_search']));
-				//$s_where[] = " account_id LIKE '%{$s_search}%'";
-				$s_where[] = " title LIKE '%{$s_search}%'";
-				$s_where[] = " total_amount LIKE '%{$s_search}%'";
-				$s_where[] = " invoice LIKE '%{$s_search}%'";
-				$where .=' AND ('.implode(' OR ',$s_where).')';
-			}
-			if(!empty($search['cate_income'])){
-				$where.= " AND cate_income = ".$search['cate_income'];
-			}
-			if(!empty($search['branch_id'])){
-				$where.= " AND branch_id = ".$search['branch_id'];
-			}
-			if($search['status']>-1){
-				$where.= " AND status = ".$search['status'];
-			}
-	       $order=" order by id desc ";
-			return $db->fetchAll($sql.$where.$order);
+			$s_where = array();
+			$s_search = trim(addslashes($search['adv_search']));
+			//$s_where[] = " account_id LIKE '%{$s_search}%'";
+			$s_where[] = " title LIKE '%{$s_search}%'";
+			$s_where[] = " total_amount LIKE '%{$s_search}%'";
+			$s_where[] = " invoice LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['cate_income'])){
+			$where.= " AND cate_income = ".$search['cate_income'];
+		}
+		if(!empty($search['branch_id'])){
+			$where.= " AND branch_id = ".$search['branch_id'];
+		}
+		if($search['status']>-1){
+			$where.= " AND status = ".$search['status'];
+		}
+        $order=" order by id desc ";
+		return $db->fetchAll($sql.$where.$order);
 	}
 	function getAllExpenseReport($search=null){
 		$db = $this->getAdapter();
@@ -168,7 +180,8 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$this->_name="rms_cate_income_expense";
 		$array = array(
 				'category_name'	=>$data['cate_title'],
-				'parent'		=>$data['type'],
+				'parent'		=>$data['parent'],
+				'account_code'	=>$data['acc_code'],
 				'create_date'	=>date('Y-m-d'),
 				'user_id'		=>$this->getUserId(),
 				);

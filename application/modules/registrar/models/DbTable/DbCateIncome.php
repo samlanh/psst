@@ -21,7 +21,7 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 					parent,
 					account_code,
 					create_date,
-					(select name_en from rms_view where type=1 and key_code = status) as status,
+					(select name_en from rms_view where type=1 and key_code = rms_cate_income_expense.status) as status,
 					(select first_name from rms_users where rms_users.id = user_id) as user
 				from
 					rms_cate_income_expense

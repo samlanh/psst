@@ -109,13 +109,6 @@ table.collape tbody td {
 	                   		<?php echo $frm->getElement('Description');?>
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('Stutas');?>
-	                   </div>
-	                </div>
 	             </div>
 	        </div>
 	        <div class="clearfix"></div>
@@ -134,7 +127,7 @@ table.collape tbody td {
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 					<input type="button" onclick="submitData();" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
-						 iconClass="dijitIconDelete"/>
+						 iconClass="dijitIconSave"/>
 					<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
 						 iconClass="dijitIconNewTask"/>
                	</div>
@@ -282,253 +275,251 @@ table.collape tbody td {
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 <script type="text/javascript">
-dojo.require("dijit.form.Textarea");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
-dojo.ready(function(){
-	getReceiptNumber("");
-	addRow();
-	dijit.byId('payment_method').attr('value',1);
-});
-function hideDialog(){
-	dijit.byId('terms').hide();
-}
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.ready(function(){
+		getReceiptNumber("");
+		addRow();
+		dijit.byId('payment_method').attr('value',1);
+	});
+	function hideDialog(){
+		dijit.byId('terms').hide();
+	}
 
-var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'get-receipt-number')); ?>";
-function getReceiptNumber(receipt){
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id>0){
-		dojo.xhrPost({
-			url:url_get_recceipt_number,
-			content:{
-				'branch_id' : branch_id
+	var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'get-receipt-number')); ?>";
+	function getReceiptNumber(receipt){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id>0){
+			dojo.xhrPost({
+				url:url_get_recceipt_number,
+				content:{
+					'branch_id' : branch_id
+					},
+				handleAs:"json",
+				load: function(data){
+					 dijit.byId('invoice').attr('value',data);
+					 if(receipt!=''){
+						 printSave(data);
+					}
 				},
-			handleAs:"json",
-			load: function(data){
-				 dijit.byId('invoice').attr('value',data);
-				 if(receipt!=''){
-					 printSave(data);
+				error: function(err) {
+					alert(err);
 				}
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+			});
+		}
 	}
-}
-function deleteRecord(index) {
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++) {
-	if(arrays[i] == index) arrays.splice(i,1);
-	}
-	var strings = arrays.join(',');
-	$('#identity').val(strings);
-	dojo.query("#row"+index).remove();
-	netTotal();
-}
-function calculateTotal(index){
-	netTotal();
-}
-function netTotal(){ 
-	var netTotal=0;
-	var rowId = $('#identity').val();
-	var rowIDArray = rowId.split(',');
-	for(var n = 0; n < rowIDArray.length; n++) {
-		netTotal += dijit.byId('total_'+rowIDArray[n]).get('value');
-	}
-	dijit.byId('total_amount').attr('value',netTotal);
-}
- 
-var template = '';
-var service = '';
-var col = 0;
-var no = 0;
-var title = 0;
-tmp = '';
-temp='';
-optexpense = '<?php echo $this->expenseopt;?>';
-function addRow(){ 
-		col++;no++;
-		template='';
-		if(title!=1){  
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';
-			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
-			temp+='<th id="lbl_titlemetion" width="150px"><?php echo $tr->translate("TOTAL");?></th>';
-			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-			dojo.query("#head-title").append(temp);
-			title=1;
-	    }
-		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id_'+col+'" name="expense_id_'+col+'">'+optexpense+'</select></td>';	
-		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
-		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
-		template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:150px;" /></td>';		
-		template+='<td><input type="text" name="remark_'+col+'" id="remark_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
-		tmp='<tr id="row'+col+'">';
-		tmp+="</tr>";
-		dojo.query("#table_row").append(tmp);
-		if($("#identity").val()!="") {
-			var identity = $("#identity").val();
-			$("#identity").val(identity+','+col);
-		} else {$("#identity").val(col);}
-		dojo.html.set(dojo.byId("row"+col),template , {
-		     parseContent: true,
-		});
- }
-
-function calculateTotal(index,type){
-		price = dijit.byId('price_'+index).get('value');
-		price = isNaN(price)?0:price;
-		
-		qty = dijit.byId('qty_'+index).get('value');
-		qty = isNaN(qty)?0:qty;
-		
-		dijit.byId('total_'+index).attr('value',price * qty);
-		
-		dijit.byId('total_amount').attr('value',netTotal);	
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
 		netTotal();
-}
-
-function printSave(new_receipt){	
-	if(dijit.byId('office_receipt').validate()) {
-		
-		condition = checkValidateAddRow();
-		if(condition==false){
-			alert("Please select category expense !!! ");
-			return false;
-		}
-		
-		if(dijit.byId("payment_method").get("value")==-1){
-			alert("សូមជ្រើសរើសប្រភេទបង់ប្រាក់");dijit.byId("payment_method").focus();
-			return false;
-		}
-		if(new_receipt==''){
-			getReceiptNumber(1);
-		}	
-		paid_date = dijit.byId("Date").get('value')
-		var today = new Date(paid_date);
-		var dd = today.getDate();
-		var mon = today.toDateString().substr(4,3); //January is 0!
-		var yyyy = today.getFullYear();
-		dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
-		dojo.byId("lb_receipt_no").innerHTML = new_receipt;
-		dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
-		dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
-		dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
-		dojo.byId("lb_receiver").innerHTML = dijit.byId("receiver").get('value');
-		dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
-		
+	}
+	function calculateTotal(index){
+		netTotal();
+	}
+	function netTotal(){ 
+		var netTotal=0;
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
-		template="";
-			 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
-				  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
-				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃ/Price</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួន/QTY</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
-				  temp+='</tr>';
-				  n=0;
-				i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark_"+rowIDArray[n]).get('value')+'</td>';
-				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("price_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("qty_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-				  i++;
-				  temp+='</tr>';
-				}
-				for(row = n+1;row<4;row++){
-					  temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
-					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
-					  temp+='<td style="border:1px solid #000;"></td>';
-					  temp+='</tr>';
-				}
-			temp+='</table>';
-		dojo.byId('t_amountmoneytype').innerHTML = temp;
-		dijit.byId("terms").show();	
-	}
-}
-function submitData(){
-	if(dijit.byId('office_receipt').validate()) {
-		
-		condition = checkValidateAddRow();
-		if(condition==false){
-			alert("Please select category expense !!! ");
-			return false;
-		}
-		dijit.byId('saveclose').set('disabled',true);
-		dijit.byId('office_receipt').submit();
-	}
-}
-function doPrintInvoice() {
-	$('#office_receipt').submit();
-	window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
-    window.frames["print_frame"].window.focus();
-    window.frames["print_frame"].window.print();
-}
-
-function checkValidateAddRow(){
-	var rowId = $('#identity').val();
-	if(rowId!=''){
-		var rowIDArray = rowId.split(',');
 		for(var n = 0; n < rowIDArray.length; n++) {
-			expense = dijit.byId('expense_id_'+rowIDArray[n]).get('value');
-			if(expense<=0){
+			netTotal += dijit.byId('total_'+rowIDArray[n]).get('value');
+		}
+		dijit.byId('total_amount').attr('value',netTotal);
+	}
+	 
+	var template = '';
+	var service = '';
+	var col = 0;
+	var no = 0;
+	var title = 0;
+	tmp = '';
+	temp='';
+	optexpense = '<?php echo $this->expenseopt;?>';
+	function addRow(){ 
+			col++;no++;
+			template='';
+			if(title!=1){  
+				temp+='<th><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
+				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
+				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
+				temp+='<th id="lbl_titlemetion" width="150px"><?php echo $tr->translate("TOTAL");?></th>';
+				temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+				dojo.query("#head-title").append(temp);
+				title=1;
+			}
+			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="50px" align="center">'+no+'</td>';
+			template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id_'+col+'" name="expense_id_'+col+'">'+optexpense+'</select></td>';	
+			template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
+			template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
+			template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:150px;" /></td>';		
+			template+='<td><input type="text" name="remark_'+col+'" id="remark_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			dojo.query("#table_row").append(tmp);
+			if($("#identity").val()!="") {
+				var identity = $("#identity").val();
+				$("#identity").val(identity+','+col);
+			} else {$("#identity").val(col);}
+			dojo.html.set(dojo.byId("row"+col),template , {
+				 parseContent: true,
+			});
+	 }
+
+	function calculateTotal(index,type){
+			price = dijit.byId('price_'+index).get('value');
+			price = isNaN(price)?0:price;
+			
+			qty = dijit.byId('qty_'+index).get('value');
+			qty = isNaN(qty)?0:qty;
+			
+			dijit.byId('total_'+index).attr('value',price * qty);
+			
+			dijit.byId('total_amount').attr('value',netTotal);	
+			netTotal();
+	}
+
+	function printSave(new_receipt){	
+		if(dijit.byId('office_receipt').validate()) {
+			
+			condition = checkValidateAddRow();
+			if(condition==false){
+				alert("Please select category expense !!! ");
 				return false;
 			}
+			
+			if(dijit.byId("payment_method").get("value")==-1){
+				alert("សូមជ្រើសរើសប្រភេទបង់ប្រាក់");dijit.byId("payment_method").focus();
+				return false;
+			}
+			if(new_receipt==''){
+				getReceiptNumber(1);
+			}	
+			paid_date = dijit.byId("Date").get('value')
+			var today = new Date(paid_date);
+			var dd = today.getDate();
+			var mon = today.toDateString().substr(4,3); //January is 0!
+			var yyyy = today.getFullYear();
+			dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
+			dojo.byId("lb_receipt_no").innerHTML = new_receipt;
+			dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
+			dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
+			dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
+			dojo.byId("lb_receiver").innerHTML = dijit.byId("receiver").get('value');
+			dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+			
+			var rowId = $('#identity').val();
+			var rowIDArray = rowId.split(',');
+			template="";
+				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
+					  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
+					  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃ/Price</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួន/QTY</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
+					  temp+='</tr>';
+					  n=0;
+					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
+					  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("price_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("qty_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  i++;
+					  temp+='</tr>';
+					}
+					for(row = n+1;row<4;row++){
+						  temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+						  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
+						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+						  temp+='<td style="border:1px solid #000;"></td>';
+						  temp+='</tr>';
+					}
+				temp+='</table>';
+			dojo.byId('t_amountmoneytype').innerHTML = temp;
+			dijit.byId("terms").show();	
 		}
 	}
-}
-function popupCateExpense(index){
-	dijit.byId("ex_save_new").attr("disabled",false);
-	expense_id = dijit.byId("expense_id_"+index).get('value');
-	$("#tow_value").val(index);
-	if(expense_id==-1){
-		dijit.byId("popup_cate_expense").show();
-	}
-}
-
-var cate_expense_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cate_expense));?> );
-var url_add_cate_expense = '<?php echo $this->url(array("module"=>"registrar","controller"=>"expense","action"=>"add-cate-expense")); ?>';
-function addCateExpense(){
-	if(dijit.byId('add_cate_expense').validate()) {
-		dijit.byId("ex_save_new").attr("disabled",true);
-		dojo.xhrPost({
-			url:url_add_cate_expense,
-			form: dojo.byId("add_cate_expense"),
-			handleAs:"json",
-			load: function(data){
-			  var Itemmake = { 
-				        id: data.id,
-				        name: dijit.byId('account_name').get('value')
-				         };
-					index=$("#tow_value").val();
-				    addDataToSelectbox(dijit.byId('expense_id_'+index), cate_expense_store, Itemmake, data.id);
-
-			  optexpense = data.new_array;
-					  
-			  dijit.byId('add_cate_expense').reset();
-			  dijit.byId("popup_cate_expense").hide();
-			},
-			error: function(err) {
-				alert(err);
+	function submitData(){
+		if(dijit.byId('office_receipt').validate()) {
+			
+			condition = checkValidateAddRow();
+			if(condition==false){
+				alert("Please select category expense !!! ");
+				return false;
 			}
-		});
+			dijit.byId('saveclose').set('disabled',true);
+			dijit.byId('office_receipt').submit();
+		}
 	}
-}
+	function doPrintInvoice() {
+		$('#office_receipt').submit();
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
+		window.frames["print_frame"].window.focus();
+		window.frames["print_frame"].window.print();
+	}
+
+	function checkValidateAddRow(){
+		var rowId = $('#identity').val();
+		if(rowId!=''){
+			var rowIDArray = rowId.split(',');
+			for(var n = 0; n < rowIDArray.length; n++) {
+				expense = dijit.byId('expense_id_'+rowIDArray[n]).get('value');
+				if(expense<=0){
+					return false;
+				}
+			}
+		}
+	}
+	function popupCateExpense(index){
+		dijit.byId("ex_save_new").attr("disabled",false);
+		expense_id = dijit.byId("expense_id_"+index).get('value');
+		$("#tow_value").val(index);
+		if(expense_id==-1){
+			dijit.byId("popup_cate_expense").show();
+		}
+	}
+
+	var cate_expense_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cate_expense));?> );
+	var url_add_cate_expense = '<?php echo $this->url(array("module"=>"registrar","controller"=>"expense","action"=>"add-cate-expense")); ?>';
+	function addCateExpense(){
+		if(dijit.byId('add_cate_expense').validate()) {
+			dijit.byId("ex_save_new").attr("disabled",true);
+			dojo.xhrPost({
+				url:url_add_cate_expense,
+				form: dojo.byId("add_cate_expense"),
+				handleAs:"json",
+				load: function(data){
+					var Itemmake = {
+							id: data.id,
+							name: dijit.byId('account_name').get('value')
+						};
+					index=$("#tow_value").val();
+					addDataToSelectbox(dijit.byId('expense_id_'+index), cate_expense_store, Itemmake, data.id);
+					optexpense = data.new_array;
+					dijit.byId('add_cate_expense').reset();
+					dijit.byId("popup_cate_expense").hide();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
 </script>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_cate_expense" >
@@ -537,36 +528,44 @@ function addCateExpense(){
 				<tr>
 					<td>
 						<fieldset style="background-color:menu;">
-									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_CATE_EXPENSE");?></strong></legend>
-									<table style="margin: 0 auto; width: 95%;white-space: nowrap; line-height: 35px;" cellspacing="10">
-										
-										<tr>
-											<td><?php echo $tr->translate("TITLE")?></td>
-											<td>
-												<input name="account_name" id="account_name" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
-											</td>
-										</tr>
-										
-										<tr>
-											<td><?php echo $tr->translate("ACCOUNT_CODE")?></td>
-											<td>
-												<input name="account_code" id="account_code" dojoType="dijit.form.TextBox" required="required" class="fullside" />
-											</td>
-										</tr>
-										
-										<tr>
-											<td colspan="2" align="center">
-												<input type="button" onclick="addCateExpense();" value="save_new" name="ex_save_new"  id="ex_save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-													iconClass="dijitEditorIcon dijitEditorIconSave" />
-											</td>
-										</tr>
-									</table>	
+							<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_CATE_EXPENSE");?></strong></legend>
+							<table style="margin: 0 auto; width: 95%;white-space: nowrap; line-height: 35px;" cellspacing="10">
+								<tr>
+									<td><?php echo $tr->translate("TITLE")?></td>
+									<td>
+										<input name="account_name" id="account_name" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("PARENT")?></td>
+									<td>
+										<select name="parent" id="parent"  dojoType="dijit.form.FilteringSelect" class="fullside" >
+											<option value=""></option>
+											<?php if(!empty($this->parent)){foreach($this->parent as $parent){?>
+											<option value="<?php echo $parent['id']?>"><?php echo $parent['name']?></option>
+											<?php }}?>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("ACCOUNT_CODE")?></td>
+									<td>
+										<input name="account_code" id="account_code" dojoType="dijit.form.TextBox" required="required" class="fullside" />
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" align="center">
+										<input type="button" onclick="addCateExpense();" value="save_new" name="ex_save_new"  id="ex_save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+									</td>
+								</tr>
+							</table>	
 						</fieldset>		
 					</td>
 				</tr>
 			</table>	
 			<input type="hidden"  name="tow_value" id="tow_value" value="" />
- 			</form>
+ 		</form>
 	</div>
 </div>
 <script>

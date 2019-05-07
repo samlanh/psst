@@ -355,9 +355,9 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			return $options;
 		}
 		public function getAllExpenseIncomeType($type){
-			$_db = new Application_Model_DbTable_DbGlobal();
+			$_db = new Registrar_Model_DbTable_DbCateExpense();
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-			$rows = $_db->getExpenseIncome($type);
+			$rows = $_db->getParentCateExpense();
 			$options = '';
 			$options .= '<option Value="0">'.$tr->translate("SELECT_CATEGORY").'</option>';
 			$options .= '<option Value="-1">'.$tr->translate("ADD_NEW").'</option>';

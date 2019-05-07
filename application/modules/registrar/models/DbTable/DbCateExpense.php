@@ -62,7 +62,7 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 			if(!empty($rs)){
 				return -1;
 			}
-		$array = array(
+			$array = array(
 					'account_name'	=>$data['title'],
 					'parent_id'		=>$data['parent'],
 					'account_code'	=>$data['acc_code'],
@@ -70,9 +70,8 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 					'user_id'		=>$this->getUserId(),
 					'date'	=>date('Y-m-d'),
 				);
-		$this->insert($array);
+			$this->insert($array);
 		}catch (Exception $e){
-			$db->rollBack();
 			echo $e->getMessage();exit();
 		}
 		//print_r($data); exit();
@@ -80,12 +79,12 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
  	 
 	 function updateCateExpense($data){
 		$arr = array(
-					'account_name'	=>$data['title'],
-					'parent_id'		=>$data['parent'],
-					'account_code'	=>$data['acc_code'],
-					'status'		=>$data['status'],
-					'user_id'		=>$this->getUserId(),
-				);
+				'account_name'	=>$data['title'],
+				'parent_id'		=>$data['parent'],
+				'account_code'	=>$data['acc_code'],
+				'status'		=>$data['status'],
+				'user_id'		=>$this->getUserId(),
+			);
 		$where=" id = ".$data['id'];
 		$this->update($arr, $where);
 	}

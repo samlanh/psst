@@ -15,15 +15,17 @@ $frm = $this->frm_expense;
 			<script type="dojo/method" event="onSubmit">
 			if(this.validate()) {
 				branch_id=dijit.byId('branch_id').get('value');
-				if(branch_id==-1 || branch_id==''){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
+				if(branch=='' || branch==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
+					dijit.byId('branch_id').focus();
 					return false;
 				}
 				cate_income=dijit.byId('cate_income').get('value');
-				if(cate_income==0 || branch_id==''){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
+				if(cate_income==0 || cate_income=='' || cate_income==-1){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');
+					dijit.byId('cate_income').focus();
 					return false;
-				}	
+				}
 				loadingBlock();
 				return true;
 			}else {
@@ -86,6 +88,16 @@ $frm = $this->frm_expense;
 								
 	                   </div>
 	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="1" <?php if($this->rs['status']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
+								<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("VOID")?></option>
+							</select>
+	                   </div>
+	                </div>
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
@@ -113,26 +125,17 @@ $frm = $this->frm_expense;
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   	<textarea name="note" id="note" class="fullside"  value="<?php echo $this->rs['description'];?>" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:50px;" ></textarea>							
+							<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:65px;" ><?php echo $this->rs['description'];?></textarea>							
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-								<option value="1" <?php if($this->rs['status']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
-								<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("VOID")?></option>
-							</select>
-	                   </div>
-	                </div>
+	                
 	            </div>
 	        </div>
 	        <div class="card-box">
                	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
                			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 									 iconClass="dijitIconClear"/>
-						<input type="button" onClick="submitDataClose();" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
+						<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
 							 iconClass="dijitEditorIcon dijitEditorIconSave"/>
 					   <input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
 						 iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
@@ -426,12 +429,19 @@ function getbranchinfo(){
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="true" /></td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("TYPE")?></td>
+							<td style="width:100px"><?php echo $tr->translate("PARENT")?></td>
 							<td>
-								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("INCOME")?></option>
+								<select class="fullside"  tabindex="2" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+									<option value=""></option>
+									<?php if(!empty($this->parent)){foreach($this->parent as $parent){?>
+									<option value="<?php echo $parent['id']?>"><?php echo $parent['name']?></option>
+									<?php }}?>
 								</select>
 							</td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("ACCOUNT_CODE")?></td>
+							<td><input class="fullside" tabindex="3" name="acc_code" id="acc_code" type="text" dojoType="dijit.form.TextBox" /></td>
 						</tr>
 						<tr>
 							<td colspan="2" align="center">

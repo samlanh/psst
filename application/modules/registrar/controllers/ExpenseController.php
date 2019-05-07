@@ -30,8 +30,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		$this->view->adv_search = $formdata;
     		
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
-    		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH_NAME","INFORS_RECEIVE","EXPENSE_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_EXPENSE","NOTE","FOR_DATE","BY_USER","STATUS");
     		$link=array(
@@ -76,14 +74,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$db = new Application_Model_GlobalClass();
     	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
     	
-    	$_db = new Registrar_Model_DbTable_DbExpense();
-    	$cate_expense = $_db->getAllCateExpense(5);
-    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
-    	$this->view->cate_expense = $cate_expense;
-    	
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$cate_expense = $_db->getAllBranch();
-    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
+    	$db = new Registrar_Model_DbTable_DbCateExpense();
+    	$this->view->parent = $db->getParentCateExpense();
     	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
@@ -127,10 +119,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$db = new Application_Model_GlobalClass();
     	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
     	 
-    	$_db = new Registrar_Model_DbTable_DbExpense();
-    	$cate_expense = $_db->getAllCateExpense(5);
-    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
-    	$this->view->cate_expense = $cate_expense;
+    	$db = new Registrar_Model_DbTable_DbCateExpense();
+    	$this->view->parent = $db->getParentCateExpense();
     	 
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();

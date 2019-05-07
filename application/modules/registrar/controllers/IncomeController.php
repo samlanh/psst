@@ -29,10 +29,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		
     		$this->view->adv_search = $search;
     		$_db = new Application_Model_DbTable_DbGlobal();
-    		$user_type=$_db->getUserType();
 			$rs_rows= $db->getAllIncome($search);//call frome model
-    		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH_NAME","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQE_NO","NOTE","PAID_DATE","STATUS");
     		$link=array(
@@ -43,10 +40,10 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	$frm = new Registrar_Form_FrmSearchexpense();
-    	$frm = $frm->AdvanceSearch();
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_search = $frm;
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
     }
     public function addAction()
     {
@@ -70,10 +67,12 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
     	$this->view->payment_method = $payment_method;
     	
-    	$cate_income = $db->getCateIncome();
+    	$_db = new Registrar_Model_DbTable_DbCateIncome();
+    	$cate_income = $_db->getParentCateIncome();
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
+    	$this->view->parent = $_db->getParentCateIncome();
     	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$branch_income= $db->getAllBranch();
@@ -116,10 +115,12 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
     	$this->view->payment_method = $payment_method;
     	 
-    	$cate_income = $db->getCateIncome();
+    	$_db = new Registrar_Model_DbTable_DbCateIncome();
+    	$cate_income = $_db->getParentCateIncome();
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
+    	$this->view->parent = $_db->getParentCateIncome();
     	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$branch_income= $db->getAllBranch();

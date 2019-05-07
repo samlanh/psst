@@ -16,12 +16,14 @@
 			if(this.validate()) {			
 				branch=dijit.byId('branch_id').get('value');
 				if(branch=='' || branch==0){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
+					dijit.byId('branch_id').focus();
 					return false;
 				}		
 				cate_income=dijit.byId('cate_income').get('value');
-				if(cate_income==0 || cate_income==''){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
+				if(cate_income==0 || cate_income=='' || cate_income==-1){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');
+					dijit.byId('cate_income').focus();
 					return false;
 				}
 				loadingBlock();
@@ -112,17 +114,7 @@
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:50px;" ></textarea>							
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-									<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
-									<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
-								</select>
+	                   		<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:65px;" ></textarea>							
 	                   </div>
 	                </div>
 	            </div>
@@ -489,17 +481,24 @@ function getbranchinfo(){
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="true" /></td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("TYPE")?></td>
+							<td style="width:100px"><?php echo $tr->translate("PARENT")?></td>
 							<td>
-								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("INCOME")?></option>
+								<select class="fullside"  tabindex="2" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+									<option value=""></option>
+									<?php if(!empty($this->parent)){foreach($this->parent as $parent){?>
+									<option value="<?php echo $parent['id']?>"><?php echo $parent['name']?></option>
+									<?php }}?>
 								</select>
 							</td>
 						</tr>
 						<tr>
+							<td style="width:100px"><?php echo $tr->translate("ACCOUNT_CODE")?></td>
+							<td><input class="fullside" tabindex="3" name="acc_code" id="acc_code" type="text" dojoType="dijit.form.TextBox" /></td>
+						</tr>
+						<tr>
 							<td colspan="2" align="center">
 								<input iconClass="dijitIconDelete" type="button" name="close" id="close" value="close" label="<?php echo $tr->translate("CANCEL")?>" dojoType="dijit.form.Button" onclick="hidePopup();" />
-								<input type="button" value="save_ajax" id="save_ajax" name="save_ajax" label="<?php echo $tr->translate("SAVECLOSE")?>" dojoType="dijit.form.Button" 
+								<input type="button" value="save_ajax" id="save_ajax" name="save_ajax" label="<?php echo $tr->translate("SAVE")?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCateIncome();"/>
 							</td>
 						</tr>

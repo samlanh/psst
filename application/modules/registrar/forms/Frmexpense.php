@@ -70,7 +70,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		$_Description ->setAttribs(array(
 				'dojoType'=>'dijit.form.SimpleTextarea',
 				'class'=>'fullside',
-				'style'=>"font-size:14px;font-family: 'Khmer OS Battambang';height:50px;"
+				'style'=>"font-size:14px;font-family: 'Khmer OS Battambang';height:65px;"
 		));
 		
 		$total_amount=new Zend_Dojo_Form_Element_NumberTextBox('total_amount');

@@ -141,8 +141,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$_cate->setValue($request->getParam("cate_income"));
-		$_db = new Registrar_Model_DbTable_DbIncome();	
-		$result = $_db->getCateIncome();
+		$_db = new Registrar_Model_DbTable_DbCateIncome();	
+		$result = $_db->getParentCateIncome();
 		$opt_cate = array(''=>$this->tr->translate("SELECT_CATEGORY"));
 		if(!empty($result))foreach ($result As $rs)$opt_cate[$rs['id']]=$rs['name'];
 		$_cate->setMultiOptions($opt_cate);

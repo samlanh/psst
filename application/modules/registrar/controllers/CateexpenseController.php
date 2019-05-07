@@ -53,14 +53,13 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
 				if($cate==-1){
 					$sms = "RECORD_EXIST";
 				}
-				if(!empty($data['saveclose'])){
+				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,"/registrar/cateexpense");
 				}else{
 					Application_Form_FrmMessage::message($sms);
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				echo $e->getMessage();
 			}
 		}

@@ -147,8 +147,8 @@
 								$degreename=$rowdegree["title"];
 							}
 						?>
-					    <strong​​ style="font-family: Arial Black;color:#f00; font-size: 17px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT_PROFILE").$branc_name;?></strong><br />
-						<strong​​ style="font-family: Arial Black;color:#0400ff; font-size: 17px;font-family:'Khmer OS Muol Light';"><?php echo $degreename;?></strong><br />
+					    <strong​​ style="font-family: Arial Black;color:#f00; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT_PROFILE").$branc_name;?></strong><br />
+						<strong​​ style="font-family: Arial Black;color:#0400ff; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $degreename;?></strong><br />
 						<strong​​ style="font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
 					<td width="15%" align="center">
@@ -210,8 +210,8 @@
 								<?php if (!empty($row['province_kh_name'])){ echo "រាជធានី/ខេត្ត ".$row['province_kh_name']." ";}?>
 								&nbsp;</td>
 								<td style="white-space: normal;">&nbsp;<?php if ($row['is_stu_new']==1){ if (!empty($row['from_school'])){ echo $row['from_school'];}else{ echo "ថ្មី";} }else{echo "អ៊ិ.អិល.ធី";}?>&nbsp;</td>	
-								<td>&nbsp;<?php //echo $row['status'];?>&nbsp;</td>	
-								<td>&nbsp;<?php //echo $row['status'];?>&nbsp;</td>	
+								<td>&nbsp;&nbsp;</td>	
+								<td>&nbsp;&nbsp;</td>	
 							</tr>
 						<?php }?>	
 						</table>	
@@ -239,16 +239,11 @@
 				</tr>
 			</table>
 		</div>
-		
 </div>
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
 
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -269,7 +264,6 @@ dojo.ready(function(){
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -314,7 +308,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -342,28 +335,7 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-	function getKHMonthByNumber(m){
-		var monthName=[
-			"មករា",
-			"កុម្ភៈ",
-			"មីនា",
-			"មេសា",
-			"ឧសភា",
-			"មិថុនា",
-			"កក្កដា",
-			"សីហា",
-			"កញ្ញា",
-			"តុលា",
-			"វិច្ឆិកា",
-			"ធ្នូ",
-			];
-			return (monthName[m-1]);
-	}	
-
-
-	
 </script>

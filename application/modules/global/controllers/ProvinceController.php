@@ -15,14 +15,13 @@ class Global_ProvinceController extends Zend_Controller_Action {
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
-						'title' => $_data['title'],
-						'status' => $_data['status_search']);
+					'title' => $_data['title'],
+					'status'=> $_data['status_search']);
 			}
 			else{
-	
 				$search = array(
-						'title' => '',
-						'status' => -1,
+					'title' => '',
+					'status' => -1,
 				);
 	
 			}
@@ -55,7 +54,7 @@ class Global_ProvinceController extends Zend_Controller_Action {
 			try {
 				$_dbmodel = new Global_Model_DbTable_DbProvince();
 				$_dbmodel->addNewProvince($_data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/province/index");
+				Application_Form_FrmMessage::message("EDIT_SUCCESS");
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err =$e->getMessage();
@@ -66,8 +65,7 @@ class Global_ProvinceController extends Zend_Controller_Action {
 		$frm_province=$provine->FrmProvince();
 		Application_Model_Decorator::removeAllDecorator($frm_province);
 		$this->view->frm_province = $frm_province;
-	}
-	
+	}	
 	public function editAction()
 	{
 		$id=$this->getRequest()->getParam("id");
@@ -86,4 +84,3 @@ class Global_ProvinceController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($update);
 	}
 }
-

@@ -13,14 +13,6 @@
 	$rs_sub=$this->rows_sub;
 ?>	
 <script>
-/*dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.parser");
-dojo.require("dijit.layout.AccordionContainer");
-dojo.require("dijit.layout.ContentPane");
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.DateTextBox");*/
 </script>
 <style>
 select{ width:100%;}
@@ -249,15 +241,10 @@ table#table_row {
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.DateTextBox");
-//dojo.require("dojo.store.Memory");
-////dojo.require('dojox.form.BusyButton');
-//dojo.require("dijit.form.Textarea");  
-//dojo.require("dijit.form.FilteringSelect");
-//dojo.require("dojo.html");
+
 var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>);
 var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->group));?> );
 dojo.ready(function(){
-	//control study year
 		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 		new dijit.form.FilteringSelect({
 		    store:years_store,
@@ -273,7 +260,6 @@ dojo.ready(function(){
 		    	//filterStudent();
 		    }
 		}, "year_study");
-
 		
 		new dijit.form.FilteringSelect({
 		    store:subject_store,
@@ -351,7 +337,7 @@ function filterGrade(){
 			    dijit.byId('grade').set('store',grade_store);  
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 		});
 }
@@ -359,7 +345,6 @@ function filterGrade(){
 
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-student')); ?>';
 function filterStudent(){
-	//alert(1);
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
@@ -390,7 +375,7 @@ function filterStudent(){
 				str='';
 				column = 0;
 				str='';
-				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
+				for(i=0;i<data.length;i++){ 
 					inx = i+1;
 					num++;
 					var gender='';
@@ -436,7 +421,7 @@ function filterStudent(){
 	       }
 	   },		
 	    error: function(err) {
-		 //   alert(err);
+		
 	    }
 	});
 	
@@ -546,14 +531,13 @@ function getInfoBygroup(type=null){
 			dijit.byId('session').set('readOnly',true);
 			
 			dijit.byId('room').set('value',data.room_id);
-			//dijit.byId('room').set('readOnly',true);
+			
 			filterStudentBygroup(type);
 
 			if(data.degree==2){
 				getSubjectByGroup(type);
 			}
-			// dijit.byId('subject').set('readOnly',true);  
-			 //dijit.byId('subject').set('required',false); 
+			
 			 dijit.byId('subject').reset();
 		},
 		error: function(err) {
@@ -563,7 +547,7 @@ function getInfoBygroup(type=null){
 }
 var url_getSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'getsubjectbygroup')); ?>';
 function getSubjectByGroup(type=null){
-	//group = dijit.byId('group').get('value');
+	
 	
 	dojo.xhrPost({
 	    url: url_getSubject,
@@ -574,8 +558,7 @@ function getSubjectByGroup(type=null){
 	   load: function(data){
 		   subject_store  = getDataStorefromJSON('id','name', data);
 		   dijit.byId('subject').set('store',subject_store);  
-		   //dijit.byId('subject').set('readOnly',false);  
-		   //dijit.byId('subject').set('required',true); 
+		
 		   if(type!=null){
 		  	 dijit.byId('subject').set('value','<?php echo $this->row['subject_id'];?>');
 		   }

@@ -208,11 +208,8 @@ table.tb-footer tr.style-head {
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
 
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );

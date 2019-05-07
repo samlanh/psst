@@ -234,48 +234,49 @@ table.tb-footer tr.style-head {
 					<?php }?>	
 						<tr>
 							<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px;white-space:nowrap;">
-									<tr>
-										<td valign="top" style="width:33%;">
-											<span>
-												<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
-											</span> 
-										</td>
-										<td  valign="top" style="width:33%; text-align: center;">
-											<span>
-												<?php echo $tr->translate("FEMALE");?> : <?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
-											</span> 
-										</td>
-										<td  style="width:33%;white-space: nowrap;" valign="top">
-											<span style="text-align: center;">
-												<?php echo $tr->translate("MALE");?> : <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
-											</span> 
-										</td>
-									</tr>
-								</table>
 							</td>
 						</tr>
 						<tr><td colspan="14" style="border:1px solid #fff;">&nbsp;</td></tr>
 					</table>	
 					<table border="0" align="right" width="60%" style="color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Battambang'; margin:0 auto; white-space:nowrap;">
 						<tr>
+							<td valign="top" style="width:33%;">
+								<?php echo $tr->translate("STUDENT_TOTAL");?> 
+							</td>
+							<td>
+								: <?php echo $count; $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
+							</td>
+							<td  valign="top" style="width:33%; text-align: center;">
+								<?php echo $tr->translate("FEMALE");?> 
+							</td>
+							<td>
+								: <?php echo $female." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
+							</td>
+							<td  style="width:33%;white-space: nowrap;" valign="top">
+								<?php echo $tr->translate("MALE");?> 
+							</td>
+							<td>
+								: <?php echo $male;?> <?php echo $tr->translate("STUDENT_UNIT");?>
+							</td>
+						</tr>
+						<tr>
 							<td width="15%" >
 								<?php echo $tr->translate("TOTAL_STUDYING_STUDENT");?>
 							</td>
 							<td width="15%" >
-								: <?php echo str_pad($all_total, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
+								: <?php echo $all_total;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 							</td>
 							<td width="15%" align="right">
 								<?php echo $tr->translate("FEMALE");?>
 							</td>
 							<td width="15%" >
-								: <?php echo str_pad($all_female, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT"); ?>
+								: <?php echo $all_female;?> <?php echo $tr->translate("STUDENT_UNIT"); ?>
 							</td>
 							<td width="15%" align="right">
 								<?php echo $tr->translate("MALE");?>
 							</td>
 							<td width="15%" >
-								: <?php echo str_pad(($all_total-$all_female), 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
+								: <?php echo $all_total-$all_female;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 							</td>
 						</tr>
 						<tr>
@@ -283,19 +284,19 @@ table.tb-footer tr.style-head {
 								<?php echo $tr->translate("TOTAL_STOP_STUDENT");?>
 							</td>
 							<td>
-								: <?php echo str_pad($all_drop, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
+								: <?php echo $all_drop?> <?php echo $tr->translate("STUDENT_UNIT");?>
 							</td>
 							<td align="right">
 								<?php echo $tr->translate("FEMALE");?>
 							</td>
 							<td>
-								: <?php echo str_pad($all_femaledrop, 2, '0', STR_PAD_LEFT)?> <?php echo $tr->translate("STUDENT_UNIT"); ?>
+								: <?php echo $all_femaledrop;?> <?php echo $tr->translate("STUDENT_UNIT"); ?>
 							</td>
 							<td align="right">
 								<?php echo $tr->translate("MALE");?>
 							</td>
 							<td>
-								: <?php echo str_pad(($all_drop-$all_femaledrop), 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
+								: <?php echo $all_drop-$all_femaledrop;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 							</td>
 						</tr>
 					</table>
@@ -330,9 +331,7 @@ table.tb-footer tr.style-head {
 </div>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
 
 dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -355,7 +354,6 @@ dojo.ready(function(){
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -414,7 +412,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -442,7 +439,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -463,7 +459,6 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("RPT_STUDENT_STATISTIC")); 
 	$frm =  $this->form_search;
-	
 	$dbst = new Allreport_Model_DbTable_DbRptAllStudent();
 ?>	
 <style>
@@ -22,7 +21,7 @@ table.tb-footer tr.style-head {
     		</div>
     	</div>
     </div>
-		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
 				<div class="col-md-2 col-sm-2 col-xs-12">
             		<?php echo $frm->getElement("allacademicyear");?>
@@ -188,9 +187,7 @@ table.tb-footer tr.style-head {
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
 
 dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -241,7 +238,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

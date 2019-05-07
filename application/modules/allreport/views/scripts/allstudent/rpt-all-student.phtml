@@ -73,16 +73,10 @@ display: table-cell !important;
 				</tr>
 				<tr class="line"><td colspan="3"></td></tr>
 				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
 					<td colspan="3" align="center">
 						<strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
 						<strong  style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
 				</tr>
 				<style>
 					table tr th{
@@ -451,7 +445,6 @@ display: table-cell !important;
 						}
 						?>
 						
-						
 							<?php if ($key==0){?>
 							<div class="one-row-persone" >
 							<?php } ?>
@@ -489,7 +482,6 @@ display: table-cell !important;
 				}?>
 		</div>
 	</div>
-		
 	</div>
 </div>
 <?php /////////////////////////////////////////////////// pick up card //////////////////////////////////////////////////////////?>
@@ -573,7 +565,6 @@ display: table-cell !important;
 							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
 							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 							}
-							
 						}
 						
 						$stuname = $row['stu_enname']." ".$row['last_name'];
@@ -636,7 +627,6 @@ display: table-cell !important;
 			<tr>
 				<td align="center">
 					<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
-					
 					<button dojoType="dijit.form.Button" id="print_pickup" iconClass="dijitEditorIcon dijitEditorIconPrint"
 						type="button" onclick="printPickupCard();">Print Pickup Card</button>
 				</td>
@@ -647,11 +637,7 @@ display: table-cell !important;
 
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
-
-dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -672,7 +658,6 @@ dojo.ready(function(){
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -687,7 +672,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                        
+		required: false,                        
 		id: "grade_all",
 		name: "grade_all",  
 		class: 'fullside',  
@@ -731,7 +716,7 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -759,7 +744,7 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -781,28 +766,10 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
 
-	function getKHMonthByNumber(m){
-		var monthName=[
-		      			"មករា",
-		      			"កុម្ភៈ",
-		      			"មីនា",
-		      			"មេសា",
-		      			"ឧសភា",
-		      			"មិថុនា",
-		      			"កក្កដា",
-		      			"សីហា",
-		      			"កញ្ញា",
-		      			"តុលា",
-		      			"វិច្ឆិកា",
-		      			"ធ្នូ",
-		   			];
-			return (monthName[m-1]);
-	}	
 	function printIDCard(indexprint){
 		loadingBlock();
 	  	 var contents = document.getElementById(indexprint).innerHTML;
@@ -853,7 +820,6 @@ function getallGrade(){
 	    window.frames["print_frame"].window.print();
 	}
 
-
 	function printPickupCardSelected(){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -862,7 +828,6 @@ function getallGrade(){
     	?>
 
     	 id_selected = dijit.byId('id_selected').get('value');
-    	 //alert(id_selected);
 		 if(id_selected!=''){
 			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
 		 }else{
@@ -873,8 +838,8 @@ function getallGrade(){
 	
 	function printPickup(){
 	    loadingBlock();
-	  	 var contents = document.getElementById("PickupCard").innerHTML;
-	 	  var frame1 = document.createElement('iframe');
+	  	var contents = document.getElementById("PickupCard").innerHTML;
+	 	var frame1 = document.createElement('iframe');
 	    frame1.name = "frame1";
 	    frame1.style.position = "absolute";
 	    frame1.style.top = "-1000000px";
@@ -911,7 +876,6 @@ function getallGrade(){
 	function checked_id(index){
 		stu_id = dijit.byId('stu_id'+index).get('value');
 		if(dojo.byId('check_box'+index).checked){
-			
 			if($("#id_selected").val()!="") {
 				var identity = $("#id_selected").val();
 				$("#id_selected").val(identity+','+stu_id);

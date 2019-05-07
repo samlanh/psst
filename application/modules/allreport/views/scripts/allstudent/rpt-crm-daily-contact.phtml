@@ -161,9 +161,7 @@ table.content-data thead tr.style-head {
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect");   
+dojo.require("dojo.data.ItemFileWriteStore");    
 </script>
 <script>
 var crm_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );

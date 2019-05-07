@@ -14,7 +14,7 @@ class Global_Model_DbTable_DbProvince extends Zend_Db_Table_Abstract
     			'province_en_name'	  => $_data['en_province'],
     			'province_kh_name'	  => $_data['kh_province'],
     			'modify_date' => Zend_Date::now(),
-    			'status'   => $_data['status'],
+    			'status'   => 1,
     			'user_id'	  => $this->getUserId()
     	);
     	return  $this->insert($_arr);

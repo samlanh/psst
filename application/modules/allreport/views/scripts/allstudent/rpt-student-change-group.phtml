@@ -158,7 +158,7 @@ table.tb-footer tr.style-head {
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore"); 
-	dojo.require("dijit.form.FilteringSelect"); 
+	
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );

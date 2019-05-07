@@ -80,8 +80,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 		
 		$this->view->search=$search;
-		$key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+// 		$key = new Application_Model_DbTable_DbKeycode();
+// 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
@@ -115,8 +115,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows;
 	
 		$this->view->search=$search;
-		$key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
+// 		$key = new Application_Model_DbTable_DbKeycode();
+// 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
 	public function rptAllStudentOldAction(){
 		if($this->getRequest()->isPost()){
@@ -168,7 +169,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $rs_rows = $group->getAllAmountStudent($search);
+		$this->view->rs =  $group->getAllAmountStudent($search);
 		$this->view->search=$search;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
@@ -230,10 +231,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $group->getGroupBYStudentGrade($search);
 		$this->view->search=$search;
 		
-		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 	}	
 	public function rptStudyHistoryAction(){
 		if($this->getRequest()->isPost()){

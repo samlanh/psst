@@ -64,8 +64,8 @@ table.tb-footer tr.style-head {
 				<td width="25%" align="left">
 				</td>
 				<td align="center">
-					<span style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_DROP");?></span><br />
-					<span style="maring-top:20px;color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
+					<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_DROP");?></span><br />
+					<span style="maring-top:20px;color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");}?><?php echo date('d-M-Y',strtotime($this->search['end_date']));?> </span>
 				</td>
 				<td width="25%" align="right">
 				</td>
@@ -97,7 +97,7 @@ table.tb-footer tr.style-head {
 			}
 			table.content-data thead tr.style-head {
 			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-				background: #fdbdbd;
+				background: #d0e5ff;
 				text-align: center;;
 			}
 			table.content-data tr td {
@@ -115,7 +115,7 @@ table.tb-footer tr.style-head {
 						<tr class="style-head">
 							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 							<td rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></td>
-							<td colspan="4"><?php echo $tr->translate("STUDENT_INFO");?></td>
+							<td colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></td>
 							<td colspan="4"><?php echo $tr->translate("STUDY_INFO");?></td>
 							<td rowspan="2" ><?php echo $tr->translate("TYPE")?></td>
 							<td rowspan="2"><?php echo $tr->translate("STOP_DATE")?></td>
@@ -125,7 +125,8 @@ table.tb-footer tr.style-head {
 							<td><?php echo $tr->translate("STUDENT_ID")?></td>
 							<td><?php echo $tr->translate("STUDENT_NAMEKHMER")?></td>
 							<td><?php echo $tr->translate("NAME_ENGLISH")?></td>
-							<td><?php echo $tr->translate("GENDER")?></td>							
+							<td><?php echo $tr->translate("GENDER")?></td>
+							<td><?php echo $tr->translate("STU_PHONE")?></td>							
 							<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
 							<td><?php echo $tr->translate("GROUP")?></td>
 							<td><?php echo $tr->translate("GRADE")?></td>
@@ -140,6 +141,7 @@ table.tb-footer tr.style-head {
 							<td align="left"><?php echo $row['stu_khname'];?></td>
 							<td align="left"><?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
 							<td><?php echo $row['sex'];?></td>
+							<td><?php echo $row['tel'];?></td>
 							<td><?php echo $row['academic_year'];?></td>
 							<td><?php echo $row['group_name'];?></td>
 							<td><?php echo $row['grade'];?></td>
@@ -175,9 +177,8 @@ table.tb-footer tr.style-head {
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
-dojo.require("dijit.form.FilteringSelect"); 
 
-dojo.require("dojo.html");
+
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -240,11 +241,9 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 function getallGrade(){
@@ -262,7 +261,6 @@ function getallGrade(){
 			dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

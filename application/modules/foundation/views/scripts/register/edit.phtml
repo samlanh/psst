@@ -123,17 +123,17 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("First Name");?> <span class="required">*</span> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("name_en");?>
-				                   </div>
-				                </div>
-				              	<div class="form-group">
 				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Last Name");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("last_name");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("First Name");?> <span class="required">*</span> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("name_en");?>
 				                   </div>
 				                </div>
 				                 <div class="form-group">
@@ -1277,8 +1277,6 @@ input.btn_borwse_image {
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
                			<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"register",'action'=>'index'),null,true); ?>';" />
 					<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
 	    		</div>

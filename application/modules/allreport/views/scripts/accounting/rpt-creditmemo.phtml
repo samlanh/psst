@@ -28,10 +28,10 @@ table.tb-footer tr.style-head {
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<select name="paid_type" id="paid_type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-		        		<option value="0" <?php if($this->search['paid_type']==0){echo "selected='selected'";}?>><?php echo $tr->translate('SELECT_FORM_REPORT');?></option>
-						<option value="1" <?php if($this->search['paid_type']==1){echo "selected='selected'";}?>>Credit Memo</option>
-						<option value="2" <?php if($this->search['paid_type']==2){echo "selected='selected'";}?>>Credit Memo Transfer</option>	
-		        	</select>
+	        		<option value="0" <?php if($this->search['paid_type']==0){echo "selected='selected'";}?>><?php echo $tr->translate('SELECT_FORM_REPORT');?></option>
+					<option value="1" <?php if($this->search['paid_type']==1){echo "selected='selected'";}?>>Credit Memo</option>
+					<option value="2" <?php if($this->search['paid_type']==2){echo "selected='selected'";}?>>Credit Memo Transfer</option>	
+		        </select>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement('by_date');?>
@@ -96,19 +96,13 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td width="15%" align="center">
 				</td>
 				<td width="70%" align="center">
-				    <span style="color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('CREDIT_MEMO_RePORT')?></span><br />
-					<span style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
+				    <span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('CREDIT_MEMO_RePORT')?></span><br />
+					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 				</td>
 				<td width="15%" align="center"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">

@@ -41,7 +41,6 @@
 </div>
 <div style="background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.2cm;">
 	<div id="divPrint">
-	
 		<style type="text/css">
 			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 		</style>
@@ -51,19 +50,16 @@
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
+				<tr class="line"><td colspan="3"></td>
 				</tr>
 				<tr>
 					<td width="15%" align="center">
 					</td>
 					<td  align="center" width="70%">
-						<strong style="font-weight:bold; font-size: 17px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('STUDENT_BALANCE_REPORT')?></strong><br />
-						<span style="font-weight: bold;font-size: 13px; ">From &nbsp;<?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;To&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
+						<strong style="font-weight:normal; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('STUDENT_BALANCE_REPORT')?></strong><br />
+						<span style="font-weight:normal;font-size: 12px; ">From &nbsp;<?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;To&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
 					</td>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 				</tr>
 				<tr>
 					<td colspan="3">
@@ -123,7 +119,7 @@
 						  </table>
 					</td>
 				</tr>
-				<tr >
+				<tr>
 					<td colspan="3" width="100%">
 						<?php echo $this->rsfooteracc;?>
 					</td>
@@ -132,8 +128,3 @@
 		</div> 				
 	</div>		
 </div>
-
-
-
-
-

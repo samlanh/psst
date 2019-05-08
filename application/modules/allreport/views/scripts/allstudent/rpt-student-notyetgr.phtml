@@ -1,5 +1,4 @@
 <?php
-	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('STUDENT_NOT_YET_REPORT')); 
 	echo $this->headTitle(''); 
@@ -36,13 +35,12 @@ display: table-cell !important;
                     	<?php echo $frm->getElement("degree");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php //echo $frm->getElement("grade_all");?>
                     	<input id="grade" />
                    </div>
                      <div class="col-md-2 col-sm-2 col-xs-12">
                     	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
-             </div>
+          </div>
 	</form>
 	<div id="divPrint">
 			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
@@ -133,10 +131,8 @@ display: table-cell !important;
 					</td>
 				</tr>
 			</table>
-		</div>
-		
+		</div>		
 </div>
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 
@@ -209,11 +205,9 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 var oldDegree = "<?php echo $this->search['degree']?>";
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 function getallGrade(){
@@ -235,26 +229,7 @@ function getallGrade(){
 
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 }
-	function getKHMonthByNumber(m){
-		var monthName=[
-   			"មករា",
-   			"កុម្ភៈ",
-   			"មីនា",
-   			"មេសា",
-   			"ឧសភា",
-   			"មិថុនា",
-   			"កក្កដា",
-   			"សីហា",
-   			"កញ្ញា",
-   			"តុលា",
-   			"វិច្ឆិកា",
-   			"ធ្នូ",
-			];
-			return (monthName[m-1]);
-	}	
-	
 </script>

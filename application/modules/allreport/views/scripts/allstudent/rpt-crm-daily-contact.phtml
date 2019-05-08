@@ -30,7 +30,6 @@ table.content-data thead tr.style-head {
 				 		<?php echo $frm_items->getElement("branch_search");?>
 				 	</div>
 				 		<div class="col-md-2 col-sm-2 col-xs-12">
-				 		<?php //echo $frm_items->getElement("crm_list");?>
 				 		<input id="crm_list" />
 				 	</div>
 				 		<div class="col-md-2 col-sm-2 col-xs-12">
@@ -60,20 +59,14 @@ table.content-data thead tr.style-head {
 					</tr>
 					<tr class="line"><td colspan="3"></td></tr>
 					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
 						<td width="20%" align="right">
 						</td>
 						<td width="60%" align="center">
-							<span style="color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("CRM Daily Contact");?></span><br/>
+							<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("CRM Daily Contact");?></span><br/>
 							<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 						</td>
 						<td width="20%" align="right">
 						</td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
 					</tr>
 				<style>
 					table tr th{
@@ -161,9 +154,7 @@ table.content-data thead tr.style-head {
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");    
-</script>
-<script>
+	dojo.require("dojo.data.ItemFileWriteStore");    
 var crm_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({

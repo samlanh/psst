@@ -46,15 +46,14 @@
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
-			<tr class="line"><td colspan="3"></td></tr>
-			<tr>
-				<td>&nbsp;</td>
+			<tr class="line">
+				<td colspan="3"></td>
 			</tr>
-			<tr >
+			<tr>
 				<td width="15%" align="center">
 				</td>
 				<td width="70%" align="center">
-					<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
+					<strong style="font-weight:normal;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
 				</td>
 				<td width="15%" align="center">
 				<style>
@@ -69,9 +68,6 @@
 				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			</style>
 				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
@@ -107,7 +103,7 @@
 					</table>	
 				</td>
 			</tr>
-			<tr >
+			<tr>
 				<td colspan="3" width="100%" >
 					<?php echo $this->rsfooteracc;?>
 				</td>
@@ -117,10 +113,8 @@
 </div>
 
 <script type="text/javascript">
-	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.store.Memory");
-	dojo.require("dojo.data.ObjectStore");
+	
 	var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
@@ -132,7 +126,6 @@
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
 			onChange: function() {  
-				 
 			}
 		}, "study_year");
 		getAllAcademicByBranch();
@@ -157,13 +150,10 @@
 			load: function(data){
 				academic_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('study_year').set('store',academic_store);  
-				
 				dijit.byId('study_year').attr("value","<?php echo $this->search['study_year']?>");
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
-	
 </script>

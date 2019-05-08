@@ -80,8 +80,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 		
 		$this->view->search=$search;
-// 		$key = new Application_Model_DbTable_DbKeycode();
-// 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
@@ -115,9 +113,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows;
 	
 		$this->view->search=$search;
-		
-// 		$key = new Application_Model_DbTable_DbKeycode();
-// 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
 	public function rptAllStudentOldAction(){
 		if($this->getRequest()->isPost()){
@@ -286,7 +281,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
-		
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getAllStudentDetail($search);
@@ -439,8 +433,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search = array(
-					'txtsearch' => "",
-					'study_type'=>1);
+				'txtsearch' => "",
+				'study_type'=>1);
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
@@ -469,18 +463,18 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$db->submitDateList($search);
 			$row = $db->getStudentGroup(null,$search,1);
 			$rs=null;
-			if (!empty($row[0]['group_id'])){
-			$rs = $db->getGroupDetailByID($row[0]['group_id']);
+			if(!empty($row[0]['group_id'])){
+				$rs = $db->getGroupDetailByID($row[0]['group_id']);
 			}
 		}
 		else{
 			$search = array(
-					'txtsearch' => "",
-					'group' 		=> "",
-					'branch_id' 	=> "",
-					'study_year'	=> "",
-					'study_type'=>1
-					);
+				'txtsearch' => "",
+				'group' 		=> "",
+				'branch_id' 	=> "",
+				'study_year'	=> "",
+				'study_type'=>1
+				);
 			$row = $db->getStudentGroup($id,$search,1);
 			$rs= $db->getGroupDetailByID($id);
 		}
@@ -511,16 +505,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($result['branch_id']);
 	}
-	function rptTranscriptAction(){
+	function rptTranscriptAction(){//for psis
 		$group_id=$this->getRequest()->getParam("group_id");
 		$student_id=$this->getRequest()->getParam("id");
 		$search= array();
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		
 		$this->view->semester1= $db->getStundetExamById($group_id,1,$student_id);//for semester1
-		
 		$this->view->semester2= $db->getStundetExamById($group_id,2,$student_id);//for semester1
-		
 		$this->view->rsrankingsemester1 = $db->getRankStudentbyGroupSemester($group_id,1,$student_id);
 		$this->view->rsrankingsemester2 = $db->getRankStudentbyGroupSemester($group_id,2,$student_id);
 		
@@ -529,7 +520,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	function academicTranscriptAction(){
 	}
-	
 	
 	public function rptCertificateAction()
 	{
@@ -541,7 +531,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$result = $db->getAcadimicByStudentHeader($group_id,$student_id);
 		$this->view->result = $result;
 	}
-	
 	
 	public function rptCrmAction(){
 		try{
@@ -570,6 +559,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			$this->view->rsfooteracc = $frm->getFooterAccount();
+			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -676,6 +666,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$this->view->row = $db->getAllStudentTest($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view->search = $search;
 		$frm = new Test_Form_FrmStudentTest();
@@ -693,14 +684,14 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 		=>'',
-					'branch_id'		=>0,
-					'degree'		=>0,
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
-					'group'			=>'',
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d',strtotime("+5 day")),
+				'title' 		=>'',
+				'branch_id'		=>0,
+				'degree'		=>0,
+				'study_year' 	=>'',
+				'grade_all' 	=>'',
+				'group'			=>'',
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d',strtotime("+5 day")),
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -734,16 +725,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 		=>'',
-					'branch_id'		=>0,
-					'degree'		=>0,
-					'study_year' 	=>'',
-					'grade' 	=>'',
-					//'session' 		=>'',
-					'group'			=>'',
-					'stu_type'=>'',
-					//'start_date'	=> date('Y-m-d'),
-					//'end_date'		=> date('Y-m-d'),
+				'title' 	=> '',
+				'branch_id'	=> 0,
+				'degree'	=> 0,
+				'study_year'=> '',
+				'grade' 	=> '',
+				'group'		=> '',
+				'stu_type'	=> '',
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();

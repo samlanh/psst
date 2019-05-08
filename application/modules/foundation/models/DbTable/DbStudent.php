@@ -63,7 +63,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 				$sql = "SELECT  s.stu_id,
-				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+				(SELECT branch_nameen FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				s.stu_khname,
 				CONCAT(s.last_name,' ',s.stu_enname),
@@ -85,7 +85,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 
 		if(!empty($search['adv_search'])){
 			$s_where = array();
-// 			$s_search = addslashes(trim($search['adv_search']));
 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
 			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
@@ -184,17 +183,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_student_document as s WHERE s.stu_id =".$id;
 		return $db->fetchAll($sql);
-	}
-	
-	public function getDegreeLanguage(){
-// 		try{
-// 			$db = $this->getAdapter();
-// 			$sql ="SELECT id,title FROM rms_degree_language WHERE status =1";
-// 			//print_r($db->fetchRow($sql)); exit();
-// 			return $db->fetchAll($sql);
-// 		}catch(Exception $e){
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 		}
 	}
 	
 	function getStudentExist($name_en,$sex,$grade,$dob,$session){
@@ -429,17 +417,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($_data['group']) AND $_data['group']!=-1){
 				$is_setgroup=1;
 			}
-// 			$adapter = new Zend_File_Transfer_Adapter_Http();
-// 			$part = PUBLIC_PATH.'/images';
-// 			$adapter->setDestination($part);
-// 			$adapter->receive();
-// 			$photo = $adapter->getFileInfo();
-			
-// 			if(!empty($photo['photo']['name'])){
-// 				$pho_name = $photo['photo']['name'];
-// 			}else{
-// 				$pho_name = $_data['old_photo'];
-// 			}
+
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
@@ -684,7 +662,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
@@ -697,7 +674,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	function getAllGrade($grade_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE dept_id=".$grade_id;
+		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);
 	}
@@ -738,7 +715,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $pre.$new_acc_no;
 	}
 	
-	
 	function getAllYear(){
 		$db = $this->getAdapter();
 		
@@ -750,11 +726,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	public function getAllFecultyName(){
-// 		$db = $this->getAdapter();
-// 		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY id DESC";
-// 		//$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(1,2,3,4) ORDER BY id DESC";
-		
-// 		return $db->fetchAll($sql);
 		$_dbg = new Application_Model_DbTable_DbGlobal();
 		return $_dbg->getAllItems(1,null);
 	}
@@ -769,16 +740,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 	}
 	function getAllgroup(){
-// 		//$db = $this->getAdapter();
-// // 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-// // 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-// // 		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
-		
-// 		$db = $this->getAdapter();
-// 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-//  		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-//  		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
-// 		return $db->fetchAll($sql);
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		return $_dbgb->getAllGroupByBranch();
 	}
@@ -810,6 +771,4 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	 FROM rms_student AS s WHERE stu_id=$id";
 		return $db->fetchRow($sql);
 	}
-	
 }
-

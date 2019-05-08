@@ -113,7 +113,6 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	
     	$order=" ORDER BY gscg.`id` ASC";
     	
-    	//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
     	$where  = '';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("st.branch_id");
@@ -121,7 +120,6 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
    		 if(empty($search)){
     		return $db->fetchAll($sql.$where.$order);
     	}
-    	
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -145,7 +143,6 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	if(!empty($search['change_type'])){
     		$where.=' AND gscg.change_type='.$search['change_type'];
     	}
-    	
     	$row = $db->fetchAll($sql.$where.$order);
     	if($row){
     		return $row;

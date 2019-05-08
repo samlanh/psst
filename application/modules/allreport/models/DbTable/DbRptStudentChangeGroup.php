@@ -4,11 +4,6 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
 {
 
     protected $_name = 'rms_student_change_group';
-//     public function getUserId(){
-//     	$session_user=new Zend_Session_Namespace('authstu');
-//     	return $session_user->user_id;
-    	 
-//     }
     public function getAllStudentChangeGroup($search){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -24,46 +19,34 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
     		$degree = "rms_items.title_en";
     		$branch = "branch_nameen";
     	}
-    	$sql = "
-    			SELECT 
+    	$sql = "SELECT 
     				stu_id,
     				(SELECT CONCAT(stu_khname,' - ',last_name,' ',stu_enname) FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) AS name,
-    				
 			    	(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) AS stu_code,
 					(SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=(SELECT sex FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) limit 1)AS sex,
-					(select group_code from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS code,
-					
-					(select CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.from_group)) as academic,
-					
-					(select semester from rms_group where rms_group.id=rms_student_change_group.from_group limit 1 ) AS semester,
-					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS session,
-					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS grade,
-					
-					(select room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS room_name,
-					(select start_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS start_date,
-					(select amount_month from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS amount_month,
-					(select expired_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS expired_date,
-			
-					(select group_code from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_code,
-					
-					(select CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.to_group)) as to_academic,
-					
-					(select semester from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_semester,
-					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.to_group=rms_group.id) limit 1) AS to_session,
-					
-					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.to_group=rms_group.id) limit 1) AS to_grade,
-					(select room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.to_group=rms_group.id) limit 1) AS to_room_name,
+					(SELECT group_code from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS code,
+					(SELECT CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.from_group LIMIT 1) limit 1) as academic,
+					(SELECT semester from rms_group where rms_group.id=rms_student_change_group.from_group limit 1 ) AS semester,
+					(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.from_group=rms_group.id LIMIT 1) limit 1) AS session,
+					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.from_group=rms_group.id LIMIT 1) limit 1) AS grade,
+					(SELECT room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS room_name,
+					(SELECT start_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS start_date,
+					(SELECT amount_month from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS amount_month,
+					(SELECT expired_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS expired_date,
+					(SELECT group_code from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_code,
+					(SELECT CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.to_group LIMIT 1) LIMIT 1) as to_academic,
+					(SELECT semester from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_semester,
+					(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.to_group=rms_group.id LIMIT 1) limit 1) AS to_session,
+					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.to_group=rms_group.id LIMIT 1) limit 1) AS to_grade,
+					(SELECT room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.to_group=rms_group.id LIMIT 1) limit 1) AS to_room_name,
 				 	 moving_date,
 				 	 rms_student_change_group.note,
-					(select $label from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`rms_student_change_group`.`status`)AS status
-		 		from 
+					(SELECT $label from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`rms_student_change_group`.`status`)AS status
+		 		FROM 
     				`rms_student_change_group`,
     				rms_group 
-    			where 
-    				rms_student_change_group.to_group=rms_group.id 
-    		";
-    	
-    	//echo $sql;exit();
+    			WHERE 
+    				rms_student_change_group.to_group=rms_group.id ";
     	
     	$where=' ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
@@ -93,35 +76,6 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('rms_group.branch_id');
-    	
     	return $db->fetchAll($sql.$where.$order);
-    	 
-    }
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }    
 }

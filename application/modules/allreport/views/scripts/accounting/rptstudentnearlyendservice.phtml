@@ -64,50 +64,47 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 					<td align="center" width="70%">
-						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></strong><br />
-						<span style="font-weight: bold;font-size: 14px;">&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span>
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'khmer os muol light';"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></strong><br />
+						<span style="font-weight: bold;font-size: 12px;">&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span>
 					</td>
-					<td width="15%" align="center">
-						&nbsp;
-					</td>					
+					<td width="15%" align="center">&nbsp;</td>					
 				</tr>
 				<style>
 					table{ page-break-inside:auto;font-family:Times New Roman,'Khmer OS Battambang'; }
-						tr{ page-break-inside:avoid; page-break-after:auto }
-						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-						#header {
+					tr{ page-break-inside:avoid; page-break-after:auto }
+					.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+					#header {
 						  display: table-header-group;
 						  page-break-inside:avoid; page-break-after:auto;
-						}
+					}
 					.hover:hover{background: #ccc;}
 					#exportExcel th{text-align: center;}
-						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 				</style>
 				<tr>
 					<td colspan="3">
 					<div id="exportExcel">
 						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-							<tr style="font-weight:bold;font-size:13px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
-								<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
-								<td><?php echo $tr->translate("STUDENT_ID"); ?></td>
-								<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</td>
-								<td><?php echo $tr->translate("SERVICE_TYPE"); ?></td>
-								<td><?php echo $tr->translate("SERVICE_NAME"); ?></td>
-							    <td><?php echo $tr->translate("PAID_DATE"); ?></td>
-								<td><?php echo $tr->translate("START_DATE"); ?></td>
-								<td><?php echo $tr->translate("VALIDATE"); ?></td>
-								<td><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?></td>
-							</tr>
+								<tr style="font-weight:bold;font-size:13px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
+									<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
+									<td><?php echo $tr->translate("STUDENT_ID"); ?></td>
+									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</td>
+								    <td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</td>
+									<td><?php echo $tr->translate("SERVICE_TYPE"); ?></td>
+									<td><?php echo $tr->translate("SERVICE_NAME"); ?></td>
+								    <td><?php echo $tr->translate("PAID_DATE"); ?></td>
+									<td><?php echo $tr->translate("START_DATE"); ?></td>
+									<td><?php echo $tr->translate("VALIDATE"); ?></td>
+									<td><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?></td>
+								</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
 													
@@ -152,8 +149,3 @@
 		</table>		
 	</div>		
 </div>
-
-
-
-
-

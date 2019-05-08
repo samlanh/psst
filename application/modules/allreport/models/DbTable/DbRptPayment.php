@@ -230,7 +230,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				END AS status,
     	(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
     	FROM `rms_specail_discount` AS d WHERE 1 ";
-    	//(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
     	$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";
     	if(!empty($search['title'])){
     		$s_where = array();

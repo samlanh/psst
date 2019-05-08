@@ -7,6 +7,7 @@
 	Application_Model_Decorator::removeAllDecorator($form);
 	$frm=$form;
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <style>
 .hover:hover{ background:#ccc;}
 table.content-data tr.style-head,
@@ -106,42 +107,41 @@ table.tb-footer tr.style-head {
 				<td width="15%" align="center">
 				</td>
 				<td align="center" width="70%">
-					<span style="padding-left: 0px; color:#000; font-size: 16px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INVOICE');?></span> 
+					<span style="padding-left: 0px; color:#000; font-size: 14px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INVOICE');?></span> 
 					<?php if(!empty($this->search['start_date'])){?><div><?php echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->search['end_date']));?></div><?php }?>
 				</td>
-				<td width="15%" align="center">
-				</td>
+				<td width="15%" align="center"></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<?php if(!empty($this->all_invoice)){ ?>
+					
 					<table class="content-data" align="center">
 						<thead>
-						<tr class="style-head" align="center">
-							<td><?php echo $tr->translate("N_O");?></td>
-							<td><?php echo $tr->translate("BRANCH_NAME");?></td>
-							<td><?php echo $tr->translate("GROUP");?></td>
-							<td><?php echo $tr->translate("STUDENT_ID");?></td>
-							<td><?php echo $tr->translate("STUDENT_NAME");?></td>
-							<td><?php echo $tr->translate("SEX");?></td>
-							<td><?php echo $tr->translate("INVOICE_NUM");?></td>
-							<td><?php echo $tr->translate("INVOICE_DATE");?></td>
-							<td><?php echo $tr->translate("INPUT_DATE");?></td>
-							<td><?php echo $tr->translate("REMARK");?></td>
-							<td><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
-							<td><?php echo $tr->translate("BY_USER");?></td>
-						</tr>
+							<tr class="style-head" align="center">
+								<td><?php echo $tr->translate("N_O");?></td>
+								<td><?php echo $tr->translate("BRANCH_NAME");?></td>
+								<td><?php echo $tr->translate("GROUP");?></td>
+								<td><?php echo $tr->translate("STUDENT_ID");?></td>
+								<td><?php echo $tr->translate("STUDENT_NAME");?></td>
+								<td><?php echo $tr->translate("SEX");?></td>
+								<td><?php echo $tr->translate("INVOICE_NUM");?></td>
+								<td><?php echo $tr->translate("INVOICE_DATE");?></td>
+								<td><?php echo $tr->translate("INPUT_DATE");?></td>
+								<td><?php echo $tr->translate("REMARK");?></td>
+								<td><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+								<td><?php echo $tr->translate("BY_USER");?></td>
+							</tr>
 						</thead>
 						<?php 
 						$total=0;
 						$gender=array(1=>"Male",2=>"Female");
-						foreach($this->all_invoice as $key=>$rs){ $key=$key+1; 
-						
-						$total = $total +$rs['totale_amount'];
-						?>
+						if(!empty($this->all_invoice)){ 
+							foreach($this->all_invoice as $key=>$rs){ $key=$key+1; 
+								$total = $total +$rs['totale_amount'];
+							?>
 						<tr class="style-rowdata hover" style="border-bottom: 1px solid #000;" align="center" >
 							<td><?php echo $key; ?></td>
 							<td><?php echo $rs['branch']; ?></td>
@@ -157,6 +157,7 @@ table.tb-footer tr.style-head {
 							<td><?php echo $rs['first_name'] ?></td>
 						</tr>
 						<?php
+							}
 						}
 						?>
 					</table>
@@ -166,7 +167,6 @@ table.tb-footer tr.style-head {
 							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
 						  </tr>
 					 </table>
-					 <?php }?>
 				</td>
 			</tr>
 			<tr >
@@ -178,13 +178,9 @@ table.tb-footer tr.style-head {
 	</div>	
 </div>
 <script type="text/javascript">
-	dojo.require("dijit.form.CheckBox"); 
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 	
-
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -219,7 +215,6 @@ table.tb-footer tr.style-head {
 			store: group_store,
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
-			required: true,                      
 			id: "group",
 			name: "group",  
 			class: 'fullside', 
@@ -234,7 +229,7 @@ table.tb-footer tr.style-head {
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
-			required: true,                        
+			required: false,                        
 			id: "grade",
 			name: "grade",  
 			class: 'fullside',  
@@ -267,7 +262,7 @@ table.tb-footer tr.style-head {
 		dojo.xhrPost({
 			url: url_getgroup,
 			content:{
-				'branch_id':branch_id,'noaddnew':1
+				'branch_id':branch_id,'noaddnew':0
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -278,11 +273,9 @@ table.tb-footer tr.style-head {
 				}
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
-
 	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
 	function getallstudentname(){//
 		dijit.byId('student_name').reset();
@@ -299,7 +292,7 @@ table.tb-footer tr.style-head {
 				'branch_id':branch_id
 			},
 			handleAs:"json",
-			load: function(data) {
+			load: function(data){
 				student_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('student_name').set('store',student_store);  
 				if(oldBranch==branch_id){
@@ -307,29 +300,27 @@ table.tb-footer tr.style-head {
 				}
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
-	function getallGrade(){
-		dept_id = dijit.byId('degree').get('value');
-		if(dept_id==''){return false;}
-		dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'dept_id':dept_id
-				},
-			handleAs:"json",
-			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('grade').set('store',grade_store);   
-				dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){return false;}
+	dojo.xhrPost({
+		url:url_dept,
+		content:{
+			'dept_id':dept_id
 			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);   
+			dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+		},
+		error: function(err) {
+		}
+	});
+}
 </script>

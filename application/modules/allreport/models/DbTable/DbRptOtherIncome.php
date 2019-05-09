@@ -54,23 +54,30 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     function getAllOtherIncomebyCate($search){
     	$db=$this->getAdapter();
     	 
-    	$sql = "SELECT *,
-    		SUM(total_amount) AS total_income, 
-	    	(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income limit 1) as income_category,
-	    	(SELECT first_name from rms_users as u where u.id = user_id)  as user_name
-    	FROM
-    		ln_income
-    	WHERE
-    		status=1 AND total_amount>0 ";
+    	$sql = "SELECT 
+    				i.*,
+		    		SUM(total_amount) AS total_income, 
+			    	cate.category_name AS income_category,
+			    	cate.parent,
+			    	(SELECT a.category_name FROM rms_cate_income_expense AS a WHERE a.id=cate.parent) AS parent_name,
+			    	(SELECT first_name FROM rms_users AS u WHERE u.id = i.user_id)  AS user_name
+		    	FROM
+		    		ln_income AS i,
+		    		rms_cate_income_expense AS cate
+		    	WHERE
+		    		i.cate_income = cate.id
+		    		AND i.status=1 
+		    		AND i.total_amount>0
+    		";
     	
     	$where= ' ';
-    	$order=" GROUP BY cate_income ORDER BY id DESC ";
-    	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+    	$order=" GROUP BY cate_income ORDER BY cate.parent DESC ";
+    	$from_date =(empty($search['start_date']))? '1': " i.date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " i.date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search['branch_id'])){
-    		$where.=" AND branch_id = ".$search['branch_id'] ;
+    		$where.=" AND i.branch_id = ".$search['branch_id'] ;
     	}
     	
     	$_db = new Application_Model_DbTable_DbGlobal();

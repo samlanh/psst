@@ -72,25 +72,60 @@
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
+						<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%;white-space:nowrap; " >
 							<thead>
 								<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
-									<td style="text-align: right;" colspan="2"><?php echo $tr->translate('CATE_EXPENSE')?></td>
-									<td style=""></td>
-									<td align="left" style=""><?php echo $tr->translate('TOTAL_EXPENSE')?></td>
+									<td width="30%"></td>
+									<td width="10%" style="text-align: left;" ><?php echo $tr->translate('CATE_EXPENSE')?></td>
+									<td width="25%" style=""></td>
+									<td width="35%" align="left" style=""><?php echo $tr->translate('TOTAL_EXPENSE')?></td>
 								</tr>
 							</thead>
-						<?php $i=0;
+						<?php /* $i=0;
 							$total_expense = 0;
-						if(!empty($this->row)){foreach ($this->row AS $row) { $i++;?>
-							<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
-								<td style=""></td>
-								<td style="text-align: right;"><?php echo $row['account_name'];?></td>
-								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
-								<td align="left" style="">&nbsp;&nbsp;<?php echo number_format($row['total_expense'],2);?></td>
-							</tr>
+							if(!empty($this->row)){foreach ($this->row AS $row) { $i++;?>
+								<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+									<td style=""></td>
+									<td style="text-align: right;"><?php echo $row['account_name'];?></td>
+									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+									<td align="left" style="">&nbsp;&nbsp;<?php echo number_format($row['total_expense'],2);?></td>
+								</tr>
 							<?php $total_expense = $total_expense + $row['total_expense'];?>
-						<?php }}?>
+						<?php }}*/?>
+							
+							
+							<?php
+								$parent="";
+								$total_expense = 0;
+								if(!empty($this->row)) foreach ($this->row as $expense_cate){
+									$total_expense = $total_expense +$expense_cate['total_expense'];
+							?>
+	             			<?php if ( $expense_cate['parent_id']!=0 AND $parent != $expense_cate['parent_id']){?>
+	             				<tr height="21px">
+		             				<td>&nbsp;</td>
+		             				<td align="left">&nbsp;<strong><?php echo $expense_cate['parent_name'];?></strong>&nbsp;</td>
+		             				<td>&nbsp;</td>
+		             				<td>&nbsp;</td>
+		             				<?php $parent = $expense_cate['parent_id'];?>
+		             			</tr>
+		             		<?php }?>
+		             		<?php if ( $expense_cate['parent_id']==0){?>
+		             			<tr height="21px">
+		             				<td>&nbsp;</td>
+		             				<td align="left">&nbsp;<strong><?php echo $expense_cate['account_name'];?></strong>&nbsp;</td>
+									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+		             				<td align="left">&nbsp;<?php echo number_format($expense_cate['total_expense'],2);?>&nbsp;</td>
+		             			</tr>
+		             		<?php }else{?>
+		             			<tr height="21px">
+		             				<td >&nbsp;</td>
+		             				<td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $expense_cate['account_name'];?>&nbsp;</td>
+									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+		             				<td align="left">&nbsp;<?php echo number_format($expense_cate['total_expense'],2);?>&nbsp;</td>
+		             			</tr>
+	             			<?php }?>
+	             			<?php }?>
+						
 							<tr>
 								<td colspan="3"></td>
 								<td align="left" >

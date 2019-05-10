@@ -140,15 +140,15 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		}
 	}
 	
-// 	function getStudentBygroupAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Issue_Model_DbTable_DbStudentAttendance();
-// 			$data=$db->getStudentByGroup($data['group']);
-// 			print_r(Zend_Json::encode($data));
-// 			exit();
-// 		}
-// 	}
+	function getStudentBygroupAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$data=$db->getStudentByGroup($data['group']);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
 	
 	function getsubjectbygroupAction(){
 		if($this->getRequest()->isPost()){

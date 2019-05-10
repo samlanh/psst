@@ -99,7 +99,7 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     			INNER JOIN rms_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ut.user_type_id =".$id . $where;
     		}
     		
-    		$order = " ORDER BY acl.module ASC, acl.rank ASC,acl.controller ASC,acl.is_menu DESC ";
+    		$order = " ORDER BY acl.menuordering ASC, acl.rank ASC,acl.controller ASC,acl.is_menu DESC ";
     		
     		$acl=$db_acl->getGlobalDb($sql.$order);
     		$acl = (is_null($acl))? array(): $acl;

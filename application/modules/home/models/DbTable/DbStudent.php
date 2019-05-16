@@ -272,6 +272,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND spd.is_suspend=0 
 					AND s.customer_type=1
 					AND s.stu_id=$stu_id
+				group by spd.itemdetail_id
 			";
 		return $db->fetchAll($sql);
 	}

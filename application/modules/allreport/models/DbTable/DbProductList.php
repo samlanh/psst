@@ -99,7 +99,9 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	if($search['category_id']>0){
     		$where.=" AND p.items_id=".$search['category_id'];
     	}
-    	
+    	if($search['product_type']>0){
+    		$where.=" AND p.product_type=".$search['product_type'];
+    	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
     	$where.=" ORDER BY pl.brand_id DESC,p.items_id DESC";

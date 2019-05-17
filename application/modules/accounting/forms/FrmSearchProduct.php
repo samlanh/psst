@@ -102,7 +102,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$category->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>false,
 		));
 		$category->setValue($request->getParam("category"));
 		
@@ -153,7 +153,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$cate->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>false,
+				'onChange'=>'getProductByCate();',
 		));
 		$cate->setValue($request->getParam("category_id"));
 		
@@ -177,7 +178,19 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		if(!empty($rows))foreach ($rows As $row)$opt_p[$row['id']]=$row['sup_name'];
 		$supplier_id->setMultiOptions($opt_p);
 		
-		$this->addElements(array($supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
+		$product_type=  new Zend_Dojo_Form_Element_FilteringSelect('product_type');
+		$product_type->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+		));
+		$_opt = array(
+				0=>$this->tr->translate("TYPE"),
+				1=>$this->tr->translate("PRODUCT_FOR_SELL"),
+				2=>$this->tr->translate("OFFICE_MATERIAL"));
+		$product_type->setMultiOptions($_opt);
+		$product_type->setValue($request->getParam("product_type"));
+		
+		$this->addElements(array($product_type,$supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
 		return $this;
 	} 
 

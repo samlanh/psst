@@ -176,6 +176,9 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if($search['category_id']>0){
     		$where.=" AND pro.items_id =".$search['category_id'];
     	}
+    	if($search['product_type']>0){
+    		$where.=" AND pro.product_type =".$search['product_type'];
+    	}
 //     	if($search['status_search']==1 OR $search['status_search']==0){
 //     		$where.=" AND spd.status=".$search['status_search'];
 //     	}

@@ -53,12 +53,14 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		}
 	
 		if($search['category_id']>0){
-			$where.=" AND (SELECT cat_id FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) =".$search['category_id'];
+			$where.=" AND (SELECT items_id FROM `rms_itemsdetail` AS p WHERE p.id = req_d.`pro_id` limit 1) =".$search['category_id'];
 		}
 		if($search['product']>0){
-			$where.=" AND (SELECT id FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) =".$search['product'];
+			$where.=" AND (SELECT p.id FROM `rms_itemsdetail` AS p WHERE p.id = req_d.`pro_id`) =".$search['product'];
 		}
-		
+		if($search['product_type']>0){
+			$where.=" AND (SELECT p.product_type FROM `rms_itemsdetail` AS p WHERE p.id = req_d.`pro_id`) =".$search['product_type'];
+		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('req_d.branch_id');
 		

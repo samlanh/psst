@@ -60,12 +60,17 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     	if(!empty($search['location'])){
     		$where.=" AND pl.brand_id=".$search['location'];
     	}
-    	
-    	if($search['status_search']==1 OR $search['status_search']==0){
-    		$where.=" AND p.status=".$search['status_search'];
-    	}
+//     	if($search['status_search']==1 OR $search['status_search']==0){
+//     		$where.=" AND p.status=".$search['status_search'];
+//     	}
     	if($search['category_id']>0){
-    		$where.=" AND p.cat_id=".$search['category_id'];
+    		$where.=" AND p.items_id=".$search['category_id'];
+    	}
+    	if($search['product']>0){
+    		$where.=" AND p.id=".$search['product'];
+    	}
+    	if($search['product_type']>0){
+    		$where.=" AND p.product_type=".$search['product_type'];
     	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();

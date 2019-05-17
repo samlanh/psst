@@ -11,7 +11,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-					
 			}
 			else{
 				$search = array(
@@ -19,7 +18,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'location' =>'',
 						'product'=>'',
 						'status_search'=>1,
-						'category_id'=>0,
+						'category_id'=>'',
+						'product_type'=>0,
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbProductList();
@@ -33,10 +33,12 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$form=new Accounting_Form_FrmSearchProduct();
-		$form=$form->FrmSearchProduct();
+		$frm=new Accounting_Form_FrmSearchProduct();
+		$form=$frm->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$this->view->search = $search;
 	}
 	public function rptListProductAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -142,6 +144,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 					'supplier_id'=>-1,
 					'category_id'=>-1,
 					'product' =>'',
+					'product_type' =>'',
 					'status_search'=>1,
 					'start_date'=> date('Y-m-d'),
 					'end_date'=>date('Y-m-d'),
@@ -364,6 +367,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
 		}
 	
 		$_pur =  new Accounting_Model_DbTable_DbRequestProduct();
@@ -429,8 +433,10 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search = array(
 						'title' =>'',
 						'location' =>'',
-						'status_search'=>1,
+						//'status_search'=>1,
 						'category_id'=>0,
+						'product'=>'',
+						'product_type'=>0,
 				);
 			}
 			$db = new Registrar_Model_DbTable_DbReportProductNearOutStock();
@@ -443,11 +449,14 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
 		}
 		$form=new Accounting_Form_FrmSearchProduct();
 		$form->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$this->view->search = $search;
 	}
 	function rptSummaryStockAction(){
 		try{
@@ -753,4 +762,16 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+	
+	function getProductbycateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rows = $db->getProductbyBranch($data['cate_id'],1);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	
 }

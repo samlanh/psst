@@ -4,6 +4,7 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
+
 <style>
 .hover:hover{ background:#ccc;}
 table.content-data tr.style-head,
@@ -23,22 +24,27 @@ table.tb-footer tr.style-head {
     </div>
 		<form dojoType="dijit.form.Form" method="post">
 			<div class="form-group">
-				<div class="col-md-2 col-sm-2 col-xs-12">
+				<div class="col-md-3 col-sm-2 col-xs-12">
 					<?php echo $frm->getElement("title");?>
 				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
+				<div class="col-md-3 col-sm-2 col-xs-12">
 					<?php echo $frm->getElement("location");?>
 				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
+				<div class="col-md-3 col-sm-2 col-xs-12">
 					<?php echo $frm->getElement("category_id");?>
 				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
-					<?php echo $frm->getElement("product");?>
+				<div class="col-md-3 col-sm-2 col-xs-12">
+					<input id="product" />
 				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
+			</div>
+			<div class="form-group">
+				<div class="col-md-3 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement("product_type");?>
+				</div>
+				<div class="col-md-3 col-sm-2 col-xs-12">
 					<?php echo $frm->getElement("status_search");?>
 				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
+				<div class="col-md-3 col-sm-2 col-xs-12">
 					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 							showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 				</div>
@@ -190,3 +196,46 @@ table.tb-footer tr.style-head {
 		</div>		
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script>
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	
+	require(["dojo/ready"], function(ready){
+		ready(function(){
+			getProductByCate();
+		});
+		new dijit.form.FilteringSelect({
+			store: item_store,
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "product",
+			name: "product",   
+			required:false,        
+			class: 'fullside', 
+		}, "product");
+	});
+	
+	var item_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_dept = '<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'get-productbycate')); ?>';
+	function getProductByCate(){
+		cate_id = dijit.byId("category_id").get("value");
+		if(cate_id>0){
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'cate_id':cate_id,
+					},
+				handleAs:"json",
+				load: function(data) {
+					item_store  = getDataStorefromJSON('id','name', data);
+					dijit.byId('product').set('store',item_store);  	
+					dijit.byId('product').attr('value',"<?php echo $this->search['product']?>");
+				},
+				error: function(err) {
+				}
+			});
+		}
+	}
+</script>
+

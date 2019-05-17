@@ -499,7 +499,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/allstudent/student-group");
     		exit();
     	}
-    	$db = new Foundation_Model_DbTable_DbScoreEng();
+    	$db = new Issue_Model_DbTable_DbScoreEng();
     	$scoreSetting=$db->getScoreSettingDetail($groupScore['score_setting']);
     	$this->view->scoreSetting = $scoreSetting;
     	
@@ -845,5 +845,61 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    
+    
+    function rptStudentEvaluationletterAction(){
+    	 
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    	}else{
+    		$stu_id =$this->getRequest()->getParam("stu_id");
+    		$group_id =$this->getRequest()->getParam("group_id");
+    		$exam_type =$this->getRequest()->getParam("exam_type");
+    		$for_semester =$this->getRequest()->getParam("for_semester");
+    		$for_month =$this->getRequest()->getParam("for_month");
+    
+    		if (empty($stu_id)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score");
+    			exit();
+    		}elseif (empty($group_id)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score");
+    			exit();
+    		}elseif (empty($exam_type)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score");
+    			exit();
+    		}elseif (empty($for_semester)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score");
+    			exit();
+    		}elseif (empty($for_month)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score");
+    			exit();
+    		}
+    		$data = array(
+    				'stu_id'=>$stu_id,
+    				'group_id'=>$group_id,
+    				'exam_type'=>$exam_type,
+    				'for_semester'=>$for_semester,
+    				'for_month'=>$for_month,
+    		);
+    	}
+    	$this->view->search = $data;
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$rs = $db->getStudentEvaluationBYId($data);
+    	$this->view->rs = $rs;
+    	 
+    	$evaluation = $db->getStudentEvaluation($data);
+    	$this->view->evaluation = $evaluation;
+    	
+    	 
+    	$group = $db->getAllGroupOfStudent($data['stu_id']);
+    	$this->view->group = $group;
+    	$db = new Foundation_Model_DbTable_DbScore();
+    	$subject =$db->getSubjectByGroup($data['group_id'],null,$data['exam_type']);
+    	$this->view->subject = $subject;
+    	$this->view-> month = $db->getAllMonth();
+    	 
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rating = $db->getRatingValuation();
     }
 }

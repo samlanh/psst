@@ -480,6 +480,12 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			ORDER BY s.id DESC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
+	function getLastStudentEnvaluation($stu_id){
+		$db = $this->getAdapter();
+		$sql="SELECT e.* FROM `rms_student_evaluation` AS e
+		WHERE e.student_id = $stu_id ORDER BY e.id DESC LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	function getStudyHistoryByStudent($stu_id){
 		$db = $this->getAdapter();
 		$dbgb = new Application_Model_DbTable_DbGlobal();

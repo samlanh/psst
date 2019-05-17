@@ -178,7 +178,9 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 	                      <li class="dropdown">
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 	                        <ul class="dropdown-menu" role="menu">
-	                        <?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);?>
+	                        <?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);
+	                        	$lastEvaluation = $db_student->getLastStudentEnvaluation($rs['stu_id']);
+	                        ?>
 	                        	<?php if (!empty($rs['group_id'])){?>
 	                        	 <li>
 		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/".$rs['group_id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
@@ -208,6 +210,11 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
                           		    <li>
 	                           			<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-score-detail/id/".$lastExam['id'];?>"><?php echo $tr->translate('SCORE_DETAIL');?></a>
                           		   </li>
+	                          <?php }?>
+	                          <?php if (!empty($lastEvaluation)){?>
+	                          		<li>
+		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-student-evaluationletter?stu_id=".$rs['stu_id']."&group_id=".$lastEvaluation['group_id']."&exam_type=".$lastEvaluation['for_type']."&for_semester=".$lastEvaluation['for_semester']."&for_month=".$lastEvaluation['for_month'];?>"><?php echo $tr->translate('Student Evaluation');?></a>
+		                          </li>
 	                          <?php }?>
 	                         
 	                        </ul>

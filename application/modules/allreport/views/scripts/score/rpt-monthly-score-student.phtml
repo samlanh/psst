@@ -173,11 +173,19 @@ dojo.ready(function(){
 				</tr>
 				<tr>
 					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<?php 
+							$sexkh="ប";
+							$sexen="M";
+							if ($this->rs['sex']==2){
+								$sexkh="ស";
+								$sexen="F";
+							}
+						?>
 						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
 							<tr>
 								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
 								<td align="right" style="width: 30px;">ភេទៈ</td>
-								<td align="center" style="width: 40px;">ប</td>
+								<td align="center" style="width: 40px;"><?php echo $sexkh;?></td>
 								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
 								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
 								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
@@ -186,7 +194,7 @@ dojo.ready(function(){
 							<tr>
 								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
 								<td align="right" style="width: 30px;">Gender:</td>
-								<td align="center" style="width: 40px;">M</td>
+								<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
 								<td align="right" style="width: 60px;">ID:</td>
 								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
 								<td style="width: 40px;">Grade:</td>
@@ -401,11 +409,19 @@ dojo.ready(function(){
 				</tr>
 				<tr>
 					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<?php 
+							$sexkh="ប";
+							$sexen="M";
+							if ($this->rs['sex']==2){
+								$sexkh="ស";
+								$sexen="F";
+							}
+						?>
 						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
 							<tr>
 								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
 								<td align="right" style="width: 30px;">ភេទៈ</td>
-								<td align="center" style="width: 40px;">ប</td>
+								<td align="center" style="width: 40px;"><?php echo $sexkh?></td>
 								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
 								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
 								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
@@ -414,7 +430,7 @@ dojo.ready(function(){
 							<tr>
 								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
 								<td align="right" style="width: 30px;">Gender:</td>
-								<td align="center" style="width: 40px;">M</td>
+								<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
 								<td align="right" style="width: 60px;">ID:</td>
 								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
 								<td style="width: 40px;">Grade:</td>

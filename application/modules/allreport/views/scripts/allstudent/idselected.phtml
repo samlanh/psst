@@ -26,13 +26,12 @@ function getKHMonthByNumber(m){
 	<div data-dojo-type="dijit.Dialog" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
 		<div id="divPrint1" >
 		<style>
-				.card-content-student-print{
-							background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+					.card-content-student-print{
+						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
 						 background-size: 100%;background-repeat: no-repea
-						 page-break-after:always					
-						}
-						
-				<?php 
+						 page-break-after:always;					
+					}
+					<?php 
 					$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
@@ -70,7 +69,6 @@ function getKHMonthByNumber(m){
 						position: relative;		
 						border:solid 1px #eee;				
 					}
-			
 					<?php }?>
 					
 					.name-card-block ul.list-data {
@@ -165,8 +163,8 @@ function getKHMonthByNumber(m){
 					min-width:50px;
 					font-size: 10px;	
 				}	
-					
-					.name-card-block-front ul.list-data {
+				
+					    .name-card-block-front ul.list-data {
 					list-style-type: none;
 					padding: 0;
 					width: 100%;
@@ -227,53 +225,52 @@ function getKHMonthByNumber(m){
 					right:20px;
 				}	
 				
-			</style>
-		<div class="main-card-block" style=" padding: 0; text-align:center; margin: 0 auto;"><!--  -->
+	</style>
+		<div class="main-card-block" style=" padding: 0; text-align:center; margin: 0 auto;">
 		<?php $con=4;$i=0; $student= count($this->rs); $amount=4;
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
-				<?php 
-				$prefix="";
-				$validDate="";
-					$stu_name = $row['stu_enname']." ".$row['last_name'];
-					$image = $this->baseUrl().'/images/no-profile.png';
-					if(!empty($row['photo'])){
-						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-						$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+					<?php 
+					$prefix="";
+					$validDate="";
+						$stu_name = $row['stu_enname']." ".$row['last_name'];
+						$image = $this->baseUrl().'/images/no-profile.png';
+						if(!empty($row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							}
+							
 						}
-						
-					}
-					$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
-					if (!empty($bg)){
-						if ($bg['display_by']==2){
-							$stu_name = $row['stu_khname'];
+						$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+						if (!empty($bg)){
+							if ($bg['display_by']==2){
+								$stu_name = $row['stu_khname'];
+							}
+							$prefix = $bg['card_prefix'];
+							$validDate = $bg['valid'];
 						}
-						$prefix = $bg['card_prefix'];
-						$validDate = $bg['valid'];
-					}
-					?>
-					
-						<?php if ($key==0){?>
-						<div class="one-row-persone" >
-						<?php } ?>
-							<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-								
-								<div class="name-card-block">
-									<ul class="list-data">
-										<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
-										<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
-										<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
-										<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
-									</ul>
-									<ul class="list-data-secondrow">
-										<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span> <span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
-										<li><span class="title_value parent-name">&nbsp;<?php echo $row['father_enname'];?></span></li>
-										<li><span class="title_value parent-job">&nbsp;<?php echo $row['fath_job'];?></span></li>
-										<li><span class="title_value parent-name">&nbsp;<?php echo $row['mother_enname'];?></span></li>
-										<li><span class="title_value parent-job">&nbsp;<?php echo $row['moth_job'];?></span></li>
-										<li style=" line-height: 21px; "><span class="title_value home_num">&nbsp;<?php echo $row['home_num'];?></span> <span class="title_value street_num">&nbsp;<?php echo $row['street_num'];?></span> <span class="title_value commnue">&nbsp;<?php echo $row['commune_name'];?></span>  <span class="title_value district">&nbsp;<?php echo $row['district_name'];?></span></li>
-									</ul>
-								</div>
+						?>
+					<?php if ($key==0){?>
+					<div class="one-row-persone" >
+					<?php } ?>
+						<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+							
+							<div class="name-card-block">
+								<ul class="list-data">
+									<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+									<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
+									<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
+									<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
+								</ul>
+								<ul class="list-data-secondrow">
+									<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span> <span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
+									<li><span class="title_value parent-name">&nbsp;<?php echo $row['father_enname'];?></span></li>
+									<li><span class="title_value parent-job">&nbsp;<?php echo $row['fath_job'];?></span></li>
+									<li><span class="title_value parent-name">&nbsp;<?php echo $row['mother_enname'];?></span></li>
+									<li><span class="title_value parent-job">&nbsp;<?php echo $row['moth_job'];?></span></li>
+									<li style=" line-height: 21px; "><span class="title_value home_num">&nbsp;<?php echo $row['home_num'];?></span> <span class="title_value street_num">&nbsp;<?php echo $row['street_num'];?></span> <span class="title_value commnue">&nbsp;<?php echo $row['commune_name'];?></span>  <span class="title_value district">&nbsp;<?php echo $row['district_name'];?></span></li>
+								</ul>
 							</div>
+						</div>
 					<?php if ($i==$amount){?>
 								<?php if ($key>0){ $amount =$amount+4;?>
 							</div>
@@ -284,74 +281,68 @@ function getKHMonthByNumber(m){
 						<?php if (count($this->rs)==$i){?>
 						</div>
 						<?php }?>
-						
-					
-		<?php }
-			}?>
-			
-			<?php $con=4;$i=0; $student= count($this->rs); $amount=4;
+			<?php }
+				}?>
+				
+				<?php $con=4;$i=0; $student= count($this->rs);$amount=4;
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
-				<?php 
-				$prefix="";
-				$validDate="";
-					$stu_name = $row['stu_enname']." ".$row['last_name'];
-					$image = $this->baseUrl().'/images/no-profile.png';
-					if(!empty($row['photo'])){
-						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-						$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+					<?php 
+					$prefix="";
+					$validDate="";
+						$stu_name = $row['stu_enname']." ".$row['last_name'];
+						$image = $this->baseUrl().'/images/no-profile.png';
+						if(!empty($row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							}
+							
 						}
+						$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+						if (!empty($bg)){
+							if ($bg['display_by']==2){
+								$stu_name = $row['stu_khname'];
+							}
+							$prefix = $bg['card_prefix'];
+							$validDate = $bg['valid'];
+						}
+						?>
 						
-					}
-					$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
-					if (!empty($bg)){
-						if ($bg['display_by']==2){
-							$stu_name = $row['stu_khname'];
-						}
-						$prefix = $bg['card_prefix'];
-						$validDate = $bg['valid'];
-					}
-					?>
-					
-					
-						<?php if ($key==0){?>
-						<div class="one-row-persone" >
-						<?php } ?>
-							<div class="card-content-student-print-front <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-								<div class="profile-card-block">
-									<div class="photo">
-										<img  src="<?php echo $image;?>" alt="profile-image" >
-									</div>
-								</div> 
-								<div class="name-card-block-front">
-									<ul class="list-data">
-										<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
-										<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span></li>
-										<li><span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
-										<li><span class="title_value acadimicyear">&nbsp;<?php echo $row['academic_year'];?></span></li>
-									</ul>
-								</div>
-								<div class="validdate">
-									<span class="issue_date day"><?php echo date("d",strtotime($validDate));?></span>
-									<span class="issue_date month"><?php echo $month[date("m",strtotime($validDate))];?></span>
-									<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
-								</div>
-							</div>
-						<?php if ($i==$amount){?>
-								<?php if ($key>0){ $amount =$amount+4;?>
-							</div>
-							<div class="one-row-persone" <?php if ($amount>8){?> style=" padding-top: 10px;"<?php }?>>
+							<?php if ($key==0){?>
+							<div class="one-row-persone" >
 							<?php } ?>
-						<?php }?>
-						
-						<?php if (count($this->rs)==$i){?>
-						</div>
-						<?php }?>
-						
-					
-		<?php }
-			}?>
-			
-			</div>
+								<div class="card-content-student-print-front <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+									<div class="profile-card-block">
+										<div class="photo">
+											<img  src="<?php echo $image;?>" alt="profile-image" >
+										</div>
+									</div> 
+									<div class="name-card-block-front">
+										<ul class="list-data">
+											<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+											<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span></li>
+											<li><span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
+											<li><span class="title_value acadimicyear">&nbsp;<?php echo $row['academic_year'];?></span></li>
+										</ul>
+									</div>
+									<div class="validdate">
+										<span class="issue_date day"><?php echo date("d",strtotime($validDate));?></span>
+										<span class="issue_date month"><?php echo $month[date("m",strtotime($validDate))];?></span>
+										<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
+									</div>
+								</div>
+							<?php if ($i==$amount){?>
+								<?php if ($key>0){ $amount =$amount+4;?>
+								</div>
+								<div class="one-row-persone" <?php if ($amount>8){?> style=" padding-top: 10px;"<?php }?>>
+								<?php } ?>
+							<?php }?>
+							
+							<?php if (count($this->rs)==$i){?>
+							</div>
+							<?php }?>
+			<?php }
+				}?>
+		</div>
 		</div>
 		
 		<table width="100%">

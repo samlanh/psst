@@ -1,0 +1,544 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("តារាងវាយតម្លៃការសិក្សាសិស្ស")); 
+	$show_subject=1;//1=subject name,0 shortcut
+	
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;
+	
+	echo $this->headTitle();
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	
+	$month = array(
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+			);
+	$monthview = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+	$show=2;
+?>	
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.data.ObjectStore");
+
+dojo.ready(function(){
+		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
+		new dijit.form.FilteringSelect({
+		    store:group_store,
+		    autoComplete: true,                        
+		    required:false,
+		    id: "group_name",
+		    name: "group_name",
+		    class:'fullside',  
+		    value:'<?php echo $this->search['group_name'];?>',         
+		    required:'true',
+		    placeHolder:"Selected Group Name",          
+		    onChange: function() {  
+		    }
+		}, "group_name");
+});
+</script>
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file-text " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('តារាងវាយតម្លៃការសិក្សាសិស្ស');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
+    <form action="" dojoType="dijit.form.Form" method="post">
+		<div class="form-group">
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select id="group_id" name="group_id" class="fullside"   dojoType="dijit.form.FilteringSelect" >
+        			<?php if (!empty($this->group)) foreach ($this->group as $rs){?>
+			   		<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->search['group_id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+			   		<?php }?>
+			   	</select>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select id="exam_type" name="exam_type" class="fullside" onChange="displaymonth();"  dojoType="dijit.form.FilteringSelect" >
+			   		<option value="1" <?php if ($this->search['exam_type']==1){ echo 'selected="selected"';}?>>ប្រចាំខែ</option>
+			   		<option value="2" <?php if ($this->search['exam_type']==2){ echo 'selected="selected"';}?>>ប្រលងឆមាស</option>
+			   	</select>
+        	</div>
+        	<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
+        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+						<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
+						<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
+				</select>
+        	</div>
+        	<div id="month" class="col-md-2 col-sm-2 col-xs-12">
+        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+					<?php }}?>
+				</select>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+				<input type="hidden" id="stu_id" name="stu_id" value="<?php echo $this->search['stu_id']?>" />
+        	</div>
+        </div>
+	</form>
+	<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				color:#4839bd;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			.header tr{ page-break-inside:avoid; page-break-after:auto }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			.cheader{height: 30px;background: #ffdbdb; white-space: nowrap;
+			height:50px;
+						color:#5a71b5;font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';"
+}
+			.hover:hover{background: #ccc;}
+			 td.rotate {
+				height: 130px;
+	    		vertical-align: bottom;
+			}				
+			td.rotate > div {
+				transform: rotate(270deg);
+				width: 30px;
+			}
+			td.rotate span{
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: inline-block;
+			}
+			td.bg_1 {
+			    background: #fffbcb73;
+			}
+			td.bg_2 {
+			    background: #fbbdbd73;
+			}
+			h3.green {
+			    color: #1ABB9C;
+			}
+			.red {
+			    color: #ff1a02;
+			}
+			
+			.border-right-none{
+    			border-right: #fff solid 1px;
+			}
+			.border-bottom-none{
+    			border-bottom: #fff solid 1px;
+			}
+		</style>
+		<?php if ($this->rs['exam_type']==1){?>
+		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr >
+					<td width="20%" align="center" >
+						<br />
+						<?php $image = $this->baseUrl()."/images/logo.png";
+							if (!empty($this->rs['photo_branch'])){
+								$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+							}
+							
+						?>
+						<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
+					</td>
+					<td width="60%" align="center" >
+						<h3 style=" font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';">តារាងវាយតម្លៃការសិក្សាសិស្ស ប្រចាំ ខែ<?php echo $this->rs['for_month']?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Monthly Student Evaluation For <?php echo $this->rs['for_monthen']?></h3>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+					</td>
+					<td width="20%" align="center" >
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<?php 
+							$sexkh="ប";
+							$sexen="M";
+							if ($this->rs['sex']==2){
+								$sexkh="ស";
+								$sexen="F";
+							}
+						?>
+						<table  style="font-size:12px; line-height:16px; width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
+							<tr>
+					    		<td colspan="7" align="center" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+					    			<?php 
+				                		$photo = $this->baseUrl().'/images/no-profile.png';
+				                		if (!empty($this->rs['photo'])){
+				                			if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+				                				$photo = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+				                			}
+				                		}
+				                		?>
+					    			<img id="profile_wiew" src="<?php echo $photo;?>" alt="" style="padding:1px; width:100px;max-height: 150px; border: solid 1px #a29f9f;"/>
+					    		</td>
+					    	</tr>
+					    	<tr>
+								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
+								<td align="right" style="width: 30px;">ភេទៈ</td>
+								<td align="center" style="width: 40px;"><?php echo $sexkh;?></td>
+								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+							<tr>
+								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
+								<td align="right" style="width: 30px;">Gender:</td>
+								<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
+								<td align="right" style="width: 60px;">ID:</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">Grade:</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel" valign="top">
+						<?php if (!empty($this->evaluation)){?>
+								<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd; border-bottom:solid 1px #4839bd; color: #4839bd; line-height: 24px;" border="1" >	
+									<tr style="background: #ffdbdb; ">
+										<td class="red" colspan="<?php echo count($this->rating);?>" align="center">ការវាយតម្លៃរបស់គ្រូ/Evaluation</td>
+									</tr>
+									<tr style="background: #ffdbdb;">
+										<td class="red" colspan="<?php echo count($this->rating);?>" align="center">កម្រិតពិន្ទុនៃការវាយតម្លៃ/Rating Scale</td>
+									</tr>
+									<tr style="background: #ffdbdb; font-size: 12px;">
+										<?php if (!empty($this->rating)) foreach ($this->rating as $rating){?>
+										<td class="red" align="center" style="white-space: nowrap;">&nbsp;<?php echo $rating['id']."=".$rating['name'];?>&nbsp;</td>
+										<?php }?>
+									</tr>
+								</table>
+						
+								<table cellpadding="5"​ valign="top" style="width:100%; font-size: 12px;color: #4839bd; border-collapse:collapse; margin:0 auto; border: solid 3px #4839bd; border-top:solid 1px #4839bd;" border="1" >
+								<?php $k=0; foreach ($this->evaluation as $evaluation){ $k++; ?>
+								
+									<tr>
+										<td width="90%" valign="top" style="padding: 0 5px;  ">&nbsp;<span style="display: inline-block; width: 20px;"><?php echo $k.".";?></span><?php echo $evaluation['comments']?>&nbsp;</td>
+										<td  width="10%" align="center">&nbsp;<strong><?php echo $evaluation['rating_id']?></strong>&nbsp;</td>
+									</tr>
+									<?php }?>
+								</table>
+								<table cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;" border="0" >
+									<tr class="style " style=" line-height: 20px;">
+										<td align="left">
+										<strong>អវត្តមាន/Absenteeism</strong><br />
+										&nbsp;-&nbsp;&nbsp;ចំនួនថ្ងៃឈប់ មានច្បាប់ /Days of Excused Absences:&nbsp;&nbsp;<strong><?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']);?></strong>&nbsp;
+										<br />
+										&nbsp;-&nbsp;&nbsp;ចំនួនថ្ងៃឈប់ អត់ច្បាប់/Days of Unexcused Absences:&nbsp;&nbsp;<strong><?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']);?></strong>&nbsp;
+										<br />
+										&nbsp;-&nbsp;&nbsp;ចំនួនថ្ងៃមកយឺត/Tardiness&nbsp;&nbsp;<strong><?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,$this->rs['for_month_id']);?></strong>&nbsp;
+										</td>
+									</tr>
+								</table>
+								<br />
+							
+								<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+									<tr>
+										<td width="40%">
+										បានឃើញ និងឯកភាព/Seen and Approved<br />
+										ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+										ប្រធានកម្មវិធីសិក្សា/Program Manager
+										</td>
+										<td width="20%">
+										&nbsp;
+										</td>
+										<td width="40%" align="center">
+										ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+										គ្រូបន្ទុកថ្នាក់/Homeroom Teacher
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3" style="height: 40px;">
+										</td>
+									</tr>
+									<tr style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+										<td width="40%" align="center">
+										<br />
+										<br />
+										<br />
+										<?php //echo $this->rs['teacher'];?>
+										</td>
+										<td width="20%">
+										&nbsp;
+										</td>
+										<td width="40%" align="center">
+											<?php echo $this->rs['teacher'];?>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3" style="font-weight: bold;">
+										មតិយោបល់ ឬ សំណូមពរមាតាបិតា /អាណាព្យាបាលសិស្ស/Comments or Request of Parents or Guardians:
+											<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+										</td>
+									</tr>
+								</table>
+								<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+										<tr>
+											<td width="45%" style="white-space: nowrap;">
+												សូមប្រគល់សៀវភៅតាមដាននេះមកសាលាត្រឹមថ្ងៃទី: <strong><?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['return_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['return_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['return_date'])));?></strong><br />
+												Please return this book to school by: <strong><?php echo date("F",strtotime($this->evaluation[0]['return_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['return_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['return_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['return_date']));?><br /></strong>
+											</td>
+											<td width="10%">
+											&nbsp;
+											</td>
+											<td width="45%" align="center">
+											ថ្ងៃទី<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ខែ
+											<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ឆ្នាំ
+											<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											Date<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span><br />
+												ហត្ថលេខា និងឈ្មោះ / Signature and Name
+											</td>
+										</tr>
+									</table>
+								<?php }?>
+					</td>
+				</tr>
+			</table>
+			<?php }else if ($this->rs['exam_type']==2){?>
+			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr >
+					<td width="20%" align="center" >
+						<br />
+						<?php $image = $this->baseUrl()."/images/logo.png";
+							if (!empty($this->rs['photo_branch'])){
+								$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+							}
+							
+						?>
+						<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
+					</td>
+					<td width="60%" align="center" >
+						<?php $semster = "តារាងវាយតម្លៃការសិក្សាសិស្ស ប្រចាំឆមាសទី១";
+							  $semsteren="Semester One Student Evaluation";
+							  if ($this->rs['for_semester']==2){
+							  	$semster = "តារាងវាយតម្លៃការសិក្សាសិស្ស ប្រចាំឆមាសទី២";
+							  	$semsteren="Semester Two Student Evaluation";
+							  }
+						?>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $semster;?></h3>
+						<h3 class="red bold" style="font-weight:normal; font-size: 18px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $semsteren;?></h3>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+					</td>
+					<td width="20%" align="center" >
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<?php 
+							$sexkh="ប";
+							$sexen="M";
+							if ($this->rs['sex']==2){
+								$sexkh="ស";
+								$sexen="F";
+							}
+						?>
+						<table  style="font-size:12px; line-height:16px; width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
+							<tr>
+					    		<td colspan="7" align="center" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+					    			<?php 
+				                		$photo = $this->baseUrl().'/images/no-profile.png';
+				                		if (!empty($this->rs['photo'])){
+				                			if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+				                				$photo = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+				                			}
+				                		}
+				                		?>
+					    			<img id="profile_wiew" src="<?php echo $photo;?>" alt="" style="padding:1px; width:100px;max-height: 150px; border: solid 1px #a29f9f;"/>
+					    		</td>
+					    	</tr>
+							<tr>
+								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
+								<td align="right" style="width: 30px;">ភេទៈ</td>
+								<td align="center" style="width: 40px;"><?php echo $sexkh;?></td>
+								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+							<tr>
+								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
+								<td align="right" style="width: 30px;">Gender:</td>
+								<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
+								<td align="right" style="width: 60px;">ID:</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">Grade:</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel" valign="top">
+							<?php if (!empty($this->evaluation)){?>
+							<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd; border-bottom:solid 1px #4839bd; color: #4839bd; line-height: 24px;" border="1" >	
+								<tr style="background: #ffdbdb; ">
+									<td class="red" colspan="<?php echo count($this->rating);?>" align="center">ការវាយតម្លៃរបស់គ្រូ/Evaluation</td>
+								</tr>
+								<tr style="background: #ffdbdb;">
+									<td class="red" colspan="<?php echo count($this->rating);?>" align="center">កម្រិតពិន្ទុនៃការវាយតម្លៃ/Rating Scale</td>
+								</tr>
+								<tr style="background: #ffdbdb; font-size: 12px;">
+									<?php if (!empty($this->rating)) foreach ($this->rating as $rating){?>
+									<td class="red" align="center" style="white-space: nowrap;">&nbsp;<?php echo $rating['id']."=".$rating['name'];?>&nbsp;</td>
+									<?php }?>
+								</tr>
+							</table>
+							<table cellpadding="5"​ valign="top" style="width:100%; font-size: 12px;color: #4839bd; border-collapse:collapse; margin:0 auto; border: solid 3px #4839bd; border-top:solid 1px #4839bd;" border="1" >
+							<?php $k=0; foreach ($this->evaluation as $evaluation){ $k++; ?>
+							
+								<tr>
+									<td width="90%" valign="top" style="padding: 0 5px;  ">&nbsp;<span style="display: inline-block; width: 20px;"><?php echo $k.".";?></span><?php echo $evaluation['comments']?>&nbsp;</td>
+									<td  width="10%" align="center">&nbsp;<strong><?php echo $evaluation['rating_id']?></strong>&nbsp;</td>
+								</tr>
+								<?php }?>
+							</table>
+							<table cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;" border="0" >
+								<tr class="style " style=" line-height: 20px;">
+									<td align="left">
+									<strong>អវត្តមាន/Absenteeism</strong><br />
+									&nbsp;-&nbsp;&nbsp;ចំនួនថ្ងៃឈប់ មានច្បាប់ /Days of Excused Absences:&nbsp;&nbsp;<strong><?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,null,$this->rs['for_semester']);?></strong>&nbsp;
+									<br />
+									&nbsp;-&nbsp;&nbsp;ចំនួនថ្ងៃឈប់ អត់ច្បាប់/Days of Unexcused Absences:&nbsp;&nbsp;<strong><?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,null,$this->rs['for_semester']);?></strong>&nbsp;
+									<br />
+									&nbsp;-&nbsp;&nbsp;ចំនួនថ្ងៃមកយឺត/Tardiness&nbsp;&nbsp;<strong><?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,null,$this->rs['for_semester']);?></strong>&nbsp;
+									</td>
+								</tr>
+							</table>
+									<?php if (!empty($this->evaluation[0]['teacher_comment'])){?>
+									<div style=" border: solid 3px #4839bd; margin: 20px 0;  padding: 10px;  color: #4839bd;  font-size: 12px;   line-height: 20px;">
+										<strong style="font-family: 'Times New Roman','Khmer OS Muol Light';">មតិយោបល់របស់គ្រូ / Teacher's Comments:</strong><br />
+										<?php echo $this->evaluation[0]['teacher_comment'];?>
+									</div>
+									<?php }?>
+									<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+										<tr style="white-space: nowrap;">
+											<td width="33%">
+											&nbsp;
+											</td>
+											<td width="33%" valign="top">
+											<br /><br />
+											បានឃើញ និងឯកភាព/Seen and Approved<br />
+											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+											ប្រធានកម្មវិធីសិក្សា/Program Manager
+											</td>
+											<td width="33%" align="center" valign="top">
+											ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+											គ្រូបន្ទុកថ្នាក់/Homeroom Teacher
+											</td>
+										</tr>
+										<tr style="white-space: nowrap;">
+											<td width="33%" colspan="2">
+												បានឃើញ និងឯកភាព/Seen and Approved<br />
+												<div style="display: inline-block;width: 130px;height: 50px;">
+													<!--for sign nature image -->
+													
+												</div>
+												<div style="display: inline-block; white-space:nowrap; min-width: 50px; height: 30px">
+												ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['issue_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['issue_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['issue_date'])));?>/ <?php echo date("F",strtotime($this->evaluation[0]['issue_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['issue_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['issue_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['issue_date']));?><br />
+												</div><br />
+												នាយិកាសាលា/Directress
+											</td>
+											<td width="33%" align="center" style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+												<?php echo $this->rs['teacher'];?>
+											</td>
+										</tr>
+										<tr style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+											<td width="33%">
+											&nbsp;
+											</td>
+											<td width="33%" align="center">
+											<?php echo $this->rs['teacher'];?>
+											</td>
+											
+											
+										</tr>
+										<tr>
+											<td colspan="3" style="font-weight: bold;">
+											មតិយោបល់ ឬ សំណូមពរមាតាបិតា /អាណាព្យាបាលសិស្ស/Comments or Request of Parents or Guardians:
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+												<span style="display:inline-block; width: 100%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											</td>
+										</tr>
+									</table>
+									<table cellpadding="5"​ valign="top" style="width:100%;  font-size: 12px;color: #4839bd;" >
+										<tr>
+											<td width="45%" style="white-space: nowrap;">
+												សូមប្រគល់សៀវភៅតាមដាននេះមកសាលាត្រឹមថ្ងៃទី: <strong><?php echo $dbgb->getNumberInkhmer(date("d",strtotime($this->evaluation[0]['return_date'])));?>  ខែ <?php echo $monthview[date("m",strtotime($this->evaluation[0]['return_date']))]?> ឆ្នាំ <?php echo $dbgb->getNumberInkhmer(date("Y",strtotime($this->evaluation[0]['return_date'])));?></strong><br />
+												Please return this book to school by: <strong><?php echo date("F",strtotime($this->evaluation[0]['return_date']));?> <?php echo date("d",strtotime($this->evaluation[0]['return_date']));?><sup><?php echo date("S",strtotime($this->evaluation[0]['return_date']));?></sup> , <?php echo date("Y",strtotime($this->evaluation[0]['return_date']));?><br /></strong>
+											</td>
+											<td width="10%">
+											&nbsp;
+											</td>
+											<td width="45%" align="center">
+											ថ្ងៃទី<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ខែ
+											<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>ឆ្នាំ
+											<span style="display:inline-block; line-height:10px; width: 30px; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											Date<span style="display:inline-block; line-height:10px; width: 50px; border-bottom: dashed 1px #4839bd;">&nbsp;</span><br />
+												ហត្ថលេខា និងឈ្មោះ / Signature and Name
+											</td>
+										</tr>
+										<tr>
+											<td style="height: 30px">
+											</td>
+										</tr>
+										<tr>
+											<td width="45%" style="white-space: nowrap;">
+											</td>
+											<td width="10%">
+											&nbsp;
+											</td>
+											<td width="45%" align="center">
+												<span style="display:inline-block; width: 45%; border-bottom: dashed 1px #4839bd;">&nbsp;</span>
+											</td>
+										</tr>
+									</table>
+							<?php }?>
+					</td>
+				</tr>
+			</table>
+			<?php }?>
+		</div>
+</div>
+<script>
+dojo.ready(function(){
+	 displaymonth();
+});
+function displaymonth(){
+	exam_type = dijit.byId('exam_type').get('value');
+	if(exam_type==1){
+		$("#semester").css("display", "none");
+		$("#month").css("display", "block");
+	}else{
+		$("#semester").css("display", "block");
+		$("#month").css("display", "none");
+	}
+}
+</script>

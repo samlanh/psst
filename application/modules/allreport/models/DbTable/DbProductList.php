@@ -57,7 +57,6 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     				p.code AS pro_code,
     				CONCAT(p.title) AS pro_name ,
     				(SELECT it.title FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
-    	           
     	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
     	            pl.brand_id,
     				pl.pro_qty,

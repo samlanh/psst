@@ -989,8 +989,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				WHERE 
 					 (sd.type=2 OR sdd.`attendence_status` IN (4,5)) 
 					 AND sd.`id` = sdd.`attendence_id` 
-					 AND sd.group_id = g.id AND sd.status=1 
-					 AND st.`stu_id` = sdd.`stu_id` ";
+					 AND sd.group_id = g.id 
+					 AND sd.status=1 
+					 AND st.`stu_id` = sdd.`stu_id` 
+    		";
     	
     	$from_date =(empty($search['start_date']))? '1': "sd.`date_attendence` >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sd.`date_attendence` <= '".$search['end_date']." 23:59:59'";
@@ -1140,25 +1142,26 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     			GROUP BY mistake_type
 // 			";
     	$sql="SELECT
-	    	sd.`group_id`,
-	    	sdd.`attendence_status` as mistake_type,
-	    	sdd.description,
-	    	sd.`date_attendence` as mistake_date,
-	    	sdd.`stu_id`,
-	    	COUNT(sdd.`attendence_status`) AS count_mistack
-	    	FROM
-	    	`rms_student_attendence` AS sd,
-	    	`rms_student_attendence_detail` AS sdd
-	    	WHERE
-	    	sd.`type` =2
-	    	AND sd.`id` = sdd.`attendence_id`
-	    	AND sdd.`stu_id` = $stu_id
-	    	AND sd.`group_id` = $group
-	    	GROUP BY attendence_status
+			    	sd.`group_id`,
+			    	sdd.`attendence_status` as mistake_type,
+			    	sdd.description,
+			    	sd.`date_attendence` as mistake_date,
+			    	sdd.`stu_id`,
+			    	COUNT(sdd.`attendence_status`) AS count_mistack
+	    		FROM
+			    	`rms_student_attendence` AS sd,
+			    	`rms_student_attendence_detail` AS sdd
+	    		WHERE
+			    	sd.`type` =2
+			    	AND sd.`id` = sdd.`attendence_id`
+			    	AND sdd.`stu_id` = $stu_id
+			    	AND sd.`group_id` = $group
+			    GROUP BY 
+			    	attendence_status
     	";
 		return $db->fetchAll($sql);
     }
-    function getAttendenceFoul($group_id,$stu_id){//Ã¡Å¾â‚¬Ã¡Å¸â€ Ã¡Å¾Â Ã¡Å¾Â»Ã¡Å¾Å¸ Ã¡Å¾ËœÃ¡Å¾â‚¬Ã¡Å¾â„¢Ã¡Å¾ÂºÃ¡Å¾ï¿½ Ã¡Å¾â€œÃ¡Å¾Â·Ã¡Å¾â€žÃ¡Å¾â€¦Ã¡Å¸ï¿½Ã¡Å¾â€°Ã¡Å¾ËœÃ¡Å¾Â»Ã¡Å¾â€œ
+    function getAttendenceFoul($group_id,$stu_id){ //កំហុស មកយឺត និងចេញមុន
     	$db = $this->getAdapter();
     	$sql="SELECT 
     				sade.*,
@@ -1170,12 +1173,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    		`rms_student_attendence` AS sta
 		    	WHERE 
 		    		sta.`id` = sade.`attendence_id`
+		    		and sta.type=1
 		    		AND sade.`stu_id`=$stu_id 
 		    		AND sta.`group_id`=$group_id 
-		    		AND sade.`attendence_status` IN (4,5) LIMIT 1
+		    		AND sade.`attendence_status` IN (4,5) 
+		    	LIMIT 1
 		";
-    	$where="";
-    	return $db->fetchRow($sql.$where);
+    	return $db->fetchRow($sql);
     }
     function getStudentAttendenceHighschool($search){
     	$db = $this->getAdapter();

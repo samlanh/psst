@@ -136,8 +136,8 @@ table.tb-footer tr.style-head {
 						<?php if ($key>0){ 
 						?>
 						<tr>
-							<td align="right" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<span​​ style="color:#000; font-size: 12px;font-family: 'Times New Roman','Khmer OS Battambang';">
+							<td align="right" colspan="7" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+								<span style="font-family: Times New Roman,Khmer OS Battambang; font-size: 12px;">
 								<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span>
 							</td>
@@ -165,12 +165,13 @@ table.tb-footer tr.style-head {
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
 								<td rowspan="2">Name in Latin</td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
-								<td colspan="3" style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $tr->translate("DISCIPLINE_TYPE");?>&nbsp;</td>
+								<td colspan="4" style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $tr->translate("DISCIPLINE_TYPE");?>&nbsp;</td>
 							</tr>							
 							<tr class="style-head">
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("SMALL_MISTACK");?>&nbsp;</td>
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("MEDIUM_MISTACK");?>&nbsp;</td>
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("BIG_MISTACK");?>&nbsp;</td>
+								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("OTHER");?>&nbsp;</td>
 							</tr>
 						</thead>
 						<?php } $i++;?>
@@ -180,7 +181,7 @@ table.tb-footer tr.style-head {
 							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_khname'];?>&nbsp;</a></td>
 							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['last_name'].' '.$rs['stu_enname'];?>&nbsp;</a></td>
 							<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
-							<?php $s=0; $m=0; $b=0;$el=0; ?>
+							<?php $s=0; $m=0; $b=0;$other=0; ?>
 							<?php  
 								$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], null, $rs['group_id']);
 								$lateAttedence = $db->getAttendenceFoul($rs['group_id'],$rs['stu_id']);
@@ -190,28 +191,30 @@ table.tb-footer tr.style-head {
 								}
 								if (!empty($mistake_status)) foreach ($mistake_status as $sta){
 									if ($sta['mistake_type']==1){
-										$s=$sta['count_mistack']+$late_foul;
+										$s=$sta['count_mistack'];
 									}
 									else if ($sta['mistake_type']==2){
 										$m = $sta['count_mistack'];
 									}
 									else if ($sta['mistake_type']==3){
 										$b = $sta['count_mistack'];
-									}else{
-										echo " ";
+									}
+									else if ($sta['mistake_type']==4){
+										$other = $sta['count_mistack'];
 									}
 								}
 								?>
 							<td align="center"><?php echo $s+$late_foul;?></td>
 							<td align="center"><?php echo $m;?></td>
 							<td align="center"><?php echo $b;?></td>
+							<td align="center"><?php echo $other;?></td>
 						</tr>
 							<?php $old_groupid = $rs['group_id'];
 						}?>
 						<tr>
 							<td align="right" colspan="7" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<span​​ style="font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;">
-								<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
+								<span style="font-family: Times New Roman,Khmer OS Battambang; font-size: 12px;">
+									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span><br />
 							</td>
 						</tr>

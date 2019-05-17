@@ -143,6 +143,11 @@
 								<?php } $i++;?>
 								<tr style="border: solid 1px #fff;">
 									<td>
+										&nbsp;
+									</td>
+								</tr>
+								<tr style="border: solid 1px #fff;">
+									<td>
 										<?php echo $i.". ".$tr->translate("STUDENT_ID");?> : <?php echo $rs['stu_code'];?>
 										<?php echo $tr->translate("STUDENT");?> : <?php echo $rs['stu_khname'];?>
 										<?php echo $tr->translate("SEX");?> : <?php echo $sex;?>
@@ -152,6 +157,7 @@
 								$s=0; 
 								$m=0; 
 								$b=0; 
+								$o=0; 
 								$mistake_status = $db->getStatusMistakeByStudent($rs['stu_id'],$rs['group_id'],date('Y-m-d',strtotime($start_date)),date('Y-m-d',strtotime($end_date)));?>
 								<?php if (!empty($mistake_status)){?>
 								<tr style="border: solid 1px #fff;">
@@ -161,7 +167,7 @@
 												<td rowspan="2" align="center">
 													<?php echo $tr->translate("DATE");?>	
 												</td>
-												<td colspan="3" align="center">
+												<td colspan="4" align="center">
 													<?php echo $tr->translate("MISTAKE");?>
 												</td>
 												<td rowspan="2" align="center">
@@ -172,11 +178,13 @@
 												<td align="center"><?php echo $tr->translate("SMALL_MISTACK");?></td>
 												<td align="center"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
 												<td align="center"><?php echo $tr->translate("BIG_MISTACK");?></td>
+												<td align="center"><?php echo $tr->translate("OTHER");?></td>
 											</tr>
 											<?php foreach ($mistake_status as $rs){
 												$small="";
 												$medium="";
 												$big="";
+												$other="";
 												$description="";
 												if ($rs['type']==2){
 													$description = $rs['description'];
@@ -194,10 +202,13 @@
 														$big=1;
 														$b = $b+1;
 														//big
-													}else{
-														echo " ";
 													}
-												}else{
+													else if ($rs['mistake_type']==4){
+														$other=1;
+														$o = $o+1;
+														//other
+													}
+												}else{ // attendance foul
 													if ($rs['mistake_type']==4){
 														$small = 1;
 														if ($rs['for_session']==1){
@@ -225,6 +236,7 @@
 												<td align="center"><?php echo $small;?></td>
 												<td align="center"><?php echo $medium;?></td>
 												<td align="center"><?php echo $big;?></td>
+												<td align="center"><?php echo $other;?></td>
 												<td align="center"><?php echo $description;?></td>
 											</tr>
 											<?php }?>
@@ -240,6 +252,9 @@
 												</td>
 												<td>
 													<?php echo $b;?>
+												</td>
+												<td>
+													<?php echo $o;?>
 												</td>
 											</tr>
 										</table>

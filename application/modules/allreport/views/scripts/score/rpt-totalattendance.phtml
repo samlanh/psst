@@ -82,7 +82,7 @@
 								<td rowspan="2"><?php echo $tr->translate("NAME_ENGLISH");?></td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
 								<td colspan="4" align="center"><?php echo $tr->translate("ABSENT");?></td>
-								<td colspan="3" align="center"><?php echo $tr->translate("DISCIPLINE_TYPE");?></td>
+								<td colspan="4" align="center"><?php echo $tr->translate("DISCIPLINE_TYPE");?></td>
 							</tr>
 							<tr class="style-head" >
 								<td align="center"><?php echo $tr->translate("NO_PERMISSION");?></td>
@@ -93,6 +93,7 @@
 								<td align="center"><?php echo $tr->translate("SMALL_MISTACK");?></td>
 								<td align="center"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
 								<td align="center"><?php echo $tr->translate("BIG_MISTACK");?></td>	
+								<td align="center"><?php echo $tr->translate("OTHER");?></td>	
 							</tr>
 						</thead>
 						<?php  
@@ -154,7 +155,7 @@
 							<td align="center"><?php echo $late;?></td>
 							<td align="center"><?php echo $early_leave;?></td>
 							
-							<?php $s=0; $m=0; $b=0;$el=0; ?>
+							<?php $s=0; $m=0; $b=0;$other=0; ?>
 							<?php  
 								$_db = new Allreport_Model_DbTable_DbRptAllStudent();
 								$mistake_status = $_db->getTotalStatusMistake($row['stu_id'], null, $row['group_id']);
@@ -165,22 +166,24 @@
 								}
 								if (!empty($mistake_status)) foreach ($mistake_status as $sta){
 									if ($sta['mistake_type']==1){
-										$s=$sta['count_mistack']+$late_foul;
+										$s=$sta['count_mistack'];
 									}
 									else if ($sta['mistake_type']==2){
 										$m = $sta['count_mistack'];
 									}
 									else if ($sta['mistake_type']==3){
 										$b = $sta['count_mistack'];
-									}else{
-										echo " ";
+									}
+									else if ($sta['mistake_type']==4){
+										$other = $sta['count_mistack'];
 									}
 								}
 							?>
 							    
-							<td align="center"><?php echo $s;?></td>
+							<td align="center"><?php echo $s+$late_foul;?></td>
 							<td align="center"><?php echo $m;?></td>
 							<td align="center"><?php echo $b;?></td>
+							<td align="center"><?php echo $other;?></td>
 						</tr>
 						<?php }?>	
 					</table>	

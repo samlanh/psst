@@ -121,7 +121,7 @@
 							<td rowspan="2" align="center" style="font-family: Khmer OS Muol Light;">
 								កាលបរិច្ឆេទ	
 							</td>
-							<td colspan="3" align="center" style="font-family: Khmer OS Muol Light;">
+							<td colspan="4" align="center" style="font-family: Khmer OS Muol Light;">
 								កំហុស
 							</td>
 							<td colspan="2" align="center" style="font-family: Khmer OS Muol Light;">
@@ -138,11 +138,12 @@
 							<td align="center">ស្រាល</td>
 							<td align="center">មធ្យម</td>
 							<td align="center">ធ្ងន់</td>
+							<td align="center">ផ្សេងៗ</td>
 							<td align="center">ច្បាប់</td>
 							<td align="center">ឥតច្បាប់</td>
 						</tr>
 						<?php 
-							$i=0;$s=0;$m=0;$l=0;
+							$i=0;$s=0;$m=0;$l=0;$o=0;
 							$at=0;
 							$p=0;
 							$attendences = $db_mistack->getAttendenceBydate(null, $group_id, $stu_id);
@@ -170,6 +171,7 @@
 								$small = "";
 								$medium = "";
 								$big = "";
+								$other = "";
 								$descri_added="";
 								if ($attendence['type']==1){ // attendence
 									if($attendence['attendence_status']==3){
@@ -194,7 +196,7 @@
 											$descri_added = "(ចេញមុន  ពេលល្ងាច)";
 										}
 									}
-								}else{
+								}else{ // mistake
 									if($attendence['attendence_status']==1){
 										$small = $number['1'];$s++;
 									}
@@ -204,7 +206,9 @@
 									if($attendence['attendence_status']==3){
 										$big = $number['1'];$l++;
 									}
-									
+									if($attendence['attendence_status']==4){
+										$other = $number['1'];$o++;
+									}
 								}
 							?>
 							<tr style="font-size:13px;">
@@ -212,6 +216,7 @@
 								<td align="center"><?php echo $small;?></td>
 								<td align="center"><?php echo $medium;?></td>
 								<td align="center"><?php echo $big;?></td>
+								<td align="center"><?php echo $other;?></td>
 								<td align="center"><?php echo $permission;?></td>
 								<td align="center"><?php echo $absent; ?></td>
 								<td>&nbsp;<?php echo $attendence['description']." ".$descri_added;?></td>
@@ -235,6 +240,13 @@
 						foreach ($sp_count_l as $cl){
 							$count_l.=$number[$cl];
 						}
+						
+						$count_o='';
+						$sp_count_o = str_split($o);
+						foreach ($sp_count_o as $co){
+							$count_o.=$number[$co];
+						}
+						
 						$count_p='';
 						$sp_count_p = str_split($p);
 						foreach ($sp_count_p as $cp){
@@ -251,6 +263,7 @@
 							<td><?php echo $count_s." ដង";?></td>
 							<td><?php echo $count_m." ដង";?></td>
 							<td><?php echo $count_l." ដង";?></td>
+							<td><?php echo $count_o." ដង";?></td>
 							<td><?php echo $count_p." ដង";?></td>
 							<td><?php echo $count_at." ដង";?></td>
 						</tr>

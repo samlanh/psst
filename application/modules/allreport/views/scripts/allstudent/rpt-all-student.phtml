@@ -58,7 +58,15 @@ display: table-cell !important;
 							<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("OLD_STUDENTS");?></option>
 							<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("NEW_STUDENT");?></option>
 						</select>
-                   </div>
+                    </div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+                    	<select name="stu_status" id="stu_status" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
+							<option value="-1"><?php echo $tr->translate("STATUS");?></option>
+							<?php if(!empty($this->status)){foreach($this->status as $row){?>
+								<option value="<?php echo $row['id']?>" <?php if($this->search['stu_status']==$row['id']){echo 'selected="selected"';}?>><?php echo $row['name']?></option>
+							<?php }}?>
+						</select>
+                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>

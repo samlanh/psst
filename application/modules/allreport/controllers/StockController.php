@@ -178,14 +178,15 @@ class Allreport_StockController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title' =>'',
-						'branch_id'=>'',
-						'study_year'=>'',
-						'user' 		=>'',
-						'product'=>'',
-						'category_id'=>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'	=>date('Y-m-d'),
+						'title' 		=>'',
+						'branch_id'		=>'',
+						'study_year'	=>'',
+						'user' 			=>'',
+						'product'		=>'',
+						'category_id'	=>'',
+						'product_type'	=>'',
+						'start_date'	=> date('Y-m-d'),
+						'end_date'		=>date('Y-m-d'),
 				);
 			}
 			$this->view->search = $search;
@@ -213,21 +214,23 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'advance_search' 	=>'',
-						'start_date'	=>date("Y-m-d"),
-						'end_date'		=>date("Y-m-d"),
-						'branch_search'		=>'',
-						'items_search'		=>'',
-						'pro_id'=>''
+						'title' 		=>'',
+						'branch_id'		=>'',
+						'user' 			=>'',
+						'product'		=>'',
+						'category_id'	=>'',
+						'start_date'	=> date('Y-m-d'),
+						'end_date'		=>date('Y-m-d'),
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptSummaryStock();
 			$this->view->rspro = $db->getProductSold($search);
 			$type=3;//product
-			$frm = new Global_Form_FrmItemsDetail();
-			$frm->FrmAddItemsDetail(null,$type);
-			Application_Model_Decorator::removeAllDecorator($frm);
-			$this->view->form_search = $frm;
+			
+			$form=new Accounting_Form_FrmSearchProduct();
+			$form=$form->FrmSearchProduct();
+			Application_Model_Decorator::removeAllDecorator($form);
+			$this->view->form_search=$form;
 				
 			$this->view->search = $search;
 				
@@ -389,22 +392,20 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search_pro=$form;
 	}
-	
-	
 	function rptAdjustStockdetailAction(){
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-					
 			}else{
 				$search = array(
 						'title'	        =>	'',
 						'branch_id'		=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
-						'status_search'	=> "",
-						'user_id'	=> "",
-						
+						'category_id'	=> "",
+						'product'		=> "",
+						'product_type'	=> "",
+						'user'			=> "",
 				);
 			}
 			$this->view->search = $search;
@@ -419,8 +420,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
+		$form=new Accounting_Form_FrmSearchProduct();
+		$form=$form->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
@@ -467,8 +468,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'branch_id'		=>  '',
-						'pro_name'		=>  '',
-						'pro_type'		=>  '',
+						'category_id'	=>0,
+						'product'		=>  '',
+						'product_type'	=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
 						'status_search'	=> 1
@@ -487,14 +489,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			echo $e->getMessage();//exit();
 		}
-		
-		$db=new Allreport_Model_DbTable_DbRptSummaryStock();
-		$this->view->pro_name=$db->getAllProductName();
-		
-		$this->view->pro_type=$db->getAllProductType();
-		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
+		$form=new Accounting_Form_FrmSearchProduct();
+		$form->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}

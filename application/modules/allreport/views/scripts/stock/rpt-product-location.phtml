@@ -217,7 +217,7 @@ table.tb-footer tr.style-head {
 	var url_dept = '<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'get-productbycate')); ?>';
 	function getProductByCate(){
 		cate_id = dijit.byId("category_id").get("value");
-		if(cate_id>0){
+		//if(cate_id>0){
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
@@ -232,7 +232,7 @@ table.tb-footer tr.style-head {
 				error: function(err) {
 				}
 			});
-		}
+		//}
 	}
 </script>
 

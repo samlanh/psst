@@ -50,11 +50,10 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
-    		$s_where[]= " p.pro_code LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_name LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_price LIKE '%{$s_search}%'";
-    		$s_where[]= "  pl.pro_qty LIKE '%{$s_search}%'";
-    		$s_where[]= "  pl.total_amount LIKE '%{$s_search}%'";
+    		$s_where[]= " p.code LIKE '%{$s_search}%'";
+    		$s_where[]= " p.title LIKE '%{$s_search}%'";
+    		$s_where[]= " pl.price LIKE '%{$s_search}%'";
+    		$s_where[]= " pl.pro_qty LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['location'])){

@@ -94,7 +94,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	public function addGraduatedStudent($_data){
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
-			try{	
+		try{	
 			$identity = empty($_data['selector'])?null:implode(',', $_data['selector']);
 			$_arr= array(
 				'user_id'		=>$this->getUserId(),

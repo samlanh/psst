@@ -115,8 +115,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
     	}
-    	if(!empty($search['stu_type']) AND $search['stu_type']>-1){
+    	if($search['stu_type']>-1){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
+    	}
+    	if($search['stu_status']>-1){
+    		$where.=' AND is_subspend = '.$search['stu_status'];
     	}
 //     	$dbp = new Application_Model_DbTable_DbGlobal();
 //     	$where.=$dbp->getAccessPermission();
@@ -1771,7 +1774,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     function getStudenLetterofpraiseById($id){
     	$db = $this->getAdapter();
     	
-   		 $dbp = new Application_Model_DbTable_DbGlobal();
+   		$dbp = new Application_Model_DbTable_DbGlobal();
     	$currentLang = $dbp->currentlang();
     	$colunmname='name_en';
     	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
@@ -1805,4 +1808,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql." LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
+    
+   	function getAllStatus(){
+   		$db = $this->getAdapter();
+   		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$currentLang = $dbp->currentlang();
+   		$label='name_en';
+   		if($currentLang==1){
+   			$label='name_kh';
+   		}
+   		$sql="select key_code as id , $label as name from rms_view where type=5 and status=1 order by key_code ASC";
+   		return $db->fetchAll($sql);
+   	} 
+    
 }

@@ -63,7 +63,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 				'grade_all' 	=>'',
 				'session' 		=>'',
 				'group'			=>'',
-				'stu_type'=>'',
+				'stu_type'		=>'',
+				'stu_status'	=>'',
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
 			);
@@ -76,6 +77,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$rs_rows = $group->getAllStudent($search);
 		$this->view->rs = $rs_rows;
+		$this->view->status = $group->getAllStatus();
 		
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 		

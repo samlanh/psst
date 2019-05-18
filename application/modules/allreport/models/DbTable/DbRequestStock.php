@@ -106,44 +106,60 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 	
 	function getAllAdjustStockDetail($search=null){
 		$db = $this->getAdapter();
-		$sql="SELECT  ad.adjust_no,ad.request_name,ad.note,ad.request_date,ad.create_date,
-		        (SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id=adj.branch_id LIMIT 1)AS branch_name,
-		        (SELECT i.title FROM `rms_items` AS i WHERE i.id = (SELECT it.items_id FROM `rms_itemsdetail` AS it WHERE it.id=adj.pro_id AND it.items_type=3 LIMIT 1 ) LIMIT 1) AS category,
-		       (SELECT it.title FROM `rms_itemsdetail` AS it WHERE it.id=adj.pro_id AND it.items_type=3 LIMIT 1 ) AS pro_name,
-		         adj.qty_befor,adj.qty_after,adj.difference,
-		       ad.status,
-				(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=ad.user_id LIMIT 1) AS user_name
+		$sql="SELECT 
+					ad.adjust_no,
+					ad.request_name,
+					ad.note,
+					ad.request_date,
+					ad.create_date,
+			        (SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id=adj.branch_id LIMIT 1)AS branch_name,
+			        (SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1) AS category,
+			       	i.title AS pro_name,
+			         adj.qty_befor,
+			         adj.qty_after,
+			         adj.difference,
+		      		 ad.status,
+					(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=ad.user_id LIMIT 1) AS user_name
+				FROM 
+					rms_adjuststock AS ad,
+					rms_adjuststock_detail AS adj,
+					rms_itemsdetail as i
+				WHERE 
+					ad.id=adj.adjuststock_id
+					AND i.id = adj.pro_id
+			";
+		$from_date =(empty($search['start_date']))? '1': " ad.request_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " ad.request_date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		if(!empty($search['title'])){
+			$s_where=array();
+			$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+			$s_where[]= " REPLACE(ad.adjust_no,' ','') LIKE '%{$s_search}%'";
+			$s_where[]="  REPLACE(ad.request_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(ad.note,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(i.title,' ','') LIKE '%{$s_search}%'";
+			$where.=' AND ('.implode(' OR ', $s_where).')';
+		}
+		if(!empty($search['product'])){
+    		$where.=" AND adj.pro_id=".$search['product'];
+    	}
+    	if($search['category_id']>0){
+    		$where.=" AND i.items_id =".$search['category_id'];
+    	}
+    	if($search['product_type']>0){
+    		$where.=" AND i.product_type =".$search['product_type'];
+    	}
+		if($search['branch_id']){
+			$where.=" AND adj.branch_id=".$search['branch_id'];
+		}
+		if($search['user']){
+			$where.=" AND ad.user_id=".$search['user'];
+		}
 		
-				FROM rms_adjuststock AS ad,rms_adjuststock_detail AS adj 
-				WHERE ad.id=adj.adjuststock_id";
-		$where="";
-	
-				$from_date =(empty($search['start_date']))? '1': " ad.request_date >= '".$search['start_date']." 00:00:00'";
-				$to_date = (empty($search['end_date']))? '1': " ad.request_date <= '".$search['end_date']." 23:59:59'";
-				$where = " AND ".$from_date." AND ".$to_date;
-				if(!empty($search['title'])){
-					$s_where=array();
-					$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
-					$s_where[]= " REPLACE(ad.adjust_no,' ','') LIKE '%{$s_search}%'";
-					$s_where[]="  REPLACE(ad.request_name,' ','') LIKE '%{$s_search}%'";
-					$s_where[]= " REPLACE(ad.note,' ','') LIKE '%{$s_search}%'";
-					$s_where[]= " REPLACE((SELECT it.title FROM `rms_itemsdetail` AS it WHERE it.id=adj.pro_id AND it.items_type=3 LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
-					$where.=' AND ('.implode(' OR ', $s_where).')';
-				}
-				if(!empty($search['status_search'])){
-					$where.=" AND ad.status=".$search['status_search'];
-				}
-				if($search['branch_id']){
-					$where.=" AND adj.branch_id=".$search['branch_id'];
-				}
-				if($search['user_id']){
-					$where.=" AND ad.user_id=".$search['user_id'];
-				}
-				
-				$dbp = new Application_Model_DbTable_DbGlobal();
-				$sql.=$dbp->getAccessPermission('branch_id');
-				$order=" ORDER BY ad.id DESC";
-				return $db->fetchAll($sql.$where.$order);
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
+		$order=" ORDER BY ad.id DESC";
+		return $db->fetchAll($sql.$where.$order);
 	}
     
 }

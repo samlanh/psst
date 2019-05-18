@@ -158,6 +158,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.paid_amount,
 						sp.balance_due,
 						sp.note,
+						sp.is_closed,
 						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
 				  FROM
 						rms_student AS s,
@@ -478,6 +479,39 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					cpd.change_id = $id
 			";
 		return $db->fetchAll($sql);
+	}
+	
+	
+	function submitClosingEngry($data){
+		$db = $this->getAdapter();
+		if(!empty($data['id_selected'])){
+			$ids = explode(',', $data['id_selected']);
+			$arr = array(
+					"is_closed"=>1,
+			);
+			foreach ($ids as $i){
+				if ($data['type_record'.$i]==1){ //1= Student Payment
+					if (!empty($data['id_'.$i])){
+						$this->_name="rms_student_payment";
+						$where=" id= ".$data['id_'.$i];
+						$this->update($arr, $where);
+					}
+				}else if ($data['type_record'.$i]==2){ //2= Other Income
+					if (!empty($data['id_'.$i])){
+						$this->_name="ln_income";
+						$where=" id= ".$data['id_'.$i];
+						$this->update($arr, $where);
+					}
+				}else if ($data['type_record'.$i]==3){ //3= Other Expense
+					if (!empty($data['id_'.$i])){
+						$this->_name="ln_expense";
+						$where=" id= ".$data['id_'.$i];
+						$this->update($arr, $where);
+					}
+				}
+				
+			}
+		}
 	}
 }
 

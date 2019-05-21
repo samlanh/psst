@@ -78,7 +78,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";

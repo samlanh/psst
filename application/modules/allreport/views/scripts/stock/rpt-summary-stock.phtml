@@ -85,7 +85,7 @@ table.tb-footer tr.style-head {
 				height: 23px;
 			}
 		</style>
-		<table width="100%">
+		<table width="100%" style="font-family: 'Times New Roman','Khmer OS Battambang';">
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
@@ -97,8 +97,8 @@ table.tb-footer tr.style-head {
 				<td width="15%" align="center">
 				</td>
 				<td align="center" width="70%">
-					<span style="padding-left: 10px; color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_SUMMARY_STOCK');?></span> 
-					<div style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';}?><?php echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
+					<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_SUMMARY_STOCK');?></span> 
+					<div style="font-size:12px;"><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';}?><?php echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
 				</td>
 				<td width="15%" align="center">
 				</td>

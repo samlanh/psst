@@ -59,8 +59,8 @@ table.tb-footer tr.style-head {
 					<td width="15%" align="center">
 					</td>
 					<td width="70%" align="center">
-					    <span style="color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('TRANSFER')?></span><br />					
-						<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span> 
+					    <span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('TRANSFER')?></span><br />					
+						<span style="color:#000; font-size: 12px;"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> &nbsp;<?php echo $tr->translate('TO');?> &nbsp;<?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span> 
 					</td>
 					<td width="15%" align="center">
 					</td>

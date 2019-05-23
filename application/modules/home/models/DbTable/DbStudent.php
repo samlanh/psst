@@ -219,7 +219,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND s.customer_type=1
 					AND s.stu_id=$stu_id 
 				ORDER BY 
-					sp.id DESC 
+					sp.id DESC ,
+					p.items_id ASC
 			";
 		return $db->fetchAll($sql);
 	}
@@ -287,19 +288,34 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$colunmname='title';
 		}
 		
-		$sql=" SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
-    	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
-    	
-    	(SELECT CONCAT(rms_itemsdetail.$colunmname,' ',(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_itemsdetail.items_id AND rms_items.type=1 LIMIT 1)) FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
-				
-    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times ,
-    	gd.stu_id
-    	FROM rms_group_reschedule AS gr,rms_group_detail_student AS gd
-    	WHERE gr.group_id=gd.group_id
-    	 AND   gd.stu_id=$id
-    	    	 
-    	GROUP BY gr.year_id,gr.group_id
-    	ORDER BY gr.year_id,gr.group_id,times DESC";
+		$sql=" SELECT 
+					gr.id,
+					gr.year_id,
+					gr.group_id,
+					gr.day_id,
+					gr.from_hour,
+					gr.to_hour,
+					gr.subject_id,
+					gr.techer_id,
+			    	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
+			    	(SELECT CONCAT(rms_itemsdetail.$colunmname,' ',(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_itemsdetail.items_id AND rms_items.type=1 LIMIT 1)) FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+			    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times ,
+			    	gd.stu_id
+    			FROM 
+    				rms_group_reschedule AS gr,
+    				rms_group_detail_student AS gd
+    			WHERE 
+    				gr.group_id=gd.group_id
+    				and gd.is_pass = 0
+    	 			AND gd.stu_id=$id
+		    	GROUP BY 
+		    		gr.year_id,
+		    		gr.group_id
+		    	ORDER BY 
+					gr.year_id,
+					gr.group_id,
+					times DESC
+			";
 		return $db->fetchAll($sql);
 	}
 	
@@ -342,10 +358,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND sd.status=1
 					AND st.`stu_id` = sdd.`stu_id` 
 					AND st.is_subspend = 0
+					AND g.is_pass!=1
 					and sdd.stu_id = $stu_id
 			";
 		 
-		$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
+		$order =" GROUP BY sd.group_id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
 		return $db->fetchAll($sql.$order);
 	}
 	

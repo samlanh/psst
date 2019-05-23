@@ -58,7 +58,7 @@
 			<style>
 				a{text-decoration: none;color: 000;}
 			</style>
-			<table width="100%">
+			<table width="100%" style="background:#fff; margin: 0 auto; width: 100%;font-family:'Times New Roman','Khmer OS Battambang' ">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
@@ -70,8 +70,8 @@
 					<td width="15%" align="center">
 					</td>
 					<td align="center" width="70%">
-						<strong style="padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_ADJUST_STOCK');?></strong><br>
-						<span style="font-weight: bold;font-size: 12px; "><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;<?php echo $tr->translate('TO');?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
+						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_ADJUST_STOCK');?></span><br>
+						<span style="font-size: 12px; "><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;<?php echo $tr->translate('TO');?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center">
 					</td>

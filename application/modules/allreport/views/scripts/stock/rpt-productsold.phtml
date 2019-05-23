@@ -59,7 +59,7 @@ table.tb-footer tr.style-head {
 	</form>
 	<div style="min-height:22cm; margin:0 auto;">
 		<div id="divPrint">
-			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;" >
+			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;font-family:'Times New Roman','Khmer OS Battambang';" >
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
@@ -71,8 +71,8 @@ table.tb-footer tr.style-head {
 					<td width="15%" align="center">
 					</td>
 					<td align="center"  width="70%">
-						<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_PRODUCT_SOLD');?></span><br />
-						<span style=" color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO');?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span> 
+						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_PRODUCT_SOLD');?></span><br />
+						<span style="color:#000; font-size: 12px;"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO');?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span> 
 					</td>
 					<td width="15%" align="center">
 					</td>

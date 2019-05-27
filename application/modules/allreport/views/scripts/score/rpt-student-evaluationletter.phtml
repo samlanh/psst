@@ -1,10 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("តារាងវាយតម្លៃការសិក្សាសិស្ស")); 
-	$show_subject=1;//1=subject name,0 shortcut
-	
-	$session_lang=new Zend_Session_Namespace('lang');
-	$lang_id=$session_lang->lang_id;
 	
 	echo $this->headTitle();
 	$frm =  $this->form_search;

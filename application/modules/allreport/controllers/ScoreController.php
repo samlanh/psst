@@ -902,4 +902,61 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rating = $db->getRatingValuation();
     }
+    public function studentEvaluationgroupAction()
+    {
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'title' 		=> "",
+    				'group' 		=> "",
+    				'branch_id' 	=> "",
+    				'study_year'	=> "",
+    				'grade' 		=> "",
+    				'session' 		=> "",
+    				'teacher' 		=> "",
+    				'room'=>0,
+    				'degree'=>0,
+    				'study_status'=>-1,
+    		);
+    	}
+    	$db = new Allreport_Model_DbTable_DbRptGroup();
+    	$this->view->rs = $db->getGroupDetail($search);
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$_db = new Global_Model_DbTable_DbGroup();
+    	$teacher = $_db->getAllTeacher();
+    	$this->view->teacher = $teacher;
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    
+    	$this->view->search = $search;
+    }
+    public function rptStudentGroupAction()
+    {
+    	$id=$this->getRequest()->getParam("id");
+    	if(empty($id)){
+    		$this->_redirect("/allreport/score/student-evaluationgroup");
+    	}
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'txtsearch' => "",
+    				'study_type'=>1);
+    	}
+    	$this->view->search = $search;
+    	$db = new Allreport_Model_DbTable_DbRptGroup();
+    	$row = $db->getStudentGroup($id,$search,1);
+    	$this->view->rs = $row;
+    	$rs = $db->getGroupDetailByID($id);
+    	$this->view->rr = $rs;
+    }
 }

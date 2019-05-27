@@ -112,10 +112,10 @@
 						  foreach($this->rs as $rs)if (!empty($this->rs)){ $i++;?>
 							  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; height: 24px;"​ align="center" class='hover padding context-menu-one'>
 								<td><?php echo $i;?></td>
-								<td><a style="text-align:left;text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['branch_name']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>
+								<td><?php echo $rs['branch_name']; ?></td>
+								<td><?php echo $rs['group_code']; ?></td>
+								<td><?php echo $rs['academic']; ?></td>
+								<td><?php echo $rs['semester']; ?></td>
 								<td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
 								<td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
 								<td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>

@@ -714,26 +714,26 @@ function getMonthByNumber(m){
 							<tr>
 								<td>Student ID </td>
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
-								<td>DOB</td>
-								<td> : &nbsp;&nbsp;<label id="lb_dob" class="one bold"></label> </td>
-								<td>Grade</td>
-								<td> : &nbsp;<label id="lb_grade" class="one bold"></label> </td>
-							</tr>
-							<tr>
-								<td>Student Name</td>
-								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
 								<td>Tel</td>
-								<td> : &nbsp;&nbsp;<label id="lb_phone" class="one bold"></label> </td>
+								<td> : &nbsp;<label id="lb_phone" class="one bold"></label> </td>
 								<td>Academic Year</td>
 								<td>  : &nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
 							</tr>
 							<tr>
-								<td>Gender </td>
-								<td> : &nbsp;&nbsp;<label id="lb_sex" class=" one bold"></label></td>
+								<td>Student Name</td>
+								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
 								<td>Degree</td>
-								<td> : &nbsp;&nbsp;<label id="lb_dept" class="one bold"></label> </td>
+								<td> : &nbsp;<label id="lb_dept" class="one bold"></label> </td>
 								<td>Session</td>
 								<td> : &nbsp;<label id="lb_session" class="one bold"></label> </td>
+							</tr>
+							<tr>
+								<td>Gender </td>
+								<td> : &nbsp;&nbsp;<label id="lb_sex" class=" one bold"></label></td>
+								<td>Grade</td>
+								<td> : &nbsp;<label id="lb_grade" class="one bold"></label> </td>
+								<td></td>
+								<td></td>
 							</tr>
 							<tr>
 								<td colspan="6">
@@ -748,7 +748,7 @@ function getMonthByNumber(m){
 												 <div class="col-md-6 col-sm-6 col-xs-12" style="width:49%;float: left;margin-right:1%">Note
 												 	<div style="font-size:10px;min-height: 70px;border:1px solid #000;" id="lbl_note" class="noted" ></div>
 												 </div>
-												 <div class="col-md-6 col-sm-6 col-xs-12" style="width:50%;float: left;">In Khmer
+												 <div class="col-md-6 col-sm-6 col-xs-12" style="width:50%;float: left;">Say in US Dollars
 												 	<div style="font-size:10px;min-height: 70px;border:1px solid #000;" id="lb_read_khmer" class="noted" ></div>
 												 </div>
 											</td>
@@ -1349,7 +1349,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
 			
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
-			dojo.byId("lb_dob").innerHTML = dojo.byId("lbl_dob").innerHTML;
+			//dojo.byId("lb_dob").innerHTML = dojo.byId("lbl_dob").innerHTML;
 			dojo.byId("lb_name").innerHTML = dojo.byId("lbl_namekh").innerHTML+" - "+dojo.byId("lbl_nameen").innerHTML;
 			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;

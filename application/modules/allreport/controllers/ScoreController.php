@@ -119,7 +119,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	
     	$frm = new Application_Form_FrmGlobal();
 //     	$rs = $db->getStundetScoreDetailGroup($search,$id,1);
-    	$branch_id = $result[0]['branch_id'];
+    	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];
     	$this->view->header = $frm->getHeaderReceipt($branch_id);
     }
     function monthlyOutstandingStudentAction(){

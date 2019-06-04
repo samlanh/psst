@@ -98,7 +98,23 @@ Class RsvAcl_Form_FrmPickupCard extends Zend_Dojo_Form {
 		$status_search->setMultiOptions($_status_opt);
 		$status_search->setValue($request->getParam("status_search"));
 		
+		$issue = new Zend_Dojo_Form_Element_DateTextBox('issue');
+		$start_date = date("Y-m-d");
+		$issue->setAttribs(array(
+				'data-dojo-Type'=>"dijit.form.DateTextBox",
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'class'=>'fullside',
+				'required'=>true));
+		$issue->setValue($start_date);
 		
+		$valid = new Zend_Dojo_Form_Element_DateTextBox('valid');
+		$date = date("Y-m-d",strtotime("+1 Year"));
+		$valid->setAttribs(array(
+				'data-dojo-Type'=>"dijit.form.DateTextBox",
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'class'=>'fullside',
+				'required'=>true));
+		$valid->setValue($date);
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
@@ -109,6 +125,8 @@ Class RsvAcl_Form_FrmPickupCard extends Zend_Dojo_Form {
 			$status->setValue($data['status']);
 			$_id->setValue($data['id']);
 			$display_by->setValue($data['display_by']);
+			$issue->setValue($data['issue']);
+			$valid->setValue($data['validate']);
 		}
 		
 		$this->addElements(array(
@@ -116,6 +134,8 @@ Class RsvAcl_Form_FrmPickupCard extends Zend_Dojo_Form {
 				$branch_id,
 				$_schoolOption,
 				$note,
+				$issue,
+				$valid,
 				$_adv_search,
 				$status_search,
 				$_id,

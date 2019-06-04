@@ -804,7 +804,7 @@ function getallGrade(){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'idselected'));
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'idselected-elt'));
     	?>
     	var urlink="";
 		if(typecard==1){
@@ -837,7 +837,11 @@ function getallGrade(){
 
     	 id_selected = dijit.byId('id_selected').get('value');
 		 if(id_selected!=''){
-			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
+			//window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
+			window.open(
+					'<?php echo $url_copy;?>'+'/id/'+id_selected,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
 		 }else{
 			alert('Please select record you want to print');
 			return false;

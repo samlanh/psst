@@ -9,7 +9,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function indexAction()
 	{
 	}
-	public function idselectedAction(){
+	public function idselectedEltAction(){
 		$id=$this->getRequest()->getParam('id');
 		$front_card=$this->getRequest()->getParam('front_card');
 		$this->view->front = empty($front_card)?"":$front_card;

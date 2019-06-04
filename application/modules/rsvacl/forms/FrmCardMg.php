@@ -104,8 +104,16 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 		$options = array(1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("TEACHER"),3=>$this->tr->translate("STAFF"));
 		$card_type->setMultiOptions($options);
 		
-		$valid = new Zend_Dojo_Form_Element_DateTextBox('valid');
+		$issue = new Zend_Dojo_Form_Element_DateTextBox('issue');
+		$start_date = date("Y-m-d");
+		$issue->setAttribs(array(
+				'data-dojo-Type'=>"dijit.form.DateTextBox",
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'class'=>'fullside',
+				'required'=>true));
+		$issue->setValue($start_date);
 		
+		$valid = new Zend_Dojo_Form_Element_DateTextBox('valid');
 		$date = date("Y-m-d",strtotime("+1 Year"));
 		$valid->setAttribs(array(
 				'data-dojo-Type'=>"dijit.form.DateTextBox",
@@ -147,6 +155,7 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 			$colorcode->setValue($data['colorcode']);
 			$card_type->setValue($data['card_type']);
 			$valid->setValue($data['valid']);
+			$issue->setValue($data['issue']);
 		}
 		
 		$this->addElements(array(
@@ -157,6 +166,7 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 				$card_prefix,
 				$colorcode,
 				$card_type,
+				$issue,
 				$valid,
 				$status,
 				$display_by,

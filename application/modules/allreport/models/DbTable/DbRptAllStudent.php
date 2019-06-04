@@ -358,8 +358,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$sql ='SELECT 
     				branch_id,
-    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS schoolOption
+			    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
+			    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS schoolOption
     			from 
     				rms_student 
     			where 
@@ -400,11 +400,16 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	*,
     	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
     	CONCAT(stu_khname,' - ',stu_enname,' ',last_name) as name,
-    	stu_khname,last_name,stu_enname as en_name,
-    	CONCAT(stu_enname,' ',last_name) AS stu_enname,
+    	stu_khname,
+    	last_name,
+    	stu_enname as en_name,
+    	stu_enname,
     	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
     	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+    	
+    	(select teacher_name_en from rms_teacher where rms_teacher.id = (SELECT g.teacher_id FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1) limit 1) as teacher_name,
+    	
     	degree as dept,
     	(SELECT CONCAT(from_academic,'-',to_academic) from rms_tuitionfee where rms_tuitionfee.id=s.academic_year limit 1) as academic_year,
     	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year limit 1) as start_year,

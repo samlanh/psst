@@ -1,6 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	$type=2;
 ?>	
 <title><?php echo $tr->translate("Pickup Card Selected")?></title>
 <script type="text/javascript">
@@ -20,152 +21,373 @@ function getKHMonthByNumber(m){
 		"ធ្នូ",
 		];
 		return (monthName[m-1]);
-}	
+}	//     class="dijitHidden"		data-dojo-type="dijit.Dialog"
 </script>
-<div class="dijitHidden" style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
+<div  style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
+	<div  style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
 		<div id="PickupCard" style="margin: 0 auto;width:100%;" >
-		<style>
-			.card-content-student-printpickup{
-				background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
-				background-size: 100%;background-repeat: no-repeat;	
-				position: relative;			
-				display:inline-block;	
-				float:left;					
-				border:solid 1px #eee;
-				width: 14.5cm; 
-				height:10.3cm; 	
-			}
-			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
-				$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
-				$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
-				if(!empty($bgpick['background'])){
-					if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
-					$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
+			<?php if($type==1){?>
+				<style>
+					.card-content-student-printpickup{
+						background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
+						background-size: 100%;background-repeat: no-repeat;	
+						position: relative;			
+						display:inline-block;	
+						float:left;					
+						border:solid 1px #eee;
+						width: 14.5cm; 
+						height:10.3cm; 	
 					}
-				}
-				?>
-			.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
-				background-image: url('<?php echo $imagepick;?>');
-				background-size: 100%;background-repeat: no-repeat;					
-			}
-			<?php }?>
-			.guardian-name {
-				font-family: 'Khmer OS Muol Light';
-				position: absolute;
-				top: 33%;
-				left: 60px;
-				color: #000;
-			}
-			.profile-card-block {
-				position: relative;
-			}
-			.profile-card-block .photo {
-				 width: initial;
-				position: absolute;
-				top: 120px;
-				left: 80.2% !important;
-				border: solid 1px #4a4a4a;
-			}
-			.photo img {
-				width: 70.7px;
-				height: 92px;
-			}
-			.profile-card-block .stu_code {
-				text-align:center;
-				min-width: 70.7px;
-				position: absolute;
-				top: 213px;
-				left: 80.2% !important;
-				font-weight:bold;
-				font-size:12px;
-				color:#000;
-			}
-			.guardian-card-block .photo {
-				width: initial;
-				position: absolute;
-				top: 150px;
-				left: 35.2% !important;
-				border: solid 1px #4a4a4a;
-			}
-			.guardian-card-block .photo.pho1 {
-				left: 50.2% !important;
-			}
-		</style>
-		<?php 			
-			$i=0;$margin_work = 2;
-			if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
-			<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-				<?php 
-					$image = $this->baseUrl().'/images/no-profile.png';
-					if(!empty($row['photo'])){
-						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-						$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+					<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
+						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
+						if(!empty($bgpick['background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
+							$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
+							}
 						}
-						
+						?>
+					.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
+						background-image: url('<?php echo $imagepick;?>');
+						background-size: 100%;background-repeat: no-repeat;					
 					}
-					$stuname = $row['stu_enname']." ".$row['last_name'];
-					$bgge = $_dbgb->getPickupCardBackground($row['branch_id'],$row['schoolOption']);
-					if (!empty($bgge)){
-						if ($bgge['display_by']==2){
-							$stuname = $row['stu_khname'];
-						}
-					}
-					?>
-				<div class="guardian-name">
-					<?php echo $stuname;?>
-				</div>
-				<div class="profile-card-block">
-					<div class="photo">
-						<img  src="<?php echo $image;?>" alt="profile-image" >
-					</div>
-					<div class="stu_code" style="text-align:center;">
-						<?php echo $row['stu_code']; ?>
-					</div>
-				</div>
-				<div class="guardian-card-block">
-					<?php 
-						$guardian_photo = $this->baseUrl().'/images/no-profile.png';
-						 if (!empty($row['guardian_photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['guardian_photo'])){
-								$guardian_photo = $this->baseUrl().'/images/photo/'.$row['guardian_photo'];
-							}
-						 }
-						 $father_photo = $this->baseUrl().'/images/no-profile.png';
-						 if (!empty($row['father_photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['father_photo'])){
-								$father_photo = $this->baseUrl().'/images/photo/'.$row['father_photo'];
-							}
-						 }
-						 $mother_photo = $this->baseUrl().'/images/no-profile.png';
-						 if (!empty($row['mother_photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['mother_photo'])){
-								$mother_photo = $this->baseUrl().'/images/photo/'.$row['mother_photo'];
-							}
-						 }
-					?>
-					<?php if(!empty($row['guardian_photo'])){ ?>
-					<div class="photo">
-						<img  src="<?php echo $guardian_photo;?>" alt="profile-image" >
-					</div>
-					<?php }else{?>
-					<div class="photo">
-						<img  src="<?php echo $father_photo;?>" alt="profile-image" >
-					</div>
 					<?php }?>
-					<div class="photo pho1">
-						<img  src="<?php echo $mother_photo;?>" alt="profile-image" >
+					.guardian-name {
+						font-family: 'Khmer OS Muol Light';
+						position: absolute;
+						top: 33%;
+						left: 60px;
+						color: #000;
+					}
+					.profile-card-block {
+						position: relative;
+					}
+					.profile-card-block .photo {
+						width: initial;
+						position: absolute;
+						top: 120px;
+						left: 80.2% !important;
+						border: solid 1px #4a4a4a;
+					}
+					.photo img {
+						width: 70.7px;
+						height: 92px;
+					}
+					.profile-card-block .stu_code {
+						text-align:center;
+						min-width: 70.7px;
+						position: absolute;
+						top: 213px;
+						left: 80.2% !important;
+						font-weight:bold;
+						font-size:12px;
+						color:#000;
+					}
+					.guardian-card-block .photo {
+						width: initial;
+						position: absolute;
+						top: 150px;
+						left: 35.2% !important;
+						border: solid 1px #4a4a4a;
+					}
+					.guardian-card-block .photo.pho1 {
+						left: 50.2% !important;
+					}
+				</style>
+			<?php 			
+				$i=0;$margin_work = 2;
+				if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
+				<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+					<?php 
+						$image = $this->baseUrl().'/images/no-profile.png';
+						if(!empty($row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							}
+							
+						}
+						$stuname = $row['stu_enname']." ".$row['last_name'];
+						$bgge = $_dbgb->getPickupCardBackground($row['branch_id'],$row['schoolOption']);
+						if (!empty($bgge)){
+							if ($bgge['display_by']==2){
+								$stuname = $row['stu_khname'];
+							}
+						}
+						?>
+					<div class="guardian-name">
+						<?php echo $stuname;?>
+					</div>
+					<div class="profile-card-block">
+						<div class="photo">
+							<img  src="<?php echo $image;?>" alt="profile-image" >
+						</div>
+						<div class="stu_code" style="text-align:center;">
+							<?php echo $row['stu_code']; ?>
+						</div>
+					</div>
+					<div class="guardian-card-block">
+						<?php 
+							$guardian_photo = $this->baseUrl().'/images/no-profile.png';
+							 if (!empty($row['guardian_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['guardian_photo'])){
+									$guardian_photo = $this->baseUrl().'/images/photo/'.$row['guardian_photo'];
+								}
+							 }
+							 $father_photo = $this->baseUrl().'/images/no-profile.png';
+							 if (!empty($row['father_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['father_photo'])){
+									$father_photo = $this->baseUrl().'/images/photo/'.$row['father_photo'];
+								}
+							 }
+							 $mother_photo = $this->baseUrl().'/images/no-profile.png';
+							 if (!empty($row['mother_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['mother_photo'])){
+									$mother_photo = $this->baseUrl().'/images/photo/'.$row['mother_photo'];
+								}
+							 }
+						?>
+						<?php if(!empty($row['guardian_photo'])){ ?>
+						<div class="photo">
+							<img  src="<?php echo $guardian_photo;?>" alt="profile-image" >
+						</div>
+						<?php }else{?>
+						<div class="photo">
+							<img  src="<?php echo $father_photo;?>" alt="profile-image" >
+						</div>
+						<?php }?>
+						<div class="photo pho1">
+							<img  src="<?php echo $mother_photo;?>" alt="profile-image" >
+						</div>
 					</div>
 				</div>
-			</div>
-		<?php }}?>
+			
+			<?php }}}else if($type==2){?>
+				
+				<style>
+					.card-content-student-printpickup{
+						background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
+						background-size: 100%;background-repeat: no-repeat;	
+						position: relative;			
+						display:inline-block;	
+						float:left;					
+						border:solid 1px #eee;
+						width: 14.5cm; 
+						height:10.3cm; 	
+					}
+					<?php $issue="";$validate="";if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
+						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
+						if(!empty($bgpick['background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
+								$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
+							}
+							$issue=$bgpick['issue'];
+							$validate=$bgpick['validate'];
+						}
+						?>
+					.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
+						background-image: url('<?php echo $imagepick;?>');
+						background-size: 100%;background-repeat: no-repeat;					
+					}
+					<?php }?>
+					.session-block {
+						font-family: Century Gothic,'Khmer OS Battambang';
+						position: absolute;
+						top: 14.3%;
+						left: 115px;
+						color: #fff;
+						font-weight:bold;
+						font-size:13px;
+					}
+					.student-block {
+						font-family: Arial,'Khmer OS Battambang';
+						position: absolute;
+						top: 22.7%;
+						left: 152px;
+						color: #0a074d;
+						font-size:15px;
+						text-align:left;
+						line-height: 19px;
+					}
+					.father-block {
+						font-family: Arial,'Khmer OS Battambang';
+						position: absolute;
+						top: 43.2%;
+						left: 152px;
+						color: #0a074d;
+						font-size:15px;
+						text-align:left;
+						line-height: 19px;
+					}
+					.mother-block {
+						font-family: Arial,'Khmer OS Battambang';
+						position: absolute;
+						top: 63.5%;
+						left: 152px;
+						color: #0a074d;
+						font-size:15px;
+						text-align:left;
+						line-height: 19px;
+					}
+					.teacher-block {
+						font-family: Century Gothic , 'Khmer OS Battambang';
+						position: absolute;
+						top: 81.3%;
+						left: 155px;
+						color: #fff;
+						font-weight:bold;
+						font-size:14px;
+						text-align:left;
+					}
+					.date-block {
+						font-family: Century Gothic , 'Khmer OS Battambang';
+						position: absolute;
+						top: 88%;
+						left: 155px;
+						color: #1a1754;
+						font-size:14px;
+						text-align:left;
+					}
+					
+					.profile-card-block {
+						position: relative;
+					}
+					.profile-card-block .photo {
+						width: initial;
+						position: absolute;
+						top: 75px;
+						left: 3% !important;
+						border: solid 1px #4a4a4a;
+					}
+					.photo img {
+						min-width: 65px;
+						min-height: 70px;
+						max-width: 65px;
+						max-height: 70px;
+					}
+					.profile-card-block .stu_code {
+						text-align:center;
+						min-width: 70.7px;
+						position: absolute;
+						top: 106px;
+						left: 46% !important;
+						font-weight:bold;
+						font-size:15px;
+						color:#000;
+					}
+					.guardian-card-block .photo {
+						width: initial;
+						position: absolute;
+						top: 152px;
+						left: 3% !important;
+						border: solid 1px #4a4a4a;
+					}
+					.guardian-card-block .photo.pho1 {
+						left: 3% !important;
+						top: 229px;
+					}
+				</style>
+			<?php 			
+				$i=0;$margin_work = 3;
+				if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
+				<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1 || $key==2){ echo "margin-top:0px;";}else{ echo "margin-top:4px;";} ?> width:7.3cm;height:9.99cm;line-height: 16.285px;margin-right:10px;color: #3f3f95;font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+					<?php 
+						$image = "";//$this->baseUrl().'/images/no-profile.png';
+						if(!empty($row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							}
+							
+						}
+						$stuname = $row['last_name']." ".$row['stu_enname'];
+						$bgge = $_dbgb->getPickupCardBackground($row['branch_id'],$row['schoolOption']);
+						if (!empty($bgge)){
+							if ($bgge['display_by']==2){
+								$stuname = $row['stu_khname'];
+							}
+						}
+						?>
+					<div class="session-block">
+						<?php echo $row['session']." Class";?>
+					</div>
+					<div class="student-block">
+						<?php echo $stuname;?> <br/>
+						<?php echo $row['stu_code'];?><br/>
+						<?php echo $row['grade'];?>
+					</div>
+					
+					<div class="father-block">
+						<?php echo $row['father_enname'];?> <br/>
+						<?php echo $row['father_phone'];?><br/>
+						<?php if(!empty($row['father_enname'])){echo "Father";}?>
+					</div>
+					
+					<div class="mother-block">
+						<?php echo $row['mother_enname'];?> <br/>
+						<?php echo $row['mother_phone'];?><br/>
+						<?php if(!empty($row['mother_enname'])){echo "Mother";}?>
+					</div>
+					<div class="teacher-block">
+						<?php echo $row['teacher_name'];?> <br/>
+					</div>
+					<div class="date-block">
+						<?php echo date("d-m-Y",strtotime($issue));?> <br/>
+						<?php echo date("d-m-Y",strtotime($validate));?> 
+					</div>
+					
+					<div class="profile-card-block">
+						<div class="photo">
+							<img  src="<?php echo $image;?>"  >
+						</div>
+					</div>
+					<div class="guardian-card-block">
+						<?php 
+							$guardian_photo = "";//$this->baseUrl().'/images/no-profile.png';
+							 if (!empty($row['guardian_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['guardian_photo'])){
+									$guardian_photo = $this->baseUrl().'/images/photo/'.$row['guardian_photo'];
+								}
+							 }
+							 $father_photo = "";//$this->baseUrl().'/images/no-profile.png';
+							 if (!empty($row['father_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['father_photo'])){
+									$father_photo = $this->baseUrl().'/images/photo/'.$row['father_photo'];
+								}
+							 }
+							 $mother_photo = "";//$this->baseUrl().'/images/no-profile.png';
+							 if (!empty($row['mother_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['mother_photo'])){
+									$mother_photo = $this->baseUrl().'/images/photo/'.$row['mother_photo'];
+								}
+							 }
+						?>
+						<?php /* if(!empty($row['guardian_photo'])){ ?>
+						<div class="photo">
+							<img  src="<?php echo $guardian_photo;?>" alt="profile-image" >
+						</div>
+						<?php }else{?>
+						<div class="photo">
+							<img  src="<?php echo $father_photo;?>" alt="profile-image" >
+						</div>
+						<?php }*/?>
+						
+						<div class="photo">
+							<img  src="<?php echo $father_photo;?>"  >
+						</div>
+						
+						<div class="photo pho1">
+							<img  src="<?php echo $mother_photo;?>"   >
+						</div>
+					</div>
+				</div>
+			<?php }}}?>
 		</div>
 		<table width="100%">
 			<tr>
 				<td align="center">
 					<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 					<button dojoType="dijit.form.Button" id="print_pickup" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printPickupCard();">Print Pickup Card</button>
+						type="button" onclick="print();">Print Pickup Card</button>
 				</td>
 			</tr>
 		</table>
@@ -173,10 +395,9 @@ function getKHMonthByNumber(m){
 </div>
 <script type="text/javascript">
 	dojo.ready(function(){
-		print();
+		//print();
 	});
 	function print(){
-
 		loadingBlock();
 	  	 var contents = document.getElementById("PickupCard").innerHTML;
 	 	  var frame1 = document.createElement('iframe');
@@ -200,7 +421,7 @@ function getKHMonthByNumber(m){
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'),null,true);
 			?>
-			window.location.href = '<?php echo $url_copy;?>';
+			//window.location.href = '<?php echo $url_copy;?>';
 	    }, 10000);
 	   return false;
 	}

@@ -2,9 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 ?>	
-
 <script type="text/javascript">
-
 	function convertEnglishToKhmerNumber(num) {
 	    var str = '';        
 	    for (var i = 0; i < num.length; i++) {
@@ -12,9 +10,7 @@
 	    }
 	    return str;
 	}
-	
 	function getKHMonthByNumber(m){
-		//alert(Number(m));
 		var monthName=[
 			"មករា",
 			"កុម្ភៈ",
@@ -70,14 +66,8 @@
 </script>
 <div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog"  align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
-		
 		<div id="print_student_card" >
 			<style>
-					.card-content-student-print{
-						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
-						 background-size: 100%;background-repeat: no-repea
-						 page-break-after:always;					
-					}
 					<?php if(!empty($this->groupByType)) foreach($this->groupByType as $bck){
 						$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
 						$color = "000000";
@@ -174,7 +164,10 @@
 							    font-size: 5px;
 							    font-weight: 700 !important;
 							}
-						div.pagese{ page-break-inside:always; page-break-after:always; }
+						div.pagese{ 
+								/*page-break-inside:always; page-break-after:always;*/
+								display: inline-block;
+								     }
 	</style>
 		<?php $con=4;$i=0; $student= count($this->rs);
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>

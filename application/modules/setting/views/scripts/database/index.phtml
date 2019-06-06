@@ -175,10 +175,10 @@ if(isset($_GET['task'])&& $_GET['task']=='clear'){
 	if(file_exists($file)){
 		if(unlink($file))
 			$this->baseUrl();
-		echo'<script>alert("'.$tr->translate("DELETE_SUCCESS").'"); window.location="'.Zend_Controller_Front::getInstance()->getBaseUrl().'/setting/backupdatabase";</script>';
+		echo'<script>alert("'.$tr->translate("DELETE_SUCCESS").'"); window.location="'.Zend_Controller_Front::getInstance()->getBaseUrl().'/setting/database";</script>';
 	}
 	else {
-		echo"<script>alert('".$tr->translate("Not found already removed")."'); window.location='".Zend_Controller_Front::getInstance()->getBaseUrl()."/setting/backupdatabase';</script>";
+		echo"<script>alert('".$tr->translate("Not found already removed")."'); window.location='".Zend_Controller_Front::getInstance()->getBaseUrl()."/setting/database';</script>";
 	}
 }
 ?>

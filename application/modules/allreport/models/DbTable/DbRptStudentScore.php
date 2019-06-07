@@ -148,9 +148,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			 	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 			 	`g`.`semester` AS `semester`,
 			 	(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
-			 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
-			 	(SELECT $label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
-			 	(SELECT $month FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
+			 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1) AS `room_name`, 
+			 	(SELECT $label FROM `rms_view`	WHERE (`rms_view`.`type` = 4 AND `rms_view`.`key_code` = `g`.`session`) LIMIT 1) AS `session`,
+			 	CASE
+						WHEN s.exam_type = 2 THEN ''
+					ELSE (SELECT $month FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) 
+				END 
+				as for_month,
 			 	s.exam_type,
 			 	s.for_semester,
 			  	s.reportdate

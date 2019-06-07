@@ -17,13 +17,14 @@ class Issue_IndexController extends Zend_Controller_Action {
 					'adv_search' => '',
 					'branch_id' => '',
 					'group' => '',
+					'type_search'=>0,
 					'status_search' => -1,
 				);
 			}
 			$db = new Issue_Model_DbTable_DbCertification();
 			$rs_rows= $db->getAllIssueCertification($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","USER","STATUS");
+			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","TYPE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'index','action'=>'edit',
 			);

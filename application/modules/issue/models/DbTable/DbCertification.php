@@ -11,13 +11,22 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
     function getAllIssueCertification($search){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+    	
+    	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+    	$khmer = $tr->translate("KHMER");
+    	$eng = $tr->translate("ENGLISH");
+    	
     	$sql = "SELECT c.id,
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
 			c.dept_kh,
 			c.from_date,
 			c.to_date,
-			c.issue_date,
+			c.issue_date
+			, CASE
+		   	WHEN  c.type = 1 THEN '$khmer'
+		   	WHEN  c.type = 2 THEN '$eng'
+		   	END AS type,
 			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user 
     	";
     	
@@ -38,6 +47,9 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
 	    }
 	    if(!empty($search['group'])){
 	    	$where.=' AND c.group_id='.$search['group'];
+	    }
+	    if(!empty($search['type_search'])){
+	    	$where.=' AND c.type='.$search['type_search'];
 	    }
 	    if($search['status_search']>-1){
 	    	$where.=' AND c.status='.$search['status_search'];
@@ -68,6 +80,7 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
 					'from_date'		=>$_data['from_date'],
 					'to_date'		=>$_data['to_date'],
 					'issue_date'		=>$_data['issue_date'],
+					'type'		=>$_data['type'],
 					'note'		=>$_data['note'],
 					'create_date'		=>date("Y-m-d H:i:s"),
 					'modify_date'		=>date("Y-m-d H:i:s"),
@@ -111,6 +124,7 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
 					'from_date'		=>$_data['from_date'],
 					'to_date'		=>$_data['to_date'],
 					'issue_date'		=>$_data['issue_date'],
+					'type'		=>$_data['type'],
 					'note'		=>$_data['note'],
 					'modify_date'		=>date("Y-m-d H:i:s"),
 					'status'		=>$_data['status'],

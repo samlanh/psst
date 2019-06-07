@@ -111,6 +111,13 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     	$_status->setMultiOptions($_status_opt);
     	$_status->setValue($request->getParam("status"));
     	
+    	$_type=  new Zend_Dojo_Form_Element_FilteringSelect('type');
+    	$_type->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
+    	$_type_opt = array(
+    			1=>$this->tr->translate("KHMER"),
+    			2=>$this->tr->translate("ENGLISH"));
+    	$_type->setMultiOptions($_type_opt);
+    	
     	$id = new Zend_Form_Element_Hidden('id'); 
 
     	$adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
@@ -145,6 +152,15 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
+    	$_type_search=  new Zend_Dojo_Form_Element_FilteringSelect('type_search');
+    	$_type_search->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
+    	$_type_opt = array(
+    			0=>$this->tr->translate("PLEASE_SELECT"),
+    			1=>$this->tr->translate("KHMER"),
+    			2=>$this->tr->translate("ENGLISH"));
+    	$_type_search->setMultiOptions($_type_opt);
+    	$_type_search->setValue($request->getParam("type_search"));
+    	
     	$_status_search=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
     	$_status_search->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
     	$_status_opt = array(
@@ -178,6 +194,9 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     		
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
+    		
+    		$_type->setValue($data["type"]);
+    		
     		$id->setValue($data["id"]);
     		
     	}
@@ -192,12 +211,14 @@ class Issue_Form_FrmIssueCertificate extends Zend_Dojo_Form
     			$to_date,
     			$issue_date,
     			$note,
+    			$_type,
     			$id,
     			$_status,
     			$adv_search,
     			$start_date,
     			$end_date,
     			$_status_search,
+    			$_type_search,
     			
     			));
     	return $this;

@@ -259,7 +259,7 @@
 								echo $total_score;?></td>
 								<?php 
 									$average=0;
-									if ($rs['total_score']>0){
+									if ($rs['total_score']>0 && $amount_subject>0){
 									$average = number_format($rs['total_score']/$amount_subject,2);//amount_subjectsem
 									}
 								?>

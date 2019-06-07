@@ -258,7 +258,10 @@
 								$total_score = number_format($total_score,2);
 								echo $total_score;?></td>
 								<?php 
+									$average=0;
+									if ($rs['total_score']>0){
 									$average = number_format($rs['total_score']/$amount_subject,2);//amount_subjectsem
+									}
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
 								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
@@ -294,18 +297,18 @@
 							<?php if (!empty($this->studentgroup)){?>
 									<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Fasthand';font-size: 14px">
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT");?>  : <?php echo $i." ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php echo $f." ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
+											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT");?>  : <?php if ($i>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));}else{ echo $dbgb->getNumberInkhmer($i);} echo " ".$tr->translate("STUDENT_UNIT");?></td>
+											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php if ($f>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$f));}else{ echo $dbgb->getNumberInkhmer($f);} echo " ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
 											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">សិស្សជាប់មធ្យមភាគ  : <?php echo $count_pass." ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php echo $pass_female." ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
+											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">សិស្សជាប់មធ្យមភាគ  : <?php if ($count_pass>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));}else{ echo $dbgb->getNumberInkhmer($count_pass);} echo " ".$tr->translate("STUDENT_UNIT")?></td>
+											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php if ($pass_female){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$pass_female));}else{ echo $dbgb->getNumberInkhmer($pass_female);} echo " ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
 											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">សិស្សក្រោមមធ្យមភាគ : <?php echo $count_fail." ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?> : <?php echo $fail_female." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</td>
+											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">សិស្សក្រោមមធ្យមភាគ : <?php if ($count_fail>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));}else{ echo $dbgb->getNumberInkhmer($count_fail);} echo " ".$tr->translate("STUDENT_UNIT");?></td>
+											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?> : <?php if ($fail_female>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$fail_female));}else{ echo $dbgb->getNumberInkhmer($fail_female);} echo " ".$tr->translate("STUDENT_UNIT");?>&nbsp;</td>
 											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
 										</tr>
 										<tr>

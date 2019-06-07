@@ -443,6 +443,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	g.branch_id,
 			    $semester as for_semester,
 				(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
+				(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS school_nameen,
+				(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS school_namekh,
 			   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
 			   	(SELECT CONCAT(from_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS start_year,
 			   	(SELECT CONCAT(to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS end_year,
@@ -461,6 +463,16 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   					AND s.exam_type=2
 			   					AND sm.student_id=gs.stu_id 
 			   			LIMIT 1) AS max_score,
+			   	(SELECT s.date_input 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=$semester
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=2
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1) AS date_input,
 			   	(SELECT sm.total_avg 
 			   		FROM `rms_score_monthly` AS sm,
 			   			  rms_score s

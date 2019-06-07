@@ -1,6 +1,5 @@
-<?php
+<?php 
 class Foundation_LecturerController extends Zend_Controller_Action {
-	const REDIRECT_URL = '/foundation/lecturer';
     public function init()
     {    	
      /* Initialize action controller here */
@@ -10,7 +9,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Foundation_Model_DbTable_DbTeacher();
+			$db = new Global_Model_DbTable_DbTeacher();
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
@@ -35,7 +34,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","TYPE",
 					"NATIONALITY","DEGREE","TEACHER_TYPE","POSITION","PHONE","EMAIL","NOTE","SCHOOL_OPTION","STATUS");
-			$link=array('module'=>'foundation','controller'=>'lecturer','action'=>'edit',);
+			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -52,20 +51,20 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			if (empty($_data)){
-				Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !",self::REDIRECT_URL."/index");
+				Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/global/lecturer");
 				exit();
 			}
 			try {
 				$sms="INSERT_SUCCESS";
-				$dbmodel = new Foundation_Model_DbTable_DbTeacher();
+				$dbmodel = new Global_Model_DbTable_DbTeacher();
 				$id = $dbmodel->AddNewStaff($_data);
 				if($id==-1){
 					$sms = "RECORD_EXIST";
 				}
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL."/index");
+					Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer');
 				} 
-				Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL."/add");
+				Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer/add');
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -89,10 +88,10 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->department_type = $row;
 		
-		$_db = new Foundation_Model_DbTable_DbTeacher();
+		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
 		
-		$tsub=new Foundation_Form_FrmTeacher();
+		$tsub=new Global_Form_FrmTeacher();
 		$frm_techer=$tsub->FrmTecher();
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_techer = $frm_techer;
@@ -107,13 +106,13 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				if (empty($data)){
-					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !",self::REDIRECT_URL."/index");
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/global/lecturer");
 					exit();
 				}
 				$data['id'] = $id;
-				$db = new Foundation_Model_DbTable_DbTeacher();
+				$db = new Global_Model_DbTable_DbTeacher();
 				$db->updateStaff($data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS",self::REDIRECT_URL."/index");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/lecturer");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -136,18 +135,18 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->department_type = $rows;
 		
-		$_db = new Foundation_Model_DbTable_DbTeacher();
+		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
 		$this->view->row = $_db->getTeacherDocumentById($id);
 		
 		$row = $_db->getTeacherById($id);
 		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/global/lecturer");
 			exit();
 		}
 		$this->view->rs = $row;
 		
-		$tsub = new Foundation_Form_FrmTeacher();
+		$tsub = new Global_Form_FrmTeacher();
 		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
@@ -165,12 +164,12 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				if (empty($data)){
-					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !",self::REDIRECT_URL."/index");
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/global/lecturer");
 					exit();
 				}
 				$data['id'] = $id;
 			
-				$db = new Foundation_Model_DbTable_DbTeacher();
+				$db = new Global_Model_DbTable_DbTeacher();
 				$idss = $db->AddNewStaff($data);
 				$sms = "COPY_SUCCESS";
 				if($idss==-1){
@@ -199,13 +198,13 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->department_type = $row;
 	
-		$_db = new Foundation_Model_DbTable_DbTeacher();
+		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
 		$this->view->row = $_db->getTeacherDocumentById($id);
 	
 		$row = $_db->getTeacherById($id);
 		$this->view->rs = $row;
-		$tsub = new Foundation_Form_FrmTeacher();
+		$tsub = new Global_Form_FrmTeacher();
 		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
@@ -213,7 +212,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbTeacher();
+			$db = new Global_Model_DbTable_DbTeacher();
 			$id = $db->addNewPosition($data);
 			print_r(Zend_Json::encode($id));
 			exit();
@@ -237,7 +236,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	function getdepartmentAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbTeacher();
+			$db = new Global_Model_DbTable_DbTeacher();
 			$row = $db->getAllDepartment();
 			array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 			print_r(Zend_Json::encode($row));
@@ -247,7 +246,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	
 	public function viewAction(){
 		$id=$this->getRequest()->getParam("id");
-		$db= new Foundation_Model_DbTable_DbTeacher();
+		$db= new Global_Model_DbTable_DbTeacher();
 		$this->view->rs = $db->getViewById($id);
 	}
 	function getTeacherIdAction(){
@@ -259,6 +258,4 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 }
-

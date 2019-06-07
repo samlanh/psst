@@ -14,7 +14,6 @@
 				$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
 				}
 	}
-	//print_r($image); exit();
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="dojo/method" event="onSubmit">			
@@ -52,9 +51,7 @@ dojo.require("dijit.form.NumberTextBox");
 dojo.ready(function(){
 	 
 }); 
- 
 </script>
-<table width="100%">
 <div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
 		<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
 			<i class="fa fa-print"></i>
@@ -73,7 +70,6 @@ dojo.ready(function(){
 			</div>
 		</div>
 </div>
-</table>
 <div style="background: #fff;width: 27cm;margin: 0 auto;min-height: 25cm; padding: 0.5cm;">
 <div id="divPrint">
 			<style>
@@ -245,4 +241,3 @@ function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
 </script>
-

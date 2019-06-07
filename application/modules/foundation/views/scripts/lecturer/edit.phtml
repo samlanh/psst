@@ -61,7 +61,7 @@ input.btn_borwse_image {
     			<div class="clearfix"></div>
     		</div>
     	</div>
-    	<form id='frm_add_tran' action="" 
+    	<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'edit')); ?>" 
 			dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -743,7 +743,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	</div>
 </div>
 <script type="text/javascript">
-	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
+	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
 	function getTeacherID(){
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id!=""){
@@ -906,13 +906,13 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				return false;
 			}	
 			dijit.byId("save_close").attr("disabled",true);		
-			var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>';
+			var url_submit = '<?php echo $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'add')); ?>';
 			dojo.xhrPost({
 			    url: url_submit,	
 				form: dojo.byId("frm_add_tran"),		    
 				load: function(data) {
 					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-					window.location.href ="<?php echo $this->baseUrl();?>/global/lecturer";
+					window.location.href ="<?php echo $this->baseUrl();?>/foundation/lecturer";
 				},
 				error: function(e) {
 				}
@@ -1013,7 +1013,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				});
 			}
 		}
-	var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"add-doctype")); ?>';
+		var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"add-doctype")); ?>';
 	function addDocType(){
 		if(dijit.byId('frm_doc_type').validate()){
 			dijit.byId("save_doc_type").attr("disabled",true);

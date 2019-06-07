@@ -46,25 +46,25 @@
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 			<tr>
 				<td>	
-						<?php
-							 $show=1; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;$female=0;
-							 $duplicate=0;$count_pass=0;
-							 $rank="";
-							 $rank1="";
-							 $rank2="";
-							 $rank3="";
-							 $rank4="";
-							 $rank5="";
-							 
-							 if (!empty($this->all_student)){
-							 	foreach($this->all_student as $key=> $rs){
-							 		if($rs['sex']==1){
-							 			$sex = $tr->translate("MALE");
-							 		}else{
-							 			$sex = $tr->translate("FEMALE");
-							 			$female++;
-							 		}
-							 }}
+				<?php
+					 $show=1; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;$female=0;
+					 $duplicate=0;$count_pass=0;
+					 $rank="";
+					 $rank1="";
+					 $rank2="";
+					 $rank3="";
+					 $rank4="";
+					 $rank5="";
+					 
+					 if (!empty($this->all_student)){
+					 	foreach($this->all_student as $key=> $rs){
+					 		if($rs['sex']==1){
+					 			$sex = $tr->translate("MALE");
+					 		}else{
+					 			$sex = $tr->translate("FEMALE");
+					 			$female++;
+					 		}
+					 	}}
 							 
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){
 								if($rs['total_score']==$old_totalscore){
@@ -140,10 +140,9 @@
 								<td align="center" style="font-family: Khmer OS Muol Light;font-size: 22px;">
 									<span style="font-size: 25px;">តារាងកិត្តិយស </span><br />
 									ប្រចាំខែ <?php echo $this->studentgroup[0]['for_month'];?><br />
-									ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
-									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?>
+									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?><br />
+									ឆ្នាំសិក្សា  <label id="academic_year"></label>
 								</td>
-								
 								<script type="text/javascript">
 									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
 									dojo.byId('academic_year').innerHTML=year;

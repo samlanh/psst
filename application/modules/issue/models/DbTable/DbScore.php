@@ -214,21 +214,23 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if ($currentLang==1){
 			$colunmname='title';
 		}
-		
 		$sql="SELECT s.id,
 			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
 			s.title_score,
 			(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
 			s.for_semester,
-			(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
+			CASE
+				WHEN s.exam_type = 2 THEN ''
+			ELSE (SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+			END 
+			as for_month,
 			s.max_score,
 			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
 			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
-				";
+			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name` ";
 		$sql.=$dbp->caseStatusShowImage("s.status");
 		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1  ";
 		
@@ -253,17 +255,26 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if(!empty($search['grade'])){
 			$where.=" AND `g`.`grade` =".$search['grade'];
 		}
-		if(!empty($search['session'])){
-			$where.=" AND `g`.`session` =".$search['session'];
-		}
-		if(!empty($search['room'])){
-			$where.=" AND `g`.`room_id` =".$search['room'];
-		}
+// 		if(!empty($search['session'])){
+// 			$where.=" AND `g`.`session` =".$search['session'];
+// 		}
+// 		if(!empty($search['room'])){
+// 			$where.=" AND `g`.`room_id` =".$search['room'];
+// 		}
 		if(!empty($search['group'])){
 			$where.=" AND `s`.`group_id` =".$search['group'];
 		}
 		if(!empty($search['branch_id'])){
 			$where.=" AND `s`.`branch_id` =".$search['branch_id'];
+		}
+		if($search['for_month']>0){
+			$where.=" AND s.for_month =".$search['for_month'];
+		}
+		if($search['exam_type']>0){
+			$where.= " AND s.exam_type =".$search['exam_type'];
+		}
+		if($search['for_semester']>0){
+			$where.= " AND s.for_semester =".$search['for_semester'];
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		$order=" ORDER BY id DESC ";
@@ -358,14 +369,15 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT 
 					gsjd.*,
+					(SELECT max_score FROM `rms_dept_subject_detail` WHERE subject_id=gsjd.subject_id AND dept_id=g.degree LIMIT 1) AS max_subjectscore,
 					(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
 					(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 					(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
 					(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
 					(gsjd.amount_subject) amtsubject_month,
 					(gsjd.amount_subject_sem) amtsubject_semester,
-					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
-					(select dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id) as max_score
+					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
+					
 				FROM 
 			 		rms_group_subject_detail AS gsjd ,
 			 		rms_group as g

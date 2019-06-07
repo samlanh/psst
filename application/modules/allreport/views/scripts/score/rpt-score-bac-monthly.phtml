@@ -74,12 +74,6 @@ table.tb-footer tr.style-head {
 			</select>
     	</div>
     	<div class="col-md-2 col-sm-2 col-xs-12">
-    		<?php echo $frm->getElement("session");?>
-    	</div>
-    	<div class="col-md-2 col-sm-2 col-xs-12">
-    		<?php echo $frm->getElement("room");?>
-    	</div>
-    	<div class="col-md-2 col-sm-2 col-xs-12">
     		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" autoComplete="false" queryExpr="*${0}*">								
 				<option><?php echo $tr->translate("CHOOSE");?></option>
 				<?php if(!empty($this->month)){foreach ($this->month as $month){?>
@@ -87,6 +81,13 @@ table.tb-footer tr.style-head {
 				<?php }}?>
 			</select>
     	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("session");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("room");?>
+    	</div>
+    	
     	<div class="col-md-2 col-sm-2 col-xs-12">
     		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
     	</div>

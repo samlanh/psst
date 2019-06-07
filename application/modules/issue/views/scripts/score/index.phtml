@@ -23,13 +23,33 @@
 				    <div class="col-md-2 col-sm-2 col-xs-12"> <input id="group" /></div>
 				    <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("degree");?></div>
 				    <div class="col-md-2 col-sm-2 col-xs-12"> <input id="grade" /></div>
-				  </div>
-				  <div class="form-group"> 
-			  		<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("session");?></div>
-			  		<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("room");?></div>
+			  </div>
+			  <div class="form-group"> 
+			  		<div class="col-md-2 col-sm-2 col-xs-12">
+			    		<select id="exam_type" name="exam_type" class="fullside" dojoType="dijit.form.FilteringSelect" >
+					   		<option value="-1"><?php echo $tr->translate("RESULT_TYPE");?></option>
+					   		<option value="1" <?php if($this->search['exam_type']==1){echo "selected='selected'";}?>><?php echo $tr->translate("MONTHLY");?></option>
+					   		<option value="2" <?php if($this->search['exam_type']==2){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER");?></option>
+					   	</select>
+			    	</div>
+			    	<div class="col-md-2 col-sm-2 col-xs-12">
+			    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" autoComplete="false" queryExpr="*${0}*">	
+			    			<option value="-1"><?php echo $tr->translate("FOR_SEMESTER");?></option>							
+							<option value="1" <?php if($this->search['for_semester']==1){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
+							<option value="2" <?php if($this->search['for_semester']==2){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
+						</select>
+			    	</div>
+			    	<div class="col-md-2 col-sm-2 col-xs-12">
+			    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" autoComplete="false" queryExpr="*${0}*">								
+							<option><?php echo $tr->translate("CHOOSE_MONTH");?></option>
+							<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+								<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month']?></option>
+							<?php }}?>
+						</select>
+			    	</div>
 			  		<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
 			 		<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div>
-					<div class="col-md-4 col-sm-4 col-xs-12"> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></div>
+					<div class="col-md-2 col-sm-2 col-xs-12"> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></div>
 				</div>
 			</form>
 		</div>

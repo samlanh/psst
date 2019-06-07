@@ -112,6 +112,7 @@
 												<th><?php echo $tr->translate("DEL");?></th>
 												<th><?php echo $tr->translate("N_O");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+												<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>
@@ -143,6 +144,7 @@
 												<option value="<?php echo $comment['id']?>"><?php echo $comment['comment']?></option>
 											<?php }}?>
 										</select>
+										<input type="hidden" name="identity1" id="identity1"  />
 									</div>
 								</div>
 								<div class="form-group">
@@ -157,9 +159,7 @@
 												</tr>
 											</thead>
 											<tbody id="table_row_comment">
-											
 											</tbody>
-											<input type="hidden" name="identity1" id="identity1"  />
 										</table>
 									</div>
 								</div>
@@ -248,6 +248,7 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
+		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_IN_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_SHORT");?></th>';
@@ -258,6 +259,7 @@ function addRow() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');popupsubject('+col+');" >'+subject+'</select></td>';
+		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'"  value="0" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
@@ -361,6 +363,7 @@ function Initailize() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
+		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_IN_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_SHORT");?></th>';
@@ -371,6 +374,7 @@ function Initailize() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');" >'+subjectold+'</select></td>';
+		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="" type="text"></td>';
@@ -388,6 +392,7 @@ function Initailize() {
 	});
 	dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 	dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
+	dijit.byId('max_score'+col).attr('value','<?php echo $rows['max_score'];?>');
 	dijit.byId('scoreinclass_'+col).attr('value','<?php echo $rows['score_in_class'];?>');
 	dijit.byId('scoreoutclass_'+col).attr('value','<?php echo $rows['score_out_class'];?>');
 	dijit.byId('scoreshort_'+col).attr('value','<?php echo $rows['score_short'];?>');

@@ -331,7 +331,7 @@ function filterStudent(){
 					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input required="1" class="fullside" onKeyUp="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /><input dojoType="dijit.form.TextBox" value="'+subject[j].max_score+'" name="max_score_'+inx+'_'+subject[j].subject_id+'" id="max_score_'+inx+'_'+subject[j].subject_id+'" type="hidden" ></td>';
+						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" onblur="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
@@ -359,12 +359,6 @@ function filterStudent(){
 	});
 	HideloadingBlock();
 }
-function checkScore(index,subject_id){
-	score_input = dijit.byId('score_'+index+'_'+subject_id).get('value');
-	max_score = dijit.byId('max_score_'+index+'_'+subject_id).get('value');
-	if(score_input>max_score){
-	}
-}
 function CheckSubjectExam(subject_id){
 	var rowId = $('#identity').val();
 	var amountsub = $(".checkbox:checked").length;
@@ -386,7 +380,6 @@ function CheckSubjectExam(subject_id){
 				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
-				
 			}
 		}
 	}
@@ -435,7 +428,6 @@ function getInfoBygroup(){
 			dijit.byId('grade').set('value',data.grade);
 			dijit.byId('grade').set('readOnly',true);
 			dijit.byId('grade_fromgrouop').set('value',data.grade);
-			
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
 		},

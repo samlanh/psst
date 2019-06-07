@@ -113,6 +113,7 @@
 						$arr = array(
 								'dept_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
+								'max_score'		=> $_data['max_score'.$i],
 								'score_in_class'=> $_data['scoreinclass_'.$i],
 								'score_out_class'=> $_data['scoreoutclass_'.$i],
 								'score_short'	=> $_data['scoreshort_'.$i],
@@ -211,10 +212,10 @@
 							$arr = array(
 									'dept_id'		=>$id,
 									'subject_id'	=>$_data['subject_study_'.$i],
+									'max_score'		=> $_data['max_score'.$i],
 									'score_in_class'=>$_data['scoreinclass_'.$i],
 									'score_out_class'=>$_data['scoreoutclass_'.$i],
 									'score_short'	=>$_data['scoreshort_'.$i],
-									//'status'    	=> $_data['status_'.$i],
 									'note'   		=> $_data['note_'.$i],
 									'date' 			=> date("Y-m-d"),
 									'user_id'		=> $this->getUserId()
@@ -225,10 +226,10 @@
 							$arr = array(
 									'dept_id'		=>$id,
 									'subject_id'	=>$_data['subject_study_'.$i],
+									'max_score'		=> $_data['max_score'.$i],
 									'score_in_class'=>$_data['scoreinclass_'.$i],
 									'score_out_class'=>$_data['scoreoutclass_'.$i],
 									'score_short'	=>$_data['scoreshort_'.$i],
-									//'status'    	=> $_data['status_'.$i],
 									'note'   		=> $_data['note_'.$i],
 									'date' 			=> date("Y-m-d"),
 									'user_id'		=> $this->getUserId()

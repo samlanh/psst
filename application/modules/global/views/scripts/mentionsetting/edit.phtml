@@ -183,7 +183,7 @@ function addRow() {
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.NumberTextBox" class="fullside" id="max_score'+col+'" name="max_score'+col+'" placeholder="'+'<?php echo $tr->translate("MAX_SCORE")." ";?> " value="" type="text"  ></td>';	
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_grade'+col+'" name="metion_grade'+col+'" placeholder="'+'<?php echo $tr->translate("METION_GRADE")." ";?> " value="" type="text"  ></td>';	
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_khmer'+col+'" name="metion_khmer'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_KHMER")." ";?> " value="" type="text"  ></td>';	
-		template+='<td width="10%"><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." ";?> " value="" type="text"  ></td>';	
+		template+='<td width="10%"><input  dojoType="dijit.form.TextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." ";?> " value="" type="text"  ></td>';	
 		
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -217,7 +217,7 @@ function addRow() {
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.NumberTextBox" class="fullside" id="max_score'+col+'" name="max_score'+col+'" placeholder="'+'<?php echo $tr->translate("MAX_SCORE")." ";?> " value="<?php echo $rs['max_score'];?>" type="text"  ></td>';	
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_grade'+col+'" name="metion_grade'+col+'" placeholder="'+'<?php echo $tr->translate("METION_GRADE")." ";?> " value="<?php echo $rs['metion_grade'];?>" type="text"  ></td>';	
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_khmer'+col+'" name="metion_khmer'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_KHMER")." ";?> " value="<?php echo $rs['metion_in_khmer'];?>" type="text"  ></td>';	
-		template+='<td width="10%"><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." ";?> " value="<?php echo $rs['mention_in_english'];?>" type="text"  ><input type="hidden" dojoType="dijit.form.TextBox" name="detailid'+col+'" id="detailid'+col+'" value="<?php echo $rs['id'];?>" ></td>';	
+		template+='<td width="10%"><input  dojoType="dijit.form.TextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." ";?> " value="<?php echo $rs['mention_in_english'];?>" type="text"  ><input type="hidden" dojoType="dijit.form.TextBox" name="detailid'+col+'" id="detailid'+col+'" value="<?php echo $rs['id'];?>" ></td>';	
 		
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";

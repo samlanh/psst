@@ -521,6 +521,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	g.`semester` AS `semester`,
 			   	g.branch_id,
 			    (SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
+			    (SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS school_nameen,
+				(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS school_namekh,
 			   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
 			   	(SELECT CONCAT(from_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS start_year,
 			   	(SELECT CONCAT(to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS end_year,
@@ -529,19 +531,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id=g.teacher_id LIMIT 1) AS teacher_name,
-			   	
-			   	(SELECT sm.total_avg 
-			   		FROM `rms_score_monthly` AS sm,
-			   			  rms_score s
-			   			WHERE 
-			   					s.id = sm.score_id 
-			   					AND s.for_semester=1
-			   					AND s.`group_id`=$group_id
-			   					AND s.exam_type=2
-			   					AND sm.student_id=gs.stu_id 
-			   			LIMIT 1) AS avg_forsemester1,
-			   			
-			   	(SELECT AVG(sm.total_avg) 
+			   	(SELECT s.date_input 
 			   		FROM `rms_score_monthly` AS sm,
 			   			  rms_score s
 			   			WHERE 
@@ -550,9 +540,40 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   					AND s.`group_id`=$group_id
 			   					AND s.exam_type=1
 			   					AND sm.student_id=gs.stu_id 
-			   			LIMIT 1) AS avg_formonthsemester1,
+			   			LIMIT 1) as date_input,
+			   (SELECT s.max_score 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=1
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=1
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1) as max_score,
+			   	IFNULL((SELECT sm.total_avg 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=1
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=2
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1),0) AS avg_forsemester1,
 			   			
-			   	(SELECT sm.total_avg 
+			   	IFNULL((SELECT AVG(sm.total_avg) 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=1
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=1
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1),0) AS avg_formonthsemester1,
+			   			
+			   	IFNULL((SELECT sm.total_avg 
 			   		FROM `rms_score_monthly` AS sm,
 			   			  rms_score s
 			   			WHERE 
@@ -561,9 +582,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   					AND s.`group_id`=$group_id
 			   					AND s.exam_type=2
 			   					AND sm.student_id=gs.stu_id 
-			   			LIMIT 1) AS avg_forsemester2,
+			   			LIMIT 1),0) AS avg_forsemester2,
 			   			
-			   	(SELECT AVG(sm.total_avg) 
+			   	IFNULL((SELECT AVG(sm.total_avg) 
 			   		FROM `rms_score_monthly` AS sm,
 			   			  rms_score s
 			   			WHERE 
@@ -572,7 +593,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   					AND s.`group_id`=$group_id
 			   					AND s.exam_type=1
 			   					AND sm.student_id=gs.stu_id 
-			   			LIMIT 1) AS avg_formonthsemester2
+			   			LIMIT 1),0) AS avg_formonthsemester2
 			   	FROM
 				   	`rms_student` AS st,
 				   	`rms_group` AS g,
@@ -583,7 +604,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	AND g.id = $group_id ";
    		$where='';
    		$order = "GROUP BY gs.`stu_id` ORDER BY ((((avg_forsemester1+avg_formonthsemester1)/2)+((avg_forsemester2+avg_formonthsemester2)/2))/2) DESC,g.academic_year,g.semester ASC ";
-   	return $db->fetchAll($sql.$where.$order);
+   	
+   		return $db->fetchAll($sql.$where.$order);
    }
    public function getAcadimicByStudentHeader($group_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ក្បាល I+II
    	$db = $this->getAdapter();

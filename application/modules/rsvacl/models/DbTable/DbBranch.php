@@ -69,6 +69,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'displayby'		=>2,
 	    			'photo'   	    => $photo,
 	    			'schooloptionlist'		=>$schooloption,
+	    			'color'			=>$_data['color'],
 	    			);
 // 	    	$check = $this->getCheckHasBranch();
 // 	    	if (empty($check)){
@@ -137,6 +138,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'status'		=>$_data['branch_status'],
     			'displayby'		=>2,
     			'schooloptionlist'		=>$schooloption,
+    			'color'			=>$_data['color'],
     			);
     	if (!empty($name)){
     		$ss = 	explode(".", $name);

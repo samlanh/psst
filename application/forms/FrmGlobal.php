@@ -94,7 +94,7 @@ class Application_Form_FrmGlobal{
 		}
 		$rs = $db->getBranchInfo($branch_id);
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
-		
+		$color = empty($rs['color'])?"":"#".$rs['color'];
 		$str="<table width='100%'>
 				<tr>
 					<td width='20%' align='center'>
@@ -102,7 +102,7 @@ class Application_Form_FrmGlobal{
 					</td>
 					<td width='80%' valign='top'>
 						<div class='schoo-headkh' style='text-align: center;'>
-							<h2 style='padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px;background: #2e3192;color: #fff;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
+							<h2 style='padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px;background: $color;color: #fff;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
 						</div>
 						<table width='100%' >
 							<tr>

@@ -69,7 +69,30 @@ class IndexController extends Zend_Controller_Action
 					$session_user->branch_id= $user_info['branch_id'];
 					$session_user->branch_list= $user_info['branch_list'];
 					$session_user->schoolOption= $user_info['schoolOption'];
-						
+
+					$db = new Application_Model_DbTable_DbUsers();
+					$creditmemo = $db->getAccessUrl("accounting","creditmemo","index");
+					if (empty($creditmemo)){
+						$session_user->isnot_creditmemo_acl= 1;
+					}
+					$lecturer_acl = $db->getAccessUrl("foundation","lecturer","index");
+					if (empty($lecturer_acl)){
+						$session_user->isnot_lecturer_acl= 1;
+					}
+					$student_acl = $db->getAccessUrl("foundation","register","index");
+					if (empty($student_acl)){
+						$session_user->isnot_student_acl= 1;
+					}
+					$cutstock_acl = $db->getAccessUrl("stock","cutstock","index");
+					if (empty($cutstock_acl)){
+						$session_user->isnot_cutstock_acl= 1;
+					}
+					
+					$crm_acl = $db->getAccessUrl("home","crm","index");
+					if (empty($crm_acl)){
+						$session_user->isnot_crm_acl= 1;
+					}
+					
 					$session_user->lock();
 					$log=new Application_Model_DbTable_DbUserLog();
 					$log->insertLogin($user_id);

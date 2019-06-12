@@ -37,16 +37,32 @@ $teacher_id = $session_t->teacher_id;
 	}
 	
 	$dbNotification = new Application_Model_DbTable_DbNotification();
-	$stu_doc = $dbNotification->getStuDocumentAlert();
-	$teacher_doc = $dbNotification->getTeachDocumentAlert();
-	$stuproduct = $dbNotification->getStuProductAlert();
-	$stuproductNew = $dbNotification->getStuProductAlert(1);
+	$teacher_doc = array();
+	if (empty($session_user->isnot_lecturer_acl)){
+		$teacher_doc = $dbNotification->getTeachDocumentAlert();
+	}
+	$stuproduct = array();
+	$stuproductNew = array();
+	if (empty($session_user->isnot_cutstock_acl)){
+		$stuproduct = $dbNotification->getStuProductAlert();
+		$stuproductNew = $dbNotification->getStuProductAlert(1);
+	}
+	$crmNotif = array();
+	$stu_doc = array();
+	if (empty($session_user->isnot_student_acl)){
+		$stu_doc = $dbNotification->getStuDocumentAlert();
+		$stu_nogroup = $dbNotification->getStudentNotYetGroup();
+	}
 	
-	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
-	
+	$crmNotif = array();
+	if (empty($session_user->isnot_crm_acl)){
 	$crmNotif = $dbNotification->getCrmNextContactNoti();
+	}
 	
-	$creditNotif = $dbNotification->getCreditMemoNearExpired();
+	$creditNotif = array();
+	if (empty($session_user->isnot_creditmemo_acl)){
+		$creditNotif = $dbNotification->getCreditMemoNearExpired();
+	}
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -225,6 +241,7 @@ $teacher_id = $session_t->teacher_id;
 					                    </li>
 				                  </ul>
 				                </li>
+				                 <?php if(!empty($crmNotif)){?>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("CRM For Follow Up");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-globe "></i>
@@ -234,7 +251,6 @@ $teacher_id = $session_t->teacher_id;
 						                 <li class=" event title">
 						                  	<h4><i class="fa fa-phone "></i> <?php echo $tr->translate("CRM For Follow Up");?></h4>
 						                  </li>
-						                  <?php if(!empty($crmNotif)){?>
 						                  	<?php foreach($crmNotif as $key=> $crmn){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'crm','action'=>'contact'), null, true)."/id/".$crmn['crm_id'];
 					                          	$style="";
@@ -256,9 +272,10 @@ $teacher_id = $session_t->teacher_id;
 				                            </a>
 				                          </li>
 				                          	<?php }?>
-						                  <?php }?>
 						               </ul>
 					            </li>
+					            <?php }?>
+					            <?php if(!empty($stu_nogroup)){?>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
@@ -268,7 +285,6 @@ $teacher_id = $session_t->teacher_id;
 						                 <li class=" event title">
 						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?></h4>
 						                  </li>
-						                  <?php if(!empty($stu_nogroup)){?>
 						                  	<?php foreach($stu_nogroup as $key=> $stunogro){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$stunogro['stu_id'];
 					                          	$style="";
@@ -296,7 +312,7 @@ $teacher_id = $session_t->teacher_id;
 				                            </a>
 				                          </li>
 				                          	<?php }?>
-						                  <?php }?>
+						                  
 						                  <?php if (count($stu_nogroup)>9){?>
 						                  <li>
 						                      <div class="text-center">
@@ -309,6 +325,10 @@ $teacher_id = $session_t->teacher_id;
 						                   <?php }?>
 						               </ul>
 					            </li>
+					            <?php }?>
+					            <?php $all_studpro = (count($stuproduct)+count($stuproductNew));
+					            	if ($all_studpro>0){
+					            ?>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("STUDENT_PRODUCT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-cubes "></i>
@@ -395,6 +415,8 @@ $teacher_id = $session_t->teacher_id;
 						                  <?php }?>
 						              </ul>
 						         </li>
+						         <?php }?>
+						         <?php if(!empty($stu_doc)){?>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("STUDENT_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
@@ -404,7 +426,6 @@ $teacher_id = $session_t->teacher_id;
 						                 <li class=" event title">
 						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("STUDENT_DOCUMENT");?></h4>
 						                  </li>
-						                  <?php if(!empty($stu_doc)){?>
 						                  	<?php foreach($stu_doc as $key=> $rsdoc){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rsdoc['stu_id'];
 					                          	$style="";
@@ -439,7 +460,6 @@ $teacher_id = $session_t->teacher_id;
 				                            </a>
 				                          </li>
 				                          	<?php }?>
-						                  <?php }?>
 						                  <?php if (count($stu_doc)>15){?>
 						                  <li>
 						                      <div class="text-center">
@@ -452,6 +472,8 @@ $teacher_id = $session_t->teacher_id;
 						                   <?php }?>
 						               </ul>
 					            </li>
+					             <?php }?>
+					             <?php if(!empty($teacher_doc)){?>
 					            <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("TEACHER_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
@@ -461,9 +483,8 @@ $teacher_id = $session_t->teacher_id;
 						                 <li class=" event title">
 						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("TEACHER_DOCUMENT");?></h4>
 						                  </li>
-						                  <?php if(!empty($teacher_doc)){?>
 						                  	<?php foreach($teacher_doc as $key=> $rsdoc){
-				                          	$url = $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
+				                          	$url = $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
 					                          	$style="";
 					                          	if (!empty($rsdoc['branch_logo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rsdoc['branch_logo'])) {
@@ -494,7 +515,7 @@ $teacher_id = $session_t->teacher_id;
 				                            </a>
 				                          </li>
 				                          	<?php }?>
-						                  <?php }?>
+						                 
 						                  <?php if (count($teacher_doc)>15){?>
 						                  <li>
 						                      <div class="text-center">
@@ -507,6 +528,8 @@ $teacher_id = $session_t->teacher_id;
 						                   <?php }?>
 						               </ul>
 					            </li>
+					             <?php }?>
+					            <?php if(!empty($creditNotif)){?>
 					            <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("Credit Memo Expired");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-credit-card "></i>
@@ -516,7 +539,6 @@ $teacher_id = $session_t->teacher_id;
 						                 <li class=" event title">
 						                  	<h4><i class="fa fa-credit-card "></i> <?php echo $tr->translate("Credit Memo Expired");?></h4>
 						                  </li>
-						                  <?php if(!empty($creditNotif)){?>
 						                  	<?php foreach($creditNotif as $key=> $rscrd){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rscrd['id'];
 					                          	$style="";
@@ -550,7 +572,7 @@ $teacher_id = $session_t->teacher_id;
 				                            </a>
 				                          </li>
 				                          	<?php }?>
-						                  <?php }?>
+						                  
 						                  <?php if (count($creditNotif)>15){?>
 						                  <li>
 						                      <div class="text-center">
@@ -563,6 +585,7 @@ $teacher_id = $session_t->teacher_id;
 						                   <?php }?>
 						               </ul>
 					            </li>
+					            <?php }?>
 				              <li class="">
 				                  	<a onclick="dijit.byId('popupCalculator').show();" href="javascript:;" title="<?php echo $tr->translate("CALCULATOR");?>"  class="user-profile " >
                                         <i class="fa fa-calculator"></i>

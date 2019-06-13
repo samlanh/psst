@@ -130,6 +130,7 @@ display: table-cell !important;
 									<td><?php echo $tr->translate("GROUP");?></td>
 									<td><?php echo $tr->translate("DEGREE");?></td>
 									<td><?php echo $tr->translate("ISSUE_DATE");?></td>
+									<td><?php echo $tr->translate("USER");?></td>
 								</tr>
 							</thead>
 							
@@ -144,6 +145,7 @@ display: table-cell !important;
 								 	<td align="center"><?php echo $rs['group_code'];?></td>
 								 	<td><?php echo $rs['dept_kh'];?></td>
 								 	<td align="center"><?php echo date("d-M-Y",strtotime($rs['issue_date']));?></td>
+									<td><?php echo $rs['user'];?></td>
 								 </tr>
 								 <?php }?>
 							</tbody>

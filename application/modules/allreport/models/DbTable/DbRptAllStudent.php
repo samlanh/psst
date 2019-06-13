@@ -1611,7 +1611,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				st.stu_khname,
 				st.stu_code,
 				$stu_name AS stu_name,
-				(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+				(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex,
+				(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
 			FROM 
 				`rms_issuecertificate_detail` AS cd,
 				rms_student AS st,
@@ -1720,7 +1721,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	st.stu_khname,
 		    	st.stu_code,
 		    	$stu_name AS stu_name,
-		    	(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+		    	(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex,
+		    	(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
 	    	FROM
 		    	`rms_issue_letterpraise_detail` AS cd,
 		    	rms_student AS st,

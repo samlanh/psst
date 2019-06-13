@@ -66,10 +66,16 @@ display: table-cell !important;
 					<td colspan="3"></td>
 				</tr>
 				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
 					<td colspan="3" align="center">
-						<strong style=" font-weight:200; color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_LETTEROFPRAISE");?></strong><br />
+						<strong style=" font-weight:200; color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_LETTEROFPRAISE");?></strong><br />
 						<strong  style=" font-weight:200; color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<style>
 					table tr th{
@@ -126,6 +132,7 @@ display: table-cell !important;
 									<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 									<td><?php echo $tr->translate("RANK");?></td>
 									<td><?php echo $tr->translate("ISSUE_DATE");?></td>
+									<td><?php echo $tr->translate("USER");?></td>
 								</tr>
 							</thead>
 							<tbody>
@@ -140,6 +147,7 @@ display: table-cell !important;
 								 	<td align="center"><?php echo $rs['academic_year'];?></td>
 								 	<td align="center"><?php echo $rs['rank'];?></td>
 								 	<td align="center"><?php echo date("d-M-Y",strtotime($rs['issue_date']));?></td>
+									<td><?php echo $rs['user'];?></td>
 								 </tr>
 								 <?php }?>
 							</tbody>

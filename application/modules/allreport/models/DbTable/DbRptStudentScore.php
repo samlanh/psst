@@ -1253,37 +1253,40 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 // 			AND s.type_score=1 
 // 			";
    	$sql="SELECT
-		s.`id`,
-		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
-		(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_monthen,
-		s.exam_type,
-		s.for_month AS for_month_id,
-		s.for_semester,
-		s.reportdate,
-		s.title_score,
-		s.max_score,
-		sd.`student_id`, 
-		sm.total_score,sm.total_avg,
-		FIND_IN_SET( total_avg, (    
-		SELECT GROUP_CONCAT( total_avg
-		ORDER BY total_avg DESC ) 
-		FROM rms_score_monthly AS dd ,rms_score AS ss WHERE  
-			ss.`id`=dd.`score_id` 
-			AND ss.group_id= s.`id`
-			AND ss.id=s.`id`
-			)
-		) AS rank,
-		vst.* 
-		FROM 
-		`rms_score` AS s,
-		`rms_score_detail` AS sd,
-		`rms_score_monthly` AS sm,
-		`v_studentinfo_by_group_detail_student` AS vst
-		WHERE s.`id`=sd.`score_id`
-		AND vst.stu_id = sm.`student_id`
-		AND s.`id`=sm.`score_id`
-		AND s.status = 1
-		AND s.type_score=1 ";
+				s.`id`,
+				(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+				(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_monthen,
+				s.exam_type,
+				s.for_month AS for_month_id,
+				s.for_semester,
+				s.reportdate,
+				s.title_score,
+				s.max_score,
+				sd.`student_id`, 
+				sm.total_score,
+				sm.total_avg,
+				FIND_IN_SET( total_avg, (    
+				SELECT GROUP_CONCAT( total_avg
+				ORDER BY total_avg DESC ) 
+				FROM rms_score_monthly AS dd ,rms_score AS ss WHERE  
+					ss.`id`=dd.`score_id` 
+					AND ss.group_id= s.`id`
+					AND ss.id=s.`id`
+					)
+				) AS rank,
+				vst.* 
+			FROM 
+				`rms_score` AS s,
+				`rms_score_detail` AS sd,
+				`rms_score_monthly` AS sm,
+				`v_studentinfo_by_group_detail_student` AS vst
+			WHERE s.`id`=sd.`score_id`
+				AND vst.stu_id = sm.`student_id`
+				AND vst.stu_id = sd.`student_id`
+				AND s.`id`=sm.`score_id`
+				AND s.status = 1
+				AND s.type_score=1 
+   			";
    		if (!empty($data['group_id'])){
    			$sql.=" AND vst.`group_id`=".$data['group_id'];
    		}
@@ -1303,9 +1306,8 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    				}
    			}
    		}
-   		
-   		
    		$sql.=" ORDER BY s.id DESC LIMIT 1";
+   		//echo $sql;
    		return $db->fetchRow($sql);
    }
    function getRankSubjectMonthlyExam($group_id,$stu_id,$subject_id,$formonth){
@@ -1403,6 +1405,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    			$sql.= " AND EXTRACT(MONTH FROM sat.date_attendence)=".$monthly;
    		}
    		$sql.=" LIMIT 1";
+   		//echo $sql;
    		return $db->fetchOne($sql);
    }
    

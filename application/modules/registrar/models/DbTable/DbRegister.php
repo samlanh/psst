@@ -177,7 +177,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$arr = array(
 					'balance_due'=>0
-					);
+				);
 				$this->_name='rms_student_payment';
 				$where="student_id = ".$stu_id;
 				$this->update($arr, $where);//clear old balance
@@ -482,27 +482,28 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		if($data['void']==1){  // void
 			try{	
 				$rsold = $this->getStudentPaymentByID($payment_id);
-				if($rsold['data_from']==2){
-					$arr = array(
-						'is_registered'=>0,
-					);
-					$this->_name='rms_student_test_result';
-					$where="stu_test_id = ".$data['old_stu']." AND degree_result=".$rsold['degree_id']." AND grade_result=".$rsold['grade'];
-					$this->update($arr, $where);//reverse to tested student
-					
-					$arr = array(
-						'customer_type'=>4 //reverse to tested student
-					);
-				}elseif($rsold['data_from']==3){
-					$arr = array(
-						'customer_type' =>3, //reverse to crm
-						'is_studenttest' =>0,
-					);
+				if($rsold['data_from']!=1){ // not student study payments
+					if($rsold['data_from']==2){
+						$arr = array(
+							'is_registered'=>0,
+						);
+						$this->_name='rms_student_test_result';
+						$where="stu_test_id = ".$data['old_stu']." AND degree_result=".$rsold['degree_id']." AND grade_result=".$rsold['grade'];
+						$this->update($arr, $where);//reverse to tested student
+						
+						$arr = array(
+							'customer_type'=>4 //reverse to tested student
+						);
+					}elseif($rsold['data_from']==3){
+						$arr = array(
+							'customer_type' =>3, //reverse to crm
+							'is_studenttest' =>0,
+						);
+					}
+					$this->_name='rms_student';
+					$where='stu_id = '.$data['old_stu'];
+					$this->update($arr, $where);
 				}
-				$this->_name='rms_student';
-				$where='stu_id = '.$data['old_stu'];
-				$this->update($arr, $where);
-				
 				// update payment and validate of service and tuition fee info back ,  and update stock back to origin
 				if($rsold['is_void']==0){
 					$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
@@ -517,7 +518,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$where = " id = ".$payment_id;
 				$this->update($arra, $where);
 			
-				if(!empty($data['credit_memo_id'])){//check again because it old code
+				if(!empty($data['credit_memo_id']) && $rsold['is_void']==0){//check again because it old code
 					$this->updateCreditMemoBack($data);
 				}				
 				
@@ -565,7 +566,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				WHERE 
 					s.stu_id=sp.student_id 
 					$user 
-					$branch_id ";
+					$branch_id 
+    		";
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;

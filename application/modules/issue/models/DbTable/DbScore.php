@@ -31,6 +31,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'max_score'=>$_data['max_score'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
+					'date_kh'=>$_data['date_kh'],
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
 					'type_score'=>1, // 1 => BacII score
@@ -113,6 +114,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'max_score'=>$_data['max_score'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
+					'date_kh'=>$_data['date_kh'],
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
 					'type_score'=>1, 

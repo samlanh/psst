@@ -192,7 +192,7 @@ function getGroupInfo(){
 				 dijit.byId('academic_year').set('value','<?php echo $this->row['academic_year'];?>'); 
 			    dijit.byId('grade').set('value','<?php echo $this->row['grade'];?>');  
 			}else{
-				dijit.byId('academic_year').set('value',data.year); 
+				dijit.byId('academic_year').set('value',data.year_only); 
 			    dijit.byId('grade').set('value',data.group_code);  
 			} 
 		    document.getElementsByClassName("overlay")[0].style.display="none";

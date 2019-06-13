@@ -178,7 +178,7 @@ function getGroupInfo(){
 			},
 		handleAs:"json",
 		load: function(data) {
-		    dijit.byId('academic_year').set('value',data.year); 
+		    dijit.byId('academic_year').set('value',data.year_only); 
 		    dijit.byId('grade').set('value',data.group_code);  
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},

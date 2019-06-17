@@ -299,7 +299,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	
 	function selectStudentPass($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.group_id=$id and gds.is_pass=0 and gds.type=2 and gds.stop_type=2";
+		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.group_id=$id and gds.is_pass=0 and gds.type=1 and gds.stop_type=3";
 		return $db->fetchAll($sql);
 	}
 	

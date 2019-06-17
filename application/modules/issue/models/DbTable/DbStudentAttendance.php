@@ -227,6 +227,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 				AND s.status=1
 				AND sgh.status = 1
 				AND sgh.type = 1
+				and sgh.stop_type=0
 				AND sgh.`group_id`=".$group_id;
 		$order=" ORDER BY s.stu_khname ASC";
 		return $db->fetchAll($sql.$order);

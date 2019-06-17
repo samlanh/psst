@@ -552,7 +552,7 @@ function getgradebyDegree(dept_id,a,type=1){
 			'dept_id':dept_id,
 			'student_id':student_id,
 			'is_stutested':is_stutested
-			},
+		},
 		handleAs:"json",
 		load: function(data) {
 			if(type==1){
@@ -1054,7 +1054,7 @@ function addRow() {
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="30px" align="center">'+no+'</td>';
 			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+label+'<label><input type="hidden" value="'+service_id+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
 			template+='<td style="width:180px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';

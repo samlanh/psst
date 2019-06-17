@@ -322,7 +322,7 @@ function getAllAcademicByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	degree = dijit.byId('degree').get('value'); 
+	degree = "";//dijit.byId('degree').get('value'); 
 	dojo.xhrPost({
 		url: url_getacademic,
 		content:{

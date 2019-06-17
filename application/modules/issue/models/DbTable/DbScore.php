@@ -363,6 +363,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					`rms_group_detail_student` AS sgh
 				WHERE 
 					sgh.type = 1
+					and sgh.stop_type=0
 					and sgh.`group_id` = ".$group_id;
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC, (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 		return $db->fetchAll($sql.$order);

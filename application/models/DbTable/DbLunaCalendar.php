@@ -269,14 +269,20 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
    */
   function getNumberOfDayInKhmerMonth($beMonth, $beYear) {
   	$LunarMonths = $this->LunarMonths();
-  	if ($beMonth === $LunarMonths['ជេស្ឋ'] && $this->isKhmerLeapDay($beYear)) {
+  	if ($beMonth == $LunarMonths['ជេស្ឋ'] && $this->isKhmerLeapDay($beYear)) {
   		return 30;
   	}
-  	if ($beMonth === $LunarMonths['បឋមាសាឍ'] || $beMonth === $LunarMonths['ទុតិយាសាឍ']) {
+  	if ($beMonth == $LunarMonths['បឋមាសាឍ'] || $beMonth == $LunarMonths['ទុតិយាសាឍ']) {
   		return 30;
   	}
+  	
   	// មិគសិរ : 29 , បុស្ស : 30 , មាឃ : 29 .. 30 .. 29 ..30 .....
-  	return $beMonth % 2 == 0 ? 29 : 30;
+  	if(($beMonth % 2)==0){
+  		return 29;
+  	}else{
+  		return 30;
+  	}
+  	//return $beMonth % 2 == 0 ? 29 : 30;
   }
 
   
@@ -628,9 +634,9 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   	// Find nearest year epoch
   	if ($differentFromEpoch > 0) {
 //   		echo $target->diff($epochMoment)->format('%R%a');
-			while (date_create($epochMoment)->diff($target)->format('%R%a') > $this->getNumerOfDayInKhmerYear($this->getMaybeBEYear(date_add(date_create($epochMoment),date_interval_create_from_date_string("1 year"))->format('Y-m-d'))) ){
-				$amount_day= $this->getNumerOfDayInKhmerYear($this->getMaybeBEYear(date_add(date_create($epochMoment),date_interval_create_from_date_string("1 year"))->format('Y-m-d')));
-				$epochMoment = date_add(date_create($epochMoment),date_interval_create_from_date_string("$amount_day days"))->format('Y-m-d');
+			while (date_create($epochMoment)->diff($target)->format('%R%a') > $this->getNumerOfDayInKhmerYear($this->getMaybeBEYear(date_add(date_create($epochMoment),date_interval_create_from_date_string("+1 year"))->format('Y-m-d'))) ){
+				$amount_day= $this->getNumerOfDayInKhmerYear($this->getMaybeBEYear(date_add(date_create($epochMoment),date_interval_create_from_date_string("+1 year"))->format('Y-m-d')));
+				$epochMoment = date_add(date_create($epochMoment),date_interval_create_from_date_string("+$amount_day days"))->format('Y-m-d');
 			}
   		
   	} else {
@@ -640,14 +646,11 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   		} while (date_create($epochMoment)->diff($target)->format('%R%a')>0);
   		
   	}
- 
-//   	echo date_create($epochMoment)->diff($target)->format('%R%a');exit();
   	// Move epoch month
   	while (date_create($epochMoment)->diff($target)->format('%R%a')> $this->getNumberOfDayInKhmerMonth($khmerMonth, $this->getMaybeBEYear($epochMoment)) ){
   		
   		$amountDay = $this->getNumberOfDayInKhmerMonth($khmerMonth, $this->getMaybeBEYear($epochMoment));
-//   		$epochMoment = date("Y-m-d",strtotime("$epochMoment + $amountDay day"));
-  		$epochMoment = date_add(date_create($epochMoment),date_interval_create_from_date_string("$amountDay days"))->format('Y-m-d');
+  		$epochMoment = date_add(date_create($epochMoment),date_interval_create_from_date_string("+$amountDay days"))->format('Y-m-d');
   		switch ($khmerMonth) {
   			case $LunarMonths['មិគសិរ']:
   				$khmerMonth = $LunarMonths['បុស្ស'];
@@ -700,9 +703,17 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   				null;
   		}
   	}
-  
-  	  		$khmerDay += floor(date_create($epochMoment)->diff($target)->format('%R%a'));
-  	
+  		//$epochMoment +1 day cuse
+//   			echo $epochMoment." ".$target->format('Y-m-d')."<br />";
+  	$amountKHDay = $this->getNumberOfDayInKhmerMonth($khmerMonth, $this->getMaybeBEYear($epochMoment));
+  	$khmerDay = floor(date_create($epochMoment)->diff($target)->format('%R%a'));
+  	if($amountKHDay==$khmerDay){
+  		$khmerMonth=$khmerMonth+1;
+  		if ($khmerMonth>$LunarMonths['ទុតិយាសាឍ']){
+  			$khmerMonth=$LunarMonths['ស្រាពណ៍'];
+  		}
+  		$khmerDay=0;
+  	}
   	  		
   	  		$amountDay = date_create($epochMoment)->diff($target)->format('%R%a');
   	  		$epochMoment = date_add(date_create($epochMoment),date_interval_create_from_date_string("$amountDay days"))->format('Y-m-d');
@@ -834,6 +845,5 @@ e	ស័ក	ឯកស័ក
 b	ឆ្នាំពុទ្ធសករាជ	២៥៥៦
 c	ឆ្នាំគ្រិស្តសករាជ	២០១៩
 j	ឆ្នាំចុល្លសករាជ	១៤៦៣
-fk  ថ្ងៃខែឆ្នាំជាខ្មែពេញ		ថ្ងៃច័ន្ទ ១៥ កើត ខែជេស្ឋ ឆ្នាំកុរ ឯកស័ក ពុទ្ធសករាជ ២៥៦៣
 */
 ?>

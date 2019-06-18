@@ -588,6 +588,9 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   					'b'=>	$dbgb->getNumberInkhmer($this->getBEYear($moment)),
   					'c'=>	$dbgb->getNumberInkhmer(date_create($moment)->format('Y')),
   					'j'=>	$dbgb->getNumberInkhmer($this->getJolakSakarajYear($moment)),
+  					
+  					's'=>	$dbgb->getNumberInkhmer($config['months'][sprintf("%01d",date_create($moment)->format('m')-1)]),
+  					'g'=>	$dbgb->getNumberInkhmer(date_create($moment)->format('d')),
   					);
   		$spp = str_split($format);
     	$return="";
@@ -815,6 +818,26 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   }
 }
 
+/*
+ * 
+ * Religious Events
+ */
+
+
+/*
+ * ពិធីបុណ្យមាឃបូជា
+ * ១៥កើត ខែមាឃ។
+ * បុណ្យមាឃបូជាប្រារព្ធឡើង ដើម្បីរំលឹកដល់ថៃ្ងដែល ព្រះសម្មាសម្ពុទ្ធទ្រង់ប្រកាសបង្កើត ព្រះពុទ្ធសាសនាឡើងក្នុងលោកនាប្រទេសឥណ្ឌាកាលពី ៥៨៨ ឆ្នាំ
+ */
+function MeakBochea($khMonth,$khDay){
+	$LunarMonths = $this->LunarMonths();
+	if($LunarMonths['មាឃ']==$khMonth AND $khDay=15){
+		return true;
+	}
+	return false;
+}
+
+
 /* Example
  * 
 $myDate = date("Y-m-d"));
@@ -845,5 +868,7 @@ e	ស័ក	ឯកស័ក
 b	ឆ្នាំពុទ្ធសករាជ	២៥៥៦
 c	ឆ្នាំគ្រិស្តសករាជ	២០១៩
 j	ឆ្នាំចុល្លសករាជ	១៤៦៣
+g	ថ្ងៃទីសកល	១ ដល់ ៣១
+s	ខែសកល	មិថុនា
 */
 ?>

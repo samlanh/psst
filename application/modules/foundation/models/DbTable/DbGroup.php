@@ -352,7 +352,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$teacher = $this->getAllTeacher($schoolOption,$branch_id);
 		array_unshift($teacher,array('id' => -1,"name"=>$tr->translate("ADD_NEW")));
-		$teacher_options = '<option value="">'.$tr->translate("SELECT_TEACHER").'</option>';
+		$teacher_options = '<option value="0">'.$tr->translate("PLEASE_SELECT").'</option>';
 		if(!empty($teacher))foreach($teacher as $value){
 			$teacher_options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
 		}

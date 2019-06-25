@@ -262,6 +262,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		
     		$group = $model->getAllGroupByBranch($branch_id);
     		array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+    		
     		$degree = $model->getAllItems(1,null);
     		$room = $model->getAllRoom($branch_id);
     		array_unshift($room, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_ROOM")));
@@ -365,11 +366,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
     function getdegreeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		
     		$_db = new Accounting_Model_DbTable_DbFee();
     		$row = $_db->getFeeById($data['academic_year']);
     		$schoolOption = $row['school_option'];
-    		
     		$db = new Application_Model_DbTable_DbGlobal();
     		$group = $db->getAllItems(1,null,$schoolOption);
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_DEGREE")));

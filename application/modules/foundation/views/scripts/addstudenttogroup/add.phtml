@@ -339,7 +339,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(){
 		group = dijit.byId('group').get('value');
-		if(group==-1){
+		if(group==-1 || group==''){
 			alert('Please select group !!! ');
 			return false;
 		}
@@ -364,11 +364,15 @@ function toStudentGroup(){
 	});
 }
 
-var url_getgroup = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getgroup"));?>';										
+var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
 function getRefreshGroup(){
+	branch_id = dijit.byId('branch_id').get('value');
 	loading();
 	dojo.xhrPost({
-		url:url_getgroup,
+		url:url_getgroup1,
+		content:{
+			'branch_id':branch_id
+		},
 		handleAs:"json",
 		load: function(data) {
 			group_store  = getDataStorefromJSON('id','name', data.group);
@@ -412,7 +416,7 @@ function getAllAcademicByBranch(){
 }
 
 
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -427,7 +431,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {

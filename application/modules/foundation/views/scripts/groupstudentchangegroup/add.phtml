@@ -66,7 +66,7 @@
 									<?php }?>
 								</select>
 			                </div>
-			             </div>
+			            </div>
 		                <div class="form-group">
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_GROUP");?>  :
 		                   </label>
@@ -116,7 +116,7 @@
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_GROUP");?> <span class="required">*</span> :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		 <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<div class="col-md-7 col-sm-7 col-xs-12">
 		                   		 	<input id="to_group" />
 		                   		</div>
 		                   		<div class="col-md-3 col-sm-3 col-xs-12">
@@ -188,22 +188,27 @@
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.DateTextBox");
 
-var url_getservice = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"refreshservice"));?>';										
+var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
 function getRefreshGroup(){
+	branch_id = dijit.byId('branch_id').get('value');
 	loading();
 	dojo.xhrPost({
-		url:url_getservice,
+		url:url_getgroup1,
+		content:{
+			'branch_id':branch_id
+		},
 		handleAs:"json",
 		load: function(data) {
 			group_store  = getDataStorefromJSON('id','name', data.group);
-		    dijit.byId('to_group').set('store',group_store);  
-		    document.getElementsByClassName("overlay")[0].style.display="none";
+			dijit.byId('to_group').set('store',group_store);  
+			document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
 			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
 	});
 }
+
 var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-all-student')); ?>";
 function getStudentFromGroup(){
 	from_group = dijit.byId('from_group').get('value');

@@ -100,7 +100,7 @@
 	                </div>
 	           </div>
 	           <div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group">
+	                <div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("GROUP_INFO");?> 
 	                   </label>
 	                </div>
@@ -108,7 +108,12 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_GROUP")?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="to_group" />
+	                   		<div class="col-md-7 col-sm-7 col-xs-12">
+								<input id="to_group" />
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-12">
+								<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+							</div>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -338,4 +343,44 @@ function getallstudentname(){//
 		}
 	});
 }
+
+var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
+function getRefreshGroup(){
+	branch_id = dijit.byId('branch_id').get('value');
+	loading();
+	dojo.xhrPost({
+		url:url_getgroup1,
+		content:{
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data.group);
+			dijit.byId('to_group').set('store',group_store);  
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
+function loading(){
+	document.getElementsByClassName("overlay")[0].style.display="block";
+}
 </script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

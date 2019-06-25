@@ -108,6 +108,9 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 // 		$room =  $db->getRoom();
 // 		array_unshift($room, array ( 'room_id' => 0, 'room_name' =>$this->tr->translate("SELECT_ROOM")) );
 // 		$this->view->room = $room;
+		$db=new Application_Model_DbTable_DbGlobal();
+		$branch = $db->getAllBranch();
+		$this->view->branch = $branch;
 	}
 	
 	

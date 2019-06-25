@@ -208,7 +208,7 @@ dojo.ready(function(){
 			teacher_id = dijit.byId('teacher_id').get('value');
 			if(teacher_id==-1){
 				$("#tow_value").val(-2)
-				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/lecturer/add?rightclick=true";?>','_blank');
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/lecturer/add?rightclick=true";?>','_blank');
 			}
 		}
 	}, "teacher_id");
@@ -226,7 +226,7 @@ dojo.ready(function(){
 			teacher_id = dijit.byId('teacher_ass').get('value');
 			if(teacher_id==-1){
 				$("#tow_value").val(-2)
-				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/lecturer/add?rightclick=true";?>','_blank');
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/lecturer/add?rightclick=true";?>','_blank');
 			}
 		}
 	}, "teacher_ass");
@@ -383,8 +383,8 @@ function getAllDegreeByAcademicSchoolOption(){
 function AllRefresh(){
 	loadingBlock();
 	getRefreshItems();
-	getRefreshTeacher();
 	getAllAcademicByBranch();
+	//getRefreshTeacher();
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id!='' || dept_id!=-1){getallGrade();}
 	getRefreshRoom();
@@ -417,7 +417,8 @@ function getRefreshTeacher(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
 		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('teacher_ass').set('store',teacher_store);  
+		var teacher_storeass  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('teacher_ass').set('store',teacher_storeass);  
 		dijit.byId('teacher_id').set('store',teacher_store);  
 		teacher_option="";
 		return false;
@@ -431,8 +432,9 @@ function getRefreshTeacher(){
 		load: function(data) {
 			teacher_storeass  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('teacher_ass').set('store',teacher_storeass);
-		    teacher_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('teacher_id').set('store',teacher_store);  
+			//teacher_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher_id').set('store',teacher_storeass);  
+			
 		    for(var i = 0; i < data.length; i++) {
 			    if(data[i].id==-1){
 			    }else{
@@ -500,7 +502,7 @@ function getSubject(){
 			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 			    }
 		    }
-		    getRefreshTeacher();
+		    //getRefreshTeacher();
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {

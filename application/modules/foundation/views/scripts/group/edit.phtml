@@ -229,7 +229,7 @@ dojo.ready(function(){
 		onChange: function() {  
 			teacher_id = dijit.byId('teacher_id').get('value');
 			if(teacher_id==-1){
-				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/lecturer/add?rightclick=true";?>','_blank');
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/lecturer/add?rightclick=true";?>','_blank');
 			}
 		}
 	}, "teacher_id");
@@ -248,7 +248,7 @@ dojo.ready(function(){
 		onChange: function() {  
 			teacher_id = dijit.byId('teacher_ass').get('value');
 			if(teacher_id==-1){
-				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/lecturer/add?rightclick=true";?>','_blank');
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/lecturer/add?rightclick=true";?>','_blank');
 			}
 		}
 	}, "teacher_ass");

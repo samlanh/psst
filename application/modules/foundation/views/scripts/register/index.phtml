@@ -163,7 +163,7 @@
 			}
 		});
 	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 	function getAllGroupByBranch(){
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
@@ -191,7 +191,7 @@
 		});
 	}
 	var oldstudy_year = '<?php echo $this->search['study_year'];?>';
-	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbyacademic'));?>';
+	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbyacademic'));?>';
 	function getAllGroupByAcademic(){
 		dijit.byId('group').reset();
 		study_year = dijit.byId('study_year').get('value');

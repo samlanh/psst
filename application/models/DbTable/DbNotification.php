@@ -48,13 +48,12 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
     	WHEN  s.sex = 1 THEN '".$this->tr->translate("MALE")."'
     	WHEN s.sex = 2 THEN '".$this->tr->translate("FEMALE")."'
     	END AS sex,
-		(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=s.teacher_type) AS teacher_type,
-		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality,
-		(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=s.degree) AS degree,
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=s.teacher_type LIMIT 1) AS teacher_type,
 		s.teacher_code,s.teacher_name_kh,s.tel,
 		s.email,s.photo,
 		sd.*
-		FROM `rms_teacher_document` AS sd, `rms_teacher` AS s
+		FROM `rms_teacher_document` AS sd, 
+		`rms_teacher` AS s
 		WHERE s.id = sd.stu_id
 		AND sd.is_receive=0
 		";
@@ -89,23 +88,21 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
 			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
 			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
-			(SELECT s.photo FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS photo,
 			(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS tel,
 			(SELECT ie.$colunmname FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 			(SELECT ie.images FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS pro_images,
-			(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type,
 			spd.*,
 			sp.branch_id,
 			sp.receipt_number,
-			sp.create_date AS payment_date,
 			(SELECT ctd.remide_date FROM `rms_cutstock_detail` AS ctd WHERE ctd.student_paymentdetail_id=spd.id ORDER BY ctd.remide_date DESC LIMIT 1 ) AS remide_date
-			FROM `rms_student_payment` AS sp,
-			`rms_student_paymentdetail` AS spd
+			FROM 
+				`rms_student_payment` AS sp,
+				`rms_student_paymentdetail` AS spd
 			WHERE spd.payment_id = sp.id
-			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
-			AND is_void=0
-			AND qty_balance >0
-					";
+				AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
+				AND is_void=0
+				AND qty_balance >0
+			";
 		$where ='';
 		$order="";
 		if (!empty($new)){
@@ -138,8 +135,6 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$sql="SELECT
 			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
-			(SELECT b.school_namekh FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS school_namekh,
-			(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS school_nameen,
 			(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_title,
 			   (SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_title,	 
 			s.* FROM 

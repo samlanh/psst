@@ -129,6 +129,11 @@
 			}
 		}, "study_year");
 		getAllAcademicByBranch();
+		
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function(evt) {
+			getAllAcademicByBranch();
+		});
 	});
 	
 	url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'get-yearbybranch'));?>';

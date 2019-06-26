@@ -365,7 +365,7 @@ dojo.ready(function(){
 	}, "to_group");
 	getAllGroupByBranch();
 }); 
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('from_group').reset();
 	dijit.byId('to_group').reset();
@@ -379,7 +379,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id
 			},
 		handleAs:"json",
 		load: function(data) {

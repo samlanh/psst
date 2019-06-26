@@ -417,9 +417,25 @@ tr#head-title {
 	</div>
 </div>	
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:415px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
-		<div id="my_camera"></div>
-		<button type="button" onClick="take_snapshot()" class="btn btn-success btn-sm">ចុចថត</button>
+	<div data-dojo-type="dijit.Dialog" style="width:320px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
+		<div class="app">
+		    <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
+		    <video id="camera-stream"></video>
+		    <img id="snap">
+		
+		    <p id="error-message"></p>
+		
+		    <div class="controls">
+		      <a href="#" id="delete-photo" title="Re-take Photo" class="disabled"><i class="fa fa-refresh"></i></a>
+		      <a href="#" id="take-photo" title="Take Photo"><i class="fa fa-camera"></i></a>
+		      <a href="#" id="close-photo" class="disabled" onClick='dijit.byId("showcamera").hide();'><i class="fa fa-times"></i></a>
+		      <!-- <a href="#" id="download-photo" download="selfie.png" title="Save Photo" class="disabled"><i class="fa fa-download"></i></a>  --> 
+		    </div>
+		
+		    <!-- Hidden canvas element. Used for taking snapshot of video. -->
+		    <canvas></canvas>
+			
+		  </div>
 	</div>
 </div>	
 <script type="text/javascript">
@@ -486,6 +502,18 @@ dojo.ready(function(){
 		dijit.byId('nationality').attr('value',1);
 		dijit.byId('nation').attr('value',1);
 		getSerailCodeByBranch();
+
+
+		 var nationality = dijit.byId('nationality');
+		 nationality.on('change', function(evt) {
+			 popupNation(1);
+		});
+
+		 var nation = dijit.byId('nation');
+		 nation.on('change', function(evt) {
+			 popupNation(2);
+		});
+		
 });
 
 function AllRefresh(){
@@ -609,6 +637,7 @@ function popupNation(key){
 	dijit.byId("save_nation").attr("disabled",false);
 	if(key==1){
 		var nation = dijit.byId('nationality').get('value');
+		dijit.byId('nation').set('value',nation);
 		$("#indexkey").val(key);
 	}else{
 		var nation = dijit.byId('nation').get('value');
@@ -693,33 +722,9 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 				onChange: function() {  
 				}
 			}, "grade_result");
-			getAllGrade();	
-
-			new dijit.form.FilteringSelect({
-				name: "nationality",
-				id: "nationality",
-				searchAttr: "name",
-				autoComplete:false,
-				queryExpr:'*${0}*',
-				class: 'fullside',
-				onChange: function() {
-					popupNation(1);
-			    }
-				}, "nationality");
-			
-			new dijit.form.FilteringSelect({
-				name: "nation",
-				id: "nation",
-				searchAttr: "name",
-				autoComplete:false,
-				queryExpr:'*${0}*',
-				class: 'fullside',
-				onChange: function() {
-					popupNation(2);
-			    }
-			}, "nation");			 
+						 
 		});
-		
+		//getAllGrade();	
 		var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 		function getAllGrade(){
 			dijit.byId('grade').set('value',''); 
@@ -813,26 +818,9 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		dojo.query("#row"+index).remove();
 	}
 	
-	Webcam.set({
-		width: 320,
-		height: 240,
-		image_format: 'jpeg',
-		jpeg_quality: 90
-	});
 	function setup() {
 		dijit.byId("showcamera").show();	
-		Webcam.reset();
-		Webcam.attach('#my_camera' );
-	}
-	var shutter = new Audio();
-	shutter.autoplay = false;
-	shutter.src = navigator.userAgent.match(/Firefox/) ? '<?php echo $this->baseUrl();?>/webcam/shutter.ogg' : '<?php echo $this->baseUrl();?>/webcam/shutter.mp3';
-	function take_snapshot() {
-		shutter.play();
-		Webcam.snap( function(data_uri) {
-			  $('#profile_wiew').attr('src',data_uri);
-			  SaveSnap();
-		} );
+		startWebCam();
 	}
 	function SaveSnap(){
 	    var url_upload = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'webcam')); ?>';	
@@ -847,3 +835,5 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 	    $("#uploaded").val(image_return);
 	}
 </script>
+<script src="<?php echo $this->baseUrl()."/webcam/scripttakephoto.js"?>"></script>
+<link href="<?php echo $this->baseUrl();?>/webcam/scripttakephoto.css" rel="stylesheet">

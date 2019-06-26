@@ -189,7 +189,6 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS stu_enname,
 			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS last_name,
 			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS stu_code,
-			(SELECT s.photo FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS photo,
 			(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS tel,
 			cr.* FROM `rms_creditmemo` AS cr
 			WHERE cr.status=1

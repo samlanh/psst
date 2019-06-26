@@ -252,6 +252,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	
 	public function copyAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$row = $db->getStudentById($id);
 		$this->view->rs = $row;

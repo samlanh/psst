@@ -130,6 +130,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){
@@ -175,6 +176,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				AND s.customer_type=1";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission();
+		$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
 		return $db->fetchRow($sql);
 		echo $sql; exit();
 	}
@@ -290,7 +292,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'sponser_phone'	=>$_data['sponser_phone'],
 						//////////////////////////////////////////////				
 						'is_setgroup'	=> $is_setgroup,
-						'status'		=>$_data['status'],
+						'status'		=>1,//$_data['status'],
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
 						'photo'  			 => $photo,
@@ -348,7 +350,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							'stu_id'	=> $id,
 							'group_id'	=> $_data['group'],
 							'date'		=> date("Y-m-d H:i:s"),
-							'status'	=> $_data['status'],
+							'status'	=> 1,//$_data['status'],
 							'is_newstudent'	=>$_data['stu_denttype'],
 							'user_id'	=> $this->getUserId(),
 							);
@@ -404,8 +406,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 				$_db->commit();
 		}catch(Exception $e){
-			$_db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 			Application_Form_FrmMessage::message("INSERT_FAILE");
 		}
 	}

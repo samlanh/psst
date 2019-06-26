@@ -336,13 +336,6 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>  
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("status");?>
-				                   </div>
-				                </div>  
-				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("REMARK");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -716,6 +709,7 @@ dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ObjectStore");
 
 var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->lang_level));?> );
 var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
@@ -1107,8 +1101,8 @@ dojo.ready(function(){
 
 function AllRefresh(){
 	loadingBlock();
-	pro_id = dijit.byId('student_province').get('value');
-	if(pro_id!=''){
+	student_province = dijit.byId('student_province').get('value');
+	if(student_province!=''){
 		filterDistrict();
 	}
 	distric_note = dijit.byId('distric_note').get('value');
@@ -1661,6 +1655,18 @@ function addJob(){
 	}
 	var url_getgroup = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getgroup"));?>';										
 	function getRefreshGroup(){
+		loadingBlock();
+		dijit.byId('group').reset();
+		dijit.byId('room').reset();
+		dijit.byId('grade').reset();
+		dijit.byId('degree').reset();
+		getAllGroupByBranch();
+		getRefreshRoom();
+		getRefreshItems();
+		getAllAcademicByBranch();
+		document.getElementsByClassName("overlay")[0].style.display="none";
+		/*
+
 		loading();
 		dojo.xhrPost({
 			url:url_getgroup,
@@ -1680,9 +1686,7 @@ function addJob(){
 				document.getElementsByClassName("overlay")[0].style.display="none";
 			}
 		});
-	}
-	function loading(){
-	    document.getElementsByClassName("overlay")[0].style.display="block";
+		*/
 	}
 	  function readURL(input) {
 	        if (input.files && input.files[0]) {
@@ -1697,7 +1701,48 @@ function addJob(){
 	    $("#photo").change(function(){
 	        readURL(this);
 	    });
-		
+    function getRefreshItems(){
+    	dijit.byId('degree').reset();   
+    	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
+    	dojo.xhrPost({
+    		url: url_getItems,
+    		content:{
+    			'items_type':1
+    			},
+    		handleAs:"json",
+    		load: function(data) {
+    			degree_store  = getDataStorefromJSON('id','name', data);
+    			dijit.byId('degree').set('store',degree_store);  
+    		   document.getElementsByClassName("overlay")[0].style.display="none";
+    		},
+    		error: function(err) {
+    			document.getElementsByClassName("overlay")[0].style.display="none";
+    		}
+    	});
+    }
+    var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';										
+    function getRefreshRoom(){
+    	dijit.byId('room').reset();
+    	branch_id = dijit.byId('branch_id').get('value');
+    	if(branch_id=='' || branch_id == -1){
+    		return false;
+    	}
+    	dojo.xhrPost({
+    		url: url_getRoom,
+    		handleAs:"json",
+    		content:{
+    				'branch_id':branch_id
+    				},
+    		load: function(data) {
+    			room_store  = getDataStorefromJSON('id','name', data);
+    		    dijit.byId('room').set('store',room_store);  
+    		    document.getElementsByClassName("overlay")[0].style.display="none";
+    		},
+    		error: function(err) {
+    			document.getElementsByClassName("overlay")[0].style.display="none";
+    		}
+    	});
+    }		
 var template = '';
 var service = '';
 var col = 0;
@@ -1863,7 +1908,7 @@ date_format = '"dd/MM/yyyy"';
 			}
 		});
 	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 	var oldbranch = '<?php echo $this->rs['branch_id']?>';
 	function getAllGroupByBranch(){
 		dijit.byId('student_id').set('value',"");
@@ -1957,18 +2002,3 @@ function readURLguardian(input) {
     	);
     }
 </script>
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
-}
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>

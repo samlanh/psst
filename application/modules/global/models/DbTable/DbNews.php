@@ -62,7 +62,7 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     		}
     		$name = $_FILES['photo']['name'];
     		$size = $_FILES['photo']['size'];
-    		$photo='';
+    		$photo='news.jpg';
     		if (!empty($name)){
     			$tem =explode(".", $name);
     			$image_name = date("Y").date("m").date("d").time().".".end($tem);

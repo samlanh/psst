@@ -4,10 +4,11 @@
 	$countlang = count($this->lang);
 	$frm = $this->frm_new;
 	$db = new global_Model_DbTable_DbNews();
+	$profile ="/news/news.jpg";
 	if(!empty($this->row['image_feature'])){
-		$profile="/news/".$this->row['image_feature'];
-	}else{
-		$profile ="/no-photo.png";
+		if (file_exists(PUBLIC_PATH."images/news/".$this->row['image_feature'])){
+			$profile="/news/".$this->row['image_feature'];
+		}
 	}
 ?>
 <style>

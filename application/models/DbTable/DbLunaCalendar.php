@@ -816,26 +816,46 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   function khYear($moment) {
   	return $this->getBEYear($moment);//this.clone()
   }
+  
+  function silDay($moment){
+  	$day = $this->khDay($moment);
+  	if ($day==7 || $day==14 || $day==22 || $day == 29){
+  		return true;
+  	}elseif ($day==28){
+  		$newMoment = date_add(date_create($moment),date_interval_create_from_date_string("1 days"))->format('Y-m-d');
+  		$newDay = $this->khDay($newMoment);
+  		if ($newDay==29){
+  			return false;
+  		}else{
+  			return true;
+  		}
+  	}
+  	return false;
+  }
+  
+  
+  /*
+   *
+  * Religious Events
+  */
+  
+  
+  /*
+   * ពិធីបុណ្យមាឃបូជា
+  * ១៥កើត ខែមាឃ។
+  * បុណ្យមាឃបូជាប្រារព្ធឡើង ដើម្បីរំលឹកដល់ថៃ្ងដែល ព្រះសម្មាសម្ពុទ្ធទ្រង់ប្រកាសបង្កើត ព្រះពុទ្ធសាសនាឡើងក្នុងលោកនាប្រទេសឥណ្ឌាកាលពី ៥៨៨ ឆ្នាំ
+  */
+  function MeakBochea($khMonth,$khDay){
+  	$LunarMonths = $this->LunarMonths();
+  	if($LunarMonths['មាឃ']==$khMonth AND $khDay=15){
+  		return true;
+  	}
+  	return false;
+  }
 }
 
-/*
- * 
- * Religious Events
- */
 
 
-/*
- * ពិធីបុណ្យមាឃបូជា
- * ១៥កើត ខែមាឃ។
- * បុណ្យមាឃបូជាប្រារព្ធឡើង ដើម្បីរំលឹកដល់ថៃ្ងដែល ព្រះសម្មាសម្ពុទ្ធទ្រង់ប្រកាសបង្កើត ព្រះពុទ្ធសាសនាឡើងក្នុងលោកនាប្រទេសឥណ្ឌាកាលពី ៥៨៨ ឆ្នាំ
- */
-function MeakBochea($khMonth,$khDay){
-	$LunarMonths = $this->LunarMonths();
-	if($LunarMonths['មាឃ']==$khMonth AND $khDay=15){
-		return true;
-	}
-	return false;
-}
 
 
 /* Example

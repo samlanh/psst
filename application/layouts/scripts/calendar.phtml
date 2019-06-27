@@ -56,6 +56,16 @@ $s = $lunar->toLunarDate('s');
 	    border-radius: 6px;
 	    border: 3px #02014a solid;
 	}
+	
+img.sil-day {
+    width: 24px;
+    display: inline-block;
+}
+small.sil-day {
+    font-weight: bold;
+    color: #ff0000;
+    display: inline-block;
+}
 </style>
 				<li role="presentation" class="dropdown">
                 	<a style="margin: 0;  padding: 0; border: none; " title="<?php echo $tr->translate("CALENDAR");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
@@ -87,7 +97,14 @@ $s = $lunar->toLunarDate('s');
 		                 			<div class="form-row">
 		                 				<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
 			                 				<span><?php echo $lunar->toLunarDate('dN');?></span><br />
-			                 				<span><?php echo $lunar->toLunarDate('s');?></span>
+			                 				<span><?php echo $lunar->toLunarDate('s');?></span><br />
+			                 				<?php 
+			                 				if (!empty($lunar->silDay($moment))){?>
+			                 				<?php if (file_exists(PUBLIC_PATH."/images/buddha-png.png")){?>
+			                 				<img class="sil-day" src="<?php echo $this->baseUrl()."/images/buddha-png.png"?>" />
+			                 				<?php }?>
+			                 				<small class="sil-day" >ថ្ងៃសីល</small>
+			                 				<?php }?>
 				                 		</div>
 				                 		<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
 				                 			<span class="g-day"><?php echo $lunar->toLunarDate('g');?></span>

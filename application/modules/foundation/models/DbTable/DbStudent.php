@@ -397,7 +397,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				//for update depart m
 				$sql="SELECT id_start FROM `rms_items` WHERE id=".$_data['degree']." LIMIT 1";
 				$id_start = $_db->fetchOne($sql);
-					
 				$this->_name="rms_items";
 				$arr=array(
 						'id_start'=>$id_start+1

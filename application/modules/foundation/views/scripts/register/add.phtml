@@ -433,7 +433,6 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="father_photo" name="father_photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
 				                   </div>
@@ -491,7 +490,6 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="mother_photo" name="mother_photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
 				                   </div>
@@ -550,7 +548,6 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="guardian_photo" name="guardian_photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
 				                   </div>
@@ -1569,8 +1566,24 @@ function addJob(){
 </script>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:415px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
-		<div id="my_camera"></div>
-		<button type="button" onClick="take_snapshot()" class="btn btn-success btn-sm">ចុចថត</button>
+		<div class="app">
+		    <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
+		    <video id="camera-stream"></video>
+		    <img id="snap">
+		
+		    <p id="error-message"></p>
+		
+		    <div class="controls">
+		      <a href="#" id="delete-photo" title="Re-take Photo" class="disabled"><i class="fa fa-refresh"></i></a>
+		      <a href="#" id="take-photo" title="Take Photo"><i class="fa fa-camera"></i></a>
+		      <a href="#" id="close-photo" class="disabled" onClick='dijit.byId("showcamera").hide();'><i class="fa fa-times"></i></a>
+		      <!-- <a href="#" id="download-photo" download="selfie.png" title="Save Photo" class="disabled"><i class="fa fa-download"></i></a>  --> 
+		    </div>
+		
+		    <!-- Hidden canvas element. Used for taking snapshot of video. -->
+		    <canvas></canvas>
+			
+		  </div>
 	</div>
 </div>
 
@@ -1749,29 +1762,11 @@ function addJob(){
 
 <script type="text/javascript">
 	
-Webcam.set({
-	width: 320,
-	height: 240,
-	image_format: 'jpeg',
-	jpeg_quality: 90
-});
 function setup() {
 	dijit.byId("showcamera").show();	
-	Webcam.reset();
-	Webcam.attach('#my_camera' );
+	startWebCam();
 }
-var shutter = new Audio();
-shutter.autoplay = false;
-shutter.src = navigator.userAgent.match(/Firefox/) ? '<?php echo $this->baseUrl();?>/webcam/shutter.ogg' : '<?php echo $this->baseUrl();?>/webcam/shutter.mp3';
-function take_snapshot() {
-	// play sound effect
-	shutter.play();
-	// take snapshot and get image data
-	Webcam.snap( function(data_uri) {
-		  $('#profile_wiew').attr('src',data_uri);
-		  SaveSnap();
-	} );
-}
+
 function SaveSnap(){
     var url_upload = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'webcam')); ?>';	
 
@@ -2084,3 +2079,5 @@ date_format = '"dd/MM/yyyy"';
     	);
     }
 </script>
+<script src="<?php echo $this->baseUrl()."/webcam/scripttakephoto.js"?>"></script>
+<link href="<?php echo $this->baseUrl();?>/webcam/scripttakephoto.css" rel="stylesheet">

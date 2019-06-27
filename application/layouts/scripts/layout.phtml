@@ -70,7 +70,7 @@ $teacher_id = $session_t->teacher_id;
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/<?php echo $them_style."/".$them_style?>.css" />
     <script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
-	<?php if ( ($module=='test' AND $controller=="index" AND $action=="add") OR ($module=='test' AND $controller=="index" AND $action=="edit") OR ($module=='foundation' AND $controller=="register" AND $action=="add") OR ($module=='foundation' AND $controller=="register" AND $action=="edit")){?>
+	<?php if ( ($module=='test' AND $controller=="index" AND $action=="add") OR ($module=='test' AND $controller=="index" AND $action=="edit") OR ($module=='foundation' AND $controller=="register" AND $action=="add") OR ($module=='foundation' AND $controller=="register" AND $action=="copy")){?>
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/webcam/webcamjs/webcam.js"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/webcam/webcamjs/webcam.min.js"></script>
 	<?php }?>

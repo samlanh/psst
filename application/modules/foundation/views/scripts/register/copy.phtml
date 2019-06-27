@@ -250,11 +250,13 @@ input.btn_borwse_image {
 												<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />
 											</div>
 											<div class="button_browse">
-											<div id='preview'></div>	
-													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-													<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
-													<input type="hidden" name="old_photo" value="<?php echo $this->rs['photo'];?>" id="old_photo" dojoType="dijit.form.TextBox" />
+												<div id='preview'></div>	
+												<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+												<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
+												<input type="hidden" name="old_photo" value="<?php echo $this->rs['photo'];?>" id="old_photo" dojoType="dijit.form.TextBox" />
+												<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
+											<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
 										</div>
 				                   </div>
 				                </div>
@@ -436,7 +438,6 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="father_photo" name="father_photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
 				                   </div>
@@ -494,7 +495,6 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="mother_photo" name="mother_photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
 				                   </div>
@@ -552,7 +552,6 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="guardian_photo" name="guardian_photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
 				                   </div>
@@ -701,6 +700,28 @@ input.btn_borwse_image {
 	    		</div>
 	    	</div>
 		</form>
+	</div>
+</div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:415px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
+		<div class="app">
+		    <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
+		    <video id="camera-stream"></video>
+		    <img id="snap">
+		
+		    <p id="error-message"></p>
+		
+		    <div class="controls">
+		      <a href="#" id="delete-photo" title="Re-take Photo" class="disabled"><i class="fa fa-refresh"></i></a>
+		      <a href="#" id="take-photo" title="Take Photo"><i class="fa fa-camera"></i></a>
+		      <a href="#" id="close-photo" class="disabled" onClick='dijit.byId("showcamera").hide();'><i class="fa fa-times"></i></a>
+		      <!-- <a href="#" id="download-photo" download="selfie.png" title="Save Photo" class="disabled"><i class="fa fa-download"></i></a>  --> 
+		    </div>
+		
+		    <!-- Hidden canvas element. Used for taking snapshot of video. -->
+		    <canvas></canvas>
+			
+		  </div>
 	</div>
 </div>
 <script type="text/javascript">
@@ -2001,4 +2022,26 @@ function readURLguardian(input) {
     	}
     	);
     }
+
+    function setup() {
+    	dijit.byId("showcamera").show();	
+    	startWebCam();
+    }
+
+    function SaveSnap(){
+        var url_upload = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'webcam')); ?>';	
+
+        var base64image = document.getElementById("profile_wiew").src;
+        Webcam.upload( base64image, url_upload, function(code, text) {
+        	  console.log('Save successfully');
+        	  //console.log(text);
+        	  uploadcomplete(event);
+        	 });
+    }
+    function uploadcomplete(event){
+        var image_return=event.target.responseText;
+        $("#uploaded").val(image_return);
+    }
 </script>
+<script src="<?php echo $this->baseUrl()."/webcam/scripttakephoto.js"?>"></script>
+<link href="<?php echo $this->baseUrl();?>/webcam/scripttakephoto.css" rel="stylesheet">

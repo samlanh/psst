@@ -62,9 +62,6 @@ class Global_GradeController extends Zend_Controller_Action {
     	$this->view->frm_items = $frm;
     	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
-    	$_dbuser = new Application_Model_DbTable_DbUsers();
-    	$userid = $_dbgb->getUserId();
-    	$userinfo = $_dbuser->getUserInfo($userid);
     	$d_row = $_dbgb->getAllItems(1);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
@@ -95,7 +92,6 @@ class Global_GradeController extends Zend_Controller_Action {
     	$this->view->frm_items = $frm;
     	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
-    	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$d_row = $_dbgb->getAllItems(1);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;    	
@@ -118,7 +114,6 @@ class Global_GradeController extends Zend_Controller_Action {
     	if (empty($row)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     	}
-    	
     	$frm = new Global_Form_FrmItemsDetail();
     	$frm->FrmAddItemsDetail($row,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);

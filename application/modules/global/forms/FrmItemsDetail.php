@@ -15,9 +15,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$request=Zend_Controller_Front::getInstance()->getRequest();
     	$typeItems = empty($typeItems)?1:$typeItems;
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
-    	$_dbuser = new Application_Model_DbTable_DbUsers();
-    	$userid = $_dbgb->getUserId();
-    	$userinfo = $_dbuser->getUserInfo($userid);
+//     	$_dbuser = new Application_Model_DbTable_DbUsers();
+//     	$userid = $_dbgb->getUserId();
+//     	$userinfo = $_dbuser->getUserInfo($userid);
     	
     	$code = new Zend_Dojo_Form_Element_TextBox('code');
     	$code->setAttribs(array(

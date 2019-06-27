@@ -1670,6 +1670,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql="SELECT cd.*,
 			    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1 ) AS branch_name,
 			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1 ) AS group_code,
+			    	c.type,
 			    	c.dept_kh,
 			    	c.dept_eng,
 			    	c.program_kh,

@@ -79,8 +79,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$day = 5;
 		$end_date = date('Y-m-d',strtotime(" +$day day"));
-		$sql ="
-			SELECT 
+		$sql ="SELECT 
 			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_logo,
 			sp.student_id as stu_id,

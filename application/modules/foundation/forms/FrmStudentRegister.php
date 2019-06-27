@@ -36,12 +36,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 	
 		$name_en = new Zend_Dojo_Form_Element_ValidationTextBox('name_en');
 		$name_en->setAttribs(array('dojoType'=>$this->tvalidate,
-				'required'=>'true',
+				'required'=>OTHER_LANG_REQUIRED,
 				'class'=>'fullside'));
 		
 		$last_name = new Zend_Dojo_Form_Element_ValidationTextBox('last_name');
 		$last_name->setAttribs(array('dojoType'=>$this->tvalidate,
-				'required'=>'true',
+				'required'=>OTHER_LANG_REQUIRED,
 				'class'=>'fullside'));
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();

@@ -339,7 +339,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1,'forfilter':1
+			'branch_id':branch_id,'noaddnew':0,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -395,7 +395,6 @@ $(function(){
 			}else if(key=="rpt-assessmentterm"){
 				url='<?php echo $urlAssesment;?>';
 			}  
-			
 			gotoAction();
 		},
 		items: {
@@ -425,9 +424,6 @@ function getRefreshTeacher(){
 		dijit.byId('teacher').set('store',teacher_store);  
 		return false;
 	}
-	//if(academic_year=='' || academic_year == -1){
-		//return false;
-	//}
 	dojo.xhrPost({
 		url:url_gettecher,
 		content:{
@@ -474,5 +470,4 @@ function getRefreshRoom(){
 		}
 	});
 }
-
 </script>

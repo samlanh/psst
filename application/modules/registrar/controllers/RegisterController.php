@@ -181,27 +181,27 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
     }
-    public function clearbalanceAction(){
-    	$id=$this->getRequest()->getParam('id');
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try {
-    			$db = new Registrar_Model_DbTable_DbRegister();
-    			$db->updateBalance($_data,$id);
-    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/add');
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			echo $e->getMessage();exit();
-    		}
-    	}
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->row = $row = $db->getRegisterById($id);
+//     public function clearbalanceAction(){
+//     	$id=$this->getRequest()->getParam('id');
+//     	if($this->getRequest()->isPost()){
+//     		$_data = $this->getRequest()->getPost();
+//     		try {
+//     			$db = new Registrar_Model_DbTable_DbRegister();
+//     			$db->updateBalance($_data,$id);
+//     			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/add');
+//     		} catch (Exception $e) {
+//     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+//     			echo $e->getMessage();exit();
+//     		}
+//     	}
+//     	$db = new Registrar_Model_DbTable_DbRegister();
+//     	$this->view->row = $row = $db->getRegisterById($id);
     	
-    	$this->view->receipt = $db->getRecieptNo($row['branch_id']);
+//     	$this->view->receipt = $db->getRecieptNo($row['branch_id']);
     	
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt();
-    }
+//     	$_db = new Application_Form_FrmGlobal();
+//     	$this->view->header = $_db->getHeaderReceipt();
+//     }
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

@@ -45,7 +45,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_first_name = new Zend_Dojo_Form_Element_TextBox('first_name');
     	$_first_name->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			'required'=>OTHER_LANG_REQUIRED,
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter First Name")
     			
@@ -54,7 +54,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_last_name = new Zend_Dojo_Form_Element_TextBox('en_name');
     	$_last_name->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			'required'=>OTHER_LANG_REQUIRED,
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
     			 
@@ -632,7 +632,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_first_name = new Zend_Dojo_Form_Element_TextBox('first_name');
     	$_first_name->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			'required'=>OTHER_LANG_REQUIRED,
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter First Name")
     	));
@@ -640,7 +640,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_last_name = new Zend_Dojo_Form_Element_TextBox('en_name');
     	$_last_name->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			'required'=>OTHER_LANG_REQUIRED,
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
     	));

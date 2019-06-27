@@ -10,10 +10,6 @@
 		<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-  				//if(maxSize == 1){
-      				// alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
-      				 //return false;
-      			//}
 				dijit.byId('save_close').set('disabled',true);	
 				return true;
 			}else {

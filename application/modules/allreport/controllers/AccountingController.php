@@ -9,38 +9,38 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	public function rptAccountRecAction(){
 	}
-	function rptStudentpaymentAction(){
-		try{
-			if($this->getRequest()->isPost()){
-					$search=$this->getRequest()->getPost();
-				}
-				else{
-					$search = array(
-							'title' =>'',
-							'branch_id'=>'',
-							'study_year' =>'',
-							'session'=>'',
-							'degree' =>'',
-							'grade_all' =>'',
-							'session' =>'',
-							'user' =>'',
-							'session' =>'',
-							'start_date'=> date('Y-m-d'),
-	                        'end_date'=>date('Y-m-d'),
-					);
-				}
-			$this->view->search = $search;
-			$db = new Allreport_Model_DbTable_DbRptPayment();
-			$this->view->row = $db->getStudentPayment($search);
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-	}
+// 	function rptStudentpaymentAction(){
+// 		try{
+// 			if($this->getRequest()->isPost()){
+// 					$search=$this->getRequest()->getPost();
+// 				}
+// 				else{
+// 					$search = array(
+// 							'title' =>'',
+// 							'branch_id'=>'',
+// 							'study_year' =>'',
+// 							'session'=>'',
+// 							'degree' =>'',
+// 							'grade_all' =>'',
+// 							'session' =>'',
+// 							'user' =>'',
+// 							'session' =>'',
+// 							'start_date'=> date('Y-m-d'),
+// 	                        'end_date'=>date('Y-m-d'),
+// 					);
+// 				}
+// 			$this->view->search = $search;
+// 			$db = new Allreport_Model_DbTable_DbRptPayment();
+// 			$this->view->row = $db->getStudentPayment($search);
+// 		}catch(Exception $e){
+// 			Application_Form_FrmMessage::message("Application Error");
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
+// 		$form=new Registrar_Form_FrmSearchInfor();
+// 		$form->FrmSearchRegister();
+// 		Application_Model_Decorator::removeAllDecorator($form);
+// 		$this->view->form_search=$form;
+// 	}
 	function rptSpecaildiscountAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -80,7 +80,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/accounting/rpt-studentpayment");
 		}
 	}
-	function  rptPaymentdetailbytypeAction(){
+	function rptPaymentdetailbytypeAction(){
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -128,39 +128,39 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}
-	function rptStudentpaymentdetailAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-						'title' =>'',
-						'branch_id'=>'',
-						'study_year' =>-1,
-						'degree'=>-1,
-						'grade_all' =>-1,
-						'user'=>-1,
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-						'service'=>'',
-						'session'=>'',
-						'payment_by'=>-1,
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptPayment();
-			$this->view->row = $db->getStudentPaymentDetail($search,1);
-			$this->view->rs = $db->getStudentPayment($search);
-			$this->view->search = $search;
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;		
-	}
+// 	function rptStudentpaymentdetailAction(){
+// 		try{
+// 			if($this->getRequest()->isPost()){
+// 				$search=$this->getRequest()->getPost();
+// 			}
+// 			else{
+// 				$search = array(
+// 						'title' =>'',
+// 						'branch_id'=>'',
+// 						'study_year' =>-1,
+// 						'degree'=>-1,
+// 						'grade_all' =>-1,
+// 						'user'=>-1,
+// 						'start_date'=> date('Y-m-d'),
+// 						'end_date'=>date('Y-m-d'),
+// 						'service'=>'',
+// 						'session'=>'',
+// 						'payment_by'=>-1,
+// 				);
+// 			}
+// 			$db = new Allreport_Model_DbTable_DbRptPayment();
+// 			$this->view->row = $db->getStudentPaymentDetail($search,1);
+// 			$this->view->rs = $db->getStudentPayment($search);
+// 			$this->view->search = $search;
+// 		}catch(Exception $e){
+// 			Application_Form_FrmMessage::message("Application Error");
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
+// 		$form=new Registrar_Form_FrmSearchInfor();
+// 		$form->FrmSearchRegister();
+// 		Application_Model_Decorator::removeAllDecorator($form);
+// 		$this->view->form_search=$form;		
+// 	}
 	function rptStudentpaymenthistoryAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -193,18 +193,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-	}
-	function rptPaymentrecieptdetailAction(){
-		$db = new Allreport_Model_DbTable_DbRptPayment();
-			if($this->getRequest()->isPost()){
-				$data=$this->getRequest()->getPost();
-				$db->updateValidationbyreceipt($data);
-				Application_Form_FrmMessage::Sucessfull("UPDAE_SUCCESSS", "/allreport/accounting/rpt-studentpayment");
-			}
-		$id=$this->getRequest()->getParam("id");
-		$this->view->row =  $db->getPaymentReciptDetail($id);
-		$this->view->rr = $db->getStudentPaymentByid($id);
-	}
+	}	
 	function  rptSuspendserviceAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -234,23 +223,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
-		
-	}
-	function rptStudentListDetailPart1Action(){
-	}
-	function rptStudentListDetailPart2Action(){
-	}
-	function rptStudentListDetailPart3Action(){
-	}
-	public function rptTuitionFeeAction()
-	{
-	}
-	function rptGepFeeAction(){
-	}
-	function rptGepListAction(){
-	}
-	function rptListOfItemAction(){
 	}
 	public function rptstudentbalanceAction(){
 		try{
@@ -354,7 +326,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 // 		}
 // 	}
 	
-	public function rptIncomeExpenseAction(){
+	public function rptExpenseAction(){
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -384,7 +356,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	
-    public function rptIncomeExpenseDetailAction(){
+    public function rptExpensedetailAction(){
 		$id = $this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
 		$row =$db->getAllexspanByid($id);
@@ -1003,43 +975,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
-	
-	
-	function  rptPaymentbydegreeAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-					'txtsearch' =>'',
-					'branch_id' =>'',
-					'start_date'=> date('Y-m-d'),
-					'end_date'=>date('Y-m-d'),
-					'service_type'=>'',
-					'payment_by'=>-1,
-					'study_year'=>-1,
-					'degree'=>-1,
-					'grade_all'=>-1,
-					'user'=>-1,
-					'session'=>-1,
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptPayment();
-			$this->view->row_detail = $db->getStudentPaymentbyDegree($search,3);
-			$this->view->search = $search;
-			
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-	}
-	
 	function rptReceiptVoidAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -1088,39 +1023,39 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	
-	function rptPaymentByDateAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-						'title' =>'',
-						'branch_id'=>'',
-						'study_year' =>'',
-						'session'=>'',
-						'degree' =>'',
-						'grade_all' =>'',
-						'session' =>'',
-						'user' =>'',
-						'session' =>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-				);
-			}
-			$this->view->search = $search;
-			$db = new Allreport_Model_DbTable_DbRptPayment();
-			$this->view->row = $db->getPaymentByDate($search);
-			$this->view->testPayment = $db->getStudentTestPaymentDate($search);
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-	}
+// 	function rptPaymentByDateAction(){
+// 		try{
+// 			if($this->getRequest()->isPost()){
+// 				$search=$this->getRequest()->getPost();
+// 			}
+// 			else{
+// 				$search = array(
+// 						'title' =>'',
+// 						'branch_id'=>'',
+// 						'study_year' =>'',
+// 						'session'=>'',
+// 						'degree' =>'',
+// 						'grade_all' =>'',
+// 						'session' =>'',
+// 						'user' =>'',
+// 						'session' =>'',
+// 						'start_date'=> date('Y-m-d'),
+// 						'end_date'=>date('Y-m-d'),
+// 				);
+// 			}
+// 			$this->view->search = $search;
+// 			$db = new Allreport_Model_DbTable_DbRptPayment();
+// 			$this->view->row = $db->getPaymentByDate($search);
+// 			$this->view->testPayment = $db->getStudentTestPaymentDate($search);
+// 		}catch(Exception $e){
+// 			Application_Form_FrmMessage::message("Application Error");
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
+// 		$form=new Registrar_Form_FrmSearchInfor();
+// 		$form->FrmSearchRegister();
+// 		Application_Model_Decorator::removeAllDecorator($form);
+// 		$this->view->form_search=$form;
+// 	}
 	public function rptDailyAction()
 	{
 		try{
@@ -1308,5 +1243,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			
 		}
+	}
+	function reprintOtherIncomeAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+		$this->view->row = $db->getOtherIncomeById($id);
+		 
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	
+		$_db = new Application_Form_FrmGlobal();
+		$this->view->header = $_db->getHeaderReceipt();
 	}
 }

@@ -171,11 +171,11 @@ table.tb-footer tr.style-head {
 											  </tr>
 										  </thead>
 										 <?php foreach($this->row as $rs){ $i++;?>
-										  <tr style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​ class="style-rowdata hover">
+										  <tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,1);return false;" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​ >
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $i;?></td>
 										    <td><?php echo $rs['receipt_number']; ?></td>
 										    <td><?php echo $rs['stu_code']; ?></td>
-										    <td style=" white-space:nowrap; text-align:left">&nbsp;<a style="color: #000;text-decoration: none;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$rs['id']))?>"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></a></td>
+										    <td style=" white-space:nowrap; text-align:left">&nbsp;<?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?>&nbsp;</td>
 											<td><?php echo $rs['type']; ?></td>
 											<td><?php echo $rs['degree']; ?></td>
 											<td><?php echo $rs['grade']; ?></td>
@@ -225,10 +225,10 @@ table.tb-footer tr.style-head {
 										</tr>
 										<style> td{padding:0 3px; }</style>
 									<?php $i=0;foreach($this->income as $row){ $i++;?>
-										<tr class="style-rowdata hover" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
+										<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,2);return false;" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
 											<td style="text-align: left;"><?php echo $row['title'];?></td>
-											<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'reprint-other-income','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice'];?></a></td>
+											<td><?php echo $row['invoice'];?></td>
 											<td><?php echo $row['income_category'];?></td>
 											<td align="center" ><?php echo $row['payment_method'];?></td>	
 											<td><?php echo number_format($row['total_amount'],2);?></td>
@@ -261,9 +261,9 @@ table.tb-footer tr.style-head {
 										</tr>
 										 <style>td{padding:0 3px; }</style>
 										<?php $i=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;?>
-										<tr class="style-rowdata hover" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
+										<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,3);return false;" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
-											<td style=" text-align: left;">&nbsp;<a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['title']; ?></a></td>
+											<td style=" text-align: left;">&nbsp;<?php echo $row['title']; ?>&nbsp;</td>
 											<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
 											<td align="center"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['payment_type']; ?></a></td>	
 											<td><?php echo number_format($row['total_amount'],2);?></td>
@@ -438,5 +438,40 @@ table.tb-footer tr.style-head {
 			error: function(err) {
 			}
 		});
+	}
+
+
+	var row=0;
+	var typereceipt=1;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="receipt"){
+					if(typereceipt==1){//Student Payment
+						url='<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/";?>';
+					}else if(typereceipt==2){//Other Income
+						url='<?php echo $this->baseUrl()."/allreport/accounting/reprint-other-income/id/";?>';
+					}else if(typereceipt==3){//Other Expense
+						url='<?php echo $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";?>';
+					}
+					
+				}
+				gotoAction();
+			},
+			items: {
+				"receipt": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-money", accesskey: "c"},
+			}
+		});
+	});
+	function setrowdata(index,type){
+		row = index;
+		typereceipt = type;
+	}
+	var recordid ='';
+	function gotoAction(){
+		 window.open(url+row, '_blank');
 	}
 </script>

@@ -40,113 +40,60 @@ table tr td strong{
    	</div>
    	<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
    		<div id="divPrint">
-			<?php 
-			$amount_print = $this->data['receipt_print'];
-			for($prin=0;$prin<$amount_print;$prin++){?>
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:10.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
-				<tr height="90px;">
-					<td colspan="10"  style="" align="center" valign="top">
-						<?php echo $this->header?>
-					</td>
-				</tr>
-				
-				<style>
-					.bold{
-						font-weight:bold;
-						}
-				</style>
-				<tr height="40px;">
-					<td colspan="10"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-top: -15px;">
-							<tr>
-								<td width="30%"></td>
-								<td align="center" width="40%" style="font-size: 16px;font-weight: bold;line-height: 20px;">
-									<div style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;">បង្កាន់ដៃបង់ប្រាក់</div>
-									OFFICIAL RECEIPT
-								</td>
-								<td width="30%" valign="center" align="center">
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<style>
-					.h{ margin-top: -3px;margin-bottom: 3px;}
-					.tab_row{ margin-top: -8px;}
-					
-					.h1{ margin-top: -6px;}
-					.values{ min-height: 25px; padding: 2px 5px;display: block; font-family: Khmer OS battambang ,Times New Roman;}
-							
-					.fonteng{font-size:16px;}
-					.one{white-space:nowrap;font-size:16px;}
-					.border{border:1px solid #000; min-width:220px}
-				</style>
-				<tr>
-					<td colspan="10" valign="top">
-						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px; white-space:nowrap;margin-top:-5px;line-height: 20px;">
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
-								<td class="border values one"><?php echo $this->row['invoice']?> </td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
-								<td class="border values one"><?php echo date("d/M/Y",strtotime($this->row['date']));?></td>
-							</tr>
-							
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("INCOME_TITLE");?>&nbsp;</td>
-								<td class="border values one"><?php echo $this->row['title']?> </td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("INCOME_CATEGORY");?>&nbsp;</td>
-								<td class="border values one"><?php echo $this->row['cate_income']?></td>
-							</tr>
-							
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("PAYMENT_METHOD");?>&nbsp;</td>
-								<td class="border values one"><?php echo $this->row['payment_method']?> </td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("TOTAL_INCOME");?>&nbsp;</td>
-								<td class="border values one"><?php echo $this->row['total_amount']?></td>
-							</tr>
-							
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("CHEQE_NO");?>&nbsp;</td>
-								<td class="border values one"><?php echo $this->row['cheqe_no']?> </td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
-								<td class="border values one">&nbsp;<?php echo $this->row['description']?></td>
-							</tr>
-							
-							<tr style="font-size: 15px; font-weight:bold;font-family:'Khmer MEF2'">
-								<td colspan="2" align="center" >អ្នកប្រគល់</td>
-								<td colspan="2" align="center">អ្នកទទួល</td>
-							</tr>
-							<tr style="font-size: 15px;">
-								<td colspan="4" align="center">&nbsp;</td>
-							</tr>
-							<tr style="font-size: 15px;">
-								<td colspan="2" align="center"></td>
-								<td colspan="2" align="center" style="line-height: 13px;">
-									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';"> 
-								        <?php 
-										   echo $this->row['last_name']." ".$this->row['first_name'];
-										?>
-					        		</h4>
-					        		<div style="font-size: 12px;margin-top:-10px;">
-					        			<?php  echo date("F j, Y, g:i a",strtotime($this->row['create_date']));?>
-					        		</div>
-					        	</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-			<?php //if($print==0){?>
-				<!-- <hr style="border:1px dotted #000;" /> -->
-			<?php }//}?>
+   			<div id="divPrint1" style="width: 100%; height: 13cm ; padding: 0px; margin: 0px;">
+   			<?php 
+			echo $this->officailreceipt;
+			?>
+			</div>
+			<?php if($this->data['receipt_print']>1){?>
+			<div id="divPrint2" style="width: 100%;height: 13cm ; padding: 0px; margin: 0px;">
+				<div style="border:2px dashed #000; vertical-align: middle;margin:0 0px 40px 0px"></div>
+				<div id="printblog2"></div>
+			</div>
+			<?php }?>
+		
 			
-	</div>	
+			
+		</div>	
    	</div>
 </div>
     	
 <script type="text/javascript">
-dojo.ready(function(){
-});	
+require(["dojo/ready"], function(ready){
+	 ready(function(){
+		 loadingBlock();
+		 printSave();
+		 setTimeout(function () {
+			 <?php if($this->data['receipt_print']>1){?>
+			 dojo.byId('printblog2').innerHTML = dojo.byId('divPrint1').innerHTML;
+			 <?php }?>
+	        HideloadingBlock();
+	    }, 500);
+		 
+	 });
+});	 
+function printSave(){
+	symbal="$ ";
+	<?php if (!empty($this->header)){?>
+	$( "#header_receipt" ).append( "<?php echo preg_replace( "/\r|\n/", "",$this->header);?>" );
+	<?php }?>
+	var statusvoid="";
+	<?php if ($this->row['status']==0){?>
+		statusvoid="<?php echo preg_replace( "/\r|\n/", "", strip_tags("(Void)"));?>";
+	<?php }?>
+	dojo.byId("receipt_no").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['invoice'])));?>'+" "+statusvoid;
+	dojo.byId("lbl_for_date").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(date("d/M/Y",strtotime($this->row['date'])))));?>';
+	dojo.byId("lbl_title_income").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['title'])));?>';
+	dojo.byId("lbl_cate_income").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['cate_income'])));?>';
+	dojo.byId("lbl_payment_method").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['payment_method'])));?>';
+	dojo.byId("lbl_total_amount").innerHTML = symbal+'<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(number_format($this->row['total_amount'],2))));?>';
+	dojo.byId("lbl_cheqe_no").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['cheqe_no'])));?>';
+	dojo.byId("lbl_description").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['description'])));?>';
+	dojo.byId("user_sign").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['last_name']." ".$this->row['first_name'])));?>';
+	dojo.byId("time_footer").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(date("F j, Y, g:i a",strtotime($this->row['create_date'])))));?>';
+}
+										
+
 function readMoneyInKhmer(netTotal){
 	var str = netTotal.toString();
     str_cent = 'សេន';
@@ -173,7 +120,6 @@ function doPrint() {
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-    hideDialog();
 }
 function hideleft(){
 	(dojo.style("leftmenu","display") == "none") ? 'show':'hide'();

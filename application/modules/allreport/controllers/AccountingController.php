@@ -1247,12 +1247,20 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	function reprintOtherIncomeAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-		$this->view->row = $db->getOtherIncomeById($id);
-		 
+		$row = $db->getOtherIncomeById($id);
+		$this->view->row = $row;
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/accounting/rpt-other-income");
+			exit();
+		}
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	
 		$_db = new Application_Form_FrmGlobal();
-		$this->view->header = $_db->getHeaderReceipt();
+		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+		$this->view->header = $_db->getHeaderReceipt($branch_id);
+		
+		$frmpopup = new Application_Form_FrmPopupGlobal();
+		$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
 	}
 }

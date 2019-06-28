@@ -118,7 +118,7 @@ table.tb-footer tr.style-head {
 							foreach ($this->row AS $row) { $i++;
 								$total_income = $total_income+$row['total_amount'];
 							?>
-								<tr class="style-rowdata hover" >
+								<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;">
 									<td align="center"><?php echo $i;?></td>
 									<td><?php echo $row['branch_name'];?></td>
 									<td><?php echo $row['cate_income'];?></td>
@@ -147,3 +147,29 @@ table.tb-footer tr.style-head {
 			</div>
 	</div>		
 </div>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="receipt"){
+				url='<?php echo $this->baseUrl()."/allreport/accounting/reprint-other-income/id/";?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"receipt": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-money", accesskey: "c"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>

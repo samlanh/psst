@@ -193,4 +193,112 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		</div>';
 		return $str;
 	}	
+	
+	public function receiptOtherIncome(){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$key = new Application_Model_DbTable_DbKeycode();
+		$data=$key->getKeyCodeMiniInv(TRUE);
+		
+		$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
+		
+		$session_user=new Zend_Session_Namespace('authstu');
+		$last_name=$session_user->last_name;
+		$username = $session_user->first_name;
+		$user_id = $session_user->user_id;
+		$usertype="";
+		$str='
+			<style>
+				.h{ margin-top: -3px;margin-bottom: 3px;}
+				.tab_row{ margin-top: -8px;}
+				.bold{
+					font-weight:bold;
+				}
+				.h1{ margin-top: -6px;}
+				.values{ min-height: 25px; padding: 2px 5px;display: block; font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';}
+						
+				.fonteng{font-size:16px;}
+				.one{white-space:nowrap;font-size:16px;}
+				.border{border:1px solid #000; min-width:220px}
+				.heght-row {
+				    height: 38px;
+				}
+			</style>
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
+				<tr height="90px;">
+					<td id="header_receipt" align="center" valign="top">
+					</td>
+				</tr>
+				<tr height="40px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<table width="100%" style="font-size: 10px;margin-top: -15px;">
+							<tr>
+								<td width="30%"></td>
+								<td align="center" width="40%" style="font-size: 16px; line-height: 20px;">
+									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 16px;">បង្កាន់ដៃបង់ប្រាក់</div>
+									<strong>OFFICIAL RECEIPT</strong>
+								</td>
+								<td width="30%" valign="center" align="center">
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="10" valign="top">
+						<table class="defaulheight" width="100%" border="0" style="font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".';font-size:12px; white-space:nowrap;margin-top:-5px;line-height: 20px;">
+							<tr class="heght-row">
+								<td class="one ">&nbsp;'.$tr->translate("RECEIPT_NO").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="receipt_no"></span>&nbsp;</td>
+								<td class="one " align="left">&nbsp;'.$tr->translate("FOR_DATE").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_for_date"></span>&nbsp;</td>
+							</tr>
+							
+							<tr class="heght-row">
+								<td class="one ">&nbsp;'.$tr->translate("INCOME_TITLE").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_title_income"></span>&nbsp;</td>
+								<td class="one " align="left">&nbsp;'.$tr->translate("INCOME_CATEGORY").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_cate_income"></span>&nbsp;</td>
+							</tr>
+							
+							<tr class="heght-row">
+								<td class="one ">&nbsp;'.$tr->translate("PAYMENT_METHOD").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_payment_method"></span>&nbsp;</td>
+								<td class="one " align="left">&nbsp;'.$tr->translate("TOTAL_INCOME").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_total_amount"></span>&nbsp;</td>
+							</tr>
+							
+							<tr class="heght-row">
+								<td class="one ">&nbsp;'.$tr->translate("CHEQE_NO").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_cheqe_no"></span>&nbsp;</td>
+								<td class="one " align="left">&nbsp;'.$tr->translate("NOTE").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_description"></span>&nbsp;</td>
+							</tr>
+							
+							<tr style="font-size: 15px; font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';">
+								<td colspan="2" align="center" >អ្នកប្រគល់</td>
+								<td colspan="2" align="center">អ្នកទទួល</td>
+							</tr>
+							<tr style="font-size: 15px;">
+								<td colspan="4" align="center">&nbsp;</td>
+							</tr>
+							
+							<tr style="font-size: 15px;">
+								<td colspan="2" align="center"></td>
+								<td colspan="2" align="center" style="line-height: 13px;">
+									<h4 id="user_sign" style="font-weight:bold; font-family: Arial Black;color:#000; font-size: 13px;font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';"> 
+								        '.$last_name." ".$username.$usertype.'
+					        		</h4>
+					        		<div style="font-size: 12px;margin-top:-10px;" id="time_footer">
+					        			'.date("F j, Y, g:i a").'
+					        		</div>
+					        	</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+			</table>
+		';
+		return $str;
+	}
 }

@@ -43,3 +43,29 @@
 		</div>
 	</div>
 </div>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="receipt"){
+				url='<?php echo $this->baseUrl()."/allreport/accounting/reprint-other-income/id/";?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"receipt": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-money", accesskey: "c"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>

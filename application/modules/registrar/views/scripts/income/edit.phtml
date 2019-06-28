@@ -15,7 +15,7 @@ $frm = $this->frm_expense;
 			<script type="dojo/method" event="onSubmit">
 			if(this.validate()) {
 				branch_id=dijit.byId('branch_id').get('value');
-				if(branch=='' || branch==0){
+				if(branch_id=='' || branch_id==0){
 					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
 					dijit.byId('branch_id').focus();
 					return false;
@@ -138,7 +138,7 @@ $frm = $this->frm_expense;
 						<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
 							 iconClass="dijitEditorIcon dijitEditorIconSave"/>
 					   <input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
-						 iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
+						 iconClass="dijitIconNewTask"  onclick="cloneReceipt(); printReceipt('');"   />
 				</div>
 	    	</div>
 		</form>
@@ -206,62 +206,67 @@ dojo.require("dojo.data.ObjectStore");
 		//////////////////////////////////// check validate ///////////////////////////////
 			cate_income = dijit.byId('cate_income').get('value')
 			if(cate_income==0 || cate_income==-1){
-				alert("Please select category income !!! ");
+				alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');
 				dijit.byId('cate_income').focus();
 				return false;
 			}
 			payment_method = dijit.byId('payment_method').get('value')
 			if(payment_method==-1){
-				alert("Please select payment method !!! ");
+				alert('<?php echo $tr->translate('Please select payment method');?>!');
 				dijit.byId('payment_method').focus();
 				return false;
 			}
-			
+			var statusvoid="";
 			if(dijit.byId("status").get("value")==1){
-				dojo.byId("lb_receiptvoid").innerHTML = '';
+				statusvoid="";
 			}else{
-				dojo.byId("lb_receiptvoid").innerHTML = '(Void)';
+				statusvoid="(Void)";
 			}
-			
-			dojo.byId("lb_receipt_no").innerHTML = dijit.byId('invoice').get('value');
-			
-			cate_income = dijit.byId('cate_income').get('value');
-			if(cate_income==0){
-				dojo.byId("lb_cate_income").innerHTML = "";
-			}else{
-				dojo.byId("lb_cate_income").innerHTML = dijit.byId("cate_income").attr('displayedValue');
-			}
-			dojo.byId("lb_title").innerHTML = dijit.byId("title").get('value');
+			symbal="$ ";
 
-			payment_method = dijit.byId('payment_method').get('value');
-			if(payment_method==-1){
-				dojo.byId("lb_payment_method").innerHTML = "";
-			}else{
-				dojo.byId("lb_payment_method").innerHTML = dijit.byId("payment_method").attr('displayedValue');
-			}
-
-			dojo.byId("lb_total_income").innerHTML = "$ "+dijit.byId("total_income").get('value').toFixed(2);
-			
 			var d = dijit.byId("date").get('value');
 			
 			 if(d!=null){
 				 var day = d.getDate();
 				 var mon = d.toDateString().substr(4,3);
 				 var year = d.getFullYear();
-				 dojo.byId("lb_date").innerHTML  = day+'/'+mon+'/'+year;
+				 dojo.byId("lbl_for_date").innerHTML  = day+'/'+mon+'/'+year;
 			 }else{
-				 dojo.byId("lb_date").innerHTML  = '';
+				 dojo.byId("lbl_for_date").innerHTML  = '';
 			 }
-			dojo.byId("lb_cheqe_no").innerHTML = dijit.byId("cheqe_no").get('value'); 
-			dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
+			 
+			dojo.byId("receipt_no").innerHTML = dijit.byId('invoice').get('value')+" "+statusvoid;
+			dojo.byId("lbl_title_income").innerHTML = dijit.byId("title").get('value');
+			if(cate_income==0){
+				dojo.byId("lbl_cate_income").innerHTML = "";
+			}else{
+				dojo.byId("lbl_cate_income").innerHTML = dijit.byId("cate_income").attr('displayedValue');
+			}
+			if(payment_method==-1){
+				dojo.byId("lbl_payment_method").innerHTML = "";
+			}else{
+				dojo.byId("lbl_payment_method").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+			}
+			dojo.byId("lbl_total_amount").innerHTML = symbal+dijit.byId("total_income").get('value').toFixed(2);
+			dojo.byId("lbl_cheqe_no").innerHTML = dijit.byId("cheqe_no").get('value');
+			dojo.byId("lbl_description").innerHTML = dijit.byId("note").get('value');
+			
 			dijit.byId("payment_transaction").show();	
 		}
+	}
+	function cloneReceipt(){
+		loadingBlock();
+		setTimeout(function () {
+			 <?php if($this->data['receipt_print']>1){?>
+			 dojo.byId('printblog2').innerHTML = dojo.byId('divPrint1').innerHTML;
+			 <?php }?>
+	        HideloadingBlock();
+	    }, 500);
 	}
 	function printSubmit(){
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
-	    loading();
 	    dijit.byId('frm_add_tran').submit();
 	}
 	function setReadonlyCheqe(){
@@ -304,7 +309,7 @@ function getbranchinfo(){
 				},
 			handleAs:"json",
 			load: function(data){
-				dojo.byId('lbl_header').innerHTML=data;
+				dojo.byId('header_receipt').innerHTML=data;
 			},
 			error: function(err) {
 				alert(err);
@@ -314,100 +319,20 @@ function getbranchinfo(){
 }
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-<?php $keycode = $this->keycode;?>
 	<div data-dojo-type="dijit.Dialog" style="width:24cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="payment_transaction" >
 		
 		<div id="PrintReceipt" style="width: 20cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
-			<table width="100%" height="49%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
-				<tr height="90px;">
-					<td colspan="10"  style="" align="left" valign="top">
-						<label id="lbl_header"></label>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="10" valign="top">
-						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;margin-top: -20px;">
-							<tr>
-								<td colspan="4" style="text-align:center;font-weight:bold;font-family:'Khmer MEF2';">
-									<div style="font-size:18px;">បង្កាន់ដៃបង់ប្រាក់</div>
-									<div style="font-size:15px;">OFFICIAL RECEIPT</div>
-								</td>
-							</tr>	
-							<style>
-								.h{ margin-top: -3px;margin-bottom: 3px;}
-								.tab_row{ margin-top: -8px;}
-								
-								.h1{ margin-top: -6px;}
-								.values{ min-height: 20px; padding: 0 5px;display: block;
-										 font-family: Khmer OS battambang ,Times New Roman;}
-								.fonteng{font-size:16px;}
-								.one{white-space:nowrap;font-size:16px;}
-								.border{border:1px solid #000; min-width:220px}
-								.noted {
-									white-space: pre-wrap;
-									word-wrap: break-word;
-									word-break: break-all;
-									white-space: pre;
-									font: 12px 'Khmer OS Battambang';
-									border: 1px solid #000;
-									line-height: 20px;
-									font-weight: normal !important;
-								}
-							</style>
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
-								<td class="border"><label id="lb_receipt_no"></label>&nbsp;<span style="color:red;" id="lb_receiptvoid"></span></td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
-								<td class="border"><label id="lb_date" class="values one"> </label></td>
-							</tr>
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("INCOME_TITLE");?>&nbsp;</td>
-								<td class="border"><label id="lb_title" class="values one"></label> </td>
-								<td class="one ">&nbsp;<?php echo $tr->translate("INCOME_CATEGORY");?>&nbsp;</td>
-								<td class="border"><label id="lb_cate_income" class=" values one"></label> </td>
-							</tr>
-							<tr style="height: 30px;">
-								<td class="one ">&nbsp;<?php echo $tr->translate("PAYMENT_METHOD");?>&nbsp;</td>
-								<td class="border"><label id="lb_payment_method" class="values one"></label> </td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("TOTAL_INCOME");?>&nbsp;</td>
-								<td class="border"><label id="lb_total_income" class="values one"> </label></td>
-							</tr>
-							<tr style="height: 30px;">
-								<td class="one " align="left" valign="top">&nbsp;<?php echo $tr->translate("CHEQE_NO");?>&nbsp;</td>
-								<td class="border" valign="top"><label id="lb_cheqe_no" class="values one"> </label></td>
-								<td class="one " align="left" valign="top">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
-								<td class="border noted" ><label id="lb_note" class="values"> </label></td>
-							</tr>
-							<tr style="font-size: 15px; font-weight:bold;font-family:'Khmer MEF2'">
-								<td colspan="2" align="center" >អ្នកប្រគល់</td>
-								<td colspan="2" align="center">អ្នកទទួល</td>
-							</tr>
-							<tr style="font-size: 15px;">
-								<td colspan="2" align="center">&nbsp;</td>
-							</tr>
-							<tr style="font-size: 15px;">
-								<td colspan="2" align="center">&nbsp;</td>
-							</tr>
-							<tr style="font-size: 15px;">
-								<td colspan="2" align="center"></td>
-								<td colspan="2" align="center" style="line-height: 13px;">
-									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';"> 
-								        <?php 
-										   $session_user=new Zend_Session_Namespace('authstu');
-								           $last_name=$session_user->last_name;
-								           $username = $session_user->first_name;
-										   echo "".$last_name." ".$username;
-										?>
-					        		</h4>
-					        		<div style="font-size: 12px;margin-top:-10px;">
-					        			<?php  $today = date("F j, Y, g:i a");echo $today; ?>
-					        		</div>
-					        	</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
+			<div id="divPrint1" style="width: 100%; height: 13cm ; padding: 0px; margin: 0px;">
+   			<?php 
+			echo $this->officailreceipt;
+			?>
+			</div>
+			<?php if($this->data['receipt_print']>1){?>
+			<div id="divPrint2" style="width: 100%;height: 13cm ; padding: 0px; margin: 0px;">
+				<div style="border:2px dashed #000; vertical-align: middle;margin:0 0px 40px 0px"></div>
+				<div id="printblog2"></div>
+			</div>
+			<?php }?>
 		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"

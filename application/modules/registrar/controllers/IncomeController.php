@@ -35,7 +35,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -78,8 +78,12 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$branch_income= $db->getAllBranch();
     	$this->view->branch_name = $branch_income;
     	
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt();
+    	$frmpopup = new Application_Form_FrmPopupGlobal();
+    	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
+    	 
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
     }
     public function editAction()
     {
@@ -122,11 +126,17 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$this->view->cate_income = $cate_income;
     	$this->view->parent = $_db->getParentCateIncome();
     	
+    	
+    	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$branch_income= $db->getAllBranch();
     	$this->view->branch_name = $branch_income;
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt();
+    	
+    	$frmpopup = new Application_Form_FrmPopupGlobal();
+    	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
+    	
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){

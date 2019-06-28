@@ -359,8 +359,8 @@ jQuery(function () {
 	'use strict';
 	
 	loadingBlock();
-    $(".overlay").fadeOut(2000, function() {
-    	$("div.container.body").fadeIn(1000);  
+    $(".overlay").fadeOut(1000, function() {
+    	$("div.container.body").fadeIn(500);  
 
    	 <?php if ( (($module!='home' OR $controller=="crm") AND ( $action=="index")) OR $module=='allreport'){?>
 	    $('#datatable-responsive').DataTable( {

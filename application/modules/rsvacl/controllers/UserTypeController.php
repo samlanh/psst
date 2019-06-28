@@ -14,7 +14,6 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
     	try {
     		$db_tran=new Application_Model_DbTable_DbGlobal();
     		$db = new RsvAcl_Model_DbTable_DbUserType();
@@ -34,7 +33,6 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     		);
     		$this->view->list=$list->getCheckList(0,$collumns, $result,array('user_type'=>$link,'title'=>$link));
     		
-    		
     		if (empty($result)){
     			$result = array('err'=>1, 'msg'=>'មិនទាន់មានទិន្នន័យនៅឡើយ!');
     		}		
@@ -42,18 +40,17 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     		$result = Application_Model_DbTable_DbGlobal::getResultWarning();
     	}
     }
-    
-    public function viewUserTypeAction()
-    {   
-    	/* Initialize action controller here */
-    	if($this->getRequest()->getParam('id')){
-    		$db = new RsvAcl_Model_DbTable_DbUserType();
-    		$user_type_id = $this->getRequest()->getParam('id');
-    		$rs=$db->getUserType($user_type_id);
-    		$this->view->rs=$rs;
-    	}  	 
+//     public function viewUserTypeAction()
+//     {   
+//     	/* Initialize action controller here */
+//     	if($this->getRequest()->getParam('id')){
+//     		$db = new RsvAcl_Model_DbTable_DbUserType();
+//     		$user_type_id = $this->getRequest()->getParam('id');
+//     		$rs=$db->getUserType($user_type_id);
+//     		$this->view->rs=$rs;
+//     	}  	 
     	
-    }
+//     }
 	public function addAction()
 		{
 			if($this->getRequest()->isPost())
@@ -104,7 +101,6 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     	if($this->getRequest()->isPost())
 		{
 			$post=$this->getRequest()->getPost();
-			//print_r($rs); exit;
 			if($rs['user_type']==$post['user_type']){
 					$db->updateUserType($post,$rs['user_type_id']);
 					

@@ -124,47 +124,43 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			$this->view->rs_branch = $db->getAllBranch();
 			$this->view->schoolOption = $db->getAllSchoolOption();
     }
-    
- 
-    public function changePasswordAction()
-	{
-		$session_user=new Zend_Session_Namespace('authstu');
+//     public function changePasswordAction()
+// 	{
+// 		$session_user=new Zend_Session_Namespace('authstu');
 		
-		if($session_user->user_id==$this->getRequest()->getParam('id') OR $session_user->level == 1){
-			$form = new RsvAcl_Form_FrmChgpwd();	
-			//echo $form->getElement('current_password'); exit;	
-			$this->view->form=$form;
-			//echo "Work"; exit; 
+// 		if($session_user->user_id==$this->getRequest()->getParam('id') OR $session_user->level == 1){
+// 			$form = new RsvAcl_Form_FrmChgpwd();	
+// 			//echo $form->getElement('current_password'); exit;	
+// 			$this->view->form=$form;
+// 			//echo "Work"; exit; 
 			
-			if($this->getRequest()->isPost())
-			{
-				$db=new RsvAcl_Model_DbTable_DbUser();
-				$user_id=$this->getRequest()->getParam('id');		
-				if(!$user_id) $user_id=0;			
-				$current_password=$this->getRequest()->getParam('current_password');
-				$password=$this->getRequest()->getParam('password');
-				if($db->isValidCurrentPassword($user_id,$current_password)){ 
-					$db->changePassword($user_id, md5($password));	
-					      //write log file 
-					             $userLog= new Application_Model_Log();
-					    		 $userLog->writeUserLog($user_id);
-					     	  //End write log file		
-					Application_Form_FrmMessage::message('Password has been changed');
-					Application_Form_FrmMessage::redirector('/rsvacl/user/view-user/id/'.$user_id);
-				}else{
-					Application_Form_FrmMessage::message('Invalid current password');
-				}
-			}		
-		}else{ 
-			   Application_Form_FrmMessage::message('Access Denied!');
-		       Application_Form_FrmMessage::redirector('/rsvacl');	
-		}
-		
-	}
+// 			if($this->getRequest()->isPost())
+// 			{
+// 				$db=new RsvAcl_Model_DbTable_DbUser();
+// 				$user_id=$this->getRequest()->getParam('id');		
+// 				if(!$user_id) $user_id=0;			
+// 				$current_password=$this->getRequest()->getParam('current_password');
+// 				$password=$this->getRequest()->getParam('password');
+// 				if($db->isValidCurrentPassword($user_id,$current_password)){ 
+// 					$db->changePassword($user_id, md5($password));	
+// 					      //write log file 
+// 					             $userLog= new Application_Model_Log();
+// 					    		 $userLog->writeUserLog($user_id);
+// 					     	  //End write log file		
+// 					Application_Form_FrmMessage::message('Password has been changed');
+// 					Application_Form_FrmMessage::redirector('/rsvacl/user/view-user/id/'.$user_id);
+// 				}else{
+// 					Application_Form_FrmMessage::message('Invalid current password');
+// 				}
+// 			}		
+// 		}else{ 
+// 			   Application_Form_FrmMessage::message('Access Denied!');
+// 		       Application_Form_FrmMessage::redirector('/rsvacl');	
+// 		}
+// 	}
 	function getschooloptionAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-		
 			$db = new Application_Model_DbTable_DbGlobal();
 			$gty= $db->getAllSchoolOption($data['branch_id']);
 			print_r(Zend_Json::encode($gty));
@@ -174,7 +170,6 @@ class RsvAcl_UserController extends Zend_Controller_Action
 	function getschooloptionbybranchlistAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			
 			$branchList="";
 			if (!empty($data['selector'])){
 				foreach ($data['selector'] as $rs){

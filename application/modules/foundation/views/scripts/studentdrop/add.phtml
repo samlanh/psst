@@ -285,15 +285,18 @@ function getStudentInfo(){
 			dijit.byId('gender').set('readOnly',true);
 			dijit.byId("academic_year").attr("value",data.academic_year);
 			dijit.byId('academic_year').set('readOnly',true);
-			dijit.byId("session").attr("value",data.session);
-			dijit.byId('session').set('readOnly',true);
-			dijit.byId("calture").attr("value",data.calture);
+			if(data.calture>0){
+				dijit.byId("calture").attr("value",data.calture);
+			}
+			if(data.session>0){
+				dijit.byId("session").attr("value",data.session);
+			}
 			dijit.byId('calture').set('readOnly',true);
+			dijit.byId('session').set('readOnly',true);
 			if(data.group_id>0){
 				dijit.byId("group").attr("value",data.group_id);
 				dijit.byId('group').set('readOnly',true);
 			}
-
 			dijit.byId('degree').set('value',data.degree);
 			dijit.byId('degree').set('readOnly',true);
 			dijit.byId('grade').set('value',data.grade);

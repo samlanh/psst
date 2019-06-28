@@ -364,7 +364,6 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 	
 		$_calture = new Zend_Dojo_Form_Element_FilteringSelect('calture');
 		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly',
-				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',

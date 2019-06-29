@@ -285,6 +285,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	public function rptstudentnearlyendserviceAction(){
 		try{
+			
+			$key = new Application_Model_DbTable_DbKeycode();
+			$data=$key->getKeyCodeMiniInv(TRUE);
+			$default_end = date('Y-m-d');
+			if (!empty($data['payment_day_alert'])){
+				$alert = $data['payment_day_alert'];
+				$default_end = date('Y-m-d',strtotime("+$alert day"));
+			}
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}else{
@@ -296,7 +304,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'stu_name' 	=>'',
 						'group'		=>-1,
 						'service_type'=>-1,
-						'end_date'	=>date('Y-m-d'),
+						'end_date'	=>$default_end,
 						'service'	=>''
 				);;
 			}

@@ -28,7 +28,9 @@ public function init()
 		$row['branch_email'] = $db_gs->geLabelByKeyName('branch_email');
 		$row['label_animation'] = $db_gs->geLabelByKeyName('label_animation');
 		$row['show_header_receipt'] = $db_gs->geLabelByKeyName('show_header_receipt');
+		$row['receipt_print'] = $db_gs->geLabelByKeyName('receipt_print');
 		
+		$row['payment_day_alert'] = $db_gs->geLabelByKeyName('payment_day_alert');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$fm = new Setting_Form_FrmGeneral();

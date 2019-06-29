@@ -33,10 +33,23 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			$where=" keyName= 'label_animation'";
 			$this->update($arr, $where);
 			
+			$arr = array('keyValue'=>$data['receipt_print'],);
+			$where=" keyName= 'receipt_print'";
+			$this->update($arr, $where);
+			
 			$arr = array('keyValue'=>$data['show_header_receipt'],);
 			$where=" keyName= 'show_header_receipt'";
 			$this->update($arr, $where);
 			
+			$rows = $this->geLabelByKeyName('payment_day_alert');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['payment_day_alert'],'keyName'=>'payment_day_alert','note'=>"ចំនួនថ្ងៃដែលត្រូវ  Alert ថ្ងៃបង់លុយមុន",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['payment_day_alert'],);
+				$where=" keyName= 'payment_day_alert'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

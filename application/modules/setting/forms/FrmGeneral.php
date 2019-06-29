@@ -47,6 +47,13 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				'placeholder'=>$this->tr->translate("label_animation")
 		));
 		
+		$_receipt_print = new Zend_Dojo_Form_Element_NumberTextBox('receipt_print');
+		$_receipt_print->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("RECEIPT_PRINT")
+		));
+		
 		$_show_header_receipt=  new Zend_Dojo_Form_Element_FilteringSelect('show_header_receipt');
 		$_show_header_receipt->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$_show_header_receipt_opt = array(
@@ -54,6 +61,12 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				0=>$this->tr->translate("HIDE"));
 		$_show_header_receipt->setMultiOptions($_show_header_receipt_opt);
 		
+		$_payment_day_alert = new Zend_Dojo_Form_Element_NumberTextBox('payment_day_alert');
+		$_payment_day_alert->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+		));
+		$_payment_day_alert->setValue(1);
 		
 		if($data!=null){
 			
@@ -61,8 +74,9 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$_branch_email->setValue($data['branch_email']['keyValue']);
 			$_branch_tel->setValue($data['branch_tel']['keyValue']);
 			$_label_animation->setValue($data['label_animation']['keyValue']);
+			$_receipt_print->setValue($data['receipt_print']['keyValue']);
 			$_show_header_receipt->setValue($data['show_header_receipt']['keyValue']);
-			
+			$_payment_day_alert->setValue($data['payment_day_alert']['keyValue']);
 			
 		}
 		$this->addElements(array(
@@ -70,7 +84,9 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				$_branch_tel,
 				$_branch_email,
 				$_branch_add,
+				$_receipt_print,
 				$_show_header_receipt,
+				$_payment_day_alert,
 				
 				));
 		

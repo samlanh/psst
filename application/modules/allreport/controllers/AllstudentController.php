@@ -9,7 +9,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function indexAction()
 	{
 	}
-	public function idselectedEltAction(){
+	public function printIdcardAction(){
 		$id=$this->getRequest()->getParam('id');
 		$front_card=$this->getRequest()->getParam('front_card');
 		$this->view->front = empty($front_card)?"":$front_card;
@@ -32,7 +32,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
-	public function pickupselectedAction(){
+	public function printPickupcardAction(){
 		$id=$this->getRequest()->getParam('id');
 		$k = 0;
 		$condition = '';
@@ -50,7 +50,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($condition);
 	}
 	
-	public function rptAllStudentAction(){
+	public function rptStudentcardAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}

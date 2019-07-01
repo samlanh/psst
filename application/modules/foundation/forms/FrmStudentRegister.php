@@ -130,7 +130,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		));
 		
 		$student_id = new Zend_Dojo_Form_Element_TextBox('student_id');
-		$student_id->setAttribs(array('dojoType'=>$this->text,
+		$student_id->setAttribs(array('dojoType'=>$this->tvalidate,
 				'class'=>'fullside',
 				'required'=>'true',
 				'style'=>'color: red;',

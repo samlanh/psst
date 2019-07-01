@@ -170,8 +170,7 @@ input.btn_borwse_image {
 				            </div>
 				            <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS_POB");?> 
-				                  	 <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("POB");?> 
 				                   </label>
 				                </div>
 				                <div class="form-group">
@@ -180,6 +179,11 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("pob");?>
 				                   </div>
+				                </div>
+								<div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
+				                  	 <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
+				                   </label>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NUMBER_HOME");?>  :
@@ -272,7 +276,7 @@ input.btn_borwse_image {
 				                   <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-										<input type="text" name="student_id" id="student_id" style="color:red" dojoType="dijit.form.TextBox" class="fullside" />
+										<input type="text" name="student_id" id="student_id" style="color:red" required="1" dojoType="dijit.form.ValidationTextBox" class="fullside" />
 				                   </div>
 				                </div>
 				                <div class="form-group">

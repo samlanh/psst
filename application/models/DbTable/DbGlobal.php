@@ -1586,7 +1586,7 @@ function getAllgroupStudyNotPass($action=null){
  	$str = implode(',',array_unique(explode(',', $rs)));
  	return   $str;
  }
-  function getAllSchoolOption($branchlist=null){
+  function getAllSchoolOption($branchlist=null,$show_university=1){
   	$db = $this->getAdapter();
   	$this->_name = "rms_schooloption";
   	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1 ";
@@ -1602,7 +1602,9 @@ function getAllgroupStudyNotPass($action=null){
   		if (!empty($user['schoolOption'])){
   			$sql .=' AND s.id IN ('.$user['schoolOption'].')';
   		}
-	  	
+  	}
+  	if($show_university==0){
+  		$sql.=" and s.id != 3 ";
   	}
   	return $db->fetchAll($sql);
   }

@@ -1,13 +1,10 @@
 <?php
-
 class Setting_Model_DbTable_DbLabel extends Zend_Db_Table_Abstract
 {
-
     protected $_name = 'rms_setting';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
-    	 
     }
 	public function getAllLabelList($search){
 		$db = $this->getAdapter();
@@ -31,7 +28,6 @@ class Setting_Model_DbTable_DbLabel extends Zend_Db_Table_Abstract
 				);
 		$where = $db->quoteInto('code=?', $data['id']);
 		$this->update($arr, $where);
-		
 	}
 	function updateKeyCode($post, $data){
 		$this->_name='ln_system_setting';
@@ -39,7 +35,6 @@ class Setting_Model_DbTable_DbLabel extends Zend_Db_Table_Abstract
 		foreach ($post as $key => $val) {
 			if($val != $data[$key]){
 				$_key_code_data['value'] = $val;
-	
 				$where=$this->getAdapter()->quoteInto('keycode=?', $key);
 				$this->update( $_key_code_data, $where);
 				if($key == 'servername'){
@@ -89,15 +84,7 @@ class Setting_Model_DbTable_DbLabel extends Zend_Db_Table_Abstract
 					$session_user->theme_style=$array_theme[$val];
 						 
 				}
-				
-				
-				
-				
-	
 			}
-				
 		}
 	}
-	
 }
-

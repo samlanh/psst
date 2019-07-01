@@ -120,15 +120,8 @@ table.content-data thead tr.style-head {
 										</style>
 									<table class="content-data" width="100%" border="1" align="center" >
 										 <?php 
-										 	$i=0; $total=0;$total_paid=0;$total_balance=0;
-										 	$comple_b=0; $isset =0; $total_other_income=0;
-										 	$total_other_expense=0;
-										 	$total_income_dollar=0;
-										 	$total_income_kh = 0;
-										 	$total_expense_dollar = 0;
-										 	$total_expense_kh =0;
+										 	$i=0; 
 										 	$updated_result=0;
-										 	$register=0;
 										 	if (!empty($this->row)){  
 										 ?>
 										  <tr class="style-head" style="height: 20px;background:#ccd9ff;" align="center">
@@ -216,10 +209,10 @@ table.content-data thead tr.style-head {
 											</td>
 										</tr>
 									</table>
-								</td>
-							</tr>
-						</table>
-				</div>	
+							</td>
+					</tr>
+				</table>
+			</div>	
 		</div>
 	</div>
 </div>
@@ -236,7 +229,6 @@ table.content-data thead tr.style-head {
 					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
 					<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
 				</div>
-				
 			</div>
 		</div>
 	</div>
@@ -270,8 +262,6 @@ dojo.ready(function(){
     });
 	 getAllAcademicByBranch();
 });
-
-
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_search']?>";
 function getAllAcademicByBranch(){
@@ -296,23 +286,19 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 var row=0;
 var url="";
 $(function(){
 	$.contextMenu({
 		selector: '.context-menu-one', 
 		callback: function(key, options) {
-		
 			var m = "clicked: " + key;
 			if(key=="profile"){
 				url='<?php echo $urlStudentProfile;?>';
 			}
-			
 			gotoAction();
 		},
 		items: {
@@ -328,4 +314,3 @@ function gotoAction(){
 	window.open(url+row);
 }
 </script>
-

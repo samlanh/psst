@@ -21,7 +21,7 @@ display: table-cell !important;
     			</div>
     		</div>
     	</div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("title");?>
@@ -155,14 +155,12 @@ display: table-cell !important;
 			<td align="center">
 				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
 					type="button" onclick="printSelected('');"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
-				<input type="button" onclick="printIDCard('print_student_card');" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
 			</td>
 		</tr>
 		<tr>
 			<td align="center">
 				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
 					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
-				<input type="button" onclick="printPickup();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_PICKUP");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
 			</td>
 		</tr>
 	</table>
@@ -778,33 +776,12 @@ function getallGrade(){
 	});
 }
 
-	function printIDCard(indexprint){
-		loadingBlock();
-	  	 var contents = document.getElementById(indexprint).innerHTML;
-	 	  var frame1 = document.createElement('iframe');
-	    frame1.name = "frame1";
-	    frame1.style.position = "absolute";
-	    frame1.style.top = "-1000000px";
-	    document.body.appendChild(frame1);
-	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
-	    frameDoc.document.write('<html><head><title>Employee ID</title>');
-	    frameDoc.document.write('</head><body>');
-	    frameDoc.document.write(contents);
-	    frameDoc.document.write('</body></html>');
-	    frameDoc.document.close();
-	    setTimeout(function () {
-	        window.frames["frame1"].focus();
-	        window.frames["frame1"].print();
-	        document.body.removeChild(frame1);
-	        HideloadingBlock();
-	    }, 10000);
-	   return false;
-	}
+	
 	function printSelected(typecard){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'idselected-elt'));
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-idcard'));
     	?>
     	var urlink="";
 		if(typecard==1){
@@ -832,7 +809,7 @@ function getallGrade(){
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'pickupselected'));
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-pickupcard'));
     	?>
 
     	 id_selected = dijit.byId('id_selected').get('value');
@@ -847,30 +824,6 @@ function getallGrade(){
 			return false;
 		 }
 	}
-	
-	function printPickup(){
-	    loadingBlock();
-	  	var contents = document.getElementById("PickupCard").innerHTML;
-	 	var frame1 = document.createElement('iframe');
-	    frame1.name = "frame1";
-	    frame1.style.position = "absolute";
-	    frame1.style.top = "-1000000px";
-	    document.body.appendChild(frame1);
-	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
-	    frameDoc.document.write('<html><head><title>Employee ID</title>');
-	    frameDoc.document.write('</head><body>');
-	    frameDoc.document.write(contents);
-	    frameDoc.document.write('</body></html>');
-	    frameDoc.document.close();
-	    setTimeout(function () {
-	        window.frames["frame1"].focus();
-	        window.frames["frame1"].print();
-	        document.body.removeChild(frame1);
-	        HideloadingBlock();
-	    }, 10000);
-	   return false;
-	}
-	
 	function checkAllStudent(array_length){
 		dijit.byId('id_selected').attr('value','');
 		if(dojo.byId('checkall').checked){

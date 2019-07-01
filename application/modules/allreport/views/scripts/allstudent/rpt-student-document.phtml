@@ -66,14 +66,12 @@ table.tb-footer tr.style-head {
 				</tr>
 				<tr class="line"><td colspan="3"></td></tr>
 				<tr>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 					<td width="70%"  align="center">
 						<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
 						<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></span>
 					</td>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 				</tr>
 				<style>
 					table tr th{
@@ -182,14 +180,7 @@ table.tb-footer tr.style-head {
 				</tr>
 			</table>
 		</div>
-		
 </div>
-	
-			
-
-
-
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
@@ -222,7 +213,6 @@ dojo.ready(function(){
 	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
-		    
 	    }
 	}, "group");
 	
@@ -235,7 +225,6 @@ dojo.ready(function(){
 		class: 'fullside',  
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
-
 		}
 	}, "grade_all");
 	getallGrade();
@@ -274,7 +263,6 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -302,7 +290,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -324,13 +311,11 @@ function getallGrade(){
 			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
-	function getKHMonthByNumber(m){
-		var monthName=[
+function getKHMonthByNumber(m){
+	var monthName=[
 			"មករា",
 			"កុម្ភៈ",
 			"មីនា",
@@ -344,7 +329,6 @@ function getallGrade(){
 			"វិច្ឆិកា",
 			"ធ្នូ",
 			];
-			return (monthName[m-1]);
+		return (monthName[m-1]);
 	}	
-	
 </script>

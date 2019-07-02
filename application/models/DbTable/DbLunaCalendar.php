@@ -576,21 +576,21 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
   			$formatRule = array(
   					'W'=>	$config['weekdays'][$dayOfWeek],
   					'w'=>	$config['weekdaysShort'][$dayOfWeek],
-  					'd'=>	$dbgb->getNumberInkhmer($moonDay['count']),
-  					'D'=>	$dbgb->getNumberInkhmer($count),
+  					'd'=>	$moonDay['count'],
+  					'D'=>	$count,
   					'n'=>	$config['moonStatusShort'][$moonDay['moonStatus']],
   					'N'=>	$config['moonStatus'][$moonDay['moonStatus']],
   					
   					'o'=>	$config['moonDays'][$day],
   					'm'=>	$config['lunarMonths'][$month],
   					'a'=>	$config['animalYear'][$animalYear],
-  					'e'=>	$dbgb->getNumberInkhmer($config['eraYear'][$eraYear]),
-  					'b'=>	$dbgb->getNumberInkhmer($this->getBEYear($moment)),
-  					'c'=>	$dbgb->getNumberInkhmer(date_create($moment)->format('Y')),
-  					'j'=>	$dbgb->getNumberInkhmer($this->getJolakSakarajYear($moment)),
+  					'e'=>	$config['eraYear'][$eraYear],
+  					'b'=>	$this->getBEYear($moment),
+  					'c'=>	date_create($moment)->format('Y'),
+  					'j'=>	$this->getJolakSakarajYear($moment),
   					
-  					's'=>	$dbgb->getNumberInkhmer($config['months'][sprintf("%01d",date_create($moment)->format('m')-1)]),
-  					'g'=>	$dbgb->getNumberInkhmer(date_create($moment)->format('d')),
+  					's'=>	$config['months'][sprintf("%01d",date_create($moment)->format('m')-1)],
+  					'g'=>	date_create($moment)->format('d'),
   					);
   		$spp = str_split($format);
     	$return="";
@@ -601,7 +601,7 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
     			$return.=$ss;
     		}
     	}
-    	return $return;
+    	return $dbgb->getNumberInkhmer($return);
   		}
   }
   

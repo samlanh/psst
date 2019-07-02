@@ -1,10 +1,11 @@
+<!-- 
 <?php 
-$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-$moment=date("Y-m-d");
-$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
-$w = $lunar->toLunarDate('w');
-$g = $lunar->toLunarDate('g');
-$s = $lunar->toLunarDate('s');
+// $tr=Application_Form_FrmLanguages::getCurrentlanguage();
+// $moment=date("Y-m-d");
+// $lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
+// $w = $lunar->toLunarDate('w');
+// $g = $lunar->toLunarDate('g');
+// $s = $lunar->toLunarDate('s');
 ?>
 <style>
 	.details-calendar {
@@ -68,12 +69,12 @@ small.sil-day {
 }
 </style>
 				<li role="presentation" class="dropdown">
-                	<a style="margin: 0;  padding: 0; border: none; " title="<?php echo $tr->translate("CALENDAR");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+                	<a style="margin: 0;  padding: 0; border: none; " title="<?php //echo $tr->translate("CALENDAR");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 	                  	<div class="details-calendar">
 							<div class="calendar_date">
-								<div class="day"><?php echo $w;?></div>
-								<div class="date"><?php echo $g;?></div>
-								<div class="month"><?php echo $s;?></div>
+								<div class="day"><?php //echo $w;?></div>
+								<div class="date"><?php //echo $g;?></div>
+								<div class="month"><?php //echo $s;?></div>
 							</div>
 						</div>
 					</a>
@@ -83,35 +84,35 @@ small.sil-day {
 		                 		<div class="row-top">
 		                 			<div class="form-row">
 			                 			<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
-			                 				<span><?php echo $lunar->toLunarDate('ឆ្នាំa');?></span>
+			                 				<span><?php //echo $lunar->toLunarDate('ឆ្នាំa');?></span>
 				                 		</div>
 				                 		<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
-				                 			<?php echo $lunar->toLunarDate('e');?>
+				                 			<?php //echo $lunar->toLunarDate('e');?>
 				                 		</div>
 				                 		<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
-				                 			<span><?php echo $lunar->toLunarDate('b');?></span>
+				                 			<span><?php //echo $lunar->toLunarDate('b');?></span>
 				                 		</div>
 				                 	</div>
 		                 		</div>
 		                 		<div class="row-middle">
 		                 			<div class="form-row">
 		                 				<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
-			                 				<span><?php echo $lunar->toLunarDate('dN');?></span><br />
-			                 				<span><?php echo $lunar->toLunarDate('s');?></span><br />
+			                 				<span><?php //echo $lunar->toLunarDate('dN');?></span><br />
+			                 				<span><?php //echo $s;?></span><br />
 			                 				<?php 
-			                 				if (!empty($lunar->silDay($moment))){?>
-			                 				<?php if (file_exists(PUBLIC_PATH."/images/buddha-png.png")){?>
-			                 				<img class="sil-day" src="<?php echo $this->baseUrl()."/images/buddha-png.png"?>" />
-			                 				<?php }?>
+			                 				//if (!empty($lunar->silDay($moment))){?>
+			                 				<?php //if (file_exists(PUBLIC_PATH."/images/buddha-png.png")){?>
+			                 				<img class="sil-day" src="<?php //echo $this->baseUrl()."/images/buddha-png.png"?>" />
+			                 				<?php //}?>
 			                 				<small class="sil-day" >ថ្ងៃសីល</small>
-			                 				<?php }?>
+			                 				<?php //}?>
 				                 		</div>
 				                 		<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
-				                 			<span class="g-day"><?php echo $lunar->toLunarDate('g');?></span>
+				                 			<span class="g-day"><?php //echo $g;?></span>
 				                 		</div>
 				                 		<div class="center col-lg-4 col-md-6 col-sm-12 col-xs-12">
-				                 			<span><?php echo $lunar->toLunarDate('m');?></span><br />
-				                 			<span><?php echo $lunar->toLunarDate('c');?></span>
+				                 			<span><?php //echo $lunar->toLunarDate('m');?></span><br />
+				                 			<span><?php //echo $lunar->toLunarDate('c');?></span>
 				                 		</div>
 		                 			</div>
 		                 			
@@ -122,7 +123,7 @@ small.sil-day {
 		                 			</div>
 		                 			<div class="form-row">
 			                 			<div class="center col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			                 			<small><?php echo $lunar->toLunarDate('ថ្ងៃW dN ខែm ឆ្នាំa ព.ស. b');?></small>
+			                 			<small><?php //echo $lunar->toLunarDate('ថ្ងៃW dN ខែm ឆ្នាំa ព.ស. b');?></small>
 			                 			</div>
 		                 			</div>
 		                 			<div class="form-row">
@@ -132,7 +133,7 @@ small.sil-day {
 		                 			</div>
 		                 			<div class="form-row">
 			                 			<div class="center col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			                 			<small><?php echo $lunar->toLunarDate('ត្រូវ​នឹងថ្ងៃទីg ខែs ឆ្នាំc');?></small>
+			                 			<small><?php //echo $lunar->toLunarDate('ត្រូវ​នឹងថ្ងៃទីg ខែs ឆ្នាំc');?></small>
 			                 			</div>
 		                 			</div>
 		                 		</div>
@@ -141,3 +142,4 @@ small.sil-day {
 		                 </li>
 	                 </ul>
                 </li>
+-->

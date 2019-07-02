@@ -8,7 +8,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
 	}
 	public function indexAction(){	
 	}
-    function rptScoreBacMonthlyAction(){
+    function rptScoreAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
     	}

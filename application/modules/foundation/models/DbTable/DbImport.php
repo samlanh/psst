@@ -14,25 +14,47 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	$count = count($data);
     	for($i=2; $i<=$count; $i++){
     		$arr = array(
-    				'branch_id'=>1,
+    				'branch_id'=>$data[$i]['B'],
     				'user_id'=>1,
-    				'stu_enname'=>$data[$i]['B'],
-    				'stu_khname'=>$data[$i]['B'],
-    				'sex'=>($data[$i]['C']=="M")?1:2,
-    				'tel'=>$data[$i]['F'],
+    				'stu_khname'=>$data[$i]['C'],
+    				'stu_enname'=>$data[$i]['D'],
+    				'last_name'=>$data[$i]['E'],
+    				'sex'=>($data[$i]['F']=="M")?1:2,
+    				'tel'=>$data[$i]['G'],
+    				'dob'=>date("Y-m-d",strtotime($data[$i]['H'])),
+    				'pob'=>$data[$i]['I'],
+    				
+    				'father_enname'=>$data[$i]['J'],
+    				'father_khname'=>$data[$i]['J'],
+    				'father_phone'=>$data[$i]['K'],
+    				
+    				'mother_khname'=>$data[$i]['L'],
+    				'mother_enname'=>$data[$i]['L'],
+    				'mother_phone'=>$data[$i]['M'],
+    				
+    				'guardian_first_name'=>$data[$i]['N'],
+    				'guardian_enname'=>$data[$i]['N'],
+    				'guardian_khname'=>$data[$i]['N'],
+    				'guardian_tel'=>$data[$i]['O'],
+    				
+    				'is_stu_new'=>0,
+    				'customer_type'=>1,
+    				'status'=>1,
+    				'modify_date'=>date("Y-m-d H:i:s"),
+    				'create_date'=>date("Y-m-d H:i:s")
     				//'note'=>$data[$i]['J'].",".$data[$i]['K'].",".$data[$i]['L'],
     		);
      		$this->_name='rms_student';
     		$id = $this->insert($arr);
     		
-    		$arr = array(
-    				'branch_id'=>1,
-    				'stu_id'=>$id,
-    				'degree'=>4,
-    				'status'=>1,
-    		);
-    		$this->_name='rms_student_id';
-    		$id = $this->insert($arr);
+//     		$arr = array(
+//     				'branch_id'=>1,
+//     				'stu_id'=>$id,
+//     				'degree'=>4,
+//     				'status'=>1,
+//     		);
+//     		$this->_name='rms_student_id';
+//     		$id = $this->insert($arr);
     		
     		/*$arr = array(
     				'group_id'=>0,

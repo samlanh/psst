@@ -268,7 +268,7 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 							</tr>
 							
 							<tr class="heght-row">
-								<td class="one ">&nbsp;'.$tr->translate("CHEQE_NO").'&nbsp;</td>
+								<td class="one ">&nbsp;'.$tr->translate("NOTE_NUMBER").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_cheqe_no"></span>&nbsp;</td>
 								<td class="one " align="left">&nbsp;'.$tr->translate("NOTE").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_description"></span>&nbsp;</td>

@@ -2,6 +2,10 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("STUDENT_SCORE"));
 	$frm =  $this->form_search;
+	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
+	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
+	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
 ?>	
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -195,4 +199,53 @@
 			}
 		});
 	}
+	
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="outstanding"){
+					url='<?php echo $urlOutStanding;?>';
+				}else if(key=="outstandingNophoto"){
+					url='<?php echo $urlOutStandingNoPhoto;?>';
+				}else if(key=="scoreresult"){
+					url='<?php echo $urlScoreResult;?>';
+				}else if(key=="scoredetail"){
+					url='<?php echo $urlScoreDetail;?>';
+				}
+				gotoAction();
+			},
+			items: {
+				"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
+				"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
+				"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
+				"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row, '_blank');
+	}
+	
 </script>

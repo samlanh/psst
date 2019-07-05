@@ -37,7 +37,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'issue','controller'=>'score','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'exam_type'=>$link,'title_score'=>$link,
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'exam_type'=>$link,'title_score'=>$link,
 					'for_semester'=>$link,'for_month'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
 		}catch (Exception $e){

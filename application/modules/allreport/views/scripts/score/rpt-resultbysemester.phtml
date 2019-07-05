@@ -109,19 +109,18 @@
 					<td colspan="3" id="exportExcel">
 						<table border="1" cellpadding="0"​ style=" font-size:13px; margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  >
 							<tr class="cheader" align="center"  style="font-size:14px;font-family: Arial,'Khmer OS Battambang';">
-								<td><?php echo $tr->translate("NUM");?></td>
-								<td><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
-								<td><?php echo $tr->translate("SEX");?></td>
-								<td><?php echo $tr->translate("ម.ខែក្នុងឆមាស");?></td>
-								<td><?php echo $tr->translate("ម.ប្រឡងឆមាស");?></td>
-								
-								<td><?php echo $tr->translate("ម.សរុប");?></td>
-								
-								<td><?php echo $tr->translate("ម.ប្រចាំឆ.ទី").$dbgb->getNumberInkhmer($rs['for_semester']);?></td>
-								<td>ចំ.ថ្នាក់<?php //echo $tr->translate("RANK");?>
+								<td width="3%"><?php echo $tr->translate("NUM");?></td>
+								<td width="24%"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
+								<td width="5%"><?php echo $tr->translate("SEX");?></td>
+								<td width="12%"><?php echo $tr->translate("ម.ខែក្នុងឆមាស");?></td>
+								<td width="12%"><?php echo $tr->translate("ម.ប្រឡងឆមាស");?></td>
+								<td width="10%"><?php echo $tr->translate("ម.សរុប");?></td>
+								<td width="12%"><?php echo $tr->translate("ម.ប្រចាំឆ.ទី").$dbgb->getNumberInkhmer($rs['for_semester']);?></td>
+								<td width="10%">ចំ.ថ្នាក់<?php //echo $tr->translate("RANK");?>
 									<input type="hidden" name="group_id" id="group_id" value="<?php echo $rs['group_id'];?>" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="semester" id="semester" value="<?php echo $rs['for_semester'];?>" dojoType="dijit.form.TextBox" />
 								</td>
+								<td width="12%"><?php echo $tr->translate("OTHER");?></td>
 							</tr>
 						<?php }$i++;?>
 							<tr class="style">
@@ -157,6 +156,7 @@
 								<td align="center"><?php echo number_format($avg_allmonth+$avg_semester,2);?></td>
 								<td align="center"><?php echo number_format(($avg_semester+$avg_allmonth)/2,2);?></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
+								<td>&nbsp;</td>
 							</tr>
 							<?php 
 								$old_groupid=$rs['group_id'];
@@ -164,10 +164,11 @@
 							?>
 							<?php }}?>
 							<?php if (!empty($this->studentgroup)){
-								for($i;$i<=45;$i++){
+								for($i=$i+1;$i<=45;$i++){
 							?>
 								<tr>
 									<td align="center"><?php echo $dbgb->getNumberInkhmer($i);?></td>
+									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
@@ -220,10 +221,13 @@
 											</tr>
 											<tr>
 												<td valign="top" width="33%" valign="top" align="center" style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
-													បានឃើញ និងឯកភាព<br/>
+													<?php echo $tr->translate("CHECKANDAPPROVED");?><br/>
 													<?php echo $tr->translate("DISTRIC_DIRECTOR_OFFICE_MINISTRY");//ប្រធានការិយាល័យអប់រំយុវជន និងកីឡាខណ្ឌពោធិ៍សែនជ័យ?>
 												</td>
-												<td width="33%" valign="top"></td>
+												<td width="33%" valign="top" align="center" style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
+													<?php echo $tr->translate("CHECKANDAPPROVED");//បានឃើញ និងឯកភាព?><br/>
+													<?php echo $tr->translate("PRINCIPAL");//?>
+												</td>
 												<td width="33%"  align="center" style="white-space: nowrap;" valign="top"><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;<?php echo @$this->studentgroup[0]['teacher_name'];?></td>
 											</tr>
 											
@@ -236,9 +240,9 @@
 				</tr>
 			</table>
 		</div>
-		<table>
+		<table width="100%">
 			<tr>
-				<td colspan="3"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></td>
+				<td colspan="3" align="center"><button dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></td>
 			</tr>
 		</table>
 		

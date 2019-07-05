@@ -689,7 +689,28 @@ dojo.ready(function(){
 			</tr>
 		</table>
 	<?php }?>	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 <?php }else if($type==2){ // GOOD WILL Layout ?>
+
+
+
+
+
+
+
+
+
+
+
 		<style type="text/css">
 			.style{
 				line-height: 20px;
@@ -1071,24 +1092,45 @@ dojo.ready(function(){
 								$sexen="F";
 							}
 						?>
-						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
+						<table  style="width:100%;background:#fff; color: darkblue; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
 							<tr>
-								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
-								<td align="right" style="width: 30px;">ភេទៈ</td>
-								<td align="center" style="width: 40px;"><?php echo $sexkh?></td>
-								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
-								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
-								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
-								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
-							</tr>
-							<tr>
-								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
-								<td align="right" style="width: 30px;">Gender:</td>
-								<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
-								<td align="right" style="width: 60px;">ID:</td>
-								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
-								<td style="width: 40px;">Grade:</td>
-								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+								<td width="80%">
+									<table style="line-height: 21px;width:100%;background:#fff; color: darkblue; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+										<tr>
+											<td width="20%"><?php echo $tr->translate('ACADEMIC_YEAR');?></td>
+											<td width="2%">:</td>
+											<td width="78%" class="bold"><?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></td>
+										</tr>
+										<tr>
+											<td ><?php echo $tr->translate('STUDENT_NAME');?></td>
+											<td >:</td>
+											<td class="bold"><?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name']);?></td>
+										</tr>
+										<tr>
+											<td ><?php echo $tr->translate('GENDER');?></td>
+											<td >:</td>
+											<td class="bold"><?php echo $sexen;?></td>
+										</tr>
+										<tr>
+											<td ><?php echo $tr->translate('GRADE');?></td>
+											<td >:</td>
+											<td class="bold"><?php echo $this->rs['group_code'];?></td>
+										</tr>
+										<tr>
+											<td ><?php echo $tr->translate('STUDENT_ID');?></td>
+											<td >:</td>
+											<td class="bold"><?php echo $this->rs['stu_code'];?></td>
+										</tr>
+									</table>
+								</td>
+								<td width="20%" align="center" valign="center">
+									<?php $stu_image = "";
+										if (!empty($this->rs['photo'])){
+											$stu_image = $this->baseUrl()."/images/photo/".$this->rs['photo'];
+										}
+									?>
+									<img style="width: 90px;height:100px;border: 1px solid #000;" src="<?php echo $stu_image;?>">
+								</td>
 							</tr>
 						</table>
 					</td>
@@ -1100,10 +1142,8 @@ dojo.ready(function(){
 								<td>ល.រ<br />No</td>
 								<td style="min-width:250px;">មុខវិជ្ជា<br />Subjects</td>
 								<td>ពិន្ទុ<br />Scores</td>
-								<td>មធ្យមភាគ<br />Average</td>
 								<td class="red ">ចំ.ថ្នាក់<br />Rank</td>
-								<td>និទ្ទេស <br />Grade</td>
-								<td colspan="2">មូលវិចារ<br />Comments</td>
+								<td colspan="3">មូលវិចារ<br />Comments</td>
 							</tr>
 							<?php $totalscore=0; $i=0; if (!empty($this->subject)){ ?>
 							<?php foreach ($this->subject as $rs){ $i++;
@@ -1114,11 +1154,9 @@ dojo.ready(function(){
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;<?php echo $rs['sub_name']; echo empty($rs['sub_name_en'])?'':"/".$rs['sub_name_en'];?>&nbsp;</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap;">&nbsp;<?php //echo $score['score'];?>&nbsp;</td>
 								<td class="border-bottom-none border-right-none" align="center">&nbsp;<?php echo $score['score'];?>&nbsp;</td>
 								<td class="border-bottom-none border-right-none" class="red bold"  align="center"><?php echo $rangsubje['rank']?></td>
-								<td class="border-bottom-none border-right-none" align="center"><?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?></td>
-								<td colspan="2" class="border-bottom-none" align="center">&nbsp;</td>
+								<td colspan="3" class="border-bottom-none" align="center">&nbsp;</td>
 								
 							</tr>
 							<?php }?>
@@ -1127,7 +1165,6 @@ dojo.ready(function(){
 								<td colspan="2" align="right">&nbsp;ពិន្ទុសរុបប្រឡងឆមាស &nbsp;<br />
 								&nbsp;<small>Total Scores for Semester Exams</small>&nbsp;
 								</td>
-								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="bold border-bottom-none border-right-none" align="center">&nbsp;<strong><?php echo number_format($totalscore,2)?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="border-bottom-none border-right-none">&nbsp;</td>
@@ -1137,7 +1174,6 @@ dojo.ready(function(){
 								<td colspan="2" align="right">&nbsp;មធ្យមភាគប្រឡងឆមាស &nbsp;<br />
 								&nbsp;<small>Average Scores for Semester Exams</small>&nbsp;
 								</td>
-								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php //echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
@@ -1147,7 +1183,6 @@ dojo.ready(function(){
 								<td colspan="2" align="right">&nbsp;មធ្យមភាគខែប្រចាំឆមាស &nbsp;<br />
 								&nbsp;<small>Monthly Average  Scores in Semester</small>&nbsp;
 								</td>
-								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo number_format($this->monthlySemester['total_avg'],2);?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $this->monthlySemester['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;
@@ -1171,17 +1206,15 @@ dojo.ready(function(){
 								<td colspan="2" align="right">&nbsp;ពិន្ទុសរុបប្រចាំឆមាស&nbsp;<br />
 								&nbsp;<small> Total Scores for Semester</small>&nbsp; 
 								</td>
-								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo $this->Semester['total_score_semester'];?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php //echo $this->rs['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php //echo $dbgb->calCulateGrade($semesterScore,$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
-								<td colspan="2" class="border-bottom-none">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none ">&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td colspan="2" align="right">&nbsp;<span class="red">មធ្យមភាគប្រចាំឆមាស ចំណាត់ថ្នាក់ និទ្ទេស មូលវិចារ</span>&nbsp;<br />
 								&nbsp;<small>Average Scores for Semester, Ranking Classification, Comments</small>&nbsp;
 								</td>
-								<td class="border-right-none">&nbsp;</td>
 								<td class="border-right-none bold" align="center" >&nbsp;<strong><?php echo $this->Semester['average_semester_score'];?></strong>&nbsp;</td>
 								<td class="border-right-none red" align="center" >&nbsp;<strong><?php echo $this->Semester['rank']?></strong>&nbsp;</td>
 								<td class="border-right-none red" align="center" >&nbsp;<strong>
@@ -1197,9 +1230,52 @@ dojo.ready(function(){
 									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],3);?>
 									</strong>&nbsp;</td>
 							</tr>
-							<tr>
-								<td colspan="8" style="border: solid 3px #4839bd;">&nbsp;</td>
+						</table>
+
+						<br/>
+						
+						<table class="header" cellpadding="5"​ style="text-align:center;width:40%;border-collapse:collapse;border: solid 3px #4839bd;color: darkblue;font-family: Times New Roman,Khmer OS Battambang;font-size:14px;" border="1" >		
+							<tr height="25px" style="background:#dbedff82;font-weight:bold;">
+								<td colspan="3">Grading Scale</td>
 							</tr>
+							<tr height="25px" style="background:#dbedff82;font-weight:bold;">
+								<td width="30%" >Score</td>
+								<td width="35%" >Grade</td>
+								<td width="35%" >Remarks</td>
+							</tr>
+							<tr>
+								<td>95 – 100</td>
+								<td>A</td>
+								<td>Excellent</td>
+							</tr>
+							<tr>
+								<td>85 – 94.99</td>
+								<td>B</td>
+								<td>Very Good</td>
+							</tr>
+							<tr>
+								<td>75 – 84.99</td>
+								<td>C</td>
+								<td>Good</td>
+							</tr>
+							<tr>
+								<td>65 –74.99</td>
+								<td>D</td>
+								<td>Satisfactory</td>
+							</tr>
+							<tr>
+								<td>50 – 64.99 </td>
+								<td>E</td>
+								<td>Pass</td>
+							</tr>
+							<tr>
+								<td>0 – 49.99</td>
+								<td>F</td>
+								<td>Fail</td>
+							</tr>
+						</table>
+						<br/>
+						<table class="header" cellpadding="5"​ style="text-align:center;width:100%;border-collapse:collapse;border: solid 3px #4839bd;color: darkblue;font-family: Times New Roman,Khmer OS Battambang;font-size:14px;" border="1" >	
 							<tr class="cheader">
 								<td class="red" colspan="8" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
 									អវត្តមាន<br />Absenteeism

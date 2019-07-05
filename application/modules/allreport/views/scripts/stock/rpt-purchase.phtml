@@ -131,13 +131,13 @@ table.tb-footer tr.style-head {
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
 								</tr>
 								<tr class="style-head" align="center">
-										<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('PHONE');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('REMAIN');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PHONE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('REMAIN');?>&nbsp;</td>
 							   </tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;
@@ -155,7 +155,6 @@ table.tb-footer tr.style-head {
 								     		<strong><?php echo $rs['supplier_no'];?></strong>
 								   	</a>&nbsp;
 								</td>
-								   
 								<td align="right">&nbsp;$&nbsp;<?php echo number_format($rs['amount_due'],2);?>&nbsp;</td>
 								<td>&nbsp;<?php echo date("d/m/Y",strtotime($rs['date']));?>&nbsp;</td>
 								<td>&nbsp;<?php if($rs['status']==0){ echo $tr->translate('VOID');}else if($rs['amount_due']>$rs['amount_due_after'] AND $rs['amount_due_after']>0){ echo $tr->translate('SOME_PAID'); }else if($rs['is_paid']==1){ echo $tr->translate('FULL_PAID');}else{ echo "-";} ?>&nbsp;</td>
@@ -166,7 +165,6 @@ table.tb-footer tr.style-head {
 									&nbsp;
 								</td>
 							 </tr>
-						  
 							<?php 
 								$totalbalance=$totalbalance+$rs['amount_due'];
 								$totalremain = $totalremain+$rs['amount_due_after'];

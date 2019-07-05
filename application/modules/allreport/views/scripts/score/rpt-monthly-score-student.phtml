@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("TRANSCRIPT")); 
-	$show_subject=1;//1=subject name,0 shortcut
 	
 	$session_lang=new Zend_Session_Namespace('lang');
 	$lang_id=$session_lang->lang_id;
@@ -27,8 +26,8 @@
 		"12"=>"ធ្នូ"
 			);
 	$monthview = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-	$show=2;
-	$type=2; // show good will layout
+	$show=2;// 1 for hide evaluation,2 show evaluation
+	$type=2; //1 for elt/2 goodwill layout
 ?>	
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
@@ -38,7 +37,7 @@ dojo.ready(function(){
 		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
 		new dijit.form.FilteringSelect({
 		    store:group_store,
-		    autoComplete: true,                        
+		    autoComplete: false,                        
 		    required:false,
 		    id: "group_name",
 		    name: "group_name",

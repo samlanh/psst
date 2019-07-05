@@ -4,7 +4,6 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
-// 	print_r($this->purchase);exit();
 ?>
 <style>
 .hover:hover{ background:#ccc;}
@@ -81,7 +80,6 @@ div#divPrint tr td {
 					</td>
 				</tr>
 				<tr>
-				 
 					<td colspan="3">
 						<table class="content-data" cellpadding="5"​ border="1" >
 							<tr class="style-head" align="center">
@@ -91,15 +89,14 @@ div#divPrint tr td {
 								<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 						   </tr>
-							
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_detail)) foreach ($this->pur_detail AS $rs) { $i++;
 						  ?>
 							<tr class="style-rowdata hover" align="center">
-								    <td> <?php echo $i; ?></td>
-								    <td align="left">&nbsp;<?php echo $rs['pro_id'];?>&nbsp;</td>
-								    <td align="center">&nbsp;<?php echo number_format($rs['qty'],0);?>&nbsp;</td>
-								    <td align="right">&nbsp;$&nbsp;<?php echo $rs['cost'];?>&nbsp;</td>
-								    <td align="right">&nbsp;$&nbsp;<?php echo $rs['amount'];?>&nbsp;</td>
+							    <td><?php echo $i; ?></td>
+							    <td align="left">&nbsp;<?php echo $rs['pro_id'];?>&nbsp;</td>
+							    <td align="center">&nbsp;<?php echo number_format($rs['qty'],0);?>&nbsp;</td>
+							    <td align="right">&nbsp;$&nbsp;<?php echo $rs['cost'];?>&nbsp;</td>
+							    <td align="right">&nbsp;$&nbsp;<?php echo $rs['amount'];?>&nbsp;</td>
 							 </tr>
 							<?php $totalbalance=$totalbalance+$rs['amount'];}?>	 
 						</table>	
@@ -109,8 +106,8 @@ div#divPrint tr td {
 					<td colspan="3" align="right">
 					     <table width="30%"  style="border: 0px solid #000;border-collapse: collapse;"  ><!-- background-color: #ccc; -->
 					           <tr align="center" style="font-size:12px; height: 20px;line-height: 30px;" align="center">
-					               <td>Total Amount :</td>
-					               <td><strong>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp; </strong></td>
+					              <td>Total Amount :</td>
+					              <td><strong>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp; </strong></td>
 					           </tr>
 					     </table>
 					</td>
@@ -141,7 +138,6 @@ dojo.ready(function(){
 var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
 function getbranchinfo(){
 		branch_id = '<?php echo $this->purchase['branch_id'];?>';
-		
 		if(branch_id != ""){
 			loadingBlock();
 			dojo.xhrPost({
@@ -155,13 +151,8 @@ function getbranchinfo(){
 					HideloadingBlock();
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});	
 		} 
 	}
 </script>
-
-
-
-

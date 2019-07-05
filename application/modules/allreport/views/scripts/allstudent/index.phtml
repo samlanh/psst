@@ -36,8 +36,16 @@
 					   $report_url=$db_user->getArrAclReport(1,'allstudent');
 					   if(!empty($report_url)){
 						   foreach($report_url as $url){
-						   if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' 
-							AND $url['action']!='rpt-crm-detail' AND $url['action']!='rpt-student-group' AND $url['action']!='mistake-certificate' AND $url['action']!='idselected' AND $url['action']!='semester-outstanding-student' AND $url['action']!='certificate' AND $url['action']!='certificate-letterofpraise' ){
+						   if($url['controller']=='allstudent' AND $url['action']!='index' 
+						   	AND $url['action']!='certify' AND $url['action']!='rpt-transcript' 
+						   	AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' 
+							AND $url['action']!='rpt-crm-detail' AND $url['action']!='rpt-student-group' 
+						   	AND $url['action']!='mistake-certificate' AND $url['action']!='idselected' 
+						   	AND $url['action']!='semester-outstanding-student' AND $url['action']!='certify-khmer'
+						   	AND $url['action']!='certificate-letterofpraise' AND $url['action']!='certify-english'
+						   	AND $url['action']!='rpt-assessmentterm' AND $url['action']!='print-idcard'
+						   	AND $url['action']!='print-pickupcard' AND $url['action']!='certify-english'
+						  ){
 				   ?>
 				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">

@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('Report Supplier Balance')); 
+	echo $this->headTitle($tr->translate('SUPPLIER_BALANCE_REPORT')); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
@@ -17,7 +17,7 @@ table.tb-footer tr.style-head {
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Report Supplier Balance');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SUPPLIER_BALANCE_REPORT');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
@@ -95,7 +95,7 @@ table.tb-footer tr.style-head {
 					<td width="15%" align="center">
 					</td>
 					<td align="center" width="70%">
-						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('Report Supplier Balance');?></span><br>
+						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('SUPPLIER_BALANCE_REPORT');?></span><br>
 						<span style="font-size: 12px; "><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;<?php echo $tr->translate('TO');?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center">

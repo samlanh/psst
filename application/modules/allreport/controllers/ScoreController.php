@@ -415,19 +415,19 @@ class Allreport_ScoreController extends Zend_Controller_Action {
 	    	$for_month =$this->getRequest()->getParam("for_month");
 	    	
 	    	if (empty($stu_id)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
 	    		exit();
 	    	}elseif (empty($group_id)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
 	    		exit();
 	    	}elseif (empty($exam_type)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
 	    		exit();
 	    	}elseif (empty($for_semester)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
 	    		exit();
 	    	}elseif (empty($for_month)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
 	    		exit();
 	    	}
 	    	$data = array(

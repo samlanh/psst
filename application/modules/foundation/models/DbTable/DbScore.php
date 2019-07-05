@@ -360,7 +360,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					(gsjd.amount_subject) amtsubject_month,
 					(gsjd.amount_subject_sem) amtsubject_semester,
 					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
-					(select dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id) as max_score
+					(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
 				FROM 
 			 		rms_group_subject_detail AS gsjd ,
 			 		rms_group as g
@@ -378,7 +378,6 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}
 		$sql.=' ORDER BY gsjd.id ASC ';
 		return $db->fetchAll($sql);
-		
 	}
 	function getChildSubject($subject_id){
 		$db=$this->getAdapter();

@@ -5,29 +5,6 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	$day = array(
-			"Mon" =>'ច័ន្ទ',
-			"Tue" =>'អង្គារ',
-			"Wed" =>'ពុធ',
-			"Thu" =>'ព្រហស្បតិ៍',
-			"Fri" =>'សុក្រ',
-			"Sat" =>'សៅរ៍',
-			"Sun" =>'អាទិត្យ',
-	);
-	$month = array(
-				"01"=>"មករា",
-				"02"=>"កុម្ភៈ",
-				"03"=>"មីនា",
-				"04"=>"មេសា",
-				"05"=>"ឧសភា",
-				"06"=>"មិថុនា",
-				"07"=>"កក្កដា",
-				"08"=>"សីហា",
-				"09"=>"កញ្ញា",
-				"10"=>"តុលា",
-				"11"=>"វិច្ឆិកា",
-				"12"=>"ធ្នូ"
-			);
 	$semester = array(
 				"1"=>"១",
 				"2"=>"២",
@@ -136,8 +113,8 @@
 								<td align="center" style="font-family: Khmer OS Muol Light;font-size: 22px;">
 									<span style="font-size: 25px;">តារាងកិត្តិយស </span><br />
 									ប្រចាំឆមាស <?php echo $semester[$this->studentgroup[0]['for_semester']];?><br />
-									ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
-									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?>
+									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?><br />
+									ឆ្នាំសិក្សា  <label id="academic_year"></label>
 								</td>
 								<script type="text/javascript">
 									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');

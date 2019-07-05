@@ -5,11 +5,11 @@
 ?>	
 <meta charset="utf-8">
 <style>
-.hover:hover{ background:#ccc;}
-table.content-data tr.style-head,
-table.tb-footer tr.style-head {
-   font-weight: bold !important;
-}
+	.hover:hover{ background:#ccc;}
+	table.content-data tr.style-head,
+	table.tb-footer tr.style-head {
+	   font-weight: bold !important;
+	}
 </style>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -29,11 +29,6 @@ table.tb-footer tr.style-head {
         	<div class="col-md-3 col-sm-2 col-xs-12">
         		<?php echo $frm->getElement("branch_id");?>
         	</div>
-			<?php /*?>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<input id="study_year" />
-        	</div>
-			<?php */?>
         	<div class="col-md-3 col-sm-2 col-xs-12">
         		<?php echo $frm->getElement("category_id");?>
         	</div>
@@ -126,10 +121,8 @@ table.tb-footer tr.style-head {
 								<tr class="style-head" align="center">
 									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?></td>
 									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?></td>
-									
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?></td>
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?></td>
-									
 									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('UNIT_COST');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
@@ -146,20 +139,20 @@ table.tb-footer tr.style-head {
 						if(!empty($this->product_sold)){ foreach ($this->product_sold AS $rs) { $i++;
 						?>
 							<tr class="style-rowdata hover" align="center">
-								    <td><?php echo $i; ?></td>
-								    <td><?php echo $rs['branch_name'];?></td>
-								    <td><?php echo $rs['stu_code'];?></td>
-								    <td style="text-align: left;"><?php echo $rs['student_name'];?></td>
-								    <td style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
-								    <td><?php echo $rs['category'];?></td>
-								    <td><?php echo number_format($rs['qty'],0);?></td>
-								    <td><?php echo "$ ".$rs['cost'];?></td>
-								    <td><?php echo "$ ".$rs['fee'];?></td>
-								    <td>&nbsp;$&nbsp;<?php echo $rs['subtotal'];?>&nbsp;</td>
-								    <td>&nbsp;$&nbsp;<?php echo $rs['paidamount'];?>&nbsp;</td>
-								    <td><strong><?php echo $rs['receipt_number'];?></strong></td>
-								    <td><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
-								    <td><?php echo $rs['user']; ?></td>
+							    <td><?php echo $i; ?></td>
+							    <td><?php echo $rs['branch_name'];?></td>
+							    <td><?php echo $rs['stu_code'];?></td>
+							    <td style="text-align: left;"><?php echo $rs['student_name'];?></td>
+							    <td style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
+							    <td><?php echo $rs['category'];?></td>
+							    <td><?php echo number_format($rs['qty'],0);?></td>
+							    <td><?php echo "$ ".$rs['cost'];?></td>
+							    <td><?php echo "$ ".$rs['fee'];?></td>
+							    <td>&nbsp;$&nbsp;<?php echo $rs['subtotal'];?>&nbsp;</td>
+							    <td>&nbsp;$&nbsp;<?php echo $rs['paidamount'];?>&nbsp;</td>
+							    <td><strong><?php echo $rs['receipt_number'];?></strong></td>
+							    <td><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
+							    <td><?php echo $rs['user']; ?></td>
 							 </tr>
 						  		<?php 
 						  			$grand_total=$grand_total+$rs['subtotal'];
@@ -194,14 +187,12 @@ table.tb-footer tr.style-head {
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
+	//dojo.require("dojo.NodeList-manipulate");
 
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
-		
 		getProductByCate();
-		
 		new dijit.form.FilteringSelect({
 			store: academic_store,
 			queryExpr: "*${0}*",
@@ -257,16 +248,13 @@ table.tb-footer tr.style-head {
 				}
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
-
 	var item_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'get-productbycate')); ?>';
 	function getProductByCate(){
 		cate_id = dijit.byId("category_id").get("value");
-		//if(cate_id>0){
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
@@ -281,7 +269,5 @@ table.tb-footer tr.style-head {
 				error: function(err) {
 				}
 			});
-		//}
 	}
-
 </script>

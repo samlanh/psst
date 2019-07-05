@@ -83,7 +83,7 @@ $teacher_id = $session_t->teacher_id;
     </script>
      -->
 	<?php }?>
-	<?php if ($module=="allreport" AND ($action=="rpt-score-bac-monthly" OR $action=="rpt-student-group")){?>
+	<?php if ($module=="allreport" AND ($action=="rpt-score" OR $action=="rpt-student-group")){?>
 	<link href="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.css" rel="stylesheet" type="text/css" />
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
@@ -292,11 +292,11 @@ $teacher_id = $session_t->teacher_id;
 							<?php 
 								$db = new Application_Model_DbTable_DbUsers();
 	            				$rs = $db->getAccessUrl($module,$controller,$action);
-	            				echo $this->layout()->content;
+	            				//echo $this->layout()->content;
 		            			if(!empty($rs) OR $action=='changepassword'){
-		            				//echo $this->layout()->content;
+		            				echo $this->layout()->content;
 		            			}else{
-		            				//echo $this->render('pagenotfund.phtml');
+		            				echo $this->render('pagenotfund.phtml');
 		            			}
             				 ?>
             				 <?php if($module!='home') {?>

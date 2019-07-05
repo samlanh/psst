@@ -151,10 +151,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1) AS `room_name`, 
 			 	(SELECT $label FROM `rms_view`	WHERE (`rms_view`.`type` = 4 AND `rms_view`.`key_code` = `g`.`session`) LIMIT 1) AS `session`,
 			 	CASE
-						WHEN s.exam_type = 2 THEN ''
+					WHEN s.exam_type = 2 THEN ''
 					ELSE (SELECT $month FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) 
-				END 
-				as for_month,
+				END as for_month,
 			 	s.exam_type,
 			 	s.for_semester,
 			  	s.reportdate
@@ -199,9 +198,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	}
 	   	if($search['room']>0){
 	   		$where.=" AND `g`.`room_id` =".$search['room'];
-	   	}
-	   	if($search['for_month']>0){
-	   		$where.= " AND s.for_month =".$search['for_month'];
 	   	}
 	   	if($search['exam_type']>0){
 	   		$where.= " AND s.exam_type =".$search['exam_type'];

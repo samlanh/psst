@@ -3,34 +3,15 @@
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
 ?>	
-<script type="text/javascript">
-function getKHMonthByNumber(m){
-	var monthName=[
-		"មករា",
-		"កុម្ភៈ",
-		"មីនា",
-		"មេសា",
-		"ឧសភា",
-		"មិថុនា",
-		"កក្កដា",
-		"សីហា",
-		"កញ្ញា",
-		"តុលា",
-		"វិច្ឆិកា",
-		"ធ្នូ",
-		];
-		return (monthName[m-1]);
-}	
-</script>
 <div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
 		<div id="divPrint1" >
 		<style>
-					.card-content-student-print{
-						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
-						 background-size: 100%;background-repeat: no-repea
-						 page-break-after:always;					
-					}
+				.card-content-student-print{
+					background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+					 background-size: 100%;background-repeat: no-repea
+					 page-break-after:always;					
+				}
 					<?php 
 					$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
@@ -283,8 +264,7 @@ function getKHMonthByNumber(m){
 						<?php }?>
 			<?php }
 				}?>
-				
-				<?php $con=4;$i=0; $student= count($this->rs);$amount=4;
+		<?php $con=4;$i=0; $student= count($this->rs);$amount=4;
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 					<?php 
 					$prefix="";
@@ -382,10 +362,10 @@ function getKHMonthByNumber(m){
 			<?php 
 				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'),null,true);
+				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
 			?>
 			window.location.href = '<?php echo $url_copy;?>';
-	    }, 10000);
+	    }, 1000);
 	   return false;
 
 	    

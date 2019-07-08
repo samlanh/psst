@@ -419,9 +419,8 @@ function getKHMonthByNumber(m){
 			<?php 
 				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'),null,true);
+				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
 			?>
-			//window.location.href = '<?php echo $url_copy;?>';
 	    }, 10000);
 	   return false;
 	}

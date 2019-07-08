@@ -387,7 +387,6 @@ dojo.ready(function(){
 						if (!empty($this->rs['photo_branch'])){
 							$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
 						}
-						
 					?>
 					<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
 				</td>
@@ -832,12 +831,12 @@ dojo.ready(function(){
 									</table>
 								</td>
 								<td width="20%" align="center" valign="center">
-									<?php $stu_image = "";
+									<?php $stu_image = '';
 										if (!empty($this->rs['photo'])){
 											$stu_image = $this->baseUrl()."/images/photo/".$this->rs['photo'];
 										}
 									?>
-									<img style="width: 90px;height:100px;border: 1px solid #000;" src="<?php echo $stu_image;?>">
+									<img style="width: 90px;height:100px;border: 1px solid #000;" <?php if(!empty($stu_image)){echo "src='".$stu_image."'";}?> >
 								</td>
 							</tr>
 						</table>
@@ -1129,7 +1128,7 @@ dojo.ready(function(){
 											$stu_image = $this->baseUrl()."/images/photo/".$this->rs['photo'];
 										}
 									?>
-									<img style="width: 90px;height:100px;border: 1px solid #000;" src="<?php echo $stu_image;?>">
+									<img style="width: 90px;height:100px;border: 1px solid #000;" <?php if(!empty($stu_image)){echo "src='".$stu_image."'";}?> >
 								</td>
 							</tr>
 						</table>

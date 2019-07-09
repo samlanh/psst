@@ -17,7 +17,7 @@ table tr td strong{
 	<div id="divPrint">
 		<?php 
 		$amount_print = $this->data['receipt_print'];
-		for($prin=0;$prin<$amount_print;$prin++){?>
+		//for($prin=0;$prin<$amount_print;$prin++){?>
 			<table cellspacing="0" width="100%" cellpadding="0" style="margin: 0 auto; width:100%;height:13.97cm;font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: 0px;white-space:nowrap;" >
 				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
@@ -177,7 +177,7 @@ table tr td strong{
 																	 <option value="1" <?php if($this->payment['is_void'] == 1){echo "selected='selected'";}?>><?php echo $tr->translate("VOID");?></option>
 																   </select>
 											                   </div>
-										                 </div>
+															</div>
 														</td>
 														<td align="center" valign="top">
 															<div class="form-group" >
@@ -191,7 +191,7 @@ table tr td strong{
 											                    	<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
 					 												iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 											</div>
-										                 </div>
+															</div>
 														</td>
 													</tr>	
 												</table>
@@ -249,8 +249,8 @@ table tr td strong{
 						</td>
 					</tr>
 			</table>
-<?php
-}?>
+<?php //}?>
+
 	</div>	
 </div>
 <script type="text/javascript">

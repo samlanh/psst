@@ -543,22 +543,35 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$print=$tr->translate("PRINT_SCHO");
     	$db=$this->getAdapter();
+    	
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    	}
 		
     	$sql=" SELECT 
     				sp.id,
-    				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+    				(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
     				sp.receipt_number,
 	    			s.stu_code,
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
-	    			(SELECT name_en FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
+	    			(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
-	    	        (SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
-			        (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+	    	        (SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
+			        (SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 	 		        sp.penalty,sp.grand_total,sp.credit_memo,sp.paid_amount,sp.balance_due,
-					(SELECT name_en FROM `rms_view` WHERE type=8 AND key_code=payment_method LIMIT 1) AS payment_method,
+					(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=payment_method LIMIT 1) AS payment_method,
 					number,sp.create_date ,
 	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
-	 		       (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS void,
+	 		       (SELECT $label FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS void,
 	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
  			   FROM 
     				rms_student AS s,

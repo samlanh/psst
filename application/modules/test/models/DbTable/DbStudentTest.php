@@ -240,16 +240,27 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': " s.create_date_stu_test <= '".$search['end_date']." 23:59:59'";
 		
 		$where = " AND ".$from_date." AND ".$to_date;
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+		}else{ // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+		}
+		
 		$sql="
 			SELECT 
 				s.stu_id,
-				(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,
+				(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,
 				s.serial,
 				s.stu_khname,
 				s.stu_enname,
 				s.last_name,
-				(SELECT name_kh from rms_view WHERE type=2 and key_code=s.sex LIMIT 1) as sex,
-				(SELECT name_kh FROM rms_view WHERE TYPE=21 AND key_code=s.nationality LIMIT 1) AS nationality,
+				(SELECT $label from rms_view WHERE type=2 and key_code=s.sex LIMIT 1) as sex,
+				(SELECT $label FROM rms_view WHERE TYPE=21 AND key_code=s.nationality LIMIT 1) AS nationality,
 				s.tel,
 				s.dob,
 				s.from_school,

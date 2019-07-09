@@ -276,14 +276,14 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		$user = new Zend_Dojo_Form_Element_FilteringSelect('user');
 		$user->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("USER"),
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_USER"),
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
 		$user->setValue($request->getParam('user'));
-		$opt_user = array(''=>$this->tr->translate("USER"));
+		$opt_user = array(''=>$this->tr->translate("PLEASE_SELECT_USER"));
 		$opt_all_user=$db->getAllUser();
 		if(!empty($opt_all_user))foreach ($opt_all_user As $row)$opt_user[$row['id']]=$row['name'];
 		$user->setMultiOptions($opt_user);

@@ -31,7 +31,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","INFORS_RECEIVE","EXPENSE_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_EXPENSE","NOTE","FOR_DATE","BY_USER","STATUS");
+    		$collumns = array("BRANCH_NAME","RECEIVER","EXPENSE_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_EXPENSE","NOTE","FOR_DATE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'expense','action'=>'edit',
     		);

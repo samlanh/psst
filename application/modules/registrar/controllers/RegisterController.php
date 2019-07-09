@@ -34,9 +34,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		//$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
     		
-    		$collumns = array("BRANCH_NAME","RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","FINE",
+    		$collumns = array("BRANCH_NAME","RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","FINE",
     				"TOTAL_PAYMENT","CREDIT_MEMO","PAID","BALANCE",
-    							"PAYMENT_METHOD","NUMBER","DATE_PAY","USER","STATUS","VOID_BY");
+    							"PAYMENT_METHOD","CHEQUE_NO","DATE_PAY","USER","STATUS","VOID_BY");
     		
     		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);
     		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));

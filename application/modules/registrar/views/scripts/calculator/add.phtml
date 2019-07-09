@@ -170,7 +170,7 @@
 <table width="100%">
 	<tr align="center">
 		<td>
-			<input type="button" value="Save & Print" label="រក្សាទុកបោះពុម្ភ" id="busyButton" dojoType="dijit.form.Button" 
+			<input type="button" value="Save & Print" label="<?php echo $tr->translate("SAVE_PRINT");?>" id="busyButton" dojoType="dijit.form.Button" 
 			iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printCashCount();displayNone()"/>
 		</td>
 	</tr>
@@ -180,7 +180,6 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require("dojo.number");
 function displayNone(){
-	//document.getElementById('printcashcount1').style.display="none";
 }
 function Calcuhundred(){
 	d_hundred=dijit.byId('d_hundred').get('value');
@@ -770,8 +769,8 @@ function hideDialog(){
 	</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-			type="button" onclick="hideDialog();">បោះបង់</button>
+			type="button" onclick="hideDialog();"><?php echo $tr->translate("CANCEL");?></button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-			type="button" onclick="Printcashcount();">រក្សាទុក/បោះពុម្ភ</button>
+			type="button" onclick="Printcashcount();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>	

@@ -104,7 +104,6 @@ table .set-style tr td a {
 				                </div>
 			                </div>
 		                </div>
-						
 						<div class="form-group">
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								 <div class="form-group">
@@ -116,7 +115,6 @@ table .set-style tr td a {
 				                </div>
 							</div>
 						</div>
-						
 						<div class="form-group">
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<div class="form-group">
@@ -160,7 +158,6 @@ table .set-style tr td a {
 							return false;
 						}
 						loadingBlock();	
-
 						return true;
 	   				}else {
 						return false;
@@ -228,7 +225,6 @@ table .set-style tr td a {
 								<input type="hidden" name="room_group" id="room_group" dojoType="dijit.form.TextBox" />
 		                   </div>
 		                </div>
-		                
 		                <div class="form-group">
 		                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
 		                   		<input type="submit" id="save_close" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_CLOSE");?>"
@@ -242,17 +238,13 @@ table .set-style tr td a {
 		            <div class="clearfix"></div>
 	             </form>
        	 </div>
-	        
-       
 	</div>
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
- <script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/jquery.multi-select.js" type="text/javascript"></script>
- <script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/rainbow.js" type="text/javascript"></script>
- <script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/application.js" type="text/javascript"></script>
- 
+<script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/jquery.multi-select.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/rainbow.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/application.js" type="text/javascript"></script>
 <script type="text/javascript">
-
 dojo.require("dojo.NodeList-manipulate");
 dojo.require('dijit.form.Textarea');
 dojo.require("dojo.data.ItemFileWriteStore"); 
@@ -326,15 +318,11 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 					dijit.byId('grade').attr('value','<?php echo $this->value['grade']; ?>');  
 				},
 				error: function(err) {
-					//alert(222);
 				}
 			});
 		}
 	}
-	
 </script>
-
-	
 <script type="text/javascript">
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(){
@@ -343,7 +331,6 @@ function toStudentGroup(){
 			alert('Please select group !!! ');
 			return false;
 		}
-	
 	dojo.xhrPost({
 		url:url_to_group,
 		content:{
@@ -359,11 +346,9 @@ function toStudentGroup(){
 			dijit.byId('room_group').attr('value',data.room_id);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
 var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
 function getRefreshGroup(){
 	branch_id = dijit.byId('branch_id').get('value');
@@ -410,12 +395,9 @@ function getAllAcademicByBranch(){
 			dijit.byId('academy').attr('value','<?php echo $this->value['academy']; ?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
-
-
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
@@ -439,7 +421,6 @@ function getAllGroupByBranch(){
 		    dijit.byId('group').set('store',group_store);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

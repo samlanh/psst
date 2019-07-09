@@ -226,8 +226,8 @@ function getStudentFromGroup(){
 		load: function(respone) {
 			tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table" >'
 				+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
-					+'<td><?php echo $tr->translate('CODE');?></td>'
-					+'<td><?php echo $tr->translate('NAME_KH');?></td>'
+					+'<td><?php echo $tr->translate('STUDENT_CODE');?></td>'
+					+'<td><?php echo $tr->translate('STUDENT_NAMEKHMER');?></td>'
 					+'<td><?php echo $tr->translate('NAME_EN');?></td>'
 					+'<td colspan="2"><?php echo $tr->translate('SEX');?></td>'
 					+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
@@ -323,7 +323,7 @@ function check(i){
 function popupAddGroup(){
 	id = dijit.byId('to_group').get('value');
 	if(id==-1){
-		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
 	}
 }
 function loading(){

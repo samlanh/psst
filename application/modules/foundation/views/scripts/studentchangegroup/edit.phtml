@@ -175,7 +175,6 @@ dojo.ready(function(){
 	function getStudentInfo(){
 		studentid = dijit.byId('studentid').get('value');
 		if(studentid=="" || studentid==0){ 
-			//alert("Please Select Student");
 			dijit.byId('studentid').focus();
 			return false;
 		}
@@ -189,7 +188,7 @@ dojo.ready(function(){
 				dijit.byId("gender").attr("value",data.sex);
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -217,13 +216,13 @@ function toStudentGroup(type){
 		handleAs:"json",
 		load: function(data) {
 			if(type==1){
-				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
+				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
 			}else{
-				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
+				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
 			}
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 }
@@ -309,7 +308,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -339,7 +337,6 @@ function getallstudentname(){//
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

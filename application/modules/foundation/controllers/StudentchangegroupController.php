@@ -3,13 +3,11 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 	
     public function init()
     {    	
-     /* Initialize action controller here */
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction(){
-		
 		if($this->getRequest()->isPost()){
 			$search = $this->getRequest()->getPost();
 		}else{
@@ -26,7 +24,6 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 		$db_student= new Foundation_Model_DbTable_DbStudentChangeGroup();
 		$rs_rows = $db_student->selectAllStudentChangeGroup($search);
 		$list = new Application_Form_Frmtable();
@@ -35,7 +32,7 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 			else{
 				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 			}
-			$collumns = array("BRANCH","STUDENT_ID","NAME_KH","NAME_EN","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE");
+			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","Last Name","First Name","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE");
 			$link=array(
 					'module'=>'foundation','controller'=>'studentchangegroup','action'=>'edit',
 			);

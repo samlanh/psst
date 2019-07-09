@@ -25,7 +25,6 @@
                     	<?php echo $frm->getElement("branch_id");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php //echo $frm->getElement("study_year");?>
                     	<input id="study_year" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -47,7 +46,7 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -98,11 +97,7 @@ function getAllAcademicByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
 </script>
-
-
-

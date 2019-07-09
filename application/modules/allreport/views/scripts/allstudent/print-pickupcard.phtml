@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
-	$type=2;
+	$type=2;  // tyep=1 for ELT , type=2 for good will 
 ?>	
 <title><?php echo $tr->translate("Pickup Card Selected")?></title>
 <script type="text/javascript">
@@ -23,10 +23,10 @@ function getKHMonthByNumber(m){
 		return (monthName[m-1]);
 }	//     class="dijitHidden"		data-dojo-type="dijit.Dialog"
 </script>
-<div  style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
-	<div  style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
+<div class="dijitHidden" style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
 		<div id="PickupCard" style="margin: 0 auto;width:100%;" >
-			<?php if($type==1){?>
+			<?php if($type==1){ // type=1 for ELT format   ?>
 				<style>
 					.card-content-student-printpickup{
 						background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
@@ -161,7 +161,7 @@ function getKHMonthByNumber(m){
 					</div>
 				</div>
 			
-			<?php }}}else if($type==2){?>
+			<?php }}}else if($type==2){ // type=2 for GoodWill format  ?>
 				
 				<style>
 					.card-content-student-printpickup{
@@ -395,7 +395,7 @@ function getKHMonthByNumber(m){
 </div>
 <script type="text/javascript">
 	dojo.ready(function(){
-		//print();
+		print();
 	});
 	function print(){
 		loadingBlock();
@@ -421,6 +421,7 @@ function getKHMonthByNumber(m){
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
 			?>
+			window.location.href = '<?php echo $url_copy;?>';
 	    }, 10000);
 	   return false;
 	}

@@ -76,7 +76,25 @@
 	                   		<input type="text" name="title" id="title" dojoType="dijit.form.TextBox" class="fullside" />
 	                   </div>
 	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FOR_DATE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   	<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
+	                   </div>
+	                </div>
+	                
+	            </div>
+	            <div class="col-md-4 col-sm-4 col-xs-12">
+	                
 	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_INCOME");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="total_income" id="total_income" required="true" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   </div>
+	                </div>
+					<div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAYMENT_METHOD");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -85,22 +103,6 @@
 									<option value="<?php echo $payment_method['id']?>"><?php echo $payment_method['name']?></option>
 								<?php }}?>
 							</select>
-	                   </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FOR_DATE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   	<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_INCOME");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="total_income" id="total_income" required="true" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 	                <div class="form-group">

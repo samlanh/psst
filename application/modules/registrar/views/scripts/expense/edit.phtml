@@ -16,6 +16,9 @@ table.collape tbody td {
     padding: 2px;
     border-bottom: solid 1px #eee;
 }
+.nomargin{
+	margin-top:0px !important;
+}
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
  <script>
@@ -155,7 +158,7 @@ table.collape tbody td {
 				</tr>
 				<tr>
 				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-top:-10px;">
+						<table width="100%" style="font-size: 10px;margin-top: -10px;">
 							<tr>
 								<td width="30%">
 								</td>
@@ -175,8 +178,19 @@ table.collape tbody td {
 				<tr>
 					<td colspan="10">
 						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-1px;line-height: 17px;">
-							 
-							<tr style="line-height: 12px; ">
+							<tr >
+								<td width="10%"></td>
+								<td width="18%"></td>
+								<td width="9%"></td>
+								<td width="18%"></td>
+								<td width="4%"></td>
+								<td width="8%"></td>
+								<td width="4%"></td>
+								<td width="5%"></td>
+								<td width="3%"></td>
+								<td width="8%"></td>
+							</tr>
+							<tr style="line-height: 15px;">
 								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
 								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
 								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
@@ -184,7 +198,7 @@ table.collape tbody td {
 								<td colspan="3">ចំណាយជា  </br />Payment Method</td>
 								<td colspan="3" valign="top">:&nbsp;<label id="lb_paymentmehtod"></label></td>
 							</tr>
-							<tr style="line-height: 12px;">
+							<tr style="line-height: 15px;">
 								<td>សម្គាល់  </br /> Note </td>
 								<td colspan="9" valign="top"> :&nbsp; <label id="lb_note"></label></td>
 							</tr>
@@ -196,14 +210,34 @@ table.collape tbody td {
 							<tr>
 								<td colspan="10" valign="bottom">
 									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
-										 
+										<tr>
+											<td width="20%"></td>
+											<td width="20%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+										</tr>
+										<tr>
+											<td colspan="2"  align="center">
+												<div style="margin-top:-5px;"></div>
+											</td>
+											<td colspan="2">
+												&nbsp;
+											</td>
+											<td>
+												<div style="margin-top:-15px;"></div>
+											</td>
+											<td>
+											</td>
+										</tr>
 										<tr>
 											<td colspan="4"></td>
 											<td>
-												<div style="margin-top:4px;">ចំណាយសរុប <br />Paid Amount</div>
+												<div class="nomargin" style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
 											</td>
 											<td>
-												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
+												<div class="nomargin" style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
 											</td>
 										</tr>
 										<tr >
@@ -482,10 +516,10 @@ table.collape tbody td {
 		}
 	}
 	function doPrintInvoice() {
-		$('#office_receipt').submit();
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
 		window.frames["print_frame"].window.focus();
 		window.frames["print_frame"].window.print();
+		//$('#office_receipt').submit();
 	}
 	function checkValidateAddRow(){
 		var rowId = $('#identity').val();

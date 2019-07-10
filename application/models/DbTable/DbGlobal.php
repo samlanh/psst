@@ -703,8 +703,15 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    public function getAllDegreeMent(){
+   	$_db  = new Application_Model_DbTable_DbGlobal();
+   	$lang = $_db->currentlang();
+   	if($lang==1){// khmer
+   		$label = "name_kh";
+   	}else{ // English
+   		$label = "name_en";
+   	}
    	$db = $this->getAdapter();
-   	$sql=" SELECT key_code AS id, name_kh AS name FROM rms_view WHERE STATUS=1 AND TYPE=3 AND name_kh!='' ORDER BY rms_view.key_code ASC ";
+   	$sql=" SELECT key_code AS id, $label AS name FROM rms_view WHERE STATUS=1 AND TYPE=3 AND name_kh!='' ORDER BY rms_view.key_code ASC ";
    	return $db->fetchAll($sql);
    }
    function getSession(){
@@ -960,7 +967,7 @@ function getAllgroupStudyNotPass($action=null){
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
    			stu_code,
-		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
+		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
 		   	FROM rms_student AS s
 		   	WHERE
 		   	(stu_enname!='' OR s.stu_khname!='')

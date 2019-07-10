@@ -55,27 +55,31 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
+		$label="name_en";
+		$branch = "branch_nameen";
 		if ($currentLang==1){
 			$colunmname='title';
+			$label="name_kh";
+			$branch = "branch_namekh";
 		}
 		
 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 				$sql = "SELECT  s.stu_id,
-				(SELECT branch_nameen FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+				(SELECT $branch FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				s.stu_khname,
 				CONCAT(s.last_name,' ',s.stu_enname),
-				(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
+				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
-				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
+				(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-				(SELECT name_kh from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student
+				(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student
 				 ";//AND s.is_subspend=0
 				
 		$sql.=$dbp->caseStatusShowImage("s.status");

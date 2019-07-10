@@ -17,6 +17,9 @@ table.collape tbody td {
     padding: 2px;
     border-bottom: solid 1px #eee;
 }
+.nomargin{
+	margin-top:0px !important;
+}
 </style>
  <script>
 	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
@@ -223,10 +226,10 @@ table.collape tbody td {
 										<tr>
 											<td colspan="4"></td>
 											<td>
-												<div style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
+												<div class="nomargin" style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
 											</td>
 											<td>
-												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
+												<div class="nomargin" style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
 											</td>
 										</tr>
 										<tr >
@@ -467,10 +470,10 @@ table.collape tbody td {
 		}
 	}
 	function doPrintInvoice() {
-		$('#office_receipt').submit();
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
 		window.frames["print_frame"].window.focus();
 		window.frames["print_frame"].window.print();
+		$('#office_receipt').submit();
 	}
 
 	function checkValidateAddRow(){

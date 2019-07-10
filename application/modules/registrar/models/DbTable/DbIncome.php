@@ -165,8 +165,16 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 
 	
 	function getPaymentMethod($type){ // $type = rms_view type
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+		}else{ // English
+			$label = "name_en";
+		}
+		
 		$db=$this->getAdapter();
-		$sql="SELECT key_code as id,name_kh as name FROM rms_view WHERE `type`=$type AND `status`=1 ";
+		$sql="SELECT key_code as id,$label as name FROM rms_view WHERE `type`=$type AND `status`=1 ";
 		return $db->fetchAll($sql);
 	}
 	

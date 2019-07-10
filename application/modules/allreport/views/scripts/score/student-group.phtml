@@ -192,11 +192,9 @@
 			store: group_store,
 		    queryExpr: "*${0}*",
 			autoComplete: false,                     
-			required: true,                      
 		    id: "group",
 		    name: "group",  
 		    class: 'fullside', 
-		    readonly:false,
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 		    onChange: function() {  
@@ -206,7 +204,7 @@
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
-			required: true,                        
+			required: false,                        
 			id: "grade",
 			name: "grade",  
 			class: 'fullside',  

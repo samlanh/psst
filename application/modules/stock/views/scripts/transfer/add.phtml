@@ -1,6 +1,5 @@
 <?php 
      $url_save = $this->url(array('module'=>'stock','controller'=>'transfer','action'=>'add'));
-     $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $status_view=$this->status_view;
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
@@ -16,7 +15,7 @@
 	}
 	.center{border:1px solid #000;}
 </style>
-<title><?php echo $this->tr->translate("ADD_TRANSFER_PRODUCT")?></title>
+<title><?php echo $tr->translate("ADD_TRANSFER_PRODUCT")?></title>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -43,7 +42,7 @@
 						dijit.byId('branch').focus();
                			return false;
 					}
-					dijit.byId('save_new').set('disabled',true);
+					loadingBlock();
 					return true;
 				} else {
 					return false;

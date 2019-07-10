@@ -15,7 +15,7 @@
 	}
 	.center{border:1px solid #000;}
 </style>
-<title><?php echo $this->tr->translate("EDIT_TRANSFER_PRODUCT")?></title>
+<title><?php echo $tr->translate("EDIT_TRANSFER_PRODUCT")?></title>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -43,7 +43,7 @@
 						dijit.byId('to_location').focus();
                 		return false;
 					}
-					dijit.byId('save_new').set('disabled',true);
+					loadingBlock();
 					return true;
 				} else {
 					return false;

@@ -35,6 +35,12 @@
 						dijit.byId('branch_id').focus();
                			return false;
 					}
+					transfer_id = dijit.byId('transfer_id').get('value');
+             		if(transfer_id=="" && transfer_id==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_TRANSFER_NUMBER")?>");
+						dijit.byId('transfer_id').focus();
+               			return false;
+					}
 					loadingBlock();
 					return true;
 				} else {

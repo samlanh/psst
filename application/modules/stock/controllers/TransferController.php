@@ -1,5 +1,6 @@
 <?php
 class Stock_TransferController extends Zend_Controller_Action {
+	const REDIRECT_URL = '/stock/transfer';
 	public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -84,6 +85,15 @@ class Stock_TransferController extends Zend_Controller_Action {
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("No Record","/stock/transfer");
 			exit();
+		}
+		$key = new Application_Model_DbTable_DbKeycode();
+		$keydata=$key->getKeyCodeMiniInv(TRUE);
+		$condictionTransfer = empty($keydata['trasfer_st_cut'])?0:$keydata['trasfer_st_cut'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+		if ($condictionTransfer==1){
+			if ($row['is_received']==1){
+				Application_Form_FrmMessage::Sucessfull("TRANSFER_ALREADY_RECEIVED", self::REDIRECT_URL."");
+				exit();
+			}
 		}
 		$this->view->rs = $row;
 		$this->view->rsdetail = $db->getTransferByIdDetail($id,$row['from_location']);

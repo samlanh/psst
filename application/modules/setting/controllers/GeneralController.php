@@ -28,6 +28,7 @@ public function init()
 		$row['receipt_print'] = $db_gs->geLabelByKeyName('receipt_print');
 		
 		$row['payment_day_alert'] = $db_gs->geLabelByKeyName('payment_day_alert');
+		$row['trasfer_st_cut'] = $db_gs->geLabelByKeyName('trasfer_st_cut');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$fm = new Setting_Form_FrmGeneral();

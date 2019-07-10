@@ -68,6 +68,13 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 		));
 		$_payment_day_alert->setValue(1);
 		
+		$_trasfer_st_cut=  new Zend_Dojo_Form_Element_FilteringSelect('trasfer_st_cut');
+		$_trasfer_st_cut->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$_trasfer_st_cut_opt = array(
+				0=>$this->tr->translate("CUTSTOCK_DIRECT"),
+				1=>$this->tr->translate("CUTSTOCK_WITH_RECEIVED_NOTE"));
+		$_trasfer_st_cut->setMultiOptions($_trasfer_st_cut_opt);
+		
 		if($data!=null){
 			
 			$_branch_add->setValue($data['branch_add']['keyValue']);
@@ -77,6 +84,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$_receipt_print->setValue($data['receipt_print']['keyValue']);
 			$_show_header_receipt->setValue($data['show_header_receipt']['keyValue']);
 			$_payment_day_alert->setValue($data['payment_day_alert']['keyValue']);
+			$_trasfer_st_cut->setValue($data['trasfer_st_cut']['keyValue']);
 			
 		}
 		$this->addElements(array(
@@ -87,7 +95,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				$_receipt_print,
 				$_show_header_receipt,
 				$_payment_day_alert,
-				
+				$_trasfer_st_cut
 				));
 		
 		return $this;

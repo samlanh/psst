@@ -51,6 +51,16 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 			
+			$rows = $this->geLabelByKeyName('trasfer_st_cut');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['trasfer_st_cut'],'keyName'=>'trasfer_st_cut','note'=>"0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['trasfer_st_cut'],);
+				$where=" keyName= 'trasfer_st_cut'";
+				$this->update($arr, $where);
+			}
+			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){
 				$this->_name="rms_schooloption";

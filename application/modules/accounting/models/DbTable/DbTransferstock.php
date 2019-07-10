@@ -66,6 +66,10 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
+	    		$key = new Application_Model_DbTable_DbKeycode();
+	    		$keydata=$key->getKeyCodeMiniInv(TRUE);
+	    		$condictionTransfer = empty($keydata['trasfer_st_cut'])?0:$keydata['trasfer_st_cut'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+    			   
     			$tran_no = $this->getTransferNo();
 	    		$_arr = array(
 	    				'transfer_no'=>$tran_no,
@@ -78,90 +82,100 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 	    				'user_id'=>$this->getUserId(),
 	    				'status'=>1,
 	    				);
+		    		if ($condictionTransfer!=1){
+		    			$_arr['is_received']=1;
+		    		}else{
+		    			$_arr['is_received']=0;
+		    		}
 	    		$tranid= $this->insert($_arr);
 	    		
+	    	
 	    		$ids = explode(',', $_data['identity']);
 	    		foreach ($ids as $i){
     				$_arr = array(
     					'transferid'=> $tranid,
     					'pro_id'	=> $_data['pro_id_'.$i],
     					'qty'		=> $_data['qty_'.$i],
+    					'qty_after' =>$_data['qty_'.$i],
     					'note'		=> $_data['remark_'.$i],
     				);
     				$this->_name='rms_transferdetail';
     				$this->insert($_arr);
     				
-    				$rs = $this->checkisProductSet($_data['pro_id_'.$i]);
-    				if(empty($rs)){//normal product
-	    				$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['f_branch']);
-	    				$this->_name="rms_product_location";
-	    				if(!empty($qty_stock)){
-	    					$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
-	    					$array = array(
-	    							'pro_qty'=>$qty,
-	    					);
-	    					$where = " id = ".$qty_stock['id'];
-	    					$this->update($array, $where);
-	    				}
-	    				//to location
-	    				$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['branch']);
-	    				if(!empty($qty_stock)){
-	    					$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
-	    					$array = array(
-	    							'pro_qty'=>$qty,
-	    					);
-	    					$where = " id = ".$qty_stock['id'];
-	    					$this->update($array, $where);
-	    				}else{
-	    					$data = array(
-    							'pro_id'=>$_data['pro_id_'.$i],
-								'brand_id'=>$_data['branch'], 
-								'pro_qty'=>$_data['qty_'.$i],
-								'note'=>'ពីផ្ទេរទំនិញចូល',
-								'date' =>date("Y-m-d"),
-								'user_id'=>$this->getUserId(),
-								'status'=>1);
-							$this->insert($data);
-	    				}
-    				}//prodcut set
-    				else{
-    					$rsset = $this->getProductSet($_data['pro_id_'.$i]);
-    					if(!empty($rsset)){
-    						foreach($rsset as $rs){
-    							$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['f_branch']);
-    							$this->_name="rms_product_location";
-    							if(!empty($qty_stock)){
-    								$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];//ត្រូវគុណចំនួនត្រូវផ្ទេរជាមួយនឹងបរិមាណទំនិញក្នុងមួយ setទើបត្រូវ
-    								$array = array(
-    										'pro_qty'=>$qty,
-    								);
-    								$where = " id = ".$qty_stock['id'];
-    								$this->update($array, $where);
-    							}
-    							//to location
-    							$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['branch']);
-    							if(!empty($qty_stock)){
-    								$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
-    								$array = array(
-    										'pro_qty'=>$qty,
-    								);
-    								$where = " id = ".$qty_stock['id'];
-    								$this->update($array, $where);
-    							}else{
-    								$data = array(
-    										'pro_id'=>$_data['pro_id_'.$i],
-    										'brand_id'=>$_data['branch'],
-    										'pro_qty'=>$_data['qty_'.$i],
-    										'note'=>'ពីផ្ទេរទំនិញចូល',
-    										'date' =>date("Y-m-d"),
-    										'user_id'=>$this->getUserId(),
-    										'status'=>1
-    								);
-    								$this->insert($data);
+    				if ($condictionTransfer!=1){
+    					$rs = $this->checkisProductSet($_data['pro_id_'.$i]);
+    					if(empty($rs)){//normal product
+    						$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['f_branch']);
+    						$this->_name="rms_product_location";
+    						if(!empty($qty_stock)){
+    							$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
+    							$array = array(
+    									'pro_qty'=>$qty,
+    							);
+    							$where = " id = ".$qty_stock['id'];
+    							$this->update($array, $where);
+    						}
+    						//to location
+    						$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['branch']);
+    						if(!empty($qty_stock)){
+    							$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
+    							$array = array(
+    									'pro_qty'=>$qty,
+    							);
+    							$where = " id = ".$qty_stock['id'];
+    							$this->update($array, $where);
+    						}else{
+    							$data = array(
+    									'pro_id'=>$_data['pro_id_'.$i],
+    									'brand_id'=>$_data['branch'],
+    									'pro_qty'=>$_data['qty_'.$i],
+    									'note'=>'ពីផ្ទេរទំនិញចូល',
+    									'date' =>date("Y-m-d"),
+    									'user_id'=>$this->getUserId(),
+    									'status'=>1);
+    							$this->insert($data);
+    						}
+    					}//prodcut set
+    					else{
+    						$rsset = $this->getProductSet($_data['pro_id_'.$i]);
+    						if(!empty($rsset)){
+    							foreach($rsset as $rs){
+    								$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['f_branch']);
+    								$this->_name="rms_product_location";
+    								if(!empty($qty_stock)){
+    									$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];//ត្រូវគុណចំនួនត្រូវផ្ទេរជាមួយនឹងបរិមាណទំនិញក្នុងមួយ setទើបត្រូវ
+    									$array = array(
+    											'pro_qty'=>$qty,
+    									);
+    									$where = " id = ".$qty_stock['id'];
+    									$this->update($array, $where);
+    								}
+    								//to location
+    								$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['branch']);
+    								if(!empty($qty_stock)){
+    									$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
+    									$array = array(
+    											'pro_qty'=>$qty,
+    									);
+    									$where = " id = ".$qty_stock['id'];
+    									$this->update($array, $where);
+    								}else{
+    									$data = array(
+    											'pro_id'=>$_data['pro_id_'.$i],
+    											'brand_id'=>$_data['branch'],
+    											'pro_qty'=>$_data['qty_'.$i],
+    											'note'=>'ពីផ្ទេរទំនិញចូល',
+    											'date' =>date("Y-m-d"),
+    											'user_id'=>$this->getUserId(),
+    											'status'=>1
+    									);
+    									$this->insert($data);
+    								}
     							}
     						}
     					}
     				}
+    				
 	    		}
 	    	    $db->commit();
 	    	    return true;
@@ -203,6 +217,10 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
+    		$key = new Application_Model_DbTable_DbKeycode();
+    		$keydata=$key->getKeyCodeMiniInv(TRUE);
+    		$condictionTransfer = empty($keydata['trasfer_st_cut'])?0:$keydata['trasfer_st_cut'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+    		
     			$rsold = $this->getTransferById($_data['id']);
 	    		$_arr = array(
 	    				'transfer_no'=>$_data['transfer_no'],
@@ -213,34 +231,43 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 	    				'user_id'=>$this->getUserId(),
 	    				'status'=>$_data['status'],
 	    			);
+	    		if ($condictionTransfer!=1){
+	    			$_arr['is_received']=1;
+	    		}else{
+	    			$_arr['is_received']=0;
+	    		}
+	    		
 	    		$where="id = ".$_data['id'];
 	    		$this->update($_arr, $where);
 	    		$rsdetail = $this->getTransferByIdDetail($_data['id']);
 	    		$this->_name='rms_transferdetail';
 	    		
-	    		if(!empty($rsdetail) AND $rsold['status']==1){// if old status active
-	    			foreach($rsdetail as $rsd){
-		    			$qty_stock = $this->getProductLocation($rsd['pro_id'],$_data['old_flocation']);
-		    			$this->_name="rms_product_location";
-		    			if(!empty($qty_stock)){
-		    				$qty = $qty_stock['pro_qty'] + $rsd['qty'];
-		    				$array = array(
-		    						'pro_qty'=>$qty,
-		    				);
-		    				$where = " id = ".$qty_stock['id'];
-		    				$this->update($array, $where);
-		    			}
-		    			$qty_stock = $this->getProductLocation($rsd['pro_id'],$_data['old_tlocation']);
-		    			if(!empty($qty_stock)){
-		    				$qty = $qty_stock['pro_qty'] - $rsd['qty'];
-		    				$array = array(
-		    						'pro_qty'=>$qty,
-		    				);
-		    				$where = " id = ".$qty_stock['id'];
-		    				$this->update($array, $where);
-		    			}
+	    		if ($condictionTransfer!=1){
+	    			if(!empty($rsdetail) AND $rsold['status']==1){// if old status active
+	    				foreach($rsdetail as $rsd){
+	    					$qty_stock = $this->getProductLocation($rsd['pro_id'],$_data['old_flocation']);
+	    					$this->_name="rms_product_location";
+	    					if(!empty($qty_stock)){
+	    						$qty = $qty_stock['pro_qty'] + $rsd['qty'];
+	    						$array = array(
+	    								'pro_qty'=>$qty,
+	    						);
+	    						$where = " id = ".$qty_stock['id'];
+	    						$this->update($array, $where);
+	    					}
+	    					$qty_stock = $this->getProductLocation($rsd['pro_id'],$_data['old_tlocation']);
+	    					if(!empty($qty_stock)){
+	    						$qty = $qty_stock['pro_qty'] - $rsd['qty'];
+	    						$array = array(
+	    								'pro_qty'=>$qty,
+	    						);
+	    						$where = " id = ".$qty_stock['id'];
+	    						$this->update($array, $where);
+	    					}
+	    				}
 	    			}
 	    		}
+	    		
 	    		
 	    	$this->_name='rms_transferdetail';
 	    	$where = "transferid = ".$_data['id']; 
@@ -252,83 +279,87 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     						'transferid'=>$_data['id'],
     						'pro_id'=>$_data['pro_id_'.$i],
     						'qty'=>$_data['qty_'.$i],
+    						'qty_after' =>$_data['qty_'.$i],
     						'note'=>$_data['remark_'.$i],);
     				$this->_name='rms_transferdetail';
     				$this->insert($_arr);
-    				
-    			if($_data['status']==1){	
-	    				$rs = $this->checkisProductSet($_data['pro_id_'.$i]);
-	    				if(empty($rs)){//normal product
-		    				$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['from_location']);
-		    				$this->_name="rms_product_location";
-		    				if(!empty($qty_stock)){
-		    					$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
-		    					$array = array(
-		    							'pro_qty'=>$qty,
-		    					);
-		    					$where = " id = ".$qty_stock['id'];
-		    					$this->update($array, $where);
-		    				}
-		    				//to location
-		    				$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['to_location']);
-		    				if(!empty($qty_stock)){
-		    					$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
-		    					$array = array(
-		    							'pro_qty'=>$qty,
-		    					);
-		    					$where = " id = ".$qty_stock['id'];
-		    					$this->update($array, $where);
-		    				}else{
-		    					$data = array(
-	    							'pro_id'=>$_data['pro_id_'.$i],
-									'brand_id'=>$_data['to_location'], 
-									'pro_qty'=>$_data['qty_'.$i],
-									'note'=>'ពីផ្ទេរទំនិញចូល',
-									'date' =>date("Y-m-d"),
-									'user_id'=>$this->getUserId(),
-									'status'=>1);
-								$this->insert($data);
-		    				}
-	    				}//prodcut set
-	    				else{
-	    					$rsset = $this->getProductSet($_data['pro_id_'.$i]);
-	    					if(!empty($rsset)){
-	    						foreach($rsset as $rs){
-	    							$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['from_location']);
-	    							$this->_name="rms_product_location";
-	    							if(!empty($qty_stock)){
-	    								$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
-	    								$array = array(
-	    										'pro_qty'=>$qty,
-	    								);
-	    								$where = " id = ".$qty_stock['id'];
-	    								$this->update($array, $where);
-	    							}
-	    							//to location
-	    							$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['to_location']);
-	    							if(!empty($qty_stock)){
-	    								$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
-	    								$array = array(
-	    										'pro_qty'=>$qty,
-	    								);
-	    								$where = " id = ".$qty_stock['id'];
-	    								$this->update($array, $where);
-	    							}else{
-	    								$data = array(
-	    										'pro_id'=>$_data['pro_id_'.$i],
-	    										'brand_id'=>$_data['to_location'],
-	    										'pro_qty'=>$_data['qty_'.$i],
-	    										'note'=>'ពីផ្ទេរទំនិញចូល',
-	    										'date' =>date("Y-m-d"),
-	    										'user_id'=>$this->getUserId(),
-	    										'status'=>1
-	    								);
-	    								$this->insert($data);
-	    							}
-	    						}
-	    					}
-	    				}
+
+    				if ($condictionTransfer!=1){
+    					if($_data['status']==1){
+    						$rs = $this->checkisProductSet($_data['pro_id_'.$i]);
+    						if(empty($rs)){//normal product
+    							$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['from_location']);
+    							$this->_name="rms_product_location";
+    							if(!empty($qty_stock)){
+    								$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
+    								$array = array(
+    										'pro_qty'=>$qty,
+    								);
+    								$where = " id = ".$qty_stock['id'];
+    								$this->update($array, $where);
+    							}
+    							//to location
+    							$qty_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['to_location']);
+    							if(!empty($qty_stock)){
+    								$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
+    								$array = array(
+    										'pro_qty'=>$qty,
+    								);
+    								$where = " id = ".$qty_stock['id'];
+    								$this->update($array, $where);
+    							}else{
+    								$data = array(
+    										'pro_id'=>$_data['pro_id_'.$i],
+    										'brand_id'=>$_data['to_location'],
+    										'pro_qty'=>$_data['qty_'.$i],
+    										'note'=>'ពីផ្ទេរទំនិញចូល',
+    										'date' =>date("Y-m-d"),
+    										'user_id'=>$this->getUserId(),
+    										'status'=>1);
+    								$this->insert($data);
+    							}
+    						}//prodcut set
+    						else{
+    							$rsset = $this->getProductSet($_data['pro_id_'.$i]);
+    							if(!empty($rsset)){
+    								foreach($rsset as $rs){
+    									$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['from_location']);
+    									$this->_name="rms_product_location";
+    									if(!empty($qty_stock)){
+    										$qty = $qty_stock['pro_qty'] - $_data['qty_'.$i];
+    										$array = array(
+    												'pro_qty'=>$qty,
+    										);
+    										$where = " id = ".$qty_stock['id'];
+    										$this->update($array, $where);
+    									}
+    									//to location
+    									$qty_stock = $this->getProductLocation($rs['subpro_id'],$_data['to_location']);
+    									if(!empty($qty_stock)){
+    										$qty = $qty_stock['pro_qty'] + $_data['qty_'.$i];
+    										$array = array(
+    												'pro_qty'=>$qty,
+    										);
+    										$where = " id = ".$qty_stock['id'];
+    										$this->update($array, $where);
+    									}else{
+    										$data = array(
+    												'pro_id'=>$_data['pro_id_'.$i],
+    												'brand_id'=>$_data['to_location'],
+    												'pro_qty'=>$_data['qty_'.$i],
+    												'note'=>'ពីផ្ទេរទំនិញចូល',
+    												'date' =>date("Y-m-d"),
+    												'user_id'=>$this->getUserId(),
+    												'status'=>1
+    										);
+    										$this->insert($data);
+    									}
+    								}
+    							}
+    						}
+    					}
     				}
+    			
 	    		}
 	    	    $db->commit();
 	    	    return true;

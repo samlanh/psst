@@ -26,7 +26,7 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","STUDENT_CODE","INFORS_TO","STUDENT_CODE","INFORS_RECEIVE","TOTAL_AMOUNT","REASON_TO","REASON_RESIVE","BY_USER","STATUS");
+    		$collumns = array("BRANCH","STUDENT_CODE","INFORS_TO","STUDENT_CODE","INFORS_RECEIVE","TOTAL_AMOUNT","REASON_TO","REASON_RESIVE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'transfercredit','action'=>'edit',
     		);

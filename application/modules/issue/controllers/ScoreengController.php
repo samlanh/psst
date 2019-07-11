@@ -28,7 +28,7 @@ class Issue_ScoreengController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$rs_rows = $db->getAllScore($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","TITLE","DATE","STUDY_YEAR","GROUP","DEGREE","GRADE","STATUS");
+			$collumns = array("BRANCH","TITLE","DATE","STUDY_YEAR","GROUP","DEGREE","GRADE","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'scoreeng','action'=>'edit',
 			);

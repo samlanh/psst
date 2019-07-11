@@ -25,7 +25,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			$db =  new Foundation_Model_DbTable_DbSuspendservice();
 			$rs = $db->getStudentSuspendService($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDENT_ID","NAME_KH","NAME_EN","CREATED_DATE","USER","STATUS");
+			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","CREATED_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'suspendservice','action'=>'edit',
 			);

@@ -73,7 +73,7 @@ table#table_row tr th {
 			<div class="card-box">
 				<div class="col-md-5 col-sm-5 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select type="text" id="branch_id" name="branch_id"queryExpr="*${0}*" autoComplete="false" required="true" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getInvoiceByBranch();" >
 								<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>

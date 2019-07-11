@@ -34,7 +34,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			else{
 				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 			}
-			$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","START_DATE","END_DATE","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
+			$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
 			$link=array(
 					'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
 			);

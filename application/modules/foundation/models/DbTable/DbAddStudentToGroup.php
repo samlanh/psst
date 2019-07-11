@@ -160,20 +160,31 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	}
 	public function getGroupDetail($search){
 		$db = $this->getAdapter();
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+		}else{ // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+		}
 		$sql = " SELECT
 					`g`.`id`,
-					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
+					(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 					`g`.`group_code` AS `group_code`,
 					(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year LIMIT 1) as academic,
-					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
-					(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
+					(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
+					(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+					(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
-					`g`.`start_date`,
-					`g`.`expired_date`,
 					`g`.`note`,
-					(select name_en from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
+					(select $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
 					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student,
 					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id LIMIT 1)AS remain_Student
 				FROM 

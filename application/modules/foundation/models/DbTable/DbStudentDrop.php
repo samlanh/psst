@@ -57,8 +57,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
+		$label="name_en";
 		if ($currentLang==1){
 			$colunmname='title';
+			$label="name_kh";
 		}
 		
 		$sql = "SELECT  s.id,
@@ -66,14 +68,15 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id,
 				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_kh,
 				(SELECT CONCAT(last_name,' ',stu_enname) FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
+				(SELECT $label FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
-				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
+				(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room,
+				(SELECT $label FROM `rms_view` WHERE TYPE=5 AND key_code = s.type LIMIT 1) AS type,
 				date_stop,
 				reason,
 				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name

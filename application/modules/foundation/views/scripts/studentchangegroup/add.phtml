@@ -8,7 +8,7 @@
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()){
 					branch_id = dijit.byId('branch_id').get('value');
-					if(stu_id==""){
+					if(branch_id==""){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
 						dijit.byId("branch_id").focus();
 						return false;
@@ -283,11 +283,11 @@ function toStudentGroup(type){
 		getAllGroupByBranch();
 	}); 
 	function popupAddGroup(){
-	id = dijit.byId('to_group').get('value');
-	if(id==-1){
-		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+		id = dijit.byId('to_group').get('value');
+		if(id==-1){
+			window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
+		}
 	}
-}
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 	function getAllGroupByBranch(){
 		dijit.byId('to_group').reset();

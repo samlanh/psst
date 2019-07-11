@@ -118,14 +118,14 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				$stu_id=$_data['studentid'];
 				$_arr= array(
 						'branch_id'=>$_data['branch_id'],
-						'user_id'=>$this->getUserId(),
-						'stu_id'=>$_data['studentid'],
+						'stu_id'	=>$_data['studentid'],
 						'from_group'=>$_data['from_group'],
-						'to_group'=>$_data['to_group'],
+						'to_group'	=>$_data['to_group'],
 						'moving_date'=>$_data['moving_date'],
-						'note'=>$_data['note'],
-						'status'=>$_data['status']
-						);
+						'note'		=>$_data['note'],
+						'user_id'	=>$this->getUserId(),
+						'status'	=>1
+					);
 				$this->_name='rms_student_change_group';
 				$id = $this->insert($_arr);
 				

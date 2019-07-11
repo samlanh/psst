@@ -125,7 +125,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					'change_type'	=>$_data['change_type'],
 					'moving_date'	=>$_data['moving_date'],
 					'note'			=>$_data['note'],
-					'status'		=>$_data['status'],
+					'status'		=>1,
 					'array_checkbox'=>$_data['identity'],
 				);
 				$id = $this->insert($_arr);
@@ -559,8 +559,15 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	}
 	
 	public function getChangeType(){
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+		}else{ // English
+			$label = "name_en";
+		}
 		$db=$this->getAdapter();
-		$sql="SELECT key_code as id, name_kh as name from rms_view where type=17 and status=1 ";
+		$sql="SELECT key_code as id, $label as name from rms_view where type=17 and status=1 ";
 		return $db->fetchAll($sql);
 	}
 	

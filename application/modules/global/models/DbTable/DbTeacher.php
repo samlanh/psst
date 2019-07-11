@@ -283,7 +283,14 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	function getAllDegree(){
 		$db=$this->getAdapter();
-		$sql="SELECT key_code AS id,name_kh AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!='' AND STATUS=1";
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+		}else{ // English
+			$label = "name_en";
+		}
+		$sql="SELECT key_code AS id,$label AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!='' AND STATUS=1";
 		return $db->fetchAll($sql);
 	}
 	public function getallSubjectTeacherById($teacher_id){
@@ -306,22 +313,29 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		
-		$sql = 'SELECT g.id, 
-				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+		$lang = $dbp->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+		}else{ // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+		}
+		$sql = "SELECT g.id, 
+				(SELECT $branch FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 				g.teacher_code, 
 				g.teacher_name_kh,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex LIMIT 1) AS sex,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.staff_type LIMIT 1) AS staff_type,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality LIMIT 1) AS nationality, 
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree LIMIT 1) AS degree,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type LIMIT 1) AS teacher_type,
+				(SELECT $label FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex LIMIT 1) AS sex,
+				(SELECT $label FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.staff_type LIMIT 1) AS staff_type,
+				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality LIMIT 1) AS nationality, 
+				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree LIMIT 1) AS degree,
+				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type LIMIT 1) AS teacher_type,
 				g.position_add,
 				g.tel,
 				g.email,
 				g.note,
 				(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = g.schoolOption LIMIT 1) AS schoolOption
-				';
+			";
 		$sql.=$dbp->caseStatusShowImage("g.status");
 		$sql.=" FROM rms_teacher AS g WHERE 1 ";
 		

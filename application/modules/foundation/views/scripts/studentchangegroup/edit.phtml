@@ -259,6 +259,7 @@ dojo.ready(function(){
 	    onChange: function() {  
 	    	group_id = dijit.byId('to_group').get('value');
 	    	toStudentGroup(2);
+			popupAddGroup();
 	    }
 	}, "to_group");
 	new dijit.form.FilteringSelect({
@@ -280,6 +281,13 @@ dojo.ready(function(){
 	getallstudentname();
 	getAllGroupByBranch();
 }); 
+function popupAddGroup(){
+	id = dijit.byId('to_group').get('value');
+	if(id==-1){
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
+	}
+}
+
 var oldBranch = '<?php echo $this->rows['branch_id'];?>';
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){

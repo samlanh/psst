@@ -519,7 +519,7 @@ table.collape tbody td {
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
 		window.frames["print_frame"].window.focus();
 		window.frames["print_frame"].window.print();
-		//$('#office_receipt').submit();
+		$('#office_receipt').submit();
 	}
 	function checkValidateAddRow(){
 		var rowId = $('#identity').val();

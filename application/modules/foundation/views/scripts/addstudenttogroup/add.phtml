@@ -338,7 +338,7 @@ function toStudentGroup(){
 			},
 		handleAs:"json",
 		load: function(data) {
-			dojo.byId('lbldetail').innerHTML='<span style="color:red;">Academic :  </span>'+data.year+'<span style="color:red;"> , Degree :  </span>'+data.degree+'<br /><span style="color:red;">  Grade :  </span>'+data.grade+'<span style="color:red;"> , Session :  </span>'+data.session+'<span style="color:red;"> , Room :  </span>'+data.room+'<br /><span style="color:red;">  Start Date :  </span>'+data.start_date+'<span style="color:red;"> , Expired Date :  </span>'+data.expired_date;   
+			dojo.byId('lbldetail').innerHTML='<span style="color:red;">Academic :  </span>'+data.year+'<span style="color:red;"> , Degree :  </span>'+data.degree+'<br /><span style="color:red;">  Grade :  </span>'+data.grade+'<span style="color:red;"> , Session :  </span>'+data.session+'<span style="color:red;"> , Room :  </span>'+data.room;   
 			dijit.byId('academic_year_group').attr('value',data.academic_year_id);
 			dijit.byId('degree_group').attr('value',data.degree_id);
 			dijit.byId('grade_group').attr('value',data.grade_id);

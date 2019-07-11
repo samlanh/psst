@@ -35,7 +35,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER");
+			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","TYPE","STOP_DATE","REASON","USER");
 			$link=array(
 					'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 			);

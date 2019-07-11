@@ -38,7 +38,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('group_code'=>$link,'room_name'=>$link,'academic'=>$link,'degree'=>$link,'grade'=>$link,'session'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
 			
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();
@@ -70,9 +70,6 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$this->view->academy = $db->getAllYear();
 		$this->view->degree = $db->getAllFecultyName();
 		
-// 		$group_option = $db->getGroup();
-// 		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
-// 		$this->view->group = $group_option;
 		$this->view->room = $db->getRoom();
 		
 		$db=new Application_Model_DbTable_DbGlobal();

@@ -24,7 +24,7 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 			$db = new Foundation_Model_DbTable_DbRescheduleGroup();
 			$rs_rows= $db->getAllRescheduleGroup($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","STUDY_YEAR","GROUP","DAY","FROM_HOUR","TO_HOUR","SUBJECT","TEACHER","DATE","USER","STATUS");
+			$collumns = array("BRANCH","STUDY_YEAR","GROUP","DAY","FROM_HOUR","TO_HOUR","SUBJECT","TEACHER","DATE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'reschedulegroup','action'=>'edit',
 			);

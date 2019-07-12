@@ -6,18 +6,22 @@
     }
 	function getAllItemsDetail($search = '',$items_type=null){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
 		$sql = " SELECT 
-						ide.id,
-						ide.title,
-						ide.title_en,
-						ide.shortcut,
-						ide.ordering,
-						(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
-						ide.create_date,
-						ide.modify_date,
-						(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
-						 
-					
+					ide.id,
+					ide.title,
+					ide.title_en,
+					ide.shortcut,
+					ide.ordering,
+					(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+					ide.create_date,
+					ide.modify_date,
+					(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
 				";
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();

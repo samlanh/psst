@@ -77,7 +77,6 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 		$teacher_id = $session_t->teacher_id;
 	
 		$result= $db_global->getAllgroupStudy($teacher_id);
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
@@ -114,7 +113,6 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result = $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 	

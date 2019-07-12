@@ -191,7 +191,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':0
+			'branch_id':branch_id,'noaddnew':1
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -230,7 +230,7 @@ function getStudentFromGroup(){
 					    tem += '<td style="width: 20px;" class="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
 						tem += '<td>'+respone[i].stu_code+'</td>';
 						tem += '<td>'+respone[i].stu_khname+'</td>';
-						tem += '<td>'+respone[i].stu_enname+' '+respone[i].last_name+'</td>';
+						tem += '<td>'+respone[i].last_name+' '+respone[i].stu_enname+'</td>';
 						tem += '<td class="center">'+respone[i].sex+'</td>';
 						tem += '<td class="center" style="width: 20px;"><input class="checkbox" style="height: initial;" type="checkBox" value="'+respone[i].stu_id+'"  name="selector[]" id="checkbox'+inx+'"/></td>';
 					    tem += '</tr>';

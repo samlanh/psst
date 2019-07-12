@@ -86,8 +86,8 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();getSubjectByGroup();"  dojoType="dijit.form.FilteringSelect" >
-							   	<option value="1">ប្រចាំខែ</option>
-							   	<option value="2">ប្រលងឆមាស</option>
+							   	<option value="1"><?php echo $tr->translate("MONTHLY");?></option>
+							   	<option value="2"><?php echo $tr->translate("SEMESTER");?></option>
 							</select>
 		                </div>
 		             </div>

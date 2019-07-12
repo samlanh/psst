@@ -32,19 +32,30 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	public function selectAllStudentChangeGroup($search){
 		$_db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
+		if ($currentLang==1){
+			$colunmname='title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
+		}
 		$sql = "SELECT 
 					gscg.id,
 					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 					(select group_code from rms_group where rms_group.id=gscg.from_group) as group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=gscg.from_group) limit 1) AS academic,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 				
-					(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_group.id=gscg.from_group) limit 1 ) as session,
+					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_group.id=gscg.from_group) limit 1 ) as session,
 				
 					g.group_code as to_group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS to_academic,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
-					(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session limit 1) as to_session,
+					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
+					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=g.session limit 1) as to_session,
 				
 					moving_date,
 					gscg.note

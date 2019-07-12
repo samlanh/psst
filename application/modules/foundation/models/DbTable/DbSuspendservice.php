@@ -146,7 +146,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   				(SELECT $branch from rms_branch where br_id = ss.branch_id LIMIT 1) as branch,
 			  	 	s.stu_code AS code,
 			   		s.stu_khname as kh_name,
-			   		s.stu_enname AS en_name,
+			   		CONCAT(s.last_name,' ',s.stu_enname) AS en_name,
 			   		ss.create_date,
 			   		(SELECT CONCAT(first_name) from rms_users where rms_users.id = ss.user_id) as user,
 			   		(select $label from rms_view as v where v.type=1 and v.key_code = ss.status) as status

@@ -158,8 +158,8 @@ table#table_row {
 		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-								<option value="1">ទី 1</option>
-								<option value="2">ទី 2</option>
+								<option value="1"><?php echo $tr->translate("SEMESTER1");?></option>
+								<option value="2"><?php echo $tr->translate("SEMESTER2");?></option>
 							</select>
 		                </div>
 		             </div>
@@ -183,7 +183,6 @@ table#table_row {
 		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ATTENDANCE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="attedence" name="attedence" type="text">								
-								<option value="1"><?php echo $tr->translate("PRESENT");?></option>
 								<option value="2"><?php echo $tr->translate("ABSENT");?></option>
 								<option value="3"><?php echo $tr->translate("PERMISSION");?></option>
 								<option value="4"><?php echo $tr->translate("LATE");?></option>

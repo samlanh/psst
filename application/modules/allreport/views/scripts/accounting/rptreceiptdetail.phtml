@@ -93,6 +93,17 @@ table tr td strong{
 							    white-space: normal;
 								text-align: left;
 							}
+							.boxnorefund{
+								color: #fff;
+								background: #d42727;
+								border: 2px solid fff;
+								font-size: 11px;
+								padding:10px 2px;
+								border-radius: 2px;
+								border: 6px double #fff;
+								font-weight:bold !important;
+								font-family:Times New Roman;	
+							}
 							</style>
 						<table border="1" class="padd" width="100%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
 							  <tr style="font-size:12px; height: 25px;background: #f0f0f0;text-align: center !important;" align="center"  >
@@ -145,7 +156,7 @@ table tr td strong{
 													</tr>
 													<tr>
 														<td width="33%" align="center">Cashier</td>
-														<td width="34%" align="center">Customer</td>
+														<td width="34%" align="center">Head of Cashier</td>
 														<td width="33%" align="center">Verified By</td>
 													</tr>	
 													<tr>
@@ -153,14 +164,26 @@ table tr td strong{
 														<td width="34%" align="center"></td>
 														<td width="33%" align="center"></td>
 													</tr>
+													<tr>
+														<td width="33%" align="center"><br /><br /></td>
+														<td width="34%" align="center"></td>
+														<td width="33%" align="center"></td>
+													</tr>
 													<tr style="height:15px;">
 														<td align="center">
-															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
+															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: -5px;border-bottom: 1px solid #000;"> 
 																<?php echo $this->rr['user'];?>
 															</div>
+															Signature/Name/Date
 														</td>
-														<td align="center"></td>
-														<td align="center"></td>
+														<td align="center">
+															<div style="border-bottom: 1px solid #000;width:85%;margin:0 auto;" ></div>
+															Signature/Name/Date
+														</td>
+														<td align="center">
+															<div style="border-bottom: 1px solid #000;width:85%;margin:0 auto;" ></div>
+															Signature/Name/Date
+														</td>
 													</tr>	
 												</table>
 											</td>
@@ -206,6 +229,9 @@ table tr td strong{
 													  <td style="" colspan="8"></td>
 													  <td style="text-align: left;"><?php echo $tr->translate('Number/Bank');?></td>
 													  <td><?php echo $this->rr['number'];?></td>
+												  </tr>
+												  <tr>
+													  <td colspan="11"><div class="boxnorefund">Non-Refundable / Transferable</div></td>
 												  </tr>
 											  </table>
 										  </td>

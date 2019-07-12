@@ -83,8 +83,8 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE");?></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	 <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
-						   		<option value="1" <?php if($this->score['exam_type']==1){echo "selected";} ?>>ប្រចាំខែ</option>
-						   		<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>>ប្រលងឆមាស</option>
+						   		<option value="1" <?php if($this->score['exam_type']==1){echo "selected";} ?>><?php echo $tr->translate("MONTHLY");?></option>
+						   		<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>><?php echo $tr->translate("SEMESTER");?></option>
 							 </select>
 		                </div>
 		             </div>
@@ -112,8 +112,8 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-								<option value="1" <?php if ($this->score['for_semester']==1){ echo "Selected='selected'";}?>>ទី 1</option>
-								<option value="2" <?php if ($this->score['for_semester']==2){ echo "Selected='selected'";}?>>ទី 2</option>
+								<option value="1" <?php if ($this->score['for_semester']==1){ echo "Selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
+								<option value="2" <?php if ($this->score['for_semester']==2){ echo "Selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
 							</select>
 		                </div>
 		             </div>

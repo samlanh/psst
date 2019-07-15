@@ -44,7 +44,13 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	function addAction(){
+		$dbgb = new Application_Model_DbTable_DbGlobal();
 		if($this->getRequest()->isPost()){
+			$checkses = $dbgb->checkSessionExpire();
+			if (empty($checkses)){
+				$dbgb->reloadPageExpireSession();
+				exit();
+			}
 			$data = $this->getRequest()->getPost();
 			try{
 				$sms="INSERT_SUCCESS";
@@ -96,6 +102,12 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		}
 		$this->view->rs = $row;
 		if($this->getRequest()->isPost()){
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+			$checkses = $dbgb->checkSessionExpire();
+			if (empty($checkses)){
+				$dbgb->reloadPageExpireSession();
+				exit();
+			}
 			try {
 				$data = $this->getRequest()->getPost();
 				$db->updateGroup($data);

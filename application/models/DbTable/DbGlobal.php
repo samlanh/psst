@@ -2338,5 +2338,24 @@ function getAllgroupStudyNotPass($action=null){
   	//and gds.is_pass=0
   	return $db->fetchAll($sql);
   }
+  public function checkSessionExpire()
+  {
+  	$user_id = $this->getUserId();
+  	$tr= Application_Form_FrmLanguages::getCurrentlanguage();
+  	if (empty($user_id)){
+  		return false;
+  	}else{
+  		return true;
+  	}
+  }
+  function reloadPageExpireSession(){
+  		$url="";
+  		$tr= Application_Form_FrmLanguages::getCurrentlanguage();
+  		$msg = $tr->translate("Session Expire");
+	  	echo '<script language="javascript">
+	  	alert("'.$msg.'");		
+	  	window.location = "'.Zend_Controller_Front::getInstance()->getBaseUrl().$url.'";
+	  	</script>';
+  }
 }
 ?>

@@ -10,6 +10,19 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     }
     public function getStudentPaymentByid($id){
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    	}
     	$sql = "select 
     				s.stu_id,
     				s.branch_id,
@@ -19,7 +32,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.last_name,
     				s.tel,
     				s.dob,
-    				(select name_en from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
+    				(select $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				sp.receipt_number,
     				sp.create_date,
     				(SELECT CONCAT(last_name,' ',first_name) FROM rms_users where id=sp.user_id LIMIT 1) as user,
@@ -35,10 +48,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				(SELECT CONCAT(from_academic,'-',to_academic) 
 						FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
 					
-					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
-					(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
+					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
+					(SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
 					
-					(select name_en from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session
+					(select $label from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session
     			from
     				rms_student_payment as sp,
 					rms_student as s,
@@ -301,14 +314,27 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     }
     public function getPaymentReciptDetail($id){
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    	}
     	$sql=" SELECT 
 			    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
 			    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
-			    	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
-			    	(SELECT title FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS service,
+			    	(SELECT `rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
+			    	(SELECT $grade FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS service,
 			    	(SELECT items_type FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS items_type,
-			    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
-			    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+			    	(SELECT $label FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
+			    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			    	sp.receipt_number as receipt_number,
 			    	sp.`grand_total` AS total_payment,
 			    	sp.`paid_amount` as paid_amount,

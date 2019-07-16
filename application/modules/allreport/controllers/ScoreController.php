@@ -139,7 +139,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	$this->view->search=$search;
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreResult($search,$id,2);
+    	$this->view->studentgroup = $db->getStundetScoreResult($search,$id);
     	
     	$this->view->all_student = $db->getStundetScoreDetailGroup($search,$id,1);
     	

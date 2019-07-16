@@ -401,4 +401,14 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
+	function checkSessionAction(){
+		if($this->getRequest()->isPost()){
+			$db = new Application_Model_DbTable_DbGlobal();
+			$checkses = $db->checkSessionExpire();
+			print_r(Zend_Json::encode($checkses));
+			exit();
+		}
+	}
+	
 }

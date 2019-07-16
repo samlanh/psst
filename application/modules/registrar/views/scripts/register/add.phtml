@@ -507,6 +507,7 @@ require(["dojo/ready"], function(ready){
 			academic_year = dijit.byId('study_year').get('value');
 		}
 	}, "study_year");
+	
 });	
 
 url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
@@ -867,6 +868,7 @@ function displayNone(){
 	document.getElementById('PrintReceipt1').style.display="none";
 }
 function printSubmit(){	
+	checkSession();
 	dojo.byId('innerPrintReceipt').innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML<?php if($this->data['receipt_print']==2){ ?>+dojo.byId('PrintReceipt1').innerHTML<?php }?>;
     window.frames["print_frame"].window.focus();
@@ -1320,148 +1322,149 @@ function getservicefee(key){
  	});
  }
 function printSave(new_stu_id,new_receipt,submit){		
-		if(dijit.byId('office_receipt').validate()) {
-			study_year = dijit.byId("study_year").get("value");
-			if(study_year==1){dijit.byId("study_year").focus();}
-			var identity = $('#identity').val();
-			if(identity==''){
-				alert("There is no record to save");
-				dijit.byId("item").focus();
-				return false;
-			}
-			receipt=dijit.byId("receipt_no").get("value");
-			stu_type = dijit.byId('student_type').get('value');
-			stu_id = dijit.byId("old_stu").attr('displayedValue');
-			
-			stu_id = dijit.byId("old_stu").attr('displayedValue');
-			if(new_receipt==''){
-				getReceiptNo(stu_id);
-			}else{
-				receipt = new_receipt;
-			}
-			if(new_receipt==""){
-				getReceiptNo(1,submit);
-				submit=0;
-			}
-			today = dijit.byId("paid_date").get("value");
-			var dd = today.getDate();
-			var mon = today.toDateString().substr(4,3); //January is 0!
-			var yyyy = today.getFullYear();
-			dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
-			dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
-			dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
-			
-			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
-			//dojo.byId("lb_dob").innerHTML = dojo.byId("lbl_dob").innerHTML;
-			dojo.byId("lb_name").innerHTML = dojo.byId("lbl_namekh").innerHTML+" - "+dojo.byId("lbl_nameen").innerHTML;
-			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
-			dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;
-			dojo.byId("lb_grade").innerHTML = dojo.byId("lbl_grade").innerHTML+"("+dojo.byId("lbl_group").innerHTML+")";
-			dojo.byId("lb_phone").innerHTML = dojo.byId("lbl_phone").innerHTML;
-			dojo.byId("lb_session").innerHTML = dojo.byId("lbl_session").innerHTML;
-			dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
-			
-			dojo.byId("lb_total_payment").innerHTML = dojo.number.format(dijit.byId("grand_total").get('value'),{places:2});
-			dojo.byId("lb_fine").innerHTML = dojo.number.format(dijit.byId("penalty").get('value'),{places:2});			
-			dojo.byId("lb_credit_memo").innerHTML = dojo.number.format(dijit.byId("credit_memo").get('value'),{places:2});
-			dojo.byId("lb_paid_amount").innerHTML = dojo.number.format(dijit.byId("paid_amount").get('value'),{places:2});
-			dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'),{places:2});
+	checkSession();
+	if(dijit.byId('office_receipt').validate()) {
+		study_year = dijit.byId("study_year").get("value");
+		if(study_year==1){dijit.byId("study_year").focus();}
+		var identity = $('#identity').val();
+		if(identity==''){
+			alert("There is no record to save");
+			dijit.byId("item").focus();
+			return false;
+		}
+		receipt=dijit.byId("receipt_no").get("value");
+		stu_type = dijit.byId('student_type').get('value');
+		stu_id = dijit.byId("old_stu").attr('displayedValue');
+		
+		stu_id = dijit.byId("old_stu").attr('displayedValue');
+		if(new_receipt==''){
+			getReceiptNo(stu_id);
+		}else{
+			receipt = new_receipt;
+		}
+		if(new_receipt==""){
+			getReceiptNo(1,submit);
+			submit=0;
+		}
+		today = dijit.byId("paid_date").get("value");
+		var dd = today.getDate();
+		var mon = today.toDateString().substr(4,3); //January is 0!
+		var yyyy = today.getFullYear();
+		dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
+		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
+		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
+		
+		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
+		//dojo.byId("lb_dob").innerHTML = dojo.byId("lbl_dob").innerHTML;
+		dojo.byId("lb_name").innerHTML = dojo.byId("lbl_namekh").innerHTML+" - "+dojo.byId("lbl_nameen").innerHTML;
+		dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
+		dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;
+		dojo.byId("lb_grade").innerHTML = dojo.byId("lbl_grade").innerHTML+"("+dojo.byId("lbl_group").innerHTML+")";
+		dojo.byId("lb_phone").innerHTML = dojo.byId("lbl_phone").innerHTML;
+		dojo.byId("lb_session").innerHTML = dojo.byId("lbl_session").innerHTML;
+		dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
+		
+		dojo.byId("lb_total_payment").innerHTML = dojo.number.format(dijit.byId("grand_total").get('value'),{places:2});
+		dojo.byId("lb_fine").innerHTML = dojo.number.format(dijit.byId("penalty").get('value'),{places:2});			
+		dojo.byId("lb_credit_memo").innerHTML = dojo.number.format(dijit.byId("credit_memo").get('value'),{places:2});
+		dojo.byId("lb_paid_amount").innerHTML = dojo.number.format(dijit.byId("paid_amount").get('value'),{places:2});
+		dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'),{places:2});
 
-			dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
-			dojo.byId("lb_paymentnumber").innerHTML = dijit.byId("number").get('value');
-			
-			var customer_type = dijit.byId("customer_type").get("value");
-			var student_type = dijit.byId("student_type").get("value");
+		dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+		dojo.byId("lb_paymentnumber").innerHTML = dijit.byId("number").get('value');
+		
+		var customer_type = dijit.byId("customer_type").get("value");
+		var student_type = dijit.byId("student_type").get("value");
 
-			var rowId = $('#identity').val();
-			var rowIDArray = rowId.split(',');
-			template="";
-				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
-					  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
-						  temp+='<td style="border:1px solid #000;">No</td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Deduct/Extra</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Type</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Amt</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Code</strong></td>';
-					  temp+='</tr>';
-					i=1;  
-					for(var n = 0; n < rowIDArray.length; n++) {
-						var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
-						var term_label = "-";
-						if(items_type!=3){
-							term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
-						}
-					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-					  
-					  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
-					  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
-						  item_label='Tuition Fee';
-						}
-					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
-					  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
-					  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
-					  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
-					  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
-					  percent = isNaN(percents)?'':percents+'%';
-
-					  sign='';					  
-					  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
-						  sign=' & ';
-					  }
-					  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
-
-					  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
-					  if(service_type==1){//one payment only
-						  start_date = '';
-						  epx_date='';
-					  }else{//period
-						  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
-						  mm = b.getMonth()+1;
-						  var dd = b.getDate();
-						  if(dd<10){
-							dd = "0"+dd;
-						  }
-						  var mon = getMonthByNumber(mm);
-						  if(mm<10){
-							mm = "0"+mm;
-						  }
-						  var y = b.getFullYear();
-						  var start_date = dd + '/' + mon + '/' + y ;
-
-						  var a = new Date(dijit.byId("validate_"+rowIDArray[n]).get('value'));
-						  mm = a.getMonth()+1;
-						  var dd = a.getDate();
-						  if(dd<10){
-							dd = "0"+dd;
-						  }
-						  var months = getMonthByNumber(mm);
-						  if(mm<10){
-							mm = "0"+mm;
-						  }
-						  var y = a.getFullYear();
-						  var epx_date = dd + '/' +months+ '/' + y ;
-					  }
-					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-					  i++;
-					  temp+='</tr>';
+		var rowId = $('#identity').val();
+		var rowIDArray = rowId.split(',');
+		template="";
+			 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
+				  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
+					  temp+='<td style="border:1px solid #000;">No</td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Deduct/Extra</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Type</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Amt</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Code</strong></td>';
+				  temp+='</tr>';
+				i=1;  
+				for(var n = 0; n < rowIDArray.length; n++) {
+					var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
+					var term_label = "-";
+					if(items_type!=3){
+						term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 					}
-			temp+='</table>';
-			dojo.byId('t_amountmoneytype').innerHTML = temp;
-			dijit.byId("terms").show();	
+				  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+				  
+				  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
+				  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
+					  item_label='Tuition Fee';
+					}
+				  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
+				  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
+				  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
+				  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
+				  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
+				  percent = isNaN(percents)?'':percents+'%';
+
+				  sign='';					  
+				  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
+					  sign=' & ';
+				  }
+				  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
+				  temp+='<td style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
+
+				  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
+				  if(service_type==1){//one payment only
+					  start_date = '';
+					  epx_date='';
+				  }else{//period
+					  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
+					  mm = b.getMonth()+1;
+					  var dd = b.getDate();
+					  if(dd<10){
+						dd = "0"+dd;
+					  }
+					  var mon = getMonthByNumber(mm);
+					  if(mm<10){
+						mm = "0"+mm;
+					  }
+					  var y = b.getFullYear();
+					  var start_date = dd + '/' + mon + '/' + y ;
+
+					  var a = new Date(dijit.byId("validate_"+rowIDArray[n]).get('value'));
+					  mm = a.getMonth()+1;
+					  var dd = a.getDate();
+					  if(dd<10){
+						dd = "0"+dd;
+					  }
+					  var months = getMonthByNumber(mm);
+					  if(mm<10){
+						mm = "0"+mm;
+					  }
+					  var y = a.getFullYear();
+					  var epx_date = dd + '/' +months+ '/' + y ;
+				  }
+				  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+				  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+				  i++;
+				  temp+='</tr>';
+				}
+		temp+='</table>';
+		dojo.byId('t_amountmoneytype').innerHTML = temp;
+		dijit.byId("terms").show();	
 		if(submit==1){
-				printSubmit();
+			printSubmit();
 		}
 	}
 }	

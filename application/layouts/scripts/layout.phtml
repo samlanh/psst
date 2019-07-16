@@ -398,6 +398,26 @@ jQuery(function () {
 		}
 	});
 })
+
+url_session = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'check-session'));?>';
+function checkSession(){
+	dojo.xhrPost({
+		url: url_session,
+		content:{
+			'branch_id':1
+		},
+		handleAs:"json",
+		load: function(data) {
+		    if(data == false){
+				alert("Session Expired ! Please log in again ! ")
+				location.reload();
+			}
+		},
+		error: function(err) {
+		}
+	});
+}
+
 <?php if($module=='allreport' AND $action!='index' OR $action='allreports' OR $action='studentnearlyendservice' OR $action='studentpaymentlate'){?>
 
 function doPrint() {
@@ -426,6 +446,7 @@ function preview()
 function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
+
 <?php }?>
 </script>
 

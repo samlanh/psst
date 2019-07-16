@@ -269,7 +269,7 @@
 									&nbsp;
 								</td>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 17px;">
+									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 17px;<?php if(!empty($this->studentgroup[4]) && !empty($this->studentgroup[5])){if($this->studentgroup[4]['total_score']==$this->studentgroup[5]['total_score']){echo "float:left;";}}?>">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -287,9 +287,41 @@
 										<tr align="center">
 											<td  class="studentname" >
 												<?php if(!empty($this->studentgroup[4])){if(!empty($this->studentgroup[4]['stu_khname'])){echo $this->studentgroup[4]['stu_khname'];}else{echo $this->studentgroup[4]['stu_enname'];}}?>
+												<?php if(!empty($this->studentgroup[4])){$score = $this->studentgroup[4]['total_score'];}?>
 											</td>
 										</tr>
 									</table>
+									
+									<?php $i=-1; if(!empty($this->studentgroup)){foreach($this->studentgroup as $student){$i++;?>
+										<?php 
+											if($i>4){
+												if($score==$student['total_score']){
+										?>
+													
+													<table width="50%" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 17px;float:left;">
+														<tr>
+															<td align="center">
+																<table width="125px" height="150px">
+																	<tr>
+																		<td style="border:1px solid #000;">
+																			<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[4])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[4]['photo'];}?>">
+																		</td>
+																	</tr>
+																</table>											
+															</td>
+														</tr>
+														<tr align="center">
+															<td class="number">លេខ <?php echo $rank5;?></td>
+														</tr>
+														<tr align="center">
+															<td  class="studentname" >
+																<?php if(!empty($student['stu_khname'])){echo $student['stu_khname'];}else{echo $student['stu_enname'];}?>
+															</td>
+														</tr>
+													</table>
+											
+										<?php }}?>
+									<?php }}?>
 								</td>
 							</tr>	
 							<tr>

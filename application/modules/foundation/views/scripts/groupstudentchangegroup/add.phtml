@@ -59,7 +59,7 @@
 			                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 			                <div class="col-md-7 col-sm-7 col-xs-12">
 			                	<?php $counbranhc = count($this->branch);?>
-			                	<select class="fullside" <?php if ($counbranhc==1){ echo 'readonly="readonly"';}?> tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllGroupByBranch();">
+			                	<select class="fullside" <?php if ($counbranhc==1){ echo 'readonly="readonly"';}?> tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllGroupByBranch();getAllGroupByBranch1();">
 									<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
 									<?php if(!empty($this->branch))foreach ($this->branch as $row){?>
 									<option value="<?php echo $row['id']?>" <?php if ($counbranhc==1){ echo 'selected="selected"';}?>><?php echo $row['name']?></option>
@@ -369,13 +369,40 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,
+			'noaddnew':0
 			},
 		handleAs:"json",
 		load: function(data) {
-		    group_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('from_group').set('store',group_store); 
+		    group_store = getDataStorefromJSON('id','name', data);
+		    //dijit.byId('from_group').set('store',group_store); 
 		    dijit.byId('to_group').set('store',group_store);     
+		},
+		error: function(err) {
+		}
+	});
+}
+function getAllGroupByBranch1(){
+	dijit.byId('from_group').reset();
+	dijit.byId('to_group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('from_group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,
+			'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    group_store = getDataStorefromJSON('id','name', data);
+		    dijit.byId('from_group').set('store',group_store); 
+		    //dijit.byId('to_group').set('store',group_store);     
 		},
 		error: function(err) {
 		}

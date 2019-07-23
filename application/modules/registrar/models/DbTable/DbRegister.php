@@ -96,11 +96,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     }
     
-    function getIdRecordUpdated($stu_id){
-    	$db = $this->getAdapter();
-    	$sql = "select id from rms_study_history where stu_id = $stu_id and is_finished=0 ";
-    	
-    }
+    
     function getStudentExist($data){
     	$db = $this->getAdapter();
     	
@@ -390,37 +386,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 			}
 		}
-	}
-	
-	function getParentIdStudentHistory($payment_id){
-		$db = $this->getAdapter();
-		$sql=" select is_parent from rms_study_history where payment_id = $payment_id ";
-		return $db->fetchOne($sql);
-	}
-	
-	function UpdateStudentInfoBack($id_old_record,$payment_id){
-		$db = $this->getAdapter();
-		$sql="select * from rms_study_history where id = $id_old_record ";
-		$stu_info = $db->fetchRow($sql);
-		if(!empty($stu_info)){
-			$this->_name="rms_student";
-			$array = array(
-					'stu_type'=>$stu_info['stu_type'],
-					'academic_year'=>$stu_info['academic_year'],
-					'degree'=>$stu_info['degree'],
-					'grade'=>$stu_info['grade'],
-					'session'=>$stu_info['session'],
-					//'teacher_id'=>$stu_info['teacher_id'],
-					'room'=>$stu_info['room'],
-					);
-			$where = " stu_id = ".$stu_info['stu_id'];
-			$this->update($array, $where);
-		}
-		
-		$this->_name="rms_study_history";
-		$where = " payment_id = $payment_id ";
-		$this->delete($where);
-		
 	}
 	
 	function updatePaymentInfoBack($payment_id,$type){

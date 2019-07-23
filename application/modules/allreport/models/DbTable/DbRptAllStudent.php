@@ -675,7 +675,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	return $db->fetchAll($sql.$where.$group_by.$order_by);
     }
-    public function getAllStudyHistory($search){
+    /*public function getAllStudyHistory($search){
     	$db = $this->getAdapter();
 	    	$sql = 'SELECT 
 					  h.`stu_id`,s.`stu_code`,is_subspend,
@@ -737,7 +737,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    		$where.=' AND h.session='.$search['session'];
 	    	}
 	    	return $db->fetchAll($sql.$where.$order);
-    }
+    }*/
     
     function getAllStudentID(){
     	$db = $this->getAdapter();

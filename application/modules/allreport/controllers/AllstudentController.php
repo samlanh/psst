@@ -255,7 +255,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	
 		$db= new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $rs_rows = $db->getAllStudyHistory($search);
+		//$this->view->rs = $rs_rows = $db->getAllStudyHistory($search);
 		$this->view->search =$search;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

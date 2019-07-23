@@ -360,6 +360,7 @@ function getStudntTestByBranch(){
 }
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getAllGrade(){
+	
 	dijit.byId('grade').set('value',''); 
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id==''){

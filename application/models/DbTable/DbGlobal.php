@@ -1017,15 +1017,9 @@ function getAllgroupStudyNotPass($action=null){
 	   		$colunmname='title';
 	   	}
 	   	$sql="SELECT s.*,
-	   		(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
-	   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
-	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
-	   		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
-	   		(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
-	   		(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
-	   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label
-	   		FROM rms_student as s
+	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id
+	   	FROM rms_student as s
 	   			WHERE s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
@@ -1739,10 +1733,10 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND i.items_id=".$category_id;
   	}
   	if($student_id!=null AND !empty($student_id)){
-  		if(empty($is_stutested)){
-  			$sql.=" AND (i.items_type =2 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
-  		}else{//will check expired of result test later
-  			$sql.=" AND (i.items_type =2 OR i.id IN ((SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result )))";
+  		if(empty($is_stutested)){//for normal student
+  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_study_history` WHERE stop_type=0 AND stu_id= $student_id )) ";
+  		}else{//will check expired of result test later //for tested student
+  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result ))";
   		}
   	}
   	$user = $this->getUserInfo();
@@ -1896,22 +1890,19 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getStudentProfileblog($student_id,$data_from=1){
   	$db = $this->getAdapter();
-  	if($data_from==1 OR $data_from==3){
+  	if($data_from==1 OR $data_from==3){//test ,student
   		$rs = $this->getStudentinfoById($student_id);
-    }elseif($data_from==2){
+    }elseif($data_from==2){//crm
   		$rs = $this->getStudentTestinfoById($student_id);
   	}
   	$tr = $this->tr;
   	$str = '';
-//   	print_r($rs);exit();
   	$student_type=$tr->translate("Old Student");
   	$style="style='color:white'";
   	if($rs["is_stu_new"]==1){
   		$student_type=$tr->translate("New Student");
   		$style="style='color:#99e5fd'";
   	}
-  	
-  	 //if($rs["is_subspend"]!=0){style="background: red !important;";}
   	if(!empty($rs)){
   		$str='<div class="text-center card-box-border">
   			<div class="member-card card-display-reg">
@@ -1939,18 +1930,21 @@ function getAllgroupStudyNotPass($action=null){
   		                        <div class="col-md-8 col-sm-8 col-xs-12">
   			                       <p class="text-muted info-list font-13">
   			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" >'.$rs["stu_code"].'</span><br />
-  			                       		<span class="title-info">'.$tr->translate("NAME_KH").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
-  			                       		<span class="title-info">'.$tr->translate("NAME_EN").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
+  			                       		<span class="title-info">'.$tr->translate("STUDENT_NAMEKHMER").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
+  			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
-  			                       		<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
+  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>';
+  			                        	
+  			                       		/*<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("CULTURE_LEVEL").'</span> : <span id="lbl_culturelevel" class="inf-value" >'.$rs['degree_culture'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
   			                            <span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("SESSION").'</span> : <span id="lbl_session" class="inf-value">'.$rs['session_label'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("ROOM").'</span> : <span id="lbl_room" class="inf-value">'. $rs['room_label'].'</span><br />
-  			         	 		  </p>
+  			         	 		  */
+  			                            
+  			         	 		  $str.='</p>
   		          </div>
   		      <div style="clear: both;"></div>
   		 </div>

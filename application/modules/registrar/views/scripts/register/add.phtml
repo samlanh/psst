@@ -168,7 +168,7 @@ tr.head-td th{padding: 5px 2px;}
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="">
 				    			<option value="1">Student Payment</option>
-				    			<option value="2">Customer Payment</option>
+				    			<!-- <option value="2">Customer Payment</option> -->
 				    		</select>
 	                   </div>
 	                </div>
@@ -206,7 +206,7 @@ tr.head-td th{padding: 5px 2px;}
 		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<input readonly type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" />
+		                   		<input readonly type="text" style="color: red;"  dojoType="dijit.form.TextBox" name="receipt_no" id="receipt_no" class="fullside" />
 		                   </div>
 		              </div>
 		              <div class="form-group">
@@ -245,17 +245,11 @@ tr.head-td th{padding: 5px 2px;}
 		                        <div class="col-md-8 col-sm-8 col-xs-12">
 			                       <p class="text-muted info-list font-13">
 			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_CODE");?></span> : <span id="lbl_stucode" class="inf-value" ></span><br />
-  			                       		<span class="title-info"><?php echo $tr->translate("NAME_KH");?></span> : <span id="lbl_namekh" class="inf-value" ></span><br />
-  			                       		<span class="title-info"><?php echo $tr->translate("NAME_EN");?></span> : <span id="lbl_nameen" class="inf-value" ></span><br />
+  			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> : <span id="lbl_namekh" class="inf-value" ></span><br />
+  			                       		<span class="title-info"><?php echo $tr->translate("NAME_ENGLISH");?></span> : <span id="lbl_nameen" class="inf-value" ></span><br />
   			                       		<span class="title-info"><?php echo $tr->translate("DOB"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
 			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
 			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                            <span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span id="lbl_group" class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('CULTURE_LEVEL');?></span> : <span id="lbl_culturelevel" class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_degree" class="inf-value" title="<?php //echo $rs['degree'];?>"><?php //echo $rs['degree'];?></span> <br />
-			                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_grade" class="inf-value" title="<?php //echo $rs['grade'];?>"><?php //echo $rs['grade'];?></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('SESSION');?></span> : <span id="lbl_session" class="inf-value" title="<?php //echo $rs['session'];?>"><?php //echo $rs['session'];?></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('ROOM');?></span> : <span id="lbl_room" class="inf-value" title="<?php //echo $rs['room'];?>"><?php //echo $rs['room'];?></span><br />
 			                        </p>
 		                        </div>
 		                         <div style="clear: both;"></div>
@@ -406,9 +400,6 @@ tr.head-td th{padding: 5px 2px;}
 	        <div class="clearfix">
 	        	<input type="hidden" id="identity" name="identity" />
 				<input type="hidden" id="identitystock" name="identitystock" />
-				<input type="hidden" dojoType="dijit.form.TextBox" name="br_address" value="<?php echo $this->branch_info['br_address'];?>" id="br_address" />
-				<input type="hidden" dojoType="dijit.form.TextBox" name="br_tel" value="<?php echo $this->branch_info['branch_tel'];?>" id="br_tel" />
-				<input type="hidden" dojoType="dijit.form.TextBox" value="<?php echo $this->branch_info['branch_nameen']?>" name="br_code" id="br_code" />
 				<input type="hidden" dojoType="dijit.form.TextBox" value="<?php echo $this->exchange_rate;?>" name="ex_rate" id="ex_rate" />
 				<input type="hidden" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" />
 	        </div>
@@ -449,20 +440,19 @@ div.img-back {
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dojo.number");
 	dojo.require("dijit.form.DateTextBox");
-	dojo.require('dijit.form.TextBox');
+	//dojo.require('dijit.form.TextBox');
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 
 item_store = getDataStorefromJSON('id','name');
-student_store = getDataStorefromJSON('id','name');
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		getbranchinfo();
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
 		getAllAcademicByBranch();
-		getReceiptNo('','');
+		//getReceiptNo('','');
 	});
 
 	new dijit.form.FilteringSelect({
@@ -534,14 +524,9 @@ function getAllAcademicByBranch(){
 		}
 	});
 }
-
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-gradeproduct')); ?>';
 function getgradebyDegree(dept_id,a,type=1){
-	if(type==1){
-	}else if(type==2){
-		dept_id = dijit.byId("category").get("value");
-	}
+	dept_id = dijit.byId("category").get("value");
 	student_id = dijit.byId("old_stu").get("value");
 	is_stutested=0;
 	if(dijit.byId('student_type').get('value')==2){
@@ -556,18 +541,14 @@ function getgradebyDegree(dept_id,a,type=1){
 		},
 		handleAs:"json",
 		load: function(data) {
-			if(type==1){
-			}else{
-				item_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('item').set('store',item_store);  	
-			}
+			dijit.byId('item').set('store',getDataStorefromJSON('id','name', data));  	
 		},
 		error: function(err) {
 		}
 	});
 }
 
-var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
+/*var url_getreceipt_no = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
 function getReceiptNo(stu_id='',submit=''){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id==''){return false;}
@@ -593,10 +574,10 @@ function getReceiptNo(stu_id='',submit=''){
 		error: function(err) {
 		}
 	});
-}
+}*/
 </script>
 <script type="text/javascript">
-function submitDataAddNew(){
+/*function submitDataAddNew(){
 	if(dijit.byId('office_receipt').validate()) {
 		var identity = $('#identity').val();
 		if(identity==''){
@@ -605,15 +586,15 @@ function submitDataAddNew(){
 			return false;
 		}
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
+		var url_submit = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
 			load: function(data) {
 				document.getElementsByClassName("overlay")[0].style.display="none";		
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/registrar/register/add";
+				alert('<?php //echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php //echo $this->baseUrl();?>/registrar/register/add";
 			},
 			error: function(e) {
 			}
@@ -622,7 +603,7 @@ function submitDataAddNew(){
 }
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
-}
+}*/
 function getMonthByNumber(m){
 	var monthName=[
 		 "01",
@@ -642,10 +623,10 @@ function getMonthByNumber(m){
 }
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 15.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 13.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 		<style>
 			.hearder_table{height:25px !important;}
-			.defaulheight{line-height: 20px !important;}
+			.defaulheight{line-height:10px !important;}
 			.bold{
 				font-weight:bold;
 				}
@@ -676,7 +657,7 @@ function getMonthByNumber(m){
     				font-family:Times New Roman;	
 				}
 			</style>
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:10cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;">
 				<tr>
 					<td style="" align="center" valign="top">
 						<label id="lbl_header"></label>
@@ -696,14 +677,15 @@ function getMonthByNumber(m){
 								<td width="25%" valign="top" align="left">
 									<div style="font-size: 14px;font-family:Times New Roman;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
 									<div style="font-size: 12px;font-weight: bold;font-family: Times New Roman">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
-									<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
-									<div style="font-size: 10px;font-weight: bold;">By User : 
-											<?php 
-												   $session_user=new Zend_Session_Namespace('authstu');
-												   $last_name=$session_user->last_name;
-												   $username = $session_user->first_name;
-												   echo "".$last_name." ".$username;
-												?></div>
+									<div style="font-size:10px;margin-top:-5px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+									<div style="font-size:10px;font-weight: bold;margin-top:-7px;">By User : 
+										<?php 
+										   $session_user=new Zend_Session_Namespace('authstu');
+										   $last_name=$session_user->last_name;
+										   $username = $session_user->first_name;
+										   echo "".$last_name." ".$username;
+										?>
+									</div>
 								</td>
 							</tr>
 						</table>
@@ -717,24 +699,16 @@ function getMonthByNumber(m){
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
 								<td>Tel</td>
 								<td> : &nbsp;<label id="lb_phone" class="one bold"></label> </td>
-								<td>Academic Year</td>
-								<td>  : &nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
+								<td></td>
+								<td>   &nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
 							</tr>
 							<tr>
 								<td>Student Name</td>
 								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
-								<td>Degree</td>
-								<td> : &nbsp;<label id="lb_dept" class="one bold"></label> </td>
-								<td>Session</td>
-								<td> : &nbsp;<label id="lb_session" class="one bold"></label> </td>
-							</tr>
-							<tr>
 								<td>Gender </td>
 								<td> : &nbsp;&nbsp;<label id="lb_sex" class=" one bold"></label></td>
-								<td>Grade</td>
-								<td> : &nbsp;<label id="lb_grade" class="one bold"></label> </td>
 								<td></td>
-								<td></td>
+								<td>  &nbsp;<label id="lb_session" class="one bold"></label> </td>
 							</tr>
 							<tr>
 								<td colspan="6">
@@ -892,6 +866,10 @@ function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
 	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){
+		dijit.byId("branch_id").focus();
+		return false;
+	}
 	dojo.xhrPost({
 		url:url_data,
 		content:{
@@ -900,8 +878,7 @@ function getallstudentname(){//
 		},
 		handleAs:"json",
 		load: function(data) {
-			student_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('old_stu').set('store',student_store);  
+		    dijit.byId('old_stu').set('store',getDataStorefromJSON('id','name', data));  
 		},
 		error: function(err) {
 		}
@@ -979,15 +956,12 @@ function getPaymentHistory(student_id){
 function getOldStudentInfo(){
 	student_type = dijit.byId("student_type").attr("value");
 	data_from= 1;
-	if(student_type==1){//old
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
-	}else if(student_type==2){//tested student
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+	if(student_type==2){//tested student
 		data_from=2;
 	}else if(student_type==3){//crm
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 		data_from=3;
 	}
+	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 	student_id=dijit.byId('old_stu').get('value');
 	if(student_id==''){return false;}
 	dijit.byId('old_stu').attr('value',student_id);	
@@ -1009,13 +983,13 @@ function getOldStudentInfo(){
 	});
 }
 var template = '';
-var service = '';
+//var service = '';
 var col = 0;
 var no = 0;
 var title = 0;
 tmp = '';
 temp='';
-date_format = '"dd/MM/yyyy"';
+//date_format = '"dd/MM/yyyy"';
 function addRow() {
 		study_year = dijit.byId('study_year').get('value');
 		if(study_year==''){
@@ -1317,7 +1291,7 @@ function getservicefee(key){
  	 	 	 		}
  			},
  			error: function(err) {
- 	 			alert("alert+"+err);
+ 	 			
  			}
  	});
  }
@@ -1338,13 +1312,13 @@ function printSave(new_stu_id,new_receipt,submit){
 		
 		stu_id = dijit.byId("old_stu").attr('displayedValue');
 		if(new_receipt==''){
-			getReceiptNo(stu_id);
+			//getReceiptNo(stu_id);
 		}else{
 			receipt = new_receipt;
 		}
 		if(new_receipt==""){
-			getReceiptNo(1,submit);
-			submit=0;
+			//getReceiptNo(1,submit);
+			submit=1;
 		}
 		today = dijit.byId("paid_date").get("value");
 		var dd = today.getDate();
@@ -1353,28 +1327,23 @@ function printSave(new_stu_id,new_receipt,submit){
 		dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
 		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
-		
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
-		//dojo.byId("lb_dob").innerHTML = dojo.byId("lbl_dob").innerHTML;
 		dojo.byId("lb_name").innerHTML = dojo.byId("lbl_namekh").innerHTML+" - "+dojo.byId("lbl_nameen").innerHTML;
-		dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
-		dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;
-		dojo.byId("lb_grade").innerHTML = dojo.byId("lbl_grade").innerHTML+"("+dojo.byId("lbl_group").innerHTML+")";
+		//dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
+		//dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;
+		//dojo.byId("lb_grade").innerHTML = dojo.byId("lbl_grade").innerHTML+"("+dojo.byId("lbl_group").innerHTML+")";
 		dojo.byId("lb_phone").innerHTML = dojo.byId("lbl_phone").innerHTML;
-		dojo.byId("lb_session").innerHTML = dojo.byId("lbl_session").innerHTML;
+		//dojo.byId("lb_session").innerHTML = dojo.byId("lbl_session").innerHTML;
 		dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
-		
 		dojo.byId("lb_total_payment").innerHTML = dojo.number.format(dijit.byId("grand_total").get('value'),{places:2});
 		dojo.byId("lb_fine").innerHTML = dojo.number.format(dijit.byId("penalty").get('value'),{places:2});			
 		dojo.byId("lb_credit_memo").innerHTML = dojo.number.format(dijit.byId("credit_memo").get('value'),{places:2});
 		dojo.byId("lb_paid_amount").innerHTML = dojo.number.format(dijit.byId("paid_amount").get('value'),{places:2});
 		dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'),{places:2});
-
 		dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 		dojo.byId("lb_paymentnumber").innerHTML = dijit.byId("number").get('value');
-		
-		var customer_type = dijit.byId("customer_type").get("value");
-		var student_type = dijit.byId("student_type").get("value");
+		//var customer_type = dijit.byId("customer_type").get("value");
+		//var student_type = dijit.byId("student_type").get("value");
 
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
@@ -1429,36 +1398,13 @@ function printSave(new_stu_id,new_receipt,submit){
 					  start_date = '';
 					  epx_date='';
 				  }else{//period
-					  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
-					  mm = b.getMonth()+1;
-					  var dd = b.getDate();
-					  if(dd<10){
-						dd = "0"+dd;
-					  }
-					  var mon = getMonthByNumber(mm);
-					  if(mm<10){
-						mm = "0"+mm;
-					  }
-					  var y = b.getFullYear();
-					  var start_date = dd + '/' + mon + '/' + y ;
-
-					  var a = new Date(dijit.byId("validate_"+rowIDArray[n]).get('value'));
-					  mm = a.getMonth()+1;
-					  var dd = a.getDate();
-					  if(dd<10){
-						dd = "0"+dd;
-					  }
-					  var months = getMonthByNumber(mm);
-					  if(mm<10){
-						mm = "0"+mm;
-					  }
-					  var y = a.getFullYear();
-					  var epx_date = dd + '/' +months+ '/' + y ;
+					  var start_date = dijit.byId("date_start_"+rowIDArray[n]).attr('displayedValue');
+					  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
 				  }
 				  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
 				  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-				  i++;
 				  temp+='</tr>';
+				  i++;
 				}
 		temp+='</table>';
 		dojo.byId('t_amountmoneytype').innerHTML = temp;

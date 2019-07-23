@@ -1291,7 +1291,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		return $this->getAdapter()->fetchOne($sql);
 	}
 	
-	function updateBalance($data,$payment_id){
+	/*function updateBalance($data,$payment_id){
 		$db = $this->getAdapter();
 		$sql="select * from rms_student_payment where id = $payment_id LIMIT 1 ";
 		$result = $db->fetchRow($sql);
@@ -1319,7 +1319,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			$this->_name = "rms_student_payment";
 			$this->update($arr, $where);
 		}
-	}
+	}*/
 	
 	function voidStudentClearBalance($id){
 		$db = $this->getAdapter();

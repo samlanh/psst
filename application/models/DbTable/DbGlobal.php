@@ -1734,7 +1734,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if($student_id!=null AND !empty($student_id)){
   		if(empty($is_stutested)){//for normal student
-  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_study_history` WHERE stop_type=0 AND stu_id= $student_id )) ";
+  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM rms_student WHERE status=1 AND stu_id= $student_id )) ";
   		}else{//will check expired of result test later //for tested student
   			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result ))";
   		}
@@ -1767,7 +1767,7 @@ function getAllgroupStudyNotPass($action=null){
   	$db = $this->getAdapter();
   	$sql="SELECT t.id,title AS name FROM `rms_itemsdetail` AS t,
 		      `rms_product_location`
-			   WHERE t.id=rms_product_location.pro_id ";
+			   WHERE t.id=rms_product_location.pro_id AND t.status=1 ";
   	$sql.=$this->getAccessPermission("brand_id");
   	
   	if($category_id!=null AND $category_id>0 ){

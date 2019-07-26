@@ -120,15 +120,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$receipt_number = $this->getRecieptNo($data['branch_id']);
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
-				//$this->_name='rms_student';
 				$customer_type=1;
 				if($data['student_type']==1){//existing student
 					$rs_stu = $gdb->getStudentinfoById($stu_id);
 				}elseif($data['student_type']==2){//testing student
 					$rs_stu = $gdb->getStudentTestinfoById($stu_id);
 					$arr = array(
-							'is_registered'=>1,
-							);
+						'is_registered'=>1,
+					);
 					$this->_name='rms_student_test_result';
 					$where="id = ".$rs_stu['id'];
 					$this->update($arr, $where);
@@ -188,7 +187,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'grand_total'	=> $data['grand_total'],
 					'credit_memo'	=> $cut_credit_memo,
 					'memo_id'		=> $data['credit_memo'],
-					'paid_amount'	=> $data['paid_amount'],
+					'paid_amount'	=> $data['paid_amount'],   
 					'balance_due'	=> $data['balance_due'],
 					'amount_in_khmer'=> $data['money_in_khmer'],
 					'payment_method'=> $data['payment_method'],

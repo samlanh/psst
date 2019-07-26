@@ -1760,6 +1760,7 @@ function getAllgroupStudyNotPass($action=null){
   		}
   	}
   	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
+  	//echo $sql;
   	return $db->fetchAll($sql);
   }
   function getProductbyBranch($category_id=null,$product_type=null){
@@ -1776,6 +1777,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND t.product_type=1 ";
   	}
   	$sql.=" GROUP BY t.id ";
+  	//echo $sql;
   	return $db->fetchAll($sql);
   }
   public function getAllGradeStudyOption($type=1){
@@ -1869,7 +1871,6 @@ function getAllgroupStudyNotPass($action=null){
   function getnewStudentId($branch_id,$degree){//used global
 	  	$db = $this->getAdapter();
 	  	$option_type=1;//1 id by branch ,2 by degree
-	  	
 	  	$length = '';
 	  	$pre = '';
 	  	if($option_type==1){
@@ -1881,11 +1882,11 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql="SELECT id_start FROM `rms_items` WHERE id= $degree ";
 	  		$stu_num = $db->fetchOne($sql);
 	  	}
-		  	$new_acc_no= (int)$stu_num+1;
-		  	$length = strlen((int)$new_acc_no);
-		  	for($i = $length;$i<4;$i++){
-		  		$pre.='0';
-		  	}
+	  	$new_acc_no= (int)$stu_num+1;
+	  	$length = strlen((int)$new_acc_no);
+	  	for($i = $length;$i<4;$i++){
+	  		$pre.='0';
+	  	}
 	  	return $pre.$new_acc_no;
   }
   function getStudentProfileblog($student_id,$data_from=1){

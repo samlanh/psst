@@ -225,7 +225,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$remark = new Zend_Dojo_Form_Element_Textarea('remark');
 		$remark->setAttribs(array(
 				'dojoType'=>$this->textarea,'class'=>'fullside',
-				'style'=>'min-height: 60px !important;',
+				'style'=>'min-height: 65px !important;',
 		));
 		
 		$fa_name_en = new Zend_Dojo_Form_Element_TextBox('fa_name_en');

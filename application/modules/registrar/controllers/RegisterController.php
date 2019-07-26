@@ -80,8 +80,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $rs = $db->getStudentProfileblog(1);
 	   
-	   $db = new Application_Model_DbTable_DbGlobal();
-	   $grade = $db->getAllGradeStudyByDegree(7);
+// 	   $db = new Application_Model_DbTable_DbGlobal();
+// 	   $grade = $db->getAllGradeStudyByDegree(null,8);
+// 	   $prodcut = $db->getProductbyBranch(10);
 	   
 // 	   $db = new Application_Model_DbTable_DbGlobal();
 // 	   $student_id = 1;
@@ -221,7 +222,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
     		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
     		$rsproduct = $db->getProductbyBranch($data['dept_id']);
-    		if(!empty($rsproduct) AND  !empty($rs)){
+    		if(!empty($rsproduct) OR !empty($rs)){
     			$rs = array_merge($rs,$rsproduct);
     		}
     		print_r(Zend_Json::encode($rs));

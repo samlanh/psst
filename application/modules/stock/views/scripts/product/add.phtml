@@ -4,7 +4,6 @@
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_items;
 ?>
-
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
@@ -104,7 +103,8 @@ input.btn_borwse_image {
 		                </div>
 		             </div>
 		             <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name">
+	                   		<?php echo $tr->translate("TYPE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("product_type");?>
@@ -146,8 +146,8 @@ input.btn_borwse_image {
 								</div>
 								<div class="button_browse">
 								<div id='preview'></div>	
-										<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-										<input class="btn_borwse_image" type="file" id="images" name="images" />
+									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+									<input class="btn_borwse_image" type="file" id="images" name="images" />
 								</div>
 							</div>
 		                </div>
@@ -167,9 +167,9 @@ input.btn_borwse_image {
 							<tr id="head-title" class="head-td" align="right">
 								<th><?php echo $tr->translate("DEL");?></th>
 								<th><?php echo $tr->translate("N_O");?></th>
-								<th><?php echo $tr->translate("BRANCH_NAME");?></th>
+								<th><?php echo $tr->translate("BRANCH");?></th>
 								<th><?php echo $tr->translate("QTY");?></th>
-								<th><?php echo $tr->translate("PRICE");?></th>
+								<th><?php echo $tr->translate("SELL_PRICE");?></th>
 								<th><?php echo $tr->translate("QTY_WARNING");?></th>
 								<th><?php echo $tr->translate("OTHER");?></th>
 							</tr>
@@ -260,7 +260,7 @@ input.btn_borwse_image {
 				$("#head-title").html("");
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("BRANCH_NAME");?></th>';
+				temp+='<th><?php echo $tr->translate("BRANCH");?></th>';
 				temp+='<th><?php echo $tr->translate("QTY");?></th>';
 				temp+='<th><?php echo $tr->translate("SELL_PRICE");?></th>';
 				temp+='<th><?php echo $tr->translate("QTY_WARNING");?></th>';
@@ -287,7 +287,6 @@ input.btn_borwse_image {
 			     parseContent: true,
 			});
 	 }
-	
 	function deleteRecord(index) {
 			var identity = $('#identity').val();
 			var arrays = identity.split(',');

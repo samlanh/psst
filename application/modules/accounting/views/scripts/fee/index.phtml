@@ -28,7 +28,7 @@
 					 	<?php echo $frm->getElement("title");?>
 					 </div>
 					 <div class="col-md-3 col-sm-3 col-xs-12">
-					  	<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
+					  	<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
 							<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
 							<?php if(!empty($this->branch)){ foreach ($this->branch as $year){?>	
 								<option value="<?php echo $year['id'];?>" <?php if ($this->adv_search['branch_id']==$year['id']){ echo 'selected="selected"';}?>><?php echo $year['name'];?></option>

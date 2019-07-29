@@ -26,7 +26,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 			$db =  new Global_Model_DbTable_DbItemsDetail();
 			$rs_rows = $db->getAllProductSet($search,$type);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_CODE","PRODUCT_NAME","PRODUCT_CATEGORY","PRICE",
+			$collumns = array("PRODUCT_CODE","PRODUCT_NAME","PRODUCT_CATEGORY","SELL_PRICE",
 					"DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'productset','action'=>'edit',

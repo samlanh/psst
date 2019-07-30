@@ -176,8 +176,8 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   	if(!empty($search['branch_id'])){
 	   		$where.=" AND ss.branch_id=".$search['branch_id'];
 	   	}
-	   	if(!empty($search['stu_name'])){
-	   		$where.=" AND ss.student_id=".$search['stu_name'];
+	   	if(!empty($search['studentid'])){
+	   		$where.=" AND ss.student_id=".$search['studentid'];
 	   	}
 	   	return $db->fetchAll($sql.$where.$order);
    }

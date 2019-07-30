@@ -83,28 +83,28 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			'type'			=>0,
 			'date'			=>$data['Date'],
 			'end_date'		=>$data['end_date'],
-			'status'		=>$data['status'],
+			'status'		=>1,
 			'user_id'		=>$this->getUserId(),);
 		$this->insert($arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
 		}
 		//print_r($data); exit();
  	 }
 	 function updatcreditMemo($data){
-			$arr = array(
-				'branch_id'=>$data['branch_id'],
-				'student_id'=>$data['student_id'],
-				'total_amount'=>$data['total_amount'],
-				'total_amountafter'=>$data['total_amount'],
-				'note'=>$data['Description'],
-				'prob'=>$data['prob'],
-				'type'=>0,
-				'date'=>$data['Date'],
-				'end_date'=>$data['end_date'],
-				'status'=>$data['status'],
-				'user_id'=>$this->getUserId(),);
+		$arr = array(
+			'branch_id'		=>$data['branch_id'],
+			'student_id'	=>$data['student_id'],
+			'total_amount'	=>$data['total_amount'],
+			'total_amountafter'=>$data['total_amount'],
+			'note'			=>$data['Description'],
+			'prob'			=>$data['prob'],
+			'type'			=>0,
+			'date'			=>$data['Date'],
+			'end_date'		=>$data['end_date'],
+			'status'		=>$data['status'],
+			'user_id'		=>$this->getUserId(),
+		);
 		$where=" id = ".$data['id'];
 		$this->update($arr, $where);
 	}

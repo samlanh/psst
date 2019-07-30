@@ -65,7 +65,6 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 		//$this->view->subjectlist = $_db->getAllSubjectStudy(1);
 		
 		//$this->view->parent_subject = $_db->getParentSubject();
-		$this->view->subject = $_db->getAllSubjectStudy();
 		
 		$teacher = $_db->getAllTeacher();
 		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
@@ -79,6 +78,8 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
 		$this->view->room = $room;
 		$this->view->branch_name = $model->getAllBranch();
+		
+		$this->view->subject = $model->getAllSubjectName();
 		
 		$db=new Global_Model_DbTable_DbGrade();
 // 		$d_row=$db->getNameGradeAll();

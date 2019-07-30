@@ -192,8 +192,17 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     //for get Grade By School Option
     function getAllGradeStudySchoolOption($option=1,$schoolOption){
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$grade = "i.title";
+    		$degree = "it.title";
+    	}else{ // English
+    		$grade = "i.title_en";
+    		$degree = "it.title_en";
+    	}
     	$sql="SELECT i.id,
-    	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+    	CONCAT($grade,' (',(SELECT $degree FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
     	FROM `rms_itemsdetail` AS i
     	WHERE i.status =1 ";
     	if($option!=null){

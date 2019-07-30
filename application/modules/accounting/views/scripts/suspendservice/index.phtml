@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("STUDENT_SUSPEND_SERVICE"));
 	$frm = $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -21,10 +22,15 @@
 						<?php echo $frm->getElement("adv_search");?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("branch_id");?>
+						<select name="branch_id" id="branch_id" class="fullside" onChange="getStudentByBranch();" dojoType="dijit.form.FilteringSelect" >
+							<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
+							<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+								<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->rs['branch_id']){echo "selected";}?>><?php echo $branch['name']?></option>
+							<?php }}?>
+						</select>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("stu_name");?>
+						<input id="studentid" />
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("start_date");?>
@@ -44,7 +50,53 @@
 	</div>
 </div>
 
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $base_url;?>/js/help.js"></script>
 <script type="text/javascript">
+	dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dijit.form.DateTextBox");
+	
+	student_store = getDataStorefromJSON('id','name');
+	dojo.ready(function(){ 
+		new dijit.form.FilteringSelect({
+		    queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,
+		    id: "studentid",
+		    name: "studentid",           
+		    class: 'fullside',  
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
+		    onChange: function() {  
+		    	//getServiceByStudent();
+		    }
+		}, "studentid");
+		getStudentByBranch("<?php echo $this->rs['studentid']?>");
+	});	
+	
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	function getStudentByBranch(stu_id=''){//
+		dijit.byId("studentid").attr("value","");
+		branch_id = dijit.byId("branch_id").get("value");
+		if(branch_id>0){
+			dojo.xhrPost({
+				url:url_data,
+				content:{
+					'branch_id':branch_id
+				},
+				handleAs:"json",
+				load: function(data) {
+					student_store  = getDataStorefromJSON('id','name', data);
+					dijit.byId('studentid').set('store',student_store);  
+					if(stu_id!=''){
+						dijit.byId("studentid").attr("value",stu_id);
+					}
+				},
+				error: function(err) {
+				}
+			});
+		}
+	}
+
 </script>

@@ -17,9 +17,11 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			}
 			else{
 				$search=array(
-					'adv_search' =>'',
-					'start_date' =>date("Y-m-d"),
-					'end_date' =>date("Y-m-d"),
+					'adv_search' 	=>'',
+					'branch_id' 	=>-1,
+					'studentid' 	=>'',
+					'start_date' 	=>date("Y-m-d"),
+					'end_date' 		=>date("Y-m-d"),
 				);
 			}
 			$db =  new Foundation_Model_DbTable_DbSuspendservice();
@@ -35,6 +37,9 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 		$this->view->rs =$search;
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->branch = $_db->getAllBranch();
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

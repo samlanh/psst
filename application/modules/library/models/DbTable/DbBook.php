@@ -4,7 +4,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 {
  	protected $_name = 'rms_book';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
     
@@ -265,7 +265,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		$sql=" SELECT id,book_no,qty_after,qty FROM rms_book WHERE id=$book_id AND `status`=1 ";
 		$row = $db->fetchRow($sql);
 		if(empty($row)){
-			$session_user=new Zend_Session_Namespace('authstu');
+			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 			$userName=$session_user->user_name;
 			$GetUserId= $session_user->user_id;
 			$array = array(

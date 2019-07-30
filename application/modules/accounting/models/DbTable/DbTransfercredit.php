@@ -3,12 +3,12 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'rms_transfer_credit';
 	public function getUserId(){
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
 	}
 	function getAllTransfer($search=null){
 		$db = $this->getAdapter();
-		//$session_user=new Zend_Session_Namespace('authstu');
+		//$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$sql="SELECT 
 				c.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				

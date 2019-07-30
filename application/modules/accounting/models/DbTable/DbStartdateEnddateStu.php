@@ -4,7 +4,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 	protected $_name = 'rms_startdate_enddate';
 	
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
     

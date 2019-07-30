@@ -5,7 +5,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 
     protected $_name = 'rms_supplier';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     	 
     }
@@ -364,7 +364,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     
     public function ajaxAddProduct($data){
     	$db = $this->getAdapter();
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	$userName=$session_user->user_name;
     	$GetUserId= $session_user->user_id;
     	$_arr = array(

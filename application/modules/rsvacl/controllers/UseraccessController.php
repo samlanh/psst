@@ -66,7 +66,7 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     }
     public function addAction()
     {
-//     	$session_user=new Zend_Session_Namespace('authstu');
+//     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 //     	print_r($session_user->arr_acl);exit();
     	
     	/* Initialize action controller here */

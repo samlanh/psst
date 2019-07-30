@@ -4,7 +4,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 {
     protected $_name = 'rms_student_attendence';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
 	
@@ -62,7 +62,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		$db->beginTransaction();
 		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{
-// 			$session_user=new Zend_Session_Namespace('authstu');
+// 			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 // 			$branch_id = $session_user->branch_id;
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],
@@ -111,7 +111,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-// 			$session_user=new Zend_Session_Namespace('authstu');
+// 			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 // 			$branch_id = $session_user->branch_id;
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],

@@ -5,7 +5,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	protected $_name = 'rms_student';
 	public function getUserId(){
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
 	
 	}
@@ -240,7 +240,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				if(!empty($_data['group']) AND $_data['group']!=-1){
 					$is_setgroup=1;
 				}
-				$session_user=new Zend_Session_Namespace('authstu');
+				$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 				$branch_id = $session_user->branch_id;
 				$_arr= array(
 						'branch_id'		=>$_data['branch_id'],

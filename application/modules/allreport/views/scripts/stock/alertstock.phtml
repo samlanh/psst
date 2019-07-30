@@ -3,7 +3,7 @@
 	$this->headTitle($tr->translate('REPORT_PRODUCT_NEAR_OUT_STOCK')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$session_user=new Zend_Session_Namespace('authstu');
+	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>

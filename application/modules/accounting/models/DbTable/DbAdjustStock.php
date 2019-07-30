@@ -5,7 +5,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 
     protected $_name = 'rms_request_order';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     	 
     }
@@ -56,7 +56,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 				 AND   p.id=pl.pro_id ";
     	$row = $db->fetchRow($sql);
     	if(empty($row)){
-    		$session_user=new Zend_Session_Namespace('authstu');
+    		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     		$userName=$session_user->user_name;
     		$GetUserId= $session_user->user_id;
     		$array = array(
@@ -311,7 +311,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     
     public function ajaxAddProduct($data){
     	$db = $this->getAdapter();
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	$userName=$session_user->user_name;
     	$GetUserId= $session_user->user_id;
     	$_arr = array(

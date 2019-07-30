@@ -288,7 +288,7 @@ tr.head-td th {
 				<td colspan="2" width="50%" align="center">
 					<div style="margin-top:30px;font-size:10px;"></div>
 					<?php 
-						   $session_user=new Zend_Session_Namespace('authstu');
+						   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 						   $last_name=$session_user->last_name;
 						   $username = $session_user->first_name;
 						   echo "".$last_name." ".$username;

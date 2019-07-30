@@ -4,7 +4,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_transferstock';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
     function getAllTransfer($search=null){  

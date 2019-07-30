@@ -4,13 +4,13 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 {
     protected $_name = 'rms_student_test';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     	 
     }
     
     public function getBranchId(){
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->branch_id;
     }
     

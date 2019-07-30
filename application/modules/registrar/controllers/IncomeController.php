@@ -106,7 +106,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		$db = new Registrar_Model_DbTable_DbIncome();
 		$row  = $db->getIncomeById($id);
 		
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$user_type_id = $session_user->level;
 		$payment_date = date("Y-m-d",strtotime($row['date']));
 		$current_date = date("Y-m-d");

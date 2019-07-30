@@ -151,7 +151,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$rspayment =  $db->getCustomerPaymentByID($id);
     	$this->view->payment =$rspayment;
     	 
-    	$session_user=new Zend_Session_Namespace('authstu');
+    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	$user_type_id = $session_user->level;
     	$payment_date = date("Y-m-d",strtotime($rspayment['create_date']));
     	$current_date = date("Y-m-d");

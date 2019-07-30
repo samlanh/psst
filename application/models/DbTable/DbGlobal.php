@@ -118,7 +118,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
 
    public function getUserId(){
-   	$session_user=new Zend_Session_Namespace('authstu');
+   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
    	return $session_user->user_id;
    }
    public  function caseStatusShowImage($status="status"){
@@ -142,7 +142,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			AND u.is_system =0";
 	   $row = $db->fetchAll($sql);
 	   	
-	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$branch_list = $session_user->branch_list;
 	   	$level = $session_user->level;
 	   
@@ -199,7 +199,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    
    public function getUserInfo(){
-	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$session_teacher=new Zend_Session_Namespace('authteacher');
 	   	if (!empty($session_user->user_id)){
 		   	$userName=$session_user->user_name;
@@ -799,7 +799,7 @@ function getAllgroupStudyNotPass($action=null){
     	return $db->fetchAll($sql);
     } 
    public function getAccessPermission($branch_str='branch_id'){
-	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$branch_list = $session_user->branch_list;
 	   	$result="";
 	   	if(!empty($branch_list)){
@@ -822,7 +822,7 @@ function getAllgroupStudyNotPass($action=null){
    }
    
    function getSchoolOptionAccess($schooloption_coloum="schoolOption"){
-	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$level = $session_user->level;
 	   	if($level==1){
 	   		return ;
@@ -843,7 +843,7 @@ function getAllgroupStudyNotPass($action=null){
    
    public function getUserAccessPermission($user_id='user_id'){
 	   	$user = $this->getUserId();
-	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$level = $session_user->level;
 	   	if($level==1){
 	   		$result = "";
@@ -856,7 +856,7 @@ function getAllgroupStudyNotPass($action=null){
    }
    
    function getUserType(){
-   	$session_user=new Zend_Session_Namespace('authstu');
+   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
    	return $session_user->level;
    }
    
@@ -1594,7 +1594,7 @@ function getAllgroupStudyNotPass($action=null){
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
-  		$session_user=new Zend_Session_Namespace('authstu');
+  		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
   		$branchlist = empty($branchlist)?$session_user->branch_list:$branchlist;
   		if($branchlist !=null){
 	  		$schooloption = $this->getSchoolOptionListByBranch($branchlist);

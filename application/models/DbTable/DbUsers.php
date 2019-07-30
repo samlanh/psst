@@ -351,7 +351,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	}
 	public function getArrAclReport($user_type_id,$str_controller='allreport'){
 		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$user_type_id = $session_user->level;
 		$sql = "SELECT aa.label,aa.module, aa.controller, aa.action 
 			FROM rms_acl_user_access AS ua  
@@ -365,7 +365,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	function getAccessUrl($module,$controller,$action){
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$user_typeid = $session_user->level;
 		$db = $this->getAdapter();
 		$sql = "SELECT aa.module, aa.controller, aa.action FROM rms_acl_user_access AS ua  INNER JOIN rms_acl_acl AS aa

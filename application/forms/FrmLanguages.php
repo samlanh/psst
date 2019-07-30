@@ -13,7 +13,7 @@ class Application_Form_FrmLanguages{
 		}else{$str="en"; }	
 		
 		$schoolOption=1;
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$session_teacher=new Zend_Session_Namespace('authteacher');
 		if (!empty($session_user->user_id)){
 			$schoolOption = $session_user->schoolOption;

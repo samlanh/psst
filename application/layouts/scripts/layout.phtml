@@ -2,7 +2,7 @@
 header('Cache-Control: no cache'); //no cache
 session_cache_limiter('private_no_expire');
 
-$session_user=new Zend_Session_Namespace('authstu');
+$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 $username = $session_user->first_name;
 $them_style =  $session_user->theme_style;
 $user_id = $session_user->user_id;
@@ -24,7 +24,7 @@ $teacher_id = $session_t->teacher_id;
 	$controller=$request->getControllerName();
 	$module=$request->getModuleName();
 	
-	$session_user=new Zend_Session_Namespace('authstu');
+	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	$arr_module = $session_user->arr_acl;
 	$user_id = $session_user->user_id;
 	if(empty($username)){

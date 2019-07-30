@@ -5,7 +5,7 @@
 	
 	/*--------------------URLs link display--------------------------*/
 		  $tr=Application_Form_FrmLanguages::getCurrentlanguage();
-		  $session_user=new Zend_Session_Namespace('authstu');
+		  $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		  $arr_module = $session_user->arr_acl;
 		  $menu = array();
 		  $module = '';

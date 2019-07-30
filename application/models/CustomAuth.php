@@ -34,7 +34,7 @@ class Application_Model_CustomAuth extends Zend_Controller_Plugin_Abstract
  		//clear session from search session
  		$this->clearSession();
  		
- 		$session_user=new Zend_Session_Namespace('authstu');
+ 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
  		$module = $request->getModuleName();
  		$controller = $request->getControllerName();
  		$action = $request->getActionName();

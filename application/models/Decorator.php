@@ -33,7 +33,7 @@ class Application_Model_Decorator
 		
 		$menu='';
 		$i=0;
-		$session_user=new Zend_Session_Namespace('authstu');
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$arr_actin=$session_user->arr_actin;
 // 				print_r($arr_actin);exit();
 	

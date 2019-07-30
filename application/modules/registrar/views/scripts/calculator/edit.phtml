@@ -638,7 +638,7 @@ function hideDialog(){
 							<tr style="height: 23px;">
 								<td align="center" colspan="2"><strong >អ្នកប្រគល់ : 
 								<?php 
-								   $session_user=new Zend_Session_Namespace('authstu');
+								   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 								   $last_name=$session_user->last_name;
 								   $username = $session_user->first_name;
 								   echo $last_name." ".$username;
@@ -748,7 +748,7 @@ function hideDialog(){
 							</tr>
 						<tr style="height: 23px;">
 							<td align="center" colspan="2"><strong style="font-size:12px" >អ្នកប្រគល់ : <?php 
-							   $session_user=new Zend_Session_Namespace('authstu');
+							   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 							   $last_name=$session_user->last_name;
 							   $username = $session_user->first_name;
 							   echo $last_name." ".$username;

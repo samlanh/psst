@@ -244,7 +244,7 @@ table.collape tbody td {
 											<td colspan="2" align="center" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
-													   $session_user=new Zend_Session_Namespace('authstu');
+													   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 													   $last_name=$session_user->last_name;
 													   $username = $session_user->first_name;
 													   echo"Paid By : ".$last_name." ".$username;

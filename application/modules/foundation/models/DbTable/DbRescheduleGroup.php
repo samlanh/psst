@@ -38,13 +38,11 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
     }
 	
 	public function updateRescheduleGroup($_data,$id){
-		
     	$db= $this->getAdapter();
     	try{
     		$this->_name="rms_group_reschedule";
     		$where = " group_id=$id ";
     		$this->delete($where);
-    		
     		if(!empty($_data['identity1'])){
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
@@ -200,7 +198,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
        		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
        		gr.from_hour,gr.to_hour,
        		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
-       		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
+       		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.id = gr.techer_id and rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
        		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT first_name FROM rms_users WHERE rms_users.id = gr.user_id) AS user
      		";
 		$sql.=$dbp->caseStatusShowImage("gr.status");
@@ -390,8 +388,22 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	function getRescheduleById($id){
 		$db=$this->getAdapter();
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$sql="SELECT gr.*   FROM rms_group_reschedule AS gr  
-   			  WHERE gr.group_id=$id";
+		$lang = $dbgb->currentlang();
+		$subject= 'subject_titleen';
+		$teacher= 'teacher_name_en';
+		if ($lang==1){
+			$subject = 'subject_titlekh';
+			$teacher= 'teacher_name_kh';
+		}
+		$sql="SELECT 
+					gr.*,
+					(select $subject from rms_subject where rms_subject.id = gr.subject_id limit 1) as subjectLabel,
+					(select $teacher from rms_teacher where rms_teacher.id = gr.techer_id limit 1) as teacherName
+				FROM 
+					rms_group_reschedule AS gr  
+   			  	WHERE 
+					gr.group_id=$id
+			";
 		$sql.=$dbgb->getAccessPermission('gr.branch_id');
 		return $db->fetchAll($sql);
 	}

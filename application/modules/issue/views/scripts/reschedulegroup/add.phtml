@@ -36,28 +36,10 @@
                     return false;
 				}
     			var rowId = $('#identity1').val();
-				if(rowId!=''){ 
-				var rowIDArray = rowId.split(',');
-				for(var n = 0; n < rowIDArray.length; n++){
-				var row_id = dijit.byId('group_subject_study_'+rowIDArray[n]).get('value');
-				var row_ = dijit.byId('teacher_'+rowIDArray[n]).get('value');
-				if(row_id==''){
-					alert("Please subject study !!!");
-					dijit.byId('group_subject_study_'+rowIDArray[n]).focus();
+				if(rowId==''){
+					alert("Please add data !!! ");
 					return false;
 				}
-				if(row_==''){
-					alert("Please teacher name !!!");
-					dijit.byId('teacher_'+rowIDArray[n]).focus();
-					return false;
-				}
-				if(dijit.byId('from_hour_'+rowIDArray[n]).get('value') > dijit.byId('to_hour_'+rowIDArray[n]).get('value')){
-					alert("Start hour can't bigger then end hour!!!");
-					dijit.byId('to_hour_'+rowIDArray[n]).focus();
-					return false;
-				}
-			  }
-			}
 				dijit.byId('save_new').set('disabled',true);
 				dijit.byId('save_close').set('disabled',true);
 				return true;
@@ -118,11 +100,8 @@
 							</select>
 		                </div>
 						<div class="col-md-1 col-sm-7 col-xs-12">
-							<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitIconEditProperty" onclick="addRow();" />
-							<input type="hidden" name="identity1" id="identity1"  />
+							<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="refreshFunction();"/>
 		                </div>
-						
 		        	</div>
 					<div class="form-group">
 						<label class="control-label text-center col-md-1 col-sm-5 col-xs-12">
@@ -140,24 +119,29 @@
 						<label class="control-label text-center col-md-2 col-sm-5 col-xs-12">
 							<?php echo $tr->translate("NOTE");?>
 						</label>
-		                <div class="col-md-3 col-sm-7 col-xs-12">
+		                <div class="col-md-2 col-sm-7 col-xs-12">
 							<input name="note" id="note" dojoType="dijit.form.TextBox" class="fullside" placeHolder="<?php echo $tr->translate("NOTE");?>"/>
+		                </div>
+						<div class="col-md-1 col-sm-7 col-xs-12">
+							<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitIconEditProperty" onclick="addRow();" />
 		                </div>
 		        	</div>
 		        	<div class="form-group">
 		        		<table style="border-collapse: collapse; border:1px solid #ccc;">
 							<thead  id="head-title">
 								<tr class="head-td">
-									<th><?php echo $tr->translate("DEL");?></th>
-									<th><?php echo $tr->translate("N_O");?></th>
-									<th><?php echo $tr->translate("DAY");?></th>
-									<th><?php echo $tr->translate("FROM_HOUR");?></th>
-									<th><?php echo $tr->translate("TO_HOUR");?></th>
-									<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-									<th><?php echo $tr->translate("TEACHER");?></th>
-									<th><?php echo $tr->translate("NOTE");?></th>
+									<th width="5%"><?php echo $tr->translate("DEL");?></th>
+									<th width="5%"><?php echo $tr->translate("N_O");?></th>
+									<th width="15%"><?php echo $tr->translate("DAY");?></th>
+									<th width="15%"><?php echo $tr->translate("FROM_HOUR");?></th>
+									<th width="15%"><?php echo $tr->translate("TO_HOUR");?></th>
+									<th width="15%"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+									<th width="15%"><?php echo $tr->translate("TEACHER");?></th>
+									<th width="15%"><?php echo $tr->translate("NOTE");?></th>
 								</tr>
 								<tbody id="table_row"></tbody>
+								<input type="hidden" name="identity1" id="identity1"  />
 							</thead>
 						</table>
 						
@@ -187,9 +171,8 @@
 	//dojo.require('dijit.form.CheckBox');
 	dojo.require('dijit.form.DateTextBox');
 	
-	var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
-	var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subject));?> );
-	var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
+	var subject_store  = getDataStorefromJSON('id','name');
+	var teacher_store  = getDataStorefromJSON('id','name');
 	var group_store  = getDataStorefromJSON('id','name',);
 	var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	
@@ -203,7 +186,11 @@ dojo.ready(function(){
 		name: "group_code",   
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",
-		onChange: function() {  
+		onChange: function() {
+			group_code = dijit.byId("group_code").get("value");
+			if(group_code==-1){
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
+			}
 		}
 	}, "group_code");
 	
@@ -231,7 +218,10 @@ dojo.ready(function(){
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SUBJECT_STUDY");?>",
 		onChange: function() {  
-			//getSubject();
+			subject = dijit.byId("subject_id").get("value");
+			if(subject==-1){
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/subject/add";?>','_blank');
+			}
 		}
 	}, "subject_id");
 	
@@ -245,37 +235,53 @@ dojo.ready(function(){
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("TEACHER");?>",
 		onChange: function() {  
-			//getSubject();
+			teacher = dijit.byId("teacher").get("value");
+			if(teacher==-1){
+				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/lecturer/add";?>','_blank');
+			}
 		}
 	}, "teacher");
 	
-	getallgroupby();
 	var branch_id = dijit.byId('branch_id');
 	branch_id.on('change', function(evt) {
-		getallgroupby();
+		dojo.query("#table_row").append('');
+		$('#identity1').val('');
+		
+		getAllGroupByBranch();
 		getAllAcademicByBranch();
+		getTeacherByBranch();
 	});
 	//addRow();
 });
-function getallgroupby(){// 
-	var url_data = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-allstubygroup')); ?>';
-	branch_id = dijit.byId("branch_id").attr("value");
-	if(branch_id=='' || branch_id==-1){  
-		dijit.byId("branch_id").focus();
+
+function refreshFunction(){
+	getAllGroupByBranch();
+	getTeacherByBranch();
+	getSubject();
+}
+
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group_code').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group_code').set('store',group_store);  
+		dijit.byId('branch_id').focus();
 		return false;
 	}
 	dojo.xhrPost({
-		url:url_data,
+		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,
-		},
+			'branch_id':branch_id
+			},
 		handleAs:"json",
-		load: function(data){
-			group_store = getDataStorefromJSON('id','name', data);
-		    dijit.byId('group_code').set('store',group_store);
-		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('group_code').set('store',group_store);   
 		},
 		error: function(err) {
+			alert(err);
 		}
 	});
 }
@@ -305,33 +311,53 @@ function getAllAcademicByBranch(){
 	});
 }
 
+var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getteacher"));?>';										
+function getTeacherByBranch(){
+	dijit.byId('teacher').reset();
+	academic_year = dijit.byId('academic_year').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('teacher').set('store',teacher_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_gettecher,
+		content:{
+			'academic_year':academic_year,
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			teacher_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher').set('store',teacher_store);  
+		},
+		error: function(err){
+
+		}
+	});
+}
+
 var subject = '';
 var url_getsubject = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getsubject"));?>';										
 function getSubject(){
-	subject = '';
+	dijit.byId('subject_id').reset();
 	academic_year = dijit.byId('academic_year').get('value');
 	if(academic_year=='' || academic_year==-1){
-		subject="";
+		var subject_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		return false;
 	}
 	dojo.xhrPost({
 		url:url_getsubject,
 		content:{
-			'academic_year':academic_year
+			'academic_year':academic_year,
 		},
 		handleAs:"json",
 		load: function(data) {
-			subject+='<option value="-1">Add New</option>';
-		    for(var i = 0; i < data.length; i++) {
-			    if(data[i].id==-1){
-			    }else{
-			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
-			    }
-		    }
-			dojo.query("#table_row").append("");
-			$("#identity1").val("");
-			addRow();
-		    document.getElementsByClassName("overlay")[0].style.display="none";
+			if(data){
+				subject_store = getDataStorefromJSON('id','name', data);
+				dijit.byId('subject_id').set('store',subject_store);  
+			}
 		},
 		error: function(err) {
 			document.getElementsByClassName("overlay")[0].style.display="none";
@@ -339,44 +365,53 @@ function getSubject(){
 	});
 }
 
-var teacher_option = '<?php echo $this->teacher_option;?>';
 var col = 0;
 var no = 0;
-var title = 1;
 tmp = '';
 temp='';
-var opt_day = '<?php echo $this->optday;?>';
-var opttime = '<?php echo $this->opttime;?>';
 function addRow() {
+	
+	day = dijit.byId("day").get("value");
+	from_hour = dijit.byId("from_hour").get("value");
+	to_hour = dijit.byId("to_hour").get("value");
+	subject = dijit.byId("subject_id").get("value");
+	teacher = dijit.byId("teacher").get("value");
+	note = dijit.byId("note").get("value");
+	dayLabel = dijit.byId("day").attr("displayedValue");
+	from_hourLabel = dijit.byId("from_hour").attr("displayedValue");
+	to_hourLabel = dijit.byId("to_hour").attr("displayedValue");
+	subjectLabel = dijit.byId("subject_id").attr("displayedValue");
+	teacherLabel = dijit.byId("teacher").attr("displayedValue");
+	noteLabel = dijit.byId("note").attr("displayedValue");
+	if(from_hour>=to_hour){
+		alert("Start hour can't bigger than End hour!!!");
+		dijit.byId("to_hour").focus();
+		return false;
+	}	
+	if(subject<1){
+		alert("select subject !!!");
+		dijit.byId("subject_id").focus();
+		return false;
+	}
+	if(teacher<1){
+		alert("select teacher !!!");
+		dijit.byId("teacher").focus();
+		return false;
+	}
+	
 	col++;no++;
 	template='';
-	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th><?php echo $tr->translate("DAY");?></th>';
-		temp+='<th><?php echo $tr->translate("FROM_HOUR");?></th>';
-		temp+='<th><?php echo $tr->translate("TO_HOUR");?></th>';
-		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
-		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
-		dojo.query("#head-title").append(temp);
-		title=1;
-	}
-		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="day_id_'+col+'" name="day_id_'+col+'">'+opt_day+'</select></td>';
-		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="from_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="from_hour_'+col+'" >'+opttime+'</select></td>';
-		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="to_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="to_hour_'+col+'" >'+opttime+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'"  autoComplete="false"​​ queryExpr="*${0}*" >'+subject+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" >';
-		template+=teacher_option;  
-		template+='</select></td>';
-		template+='<td width="10%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
-		
+		template+='<td align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td align="center">'+no+'</td>';
+		template+='<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="day_id_'+col+'" name="day_id_'+col+'" value="'+day+'" type="hidden" />'+dayLabel+'</td>';
+		template+='<td ><input class="fullside"  required="false" dojoType="dijit.form.TextBox" id="from_hour_'+col+'" value="'+from_hour+'" name="from_hour_'+col+'" type="hidden" />'+from_hourLabel+'</td>';
+		template+='<td ><input class="fullside"  required="false" dojoType="dijit.form.TextBox" id="to_hour_'+col+'" value="'+to_hour+'" name="to_hour_'+col+'" type="hidden" />'+to_hourLabel+'</td>';
+		template+='<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" value="'+subject+'" type="hidden" />'+subjectLabel+'</td>';
+		template+='<td ><input dojoType="dijit.form.TextBox" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" value="'+teacher+'" type="hidden" />'+teacherLabel+'</td>';
+		template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="'+note+'" type="hidden" />'+noteLabel+'</td>';		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
-
 	if($("#identity1").val()!="") {
 		var identity = $("#identity1").val();
 		$("#identity1").val(identity+','+col);
@@ -384,12 +419,15 @@ function addRow() {
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
+	dijit.byId("subject_id").set("value",'');
+	dijit.byId("teacher").set("value",'');
+	dijit.byId("note").set("value",'');
 }
 function deleteRecord(index) {
 	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++) {
-	if(arrays[i] == index) arrays.splice(i,1);
+		if(arrays[i] == index) arrays.splice(i,1);
 	}
 	var strings = arrays.join(',');
 	$('#identity1').val(strings);
@@ -418,51 +456,24 @@ function submitDataClose(){
 	
 	var rowId = $('#identity1').val();
 	if(rowId==''){ 
+		alert("Please add data !!!");
 		return false;
 	}
 	if(dijit.byId('frm_add_tran').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'foundation','controller'=>'reschedulegroup','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'issue','controller'=>'reschedulegroup','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("frm_add_tran"),		    
 			load: function(data) {
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/foundation/reschedulegroup";
+				window.location.href ="<?php echo $this->baseUrl();?>/issue/reschedulegroup";
 			},
 			error: function(e) {
 			}
 		});
 	}
 }
-var url_get_subject = '<?php echo $this->url(array("module"=>"foundation","controller"=>"reschedulegroup","action"=>"getsubjectajax")); ?>';
-function getSubjectajax(){
-	    group_id=dijit.byId("group_code").get("value");
-		dojo.xhrPost({
-			url:url_get_subject,
-			content:{
-				'group_id':group_id
-				},
-			handleAs:"json",
-			load: function(data) {
-				alert(data.id);
-				var Itemmake = { 
-				    	 id: data,
-					     name: diji.byId('group_code').get('value')
-					   };
-			   addDataToSelectbox(dijit.byId('group_subject_study_1'),subject_store,Itemmake,data);
-			},
-			error: function(xhr, status, error) {
-			}
-		});
-}
-function checkCondition(r){
-	from_hour=dijit.byId("from_hour_"+r).get("value");
-	to_hour=dijit.byId("to_hour_"+r).get("value");
-	if(from_hour>to_hour){
-		alert("Start hour can't bigger then end hour!!!");
-		dijit.byId("to_hour_"+r).focus();
-	}	
-}
+
 </script>

@@ -69,11 +69,11 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		$this->view->rq_code=$_pur->getRequestCode();
 		
 		$req_for = $_pur->getAllRequestFor();
-		array_unshift($req_for, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($req_for, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->rq_for = $req_for;
 		
 		$for_section = $_pur->getAllForSection();
-		array_unshift($for_section, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($for_section, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->for_section = $for_section;
 		
 		$model = new Application_Model_DbTable_DbGlobal();

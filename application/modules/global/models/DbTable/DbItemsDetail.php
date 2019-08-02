@@ -214,6 +214,14 @@
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbgb->currentlang();
+		if($lang==1){// khmer
+			$grade = "ide.title";
+			$degree = "it.title";
+		}else{ // English
+			$grade = "ide.title_en";
+			$degree = "it.title_en";
+		}
 		$result = $dbgb->getUserInfo();
 		$level = $result["level"];
 		$branch_id = $result["branch_id"];
@@ -224,8 +232,8 @@
 			$location = $dbgb->getAccessPermission('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id LIMIT 1 )');
 		}
 		
-		$sql = " SELECT ide.id,ide.code,ide.title,
-			(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+		$sql = " SELECT ide.id,ide.code,$grade,
+			(SELECT $degree FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 			ide.cost,
 			(SELECT SUM(pl.pro_qty) FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  $string ) AS totalqty,
 			CASE    
@@ -407,6 +415,7 @@
 					'code'=> $_data['code'],
 					'price'=> $_data['price'],
 					'title'	  => $_data['title'],
+					'title_en'=> $_data['title'],
 					'note'    => $_data['note'],
 					'is_onepayment' => $_data['is_onepayment'],
 					'product_type' => 1,
@@ -527,13 +536,21 @@
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
 		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbgb->currentlang();
+		if($lang==1){// khmer
+			$grade = "ide.title";
+			$degree = "it.title";
+		}else{ // English
+			$grade = "ide.title_en";
+			$degree = "it.title_en";
+		}
 		$result = $dbgb->getUserInfo();
 		$level = $result["level"];
 		$branch_id = $result["branch_id"];
 		$string="";
 		$location="";
-		$sql = "SELECT ide.id,ide.code,ide.title,
-			(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+		$sql = "SELECT ide.id,ide.code,$grade,
+			(SELECT $degree FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 			ide.price,
 			ide.modify_date,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
@@ -577,8 +594,17 @@
 	
 	function getAllProductsNormal($product_type=null){
 		$db = $this->getAdapter();
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$grade = "i.title";
+			$degree = "it.title";
+		}else{ // English
+			$grade = "i.title_en";
+			$degree = "it.title_en";
+		}
 		$sql="SELECT i.id,
-		CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+		CONCAT($grade,' (',(SELECT $degree FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 		FROM `rms_itemsdetail` AS i
 		WHERE i.status =1 AND i.items_type=3 AND i.is_productseat=0  ";
 		

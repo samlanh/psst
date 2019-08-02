@@ -89,5 +89,13 @@ class Global_TermController extends Zend_Controller_Action {
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rsbranch = $db->getAllBranch();
 	}
-	
+	function gettermstudyAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Global_Model_DbTable_DbTerm();
+			$rows = $db->getTermStudy($data['branch_id'],$data['study_year']);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
 }

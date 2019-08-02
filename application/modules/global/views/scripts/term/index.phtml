@@ -47,11 +47,11 @@ $formList = new Application_Form_Frmtable();
 		</div>
 	</div>
 </div>
-
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dijit.form.DateTextBox");
    
 	
 	dojo.ready(function(){ 
@@ -71,7 +71,7 @@ $formList = new Application_Form_Frmtable();
 		getAllAcademicByBranch();
 	});
 	
-	url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+	url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 	function getAllAcademicByBranch(){
 		dijit.byId('academic_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');

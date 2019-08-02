@@ -31,7 +31,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'stock','controller'=>'productset','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'code'=>$link,'degree'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'code'=>$link,'degree'=>$link,));
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Application Error!");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

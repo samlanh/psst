@@ -12,10 +12,18 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     function getAllSupPurchase($search=null){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$lang = $dbp->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    	}
     	$sql="SELECT sp.id,
-    		 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
+    		 (SELECT $branch FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
     		 sp.supplier_no,s.sup_name,
-    	 	(SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
+    	 	(SELECT $label FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
 		    sp.amount_due,sp.date,
 		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name 
      		    ";

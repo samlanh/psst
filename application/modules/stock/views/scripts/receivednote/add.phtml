@@ -95,7 +95,6 @@
 	                		</thead>
 	                		<tbody id="table_row">
 	                		</tbody>
-							
 						</table>
 						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
 	                </div>
@@ -179,7 +178,6 @@
 				
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -201,7 +199,6 @@
 				dijit.byId('branch').set('value',data.to_location);
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -252,9 +249,7 @@
 				
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
-				
 	}
 </script>

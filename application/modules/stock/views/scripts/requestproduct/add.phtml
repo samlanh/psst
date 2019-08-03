@@ -426,7 +426,7 @@ function printSave(){
 				  n=0;
 				i=1; 
 				for(var n = 0; n < rowIDArray.length; n++){
-				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="left"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("label_product_name_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 				  temp+='<td style="border:1px solid #000;">'+dijit.byId("curr_qty"+rowIDArray[n]).get('value')+'</td>';
 				  temp+='<td style="border:1px solid #000;">'+"$ "+dijit.byId("cost_"+rowIDArray[n]).get('value')+'</td>';
@@ -437,7 +437,7 @@ function printSave(){
 				  temp+='</tr>';
 				}
 				for(row = n+1;row<6;row++){
-					 temp+='<tr style="font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+					 temp+='<tr style="font-size:12px;height: 25px;"​ align="left"><td align="center" style="border:1px solid #000;">'+row+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
 					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
 					  temp+='<td style="border:1px solid #000;"></td>';

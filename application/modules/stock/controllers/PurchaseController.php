@@ -25,7 +25,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			$db =  new Stock_Model_DbTable_DbPurchase();
 			$rows = $db->getAllSupPurchase($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","TEL","EMAIL","AMOUNT_DUE","DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","Tel","EMAIL","AMOUNT_DUE","DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'purchase','action'=>'edit',
 			);

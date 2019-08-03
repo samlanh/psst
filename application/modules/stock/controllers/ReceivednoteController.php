@@ -25,7 +25,7 @@ class Stock_ReceivednoteController extends Zend_Controller_Action {
     		}
     		$rs_rows= $db->getAllTransfer($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","RECEIVED_NUMBER","DATE","TRANSFER_FROM","NOTE","BY_USER","STATUS");
+    		$collumns = array("BRANCH_NAME","RECEIVED_NUMBER","DATE","FROM_BRANCH","NOTE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'stock','controller'=>'receivednote','action'=>'edit',
     		);

@@ -13,7 +13,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$userinfo = $_dbgb->getUserInfo();
     	
-    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
@@ -22,7 +22,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
     			'onChange'=>'getSerailCodeByBranch();',
-    			
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
@@ -416,7 +415,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_student_option_search->setValue($request->getParam("student_option_search"));
     	
     	$rs_province = $_dbgb->getProvince();
-    	$opt = array(""=>$this->tr->translate("PROVINCE"));
+    	$opt = array(""=>$this->tr->translate("SELECT_PROVINCE"));
     	if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
     	$_province_search = new Zend_Dojo_Form_Element_FilteringSelect("province_search");
     	$_province_search->setMultiOptions($opt);
@@ -465,7 +464,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
-    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");

@@ -19,7 +19,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	
     	$dbCRM = new Home_Model_DbTable_DbCRM();
     	
-    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
@@ -212,7 +212,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	));
     	$advance_search->setValue($request->getParam("advance_search"));
     	
-    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");

@@ -243,7 +243,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){
 		$db = $this->getAdapter();
-		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
+		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description` FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		return $db->fetchRow($sql);
 	}
 	function getAllgroupStudy(){
@@ -282,7 +282,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT
 					sgh.`stu_id` as id,
-					CONCAT(s.stu_code) as name
+					s.stu_code as name
 				FROM
 					`rms_group_detail_student` AS sgh,
 					rms_student as s
@@ -297,7 +297,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 		
 		$sql1="SELECT
 					sgh.`stu_id` as id,
-					CONCAT(s.stu_khname,' - ',s.last_name,' ',s.stu_enname) as name
+					CONCAT(COALESCE(s.stu_khname,''),' - ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) as name
 				FROM
 					`rms_group_detail_student` AS sgh,
 					rms_student as s

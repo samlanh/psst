@@ -19,7 +19,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'branch_search' => '',
+    							'branch_id' => '',
     							'adv_search' => '',
     					        'student_id'=>'',
     							'start_date'=> date('Y-m-d'),
@@ -40,10 +40,11 @@ class Stock_CutstockController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 			$this->view->search = $search;
-			$frm = new Stock_Form_FrmCutStock();
-			$frm->FrmAddCutStock(null);
-			Application_Model_Decorator::removeAllDecorator($frm);
-			$this->view->frm_payment = $frm;
+			
+			$form=new Registrar_Form_FrmSearchInfor();
+			$form->FrmSearchRegister();
+			Application_Model_Decorator::removeAllDecorator($form);
+			$this->view->frm_payment=$form;
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){

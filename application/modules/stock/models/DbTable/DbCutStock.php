@@ -293,8 +293,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		if(!empty($search['status_search'])){
     			$where.=" AND pp.status=".$search['status_search'];
     		}
-    		if(!empty($search['branch_search'])){
-    			$where.=" AND pp.branch_id=".$search['branch_search'];
+    		if(!empty($search['branch_id'])){
+    			$where.=" AND pp.branch_id=".$search['branch_id'];
     		}
     		
     		$where.=$dbp->getAccessPermission('pp.branch_id');

@@ -74,59 +74,71 @@
 		             </div>
 		        </div>
 		        <div class="col-md-8 col-sm-8 col-xs-12">
-					<div class="form-group">
-						<label class="control-label text-center col-md-1 col-sm-5 col-xs-12">
-							<?php echo $tr->translate("DAY");?>
-						</label>
-		                <div class="col-md-2 col-sm-7 col-xs-12">
-							<select dojoType="dijit.form.FilteringSelect" class="fullside" name="day" id="day" >
-								<?php echo $this->optday;?>
-							</select>
-		                </div>
-						<label class="control-label text-center col-md-2 col-sm-5 col-xs-12">
-							<?php echo $tr->translate("FROM_HOUR");?>
-						</label>
-		                <div class="col-md-2 col-sm-7 col-xs-12">
-							<select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour" id="from_hour" >
-								<?php echo $this->opttime;?>
-							</select>
-		                </div>
-						<label class="control-label text-center col-md-2 col-sm-5 col-xs-12">
-							<?php echo $tr->translate("TO_HOUR");?>
-						</label>
-		                <div class="col-md-2 col-sm-7 col-xs-12">
-							<select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour" id="to_hour" >
-								<?php echo $this->opttime;?>
-							</select>
-		                </div>
-						<div class="col-md-1 col-sm-7 col-xs-12">
-							<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="refreshFunction();"/>
-		                </div>
-		        	</div>
-					<div class="form-group">
-						<label class="control-label text-center col-md-1 col-sm-5 col-xs-12">
-							<?php echo $tr->translate("SUBJECT_STUDY");?>
-						</label>
-		                <div class="col-md-2 col-sm-7 col-xs-12">
-							<input id="subject_id" />
-		                </div>
-						<label class="control-label text-center col-md-2 col-sm-5 col-xs-12">
-							<?php echo $tr->translate("TEACHER");?>
-						</label>
-		                <div class="col-md-2 col-sm-7 col-xs-12">
-							<input id="teacher" />
-		                </div>
-						<label class="control-label text-center col-md-2 col-sm-5 col-xs-12">
-							<?php echo $tr->translate("NOTE");?>
-						</label>
-		                <div class="col-md-2 col-sm-7 col-xs-12">
-							<input name="note" id="note" dojoType="dijit.form.TextBox" class="fullside" placeHolder="<?php echo $tr->translate("NOTE");?>"/>
-		                </div>
-						<div class="col-md-1 col-sm-7 col-xs-12">
-							<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitIconEditProperty" onclick="addRow();" />
-		                </div>
-		        	</div>
+					<div class="col-md-5 col-sm-6 col-xs-12">
+						<div class="form-group">
+							<label class="control-label  col-md-3 col-sm-5 col-xs-12">
+								<?php echo $tr->translate("DAY");?>
+							</label>
+							<div class="col-md-9 col-sm-7 col-xs-12">
+								<select dojoType="dijit.form.FilteringSelect" class="fullside" name="day" id="day" >
+									<?php echo $this->optday;?>
+								</select>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label class="control-label  col-md-3 col-sm-5 col-xs-12">
+								<?php echo $tr->translate("FROM_HOUR");?>
+							</label>
+							<div class="col-md-9 col-sm-7 col-xs-12">
+								<select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour" id="from_hour" >
+									<?php echo $this->opttime;?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">						
+							<label class="control-label  col-md-3 col-sm-5 col-xs-12">
+								<?php echo $tr->translate("TO_HOUR");?>
+							</label>
+							<div class="col-md-9 col-sm-7 col-xs-12">
+								<select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour" id="to_hour" >
+									<?php echo $this->opttime;?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-5 col-xs-12">
+								<?php echo $tr->translate("SUBJECT_STUDY");?>
+							</label>
+							<div class="col-md-7 col-sm-7 col-xs-12">
+								<input id="subject_id" />
+							</div>
+						</div>	
+						<div class="form-group">	
+							<label class="control-label col-md-3 col-sm-5 col-xs-12">
+								<?php echo $tr->translate("TEACHER");?>
+							</label>
+							<div class="col-md-7 col-sm-7 col-xs-12">
+								<input id="teacher" />
+							</div>
+							<div class="col-md-2 col-sm-7 col-xs-12">
+								<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="refreshFunction();"/>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label class="control-label  col-md-3 col-sm-5 col-xs-12">
+								<?php echo $tr->translate("NOTE");?>
+							</label>
+							<div class="col-md-7 col-sm-7 col-xs-12">
+								<input name="note" id="note" dojoType="dijit.form.TextBox" class="fullside" placeHolder="<?php echo $tr->translate("NOTE");?>"/>
+							</div>
+							<div class="col-md-2 col-sm-7 col-xs-12">
+								<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitIconEditProperty" onclick="addRow();" />
+							</div>
+						</div>
+					</div>
 		        	<div class="form-group">
 		        		<table style="border-collapse: collapse; border:1px solid #ccc;">
 							<thead  id="head-title">
@@ -144,7 +156,6 @@
 								<input type="hidden" name="identity1" id="identity1"  />
 							</thead>
 						</table>
-						
 		        	</div>
 		        </div>
 		    </div>

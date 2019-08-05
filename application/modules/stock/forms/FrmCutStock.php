@@ -22,7 +22,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		
 		
-		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
 		$optionBranch = $_dbgb->getAllBranch();
 		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");

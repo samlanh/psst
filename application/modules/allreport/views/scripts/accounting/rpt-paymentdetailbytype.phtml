@@ -46,10 +46,9 @@
         		<?php echo $frm->getElement("session");?>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("payment_by");?>
+        		<?php echo $frm->getElement("service_type");?>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php //echo $frm->getElement("item");?>
         		<select required="false" type="text" name="item" id="item"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getgradebyDegree();" >
 					<option value="-1"></option>
 					<?php if(!empty($this->rs_type)){foreach ($this->rs_type as $rs){?>

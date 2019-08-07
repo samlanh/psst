@@ -175,7 +175,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$_session->setValue($request->getParam("session"));
 		$opt_ses=new Application_Model_DbTable_DbGlobal();
 		$opt_sesion=$opt_ses->getSession();
-		$opt_session = array(''=>$this->tr->translate("SESSION"));
+		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);
 		
@@ -476,8 +476,10 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$db = new Accounting_Model_DbTable_DbService();
-// 		$opt= $db->getServiceType(1,1);
-		$opt = array(''=>$this->tr->translate("PLEASE_SELECT"),'1'=>$this->tr->translate("TUITION_FEE"),'2'=>$this->tr->translate("SERVICE"));
+		$opt = array(''=>$this->tr->translate("PLEASE_SELECT"),
+				'1'=>$this->tr->translate("TUITION_FEE"),
+				'2'=>$this->tr->translate("SERVICE"),
+				3=>$this->tr->translate("PRODUCT"));
 		$service_type->setMultiOptions($opt);
 		$service_type->setValue($request->getParam("service_type"));
 		
@@ -500,7 +502,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$study_status->setMultiOptions($study_option);
 		$study_status->setValue($request->getParam("study_status"));
 		
-		$opt=array(-1=>"Select Payment By",1=>"Tution Fee",3=>"Service",4=>"Product");
+		$opt=array(-1=>"Select Payment By",1=>"Tution Fee",2=>"Service",3=>"Product");
 		$payment_by->setMultiOptions($opt);
 		$payment_by->setValue($request->getParam("payment_by"));
 		

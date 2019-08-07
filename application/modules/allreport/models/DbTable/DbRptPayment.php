@@ -182,8 +182,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['branch_id']>0){
     		$where .= " and sp.branch_id = ".$search['branch_id'];
     	}
-    	if($search['payment_by']>0){
-    		$where .= " and d.items_type = ".$search['payment_by'];
+    	if($search['service_type']>0){
+    		$where .= " and d.items_type = ".$search['service_type'];
     	}
     	if(!empty($search['group'])){
     		$where .= " AND sp.group_id = ".$search['group'];
@@ -193,6 +193,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .= " AND d.items_id = ".$search['item'];
     		}
     	}
+    	
     	if(!empty($search['service'])){
     		$where .= " AND spd.itemdetail_id = ".$search['service'];
     	}

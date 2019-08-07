@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('STUDENT_RECEIPT_VOID_REPORT'));
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 	$str="";
 ?>
@@ -109,7 +108,7 @@ table.tb-footer tr.style-head {
 						$totalvoidchang=0;
 						$totalvoidincome=0;
 						$totalvoidexpense=0;
-						if(!empty($this->void_stu)){ ?>
+						?>
 							<table class="content-data" align="center" >	  
 								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
 									<td colspan="13" align="left" style="text-align:left;"><?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?></td>
@@ -131,7 +130,7 @@ table.tb-footer tr.style-head {
 									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 									<td><?php echo $tr->translate("VOID_BY"); ?></td>
 								  </tr>
-								 <?php $i=0; $total=0;foreach($this->void_stu as $key=>$rs){
+								 <?php $i=0; $total=0;if(!empty($this->void_stu)){foreach($this->void_stu as $key=>$rs){
 										$i++;
 										$stu_name = $rs['stu_enname'];
 										if($stu_name==""){
@@ -157,6 +156,7 @@ table.tb-footer tr.style-head {
 										<td><?php echo $rs['void_by'];?></td>
 								  </tr>
 								 <?php } ?>
+								 <?php } ?>
 							</table>
 							<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
 								  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
@@ -164,7 +164,6 @@ table.tb-footer tr.style-head {
 									<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidstu,2);?></td>
 								  </tr>
 							 </table>
-						<?php } ?>
 						<?php if(!empty($this->void_chang_product)){?>
 							<br />
 							<table class="content-data" align="center" >	  
@@ -188,7 +187,6 @@ table.tb-footer tr.style-head {
 										if($stu_name==""){
 											$stu_name=$rs['stu_khname'];
 										}
-										
 										$totalvoidchang = $totalvoidchang+$rs['total_payment'];
 								 ?>
 								 <tr class="style-rowdata hover" align="center" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​>
@@ -219,7 +217,7 @@ table.tb-footer tr.style-head {
 								  </tr>
 								  <tr class="style-head" align="center" style="font-size:10px;">
 										<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('INCOME_CATEGORY');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('INCOME_TITLE');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>

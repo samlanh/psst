@@ -86,7 +86,7 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 			$where = " AND ".$from_date." AND ".$to_date;
 	
 			if(!empty($search['branch_id']) AND $search['branch_id']>0){
-				$where.=" AND s.branch_id = ".$search['branch_id'] ;
+				$where.=" AND p.branch_id = ".$search['branch_id'] ;
 			}
 			$where.=" GROUP BY 
 				p.branch_id,

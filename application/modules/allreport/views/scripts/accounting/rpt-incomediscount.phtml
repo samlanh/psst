@@ -22,6 +22,9 @@
 <div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
 			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr>
 				<td width="15%" align="center">
 				</td>
 				<td align="center" width=70%">
@@ -46,7 +49,7 @@
 								<td style="text-align: center;" ><?php echo $tr->translate('GRAND_TOTAL_PAID_AMOUNT')?></td>
 								<td style="text-align: center;" ><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></td>
 								<td style="text-align: center;"><?php echo $tr->translate('DISCOUNT')?></td>
-								<td style="text-align: center;"><?php echo $tr->translate('RPT_ALLPAYMENTREPORT')?></td>
+								<td style="text-align: center;"><?php echo $tr->translate('TOTAL_AMOUNT')?></td>
 							</tr>
 						</thead>
 						<style>td{padding:0 3px; }</style>

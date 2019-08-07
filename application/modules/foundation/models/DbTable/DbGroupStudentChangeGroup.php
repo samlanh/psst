@@ -448,8 +448,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				gds.type=1 
 				and gds.stu_id=st.stu_id 
 				and gds.group_id=$from_group
-				and gds.is_pass=0
-		";
+				and gds.is_pass=0 ";
 		//remove and gds.is_pass=0  but bat old student when have repeat student 
 		return $db->fetchAll($sql);
 	}

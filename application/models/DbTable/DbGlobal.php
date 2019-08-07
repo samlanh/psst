@@ -716,7 +716,14 @@ function getAllgroupStudyNotPass($action=null){
    }
    function getSession(){
    	$db=$this->getAdapter();
-   	$sql="SELECT key_code AS id,key_code,name_en as name,name_en AS view_name 
+   	$_db  = new Application_Model_DbTable_DbGlobal();
+   	$lang = $_db->currentlang();
+   	if($lang==1){// khmer
+   		$label = "name_kh";
+   	}else{ // English
+   		$label = "name_en";
+   	}
+   	$sql="SELECT key_code AS id,key_code,$label as name,$label AS view_name 
    		FROM rms_view WHERE `type`=4 AND `status`=1";
 	return $db->fetchAll($sql);
    }
@@ -1959,7 +1966,7 @@ function getAllgroupStudyNotPass($action=null){
 	  AND c.default=1  AND c.card_type=$card_type 
 	  ";
 	  if (!empty($schoolOption)){
-	  	$sql.=" AND c.schoolOption=$schoolOption ";
+	  	$sql.=" AND c.schoolOption IN ($schoolOption) ";
 	  }
 	  $sql.=" ORDER BY c.id DESC LIMIT 1";
 	  return $db->fetchRow($sql);

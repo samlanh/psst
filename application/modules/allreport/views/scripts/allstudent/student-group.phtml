@@ -131,7 +131,7 @@ table.tb-footer tr.style-head {
 						  <thead>
 							  <tr class="style-head">
 							    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
@@ -336,7 +336,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':0,'forfilter':1
+			'branch_id':branch_id,'noaddnew':1,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -358,7 +358,8 @@ function getallGrade(){
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {

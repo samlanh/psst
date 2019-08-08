@@ -26,9 +26,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudentSelected($condition);
-		
 		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($condition);
-		
+		//print_r($this->view->groupByBranchAndSchool);exit();
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
@@ -80,7 +79,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->status = $group->getAllStatus();
 		
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
-		
 		$this->view->search=$search;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

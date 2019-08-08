@@ -86,7 +86,7 @@ display: table-cell !important;
 							<thead>
 								<tr style="font-size:14px; height: 20px;background: #ccd9ff;" align="center" >
 									<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-									<th rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></th>
+									<th rowspan="2"><?php echo $tr->translate("BRANCH");?></th>
 									<th colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></th>
 									<th colspan="2"><?php echo $tr->translate("CONTACT_INFO");?></th>
 									<th colspan="3"><?php echo $tr->translate("STUDY_INFO");?></th>
@@ -94,7 +94,7 @@ display: table-cell !important;
 								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
 									<th><?php echo $tr->translate("STUDENT_CODE");?></th>
 									<th><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>
-									<th><?php echo $tr->translate("Name");?></th>
+									<th><?php echo $tr->translate("NAME_ENGLISH");?></th>
 									<th><?php echo $tr->translate("SEX");?></th>
 									<th><?php echo $tr->translate("NATIONALITY");?></th>
 									<th><?php echo $tr->translate("PHONE");?></th>
@@ -215,7 +215,8 @@ function getallGrade(){
 		dojo.xhrPost({
 			url:url_dept,
 			content:{
-				'dept_id':dept_id
+				'dept_id':dept_id,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

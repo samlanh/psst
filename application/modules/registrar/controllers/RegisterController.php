@@ -90,6 +90,22 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 // 	   $rs = $db->getAllGradeStudyByDegree(-1,$student_id,$is_stutested);
 // 	   print_r($rs);exit();
     }
+    public function addregistraAction(){
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		try {
+    			$db = new Registrar_Model_DbTable_DbRegister();
+    			$receipt_no = $db->addRegister($_data);
+    			$receipt_no = str_replace('"','',$receipt_no);
+    			print_r(Zend_Json::encode($receipt_no));
+    			exit();
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
+    
+    
     public function editAction(){
     	$id=$this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
@@ -145,7 +161,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->all_dept = $_db->getAllDegreeName();
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
-    	 
     	$this->view->teacher = $db->getTeacherEdit($id);
     	 
     	$rspayment =  $db->getCustomerPaymentByID($id);

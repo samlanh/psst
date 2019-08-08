@@ -259,7 +259,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'note'			=>$data['remark'.$i],
 							'is_parent'     =>$spd_id,
 						);
-					$this->insert($_arr);
+					$studentpaymentid = $this->insert($_arr);
 					
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
 					if($rs_item['items_type']==3){ // product
@@ -309,12 +309,43 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								);
 							$this->_name="rms_saledetail";
 							$this->insert($arr_sale);
+							
+// 							$dbstock = new Stock_Model_DbTable_DbCutStock();
+// 							$itemsCode = $dbstock->getCutStockode($data['branch_id']);
+// 							$_arr=array(
+// 									'branch_id'	   => $data['branch_id'],
+// 									'serailno'	   => $itemsCode,
+// 									'student_id'   => $data['old_stu'],
+// 									'balance'      => 0,
+// 									'total_received'=>$data['qty_'.$i],
+// 									'total_qty_due' => 0,
+// 									'received_date' => $paid_date,
+// 									'create_date'   => date("Y-m-d H:i:s"),
+// 									'modify_date'	=> date("Y-m-d H:i:s"),
+// 									'status'        => 1,
+// 									'user_id'       => $this->getUserId(),
+// 							);
+// 							$this->_name ='rms_cutstock';
+// 							$cut_id =  $this->insert($_arr);
+
+// 							$arrs = array(
+// 									'cutstock_id'=>$cut_id,
+// 									'student_paymentdetail_id'=>$studentpaymentid,
+// 									'product_id'=>$data['item_id'.$i],
+// 									'due_amount'=>0,
+// 									'qty_receive'=>$data['qty_'.$i],
+// 									'remain'=>0,
+// 									'remide_date'=>'',
+// 							);
+// 							$this->_name ='rms_cutstock_detail';
+// 							$this->insert($arrs);
+// 							$dbpu = new Stock_Model_DbTable_DbPurchase();
+// 							$dbpu->updateStock($data['item_id'.$i],$data['branch_id'],-$data['qty_'.$i]);
 						}
 					}
-				// បង់លើផលិតផល
-				// $this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
 				}
 				$db->commit();
+				return $receipt_number;
 		}catch (Exception $e){
 			$db->rollBack();//
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -328,7 +359,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);	
 	}
 		
-	function updateStockBack($payment_id){
+	/*function updateStockBack($payment_id){
 		$db = $this->getAdapter();
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -385,8 +416,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 			}
 		}
-	}
-	
+	}*/
 	function updatePaymentInfoBack($payment_id,$type){
 		$db = $this->getAdapter();
 		$sql="select * from rms_student_paymentdetail where payment_id = $payment_id ";
@@ -1044,6 +1074,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		 			rms_tuitionfee_detail AS tfd 
     		  		WHERE 
     		  			tf.id = tfd.fee_id
+    		  			AND tf.status=1
     					AND tfd.class_id = $item_id 
     					AND tfd.payment_term = $termid ";
     		if($item_type==1){// grade

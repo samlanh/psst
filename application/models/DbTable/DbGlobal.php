@@ -1024,6 +1024,12 @@ function getAllgroupStudyNotPass($action=null){
 	   		$colunmname='title';
 	   	}
 	   	$sql="SELECT s.*,
+	   	(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
+	   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
+	   		(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
+	   		(SELECT title FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
+	   		(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
+	   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
 	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id
 	   	FROM rms_student as s
@@ -1942,16 +1948,13 @@ function getAllgroupStudyNotPass($action=null){
   			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>';
-  			                        	
-  			                       		/*<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
+  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
+  			                        	<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("CULTURE_LEVEL").'</span> : <span id="lbl_culturelevel" class="inf-value" >'.$rs['degree_culture'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
   			                            <span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("SESSION").'</span> : <span id="lbl_session" class="inf-value">'.$rs['session_label'].'</span><br />
-  			                            <span class="title-info">'.$tr->translate("ROOM").'</span> : <span id="lbl_room" class="inf-value">'. $rs['room_label'].'</span><br />
-  			         	 		  */
-  			                            
+  			                            <span class="title-info">'.$tr->translate("ROOM").'</span> : <span id="lbl_room" class="inf-value">'. $rs['room_label'].'</span><br />';
   			         	 		  $str.='</p>
   		          </div>
   		      <div style="clear: both;"></div>

@@ -75,8 +75,15 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				1=>$this->tr->translate("CUTSTOCK_WITH_RECEIVED_NOTE"));
 		$_trasfer_st_cut->setMultiOptions($_trasfer_st_cut_opt);
 		
+		$_sale_stock=  new Zend_Dojo_Form_Element_FilteringSelect('sale_stock');
+		$_sale_stock->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$_salestock_opt = array(
+				0=>$this->tr->translate("SALE_STOCK_DIRECT"),
+				1=>$this->tr->translate("CUTSTOCK_WITH_STORE"));
+		$_sale_stock->setMultiOptions($_salestock_opt);
+		
 		if($data!=null){
-			
+			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
 			$_branch_add->setValue($data['branch_add']['keyValue']);
 			$_branch_email->setValue($data['branch_email']['keyValue']);
 			$_branch_tel->setValue($data['branch_tel']['keyValue']);
@@ -88,6 +95,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			
 		}
 		$this->addElements(array(
+				$_sale_stock,
 				$_label_animation,
 				$_branch_tel,
 				$_branch_email,

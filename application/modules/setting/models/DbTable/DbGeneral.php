@@ -61,6 +61,16 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 			
+			$rows = $this->geLabelByKeyName('sale_cut_stock');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['sale_stock'],'keyName'=>'sale_cut_stock','note'=>"0 cut direct when sale,1 cut stock in cut stock",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['sale_stock']);
+				$where=" keyName= 'sale_cut_stock'";
+				$this->update($arr, $where);
+			}
+			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){
 				$this->_name="rms_schooloption";

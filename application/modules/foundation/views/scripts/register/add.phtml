@@ -2,9 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('ADD_STUDENT_REGISTER')); 
 	echo $this->headTitle(''); 
-	$frm = $this->frm;
-?>	
-<?php 
+	$frm = $this->frm; 
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 ?>
 <style>
@@ -213,7 +211,6 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISTRICT");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("distric_note");?>
 				                   		<input id="distric_note"  />
 				                   </div>
 				                </div>
@@ -221,7 +218,6 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COMMUNE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("commun_note");?>
 				                   		<input id="commun_note"  />
 				                   </div>
 				                </div>
@@ -229,7 +225,6 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("VILLAGE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("village_note");?>
 				                   		<input id="village_note"  />
 				                   </div>
 				                </div>
@@ -1141,7 +1136,6 @@ function filterDistrict(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});	
 }
@@ -1162,7 +1156,6 @@ function filterCommune(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -1183,7 +1176,6 @@ function filterVillage(){
 		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -1205,7 +1197,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 				    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 	}
@@ -1221,7 +1212,6 @@ function getRefreshGroup(){
 	getRefreshItems();
 	getAllAcademicByBranch();
 	document.getElementsByClassName("overlay")[0].style.display="none";
-	
 	/*
 	loading();
 	dojo.xhrPost({
@@ -1307,7 +1297,6 @@ function getStudentNo(){
 			dijit.byId('student_id').attr('value',data);   
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }	
@@ -1335,7 +1324,6 @@ url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>
 				dijit.byId('academic_year').attr("value","<?php echo $this->adv_search['academic_year']?>");
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -1368,7 +1356,6 @@ function addLanguage(){
 		   dijit.byId("popup_lang_level").hide();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -1453,7 +1440,6 @@ function addNationBy(){
 	    dijit.byId("popup_nation").hide();
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 	}
@@ -1475,7 +1461,6 @@ function addKnowBy(){
 		   dijit.byId("popup_know_by").hide();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}	
@@ -1500,7 +1485,6 @@ function addDocType(){
 		   dijit.byId("popup_doc_type").hide();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -1562,7 +1546,6 @@ function addJob(){
 	    dijit.byId("popup_dept2").hide();
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 	}
@@ -1827,7 +1810,6 @@ function uploadcomplete(event){
 				getStudentNo();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
@@ -2008,7 +1990,6 @@ date_format = '"dd/MM/yyyy"';
 			    dijit.byId('group').set('store',group_store);   
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}

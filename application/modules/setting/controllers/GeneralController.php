@@ -29,6 +29,7 @@ public function init()
 		
 		$row['payment_day_alert'] = $db_gs->geLabelByKeyName('payment_day_alert');
 		$row['trasfer_st_cut'] = $db_gs->geLabelByKeyName('trasfer_st_cut');
+		$row['sale_cut_stock'] = $db_gs->geLabelByKeyName('sale_cut_stock');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$fm = new Setting_Form_FrmGeneral();

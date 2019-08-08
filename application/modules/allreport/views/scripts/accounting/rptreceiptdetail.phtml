@@ -47,26 +47,25 @@ table tr td strong{
 							<tr style="line-height: 16px;">
 								<td width="10%"><?php echo $tr->translate("STUDENT_ID"); ?></td>
 								<td width="25%"> :&nbsp;<?php echo $this->rr['stu_code'];?></td>
-								<td width="8%"><?php echo $tr->translate("DOB"); ?></td>
-								<td width="20%"> :&nbsp;<?php echo empty($this->rr['dob'])?"":date('d-m-Y',strtotime($this->rr['dob']));?></td>
-								<td width="12%"><?php echo $tr->translate("GRADE"); ?></td>
-								<td width="25%"> :&nbsp;<?php echo $this->rr['grade'];?></td>
+								<!--<td width="8%"><?php //echo $tr->translate("DOB"); ?></td>
+								<td width="20%"> :&nbsp;<?php //echo empty($this->rr['dob'])?"":date('d-m-Y',strtotime($this->rr['dob']));?></td>
+								<td width="12%"><?php //echo $tr->translate("GRADE"); ?></td>
+								<td width="25%"> :&nbsp;<?php //echo $this->rr['grade'];?></td>
+								<td><?php //echo $tr->translate("DEGREE"); ?></td>
+								<td> : &nbsp;<?php //echo $this->rr['degree'];?></td>
+								<td><?php //echo $tr->translate("SESSION"); ?></td>
+								<td> : &nbsp;<?php //echo $this->rr['session'];?></td>
+								<td><?php echo $tr->translate("ACADEMIC_YEAR"); ?></td>
+								<td> : &nbsp;<?php echo $this->rr['academic_year'];?></td>
+								-->
+								<td><?php echo $tr->translate("PHONE"); ?></td>
+								<td> : &nbsp;<?php echo $this->rr['tel'];?></td>
 							</tr>
 							<tr style="line-height: 16px;">
 								<td><?php echo $tr->translate("STUDENT_NAME"); ?></td>
 								<td colspan="1"> :&nbsp;<?php echo $this->rr['stu_khname'].' / ';echo $this->rr['last_name'].' '.$this->rr['stu_enname']?></td>
-								<td><?php echo $tr->translate("PHONE"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['tel'];?></td>
-								<td><?php echo $tr->translate("ACADEMIC_YEAR"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['academic_year'];?></td>
-							</tr>
-							<tr style="line-height: 16px;">
 								<td><?php echo $tr->translate("GENDER"); ?></td>
 								<td> : &nbsp;<?php echo $this->rr['sex'];?></td>
-								<td><?php echo $tr->translate("DEGREE"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['degree'];?></td>
-								<td><?php echo $tr->translate("SESSION"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['session'];?></td>
 							</tr>
 						</table>
 					</td>

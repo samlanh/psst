@@ -1465,17 +1465,30 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getGroupBYStudentGrade($search){
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    	}
     	$sql="SELECT 
 			g.branch_id,
-			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
+			(SELECT $branch FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
 			g.academic_year,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic_year_name,
 			g.session,
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1) AS `session_name`, 
+			(SELECT $label FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1) AS `session_name`, 
 			g.grade,
-			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
+			(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
 			g.degree,
-			(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+			(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 			(SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS from_academic,
 			(SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS to_academic,
 			(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS generation,

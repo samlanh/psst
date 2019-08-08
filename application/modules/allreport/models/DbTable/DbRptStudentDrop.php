@@ -15,13 +15,15 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$lang_id=$session_lang->lang_id;
     	$str='name_en';
     	$grade="title_en";
+    	$branch = "branch_nameen";
     	if($lang_id==1){//for kh
     		$str = 'name_kh';
     		$grade="title";
+    		$branch = "branch_namekh";
     	}
     	
     	$sql = "SELECT st.stu_code as stu_id, 
-					(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
+					(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
 					st.stu_khname,
 					st.stu_enname,
 					st.last_name,

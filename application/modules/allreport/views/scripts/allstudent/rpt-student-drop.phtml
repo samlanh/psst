@@ -114,7 +114,7 @@ table.tb-footer tr.style-head {
 						<thead>
 						<tr class="style-head">
 							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-							<td rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></td>
+							<td rowspan="2"><?php echo $tr->translate("BRANCH");?></td>
 							<td colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></td>
 							<td colspan="4"><?php echo $tr->translate("STUDY_INFO");?></td>
 							<td rowspan="2" ><?php echo $tr->translate("TYPE")?></td>
@@ -251,7 +251,8 @@ function getallGrade(){
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {

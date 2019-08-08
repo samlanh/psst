@@ -8,6 +8,13 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
     	
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	if (!empty($data['payment_day_alert'])){
+    		$alert = $data['payment_day_alert'];
+    		$search['end_date'] = date('Y-m-d',strtotime($search['end_date']."+$alert day"));
+    	}
     	$sql="SELECT 
     		(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				 s.stu_code AS code,
@@ -40,10 +47,6 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$sql.=" AND s.is_subspend=0 ";
      	$order=" ORDER by item.items_id ASC ";
      	$where=" ";
-     	$from_date = (empty($search['end_date']))? '1': "spd.validate >= '".$search['end_date']." 00:00:00'";
-     	     	
-     	$str_next = '+1 week';
-     	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
      	
      	$where .= " AND ".$to_date;
@@ -56,17 +59,8 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	if(($search['grade_all']>0)){
      		$where.= " AND s.grade = ".$search['grade_all'];
      	}
-     	if(($search['session']>0)){
-     		$where.= " AND s.session = ".$search['session'];
-     	}
      	if(($search['group']>0)){
      		$where.= " AND s.group_id = ".$search['group'];
-     	}
-     	if(($search['stu_name']>0)){
-     		$where.= " AND s.stu_id = ".$search['stu_name'];
-     	}
-     	if(($search['stu_code']>0)){
-     		$where.= " AND s.stu_id = ".$search['stu_code'];
      	}
     	if(!empty($search['adv_search'])){
     		$s_where = array();
@@ -75,7 +69,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " spd.comment LIKE '%{$s_search}%'";
+    		$s_where[] = " s.last_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}    		
     	return $db->fetchAll($sql.$where.$order);

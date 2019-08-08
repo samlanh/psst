@@ -285,31 +285,29 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	public function rptstudentnearlyendserviceAction(){
 		try{
-			$key = new Application_Model_DbTable_DbKeycode();
-			$data=$key->getKeyCodeMiniInv(TRUE);
-			$default_end = date('Y-m-d');
-			if (!empty($data['payment_day_alert'])){
-				$alert = $data['payment_day_alert'];
-				$default_end = date('Y-m-d',strtotime("+$alert day"));
-			}
+// 			$key = new Application_Model_DbTable_DbKeycode();
+// 			$data=$key->getKeyCodeMiniInv(TRUE);
+// 			$default_end = date('Y-m-d');
+// 			if (!empty($data['payment_day_alert'])){
+// 				$alert = $data['payment_day_alert'];
+// 				$default_end = date('Y-m-d',strtotime("+$alert day"));
+// 			}
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
 						'adv_search' =>'',
+						'branch_id' =>'',
+						'study_year'=>'',
 						'grade_all' =>'',
-						'session' 	=>'',
-						'stu_code' 	=>'',
-						'stu_name' 	=>'',
 						'group'		=>-1,
 						'service_type'=>-1,
-						'end_date'	=>$default_end,
+						'end_date'	=>date('Y-m-d'),
 						'service'	=>''
 				);;
 			}
 			$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
 			$abc = $this->view->row = $db->getAllStudentNearlyEndService($search);
-			$this->view->search = $search;
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
@@ -319,6 +317,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		$this->view->search = $search;
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);

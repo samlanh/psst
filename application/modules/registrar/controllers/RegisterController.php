@@ -412,4 +412,14 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		}
 	}
 	
+	function getstartdateenddateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Global_Model_DbTable_DbTerm();
+			$rows = $db->getTermById($data['term_study']);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	
 }

@@ -1977,7 +1977,7 @@ function getAllgroupStudyNotPass($action=null){
   	AND c.default=1
   	";
   	if (!empty($schoolOption)){
-  	$sql.=" AND c.schoolOption=$schoolOption ";
+  	$sql.=" AND c.schoolOption IN ($schoolOption) ";
   	}
   	$sql.=" ORDER BY c.id DESC LIMIT 1";
   	return $db->fetchRow($sql);

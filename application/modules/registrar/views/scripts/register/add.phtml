@@ -1390,7 +1390,7 @@ function printSave(){
 							  
 							  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
 							  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
-								  item_label='Tuition Fee';
+								  item_label='School Fee '+item_label;
 								}
 							  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
 							  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';

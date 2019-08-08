@@ -301,7 +301,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		if (empty($data['has_addnew'])){
     			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
     		}
-    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("SELECT_TEACHER")));
     		print_r(Zend_Json::encode($teacher));
     		exit();
     	}

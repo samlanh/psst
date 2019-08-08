@@ -190,7 +190,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$grade = $_dbgb->getAllGradeStudyByDegree($data['dept_id']);
-			array_unshift($grade, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")));
+			if(empty($data['noaddnew'])){
+				array_unshift($grade, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")));
+			}
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

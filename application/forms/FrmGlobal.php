@@ -95,6 +95,9 @@ class Application_Form_FrmGlobal{
 		$rs = $db->getBranchInfo($branch_id);
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
 		$color = empty($rs['color'])?"":"#".$rs['color'];
+		$type_header = HEADER_REPORT_TYPE;
+		$str="";
+		if ($type_header==1){
 		$str="<table width='100%'>
 				<tr>
 					<td width='20%' align='center'>
@@ -121,6 +124,65 @@ class Application_Form_FrmGlobal{
 					</td>
 				</tr>
 		</table>";
+		}else if ($type_header==2){
+			$str="
+			<style>
+				span.space {
+					padding:0;
+				    padding-right: 10px;
+				    margin:0;
+				        line-height: inherit;
+				}
+			</style>
+			<table width='100%'>
+					<tr>
+						<td width='20%' align='center'>
+							<img style='max-height:100px;' src=".$logo."><br>
+						</td>
+						<td width='80%' valign='top'>
+							<table width='100%' >
+								<tr>
+									<td width='60%' align='left' valign='top'>
+										<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:18px; color: inherit;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
+										<h2 style='white-space:nowrap; font-weight:bold; font-size:14px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
+									</td>
+									<td width='40%' align='left' valign='top'>
+										<ul style='font-size:12px; color:inherit; list-style-type: none; padding: 0; margin: 0; line-height: initial;'>
+											<li><span class='space'>&#9742;</span> ".$rs['branch_tel']."</li>
+											<li><span class='space' style='font-size:15px;' >&#9993;</span> ".$rs['email']."</li>";
+											if (!empty($rs['website'])){
+												$str.="<li><span class='space'>&#127758;</span> ".$rs['website']."</li>";
+											}
+											$str.="<li><span class='space' style='font-size:15px;'>&#127963;</span> ".$rs['br_address']."</li>
+										</ul>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					</table>";	
+		}else if ($type_header==3){	
+			$str="
+			<style>
+				span.space {
+					padding:0;
+				    padding-right: 10px;
+				    margin:0;
+				        line-height: inherit;
+				}
+			</style>
+			<table width='100%'>
+				<tr>
+					<td width='20%' align='center'>
+						<img style='max-height:100px;' src=".$logo."><br>
+					</td>
+					<td width='80%' valign='top'>
+						<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px; color: inherit;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
+						<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
+					</td>
+				</tr>
+			</table>";	
+		}
 		return $str;
 	}
 	

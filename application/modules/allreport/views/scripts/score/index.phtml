@@ -43,7 +43,10 @@
 						   		AND $url['action']!='rpt-score-result' AND $url['action']!='rpt-monthly-score-student'
 						   		AND $url['action']!='rpt-student-group' AND $url['action']!='rpt-student-evaluationletter'
 						   		AND $url['action']!='mistake-certificate' AND $url['action']!='certificate-letterofpraise'
-						   		AND $url['action']!='rpt-assessmentterm' AND $url['action']!='semester-outstanding-student-nophoto'){
+						   		AND $url['action']!='rpt-assessmentterm' AND $url['action']!='semester-outstanding-student-nophoto'
+						   		AND $url['action']!='certificate'
+						   		
+						   		){
 				   ?>
 				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">

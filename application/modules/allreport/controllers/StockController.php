@@ -354,6 +354,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'for_section' 	=> -1,
 						'branch_id'		=>  '',
 						'category_id'	=>  '',
+						'product_type'	=>  '',
 						'product'		=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),

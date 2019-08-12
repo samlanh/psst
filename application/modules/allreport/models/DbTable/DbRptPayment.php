@@ -124,6 +124,21 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     }
     public function getStudentPaymentDetail($search,$order_no){//
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    		$title = "title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    		$title = "title_en";
+    	}
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -151,15 +166,15 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					s.stu_enname,
 					s.last_name,
 					s.create_date AS date_start_study,				  
-					(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
+					(SELECT $label FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
 					spd.payment_term AS payment_id,
-					(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
+					(SELECT $label FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
 					(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id = s.academic_year LIMIT 1) AS academic_type,
 					d.items_id,
-					d.title AS service_name,
+					d.$title AS service_name,
 					(SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
-					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS major_name,
-					(SELECT rms_items.title FROM rms_items  WHERE rms_items.id = d.items_id LIMIT 1 ) AS category                             
+					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS major_name,
+					(SELECT $degree FROM rms_items  WHERE rms_items.id = d.items_id LIMIT 1 ) AS category                             
 					FROM 
 					    rms_student_payment AS sp,
 					    rms_student_paymentdetail AS spd,

@@ -46,7 +46,18 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$level = $_db->getUserType();
-    	
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "p.title";
+    		$degree = "it.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "p.title_en";
+    		$degree = "it.title_en";
+    	}
     	if($level==4){
     		$branch_id = $_db->getAccessPermission("brand_id");
     	}else{
@@ -55,9 +66,9 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	
     	$sql="SELECT 
     				p.code AS pro_code,
-    				CONCAT(p.title) AS pro_name ,
-    				(SELECT it.title FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
-    	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
+    				$grade AS pro_name ,
+    				(SELECT $degree FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
+    	            (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
     	            pl.brand_id,
     				pl.pro_qty,
     				pl.note,
@@ -66,7 +77,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     				p.cost,
     				pl.total_amount,
 			        p.create_date AS date,
-			        (SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 LIMIT 1) AS `status` 
+			        (SELECT $label FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 LIMIT 1) AS `status` 
 			  FROM 
 			  		`rms_itemsdetail` AS p,
 			  		rms_product_location AS pl

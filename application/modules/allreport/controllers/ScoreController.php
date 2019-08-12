@@ -562,6 +562,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$rs_rows = $group->getAllReschedulebygroup($search);
     	$this->view->rs = $rs_rows;
     	$this->view->search=$search;
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->day = $_db->getAllDay();
     }
     public function rptRescheduleGroupAction(){
     	if($this->getRequest()->isPost()){

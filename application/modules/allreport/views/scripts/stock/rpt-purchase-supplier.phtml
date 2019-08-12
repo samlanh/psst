@@ -57,7 +57,7 @@ div#divPrint tr td {
 					<td width="25%" align="left">
 					</td>
 					<td align="center" width="50%">
-						<span style="color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';">បញ្ជីការបញ្ជារទិញ</span><br />
+						<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';">បញ្ជីការបញ្ជារទិញ</span><br />
 						<span style="color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';">Purchase Order List</span>
 					</td>
 					<td width="25%" align="right">
@@ -75,7 +75,7 @@ div#divPrint tr td {
 						<ul style="line-height: 18px; list-style: none;font-size: 13px;margin: 0;padding: 0;">
 							<li><span class="label-title"><?php echo $tr->translate('BRANCH');?></span> : <?php echo $this->purchase['brand_name'];?></li>
 							<li><span class="label-title"><?php echo $tr->translate('PURCHASE_NO');?></span> : <?php echo $this->purchase['supplier_no'];?></li>
-							<li><span class="label-title"><?php echo $tr->translate('DATE');?></span> : <?php echo date("d/M/Y",strtotime($this->purchase['date']));?></li>
+							<li><span class="label-title"><?php echo $tr->translate('DATE');?></span> : <?php echo date("d/m/Y",strtotime($this->purchase['date']));?></li>
 						</ul>
 					</td>
 				</tr>

@@ -304,9 +304,9 @@ table.tb-footer tr.style-head {
 								  			<td style=" color:#F00; font-weight:bold;"><?php echo '$ '.number_format($total_expense_dollar,2);?></td>
 								  		</tr>
 								  		<tr>
-								  			<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
-								  			<td><?php echo '$ '.number_format($paid_amount,2);?></td>
-								  			<td><?php echo $tr->translate("GRAND_TOTAL");?></td>
+								  			<td style="font-weight:bold;"><?php echo $tr->translate("PAID_AMOUNT");?></td>
+								  			<td style="color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
+								  			<td style="font-weight:bold;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
 											<td colspan="7" style="border-bottom:5px double #000;color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
 								  		</tr>
 								    </table>
@@ -393,9 +393,16 @@ table.tb-footer tr.style-head {
 			}
 		}, "stu_name");
 
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function(evt) {
+			 getAllStudentByBranch();
+		});
+		
 		getallGrade();
-		getAllAcademicByBranch();
+		getAllStudentByBranch();
 	});
+	
+	
 	
 	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallGrade(){
@@ -405,6 +412,7 @@ table.tb-footer tr.style-head {
 			url:url_dept,
 			content:{
 				'dept_id':dept_id,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -418,7 +426,7 @@ table.tb-footer tr.style-head {
 	}
 	
 	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
-	function getAllAcademicByBranch(){
+	function getAllStudentByBranch(){
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id==''){  
 				dijit.byId("branch_id").focus();

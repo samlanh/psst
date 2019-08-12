@@ -282,10 +282,17 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     
     function getAllProductBybranch($branch_id){
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$grade = "p.title";
+    	}else{ // English
+    		$grade = "p.title_en";
+    	}
     	$sql = "SELECT 
 			  p.id,
 			  pl.brand_id,
-			  p.title AS `name` 
+			  $grade AS `name` 
 			FROM
 			  `rms_itemsdetail` AS p,
 			  rms_product_location AS pl 

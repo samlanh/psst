@@ -57,10 +57,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     public function GetRecordByID($conditions,$tbl_name){
     	$db=$this->getAdapter();
     	$sql="SELECT * FROM ".$tbl_name." WHERE ".$conditions." LIMIT 1";
-    	$row = $this->fetchRow($sql);
-    	return $row;
     	$row= $db->fetchRow($sql);
     	return $row;
+    }
+    
+    public function getAllDay($all=0){
+    	$db=$this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    	}else{ // English
+    		$label = "name_en";
+    	}
+    	$sql="SELECT key_code as id ,$label as name FROM rms_view where type = 18 ";
+    	if($all==0){
+    		$sql.=" and key_code != 7 ";
+    	}
+    	
+    	return $db->fetchAll($sql);
     }
     
     /**

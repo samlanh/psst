@@ -19,19 +19,25 @@
 	   	  </tr>
 	</table>
 </form>
+<style>
+	.hideprintdate{display:none !important;}
+</style>
 <div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td width="15%" align="center">
+				<td width="20%" align="center">
 				</td>
-				<td align="center" width=70%">
-					<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate('RPT_TOTALDISCOUNT');?>(Tuition Fee)</strong><br />
-					<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+				<td width="60%" align="center">
+					<span style="padding-left: 0px;  color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_TOTALDISCOUNT')?> (Tuition Fee)</span><br />
+					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>     
 				</td>
-				<td width="15%" align="center"></td>
+				<td width="20%" align="center">
+					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="3">
@@ -41,6 +47,8 @@
 						.padd tr td{  text-align:left}
 						.padd tr th{  background-color: #ccc; }
 						th,td{ padding:0 1px;}
+						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+						.hideprintdate{display:block;font-size:10px;white-space:nowrap;}
 					</style>
 					<table class="padd" width="100%" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
 						<thead>

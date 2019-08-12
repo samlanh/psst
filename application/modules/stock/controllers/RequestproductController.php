@@ -156,7 +156,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRequestProduct();
     		$gty= $db->getAllProductBybranch($data['branch_id']);
-    		array_unshift($gty, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		//array_unshift($gty, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		array_unshift($gty, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
     		print_r(Zend_Json::encode($gty));
     		exit();

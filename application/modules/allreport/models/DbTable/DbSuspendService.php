@@ -29,21 +29,24 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
 	   				(SELECT $branch from rms_branch where br_id = ss.branch_id LIMIT 1) as branch,
 			  	 	s.stu_code AS code,
 			   		s.stu_khname as kh_name,
-			   		CONCAT(s.last_name,' ',s.stu_enname) AS en_name,
+			   		CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS en_name,
 			   		ss.create_date,
 			   		(SELECT CONCAT(first_name) from rms_users where rms_users.id = ss.user_id) as user,
 			   		(select $label from rms_view as v where v.type=1 and v.key_code = ss.status) as status,
-			   		(select $service from rms_itemsdetail as idt where idt.id = spd.itemdetail_id) as service_name,
+			   		(select $service from rms_items as it where it.id = idt.items_id) as category,
+			   		$service as service_name,
 			   		ssd.reason
 	   			FROM 
 	   				rms_suspendservice as ss,
 	   				rms_suspendservicedetail as ssd,
 	   				rms_student_paymentdetail as spd,
-	   				rms_student as s
+	   				rms_student as s,
+	   				rms_itemsdetail as idt
 	   			where 
 	   				s.stu_id = ss.student_id
 	   				and ss.id = ssd.suspendservice_id
 	   				and ssd.spd_id = spd.id
+	   				and spd.itemdetail_id = idt.id
 	   		";
 			
 			$order = ' ORDER BY ss.id DESC,spd.itemdetail_id ASC ';
@@ -57,6 +60,9 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
 		   	}
 		   	if(!empty($search['stu_name'])){
 		   		$where.=" AND ss.student_id=".$search['stu_name'];
+		   	}
+		   	if(!empty($search['category'])){
+		   		$where.=" AND idt.items_id=".$search['category'];
 		   	}
 			if(!empty($search['adv_search'])){
 		   		$s_where = array();

@@ -23,7 +23,15 @@
 				<?php echo $frm->getElement("branch_id");?>
 			</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-				<?php echo $frm->getElement("stu_name");?>
+       			<input id="stu_name" />
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<select name="category" id="category" class="fullside" dojoType="dijit.form.FilteringSelect" >
+					<option value=""><?php echo $tr->translate('SELECT_CATEGORY')?></option>
+					<?php if(!empty($this->category)){foreach($this->category as $cate){?>
+					<option value="<?php echo $cate['id']?>" <?php if($cate['id']==$this->search['category']){echo "selected";}?>><?php echo $cate['name']?></option>
+					<?php }}?>
+				</select>
 			</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<?php echo $frm->getElement("start_date");?>
@@ -31,13 +39,14 @@
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<?php echo $frm->getElement("end_date");?>
 			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-12 col-sm-2 col-xs-12 text-right">
 				<button  iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</div>
        	</div>
 	</form>
 <style>
 #footer{display: none;}
+.hideprintdate{display:none !important;}
 </style>	
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm;">
@@ -49,12 +58,15 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td width="15%" align="center"></td>
-				<td align="center" width="70%">
-					<strong style="font-weight:normal;padding-left:20px;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_STOP_SERVICE_REPORT');?></strong>
-					<div><strong​​ style="font-weight:normal;font-family: Arial Black;color:#000;font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate('TO');?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></strong></div>
+				<td width="20%" align="center">
 				</td>
-				<td width="15%" align="center"></td>
+				<td width="60%" align="center">
+					<span style="padding-left: 0px;  color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_STOP_SERVICE_REPORT')?></span><br />
+					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>     
+				</td>
+				<td width="20%" align="center">
+					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+				</td>
 			</tr>
 			<tr>
 				<style> th,td{ padding:0 1px;}</style>
@@ -69,6 +81,7 @@
 						  display: table-header-group;
 						  page-break-inside:avoid; page-break-after:auto;
 						}	tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+						.hideprintdate{display:block;font-size:10px;white-space:nowrap;}
 				</style>
 				<td colspan="3" id="exporteExcel">
 					<table class="padd" width="99%" border="1" align="center" style="font-size:14px;white-space:nowrap;font-family: Times New Roman,Khmer OS Battambang;">
@@ -78,8 +91,8 @@
 								<td>&nbsp;<?php echo $tr->translate('N_O')?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('BRANCH')?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('STUDENT_ID')?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('NAME_KH')?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('NAME_EN')?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME')?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('CATEGORY')?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('SERVICE')?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('REASON')?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('CREATE_DATE')?>&nbsp;</td>
@@ -91,8 +104,8 @@
 								<td><?php echo $i;?></td>
 								<td><?php echo $rs['branch']; ?></td>
 								<td><?php echo $rs['code']; ?></td>
-								<td align="left"> <?php echo $rs['kh_name']; ?></td>
-								<td align="left"> <?php echo $rs['en_name']; ?></td>
+								<td align="left"> <?php echo $rs['kh_name']." - ".$rs['en_name']; ?></td>
+								<td align="left"><?php echo $rs['category']; ?></td>
 								<td align="left"><?php echo $rs['service_name']; ?></td>
 								<td align="left"> <?php echo $rs['reason']; ?></td>
 								<td><?php echo date("d/m/Y",strtotime($rs['create_date'])); ?></td>
@@ -110,43 +123,55 @@
 		</table>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore"); 
-	
+	var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,                        
-			id: "grade_all",
-			name: "grade_all",  
-			class: 'fullside',  
-			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-			onChange: function(){  
+			store: student_store,
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "stu_name",
+			name: "stu_name",   
+			required: false,        
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+			onChange: function() { 
+
 			}
-		}, "grade_all");
-		getallGrade();
+		}, "stu_name");
+		getallstudentname();
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function(evt) {
+			 getallstudentname();
+		});
 	});
 	
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
-	function getallGrade(){
-		dept_id = dijit.byId('degree').get('value');
-		if(dept_id==''){return false;}
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	function getallstudentname(){//
+		dijit.byId('stu_name').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('stu_name').set('store',student_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
 		dojo.xhrPost({
-			url:url_dept,
+			url:url_data,
 			content:{
-				'dept_id':dept_id
-				},
+				'branch_id':branch_id
+			},
 			handleAs:"json",
-			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('grade_all').set('store',grade_store);   
-				dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
+			load: function(data){
+				student_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('stu_name').set('store',student_store);  
+				dijit.byId('stu_name').set('value','<?php echo $this->search['stu_name']?>');  
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}
+	
 </script>

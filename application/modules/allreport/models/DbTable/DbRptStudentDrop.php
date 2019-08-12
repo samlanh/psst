@@ -236,10 +236,19 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     }
     function getSubjectTeacherByScheduleAndGroup($year,$group,$time,$day){
     	$db=$this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$subjecct = "subject_titlekh";
+    		$teacher = "teacher_name_kh";
+    	}else{ // English
+    		$subjecct = "subject_titleen";
+    		$teacher = "teacher_name_en";
+    	}
     	$sql="SELECT gr.from_hour,
 			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
-			(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
-			(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+			(SELECT s.$subjecct FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+			(SELECT t.$teacher FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
 			(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
 			FROM rms_group_reschedule AS gr 
 			WHERE gr.year_id=$year AND gr.group_id=$group
@@ -266,19 +275,29 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 //     }
     
     function getSubjectListByYG($year,$group){
-    $db=$this->getAdapter();
-    $sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
-    REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
-    (SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
-    (SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
-    (SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone,
-    COUNT(*)AS total_hour
-    FROM rms_group_reschedule AS gr
-    WHERE gr.year_id=$year
-    AND gr.group_id=$group
-    GROUP BY gr.subject_id
-    ORDER BY subject_name,gr.subject_id DESC ";
-    return $db->fetchAll($sql);
+	    $db=$this->getAdapter();
+	    $_db  = new Application_Model_DbTable_DbGlobal();
+	    $lang = $_db->currentlang();
+	    if($lang==1){// khmer
+	    	$subjecct = "subject_titlekh";
+	    	$teacher = "teacher_name_kh";
+	    }else{ // English
+	    	$subjecct = "subject_titleen";
+	    	$teacher = "teacher_name_en";
+	    }
+	    $sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
+			    REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+			    (SELECT s.$subjecct FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+			    (SELECT t.$teacher FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+			    (SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone,
+			    COUNT(*)AS total_hour
+		    FROM rms_group_reschedule AS gr
+		    WHERE gr.year_id=$year
+		    	AND gr.group_id=$group
+		    GROUP BY gr.subject_id
+		    ORDER BY subject_name,gr.subject_id DESC 
+	    ";
+	    return $db->fetchAll($sql);
     }
     //end reschedule by group
     

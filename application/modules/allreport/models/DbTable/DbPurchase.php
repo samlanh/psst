@@ -139,13 +139,26 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function  getAllPurchase($search=null){
     	$db=$this->getAdapter();
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "title";
+    		$degree = "it.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "title_en";
+    		$degree = "it.title_en";
+    	}
     	$sql=" SELECT  sp.id,sp.supplier_no,s.sup_name,s.tel,
-		           (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
-		           pro.title AS pro_id,
-		           (SELECT it.title FROM `rms_items` AS it WHERE it.id = pro.items_id LIMIT 1) AS cate_name,
+		           (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
+		           pro.$grade AS pro_id,
+		           (SELECT $degree FROM `rms_items` AS it WHERE it.id = pro.items_id LIMIT 1) AS cate_name,
 		          
 		            spd.qty,spd.qty,spd.cost,spd.amount,spd.date,
-		       		(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
+		       		(SELECT $label FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
        				FROM rms_purchase AS sp,
        				rms_purchase_detail AS spd,
        				rms_supplier AS s,

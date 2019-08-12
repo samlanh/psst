@@ -12,6 +12,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) AS group_name,
 					s.stu_code ,
 					s.stu_khname,
+					s.last_name,
+					s.stu_enname,
 					CONCAT(s.last_name,' ',s.stu_enname) as en_name,
 					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2) AS sex,
 					DATE_FORMAT(v.invoice_date,'%d-%b-%Y') AS invoice_date,

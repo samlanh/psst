@@ -49,8 +49,8 @@
         		<?php echo $frm->getElement("service_type");?>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<select required="false" type="text" name="item" id="item"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getgradebyDegree();" >
-					<option value="-1"></option>
+        		<select required="false" type="text" name="item" id="item" placeHolder="<?php echo $tr->translate('SELECT_CATEGORY');?>" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getgradebyDegree();" >
+					<option value="-1"><?php echo $tr->translate('SELECT_CATEGORY');?></option>
 					<?php if(!empty($this->rs_type)){foreach ($this->rs_type as $rs){?>
 					<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 					<?php }}?>
@@ -164,7 +164,7 @@
 								<tr class="style-head" style="font-size:10px;" align="center">
 									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
-									<td>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
 									<td><?php echo $tr->translate('PAID_DATE');?></td>
 									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
 									<td>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
@@ -349,7 +349,8 @@
 			id: "service",
 			name: "service",   
 			required:false,        
-			class: 'fullside', 
+			class: 'fullside',
+			placeHolder:'<?php echo $tr->translate('SERVICE');?>',
 			onChange: function() {  
 			}
 		}, "service");
@@ -386,7 +387,7 @@
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
-			required: true,                        
+			required: false,                        
 			id: "grade_all",
 			name: "grade_all",  
 			class: 'fullside',  
@@ -473,7 +474,8 @@
 		dojo.xhrPost({
 			url:url_dept,
 			content:{
-				'dept_id':dept_id
+				'dept_id':dept_id,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

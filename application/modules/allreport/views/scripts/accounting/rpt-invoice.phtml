@@ -311,7 +311,8 @@ function getallGrade(){
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {

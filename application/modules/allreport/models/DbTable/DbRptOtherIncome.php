@@ -9,13 +9,21 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     }
     function getAllOtherIncome($search){
     	$db=$this->getAdapter();
-    	
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    	}
     	$sql = "SELECT 
     				*,
-    				(SELECT branch_namekh from rms_branch where br_id = branch_id) as branch_name,
-    				(SELECT category_name FROM rms_cate_income_expense WHERE id = cate_income) AS cate_income, 
+    				(SELECT $branch from rms_branch where br_id = branch_id) as branch_name,
+    				(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income) AS cate_income, 
 	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income) as income_category,
-	    			(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
+	    			(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
 	    			(select CONCAT(first_name) from rms_users as u where u.id = user_id)  as name
     			 FROM 
     				ln_income  

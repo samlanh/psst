@@ -194,7 +194,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}	
-	function  rptSuspendserviceAction(){
+	function rptSuspendserviceAction(){
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -202,6 +202,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			else{
 				$search=array(
 					'adv_search' =>'',
+					'stu_name' =>'',
+					'grade_all' =>'',
+					'category' =>'',
 					'start_date' =>date("Y-m-d"),
 					'end_date' =>date("Y-m-d"),
 				);
@@ -223,6 +226,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->category = $db->getAllItems(2);
 	}
 	public function rptstudentbalanceAction(){
 		try{
@@ -1143,6 +1149,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}
 		$_db = new Application_Form_FrmGlobal();
 		$this->view->header = $_db->getHeaderReceipt($branch_id);
+		
+		
 	}
 	public function rptIncomediscountAction(){
 		try{
@@ -1168,8 +1176,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 		$this->view->search = $search;
-		$_db = new Application_Form_FrmGlobal();
-		$this->view->header = $_db->getHeaderReceipt($search['branch_id']);
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	
 	public function rptClosingdailyAction()

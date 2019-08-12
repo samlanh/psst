@@ -114,7 +114,7 @@
 								<td colspan="3" align="center" style="font-family: Khmer OS Muol Light;font-size: 25px;">
 									ព្រះរាជាណាចក្រកម្ពុជា <br />
 									ជាតិ សាសនា ព្រះមហាក្សត្រ<br />
-									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/style.png'?>">
+									<img style="width: 20%;"  src="<?php echo $this->baseUrl().'/images/style.png'?>">
 								</td>
 							</tr>
 							<tr>
@@ -132,7 +132,7 @@
 														$logo = $this->baseUrl().'/images/'.$this->studentgroup[0]['branch_logo'];
 													}
 													?>
-												<img style="width: 65%;" alt="<?php ?>" src="<?php echo $logo;?>"><br />
+												<img style="width: 65%;"  src="<?php echo $logo;?>"><br />
 											</td>
 										</tr>
 									</table>
@@ -166,7 +166,7 @@
 												<table width="125px" height="150px">
 													<tr>
 														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[0])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[0]['photo'];}?>">
+															<img style="width: 125px;height: 150px;"  <?php if(!empty($this->studentgroup[0])){if(!empty($this->studentgroup[0]['photo'])){ echo 'src="'.$this->baseUrl().'/images/photo/'.$this->studentgroup[0]['photo'].'"';}} ?>>
 														</td>
 													</tr>
 												</table>											
@@ -192,7 +192,7 @@
 												<table width="125px" height="150px">
 													<tr>
 														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[1])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[1]['photo'];}?>">
+															<img style="width: 125px;height: 150px;"  <?php if(!empty($this->studentgroup[1])){if(!empty($this->studentgroup[1]['photo'])){ echo 'src="'.$this->baseUrl().'/images/photo/'.$this->studentgroup[1]['photo'].'"';}} ?>>
 														</td>
 													</tr>
 												</table>											
@@ -218,7 +218,7 @@
 												<table width="125px" height="150px">
 													<tr>
 														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[2])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[2]['photo'];}?>">
+															<img style="width: 125px;height: 150px;"  <?php if(!empty($this->studentgroup[2])){if(!empty($this->studentgroup[2]['photo'])){ echo 'src="'.$this->baseUrl().'/images/photo/'.$this->studentgroup[2]['photo'].'"';}} ?>>
 														</td>
 													</tr>
 												</table>											
@@ -249,7 +249,7 @@
 												<table width="125px" height="150px">
 													<tr>
 														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[3])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[3]['photo'];}?>">
+															<img style="width: 125px;height: 150px;"  <?php if(!empty($this->studentgroup[3])){if(!empty($this->studentgroup[3]['photo'])){ echo 'src="'.$this->baseUrl().'/images/photo/'.$this->studentgroup[3]['photo'].'"';}} ?>>
 														</td>
 													</tr>
 												</table>											
@@ -275,7 +275,7 @@
 												<table width="125px" height="150px">
 													<tr>
 														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[4])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[4]['photo'];}?>">
+															<img style="width: 125px;height: 150px;" <?php if(!empty($this->studentgroup[4])){if(!empty($this->studentgroup[4]['photo'])){ echo 'src="'.$this->baseUrl().'/images/photo/'.$this->studentgroup[4]['photo'].'"';}} ?>>
 														</td>
 													</tr>
 												</table>											
@@ -304,7 +304,7 @@
 																<table width="125px" height="150px">
 																	<tr>
 																		<td style="border:1px solid #000;">
-																			<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[4])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[4]['photo'];}?>">
+																			<img style="width: 125px;height: 150px;"  <?php if(!empty($this->studentgroup[$i])){if(!empty($this->studentgroup[$i]['photo'])){ echo 'src="'.$this->baseUrl().'/images/photo/'.$this->studentgroup[$i]['photo'].'"';}} ?>">
 																		</td>
 																	</tr>
 																</table>											

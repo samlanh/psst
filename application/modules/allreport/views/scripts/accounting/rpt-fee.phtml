@@ -88,7 +88,7 @@
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('DEGREE')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('GRADE')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('MONTHLY')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('QUARTER')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('TERM')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('SEMESTER')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('YEAR')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
@@ -200,7 +200,8 @@
 		dojo.xhrPost({
 			url:url_dept,
 			content:{
-				'dept_id':dept_id
+				'dept_id':dept_id,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

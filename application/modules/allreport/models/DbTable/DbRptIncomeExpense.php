@@ -81,6 +81,26 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
     }
+    public function getTotalIncome(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$total=0;
+    	$sql =' SELECT SUM(paid_amount) FROM rms_student_payment ';
+    	$where=' WHERE status=1 and is_void=0 ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	$student_payment = $db->fetchOne($sql.$where);
+    	
+    	
+    	$sql1 =' SELECT SUM(total_amount) FROM ln_income  ';
+    	$where1=' WHERE status=1 ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where1.=$dbp->getAccessPermission();
+    	$other_payment = $db->fetchOne($sql1.$where1);
+    	
+    	$total = $student_payment + $other_payment;
+    	return $total;
+    }
+    
 	public function getAllexspanByid($id){
 	    $db=$this->getAdapter();
 	    $sql="SELECT 

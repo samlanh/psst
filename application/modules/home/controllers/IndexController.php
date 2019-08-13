@@ -31,7 +31,7 @@ class Home_IndexController extends Zend_Controller_Action
       
       $_db = new Allreport_Model_DbTable_DbRptIncomeExpense();
       $this->view->totalExpense = $_db->getAmountExpest();
-      $this->view->netIncome = $_db->getTotalIncome();
+      $this->view->totalIncome = $_db->getTotalIncome();
       
       $_db = new Home_Model_DbTable_DbDashboard();
       $this->view->studropnew = $_db->getStudentDropNew();

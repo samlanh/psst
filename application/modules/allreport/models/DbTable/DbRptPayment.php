@@ -208,7 +208,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .= " AND d.items_id = ".$search['item'];
     		}
     	}
-    	
+    	if($search['pay_term']!=''){
+    		$where .= " and spd.payment_term = ".$search['pay_term'];
+    	}
     	if(!empty($search['service'])){
     		$where .= " AND spd.itemdetail_id = ".$search['service'];
     	}

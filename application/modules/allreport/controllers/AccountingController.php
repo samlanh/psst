@@ -101,6 +101,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'grade_all'=>-1,
 						'user'=>-1,
 						'session'=>-1,
+						'pay_term'=>'',
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();

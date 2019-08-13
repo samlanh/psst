@@ -329,10 +329,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$pay_term->setValue($request->getParam("pay_term"));
 		$opt_term = array(
 				''=>$this->tr->translate("PAYMENT_TERM"),
-   				2=>$this->tr->translate('QUARTER'),
+				1=>$this->tr->translate('MONTHLY'),
+   				2=>$this->tr->translate('TERM'),
    				3=>$this->tr->translate('SEMESTER'),
    				4=>$this->tr->translate('YEAR'),
-   		
+				5=>$this->tr->translate('OTHER'),
    		);
 		$pay_term->setMultiOptions($opt_term);
 		

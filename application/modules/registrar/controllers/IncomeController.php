@@ -31,7 +31,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$_db = new Application_Model_DbTable_DbGlobal();
 			$rs_rows= $db->getAllIncome($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQUE_NO","NOTE","PAID_DATE","STATUS");
+    		$collumns = array("BRANCH","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQUE_NO","NOTE","PAID_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);

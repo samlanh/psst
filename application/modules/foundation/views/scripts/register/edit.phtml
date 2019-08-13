@@ -1828,7 +1828,8 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
-					'dept_id':dept_id
+					'dept_id':dept_id,
+					'noaddnew':1
 					},
 				handleAs:"json",
 				load: function(data) {

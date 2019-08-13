@@ -106,7 +106,8 @@ class Global_DegreeController extends Zend_Controller_Action {
     		$_dbgb = new Application_Model_DbTable_DbGlobal();
     		$type = empty($data['items_type'])?null:$data['items_type'];
     		$d_row = $_dbgb->getAllItems($type);
-    		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		//array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		array_unshift($d_row, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_DEGREE")));
     		print_r(Zend_Json::encode($d_row));
     		exit();
     	}

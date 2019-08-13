@@ -445,6 +445,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'dojoType'=>"dijit.form.DateTextBox",
     			'value'=>'now',
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'placeholder'=>$this->tr->translate("START_DATE"),
     			'class'=>'fullside',));
     	$_date = $request->getParam("start_date");
     	if(empty($_date)){
@@ -457,6 +458,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'dojoType'=>"dijit.form.DateTextBox",
     			'class'=>'fullside',
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'placeholder'=>$this->tr->translate("END_DATE"),
     			'required'=>false));
     	$_date = $request->getParam("end_date");
     	if(empty($_date)){

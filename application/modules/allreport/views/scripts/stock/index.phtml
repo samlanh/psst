@@ -1,7 +1,7 @@
- <?php 
-	  $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	  echo $this->headTitle($tr->translate("RPT_PRODUCT_LOCATION"));
-  ?>
+<?php 
+	 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	 echo $this->headTitle($tr->translate("RPT_PRODUCT_LOCATION"));
+ ?>
 <style>
   ul.link-rpt li a {
 	color: #3A3939;
@@ -27,7 +27,7 @@
   <div class="card">
 		<div class="card-content collapse show">
 			<div class="card-box report-list">
-				<h3 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;"><i style="font-size:25px;margin-right:10px;" class="fa fa-suitcase" aria-hidden="true"></i><?php echo $tr->translate("RPT_PRODUCT_LOCATION");?></h3><hr>
+				<h3 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;"><i style="font-size:25px;margin-right:10px;" class="fa fa-suitcase" aria-hidden="true"></i><?php echo $tr->translate("STOCK");?></h3><hr>
 				<div class="row top_tiles">
 					 <?php
 					   $db_user=new Application_Model_DbTable_DbUsers();

@@ -611,33 +611,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$order=" ORDER BY sp.id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
-    
-//     function getCustomerPayment($search){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT
-// 			    	*,
-// 			    	(select name_en from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
-// 			    	(select name_en from rms_view where type=10 and key_code=is_void LIMIT 1) as status,
-// 			    	(select first_name from rms_users as u where u.id=user_id LIMIT 1) as user
-// 			    FROM
-// 			    	rms_customer_payment
-// 			    WHERE 1 ";
-    	 
-//     	$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
-//     	$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
-//     	$where = " AND ".$from_date." AND ".$to_date;
-    	 
-//     	if(!empty($search['adv_search'])){
-//     		$s_where=array();
-//     		$s_search=addslashes(trim($search['adv_search']));
-//     		$s_where[]= " name_kh LIKE '%{$s_search}%'";
-//     		$s_where[]=" name_en LIKE '%{$s_search}%'";
-//     		$s_where[]=" receipt_no LIKE '%{$s_search}%'";
-//     		$where.=' AND ('.implode(' OR ', $s_where).')';
-//     	}
-//     	$order=" ORDER BY id DESC";
-//     	return $db->fetchAll($sql.$where.$order);
-//     }
+
     function getRegisterById($id){
     	$db=$this->getAdapter();
     	$sql=" SELECT 
@@ -650,8 +624,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    			s.stu_enname,
 	    			s.sex,
 	    			s.session,
-	    			s.degree,
-	    			s.grade,
+	    			sp.degree,
+	    			sp.grade,
 			    	sp.paid_amount,
 			    	sp.is_void,sp.create_date,
 			    	sp.balance_due,sp.amount_in_khmer,

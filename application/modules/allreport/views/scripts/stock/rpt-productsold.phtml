@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('RPT_PRODUCT_SOLD')); 
+	echo $this->headTitle($tr->translate('RPT_PRODUCT_SELLOUT')); 
 	$frm = $this->form_search;
 ?>	
 <meta charset="utf-8">
@@ -15,7 +15,7 @@
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_PRODUCT_SOLD');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_PRODUCT_SELLOUT');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
@@ -66,7 +66,7 @@
 					<td width="15%" align="center">
 					</td>
 					<td align="center"  width="70%">
-						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_PRODUCT_SOLD');?></span><br />
+						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_PRODUCT_SELLOUT');?></span><br />
 						<span style="color:#000; font-size: 12px;"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO');?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span> 
 					</td>
 					<td width="15%" align="center">
@@ -187,7 +187,6 @@
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	//dojo.require("dojo.NodeList-manipulate");
 
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -219,9 +218,7 @@
 		
 		var branch_id = dijit.byId('branch_id');
 		branch_id.on('change', function(evt) {
-			//getAllAcademicByBranch();
 		});
-		//getAllAcademicByBranch();
 	});
 	url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
 	var oldBranch = "<?php echo $this->search['branch_id']?>";
@@ -244,7 +241,7 @@
 				academic_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('study_year').set('store',academic_store);  
 				if(oldBranch==branch_id){
-					dijit.byId('study_year').set('value','<?php //echo $this->search['study_year']?>');  
+					dijit.byId('study_year').set('value','');  
 				}
 			},
 			error: function(err) {

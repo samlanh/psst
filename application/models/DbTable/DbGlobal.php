@@ -893,7 +893,7 @@ function getAllgroupStudyNotPass($action=null){
    	$sql="SELECT key_code AS id,$label AS name,key_code,$label AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
    	$rows = $db->fetchAll($sql);
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$options= array(-1=>$tr->translate("CHOOSE"));
+   	$options= array(-1=>$tr->translate("PAYMENT_METHOD"));
    	if($is_opt!=null){
    		if(!empty($rows))foreach($rows AS $row){
    			$options[$row['key_code']]=$row['view_name'];

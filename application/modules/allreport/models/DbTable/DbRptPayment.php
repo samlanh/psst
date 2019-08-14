@@ -373,7 +373,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	spd.validate,
 			    	(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
 			    	spd.discount_amount,
-			    	spd.discount_percent
+			    	spd.discount_percent,
+			    	spd.service_type
     			FROM 
 			    	rms_student_payment as sp,
 			    	rms_student_paymentdetail AS spd ";

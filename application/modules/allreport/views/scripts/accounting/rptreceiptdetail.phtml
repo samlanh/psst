@@ -119,12 +119,13 @@ table tr td strong{
 								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
 							  </tr>
 							  <?php $i=0; $total=0; if(!empty($this->row)) foreach($this->row as $rs){ 
-							  		$i++;
+							  		$i++;$label="";
+									if($rs['service_type']==1){$label="School Fee ";}
 							  ?>
 							  <tr class="hover" style="font-size:12px;height: 25px;"​ >
 							    <td><?php echo $i;?></td>
 							    <?php ?>
-							    <td style="text-align: left;"><?php echo $rs['service'];?></td>
+							    <td style="text-align: left;"><?php echo $label.$rs['service'];?></td>
 							    <td><?php if ($rs['is_onepayment']!=1) { echo $rs['payment_term']; }else{ echo "-";}?></td>
 							    <td><?php echo number_format($rs['qty'],2)?></td>
 							    <td><?php echo number_format($rs['fee'],2);?></td>

@@ -40,8 +40,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-		$frm = new Registrar_Form_FrmSearchexpense();
-    	$frm = $frm->AdvanceSearch();
+		$form = new Registrar_Form_FrmSearchexpense();
+    	$frm = $form->AdvanceSearch();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_search = $frm;
     }

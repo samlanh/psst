@@ -33,7 +33,10 @@ span.title-suppend {
     margin-bottom: 10px;
 }
 .col-lg-6.capital-box {
-    min-height: 115px;
+    min-height: 97px;
+}
+.accounting-management .capital-box span{
+	font-size: 24px;
 }
 .bg-style-drop {
     height: 80%;
@@ -100,7 +103,7 @@ small.pull-right.showall-ann {
 		<!-- START PAGE CONTENT -->
 		<div id="page-right-content">
 			<div class="container">
-				 <div class="row">
+				 <div class="row" style="margin-top: 15px;">
 					<div class="col-lg-6">
 						<div class="card-box" style="  margin: 0;">
 							<div class="col-lg-12">
@@ -121,7 +124,7 @@ small.pull-right.showall-ann {
 									<div class="col-lg-12" style="padding: 0;">
 										<div class="col-lg-6 capital-box" style="background: #0077c5;">
 											<span data-bind="text: currentRatio"><?php echo "$ ".number_format($this->totalIncome,2);?></span> 
-											<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("Total Income")?></p>
+											<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("Total Revenue")?></p>
 										</div>
 										<div class="col-lg-6 capital-box" style="background: #21abf6; color: #fff;">
 											<span data-bind="text: quickRatio"><?php echo "$ ".number_format($this->totalExpense,2);?></span> 

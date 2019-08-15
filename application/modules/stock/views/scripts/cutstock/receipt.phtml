@@ -36,7 +36,7 @@ img.view{height: 70px !important;}
 					<tr>
 						<td>Student's ID : <?php echo $this->row['stu_code'];?></td>
 						<td></td>
-						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; color:red; min-width: 100px; display: inline-block;"><?php echo $this->row['serailno'];?></span></td>
+						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; color:red; min-width: 100px; display: inline-block;"><?php echo $this->row['serailno'];?><?php if($this->row['status']==0){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></span></td>
 					</tr>
 					<tr>
 						<td>Student's Name : <?php echo $this->row['stu_enname']." ".$this->row['last_name'];?></td>

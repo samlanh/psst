@@ -223,7 +223,33 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 					$dbpush = new  Application_Model_DbTable_DbGlobal();
 // 					$dbpush->getTokenUser(null,$id, 1);
 				
-				$this->_name="rms_student_paymentdetail";
+				$key = new Application_Model_DbTable_DbKeycode();
+				$keydata=$key->getKeyCodeMiniInv(TRUE);
+				$condictionSale = empty($keydata['sale_cut_stock'])?0:$keydata['sale_cut_stock'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+				
+				$cut_id="";
+				$totalQty=0;
+				if ($condictionSale!=1){
+					$dbstock = new Stock_Model_DbTable_DbCutStock();
+					$itemsCode = $dbstock->getCutStockode($data['branch_id']);
+					$_arr=array(
+							'branch_id'	   => $data['branch_id'],
+							'serailno'	   => $itemsCode,
+							'student_id'   => $data['old_stu'],
+							'balance'      => 0,
+// 							'total_received'=>$data['qty_'.$i],
+							'total_qty_due' => 0,
+							'received_date' => $paid_date,
+							'create_date'   => date("Y-m-d H:i:s"),
+							'modify_date'	=> date("Y-m-d H:i:s"),
+							'status'        => 1,
+							'note'			=>'Direct Stock From Payment',
+							'user_id'       => $this->getUserId(),
+					);
+					$this->_name ='rms_cutstock';
+					$cut_id =  $this->insert($_arr);
+				}
+				
 				$ids = explode(',', $data['identity']);
 				$dbitem = new Global_Model_DbTable_DbItemsDetail();
 				if(!empty($ids))foreach ($ids as $i){
@@ -259,8 +285,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'note'			=>$data['remark'.$i],
 							'is_parent'     =>$spd_id,
 						);
+					$this->_name="rms_student_paymentdetail";
 					$studentpaymentid = $this->insert($_arr);
-					
+
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
 					if($rs_item['items_type']==3){ // product
 						if($rs_item['is_productseat']==1){ // product set
@@ -280,75 +307,104 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 										and set.pro_id = ".$rs_item['id']."
 										and lo.brand_id = ".$data['branch_id'];
 							$result = $db->fetchAll($sql);
-							if(!empty($result)){foreach ($result as $row){
-								$arr_sale = array(
-										'payment_id'		=>$paymentid,
-										'is_product_set'	=>1,
-										'product_set_id'	=>$row['product_set_id'],
-										'pro_id'			=>$row['pro_id'],
-										'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
-										'qty_after'			=>$row['set_qty'] * $data['qty_'.$i],
-										'cost'				=>$row['cost'],
-										'price'				=>$row['price'],
-										'user_id'			=>$this->getUserId(),
-									);
-								$this->_name="rms_saledetail";
-								$this->insert($arr_sale);
-							}}
+							if(!empty($result)){
+								foreach ($result as $row){
+									$totalQty = $totalQty+($row['set_qty'] * $data['qty_'.$i]);//count QtyReceive
+									$qty_after = $row['set_qty'] * $data['qty_'.$i];
+									if ($condictionSale!=1){
+										$qty_after=0;
+									}
+									$arr_sale = array(
+											'payment_id'		=>$paymentid,
+											'is_product_set'	=>1,
+											'product_set_id'	=>$row['product_set_id'],
+											'pro_id'			=>$row['pro_id'],
+											'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
+											'qty_after'			=>$qty_after,
+											'cost'				=>$row['cost'],
+											'price'				=>$row['price'],
+											'user_id'			=>$this->getUserId(),
+										);
+									$this->_name="rms_saledetail";
+									$sale_detailid = $this->insert($arr_sale);
+									
+									if ($condictionSale!=1){
+										$arrs = array(
+												'cutstock_id'=>$cut_id,
+												'student_paymentdetail_id'=>$sale_detailid,
+												'product_id'=>$row['pro_id'],
+												'due_amount'=>0,
+												'qty_receive'=>$row['set_qty'] * $data['qty_'.$i],
+												'remain'=>0,
+												'remide_date'=>'',
+										);
+										$this->_name ='rms_cutstock_detail';
+										$this->insert($arrs);
+										$dbpu = new Stock_Model_DbTable_DbPurchase();
+										$dbpu->updateStock($row['pro_id'],$data['branch_id'],-($row['set_qty'] * $data['qty_'.$i]));
+									}
+								}
+							}
 						}else{ // product normal
+							$totalQty = $totalQty+$data['qty_'.$i];//count QtyReceive
+							$qty_after = $data['qty_'.$i];
+							if ($condictionSale!=1){
+								$qty_after=0;
+							}
 							$arr_sale = array(
 									'payment_id'		=>$paymentid,
 									'is_product_set'	=>0,
 									'product_set_id'	=>$data['item_id'.$i],
 									'pro_id'			=>$data['item_id'.$i],
 									'qty'				=>$data['qty_'.$i],
-									'qty_after'			=>$data['qty_'.$i],
+									'qty_after'			=>$qty_after,
 									'cost'				=>$rs_item['cost'],
 									'price'				=>$data['price_'.$i],
 									'user_id'			=>$this->getUserId(),
 								);
 							$this->_name="rms_saledetail";
-							$this->insert($arr_sale);
+							$sale_detailid= $this->insert($arr_sale);
 							
-// 							$dbstock = new Stock_Model_DbTable_DbCutStock();
-// 							$itemsCode = $dbstock->getCutStockode($data['branch_id']);
-// 							$_arr=array(
-// 									'branch_id'	   => $data['branch_id'],
-// 									'serailno'	   => $itemsCode,
-// 									'student_id'   => $data['old_stu'],
-// 									'balance'      => 0,
-// 									'total_received'=>$data['qty_'.$i],
-// 									'total_qty_due' => 0,
-// 									'received_date' => $paid_date,
-// 									'create_date'   => date("Y-m-d H:i:s"),
-// 									'modify_date'	=> date("Y-m-d H:i:s"),
-// 									'status'        => 1,
-// 									'user_id'       => $this->getUserId(),
-// 							);
-// 							$this->_name ='rms_cutstock';
-// 							$cut_id =  $this->insert($_arr);
+							if ($condictionSale!=1){
+								
+								$arrs = array(
+										'cutstock_id'=>$cut_id,
+										'student_paymentdetail_id'=>$sale_detailid,
+										'product_id'=>$data['item_id'.$i],
+										'due_amount'=>0,
+										'qty_receive'=>$data['qty_'.$i],
+										'remain'=>0,
+										'remide_date'=>'',
+								);
+								$this->_name ='rms_cutstock_detail';
+								$this->insert($arrs);
+								$dbpu = new Stock_Model_DbTable_DbPurchase();
+								$dbpu->updateStock($data['item_id'.$i],$data['branch_id'],-$data['qty_'.$i]);
+							}
+							
 
-// 							$arrs = array(
-// 									'cutstock_id'=>$cut_id,
-// 									'student_paymentdetail_id'=>$studentpaymentid,
-// 									'product_id'=>$data['item_id'.$i],
-// 									'due_amount'=>0,
-// 									'qty_receive'=>$data['qty_'.$i],
-// 									'remain'=>0,
-// 									'remide_date'=>'',
-// 							);
-// 							$this->_name ='rms_cutstock_detail';
-// 							$this->insert($arrs);
-// 							$dbpu = new Stock_Model_DbTable_DbPurchase();
-// 							$dbpu->updateStock($data['item_id'.$i],$data['branch_id'],-$data['qty_'.$i]);
+
 						}
 					}
 				}
+				
+				if ($condictionSale!=1){
+					$dbstock = new Stock_Model_DbTable_DbCutStock();
+					$itemsCode = $dbstock->getCutStockode($data['branch_id']);
+					$_arr=array(
+							'total_received'=>$totalQty,
+					);
+					$this->_name ='rms_cutstock';
+					$where = "id = ".$cut_id;
+					$this->update($_arr, $where);
+				}
+				
 				$db->commit();
 				return $receipt_number;
 		}catch (Exception $e){
-			$db->rollBack();//
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();//
+			
 		}
 	}
 	
@@ -516,16 +572,52 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->updateCreditMemoBack($data);
 				}				
 				
-				$where = " payment_id = $payment_id";
-				$this->_name='rms_saledetail';
-				$this->delete($where);
+				$key = new Application_Model_DbTable_DbKeycode();
+				$keydata=$key->getKeyCodeMiniInv(TRUE);
+				$condictionSale = empty($keydata['sale_cut_stock'])?0:$keydata['sale_cut_stock'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+				if ($condictionSale!=1){
+					$sql="SELECT sd.* FROM `rms_saledetail` AS sd WHERE sd.payment_id =$payment_id";
+					$saleDetail = $db->fetchAll($sql);
+					if (!empty($saleDetail)) foreach ($saleDetail as $rs){
+						//Qurey Cut Stock Detail
+						$sql = "SELECT cd.* FROM `rms_cutstock_detail` AS cd WHERE cd.`student_paymentdetail_id` =".$rs['id'];
+						$cutDetail = $db->fetchAll($sql);
+						$qtyReceive = 0;
+						if (!empty($cutDetail)) foreach ($cutDetail as $cut){
+							$qtyReceive = $qtyReceive+$cut['qty_receive'];
+							//Void All This Payment Cut Stock
+							$_arr=array(
+				    			'status'	      => 0,
+				    			'user_id'  =>$this->getUserId(),
+				    			'modify_date'	  => date("Y-m-d H:i:s"),
+					    	);
+					    	$this->_name ='rms_cutstock';
+					    	$where = ' id = '.$cut['cutstock_id'];
+					    	$this->update($_arr, $where);
+						}
+						//Update Sale Detial back
+						$_arr=array(
+								'qty_after'	      => ($rs['qty_after']+$qtyReceive),
+						);
+						$this->_name ='rms_saledetail';
+						$where = ' id = '.$rs['id'];
+						$this->update($_arr, $where);
+						
+						$dbpu = new Stock_Model_DbTable_DbPurchase();
+						$dbpu->updateStock($rs['pro_id'],$data['branch_id'],+$qtyReceive);
+					}
+				}
+				
+// 				$where = " payment_id = $payment_id";
+// 				$this->_name='rms_saledetail';
+// 				$this->delete($where);
 
 				$db->commit();
 				return 0;
 			}catch (Exception $e){
-				$db->rollBack();
 				Application_Form_FrmMessage::message("UPDATE_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				$db->rollBack();
 				exit();
 			}
 		}					

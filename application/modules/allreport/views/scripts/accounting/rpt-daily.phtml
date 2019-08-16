@@ -180,7 +180,7 @@ table.tb-footer tr.style-head {
 											<td><?php echo $rs['degree']; ?></td>
 											<td><?php echo $rs['grade']; ?></td>
 											<td><?php echo $rs['session']; ?></td>
-											<td><?php if($rs['penalty']>0){echo number_format($rs['penalty'],2);} ?></td>
+											<td><?php if($rs['penalty']!=0){echo number_format($rs['penalty'],2);} ?></td>
 											<td><?php echo number_format($rs['grand_total'],2); ?></td>
 										    <td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
 											<td><?php echo number_format($rs['paid_amount'],2); ?></td>

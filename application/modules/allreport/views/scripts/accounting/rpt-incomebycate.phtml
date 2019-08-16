@@ -85,6 +85,7 @@
 							$grand_total=0;
 							$total_penalty=0;
 							$credit_memo= 0;
+							$total_otherincome = 0;
 							$no=0;
 						 ?>
 						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
@@ -114,6 +115,18 @@
 								<td style=""><?php echo number_format($credit_memo,2);?></td>
 							</tr>
 						  <?php }?>
+						  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
+								<td style="white-space: nowrap;width:200px;"></td>
+								<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;"><?php echo number_format($grand_total,2);?></td>
+							</tr>
+							<tr style="font-size:14px; height: 20px;line-height: 30px;font-weight:bold;" align="center" >
+								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('OTHER_INCOME')?></td>
+								<td style="background-color: #ccd9ff;"></td>
+								<td style="background-color: #ccd9ff;"></td>
+							</tr>
+						  
 						   <?php if(!empty($this->rsincome)){ foreach($this->rsincome as $key => $rs){?>
 							  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
 								<td style=""></td>
@@ -122,12 +135,19 @@
 								<td style=""><?php echo number_format($rs['total_income'],2);?></td>
 							  </tr>
 								<?php 
-								 	$grand_total = $grand_total + $rs['total_income'];
-						 	 	}}
+								 	$total_otherincome = $total_otherincome + $rs['total_income'];
+						 	 	}
 						 	 	?>
+						 	 <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
+								<td style="white-space: nowrap;width:200px;"></td>
+								<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;"><?php echo number_format($total_otherincome,2);?></td>
+							</tr>
+							<?php }?>
 							<tr>
-								<td colspan="3"></td>
-								<td><strong style="border-bottom: 5px double #000;font-size:17px;">$&nbsp;<?php echo number_format($grand_total,2);?></strong></td>
+								<td colspan="3" style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTLE_AMOUNT');?></td>
+								<td><strong style="border-bottom: 5px solid #000;font-size:17px;">$&nbsp;<?php echo number_format($grand_total+$total_otherincome,2);?></strong></td>
 							</tr>
 					</table>
 				</td>	

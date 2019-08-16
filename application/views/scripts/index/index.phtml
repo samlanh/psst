@@ -1,7 +1,4 @@
 <?php
-// 	$session_lang=new Zend_Session_Namespace('lang');
-// 	$session_lang->lang_id=1;
-
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage(1);
 	$this->headTitle($this->data["system_name"]."-Student Management System"); 
 	echo $this->headTitle();
@@ -24,7 +21,6 @@
 		require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox"]);
 	</script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
 	 <!-- Bootstrap -->
     <link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -33,10 +29,10 @@
     <!-- Custom Theme Style -->
     <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
 	<style type="text/css">
-.container {
-    padding: 0;
-    width: auto;
-}
+		.container {
+		    padding: 0;
+		    width: auto;
+		}
 		.fullside {
 		    width: 99%;
 		    height: 30px;

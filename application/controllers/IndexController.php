@@ -13,6 +13,7 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
+    	
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	$username = $session_user->first_name;
     	$user_id = $session_user->user_id;
@@ -30,6 +31,15 @@ class IndexController extends Zend_Controller_Action
         
 		if($this->getRequest()->isPost())		
 		{
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+			$sys = $dbgb->getPh();
+			if (!$sys){
+// 				$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+// 				$session_user->unsetAll();
+				Application_Form_FrmMessage::redirectUrl("/");
+				exit();
+			}
+			
 			$formdata=$this->getRequest()->getPost();
 			if($form->isValid($formdata))
 			{

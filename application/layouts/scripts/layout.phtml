@@ -166,7 +166,7 @@ $teacher_id = $session_t->teacher_id;
 		    </div>
 		</div>
 	</div>	
-	<div class="container body"<?php if($module!='rsvacl' AND $controller!="useraccess" AND $action!="add"){?> style="display: none;" <?php }?>>
+	<div class="container body"<?php if(($module!='rsvacl' AND $controller!="useraccess" AND $action!="add") AND ($module!='home' AND $controller!="index" AND $action!="index")){?> style="display: none;" <?php }?>>
     	<div class="main_container">
         	<div class="col-md-3 left_col ">
           		<div class="left_col scroll-view">

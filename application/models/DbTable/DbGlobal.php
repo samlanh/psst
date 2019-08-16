@@ -2382,29 +2382,33 @@ function getAllgroupStudyNotPass($action=null){
   }
   
   
-  function getPh(){
+ function getPh($type=null){
   	// Turn on output buffering
   	ob_start();
   	//Get the ipconfig details using system commond
   	system('ipconfig /all');
-  	
+  	 
   	// Capture the output into a variable
   	$mycom=ob_get_contents();
   	// Clean (erase) the output buffer
   	ob_clean();
-  	
+  	 
   	$findme = "Physical";
   	//Search the "Physical" | Find the position of Physical text
   	$pmac = strpos($mycom, $findme);
-  	
   	// Get Physical Address
   	$mac=substr($mycom,($pmac+36),17);
-  	//Display Mac Address
-  	if ($mac!=PHISYCAL_CONFIG){
-  		return false;
+  	if ($type==1){
+  		return $mac;
+  	}else {
+	  
+	  	//Display Mac Address
+	  	if ($mac!=PHISYCAL_CONFIG){
+	  		return false;
+	  	}
+	  	return true;
   	}
-  	return true;
-  	
+  	 
   	//If you want you can track the page visitor's mac address and store in database
   	//Insert the visitor's mac address to database
   	// " INSERT INTO `table_name` (`column_name`) VALUES('".$mac_address."') ";

@@ -74,6 +74,9 @@ table.tb-footer tr.style-head {
 						font-size:12px; 
 						height: 23px;
 					}
+					.bold {
+							font-weight: 600;				
+					}
 			</style>
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 				<tr>
@@ -116,23 +119,26 @@ table.tb-footer tr.style-head {
 							<?php 
 								$total_expense = 0;
 							if(!empty($this->row)){foreach ($this->row AS $key=>$row) { $key=$key+1;
-								$total_expense =$total_expense+$row['total_amount'];
+								
+								if ($row['status']==1){
+									$total_expense =$total_expense+$row['total_amount'];
+								}
 							?>
-							<tr class="style-rowdata hover" align="center" >
+							<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;" align="center" <?php if ($row['status']==0){?>style="background: #ffd9d9;"<?php }?> >
 								<td><?php echo $key;?></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['branch_name']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['receiver']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['title']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
-								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['pay']; ?></a></td>
-								<td><?php echo '$ '.$row['total_amount'];?></td>
+								<td><?php echo $row['branch_name']; ?></td>
+								<td><?php echo $row['receiver']; ?></td>
+								<td align="left"><?php echo $row['title']; ?></td>
+								<td><?php echo $row['invoice']; ?></td>
+								<td><?php echo $row['pay']; ?></td>
+								<td class="bold" align="right"><?php echo '$ '.$row['total_amount'];?></td>
 								<td><?php echo $row['description'];?></td>
 								<td><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 								<td><?php echo $row['first_name'];?></td>
 							</tr>	
 							<?php }}?>
 							<tr style="border-left: 1px solid #fff; border-bottom: 1px solid #fff; border-right: 1px solid #fff;">
-								<td colspan="10" align="right"><?php echo $tr->translate("TOTAL_EXPENSE");?> <strong> $&nbsp;&nbsp;<?php echo number_format($total_expense,2);?></strong></td>
+								<td colspan="10" align="right"><?php echo $tr->translate("TOTAL");?> <strong> $&nbsp;&nbsp;<?php echo number_format($total_expense,2);?></strong></td>
 							</tr>	
 						</table>
 					</td>
@@ -145,3 +151,29 @@ table.tb-footer tr.style-head {
 		</table>
 	</div>		
 </div>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="receipt"){
+				url='<?php echo $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"receipt": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-money", accesskey: "c"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>

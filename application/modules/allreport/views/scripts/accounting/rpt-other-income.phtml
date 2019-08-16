@@ -38,10 +38,13 @@ table.tb-footer tr.style-head {
 		   	</div>
 		   	<div class="form-group">
 		   		<div class="col-md-3 col-sm-3 col-xs-12">
-		       		<input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->search['start_date'];?>" type="text">
+		   			<?php echo $frm->getElement("start_date");?>
 		       	</div>
 		       	<div class="col-md-3 col-sm-3 col-xs-12">
-		       		<input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->search['end_date'];?>" type="text">
+		       	<?php echo $frm->getElement("end_date");?>
+		       	</div>
+		       	<div class="col-md-3 col-sm-3 col-xs-12">
+		       	<?php echo $frm->getElement("sortby");?>
 		       	</div>
 		       	<div class="col-md-3 col-sm-3 col-xs-12">
 		       		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -77,8 +80,12 @@ table.tb-footer tr.style-head {
 			table.content-data tr.style-rowdata {
 				font-size:12px; 
 				height: 23px;
-			}								
+			}			
+			.bold {
+					font-weight: 600;				
+			}
 		</style>
+		
 		<div id="exportExcel">
 				<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 					<tr>
@@ -117,9 +124,11 @@ table.tb-footer tr.style-head {
 							<?php $i=0; 
 								  $total_income = 0;
 							foreach ($this->row AS $row) { $i++;
-								$total_income = $total_income+$row['total_amount'];
+								if ($row['status']==1){
+									$total_income = $total_income+$row['total_amount'];
+								}
 							?>
-								<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;">
+								<tr <?php if ($row['status']==0){?>style="background: #ffd9d9;"<?php }?> class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;">
 									<td align="center"><?php echo $i;?></td>
 									<td><?php echo $row['branch_name'];?></td>
 									<td><?php echo $row['cate_income'];?></td>
@@ -127,15 +136,16 @@ table.tb-footer tr.style-head {
 									<td align="center"><?php echo $row['invoice'];?></td>
 									<td align="center"><?php echo $row['payment_method'];?></td>	
 									<td><?php echo $row['cheqe_no'];?></td>
-									<td><?php echo "$ ".number_format($row['total_amount'],2);?></td>
+									<td class="bold" align="right"><?php echo "$ ".number_format($row['total_amount'],2);?></td>
 									<td align="center"><?php echo date('d-m-Y',strtotime($row['date']));?></td>
-									<td><?php echo $row['name'];?></td>
+									<td align="center"><?php echo $row['name'];?></td>
 								</tr>
 							<?php }?>
 							<tr>
 								<td colspan="6" style="border: 1px solid #fff;border-top: 1px solid #000;"></td>
-								<td>$ <?php echo number_format($total_income,2);?></td>
-								<td colspan="2" style="border: 1px solid #fff;border-top: 1px solid #000;"></td>
+								<td class="bold" colspan="4" align="right" style="border: 1px solid #fff;border-top: 1px solid #000;">
+								<?php echo $tr->translate('TOTAL')?>
+								$ <?php echo number_format($total_income,2);?></td>
 							</tr>	
 							</table>	
 						</td>

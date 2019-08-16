@@ -28,8 +28,13 @@ table.collape tbody td {
 	<div class="card-content collapse show">
 		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">	
-				 		
 				if(this.validate()) {
+					condition = checkValidateAddRow();
+					if(condition==false){
+						alert("<?php echo $tr->translate('PLEASE_SELECT_CATEGORY_EXPENSE');?> !!! ");
+						return false;
+					}
+					loadingBlock();
 					return true;
 				}else {
 					return false;
@@ -129,7 +134,7 @@ table.collape tbody td {
 	        <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-					<input type="button" onclick="submitData();" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+					<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
 						 iconClass="dijitIconSave"/>
 					<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
 						 iconClass="dijitIconNewTask"/>

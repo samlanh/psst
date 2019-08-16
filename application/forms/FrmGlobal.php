@@ -119,7 +119,14 @@ class Application_Form_FrmGlobal{
 							</tr>
 						</table>
 						<div class='schoo-add' style='text-align: center; font-size: 13px;font-family: Times New Roman , Khmer OS Battambang;'>
-							 ".$rs['br_address'].", E-mail: ".$rs['email'].", Website: ".$rs['website']."
+							 ".$rs['br_address'];
+							if (!empty($rs['email'])){
+								$str.=", E-mail: ".$rs['email'];
+							}
+							if (!empty($rs['website'])){
+								$str.=", Website: ".$rs['website'];
+							}
+							$str.="
 						</div>
 					</td>
 				</tr>
@@ -148,8 +155,10 @@ class Application_Form_FrmGlobal{
 									</td>
 									<td width='40%' align='left' valign='top'>
 										<ul style='font-size:12px; color:inherit; list-style-type: none; padding: 0; margin: 0; line-height: initial;'>
-											<li><span class='space'>&#9742;</span> ".$rs['branch_tel']."</li>
-											<li><span class='space' style='font-size:15px;' >&#9993;</span> ".$rs['email']."</li>";
+											<li><span class='space'>&#9742;</span> ".$rs['branch_tel']."</li>";
+											if (!empty($rs['email'])){
+												$str.="<li><span class='space' style='font-size:15px;' >&#9993;</span> ".$rs['email']."</li>";
+											}							
 											if (!empty($rs['website'])){
 												$str.="<li><span class='space'>&#127758;</span> ".$rs['website']."</li>";
 											}

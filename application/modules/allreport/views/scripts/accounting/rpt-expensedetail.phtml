@@ -12,7 +12,7 @@ table tr td strong{
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 		<div id="divPrint">
 			<?php for($print=0;$print<1;$print++){?>
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: ''Times New Roman','Khmer OS Battambang'' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Times New Roman','Khmer OS Battambang'; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				
 				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
@@ -31,7 +31,8 @@ table tr td strong{
 								</td>
 								<td width="30%">
 									<div style="font-size: 16px;font-weight:bold;text-align:center;">
-										N<sup>o</sup> : <?php echo $this->row['invoice'];?>
+										N<sup>o</sup> : <?php echo $this->row['invoice']; ?>
+										<small><?php if ($this->row['status']==0){ echo "(".$tr->translate("VOID").")";}?></small>
 									</div>
 								</td>
 							</tr>

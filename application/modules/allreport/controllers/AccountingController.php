@@ -390,6 +390,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'branch_id'	=>'',
 						'cate_income'	=>'',
 						'user'	=>'',
+						'sortby'=>'',
 						'start_date'=>date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
 				);

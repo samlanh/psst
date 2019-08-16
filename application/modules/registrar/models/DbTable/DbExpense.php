@@ -121,11 +121,10 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					total_amount,
 					description,
 					date,
-					(SELECT first_name FROM `rms_users` WHERE rms_users.id=ln_expense.user_id LIMIT 1) as user_name,
-					(SELECT $label FROM `rms_view` WHERE rms_view.type=1 and rms_view.key_code = ln_expense.status) AS status 
-				FROM 
-					ln_expense 
+					(SELECT first_name FROM `rms_users` WHERE rms_users.id=ln_expense.user_id LIMIT 1) as user_name
 			";
+		$sql.=$dbp->caseStatusShowImage("ln_expense.status");
+		$sql.=" FROM ln_expense ";
 		
 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";

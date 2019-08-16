@@ -116,7 +116,10 @@
 			table.content-data tr.style-rowdata {
 				font-size:12px; 
 				height: 23px;
-			}									
+			}	
+			.bold {
+					font-weight: 600;				
+			}								
 		</style>
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
 			<tr>
@@ -136,7 +139,6 @@
 			</tr>
 			<tr>			
 				 <td colspan="3" id="exportExcel">
-					<table class="content-data" width="100%"  align="center" style="white-space:nowrap;">
 						<style> td{padding:0 3px; }</style>
 						  <?php 
 							$grand_total =0;  
@@ -146,27 +148,27 @@
 							$other_income = 0;
 							$payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);
 						  ?>
+						   <table class="content-data"  width="100%"  align="center" >
 					  <?php if(!empty($this->row_detail)) foreach($this->row_detail as $key => $rs){ $i++;?>
+					 
 					  <?php 
 					  if($rs['items_id']!=$type){
 					  if($key>0){?>
-						</table>
-						<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
-							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-								<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;</td>
-								<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
+							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="right">
+								<td class="bold" colspan="18" >&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;$ <?php echo number_format($grand_total,2);?></td>
 							  </tr>
-						 </table><br /><br />
-						<table class="content-data"  width="100%"  align="center" >
+							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+								<td colspan="18">&nbsp;</td>
+							  </tr>
 						  <?php $i=1;
 							$grand_total=0;
 						  }
 						  ?>
-						  <thead>
 								<tr class="style-head" style="font-size:10px;" align="center">
 									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+									
+									<td>&nbsp;<?php echo $tr->translate('STUDENT');?>&nbsp;</td>
+									
 									<td><?php echo $tr->translate('PAID_DATE');?></td>
 									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
 									<td>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
@@ -174,24 +176,27 @@
 									<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
 									<td><?php echo $tr->translate('QTY');?></td>
 									<td><?php echo $tr->translate('PRICE');?></td>
-									<td><?php echo $tr->translate('Deduct/Extra');?></th>
+									<td><?php echo $tr->translate('Deduct/Extra');?></td>
 									<td><?php echo $tr->translate('Disc Type');?></td>
 									<td><?php echo $tr->translate('DISCOUND');?></td>
 									<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
 									<td><?php echo $tr->translate('PERIOD');?></td>
 									<td><?php echo $tr->translate('REMARK');?></td>
 									<td><?php echo $tr->translate('STATUS');?></td>
-									<th><?php echo $tr->translate('USER');?></td>
+									<td><?php echo $tr->translate('USER');?></td>
 							  </tr>
-						  </thead>
 					  <?php 
 					   }
 					   $type = $rs['items_id'];
 					   ?>
-					   <tr class="hover" style="font-size:11px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
-							<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
-							<td style="text-align:center;"><?php echo $rs['stu_code']; ?></td>
-							<td style="text-align:left"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></td>
+					   <tr class="hover" style=" <?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?> font-size:11px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
+							<td align="center"><?php echo $i;?></td>
+							<td style="text-align:left">
+							<?php 
+							echo $rs['stu_code'];
+							echo !empty($rs['stu_khname'])?"/".$rs['stu_khname']:"/".$rs['stu_enname']; 
+							?>
+							</td>
 							<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 							<td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
 							<td style="text-align:left"><?php echo $rs['category']; ?></td>
@@ -227,7 +232,7 @@
 								   }
 								?>
 							</td>
-							<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
+							<td align="right" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
 							<td><?php if($rs['is_onepayment']==0){
 									echo date('d/m/Y', strtotime($rs['start_date']));
 									echo "-".date('d/m/Y', strtotime($rs['validate']));
@@ -244,16 +249,13 @@
 						}
 					  ?>
 					  <?php } ?>
-					   </table>
-				</td>
-			</tr>
-			<tr>	
-				<td colspan="3">
-					<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
-						  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-							<td style="width:146px;  ">&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;</td>
-							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
-						  </tr>
+					  <tr style="font-size:13px; color:#000; height: 18px;"​ align="right">
+						<td class="bold" colspan="18" >&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;$ <?php echo number_format($grand_total,2);?></td>
+					  </tr>
+					  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+						<td colspan="18">&nbsp;</td>
+					  </tr>
+							  
 					 </table>
 				</td>
 			</tr>
@@ -278,15 +280,17 @@
 					<?php $i=0;
 					$other_income = 0;
 					foreach ($this->rsincome AS $row) { $i++;
-						$other_income = $other_income + $row['total_amount'];
+						if ($row['status']==1){
+							$other_income = $other_income + $row['total_amount'];
+						}
 					?>
-						<tr class="style-rowdata hover" style="font-size:11px; height: 20px;border-bottom: 1px solid #000;" align="center" >
+						<tr class="style-rowdata hover" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> font-size:11px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 							<td><?php echo $i;?></td>
 							<td><?php echo $row['income_category'];?></td>	
-							<td><?php echo $row['title'];?></td>
+							<td align="left"><?php echo $row['title'];?></td>
 							<td><?php echo $row['invoice'];?></td>
 							<td><?php echo date('d-m-Y',strtotime($row['date']));?></td>
-							<td><?php echo number_format($row['total_amount'],2);?></td>
+							<td align="right"><?php echo number_format($row['total_amount'],2);?></td>
 							<td><?php echo $row['name'];?></td>
 						</tr>
 					<?php }?>	

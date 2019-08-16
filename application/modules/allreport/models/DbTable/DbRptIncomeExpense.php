@@ -51,7 +51,7 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 				 rms_users AS u 
 			WHERE b.br_id=e.branch_id 
 	   			AND e.user_id=u.id
-	   			AND e.status=1 ";
+	   			 ";
 	   
 	   $where="";
 	   $from_date =(empty($search['start_date']))? '1': " e.date  >= '".$search['start_date']." 00:00:00'";

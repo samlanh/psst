@@ -604,13 +604,24 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$is_pass->setMultiOptions($opt);
 		$is_pass->setValue($request->getParam("is_pass"));
 		
+		
+		$_sortby=  new Zend_Dojo_Form_Element_FilteringSelect('sortby');
+		$_sortby->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_sortby_opt = array(
+				0=>$this->tr->translate("NORMAL"),
+				1=>$this->tr->translate("SORT_BY_DATE"),
+				2=>$this->tr->translate("SORT_BY_RECEIPT"));
+		$_sortby->setMultiOptions($_sortby_opt);
+		$_sortby->setValue($request->getParam("sortby"));
+		
 		$this->addElements(array($is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
 				
-				$allacademicyear
+				$allacademicyear,
+				$_sortby
 				));
 	
 		return $this;

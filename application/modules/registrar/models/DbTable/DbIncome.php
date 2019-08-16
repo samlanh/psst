@@ -75,11 +75,11 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				total_amount,
 				cheqe_no,
 				description,
-				date,
-				(SELECT $label FROM `rms_view` WHERE rms_view.type=1 and rms_view.key_code = ln_income.status) AS status 
-			FROM 
-				ln_income 
+				date
 		";
+		
+		$sql.=$dbp->caseStatusShowImage("ln_income.status");
+		$sql.=" FROM ln_income ";
 		
 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";

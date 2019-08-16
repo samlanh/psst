@@ -288,13 +288,27 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAmountStudent($year=null){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
-    	if (!empty($year)){
-    		$where.=" AND DATE_FORMAT(create_date, '%Y') <='$year'";
-    	}
+    	$sql="SELECT COUNT(sg.`stu_id`) 
+					FROM
+						rms_student AS s,
+					   `rms_group` AS `g`,
+					   `rms_group_detail_student` AS sg 
+					WHERE 
+						s.status=1 
+						AND s.is_subspend=0
+						AND s.customer_type=1 
+						AND g.group_code != ''
+						AND s.stu_id =sg.`stu_id` 
+						AND g.id = sg.group_id 
+						AND g.is_pass=2  ";
+    	$where='';
+//     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
+//     	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
+//     	if (!empty($year)){
+//     		$where.=" AND DATE_FORMAT(create_date, '%Y') <='$year'";
+//     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	return $db->fetchOne($sql.$where);
     }
     public function getAmountNewStudent(){//count to dashboard

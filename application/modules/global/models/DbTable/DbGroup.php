@@ -329,9 +329,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);
 	}
-	function getAllYears(){
+	function getAllYears($is_completed=1){
 		$db = new Application_Model_DbTable_DbGlobal();
-		return $db->getAllYear();
+		return $db->getAllYear(1,$is_completed);
 	}
 	
 	

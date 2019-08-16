@@ -47,10 +47,28 @@
     	return $db->fetchAll($sql.$where.$orderby);
     }
     function countStudentDrop($droptype=null){
+//     	SELECT COUNT(sg.`stu_id`)
+//     	FROM
+//     	rms_student AS s,
+//     	`rms_group` AS `g`,
+//     	`rms_group_detail_student` AS sg
+//     	WHERE
+//     	s.status=1
+//     	AND s.is_subspend=0
+//     	AND s.customer_type=1
+//     	AND g.group_code != ''
+//     	AND s.stu_id =sg.`stu_id`
+//     	AND g.id = sg.group_id
+//     	AND sg.stop_type!=0
     	$db = $this->getAdapter();
-    	$sql="SELECT COUNT(sd.id) FROM `rms_student_drop` AS sd
-			WHERE sd.status =1
-			";
+    	$sql="SELECT COUNT(sd.stu_id) 
+    				FROM `rms_student_drop` AS sd,
+    				`rms_group` AS `g`
+				WHERE sd.status =1
+    				AND g.id =sd.group
+    				AND g.is_pass=2
+    				AND g.group_code != ''
+    				 ";
     	if (!empty($droptype)){
     		$sql.=" AND sd.type=$droptype";
     	}

@@ -126,7 +126,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		
 		$_academic->setValue($request->getParam("academic_year"));
 		$db = new Global_Model_DbTable_DbGroup();
-		$rows= $db->getAllYears();
+		$rows= $db->getAllYears(1);
 		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];

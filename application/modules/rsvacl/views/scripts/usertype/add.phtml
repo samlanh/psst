@@ -22,7 +22,8 @@
     	</div>
 		<form action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">										
-				if(this.validate()) {								
+				if(this.validate()) {			
+					loadingBlock();					
 					return true;
 				}
 				return false;

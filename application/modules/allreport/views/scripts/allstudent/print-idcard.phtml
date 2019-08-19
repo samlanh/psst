@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
-	$type=2;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
+	$type=CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
 ?>	
 <script type="text/javascript">
 function getKHMonthByNumber(m){

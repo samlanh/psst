@@ -65,9 +65,8 @@ input.btn_borwse_image {
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_REGISTER');?></h4>
 	    			</div>
 	    			<div class="col-sm-4 pd-0 text-right">
-	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv('divPrint')"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("RPT_STUDNET_CARD");?></a>
-	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv('divPrintFront')"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("STUDNET_CARD_FRONT");?></a>
-	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv('divPrintPickup')"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("PRINT_PICKUP_CARD");?></a>
+	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="printIDCard();"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("RPT_STUDNET_CARD");?></a>
+	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="printPickupCard();"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("PRINT_PICKUP_CARD");?></a>
 	    			</div>
 	    			<div class="clearfix"></div>
 	    		</div>
@@ -2623,8 +2622,33 @@ function initialize() {
     	}
     	);
     }
-function getStudentNo(){
-}
+	function getStudentNo(){
+		
+	}
+	function printIDCard(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-idcard'));
+    	?>
+		id_selected = "<?php echo $this->rs['stu_id'];?>";
+		//window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
+		//window.open('<?php echo $url_copy;?>'+'/id/'+id_selected,'_blank'); // _blank <- This is what makes it open in a new window.
+		window.open('<?php echo $url_copy;?>','_blank'); // _blank <- This is what makes it open in a new window.
+		
+	}
+	function printPickupCard(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-pickupcard'));
+    	?>
+		id_selected = "<?php echo $this->rs['stu_id'];?>";
+		//window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
+		//window.open('<?php echo $url_copy;?>'+'/id/'+id_selected,'_blank'); // _blank <- This is what makes it open in a new window.
+		window.open('<?php echo $url_copy;?>','_blank'); // _blank <- This is what makes it open in a new window.
+		
+	}
 </script>
 <div class="overlay">
 	<div class="overlay-load">

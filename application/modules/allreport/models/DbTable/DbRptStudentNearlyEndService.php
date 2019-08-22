@@ -50,9 +50,14 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
      	
      	$where .= " AND ".$to_date;
+     	if($search['item']>0){
+     		$where .=" and item.items_id=".$search['item'];
+     	}
+     	
      	if(!empty($search['service'])){
      		$where .=" and item.id=".$search['service'];
      	}
+     	
      	if(($search['service_type']>0)){
      		$where.= " AND item.items_type = ".$search['service_type'];
      	}
@@ -61,6 +66,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	}
      	if(($search['group']>0)){
      		$where.= " AND s.group_id = ".$search['group'];
+     	}
+     	if(($search['degree']>0)){
+     		$where.= " AND sp.degree = ".$search['degree'];
      	}
     	if(!empty($search['adv_search'])){
     		$s_where = array();

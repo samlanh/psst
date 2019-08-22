@@ -1790,7 +1790,7 @@ function getAllgroupStudyNotPass($action=null){
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
   	}
-  	$sql.=" ORDER BY i.items_id DESC, i.ordering DESC ";
+  	$sql.=" GROUP BY i.id ORDER BY i.items_id DESC, i.ordering DESC ";
   	//echo $sql;
   	return $db->fetchAll($sql);
   }

@@ -3,7 +3,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
-<title><?php echo $tr->translate('RPT_INCOME_STATEMENT');?></title>
+<title><?php echo $tr->translate('RPT_INCOMESTATEMENT');?></title>
 <script>
 	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.DateTextBox");
@@ -12,7 +12,7 @@
 	<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_INCOME_STATEMENT');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_INCOMESTATEMENT');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -60,7 +60,7 @@
 				</td>
 				<td width="70%" align="center">
 					<div style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMESTATEMENT')?></div>
-					<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-m-Y",strtotime($this->search["start_date"]))?>  <?php } echo date("d-m-Y",strtotime($this->search["end_date"]));?></strong>
 				</td>
 				<td width="15%" align="center"></td>
 			</tr>
@@ -84,93 +84,104 @@
 							$total_income=0;
 							$total_penalty=0;
 							$credit_memo= 0;
+							$total_otherincome = 0;
 							$no=0;
+							$string='...................................................................................';
 						 ?>
 						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-							<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
+							<tr class="hover" align="right" >
 								<td style=""></td>
-								<td style="text-align:left;"><?php echo $rs['category_name'];?></td>
-								<td style="white-space: nowrap;">.............................................</td>
+								<td style="text-align:right;font-size:12px;"><?php echo $rs['category_name'];?></td>
+								<td style="white-space: nowrap;width:200px;"><?php echo $string;?></td>
 								<td style=""><?php echo number_format($rs['total_paidamount'],2);?></td>
 							</tr>
 								<?php 
-								 	$total_income = $total_income + $rs['total_paidamount']+$rs['total_penalty']-$rs['credit_memo'];
-								 	$total_penalty = $total_penalty + $rs['total_penalty'];
-								 	$credit_memo = $credit_memo + $rs['credit_memo'];
+								 	$grand_total = $grand_total + $rs['total_paidamount'];
 						 	 	?>
-						  <?php }}if($total_penalty>0){ ?>
-					  		<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
+						  <?php }}
+						  if(!empty($this->row_penalty)){
+						  	foreach ($this->row_penalty as $payment){
+						  		$credit_memo = $credit_memo + $payment['credit_memo'];
+						  		$total_penalty = $total_penalty + $payment['penalty'];
+						  	}
+						  }
+						  
+						  if($total_penalty>0){ ?>
+					  		<tr class="hover" align="right" >
 								<td style=""></td>
-								<td style="text-align: left;"><?php echo $tr->translate('FINE');?></td>
-								<td style="white-space: nowrap;width:200px;">.............................................</td>
+								<td style="text-align:right;font-size:12px;"><?php echo $tr->translate('FINE');?></td>
+								<td style="white-space: nowrap;width:200px;"><?php echo $string;?></td>
 								<td style=""><?php echo number_format($total_penalty,2);?></td>
 							</tr>
-							<?php }if($credit_memo>0){?>
-						  	<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
+							<?php }
+							if($credit_memo>0){?>
+						  	<tr class="hover"  align="right" >
 								<td style=""></td>
-								<td style="text-align: left;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
-								<td style="white-space: nowrap;width:200px;">.............................................</td>
+								<td style="text-align:right;font-size:12px;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
+								<td style="white-space: nowrap;width:200px;"><?php echo $string;?></td>
 								<td style=""><?php echo number_format($credit_memo,2);?></td>
 							</tr>
 							<?php }?>
-							
+							<tr class="hover" style="font-size:13px;" align="right" >
+								<td style=""></td>
+								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
+								<td style="white-space: nowrap;width:200px;"></td>
+								<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;"><?php 
+								$grand_total = $grand_total+$total_penalty-$credit_memo;
+								echo number_format($grand_total,2);?></td>
+							</tr>
+							<tr style="font-size:13px; height: 20px;line-height:20px;font-weight:bold;" >
+								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('OTHER_INCOME')?></td>
+								<td style="background-color: #ccd9ff;"></td>
+								<td style="background-color: #ccd9ff;"></td>
+							</tr>
 							<?php
 								$parent="";
-								if(!empty($this->rsincome)) foreach ($this->rsincome as $income_cate){
-									$total_income = $total_income +$income_cate['total_income'];
+								if(!empty($this->rsincome)){ foreach ($this->rsincome as $income_cate){
+									$total_otherincome = $total_otherincome +$income_cate['total_income'];
 							?>
-								<?php if ( $income_cate['parent']!=0 AND $parent != $income_cate['parent']){?>
-									<tr height="21px">
-										<td>&nbsp;</td>
-										<td align="left">&nbsp;<strong><?php echo $income_cate['parent_name'];?></strong>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<?php $parent = $income_cate['parent'];?>
-									</tr>
-								<?php }?>
-								<?php if ( $income_cate['parent']==0){?>
-									<tr height="21px">
-										<td>&nbsp;</td>
-										<td align="left">&nbsp;<strong><?php echo $income_cate['income_category'];?></strong>&nbsp;</td>
-										<td style="white-space: nowrap;width:200px;">.............................................</td>
-										<td align="left">&nbsp;<?php echo number_format($income_cate['total_income'],2);?>&nbsp;</td>
-									</tr>
-								<?php }else{?>
-									<tr height="21px">
-										<td >&nbsp;</td>
-										<td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $income_cate['income_category'];?>&nbsp;</td>
-										<td style="white-space: nowrap;width:200px;">.............................................</td>
-										<td align="left">&nbsp;<?php echo number_format($income_cate['total_income'],2);?>&nbsp;</td>
-									</tr>
-								<?php }?>
-								<?php }?>	
-							
-							
-							<tr>
-								<td colspan="3"></td>
-								<td><strong style="border-bottom: 2px solid #000;font-size:13px;">$&nbsp;<?php echo number_format($total_income,2);?></strong></td>
+							<?php if($income_cate['parent']!=0 AND $parent != $income_cate['parent']){?>
+								<tr height="21px">
+									<td>&nbsp;</td>
+									<td style="text-align:right;font-size:12px;">&nbsp;<?php echo $income_cate['parent_name'];?>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<?php $parent = $income_cate['parent'];?>
+								</tr>
+							<?php }?>
+							<?php if ( $income_cate['parent']==0){?>
+								<tr height="21px">
+									<td>&nbsp;</td>
+									<td style="text-align:right;font-size:12px;">&nbsp;<?php echo $income_cate['income_category'];?>&nbsp;</td>
+									<td style="white-space: nowrap;width:200px;"><?php echo $string;?></td>
+									<td align="left">&nbsp;<?php echo number_format($income_cate['total_income'],2);?>&nbsp;</td>
+								</tr>
+							<?php }else{?>
+								<tr height="21px">
+									<td >&nbsp;</td>
+									<td style="text-align:right;font-size:12px;"><?php echo $income_cate['income_category'];?>&nbsp;</td>
+									<td style="white-space: nowrap;width:200px;"><?php echo $string;?></td>
+									<td align="left">&nbsp;<?php echo number_format($income_cate['total_income'],2);?>&nbsp;</td>
+								</tr>
+							<?php }?>
+							<?php }?>	
+							 <tr class="hover" style="font-size:13px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
+								<td style="white-space: nowrap;width:200px;"></td>
+								<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;"><?php echo number_format($total_otherincome,2);?></td>
 							</tr>
-					</table>
-				</td>	
-			</tr>	
-			<tr>
-				<td colspan="3">
-					<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
-						<style>
-							table tr th{background-color: #ccc;}	
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
-						</style>
-						<tr>
-							<td colspan="3" id="exportExcel">
-								<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';font-size:12px;margin:0 auto;width:100%; " >
-									<thead>
-										<tr style="font-size:13px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
-											<td width="20%" style="text-align: right;" ><?php echo $tr->translate('ALL_EXPENSE')?></td>
-											<td width="20%" style=""></td>
-											<td width="20%" style=""></td>
-											<td width="40%" style=""><?php echo $tr->translate('')?></td>
-										</tr>
-									</thead>
+							<?php }?>
+							<tr>
+								<td colspan="3" style="text-align: right;font-weight:bold;font-size:14px;"><?php echo $tr->translate('TOTLE_AMOUNT');?></td>
+								<td><strong style="border-bottom: 5px solid #000;font-size:14px;">$&nbsp;<?php echo number_format($grand_total+$total_otherincome,2);?></strong></td>
+							</tr>
+							<tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height:30px;font-weight: bold;" align="center" >
+								<td width="20%" style="text-align: right;" ><?php echo $tr->translate('ALL_EXPENSE')?></td>
+								<td width="20%" style=""></td>
+								<td width="20%" style=""></td>
+								<td width="40%" style=""><?php echo $tr->translate('')?></td>
+							</tr>
 								<?php
 									$parent="";
 									$total_expense = 0;
@@ -180,7 +191,7 @@
 									<?php if ( $expense_cate['parent_id']!=0 AND $parent != $expense_cate['parent_id']){?>
 										<tr height="21px">
 											<td>&nbsp;</td>
-											<td align="left">&nbsp;<strong><?php echo $expense_cate['parent_name'];?></strong>&nbsp;</td>
+											<td style="text-align: right;font-size:12px;">&nbsp;<?php echo $expense_cate['parent_name'];?>&nbsp;</td>
 											<td>&nbsp;</td>
 											<td>&nbsp;</td>
 											<?php $parent = $expense_cate['parent_id'];?>
@@ -189,64 +200,39 @@
 									<?php if ( $expense_cate['parent_id']==0){?>
 										<tr height="21px">
 											<td>&nbsp;</td>
-											<td align="left">&nbsp;<strong><?php echo $expense_cate['account_name'];?></strong>&nbsp;</td>
-											<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+											<td style="text-align: right;font-size:12px;">&nbsp;<?php echo $expense_cate['account_name'];?>&nbsp;</td>
+											<td style="white-space: nowrap;width:200px;">.<?php echo $string;?></td>
 											<td align="left">&nbsp;<?php echo number_format($expense_cate['total_expense'],2);?>&nbsp;</td>
 										</tr>
 									<?php }else{?>
 										<tr height="21px">
 											<td >&nbsp;</td>
-											<td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $expense_cate['account_name'];?>&nbsp;</td>
-											<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+											<td style="text-align: right;font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $expense_cate['account_name'];?>&nbsp;</td>
+											<td style="white-space: nowrap;width:200px;"><?php echo $string;?></td>
 											<td align="left">&nbsp;<?php echo number_format($expense_cate['total_expense'],2);?>&nbsp;</td>
 										</tr>
 									<?php }?>
 									<?php }?>
-									<tr>
-										<td colspan="3"></td>
-										<td align="left" >
-											<strong style="border-bottom: 2px solid #000;font-size:13px;color:#000">$&nbsp;<?php echo number_format($total_expense,2);?></strong>
-										</td>
-									</tr>	
-								</table>	
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>	
-			<tr>
-				<td colspan="3">
-					&nbsp;
-				</td>	
-			</tr>
-			<tr>
-				<td colspan="3">
-					<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
-						<style>
-							table tr th{background-color: #ccc;}	
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
-						</style>
-						<tr>
-							<td id="exportExcel">
-								<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
-									<?php 
-										$grand_total = $total_income - $total_expense;
+								<tr>
+									<td colspan="3" style="text-align: right;font-weight:bold;font-size:13px;"><?php echo $tr->translate('TOTLE_AMOUNT');?></td>
+									<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;font-size:13px;" >
+										<strong >$&nbsp;<?php echo number_format($total_expense,2);?></strong>
+									</td>
+								</tr>
+								<?php 
+										$grand_total = ($grand_total+$total_otherincome) - $total_expense;
 									?>
-									<tr>
-										<td width="20%" align="right"><strong><?php echo $tr->translate('NET_INCOME_OR_NET_LOST')?></strong></td>
-										<td width="20%" style="text-align: right;font-size:13px;font-weight:bold;"></td>
-										<td width="20%" style="white-space: nowrap;"></td>
-										<td width="40%" align="left" >
-											<strong style="border-bottom: 5px double #000;font-size:13px;<?php if($grand_total<0){echo 'color:red;';}?>">$&nbsp;<?php echo number_format($grand_total,2);?></strong>
-										</td>
-									</tr>	
-								</table>	
-							</td>
-						</tr>
+								<tr>
+									<td style="white-space: nowrap;text-align: right;font-size:13px;"><strong><?php echo $tr->translate('NET_INCOME_OR_NET_LOST')?></strong></td>
+									<td></td>
+									<td></td>
+									<td align="left" >
+										<strong style="border-bottom:5px solid red;font-wight:bold;font-size:15px;<?php if($grand_total<0){echo 'color:red;';}?>">$&nbsp;<?php echo number_format($grand_total,2);?></strong>
+									</td>
+								</tr>
 					</table>
-				</td>
-			</tr>
-			
+				</td>	
+			</tr>	
 			<tr>
 				<td colspan="3">
 					<br />

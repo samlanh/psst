@@ -96,11 +96,17 @@
 								<td style=""><?php echo number_format($rs['total_paidamount'],2);?></td>
 							</tr>
 								<?php 
-								 	$grand_total = $grand_total + $rs['total_paidamount']+$rs['total_penalty']-$rs['credit_memo'];
-								 	$total_penalty = $total_penalty + $rs['total_penalty'];
-								 	$credit_memo = $credit_memo + $rs['credit_memo'];
+								 	$grand_total = $grand_total + $rs['total_paidamount'];
 						 	 	?>
-						  <?php }}if($total_penalty>0){ ?>
+						  <?php }}
+						  if(!empty($this->row_penalty)){
+						  	foreach ($this->row_penalty as $payment){
+						  		$credit_memo = $credit_memo + $payment['credit_memo'];
+						  		$total_penalty = $total_penalty + $payment['penalty'];
+						  	}
+						  }
+						  
+						  if($total_penalty!=0){ ?>
 					  		<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;"><?php echo $tr->translate('FINE');?></td>
@@ -119,7 +125,7 @@
 								<td style=""></td>
 								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
 								<td style="white-space: nowrap;width:200px;"></td>
-								<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;"><?php echo number_format($grand_total,2);?></td>
+								<td style="padding-left:20px;font-weight: bold;border-bottom: 6px double #000;"><?php echo number_format($grand_total+$total_penalty-$credit_memo,2);?></td>
 							</tr>
 							<tr style="font-size:14px; height: 20px;line-height: 30px;font-weight:bold;" align="center" >
 								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('OTHER_INCOME')?></td>
@@ -147,7 +153,7 @@
 							<?php }?>
 							<tr>
 								<td colspan="3" style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTLE_AMOUNT');?></td>
-								<td><strong style="border-bottom: 5px solid #000;font-size:17px;">$&nbsp;<?php echo number_format($grand_total+$total_otherincome,2);?></strong></td>
+								<td><strong style="border-bottom: 5px solid #000;font-size:17px;">$&nbsp;<?php echo number_format(($grand_total+$total_penalty-$credit_memo)+$total_otherincome,2);?></strong></td>
 							</tr>
 					</table>
 				</td>	

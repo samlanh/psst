@@ -43,36 +43,29 @@
 					display: table-header-group;
 					page-break-inside:avoid; page-break-after:auto;
 				  }
+					table tr th{background-color: #ccc;}	
+					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
 		</style>
 		<div id="exportExcel">
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
+				<tr class="line">
+					<td colspan="3"></td>
 				</tr>
 				<tr>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 					<td width="70%" align="center">
-						<strong style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
-						<strong style="color:#000; font-size: 13px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+						<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'khmer os muol light';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
+						<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'khmer os muol light';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 					</td>
 					<td width="15%" align="center">
 					</td>
 				</tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<style>
-					table tr th{background-color: #ccc;}	
-					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
-				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%;white-space:nowrap; " >
+						<table cellpadding="0"​ cellspacing="0" border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%;white-space:nowrap; " >
 							<thead>
 								<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 									<td width="30%"></td>
@@ -81,19 +74,6 @@
 									<td width="35%" align="left" style=""><?php echo $tr->translate('TOTAL_EXPENSE')?></td>
 								</tr>
 							</thead>
-						<?php /* $i=0;
-							$total_expense = 0;
-							if(!empty($this->row)){foreach ($this->row AS $row) { $i++;?>
-								<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
-									<td style=""></td>
-									<td style="text-align: right;"><?php echo $row['account_name'];?></td>
-									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
-									<td align="left" style="">&nbsp;&nbsp;<?php echo number_format($row['total_expense'],2);?></td>
-								</tr>
-							<?php $total_expense = $total_expense + $row['total_expense'];?>
-						<?php }}*/?>
-							
-							
 							<?php
 								$parent="";
 								$total_expense = 0;
@@ -101,23 +81,23 @@
 									$total_expense = $total_expense +$expense_cate['total_expense'];
 							?>
 	             			<?php if ( $expense_cate['parent_id']!=0 AND $parent != $expense_cate['parent_id']){?>
-	             				<tr height="21px">
+	             				<tr style="line-height:20px;font-size: 12px;">
 		             				<td>&nbsp;</td>
-		             				<td align="left">&nbsp;<strong><?php echo $expense_cate['parent_name'];?></strong>&nbsp;</td>
+		             				<td align="left">&nbsp;<?php echo $expense_cate['parent_name'];?>&nbsp;</td>
 		             				<td>&nbsp;</td>
 		             				<td>&nbsp;</td>
 		             				<?php $parent = $expense_cate['parent_id'];?>
 		             			</tr>
 		             		<?php }?>
 		             		<?php if ( $expense_cate['parent_id']==0){?>
-		             			<tr height="21px">
+		             			<tr style="line-height:20px;font-size: 12px;">
 		             				<td>&nbsp;</td>
-		             				<td align="left">&nbsp;<strong><?php echo $expense_cate['account_name'];?></strong>&nbsp;</td>
+		             				<td align="left">&nbsp;<?php echo $expense_cate['account_name'];?>&nbsp;</td>
 									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
 		             				<td align="left">&nbsp;<?php echo number_format($expense_cate['total_expense'],2);?>&nbsp;</td>
 		             			</tr>
 		             		<?php }else{?>
-		             			<tr height="21px">
+		             			<tr style="line-height:20px;font-size: 12px;">
 		             				<td >&nbsp;</td>
 		             				<td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $expense_cate['account_name'];?>&nbsp;</td>
 									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
@@ -125,39 +105,32 @@
 		             			</tr>
 	             			<?php }?>
 	             			<?php }?>
-						
 							<tr>
 								<td colspan="3"></td>
-								<td align="left" >
+								<td align="left" valign="top">
 									<strong style="border-bottom: 5px double #000;font-size:17px">$&nbsp;<?php echo number_format($total_expense,2);?></strong>
+								<br />
+								<br />
 								</td>
 							</tr>	
-						</table>	
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<br />
-						<br />
-						<table width="100%" style="font-size:12px;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
-							<tr style="text-align: center;">
-								<td width="30%">បានឃើញនិង ឯកភាព</td>
-								<td width="30%">បានពិនិត្យ</td>
-								<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
-							</tr>
-							<tr style="text-align: center;">
-								<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
-								<td width="30%">ប្រធានគណនេយ្យ</td>
-								<td width="30%">បេឡាករ</td>
+							<tr>
+								<td colspan="4">
+									<table width="100%" style="font-size:12px;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+										<tr style="text-align: center;">
+											<td width="30%">បានឃើញនិង ឯកភាព</td>
+											<td width="30%">បានពិនិត្យ</td>
+											<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
+											<td width="30%">ប្រធានគណនេយ្យ</td>
+											<td width="30%">បេឡាករ</td>
+										</tr>
+									</table>
+								</td>
 							</tr>
 						</table>
-					</td>	
+					</td>
 				</tr>
 			</table>
 		</div>

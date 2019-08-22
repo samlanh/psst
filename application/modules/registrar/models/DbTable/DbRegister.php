@@ -1115,7 +1115,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getServiceFee($year,$item_id,$termid,$student_id,$branch_id){
     	$db=$this->getAdapter();
-    	
     	$sql="SELECT items_type,is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
     	$rs_pro=$db->fetchRow($sql);
     	$item_type = $rs_pro['items_type'];
@@ -1359,7 +1358,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  sp.receipt_number,
 				  DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS create_date ,
 				  sp.is_void,
-				  $grade as item_name,
+				  $grade AS item_name,
 				  (SELECT $degree FROM rms_items WHERE item.items_type LIMIT 1) AS category,
 				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_name,
 				  (SELECT $label FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
@@ -1373,7 +1372,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					item.id=spd.itemdetail_id
     				AND s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND sp.student_id = $studentid ORDER BY create_date DESC,sp.id DESC, item.id ASC ";
+    				AND sp.student_id = $studentid ORDER BY sp.create_date DESC ";
 			return $db->fetchAll($sql);
 	}
 	

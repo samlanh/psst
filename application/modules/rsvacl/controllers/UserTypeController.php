@@ -2,12 +2,9 @@
 
 class Rsvacl_UsertypeController extends Zend_Controller_Action
 {
-	
 	const REDIRECT_URL = '/rsvacl/usertype';
-	
     public function init()
     {
-        /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
@@ -40,17 +37,6 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     		$result = Application_Model_DbTable_DbGlobal::getResultWarning();
     	}
     }
-//     public function viewUserTypeAction()
-//     {   
-//     	/* Initialize action controller here */
-//     	if($this->getRequest()->getParam('id')){
-//     		$db = new RsvAcl_Model_DbTable_DbUserType();
-//     		$user_type_id = $this->getRequest()->getParam('id');
-//     		$rs=$db->getUserType($user_type_id);
-//     		$this->view->rs=$rs;
-//     	}  	 
-    	
-//     }
 	public function addAction()
 		{
 			if($this->getRequest()->isPost())
@@ -70,10 +56,7 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
 			$options=array(''=>'Please select');
 			foreach($rs as $read) $options[$read['user_type_id']]=$read['user_type'];
 			$this->view->usertype_list= $options;
-				
-			
 	}
-	
     public function editAction()
     {	
     	if($this->getRequest()->getParam('id')){
@@ -86,7 +69,6 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     		$options=array(''=>'Please select');
     		foreach($allusertype as $read) $options[$read['user_type_id']]=$read['user_type'];
     		$this->view->usertype_list= $options;
-    	
     	}
     	else{
     		Application_Form_FrmMessage::message('User type had not existed');
@@ -97,12 +79,11 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
 			$post=$this->getRequest()->getPost();
 			if($rs['user_type']==$post['user_type']){
 					$db->updateUserType($post,$rs['user_type_id']);
-					Application_Form_FrmMessage::Sucessfull("UPDATE_SUCESS", '/rsvacl/usertype/index');																																		
-				
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/rsvacl/usertype/index');																																		
 			}else{
 				if(!$db->isUserTypeExist($post['user_type'])){
 					$db->updateUserType($post,$rs['user_type_id']);
-					 Application_Form_FrmMessage::Sucessfull("UPDATE_SUCESS", '/rsvacl/usertype/index');					
+					 Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/rsvacl/usertype/index');					
 				}else {
 					Application_Form_FrmMessage::message('User had existed already');
 				}

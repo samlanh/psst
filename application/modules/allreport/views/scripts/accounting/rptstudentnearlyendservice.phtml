@@ -28,15 +28,27 @@
        			<input id="group" />
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<?php echo $frm->getElement("service_type");?>
+       			<?php echo $frm->getElement("degree");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<?php echo $frm->getElement("service");?>
+       			<input type="text" id="grade_all" />
        		</div>
        	</div>
        	<div class="form-group">
+       		
        		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<?php echo $frm->getElement("grade_all");?>
+       			<?php echo $frm->getElement("service_type");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<select required="false" type="text" name="item" id="item" placeHolder="<?php echo $tr->translate('SELECT_CATEGORY');?>" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getgradebyDegree();" >
+					<option value="-1"><?php echo $tr->translate('SELECT_CATEGORY');?></option>
+					<?php if(!empty($this->rs_type)){foreach ($this->rs_type as $rs){?>
+					<option value="<?php echo $rs['id']?>" <?php if($rs['id']== $this->search['item']){echo "selected";}?>><?php echo $rs['name']?></option>
+					<?php }}?>
+                </select>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<input id="service" name="service" />
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("end_date");?>
@@ -82,22 +94,20 @@
 					<div id="exportExcel">
 						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-								<tr style="font-weight:bold;font-size:13px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
+								<tr style="font-weight:bold;font-size:12px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
 									<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
 									<td><?php echo $tr->translate("STUDENT_ID"); ?></td>
 									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STUDY_INFO");?>&nbsp;</td>
 									<td><?php echo $tr->translate("SERVICE_TYPE"); ?></td>
 									<td><?php echo $tr->translate("SERVICE_NAME"); ?></td>
 								    <td><?php echo $tr->translate("PAID_DATE"); ?></td>
 									<td><?php echo $tr->translate("START_DATE"); ?></td>
 									<td><?php echo $tr->translate("VALIDATE"); ?></td>
-									<td><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?></td>
+									<td><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
 								</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
@@ -106,21 +116,19 @@
 							$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
 							$day=(int)($total_day/(60*60*24));
 						?>
-							<tr class="hover" style="font-size:12px; height: 22px;border: 1px solid #000;" align="center" >
+							<tr class="hover" style="font-size:11px; height: 22px;border: 1px solid #000;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $i;?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name']." ".$row['last_name'];?></td>	
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['tel'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['group_name'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['category_name'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php  echo $row['service_name'];?></td>
-								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
-								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>
-								<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-M-Y",strtotime($row['end']));?>&nbsp;</td>
+								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['tel'];?></td>
+								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['group_name'].'/'.$row['grade'].'/'.$row['session'];?></td>
+								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['category_name'];?></td>
+								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php  echo $row['service_name'];?></td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['create_date']));?>&nbsp;</td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['start']));?>&nbsp;</td>
+								<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-m-Y",strtotime($row['end']));?>&nbsp;</td>
 								<?php 
 								$daylate =$day;
 								if($day>=0){
@@ -128,7 +136,7 @@
 								}else{
 									$daylate ="Late".abs($day);
 								}?>
-								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo $daylate;?> (Days)</td>
+								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo $daylate;?></td>
  							</tr>
 							<?php }}?>	 
 						</table>
@@ -148,6 +156,8 @@
 dojo.require("dojo.data.ItemFileWriteStore"); 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var service_store = getDataStorefromJSON('id','name');
+
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: academic_store,
@@ -175,6 +185,20 @@ dojo.ready(function(){
 	    onChange: function() {  
 	    }
 	}, "group");
+
+	new dijit.form.FilteringSelect({
+		store: service_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "service",
+		name: "service",   
+		required:false,        
+		class: 'fullside',
+		placeHolder:'<?php echo $tr->translate('SERVICE');?>',
+		onChange: function() {  
+		}
+	}, "service");
+	
 	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
@@ -183,6 +207,7 @@ dojo.ready(function(){
     });
 	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
+	 getgradebyDegree();
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
@@ -237,6 +262,69 @@ function getAllGroupByBranch(){
 		},
 		error: function(err) {
 		}
+	});
+}
+</script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "grade_all",
+			name: "grade_all",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			onChange: function() {  
+			}
+		}, "grade_all");
+		getallGrade();
+	});
+	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id==''){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('grade_all').set('store',grade_store);   
+				dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+var oldItems = '<?php echo $this->search['item']?>';
+var url_degree = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+function getgradebyDegree(){
+		dept_id = dijit.byId("item").get("value");
+		if(dept_id==-1){
+			return false;
+		}
+		dojo.xhrPost({
+			url:url_degree,
+			content:{
+				'dept_id':dept_id,
+				},
+			handleAs:"json",
+			load: function(data) {
+				service_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('service').set('store',service_store);  	
+				//if(oldItems==dept_id){
+					dijit.byId('service').set('value','<?php echo $this->search['service']?>');  	
+				//}
+			},
+			error: function(err) {
+			}
 	});
 }
 </script>

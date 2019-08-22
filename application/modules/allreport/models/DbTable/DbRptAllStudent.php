@@ -1564,14 +1564,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				rms_student as s
 			WHERE 
 				g.id = gds.group_id
-				and gds.stu_id = s.stu_id
-    			and s.status = 1
+				AND gds.stu_id = s.stu_id
+    		    AND s.status = 1
 				AND g.branch_id =$branch_id
 				AND g.academic_year=$academic_year
 				AND g.degree = $degree
 				AND g.grade = $grade
-				AND g.session = $session
-			";
+				AND g.session = $session ";
     	if (!empty($is_new)){
     		$sql.=" AND gds.is_newstudent = 1";
     	}else{

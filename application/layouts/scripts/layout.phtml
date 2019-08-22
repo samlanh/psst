@@ -292,7 +292,6 @@ $teacher_id = $session_t->teacher_id;
 							<?php 
 								$db = new Application_Model_DbTable_DbUsers();
 	            				$rs = $db->getAccessUrl($module,$controller,$action);
-	            				//echo $this->layout()->content;
 		            			if(!empty($rs) OR $action=='changepassword'){
 		            				echo $this->layout()->content;
 		            			}else{

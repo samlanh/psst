@@ -310,12 +310,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['branch_id']>0){
     		$where .= " and sp.branch_id = ".$search['branch_id'];
     	}
-//     	if($search['payment_by']>0){
-//     		$where .= " and spd.type = ".$search['payment_by'];
-//     	}
-//     	if(!empty($search['service'])){
-//     		$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
-//     	}
     	if($search['study_year']>0){
     		$where .= " and sp.academic_year = ".$search['study_year'];
     	}

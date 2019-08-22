@@ -145,7 +145,10 @@ table.tb-footer tr.style-head {
 							  </tr>
 						  </thead>
 						  <?php $i=0; 
-						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;?>
+						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;
+							  $all_student = $all_student+$rs['Num_Student'];
+							  $drop_student = $drop_student+$rs['student_drop'];
+						  ?>
 						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
 						   	<td><?php echo $i;?></td>
 						   	<td align="left">&nbsp;<?php echo $rs['branch_name']; ?></td>
@@ -162,8 +165,7 @@ table.tb-footer tr.style-head {
 						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
 						  </tr>
 						  <?php 
-						  	$all_student = $all_student+$rs['Num_Student'];
-						  	$drop_student = $drop_student+$rs['student_drop'];
+						  	
 						  }} ?>
 						</table>
 						<br>

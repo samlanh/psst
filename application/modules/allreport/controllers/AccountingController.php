@@ -292,13 +292,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	public function rptstudentnearlyendserviceAction(){
 		try{
-// 			$key = new Application_Model_DbTable_DbKeycode();
-// 			$data=$key->getKeyCodeMiniInv(TRUE);
-// 			$default_end = date('Y-m-d');
-// 			if (!empty($data['payment_day_alert'])){
-// 				$alert = $data['payment_day_alert'];
-// 				$default_end = date('Y-m-d',strtotime("+$alert day"));
-// 			}
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}else{
@@ -307,7 +300,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'branch_id' =>'',
 						'study_year'=>'',
 						'grade_all' =>'',
+						'degree' =>'',
 						'group'		=>-1,
+						'item'		=>-1,
 						'service_type'=>-1,
 						'end_date'	=>date('Y-m-d'),
 						'service'	=>''
@@ -329,6 +324,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->rs_type = $_db->getAllItems();
 	}
 // 	public function submitlateAction(){
 // 		if($this->getRequest()->isPost()){
@@ -933,11 +931,24 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'end_date'=>date('Y-m-d'),
 				);
 			}
+			
+			
 			$db = new Registrar_Model_DbTable_DbRptByType();
 			$this->view->row = $db->getIncomebyCategory($search);
 			
 			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
 			$this->view->rsincome = $db->getAllOtherIncomebyCate($search);
+			
+			$search['user']=-1;
+			$search['session']=-1;
+			$search['group']='';
+			$search['degree']=-1;
+			$search['grade_all']=-1;
+			$search['study_year']=-1;
+			
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$this->view->row_penalty = $db->getStudentPayment($search);
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -984,7 +995,17 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 		$this->view->search = $search;
-	
+		
+		$search['user']=-1;
+		$search['session']=-1;
+		$search['group']='';
+		$search['degree']=-1;
+		$search['grade_all']=-1;
+		$search['study_year']=-1;
+			
+		$db = new Allreport_Model_DbTable_DbRptPayment();
+		$this->view->row_penalty = $db->getStudentPayment($search);
+		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);

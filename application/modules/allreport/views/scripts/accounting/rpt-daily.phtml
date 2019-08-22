@@ -4,12 +4,12 @@
 	$frm =  $this->form_search;
 ?>
 <style>
-.hover:hover{ background:#ccc;}
-table.content-data tr.style-head,
-table.tb-footer tr.style-head {
-   font-weight: bold !important;
-}
-.hideprintdate{display:none !important;}
+	.hover:hover{ background:#ccc;}
+	table.content-data tr.style-head,
+	table.tb-footer tr.style-head {
+	   font-weight: bold !important;
+	}
+	.hideprintdate{display:none !important;}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
@@ -155,11 +155,8 @@ table.tb-footer tr.style-head {
 											  <tr class="style-head" style="font-size:10px;" align="center">
 											    <td><?php echo $tr->translate("N_O"); ?></td>
 											    <td><?php echo $tr->translate("RECEIPT_NO"); ?></td>
-											    
 											    <td><?php echo $tr->translate("STUDENT"); ?></td>
-												
 												<td><?php echo $tr->translate("STUDY_INFO"); ?></td>
-												
 												<td><?php echo $tr->translate("FINE"); ?></td>
 												<td><?php echo $tr->translate("TOTAL_PAYMENT"); ?></td>
 												<td><?php echo $tr->translate("Credit Memo"); ?></td>
@@ -191,7 +188,6 @@ table.tb-footer tr.style-head {
 													echo empty($rs['session'])?"":" , ".$rs['session'];
 												?>
 											</td>
-											
 											<td><?php if($rs['penalty']!=0){echo number_format($rs['penalty'],2);} ?></td>
 											<td><?php echo number_format($rs['grand_total'],2); ?></td>
 										    <td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>

@@ -67,7 +67,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			}
 			
 // 			$list = new Application_Form_Frmtable();
-// 			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+// 			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 // 			$link=array(
 // 					'module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail',
 // 			);

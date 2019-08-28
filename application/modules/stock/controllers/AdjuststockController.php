@@ -24,7 +24,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 			$rows = $db->getAllAdjustStock($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","ADJUST_NO","TITLE","NOTE","DATE","TOTAL","USER","STATUS");
+			$collumns = array("BRANCH","ADJUST_NO","TITLE","NOTE","DATE","TOTAL","USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
 			);

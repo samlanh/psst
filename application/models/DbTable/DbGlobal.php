@@ -948,15 +948,21 @@ function getAllgroupStudyNotPass($action=null){
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
-   function getAllYearByBranch($branch=1,$degree=null){
+   function getAllYearByBranch($branch=1,$degree=null,$showall=null){
    	$db = $this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
    	CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years
-   	FROM rms_tuitionfee WHERE `status`=1
-   	AND type=1
-   	AND is_finished=0 $branch_id ";
+   	FROM rms_tuitionfee WHERE 
+   	 type=1 AND `status`=1
+   	$branch_id ";
    	$sql.=" AND branch_id=$branch ";
+   	
+   	if (!empty($showall)){
+   		$sql.="";
+   	}else{
+   		$sql.=" AND is_finished=0   ";
+   	}
    	
    	if (!empty($degree)){
    		$dbdeg = new Global_Model_DbTable_DbItems();

@@ -45,11 +45,16 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 	}	
 	function addAction()
 	{
+		$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
+		$count = $_dbmodel->getAllBranchCount();
+		if ($count>=BRANCHES){
+			$this->_redirect(self::REDIRECT_URL ."/branch/index");
+		}
 		if($this->getRequest()->isPost()){//check condition return true click submit button
 			$_data = $this->getRequest()->getPost();	
 			try {
 				$sms = "INSERT_SUCCESS";
-				$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
+				
 				$branch_id= $_dbmodel->addbranch($_data);
 				if($branch_id==-1){
 					$sms = "RECORD_EXIST";

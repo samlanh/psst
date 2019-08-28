@@ -224,6 +224,13 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			);
     	return $this->insert($_arr);//insert data
     }
+    
+    function getAllBranchCount(){
+    	$db = $this->getAdapter();
+    	$this->_name = "rms_branch";
+    	$sql="SELECT COUNT(s.br_id) as cou FROM $this->_name AS s ";
+    	return $db->fetchAll($sql);
+    }
 }  
 	  
 

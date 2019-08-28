@@ -380,4 +380,26 @@
 		$sql = "SELECT id,comment FROM rms_comment WHERE status = 1 order by id ASC";
 		return $db->fetchAll($sql);
 	}
+	
+	function checkuDuplicate($data){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT 
+				* FROM rms_items AS i
+			WHERE i.title='".$data['title']."'
+				AND i.title_en='".$data['title_en']."'
+				AND i.schoolOption='".$data['schoolOption']."' 
+				AND i.type='".$data['type']."' ";
+		
+		if (!empty($data['id'])){
+			$sql.=" AND i.id != ".$data['id'];
+		}
+		
+		$sql.=" LIMIT 1 ";
+		$row = $db->fetchRow($sql);
+		if (!empty($row)){
+			return 1;
+		}
+		return 0;
+	}
 }

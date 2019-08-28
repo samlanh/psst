@@ -79,7 +79,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-				(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student
+				(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
+				(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE s.user_id=id LIMIT 1 ) AS user_name
 				 ";//AND s.is_subspend=0
 				
 		$sql.=$dbp->caseStatusShowImage("s.status");

@@ -10,6 +10,10 @@
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
 }
+span#message {
+    color: #fb0101;
+    font-style: italic;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -17,6 +21,7 @@
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
 	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DEGREE');?></h4>
+    				<span id="message"></span>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -29,6 +34,11 @@
 					if(schoolOption=='' || schoolOption==-1){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
 						dijit.byId("schoolOption").focus();
+						return false;
+					}
+					if(isDuplicate==1){
+						alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+						dijit.byId("title").focus();
 						return false;
 					}
 					var rowId = $('#identity').val();
@@ -66,7 +76,7 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("shortcut");?>
-		                	<input type="hidden" id="type" name="type" value="1" />
+		                	<input type="hidden" dojoType="dijit.form.TextBox" id="type" name="type" value="1" />
 		                </div>
 		            </div>
 		            <div class="form-group">
@@ -181,17 +191,76 @@
     	</form>
     </div>
 </div>
+
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.NumberTextBox");
 	dojo.require("dojo.NodeList-manipulate");
 dojo.ready(function(){
 	addRow();
-	 var schoolOption = dijit.byId('schoolOption');
-	 schoolOption.on('change', function(evt) {
+	var schoolOption = dijit.byId('schoolOption');
+	schoolOption.on('change', function(evt) {
 		 getSubject();
+		 checkDuplicateRecord();
     });
+
+	var title = dijit.byId('title');
+	title.on('keyUp', function(evt) {
+		checkDuplicateRecord();
+    });
+
+	var title_en = dijit.byId('title_en');
+	title.on('keyUp', function(evt) {
+		checkDuplicateRecord();
+    });
+    
 });
+
+var isDuplicate = 0;
+var url_duplicate = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"checkduplicate"));?>';										
+function checkDuplicateRecord(){
+	titleDegree = dijit.byId('title').get('value');
+	if(titleDegree=='' || titleDegree==-1){
+		dijit.byId('title').focus();
+		return false;
+	}
+	title_en = dijit.byId('title_en').get('value');
+	if(title_en=='' || title_en==-1){
+		return false;
+	}
+	schoolOption = dijit.byId('schoolOption').get('value');
+	if(schoolOption=='' || schoolOption==-1){
+		return false;
+	}
+	type = dijit.byId('type').get('value');
+	if(type=='' || type==-1){
+		return false;
+	}
+	
+	dojo.xhrPost({
+		url: url_duplicate,
+		content:{
+			'title':titleDegree,'title_en':title_en,'schoolOption':schoolOption,'type':type
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
+			}else{
+				isDuplicate=0;
+			}
+			   
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
 var subject = '';
 var url_getsubject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"getsubject"));?>';										
 function getSubject(){

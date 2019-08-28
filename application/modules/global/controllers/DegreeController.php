@@ -7,6 +7,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$this->type = 1;
 	}
     public function indexAction()
     {
@@ -21,7 +22,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     				'status_search' => -1
     		);
     	}
-    	$type=1; //Degree
+    	$type= $this->type; //Degree
         $rs_rows = $db_dept->getAllItems($search,$type);
 
     	$list = new Application_Form_Frmtable();
@@ -78,7 +79,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     			Application_Form_FrmMessage::message("Application Error!");
     		}
     	}
-    	$type=1; //Degree
+    	$type=$this->type; //Degree
     	$row =$db->getDegreeById($id,$type);
     	$rs =  $db->getDeptSubjectById($id);
     	$this->view->row=$row;
@@ -128,6 +129,33 @@ class Global_DegreeController extends Zend_Controller_Action {
     		$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
     		$option=$_dbmodel->addSubjectajax($data);
     		$result = array("id"=>$option);
+    		print_r(Zend_Json::encode($result));
+    		exit();
+    	}
+    }
+    
+    
+    function checkduplicateAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+//     		$type=$this->type; //Degree
+    		
+    		$title = empty($data['title'])?"":$data['title'];
+    		$title_en = empty($data['title_en'])?"":$data['title_en'];
+    		$schoolOption = empty($data['schoolOption'])?"":$data['schoolOption'];
+    		$type = empty($data['type'])?"":$data['type'];
+    		$id = empty($data['id'])?"":$data['id'];
+    		$arr  = array(
+    				'title'=>$title,
+    				'title_en'=>$title_en,
+    				'schoolOption'=>$schoolOption,
+    				'type'=>$type,
+    				'id'=>$id,
+    				);
+    		
+    		$_dbmodel = new Global_Model_DbTable_DbItems();
+    		
+    		$result=$_dbmodel->checkuDuplicate($arr);
     		print_r(Zend_Json::encode($result));
     		exit();
     	}

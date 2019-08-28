@@ -147,6 +147,9 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	$_save->setLabel($this->tr->translate("ADD_NEW"));
     	
     	$id = new Zend_Form_Element_Hidden('id');
+    	$id->setAttribs(
+    			array('dojoType'=>'dijit.form.TextBox',)
+    			);
     	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');

@@ -24,10 +24,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$rs_rows = $db_student->selectAllStudentChangeGroup($search);
 			$list = new Application_Form_Frmtable();
 			
-			$form=new Registrar_Form_FrmSearchInfor();
-			$forms=$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($forms);
-			$this->view->form_search=$form;
+			
 			
 			$collumns = array("BRANCH","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
 			$link=array(
@@ -35,10 +32,17 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'academic'=>$link,'grade'=>$link,'session'=>$link,'to_group_code'=>$link));
 			$this->view->adv_search = $search;
+			
+			
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}	
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	function addAction(){
 		if($this->getRequest()->isPost()){

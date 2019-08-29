@@ -74,29 +74,27 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		if(!empty($search['title'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
-			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.from_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.to_group limit 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT group_code from rms_group WHERE rms_group.id=gscg.from_group limit 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT group_code from rms_group WHERE rms_group.id=gscg.to_group limit 1) LIKE '%{$s_search}%'";
 			
-			$s_where[] = " (SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=
-							rms_group_student_change_group.from_group limit 1) ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=
-							rms_group_student_change_group.to_group limit 1) ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
 			
-			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
-							rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
-							rms_group_student_change_group.from_group limit 1)) LIKE '%{$s_search}%'";
+// 			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(SELECT session FROM rms_group where rms_group.id=
+// 							gscg.to_group limit 1)) LIKE '%{$s_search}%'";
+// 			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(SELECT session FROM rms_group where rms_group.id=
+// 							gscg.from_group limit 1)) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		
 		if(!empty($search['study_year'])){
-			$where.=" AND rms_group.academic_year=".$search['study_year'];
+			$where.=" AND g.academic_year=".$search['study_year'];
 		}
 		if(!empty($search['grade'])){
-			$where.=" AND rms_group.grade=".$search['grade'];
+			$where.=" AND g.grade=".$search['grade'];
 		}
 		if(!empty($search['session'])){
-			$where.=" AND rms_group.session=".$search['session'];
+			$where.=" AND g.session=".$search['session'];
 		}
 		
 		return $_db->fetchAll($sql.$where.$order_by);

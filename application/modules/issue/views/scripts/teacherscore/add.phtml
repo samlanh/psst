@@ -121,26 +121,27 @@ dojo.ready(function(){
 		}, "grade");
 });
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 function filterGrade(){
-	degree = dijit.byId('degree').get('value');
-		dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'degree':degree
-				},
-			handleAs:"json",
-			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('grade').set('store',grade_store);  
-			    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
-			},
-			error: function(err) {
-			}
-		});
+	dept_id = dijit.byId('degree').get('value');
+	dojo.xhrPost({
+		url:url_dept,
+		content:{
+			'dept_id':dept_id,
+			'noaddnew':1
+		},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);  
+			dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+		},
+		error: function(err) {
+		}
+	});
 }
 
-var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
+var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
@@ -232,7 +233,7 @@ function filterStudent(){
 			                           str+='<div id="main'+data[i].stu_id+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
 	                              	   str+='</div>';
 	                           str+='</div>';
-	                           getChildren(subject[j].subject_id , data[i].stu_id , +data[i].stu_id+stringsname+no , stringsname , no);
+	                           //getChildren(subject[j].subject_id , data[i].stu_id , +data[i].stu_id+stringsname+no , stringsname , no);
                       	 	}
 					str+='</div></fieldset>	';
 					str+='</div>';
@@ -502,7 +503,7 @@ function getInfoBygroup(){
 		}
 	});
 }
-var url_getSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'teacherscore','action'=>'get-subjectbygroup')); ?>';
+var url_getSubject= '<?php echo $this->url(array('module'=>'issue','controller'=>'teacherscore','action'=>'get-subjectbygroup')); ?>';
 function getSubjectByGroup(){
 	group = dijit.byId('group').get('value');
 	if(group==''){

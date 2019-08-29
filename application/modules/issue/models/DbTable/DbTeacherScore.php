@@ -563,7 +563,7 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 						'exam_type'=>$_data['exam_type'],
 						'date_input'=>date("Y-m-d"),
 						'note'=>$_data['note'],
-						'user_id'=>$this->getUserId(),
+						//'user_id'=>$teacher_id,
 						'type_score'=>1, // 1 => BacII score
 						'for_academic_year'=>$_data['year_study'],
 						'for_semester'=>$_data['for_semester'],
@@ -597,7 +597,7 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 									'subject_id'=> $subject_id,
 									'score'=> $_data["$sub_name".$no],
 									'status'=>1,
-									'user_id'=>$this->getUserId(),
+									//'user_id'=>$this->getUserId(),
 									'is_parent'=> $rs_parent["is_parent"],
 									'behavior_comment'=> $_data['behavior'.$sub_name.$no],
 									'homework_comment'=> $_data['homework'.$sub_name.$no],

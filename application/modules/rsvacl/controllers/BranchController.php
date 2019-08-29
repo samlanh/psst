@@ -108,6 +108,12 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 	function copyAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db = new RsvAcl_Model_DbTable_DbBranch();
+		
+		$count = $db->getAllBranchCount();
+		if ($count>=BRANCHES){
+			$this->_redirect(self::REDIRECT_URL ."/branch/index");
+		}
+		
 		if($this->getRequest()->isPost())
 		{
 			$data = $this->getRequest()->getPost();

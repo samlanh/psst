@@ -176,7 +176,7 @@ class IndexController extends Zend_Controller_Action
 //     					$url = self::REDIRECT_URL;
 //     					break;
 //     				}
-    				Application_Form_FrmMessage::redirectUrl("/foundation/teacherscore");
+    				Application_Form_FrmMessage::redirectUrl("/issue/teacherscore");
     				exit();
     			}
     			else{

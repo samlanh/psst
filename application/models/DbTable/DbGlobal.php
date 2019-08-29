@@ -231,7 +231,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   		$location_id = $session_teacher->branch_id;
 	   		$branch_list = $session_teacher->branch_list;
 	   		$schoolOption = $session_teacher->schoolOption;
-	   		$info = array("user_name"=>$userName,"teacher_id"=>$teacherId,"level"=>null,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
+	   		$info = array("user_name"=>$userName,"user_id"=>$teacherId,"level"=>null,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
 	   		return $info;
 	   	}
    }
@@ -330,6 +330,8 @@ function getAllgroupStudy($teacher_id=null){
    		$sql.=" WHERE 1";
    	}
    	$sql.=" AND g.status =1 AND group_code!=''";
+   	$sql.=" group by g.id ";
+   	//echo $sql;
    	return $db->fetchAll($sql);
 }
 

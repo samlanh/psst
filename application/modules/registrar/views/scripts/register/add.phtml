@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('Add Student Register')); 
+	echo $this->headTitle($tr->translate('REGISTER')); 
 ?>
 <style>
 	select{ width:100%;}
@@ -430,7 +430,6 @@ div.img-back {
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dojo.number");
 	dojo.require("dijit.form.DateTextBox");
-	//dojo.require('dijit.form.TextBox');
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
@@ -442,7 +441,6 @@ require(["dojo/ready"], function(ready){
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
 		getAllAcademicByBranch();
-		//getReceiptNo('','');
 	});
 
 	new dijit.form.FilteringSelect({
@@ -538,63 +536,8 @@ function getgradebyDegree(dept_id,a,type=1){
 		}
 	});
 }
-
-/*var url_getreceipt_no = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
-function getReceiptNo(stu_id='',submit=''){
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id==''){return false;}
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=="" || branch_id==-1){
-		dijit.byId('receipt_no').attr('value','');
-		return false;
-	}
-	dojo.xhrPost({
-		url:url_getreceipt_no,
-		content:{
-			'dept_id':1,
-			'branch_id':branch_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			  dijit.byId('receipt_no').attr('value',data); 
-			  if(stu_id!=''){
-				  dojo.byId("lb_receipt_no").innerHTML = data;
-				  printSave(stu_id,data,submit);
-			  }
-		},
-		error: function(err) {
-		}
-	});
-}*/
 </script>
 <script type="text/javascript">
-/*function submitDataAddNew(){
-	if(dijit.byId('office_receipt').validate()) {
-		var identity = $('#identity').val();
-		if(identity==''){
-			alert("There is no record to save");
-			dijit.byId("item").focus();
-			return false;
-		}
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";		
-				alert('<?php //echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php //echo $this->baseUrl();?>/registrar/register/add";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
-}*/
 function getMonthByNumber(m){
 	var monthName=[
 		 "01",
@@ -658,9 +601,7 @@ function getMonthByNumber(m){
 					<td style="" align="center" valign="bottom">
 						<table  width="100%" style="font-size: 10px;" >
 							<tr>
-								<td width="25%">&nbsp;
-									
-								</td>
+								<td width="25%">&nbsp;</td>
 								<td width="50%" valign="top" align="center" style="font-size: 14px;line-height: 20px">
 									<div style="font-family:'Khmer OS Muol Light';">បង្កាន់ដៃបង់ប្រាក់</div>
 									<div style="font-family:Times New Roman;">Official Receipt</div>
@@ -691,7 +632,7 @@ function getMonthByNumber(m){
 								<td>Tel</td>
 								<td> : &nbsp;<label id="lb_phone" class="one bold"></label> </td>
 								<td></td>
-								<td>   &nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
+								<td>&nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
 							</tr>
 							<tr>
 								<td>Student Name</td>
@@ -876,7 +817,7 @@ function getPaymentHistory(student_id){
 		handleAs:"json",
 		load: function(respone) {
 			tem='<table class="collape tablesorter" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;" id="table_row" >'
-				+'<thead><tr id="head-title" class="head-td" style="background:#ececec;font-size:10px;color:#000"><th class="tdheader"><?php echo $tr->translate('NO');?></th>'
+				+'<thead><tr id="head-title" class="head-td" style="background:#ececec;font-size:10px;color:#000"><th class="tdheader"><?php echo $tr->translate('N_O');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('SERVICE_CATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('SERVICES');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PAID_DATE');?></th>'
@@ -1186,7 +1127,7 @@ function calculateTotal(index){
 		dijit.byId('total_amount'+index).attr('value',total_pay);
 		netTotal();
 }
-function netTotal() {
+function netTotal(){
 		var netTotal=0;
 		var netPaidAmount=0;
 		var grandTotal=0;

@@ -1490,7 +1490,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function getGroupBYStudentGrade($search){
+    function getGroupBYStudentGrade($search){//រាប់សិស្សទាំងអស់ មិនគិតឈប់
     	$db = $this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
@@ -1527,11 +1527,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			WHERE 
     			g.id = gds.group_id 
     			and gds.stu_id = s.stu_id
-    			and s.status = 1
+    			and s.status = 1 
     	";
     	$where=' ';
     	if(($search['branch_id'])>0){
     		$where.=' AND g.branch_id='.$search['branch_id'];
+    	}
+    	if(($search['study_status'])>0){
+    		$where.=' AND g.is_pass='.$search['study_status'];
     	}
     	if(!empty($search['study_year'])){
     		$where.=' AND g.academic_year='.$search['study_year'];
@@ -1588,10 +1591,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if (!empty($is_new)){
     		$sql.=" AND gds.is_newstudent = 1";
     	}else{
-    		if ($status_study!=0){
-    			$sql.=" AND gds.stop_type != 0";
-    		}else{
-    			$sql.=" AND gds.stop_type = 0";
+//     		if($status_study!=0){
+//     			$sql.=" AND gds.stop_type != 0";
+//     		}else{
+//     			$sql.=" AND gds.stop_type = 0";
+//     		}
+    		if($status_study>0){
+    			$sql.=' AND g.is_pass='.$status_study;
     		}
     	}
     	return $db->fetchOne($sql);

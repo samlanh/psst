@@ -500,7 +500,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$study_option = $db->getViewById(9,1);
+		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
 		$study_status->setMultiOptions($study_option);
+		
 		$study_status->setValue($request->getParam("study_status"));
 		
 		$opt=array(-1=>"Select Payment By",1=>"Tution Fee",2=>"Service",3=>"Product");

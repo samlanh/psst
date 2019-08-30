@@ -174,7 +174,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	}
 	public function getGroupDetail($search){
 	   	$db = $this->getAdapter();
-	   	
 	   	$_db = new Application_Model_DbTable_DbGlobal();
 	   	$lang = $_db->currentlang();
 	   	if($lang==1){// khmer

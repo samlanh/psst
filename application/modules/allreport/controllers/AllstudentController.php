@@ -206,15 +206,16 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 		=>'',
-					'allacademicyear'=>$yeartran[0]['academicyear'],
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
-					'session' 		=>'',
-					'branch_id'		=>0,
-					'degree'		=>0,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
+				'title' 		=>'',
+				'allacademicyear'=>$yeartran[0]['academicyear'],
+				'study_year' 	=>'',
+				'grade_all' 	=>'',
+				'session' 		=>'',
+				'branch_id'		=>0,
+				'degree'		=>0,
+				'study_status'=>-1,
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d'),
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();

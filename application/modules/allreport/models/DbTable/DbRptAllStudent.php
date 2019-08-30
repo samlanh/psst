@@ -300,8 +300,22 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 						AND g.group_code != ''
 						AND s.stu_id =sg.`stu_id` 
 						AND g.id = sg.group_id 
-						AND g.is_pass=2  ";
+						  ";
+    	//AND g.is_pass=2
     	$where='';
+    	if (!empty($year)){
+    		$acad = explode("-", $year);
+    		if (!empty($acad)){
+    			$from_year=$acad[0];
+    			$to_year=$acad[1];
+    			if (!empty($from_year)){
+    				$where.=" AND (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$from_year'";
+    			}
+    			if (!empty($from_year)){
+    				$where.=" AND (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$to_year'";
+    			}
+    		}
+    	}
 //     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
 //     	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
 //     	if (!empty($year)){
@@ -1583,12 +1597,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql);
     }
     //for rpt-student-static
-    function getAllYearTuitionfee(){
+    function getAllYearTuitionfee($limit =null){
     	$db = $this->getAdapter();
     	$sql="SELECT CONCAT(t.from_academic,'-',t.to_academic) AS academicyear FROM `rms_tuitionfee` AS t
 			GROUP BY t.from_academic,t.to_academic 
-			ORDER BY t.from_academic DESC
+			
 		";
+    	if (!empty($limit)){ // Add new Case For Limit Record on Dashboard
+    		$sql.=" ORDER BY t.from_academic ASC LIMIT $limit ";
+    	}else {
+    		$sql.=" ORDER BY t.from_academic DESC ";
+    	}
     	return $db->fetchAll($sql);
     }
     

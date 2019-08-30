@@ -386,12 +386,12 @@ small.pull-right.showall-ann {
 var $stckedData  = [];
 //creating Stacked chart
 var $stckedData  = [
-                    <?php for ($i=0; $i<=6; $i++ ){ 
-                    	$year = date("Y",strtotime("$start_year+$i year"));
-                    	$stu = $db->getAmountStudent($year);
-                    ?>
-                    { y: '<?php echo $year;?>', a: <?php echo $stu;?>},
+                    <?php if (!empty($this->yearly)) foreach ($this->yearly as $yearly){
+                    	$stu = $db->getAmountStudent($yearly['academicyear']);
+                    	?>
+                   	 { y: '<?php echo $yearly['academicyear'];?>', a: <?php echo $stu;?>},
                     <?php }?>
+                   
                 ];
 var $stckedDataIncmoe  = [];
 var $stckedDataIncmoe  = [

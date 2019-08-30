@@ -193,6 +193,11 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		));
 		$color->setValue("2e3192");
 		
+		$id = new Zend_Form_Element_Hidden('id');
+		$id->setAttribs(
+				array('dojoType'=>'dijit.form.TextBox',)
+		);
+		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
 			$school_namekh->setValue($data['school_namekh']);
@@ -215,11 +220,13 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			$branch_status->setValue($data['status']);
 			$branch_display->setValue($data['displayby']);
 			$color->setValue($data['color']);
+			
+			$id->setValue($data['br_id']);
 		}
 		
 		$this->addElements(array($branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display,
-				$color));
+				$color,$id));
 		
 		return $this;
 		

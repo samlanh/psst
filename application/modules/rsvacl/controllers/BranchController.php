@@ -150,4 +150,21 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
     		exit();
     	}   
     }
+    
+    function checkduplicateAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    
+    		$prefix_code = empty($data['prefix_code'])?"":$data['prefix_code'];
+    		$id = empty($data['id'])?"":$data['id'];
+    		$arr  = array(
+    				'prefix_code'=>$prefix_code,
+    				'id'=>$id,
+    		);
+    		$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
+    		$result=$_dbmodel->checkuDuplicatePrefix($arr);
+    		print_r(Zend_Json::encode($result));
+    		exit();
+    	}
+    }
 }

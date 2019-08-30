@@ -68,6 +68,7 @@ ul.opt-school {
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('UPDATE_BRANCH​​_INFO');?></h4>
+    				<span id="message"></span>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -82,6 +83,11 @@ ul.opt-school {
 	     			});
 					if(identity==""){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
+						return false;
+					}
+					if(isDuplicate==1){
+						alert("<?php echo $tr->translate("ALREADY_EXISTING_PREFIX");?>");
+						dijit.byId("title").focus();
 						return false;
 					}
 					loadingBlock();
@@ -100,6 +106,7 @@ ul.opt-school {
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SCHOOL_NAMEKH");?></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">	
 	                   		<?php echo $frm->getElement("school_namekh");?>
+	                   		<?php echo $frm->getElement("id");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -261,6 +268,48 @@ ul.opt-school {
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
+dojo.ready(function(){
+
+	var prefix_code = dijit.byId('prefix_code');
+	prefix_code.on('keyUp', function(evt) {
+		checkDuplicateRecord();
+    });
+    
+});
+var isDuplicate = 0;
+var url_duplicate = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"branch","action"=>"checkduplicate"));?>';										
+function checkDuplicateRecord(){
+	prefix_code = dijit.byId('prefix_code').get('value');
+	if(prefix_code=='' || prefix_code==-1){
+		dijit.byId('prefix_code').focus();
+		return false;
+	}
+	id = dijit.byId('id').get('value');
+	dojo.xhrPost({
+		url: url_duplicate,
+		content:{
+			'prefix_code':prefix_code,'id':id
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_PREFIX");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_PREFIX");?> !');
+			}else{
+				isDuplicate=0;
+				$("#message").html('');
+			}
+			HideloadingBlock();
+			
+		},
+		error: function(err) {
+			alert(err);
+			HideloadingBlock();
+		}
+	});
+}
+
 function CheckAllTotal(index){
 	if(index==0){
 			if($('#check_all').is(":checked")){

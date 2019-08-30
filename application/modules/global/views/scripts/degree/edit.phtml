@@ -251,13 +251,14 @@ function checkDuplicateRecord(){
 				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
 			}else{
 				isDuplicate=0;
+				$("#message").html('');
 			}
 			   
-		    document.getElementsByClassName("overlay")[0].style.display="none";
+			HideloadingBlock();
 		},
 		error: function(err) {
 			alert(err);
-			document.getElementsByClassName("overlay")[0].style.display="none";
+			HideloadingBlock();
 		}
 	});
 }

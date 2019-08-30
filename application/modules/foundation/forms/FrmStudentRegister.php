@@ -352,6 +352,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		
 		
 		$id = new Zend_Form_Element_hidden('id');
+		$id->setAttribs(array('dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
 		
 		if($data!=null){
 			$discount_type->setValue($data['scholarship_id']);
@@ -372,7 +374,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$name_kh->setValue($data['stu_khname']);
 			$name_en->setValue($data['stu_enname']);
 			$last_name->setValue($data['last_name']);
+			
 			$_sex->setValue($data['sex']);
+			
 			if (!empty($data['dob'])){
 			$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
 			}
@@ -414,6 +418,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
 			$_stutype->setValue($data['is_stu_new']);
+			if (!empty($data['stu_id'])){
+				$id->setValue($data['stu_id']);
+			}
 		}
 	
 		$this->addElements(

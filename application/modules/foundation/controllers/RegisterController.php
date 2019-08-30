@@ -44,7 +44,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-// 		$db_student->updategroupstudent();
 	}
 	function addAction(){
 		$db = new Foundation_Model_DbTable_DbStudent();
@@ -55,12 +54,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
 					exit();
 				}
-				$id_existing = $db->ifStudentIdExisting($_data['student_id']);
-				if(!empty($id_existing)){
-					print_r("<script type='text/javascript'>
-					    alert('អត្តលេខ សិស្សនេះបានប្រើរួចរាល់ហើយសូមត្រួតពិនិត្យម្តងទៀត!');
-					</script>");
-				}else{
 					$exist = $db->addStudent($_data);
 					if($exist==-1){
 						Application_Form_FrmMessage::message("RECORD_EXIST");
@@ -74,7 +67,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						}
 						Application_Form_FrmMessage::message("INSERT_SUCCESS");
 					}
-				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -135,7 +127,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
 					exit();
 				}
-				$data["id"]=$id;
+// 				$data["id"]=$id;
 				$row=$db->updateStudent($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
 			}catch(Exception $e){
@@ -216,7 +208,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$result = array("id"=>$row);
 				print_r(Zend_Json::encode($row));
 				exit();
-				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -272,9 +263,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
 					exit();
 				}
-				
-				$data["id"]=$id;
-// 				$row=$db->addStudent($data);
 				$exist = $db->addStudent($data);
 				if($exist==-1){
 					Application_Form_FrmMessage::Sucessfull("RECORD_EXIST","/foundation/register/index");
@@ -497,5 +485,36 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 	}
 	
+	
+	function checkstudentcodeAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$studentCode = empty($data['student_id'])?"":$data['student_id'];
+			$id = empty($data['id'])?"":$data['id'];
+			$db = new Foundation_Model_DbTable_DbStudent();
+			$id_existing = $db->ifStudentIdExisting($studentCode,$id);
+			$return = 0;
+			if (!empty($id_existing)){
+				$return = 1;
+			}
+			print_r(Zend_Json::encode($return));
+			exit();
+		}
+	}
+	
+	function checkstudentduplicateAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$db = new Foundation_Model_DbTable_DbStudent();
+			$idStu = empty($_data['id'])?0:$_data['id'];
+			$id_existing = $db->getStudentExist($_data['name_kh'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session'],$idStu);
+			$return = 0;
+			if (!empty($id_existing)){
+				$return = 1;
+			}
+			print_r(Zend_Json::encode($return));
+			exit();
+		}
+	}
 	
 }

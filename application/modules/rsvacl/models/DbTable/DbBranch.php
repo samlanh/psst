@@ -229,7 +229,25 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$this->_name = "rms_branch";
     	$sql="SELECT COUNT(s.br_id) as cou FROM $this->_name AS s ";
-    	return $db->fetchAll($sql);
+    	return $db->fetchOne($sql);
+    }
+    
+    function checkuDuplicatePrefix($data){
+    	$db = $this->getAdapter();
+    	$sql="
+    	SELECT
+    	* FROM rms_branch AS i
+    	WHERE i.prefix='".$data['prefix_code']."'
+    	 ";
+    	if (!empty($data['id'])){
+    		$sql.=" AND i.br_id != ".$data['id'];
+    	}
+    	$sql.=" LIMIT 1 ";
+    	$row = $db->fetchRow($sql);
+    	if (!empty($row)){
+    		return 1;
+    	}
+    	return 0;
     }
 }  
 	  

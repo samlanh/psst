@@ -53,6 +53,15 @@ input.btn_borwse_image {
 					dijit.byId('branch_id').focus();
 					return false;
 				}
+				if(isDuplicate==1){
+					alert("<?php echo $tr->translate("ALREADY_EXISTING_STUDENT_CODE");?>");
+					dijit.byId("student_id").focus();
+					return false;
+				}
+				if(duplicateStudent==1){
+					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?>");
+					return false;
+				}
 				loadingBlock();
 				return true;
 			}else {
@@ -63,6 +72,7 @@ input.btn_borwse_image {
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_REGISTER');?></h4>
+	    				<span id="message"></span>
 	    			</div>
 	    			<div class="col-sm-4 text-right">
 	    			</div>
@@ -799,6 +809,7 @@ dojo.ready(function(){
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 	    onChange: function() {  
+	    	checkDuplicateStudent();
 	    }
 	}, "grade");
 	getallGrade(1);
@@ -1122,8 +1133,88 @@ dojo.ready(function(){
 	getStudentNo();
 	getAllGroupByBranch();
 	getAllAcademicByBranch();
-}); 
 
+	setTimeout(function () {
+		loadingBlock();
+		checkDuplicateRecord();
+		HideloadingBlock();
+    }, 500);
+	
+}); 
+dojo.ready(function(){
+	var student_id = dijit.byId('student_id');
+	 	student_id.on('keyUp', function(evt) {
+		checkDuplicateRecord();
+	});
+
+	 	 var name_kh = dijit.byId('name_kh');
+		 name_kh.on('keyUp', function(evt) {
+			 checkDuplicateStudent();
+		});
+		 var sex = dijit.byId('sex');
+		 sex.on('change', function(evt) {
+			 checkDuplicateStudent();
+		});
+		 var date_of_birth = dijit.byId('date_of_birth');
+		 date_of_birth.on('change', function(evt) {
+			 checkDuplicateStudent();
+		});
+});
+var isDuplicate = 0;
+var url_duplicate = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"checkstudentcode"));?>';										
+function checkDuplicateRecord(){
+	student_id = dijit.byId('student_id').get('value');
+	if(student_id=='' || student_id==-1){
+		dijit.byId('student_id').focus();
+		return false;
+	}
+	
+	dojo.xhrPost({
+		url: url_duplicate,
+		content:{
+			'student_id':student_id,
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_STUDENT_CODE");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_STUDENT_CODE");?> !');
+			}else{
+				isDuplicate=0;
+				$("#message").html('');
+			}
+			   
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+	checkDuplicateStudent();
+}
+var duplicateStudent =0;
+var url_duplicateRl = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"checkstudentduplicate"));?>';										
+function checkDuplicateStudent(){
+	dojo.xhrPost({
+		url: url_duplicateRl,
+		form: dojo.byId("add_student"),
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				duplicateStudent = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?> !');
+			}else{
+				duplicateStudent=0;
+				$("#message").html('');
+			}
+		},
+		error: function(err) {
+		}
+	});
+}
 function AllRefresh(){
 	loadingBlock();
 	student_province = dijit.byId('student_province').get('value');

@@ -190,7 +190,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',
 				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false'));
+				'autoComplete'=>'false',
+				'required'=>'false'));
 		
 		
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');

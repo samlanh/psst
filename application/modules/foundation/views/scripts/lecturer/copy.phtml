@@ -437,7 +437,8 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		
 		new dijit.form.FilteringSelect({
 			store: position_store,
-			autoComplete: true,                        
+			queryExpr: "*${0}*",
+			autoComplete: false,			
 		    id: "staff_position",
 		    name: "staff_position",  
 		    class: 'fullside',  

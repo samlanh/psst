@@ -67,7 +67,8 @@ dojo.ready(function(){
 		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 		new dijit.form.FilteringSelect({
 		    store:years_store,
-		    autoComplete: true,                        
+		    queryExpr: "*${0}*",
+			autoComplete: false,                        
 		    required: true,
 		    id: "year_study",
 		    name: "year_study",           
@@ -81,7 +82,8 @@ dojo.ready(function(){
 
 		
 		new dijit.form.FilteringSelect({
-			autoComplete: true,                        
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
 			id: "grade",
 			name: "grade",           
 			class: 'fullside', 

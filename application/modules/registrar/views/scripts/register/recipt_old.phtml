@@ -15,7 +15,8 @@ var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 	dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 	    store: dept_store,
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                       
 	    required: true,
 	    id: "dept",
 	    name: "dept",           
@@ -30,8 +31,8 @@ var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 	}, "dept");
     
 	new dijit.form.FilteringSelect({
-	    //store: dept_store,
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                        
 	    id: "grade",
 	    name: "grade",           
 	    class: 'fullside',  

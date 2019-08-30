@@ -144,7 +144,8 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::en
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 	    store:group_store,
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                       
 	    id: "group",
 	    name: "group",   
 	    class: 'fullside',  

@@ -58,7 +58,8 @@ dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                       
 	    id: "fa_job",
 	    name: "fa_job",  
 	    tabindex: "17",         
@@ -82,7 +83,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                        
 	    id: "mo_job",
 	    name: "mo_job",  
 	    tabindex: "17",         
@@ -106,7 +108,8 @@ dojo.ready(function(){
 	}
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                       
 	    id: "gu_job",
 	    name: "gu_job",  
 	    tabindex: "17",         

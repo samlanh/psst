@@ -244,7 +244,8 @@ var usertype_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json:
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: usertype_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                       
 		id: "user_type",
 		name: "user_type",
 		class: "fullside", 	

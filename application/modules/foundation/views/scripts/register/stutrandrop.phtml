@@ -148,7 +148,8 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: group_store,
-	    autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,		
 	    id: "group",
 	    name: "group",  
 	    value:'<?php echo $this->rs['group_id'];?>' ,       
@@ -172,7 +173,9 @@ dojo.ready(function(){
 	 initialize();
 	
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
+	    
+		queryExpr: "*${0}*",
+		autoComplete: false,		
 	    id: "grade",
 	    name: "grade",
 	    required : "false",          
@@ -185,7 +188,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                    
 	    id: "fa_job",
 	    name: "fa_job",  
 	    tabindex: "17",         
@@ -209,7 +213,9 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		
+		queryExpr: "*${0}*",
+		autoComplete: false,		
 	    id: "mo_job",
 	    name: "mo_job",  
 	    tabindex: "17",         
@@ -233,7 +239,8 @@ dojo.ready(function(){
 	}
 	new dijit.form.FilteringSelect({
 		store: job_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
 	    id: "gu_job",
 	    name: "gu_job",  
 	    tabindex: "17",         

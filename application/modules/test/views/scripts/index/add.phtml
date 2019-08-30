@@ -701,7 +701,8 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		dojo.ready(function(){
 			new dijit.form.FilteringSelect({
 				store: grade_store,
-				autoComplete: true,                        
+				queryExpr: "*${0}*",
+			   autoComplete: false,                        
 				required: false,
 				id: "grade",
 				name: "grade",           
@@ -713,7 +714,8 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 			
 			new dijit.form.FilteringSelect({
 				store: grade_result_store,
-				autoComplete: true,                        
+				queryExpr: "*${0}*",
+			    autoComplete: false,                       
 				required: false,
 				id: "grade_result",
 				name: "grade_result",           

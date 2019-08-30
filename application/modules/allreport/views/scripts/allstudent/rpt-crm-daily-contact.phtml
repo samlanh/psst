@@ -159,7 +159,8 @@ var crm_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enco
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: crm_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                 
 		required: false,
 		id: "crm_list",
 		name: "crm_list",           

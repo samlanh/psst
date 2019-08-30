@@ -214,7 +214,8 @@ var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::enc
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                        
 	    id: "grade",
 	    name: "grade",           
 	    class: 'fullside',  
@@ -228,7 +229,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 	    store: group_store,
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                       
 	    required: true,
 	    id: "group",
 	    name: "group",

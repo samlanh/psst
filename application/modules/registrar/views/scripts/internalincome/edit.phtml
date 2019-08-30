@@ -111,7 +111,8 @@ dojo.require("dojo.store.Memory");
 		setReadonlyCheqe();
 		new dijit.form.FilteringSelect({
 			store: cate_income_store,
-			autoComplete: true,                        
+			queryExpr: "*${0}*",
+			autoComplete: false,                      
 			required: true,                      
 		    id: "cate_income",
 		    name: "cate_income",  

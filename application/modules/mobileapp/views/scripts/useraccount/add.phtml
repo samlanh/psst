@@ -64,7 +64,8 @@ dojo.ready(function(){
 	getStudentNo();
 	new dijit.form.FilteringSelect({
 		store: group_store,
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                        
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -84,7 +85,8 @@ dojo.ready(function(){
 	    }
 	}, "group");
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                       
 	    id: "grade",
 	    name: "grade",  
 	    tabindex: "16",  
@@ -101,7 +103,7 @@ dojo.ready(function(){
 	    id: "fa_job",
 	    name: "fa_job",  
 	    queryExpr: "*${0}*",
-		autoComplete: true,
+		autoComplete: false,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
 	    onChange: function() {          
@@ -119,7 +121,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: true,                 
+		autoComplete: false,                 
 	    id: "mo_job",
 	    name: "mo_job",  
 	    tabindex: "17",         
@@ -140,7 +142,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: true,                     
+		autoComplete: false,                     
 	    id: "gu_job",
 	    name: "gu_job",  
 	    tabindex: "17",         
@@ -160,7 +162,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: language_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                        
 	    id: "level",
 	    name: "level",  
 	    tabindex: "17",         

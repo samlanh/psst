@@ -21,10 +21,10 @@
 					 	<?php echo $frm->getElement("branch_id");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input id="group" />
+					 	<input id="study_year" />
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input id="study_year" />
+					 	<input id="group" />
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<?php echo $frm->getElement("grade");?>
@@ -145,7 +145,7 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':0
+			'branch_id':branch_id,'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {

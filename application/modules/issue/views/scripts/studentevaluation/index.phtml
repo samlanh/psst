@@ -99,7 +99,7 @@
 		getAllAcademicByBranch();
 		getAllGroupByBranch();
 	});
-	url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+	url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 	var oldBranch = "<?php echo $this->search['branch_id'];?>";
 	function getAllAcademicByBranch(){
 		dijit.byId('study_year').reset();
@@ -113,7 +113,7 @@
 		dojo.xhrPost({
 			url: url_getacademic,
 			content:{
-				'branch_id':branch_id
+				'branch_id':branch_id,'showall':1
 				},
 			handleAs:"json",
 			load: function(data) {

@@ -488,7 +488,7 @@ require(["dojo/ready"], function(ready){
 	}, "study_year");
 });	
 
-url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');

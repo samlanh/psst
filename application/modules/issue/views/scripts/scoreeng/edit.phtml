@@ -227,7 +227,7 @@ dojo.ready(function(){
 		//getDetailScoreSetting();
 });
 
-url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranchID = '<?php echo $this->score['branch_id']?>';
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();

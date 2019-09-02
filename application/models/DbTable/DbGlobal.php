@@ -1447,9 +1447,13 @@ function getAllgroupStudyNotPass($action=null){
 //   	}
 //   	return $db->fetchAll($sql);
   } 
-  public function getAllTeahcerName(){
+  public function getAllTeahcerName($branch_id=null){
   	$db = $this->getAdapter();
-  	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' order by id DESC ";
+  	$sql=" SELECT id ,CONCAT(COALESCE(teacher_name_kh,''),' ',COALESCE(teacher_name_en,''))  AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != ''  ";
+  	if (!empty($branch_id)){
+  		$sql.=" AND branch_id = $branch_id";
+  	}
+  	$sql.=" ORDER BY id DESC";
   	return $db->fetchAll($sql);
   }
    

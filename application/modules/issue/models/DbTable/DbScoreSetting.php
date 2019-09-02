@@ -70,8 +70,9 @@ class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
 			}
 		  $db->commit();
 		}catch (Exception $e){
-			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			
 		}
    }
    function getScoreSettingById($id){
@@ -95,8 +96,7 @@ class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    				'branch_id'=>$_data['branch_id'],
    				'title'=>$_data['title'],
    				'note'=>$_data['note'],
-   				'status'=>1,
-   				'create_date'=>date("Y-m-d H:i:s"),
+   				'status'=>$_data['status'],
    				'modify_date'=>date("Y-m-d H:i:s"),
    				'user_id'=>$this->getUserId(),
    		);
@@ -154,8 +154,8 @@ class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    		}
    		$db->commit();
    	}catch (Exception $e){
-   		$db->rollBack();
    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+   		$db->rollBack();
    	}
    }
 }

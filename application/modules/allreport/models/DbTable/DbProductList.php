@@ -66,6 +66,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	
     	$sql="SELECT 
     				p.code AS pro_code,
+    				p.images,
     				$grade AS pro_name ,
     				(SELECT $degree FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
     	            (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,

@@ -54,6 +54,10 @@ class Issue_Form_FrmSchedule extends Zend_Dojo_Form
     	
     	
     	$id = new Zend_Form_Element_Hidden('id');
+    	$id->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    	));
     	
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
     	$advance_search->setAttribs(array(

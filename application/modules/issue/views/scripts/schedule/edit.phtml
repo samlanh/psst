@@ -12,6 +12,7 @@
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
 		    		<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_RESCHEDULE_GROUP');?></h4>
+    				<span id="message"></span>
     			</div>
     			<div class="col-sm-4 text-right"></div>
     		</div>
@@ -20,26 +21,31 @@
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				branch_id=dijit.byId("branch_id").get("value");
-                if(branch_id==-1){
-					alert("Please Selected Branch!!!");
+                if(branch_id==-1 || branch_id==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>!!!");
 					dijit.byId("branch_id").focus();
                     return false;
 				}
 				group_code=dijit.byId("group_code").get("value");
-                if(group_code==-1){
-					alert("Please Selected group code!!!");
+                if(group_code==-1 || group_code=="" ){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>!!!");
 					dijit.byId("group_code").focus();
                     return false;
 				}
                 year=dijit.byId("academic_year").get("value");
-                if(year==-1){
-					alert("Please Selected Year!!!");
+                if(year==-1 || year==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_STUDY_YEAR");?>!!!");
 					dijit.byId("academic_year").focus();
                     return false;
 				}
     			var rowId = $('#identity1').val();
 				if(rowId==''){
 					alert("Please add data !!! ");
+					return false;
+				}
+				if(isDuplicate==1){
+					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+					dijit.byId("group_code").focus();
 					return false;
 				}
 				loadingBlock();
@@ -54,6 +60,7 @@
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("branch_id");?>
+		                	<?php echo $frm->getElement("id");?>
 		                </div>
 		            </div>
 		    		<div class="form-group">
@@ -139,6 +146,7 @@ dojo.ready(function(){
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",
 		onChange: function() {
+			checkGroupSchedule();
 			group_code = dijit.byId("group_code").get("value");
 			if(group_code==-1){
 				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
@@ -187,6 +195,37 @@ dojo.ready(function(){
 	getScheduleSettingByBranch();
 	getAllGroupByBranch();
 });
+
+var isDuplicate = 0;
+url_getcheckgroup = '<?php echo $this->url(array('module'=>'issue','controller'=>'schedule','action'=>'checking'));?>';
+function checkGroupSchedule(){
+	group_code = dijit.byId('group_code').get('value');
+	if(group_code=='' || group_code==-1){
+		dijit.byId('group_code').focus();
+		return false;
+	}
+	id = dijit.byId('id').get('value');
+	dojo.xhrPost({
+		url: url_getcheckgroup,
+		content:{
+			'group_id':group_code,'id':id
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
+			}else{
+				isDuplicate=0;
+				$("#message").html('');
+			} 
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
 
 var oldBranchId = '<?php echo $this->row['branch_id'];?>';
 url_getgroupbybrannch = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
@@ -258,7 +297,7 @@ function getScheduleSettingByBranch(){
 		return false;
 	}
 	dojo.xhrPost({
-		url:url_gettecher,
+		url: url_gettecher,
 		content:{
 			'branch_id':branch_id
 		},
@@ -276,8 +315,10 @@ function getScheduleSettingByBranch(){
 		}
 	});
 }
+
+var oldScheduleSetting = '<?php echo $this->row['schedule_setting'];?>';
 var keyrow=0;
-url_getgroup = '<?php echo $this->url(array('module'=>'issue','controller'=>'schedulesetting','action'=>'getschedulesettingdetail'));?>';
+
 function getAllSchoreSettingDetail(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -297,10 +338,15 @@ function getAllSchoreSettingDetail(){
 		dijit.byId('academic_year').focus();
 		return false;
 	}
+	url_getgroup = '<?php echo $this->url(array('module'=>'issue','controller'=>'schedulesetting','action'=>'getschedulesettingdetail'));?>';
+	if(oldScheduleSetting==schedule_setting){
+		loadingBlock();
+		url_getgroup = '<?php echo $this->url(array('module'=>'issue','controller'=>'schedulesetting','action'=>'getschedulesettingdetailedit'));?>';
+	}
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'schedule_setting':schedule_setting,'academic_year':academic_year,'keyrow':keyrow
+			'branch_id':branch_id,'schedule_setting':schedule_setting,'academic_year':academic_year,'keyrow':keyrow,'id':'<?php echo $this->row['id'];?>'
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -309,9 +355,11 @@ function getAllSchoreSettingDetail(){
 			     parseContent: true,
 			});
 			keyrow = data.keyrow;
+			HideloadingBlock();
 		},
 		error: function(err) {
 			alert(err);
+			HideloadingBlock();
 		}
 	});
 }
@@ -322,6 +370,9 @@ function disableColume(keyIndex){
 		dijit.byId("subject_"+keyIndex).set('disabled',false);
 		dijit.byId("teacher_"+keyIndex).set('disabled',false);
 	}else{
+		dijit.byId("subject_"+keyIndex).reset();
+		dijit.byId("teacher_"+keyIndex).reset();
+		
 		dijit.byId("subject_"+keyIndex).set('disabled',true);
 		dijit.byId("teacher_"+keyIndex).set('disabled',true);
 	}

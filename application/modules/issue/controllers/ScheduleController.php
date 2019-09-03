@@ -73,8 +73,8 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 			try {
 				$data = $this->getRequest()->getPost();
 				
-				$_db->addScheduleGroup($data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/issue/schedule");
+				$_db->updateScheduleGroup($data);
+				Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", "/issue/schedule");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAILE");
 				$err =$e->getMessage();
@@ -101,7 +101,22 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 		$teacher = $_db->getAllTeacher();
 		$this->view->teacher = $teacher;
 	}
+	function checkingAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
 	
+			$group_id = empty($data['group_id'])?"":$data['group_id'];
+			$id = empty($data['id'])?"":$data['id'];
+			$arr  = array(
+					'group_id'=>$group_id,
+					'id'=>$id,
+			);
+			$_dbmodel = new Issue_Model_DbTable_DbSchedule();
+			$result=$_dbmodel->checking($arr);
+			print_r(Zend_Json::encode($result));
+			exit();
+		}
+	}
     
 }
 

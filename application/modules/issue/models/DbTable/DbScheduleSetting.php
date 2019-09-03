@@ -239,6 +239,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
 			   				
 			   			$str.='
 			   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" >';
+			   			$str.='<option value=""></option>';
 			   			if (!empty($allSubject)) foreach ($allSubject as $subject){
 			   				$str.='<option value="'.$subject['id'].'">'.$subject['name'].'</option>';
 			   			}
@@ -247,6 +248,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
 			   				
 		   			$str.='
 		   				<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" >';
+		   			$str.='<option value=""></option>';
 		   			if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
 		   				$str.='<option value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
 		   			}
@@ -265,5 +267,145 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    			'keyrow' =>$index,
    	);
    	return $arr;
+   }
+   function getScheduleDetialByScheduleEdit($_data){
+   	 
+   	$setting_id = empty($_data['schedule_setting'])?0:$_data['schedule_setting'];
+   	$branch_id = empty($_data['branch_id'])?0:$_data['branch_id'];
+   	$academic_year = empty($_data['academic_year'])?0:$_data['academic_year'];
+   	$index = empty($_data['keyrow'])?1:$_data['keyrow'];
+   	$mainId = empty($_data['id'])?1:$_data['id'];
+   
+   	$_db = new Accounting_Model_DbTable_DbFee();
+   	$row = $_db->getFeeById($academic_year);
+   	$schoolOption = empty($row['school_option'])?null:$row['school_option'];
+   
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$model = new Application_Model_DbTable_DbGlobal();
+   	$allDay = $model->getAllDay(1);
+   	$allSubject = $model->getAllSubjectName($schoolOption);
+   	$allTeacher = $model->getAllTeahcerName($branch_id);
+   	 
+   	 
+   	$scheduleSetting = $this->getScheduleSettingDetail($setting_id);
+   	 
+   	$str='
+   	<thead  id="head-title">
+   	<tr class="head-td">
+   		<th >'.$tr->translate("TIME").'</th>';
+   	if (!empty($allDay)) foreach ($allDay as $day){
+   		$str.='<th >'. $day['name'].'</th>';
+   	}
+   	$str.='</tr>
+   	</thead>
+   	';
+   	$str.='<tbody id="table_row">';
+   	$identity="";
+   	if (!empty($scheduleSetting)) foreach ($scheduleSetting as $key => $rs) {
+   		$index = $index+1;
+   		if (empty($identity)){
+   			$identity = $index;
+   		}else{ $identity = $identity.",".$index;
+   		}
+   		$classrow="";
+   		if (($key+1)%2==1){
+   			$classrow = "odd";
+   		}
+   		$str.='
+   		<tr class="record_schedule '.$classrow.'" id="row_'.($index).'">
+   		<td align="center" class="nowrap">
+	   		<span>
+		   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['from_hour']." - ".$rs['to_hour'].'
+		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="settingdetail_'.$index.'" name="settingdetail_'.$index.'" value="'.$rs['id'].'" />
+		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="from_hour_'.$index.'" name="from_hour_'.$index.'" value="'.$rs['from_hour'].'" />
+		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="to_hour_'.$index.'" name="to_hour_'.$index.'" value="'.$rs['to_hour'].'" />
+	   		 
+	   		</span>
+   		</td>
+   		';
+   		if (!empty($allDay)) foreach ($allDay as $day){
+   			$selected="";
+   			$readOnly="";
+   			
+   			$scheduleDay = $this->getScheduleDetail($mainId, $rs['id'], $day['id']);
+   			$subjectSchedule="";
+   			$teacherSchedule="";
+   			$idScheduleDetail="";
+   			if (!empty($scheduleDay)){
+   				if ($scheduleDay['study_type']==2){
+   					$selected = 'selected="selected"';
+   					$readOnly = 'readOnly="readOnly"';
+   				}
+   				$subjectSchedule=$scheduleDay['subject_id'];
+   				$teacherSchedule=$scheduleDay['techer_id'];
+   				$idScheduleDetail=$scheduleDay['id'];
+   			}else{
+	   			if ($day['id']==7){
+	   				$selected = 'selected="selected"';
+	   				$readOnly = 'readOnly="readOnly"';
+	   			}
+   			}
+   			$keyindex = $index."_".$day['id'];
+   			$str.='<td align="center">
+			   			<div class="dayColunm">';
+			   			$str.='
+			   			<select onChange="disableColume('."'".$keyindex."'".')" dojoType="dijit.form.FilteringSelect" class="fullside" name="type_'.$keyindex.'" id="type_'.$keyindex.'" >
+			   			<option value="1">'.$tr->translate("STUDY").'</option>
+			   			<option value="2" '.$selected.'>'.$tr->translate("NO_STUDY").'</option>
+			   			</select>
+			   			<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="schedule_detail'.$keyindex.'" name="schedule_detail'.$keyindex.'" value="'.$idScheduleDetail.'" />
+			   			';
+   
+   			$str.='
+   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" >';
+   			$str.='<option value=""></option>';
+   			if (!empty($allSubject)) foreach ($allSubject as $subject){
+   				$selected="";
+   				if($subjectSchedule==$subject['id']){ $selected = 'selected="selected"'; }
+   				$str.='<option '.$selected.' value="'.$subject['id'].'">'.$subject['name'].'</option>';
+   			}
+   			$str.='</select>
+   			';
+   
+   			$str.='
+   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" >';
+   			$str.='<option value=""></option>';
+   			if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
+   				$selected="";
+   				if($teacherSchedule==$teacher['id']){ $selected = 'selected="selected"';}
+   				$str.='<option '.$selected.' value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
+   			}
+   			$str.='</select>
+   			';
+   			$str.='</div>
+   			</td>';
+   		}
+   		$str.='</tr>';
+   	}
+   	$str.='</tbody>';
+   	 
+   	$arr = array(
+   			'string' => $str,
+   			'identity' => $identity,
+   			'keyrow' =>$index,
+   	);
+   	return $arr;
+   }
+   
+   function getScheduleDetail($main_schedule_id,$schedule_setting_id,$day_id){
+   	$db = $this->getAdapter();
+   	$sql="SELECT d.*
+		FROM `rms_group_reschedule` AS d 
+		WHERE d.main_schedule_id=$main_schedule_id
+		AND d.day_id =$day_id
+		AND d.schedule_setting_id =$schedule_setting_id";
+   	return $db->fetchRow($sql);
+   }
+   
+   
+   function getCheckScheduleSettingInSchedule($id){
+   	$db = $this->getAdapter();
+   	$sql="SELECT s.* FROM `rms_group_schedule` AS s WHERE s.schedule_setting=$id LIMIT 1";
+   	return $db->fetchRow($sql);
    }
 }

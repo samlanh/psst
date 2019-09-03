@@ -92,6 +92,11 @@ class Issue_SchedulesettingController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     		exit();
     	}
+    	$check = $db->getCheckScheduleSettingInSchedule($id);
+    	if (!empty($check)){
+    		Application_Form_FrmMessage::Sucessfull("UNAVAILABLE_TO_EDIT", self::REDIRECT_URL."/index");
+    		exit();
+    	}
     	$this->view->detail = $db->getScheduleSettingDetail($id);
     	$frm = new Issue_Form_FrmScheduleSetting();
     	$frm->FrmAddScheduleSetting($row);
@@ -143,6 +148,16 @@ class Issue_SchedulesettingController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Issue_Model_DbTable_DbScheduleSetting();
     		$scheduldSetting = $db->getScheduleDetialBySchedule($data);
+    		print_r(Zend_Json::encode($scheduldSetting));
+    		exit();
+    	}
+    }
+    
+    public function getschedulesettingdetaileditAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Issue_Model_DbTable_DbScheduleSetting();
+    		$scheduldSetting = $db->getScheduleDetialByScheduleEdit($data);
     		print_r(Zend_Json::encode($scheduldSetting));
     		exit();
     	}

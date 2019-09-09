@@ -189,52 +189,53 @@
 
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require('dijit.form.NumberTextBox');
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.DateTextBox");
+dojo.require('dijit.form.NumberTextBox');
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+
 dojo.ready(function(){
 	var subject = [];
-		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
-		new dijit.form.FilteringSelect({
-		    store:years_store,		                    
-		    required: true,
-		    queryExpr: "*${0}*",
-			autoComplete: false,     			
-		    id: "year_study",
-		    name: "year_study",           
-		    class: 'fullside',  
-		    required:'true',
-		    placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
-		    onChange: function() {  
-		    }
-		}, "year_study");
-		
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,                        
-			id: "grade",
-			name: "grade",           
-			class: 'fullside', 
-			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-			onChange: function() {
-			}
-		}, "grade");
+	var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
+	new dijit.form.FilteringSelect({
+		store:years_store,		                    
+		required: true,
+		queryExpr: "*${0}*",
+		autoComplete: false,     			
+		id: "year_study",
+		name: "year_study",           
+		class: 'fullside',  
+		required:'true',
+		placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
+		onChange: function() {
+		}
+	}, "year_study");
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                        
+		id: "grade",
+		name: "grade",           
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {
+		}
+	}, "grade");
 
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,             
-			id: "group",
-			name: "group",           
-			class: 'fullside', 
-			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-			onChange: function() {
-				getInfoBygroup();
-				getSubjectByGroup();
-			}
-		}, "group");
-		getAllGroupByBranch();
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,             
+		id: "group",
+		name: "group",           
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+		onChange: function() {
+			getInfoBygroup();
+			getSubjectByGroup();
+		}
+	}, "group");
+	getAllGroupByBranch();
 });
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-grade')); ?>';

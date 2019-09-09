@@ -555,103 +555,82 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		try{
 			$session_t=new Zend_Session_Namespace('authteacher');
 			$teacher_id = $session_t->teacher_id;
-			$id = $this->existingReadyinputExamScore($_data['group'], $_data['exam_type'], $_data['for_semester'], $_data['for_month'],$teacher_id);
-			if(empty($id)){
-				$_arr = array(
-						'title_score'=>$_data['title'],
-						'group_id'=>$_data['group'],
-						'exam_type'=>$_data['exam_type'],
-						'date_input'=>date("Y-m-d"),
-						'note'=>$_data['note'],
-						//'user_id'=>$teacher_id,
-						'type_score'=>1, // 1 => BacII score
-						'for_academic_year'=>$_data['year_study'],
-						'for_semester'=>$_data['for_semester'],
-						'for_month'=>$_data['for_month'],
-						'teacher_id'=>$teacher_id,
-				);
-				$this->_name='rms_teacherscore';
-				$id=$this->insert($_arr);
-			}else{
-				return 1;
-			}
-				
+			$branch_id = $session_t->branch_id;
+			$_arr = array(
+					'branch_id'		=>$branch_id,
+					'title_score'	=>$_data['title'],
+					'group_id'		=>$_data['group'],
+					'max_score'		=>$_data['max_score'],
+			        'exam_type'		=>$_data['exam_type'],
+					'date_input'	=>date("Y-m-d"),
+					'note'			=>$_data['note'],
+					'user_id'		=>$teacher_id,
+					'type_score'	=>1, // 1 => BacII score , 2 => Eng score
+					'for_academic_year'=>$_data['year_study'],
+					'for_semester'	=>$_data['for_semester'],
+					'for_month'		=>$_data['for_month'],
+					'score_option'	=>2, // 1=user input , 2=teacher input
+			);
+			$id=$this->insert($_arr);
+			$dbpush = new Application_Model_DbTable_DbGlobal();
+// 			$dbpush->getTokenUser($_data['group'],null, 4);
+			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-				$k=0;
+				$total_score = 0;
+				$rssubject = $_data['selector'];
+				$subject_amt = 1 ;
 				if(!empty($ids))foreach ($ids as $i){
-					$k=$k+1;
-					foreach ($this->getSubjectByGroup($_data['group'],$teacher_id) as $index => $rs_parent){
-						$parent_id = $rs_parent["subject_id"];
-						$getChildren= $this->getChildSubject($parent_id);
-						if(!empty($getChildren)){
-							$no = $index + 1;
-							$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-							$sub_name = $_data['stu_id_'.$k].$sub_name;
-							$subject_id = $rs_parent['subject_id'];
-								
-							$arr=array(
+					
+					foreach ($rssubject as $subject){
+						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							$arr = array(
 									'score_id'=>$id,
-									'group_id'=>$_data['group'],
-									'student_id'=>$_data['stu_id_'.$k],
-									'subject_id'=> $subject_id,
-									'score'=> $_data["$sub_name".$no],
-									'status'=>1,
-									//'user_id'=>$this->getUserId(),
-									'is_parent'=> $rs_parent["is_parent"],
-									'behavior_comment'=> $_data['behavior'.$sub_name.$no],
-									'homework_comment'=> $_data['homework'.$sub_name.$no],
-									'class_participate_comment'=> $_data['classprticipate'.$sub_name.$no],
-									'comment'=> $_data['comment'.$sub_name.$no],
+									'student_id'=>$old_studentid,
+									'total_score'=>$total_score,
+									'amount_subject'=>$subject_amt,
+									'total_avg' =>number_format($total_score/$subject_amt,2)
 							);
-							$this->_name='rms_teacherscore_detail';
+							$this->_name='rms_score_monthly';
 							$this->insert($arr);
-							// 									}
-							foreach ($this->getChildSubject($parent_id) as $key2 => $rs_sub){
-								$no2= $key2+1;/////////if parent have subjects
-								$subject_id = $rs_sub["id"];
-								$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
-								$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-								$arr=array(
-										'score_id'=>$id,
-										'group_id'=>$_data['group'],
-										'student_id'=>$_data['stu_id_'.$k],
-										'subject_id'=> $subject_id,
-										'score'=> $_data["$sub_name".$no2],
-										'status'=>1,
-										'user_id'=>$this->getUserId(),
-										'is_parent'=> $rs_sub["is_parent"]
-								);
-								$this->_name='rms_teacherscore_detail';
-								$this->insert($arr);
-								//}
-							}
-						}else{/////////if parent have not subjects
-							$no3 = $index+1;
-							$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-							$sub_name = $_data['stu_id_'.$k].$sub_name;
-							$subject_id = $rs_parent['subject_id'];
-							$arr=array(
-									'score_id'=>$id,
-									'group_id'=>$_data['group'],
-									'student_id'=>$_data['stu_id_'.$k],
-									'subject_id'=> $subject_id,
-									'score'=> $_data["$sub_name".$no3],
-									'status'=>1,
-									'user_id'=>$this->getUserId(),
-									'is_parent'=> $rs_parent["is_parent"],
-									'behavior_comment'=> $_data['behavior'.$sub_name.$no3],
-									'homework_comment'=> $_data['homework'.$sub_name.$no3],
-									'class_participate_comment'=> $_data['classprticipate'.$sub_name.$no3],
-									'comment'=> $_data['comment'.$sub_name.$no3],
-							);
-							$this->_name='rms_teacherscore_detail';
-							$this->insert($arr);
+							$total_score = 0;
 						}
+						
+						$old_studentid=$_data['student_id'.$i];
+						$subject_amt = $_data['amount_subject'.$i];
+						$total_score = $total_score+$_data["score_".$i."_".$subject];
+						
+						$arr=array(
+								'score_id'=>$id,
+								'group_id'=>$_data['group'],
+								'student_id'=>$_data['student_id'.$i],
+								'amount_subject'=>$_data['amount_subject'.$i],
+								'subject_id'=> $subject,
+								'score'=> $_data["score_".$i."_".$subject],
+								'status'=>1,
+								'user_id'=>$this->getUserId(),
+								'is_parent'=> 1
+						);
+						$this->_name='rms_score_detail';
+						$this->insert($arr);
+					}
+				}
+				
+				if(!empty($ids)){
+					if($total_score>0){
+						$arr = array(
+								'score_id'=>$id,
+								'student_id'=>$old_studentid,
+								'total_score'=>$total_score,
+								'amount_subject'=>$subject_amt,
+								'total_avg' =>number_format($total_score/$subject_amt,2)
+						);
+						$this->_name='rms_score_monthly';
+						$this->insert($arr);
 					}
 				}
 			}
-			$db->commit();
+		  	$db->commit();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();

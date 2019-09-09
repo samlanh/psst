@@ -83,7 +83,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					}
 				}
 				
-				if(!empty($ids)){if($total_score>0){
+				if(!empty($ids)){
+					if($total_score>0){
 						$arr = array(
 								'score_id'=>$id,
 								'student_id'=>$old_studentid,

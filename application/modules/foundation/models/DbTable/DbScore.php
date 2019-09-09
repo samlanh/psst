@@ -372,9 +372,9 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$sql.=" AND gsjd.teacher = ".$teacher_id;
 		}
 		if($exam_type==1){//for month
-			$sql.=" AND gsjd.amount_subject >0 ";
+			$sql.=" AND gsjd.amount_subject > 0 ";
 		}else{//for semester
-			$sql.=" AND gsjd.amount_subject_sem >0 ";
+			$sql.=" AND gsjd.amount_subject_sem > 0 ";
 		}
 		$sql.=' ORDER BY gsjd.id ASC ';
 		return $db->fetchAll($sql);

@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	$this->headTitle($tr->translate('ប្រវត្តិរូបសង្ខេប')); 
 	echo $this->headTitle(''); 
 	$sex='';
 	if($this->rs['sex']==1){
@@ -98,15 +98,13 @@ dojo.ready(function(){
 	  		 </style>
 				<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
 					<tr class="head">
-						<td width="40%" valign="middle">
-							<img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 60px;display: inline-block;margin-right: 10px;">
+						<td width="45%" valign="middle">
 							<div style=" display: inline-block;    vertical-align: top;">
-							<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >សាលាបញ្ញាសាស្ត្រអន្តរជាតិ</h2>
-					   		<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Times New Roman';">Paññāsāstra International School</h2>
+								<?php echo $this->rsheader;?>
 							</div>
 					   </td>
-					   <td width="30%" align="center">
-					   		
+					   <td width="25%" align="center">
+					   
 					   </td>
 					   <td width="30%" align="center">
 					   		<h2 style="font-size:16px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>

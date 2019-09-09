@@ -130,7 +130,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 		$rows = $_db->getAllDepartment(); // degree language
-		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($rows, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->department_type = $rows;
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
@@ -242,7 +242,10 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	public function viewAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db= new Global_Model_DbTable_DbTeacher();
-		$this->view->rs = $db->getViewById($id);
+		$this->view->rs = $rs = $db->getViewById($id);
+		
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($rs['branch_id'],3);
 	}
 	function getTeacherIdAction(){
 		if($this->getRequest()->isPost()){

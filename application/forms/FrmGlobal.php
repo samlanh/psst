@@ -77,7 +77,7 @@ class Application_Form_FrmGlobal{
 		}
 		return $str;
 	}
-	function getLetterHeaderReport($branch_id){
+	function getLetterHeaderReport($branch_id,$header_type=0){
 		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
 		//$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -96,6 +96,9 @@ class Application_Form_FrmGlobal{
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
 		$color = empty($rs['color'])?"":"#".$rs['color'];
 		$type_header = HEADER_REPORT_TYPE;
+		if($header_type!=0){
+			$type_header = $header_type;
+		}
 		$str="";
 		if ($type_header==1){
 		$str="<table width='100%'>
@@ -183,7 +186,7 @@ class Application_Form_FrmGlobal{
 			<table width='100%'>
 				<tr>
 					<td width='20%' align='center'>
-						<img style='max-height:100px;' src=".$logo."><br>
+						<img style='width:100%' src=".$logo."><br>
 					</td>
 					<td width='80%' valign='top'>
 						<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px; color: inherit;padding: 8px 0px;'>".$rs['school_namekh']."</h2>

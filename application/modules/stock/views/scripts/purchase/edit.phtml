@@ -142,6 +142,13 @@ span.oldsup input[type=checkbox] {
 	                   </div>
 	                </div>
 	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INVOICE_NO");?> 
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" dojoType="dijit.form.TextBox" name="invoice_no"  id="invoice_no" value="<?php echo $this->row_sup['invoice_no'];?>" class="fullside" >
+	                   </div>
+	                </div>
+	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PURCHASE_DATE");?></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d",strtotime($this->row_sup['date']))?>" name="purchase_date"  id="purchase_date" class="fullside" >

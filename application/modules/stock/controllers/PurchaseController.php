@@ -25,11 +25,12 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			$db =  new Stock_Model_DbTable_DbPurchase();
 			$rows = $db->getAllSupPurchase($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","Tel","EMAIL","AMOUNT_DUE","DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","PURCHASE_NO","INVOICE_NO","SUPPLIER_NAME","SEX","Tel","EMAIL","AMOUNT_DUE","PURCHASE_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'purchase','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rows,array( 'branch_name'=>$link,'supplier_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rows,array( 'branch_name'=>$link,'supplier_no'=>$link,
+					'invoice_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Application Error");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

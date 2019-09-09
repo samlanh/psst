@@ -22,7 +22,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	}
     	$sql="SELECT sp.id,
     		 (SELECT $branch FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
-    		 sp.supplier_no,s.sup_name,
+    		 sp.supplier_no,
+    		 sp.invoice_no,
+    		 s.sup_name,
     	 	(SELECT $label FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
 		    sp.amount_due,sp.date,
 		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name 
@@ -41,6 +43,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_search=addslashes(trim($search['title']));
     		$s_where[]= " sp.supplier_no LIKE '%{$s_search}%'";
     		$s_where[]="  s.sup_name LIKE '%{$s_search}%'";
+    		$s_where[]="  sp.invoice_no LIKE '%{$s_search}%'";
     		$s_where[]= " s.tel LIKE '%{$s_search}%'";
     		$s_where[]= " s.email LIKE '%{$s_search}%'";
     		$s_where[]= " sp.amount_due LIKE '%{$s_search}%'";
@@ -152,6 +155,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$_arr = array(
     				'sup_id'		=>$sup_id,
     				'supplier_no'	=>$purchase_no,
+    				'invoice_no'    =>$_data['invoice_no'],
     				'amount_due'	=>$_data['amount_due'],
     				'amount_due_after'=>$_data['amount_due'],
     				'branch_id'		=>$_data['branch'],
@@ -283,6 +287,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		$_arr = array(
 	    				'sup_id'		=> $sup_id,
 	    				'supplier_no'	=> $_data['purchase_no'],
+	    				'invoice_no'    =>$_data['invoice_no'],
 	    				'amount_due'	=> $_data['amount_due'],
 	    				'amount_due_after'=> $_data['amount_due'],
 	    				'branch_id'		=> $_data['branch_id'],
@@ -320,6 +325,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		   	}catch (Exception $e){
 		   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		   		$db->rollBack();
+		   		Application_Form_FrmMessage::message("INSERT_FAIL");
 		   	}
     }
     function getProductNames(){

@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('RPT_PURCHASE_ALL')); 
-	$frm =  $this->form_search;
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 ?>	
 <meta charset="utf-8">
@@ -123,19 +121,19 @@ table.tb-footer tr.style-head {
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 									<td colspan="2">&nbsp;<?php echo $tr->translate("SUPPLIER_INFO");?>&nbsp;</td>
-									<td colspan="8">&nbsp;<?php echo $tr->translate("PURCHASE_INFO");?>&nbsp;</td>
+									<td colspan="9">&nbsp;<?php echo $tr->translate("PURCHASE_INFO");?>&nbsp;</td>
 								</tr>
 								<tr class="style-head" align="center">
-									
 									<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?></td>
 									<td>&nbsp;<?php echo $tr->translate('PHONE');?></td>
 									<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?></td>
+									<td>&nbsp;<?php echo $tr->translate('INVOICE_NO');?></td>
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PURCHASE_DATE');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 							   </tr>
 						   </thead>
@@ -143,22 +141,26 @@ table.tb-footer tr.style-head {
 						$totalpaid=0;
 						$totalQTY=0;
 						$totalbalance=0; if(!empty($this->pur_all))foreach ($this->pur_all AS $rs) { $i++; ?>
-							<tr class="style-rowdata hover" align="center">
+							<tr class="style-rowdata hover" align="left" style="<?php if($rs['status']==0){echo'background:#fceeee;';}?>">
 							    <td>&nbsp;<?php echo $i; ?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $rs['brand_name'];?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $rs['sup_name'];?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $rs['tel'];?>&nbsp;</td>
 							    <td>&nbsp;<strong><?php echo $rs['supplier_no'];?></strong>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['invoice_no'];?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $rs['cate_name'];?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $rs['pro_id'];?>&nbsp;</td>
 							    <td><?php echo number_format($rs['qty'],0);?>&nbsp;</td>
 							    <td>&nbsp;$&nbsp;<?php echo $rs['cost'];?>&nbsp;</td>
 							    <td>&nbsp;$&nbsp;<?php echo $rs['amount'];?>&nbsp;</td>
 							    <td><?php echo date("d/m/Y",strtotime($rs['date']));?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['status_po']; ?>&nbsp;</td>
 							 </tr>
-							<?php $totalbalance=$totalbalance+$rs['amount'];
-							$totalQTY = $totalQTY +$rs['qty'];
+							<?php 
+								if($rs['status']==1){
+									$totalbalance=$totalbalance+$rs['amount'];
+									$totalQTY = $totalQTY +$rs['qty'];
+								}
 							}?>	  
 						</table>	
 					</td>

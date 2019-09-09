@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('RPT_PURCHASE')); 
-	$frm =  $this->form_search;
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 ?>	
 <meta charset="utf-8">
@@ -126,7 +124,7 @@ table.tb-footer tr.style-head {
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 									<td colspan="2">&nbsp;<?php echo $tr->translate("SUPPLIER_INFO");?>&nbsp;</td>
-									<td colspan="5">&nbsp;<?php echo $tr->translate("PURCHASE_INFO");?>&nbsp;</td>
+									<td colspan="6">&nbsp;<?php echo $tr->translate("PURCHASE_INFO");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
 								</tr>
@@ -134,20 +132,21 @@ table.tb-footer tr.style-head {
 									<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('PHONE');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('INVOICE_NO');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PURCHASE_DATE');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('REMAIN');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('REMAIN_BALANCE');?>&nbsp;</td>
 							   </tr>
 							</thead>
-						<?php $i=0;$totalpaid=0;
-						$totalremain =0;
-						$totalbalance=0; if(!empty($this->pur_code))foreach ($this->pur_code AS $rs) { $i++;
-						       
+						<?php $i=0;
+							$totalpaid=0;
+							$totalremain =0;
+							$totalbalance=0; if(!empty($this->pur_code))foreach ($this->pur_code AS $rs) { $i++;
 						  ?>
-							<tr class="style-rowdata hover" align="center">
-								<td>&nbsp;<?php echo $i; ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $rs['branch_name'];?>&nbsp;</td>
+							<tr class="style-rowdata hover" align="left" style="<?php if($rs['status']==0){echo'background:#fceeee;';}?>">
+								<td><?php echo $i; ?></td>
+								<td align="left">&nbsp;<?php echo $rs['branch_name'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $rs['sup_name'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $rs['tel'];?>&nbsp;</td>
 								<td >&nbsp;
@@ -155,6 +154,7 @@ table.tb-footer tr.style-head {
 								     		<strong><?php echo $rs['supplier_no'];?></strong>
 								   	</a>&nbsp;
 								</td>
+								<td align="right">&nbsp;<?php echo $rs['invoice_no'];?>&nbsp;</td>
 								<td align="right">&nbsp;$&nbsp;<?php echo number_format($rs['amount_due'],2);?>&nbsp;</td>
 								<td>&nbsp;<?php echo date("d/m/Y",strtotime($rs['date']));?>&nbsp;</td>
 								<td>&nbsp;<?php if($rs['status']==0){ echo $tr->translate('VOID');}else if($rs['amount_due']>$rs['amount_due_after'] AND $rs['amount_due_after']>0){ echo $tr->translate('SOME_PAID'); }else if($rs['is_paid']==1){ echo $tr->translate('FULL_PAID');}else{ echo "-";} ?>&nbsp;</td>
@@ -166,8 +166,10 @@ table.tb-footer tr.style-head {
 								</td>
 							 </tr>
 							<?php 
-								$totalbalance=$totalbalance+$rs['amount_due'];
-								$totalremain = $totalremain+$rs['amount_due_after'];
+								if($rs['status']!=0){
+									$totalbalance=$totalbalance+$rs['amount_due'];
+									$totalremain = $totalremain+$rs['amount_due_after'];
+								}
 							}?>	 
 						</table>	
 					</td>

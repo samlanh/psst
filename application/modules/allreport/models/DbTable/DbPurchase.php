@@ -49,7 +49,6 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = sp.user_id LIMIT 1) as user_name
 				FROM rms_purchase AS sp,rms_supplier AS s 
 			    WHERE sp.sup_id=s.id  ";//AND sp.status=1
-    	///(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`,
     	
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
@@ -58,6 +57,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
     		$s_where[]= " sp.supplier_no LIKE '%{$s_search}%'";
+    		$s_where[]= " sp.invoice_no LIKE '%{$s_search}%'";
     		$s_where[]=" s.sup_name LIKE '%{$s_search}%'";
     		$s_where[]=" s.tel LIKE '%{$s_search}%'";
     		$s_where[]= " sp.amount_due LIKE '%{$s_search}%'";
@@ -80,7 +80,8 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	} 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('branch_id');
-    	return $db->fetchAll($sql.$where);
+    	$orderby=' ORDER BY sp.id DESC ';
+    	return $db->fetchAll($sql.$where.$orderby);
     }
     function getPurchaseSupplierById($id){
     	$db=$this->getAdapter();
@@ -152,17 +153,20 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$grade = "title_en";
     		$degree = "it.title_en";
     	}
-    	$sql=" SELECT  sp.id,sp.supplier_no,s.sup_name,s.tel,
-		           (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
-		           pro.$grade AS pro_id,
+    	$sql=" SELECT  sp.id,
+    				sp.supplier_no,s.sup_name,s.tel,
+    				sp.invoice_no,sp.status,
+		           (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS brand_name ,
+		            pro.$grade AS pro_id,
 		           (SELECT $degree FROM `rms_items` AS it WHERE it.id = pro.items_id LIMIT 1) AS cate_name,
-		          
 		            spd.qty,spd.qty,spd.cost,spd.amount,spd.date,
-		       		(SELECT $label FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
-       				FROM rms_purchase AS sp,
-       				rms_purchase_detail AS spd,
-       				rms_supplier AS s,
-       				rms_itemsdetail AS pro
+		       		(SELECT $label FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status_po`
+       				
+       				FROM 
+       					rms_purchase AS sp,
+	       				rms_purchase_detail AS spd,
+	       				rms_supplier AS s,
+	       				rms_itemsdetail AS pro
        				WHERE sp.id=spd.supproduct_id  
     					AND s.id=sp.sup_id
     				AND pro.id=spd.pro_id	";
@@ -174,6 +178,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
     		$s_where[]= " sp.supplier_no LIKE '%{$s_search}%'";
+    		$s_where[]= " sp.invoice_no LIKE '%{$s_search}%'";
     		$s_where[]= " s.sup_name LIKE '%{$s_search}%'";
     		$s_where[]=" spd.qty LIKE '%{$s_search}%'";
     		$s_where[]= " spd.cost LIKE '%{$s_search}%'";
@@ -192,15 +197,16 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if($search['product_type']>0){
     		$where.=" AND pro.product_type =".$search['product_type'];
     	}
-//     	if($search['status_search']==1 OR $search['status_search']==0){
-//     		$where.=" AND spd.status=".$search['status_search'];
-//     	}
+    	if($search['status_search']>0){
+    		$where.=" AND sp.status=".$search['status_search'];
+    	}
     	if($search['supplier_id']>0){
     		$where.=" AND sp.sup_id=".$search['supplier_id'];
     	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$sql.=$dbp->getAccessPermission('sp.branch_id');
+    	echo $sql.$where;
     	return $db->fetchAll($sql.$where);
     }
     

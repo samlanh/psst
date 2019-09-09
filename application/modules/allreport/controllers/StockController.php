@@ -37,7 +37,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$form=$frm->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 		$this->view->search = $search;
 	}
 	public function rptListProductAction(){
@@ -145,7 +144,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 					'category_id'=>-1,
 					'product' =>'',
 					'product_type' =>'',
-					'status_search'=>1,
+					'status_search'=>-1,
 					'start_date'=> date('Y-m-d'),
 					'end_date'=>date('Y-m-d'),
 				);

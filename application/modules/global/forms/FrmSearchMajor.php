@@ -112,6 +112,19 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'class'=>'fullside height-text',));
+		$_degree->setValue($request->getParam("degree"));
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt_degree = array(""=>$this->tr->translate("PLEASE_SELECT_DEPARTMENT"));
+		$_arr_department = $_db->getAllDepartment();
+		if(!empty($_arr_department))foreach($_arr_department AS $row) $_arr_opt_degree[$row['id']]=$row['name'];
+		$_department = new Zend_Dojo_Form_Element_FilteringSelect("department");
+		$_department->setMultiOptions($_arr_opt_degree);
+		$_department->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside height-text',));
+		$_department->setValue($request->getParam("department"));
 		
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");
@@ -134,7 +147,10 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_nationality->setMultiOptions($_arr_opt_nation);
 		$_nationality->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside height-text',));
+				'class'=>'fullside height-text'
+				,)
+			);
+		$_nationality->setValue($request->getParam("nationality"));
 		
 		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
 		$optionBranch = $db->getAllBranch();
@@ -144,18 +160,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside height-text',));
- //		$_db = new Application_Model_DbTable_DbGlobal();
-// 		//$rows = $_db->getGlobalDb("SELECT DISTINCT subject_name_en FROM rms_teacher WHERE teacher_name_en!='' AND subject_name_en!=''");
-// 		$rows=array();
-// 		$opt = array(-1=>$this->tr->translate("CHOOSE_SUJECT"));
-// 		if(!empty($rows))foreach($rows AS $row) $opt[$row['subject_name_en']]=$row['subject_name_en'];
-// 		$_subject = new Zend_Dojo_Form_Element_FilteringSelect('subjec_name');
-// 		$_subject->setMultiOptions($opt);
-// 		$_subject->setAttribs(array(
-// 				'dojoType'=>$this->filter,
-// 				'required'=>'true',
-// 				'placeholder'=>$this->tr->translate("INPUT_VALUE_SETTING")));
-// 		$_subject->setValue($request->getParam('subjec_name'));
+		$_branch_id->setValue($request->getParam("branch_id"));
 		
 		$_staff=  new Zend_Dojo_Form_Element_FilteringSelect('staff_type');
 		$_staff->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -164,6 +169,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				1=>$this->tr->translate("TEACHER"),
 				2=>$this->tr->translate("STAFF"));
 		$_staff->setMultiOptions($_staff_opt);
+		$_staff->setValue($request->getParam("staff_type"));
 		
 		$_teacher=  new Zend_Dojo_Form_Element_FilteringSelect('teacher_type');
 		$_teacher->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -172,6 +178,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				1=>$this->tr->translate("TEACHER_KHMER"),
 				0=>$this->tr->translate("TEACHER_FOREIGNER"));
 		$_teacher->setMultiOptions($_teacher_opt);
+		$_teacher->setValue($request->getParam("teacher_type"));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -188,8 +195,9 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 			$_staff->setValue($_data['staff_type']);
 			$_degree->setValue($_data['degree']);
 			$_teacher->setValue($_data['teacher_type']);
+			$_nationality->setValue($_data['nationality']);
 		}
-		$this->addElements(array($_id,$_title,$_degree,$_teacher,$_staff,$_branch_id,$end_date,$_nationality,$_status));
+		$this->addElements(array($_id,$_title,$_degree,$_teacher,$_staff,$_branch_id,$end_date,$_nationality,$_status,$_department,));
 		
 		return $this;
 	}
@@ -218,13 +226,13 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
-		$_branch_id->setValue($request->getParam("branch_id"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows= $db->getAllBranch();
 		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_BRANCH")));
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_branch_id->setMultiOptions($opt);
+		$_branch_id->setValue($request->getParam("branch_id"));
 		
 			
 		$this->addElements(array($_branch_id,$_title,$_status));		

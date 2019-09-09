@@ -419,34 +419,36 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	public function getViewById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT id, 
-				(SELECT p.province_kh_name FROM rms_province AS p WHERE p.code=g.province_id LIMIT 1) AS province_name,	
-				(SELECT d.district_namekh FROM ln_district AS d WHERE d.dis_id=g.district_name LIMIT 1) AS dis_name,	
-				(SELECT c.commune_namekh FROM ln_commune AS c WHERE c.com_id=g.commune_name LIMIT 1) AS com_name,	
-				(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=g.village_name LIMIT 1) AS Village_name,			
-				g.teacher_code, 
-				g.teacher_name_kh,
-				g.home_num,
-				g.street_num,
-				g.passport_no,
-				g.dob,
-				g.card_no,
-				g.photo,
-				g.start_date,
-				g.end_date,
-				g.agreement,
-				g.experiences,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nation) AS nation, 
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-				g.position_add,
-				g.tel,
-				g.email,
-				g.note				
-				FROM rms_teacher AS g 
-				
+		$sql = "SELECT 
+					id,
+					branch_id, 
+					(SELECT p.province_kh_name FROM rms_province AS p WHERE p.code=g.province_id LIMIT 1) AS province_name,	
+					(SELECT d.district_namekh FROM ln_district AS d WHERE d.dis_id=g.district_name LIMIT 1) AS dis_name,	
+					(SELECT c.commune_namekh FROM ln_commune AS c WHERE c.com_id=g.commune_name LIMIT 1) AS com_name,	
+					(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=g.village_name LIMIT 1) AS Village_name,			
+					g.teacher_code, 
+					g.teacher_name_kh,
+					g.home_num,
+					g.street_num,
+					g.passport_no,
+					g.dob,
+					g.card_no,
+					g.photo,
+					g.start_date,
+					g.end_date,
+					g.agreement,
+					g.experiences,
+					(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
+					(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
+					(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
+					(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nation) AS nation, 
+					(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+					g.position_add,
+					g.tel,
+					g.email,
+					g.note				
+				FROM 
+					rms_teacher AS g 
 				WHERE  id=$id";
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);

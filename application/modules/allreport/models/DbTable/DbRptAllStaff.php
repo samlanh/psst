@@ -19,23 +19,26 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	if($currentlang==1){
     		$label="name_kh";
     	}
-    	$sql = "
-    	SELECT g.*,
-    	(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
-    	CASE
-    	WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
-    	WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
-    	END AS sex,
-    	CASE
-    	WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
-    	WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
-    	END AS staff_type_title,
-    	(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-    	(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-    	(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality,
-    	(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name
-    	FROM rms_teacher AS g WHERE 1
-    	";
+    	$sql = "SELECT 
+	    			g.*,
+			    	(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+			    	CASE
+			    	WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
+			    	WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
+			    	END AS sex,
+			    	CASE
+			    	WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
+			    	WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
+			    	END AS staff_type_title,
+			    	(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
+			    	(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+			    	(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality,
+			    	(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name
+    			FROM 
+    				rms_teacher AS g 
+    			WHERE 
+    				1
+    		";
     
     	$where='';
     	if(!empty($search['title'])){
@@ -48,22 +51,25 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     			$where .=' AND ('.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['degree'])){
-    	$where.=' AND degree='.$search['degree'];
+    		$where.=' AND degree='.$search['degree'];
     	}
+    	if($search['teacher_type']>-1){
+			$where.=' AND teacher_type='.$search['teacher_type'];
+		}
     	if(!empty($search['nationality'])){
-    	$where.=' AND nationality='.$search['nationality'];
+    		$where.=' AND nationality='.$search['nationality'];
     	}
     	if(!empty($search['branch_id'])){
-    	$where.=' AND branch_id='.$search['branch_id'];
+    		$where.=' AND branch_id='.$search['branch_id'];
     	}
     	if(!empty($search['staff_type'])){
-    	$where.=' AND staff_type='.$search['staff_type'];
+    		$where.=' AND staff_type='.$search['staff_type'];
     	}
-    	$order_by=" GROUP BY g.staff_type ORDER BY id DESC ";
+    	$order_by=" ORDER BY id DESC ";
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.= $dbp->getAccessPermission('g.branch_id');
-    
+    	//echo $sql.$where.$order_by;//exit();
     	return $db->fetchAll($sql.$where.$order_by);
     }
 	function getAllTeacher($search){
@@ -106,6 +112,12 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['degree'])){
 			$where.=' AND degree='.$search['degree'];
+		}
+		if(!empty($search['department'])){
+			$where.=' AND department='.$search['department'];
+		}
+		if($search['teacher_type']>-1){
+			$where.=' AND teacher_type='.$search['teacher_type'];
 		}
 		if(!empty($search['nationality'])){
 			$where.=' AND nationality='.$search['nationality'];
@@ -219,6 +231,15 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['degree'])){
     		$where.=' AND degree='.$search['degree'];
+    	}
+    	if(!empty($search['department'])){
+    		$where.=' AND department='.$search['department'];
+    	}
+    	if($search['teacher_type']>-1){
+    		$where.=' AND teacher_type='.$search['teacher_type'];
+    	}
+    	if(!empty($search['staff_type'])){
+    		$where.=' AND staff_type='.$search['staff_type'];
     	}
     	if(!empty($search['nationality'])){
     		$where.=' AND nationality='.$search['nationality'];

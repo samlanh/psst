@@ -43,9 +43,11 @@ public function init()
 						'title' => '',
 						'degree' => '',
 						'staff_type' => '',
+						'teacher_type' => -1,
 						'nationality' => '',
 						'branch_id' => '',
-						'status' => -1);
+						'status' => -1
+					);
 			}
 		
 		$this->view->rs= $db->getAllTeacher($search);
@@ -75,6 +77,7 @@ public function init()
 			$search = array(
 					'title' => '',
 					'degree' => '',
+					'teacher_type' => -1,
 					'nationality' => '',
 					'branch_id' => '',
 					'end_date'=>date('Y-m-d',strtotime("+5 day")),

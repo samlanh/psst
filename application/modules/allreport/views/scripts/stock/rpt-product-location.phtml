@@ -160,7 +160,7 @@ table.tb-footer tr.style-head {
 								    ?>
 							    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
 							    <?php if($show_image==1){?>
-							    <td><a target="_blank" href="<?php echo $this->baseUrl().'/images/proimage/'.$rs['images'];?>"><img style="max-height:30px;" src="<?php echo $this->baseUrl().'/images/proimage/'.$rs['images'];?>" /></a></td>
+									<td><a target="_blank" href="<?php echo $this->baseUrl().'/images/proimage/'.$rs['images'];?>"><img style="max-height:30px;" <?php if(!empty($rs['images'])){echo "src='".$this->baseUrl().'/images/proimage/'.$rs['images']."'";}?> /></a></td>
 							    <?php }?>
 							    <td><?php echo $rs['note']; ?></td>
 							    <td><?php echo $rs['status']; ?></td>

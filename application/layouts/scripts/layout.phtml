@@ -163,7 +163,8 @@ span#message {
 }
 	</style>
 </head>
-<body class="nav-md soria footer_fixed "><!-- oncontextmenu="return false;"  -->
+<?php //oncontextmenu="return false;" ?>
+<body class="nav-md soria footer_fixed ">
 	<div class="overlay">
 		<div class="overlay-load">
 			<div class="overlay-msg">
@@ -296,11 +297,16 @@ span#message {
 							<?php 
 								$db = new Application_Model_DbTable_DbUsers();
 	            				$rs = $db->getAccessUrl($module,$controller,$action);
-		            			if(!empty($rs) OR $action=='changepassword'){
-		            				echo $this->layout()->content;
-		            			}else{
-		            				echo $this->render('pagenotfund.phtml');
-		            			}
+
+								if(!empty($teacher_id)){
+									echo $this->layout()->content;
+								}else{
+									if(!empty($rs) OR $action=='changepassword'){
+										echo $this->layout()->content;
+									}else{
+										echo $this->render('pagenotfund.phtml');
+									}
+								}
             				 ?>
             				 <?php if($module!='home') {?>
 			            			 </div>

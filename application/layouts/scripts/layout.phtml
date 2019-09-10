@@ -350,7 +350,10 @@ function changeLange(lang){
 	});
 }
 </script>
-
+<?php if($module=='allreport'){?>
+  <!-- export library -->
+	  <script type="text/javascript" src="<?php echo $this->baseUrl()."";?>/admin/tableExport-master/tableExport.js"></script>
+<?php } ?>
 <script type="text/javascript">
 function loadingBlock(){
   document.getElementsByClassName("overlay")[0].style.display="block";

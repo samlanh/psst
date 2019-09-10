@@ -139,10 +139,10 @@ table.tb-footer tr.style-head {
 										<td> <?php echo $i; ?></td>
 										<td><?php echo $rs['category_name'];?></td>
 										<td style="color:red;"><?php echo $rs['pro_code'];?></td>
-										<td style="color:red;" align="center">&nbsp;<?php echo $rs['pro_name'];?></td>
+										<td style="color:red;" align="left">&nbsp;<?php echo $rs['pro_name'];?></td>
 										<td style="color:red;"><?php echo number_format($rs['pro_qty'],0); ?></td>
-										<td>&nbsp;<?php echo $rs['pro_price'];?></td>
-										<td>&nbsp;<?php echo number_format($rs['pro_price']*$rs['pro_qty'],2);
+										<td>&nbsp;<?php echo "$ ".$rs['pro_price'];?></td>
+										<td>&nbsp;<?php echo "$ ".number_format($rs['pro_price']*$rs['pro_qty'],2);
 										$cost_price =$cost_price+($rs['pro_price']*$rs['pro_qty']);
 										?></td>
 										<td><?php echo $rs['status']; ?></td>
@@ -154,10 +154,11 @@ table.tb-footer tr.style-head {
 						</table>
 					</td>
 				</tr>
-			
+				<?php /*?>
 				<tr>
 					<td colspan="3" align="right">&nbsp;<?php echo $tr->translate('TOTAL_UNIT_PRICE');?><strong><?php echo  " $ ".number_format($cost_price,2);?></strong>&nbsp;</td>
 				</tr>
+				<?php */?>
 				<tr>
 					<td colspan="3" width="100%">
 						<?php echo $this->rsfooteracc;?>

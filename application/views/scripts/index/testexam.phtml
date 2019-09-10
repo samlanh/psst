@@ -1,0 +1,419 @@
+<?php 
+$base_url = $this->baseUrl()."/";
+$tr=Application_Form_FrmLanguages::getCurrentlanguage(); 
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	    <script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <!-- Meta, title, CSS, favicons, etc. -->
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <!-- Bootstrap -->
+	    <link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <!-- Font Awesome -->
+	    <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	    <!-- NProgress -->
+	    <link href="<?php echo $base_url;?>admin/vendors/nprogress/nprogress.css" rel="stylesheet">
+	    
+	    <!-- Custom Theme Style -->
+	    <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
+		 
+		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
+		<link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
+		
+		<style>
+			body.exam-test .left_col.scroll-view .navbar.nav_title {
+			    background: #fff;
+			}
+			body.exam-test .nav_menu {
+			    background: #fff;
+			}
+			body.exam-test .nav.navbar-nav>li>a {
+			    color: #000!important;
+			}
+			body.exam-test .top_nav .nav .open>a, .top_nav .nav .open>a:focus, body.exam-test .top_nav .nav .open>a:hover, body.exam-test .top_nav .nav>li>a:focus, .top_nav .nav>li>a:hover {
+			    background: #f5f5f5;
+			}
+			body.exam-test .toggle a {
+			    color: #000;
+			}
+			body.exam-test .blog-duration, body.exam-test .blog-score {
+			    text-align: center;
+			    padding: 0 10px;
+			}
+			.test-min {
+			    padding: 10px;
+			    background: #ffb22e;
+			    border-radius: 8px;
+			    font-weight: 600;
+			    font-size: 21px;
+			    color: #fff;
+			}
+		.test-score ul {
+		    padding: 0;
+		    margin: 0;
+		    text-align: left;
+		    list-style: none;
+		    line-height: 24px;
+		}
+		.test-score ul span.lb-title {
+		    min-width: 35%;
+		    display: inline-block;
+		    font-weight: 600;
+		}
+		.test-score ul span.lb-value {
+		    min-width: 55%;
+		    display: inline-block;
+		    text-align: right;
+		}
+		div.reportblog {
+    		overflow-x: auto;
+			overflow-y: hidden;
+			min-height:26cm; 
+			margin:0 auto; 
+			padding:0.5cm 0.5cm 0cm 0.5cm;
+			font-size: 18px;
+		}
+		.content.exam-test-data {
+		    padding: 10px 0;
+		}
+		.title-examination {
+		    margin-top: 35px;
+		}
+		.title-examination h2 {
+		    font-weight: 600;
+		    font-size: 24px;
+		}
+		
+		.section-exam-title {
+		    margin: 15px 0px;
+		}
+		.section-exam-title h2 {
+		    padding: 0;
+		    margin: 0;
+		    font-weight: 600;
+		}
+		.section-exam-question ul {
+		    list-style: none;
+		}
+		span.question-num {
+		    padding: 0 5px;
+			vertical-align: top;
+		}
+		.answer-blog ul li.answer-opt {
+		    display: inline-block;
+		    width: 49%;
+		}
+		.answer-blog ul li.answer-opt.col5 {
+		    width: 19%;
+		    margin: 5px 0;
+		}
+		.answer-blog ul li.answer-opt.col4 {
+			width: 24%;
+		    margin: 5px 0;
+		}
+		ul.images-quest li.answer-opt.col4 {
+			width: 24%;
+		    margin: 5px 0;
+			display: inline-block;
+		}
+		
+		li.answer-opt.col5 input {
+		    display: inline-block;
+		    width: 65%;
+		}
+.section-exam-question img.img-question {
+    width: 120px;
+		height: 125px;
+}
+		</style>
+	</head>
+	<body class="nav-md  exam-test ">
+	<div class="container body">
+    	<div class="main_container">
+        	<div class="col-md-3 left_col ">
+          		<div class="left_col scroll-view">
+		            <div class="navbar nav_title">
+		            </div>
+            		<div class="clearfix"></div>
+            		
+            		<div class="left-content">
+            			<div class="blog-duration">
+            				<div class="title-label">
+		            			<h2><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $tr->translate("រយៈពេលប្រឡង");?></h2>
+		            		</div>
+		            		<div class="test-min">
+		            			<span class="min">60</span>
+		            			<span class="point">:</span>
+		            			<span class="sec">00</span>
+		            		</div>
+            			</div>
+            			<div class="blog-score">
+            				<div class="title-label">
+		            			<h2><i class="fa fa-trophy" aria-hidden="true"></i> <?php echo $tr->translate("លទ្ធផល");?></h2>
+		            		</div>
+		            		<div class="test-score">
+		            			<ul>
+		            				<li><span class="lb-title"><?php echo $tr->translate("ពិន្ទុ");?></span> : <span class="lb-value">10/10</span></li>
+		            				<li><span class="lb-title"><?php echo $tr->translate("សំនួរសរុប");?></span> : <span class="lb-value">20</span></li>
+		            				<li><span class="lb-title"><?php echo $tr->translate("ត្រឹមត្រូវ");?></span> : <span class="lb-value">15</span></li>
+		            				<li><span class="lb-title"><?php echo $tr->translate("មិនត្រឹមត្រូវ");?></span> : <span class="lb-value">2</span></li>
+		            				<li><span class="lb-title"><?php echo $tr->translate("មិនបានឆ្លើយ");?></span> : <span class="lb-value">3</span></li>
+		            			</ul>
+		            		</div>
+            			</div>
+	            	</div>
+            	</div>
+            	
+            </div>
+            <!-- top navigation -->
+		        <div class="top_nav">
+		          	<div class="nav_menu">
+		            	<nav>
+				              <div class="nav toggle">
+				              </div>
+              				  <ul class="nav navbar-nav navbar-right">
+			                	<li class="">
+				                  	<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                       	<img src="<?php echo $this->baseUrl()?>/images/user.png" alt="">
+				                    <?php echo "USER";?> <span class=" fa fa-angle-down"></span>
+					                 </a>
+				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
+					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">
+					                    <i class="fa fa-sign-out pull-right"></i> <?php echo $tr->translate("SIGN_OUT");?></a>
+					                    </li>
+				                  </ul>
+				                </li>
+             				</ul>
+            			</nav>
+          			</div>
+       			</div>
+       		 <!-- /top navigation -->
+            <!-- page content -->
+       		<div class="right_col" role="main" >
+       		 	<div class="right-conten" style="min-height: 570px;">
+       		 		<div style="clear:both;"></div>
+             		<section class="inputmask">
+						<div class="row">
+					    	<div class="col-sm-12">
+					    		<div class="reportblog">
+					    			<div class="header-row">
+					    				<?php echo $this->rsheader;?>
+					    			</div>
+					    			<div class="content exam-test-data">
+					    				<div class="title-examination text-center">
+					    					<h2>Placement Test General English for Adult</h2>
+					    				</div>
+					    				<div class="note-exame">
+					    					<span>This Test has three sections: Vocabulary, Grammar, and Reading. There are 55 questions. You are allowed 50 minutes to complete the test.</span>
+					    				</div>
+					    				
+					    				<div class="section-exam">
+					    					<div class="section-exam-title">
+					    						<h2>SECTION I: VOCABULARY</h2>
+					    						<small>Instructions: Please choose the correct answer. Fill in the answer on the answer sheet.</small>
+					    					</div>
+					    					<div class="section-exam-question">
+					    						<ul>
+					    							<li>
+					    								<div class="question">
+					    									<span class="question-num">1)</span> <span>Dara is only five years old. He’s ___.</span>
+					    								</div>
+					    								<div class="answer-blog">
+					    									<ul>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> old
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="2"> <span class="question-num">B.</span> young
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="3"> <span class="question-num">C.</span> new
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="4"> <span class="question-num">D.</span> adult
+					    										</li>
+					    									</ul>
+					    								</div>
+					    							</li>
+					    							<li>
+					    								<div class="question">
+					    									<span class="question-num">2)</span> <span>What does he enjoy doing in his ___ time?</span>
+					    								</div>
+					    								<div class="answer-blog">
+					    									<ul>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_2" value="1"> <span class="question-num">A.</span> spare
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_2" value="2"> <span class="question-num">B.</span> hobby
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_2" value="3"> <span class="question-num">C.</span> empty
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_2" value="4"> <span class="question-num">D.</span> space
+					    										</li>
+					    									</ul>
+					    								</div>
+					    							</li>
+					    							<li>
+					    								<div class="question">
+					    									<span class="question-num">3)</span> <span>She likes her house very much. It has a big ___, five bedrooms, a kitchen and a garage.</span>
+					    								</div>
+					    								<div class="answer-blog">
+					    									<ul>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> iving-room
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="2"> <span class="question-num">B.</span> salon
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="3"> <span class="question-num">C.</span> boutique
+					    										</li>
+					    										<li class="answer-opt">
+					    											<input type="radio" name="question_1" value="4"> <span class="question-num">D.</span> accommodation
+					    										</li>
+					    									</ul>
+					    								</div>
+					    							</li>
+					    							
+					    						</ul>
+					    					</div>
+					    				</div>
+					    				
+					    				
+					    				<div class="section-exam">
+					    					<div class="section-exam-title">
+					    						<h2>SECTION A: VOCABULARY (39 POINTS)</h2>
+					    					</div>
+					    					<div class="section-exam-title">
+					    						<h2>A1. ALPHABET ORDER (6 POINTS)</h2>
+					    						<small>Instruction: Write the alphabets in order. Write your answers in the answer sheet.</small>
+					    					</div>
+					    					
+					    					<div class="section-exam-question">
+					    						<ul>
+					    							<li>
+					    								<div class="question">
+					    									Example:
+					    								</div>
+					    								<div class="answer-blog">
+					    									<ul>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">1.</span> Aa
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">2.</span> <input type="text" id="answere_1" name="answere_1">
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">3.</span> Cc
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">4.</span> <input type="text" id="answere_1" name="answere_1">
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">5.</span> Ee
+					    										</li>
+					    										
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">6.</span> Ff
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">7.</span> <input type="text" id="answere_1" name="answere_1">
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">8.</span> Hh
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">9.</span> <input type="text" id="answere_1" name="answere_1">
+					    										</li>
+					    										<li class="answer-opt col5">
+					    											<span class="question-num">10.</span> Jj
+					    										</li>
+					    									</ul>
+					    								</div>
+					    							</li>
+					    						</ul>
+					    					</div>
+					    					
+					    					<div class="section-exam-title">
+					    						<h2>A2. MULTIPLE CHOICES (10 POINTS)</h2>
+					    						<small>Instruction: Choose the correct answer A or B. Write your answers in the answer sheet.</small>
+					    					</div>
+					    					
+					    					<div class="section-exam-question">
+					    						<ul class="images-quest">
+					    							<li class="answer-opt col4">
+					    								<span class="question-num">1.</span>
+					    								<img class="img-question" src="https://www.sccpre.cat/mypng/full/290-2901428_shirt-collar-drawing-at-getdrawings-men-shirt-drawing.png" />
+					    								<ul>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> shrit
+				    										</li>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> shirt
+				    										</li>
+					    								</ul>
+					    							</li>
+					    							<li class="answer-opt col4">
+					    								<span class="question-num">2.</span>
+					    								<img class="img-question" src="http://freevector.co/wp-content/uploads/2013/03/78725-varsity-jacket.png" />
+					    								<ul>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> jacket
+				    										</li>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> jecket
+				    										</li>
+					    								</ul>
+					    							</li>
+					    							<li class="answer-opt col4">
+					    								<span class="question-num">3.</span>
+					    								<img class="img-question" src="https://i.pinimg.com/originals/76/95/1b/76951b1c2db07b19961fac323e83eb8b.gif" />
+					    								<ul>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> skerit
+				    										</li>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> skirt
+				    										</li>
+					    								</ul>
+					    							</li>
+					    							<li class="answer-opt col4">
+					    								<span class="question-num">4.</span>
+					    								<img class="img-question" src="https://www.sccpre.cat/mypng/full/290-2901428_shirt-collar-drawing-at-getdrawings-men-shirt-drawing.png" />
+					    								<ul>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> shrit
+				    										</li>
+				    										<li>
+				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> shirt
+				    										</li>
+					    								</ul>
+					    							</li>
+					    						</ul>
+					    					</div>
+					    					
+					    				</div>
+					    				
+					    			</div>
+					    		</div>
+					    	</div>
+					    </div>
+					</section>
+       		 	</div>
+       		</div>
+         </div>
+     </div>
+	<script src="<?php echo $this->baseUrl()?>/admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="<?php echo $this->baseUrl()?>/admin/build/js/custom.min.js"></script>
+	</body>
+</html>

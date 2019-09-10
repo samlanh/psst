@@ -283,6 +283,18 @@ class IndexController extends Zend_Controller_Action
     	$renderer = Zend_Barcode::factory('Code128', 'image', $barcodeOptions, $rendererOptions)->render();
     	echo $renderer; exit();
     }
+    
+    
+    public function testexamAction()
+    {
+    	 
+    	
+    	$this->_helper->layout()->disableLayout();
+    
+    	$branch_id =2;
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
 
 }
 

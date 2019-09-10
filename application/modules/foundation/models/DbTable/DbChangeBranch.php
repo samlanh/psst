@@ -78,11 +78,18 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=rms_group.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = rms_group.session )) LIMIT 1) AS `to_session`,
 			moving_date
-		FROM `rms_student_change_branch` as scg,
-			rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and scg.status=1";
+		";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("scg.status");
+		$sql.=" FROM `rms_student_change_branch` as scg,
+			rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 ";
+		
 		$order_by=" order by id DESC";
 		$where=' ';
-		
+		$from_date =(empty($search['start_date']))? '1': "scg.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "scg.create_date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}
@@ -114,10 +121,9 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 	}
 	public function getStudentChangeBranchById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_student_change_branch WHERE id =".$id;
+		$sql = "SELECT * FROM rms_student_change_branch WHERE id =".$id." AND status = 1 ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
-		
 		return $db->fetchRow($sql);
 	}
 	public function getDegreeAndGradeToGroup($group){
@@ -151,13 +157,24 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 				$id = $this->insert($_arr);
 				
 				
-				$this->_name='rms_group_detail_student';
-				$arr= array(
-						'group_id'=>$_data['to_group'],
-						'old_group'	=>$_data['from_group'],
-				);
-				$where="stu_id=".$stu_id." and is_pass=0 and group_id=".$_data['from_group'];
-				$this->update($arr, $where);
+				if (!empty($_data['to_group'])){
+					$this->_name='rms_group_detail_student';
+					$arr= array(
+							'stu_id'	=>$stu_id,
+							'group_id'=>$_data['to_group'],
+							'old_group'	=>$_data['from_group'],
+							'status'	=>1,
+							'date'		=>date('Y-m-d')
+					);
+					$this->insert($arr);
+				}
+// 				$this->_name='rms_group_detail_student';
+// 				$arr= array(
+// 						'group_id'=>$_data['to_group'],
+// 						'old_group'	=>$_data['from_group'],
+// 				);
+// 				$where="stu_id=".$stu_id." and is_pass=0 and group_id=".$_data['from_group'];
+// 				$this->update($arr, $where);
 				
 				$this->_name='rms_group';
 				$arra = array(
@@ -198,105 +215,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 	}
 	
 	
-	public function updateStudentChangeGroup($_data){
-		$_db= $this->getAdapter();
-		$_db->beginTransaction();
-		try{	
-			if($_data['status']==1){
-				$stu_id=$_data['studentid'];
-				$_arr=array(
-						'branch_id'=>$_data['branch_id'],
-						'user_id'	=>$this->getUserId(),
-						'from_group'=>$_data['from_group'],
-						'to_group'	=>$_data['to_group'],
-						'moving_date'=>$_data['moving_date'],
-						'note'		=>$_data['note'],
-						'status'	=>$_data['status'],
-						);
-				$where=" id = ".$_data['id'];
-				$this->update($_arr, $where);
-				
-				
-				$this->_name='rms_group_detail_student';
-				$arr= array(
-						'group_id'	=>$_data['to_group'],
-						'old_group'	=>$_data['from_group'],
-				);
-				$where="stu_id=".$stu_id." and is_pass=0 and old_group = ".$_data['from_group'] ;
-				$this->update($arr, $where);
-				
-				
-				$this->_name='rms_student';
-				$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
-				
-				if($test['degree']==1 || $test['degree']==2){
-					$stu_type=1;    //  kid - 6
-				}else if($test['degree']==3){
-					$stu_type=2;    // 7-12
-				}else{
-					$stu_type=3;	// eng and other subject
-				}
-				
-				$array = array(
-						'academic_year'	=>$test['academic_year'],
-						'degree'		=>$test['degree'],
-						'grade'			=>$test['grade'],
-						'session'		=>$test['session'],
-						'room'			=>$test['room_id'],
-						'stu_type'		=>$stu_type,
-						'group_id'			=>$_data['to_group'],
-				);
-				$where = " stu_id=".$_data['studentid'];
-				$this->update($array, $where);
-			}else{
-				$_arr=array(
-						'user_id'	=>$this->getUserId(),
-						'status'	=>$_data['status'],
-				);
-				$where=" id = ".$_data['id'];
-				$this->update($_arr, $where);
-				
-				
-				// update back to old group
-				$this->_name='rms_group_detail_student';
-				$arr= array(
-						'group_id'	=>$_data['from_group'],
-						'old_group'	=>null,
-				);
-				$where="stu_id=".$_data['studentid']." and is_pass=0 and old_group = ".$_data['from_group'] ;
-				$this->update($arr, $where);
-				
-				// update student info back to old_group
-				$this->_name='rms_student';
-				$test = $this->getDegreeAndGradeToGroup($_data['from_group']);
-				
-				if($test['degree']==1 || $test['degree']==2){
-					$stu_type=1;    //  kid - 6
-				}else if($test['degree']==3){
-					$stu_type=2;    // 7-12
-				}else{
-					$stu_type=3;	// eng and other subject
-				}
-				
-				$array = array(
-						'academic_year'	=>$test['academic_year'],
-						'degree'		=>$test['degree'],
-						'grade'			=>$test['grade'],
-						'session'		=>$test['session'],
-						'room'			=>$test['room_id'],
-						'stu_type'		=>$stu_type,
-						'group_id'		=>$_data['from_group'],
-				);
-				$where = " stu_id=".$_data['studentid'];
-				$this->update($array, $where);
-			}
-			return $_db->commit();
-			
-		}catch(Exception $e){
-			$_db->rollBack();
-			echo $e->getMessage();
-		}
-	}
 	function getAllGrade($grade_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
@@ -313,6 +231,66 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
 		 st.`sex`,gds.`group_id` FROM `rms_student` AS st,rms_group_detail_student AS gds WHERE gds.is_pass=0 and  st.stu_id=$stu_id AND st.stu_id=gds.stu_id LIMIT 1";
 		return $db->fetchRow($sql);
+	}
+	
+	
+	public function revertChangeBranch($id){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+			
+			$row = $this->getStudentChangeBranchById($id);
+			if (!empty($row)){
+				
+				$_arr= array(
+						'user_id'	=>$this->getUserId(),
+						'status'	=>0,
+						'modify_date' => date("Y-m-d H:i:s")
+				);
+				$this->_name='rms_student_change_branch';
+				$where = " id = ".$id;
+				$id = $this->update($_arr, $where);
+				
+				
+				$this->_name='rms_group_detail_student';
+				$where="stu_id=".$row['stu_id']." and group_id=".$row['to_group'];
+				$this->delete($where);
+				
+// 				$this->_name='rms_group';
+// 				$arra = array(
+// 						'is_pass'	=> 2,
+// 				);
+// 				$where = " id = ".$row['to_group'];
+// 				$this->update($arra, $where);
+
+				$this->_name='rms_student';
+				$test = $this->getDegreeAndGradeToGroup($row['from_group']);
+				$array = array(
+						'branch_id'		=>$row['branch_id'],
+						'academic_year'	=>$test['academic_year'],
+						'degree'		=>$test['degree'],
+						'grade'			=>$test['grade'],
+						'session'		=>$test['session'],
+						'room'			=>$test['room_id'],
+						// 							'stu_type'		=>$stu_type,
+						'group_id'		=>$row['from_group'],
+				);
+				$where = " stu_id=".$row['stu_id'];
+				$this->update($array, $where);
+			}
+	
+			
+	
+			
+	
+	
+			
+			return $_db->commit();
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+	
+		}
 	}
 }
 

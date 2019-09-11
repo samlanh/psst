@@ -143,6 +143,12 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_agreement = new Zend_Dojo_Form_Element_Textarea('agreement');
 		$_agreement->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
 		
+		$pob = new Zend_Dojo_Form_Element_Textarea('pob');
+		$pob->setAttribs(array('dojoType'=>$this->textarea,
+				'class'=>'fullside',
+				'style'=>'min-height:55px;',
+		));
+		
 		$home_num = new Zend_Dojo_Form_Element_TextBox('home_num');
 		$home_num->setAttribs(array('dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside'));
@@ -226,6 +232,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);
 			$dob->setValue($_data['dob']);
+			$pob->setValue($_data['pob']);
 			$_email->setValue($_data['email']);
 			$_degree->setValue($_data['degree']);
  			$_note->setValue($_data['note']);
@@ -246,7 +253,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_user->setValue($_data['user_name']);
 		}
 		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,
-				$_email,$start_date,$_degree,$_status,$_submit,$_schoolOption));
+				$pob,$_email,$start_date,$_degree,$_status,$_submit,$_schoolOption));
 		
 		return $this;
 	}

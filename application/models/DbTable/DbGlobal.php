@@ -2424,5 +2424,21 @@ function getAllgroupStudyNotPass($action=null){
   	//Insert the visitor's mac address to database
   	// " INSERT INTO `table_name` (`column_name`) VALUES('".$mac_address."') ";
   }
+  
+  
+  function getSubjectArea($type=1){
+  	 
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
+  	 
+  	$db = $this->getAdapter();
+  	$sql="SELECT ex.id,ex.$colunmname AS `name`
+  	FROM `rms_subjectarea` AS ex
+  	WHERE ex.status=1 AND ex.type=$type";
+  	return $db->fetchAll($sql);
+  }
 }
 ?>

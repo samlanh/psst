@@ -272,7 +272,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_code'		=>$stu_code,
 						'academic_year'	=>$_data['academic_year'],
 						'degree'		=>$_data['degree'],
-						'calture'		=>$_data['calture'],
+// 						'calture'		=>$_data['calture'],
 						'grade'			=>$_data['grade'],
 						'room'			=>$_data['room'],
 						'session'		=>$_data['session'],
@@ -323,6 +323,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'scholar_fromdate'	=>$_data['scholarship_fromdate'],
 						'scholar_todate'	=>$_data['scholarship_todate'],
 						);
+				if (EDUCATION_LEVEL==1){
+					$_arr['calture'] = $_data['calture'];
+				}
 				
 				$part= PUBLIC_PATH.'/images/photo/';
 				if (!file_exists($part)) {
@@ -458,7 +461,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_code'		=>$_data['student_id'],
 					'degree'		=>$_data['degree'],
 					'grade'			=>$_data['grade'],
-					'calture'		=>$_data['calture'],
+// 					'calture'		=>$_data['calture'],
 					'session'		=>$_data['session'],
 					'room'			=>$_data['room'],
 					
@@ -506,7 +509,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'scholar_fromdate'	=>$_data['scholarship_fromdate'],
 					'scholar_todate'	=>$_data['scholarship_todate'],
 					);
-			
+			if (EDUCATION_LEVEL==1){
+				$_arr['calture'] = $_data['calture'];
+			}
 			$photo = "";
 			$name = $_FILES['photo']['name'];
 			if (!empty($name)){

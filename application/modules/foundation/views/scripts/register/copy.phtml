@@ -302,6 +302,7 @@ input.btn_borwse_image {
 				                   		</div>
 				                   </div>
 				                </div>
+				                <?php if (EDUCATION_LEVEL==1){?>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CULTURE_LEVEL");?>  :
 				                   </label>
@@ -309,6 +310,7 @@ input.btn_borwse_image {
 				                   		<?php echo $frm->getElement("calture");?>
 				                   </div>
 				                </div>  
+				                <?php }?>
 						        <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACADEMIC_YEAR");?>  :
 				                   </label>
@@ -772,7 +774,9 @@ dojo.ready(function(){
 	    	group_id = dijit.byId('group').get('value');
 	    	if(group_id==-1){
 	    		dijit.byId('academic_year').set('readOnly',false);
+	    		<?php if (EDUCATION_LEVEL==1){?>
 	    		dijit.byId('calture').set('readOnly',false);
+	    		<?php }?>
 				dijit.byId('degree').set('readOnly',false);
 				dijit.byId('grade').set('readOnly',false);
 				dijit.byId('session').set('readOnly',false);
@@ -1739,7 +1743,9 @@ function addJob(){
 		if(group=='' || group==-1){
 			dijit.byId('academic_year').set('readOnly',false);
 			dijit.byId('degree').set('readOnly',false);
+			<?php if (EDUCATION_LEVEL==1){?>
 			dijit.byId('calture').set('readOnly',false);
+			<?php }?>
 			dijit.byId('session').set('readOnly',false);
 			dijit.byId('group').focus();
 			return false;
@@ -1755,8 +1761,10 @@ function addJob(){
 				dijit.byId('academic_year').set('readOnly',true);
 				dijit.byId('degree').set('value',data.degree);
 				dijit.byId('degree').set('readOnly',true);
+				<?php if (EDUCATION_LEVEL==1){?>
 				dijit.byId('calture').set('value',data.calture);
 				dijit.byId('calture').set('readOnly',true);
+				<?php }?>
 				dijit.byId('grade').set('value',data.grade);
 				dijit.byId('grade').set('readOnly',true);
 				dijit.byId('grade_fromgrouop').set('value',data.grade);

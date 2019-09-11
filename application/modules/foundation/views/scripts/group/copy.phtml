@@ -30,11 +30,11 @@
 						dijit.byId('academic_year').focus();
                     	return false;
 					}
-    				var rowId = $('#identity').val();
+    				var rowId = $('#identity1').val();
 					if(rowId!=''){ 
 						var rowIDArray = rowId.split(',');
 						for(var n = 0; n < rowIDArray.length; n++){
-							var row_id = dijit.byId('subject_study_'+rowIDArray[n]).get('value');
+							var row_id = dijit.byId('group_subject_study_'+rowIDArray[n]).get('value');
 							if(row_id==''){
 								alert("Please select subject title!");
 								return false;
@@ -82,12 +82,14 @@
 							<input id="academic_year" name="academic_year" />
 		                </div>
 		             </div>
+		             <?php if (EDUCATION_LEVEL==1){?>
 		             <div class="form-group">
 		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
 		                 <div class="col-md-7 col-sm-7 col-xs-12">
 							<?php echo $frm->getElement("calture");?>
 		                </div>
 		             </div>
+		             <?php }?>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -162,7 +164,7 @@
 								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
 								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
 								<th><?php echo $tr->translate("NOTE");?></th>
-								<th><?php echo $tr->translate("TEACHER");?></th>
+								<th><?php echo $tr->translate("TEACHER");?><input type="checkBox" value="0" id="checking_teach"  name="checking_teach" onclick="check();" id="checkall"/></th>
                				</tr>
                			</thead>
 						<tbody id="table_row"></tbody>
@@ -172,7 +174,7 @@
     			<div class="col-sm-12">
     				<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
 								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-			 		<input type="hidden" name="identity" id="identity"  />
+			 		<input type="hidden" name="identity1" id="identity1"  />
     			</div>
     		</div>
     		 <div class="clearfix"></div>
@@ -188,6 +190,29 @@
 
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
+
+function check(){
+	if ($('input#checking_teach').prop('checked')) {
+		var teacher_id = dijit.byId('teacher_id').get('value');
+		if(teacher_id !="" || teacher_id !="-1"){
+			var identity = $('#identity1').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				dijit.byId('teacher_'+arrays[i]).set('value',teacher_id);
+			}
+		}
+	}else {
+		var teacher_id = dijit.byId('teacher_id').get('value');
+		if(teacher_id !="" || teacher_id !="-1"){
+			var identity = $('#identity1').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				dijit.byId('teacher_'+arrays[i]).set('value',"");
+			}
+		}
+	}
+}
+
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -612,7 +637,7 @@ var title = 1;
 tmp = '';
 temp='';
 function Initailize() {
-	$("#identity").val("");
+	$("#identity1").val("");
 	$("#table_row").html("");
 	<?php if(!empty($this->row)){ 
 		foreach ($this->row as $rows){?>
@@ -631,7 +656,7 @@ function Initailize() {
 			}
 				template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="4%" align="center">'+no+'</td>';
-				template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subjectold+'</select></td>';
+				template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subjectold+'</select></td>';
 				template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
 				template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 				template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
@@ -643,14 +668,14 @@ function Initailize() {
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
 		
-			if($("#identity").val()!="") {
-				var identity = $("#identity").val();
-				$("#identity").val(identity+','+col);
-			} else {$("#identity").val(col);}
+			if($("#identity1").val()!="") {
+				var identity = $("#identity1").val();
+				$("#identity1").val(identity+','+col);
+			} else {$("#identity1").val(col);}
 			dojo.html.set(dojo.byId("row"+col),template , {
 			     parseContent: true,
 			});
-			dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
+			dijit.byId('group_subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 			dijit.byId('amount_subject'+col).attr('value','<?php echo $rows['amount_subject'];?>');
 			dijit.byId('amount_subject_semester'+col).attr('value','<?php echo $rows['amount_subject_sem'];?>');
 			dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
@@ -675,7 +700,7 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
 		template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
@@ -686,33 +711,33 @@ function addRow() {
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 
-	if($("#identity").val()!="") {
-		var identity = $("#identity").val();
-		$("#identity").val(identity+','+col);
-	} else {$("#identity").val(col);}
+	if($("#identity1").val()!="") {
+		var identity = $("#identity1").val();
+		$("#identity1").val(identity+','+col);
+	} else {$("#identity1").val(col);}
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
 }
 function deleteRecord(index) {
-	var identity = $('#identity').val();
+	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++) {
 	if(arrays[i] == index) arrays.splice(i,1);
 	}
 	var strings = arrays.join(',');
-	$('#identity').val(strings);
+	$('#identity1').val(strings);
 	dojo.query("#row"+index).remove();
 }
 
 function checkSubject(index){
-	var identity = $('#identity').val();
+	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
-	current_subject = dijit.byId('subject_study_'+index).get('value');
+	current_subject = dijit.byId('group_subject_study_'+index).get('value');
 	for(var i=0;i<arrays.length;i++) {
 		if(arrays[i] == index){
 		}else{
-			old_subject = dijit.byId('subject_study_'+arrays[i]).get('value');
+			old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
 			
 			if(current_subject == old_subject){
 				alert("Can not add the same subject !!! ");
@@ -737,13 +762,13 @@ function getSubjectByDegree(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				var identity = $('#identity').val();
+				var identity = $('#identity1').val();
 				if(identity !=''){
 					var arrays = identity.split(',');
 					for(var i=0;i<arrays.length;i++) {
 						deleteRecord(arrays[i]);
 					}
-					$("#identity").val("");
+					$("#identity1").val("");
 				}
 				tem="";
 			    if(data!=""){
@@ -764,7 +789,7 @@ function getSubjectByDegree(){
 						}
 							template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 							template+='<td width="4%" align="center">'+no+'</td>';
-							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
+							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 							template+='<td width="50px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
 							template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 							template+='<td width="35%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
@@ -776,14 +801,14 @@ function getSubjectByDegree(){
 						tmp+="</tr>";
 						dojo.query("#table_row").append(tmp);
 
-						if($("#identity").val()!="") {
-							var identity = $("#identity").val();
-							$("#identity").val(identity+','+col);
-						} else {$("#identity").val(col);}
+						if($("#identity1").val()!="") {
+							var identity = $("#identity1").val();
+							$("#identity1").val(identity+','+col);
+						} else {$("#identity1").val(col);}
 						dojo.html.set(dojo.byId("row"+col),template , {
 							 parseContent: true,
 						});
-						dijit.byId('subject_study_'+col).attr('value',data[i].subject_id);
+						dijit.byId('group_subject_study_'+col).attr('value',data[i].subject_id);
 						dijit.byId('note_'+col).attr('value',data[i].note);
 					}
 			    }

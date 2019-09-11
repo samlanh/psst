@@ -38,7 +38,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'time' 			=> $_data['time'],
 					'degree' 		=> $_data['degree'],
 					'grade' 		=> $_data['grade'],
-					'calture' 		=> $_data['calture'],
+// 					'calture' 		=> $_data['calture'],
 // 					'start_date'	=> $_data['start_date'],
 // 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
@@ -49,6 +49,10 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'user_id'	 	=> $this->getUserId(),
 					'is_use' 		=> 0
 			);
+			if (EDUCATION_LEVEL==1){
+				$_arr['calture'] = $_data['calture'];
+			}
+			
 			$id = $this->insert($_arr);			
 			$this->_name='rms_group_subject_detail';
 			if(!empty($_data['identity1'])){
@@ -89,7 +93,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'time' 			=> $_data['time'],
 					'degree' 		=> $_data['degree'],
 					'grade'		 	=> $_data['grade'],
-					'calture' 		=> $_data['calture'],
+// 					'calture' 		=> $_data['calture'],
 // 					'start_date' 	=> $_data['start_date'],
 // 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
@@ -101,6 +105,10 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 // 					'is_use'   		=> $_data['is_use'],
 					'user_id'	  	=> $this->getUserId()
 			);
+			
+			if (EDUCATION_LEVEL==1){
+				$_arr['calture'] = $_data['calture'];
+			}
 			$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);
 			$this->_name='rms_group';
 			$this->update($_arr, $where);
@@ -109,8 +117,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$where = 'group_id = '.$_data['id'];
 			$this->delete($where);
 			
-			if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
+			if(!empty($_data['identity1'])){
+				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
 					$arr = array(
 							'group_id'	=> $_data['id'],

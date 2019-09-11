@@ -81,12 +81,14 @@
 					<input id="academic_year" name="academic_year" />
                 </div>
              </div>
+             <?php if (EDUCATION_LEVEL==1){?>
              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
 					<?php echo $frm->getElement("calture");?>
                 </div>
              </div>
+             <?php }?>
              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
@@ -160,7 +162,7 @@
 								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
 								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
 								<th><?php echo $tr->translate("NOTE");?></th>
-								<th><?php echo $tr->translate("TEACHER");?></th>
+								<th><?php echo $tr->translate("TEACHER");?><input type="checkBox" value="0" id="checking_teach"  name="checking_teach" onclick="check();" id="checkall"/></th>
                				</tr>
                			</thead>
 						<tbody id="table_row"></tbody>
@@ -190,7 +192,27 @@
 	</div>
 </div>
 <script type="text/javascript">
-
+function check(){
+	if ($('input#checking_teach').prop('checked')) {
+		var teacher_id = dijit.byId('teacher_id').get('value');
+		if(teacher_id !="" || teacher_id !="-1"){
+			var identity = $('#identity1').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				dijit.byId('teacher_'+arrays[i]).set('value',teacher_id);
+			}
+		}
+	}else {
+		var teacher_id = dijit.byId('teacher_id').get('value');
+		if(teacher_id !="" || teacher_id !="-1"){
+			var identity = $('#identity1').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				dijit.byId('teacher_'+arrays[i]).set('value',"");
+			}
+		}
+	}
+}
 var grade_store  = getDataStorefromJSON('id','name',);
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?>  );

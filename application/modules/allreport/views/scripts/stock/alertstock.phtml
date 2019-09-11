@@ -118,8 +118,6 @@ table.tb-footer tr.style-head {
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 							   </tr>
 						   </thead>
@@ -137,14 +135,10 @@ table.tb-footer tr.style-head {
 								<?php } $branch_name=$rs['brand_name'];?>
 									<tr class="style-rowdata hover" align="center">
 										<td> <?php echo $i; ?></td>
-										<td><?php echo $rs['category_name'];?></td>
+										<td align="left">&nbsp;<?php echo $rs['category_name'];?></td>
 										<td style="color:red;"><?php echo $rs['pro_code'];?></td>
 										<td style="color:red;" align="left">&nbsp;<?php echo $rs['pro_name'];?></td>
 										<td style="color:red;"><?php echo number_format($rs['pro_qty'],0); ?></td>
-										<td>&nbsp;<?php echo "$ ".$rs['pro_price'];?></td>
-										<td>&nbsp;<?php echo "$ ".number_format($rs['pro_price']*$rs['pro_qty'],2);
-										$cost_price =$cost_price+($rs['pro_price']*$rs['pro_qty']);
-										?></td>
 										<td><?php echo $rs['status']; ?></td>
 									</tr>
 							<?php }?>

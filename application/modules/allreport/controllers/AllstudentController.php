@@ -470,12 +470,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search = array(
-				'txtsearch' => "",
+				'txtsearch' 	=> "",
 				'group' 		=> "",
 				'branch_id' 	=> "",
 				'study_year'	=> "",
-				'study_type'=>1
-				);
+				'study_type'	=>1
+			);
 			$row = $db->getStudentGroup($id,$search,1);
 			$rs= $db->getGroupDetailByID($id);
 		}
@@ -483,6 +483,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$this->view->rs = $row;
 		$this->view->rr = $rs;
+		
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($rs['branch_id'],3);
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();

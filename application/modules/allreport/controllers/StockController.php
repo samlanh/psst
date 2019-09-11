@@ -201,8 +201,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
-		$form=new Accounting_Form_FrmSearchProduct();
-		$form=$form->FrmSearchProduct();
+		$frm=new Accounting_Form_FrmSearchProduct();
+		$form=$frm->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}

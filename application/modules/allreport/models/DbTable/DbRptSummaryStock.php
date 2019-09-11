@@ -92,13 +92,32 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     public function getAllProduct($search){
     	try{
 	    	$db = $this->getAdapter();
+	    	$_db = new Application_Model_DbTable_DbGlobal();
+	    	$level = $_db->getUserType();
+	    	$lang = $_db->currentlang();
+	    	if($lang==1){// khmer
+	    		$label = "name_kh";
+	    		$branch = "branch_namekh";
+	    		$grade = "d.title";
+	    		$degree = "it.title";
+	    	}else{ // English
+	    		$label = "name_en";
+	    		$branch = "branch_nameen";
+	    		$grade = "d.title_en";
+	    		$degree = "it.title_en";
+	    	}
+	    	if($level==4){
+	    		$branch_id = $_db->getAccessPermission("brand_id");
+	    	}else{
+	    		$branch_id = "";
+	    	}
 	    	$from_date =(empty($search['start_date']))? '1': $search['start_date']." 00:00:00";
 	    	$to_date = (empty($search['end_date']))? '1': $search['end_date']." 23:59:59";
 	    	$sql="SELECT 
 	    			d.*,
-					(SELECT b.branch_namekh FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_namekh,
-					(SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_nameen,
-					(SELECT it.title FROM `rms_items` AS it WHERE it.id = d.items_id LIMIT 1) AS category,
+	    			$grade as pro_name,
+					(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_name,
+					(SELECT $degree FROM `rms_items` AS it WHERE it.id = d.items_id LIMIT 1) AS category,
 					(SELECT  
 							SUM(pd.qty) 
 						FROM 
@@ -142,7 +161,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	";
 	    	$where=' ';
 	    	$group_by = " ";
-	    	$order=" ORDER BY pl.brand_id ASC,d.id ASC";
+	    	$order=" ORDER BY pl.brand_id ASC , d.items_id ASC , $grade ASC ";
 	    	if(!empty($search['title'])){
 	    		$s_where = array();
 	    		$s_search = addslashes(trim($search['title']));

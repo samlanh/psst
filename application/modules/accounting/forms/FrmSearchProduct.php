@@ -77,6 +77,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'value'=>'now',
+				'placeHolder'=>$this->tr->translate("START_DATE"),
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',));
 		$_date = $request->getParam("start_date");
@@ -90,6 +91,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$end_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
+				'placeHolder'=>$this->tr->translate("END_DATE"),
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>false));
 		$_date = $request->getParam("end_date");
@@ -132,6 +134,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$location->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
 		$location->setValue($request->getParam("location"));
@@ -144,6 +148,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$branch_id->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
 		$branch_id->setMultiOptions($opt_ls);
@@ -153,6 +159,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$cate->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
 				'required'=>false,
 				'onChange'=>'getProductByCate();',
 		));

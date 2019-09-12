@@ -161,7 +161,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	";
 	    	$where=' ';
 	    	$group_by = " ";
-	    	$order=" ORDER BY pl.brand_id ASC , d.items_id ASC , $grade ASC ";
+	    	$order=" ORDER BY pl.brand_id ASC ";
+	    	
+	    	if($search['sort_by']==1){
+	    		$order.=" , d.items_id ASC ";
+	    	}else if($search['sort_by']==2){
+	    		$order.=" , $grade ASC ";
+	    	}
+	    	
 	    	if(!empty($search['title'])){
 	    		$s_where = array();
 	    		$s_search = addslashes(trim($search['title']));
@@ -184,6 +191,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	}
 	    	$dbp = new Application_Model_DbTable_DbGlobal();
 	    	$where.=$dbp->getAccessPermission("pl.brand_id");
+	    	//echo  $sql.$where.$order;
 	    	return $db->fetchAll($sql.$where.$group_by.$order);
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

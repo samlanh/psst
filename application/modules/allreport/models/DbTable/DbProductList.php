@@ -115,8 +115,14 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
-    	$where.=" ORDER BY pl.brand_id ASC , p.items_id ASC , $grade ASC ";
-    	return $db->fetchAll($sql.$where);
+    	$order = " ORDER BY pl.brand_id ASC ";
+    	if($search['sort_by']==1){
+    		$order.=" , p.items_id ASC ";
+    	}else if($search['sort_by']==2){
+    		$order.=" , $grade ASC ";
+    	}
+    	
+    	return $db->fetchAll($sql.$where.$order);
     }
     function getProductsByLocId($loc_id){
     	$db=$this->getAdapter();

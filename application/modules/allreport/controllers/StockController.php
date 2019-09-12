@@ -17,6 +17,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'title' =>'',
 						'location' =>'',
 						'product'=>'',
+						'sort_by'=>-1,
 						'status_search'=>1,
 						'category_id'=>'',
 						'product_type'=>0,
@@ -468,8 +469,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'branch_id'		=>  '',
-						'category_id'	=>0,
+						'category_id'	=>  0,
 						'product'		=>  '',
+						'sort_by'		=>  -1,
 						'product_type'	=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),

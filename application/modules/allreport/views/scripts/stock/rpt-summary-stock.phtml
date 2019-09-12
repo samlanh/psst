@@ -49,7 +49,10 @@ table.tb-footer tr.style-head {
 			<div class="col-md-3 col-sm-3 col-xs-12">
            		<?php echo $frm->getElement("product_type");?>
             </div>
-        	<div class="col-md-3 col-sm-3 col-xs-12">
+			<div class="col-md-2 col-sm-3 col-xs-12">
+           		<?php echo $frm->getElement("sort_by");?>
+            </div>
+        	<div class="col-md-1 col-sm-3 col-xs-12">
         		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
         	</div>
         </div>

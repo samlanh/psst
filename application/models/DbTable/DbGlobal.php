@@ -2374,13 +2374,13 @@ function getAllgroupStudyNotPass($action=null){
   }
   public function checkSessionExpire()
   {
-  	$user_id = $this->getUserId();
-  	$tr= Application_Form_FrmLanguages::getCurrentlanguage();
-  	if (empty($user_id)){
-  		return false;
-  	}else{
-  		return true;
-  	}
+		$user_id = $this->getUserId();
+		$tr= Application_Form_FrmLanguages::getCurrentlanguage();
+		if (empty($user_id)){
+			return false;
+		}else{
+			return true;
+		}
   }
   function reloadPageExpireSession(){
   		$url="";

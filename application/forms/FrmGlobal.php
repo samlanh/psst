@@ -77,7 +77,7 @@ class Application_Form_FrmGlobal{
 		}
 		return $str;
 	}
-	function getLetterHeaderReport($branch_id,$header_type=0){
+	function getLetterHeaderReport($branch_id){
 		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
 		//$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -96,9 +96,6 @@ class Application_Form_FrmGlobal{
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
 		$color = empty($rs['color'])?"":"#".$rs['color'];
 		$type_header = HEADER_REPORT_TYPE;
-		if($header_type!=0){
-			$type_header = $header_type;
-		}
 		$str="";
 		if ($type_header==1){
 		$str="<table width='100%'>
@@ -197,6 +194,52 @@ class Application_Form_FrmGlobal{
 		}
 		return $str;
 	}
+	
+	function getLeftLogo($branch_id){
+		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
+		//$branch_id = empty($branch_id)?1:$branch_id;
+		$db = new Application_Model_DbTable_DbGlobal();
+		if (empty($branch_id)){
+			$optionBranch = $db->getAllBranch();
+			if (count($optionBranch)==1){
+				if(!empty($optionBranch))foreach($optionBranch AS $row){
+					$branch_id = $row['id'];
+				}
+			}else {
+				$branch_id = 1;
+			}
+				
+		}
+		$rs = $db->getBranchInfo($branch_id);
+		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
+		$color = empty($rs['color'])?"":"#".$rs['color'];
+		$str="
+			<style>
+				span.space {
+					padding:0;
+					padding-right: 10px;
+					margin:0;
+					line-height: inherit;
+				}
+			</style>
+			<table width='100%' style='white-space:nowrap;'>
+				<tr>
+					<td width='20%' align='left'>
+						<img style='width:80%' src=".$logo."><br>
+					</td>
+					<td width='60%' valign='top'>
+						<h2 style='margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:11px; color: inherit;padding: 5px 0px 5px 0px;'>".$rs['school_namekh']."</h2>
+						<h2 style='white-space:nowrap; font-weight:bold; font-size:10px; margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
+					</td>
+					<td width='20%' >
+					</td>
+				</tr>
+			</table>
+		";
+		return $str;
+	}
+	
+	
 	
 	function getFooterAccount($spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();

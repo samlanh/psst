@@ -71,6 +71,17 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
 		
+		$_sort_by = new Zend_Dojo_Form_Element_FilteringSelect('sort_by');
+		$_sort_by->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+		));
+		$_order_opt = array(
+				-1=>$this->tr->translate("SORT_BY"),
+				1=>$this->tr->translate("PRODUCT_CATEGORY"),
+				2=>$this->tr->translate("PRODUCT_NAME"));
+		$_sort_by->setMultiOptions($_order_opt);
+		$_sort_by->setValue($request->getParam("sort_by"));
 		
 		//date 
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
@@ -198,7 +209,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$product_type->setMultiOptions($_opt);
 		$product_type->setValue($request->getParam("product_type"));
 		
-		$this->addElements(array($product_type,$supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
+		$this->addElements(array($_sort_by,$product_type,$supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
 		return $this;
 	} 
 

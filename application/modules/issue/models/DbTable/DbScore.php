@@ -375,6 +375,14 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 	function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
 		$db=$this->getAdapter();
+		
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+			$currentLang = $dbgb->currentlang();
+			$colunmname='subject_titleen';
+			if ($currentLang==1){
+				$colunmname='subject_titlekh';
+			}
+			
 		$sql="SELECT 
 					gsjd.*,
 					(SELECT max_score FROM `rms_dept_subject_detail` WHERE subject_id=gsjd.subject_id AND dept_id=g.degree LIMIT 1) AS max_subjectscore,
@@ -384,7 +392,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
 					(gsjd.amount_subject) amtsubject_month,
 					(gsjd.amount_subject_sem) amtsubject_semester,
-					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
+					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
+					(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
 					
 				FROM 
 			 		rms_group_subject_detail AS gsjd ,

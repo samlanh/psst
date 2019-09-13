@@ -616,6 +616,41 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$_sortby->setMultiOptions($_sortby_opt);
 		$_sortby->setValue($request->getParam("sortby"));
 		
+		
+		$_arr = array(0=>$this->tr->translate("SELECT_TYPE"),1=>$this->tr->translate("MONTHLY"),2=>$this->tr->translate("SEMESTER"));
+		$_exam_type = new Zend_Dojo_Form_Element_FilteringSelect("exam_type");
+		$_exam_type->setMultiOptions($_arr);
+		$_exam_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_exam_type->setValue($request->getParam("exam_type"));
+		
+		$_arr = array(0=>$this->tr->translate("SELECT_SEMESTER"),1=>$this->tr->translate("SEMESTER1"),2=>$this->tr->translate("SEMESTER2"));
+		$_for_semester = new Zend_Dojo_Form_Element_FilteringSelect("for_semester");
+		$_for_semester->setMultiOptions($_arr);
+		$_for_semester->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_for_semester->setValue($request->getParam("for_semester"));
+		
+		$_opt_month = array(0=>$this->tr->translate("SELECT_MONTH"));
+		$_allMonth = $_dbgb->getAllMonth();
+		if(!empty($_allMonth))foreach($_allMonth AS $row) $_opt_month[$row['id']]=$row['name'];
+		$_for_month = new Zend_Dojo_Form_Element_FilteringSelect("for_month");
+		$_for_month->setMultiOptions($_opt_month);
+		$_for_month->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_for_month->setValue($request->getParam("for_month"));
+		
 		$this->addElements(array($is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
@@ -623,7 +658,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
 				
 				$allacademicyear,
-				$_sortby
+				$_sortby,
+				
+				$_exam_type,
+				$_for_semester,
+				$_for_month,
 				));
 	
 		return $this;

@@ -1,8 +1,10 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("EDIT_STUDENT_SCOREENG"));
+	echo $this->headTitle($tr->translate("EDIT_MONTHLY_NEWSLATTER"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	$db = new Issue_Model_DbTable_DbScoreEng();
+	$db = new Issue_Model_DbTable_DbMonthlyProgress();
+	
+	$frm = $this->frm_items;
 ?>	
 <style>
 		select{ width:100%;}
@@ -66,6 +68,9 @@ span.note_score {
     font-weight: bold;
     text-decoration: underline;
 }
+thead tr td {
+    padding: 10px;
+}
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <div class="card">
@@ -73,7 +78,8 @@ span.note_score {
 		<div class="card-box">
            <div class="col-sm-12 border-botom">
 		   		<div class="col-sm-8 pd-0">
-		   			<h4 class="m-b-0"><i class="fa fa-file-text-o " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_SCOREENG');?></h4>
+		   			<h4 class="m-b-0"><i class="fa fa-file-text-o " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_MONTHLY_NEWSLATTER');?></h4>
+    				<span id="message"></span>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -82,6 +88,16 @@ span.note_score {
 		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    			if(this.validate()) {
+				student_id = dijit.byId('student_id').get('value');
+				if(student_id=='' || student_id=='-1'){
+					dijit.byId('student_id').focus();
+					return false;
+				}
+				if(isDuplicate==1){
+					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+					dijit.byId("student_id").focus();
+					return false;
+				}
 				var txt;
 				var r = confirm("Are you sure to submit ?");
 				if (r == true) {
@@ -100,18 +116,14 @@ span.note_score {
 		    		 <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllAcademicByBranch(); getAllGroupByBranch(); getScoreSetting();">
-								<?php if(!empty($this->row_branch))foreach ($this->row_branch as $row){?>
-								<option value="<?php echo $row['id']?>" <?php if ($row['id']==$this->score['branch_id']){ echo 'selected=selected';}?>><?php echo $row['name']?></option>
-								<?php }?>
-							</select>
-							<input type="hidden" name="score_id" id="score_id" class="fullside" value="<?php echo $this->score['id_multiscore'];?>" dojoType="dijit.form.TextBox" />
+		                	<?php echo $frm->getElement("branch_id");?>
+							<?php echo $frm->getElement("id");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCORE_SETTING");?> </label>
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NEWSLATTER_SETTING");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input id="scoreSetting" />
+		                	<input id="newsLatterSetting" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -127,27 +139,51 @@ span.note_score {
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title'];?>" required="1" dojoType="dijit.form.ValidationTextBox" />
+							<input id="student_id">
 		                </div>
 		             </div>
+		             
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_DATE");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="for_date" id="for_date" class="fullside" value="<?php echo date("Y-m-d",strtotime($this->score['for_date']));?>" required="1" dojoType="dijit.form.DateTextBox" />
+							<?php echo $frm->getElement("status");?>
 		                </div>
 		             </div>
-		             <div class="form-group">
-			                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-			                <div class="col-md-7 col-sm-7 col-xs-12">
-			                	<textarea dojoType="dijit.form.Textarea" class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
-			                </div>
-			         </div>
 		          </div>
 		          <div class="col-md-6 col-sm-6 col-xs-12">
+		          		<div class="form-group">
+			                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("exam_type");?>
+			                </div>
+			             </div>
+			             <div class="form-group">
+			                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("for_semester");?>
+			                </div>
+			             </div>
+			             <div class="form-group">
+			                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("for_month");?>
+			                </div>
+			             </div>
+			             <div class="form-group">
+			                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_DATE");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("for_date");?>
+			                </div>
+			             </div>
+			             <div class="form-group">
+				                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                <?php echo $frm->getElement("note");?>
+				                </div>
+				         </div>
 		          		<div id="gr-info"></div>
-		          		<div id="score-info"></div>
 		          </div>
 		     </div>
 		     <div class="card-box">
@@ -201,31 +237,117 @@ dojo.ready(function(){
 	    required: true,
 	    queryExpr: "*${0}*",
 		autoComplete: false,     			
-	    id: "scoreSetting",
-	    name: "scoreSetting",           
+	    id: "newsLatterSetting",
+	    name: "newsLatterSetting",           
 	    class: 'fullside',  
 	    required:'true',
 	    onChange: function() {  
-		    getDetailScoreSetting();
+	    	filterStudent();
 	    }
-	}, "scoreSetting");
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,             
-			id: "group",
-			name: "group",           
-			class: 'fullside', 
-			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-			onChange: function() {
-				getInfoBygroup();
-				filterStudent();
-			}
-		}, "group");
+	}, "newsLatterSetting");
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,             
+		id: "group",
+		name: "group",           
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+		onChange: function() {
+			getInfoBygroup();
+			getAllStudentByGroup();
+			filterStudent();
+			
+			checkDuplicateRecord()
+		}
+	}, "group");
+
+	new dijit.form.FilteringSelect({
+		store:scoreSetting_store,	
+		queryExpr: "*${0}*",
+		autoComplete: false,             
+		id: "student_id",
+		name: "student_id",           
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT");?>",          
+		onChange: function() {
+			checkDuplicateRecord();
+		}
+	}, "student_id");
+
+	var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getAllAcademicByBranch(); 
+		 getAllGroupByBranch(); 
+		 getSubjectAreaSetting();
+	});
+		
+	getSubjectAreaSetting();
 		getAllAcademicByBranch();
 		getAllGroupByBranch();
-		getScoreSetting();
-		//getDetailScoreSetting();
+		getAllStudentByGroup();
+
+		checkExamType();
 });
+
+function checkExamType(){
+	exam_type = dijit.byId("exam_type").get("value");
+	dijit.byId('for_month').set("readOnly",false);
+	if(exam_type==2){
+		dijit.byId('for_month').set("readOnly",true);
+	}
+}
+
+var isDuplicate = 0;
+var url_duplicate = '<?php echo $this->url(array("module"=>"issue","controller"=>"monthlynewslatter","action"=>"checkduplicate"));?>';										
+function checkDuplicateRecord(){
+	group = dijit.byId('group').get('value');
+	if(group=='' || group==-1){
+		dijit.byId('group').focus();
+		return false;
+	}
+	student_id = dijit.byId('student_id').get('value');
+	if(student_id=='' || student_id==-1){
+		return false;
+	}
+
+	exam_type = dijit.byId('exam_type').get('value');
+	if(exam_type=='' || exam_type==-1){
+		return false;
+	}
+	for_semester = dijit.byId('for_semester').get('value');
+	if(for_semester=='' || for_semester==-1){
+		return false;
+	}
+	for_month = dijit.byId('for_month').get('value');
+	if(student_id=='' || student_id==-1){
+		return false;
+	}
+	
+	id = dijit.byId('id').get('value');
+	dojo.xhrPost({
+		url: url_duplicate,
+		content:{
+			'student_id':student_id,'group':group,'exam_type':exam_type,'for_semester':for_semester,'for_month':for_month,'id':id
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
+			}else{
+				isDuplicate=0;
+				$("#message").html('');
+			}
+			HideloadingBlock();
+		},
+		error: function(err) {
+			alert(err);
+			HideloadingBlock();
+		}
+	});
+}
 
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranchID = '<?php echo $this->score['branch_id']?>';
@@ -257,95 +379,34 @@ function getAllAcademicByBranch(){
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_scoresetting = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'get-scoresetting')); ?>';
-function getScoreSetting(){
+var url_subjectareasetting = '<?php echo $this->url(array('module'=>'issue','controller'=>'monthlynewslatter','action'=>'getnewslattersetting')); ?>';
+function getSubjectAreaSetting(){
 	branch_id = dijit.byId('branch_id').get('value');
-	dijit.byId('scoreSetting').reset();
+	dijit.byId('newsLatterSetting').reset();
 	dojo.xhrPost({
-		url: url_scoresetting,
+		url: url_subjectareasetting,
 		content:{
 			'branch_id':branch_id
 			},
 		handleAs:"json",
 		load: function(data) {
 			scoreSetting_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('scoreSetting').set('store',scoreSetting_store); 
+		    dijit.byId('newsLatterSetting').set('store',scoreSetting_store); 
 		    if(oldBranchID==branch_id){
-		    	dijit.byId('scoreSetting').set('value','<?php echo $this->score['score_setting']?>'); 
+		    	dijit.byId('newsLatterSetting').set('value','<?php echo $this->score['newslatter_setting']?>'); 
 		    }  
 		},
 		error: function(err) {
 		}
 	});
 }
-var url_scoresettingdetail = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'get-scoresettingdetail')); ?>';
-var oldScoreSetting = '<?php echo $this->score['score_setting']?>';
+
+
 var oldGroup = '<?php echo $this->score['group_id']?>';
-function getDetailScoreSetting(){
-	scoreSetting = dijit.byId('scoreSetting').get('value');
-	if(scoreSetting==''){
-		dojo.byId("score-info").innerHTML = '';
-		subject ='';
-		filterStudent();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_scoresettingdetail,
-		content:{
-			'scoreSetting':scoreSetting
-			},
-		handleAs:"json",
-		load: function(data) {
-			subject = data;
-			var string='';
-			if(data!=''){
-			string+='<div class="form-group" style=" padding: 10px; ">';
-				string+='<span class="note_score"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <?php echo $tr->translate("SCORE_POLICY");?></span>';
-				string+='<ul>';
-				for(j=0;j<subject.length;j++){
-					stringsname = subject[j].name;
-					string+='<li><span class="lbl-tt">'+stringsname+'</span>: <span class="red">'+subject[j].pecentage_score+'%</span></li>';
-				}
-				string+='</ul>';
-			string+='</div>';
-			}
-			dojo.byId("score-info").innerHTML = string;
-			if(oldScoreSetting==scoreSetting){
-				group = dijit.byId('group').get('value');
-				if(oldGroup==group){
-					filterStudentOld();
-				}else{
-					filterStudent();
-				}
-			}else{
-				filterStudent();
-			}
-		},
-		error: function(err) {
-		}
-	});
-}
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-grade')); ?>';
-function filterGrade(){
-	degree = dijit.byId('degree').get('value');
-		dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'degree':degree
-				},
-			handleAs:"json",
-			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('grade').set('store',grade_store);  
-			    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
-			},
-			error: function(err) {
-			}
-		});
-}
-	var inx=0;
-	var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
+var performance = '<?php echo $this->performance;?>';
+var inx=0;
+var k=0;
+var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'monthlynewslatter','action'=>'newslatterdetail')); ?>';
 function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
@@ -356,18 +417,19 @@ function filterStudent(){
 		HideloadingBlock();
 		return false;
 	}
-	if(group==''){
+	if(group=='' || group=='-1'){
 		HideloadingBlock();
 		return false;
 	}
-	if(subject==''){
+	newsLatterSetting = dijit.byId('newsLatterSetting').get('value');
+	if(newsLatterSetting=='' || newsLatterSetting=='-1'){
 		HideloadingBlock();
 		return false;
 	}
 	dojo.xhrPost({
 	    url: url_getStudent,
 	    content : { 
-			'group':group,
+	    	'subject_area':newsLatterSetting,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
@@ -384,46 +446,21 @@ function filterStudent(){
 				str='';
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
-					+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;"><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
-					+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
-					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
-					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
-					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
-					no=0;
-				  for(j=0;j<subject.length;j++){
-	      			  no++;
-	      			  stringsname = subject[j].name.replace(' ','');
-		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
-	              }
+					+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;">'
+					+'<td  style="width: 10%;" class="tdheader" ><?php echo $tr->translate('NO');?></td>'
+					+'<td class="tdheader header" style="width:40%;"><?php echo $tr->translate('TITLE');?></td>'
+					+'<td class="tdheader header" style="width:20%;"><?php echo $tr->translate('PERFORMANCE');?></td>'
 				  temp+='<td  class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
-				  temp+='<tr style="border: 1px #4839bd solid;background: #fdbdbd; display:none;">';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  no=0;
-				  for(j=0;j<subject.length;j++){
-	      			  no++;
-	      			  stringsname = subject[j].name.replace(' ','');
-		      	      temp+='<td title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].id+');"  class="checkbox" id="subject'+subject[j].id+'" value="'+subject[j].id+'"  name="selector[]"/></td>';
-	              }
-			  	  temp+='<td>&nbsp;</td>';
-			  temp+='</tr>';
 				  temp+='</thead>';
 				  
 				for(i=0;i<data.length;i++){
 					num++;
 					inx = inx+1;
+					k = k+1;
 					temp += '<tr class="hover normal" id="row'+inx+'">';
-					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td align="center">&nbsp;'+inx+'</td>';
-					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
-					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
-					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
-					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input required="1" class="fullside" onKeyUp="checkScore('+inx+','+subject[j].id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].id+'"  name="score_'+inx+'_'+subject[j].id+'" /><input dojoType="dijit.form.TextBox" value="'+subject[j].max_score+'" name="max_score_'+inx+'_'+subject[j].id+'" id="max_score_'+inx+'_'+subject[j].id+'" type="hidden" ></td>';
-					}
+					temp += '<td style="text-align: left;">&nbsp;'+data[i].name+'&nbsp; <input dojoType="dijit.form.TextBox" value="'+data[i].subject_area_id+'" name="subject_area_id'+inx+'" id="subject_area_id'+inx+'" type="hidden" ></td>';
+					temp +='<td><select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="performance_'+inx+'" name="performance_'+inx+'" >'+performance+'</select></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';
 					
@@ -450,6 +487,7 @@ function filterStudent(){
 	});
 	HideloadingBlock();
 }
+
 function filterStudentOld(){
 	num =0;
 	title=0;
@@ -457,104 +495,46 @@ function filterStudentOld(){
 	str='';
 	column = 0;
 	temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
-		+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;"><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
-		+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
-		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
-		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
-		+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
-		no=0;
-	<?php if (!empty($this->scoresettingdetail)) foreach ($this->scoresettingdetail as $index => $subj){ ?>
-			  no++;
-			  stringsname ='<?php echo $subj['name'];?>';
-  	      	  temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
-	  <?php }?>
+		+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;">'
+		+'<td  style="width: 10%;" class="tdheader" ><?php echo $tr->translate('NO');?></td>'
+		+'<td class="tdheader header" style="width:40%;"><?php echo $tr->translate('TITLE');?></td>'
+		+'<td class="tdheader header" style="width:20%;"><?php echo $tr->translate('PERFORMANCE');?></td>'
 	  temp+='<td  class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
-	  temp+='<tr style="border: 1px #4839bd solid;background: #fdbdbd; display:none;">';
-		  temp+='<td>&nbsp;</td>';
-		  temp+='<td>&nbsp;</td>';
-		  temp+='<td>&nbsp;</td>';
-		  temp+='<td>&nbsp;</td>';
-		  temp+='<td>&nbsp;</td>';
-		  no=0;
-		  <?php if (!empty($this->scoresettingdetail)) foreach ($this->scoresettingdetail as $index => $subj){ 
-		  	$rscheck = $db->checkExamtypeScore($this->score_id, $subj["id"]);
-		  	?>
-  			  no++;
-    		  stringsname ='<?php echo $subj['name'];?>';
-      	      temp+='<td title="'+stringsname+'"><input <?php if (!empty($rscheck)){?>checked="checked"<?php }?> checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj['id'];?>);"  class="checkbox" id="subject<?php echo $subj['id'];?>" value="<?php echo $subj['id'];?>"  name="selector[]"/></td>';
-      <?php }?>
-	  	  temp+='<td>&nbsp;</td>';
-	  temp+='</tr>';
 	  temp+='</thead>';
   <?php $old_stu = null;$i=0;
-	if(!empty($this->student))foreach ($this->student as $key=>$rs){
+	if(!empty($this->detail))foreach ($this->detail as $key=>$rs){
 		$i = $i+1;
 	?>  
 		num++;
 		inx = inx+1;
 		temp += '<tr class="hover normal" id="row'+inx+'">';
-		temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		temp += '<td align="center">&nbsp;<?php echo $i; ?></td>';
-		temp += '<td>&nbsp;<?php echo $rs["stu_code"]; ?><input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="<?php echo $rs["stu_id"] ?>" type="hidden" ></td>';
-		temp += '<td style="min-width:100px;">&nbsp;<?php echo $rs["stu_name"]; ?>&nbsp;</td>';
-		temp += '<td>&nbsp;'+gender('<?php echo $rs["sex"];?>')+'&nbsp;</td>';
-		<?php if (!empty($this->scoresettingdetail)) foreach ($this->scoresettingdetail as $index => $subj){ 
-				$rsscore = $db->getStudentScoreBySubjectID($this->score_id, $rs["stu_id"], $subj["id"]);
-			?>
-			temp += '<td id="score_<?php echo $index;?>"><input <?php if (empty($rsscore)){?>disabled="disabled"<?php }?> value="<?php echo $rsscore['score'];?>" required="1" class="fullside" onKeyUp="checkScore('+inx+',<?php echo $subj["id"]; ?>);" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_<?php echo $subj["id"]; ?>"  name="score_'+inx+'_<?php echo $subj["id"]; ?>" /><input dojoType="dijit.form.TextBox" value="<?php echo $subj["pecentage_score"]; ?>" name="max_score_'+inx+'_<?php echo $subj["id"]; ?>" id="max_score_'+inx+'_<?php echo $subj["id"]; ?>" type="hidden" ></td>';
-		<?php }?>
-		temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php echo $rsscore['note'];?>" type="text" ></td>';
+		temp += '<td style="text-align: left;">&nbsp;<?php echo $rs["title_sub"]; ?>&nbsp; <input dojoType="dijit.form.TextBox" value="<?php echo $rs["subject_area_id"]; ?>" name="subject_area_id'+inx+'" id="subject_area_id'+inx+'" type="hidden" > </td>';
+		temp +='<td><select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="performance_'+inx+'" name="performance_'+inx+'" >'+performance+'</select></td>';
+		temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php echo empty($rs['note'])?"":$rs['note'];?>" type="text" ></td>';
 		temp+= '</tr>';
-		
+
 		var no=0;
 	    if($("#identity").val()!="") {
 			var identity = $("#identity").val();
 			$("#identity").val(identity+','+inx);
 		} else {$("#identity").val(inx);}
-		
 	<?php }?>
 	temp+='</table>';
-
 	tmp='<tr id="row'+inx+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 	dojo.html.set(dojo.byId("row"+inx),temp , {
 	     parseContent: true,
 	});
+	
+	<?php if(!empty($this->detail))foreach ($this->detail as $key=>$rs){
+		?>
+		k = k+1;
+	dijit.byId('performance_'+k).attr('value','<?php echo $rs["performane_id"]?>'); 
+	<?php }?>
 }
 
-function checkScore(index,subject_id){
-	score_input = dijit.byId('score_'+index+'_'+subject_id).get('value');
-	max_score = dijit.byId('max_score_'+index+'_'+subject_id).get('value');
-	if(score_input>max_score){
-		alert("Can not input bigger than max score = "+max_score);
-		dijit.byId('score_'+index+'_'+subject_id).attr('value',max_score);
-	}
-}
-
-function CheckSubjectExam(subject_id){
-	var rowId = $('#identity').val();
-	var amountsub = $(".checkbox:checked").length;
-	if ($('#subject'+subject_id).is(':checked')) {
-		if(rowId!=''){ 
-			var rowIDArray = rowId.split(',');
-			for(var b = 0; b < rowIDArray.length; b++){
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
-			}
-		}
-	}else{
-		if(rowId!=''){ 
-			var rowIDArray = rowId.split(',');
-			for(var b = 0; b < rowIDArray.length; b++){
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
-			}
-		}
-	}
-}
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -565,16 +545,9 @@ function deleteRecord(index) {
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
 }
-function gender(sex){
-	if(sex==1){
-		sex='Male';
-	}else sex='Female';
-	return sex;
-}
-</script>
-<script> 
+
 function getInfoBygroup(){
-	url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
+	url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'monthlynewslatter','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
 	if(group==''){
 		return false;
@@ -591,7 +564,7 @@ function getInfoBygroup(){
 		error: function(err) {
 		}
 	});
-	}
+}
 
 url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
@@ -643,6 +616,32 @@ function getAllGroupByAcademic(){
 		    if(oldAcdemic==study_year){
 		    	dijit.byId('group').set('value','<?php echo $this->score['group_id']?>'); 
 		    } 
+		},
+		error: function(err) {
+		}
+	});
+}
+
+url_getStudentByGroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup'));?>';
+function getAllStudentByGroup(){
+	dijit.byId('student_id').reset();
+	group = dijit.byId('group').get('value');
+	if(group=='' || group==-1){
+		var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('student_id').set('store',student_store);  
+		dijit.byId('group').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getStudentByGroup,
+		content:{
+			'group':group
+			},
+		handleAs:"json",
+		load: function(data) {
+		    student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('student_id').set('store',student_store);   
+		    dijit.byId('student_id').set('value','<?php echo $this->score['student_id']?>'); 
 		},
 		error: function(err) {
 		}

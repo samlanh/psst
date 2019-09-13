@@ -884,7 +884,7 @@ function getAllgroupStudyNotPass($action=null){
    	return $session_user->level;
    }
    
-   function getViewById($type,$is_opt=null){
+   function getViewById($type,$is_opt=null,$is_stringopt=null){
    	$db=$this->getAdapter();
    	$lang = $this->currentlang();
    	if($lang==1){// khmer
@@ -900,6 +900,12 @@ function getAllgroupStudyNotPass($action=null){
    		if(!empty($rows))foreach($rows AS $row){
    			$options[$row['key_code']]=$row['view_name'];
    		}
+   	}elseif(!empty($is_stringopt)) {
+   		$options = '';
+   		if(!empty($rows))foreach($rows as $value){
+   			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+   		}
+   		return $options;
    	}else{
    		return $rows;
    	}
@@ -2329,12 +2335,14 @@ function getAllgroupStudyNotPass($action=null){
   		$coloum="name_kh";
   	}
   	$sql="SELECT
+  			gds.stu_id as id,
 		  	gds.stu_id as stu_id,
 		  	st.stu_enname,
 		  	st.last_name,
 		  	st.stu_khname,
 		  	st.stu_code,
 		  	CONCAT(st.stu_enname,' - ',st.stu_khname) AS stu_name,
+		  	CONCAT(COALESCE(st.stu_code,''),'-',COALESCE(st.stu_khname,''),'-',COALESCE(st.stu_enname,''),' ',COALESCE(st.last_name,'')) AS name,
 		  	(select $coloum from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
 	  	FROM
 		  	rms_group_detail_student as gds,
@@ -2356,12 +2364,15 @@ function getAllgroupStudyNotPass($action=null){
   		$coloum="name_kh";
   	}
   	$sql="SELECT
+  		gds.stu_id as id,
 	  	gds.stu_id as stu_id,
 	  	st.stu_enname,
 	  	st.stu_khname,
 	  	st.stu_code,
 	  	st.last_name,
 	  	CONCAT(st.stu_enname,' - ',st.stu_khname) AS stu_name,
+	  	CONCAT(COALESCE(st.stu_code,''),'-',COALESCE(st.stu_khname,''),'-',COALESCE(st.stu_enname,''),' ',COALESCE(st.last_name,'')) AS name,
+	  	
 	  	(SELECT $coloum FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) AS sex
   	FROM
 	  	rms_group_detail_student as gds,
@@ -2425,7 +2436,17 @@ function getAllgroupStudyNotPass($action=null){
   	// " INSERT INTO `table_name` (`column_name`) VALUES('".$mac_address."') ";
   }
   
-  
+  function getAllMonth(){
+  	$db = $this->getAdapter();
+  	$lang = $this->currentlang();
+  	if($lang==1){// khmer
+  		$month = "month_kh";
+  	}else{ // English
+  		$month = "month_en";
+  	}
+  	$sql="SELECT id , $month as name from rms_month where status=1 ";
+  	return $db->fetchAll($sql);
+  }
   function getSubjectArea($type=1){
   	 
   	$currentLang = $this->currentlang();

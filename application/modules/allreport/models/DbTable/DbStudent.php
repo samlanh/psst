@@ -270,6 +270,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$sql=" SELECT st.*,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=str.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic,
 					(SELECT $label FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,
+					(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=str.study_term) AS study_term,
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 					(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
@@ -312,25 +313,25 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$where.= " AND st.branch_id = ".$search['branch_search'];
 			}
 			if(!empty($search['study_year'])){
-				$where .= " and str.academic_year = ".$search['study_year'];
+				$where .= " AND str.academic_year = ".$search['study_year'];
 			}
-			if(!empty($search['nation_search'])){
-				$where .= " and st.nationality = ".$search['nation_search'];
+			if(!empty($search['term_test'])){
+				$where .= " AND str.study_term = ".$search['term_test'];
 			}
 			if(!empty($search['user'])){
 				$where.= " AND str.user_id = ".$search['user'];
 			}
 			if(!empty($search['type_exam'])){
-				$where .= " and str.test_type = ".$search['type_exam'];
+				$where .= " AND str.test_type = ".$search['type_exam'];
 			}
 			if(!empty($search['degree_search'])){
-				$where .= " and str.degree_result = ".$search['degree_search'];
+				$where .= " AND str.degree_result = ".$search['degree_search'];
 			}
 			if(!empty($search['student_option_search'])){
-				$where .= " and st.student_option = ".$search['student_option_search'];
+				$where .= " AND st.student_option = ".$search['student_option_search'];
 			}
 			if(!empty($search['province_search'])){
-				$where .= " and st.province_id = ".$search['province_search'];
+				$where .= " AND st.province_id = ".$search['province_search'];
 			}
 	// 		if($search['register_status']!=''){
 	// 			$where .= " and st.register = ".$search['register_status'];

@@ -97,15 +97,9 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
-	function getTermStudy($branch,$year){
-		$db = $this->getAdapter();
-		$sql=" select id,CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name from rms_startdate_enddate WHERE branch_id = $branch and academic_year = $year ";
-		$rows = $db->fetchAll($sql);
-		$options = " <option value=''>Term Study</option> ";
-		if(!empty($rows)){foreach ($rows as $row){
-			$options .= '<option value="'.$row['id'].'" >'.htmlspecialchars($row['name'], ENT_QUOTES).'</option>';
-		}}
-		return $options;
+	function getTermStudy($branch,$year=null,$option=1){
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		return $dbp->getAllTermStudy($branch,$year,$option);
 	}
 }
 

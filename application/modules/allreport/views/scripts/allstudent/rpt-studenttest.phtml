@@ -24,10 +24,10 @@ table.content-data thead tr.style-head {
                    		<input id="study_year" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("degree_search");?>
+    	               	<input id="term_test" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-    	               	<?php echo $frm->getElement("nation_search");?>
+                   		<?php echo $frm->getElement("degree_search");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<?php echo $frm->getElement("student_option_search");?>
@@ -103,7 +103,7 @@ table.content-data thead tr.style-head {
 												width:100%;
 												border:1px solid #4839bd; 
 												font-family:'Times New Roman','Khmer OS Battambang';
-												font-size:13px;
+												font-size:11px;
 												white-space: nowrap;
 												margin:0 auto;
 												color: #4839bd;
@@ -113,10 +113,12 @@ table.content-data thead tr.style-head {
 												background: #ccd9ff;
 												font-weight: bold;
 											}
-											table.content-data tr.style-rowdata {
+											table.content-data tr.style-rowdata,table.content-data tr.style-head {
 												font-size:11px; 
-												height: 23px;
+												height: 15px;
+												line-height: 15px;
 											}
+											
 										</style>
 									<table class="content-data" width="100%" border="1" align="center" >
 										 <?php 
@@ -126,46 +128,48 @@ table.content-data thead tr.style-head {
 										 ?>
 										  <tr class="style-head" style="height: 20px;background:#ccd9ff;" align="center">
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-										    <td style="line-height: 18px; white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
-										    <td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
+										    <td style="white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;
+										    <?php echo $tr->translate("SERIAL"); ?>/<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?><br /><?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>/<?php echo $tr->translate("TEST_TERM");?>&nbsp;</td>
 											<td colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
-											<td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
 										  </tr>
-										 <tr class="style-head" style="height: 20px;background:#ccd9ff;" align="center">
-										 	<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+										 <tr class="style-head" style="background:#ccd9ff;" align="center">
+										 	<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?><br /><?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("RESULT_DATE"); ?>&nbsp;</td>
+											<td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word;">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
 										 </tr>
 										 <?php foreach($this->row as $rs){ $i++;?>
-											  <tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center" style="height: 20px;"​ >
-												    <td><?php echo $i;?></td>
-												    <td style="line-height: 18px; white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['serial']; ?></td>
-												    <td><?php echo $rs['stu_code']; ?></td>
-												    <td align="left">&nbsp;<?php echo $rs['stu_khname']; ?></td>
-												    <td align="left">&nbsp;<?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
-												    <td><?php echo $rs['sex']; ?></td>
-												    <td><?php echo $rs['tel']; ?></td>
-												    <td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['academic']; ?></td>
-												    <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
-												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
-												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
-												    <td><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
-												    <td><?php echo $rs['note_result']; ?></td>
-													<td><?php echo $rs['user_id'];?></td>								    
-												    <td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
-												    <td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['is_registered']==0){echo " color:red;";}?>">&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    
-											  		<td>&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
+											  <tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="left" style="height: 20px;"​ >
+												    <td rowspan="2" align="center"><?php echo $i;?></td>
+												    <td style="border-bottom:1px solid #fff;line-height: 18px; white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['serial']; ?></td>
+												    <td align="left" style="border-bottom:1px solid #fff;">&nbsp;<?php echo $rs['stu_khname']; ?></td>
+												    <td rowspan="2" valign="top"><?php echo $rs['sex']; ?></td>
+												    <td rowspan="2" valign="top"><?php echo $rs['tel']; ?></td>
+												    <td rowspan="2" valign="top" style="line-height:18px;white-space: nowrap; !important;width: 120px;padding: 2px;"><?php echo $rs['academic']; ?></td>
+												    <td valign="top" style="border-bottom:1px solid #fff;"><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
+												    <td valign="top" style="border-bottom:1px solid #fff;"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
+												    <td valign="top" rowspan="2"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
+												    <td valign="top" rowspan="2">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
+												    <td valign="top" rowspan="2"><?php echo $rs['note_result']; ?></td>
+													<td valign="top" rowspan="2"><?php echo $rs['user_id'];?></td>								    
+												    <td valign="top" rowspan="2" style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
+												    <td valign="top" rowspan="2" style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['is_registered']==0){echo " color:red;";}?>">&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    
 											  </tr>
+											  <tr>
+											  	<td><?php echo $rs['stu_code']; ?></td>
+											  	<td align="left">&nbsp;<?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
+											  	<td><?php echo $rs['study_term'];?></td>
+											  	<td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
+											  </tr>
+											  
 											  <?php 
 											  	if($rs['updated_result_de']==1){
 													$updated_result = $updated_result + 1;
@@ -210,7 +214,7 @@ table.content-data thead tr.style-head {
 										</tr>
 									</table>
 							</td>
-					</tr>
+						</tr>
 				</table>
 			</div>	
 		</div>
@@ -252,15 +256,30 @@ dojo.ready(function(){
 		class: "fullside", 		
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 		onChange: function() {  
-			academic_year = dijit.byId('study_year').get('value');
+			getAllTermStudy();
 		}
 	}, "study_year");
+
+	new dijit.form.FilteringSelect({
+		placeHolder:"<?php echo $tr->translate("SELECT_TERM");?>",   
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "term_test",
+		name: "term_test",
+		class: "fullside", 		
+		onChange: function() {  
+		}
+	}, "term_test");
+
 	
 	 var branch_id = dijit.byId('branch_search');
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
+		 getAllTermStudy();
     });
 	 getAllAcademicByBranch();
+	 getAllTermStudy();
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_search']?>";
@@ -289,6 +308,33 @@ function getAllAcademicByBranch(){
 		}
 	});
 }
+url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+var oldterm = "<?php echo $this->search['branch_search']?>";
+function getAllTermStudy(){
+	branch_id = dijit.byId('branch_search').get('value');
+	if(branch_id=='' || branch_id==-1){
+		return false;
+	}
+	study_year = dijit.byId('study_year').get('value');
+	if(study_year==''){study_year=0;}
+	dojo.xhrPost({
+		url: url_term_study,
+		content:{
+			'branch_id':branch_id,
+			'study_year':study_year,
+			'option':0
+		},
+		handleAs:"json",
+		load: function(data){
+			term_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('term_test').set('store',term_store); 
+		    dijit.byId('term_test').set('value','<?php echo $this->search['term_test']?>');  
+		},
+		error: function(err) {
+		}
+	});
+}
+
 var row=0;
 var url="";
 $(function(){

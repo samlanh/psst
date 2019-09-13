@@ -437,15 +437,16 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		try{
 			$array = array(
-					'stu_test_id'	=>$data['stu_test_id'],
-					'test_type'	=>$type,//General English
-					'academic_year'	=>$data['academic_year'],
-					'degree'	=>$data['degree'],
-					'grade'	=>$data['grade'],
-					'test_date'		=>$data['test_date'],
-					'note'		=>$data['note'],
-					'modify_date' => date("Y-m-d H:i:s"),
-					'user_id'	=>$this->getUserId(),
+				'stu_test_id'	=> $data['stu_test_id'],
+				'test_type'		=> $type,//General English
+				'academic_year'	=> $data['academic_year'],
+				'degree'	    => $data['degree'],
+				'grade'	        => $data['grade'],
+				'study_term'    => $data['term_test'],
+				'test_date'		=> $data['test_date'],
+				'note'		    => $data['note'],
+				'modify_date'   => date("Y-m-d H:i:s"),
+				'user_id'	    => $this->getUserId(),
 			);
 			
 			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
@@ -538,7 +539,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			return $id;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+// 			echo $e->getMessage();
 		}
 	}
 	
@@ -571,6 +572,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				WHEN  str.comment = 3 THEN '".$tr->translate("FAIR")."'
 				WHEN  str.comment = 4 THEN '".$tr->translate("WEAK")."'
 				END AS comment_title,
+			(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=study_term) AS study_term,
 			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 			(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,

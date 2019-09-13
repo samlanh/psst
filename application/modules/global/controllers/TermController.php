@@ -93,7 +93,9 @@ class Global_TermController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Global_Model_DbTable_DbTerm();
-			$rows = $db->getTermStudy($data['branch_id'],$data['study_year']);
+			$option = empty($data['option'])?null:$data['option'];
+			$data['study_year'] = empty($data['study_year'])?null:$data['study_year'];
+			$rows = $db->getTermStudy($data['branch_id'],$data['study_year'],$option);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

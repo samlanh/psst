@@ -98,6 +98,14 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_TERM")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("term_test");?>
+	                   </div>
+	                </div>
+	                
+	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_DATE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -308,6 +316,7 @@ require(["dojo/ready"], function(ready){
 		getAllGrade();	
 		getAllGradeResult();
 		getAllAcademicByBranch();
+		getAllTermStudy();
 	});
 });
 
@@ -332,6 +341,10 @@ function getAllAcademicByBranch(){
 		load: function(data) {
 			academic_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('academic_year').set('store',academic_store);   
+		    
+			<?php if (!empty($this->detailscore['academic_year'])){?>
+				dijit.byId('academic_year').set('value',<?php echo $this->detailscore['academic_year'];?>);
+			<?php }?>
 		},
 		error: function(err) {
 		}
@@ -358,9 +371,35 @@ function getStudntTestByBranch(){
 		}
 	});
 }
+
+url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+function getAllTermStudy(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_term_study,
+		content:{
+			'branch_id':branch_id,
+			'study_year':0,
+			'option':0
+		},
+		handleAs:"json",
+		load: function(data){
+			term_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('term_test').set('store',term_store); 
+			<?php if (!empty($this->detailscore['study_term'])){?>
+				dijit.byId('term_test').set('value',<?php echo $this->detailscore['study_term'];?>);
+			<?php }?>
+		},
+		error: function(err) {
+		}
+	});
+}
+
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getAllGrade(){
-	
 	dijit.byId('grade').set('value',''); 
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id==''){

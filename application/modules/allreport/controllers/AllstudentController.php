@@ -655,7 +655,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'branch_search'=>0,
 					'study_year' =>'',
 					'degree_search' =>'',
-					'nation_search' =>'',
+					'term_test' =>'',
 					'student_option_search' =>'',
 					'province_search' =>'',
 					'type_exam' => '',

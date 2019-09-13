@@ -121,8 +121,8 @@
 								<tr class="style-head" align="center">
 									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?></td>
 									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?></td>
-									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?></td>
 									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?></td>
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?></td>
 									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('UNIT_COST');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
@@ -138,13 +138,13 @@
 							$total_cost=0;
 						if(!empty($this->product_sold)){ foreach ($this->product_sold AS $rs) { $i++;
 						?>
-							<tr class="style-rowdata hover" align="center">
+							<tr class="style-rowdata hover" align="left">
 							    <td><?php echo $i; ?></td>
 							    <td><?php echo $rs['branch_name'];?></td>
 							    <td><?php echo $rs['stu_code'];?></td>
 							    <td style="text-align: left;"><?php echo $rs['student_name'];?></td>
-							    <td style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
 							    <td><?php echo $rs['category'];?></td>
+							    <td style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
 							    <td><?php echo number_format($rs['qty'],0);?></td>
 							    <td><?php echo "$ ".$rs['cost'];?></td>
 							    <td><?php echo "$ ".$rs['fee'];?></td>

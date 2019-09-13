@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("LECTURER"));
+	echo $this->headTitle($tr->translate("TEACHER"));
 	
 	$urlCopy = $this->baseUrl()."/foundation/lecturer/copy/id/";
 	$urlView = $this->baseUrl()."/foundation/lecturer/view/id/";
@@ -47,9 +47,8 @@
 </div>
 
 <script type="text/javascript">
-dojo.require("dijit.form.CheckBox"); 
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
+//dojo.require("dijit.form.NumberTextBox");
+//dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 	
 	var row=0;

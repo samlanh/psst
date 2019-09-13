@@ -59,7 +59,7 @@ input.btn_borwse_image {
 					return false;
 				}
 				if(duplicateStudent==1){
-					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?>");
+					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
 					return false;
 				}
 				loadingBlock();
@@ -1208,8 +1208,8 @@ function checkDuplicateStudent(){
 		load: function(data) {
 			if(data==1){
 				duplicateStudent = 1;
-				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?>");
-				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?> !');
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
 			}else{
 				duplicateStudent=0;
 				$("#message").html('');

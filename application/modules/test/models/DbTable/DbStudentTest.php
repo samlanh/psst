@@ -622,7 +622,17 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function getSubjectScoreByTest($test_id){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$session_lang=new Zend_Session_Namespace('lang');
+		$lang = $session_lang->lang_id;
+		
+		if($lang==1){// khmer
+			$label = "name_kh";
+		}else{ // English
+			$label = "name_en";
+		}
+		
 		$sql="SELECT *,
+				(SELECT $label AS view_name FROM rms_view WHERE `key_code`=r.subjecttest_id AND type=31 LIMIT 1) AS subject,
 				CASE    
 				WHEN  r.comment = 1 THEN '".$tr->translate("GOOD")."'
 				WHEN  r.comment = 2 THEN '".$tr->translate("GOOD_FAIR")."'

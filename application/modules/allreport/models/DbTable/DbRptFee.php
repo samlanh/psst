@@ -27,9 +27,9 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	}
     	
     	$sql = "SELECT id,CONCAT(from_academic,' - ',to_academic) AS academic,note,generation,
-    			(select $branch from rms_branch where br_id = branch_id) as branch_name,
-    		    (select $label from `rms_view` where `rms_view`.`type`=7 and `rms_view`.`key_code`=`rms_tuitionfee`.`time`)AS time,
-    		    (SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=12 AND `rms_view`.`key_code`=`rms_tuitionfee`.`is_finished`)AS is_process,
+    			(SELECT $branch from rms_branch where br_id = branch_id LIMIT 1) AS branch_name,
+    		    (SELECT $label from `rms_view` where `rms_view`.`type`=7 and `rms_view`.`key_code`=`rms_tuitionfee`.`time` LIMIT 1) AS time,
+    		    (SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=12 AND `rms_view`.`key_code`=`rms_tuitionfee`.`is_finished` LIMIT 1) AS is_process,
     			create_date ,status FROM `rms_tuitionfee`  WHERE 1  $branch_id  ";
     	$sql.=" AND type= $type ";
     	$where= ' ';
@@ -62,12 +62,12 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		$s_where[] = " rms_tuitionfee.generation LIKE '%{$s_search}%'";
     		$s_where[] = " rms_tuitionfee.from_academic LIKE '%{$s_search}%'";
     		$s_where[] = " rms_tuitionfee.to_academic LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=7 and rms_view.key_code=rms_tuitionfee.time LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT name_en from rms_view where rms_view.type=7 and rms_view.key_code=rms_tuitionfee.time LIMIT 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
-    function getFeebyOther($fee_id,$grade_search,$degree_id){
+    function getFeebyOther($fee_id,$grade_search,$degree_id,$search=null){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
@@ -82,7 +82,7 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		$degree = "rms_items.title_en";
     		$branch = "b.branch_nameen";
     	}
-    	$sql = "select tf.*,
+    	$sql="SELECT tf.*,
 			    	$grade as class,
 			    	(SELECT $degree FROM `rms_items` WHERE rms_items.id=i.items_id LIMIT 1) as degree
 			    	FROM 
@@ -90,9 +90,7 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
 			    		rms_itemsdetail as i 
 			    	WHERE 
     					i.id=tf.class_id 
-    					AND tf.fee_id = $fee_id 
-    		";
-    	
+    					AND tf.fee_id = $fee_id ";
     	$where = ' ';
     	$order = ' ORDER BY tf.id ASC';
     	
@@ -101,6 +99,9 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	}
     	if($grade_search>0){
     		$where.=" AND tf.class_id = ".$grade_search;
+    	}
+    	if($search!=null AND $search['school_option']>0){
+    		$where.=" AND i.schoolOption = ".$search['school_option'];
     	}
 
     	$result = $db->fetchAll($sql.$where.$order);    	

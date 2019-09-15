@@ -30,7 +30,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$link=array(
     			'module'=>'global','controller'=>'degree','action'=>'edit',
     	);
-    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('ordering'=>$link,'shortcut'=>$link,'title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
+    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('ordering'=>$link,'shortcut'=>$link,'title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
@@ -100,6 +100,42 @@ class Global_DegreeController extends Zend_Controller_Action {
     	
     	$_model = new Global_Model_DbTable_DbGroup();
     	$this->view->subject = $_model->getAllSubjectStudy(null,$row['schoolOption']);    	 
+    }
+    public function copyAction(){
+    	$db = new Global_Model_DbTable_DbItems();
+    	$id= $this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		try {
+    			$_data = $this->getRequest()->getPost();
+    			$db->AddDegree($_data);
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/index");
+    			exit();
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("Application Error!");
+    		}
+    	}
+    	$type=$this->type; //Degree
+    	$row =$db->getDegreeById($id,$type);
+    	$rs =  $db->getDeptSubjectById($id);
+    	$this->view->row=$row;
+    	$this->view->rowdetail = $rs;
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    	}
+    	 
+    	$this->view->row_comment = $db->getDDegreeCommentById($id);;
+    	 
+    	$db = new Global_Model_DbTable_DbItems();
+    	$this->view->comment = $db->getAllComment();
+    	 
+    	$frm = new Global_Form_FrmItems();
+    	$frm->FrmAddDegree($row);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_degree = $frm;
+    	 
+    	$_model = new Global_Model_DbTable_DbGroup();
+    	$this->view->subject = $_model->getAllSubjectStudy(null,$row['schoolOption']);
     }
     function refreshitemsAction(){
     	if($this->getRequest()->isPost()){

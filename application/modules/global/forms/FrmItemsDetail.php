@@ -15,9 +15,6 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$request=Zend_Controller_Front::getInstance()->getRequest();
     	$typeItems = empty($typeItems)?1:$typeItems;
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
-//     	$_dbuser = new Application_Model_DbTable_DbUsers();
-//     	$userid = $_dbgb->getUserId();
-//     	$userinfo = $_dbuser->getUserInfo($userid);
     	
     	$code = new Zend_Dojo_Form_Element_TextBox('code');
     	$code->setAttribs(array(
@@ -204,7 +201,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
-    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("ONE_PAYMENT"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");
@@ -217,6 +214,25 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_branch_search->setValue($request->getParam("branch_search"));
+    	
+    	$auto_payment = new Zend_Dojo_Form_Element_FilteringSelect("auto_payment");
+    	$_arr = array(
+    			-1=>$this->tr->translate("SELECT_TYPE"),
+    			0=>$this->tr->translate("NORMAL"),
+    			1=>$this->tr->translate("AUTO_PAYMENT"));
+    	if($request->getActionName()!='index'){
+    		unset($_arr[-1]);
+    	}
+    	$auto_payment->setMultiOptions($_arr);
+    	$auto_payment->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$auto_payment->setValue($request->getParam("auto_payment"));
+    	
     	if(!empty($data)){
     		$title->setValue($data["title"]);
 			$title_en->setValue($data["title_en"]);
@@ -237,6 +253,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     		}
     	}
     	$this->addElements(array(
+    			$auto_payment,
     			$title,
 				$title_en,
 				$_shortcut,

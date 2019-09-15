@@ -18,7 +18,9 @@ class Global_GradeController extends Zend_Controller_Action {
 	    		$search = array(
 	    				'advance_search' => "",
 	    				'items_search'=>"",
-	    				'status_search' => -1
+	    				'status_search' => -1,
+	    				'is_onepayment'=>-1,
+	    				'auto_payment'=>-1
 	    		);
 	    	}
 	    	$type=1; //Degree
@@ -28,7 +30,7 @@ class Global_GradeController extends Zend_Controller_Action {
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'ordering'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'title_en'=>$link,'ordering'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -45,6 +47,7 @@ class Global_GradeController extends Zend_Controller_Action {
     		$_data = $this->getRequest()->getPost();
     		try {
     			$sms="INSERT_SUCCESS";
+    			$_data['auto_payment']=0;
     			$_major_id = $db->AddItemsDetail($_data);
     			if($_major_id==-1){
     				$sms = "RECORD_EXIST";
@@ -73,6 +76,7 @@ class Global_GradeController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		try{
 	    		$_data = $this->getRequest()->getPost();
+	    		$_data['auto_payment']=0;
 	    		$db->updateItemsDetail($_data,$id);
 	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
     		}catch(Exception $e){
@@ -102,6 +106,7 @@ class Global_GradeController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		try{
 	    		$_data = $this->getRequest()->getPost();
+	    		$_data['auto_payment']=0;
 	    		$db->AddItemsDetail($_data,$id);
 	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
     		}catch(Exception $e){

@@ -190,6 +190,9 @@ class Test_IndexController extends Zend_Controller_Action
     	$frm->FrmEnterResultTest($row,$result,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->form = $frm;
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rs_subjecttestkhmer = $db->getViewById(31);
+//     	print_r($db->getViewById(31));
     }
     function getstudenttestbybranchAction(){
     	if($this->getRequest()->isPost()){

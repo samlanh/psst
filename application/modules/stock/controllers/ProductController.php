@@ -7,9 +7,6 @@ class Stock_ProductController extends Zend_Controller_Action {
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
-	}
 	public function indexAction()
     {
     	try{
@@ -23,7 +20,9 @@ class Stock_ProductController extends Zend_Controller_Action {
     				'items_search'=>"",
     				'is_onepayment'=>-1,
     				'product_type_search'=>-1,
-    				'status_search' => -1
+    				'status_search' => -1,
+    				'is_onepayment'=>-1,
+    				'auto_payment'=>-1
 	    		);
 	    	}
 	    	$type=3; //Product
@@ -33,7 +32,7 @@ class Stock_ProductController extends Zend_Controller_Action {
 	    	$link=array(
 	    			'module'=>'stock','controller'=>'product','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('code'=>$link ,'title'=>$link ,'degree'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('code'=>$link ,'title'=>$link ,'title_en'=>$link ,'degree'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

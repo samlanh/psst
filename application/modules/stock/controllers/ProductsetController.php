@@ -31,7 +31,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'stock','controller'=>'productset','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'code'=>$link,'degree'=>$link,));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'code'=>$link,'degree'=>$link,));
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Application Error!");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -104,6 +104,35 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		    array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		    array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		    $this->view->productlist=$d_row;
+	}
+	public function copyAction(){
+		$id=$this->getRequest()->getParam('id');
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try{
+				$rs = $db->addProductSet($_data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$type=3; //Product
+		$row =$db->getItemsDetailById($id,$type,1);
+		$this->view->pro_detail=$db->getProductSetDetailById($id);
+	
+		$frm = new Global_Form_FrmItemsDetail();
+		$frm->FrmAddItemsDetail($row,$type);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_items = $frm;
+	
+		$product_type=1;
+		$d_row= $db->getAllProductsNormal($product_type);
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+		$this->view->productlist=$d_row;
 	}
 	function refreshproductAction(){
 		if($this->getRequest()->isPost()){

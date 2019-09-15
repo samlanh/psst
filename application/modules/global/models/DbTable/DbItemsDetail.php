@@ -46,9 +46,14 @@
 			$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
 		}
 		if($search['status_search']>-1){
-			$where.= " AND status = ".$db->quote($search['status_search']);
+			$where.= " AND ide.status = ".$db->quote($search['status_search']);
 		}
-		
+		if($search['is_onepayment']>-1){
+			$where.= " AND ide.is_onepayment = ".$db->quote($search['is_onepayment']);
+		}
+		if($search['auto_payment']>-1){
+			$where.= " AND ide.is_autopayment = ".$db->quote($search['auto_payment']);
+		}
 		$where.= $dbp->getSchoolOptionAccess('ide.schoolOption');
 		return $db->fetchAll($sql.$where.$orderby);
 	}
@@ -85,6 +90,7 @@
 			$_arr=array(
 					'items_id'		=> $_data['items_id'],
 					'items_type'	=> $_data['items_type'],
+					'is_autopayment'=> $_data['auto_payment'],
 					'title'	 		=> $_data['title'],
 					'title_en'	 	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
@@ -123,6 +129,7 @@
 					'note'    		=> $_data['note'],
 					'ordering'    	=> $_data['ordering'],
 					'is_onepayment' => $_data['is_onepayment'],
+					'is_autopayment'=> $_data['auto_payment'],
 					'schoolOption'  => $schooloption,
 					'modify_date' 	=> date("Y-m-d H:i:s"),
 					'status'		=> $_data['status'],

@@ -2,6 +2,8 @@
 	$request = Zend_Controller_Front::getInstance ()->getRequest ();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
 	$frm =  $this->frm_items;
+	$urlCopy = $this->baseUrl()."/stock/productset/copy/id/";
+	$urlEdit = $this->baseUrl()."/stock/productset/edit/id/";
 ?>
 <title><?php echo $tr->translate("PRODUCTSET");?></title>
 <meta charset="utf-8">
@@ -48,4 +50,45 @@
 </div>
 <script type="text/javascript">
 	dojo.require("dijit.form.DateTextBox");
-</script>
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}else if(key=="copy"){
+					url='<?php echo $urlCopy;?>';
+				}
+				gotoAction();
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+	}
+</script> 

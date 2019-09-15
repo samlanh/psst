@@ -21,7 +21,9 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	    		$search = array(
 	    				'advance_search' => "",
 	    				'items_search'=>"",
-	    				'status_search' => -1
+	    				'status_search' => -1,
+	    				'is_onepayment'=>-1,
+	    				'auto_payment'=>-1
 	    		);
 	    	}
 	    	$type=2; //Service

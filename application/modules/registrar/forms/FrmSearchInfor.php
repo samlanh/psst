@@ -651,7 +651,19 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		$_for_month->setValue($request->getParam("for_month"));
 		
-		$this->addElements(array($is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"));
+		$Option = $model->getAllSchoolOption();
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$school_option = new Zend_Dojo_Form_Element_FilteringSelect("school_option");
+		$school_option->setMultiOptions($_arr_opt);
+		$school_option->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$school_option->setValue($request->getParam("school_option"));
+		
+		$this->addElements(array($school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,

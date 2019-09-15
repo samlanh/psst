@@ -188,12 +188,12 @@
 									</tr>
 									<?php if (!empty($this->subjectScore)){?>
 										<?php $i=1;  foreach ($this->subjectScore as $rs){ $i++;
-												$subjectitle="";
-												if ($rs['subjecttest_id']==1){
-													$subjectitle=$tr->translate("KHMER");
-												}else if ($rs['subjecttest_id']==2){
-													$subjectitle=$tr->translate("MATH");
-												}
+												$subjectitle=$rs['subject'];
+// 												if ($rs['subjecttest_id']==1){
+// 													$subjectitle=$tr->translate("KHMER");
+// 												}else if ($rs['subjecttest_id']==2){
+// 													$subjectitle=$tr->translate("MATH");
+// 												}
 												if (empty($identity)){
 													$identity=$i;
 												}else{$identity=$identity.",".$i;
@@ -216,18 +216,22 @@
 										</tr>
 										<?php }?>
 									<?php }else{?>
-										<?php for ($i=1; $i<=2; $i++){
+										<?php 
+										$i = 0;
+										if(!empty($this->rs_subjecttestkhmer)){foreach($this->rs_subjecttestkhmer as $rs){
 												$subjectitle="";
-												if ($i==1){
-													$subjectitle=$tr->translate("KHMER");
-												}else if ($i==2){
-													$subjectitle=$tr->translate("MATH");
-												}
+												$i++;
+// 												if($i==1){
+// 													$subjectitle=$tr->translate("KHMER");
+// 												}else if ($i==2){
+// 													$subjectitle=$tr->translate("MATH");
+// 												}
 												if (empty($identity)){$identity=$i;}else{$identity=$identity.",".$i;}
+										
 											?>
 										<tr>
 											<td width="4%" align="center"><?php echo $i;?></td>
-											<td>&nbsp;<input  dojoType="dijit.form.TextBox" class="fullside" name="subjecttest_id_<?php echo $i;?>" id="subjecttest_id_<?php echo $i;?>" value="<?php echo $i;?>" type="hidden"><?php echo $subjectitle;?>&nbsp;</td>
+											<td>&nbsp;<input  dojoType="dijit.form.TextBox" class="fullside" name="subjecttest_id_<?php echo $i;?>" id="subjecttest_id_<?php echo $i;?>" value="<?php echo $i;?>" type="hidden"><?php echo $rs['name'];?>&nbsp;</td>
 											<td><input dojoType="dijit.form.NumberTextBox" onKeyup="CalculateTotalScore()" class="fullside" name="score_<?php echo $i;?>" id="score_<?php echo $i;?>" value="" type="text"></td>	
 											<td>
 												<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
@@ -239,7 +243,7 @@
 											</td>
 											<td><input  dojoType="dijit.form.TextBox" class="fullside" name="note_<?php echo $i;?>" id="note_<?php echo $i;?>" value="" type="text"></td>
 										</tr>
-										<?php }?>
+										<?php }}?>
 									<?php }?>
 							</table>
 							<input type="hidden" name="identity" id="identity" value="<?php echo $identity;?>"  />

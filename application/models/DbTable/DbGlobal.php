@@ -1839,7 +1839,8 @@ function getAllgroupStudyNotPass($action=null){
   	$db = $this->getAdapter();
   	$sql="SELECT t.id,title AS name FROM `rms_itemsdetail` AS t,
 		      `rms_product_location`
-			   WHERE t.is_productseat=1 OR (t.id=rms_product_location.pro_id AND t.status=1) ";
+			   WHERE t.items_type=3 AND t.status=1 
+  					 AND ( t.is_productseat=1 OR (t.id=rms_product_location.pro_id)) ";
   	$sql.=$this->getAccessPermission("brand_id");
   	
   	if($category_id!=null AND $category_id>0 ){

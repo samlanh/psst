@@ -80,6 +80,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $rs = $db->getStudentProfileblog(1);
 	   
+	   $frmreceipt = new Application_Form_FrmGlobal();
+	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();
+// 	   print_r($frmreceipt->getFormatReceipt());exit();
+	   
 // 	   $db = new Application_Model_DbTable_DbGlobal();
 // 	   $grade = $db->getAllGradeStudyByDegree(null,8);
 // 	   $prodcut = $db->getProductbyBranch(10);

@@ -233,7 +233,7 @@ function oldRow() {
 		template+='<td width="15px" align="center">'+no+'</td>';
 		template+='<td><input type="hidden" dojoType="dijit.form.TextBox" value="" id="product_'+col+'" name="product_'+col+'" /><?php echo str_replace("'", '', $rs['title']); ?></td>';	
 		template+='<td width="70px"><input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['qty'];?>" /> </td>';
-		note_remark = '<?php echo str_replace("'", '', $rs['remark']); ?>';
+		note_remark = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rs['remark'])));?>';
 		template+='<td><input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" value="'+note_remark+'" /><input type="hidden" value="<?php echo $rs["id"];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";

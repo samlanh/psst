@@ -25,9 +25,9 @@ class Application_Form_FrmMessage extends Zend_Form
 		$tr= Application_Form_FrmLanguages::getCurrentlanguage();
 		$msg = $tr->translate($msg);
 		echo '<script language="javascript">	
-					alert("'.$msg.'");						           
 					window.location = "'.Zend_Controller_Front::getInstance()->getBaseUrl().$url.'";					
 			 </script>';
+		//alert("'.$msg.'");
 	}
 	
 	public static function message($msg)
@@ -35,8 +35,9 @@ class Application_Form_FrmMessage extends Zend_Form
 		$tr= Application_Form_FrmLanguages::getCurrentlanguage();
 		$msg = $tr->translate($msg);
 		echo '<script language="javascript">
-		         alert("'.$msg.'");						      
+		        					      
 		      </script>';
+		//alert("'.$msg.'");	
 	}
 	
 	public static function redirectUrl($url)

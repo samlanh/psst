@@ -238,9 +238,6 @@ class Application_Form_FrmGlobal{
 		";
 		return $str;
 	}
-	
-	
-	
 	function getFooterAccount($spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str="<table width='100%' style='font-size: $font_size;font-family:$font_family'>";
@@ -261,5 +258,182 @@ class Application_Form_FrmGlobal{
 			</table>";
 		return $str;
 	}
-	
+	function getFormatReceipt(){
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$last_name=$session_user->last_name;
+		$username = $session_user->first_name;
+		
+		$str="<style>
+			.hearder_table{height:20px !important;}
+			.defaulheight{line-height:10px !important;}
+			.bold{
+				font-weight:bold;
+				}
+		</style>
+		<div id='PrintReceipt' style='width: 22cm !important; padding: 0px;'>
+			<style>
+				.noted{
+				    white-space: pre-wrap;     
+					word-wrap: break-word;      
+					word-break: break-all;
+					white-space: pre;
+					font:12px 'Khmer OS Battambang';
+					border: 1px solid #000;
+                    line-height:20px;
+					font-weight: normal !important;
+					padding:2px;
+				    white-space: normal;
+				}
+				.boxnorefund{
+					color: #fff;
+    				background: #d42727;
+    				border: 2px solid fff;
+    				font-size: 11px;
+    				padding:10px 2px;
+   	 				border-radius: 2px;
+    				border: 6px double #fff;
+    				font-weight:bold !important;
+    				font-family:Times New Roman;	
+				}
+			</style>
+			<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
+				<tr>
+					<td align='center' valign='top' colspan='3'>
+						<label id='lbl_header'></label>
+					</td>
+				</tr>
+				<tr>
+					<td width='30%'>&nbsp;</td>
+					<td align='center' valign='top'>
+						<div style='font-family:Khmer OS Muol Light;line-height:12px;font-size:12px;'>បង្កាន់ដៃបង់ប្រាក់</div>
+						<div style='font-family:Times New Roman;font-size:12px;'>Official Receipt</div>
+					</td>
+					<td width='30%'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td align='center' valign='bottom' colspan='3'>
+						<table  width='100%' style='font-size: 11px;line-height:9px !important;'>
+							<tr>
+								<td width='15%'>Student ID </td>
+								<td width='25%'> : &nbsp;&nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+								<td width='15%'><div style='font-size: 14px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
+								<td width='25%'> : <label id='lb_receipt_no'></label></td>
+								<td rowspan='4' width='25%'><div style='border:1px solid #ccc;margin:0 auto;'><label id='lb_photo'></label></div></td>
+							</tr>
+							<tr>
+								<td>Student Name</td>
+								<td colspan='1'> : &nbsp;&nbsp;<label id='lb_name' class='one bold'></label></td>
+								<td><div style='font-size: 12px;font-weight: bold;font-family: Times New Roman'>Pay Date</div></td>
+								<td> : <label id='lb_date' class='one bold'></label></td>
+							</tr>
+							<tr>
+								<td>Gender </td>
+								<td> : &nbsp;&nbsp;<label id='lb_sex' class='one bold'></label></td>
+								<td>Print Date</td>
+								<td> : ".date('d-m-Y g:i A')."</td>
+							</tr>
+							<tr>
+								<td>Tel</td>
+								<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
+								<td>Print By :</td>
+								<td> : ".$username."</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan='3'><div id='t_amountmoneytype'></div></td>
+				</tr>
+				<tr>
+					<td valign='top' style='font-size:12px;'>Note
+						<div style='width:99%;float: left;'>
+						 	<div style='font-size:10px;min-height:70px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
+						 </div>
+					</td>
+					<td valign='top' style='font-size:12px;'>
+						Say in US Dollars
+						<div style='font-size:10px;min-height: 70px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
+					</td>
+					<td>
+						<table width='98%' style='margin-left:4px;marin-top:5px;font-size:12px; white-space:nowrap;line-height:12px;border-collapse:collapse;'>
+							<tr>
+								<td>Penalty</td>
+								<td>: $</td>
+								<td align='right'>&nbsp;&nbsp; <label id='lb_fine'></label></td>
+							</tr>
+							<tr>
+								<td>Total Payment</td>
+								<td>: $</td>
+								<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_total_payment'></label></td>
+							</tr>
+							<tr>
+								<td><div>Credit Memo</div></td>
+								<td>: $</td>
+								<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
+							</tr>
+							<tr>
+								<td><div>Paid Amount</div></td>
+								<td>: $</td>
+								<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_paid_amount'></label></td>
+							</tr>
+							<tr>
+								<td><div>Balance</div></td>
+								<td>: $</td>
+								<td align='right'>&nbsp;&nbsp;<label id='lb_balance_due'></label></td>
+							</tr>
+							<tr>
+								<td><div>Payment Method</div></td>
+								<td></td>
+								<td align='right'>&nbsp;&nbsp;<label id='lb_paymentmethod'></label></td>
+							</tr>
+							<tr>
+								<td><div>Number/Bank</div></td>
+								<td></td>
+								<td align='right'>&nbsp;&nbsp;<label id='lb_paymentnumber'></label></td>
+							</tr>
+							<tr>
+								<td colspan='3'><div class='boxnorefund'>Non-Refundable / Transferable</div></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td valign='top' colspan='3'>
+						<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;'>
+							<tr>
+								<td colspan='5'>
+									<table width='100%' style='marin-top:5px;font-size:12px; white-space:nowrap;line-height:15px;border-collapse:collapse;'>
+										<tr>
+											<td align='center'>Cashier</td>
+											<td align='center'>Head of Cashier</td>
+											<td align='center'>Customer</td>
+										</tr>
+										<tr>
+											<td align='center'>
+												<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:50px;'>";
+												  	 echo "".$last_name." ".$username;
+												$str.="</div>
+												Signature/Name/Date
+											</td>
+											<td align='center' valign='bottom'>
+												<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;'></div>
+												Signature/Name/Date
+											</td>
+											<td align='center' valign='bottom'>
+												<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;'></div>
+												Signature/Name/Date
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td valign='top'>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>";
+		return $str;
+	}
 }

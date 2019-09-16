@@ -421,6 +421,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	function getbranchinfodetailAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rows = $db->getBranchInfo($data['branch_id']);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
 	
 	function checkSessionAction(){
 		if($this->getRequest()->isPost()){

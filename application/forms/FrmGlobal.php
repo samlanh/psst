@@ -295,18 +295,44 @@ class Application_Form_FrmGlobal{
     				font-weight:bold !important;
     				font-family:Times New Roman;	
 				}
+				#printfooter {
+				    position: absolute;
+				    bottom: 0;
+				    position: fixed;
+				    display: block ;
+				    width:100%;
+				}
+				
+				@page {
+				  
+				  /* Chrome sets own margins, we change these printer settings */
+				  margin:0.5cm 1cm 0.3cm 1cm; '
+				   page-break-before: avoid;
+				   
+				   /*size: 21cm 14.8cm; */
+				}
+				   
+
+				
 			</style>
-			<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
+		
+			<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
 				<tr>
 					<td align='center' valign='top' colspan='3'>
 						<label id='lbl_header'></label>
 					</td>
 				</tr>
 				<tr>
-					<td width='30%'>&nbsp;</td>
-					<td align='center' valign='top'>
-						<div style='font-family:Khmer OS Muol Light;line-height:12px;font-size:12px;'>បង្កាន់ដៃបង់ប្រាក់</div>
-						<div style='font-family:Times New Roman;font-size:12px;'>Official Receipt</div>
+					<td width='30%'>
+						<div id='lbl_branchlogo'></div>
+						<div style='margin:0 auto;position:absolute;top:10px;left:100px;font-family:Khmer OS Muol Light;font-size:12px;'>
+							<label id='lb_branchname'></label>
+							<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
+						</div>
+					</td>
+					<td align='center' valign='bottom' width='40%'>
+						<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:12px;position:relative'>បង្កាន់ដៃបង់ប្រាក់</div>
+						<div style='font-family:Times New Roman;font-size:12px;font-weight:bold'>Official Receipt</div>
 					</td>
 					<td width='30%'>&nbsp;</td>
 				</tr>
@@ -315,28 +341,28 @@ class Application_Form_FrmGlobal{
 						<table  width='100%' style='font-size: 11px;line-height:9px !important;'>
 							<tr>
 								<td width='15%'>Student ID </td>
-								<td width='25%'> : &nbsp;&nbsp;<label id='lb_stu_id' class='one bold'></label></td>
-								<td width='15%'><div style='font-size: 14px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
-								<td width='25%'> : <label id='lb_receipt_no'></label></td>
-								<td rowspan='4' width='25%'><div style='border:1px solid #ccc;margin:0 auto;'><label id='lb_photo'></label></div></td>
+								<td width='25%'> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+								<td width='15%'><div style='font-size: 12px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
+								<td width='25%'> : &nbsp;<label id='lb_receipt_no'></label></td>
+								<td rowspan='4' width='25%'><div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'><label id='lb_photo'></label></div></td>
 							</tr>
 							<tr>
 								<td>Student Name</td>
-								<td colspan='1'> : &nbsp;&nbsp;<label id='lb_name' class='one bold'></label></td>
+								<td colspan='1'> : &nbsp;<label id='lb_name' class='one bold'></label></td>
 								<td><div style='font-size: 12px;font-weight: bold;font-family: Times New Roman'>Pay Date</div></td>
-								<td> : <label id='lb_date' class='one bold'></label></td>
+								<td> : &nbsp;<label id='lb_date' class='one bold'></label></td>
 							</tr>
 							<tr>
 								<td>Gender </td>
-								<td> : &nbsp;&nbsp;<label id='lb_sex' class='one bold'></label></td>
+								<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
 								<td>Print Date</td>
-								<td> : ".date('d-m-Y g:i A')."</td>
+								<td> : &nbsp;".date('d-m-Y g:i A')."</td>
 							</tr>
 							<tr>
 								<td>Tel</td>
 								<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
 								<td>Print By :</td>
-								<td> : ".$username."</td>
+								<td> : &nbsp;".$username."</td>
 							</tr>
 						</table>
 					</td>
@@ -345,12 +371,12 @@ class Application_Form_FrmGlobal{
 					<td colspan='3'><div id='t_amountmoneytype'></div></td>
 				</tr>
 				<tr>
-					<td valign='top' style='font-size:12px;'>Note
+					<td valign='top' style='font-size:10px;'>Note
 						<div style='width:99%;float: left;'>
 						 	<div style='font-size:10px;min-height:70px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
 						 </div>
 					</td>
-					<td valign='top' style='font-size:12px;'>
+					<td valign='top' style='font-size:10px;'>
 						Say in US Dollars
 						<div style='font-size:10px;min-height: 70px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
 					</td>
@@ -431,6 +457,17 @@ class Application_Form_FrmGlobal{
 							</tr>
 						</table>
 					</td>
+				</tr>
+		        <tr>
+				    <td valign='top' colspan='3'>
+					    <div id='printfooter' style='display:block;font-family:khmer os battambang'>
+			        		<table width='100%' style='background: #fff;border-top: 2px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'> 
+								<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:10px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
+									<td width='100%'> &#9993; <label id='lbl_email' style='width:20%;display:in-line;margin-right:10px;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;margin-right:10px;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
+								</tr>
+							</table>
+			        	</div>
+		        	</td>
 				</tr>
 			</table>
 		</div>";

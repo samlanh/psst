@@ -663,11 +663,11 @@ function getPaymentHistory(student_id){
 				+'<th class="tdheader"><?php echo $tr->translate('STATUS');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('USER');?></th>'
 			+'</thead>';
-			no=0;
+			number_record=0;
 			for(i=0;i<respone.length;i++){
-				no++;
+				number_record++;
 				tem+= '<tr id=tr_'+i+' style="background-color:none;font-size:11px;text-align:center;" class="hover">';
-				tem += '<td>'+no+'</td>';
+				tem += '<td>'+number_record+'</td>';
 				tem += '<td style="text-align:left;">'+respone[i].category+'</td>';
 				tem += '<td style="text-align:left;">'+respone[i].item_name+'</td>';
 				tem += '<td>'+respone[i].create_date+'</td>';
@@ -1135,7 +1135,7 @@ function printSave(){
 					var rowIDArray = rowId.split(',');
 					template="";
 						 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
-							  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
+							  temp+='<tr class="hearder_table" style="font-size:11px !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
 								  temp+='<td style="border:1px solid #000;">No</td>';
 								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
 								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
@@ -1155,12 +1155,12 @@ function printSave(){
 								if(items_type!=3){
 									term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 								}
-							  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+							  temp+='<tr style="font-size:11px;height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 							  
 							  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
 							  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
 								  item_label='School Fee '+item_label;
-								}
+							  }
 							  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
 							  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
 							  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
@@ -1177,7 +1177,7 @@ function printSave(){
 								  sign=' & ';
 							  }
 							  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
-							  temp+='<td style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
+							  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 	
 							  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
 							  if(service_type==1){//one payment only
@@ -1246,7 +1246,7 @@ function getCreditMemo(){
 		});	
 	} 
 }
-var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfodetail')); ?>";
 function getbranchinfo(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id != ""){
@@ -1257,7 +1257,13 @@ function getbranchinfo(){
 				},
 			handleAs:"json",
 			load: function(data){
-				dojo.byId('lbl_header').innerHTML=data;
+				dojo.byId("lbl_email").innerHTML = data.email;
+				dojo.byId("lbl_website").innerHTML = data.website;
+				dojo.byId("lbl_address").innerHTML = data.br_address;
+				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
+				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
+				
+				dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
 			},
 			error: function(err) {
 			}

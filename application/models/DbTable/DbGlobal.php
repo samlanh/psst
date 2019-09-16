@@ -1640,18 +1640,6 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT b.* FROM `rms_branch` AS b WHERE b.br_id = $branch_id LIMIT 1";
   	return $db->fetchRow($sql);
   }
-//   function getAllSchoolOption($branch=null){
-//   	$db = $this->getAdapter();
-//   	$this->_name = "rms_schooloption";
-//   	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
-//   	if($branch!==1 AND $branch !=null){
-//   		$branchinfo = $this->getBranchInfo($branch);
-//   		$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
-//   		$sql.=" AND s.id IN ($schooloption) ";
-  	
-//   	}
-//   	return $db->fetchAll($sql);
-//   }
  function getSchoolOptionListByBranch($branchlist){
  	$db = $this->getAdapter();
  	$sql="SELECT  GROUP_CONCAT(DISTINCT schooloptionlist)  FROM rms_branch  WHERE br_id IN($branchlist)";

@@ -698,7 +698,7 @@ function Initailize() {
 			dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 			dijit.byId('amount_subject'+col).attr('value','<?php echo $rows['amount_subject'];?>');
 			dijit.byId('amount_subject_semester'+col).attr('value','<?php echo $rows['amount_subject_sem'];?>');
-			dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
+			dijit.byId('group_note_'+col).attr('value',"<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rows['note'])));?>");
 			dijit.byId('teacher_'+col).attr('value','<?php echo $rows['teacher'];?>');
 	<?php }}?>
 }

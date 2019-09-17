@@ -553,7 +553,7 @@ function initailize(){
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==3){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==4){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("OTHER");?></label>';
 				str+='</td>';
-				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo $discipline_type['description']; ?>" style="'+textareastyle+'"></td>';
+				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo str_replace("'", '', $discipline_type['description']); ?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';
 		    if(inx!=1) {
 				var identity = $('#identity').val();

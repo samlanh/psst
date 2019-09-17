@@ -2459,6 +2459,17 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT id , $month as name from rms_month where status=1 ";
   	return $db->fetchAll($sql);
   }
+  function getAllCardFormat(){
+  	$db = $this->getAdapter();
+  	$lang = $this->currentlang();
+  	if($lang==1){// khmer
+  		$label = "name_kh";
+  	}else{ // English
+  		$label = "name_en";
+  	}
+  	$sql="SELECT key_code as id , $label as name from rms_view where status=1 and type=32";
+  	return $db->fetchAll($sql);
+  }
   function getSubjectArea($type=1){
   	 
   	$currentLang = $this->currentlang();

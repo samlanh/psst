@@ -68,9 +68,10 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'status'		=>1,	    			
 	    			'displayby'		=>2,
 	    			'photo'   	    => $photo,
-	    			'schooloptionlist'		=>$schooloption,
+	    			'schooloptionlist'	=>$schooloption,
 	    			'color'			=>$_data['color'],
-	    			);
+	    			'card_type'		=>$_data['card_type'],
+	    		);
 // 	    	$check = $this->getCheckHasBranch();
 // 	    	if (empty($check)){
 // 	    		$school = $this->getAllSchoolOption();
@@ -86,9 +87,9 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    	$this->insert($_arr);//insert data
 	    	
 	    	$_db->commit();
-	    	}catch(Exception $e){
-	    		$_db->rollBack();
-	    	}
+    	}catch(Exception $e){
+    		$_db->rollBack();
+    	}
     }
     function getAllSchoolOption(){
     	$db = $this->getAdapter();
@@ -139,7 +140,8 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'displayby'		=>2,
     			'schooloptionlist'		=>$schooloption,
     			'color'			=>$_data['color'],
-    			);
+    			'card_type'		=>$_data['card_type'],
+    		);
     	if (!empty($name)){
     		$ss = 	explode(".", $name);
     		$image_name = "branch_".date("Y").date("m").date("d").time().".".end($ss);
@@ -192,7 +194,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
    return $db->fetchAll($sql.$where.$order);
    }
       
- function getBranchById($id){
+ 	function getBranchById($id){
  		
     	$db = $this->getAdapter();
     	$sql = "SELECT * FROM

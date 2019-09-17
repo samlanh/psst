@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
-	$type=CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
+	$type=$this->rs[0]['card_type'];//CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
 ?>	
 <script type="text/javascript">
 function getKHMonthByNumber(m){
@@ -19,94 +19,94 @@ function getKHMonthByNumber(m){
 		"តុលា",
 		"វិច្ឆិកា",
 		"ធ្នូ",
-		];
+	];
 		return (monthName[m-1]);
 }	
 </script>
 <?php  // class="dijitHidden"		data-dojo-type="dijit.Dialog"			?>
-<div class="dijitHidden"  style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
+<div class="dijitHidden" data-dojo-type="dijit.Dialog" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
+	<div align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
 		<style>
 			.name-card-block ul.list-data {
-				top: 146px !important;
+				top: 145.5px !important;
 			}	
 		</style>
 		<div id="divPrint1" >
 			<?php if($type==1){// ELT format ?>
 			<style>
 				.card-content-student-print{
-							background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
-						 background-size: 100%;background-repeat: no-repeat;
-						 page-break-after:always					
-						}
+					background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+					background-size: 100%;background-repeat: no-repeat;
+					page-break-after:always					
+				}
 						
-						<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
-						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						$color = "000000";
-						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
-						if(!empty($bg['background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
-							$image = $this->baseUrl().'/images/card/'.$bg['background'];
-							}
-							if (!empty($bg['colorcode'])){
-								$color = str_replace("#", "", $bg['colorcode']);
-							}
-						}
-						?>
-						
-					.card-content-student-print<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
-						background-image: url('<?php echo $image;?>');
-						 background-size: 100%;background-repeat: no-repeat;
-						 page-break-after:always;					
+			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+				$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+				$color = "000000";
+				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
+				if(!empty($bg['background'])){
+					if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+					$image = $this->baseUrl().'/images/card/'.$bg['background'];
 					}
-					
-					.name-card-block ul.list-data li.sdudent-id.color-<?php echo "card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+					if (!empty($bg['colorcode'])){
+						$color = str_replace("#", "", $bg['colorcode']);
+					}
+				}
+			?>
+				
+				.card-content-student-print{
+					background-image: url('<?php echo $image;?>');
+					 background-size: 100%;background-repeat: no-repeat;
+					 page-break-after:always;					
+				}
+				
+				.name-card-block ul.list-data li.sdudent-id.color-{
 					color:#<?php echo $color;?>;
 				}
-					<?php }?>
+			<?php }?>
 					
-					.profile-card-block {
-					    position: relative;
-					}
-					.profile-card-block .photo {
-					    text-align: center;
-					    width: 100%;
-					    position: absolute;
-					    top: 96px;
-						left: -0.58px;
-					}
-					.photo img {
-					    width: 70.7px;
-					    height: 92px;
-					}
-					.name-card-block {
-					    position: relative;
-					}
-			
-					.name-card-block ul.list-data {
-					    list-style-type: none;
-					    padding: 0;
-					    width: 100%;
-					    position: absolute;
-					    text-align: center;
-					    top: 182.5px !important;
-					    color: #01049f;
-					    font-weight: bold;
-					    font-size: 12px;
-					}	
+				.profile-card-block {
+					position: relative;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 90px;
+					left: -0.58px;
+				}
+				.photo img {
+					width: 80px;
+					height: 98px;
+				}
+				.name-card-block {
+					position: relative;
+				}
+		
+				.name-card-block ul.list-data {
+					list-style-type: none;
+					padding: 0;
+					width: 100%;
+					position: absolute;
+					text-align: center;
+					top: 182.5px !important;
+					color: #01049f;
+					font-weight: bold;
+					font-size: 12px;
+				}	
 				.name-card-block ul.list-data li{
 					line-height: 16px;	    
 				}
 				.name-card-block ul.list-data li.sdudent-id{
-						margin-top:10px;
-						color: #01731b;
-					}
+					margin-top:10px;
+					color: #01731b;
+				}
 				.foot-left-block {
 				    position: relative;
 				}
 				.qrimages {
 				    position: absolute;
-				    top: 262px;
+				    top: 255px;
 				    width: 100%;
 				    text-align: center;
 				}
@@ -120,20 +120,20 @@ function getKHMonthByNumber(m){
 				.validdate .exp_date {
 					color: #01049f;
 				    position: absolute;
-				    top: 250px;
+				    top: 243px;
 				    right: 5px;
 				    font-size: 5px;
 				    font-weight: 700 !important;
 				}
 			</style>
 		<?php 
-			$image = $this->baseUrl().'/images/photo/no-image.png';
+			
 			$con=4;
 			$i=0; $student= count($this->rs);
-		if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+		if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;$image = "";
 			if(!empty($row['photo'])){
 				if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-				$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+					$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 				}
 			}
 			$prefix="";
@@ -148,16 +148,18 @@ function getKHMonthByNumber(m){
 				$validDate = $bg['valid'];
 			}
 			?>
+				<?php /*?>
 				<?php if ($key==0){?>
-				<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
+					<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
 				<?php }?>
 				<?php if ($i==1){?>
-				<div style="display:inline-block; margin-right:10px; height:8.3cm; width: 1px; background: #000"></div>
+					<div style="display:inline-block; margin-right:10px; height:8.3cm; width: 1px; background: #000"></div>
 				<?php }?>
-				<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+				<?php */?>
+				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang';border:1px solid #e2c7c7db; ">
 					<div class="profile-card-block">
 						<div class="photo">
-							<img  src="<?php echo $image;?>" alt="profile-image" >
+							<img <?php if(!empty($image)){echo 'src="'.$image.'"';}?> >
 						</div>
 					</div>
 					<div class="name-card-block">
@@ -183,19 +185,22 @@ function getKHMonthByNumber(m){
 					<div class="foot-right-block">
 					</div>
 				</div>	
+				<?php /*?>
 				<?php if ($student>1){?>
-				<div style="display:inline-block; margin:0 10px; height:8.3cm; width: 1px; background: #000"></div>
+					<div style="display:inline-block; margin:0 10px; height:8.3cm; width: 1px; background: #000"></div>
 				<?php }?>
 				<?php if ($i==4){ $i=0;?>
-				<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
-				<?php }?>			
+					<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
+				<?php }?>	
+				<?php */?>					
 				
 			<?php }}}elseif($type==2){// Good Will format ?>
 					
 					<style>
 						.card-content-student-print{
 							background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
-							background-size: 100%;background-repeat: no-repeat;
+							background-size: 100%;
+							background-repeat: no-repeat;
 							page-break-after:always					
 						}
 								
@@ -203,6 +208,7 @@ function getKHMonthByNumber(m){
 							$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
 							$color = "000000";
 							$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
+							//print_r($bg);
 							if(!empty($bg['background'])){
 								if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 									$image = $this->baseUrl().'/images/card/'.$bg['background'];
@@ -213,7 +219,7 @@ function getKHMonthByNumber(m){
 							}
 							?>
 									
-							.card-content-student-print<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+							.card-content-student-print{
 								background-image: url('<?php echo $image;?>');
 								background-size: 100%;
 								background-repeat: no-repeat;
@@ -251,14 +257,13 @@ function getKHMonthByNumber(m){
 							width: 100%;
 							position: absolute;
 							text-align: left;
-							top: 130px;
+							top: 133px;
 							color: #1557b3;
-							
-							font-size: 16px;
+							font-size: 13px;
 							left:77px;
 						}	
 						.name-card-block ul.list-data li{
-							line-height: 19px;	    
+							line-height: 19.5px;	    
 						}
 						.name-card-block ul.list-data li.sdudent-id{
 							margin-top:10px;
@@ -290,14 +295,14 @@ function getKHMonthByNumber(m){
 						}
 					</style>
 				<?php 
-					$image = "";//$this->baseUrl().'/images/photo/no-image.png';
+					//$image = "";//$this->baseUrl().'/images/photo/no-image.png';
 					$con=4;
 					$i=0; $student= count($this->rs);
 					
-				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;$image = "";
 					if(!empty($row['photo'])){
 						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-						$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 						}
 					}
 					$prefix="";
@@ -305,6 +310,7 @@ function getKHMonthByNumber(m){
 					$validDate="";
 					$stu_name = $row['last_name']." ".$row['stu_enname'];
 					$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+					//print_r($bg);exit();
 					if (!empty($bg)){
 						if ($bg['display_by']==2){
 							$stu_name = $row['stu_khname'];
@@ -315,20 +321,18 @@ function getKHMonthByNumber(m){
 					}
 					?>
 						
-						<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; margin-right:10px ;line-height: 16.285px;  width: 5.8cm; height:8.5cm;   color: #3f3f95; font-family: Century Gothic,Khmer OS Battambang; ">
+						<div class="card-content-student-print" style=" display:inline-block; margin-right:10px ;line-height: 16.285px;  width: 5.8cm; height:8.5cm;   color: #3f3f95; font-family: Century Gothic,Khmer OS Battambang; ">
 							<div class="profile-card-block">
 								<div class="photo">
-									<?php if(!empty($image)){?>
-									<img  src="<?php echo $image;?>"  >
-									<?php }?>
+									<img <?php if(!empty($image)){echo 'src="'.$image.'"';}?> >
 								</div>
 							</div>
 							<div class="name-card-block">
 								<ul class="list-data">
 									<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
 									<li><span class="title_value">&nbsp;<?php echo $row['stu_code'];?></span></li>
-									<li><span class="title_value">&nbsp;<?php echo str_replace("Grade","",$row['grade']);?></span></li>
-									<li><span class="title_value">&nbsp;<?php echo "023 6 5555 05"?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo $row['grade'];?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo $row['tel'];?></span></li>
 									<li><span class="title_value">&nbsp;<?php echo date("d-m-Y",strtotime($issueDate));?></span></li>
 									<li><span class="title_value">&nbsp;<?php echo date("d-m-Y",strtotime($validDate));?></span></li>
 								</ul>
@@ -351,7 +355,7 @@ function getKHMonthByNumber(m){
 						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
 						if(!empty($bg['background'])){
 							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
-							$image = $this->baseUrl().'/images/card/'.$bg['background'];
+								$image = $this->baseUrl().'/images/card/'.$bg['background'];
 							}
 							if (!empty($bg['colorcode'])){
 								$color = str_replace("#", "", $bg['colorcode']);
@@ -364,7 +368,7 @@ function getKHMonthByNumber(m){
 						}
 						?>
 						
-					.card-content-student-print<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+					.card-content-student-print{
 						background-image: url('<?php echo $image;?>');
 						background-size: 100%;
 						background-repeat: no-repeat;
@@ -372,7 +376,7 @@ function getKHMonthByNumber(m){
 						border:solid 1px #eee;				
 
 					}	
-					.card-content-student-print-front<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+					.card-content-student-print-front{
 						background-image: url('<?php echo $imagebg_front;?>');
 						background-size: 100%;
 						background-repeat: no-repeat;
@@ -529,7 +533,7 @@ function getKHMonthByNumber(m){
 					}	
 				
 				</style>
-				<div class="main-card-block" style=" padding: 0; text-align:center; margin: 0 auto;">
+				<div class="main-card-block" style=" padding: 0; margin: 0 auto;">
 					<?php $con=4;$i=0; $student= count($this->rs); $amount=4;
 					if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 						<?php 
@@ -552,10 +556,7 @@ function getKHMonthByNumber(m){
 								$validDate = $bg['valid'];
 							}
 							?>
-						<?php if ($key==0){?>
-							<div class="one-row-persone" >
-						<?php } ?>
-							<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+							<div class="card-content-student-print" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 								<div class="name-card-block">
 									<ul class="list-data">
 										<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
@@ -573,27 +574,20 @@ function getKHMonthByNumber(m){
 									</ul>
 								</div>
 							</div>
-						<?php if ($i==$amount){?>
-							<?php if ($key>0){ $amount =$amount+4;?>
-								</div>
-								<div class="one-row-persone" <?php if ($amount>8){?> style=" padding-top: 10px;"<?php }?>>
-							<?php }?>
-						<?php }?>
-						<?php if (count($this->rs)==$i){?>
-							</div>
-						<?php }?>
 					<?php }}?>
-						
+					<div>
+						&nbsp;
+					</div>
 					<?php $con=4;$i=0; $student= count($this->rs);$amount=4;
 						if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 							<?php 
 								$prefix="";
 								$validDate="";
 								$stu_name = $row['stu_enname']." ".$row['last_name'];
-								$image = $this->baseUrl().'/images/no-profile.png';
+								$image = "";//$this->baseUrl().'/images/no-profile.png';
 								if(!empty($row['photo'])){
 									if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-									$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+										$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 									}
 								}
 								$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
@@ -606,13 +600,12 @@ function getKHMonthByNumber(m){
 								}
 							?>
 								
-							<?php if ($key==0){?>
-								<div class="one-row-persone" >
-							<?php } ?>
-							<div class="card-content-student-print-front <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+							<div class="card-content-student-print-front" style=" display:inline-block; line-height: 23px; width: 6.99cm; height:9.98cm;color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; margin-top:10px;">
 								<div class="profile-card-block">
 									<div class="photo">
-										<img  src="<?php echo $image;?>" alt="profile-image" >
+										<?php if(!empty($image)){?>
+										<img src="<?php echo $image;?>" >
+										<?php }?>
 									</div>
 								</div> 
 								<div class="name-card-block-front">
@@ -629,16 +622,6 @@ function getKHMonthByNumber(m){
 									<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
 								</div>
 							</div>
-							<?php if ($i==$amount){?>
-								<?php if ($key>0){ $amount =$amount+4;?>
-									</div>
-									<div class="one-row-persone" <?php if ($amount>8){?> style=" padding-top: 10px;"<?php }?>>
-								<?php }?>
-							<?php }?>
-							
-							<?php if (count($this->rs)==$i){?>
-								</div>
-							<?php }?>
 					<?php }}?>
 				</div>
 			<?php }?>

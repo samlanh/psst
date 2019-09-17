@@ -428,6 +428,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql ="SELECT
 			    	*,
 			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+			    	(SELECT card_type FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS card_type,
 			    	CONCAT(stu_khname,' - ',stu_enname,' ',last_name) as name,
 			    	stu_khname,
 			    	last_name,

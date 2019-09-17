@@ -85,6 +85,22 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$branch_id->setMultiOptions($opt);
 		
+		$card_type = new Zend_Dojo_Form_Element_FilteringSelect('card_type');
+		$card_type->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("CARD_TYPE"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$card_type->setValue($request->getParam("card_type"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$rows= $db->getAllCardFormat();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_CARD_TYPE")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$card_type->setMultiOptions($opt);
+		
 		$branch_code = new Zend_Dojo_Form_Element_NumberTextBox('branch_code');
 		$branch_code->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
@@ -220,12 +236,13 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			$branch_status->setValue($data['status']);
 			$branch_display->setValue($data['displayby']);
 			$color->setValue($data['color']);
+			$card_type->setValue($data['card_type']);
 			
 			$id->setValue($data['br_id']);
 		}
 		
 		$this->addElements(array($branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
-				$branch_status,$branch_display,
+				$branch_status,$branch_display,$card_type,
 				$color,$id));
 		
 		return $this;

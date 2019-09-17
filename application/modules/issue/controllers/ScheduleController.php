@@ -72,7 +72,6 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
-				
 				$_db->updateScheduleGroup($data);
 				Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", "/issue/schedule");
 			} catch (Exception $e) {
@@ -86,11 +85,44 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 		$id = empty($id)?0:$id;
 		$row =$_db->getScheduleGroupById($id);
 		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/letterofpraise");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/schedule");
 			exit();
 		}
 		$this->view->row = $row;
 		
+		$frm = new Issue_Form_FrmSchedule();
+		$frm->FrmAddSchedule($row);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_items = $frm;
+	
+	
+		$_db = new Foundation_Model_DbTable_DbRescheduleGroup();
+		$teacher = $_db->getAllTeacher();
+		$this->view->teacher = $teacher;
+	}
+	function copyAction(){
+		$_db= new Issue_Model_DbTable_DbSchedule();
+		if($this->getRequest()->isPost()){
+			try {
+				$data = $this->getRequest()->getPost();
+				$_db->addScheduleGroup($data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/issue/schedule");
+			} catch (Exception $e) {
+				Application_Form_FrmMessage::message("INSERT_FAILE");
+				$err =$e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			}
+		}
+	
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		$row =$_db->getScheduleGroupById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/schedule");
+			exit();
+		}
+		$this->view->row = $row;
+	
 		$frm = new Issue_Form_FrmSchedule();
 		$frm->FrmAddSchedule($row);
 		Application_Model_Decorator::removeAllDecorator($frm);

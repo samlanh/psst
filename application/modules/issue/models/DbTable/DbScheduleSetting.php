@@ -238,7 +238,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
 			   			';
 			   				
 			   			$str.='
-			   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" >';
+			   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" placeHolder="'.$tr->translate("SELECT_SUBJECT").'" id="subject_'.$keyindex.'" >';
 			   			$str.='<option value=""></option>';
 			   			if (!empty($allSubject)) foreach ($allSubject as $subject){
 			   				$str.='<option value="'.$subject['id'].'">'.$subject['name'].'</option>';
@@ -247,7 +247,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
 			   			';
 			   				
 		   			$str.='
-		   				<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" >';
+		   				<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" placeHolder="'.$tr->translate("SELECT_TEACHER").'" id="teacher_'.$keyindex.'" >';
 		   			$str.='<option value=""></option>';
 		   			if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
 		   				$str.='<option value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
@@ -357,7 +357,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
 			   			';
    
    			$str.='
-   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" >';
+   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" placeHolder="'.$tr->translate("SELECT_SUBJECT").'" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" >';
    			$str.='<option value=""></option>';
    			if (!empty($allSubject)) foreach ($allSubject as $subject){
    				$selected="";
@@ -368,7 +368,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    			';
    
    			$str.='
-   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" >';
+   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" placeHolder="'.$tr->translate("SELECT_TEACHER").'" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" >';
    			$str.='<option value=""></option>';
    			if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
    				$selected="";

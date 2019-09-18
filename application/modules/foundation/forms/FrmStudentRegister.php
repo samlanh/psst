@@ -277,7 +277,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		
 		$rs_province = $_db->getAllProvince();
 		$province_opt = array('0' => $tr->translate('SELECT_PROVINCE'));
-		//array_unshift($province_opt, array ( 'id' => -1,'name' => $tr->translate('SELECT_PROVINCE')));
 		if(!empty($rs_province))foreach($rs_province AS $row) $province_opt[$row['id']]=$row['name'];
 		$school_province = new Zend_Dojo_Form_Element_FilteringSelect("school_province");
 		$school_province->setMultiOptions($province_opt);

@@ -383,11 +383,13 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$hours ='<option value="07.00">07:00 AM </option>'.
 					'<option value="07.15">07:15 AM </option>'.
 					'<option value="07.30">07:30 AM </option>'.
+					'<option value="07.45">07:45 AM </option>'.
 					'<option value="08.00">08:00 AM </option>'.
 					'<option value="08.15">08:15 AM </option>'.
 					'<option value="08.20">08:20 AM </option>'.
 					'<option value="08.30">08:30 AM </option>'.
-					'<option value="08.40">08.40 AM </option>'.
+					'<option value="08.40">08:40 AM </option>'.
+					'<option value="08.50">08:50 AM </option>'.
 					'<option value="09.00">09:00 AM </option>'.
 					'<option value="09.15">09:15 AM </option>'.
 					'<option value="09.30">09:30 AM </option>'.
@@ -408,15 +410,19 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 					'<option value="13.40">01:40 PM </option>'.
 					'<option value="13.50">01:50 PM </option>'.
 					'<option value="14.00">02:00 PM </option>'.
+					'<option value="14.10">02:10 PM </option>'.
 					'<option value="14.30">02:30 PM </option>'.
+					'<option value="14.35">02:35 PM </option>'.
 					'<option value="14.40">02:40 PM </option>'.
 					'<option value="14.50">02:50 PM </option>'.
 					'<option value="15.00">03:00 PM </option>'.
 					'<option value="15.10">03:10 PM </option>'.
 					'<option value="15.30">03:20 PM </option>'.
 					'<option value="15.30">03:30 PM </option>'.
+					'<option value="15.35">03:35 PM </option>'.
 					'<option value="15.45">03:45 PM </option>'.
 					'<option value="16.00">04:00 PM </option>'.
+					'<option value="16.10">04:10 PM </option>'.
 					'<option value="16.30">04:30 PM </option>'.
 					'<option value="17.00">05:00 PM </option>'.
 					'<option value="17.30">05:30 PM </option>'.

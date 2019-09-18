@@ -49,9 +49,9 @@ table .set-style tr td a {
 								}
 								grade = dijit.byId('grade').get('value');
 								if(grade==''){
-									alert('<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>');
-									dijit.byId('grade').focus();
-									return false;
+									//alert('<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>');
+									//dijit.byId('grade').focus();
+									//return false;
 								}
 								return true;
 	   						}else {
@@ -174,7 +174,7 @@ table .set-style tr td a {
 								<select multiple id="public-methods" name="public-methods[]">
 									<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
 										<option value="<?php echo $row['stu_id'];?>">
-											<?php echo $no, ". " , $row['stu_code'],"-",$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
+											<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
 										</option>
 									<?php }?>
 								</select>

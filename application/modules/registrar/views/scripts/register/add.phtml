@@ -1,6 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('REGISTER')); 
+	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+	$username=$session_user->last_name.$session_user->first_name;
 ?>
 <style>
 	select{ width:100%;}
@@ -236,7 +238,8 @@ tr.head-td th{padding: 5px 2px;}
 			                       		<?php 
 			                       			$photo = $this->baseUrl()."/images/no-profile.png";
 			                       		?>
-			                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image">
+			                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image" >
+			                           	<input id="lbl_photoname" id="lbl_photoname" value="abc"  type="hidden" />
 			                            <i class="fa fa-male member-star text-active" title="verified user"></i>
 			                        </div>
 			                        <div class="center">
@@ -1130,7 +1133,12 @@ function printSave(){
 		dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'),{places:2});
 		dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 		dojo.byId("lb_paymentnumber").innerHTML = dijit.byId("number").get('value');
-	
+		dojo.byId("lb_byuser").innerHTML = '<?php echo $username;?>';
+		
+		lbl_photoname = $("#lbl_photoname").val();
+		if(lbl_photoname!=''){
+			dojo.byId("lb_photo").innerHTML = '<img style="max-height:100%;max-width:100%;" src="<?php echo $this->baseUrl();?>/images/photo/'+lbl_photoname+'" />' ;;
+		}
 					var rowId = $('#identity').val();
 					var rowIDArray = rowId.split(',');
 					template="";
@@ -1192,10 +1200,10 @@ function printSave(){
 							  temp+='</tr>';
 							  i++;
 							}
-					temp+='</table>';
-					dojo.byId('t_amountmoneytype').innerHTML = temp;
-					dijit.byId("terms").show();	
-		}		
+		temp+='</table>';
+		dojo.byId('t_amountmoneytype').innerHTML = temp;
+		dijit.byId("terms").show();	
+	}		
 }
 function printSubmit(){	
 	checkSession();

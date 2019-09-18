@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle('បង្កាន់ដៃបង់ប្រាក់');
 	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$result = $this->rr;
 ?>
 <style>
 #footer{display: none;}
@@ -17,239 +18,109 @@ table tr td strong{
 		<?php 
 		$amount_print = $this->data['receipt_print'];
 		for($prin=0;$prin<$amount_print;$prin++){?>
-			<table cellspacing="0" width="100%" cellpadding="0" style="margin: 0 auto; width:100%;height:13.97cm;font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: 0px;white-space:nowrap;" >
-				<tr height="90px;">
-					<td colspan="10"  style="" align="center" valign="top">
-						<?php echo $this->header?>
-					</td>
-				</tr>
-				<tr height="40px;">
-				    <td colspan="3"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;margin-top: -20px;" >
-							<tr>
-								<td width="25%"></td>
-								<td width="50%" valign="top" align="center" style="font-family: Times New Roman,Khmer OS Muol Light;font-size: 14px;line-height: 20px">
-									<div>បង្កាន់ដៃបង់ប្រាក់</div>
-									<div>Official Receipt</div>
-								</td>
-								<td width="25%" valign="bottom">
-									<div style="font-size: 12px;font-family:Times New Roman,Battambang;"><u>Receipt N<sup>o</sup></u> <?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
-									<span style="font-size: 12px;font-weight: bold;font-family: Times New Roman"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
-									<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->rr['create_date']));?></div>
-								</td>
-							</tr>
-						</table>
-				    </td>
-				</tr>
-				<tr height="50px">
-					<td colspan="3">
-						<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;margin-bottom: 5px;">
-							<tr style="line-height: 16px;">
-								<td width="10%"><?php echo $tr->translate("STUDENT_ID"); ?></td>
-								<td width="25%"> :&nbsp;<?php echo $this->rr['stu_code'];?></td>
-								<!--<td width="8%"><?php //echo $tr->translate("DOB"); ?></td>
-								<td width="20%"> :&nbsp;<?php //echo empty($this->rr['dob'])?"":date('d-m-Y',strtotime($this->rr['dob']));?></td>
-								<td width="12%"><?php //echo $tr->translate("GRADE"); ?></td>
-								<td width="25%"> :&nbsp;<?php //echo $this->rr['grade'];?></td>
-								<td><?php //echo $tr->translate("DEGREE"); ?></td>
-								<td> : &nbsp;<?php //echo $this->rr['degree'];?></td>
-								<td><?php //echo $tr->translate("SESSION"); ?></td>
-								<td> : &nbsp;<?php //echo $this->rr['session'];?></td>
-								<td><?php echo $tr->translate("ACADEMIC_YEAR"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['academic_year'];?></td>
-								-->
-								<td><?php echo $tr->translate("PHONE"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['tel'];?></td>
-							</tr>
-							<tr style="line-height: 16px;">
-								<td><?php echo $tr->translate("STUDENT_NAME"); ?></td>
-								<td colspan="1"> :&nbsp;<?php echo $this->rr['stu_khname'].' / ';echo $this->rr['last_name'].' '.$this->rr['stu_enname']?></td>
-								<td><?php echo $tr->translate("GENDER"); ?></td>
-								<td> : &nbsp;<?php echo $this->rr['sex'];?></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" valign="top">
-						<style> th,td{ padding:0 1px;}</style>
-							<style type="text/css">
-								body{font-family:'khmer os battambang',"Times New Roman",Arial; }
-								table{ border-collapse:collapse; margin:0 auto;
-								border-color:#000; }
-								.padd tr td,.padd tr th{  text-align:center}
-								td{padding:0 3px; }
-							.noted{
-							    white-space: pre-wrap;     
-								word-wrap: break-word;      
-								word-break: break-all;
-								white-space: pre;
-								font:12px 'Khmer OS Battambang';
-								border: 1px solid #000;
-			                    line-height:20px;
-								font-weight: normal !important;
-								padding:2px;
-							    white-space: normal;
-								text-align: left;
-							}
-							.boxnorefund{
-								color: #fff;
-								background: #d42727;
-								border: 2px solid fff;
-								font-size: 11px;
-								padding:10px 2px;
-								border-radius: 2px;
-								border: 6px double #fff;
-								font-weight:bold !important;
-								font-family:Times New Roman;	
-							}
-							</style>
-						<table border="1" class="padd" width="100%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
-							  <tr style="font-size:12px; height: 25px;background: #f0f0f0;text-align: center !important;" align="center"  >
-							    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PAYMENT_TERM');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PRICE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('Disc Amt');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PERIOD');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
-							  </tr>
-							  <?php $i=0; $total=0; if(!empty($this->row)) foreach($this->row as $rs){ 
-							  		$i++;$label="";
-									if($rs['service_type']==1){$label="School Fee ";}
-							  ?>
-							  <tr class="hover" style="font-size:12px;height: 25px;"​ >
-							    <td><?php echo $i;?></td>
-							    <?php ?>
-							    <td style="text-align: left;"><?php echo $label.$rs['service'];?></td>
-							    <td><?php if ($rs['is_onepayment']!=1) { echo $rs['payment_term']; }else{ echo "-";}?></td>
-							    <td><?php echo number_format($rs['qty'],2)?></td>
-							    <td><?php echo number_format($rs['fee'],2);?></td>
-							    <td><?php echo number_format($rs['extra_fee'],2);?></td>
-							    <td><?php echo $rs['discount_type'];?></td>
-							    <td><?php echo $rs['discount_amount']; echo ($rs['discount_percent']>0)?'+'.$rs['discount_percent']."%":"";?></td>
-							    <td><?php echo number_format($rs['paidamount'],2);?></td>
-							    <td><?php if($rs['is_onepayment']!=1){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }?></td>
-							    <td style="max-width: 150px !important;white-space: normal;"><?php echo $rs['note'];?></td>
-							  </tr> <?php $total = $total + $rs['subtotal']; ?>
-							  <?php } 
-							  ?>
-							  <tr  style="font-size:12px;border: 1px solid #fff;border-top: 1px solid #000;"​>
-							  	<td colspan="11">
-							  		<table width="100%">
-							  			<tr>
-							  				<td width="70%" valign="top">
-										  		<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
-													<tr>
-														<td align="left" colspan="3">
-															 <div class="col-md-6 col-sm-6 col-xs-12" style="width:49%;float: left;margin-right:1%">Note
-															 	<div style="font-size:10px;min-height: 70px;border:1px solid #000;" id="lbl_note" class="noted" ><?php echo $this->rr['note'];?></div>
-															 </div>
-															 <div class="col-md-6 col-sm-6 col-xs-12" style="width:50%;float: left;">Say in US Dollars
-															 	<div style="font-size:10px;min-height: 70px;border:1px solid #000;" id="lb_read_khmer" class="noted" ></div>
-															 </div>
-														</td>
-													</tr>
-													<tr>
-														<td width="33%" align="center">Cashier</td>
-														<td width="34%" align="center">Head of Cashier</td>
-														<td width="33%" align="center">Verified By</td>
-													</tr>	
-													<tr>
-														<td width="33%" align="center"><br /><br /></td>
-														<td width="34%" align="center"></td>
-														<td width="33%" align="center"></td>
-													</tr>
-													<tr>
-														<td width="33%" align="center"><br /><br /></td>
-														<td width="34%" align="center"></td>
-														<td width="33%" align="center"></td>
-													</tr>
-													<tr style="height:15px;">
-														<td align="center">
-															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: -5px;border-bottom: 1px solid #000;"> 
-																<?php echo $this->rr['user'];?>
-															</div>
-															Signature/Name/Date
-														</td>
-														<td align="center">
-															<div style="border-bottom: 1px solid #000;width:85%;margin:0 auto;" ></div>
-															Signature/Name/Date
-														</td>
-														<td align="center">
-															<div style="border-bottom: 1px solid #000;width:85%;margin:0 auto;" ></div>
-															Signature/Name/Date
-														</td>
-													</tr>	
-												</table>
-											</td>
-							  				<td width="30%" valign="top">
-										  		<table width="100%" style="font-size:12px; white-space:nowrap;line-height:15px;border-collapse:collapse;">
-												  <tr style="font-size:12px;height:20px;border: 1px solid #fff;"​>
-													  <td style="" colspan="8"></td>
-													  <td style="text-align: left;"><?php echo $tr->translate('Penalty');?></td>
-													  <td>: $</td>
-													  <td><?php echo number_format($this->rr['fine'],2);?></td>
-												  </tr>
-												 <tr style="font-size:12px;height: 15px; border: 1px solid #fff;"​>
-													  <td style="text-align: left;" colspan="8" ><label id="lbl_moneykhmer"></label></td>
-													  <td style="text-align: left;"><?php echo $tr->translate('Total Payment');?></td>
-													  <td>: $</td>
-													  <td><?php echo number_format($this->rr['grand_total'],2);?></td>
-												  </tr> 
-												  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
-													  	<td style="" colspan="8"></td>
-													  	<td style="text-align: left;"><?php echo $tr->translate('Credit Memo');?></td>
-													  	<td>: $</td>
-													  	<td><?php echo number_format($this->rr['credit_memo'],2);?></td>
-												  </tr>
-												  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
-													  <td style="" colspan="8"></td>
-													  <td style="text-align: left;"><?php echo $tr->translate('Paid Amount');?></td>
-													  <td>: $</td>
-													  <td><?php echo number_format($this->rr['paid_amount'],2);?></td>
-												  </tr>
-												  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
-													  <td style="" colspan="8"></td>
-													  <td style="text-align: left;"><?php echo $tr->translate('Balance');?></td>
-													  <td>: $</td>
-													  <td><?php echo $this->rr['balance_due'];?></td>
-												  </tr>
-												  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
-													  <td style="" colspan="8"></td>
-													  <td style="text-align: left;"><?php echo $tr->translate('Payment Method');?></td>
-													  <td></td>
-													  <td><?php echo $this->rr['payment_method'];?></td>
-												  </tr>
-												  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
-													  <td style="" colspan="8"></td>
-													  <td style="text-align: left;"><?php echo $tr->translate('Number/Bank');?></td>
-													  <td><?php echo $this->rr['number'];?></td>
-												  </tr>
-												  <tr>
-													  <td colspan="11"><div class="boxnorefund">Non-Refundable / Transferable</div></td>
-												  </tr>
-											  </table>
-										  </td>
-						  			</tr>
-						  		</table>
-							  		</td>
-							</table>
-						</td>
-					</tr>
-			</table>
-<?php
-}?>
-	</div>	
-</div>
+			<?php 
+				echo $this->officailreceipt;
+			?>
+		<?php
+		}?>
+		<style>
+			.blogbranchlogo{
+				margin:0 auto;position:absolute;top:10px !important;left:100px;
+			}
+		</style>
+	</div>
+	<style>
+			.blogbranchlogo{
+				margin:0 auto;position:absolute;top:50px !important;left:100px;
+			}
+	</style>
 <script type="text/javascript">
 dojo.ready(function(){
 	readMoneyInKhmer("<?php echo $this->rr['paid_amount'];?>");
+	getbranchinfo();
+	setDatatoReceipt();
 });	
+function setDatatoReceipt(){	
+	
+		dojo.byId("lb_receipt_no").innerHTML = '<?php echo $result['receipt_number'];?>';	
+		dojo.byId("lb_date").innerHTML  = '<?php echo date('d-m-Y g:i A',strtotime($result['create_date']));?>';
+		dojo.byId("lb_stu_id").innerHTML = '<?php echo $result['stu_code'];?>';	
+		dojo.byId("lb_sex").innerHTML = '<?php echo $result['sex'];?>';	
+		dojo.byId("lbl_note").innerHTML = '<?php echo $result['note'];?>';	
+		dojo.byId("lb_name").innerHTML = '<?php echo $result['stu_khname'].' / '.$result['last_name'].' '.$result['stu_enname'];?>';	
+		dojo.byId("lb_phone").innerHTML = '<?php echo $result['tel'];?>';	
+		//dojo.byId("lb_read_khmer").innerHTML = '<?php //echo $result['stu_code'];?>';	
+		<?php if($result['photo']){?>
+			dojo.byId("lb_photo").innerHTML = '<img style="max-height:100%;max-width:100%;" src="<?php echo $this->baseUrl().'/images/photo/'.$result['photo']?>" />' ;
+		<?php } ?>
+		dojo.byId("lb_total_payment").innerHTML = '<?php echo number_format($result['grand_total'],2);?>';	
+		dojo.byId("lb_fine").innerHTML = '<?php echo number_format($result['fine'],2);?>';			
+		dojo.byId("lb_credit_memo").innerHTML = '<?php echo number_format($result['credit_memo'],1);?>';
+		dojo.byId("lb_paid_amount").innerHTML = '<?php echo number_format($result['paid_amount'],1);?>';	
+		dojo.byId("lb_balance_due").innerHTML = '<?php echo number_format($result['balance_due'],1);?>';	
+		dojo.byId("lb_paymentmethod").innerHTML = '<?php echo $result['payment_method'];?>';	
+		dojo.byId("lb_paymentnumber").innerHTML = '<?php echo $result['number'];?>';
+		dojo.byId("lb_byuser").innerHTML = '<?php echo $result['user'];?>';
+	
+			template="";
+				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
+					  temp+='<tr class="hearder_table" style="font-size:11px !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
+						  temp+='<td style="border:1px solid #000;">No</td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Deduct/Extra</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Type</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Amt</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Code</strong></td>';
+					  temp+='</tr>';
+					i=1;  
+					<?php foreach($this->row  as $rs) { 
+						$label="";
+						if($rs['service_type']==1){
+							$label="School Fee ";
+						}
+						?>
+						
+						var items_type ='<?php echo $rs['service_type']; ?>';
+						var term_label = "-";
+						if(items_type!=3){
+							term_label = '';//dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
+						}
+					  temp+='<tr style="font-size:11px;height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  item_label = '<?php echo $label.$rs['service'];?>' ;
+					  /*if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
+						  item_label='School Fee '+item_label;
+					  }*/
+					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
+					  term = '<?php if ($rs['is_onepayment']!=1) { echo $rs['payment_term']; }else{ echo "-";}?>';
+					  temp+='<td align="center" style="border:1px solid #000;">'+term+'</td>';
+					  temp+='<td style="border:1px solid #000;">'+<?php echo number_format($rs['qty'],2)?>+'</td>';
+					  	fee='<?php echo number_format($rs['fee'],2);?>';
+					  temp+='<td align="center" style="border:1px solid #000;">'+fee+'</td>';
+					  	extra_fee='<?php echo number_format($rs['extra_fee'],2);?>';
+					  temp+='<td align="center" style="border:1px solid #000;">'+extra_fee+'</td>';
+					  	discount_type='<?php echo $rs['discount_type'];?>';
+					  temp+='<td style="border:1px solid #000;">'+discount_type+'</td>';
+					  	discount_amount = '<?php echo $rs['discount_amount']; echo ($rs['discount_percent']>0)?'+'.$rs['discount_percent']."%":"";?>';
+					  temp+='<td style="border:1px solid #000;">'+discount_amount+'</td>';
+						paid='<?php echo number_format($rs['paidamount'],2);?>';
+					  temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
+					  	period='<?php if($rs['is_onepayment']!=1){echo date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }else{echo'&nbsp;';}?>';		  				  
+					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</td>';
+					  	note='<?php echo $rs['note'];?>';
+					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+note+'</td>';
+					  temp+='</tr>';
+					  i++;
+					<?php } ?>
+			temp+='</table>';
+			dojo.byId('t_amountmoneytype').innerHTML = temp;
+			readMoneyInKhmer('<?php echo $result['grand_total'];?>');
+			
+}
 function readMoneyInKhmer(netTotal){
 	var str = netTotal.toString();
     str_cent = 'សេន';
@@ -257,22 +128,46 @@ function readMoneyInKhmer(netTotal){
 	last_decimal = str.substr(-1);
     if(first_decimal>0){string=' ចុច ';}else{string="";str_cent=""}
 	if(first_decimal!='00' && first_decimal<10 ){str_zero = "សូន្យ";}else{str_zero='';}
-    first_money_decimal = read_in_khmer_from_10_to_99(first_decimal);
-    last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
-    money_khmer=read_money_in_khmer(netTotal);
+	first_money_decimal = read_in_khmer_from_10_to_99(first_decimal);
+	last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
+	money_khmer=read_money_in_khmer(netTotal);
 
-    if(first_decimal>0){string_en='dot';}else{string_en="";str_cent_en=""}
+	if(first_decimal>0){string_en=' dot ';}else{string_en="";str_cent_en=""}
 	if(first_decimal!='00' && first_decimal<10 ){str_zero_en = "Zero";}else{str_zero_en='';}
-    first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
-    last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
-    money_english=read_money_in_english(netTotal);
-    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
-
-    english_amount = 'Dollar Only';
+	first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
+	last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
+	money_english=read_money_in_english(netTotal);
+	read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
+	
+	english_amount = ' Dollar Only';
 	if(netTotal==0){english_amount='';}
 	read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+english_amount+')'
 	khmer_amount = 'ដុល្លារគត់';
 	if(netTotal==0){khmer_amount='';}
-	dojo.byId("lb_read_khmer").innerHTML=money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng;
+	dojo.byId("lb_read_khmer").innerHTML =money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng
 }
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfodetail')); ?>";
+function getbranchinfo(){
+	branch_id = '<?php echo $this->rr['branch_id'];?>';
+	if(branch_id != ""){
+		dojo.xhrPost({
+			url:url_getbranch,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data){
+				dojo.byId("lbl_email").innerHTML = data.email;
+				dojo.byId("lbl_website").innerHTML = data.website;
+				dojo.byId("lbl_address").innerHTML = data.br_address;
+				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
+				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
+				dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
+			},
+			error: function(err) {
+			}
+		});	
+	} 
+}
+
 </script>

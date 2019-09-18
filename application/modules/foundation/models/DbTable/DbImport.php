@@ -14,12 +14,12 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	$count = count($data);
     	for($i=1; $i<=$count; $i++){
     		$arr = array(
-    				'branch_id'=>8,
+    				'branch_id'=>2,
     				'user_id'=>1,
     				'stu_khname'=>$data[$i]['C'],
-    				'stu_enname'=>$data[$i]['D'],
-    				'last_name'=>$data[$i]['E'],
-    				'sex'=>($data[$i]['F']=="ប្រុស")?1:2,
+    				'stu_enname'=>trim($data[$i]['D']),
+    				'last_name'=>trim($data[$i]['E']),
+    				'sex'=>($data[$i]['F']=="M")?1:2,
     				'tel'=>$data[$i]['G'],
     				'dob'=>date("Y-m-d",strtotime($data[$i]['H'])),
     				'pob'=>$data[$i]['I'],
@@ -37,11 +37,11 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     				'guardian_khname'=>$data[$i]['N'],
     				'guardian_tel'=>$data[$i]['O'],
     				
-    				'stu_code'=>$data[$i]['P'],
+    				//'stu_code'=>$data[$i]['P'],
     				
 //     				'degree'=>3,
 //     				'grade'=>16,
-    				'remark'=>$data[$i]['R'],
+    				//'remark'=>$data[$i]['R'],
     				
     				'is_stu_new'=>0,
     				'customer_type'=>1,

@@ -400,7 +400,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAllStudentSelected($stu_id){
     	$db = $this->getAdapter();
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
     	if($lang==1){// khmer

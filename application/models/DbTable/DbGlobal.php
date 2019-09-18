@@ -1978,13 +1978,14 @@ function getAllgroupStudyNotPass($action=null){
   			                       			}
   			                       		}
   			                       		
-  			                           	$str.='<img src='.$photo.' class=" img-thumbnail" alt="profile-image">';
+  			                           	$str.='<img src='.$photo.' class=" img-thumbnail" alt="profile-image" id="student_photo">';
   			                            if ($rs["sex"]==1){
   			                            	$str.='<input type="hidden" id="lbl_gender" value="Male"><i class="fa fa-male member-star text-active" title="verified user"></i>';
   			                            }else{
   			                           	 	$str.='<input type="hidden" id="lbl_gender" value="Female"><i class="fa fa-female member-star text-deactive" title="verified user"></i>';
   			                            }
-  			                        $str.='</div>
+  			                           $photo =  $rs["photo"];
+  			                        $str.='<input type="hidden" id="lbl_photoname" value="'.$photo.'" /></div>
   			                        <div class="center">
   			                       </div>
   		                        </div>

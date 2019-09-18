@@ -1171,10 +1171,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		if(!empty($rs)){
 			$branch_id = $rs['branch_id'];
 		}
-		$_db = new Application_Form_FrmGlobal();
-		$this->view->header = $_db->getHeaderReceipt($branch_id);
+// 		$_db = new Application_Form_FrmGlobal();
+// 		$this->view->header = $_db->getHeaderReceipt($branch_id);
 		
-		
+		$frmreceipt = new Application_Form_FrmGlobal();
+		$this->view->officailreceipt = $frmreceipt->getFormatReceipt();
 	}
 	public function rptIncomediscountAction(){
 		try{

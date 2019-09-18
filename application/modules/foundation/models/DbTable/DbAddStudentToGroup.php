@@ -115,10 +115,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
 		try{
-		//print_r($_data);exit();		
 			if(!empty($_data['public-methods'])){
-				
-				//print_r($_data['public-methods']);exit();
 				
 				$all_stu_id = $_data['public-methods'];
 				foreach ($all_stu_id as $stu_id){
@@ -148,8 +145,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				
 				$this->_name = 'rms_group';
 				$data_gro = array(
-					'is_use'=> 1,
-					'is_pass'=> 2,
+					'is_use'=> 1,//ប្រើប្រាស់
+					'is_pass'=> 2,//កំពុងសិក្សា
 				);
 				$where = 'id = '.$_data['group'];
 				$this->update($data_gro, $where);
@@ -251,6 +248,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				stu_code,
 				stu_enname,
 				stu_khname,
+				last_name,
 				sex,
 				degree,
 				grade,
@@ -281,7 +279,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		}
 		
 		$sql.=" ORDER BY stu_enname ASC ";
-		
 		return $db->fetchAll($sql);
 	}
 }

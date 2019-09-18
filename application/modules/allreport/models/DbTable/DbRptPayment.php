@@ -23,13 +23,14 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
     	}
-    	$sql = "select 
+    	$sql = "SELECT 
     				s.stu_id,
-    				s.branch_id,
+    				sp.branch_id,
     				s.stu_code,
     				s.stu_khname,
     				s.stu_enname,
     				s.last_name,
+    				s.photo,
     				s.tel,
     				s.dob,
     				(select $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,

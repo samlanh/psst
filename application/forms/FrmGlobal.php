@@ -268,9 +268,12 @@ class Application_Form_FrmGlobal{
 			.defaulheight{line-height:10px !important;}
 			.bold{
 				font-weight:bold;
+			}
+			.blogbranchlogo{
+					margin:0 auto;position:absolute;top:50px !important;left:100px;
 				}
 		</style>
-		<div id='PrintReceipt' style='width: 22cm !important; padding: 0px;'>
+		<div id='PrintReceipt' style='width:100%cm !important; padding: 0px;'>
 			<style>
 				.noted{
 				    white-space: pre-wrap;     
@@ -283,6 +286,9 @@ class Application_Form_FrmGlobal{
 					font-weight: normal !important;
 					padding:2px;
 				    white-space: normal;
+				}
+				.blogbranchlogo{
+					margin:0 auto;position:absolute;top:10px;left:100px;
 				}
 				.boxnorefund{
 					color: #fff;
@@ -304,18 +310,13 @@ class Application_Form_FrmGlobal{
 				}
 				
 				@page {
-				  
 				  /* Chrome sets own margins, we change these printer settings */
 				  margin:0.5cm 1cm 0.3cm 1cm; '
 				   page-break-before: avoid;
-				   
 				   /*size: 21cm 14.8cm; */
 				}
 				   
-
-				
 			</style>
-		
 			<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
 				<tr>
 					<td align='center' valign='top' colspan='3'>
@@ -325,7 +326,7 @@ class Application_Form_FrmGlobal{
 				<tr>
 					<td width='30%'>
 						<div id='lbl_branchlogo'></div>
-						<div style='margin:0 auto;position:absolute;top:10px;left:100px;font-family:Khmer OS Muol Light;font-size:12px;'>
+						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
 							<label id='lb_branchname'></label>
 							<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
 						</div>
@@ -436,8 +437,8 @@ class Application_Form_FrmGlobal{
 										</tr>
 										<tr>
 											<td align='center'>
-												<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:50px;'>";
-												  	 echo "".$last_name." ".$username;
+												<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:50px;'><label id='lb_byuser'></label>";
+												  	
 												$str.="</div>
 												Signature/Name/Date
 											</td>

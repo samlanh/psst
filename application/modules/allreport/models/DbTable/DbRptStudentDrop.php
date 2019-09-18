@@ -285,17 +285,29 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 	    	$subjecct = "subject_titleen";
 	    	$teacher = "teacher_name_en";
 	    }
-	    $sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
+	    $sql="SELECT 
+	    		gr.id,
+	    		gr.year_id,
+	    		gr.group_id,
+	    		gr.day_id,
+	    		gr.from_hour,
+	    		gr.to_hour,
+	    		gr.subject_id,
+	    		gr.techer_id,
 			    REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
 			    (SELECT s.$subjecct FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
 			    (SELECT t.$teacher FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
 			    (SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone,
 			    COUNT(*)AS total_hour
-		    FROM rms_group_reschedule AS gr
-		    WHERE gr.year_id=$year
+		    FROM 
+		    	rms_group_reschedule AS gr
+		    WHERE 
+		    	gr.year_id=$year
 		    	AND gr.group_id=$group
-		    GROUP BY gr.subject_id
-		    ORDER BY subject_name,gr.subject_id DESC 
+		    GROUP BY 
+		    	gr.subject_id
+		    ORDER BY 
+		    	subject_name,gr.subject_id DESC 
 	    ";
 	    return $db->fetchAll($sql);
     }
@@ -335,39 +347,67 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     
     function getSubjectForCalculateTime($year_id,$group_id,$subject_id){
     	$db=$this->getAdapter();
-    	$sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
-    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
-    	(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
-    	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
-    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
-    	FROM rms_group_reschedule AS gr
-    	WHERE gr.year_id=$year_id
-    	AND gr.group_id=$group_id
-    	AND gr.subject_id =$subject_id
-    	ORDER BY subject_name,gr.subject_id DESC ";
+    	$sql="SELECT 
+    				gr.id,
+    				gr.year_id,
+    				gr.group_id,
+    				gr.day_id,
+    				gr.from_hour,
+    				gr.to_hour,
+    				gr.subject_id,
+    				gr.techer_id,
+			    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+			    	(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+			    	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+			    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
+    			FROM 
+    				rms_group_reschedule AS gr
+    			WHERE 
+    				gr.year_id=$year_id
+			    	AND gr.group_id=$group_id
+			    	AND gr.subject_id =$subject_id
+    			ORDER BY 
+    				subject_name,gr.subject_id DESC 
+    		";
+    	
     	$row = $db->fetchAll($sql);
     	$hour="";
     	$min="";
     	if (!empty($row)){
-    		
 	    	foreach ($row as $rs){
 	    		$fromHour = explode(".", $rs['from_hour']);
 	    		$to_hour = explode(".", $rs['to_hour']);
 	    		
-	    		$HourFro = $fromHour[0];
-	    		$HourTo = $to_hour[0];
+	    		$HourFro = $fromHour[0]; 
+	    		$HourTo = $to_hour[0];	
 	    		
 	    		$MinFro = end($fromHour);
 	    		$MinTo = end($to_hour);
 	    		
 	    		$hour = $hour + ($HourTo - $HourFro);
 	    		$min = $min+($MinTo - $MinFro);
-	    		if (($MinTo - $MinFro)<0){
-	    			 $hour = $hour -1;
+	    		
+// 	    		if (($MinTo - $MinFro)<0){
+// 	    			$hour = $hour -1;
+// 	    			$min = 60 + $min;
+// 	    		}else if ($min>=60){
+// 	    			$min = $min%60;
+// 	    			$hour = $hour+1;
+// 	    		}
+	    		
+	    		if(($MinTo - $MinFro)<0 && $min<60){
+	    			$hour = $hour -1;
 	    			$min = 60 + $min;
-	    		}else if ($min>=60){
+	    			if($min>=60){
+	    				$min = $min%60;
+	    				$hour = $hour+1;
+	    			}
+	    		}else if($min>=60){
 	    			$min = $min%60;
 	    			$hour = $hour+1;
+	    		}else if(($MinTo - $MinFro)<0){
+	    			$hour = $hour -1;
+	    			$min = 60 + $min;
 	    		}
 	    	}
     	}

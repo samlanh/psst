@@ -75,7 +75,7 @@
 		</tr>
 	</table>	
 	<div id="divPrint">
-		<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
+		<table width="100%" style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 		<style>
 				table tr th{
 					border: 1px solid #000;	
@@ -134,15 +134,15 @@
 					</tr>
 					<tr>
 				<td colspan="3">
-					<table border="1" cellpadding="5"​ style="color: #4839bd; margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;" >
+					<table border="1" width="100%" cellpadding="5"​ style="color: #4839bd; margin:0 auto;width:100%; border-collapse: collapse;white-space: normal;" >
 						<thead>
 							<tr>
 								<td align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
-								<ul class="subject">
-									<li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li>
-									<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
-									<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
-								</ul>
+									<ul class="subject">
+										<li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li>
+										<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
+										<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
+									</ul>
 								</td>
 							</tr>
 							<tr class="head_schedule" style="font-size:14px;" align="center" >
@@ -151,7 +151,7 @@
 							</tr>
 							<tr class="head_schedule" style="font-size:14px;" align="center" >
 							<?php foreach ($day as $key => $days){?>
-								<td style="width:18%;"><?php echo $days['name'];?></td>
+								<td><?php echo $days['name'];?></td>
 							<?php }?>
 							</tr>
 						</thead>
@@ -172,11 +172,11 @@
 							}
 				        ?>
 							<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
-								<td align="center" style="min-width:50px;white-space: nowrap;"><strong><?php echo $time['times'];?></strong></td>
+								<td width="10%" align="center" style=""><strong><?php echo $time['times'];?></strong></td>
 								<?php foreach ($day as $key => $days){
 									$subjecNteacher = $db_sub->getSubjectTeacherByScheduleAndGroup($rs['year_id'],$rs['group_id'],$time['times'], $days['id'])
 								?>
-								<td align="center">
+								<td width="15%" align="center">
 									<?php 
 								 	if (!empty($subjecNteacher)){
 								 		if (!empty($subjecNteacher['subject_name'])){
@@ -189,18 +189,20 @@
 								<?php }?>
 							</tr>
 					 <?php }?>						 
-					 <?php  foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
+					 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
 					 	if($rs_list['total_hour']>1){
 					        $h_label='hrs';
 					 	}else{
 					 		$h_label='hr';
 					 	}
-					 	$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id'])
+						if(!empty($rs_list['subject_id'])){
+							$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
+							$num++;
 					 ?>
 					 <tr>
-					    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 20px;" colspan="2"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
+					    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 20px;" colspan="7"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
 					 </tr>
-					 <?php }?>
+					 <?php }}?>
 					 <tr >
 					 	<td  style="border: 1px solid #fff;">&nbsp;</td>
 					 </tr>

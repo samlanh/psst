@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate('RPT_RESCHEDULE_BYGROUP')); 
 	$frm =  $this->form_search;
 	$db_sub=new Allreport_Model_DbTable_DbRptStudentDrop();
+	$db_global = new Application_Model_DbTable_DbGlobal();
 	// $day = array(
 		// 1=>$tr->translate('MONDAY'),
 		// 2 =>'Tuesday',
@@ -11,7 +12,7 @@
 		// 5=>'Friday',
 		// 6=>'Saturday',
 	// );
-	$day = $this->day;
+	//$day = $this->day;
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -111,11 +112,13 @@
 			
 				<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
 					foreach ($this->rs As $rs){
+						$title=0; $titles=0;
 					$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
 					
 					$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
 					$frm = new Application_Form_FrmGlobal();
 					$rsheader = $frm->getLetterHeaderReport($branch_id);
+					$day = $db_global->getDaySchedule($rs['branch_id'],$rs['year_id'],$rs['group_id']);
 					?>
 					<tr>
 						<td colspan="3">&nbsp;</td>
@@ -169,7 +172,7 @@
 								<td  align="center" colspan="7" style="font-size:12px;padding: 5px 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("AFTERNOON");?></td>
 							</tr>
 				        <?php $titles=1;}
-							}
+						}
 				        ?>
 							<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
 								<td width="10%" align="center" style=""><strong><?php echo $time['times'];?></strong></td>

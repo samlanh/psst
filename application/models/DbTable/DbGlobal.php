@@ -77,6 +77,34 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	
     	return $db->fetchAll($sql);
     }
+    public function getDaySchedule($branch,$year,$group){
+    	$db=$this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    	}else{ // English
+    		$label = "name_en";
+    	}
+    	$sql="SELECT 
+    				v.key_code as id,
+    				v.$label as name 
+    			FROM 
+    				rms_view as v,
+    				rms_group_reschedule as gs 
+    			where 
+    				v.key_code = gs.day_id 
+    				and v.type = 18 
+    				and gs.branch_id = $branch
+    				and gs.group_id = $group
+    				and gs.year_id = $year
+    			group by
+    				gs.day_id
+    			order by
+    				gs.day_id ASC	
+    		";
+    	return $db->fetchAll($sql);
+    }
     
     /**
      * insert record to table $tbl_name

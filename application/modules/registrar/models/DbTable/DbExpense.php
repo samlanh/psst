@@ -23,6 +23,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					'description'	=>$data['Description'],
 					'receiver'		=>$data['receiver'],
 					'cheque_no'		=>$data['cheque_num'],
+					'external_invoice'=>$data['external_invoice'],
 					'date'			=>$data['Date'],
 					'user_id'		=>$this->getUserId(),
 					'create_date'	=>date('Y-m-d H:i:s'),
@@ -60,6 +61,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					'description'	=>$data['Description'],
 					'receiver'		=>$data['receiver'],
 					'cheque_no'		=>$data['cheque_num'],
+					'external_invoice'=>$data['external_invoice'],
 					'date'			=>$data['Date'],
 					'status'		=>$data['Stutas'],
 					'user_id'		=>$this->getUserId(),
@@ -118,6 +120,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					title,
 					invoice,
 					(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
+					external_invoice,
 					total_amount,
 					description,
 					date,
@@ -135,6 +138,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 			$s_search = trim(addslashes($search['adv_search']));
 			$s_where[] = " title LIKE '%{$s_search}%'";
 			$s_where[] = " invoice LIKE '%{$s_search}%'";
+			$s_where[] = " external_invoice LIKE '%{$s_search}%'";
 			$s_where[] = " receiver LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}

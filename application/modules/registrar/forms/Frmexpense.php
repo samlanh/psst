@@ -103,6 +103,12 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 				'readOnly'=>'readOnly',
 				'style'=>'color:red;',
 		));
+		
+		$external_invoice = new Zend_Dojo_Form_Element_ValidationTextBox('external_invoice');
+		$external_invoice->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+		));
 // 		$_db = new Application_Model_DbTable_DbGlobal();
 // 		$invoice_no= $_db->getExpenseRecieptNo();
 // 		$db = new Registrar_Model_DbTable_DbIncome();
@@ -130,10 +136,11 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			$_stutas->setValue($data['status']);
 			$invoice->setValue($data['invoice']);
 			$id->setValue($data['id']);
+			$external_invoice->setValue($data['external_invoice']);
 		}
 		
 		$this->addElements(array($cheque_num,$invoice,$payment_method,$title,$_Date ,$receiver,$_stutas,$_Description,$total_income,
-				$total_amount,$convert_to_dollar,$_branch_id,$for_date,$id,));
+				$total_amount,$convert_to_dollar,$_branch_id,$for_date,$id,$external_invoice));
 		return $this;
 		
 	}	

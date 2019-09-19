@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm = $this->frm_callteral;
-	echo $this->headTitle($tr->translate("EDIT_STUDY_GROUP"));
+	echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	$frm = $this->frm;
 ?>
@@ -163,6 +163,7 @@
 								<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
 								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
 								<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("SCORE_SHORT");?></th>
 								<th><?php echo $tr->translate("TEACHER");?><input type="checkBox" value="0" id="checking_teach"  name="checking_teach" onclick="check();" id="checkall"/></th>
                					<th><?php echo $tr->translate("NOTE");?></th>
                				</tr>
@@ -643,26 +644,16 @@ function Initailize() {
 		foreach ($this->row as $rows){?>
 			col++;no++;
 			template='';
-			if(title!=1){
-				temp+='<th><?php echo $tr->translate("DEL");?></th>';
-				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-				temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
-				temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
-				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
-				temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
-				dojo.query("#head-title").append(temp);
-				title=1;
-			}
 				template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="4%" align="center">'+no+'</td>';
-				template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subjectold+'</select></td>';
-				template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
-				template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
-				template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+				template+='<td width="22%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subjectold+'</select></td>';
+				template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
+				template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
+				template+='<td width="10%"><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'"  type="text"></td>';
+				template+='<td width="15%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 				template+=teacher_optionini;  
 				template+='</select></td>';
-				template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
+				template+='<td width="25%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 				
 				
 			tmp='<tr id="row'+col+'">';
@@ -679,6 +670,7 @@ function Initailize() {
 			dijit.byId('group_subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 			dijit.byId('amount_subject'+col).attr('value','<?php echo $rows['amount_subject'];?>');
 			dijit.byId('amount_subject_semester'+col).attr('value','<?php echo $rows['amount_subject_sem'];?>');
+			dijit.byId('scoreshort_'+col).attr('value','<?php echo $rows['score_short'];?>');
 			dijit.byId('group_note_'+col).attr('value',"<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rows['note'])));?>");
 			dijit.byId('teacher_'+col).attr('value','<?php echo $rows['teacher'];?>');
 	<?php }}?>
@@ -688,26 +680,16 @@ function popupTeacher(key){
 function addRow() {
 	col++;no++;
 	template='';
-	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-		temp+='<th><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>';
-		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>';
-		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
-		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
-		dojo.query("#head-title").append(temp);
-		title=1;
-	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
-		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
-		template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
-		template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+		template+='<td width="22%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
+		template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
+		template+='<td width="10%"><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
+		template+='<td width="15%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
-		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
+		template+='<td width="25%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -778,26 +760,16 @@ function getSubjectByDegree(){
 					for(i=0;i<data.length;i++){
 						col++;no++;
 						template='';
-						if(title!=1){
-							temp+='<th><?php echo $tr->translate("DEL");?></th>';
-							temp+='<th><?php echo $tr->translate("N_O");?></th>';
-							temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-							temp+='<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>';
-							temp+='<th style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>';
-							temp+='<th><?php echo $tr->translate("NOTE");?></th>';
-							temp+='<th><?php echo $tr->translate("STATUS");?></th>';
-							dojo.query("#head-title").append(temp);
-							title=1;
-						}
 							template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 							template+='<td width="4%" align="center">'+no+'</td>';
-							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
-							template+='<td width="50px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
-							template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
-							template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+							template+='<td width="22%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+							template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
+							template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
+							template+='<td width="10%"><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'"  type="text"></td>';
+							template+='<td width="15%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 							template+=teacher_option;  
 							template+='</select></td>';
-							template+='<td width="35%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
+							template+='<td width="25%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 						
 						tmp='<tr id="row'+col+'">';
 						tmp+="</tr>";
@@ -810,6 +782,7 @@ function getSubjectByDegree(){
 						dojo.html.set(dojo.byId("row"+col),template , {
 							 parseContent: true,
 						});
+						dijit.byId('scoreshort_'+col).attr('value',data[i].score_short);
 						dijit.byId('group_subject_study_'+col).attr('value',data[i].subject_id);
 						dijit.byId('group_note_'+col).attr('value',data[i].note);
 					}

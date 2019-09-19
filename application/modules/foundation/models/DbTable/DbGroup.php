@@ -59,14 +59,15 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
 					$arr = array(
-							'group_id'	=> $id,
-							'subject_id'=> $_data['group_subject_study_'.$i],
+							'group_id'		=> $id,
+							'subject_id'	=> $_data['group_subject_study_'.$i],
 							'amount_subject'=>$_data['amount_subject'.$i],
 							'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
-							'teacher'   => $_data['teacher_'.$i],
-							'note'   	=> $_data['group_note_'.$i],
-							'date' 		=> date("Y-m-d"),
-							'user_id'	=> $this->getUserId(),
+							'score_short'	=>$_data['scoreshort_'.$i],
+							'teacher'   	=> $_data['teacher_'.$i],
+							'note'   		=> $_data['group_note_'.$i],
+							'date' 			=> date("Y-m-d"),
+							'user_id'		=> $this->getUserId(),
 					);
 					$this->insert($arr);
 				}
@@ -121,14 +122,15 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
 					$arr = array(
-							'group_id'	=> $_data['id'],
-							'subject_id'=> $_data['subject_study_'.$i],
-							'amount_subject'=>$_data['amount_subject'.$i],
-							'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
-							'teacher'   => $_data['teacher_'.$i],
-							'note'   	=> $_data['note_'.$i],
-							'date' 		=> date("Y-m-d"),
-							'user_id'	=> $this->getUserId()
+							'group_id'		=> $_data['id'],
+							'subject_id'	=> $_data['group_subject_study_'.$i],
+							'amount_subject'=> $_data['amount_subject'.$i],
+							'amount_subject_sem'=> $_data['amount_subject_semester'.$i],
+							'score_short'	=> $_data['scoreshort_'.$i],
+							'teacher'   	=> $_data['teacher_'.$i],
+							'note'   		=> $_data['group_note_'.$i],
+							'date' 			=> date("Y-m-d"),
+							'user_id'		=> $this->getUserId()
 					);
 					$this->insert($arr);
 				}

@@ -2,9 +2,9 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $file = PUBLIC_PATH."/images/logo.png";
 if (file_exists($file)) {
-	$file = $this->baseUrl()."/images/logo.png";
+	$file = $this->baseUrl()."/images/camappold.png";
 } else {
-$file = $this->baseUrl()."/images/logo.jpg";
+	$file = $this->baseUrl()."/images/camappold.png";
 }
 $dbgb = new Application_Model_DbTable_DbGlobal();
 ?>
@@ -23,7 +23,7 @@ $dbgb = new Application_Model_DbTable_DbGlobal();
 		       <?php $ise = 1; if ($ise==1){?>
 		        <h1><span><strong><?php echo $dbgb->getNumberInkhmer(4)?></strong></span><span><strong><?php echo $dbgb->getNumberInkhmer(0)?></strong></span><span><strong><?php echo $dbgb->getNumberInkhmer(4)?></strong></span></h1>
 		        <?php }?>
-		      	<img src="<?php echo $file;?>" style="width: 140px;" />
+		      	<img src="<?php echo $file;?>" style="width: 240px;" />
 		      	
 		        <h2><?php echo  $tr->translate("Sorry");?> ! <span><?php echo $tr->translate("This page is not found in our site");?></span></h2>
 		      </div>

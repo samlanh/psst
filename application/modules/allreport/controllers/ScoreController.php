@@ -563,6 +563,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->rs = $rs_rows;
     	$this->view->search=$search;
     	
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+    	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$this->view->day = $_db->getAllDay();
     }

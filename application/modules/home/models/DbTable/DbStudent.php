@@ -290,6 +290,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$sql=" SELECT 
 					gr.id,
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
+					(select group_code from rms_group as g where g.id = gr.group_id limit 1) AS group_code,
+					gr.branch_id,
 					gr.year_id,
 					gr.group_id,
 					gr.day_id,

@@ -121,6 +121,7 @@
 					$title=0; $titles=0;
 				$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
 				$day = $db_global->getDaySchedule($rs['branch_id'],$rs['year_id'],$rs['group_id']);
+				$amt_day = count($day);
 				?>
 				
 				<tr>
@@ -133,17 +134,17 @@
 						<table class="main_table" border="1" width="100%" cellpadding="5"​ style="color: #4839bd; margin:0 auto;width:100%; border-collapse: collapse;white-space: normal;" >
 							<thead>
 								<tr>
-									<td align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
+									<td align="left" colspan="<?php echo $amt_day+1?>" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
 										<ul class="subject">
 											<li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li>
-											<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
 											<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
+											<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
 										</ul>
 									</td>
 								</tr>
 								<tr class="head_schedule" style="font-size:13px;line-height:17px;" align="center" >
 									<td rowspan="2" ><?php echo $tr->translate("TIME");?></td>
-									<td colspan="6" ><?php echo $tr->translate("DAYS");?></td>
+									<td colspan="<?php echo $amt_day?>" ><?php echo $tr->translate("DAYS");?></td>
 								</tr>
 								<tr class="head_schedule" style="font-size:13px;line-height:17px;" align="center" >
 								<?php foreach ($day as $key => $days){?>
@@ -155,14 +156,14 @@
 							if($time['from_hour']<=12){
 								if($title==0){?>
 								<tr  align="center" >
-									<td  align="center"  colspan="7" style="font-size:12px;padding: 5px 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("MORNING");?></td>
+									<td  align="center"  colspan="<?php echo $amt_day+1?>" style="font-size:12px;padding: 5px 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("MORNING");?></td>
 								</tr>
 								<?php $title=1;}
 							}else{
 								if($titles==0){
 							?>
 								<tr  align="center" >
-									<td  align="center" colspan="7" style="font-size:12px;padding: 5px 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("AFTERNOON");?></td>
+									<td  align="center" colspan="<?php echo $amt_day+1?>" style="font-size:12px;padding: 5px 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("AFTERNOON");?></td>
 								</tr>
 							<?php $titles=1;}
 							}
@@ -172,7 +173,7 @@
 								<?php foreach ($day as $key => $days){
 									$subjecNteacher = $db_sub->getSubjectTeacherByScheduleAndGroup($rs['year_id'],$rs['group_id'],$time['times'], $days['id'])
 								?>
-								<td width="15%" align="center">
+								<td width="<?php echo 90/$amt_day.'%';?>" align="center">
 									<?php 
 								 	if (!empty($subjecNteacher)){
 								 		if (!empty($subjecNteacher['subject_name'])){
@@ -196,7 +197,7 @@
 									$num++;
 							 ?>
 							 <tr>
-								<td style="font-size:12px;border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 18px;" colspan="7"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
+								<td style="font-size:12px;border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 18px;" colspan="<?php echo $amt_day+1?>"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
 							 </tr>
 							 <?php }}?>
 							 <tr >

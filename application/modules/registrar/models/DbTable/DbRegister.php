@@ -1190,7 +1190,50 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		return $db->fetchRow($sql);
     	}
     }
-    
+    public function getAllTermbyItemdetail($branch_id,$year,$item_id){
+    		$db=$this->getAdapter();
+    		$sql="SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
+    		$rs_pro=$db->fetchRow($sql);
+    		$item_type = $rs_pro['items_type'];
+    		
+    		$session_lang=new Zend_Session_Namespace('lang');
+    		$lang = $session_lang->lang_id;
+    		
+    		if($lang==1){// khmer
+    			$label = "name_kh";
+    		}else{ // English
+    			$label = "name_en";
+    		}
+    		
+    		$sql="SELECT
+    				tfd.`payment_term` AS id,
+    				(SELECT $label FROM rms_view WHERE `type`=6 AND key_code =tfd.`payment_term` AND `status`=1 LIMIT 1) as name
+    			FROM
+    				rms_tuitionfee AS tf,
+    				rms_tuitionfee_detail AS tfd
+    			WHERE
+    				tf.id = tfd.fee_id
+    				AND tf.status=1
+    				AND tfd.tuition_fee>0
+    				AND tfd.class_id = $item_id
+    				AND tf.branch_id = $branch_id ";
+    		if($item_type==1){//school fee
+    			$sql.=" AND tf.type =1 AND tf.id = $year ";
+    		}
+    		$rows = $db->fetchAll($sql);
+    		$options = '';
+    		if(!empty($rows))foreach($rows as $value){
+    			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
+    		}
+    		
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		if($item_type==3){
+    			$options .= '<option value="1" >'.$tr->translate('MONTHLY').'</option>';
+    		}
+    		$options .= '<option value="5" >'.$tr->translate('OTHER').'</option>';
+    		return $options;
+    		
+    }
     function getProductFee($service_id){
     	$db=$this->getAdapter();
     	$sql="select price,cost from rms_program_name where service_id=$service_id";

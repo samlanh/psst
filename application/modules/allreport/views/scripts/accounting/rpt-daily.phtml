@@ -140,6 +140,8 @@
 								<td colspan="2" valign="top">
 									<table class="content-data" align="center">
 										 <?php 
+										 	$total_cash = 0;$total_bank = 0;$total_cheque = 0;
+										 	$total_cashexp = 0;$total_bankexp = 0;$total_chequeexp = 0;
 										 	$i=0;
 										 	$total_income_dollar=0;
 										 	$total_expense_dollar = 0;
@@ -207,6 +209,15 @@
 									  	 			$net_amount = $net_amount + $rs['grand_total'];
 													$paid_amount = $paid_amount + $rs['paid_amount'];
 													$balance = $balance + $rs['balance_due'];
+													
+													if($rs['payment_method']==1){
+														$total_cash = $total_cash+$rs['paid_amount'];
+													}elseif($rs['payment_method']==2){
+														$total_bank = $total_bank+$rs['paid_amount'];
+													}
+													else{
+														$total_cheque = $total_cheque+$rs['paid_amount'];
+													}
 									  	 		} 
 										  	 ?>
 										  <?php } ?>
@@ -235,6 +246,14 @@
 									<?php $i=0;foreach($this->income as $row){ $i++;
 										if ($row['status']==1){
 											$total_income_dollar = $total_income_dollar + $row['total_amount'];
+											
+											if($row['payment_methodid']==1){
+												$total_cash = $total_cash+$row['total_amount'];
+											}elseif($row['payment_methodid']==2){
+												$total_bank = $total_bank+$row['total_amount'];
+											}else{
+												$total_cheque = $total_cheque+$row['total_amount'];
+											}
 										}
 									?>
 										<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,2);return false;" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
@@ -261,10 +280,13 @@
 									<table class="content-data" width="100%" align="center" >
 										<tr class="style-head" style="font-size:10px;" align="center">
 											<td><?php echo $tr->translate('N_O')?></td>
-											<td><?php echo $tr->translate('TITLE')?></td>
-											<td class="bold"><?php echo $tr->translate('INVOICE_NO')?></td>
+											<td><?php echo $tr->translate('EXPENSE_TITLE')?></td>
+											<td><?php echo $tr->translate('RECEIPT_NO')?></td>
+											<td><?php echo $tr->translate('INVOICE_NUM')?></td>
 											<td><?php echo $tr->translate('PAYMENT_METHOD')?></td>
+											<td><?php echo $tr->translate('CHEQUE_NO')?></td>
 											<td><?php echo $tr->translate('TOTAL')?></td>
+											<td><?php echo $tr->translate('RECEIVER')?></td>
 											<td><?php echo $tr->translate('FOR_DATE')?></td>
 											<td><?php echo $tr->translate('USER')?></td>
 										</tr>
@@ -272,14 +294,25 @@
 										<?php $i=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;
 										if ($row['status']==1){
 											$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
+											
+											if($row['payment_methodid']==1){
+												$total_cashexp = $total_cashexp+$row['total_amount'];
+											}elseif($row['payment_methodid']==2){
+												$total_bankexp = $total_bankexp+$row['total_amount'];
+											}else{
+												$total_chequeexp = $total_chequeexp+$row['total_amount'];
+											}
 										}
 										?>
 										<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,3);return false;" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
 											<td style=" text-align: left;">&nbsp;<?php echo $row['title']; ?>&nbsp;</td>
 											<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
+											<td><?php echo $row['external_invoice']; ?></td>
 											<td align="center"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['payment_type']; ?></a></td>	
+											<td><?php echo $row['cheque_no']; ?></td>
 											<td><?php echo number_format($row['total_amount'],2);?></td>
+											<td><?php echo $row['receiver']; ?></td>
 											<td><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 											<td><?php echo $row['name'];?></td>
 										</tr>
@@ -318,6 +351,23 @@
 								  			<td style="color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
 								  			<td style="font-weight:bold;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
 											<td colspan="7" style="border-bottom:5px double #000;color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
+								  		</tr>
+								  		<tr><td colspan="10"><br /></td></tr>
+								  		<tr>
+								  			<td colspan="10" style="border-bottom:1px solid #000;margin-top: 10px;"></td>
+								  		</tr>
+								  		<tr>
+								  			<td colspan="10">
+									  			<div style="width:33%;float: left;text-align: center;color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+									  				សាច់ប្រាក់&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
+									  			</div>
+									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+									  				ធនាគារ &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp,2);?>
+									  			</div>
+									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+									  				សែក&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp,2);?>
+									  			</div>
+									  		</td>
 								  		</tr>
 								    </table>
 									<?php }?>
@@ -458,7 +508,6 @@
 		});
 	}
 
-
 	var row=0;
 	var typereceipt=1;
 	var url="";
@@ -475,7 +524,6 @@
 					}else if(typereceipt==3){//Other Expense
 						url='<?php echo $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";?>';
 					}
-					
 				}
 				gotoAction();
 			},

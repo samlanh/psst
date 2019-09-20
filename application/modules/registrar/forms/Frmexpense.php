@@ -112,8 +112,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 // 		$_db = new Application_Model_DbTable_DbGlobal();
 // 		$invoice_no= $_db->getExpenseRecieptNo();
 // 		$db = new Registrar_Model_DbTable_DbIncome();
-// 		$invoice_no = $db->getInvoiceNo();
-// 		$invoice->setValue($invoice_no);
+
 		
 		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
 		$payment_method->setAttribs(array(

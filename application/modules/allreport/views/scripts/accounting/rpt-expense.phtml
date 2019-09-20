@@ -4,11 +4,11 @@
 	$frm=$this->form_search;
 ?>
 <style>
-.hover:hover{ background:#ccc;}
-table.content-data tr.style-head,
-table.tb-footer tr.style-head {
-   font-weight: bold !important;
-}
+	.hover:hover{ background:#ccc;}
+	table.content-data tr.style-head,
+	table.tb-footer tr.style-head {
+	   font-weight: bold !important;
+	}
 </style>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
@@ -87,17 +87,12 @@ table.tb-footer tr.style-head {
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 					<td width="70%" align="center">
 					    <span style="color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_OTHER_INCOME_EXPENSE')?></span><br />
 						<span style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
-					<td width="15%" align="center">
-					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
+					<td width="15%" align="center"></td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
@@ -106,11 +101,13 @@ table.tb-footer tr.style-head {
 							<tr class="style-head" align="center">
 								<td><?php echo $tr->translate('N_O')?></td>
 								<td><?php echo $tr->translate('BRANCH')?></td>
-								<td><?php echo $tr->translate('RECEIVER')?></td>
 								<td><?php echo $tr->translate('EXPENSE_TITLE')?></td>
-								<td><?php echo $tr->translate('INVOICE_NO')?></td>
+								<td><?php echo $tr->translate('RECEIPT_NO')?></td>
+								<td><?php echo $tr->translate('INVOICE_NUM')?></td>
 								<td><?php echo $tr->translate('PAYMENT_METHOD')?></td>
+								<td><?php echo $tr->translate('CHEQUE_NO')?></td>
 								<td><?php echo $tr->translate('TOTAL')?></td>
+								<td><?php echo $tr->translate('RECEIVER')?></td>
 								<td><?php echo $tr->translate('DESCRIPTION')?></td>
 								<td><?php echo $tr->translate('FOR_DATE')?></td>
 								<td><?php echo $tr->translate('USER')?></td>
@@ -127,18 +124,22 @@ table.tb-footer tr.style-head {
 							<tr class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;" align="center" <?php if ($row['status']==0){?>style="background: #ffd9d9;"<?php }?> >
 								<td><?php echo $key;?></td>
 								<td><?php echo $row['branch_name']; ?></td>
-								<td><?php echo $row['receiver']; ?></td>
 								<td align="left"><?php echo $row['title']; ?></td>
 								<td><?php echo $row['invoice']; ?></td>
+								<td><?php echo $row['external_invoice']; ?></td>
 								<td><?php echo $row['pay']; ?></td>
-								<td class="bold" align="right"><?php echo '$ '.$row['total_amount'];?></td>
+								<td><?php echo $row['cheque_no']; ?></td>
+								<td class="bold" align="right"><?php echo $row['total_amount'];?></td>
+								<td><?php echo $row['receiver']; ?></td>
 								<td><?php echo $row['description'];?></td>
 								<td><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 								<td><?php echo $row['first_name'];?></td>
 							</tr>	
 							<?php }}?>
 							<tr style="border-left: 1px solid #fff; border-bottom: 1px solid #fff; border-right: 1px solid #fff;">
-								<td colspan="10" align="right"><?php echo $tr->translate("TOTAL");?> <strong> $&nbsp;&nbsp;<?php echo number_format($total_expense,2);?></strong></td>
+								<td colspan="7"></td>
+								<td align="right" style="background:#e8e9e9;padding:5px;"><strong ><?php echo $tr->translate("TOTAL");?>  $&nbsp;&nbsp;<?php echo number_format($total_expense,2);?></strong></td>
+								<td colspan="4"></td>
 							</tr>	
 						</table>
 					</td>

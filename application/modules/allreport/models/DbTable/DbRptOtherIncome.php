@@ -20,11 +20,12 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	}
     	$sql = "SELECT 
     				*,
-    				(SELECT $branch from rms_branch where br_id = branch_id) as branch_name,
-    				(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income) AS cate_income, 
-	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income) as income_category,
-	    			(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
-	    			(select CONCAT(first_name) from rms_users as u where u.id = user_id)  as name
+    				 payment_method AS payment_methodid,
+    				(SELECT $branch from rms_branch where br_id = branch_id LIMIT 1) as branch_name,
+    				(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income, 
+	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income LIMIT 1) as income_category,
+	    			(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method LIMIT 1) AS payment_method,
+	    			(SELECT CONCAT(first_name) from rms_users as u where u.id = user_id LIMIT 1)  as name
     			 FROM 
     				ln_income  
     			WHERE 

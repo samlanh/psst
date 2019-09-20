@@ -149,11 +149,7 @@ class Registrar_Model_DbTable_Dbcashcount extends Zend_Db_Table_Abstract
 // 		}
 // 		return $pre.$id;
 // 	}
-// 	function getInvoiceNo(){
-// 		$db = $this->getAdapter();
-// 		$sql = " select count(id) from ln_income ";
-// 		$amount = $db->fetchOne($sql);
-		
+	
 		
 // 		//return 
 // 	}

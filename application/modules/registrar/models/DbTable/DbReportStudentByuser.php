@@ -159,6 +159,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.balance_due,
 						sp.note,
 						sp.is_closed,
+						sp.payment_method,
 						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
 				  FROM
 						rms_student AS s,

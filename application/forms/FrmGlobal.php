@@ -437,7 +437,7 @@ class Application_Form_FrmGlobal{
 										</tr>
 										<tr>
 											<td align='center'>
-												<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:50px;'><label id='lb_byuser'></label>";
+												<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:40px;'><label id='lb_byuser'></label>";
 												  	
 												$str.="</div>
 												Signature/Name/Date
@@ -463,8 +463,8 @@ class Application_Form_FrmGlobal{
 				    <td valign='top' colspan='3'>
 					    <div id='printfooter' style='display:block;font-family:khmer os battambang'>
 			        		<table width='100%' style='background: #fff;border-top: 2px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'> 
-								<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:10px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
-									<td width='100%'> &#9993; <label id='lbl_email' style='width:20%;display:in-line;margin-right:10px;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;margin-right:10px;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
+								<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
+									<td width='100%'>&#9742; <label id='lbl_branchphone' style='width:20%;display:in-line;'></label> &#9993; <label id='lbl_email' style='width:20%;display:in-line;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
 								</tr>
 							</table>
 			        	</div>

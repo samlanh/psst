@@ -43,15 +43,14 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 	   $db=$this->getAdapter();
 	   $sql="SELECT e.* ,
 				(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id =e.branch_id LIMIT 1) AS branch_name,
-				u.user_name ,u.first_name,e.receiver,
-				(select name_en from rms_view where rms_view.type=8 and key_code=payment_type) as payment_type,
+				u.user_name ,u.first_name,e.receiver,e.cheque_no,e.external_invoice,
+				(select name_en from rms_view where rms_view.type=8 and key_code=payment_type LIMIT 1) as payment_type,
 				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1) AS pay
 			FROM ln_expense AS e ,
 				rms_branch AS b ,
-				 rms_users AS u 
+				rms_users AS u 
 			WHERE b.br_id=e.branch_id 
-	   			AND e.user_id=u.id
-	   			 ";
+	   			AND e.user_id=u.id ";
 	   
 	   $where="";
 	   $from_date =(empty($search['start_date']))? '1': " e.date  >= '".$search['start_date']." 00:00:00'";
@@ -62,6 +61,7 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 	   	$s_where = array();
 	   	$s_search = addslashes(trim($search['txtsearch']));
 	   	$s_where[] = " e.invoice LIKE '%{$s_search}%'";
+	   	$s_where[] = " e.external_invoice LIKE '%{$s_search}%'";
 	   	$s_where[] = " e.receiver LIKE '%{$s_search}%'";
 	   	$s_where[] = " e.title LIKE '%{$s_search}%'";
 	   	$s_where[] = " e.description LIKE '%{$s_search}%'";

@@ -31,7 +31,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$this->view->adv_search=$search;
     		$rs_rows= $db->getAllStudentRegister($search);
     		$glClass = new Application_Model_GlobalClass();
-    		//$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
+    		
     		$list = new Application_Form_Frmtable();
     		
     		$collumns = array("BRANCH","RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","FINE",
@@ -67,9 +67,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
+      
        $this->view->rsbranch = $_db->getAllBranch();
        $this->view->exchange_rate = $_db->getExchangeRate();
-       $this->view->all_paymentterm = $_db->getAllTerm();
+      
        $this->view->rs_type = $_db->getAllItems();
        $this->view->rsdiscount = $_db->getAllDiscountName();
        $this->view->rs_paymenttype = $_db->getViewById(8,null);
@@ -82,6 +83,14 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $frmreceipt = new Application_Form_FrmGlobal();
 	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();
+	   
+	   $dbclass = new Application_Model_GlobalClass();
+// 	   print_r($dbclass->getAllPayMentTermOption());
+	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
+	   
+	 //  print_r($dbclass->getAllPayMentTermOption());
+	   
+	   
 // 	   print_r($frmreceipt->getFormatReceipt());exit();
 	   
 // 	   $db = new Application_Model_DbTable_DbGlobal();
@@ -449,5 +458,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
+	function gettermbyserviceAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$term_result = $db->getAllTermbyItemdetail($data['branch_id'],$data['year'],$data['items_id']);
+			print_r(Zend_Json::encode($term_result));
+			exit();
+		}
+	}
 }

@@ -3,7 +3,6 @@
 class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 {
    public static function getInvoiceNo(){	
-		//return strtoupper(uniqid());
 		$sub=substr(uniqid(rand(10,1000),false),rand(0,10),5);
 		$date= new Zend_Date();
 		$head="W".$date->get('YY-MM-d/ss');
@@ -13,60 +12,11 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	$option = '<option value="">--- Select ---</option>';
    	foreach($db->fetchAll($sql) as $r){
-   			
    		$option .= '<option value="'.$r[$value].'">'.htmlspecialchars($r[$display], ENT_QUOTES).'</option>';
    	}
    	return $option;
    }
-   public function getYesNoOption(){
-   	//Select Public for report
-   	$myopt = '<option value="">---Select----</option>';
-   	$myopt .= '<option value="Yes">Yes</option>';
-   	$myopt .= '<option value="No">No</option>';
-   	return $myopt;
-   }	
-   public function getImgAttachStatus($rows,$base_url, $case=''){
-		if($rows){			
-			$imgattach='<img src="'.$base_url.'/images/icon/attachment.png"/>';
-			$imgnone='<img src="'.$base_url.'/images/icon/no-attachment.png"/>';
-			if($case !== ''){
-				$imgattach='<img src="'.$base_url.'/images/icon/attachment.png"/>';
-				$imgnone='<img src="'.$base_url.'/images/icon/no-attachment.png"/>';
-			}
-			 
-			foreach ($rows as $i =>$row){
-				if(is_dir('docs/case_note_id_'.$row['note_id'])){
-					$rows[$i]['note_id'] = $imgattach;
-				}
-				else{
-					$rows[$i]['note_id'] = $imgnone;
-				}
-			}
-			 
-		}		
-		return $rows;
-	}
-	/**
-	 * add element "delete" to $rows
-	 * @param array $rows
-	 * @param string $url_delete
-	 * @param string $base_url
-	 * @return array $rows
-	 */
-	public static function getImgDelete($rows,$url_delete,$base_url){
-		foreach($rows as $key=>$row){
-			$url = $url_delete.$row["id"];
-			$row['delete'] = '<a href="'.$url.'"><img src="'.BASE_URL.'/images/icon/cross.png"/></a>';
-			$rows[$key] = $row;
-		}
-		return $rows;
-	}
-	
-	/**
-	 * Get Day name With multiple Languages
-	 * @param string $key
-	 * @var $key ('mo', 'tu', 'we', 'th', 'fr', 'sa', 'su')
-	 */
+  
 	public function getDayName($key = ''){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$day_name = array(
@@ -84,17 +34,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		return  $day_name[$key];
 	}
 	
-	/**
-	 * Get all Hour per day
-	 * @param int $key
-	 * @return multitype:string |Ambigous <string>
-	 * @var $key = [0-23]
-	 */
-	public function getHours($key = ''){
-		// 		$hours='';
-		// 		$time = 7;
-	
-		// 		echo $hours;exit();
+	public function getHours($key = ''){		
 		$hours ='<option value="07.00">07:00 AM </option>'.
 				'<option value="07.15">07:15 AM </option>'.
 				'<option value="07.30">07:30 AM </option>'.
@@ -144,40 +84,9 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		return  $hours;
 	}
 	
-	/**
-	 * Generate Age for child
-	 */
-
-	public function getSelectBoxOptions($options){
-		$sl_opt = "";
-		foreach($options as $key=>$opt){
-			$sl_opt .= "<option value='".$key."'>".$opt."</option>";
-		}
-		return $sl_opt;
-	}	
 	
-	/**
-	 * get phone number in format
-	 * @param string $str
-	 * @return string
-	 */
-	public static function getPhoneNumber($str)
-	{
-		$str = str_replace(" ", "", $str);
-		$firt = substr($str, 0,3);
-		$second = substr($str, 3, strlen($str)-3);
-		$phone = $firt." ".$second;
-		return $phone;
-	}
 	
-	/**
-	 * Generate navigation for use global
-	 * @author channy
-	 * @param $url current of action
-	 * @param $frm form for use cover of control 
-	 * @param $limit number of limit record
-	 * @return $record_count number of record
-	 */
+	
 		public function getList($url,$frm,$start,$limit,$record_count){
 			$page = new Application_Form_FrmNavigation($url, $start, $limit, $record_count);
 			$page->init($url, $start, $limit, $record_count);//can wrong $form
@@ -190,15 +99,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 					"result_row"=>$result_row);
 			return $arr;
 		}
-		public function getAllMetionOption(){
-			$_db = new Application_Model_DbTable_DbGlobal();
-			$rows = $_db->getAllMention();
-			$option = '';
-			if(!empty($rows))foreach($rows as $key => $value){
-				$option .= '<option value="'.$key.'" >'.htmlspecialchars($value, ENT_QUOTES).'</option>';
-			}
-			return $option;
-		}
+		
 		public function getAllPayMentTermOption(){
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$rows = $_db->getAllPaymentTerm();
@@ -252,79 +153,43 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 					else{
 						$rows[$i]['status'] = $imgnone;
 					}
-					if($type!=null){
-						if($row['type'] == 1){
-							$rows[$i]['type']="Service" ;
-						}
-						else{
-							$rows[$i]['type']="Program" ;
-						}
-					}
 				}
 			}
 			return $rows;
 		}
-		public function getServiceProgramType($rows,$base_url, $case=''){
-			if($rows){
-				foreach ($rows as $i =>$row){
-					if($row['type'] == 1){
-						$rows[$i]['type']="Service" ;
-					}
-					else{
-						$rows[$i]['type']="Program" ;
-					}
-				}
-			}
-			return $rows;
-		}
-		public function getGernder($rows,$base_url, $case=''){
-			if($rows){
-				foreach ($rows as $i =>$row){
-					if($row['sex'] == 1){
-						$rows[$i]['sex']="M" ;
-					}
-					else{
-						$rows[$i]['sex']="F" ;
-					}
-				}
-			}
-			return $rows;
-		}
+		
 		public function getGetPayTerm($rows,$base_url, $case=''){
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			if($rows){
 				foreach ($rows as $i =>$row){
 					if($row['payment_term'] == 2){
-						$rows[$i]['payment_term']=$tr->translate(' ត្រីមាស');
+						$rows[$i]['payment_term']=$tr->translate('TERM');
 					}
 					else if($row['payment_term'] == 1){
 						$rows[$i]['payment_term']=$tr->translate('MONTHLY');
 					}
 					else if($row['payment_term'] == 3){
-						$rows[$i]['payment_term']=$tr->translate(' ឆមាស');
+						$rows[$i]['payment_term']=$tr->translate('SEMESTER');
 					}
 					else if($row['payment_term'] == 4){
-						$rows[$i]['payment_term']=$tr->translate('ឆ្នាំ');
+						$rows[$i]['payment_term']=$tr->translate('YEAR');
 					}
 				}
 			}
 			return $rows;
 		}
 		public function getSession($rows,$base_url, $case=''){
-			$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
-			$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			if($rows){
 				foreach ($rows as $i =>$row){
 					if($row['session_id'] == 1){
-						$rows[$i]['session_id']=$tr->translate(' ព្រឹក');
-						$rows[$i]['status']= $imgtick;
+						$rows[$i]['session_id']=$tr->translate('MORNING');
 					}
 					else if($row['session_id'] ==2){
-						$rows[$i]['session_id']=$tr->translate('រសៀល');
+						$rows[$i]['session_id']=$tr->translate('AFTERNOON');
 					}
 					else if($row['session_id'] == 3){
-						$rows[$i]['session_id']=$tr->translate(' ល្ញាច');
+						$rows[$i]['session_id']=$tr->translate('EVENING');
 					}
 					else if($row['session_id'] == 4){
 						$rows[$i]['session_id']=$tr->translate('ចុងសបា្តហ៏');
@@ -336,7 +201,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		public function getsunjectOption(){
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$rows = $_db->getAllsubject();
-			//array_unshift($rows, array('id'=>-1,'subject_name'=>"Add New"));
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['subject_name'], ENT_QUOTES).'</option>';

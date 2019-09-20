@@ -518,15 +518,16 @@ function getAllgroupStudyNotPass($action=null){
    		return $opt_term;
    	}
    	$opt_term = array(
-//    			0=>$this->tr->translate('PLEASE_SELECT'),
    			1=>$this->tr->translate('MONTHLY'),
    			2=>$this->tr->translate('TERM'),
    			3=>$this->tr->translate('SEMESTER'),
    			4=>$this->tr->translate('YEAR'),
    			
    	);
-   	if($id==null)return $opt_term;
-   	else return $opt_term[$id]; 
+   	if($id==null){return $opt_term;}
+   	else {
+   		return $opt_term[$id]; 
+   	}
    }
    public function getAllServicePayment($id=null){
    	$opt_term = array(
@@ -1546,8 +1547,8 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getAllTerm(){
   	$db = $this->getAdapter();
-  	$SQL="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
-  	return $db->fetchAll($SQL);
+  	$sql="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
+  	return $db->fetchAll($sql);
   }
   function getTestStudentId($branch=null){
   	$db = $this->getAdapter();
@@ -1975,7 +1976,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	for($i = $length;$i<4;$i++){
 	  		$pre.='0';
 	  	}
-	  	return $pre.$new_acc_no;
+	  	return $pre.$new_acc_no."A";
   }
   function getStudentProfileblog($student_id,$data_from=1){
   	$db = $this->getAdapter();

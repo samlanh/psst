@@ -472,7 +472,7 @@ require(["dojo/ready"], function(ready){
 		class: 'fullside', 
 		style:'height: 30px;',
 		onChange: function() {  
-			addRow();
+			removeOption();
 		}
 	}, "item");
 	
@@ -767,7 +767,7 @@ var no = 0;
 var title = 0;
 tmp = '';
 temp='';
-//date_format = '"dd/MM/yyyy"';
+term_option = '<?php echo $this->term_option;?>';
 function addRow() {
 		study_year = dijit.byId('study_year').get('value');
 		if(study_year==''){
@@ -787,6 +787,8 @@ function addRow() {
 		}
 		label = dijit.byId("item").attr('displayedValue');
 		service_id = dijit.byId("item").get("value");
+
+		
 		if(service_id ==''){return false;}
 		dijit.byId("item").attr('value','');
 		
@@ -815,11 +817,7 @@ function addRow() {
 			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="30px" align="center">'+no+'</td>';
 			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+label+'<label><input type="hidden" value="'+service_id+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
-			template+='<td style="width:180px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
-				<?php if(!empty($this->all_paymentterm))foreach($this->all_paymentterm as $term){?>
-					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
-				<?php }?>
-			template+='</select></td>';
+			template+='<td style="width:180px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >'+term_option+'</select></td>';
 			column = 0;
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
@@ -852,6 +850,39 @@ function addRow() {
 		});
 		getservicefee(col);
 		getValidate(col);
+		
+		
+	    
+}
+var urlget_removeoption = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'gettermbyservice')); ?>";
+function removeOption(service_id,academic_year){
+	academic_year = dijit.byId('study_year').get('value');
+	if(study_year==''){
+		alert("Select Year");
+		dijit.byId('study_year').focus();return false;
+	}
+	service_id = dijit.byId("item").get("value");
+	if(service_id ==''){return false;}
+	
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id==''){dijit.byId('branch_id').focus();return false;}
+	
+	dojo.xhrPost({
+		url:urlget_removeoption,
+		content:{
+			'branch_id':branch_id,
+			'year':academic_year,
+			'items_id':service_id,
+		},
+		handleAs:"json",
+		load: function(data){
+			term_option = data;
+			addRow();
+	},
+	error: function(err){
+		
+	}
+});
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -1169,7 +1200,7 @@ function printSave(){
 							  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
 								  item_label='School Fee '+item_label;
 							  }
-							  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
+							  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 
 							  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
 							  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
 							  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
@@ -1196,7 +1227,7 @@ function printSave(){
 								  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
 							  }
 							  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-							  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+							  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 							  temp+='</tr>';
 							  i++;
 							}
@@ -1270,7 +1301,7 @@ function getbranchinfo(){
 				dojo.byId("lbl_address").innerHTML = data.br_address;
 				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
 				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
-				
+				dojo.byId("lbl_branchphone").innerHTML = data.branch_tel+', '+data.branch_tel1;
 				dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
 			},
 			error: function(err) {

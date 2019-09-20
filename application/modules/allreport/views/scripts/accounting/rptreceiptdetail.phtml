@@ -91,13 +91,11 @@ function setDatatoReceipt(){
 							term_label = '';//dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 						}
 					  temp+='<tr style="font-size:11px;height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-					  item_label = '<?php echo $label.$rs['service'];?>' ;
-					  /*if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
-						  item_label='School Fee '+item_label;
-					  }*/
-					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;'+item_label+'</td>'; 
+					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
+					 
+					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 
 					  term = '<?php if ($rs['is_onepayment']!=1) { echo $rs['payment_term']; }else{ echo "-";}?>';
-					  temp+='<td align="center" style="border:1px solid #000;">'+term+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;line-height:10px;">'+term+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+<?php echo number_format($rs['qty'],2)?>+'</td>';
 					  	fee='<?php echo number_format($rs['fee'],2);?>';
 					  temp+='<td align="center" style="border:1px solid #000;">'+fee+'</td>';
@@ -111,8 +109,8 @@ function setDatatoReceipt(){
 					  temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
 					  	period='<?php if($rs['is_onepayment']!=1){echo date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }else{echo'&nbsp;';}?>';		  				  
 					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</td>';
-					  	note='<?php echo $rs['note'];?>';
-					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+note+'</td>';
+					  note = '<?php echo addslashes($rs['note']);?>';
+					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+note+'</td>';
 					  temp+='</tr>';
 					  i++;
 					<?php } ?>
@@ -162,6 +160,7 @@ function getbranchinfo(){
 				dojo.byId("lbl_address").innerHTML = data.br_address;
 				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
 				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
+				dojo.byId("lbl_branchphone").innerHTML = data.branch_tel+', '+data.branch_tel1;
 				dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
 			},
 			error: function(err) {

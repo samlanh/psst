@@ -125,11 +125,6 @@ class Registrar_Model_DbTable_DbInternalincomeincome extends Zend_Db_Table_Abstr
 // 		}
 // 		return $pre.$id;
 // 	}
-// 	function getInvoiceNo(){
-// 		$db = $this->getAdapter();
-// 		$sql = " select count(id) from ln_internalincome ";
-// 		$amount = $db->fetchOne($sql);
-// 	}
 	
 	function getCateIncome(){ // $type = rms_view type
 		$db=$this->getAdapter();

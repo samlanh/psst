@@ -102,7 +102,9 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     						$arr['techer_id'] =  "";
     					}
 	    				$this->_name='rms_group_reschedule';
-	    				$this->insert($arr);
+	    				if($_data['type_'.$i."_".$day['id']]==1){ // 1=study , 2=no study
+	    					$this->insert($arr);
+	    				}
     				}
     			}
     		}
@@ -169,7 +171,10 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     						$arr['techer_id'] =  "";
     					}
     					$this->_name='rms_group_reschedule';
-    					$this->insert($arr);
+    					
+    					if($_data['type_'.$i."_".$day['id']]==1){ // 1=study , 2=no study
+	    					$this->insert($arr);
+	    				}
     				}
     			}
     		}

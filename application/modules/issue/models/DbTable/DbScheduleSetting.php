@@ -340,10 +340,10 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    				$teacherSchedule=$scheduleDay['techer_id'];
    				$idScheduleDetail=$scheduleDay['id'];
    			}else{
-	   			if ($day['id']==7){
+	   			//if ($day['id']==7){
 	   				$selected = 'selected="selected"';
 	   				$readOnly = 'readOnly="readOnly"';
-	   			}
+	   			//}
    			}
    			$keyindex = $index."_".$day['id'];
    			$str.='<td align="center">

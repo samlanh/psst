@@ -169,6 +169,12 @@
                				</tr>
                			</thead>
 						<tbody id="table_row"></tbody>
+						<tr>
+							<td colspan="3" align="right"><?php echo $tr->translate("TOTAL_SUBJECT");?> :&nbsp;&nbsp;</td>
+							<td ><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.TextBox" /></td>
+							<td ><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.TextBox" /></td>
+							<td colspan="3" ></td>
+						</tr>
 					</table>
     			</div>
     			<div class="clearfix"></div>
@@ -647,8 +653,8 @@ function Initailize() {
 				template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="4%" align="center">'+no+'</td>';
 				template+='<td width="22%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subjectold+'</select></td>';
-				template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
-				template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
+				template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject'+col+'" value="1" type="text"></td>';	
+				template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 				template+='<td width="10%"><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'"  type="text"></td>';
 				template+='<td width="15%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 				template+=teacher_optionini;  
@@ -674,6 +680,7 @@ function Initailize() {
 			dijit.byId('group_note_'+col).attr('value',"<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rows['note'])));?>");
 			dijit.byId('teacher_'+col).attr('value','<?php echo $rows['teacher'];?>');
 	<?php }}?>
+	calculateTotalSubject();
 }
 function popupTeacher(key){
 }
@@ -683,8 +690,8 @@ function addRow() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td width="22%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
-		template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
-		template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
+		template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject'+col+'" value="1" type="text"></td>';
+		template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
 		template+='<td width="15%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
@@ -702,6 +709,7 @@ function addRow() {
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
+	calculateTotalSubject();
 }
 function deleteRecord(index) {
 	var identity = $('#identity1').val();
@@ -712,6 +720,7 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity1').val(strings);
 	dojo.query("#row"+index).remove();
+	calculateTotalSubject();
 }
 
 function checkSubject(index){
@@ -763,8 +772,8 @@ function getSubjectByDegree(){
 							template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 							template+='<td width="4%" align="center">'+no+'</td>';
 							template+='<td width="22%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
-							template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
-							template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
+							template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject'+col+'" value="1" type="text"></td>';
+							template+='<td width="10%"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 							template+='<td width="10%"><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'"  type="text"></td>';
 							template+='<td width="15%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 							template+=teacher_option;  
@@ -792,12 +801,30 @@ function getSubjectByDegree(){
 			}
 		});
 }
-</script>
-<script>
-	function hideDialogGrade() {		
-		dijit.byId("popup_grate").hide();
+
+function calculateTotalSubject(){
+	//alert(1);
+	var identity = $('#identity1').val();
+	var total_amt_subject_month=0;
+	var total_amt_subject_semester=0;
+	if(identity !=''){
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			amt_subject_month = dijit.byId("amount_subject"+arrays[i]).get("value");
+			amt_subject_semester = dijit.byId("amount_subject_semester"+arrays[i]).get("value");
+			total_amt_subject_month = total_amt_subject_month + amt_subject_month;
+			total_amt_subject_semester = total_amt_subject_semester + amt_subject_semester;
+		}
+		dijit.byId("total_subject_month").attr("value",total_amt_subject_month);
+		dijit.byId("total_subject_semester").attr("value",total_amt_subject_semester);
 	}
-	function hideDialogDegree() {		
-		dijit.byId("popup_add_dept").hide();
-	}
+}
+
+
+function hideDialogGrade() {		
+	dijit.byId("popup_grate").hide();
+}
+function hideDialogDegree() {		
+	dijit.byId("popup_add_dept").hide();
+}
 </script>	

@@ -42,6 +42,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					'schoolOption'   	=> $_data['schoolOption'],
 					'is_parent'   		=> $_data['par'],
 			        'shortcut'			=> $_data['score_percent'],
+					'type_subject'		=> $_data['type_subject'],
 					'user_id'	  		=> $this->getUserId()
 			);
 			return  $this->insert($_arr);
@@ -60,6 +61,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'is_parent'   		=> $_data['par'],
 				'schoolOption'   	=> $_data['schoolOption'],
 				'shortcut'			=> $_data['score_percent'],
+				'type_subject'		=> $_data['type_subject'],
 				'user_id'	  		=> $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("id=?", $id);

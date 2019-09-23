@@ -1423,7 +1423,7 @@ function getAllgroupStudyNotPass($action=null){
   }
    
   
-  public function getAllSubjectName($schooloption=null){
+  public function getAllSubjectName($schooloption=null,$typesubject=0){
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
   	$field = 'subject_titleen';
@@ -1462,12 +1462,16 @@ function getAllgroupStudyNotPass($action=null){
   		}
   		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
   	}
+  	if ($typesubject==1){
+  		$sql .=' AND type_subject=1 ';
+  	}
+  	
   	$sql.=" ORDER BY $field ASC";
   	return $db->fetchAll($sql);
   }
   
   public function getAllSubjectStudy($schoolOption=null){
-  	return $this->getAllSubjectName();
+  	return $this->getAllSubjectName($schoolOption,1);
 //   	$db = $this->getAdapter();
   
 //   	$lang = $this->currentlang();

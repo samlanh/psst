@@ -58,6 +58,13 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 				0=>$this->tr->translate("DEACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
+		$_type_subject=  new Zend_Dojo_Form_Element_FilteringSelect('type_subject');
+		$_type_subject->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_type_subject_opt = array(
+				1=>$this->tr->translate("STUDY_SUBJECT"),
+				2=>$this->tr->translate("NOT_STUDY_SUBJECT"));
+		$_type_subject->setMultiOptions($_type_subject_opt);
+		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
 		if(!empty($data)){
@@ -66,9 +73,10 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 			$_subject_kh->setValue($data['subject_titleen']);
 			$_status->setValue($data['status']);
 			$_schoolOption->setValue($data['schoolOption']);
+			$_type_subject->setValue($data['type_subject']);
 			//$_parent->setValue($data['parent']);
 		}
-		$this->addElements(array($_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption));
+		$this->addElements(array($_type_subject,$_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption));
 		
 		return $this;
 		

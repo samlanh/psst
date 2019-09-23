@@ -313,7 +313,7 @@ class Global_GroupController extends Zend_Controller_Action {
     
     		if (!empty($schoolOption)){
     			$db = new Application_Model_DbTable_DbGlobal();
-				$subject = $db->getAllSubjectStudy($schoolOption);
+				$subject = $db->getAllSubjectName($schoolOption);
 				array_unshift($subject, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 				print_r(Zend_Json::encode($subject));

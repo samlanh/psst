@@ -131,7 +131,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			}else if (!empty($data['branch_id'])){
 				$data['schoolOption'] = $db->getSchoolOptionListByBranch($data['branch_id']);
 			}
-			$subject = $db->getAllSubjectName($data['schoolOption']);
+			$subject = $db->getAllSubjectName($data['schoolOption'],1); // 1=select only study subject
 			array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			print_r(Zend_Json::encode($subject));
 			exit();

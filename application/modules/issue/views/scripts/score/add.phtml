@@ -300,7 +300,7 @@ function filterStudent(){
 						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_semester);
 						}
 	      			  no++;
-	      			  stringsname = subject[j].subject_titleen.replace(' ','');
+	      			  stringsname = subject[j].name.replace(' ','');
 		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
 				  temp+='<td  class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';

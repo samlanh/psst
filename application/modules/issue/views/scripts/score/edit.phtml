@@ -302,7 +302,7 @@ function filterStudentOld(){
 	no=0;
 		<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ ?>
 			  no++;
-			  stringsname = '<?php echo str_replace(" ", "", $subj['subject_titleen'])?>';
+			  stringsname = '<?php echo str_replace(" ", "", $subj['name'])?>';
 			  <?php 
 			  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
 			  ?>

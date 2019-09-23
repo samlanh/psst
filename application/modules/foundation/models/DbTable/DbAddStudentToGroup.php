@@ -123,7 +123,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 						'user_id'	=>$this->getUserId(),
 						'group_id'	=>$_data['group'],
 						'stu_id'	=>$stu_id,
-						'status'	=>$_data['status'],
+						'status'	=>1,
 						'date'		=>date('Y-m-d')
 					);
 					$this->_name='rms_group_detail_student';

@@ -522,16 +522,11 @@ label.title {
 												   </td>
 												</tr>
 												<tr class="line"><td colspan="3"></td></tr>
-												<tr>
-													<td>&nbsp;</td>
-												</tr>
 												<tr class="head">
 												   <td colspan="3" align="center">
-												   		<h2 style="color: #4839bd; font-size:15px;font-weight: initial;font-family:Times New Roman,'Khmer OS Muol Light';" ><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></h2>
-												   		<!-- <h2 class="green" style="font-size:18px;font-weight: bold;font-family:'Times New Roman','Khmer OS Muol Light';" >Schedule Study</h2> -->
+												   		<h2 style="color: #4839bd; font-size:13px;font-weight: initial;font-family:Times New Roman,'Khmer OS Muol Light';" ><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></h2>
 												   </td>
 												</tr>
-												
 											<style>
 												table tr th{
 													border: 1px solid #000;	
@@ -559,10 +554,12 @@ label.title {
 												ul.subject {
 													list-style: none;
 													padding: 0;
-													line-height: 20px;
+													line-height: 18px;
+													font-size:12px;
 													margin: 0;
 												}
 												tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+												table.main_table {margin-top:-25px;}
 											</style>
 												<tr>
 													<td colspan="3">
@@ -574,7 +571,7 @@ label.title {
 														$amt_day = count($day);
 														
 														?>
-														<table class="main_table" border="1" cellpadding="5"​ style="color: #4839bd; margin:0 auto;width:100%; border-collapse: collapse;white-space: normal;" >
+														<table class="main_table" border="1" cellpadding="2"​ style="color: #4839bd; width:100%; border-collapse: collapse;white-space: normal;" >
 															<thead>
 																<tr>
 																	<td align="left" colspan="<?php echo $amt_day+1?>" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
@@ -630,30 +627,25 @@ label.title {
 																	<?php }?>
 																</tr>
 														 <?php }?>
-														 
-														 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
-														 	if($rs_list['total_hour']>1){
-														        $h_label='hrs';
-														 	}else{
-														 		$h_label='hr';
-														 	}
-														 	if(!empty($rs_list['subject_id'])){
-																$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
-																$num++;
-														 	?>
 															 <tr>
-																<td colspan="<?php echo $amt_day+1?>" style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 25px;"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
+																<td colspan="<?php echo $amt_day+1?>" style="line-height: 20px;font-size:12px;border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;">
+																	 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
+																		if($rs_list['total_hour']>1){
+																			$h_label='hrs';
+																		}else{
+																			$h_label='hr';
+																		}
+																		if(!empty($rs_list['subject_id'])){
+																			$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
+																			$num++;
+																		?>
+																		 
+																			<div><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;?></div>
+																		 
+																	 <?php }}?>
+																</td>
 															 </tr>
-														 <?php }}?>
-														 <!-- 
-														  <tr >
-														 	<td colspan="7" align="right" style="border: 1px solid #fff;">
-														 	Phnom Penh,&nbsp;<?php //echo date('d F Y');?>
-														 	</td>
-														 </tr>
-														  -->
-														</table>	
-														
+														 </table>	
 														<br/>
 													<?php  }?>
 													</td>

@@ -141,11 +141,9 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 						'branch_id'=>$_data['branch_id'],
 						'stu_id'	=>$_data['studentid'],
 						'from_group'=>$_data['from_group'],
-						
 						'to_branch'=>$_data['to_branch'],
 						'to_group'	=>$_data['to_group'],
 						'moving_date'=>$_data['moving_date'],
-						
 						'reason'		=>$_data['reason'],
 						'note'		=>$_data['note'],
 						'user_id'	=>$this->getUserId(),
@@ -156,6 +154,16 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 				$this->_name='rms_student_change_branch';
 				$id = $this->insert($_arr);
 				
+				//update old group student
+				$this->_name='rms_group_detail_student';
+				$arr= array(
+						'group_id'=>$_data['from_group'],
+						'is_pass'=>1,
+						'stop_type'=>1,
+						'note'=>'Student Change Branch'
+				);
+				$where="stu_id=".$stu_id." and is_pass=0 and group_id=".$_data['from_group'];
+				$this->update($arr, $where);
 				
 				if (!empty($_data['to_group'])){
 					$this->_name='rms_group_detail_student';
@@ -168,13 +176,7 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 					);
 					$this->insert($arr);
 				}
-// 				$this->_name='rms_group_detail_student';
-// 				$arr= array(
-// 						'group_id'=>$_data['to_group'],
-// 						'old_group'	=>$_data['from_group'],
-// 				);
-// 				$where="stu_id=".$stu_id." and is_pass=0 and group_id=".$_data['from_group'];
-// 				$this->update($arr, $where);
+				
 				
 				$this->_name='rms_group';
 				$arra = array(
@@ -187,13 +189,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 				$this->_name='rms_student';
 				$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
 				
-// 				if($test['degree']==1 || $test['degree']==2){
-// 					$stu_type=1;    //  kid - 6
-// 				}else if($test['degree']==3){
-// 					$stu_type=2;    // 7-12
-// 				}else{
-// 					$stu_type=3;// eng and other subject
-// 				}
 				$array = array(
 							'branch_id'		=>$_data['to_branch'],
 							'academic_year'	=>$test['academic_year'],
@@ -201,7 +196,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 							'grade'			=>$test['grade'],
 							'session'		=>$test['session'],
 							'room'			=>$test['room_id'],
-// 							'stu_type'		=>$stu_type,
 							'group_id'		=>$_data['to_group'],
 						);
 				$where = " stu_id=".$_data['studentid'];
@@ -233,7 +227,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	
 	public function revertChangeBranch($id){
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
@@ -256,13 +249,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 				$where="stu_id=".$row['stu_id']." and group_id=".$row['to_group'];
 				$this->delete($where);
 				
-// 				$this->_name='rms_group';
-// 				$arra = array(
-// 						'is_pass'	=> 2,
-// 				);
-// 				$where = " id = ".$row['to_group'];
-// 				$this->update($arra, $where);
-
 				$this->_name='rms_student';
 				$test = $this->getDegreeAndGradeToGroup($row['from_group']);
 				$array = array(
@@ -272,7 +258,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 						'grade'			=>$test['grade'],
 						'session'		=>$test['session'],
 						'room'			=>$test['room_id'],
-						// 							'stu_type'		=>$stu_type,
 						'group_id'		=>$row['from_group'],
 				);
 				$where = " stu_id=".$row['stu_id'];

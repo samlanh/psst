@@ -17,7 +17,6 @@ class Foundation_importController extends Zend_Controller_Action {
 			$db=new Foundation_Model_DbTable_DbImport();
 			if($this->getRequest()->isPost()){
 				$data=$this->getRequest()->getPost();
-				
 				$adapter = new Zend_File_Transfer_Adapter_Http();
 				$part= PUBLIC_PATH.'/images';
 				$adapter->setDestination($part);

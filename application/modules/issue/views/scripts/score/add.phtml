@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_SCORE"));
+	echo $this->headTitle($tr->translate("ADD_STUDENT_SCORE"));
 	$current_month = date("m");
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>	
@@ -36,7 +36,7 @@
 		<div class="card-box">
            <div class="col-sm-12 border-botom">
 		   		<div class="col-sm-8 pd-0">
-		   			<h4 class="m-b-0"><i class="fa fa-file-text-o " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_SCORE');?></h4>
+		   			<h4 class="m-b-0"><i class="fa fa-file-text-o " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDENT_SCORE');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -334,6 +334,7 @@ function filterStudent(){
 					for(j=0;j<subject.length;j++){
 						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" onblur="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
+					
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';

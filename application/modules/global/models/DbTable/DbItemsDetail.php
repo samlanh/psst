@@ -471,6 +471,7 @@
 					'code'=> $_data['code'],
 					'price'=> $_data['price'],
 					'title'	  => $_data['title'],
+					'title_en'=> $_data['title'],
 					'note'    => $_data['note'],
 					'is_onepayment' => $_data['is_onepayment'],
 					'product_type' => 1,
@@ -478,7 +479,7 @@
 					'price'    => $_data['price'],
 					'schoolOption'    => $schooloption,
 					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> 1,
+					'status'=> $_data['status'],
 					'user_id'	  => $this->getUserId()
 			);
 			$this->_name = "rms_itemsdetail";

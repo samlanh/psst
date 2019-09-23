@@ -35,7 +35,7 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 		}else{
 			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 		}
-		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","Name","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_BRANCH","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","STATUS");
+		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_BRANCH","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","STATUS");
 		$link=array(
 				'module'=>'foundation','controller'=>'changebranch','action'=>'edit',
 		);
@@ -66,7 +66,6 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 	}
 	function revertAction(){
 		
-		// Check Session Expire
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$checkses = $dbgb->checkSessionExpire();
 		if (empty($checkses)){
@@ -99,7 +98,6 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 	
 	}
 	function revertrecordAction(){
-		// Check Session Expire
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$checkses = $dbgb->checkSessionExpire();
 		if (empty($checkses)){
@@ -131,40 +129,6 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-// 	public function editAction(){
-// 		$id=$this->getRequest()->getParam("id");
-		
-// 		if($this->getRequest()->isPost())
-// 		{
-// 			try{
-// 				$data = $this->getRequest()->getPost();
-// 				$data["id"]=$id;
-// 				$db = new Foundation_Model_DbTable_DbChangeBranch();
-// 				$row=$db->updateStudentChangeGroup($data);
-				
-// 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/changebranch/index");
-// 			}catch(Exception $e){
-// 				Application_Form_FrmMessage::message("EDIT_FAIL");
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 			}
-// 		}	
-		
-// 		$db= new Foundation_Model_DbTable_DbChangeBranch();
-// 		$row = $db->getStudentChangeBranchById($id);
-// 		if (empty($row)){
-// 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/changebranch/index");
-// 			exit();
-// 		}
-// 		$this->view->rows = $row;
-		
-// 		$frm = new Foundation_Form_FrmChangeBranch();
-// 		$frm->FrmAddChangeBranch($row);
-// 		Application_Model_Decorator::removeAllDecorator($frm);
-// 		$this->view->frm = $frm;
-		
-// 	}
-
-	
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();

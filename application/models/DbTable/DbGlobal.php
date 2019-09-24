@@ -2518,5 +2518,104 @@ function getAllgroupStudyNotPass($action=null){
   	WHERE ex.status=1 AND ex.type=$type";
   	return $db->fetchAll($sql);
   }
+  
+  
+  function getPlacementTestType(){
+  	$db=$this->getAdapter();
+  	$sql="SELECT id AS id ,title AS name FROM rms_test_type WHERE `status`=1 ORDER BY id ASC ";
+  	$rows = $db->fetchAll($sql);
+  	return $rows;
+  }
+  function getAllQuestionType(){
+  	$db=$this->getAdapter();
+  	$sql="SELECT id AS id ,title AS name FROM rms_question_type WHERE `status`=1 ORDER BY id ASC ";
+  	$rows = $db->fetchAll($sql);
+  	return $rows;
+  }
+  function getAllSections($_data,$is_parent=null,$parent = 0, $spacing = '', $cate_tree_array = ''){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT id,title AS name FROM rms_section WHERE 1 ";
+  	if (!empty($_data['test_type'])){
+  		$sql.=" AND test_type = ".$_data['test_type'];
+  	}
+  	if (!empty($is_parent)){
+  		$sql.=" AND parent = 0 ";
+  		return $rows = $db->fetchAll($sql);
+  	}else{
+  		$sql.=" AND parent = $parent ";
+  	}
+  	
+  	$rows = $db->fetchAll($sql);
+  	if (!is_array($cate_tree_array))
+  		$cate_tree_array = array();
+  	if (count($rows) > 0) {
+  		foreach ($rows as $row){
+  			$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+  			$cate_tree_array = $this->getAllSections($_data,$is_parent,$row['id'], $spacing . ' - ', $cate_tree_array);
+  		}
+  			
+  	}
+  	return $cate_tree_array;
+  }
+  
+  function getOptionTrueFalse($hav_empty_opt=null){
+  	$db=$this->getAdapter();
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	$options='';
+  	if (!empty($hav_empty_opt)){
+  	$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_TRUE_FALSE"), ENT_QUOTES).'</option>';
+  	}
+  		$options .= '<option value="true" >'.htmlspecialchars("True", ENT_QUOTES).'</option>';
+  		$options .= '<option value="false" >'.htmlspecialchars("False", ENT_QUOTES).'</option>';
+  		return $options;
+  	return $options;
+  }
+  
+  function getAllQuestionBySettingExam($_data=null){
+  	$db = $this->getAdapter();
+  	$sql="SELECT s.parent,
+		(SELECT sp.title FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) AS parent_title,
+		s.title AS section_title,
+		s.instruction,
+		s.article,
+		s.ordering AS section_ordering,
+		q.* 
+		FROM `rms_question` AS q,
+		`rms_section` AS s
+		WHERE s.id = q.section_id
+		
+  		";
+  	$sql.="ORDER BY 
+		(SELECT sp.ordering FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) ASC,
+		s.ordering ASC,
+		q.ordering ASC";
+  	return $db->fetchAll($sql);
+  }
+  
+  function getQuestionDetailById($question_id){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT qd.* FROM `rms_question_detail` AS qd WHERE qd.question_id = $question_id ";
+  	return $db->fetchAll($sql);
+  }
+  function getGetAnswerKeyById($section_id,$question_type,$is_opt=null){
+  	$db = $this->getAdapter();
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	$sql=" SELECT qd.answer_key FROM `rms_question_detail` AS qd,rms_question as q WHERE qd.question_id = q.id AND q.section_id =$section_id AND q.question_type=$question_type  ";
+  	if ($question_type==8){
+  		$sql.=" AND qd.answer_label = '' ";
+  	}
+  	$sql.=" ORDER BY qd.answer_key ASC";
+  	$row =  $db->fetchAll($sql);
+  	$options='';
+  	if (!empty($is_opt)) {
+  		$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+  		if (!empty($row)) foreach ($row as $rs){
+  			$options .= '<option value="'.$rs['answer_key'].'" >'.htmlspecialchars($rs['answer_key'], ENT_QUOTES).'</option>';
+  		}
+  		return $options;
+  	}else{
+  		return $row;
+  	}
+  }
 }
 ?>

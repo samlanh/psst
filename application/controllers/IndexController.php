@@ -294,6 +294,10 @@ class IndexController extends Zend_Controller_Action
     	$branch_id =2;
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	
+    	$_dbgb= new Application_Model_DbTable_DbGlobal();
+    	$this->view->question=$_dbgb->getAllQuestionBySettingExam();
+    	$this->view->truefalse_opt=$_dbgb->getOptionTrueFalse(1);
     }
 
 }

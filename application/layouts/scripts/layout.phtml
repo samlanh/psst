@@ -298,15 +298,16 @@ span#message {
 								$db = new Application_Model_DbTable_DbUsers();
 	            				$rs = $db->getAccessUrl($module,$controller,$action);
 
-								if(!empty($teacher_id)){
-									echo $this->layout()->content;
-								}else{
-									if(!empty($rs) OR $action=='changepassword'){
-										echo $this->layout()->content;
-									}else{
-										echo $this->render('pagenotfund.phtml');
-									}
-								}
+// 								if(!empty($teacher_id)){
+// 									echo $this->layout()->content;
+// 								}else{
+// 									if(!empty($rs) OR $action=='changepassword'){
+// 										echo $this->layout()->content;
+// 									}else{
+// 										echo $this->render('pagenotfund.phtml');
+// 									}
+// 								}
+	            				echo $this->layout()->content;
             				 ?>
             				 <?php if($module!='home') {?>
 			            			 </div>

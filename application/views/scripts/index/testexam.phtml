@@ -1,13 +1,14 @@
 <?php 
 $base_url = $this->baseUrl()."/";
 $tr=Application_Form_FrmLanguages::getCurrentlanguage(); 
+$_dbgb= new Application_Model_DbTable_DbGlobal();
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 	    <script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
-		
+		<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/soria/soria.css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	    <!-- Meta, title, CSS, favicons, etc. -->
 	    <meta charset="utf-8">
@@ -26,7 +27,23 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
 		<link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
 		
+		 <script src="<?php echo $base_url;?>js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
+  		 <script>dojoConfig = {parseOnLoad: true}</script>
+  		  <script>
+   		require(["dijit/form/Form","dijit/form/FilteringSelect","dijit/form/TextBox","dijit/form/Button","dijit/Dialog"]);
+   	</script>
 		<style>
+			.full-width {
+			    width: 98%;
+			    height: 30px;
+			}
+			.dijitArrowButtonInner, .dijitIconSearch {
+			    margin-top: 6px !important;
+			}
+			.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
+			    height: 28px;
+			}
+		
 			body.exam-test .left_col.scroll-view .navbar.nav_title {
 			    background: #fff;
 			}
@@ -93,6 +110,9 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		.section-exam-title {
 		    margin: 15px 0px;
 		}
+		.section-exam-title.sub-section {
+		    padding-left: 20px;
+		}
 		.section-exam-title h2 {
 		    padding: 0;
 		    margin: 0;
@@ -102,12 +122,21 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		    list-style: none;
 		}
 		span.question-num {
-		    padding: 0 5px;
-			vertical-align: top;
+		    padding: 0 2px;
+		    vertical-align: top;
+		    display: inline-block;
+		    min-width: 30px;
 		}
+		.answer-blog ul li.answer-opt.col1,
 		.answer-blog ul li.answer-opt {
 		    display: inline-block;
+			margin: 2px;
+		}
+		.answer-blog ul li.answer-opt {
 		    width: 49%;
+		}
+		.answer-blog ul li.answer-opt.col1 {
+		    width: 100%;
 		}
 		.answer-blog ul li.answer-opt.col5 {
 		    width: 19%;
@@ -127,13 +156,60 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		    display: inline-block;
 		    width: 65%;
 		}
-.section-exam-question img.img-question {
-    width: 120px;
-		height: 125px;
-}
+		.section-exam-question img.img-question, img.img-question {
+		    width: 120px;
+				height: 125px;
+		}
+		.answer-opt.col4,
+		.answer-opt.col2 {
+			margin: 5px 0;
+		    display: inline-block;
+		}
+		.answer-opt.col2 {
+		    width: 48%;
+		}
+		.answer-opt.col4 {
+		    width: 24%;
+		}
+		.image-question ul {
+		    list-style: none;
+		}
+		div.two-blog {
+		    display: inline-block;
+		    width: 40%;
+			vertical-align: top;
+		}
+		.row-data .fill-in {
+		    display: inline-block;
+		    width: 80%;
+		}
+		.image-class {
+		    text-align: center;
+		}
+		input.full-width {
+		    width: 80%;
+		}
+		input::placeholder {
+		    padding: 5px;
+		    font-size: 14px;
+		    font-style: italic;
+		}
+		table.table_answer {
+		    width: 100%;
+		}
+		select.option-answer {
+		    max-width: 165px;
+		}
+		span.inline-value {
+		    display: inline-block;
+		}
+		span.value-list {
+		    display: inline-block;
+		    padding: 0 20px;
+		}
 		</style>
 	</head>
-	<body class="nav-md  exam-test ">
+	<body class="nav-md soria exam-test ">
 	<div class="container body">
     	<div class="main_container">
         	<div class="col-md-3 left_col ">
@@ -199,216 +275,617 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
        		<div class="right_col" role="main" >
        		 	<div class="right-conten" style="min-height: 570px;">
        		 		<div style="clear:both;"></div>
-             		<section class="inputmask">
-						<div class="row">
-					    	<div class="col-sm-12">
-					    		<div class="reportblog">
-					    			<div class="header-row">
-					    				<?php echo $this->rsheader;?>
-					    			</div>
-					    			<div class="content exam-test-data">
-					    				<div class="title-examination text-center">
-					    					<h2>Placement Test General English for Adult</h2>
-					    				</div>
-					    				<div class="note-exame">
-					    					<span>This Test has three sections: Vocabulary, Grammar, and Reading. There are 55 questions. You are allowed 50 minutes to complete the test.</span>
-					    				</div>
-					    				
-					    				<div class="section-exam">
-					    					<div class="section-exam-title">
-					    						<h2>SECTION I: VOCABULARY</h2>
-					    						<small>Instructions: Please choose the correct answer. Fill in the answer on the answer sheet.</small>
-					    					</div>
-					    					<div class="section-exam-question">
-					    						<ul>
-					    							<li>
-					    								<div class="question">
-					    									<span class="question-num">1)</span> <span>Dara is only five years old. He’s ___.</span>
-					    								</div>
-					    								<div class="answer-blog">
-					    									<ul>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> old
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="2"> <span class="question-num">B.</span> young
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="3"> <span class="question-num">C.</span> new
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="4"> <span class="question-num">D.</span> adult
-					    										</li>
-					    									</ul>
-					    								</div>
-					    							</li>
-					    							<li>
-					    								<div class="question">
-					    									<span class="question-num">2)</span> <span>What does he enjoy doing in his ___ time?</span>
-					    								</div>
-					    								<div class="answer-blog">
-					    									<ul>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_2" value="1"> <span class="question-num">A.</span> spare
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_2" value="2"> <span class="question-num">B.</span> hobby
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_2" value="3"> <span class="question-num">C.</span> empty
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_2" value="4"> <span class="question-num">D.</span> space
-					    										</li>
-					    									</ul>
-					    								</div>
-					    							</li>
-					    							<li>
-					    								<div class="question">
-					    									<span class="question-num">3)</span> <span>She likes her house very much. It has a big ___, five bedrooms, a kitchen and a garage.</span>
-					    								</div>
-					    								<div class="answer-blog">
-					    									<ul>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> iving-room
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="2"> <span class="question-num">B.</span> salon
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="3"> <span class="question-num">C.</span> boutique
-					    										</li>
-					    										<li class="answer-opt">
-					    											<input type="radio" name="question_1" value="4"> <span class="question-num">D.</span> accommodation
-					    										</li>
-					    									</ul>
-					    								</div>
-					    							</li>
-					    							
-					    						</ul>
-					    					</div>
-					    				</div>
-					    				
-					    				
-					    				<div class="section-exam">
-					    					<div class="section-exam-title">
-					    						<h2>SECTION A: VOCABULARY (39 POINTS)</h2>
-					    					</div>
-					    					<div class="section-exam-title">
-					    						<h2>A1. ALPHABET ORDER (6 POINTS)</h2>
-					    						<small>Instruction: Write the alphabets in order. Write your answers in the answer sheet.</small>
-					    					</div>
-					    					
-					    					<div class="section-exam-question">
-					    						<ul>
-					    							<li>
-					    								<div class="question">
-					    									Example:
-					    								</div>
-					    								<div class="answer-blog">
-					    									<ul>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">1.</span> Aa
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">2.</span> <input type="text" id="answere_1" name="answere_1">
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">3.</span> Cc
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">4.</span> <input type="text" id="answere_1" name="answere_1">
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">5.</span> Ee
-					    										</li>
-					    										
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">6.</span> Ff
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">7.</span> <input type="text" id="answere_1" name="answere_1">
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">8.</span> Hh
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">9.</span> <input type="text" id="answere_1" name="answere_1">
-					    										</li>
-					    										<li class="answer-opt col5">
-					    											<span class="question-num">10.</span> Jj
-					    										</li>
-					    									</ul>
-					    								</div>
-					    							</li>
-					    						</ul>
-					    					</div>
-					    					
-					    					<div class="section-exam-title">
-					    						<h2>A2. MULTIPLE CHOICES (10 POINTS)</h2>
-					    						<small>Instruction: Choose the correct answer A or B. Write your answers in the answer sheet.</small>
-					    					</div>
-					    					
-					    					<div class="section-exam-question">
-					    						<ul class="images-quest">
-					    							<li class="answer-opt col4">
-					    								<span class="question-num">1.</span>
-					    								<img class="img-question" src="https://www.sccpre.cat/mypng/full/290-2901428_shirt-collar-drawing-at-getdrawings-men-shirt-drawing.png" />
-					    								<ul>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> shrit
-				    										</li>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> shirt
-				    										</li>
-					    								</ul>
-					    							</li>
-					    							<li class="answer-opt col4">
-					    								<span class="question-num">2.</span>
-					    								<img class="img-question" src="http://freevector.co/wp-content/uploads/2013/03/78725-varsity-jacket.png" />
-					    								<ul>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> jacket
-				    										</li>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> jecket
-				    										</li>
-					    								</ul>
-					    							</li>
-					    							<li class="answer-opt col4">
-					    								<span class="question-num">3.</span>
-					    								<img class="img-question" src="https://i.pinimg.com/originals/76/95/1b/76951b1c2db07b19961fac323e83eb8b.gif" />
-					    								<ul>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> skerit
-				    										</li>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> skirt
-				    										</li>
-					    								</ul>
-					    							</li>
-					    							<li class="answer-opt col4">
-					    								<span class="question-num">4.</span>
-					    								<img class="img-question" src="https://www.sccpre.cat/mypng/full/290-2901428_shirt-collar-drawing-at-getdrawings-men-shirt-drawing.png" />
-					    								<ul>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">A.</span> shrit
-				    										</li>
-				    										<li>
-				    											<input type="radio" name="question_1" value="1"> <span class="question-num">B.</span> shirt
-				    										</li>
-					    								</ul>
-					    							</li>
-					    						</ul>
-					    					</div>
-					    					
-					    				</div>
-					    				
-					    			</div>
-					    		</div>
-					    	</div>
-					    </div>
-					</section>
+       		 		<form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+       		 			<section class="inputmask">
+							<div class="row">
+						    	<div class="col-sm-12">
+						    		<div class="reportblog">
+						    			<div class="header-row">
+						    				<?php echo $this->rsheader;?>
+						    			</div>
+						    			<div class="content exam-test-data">
+						    				<div class="title-examination text-center">
+						    					<h2>YOUNG LEARNER’S PROGRAM PLACEMENT TEST </h2>
+						    				</div>
+						    				<?php 
+						    				$parent=0;
+						    				$section=0;
+						    				$number=0;
+						    				if (!empty($this->question)) foreach ($this->question as $key => $rs){ ?>
+						    					<?php if ($parent!=$rs['parent']){ if (!empty($rs['parent_title'])){?>
+							    					<div class="section-exam">
+							    						<div class="section-exam-title">
+								    						<h2><?php echo $rs['parent_title'];?></h2>
+								    					</div>
+							    					</div>
+							    					<?php }
+						    						}?>
+						    						<?php if ($section!=$rs['section_id']){ $number=0; ?>
+						    						<div class="section-exam">
+							    						<div class="section-exam-title <?php if (!empty($rs['parent'])){ echo "sub-section";}?>">
+								    						<h2><?php echo $rs['section_title'];?></h2>
+								    						<?php if (!empty($rs['instruction'])){?>
+								    						<small>Instruction: <?php echo $rs['instruction'];?></small>
+								    						<?php }?>
+								    					</div>
+							    					</div>
+						    						<?php }?>
+						    						<?php 
+						    						$number++;
+						    						?>
+						    						
+						    						
+						    						<?php 
+						    						//Question Block
+						    						if ($rs['question_type']==1){ 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    							?>
+						    							<div class="section-exam-question">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<ul>
+											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+											    							<li class="answer-opt col5">
+												    							<?php if (!empty($question['answer_label'])){?>
+												    								<span class="question-num"><?php echo $keyIndex?>.</span> <?php echo $question['answer_label'];?>
+												    							<?php }else{?>
+												    							
+												    							<div class="row-data">
+													    							<span class="question-num"><?php echo $keyIndex?>.</span>
+													    							<div class="fill-in">
+														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex;?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
+													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex;?>">
+								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    							</div>
+												    							</div>
+												    							<?php }?>
+											    							</li>
+											    							<?php }?>
+										    								
+						    											</ul>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    						<?php }else if ($rs['question_type']==2){ 
+						    							$image = $this->baseUrl().'/images/no-photo.png';
+						    							if (!empty($rs['images'])){
+						    								if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
+						    									$image = $this->baseUrl()."/images/placement/".$rs['images'];
+						    								}
+						    							}
+						    							?>
+						    							<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    									<div class="image-question answer-opt col4">
+						    										<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<span class="question-num"><?php echo $number?>.</span>
+								    								<img class="img-question" src="<?php echo $image;?>" />
+								    								<ul>
+								    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+							    										<li>
+							    											<input type="radio" id="answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $index+1?>.</span> <?php echo $question['answer_label'];?>
+							    											<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+										    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+					    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+							    										</li>
+							    										<?php }?>
+								    								</ul>
+								    							</div>
+						    							<?php }?>
+						    							
+						    						<?php }else if ($rs['question_type']==3){
+						    							$image = $this->baseUrl().'/images/no-photo.png';
+						    							if (!empty($rs['images'])){
+						    								if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
+						    									$image = $this->baseUrl()."/images/placement/".$rs['images'];
+						    								}
+						    							}
+						    							?>	
+						    							<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    								<div class="image-question answer-opt col2">
+						    										<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="two-blog ans-left">
+								    									<span class="question-num"><?php echo $number?>.</span>
+									    								<img class="img-question" src="<?php echo $image;?>" />
+									    								<span><?php echo $rs['question_title'];?></span>
+								    								</div>
+								    								<div class="two-blog ans-right">
+								    									<ul>
+									    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+								    										<li>
+								    											<input type="radio" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
+								    											<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+											    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+						    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    										</li>
+								    										<?php }?>
+									    								</ul>
+								    								</div>
+								    								
+								    							</div>
+						    							<?php }?>
+						    						<?php }else if ($rs['question_type']==4){?>
+						    							
+						    							<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<ul>
+											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+											    								$image = $this->baseUrl().'/images/no-photo.png';
+											    								if (!empty($question['image'])){
+											    									if (file_exists(PUBLIC_PATH."/images/placement/".$question['image'])){
+											    										$image = $this->baseUrl()."/images/placement/".$question['image'];
+											    									}
+											    								}
+											    							?>
+											    							<li class="answer-opt col4">
+											    								
+											    								<div class="image-class">
+											    									<img class="img-question" src="<?php echo $image;?>" />
+											    								</div>
+											    								<div class="row-data">
+													    							<span class="question-num"><?php echo $keyIndex;?>.</span>
+													    							<div class="fill-in">
+														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo$rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    							</div>
+												    							</div>
+											    							</li>
+											    							<?php }?>
+										    								
+						    											</ul>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    							
+						    						<?php }else if ($rs['question_type']==5){?>
+						    							<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question two-blog">
+								    						<ul>
+								    							<li>
+								    								<div class="text-center">
+								    									<?php echo $rs['question_title'];?>
+								    								</div>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<ul>
+											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+											    							<li class="answer-opt col1">
+												    							<?php if (!empty($question['answer_label'])){?>
+												    								<span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
+												    							<?php }else{?>
+												    							
+												    							<div class="row-data">
+													    							<span class="question-num"><?php echo $keyIndex;?>.</span>
+													    							<div class="fill-in">
+														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
+													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
+													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    							</div>
+												    							</div>
+												    							<?php }?>
+											    							</li>
+											    							<?php }?>
+										    								
+						    											</ul>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    								
+						    						<?php }else if ($rs['question_type']==6){?>
+						    						
+						    							<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<div class="two-blog">
+									    									<div class="text-center">
+										    									A
+										    								</div>
+									    									<ul>
+												    							<?php $tdHead=""; 
+												    							$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+												    							foreach ($rowQ as $index => $question){ 
+												    								$colB = $question['column_b'];
+												    								$options .= '<option value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+												    								$tdHead.='<td align="center">'.($index+1).'</td>';
+												    								?>
+												    							<li class="answer-opt col1">
+												    								<span class="question-num"><?php echo $index+1;?>.</span> <?php echo $question['answer_label'];?>
+												    							</li>
+												    							<?php }?>
+											    								
+							    											</ul>
+								    									</div>
+								    									<div class="two-blog">
+									    									<div class="text-center">
+										    									B
+										    								</div>
+									    									<ul>
+												    							<?php 
+												    							$tdAnswer="";
+												    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+												    								$tdAnswer.='<td><select class="option-answer full-width" dojoType="dijit.form.FilteringSelect"  id="answere_'.$rs['id']."_".$keyIndex.'" name="answere_'.$rs['id']."_".$keyIndex.'">';
+												    								$tdAnswer.=$options;
+												    								$tdAnswer.='</select></td>';
+												    							?>
+												    							<li class="answer-opt col1">
+												    								<?php echo $question['column_b'];?>
+												    							</li>
+												    							<?php }?>
+							    											</ul>
+								    									</div>
+								    									<table class="table_answer" border="1">
+								    										<tr>
+								    											<?php echo $tdHead;?>
+								    										</tr>
+								    										<tr>
+								    											<?php echo $tdAnswer;?>
+								    										</tr>
+								    									</table>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    							
+						    						<?php }else if ($rs['question_type']==7){?>
+						    						
+						    						<?php 
+						    						$image = $this->baseUrl().'/images/no-photo.png';
+						    						if (!empty($rs['images'])){
+						    							if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
+						    								$image = $this->baseUrl()."/images/placement/".$rs['images'];
+						    							}
+						    						}
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<ul>
+								    										<li class="answer-opt col1">
+												    							<div class="row-data">
+												    								<span class="question-num"><?php echo $number?>.</span>
+												    								<img class="img-question" src="<?php echo $image;?>" />
+											    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+													    								
+													    								<span class="inline-value">
+													    								<?php 
+													    									echo $question['answer_label'];
+													    								?>
+													    								</span>
+													    								<span class="inline-value ">
+													    									<select class="option-answer full-width" dojoType="dijit.form.FilteringSelect" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    									<?php echo $optAnswer;?>
+													    									</select>
+														    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex;?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+									    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex;?>">
+													    								</span>
+											    								<?php }?>
+										    									</div>
+											    							</li>
+						    											</ul>
+						    										</div>
+								    							</li>
+								    						</ul>
+								    					</div>
+								    					<?php }?>
+								    					
+						    						<?php }else if ($rs['question_type']==8){?>
+						    						
+						    						<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
+						    							$answerList = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<?php if ($number==1){?>
+								    									<div style="text-align: center;margin: 20px 0;">
+									    									<table class="table_answer" border="1" style="width: 60%;margin: 0 auto;">
+									    										<tr>
+									    											<td align="center">
+									    											<?php if (!empty($answerList)) foreach ($answerList as $rr){ echo "<span class='value-list'>".$rr['answer_key']."<span>"; }?>
+									    											</td>
+									    										</tr>
+									    									</table>
+								    									</div>
+								    									<?php }?>
+								    									<ul>
+								    										<li class="answer-opt col1">
+								    											<span class="inline-value ">
+								    											<span class="question-num"><?php echo $number?>.</span>
+								    											</span>
+											    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+													    								<?php if (empty($question['answer_label'])){?>
+													    								<span class="inline-value ">
+													    								<select class="option-answer full-width" dojoType="dijit.form.FilteringSelect" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex?>">
+													    								<?php echo $optAnswer;?>
+													    								</select>
+													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								</span>
+													    								<?php }else{?>
+													    								<span class="inline-value ">
+													    									<?php echo $question['answer_label'];?>
+													    								</span>
+													    								<?php }?>
+													    								
+												    							
+											    								<?php }?>
+											    							</li>
+						    											</ul>
+						    										</div>
+								    							</li>
+								    						</ul>
+								    					</div>
+								    					<?php }?>
+								    					
+						    						<?php }else if ($rs['question_type']==9){?>
+						    						
+						    						<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<ul>
+								    										<li class="answer-opt col1">
+								    											<span class="inline-value ">
+								    											<span class="question-num"><?php echo $number?>.</span>
+								    											</span>
+											    									<?php $keyIndex=0; foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+													    								<?php if (empty($question['answer_label'])){?>
+													    								<span class="inline-value ">
+														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex;?>">
+								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								</span>
+													    								<?php }else{?>
+													    								<span class="inline-value ">
+													    									<?php echo $question['answer_label'];?>
+													    								</span>
+													    								<?php }?>
+													    								
+												    							
+											    								<?php }?>
+											    							</li>
+						    											</ul>
+						    										</div>
+								    							</li>
+								    						</ul>
+								    					</div>
+								    					<?php }?>
+								    					
+						    						<?php }else if ($rs['question_type']==10){?>
+						    						<?php }else if ($rs['question_type']==11){?>
+						    						<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<ul>
+											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+											    							<li class="answer-opt col1">
+												    							<div class="row-data">
+												    								<div class="two-blog">
+												    									<span class="question-num"><?php echo $keyIndex; ?>.</span> <?php echo $question['answer_label'];?>
+												    								</div>
+												    								<div class="two-blog">
+														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" dojoType="dijit.form.TextBox"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$index+1?>">
+													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex?>">
+								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+												    								</div>
+													    							
+												    							</div>
+											    							</li>
+											    							<?php }?>
+										    								
+						    											</ul>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    						<?php }else if ($rs['question_type']==12){?>
+							    						<?php if ($number==1){?>
+							    							<?php echo $rs['article']; ?>
+							    						<?php }?>
+							    						
+							    						<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<span class="question-num"><?php echo $number?>.</span> <?php echo $rs['question_title'];?>
+								    									<ul>
+								    										<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+								    										<li class="answer-opt col4">
+								    											<input type="radio" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
+								    											<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex?>">
+											    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
+						    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    										</li>
+								    										<?php }?>
+						    											</ul>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    							
+						    						<?php }else if ($rs['question_type']==13){?>
+						    							
+							    						
+							    						
+						    							
+						    						<?php }else if ($rs['question_type']==14){?>	
+						    							<?php if ($number==1){?>
+							    							<?php echo $rs['article']; ?>
+							    						<?php }?>
+							    						<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+								    								<div class="answer-blog">
+								    									<table class="table_answer">
+								    										<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+								    											
+								    												<tr>
+								    													<td width="80%"> <?php echo $question['answer_label'];?> </td>
+								    													<td valign="top">
+								    														<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$index+1?>">
+														    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex;?>">
+									    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex;?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+											    											<select class="option-answer full-width" dojoType="dijit.form.FilteringSelect" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
+														    								<?php echo $this->truefalse_opt;;?>
+														    								</select>
+								    													</td>
+								    												</tr>
+								    											
+								    											
+								    										<?php }?>
+						    											</table>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
+						    							
+							    					<?php }else if ($rs['question_type']==15){?>
+							    					
+							    						<?php 
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
+						    								<div class="answer-blog">
+						    									<ul>
+						    										<li class="answer-opt col1">
+									    									<?php 
+									    									$tdHead="";
+									    									$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+									    									foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+									    										$colB = $question['column_b'];
+									    										$options .= '<option value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+									    										$tdHead.='<td align="center">'.$keyIndex.'</td>';
+									    										?>
+									    										<span class="inline-value ">
+											    									<?php echo $question['answer_label'];?>
+											    								</span>
+											    								<span class="inline-value ">
+											    									<?php echo $keyIndex;?>.) &#9634;
+											    								</span>
+											    								
+									    								<?php }?>
+									    								<span class="inline-value ">
+									    								<?php echo $rs['note'];?>
+									    								</span>
+									    							</li>
+				    											</ul>
+				    											
+				    											<ul>
+									    							<?php 
+									    							$tdAnswer="";
+									    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+									    								$tdAnswer.='<td><select dojoType="dijit.form.FilteringSelect" class="option-answer full-width" id="answere_'.$rs['id']."_".$keyIndex.'" name="answere_'.$rs['id']."_".$keyIndex.'">';
+									    								$tdAnswer.=$options;
+									    								$tdAnswer.='</select></td>';
+									    							?>
+									    							<li class="answer-opt col1">
+									    								<?php echo $question['column_b'];?>
+									    							</li>
+									    							<?php }?>
+				    											</ul>
+							    								<table class="table_answer" border="1">
+								    										<tr>
+								    											<?php echo $tdHead;?>
+								    										</tr>
+								    										<tr>
+								    											<?php echo $tdAnswer;?>
+								    										</tr>
+								    									</table>			
+				    										</div>
+								    					</div>
+								    					<?php }?>
+						    						<?php }else {?>
+						    						<?php } //End Question Block?>
+						    						
+						    						<?php 
+						    						$parent = $rs['parent'];
+						    						$section = $rs['section_id'];
+						    						?>
+						    						
+						    				<?php }?>
+						    				
+						    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+						</section>
+       		 		</form>
+             		
        		 	</div>
        		</div>
          </div>

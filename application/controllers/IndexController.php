@@ -284,7 +284,70 @@ class IndexController extends Zend_Controller_Action
     	echo $renderer; exit();
     }
     
+    public function loginAction()
+    {
+    	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    	$user_id = $session_user->student_id;
+    	if (!empty($user_id)){
+    		$this->_redirect("/index/testexam");
+    	}
+    	
+    	$this->_helper->layout()->disableLayout();
+    	$form=new Application_Form_FrmLogin();
+    	$form->setAction('login');
+    	$form->setMethod('post');
+    	$form->setAttrib('accept-charset', 'utf-8');
+    	$this->view->form=$form;
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     
+    	if($this->getRequest()->isPost())
+    	{
+    		$dbgb = new Application_Model_DbTable_DbGlobal();
+    		$sys = $dbgb->getPh();
+    		if (!$sys){
+    			Application_Form_FrmMessage::redirectUrl("/");
+    			exit();
+    		}
+    		$formdata=$this->getRequest()->getPost();
+    		if($form->isValid($formdata))
+    		{
+    			$session_lang=new Zend_Session_Namespace('lang');
+    			$session_lang->lang_id=$formdata["lang"];//for creat session
+    			Application_Form_FrmLanguages::getCurrentlanguage($formdata["lang"]);//for choose lang for when login
+    			$user_name=$form->getValue('txt_user_name');
+    			$password=$form->getValue('txt_password');
+    			
+    			$db_user=new Application_Model_DbTable_DbUsers();
+    			if($db_user->userAuthenticateStudentTest($user_name,$password)){
+    				$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    				$studnet_info = $db_user->getStudentInfo($user_name,$password);
+    					
+    				$session_user->student_id= $studnet_info['stu_id'];
+    				$session_user->serial=$user_name;
+    				$session_user->pwd=$password;
+    				$session_user->stu_khname= $studnet_info['stu_khname'];
+    				$session_user->stu_enname= $studnet_info['stu_enname'];
+    				$session_user->last_name= $studnet_info['last_name'];
+    
+    				
+    				Application_Form_FrmMessage::redirectUrl("/index/testexam");
+    				exit();
+    			}
+    			else{
+    				$this->view->msg = 'ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់ និង ពាក្យ​​សំងាត់ មិន​ត្រឺម​ត្រូវ​ទេ ';
+    			}
+    		}
+    		else{
+    			$this->view->msg = 'លោកអ្នកមិនមានសិទ្ធិប្រើប្រាស់ទេ!';
+    		}
+    	}
+    	$session_lang=new Zend_Session_Namespace('lang');
+    	if (empty($session_lang->lang_id)){
+    		$session_lang->lang_id =2;
+    	}
+    	$this->view->rslang = $session_lang->lang_id;
+    }
     public function testexamAction()
     {
     	 

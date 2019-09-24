@@ -373,4 +373,44 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		$rows = $db->fetchAll($sql);
 		return $rows;
 	}
+	
+	//For Student Placement Test
+	public function userAuthenticateStudentTest($username,$password)
+	{
+		$db_adapter = Application_Model_DbTable_DbUsers::getDefaultAdapter();
+		$auth_adapter = new Zend_Auth_Adapter_DbTable($db_adapter);
+		$auth_adapter->setTableName('rms_student') // table where users are stored
+		->setIdentityColumn('serial') // field name of user in the table
+		->setCredentialColumn('password') // field name of password in the table
+		->setCredentialTreatment('MD5(?) AND status=1 AND customer_type=4'); // optional if password has been hashed
+			
+		$auth_adapter->setIdentity($username); // set value of username field
+		$auth_adapter->setCredential($password);// set value of password field
+		//instantiate Zend_Auth class
+		$auth = Zend_Auth::getInstance();
+	
+		$result = $auth->authenticate($auth_adapter);
+		if($result->isValid()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	//function get user info from database
+	public function getStudentInfo($username,$password)
+	{		
+		$db = $this->getAdapter();
+		if (!empty($username)){	
+			$sql=" SELECT s.* FROM rms_student AS s WHERE 1 ";
+			$sql.= " AND ".$db->quoteInto('s.serial=?', $username);
+			$sql.= " AND ".$db->quoteInto('s.password=?', md5($password));
+			$row=$db->fetchRow($sql);
+			if(!$row) return NULL;
+			return $row;
+			
+		}else {
+			return null;
+		}
+	}
 }

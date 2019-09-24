@@ -316,6 +316,26 @@ a.btn.btn-primary.btn-xs {
 				                   		<?php echo $frm->getElement("parent_tel");?>
 				                   </div>
 				                </div>
+				                
+				                <div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TEST_INFO");?> 
+				                   </label>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_TYPE");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("test_type");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT_TEL");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="test_setting_id" />
+				                   </div>
+				                </div>
+				                
 				             </div>
 				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -529,6 +549,7 @@ a.btn.btn-primary.btn-xs {
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var setting_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?>);
 
 dojo.ready(function(){
 	
@@ -617,7 +638,53 @@ dojo.ready(function(){
 		
 		filterDistrict();
 		oldRow();
+
+		new dijit.form.FilteringSelect({
+			store: setting_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                      
+			required: false,               
+			id: "test_setting_id",
+			name: "test_setting_id",   
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SECTION");?>",
+			onChange: function() {  
+			}
+		}, "test_setting_id");
+
+		var test_type = dijit.byId('test_type');
+		test_type.on('change', function(evt) {
+			$('#identity1').val('');
+			getAllTestSetting();
+		});
+		getAllTestSetting();
 });
+
+var url_section = '<?php echo $this->url(array("module"=>"placement","controller"=>"setting","action"=>"allsettings"));?>';										
+function getAllTestSetting(){
+	dijit.byId('test_setting_id').reset();
+	test_type = dijit.byId('test_type').get('value');
+	if(test_type=='' || test_type==-1){
+		var setting_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('test_setting_id').set('store',setting_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_section,
+		content:{
+			'test_type':test_type
+		},
+		handleAs:"json",
+		load: function(data) {
+			setting_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('test_setting_id').set('store',setting_store);  
+		    dijit.byId('test_setting_id').set('value','<?php echo $this->rs['test_setting_id'];?>');
+		},
+		error: function(err){
+
+		}
+	});
+}
 new dijit.form.FilteringSelect({
 	name: "nationality",
 	id: "nationality",

@@ -2519,7 +2519,15 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-  
+  function getAllSetting($_data){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT id,title AS name FROM rms_placementtest_setting WHERE 1 ";
+  	if (!empty($_data['test_type'])){
+  		$sql.=" AND test_type = ".$_data['test_type'];
+  	}
+  	$rows = $db->fetchAll($sql);
+  	return $rows;
+  }
   function getPlacementTestType(){
   	$db=$this->getAdapter();
   	$sql="SELECT id AS id ,title AS name FROM rms_test_type WHERE `status`=1 ORDER BY id ASC ";

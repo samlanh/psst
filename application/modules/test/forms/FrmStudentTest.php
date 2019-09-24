@@ -495,6 +495,19 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
 			}
 		}
 		
+		$_arr_opt = array(''=>$this->tr->translate("TEST_TYPE"));
+		$rows = $_dbgb->getPlacementTestType();
+		if(!empty($rows))foreach($rows AS $row) $_arr_opt[$row['id']]= preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($row['name'])));
+		$_test_type = new Zend_Dojo_Form_Element_FilteringSelect("test_type");
+		$_test_type->setMultiOptions($_arr_opt);
+		$_test_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside height-text',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',));
+		$_test_type->setValue($request->getParam("test_type"));
+		
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["stu_khname"]);
@@ -529,6 +542,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_province_id->setValue($data["province_id"]);
     		$id->setValue($data["stu_id"]);
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		
+    		$_test_type->setValue($data["test_type"]);
     	}
     	
     	$this->addElements(array(
@@ -581,6 +596,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$end_date,
     			$_branch_search,
 				$_type_exam,
+    			$_test_type
     			));
     	return $this;
     }
@@ -866,7 +882,13 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'queryExpr'=>'*${0}*',));
     	
     	$id = new Zend_Form_Element_Hidden('id');
-    	 
+    	$id->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    	));
+    	
+    	
+    	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
     	$advance_search->setAttribs(array(
@@ -1018,7 +1040,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$_nation_search,
     			$_status_search,
     			$start_date,
-    			$end_date
+    			$end_date,
+    			
     	));
     	return $this;
     }

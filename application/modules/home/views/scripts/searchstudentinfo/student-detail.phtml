@@ -414,29 +414,8 @@ label.title {
 											    <td><?php echo $tr->translate('N_O');?></td>
 												<td><?php echo $tr->translate('SERVICE_CATE');?></td>
 												<td><?php echo $tr->translate('SERVICE_NAME');?></td>
-												
-												<?php /*?>
-												<td><?php echo $tr->translate('PAID_DATE');?></td>
-												<td><?php echo $tr->translate('RECEIPT_NO');?></td>
-												<td><?php echo $tr->translate('SCHOLARSHIP');?></td>
-												<td><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></td>
-												<td><?php echo $tr->translate('LATE_FEE');?></td>
-												<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
-												<td><?php echo $tr->translate('QTY');?></td>
-												<td><?php echo $tr->translate('PRICE');?></td>
-												
-												<td><?php echo $tr->translate('EXTRA_FEE');?></td>
-												<td><?php echo $tr->translate('DISCOUND');?></td>
-												<td><?php echo $tr->translate('DISCOUNT');?></td>
-												<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
-												<td><?php echo $tr->translate('REMARK');?></td>
-												<td><?php echo $tr->translate('USER');?></td>
-												<td><?php echo $tr->translate('STATUS');?></td>
-												<?php */?>
-												
 												<td><?php echo $tr->translate('START_DATE');?></td>
 												<td><?php echo $tr->translate('END_DATE');?></td>
-												
 											</tr>
 										</thead>
 										<style> 
@@ -448,31 +427,8 @@ label.title {
 										  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
 										    <td style="text-align:left">&nbsp;<?php echo $rs['category']; ?></td>
 										    <td style="text-align:left">&nbsp;<?php echo $rs['items_name']; ?></td>
-										    
-										    <?php /*?>
-											<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
-										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-											<td align="center"><?php //echo $rs['scholarship_percent']; ?>%</td>
-										    <td align="center"><?php //echo $rs['scholarship_amount']; ?></td>
-											<td><?php //if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
-											<td align="center"><?php echo $rs['payment_term']; ?></td>
-										    <td><?php echo $rs['qty'];?></td>
-										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-										    
-										    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
-										    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
-										    <td><?php //echo $rs['discount_fix']; ?> </td>
-										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
-											<td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
-											<td><?php echo $rs['user']; ?></td>
-											<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
-											<?php */?>
-										    
 										    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
 										    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
-										    
-										   	
-										  	
 										  </tr>
 										  <?php 
 										 	if($rs['is_void']==0){
@@ -498,7 +454,6 @@ label.title {
 										$this->headTitle('Report Student Drop'); 
 										echo $this->headTitle(''); 
 										$frm =  $this->form_search;
-										//print_r($this->rs);
 										$db_sub=new Allreport_Model_DbTable_DbRptStudentDrop();
 										
 										// $day = array(
@@ -582,12 +537,10 @@ label.title {
 																		</ul>
 																	</td>
 																</tr>
-																
 																<tr class="head_schedule" style="font-size:12px;" align="center" >
 																	<td rowspan="2" ><?php echo $tr->translate("TIME");?></td>
 																	<td colspan="<?php echo $amt_day?>"><?php echo $tr->translate("DAYS");?></td>
 																</tr>
-																
 																<tr class="head_schedule" style="font-size:12px;" align="center" >
 																<?php foreach ($day as $key => $days){?>
 																	<td ><?php echo $days['name'];?></td>
@@ -597,14 +550,14 @@ label.title {
 														<?php $session='';foreach($timestudy As $time){
 															if($time['from_hour']<=12){
 																if($title==0){?>
-																<tr  >
+																<tr>
 																	<td align="center"  colspan="<?php echo $amt_day+1?>" style="font-size:12px;padding: 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("MORNING");?></td>
 																</tr>
 														        <?php $title=1;}
 															}else{
 																if($titles==0){
 													        ?>
-													        	<tr  >
+													        	<tr>
 																	<td align="center"  colspan="<?php echo $amt_day+1?>" style="font-size:12px;padding: 2px;text-decoration: underline;border: solid 1px #4839bd;"><?php echo  $tr->translate("AFTERNOON");?></td>
 																</tr>
 													        <?php $titles=1;}
@@ -629,30 +582,29 @@ label.title {
 														 <?php }?>
 															 <tr>
 																<td colspan="<?php echo $amt_day+1?>" style="line-height: 18px;font-size:12px;border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;">
-																	 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
-																		if($rs_list['total_hour']>1){
-																			$h_label='hrs';
-																		}else{
-																			$h_label='hr';
-																		}
-																		if(!empty($rs_list['subject_id'])){
-																			$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
-																			$num++;
-																		?>
-																		 
-																			<div><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;?></div>
-																		 
-																	 <?php }}?>
+																	 <ul style="display: inline-table;">
+																		 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
+																			if($rs_list['total_hour']>1){
+																				$h_label='hrs';
+																			}else{
+																				$h_label='hr';
+																			}
+																			if(!empty($rs_list['subject_id'])){
+																				$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
+																				$num++;
+																			?>
+																				<li style="width: 30%;float: left;list-style-type: none;"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;?></li>
+																		 <?php }}?>
+																	 </ul>
 																</td>
 															 </tr>
 														 </table>	
 													<?php  }?>
 													</td>
 												</tr>
-												 
 												<tr>
 													<td colspan="3" style="border:1px solid #fff;">
-														<table cellpadding="0" cellspacing="0" width="100%" style="margin-top:8px;color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px">
+														<table cellpadding="0" cellspacing="0" width="100%" style="margin-top:8px;color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px">
 															<tr>
 																<td width="35%" align="center">
 																	<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
@@ -674,8 +626,6 @@ label.title {
 					        </div>
 				        </div>
 				        <!--/. Panel 5-->
-						
-						
 						<!--Panel 6-->
 				        <div class="tab-pane fade in " id="panel26" role="tabpanel">
 				        	<div class="card-box">

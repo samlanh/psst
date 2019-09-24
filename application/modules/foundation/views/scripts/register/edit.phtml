@@ -1745,7 +1745,7 @@ dojo.ready(function(){
 
 	setTimeout(function () {
 		loadingBlock();
-		checkDuplicateRecord();
+		//checkDuplicateRecord();
 		HideloadingBlock();
     }, 500);
 }); 
@@ -1753,20 +1753,20 @@ dojo.ready(function(){
 dojo.ready(function(){
 	var student_id = dijit.byId('student_id');
 	 	student_id.on('keyUp', function(evt) {
-		checkDuplicateRecord();
+		//checkDuplicateRecord();
 	});
 
 	 var name_kh = dijit.byId('name_kh');
 	 name_kh.on('keyUp', function(evt) {
-		 checkDuplicateStudent();
+		 //checkDuplicateStudent();
 	});
 	 var sex = dijit.byId('sex');
 	 sex.on('change', function(evt) {
-		 checkDuplicateStudent();
+		 //checkDuplicateStudent();
 	});
 	 var date_of_birth = dijit.byId('date_of_birth');
 	 date_of_birth.on('change', function(evt) {
-		 checkDuplicateStudent();
+		 //checkDuplicateStudent();
 	});
 });
 var isDuplicate = 0;

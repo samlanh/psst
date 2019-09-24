@@ -72,7 +72,6 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 			$dbgb->reloadPageExpireSession();
 			exit();
 		}
-		
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		

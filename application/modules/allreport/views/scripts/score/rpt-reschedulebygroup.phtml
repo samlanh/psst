@@ -4,15 +4,6 @@
 	$frm =  $this->form_search;
 	$db_sub=new Allreport_Model_DbTable_DbRptStudentDrop();
 	$db_global = new Application_Model_DbTable_DbGlobal();
-	// $day = array(
-		// 1=>$tr->translate('MONDAY'),
-		// 2 =>'Tuesday',
-		// 3 =>'Wednesday',
-		// 4=>'Thursday',
-		// 5=>'Friday',
-		// 6=>'Saturday',
-	// );
-	//$day = $this->day;
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -39,7 +30,6 @@
             	<input id="group" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("room");?>
             	<input id="room" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
@@ -64,24 +54,20 @@
             </div>
          </div>
 	</form>
-	<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
-		<tr>
-			<td colspan="3">&nbsp;</td>
-		</tr>
-		<tr>
-			<td colspan="3"><?php echo $this->rsheader;?></td>
-		</tr>
-		<tr class="line"><td colspan="3"></td></tr>
-		<tr>
-			<td colspan="3">&nbsp;</td>
-		</tr>
-		
-	</table>	
+	<div id="divPrint">
+		<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
+			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+		</table>	
 	<style>
 		table.main_table tr td{line-height:22px !important;font-size:13px !important;}
 		table.main_table tr ul li{font-size:14px !important;}
 	</style>
-	<div id="divPrint">
 		<table width="100%" style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 			<style>
 				table tr th{
@@ -95,14 +81,13 @@
 				  page-break-inside:avoid; page-break-after:auto;
 				}
 				tr.head_schedule th {
-				    
 				    text-align: center;
 				}
 				tr.head_schedule {
 				    background-color: #ffdbdb;
 				}
 				thead tr th,tr.hover td,tr.head_schedule td {
-				        border: 1px solid #4839bd;
+				    border: 1px solid #4839bd;
 				}
 				.green {
 				    color: #1ABB9C;
@@ -115,19 +100,16 @@
 				}
 				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			</style>
-				
-			
-			<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
-				foreach ($this->rs As $rs){
-					$title=0; $titles=0;
-				$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
-				$day = $db_global->getDaySchedule($rs['branch_id'],$rs['year_id'],$rs['group_id']);
-				$amt_day = count($day);
+				<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
+					foreach ($this->rs As $rs){
+						$title=0; $titles=0;
+						$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
+						$day = $db_global->getDaySchedule($rs['branch_id'],$rs['year_id'],$rs['group_id']);
+						$amt_day = count($day);
 				?>
-				
 				<tr>
 					<td colspan="3" align="center">
-						<span style="color: #4839bd; font-size:15px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
+						<span style="color: #4839bd; font-size:13px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
 					</td>
 				</tr>
 				<tr>
@@ -186,30 +168,31 @@
 								</td>
 								<?php }?>
 							</tr>
-							<?php }?>						 
-							 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
-								if($rs_list['total_hour']>1){
-									$h_label='hrs';
-								}else{
-									$h_label='hr';
-								}
-								if(!empty($rs_list['subject_id'])){
-									$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
-									$num++;
-							 ?>
-							 <tr>
-								<td style="font-size:11px;border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 18px;" colspan="<?php echo $amt_day+1?>"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
-							 </tr>
-							 <?php }}?>
-							 <tr >
-								<td  style="border: 1px solid #fff;">&nbsp;</td>
+							<?php }?>	
+							<tr>	
+								<td colspan="<?php echo $amt_day+1?>" style="border:1px solid #fff;border-top:1px solid #000;">	
+									<ul style="display: inline-table;font-size: 12px;">			 
+									 <?php  $num=0;foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
+										if($rs_list['total_hour']>1){
+											$h_label='hrs';
+										}else{
+											$h_label='hr';
+										}
+										if(!empty($rs_list['subject_id'])){
+											$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
+											$num++;
+									 ?>
+										<li style="width: 30%;float: left;list-style-type: none;line-height: 20px;"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;?></li>
+									 <?php }}?>
+									 </ul>
+							 	</td>
 							 </tr>
 						</table>											
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3" style="border:1px solid #fff;">
-						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px">
+					<td colspan="3" style="border:1px solid #fff;" valign="top">
+						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px">
 							<tr>
 								<td width="35%" align="center">
 									<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
@@ -230,7 +213,7 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );

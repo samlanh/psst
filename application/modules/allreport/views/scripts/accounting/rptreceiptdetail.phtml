@@ -51,7 +51,7 @@ function setDatatoReceipt(){
 		dojo.byId("lb_phone").innerHTML = '<?php echo $result['tel'];?>';	
 		//dojo.byId("lb_read_khmer").innerHTML = '<?php //echo $result['stu_code'];?>';	
 		<?php if($result['photo']){?>
-			dojo.byId("lb_photo").innerHTML = '<img style="max-height:100%;max-width:100%;" src="<?php echo $this->baseUrl().'/images/photo/'.$result['photo']?>" />' ;
+			dojo.byId("lb_photo").innerHTML = '<img style="height:100%;width:100%;" src="<?php echo $this->baseUrl().'/images/photo/'.$result['photo']?>" />' ;
 		<?php } ?>
 		dojo.byId("lb_total_payment").innerHTML = '<?php echo number_format($result['grand_total'],2);?>';	
 		dojo.byId("lb_fine").innerHTML = '<?php echo number_format($result['fine'],2);?>';			

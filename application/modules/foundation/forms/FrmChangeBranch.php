@@ -18,7 +18,7 @@ class Foundation_Form_FrmChangeBranch extends Zend_Dojo_Form
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
     	
-   	 	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+   	 	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");

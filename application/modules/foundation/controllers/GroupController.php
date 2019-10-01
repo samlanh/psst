@@ -245,6 +245,15 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	function getsubjectbygradeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Global_Model_DbTable_DbItems();
+			$group = $db->getGradeSubjectById($data['grade_id']);
+			print_r(Zend_Json::encode($group));
+			exit();
+		}
+	}
 	function addGraddjaxAction(){
     	if($this->getRequest()->isPost()){
     		try{

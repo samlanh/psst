@@ -59,7 +59,7 @@
 	}
 	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
 		$db = $this->getAdapter();
-		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId ";
+		$sql=" SELECT ide.* FROM rms_itemsdetail AS ide WHERE ide.`id` = $degreeId ";
 		if(!empty($type)){
 			$sql.=" AND ide.items_type=$type";
 		}
@@ -77,8 +77,8 @@
 			$db_items = new Global_Model_DbTable_DbItems();
 			$schooloption="";
 			if (!empty($_data['items_id'])){
-			$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
-			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
+				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
 			$sql="SELECT id FROM rms_itemsdetail WHERE items_id =".$_data['items_id'];
 			$sql.=" AND items_type='".$_data['items_type']."'";
@@ -105,6 +105,28 @@
 			);
 			$this->_name = "rms_itemsdetail";
 			$id =  $this->insert($_arr);
+			
+			
+			if($_data['items_type']==1){
+				$this->_name='rms_grade_subject_detail';
+				if(!empty($_data['identity'])){
+					$ids = explode(',', $_data['identity']);
+					foreach ($ids as $i){
+						$arr = array(
+								'grade_id'		=> $id,
+								'subject_id'	=> $_data['subject_study_'.$i],
+								'max_score'=>$_data['max_score'.$i],
+								'amount_subject'=>$_data['amount_subject'.$i],
+								'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
+								'cut_score'	=>$_data['score_cut_'.$i],
+								'date' 			=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId(),
+								'status' 		=> 1,
+						);
+						$this->insert($arr);
+					}
+				}
+			}
 			return $id;	
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -138,7 +160,33 @@
 			$this->_name = "rms_itemsdetail";
 			$id = $_data["id"];
 			$where = $this->getAdapter()->quoteInto("id=?",$id);
-			$this->update($_arr, $where);			
+			$this->update($_arr, $where);		
+
+			if($_data['items_type']==1){
+				
+				$this->_name='rms_grade_subject_detail';
+				$where = 'grade_id = '.$id;
+				$this->delete($where);
+				
+				if(!empty($_data['identity'])){
+					$ids = explode(',', $_data['identity']);
+					foreach ($ids as $i){
+						$arr = array(
+								'grade_id'		=> $id,
+								'subject_id'	=> $_data['subject_study_'.$i],
+								'max_score'=>$_data['max_score'.$i],
+								'amount_subject'=>$_data['amount_subject'.$i],
+								'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
+								'cut_score'	=>$_data['score_cut_'.$i],
+								'date' 			=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId(),
+								'status' 		=> 1,
+						);
+						$this->insert($arr);
+					}
+				}
+			}
+			
 			return $id;
 			
 		}catch(exception $e){

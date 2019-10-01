@@ -364,6 +364,11 @@
 		$row=$db->fetchAll($sql);
 		return $row;
 	}
+	public function getGradeSubjectById($id){
+		$db = $this->getAdapter();
+		$sql = "SELECT * FROM rms_grade_subject_detail WHERE grade_id = ".$db->quote($id);
+		return $db->fetchAll($sql);
+	}
 	public function getDDegreeCommentById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT 

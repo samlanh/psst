@@ -61,9 +61,10 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'		=> $id,
 							'subject_id'	=> $_data['group_subject_study_'.$i],
-							'amount_subject'=>$_data['amount_subject'.$i],
-							'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
-							'score_short'	=>$_data['scoreshort_'.$i],
+							'max_score'		=> $_data['max_score'.$i],
+							'score_short'	=> $_data['scoreshort_'.$i],
+							'amount_subject'=> $_data['amount_subject'.$i],
+							'amount_subject_sem'=> $_data['amount_subject_semester'.$i],
 							'teacher'   	=> $_data['teacher_'.$i],
 							'note'   		=> $_data['group_note_'.$i],
 							'date' 			=> date("Y-m-d"),
@@ -73,7 +74,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 				}
 			}
 			$db->commit();
-			//return true;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
@@ -124,9 +124,10 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'		=> $_data['id'],
 							'subject_id'	=> $_data['group_subject_study_'.$i],
+							'max_score'		=> $_data['max_score'.$i],
+							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],
 							'amount_subject_sem'=> $_data['amount_subject_semester'.$i],
-							'score_short'	=> $_data['scoreshort_'.$i],
 							'teacher'   	=> $_data['teacher_'.$i],
 							'note'   		=> $_data['group_note_'.$i],
 							'date' 			=> date("Y-m-d"),

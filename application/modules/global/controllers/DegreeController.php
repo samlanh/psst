@@ -17,9 +17,9 @@ class Global_DegreeController extends Zend_Controller_Action {
     	}
     	else{
     		$search = array(
-    				'advance_search' => "",
-    				'schoolOption_search'=>"",
-    				'status_search' => -1
+    			'advance_search' => "",
+    			'schoolOption_search'=>"",
+    			'status_search' => -1
     		);
     	}
     	$type= $this->type; //Degree

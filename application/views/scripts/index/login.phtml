@@ -1,0 +1,182 @@
+<?php
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage(1);
+	$this->headTitle($this->data["system_name"]."-Student Management System"); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="<?php echo $base_url;?>js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
+	<script>dojoConfig = {parseOnLoad: true}</script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/tundra/tundra.css"/>
+	<link rel="shortcut icon" href="<?php echo $this->baseUrl()."/"?>images/icon.ico" type="image/x-icon"/>
+	<script>	
+		require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox"]);
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	 <!-- Bootstrap -->
+    <link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Custom Theme Style -->
+    <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
+	<style type="text/css">
+		.container {
+		    padding: 0;
+		    width: auto;
+		}
+		.fullside {
+		    width: 99%;
+		    height: 30px;
+		}
+		.dijitArrowButtonInner, .dijitIconSearch {
+		    margin-top: 6px !important;
+		}
+		.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
+		    height: 30px;
+		}
+		.tundra .dijitButtonText {
+		    line-height: 24px;
+		}
+		.tundra .dijitInputContainer INPUT, .tundra .dijitTextBox {
+		    color: #000000;
+		    font-size: 16px;
+		}
+		.btn{
+			height: 40px;
+			min-width: 100px;	
+		}
+		.f_style{
+			font-family:'NiDA Khmer Empire';
+		    font-size:14px;
+			text-shadow: 1px 1px 1px #0B404A;
+		}
+		.t_shadow{ text-shadow: 1px 1px 1px #0B404A;}
+	</style>
+
+</head>
+<body class="tundra" style="background: #edf7ef;" >
+	<div class="container ">
+    	<div class="main_container login-page">
+    		<div class="header-top">
+    			<div class="col-md-3 col-sm-3 col-xs-12">
+    				<img src="<?php echo $this->baseUrl()."/images/cam-app-logo.png";?>" style="max-height:45px;margin: 0;padding-left: 10px;"  />
+    			</div>
+    			<div class="col-md-6 col-sm-6 col-xs-12">
+    				<div class="system-title text-center">
+    				ប្រព័ន្ធធ្វើតេស្ដសិស្សចូលសិក្សា
+    				<br />
+					Placement Test System
+					</div>
+    			</div>
+    			<div class="col-md-3 col-sm-3 col-xs-12">
+    			</div>
+    			<div class="clearfix"></div>
+    		</div>
+    		<div class="content">
+    			<div class="col-md-3 col-sm-3 col-xs-12">
+    			</div>
+    			<div class="col-md-6 col-sm-6 col-xs-12">
+    				<div class="login-form">
+    					<h4 style="font-family: 'Khmer MEF2';"><i class="fa fa-lock" aria-hidden="true"></i> <?php echo $tr->translate("SECURITY_SYSTEM");?>​</h4>
+    					<?php if (!empty($this->msg)){?>
+    					<span style=" color: #f9ba00; padding: 5px 0;  display: block;  text-shadow: 0px 0px #966d6d;"><?php echo $this->msg;?></span>
+    					<?php }?>
+    					<form id="frmLogin" dojoType="dijit.form.Form" method="post" action="">
+							<script type="dojo/method" event="onSubmit">				
+								if(this.validate()) {						
+									return true;
+								}
+								return false;
+							</script>
+							<div class="form-group login-row">
+								 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"><?php echo $tr->translate("SERIAL_CODE");?>
+				                 </label>
+			                   	 <div class="col-md-9 col-sm-9 col-xs-12">
+			                    	<input class="fullside" type="text" required="true" name="txt_user_name" id="txt_user_name" placeholder="<?php echo $tr->translate("SERIAL_CODE");?>" 
+									data-dojo-type="dijit/form/ValidationTextBox" missingMessage="<?php echo $tr->translate("PLEASE_ENTER_SERIAL_CODE");?>! " style="width: 100%;"/>
+			                    </div>
+							</div>
+							<div class="form-group login-row">
+								 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"><?php echo $tr->translate("PASSWORD");?>
+				                 </label>
+			                   	 <div class="col-md-9 col-sm-9 col-xs-12">
+			                    	<input class="fullside" type="password" required="true" name="txt_password" id="txt_password" placeholder="លេខសំងាត់" 
+								data-dojo-type="dijit/form/ValidationTextBox" missingMessage="សូមបំពេញលេខសំងាត់!" style="width: 100%;"/>
+								
+								<input class="fullside" type="hidden" required="true" name="lang" id="lang" placeholder="<?php echo $tr->translate("SERIAL_CODE");?>" 
+									data-dojo-type="dijit/form/ValidationTextBox" value="2"/>
+			                    
+			                    </div>
+							</div>
+							<div class="form-group login-row text-center">
+							<input class="f_styles" style=" font-weight:bold;	color: #02014a; font-size: 13px;" type="submit" value="ចូលប្រើប្រាស់" label="<?php echo $tr->translate("LOGIN");?>" data-dojo-type="dijit/form/Button" />
+								<input class="f_styles" style=" font-weight:bold; color: #02014a; font-size: 13px;" type="reset" value="សំអាត" id="clear_login" data-dojo-type="dijit/form/Button" label="<?php echo $tr->translate("CLEAR");?>" />
+							</div>
+						</form>
+    				</div>
+    			</div>
+    			<div class="col-md-3 col-sm-3 col-xs-12">
+    			</div>
+    			<div class="clearfix"></div>
+    		</div>
+    		<div class="footer">
+    			<div class="col-md-5 col-sm-5 col-xs-12">
+    				<div class="contact_info">
+    					<ul>
+    						<li><?php echo $tr->translate("USINGBY")?> : <strong><?php echo $this->data['branch']?></strong></li>
+    						<li><?php echo $this->data['branch_tel']?></li>
+    						<li> <?php echo $this->data['branch_email'];?> <?php //echo $this->data['email_client']?></li>
+    					</ul>
+    				</div>
+    			</div>
+    			<div class="col-md-2 col-sm-2 col-xs-12">
+    			</div>
+    			<div class="col-md-5 col-sm-5 col-xs-12">
+    				<div class="contact_info">
+    					<ul>
+    						<li><strong><?php echo $tr->translate("CONTACT_INFO")?></strong> : </li>
+    						<li><?php echo $this->data['camappadress']?></li>
+    						<li> <?php echo $this->data['camapptel'];	?> </li>
+    						<li><?php echo $this->data['website']?></li>
+    						<li>&copy រក្សាសិទ្ធិគ្រប់យ៉ាង
+    						<a title="<?php echo $this->data['power_by']?>" class="copyright" href="http://<?php echo $this->data['website']?>" target="_blank">
+								<strong><?php echo $this->data['power_by']?></strong></a>
+    						</li>
+    					</ul>
+    				</div>
+    			</div>
+    			<div class="clearfix"></div>
+    		</div>
+    	</div>
+    </div>
+     <script src="<?php echo $this->baseUrl()."/"?>dashboard/js/jquery-2.1.4.min.js"></script>
+    <script src="<?php echo $this->baseUrl()?>/admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+			var url_changelang = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'changelange'));?> ';
+			function changeLange(){
+				lang = dijit.byId("lang").get("value");
+				dojo.xhrPost({
+					url: url_changelang,
+				    content :{ 
+						    'lange':lang,
+					},	
+					handleAs:"json",
+					load: function(data) {
+						location.reload();
+					},
+					error: function(err) {
+					}
+				});
+			}
+	</script>
+</body>
+</html>

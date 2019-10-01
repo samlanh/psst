@@ -1,217 +1,11 @@
 <?php 
-$base_url = $this->baseUrl()."/";
-$tr=Application_Form_FrmLanguages::getCurrentlanguage(); 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("PLACEMENT_TEST"));
 $_dbgb= new Application_Model_DbTable_DbGlobal();
+$startTime  = "2019-10-01 15:52:12";
+$endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-	<head>
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-	    <script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/soria/soria.css" />
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	    <!-- Meta, title, CSS, favicons, etc. -->
-	    <meta charset="utf-8">
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-	    <!-- Bootstrap -->
-	    <link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-	    <!-- Font Awesome -->
-	    <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	    <!-- NProgress -->
-	    <link href="<?php echo $base_url;?>admin/vendors/nprogress/nprogress.css" rel="stylesheet">
-	    
-	    <!-- Custom Theme Style -->
-	    <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
-		 
-		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
-		<link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
-		
-		 <script src="<?php echo $base_url;?>js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
-  		 <script>dojoConfig = {parseOnLoad: true}</script>
-  		  <script>
-   		require(["dijit/form/Form","dijit/form/FilteringSelect","dijit/form/TextBox","dijit/form/Button","dijit/Dialog"]);
-   	</script>
-		<style>
-			.full-width {
-			    width: 98%;
-			    height: 30px;
-			}
-			.dijitArrowButtonInner, .dijitIconSearch {
-			    margin-top: 6px !important;
-			}
-			.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
-			    height: 28px;
-			}
-		
-			body.exam-test .left_col.scroll-view .navbar.nav_title {
-			    background: #fff;
-			}
-			body.exam-test .nav_menu {
-			    background: #fff;
-			}
-			body.exam-test .nav.navbar-nav>li>a {
-			    color: #000!important;
-			}
-			body.exam-test .top_nav .nav .open>a, .top_nav .nav .open>a:focus, body.exam-test .top_nav .nav .open>a:hover, body.exam-test .top_nav .nav>li>a:focus, .top_nav .nav>li>a:hover {
-			    background: #f5f5f5;
-			}
-			body.exam-test .toggle a {
-			    color: #000;
-			}
-			body.exam-test .blog-duration, body.exam-test .blog-score {
-			    text-align: center;
-			    padding: 0 10px;
-			}
-			.test-min {
-			    padding: 10px;
-			    background: #ffb22e;
-			    border-radius: 8px;
-			    font-weight: 600;
-			    font-size: 21px;
-			    color: #fff;
-			}
-		.test-score ul {
-		    padding: 0;
-		    margin: 0;
-		    text-align: left;
-		    list-style: none;
-		    line-height: 24px;
-		}
-		.test-score ul span.lb-title {
-		    min-width: 35%;
-		    display: inline-block;
-		    font-weight: 600;
-		}
-		.test-score ul span.lb-value {
-		    min-width: 55%;
-		    display: inline-block;
-		    text-align: right;
-		}
-		div.reportblog {
-    		overflow-x: auto;
-			overflow-y: hidden;
-			min-height:26cm; 
-			margin:0 auto; 
-			padding:0.5cm 0.5cm 0cm 0.5cm;
-			font-size: 18px;
-		}
-		.content.exam-test-data {
-		    padding: 10px 0;
-		}
-		.title-examination {
-		    margin-top: 35px;
-		}
-		.title-examination h2 {
-		    font-weight: 600;
-		    font-size: 24px;
-		}
-		
-		.section-exam-title {
-		    margin: 15px 0px;
-		}
-		.section-exam-title.sub-section {
-		    padding-left: 20px;
-		}
-		.section-exam-title h2 {
-		    padding: 0;
-		    margin: 0;
-		    font-weight: 600;
-		}
-		.section-exam-question ul {
-		    list-style: none;
-		}
-		span.question-num {
-		    padding: 0 2px;
-		    vertical-align: top;
-		    display: inline-block;
-		    min-width: 30px;
-		}
-		.answer-blog ul li.answer-opt.col1,
-		.answer-blog ul li.answer-opt {
-		    display: inline-block;
-			margin: 2px;
-		}
-		.answer-blog ul li.answer-opt {
-		    width: 49%;
-		}
-		.answer-blog ul li.answer-opt.col1 {
-		    width: 100%;
-		}
-		.answer-blog ul li.answer-opt.col5 {
-		    width: 19%;
-		    margin: 5px 0;
-		}
-		.answer-blog ul li.answer-opt.col4 {
-			width: 24%;
-		    margin: 5px 0;
-		}
-		ul.images-quest li.answer-opt.col4 {
-			width: 24%;
-		    margin: 5px 0;
-			display: inline-block;
-		}
-		
-		li.answer-opt.col5 input {
-		    display: inline-block;
-		    width: 65%;
-		}
-		.section-exam-question img.img-question, img.img-question {
-		    width: 120px;
-				height: 125px;
-		}
-		.answer-opt.col4,
-		.answer-opt.col2 {
-			margin: 5px 0;
-		    display: inline-block;
-		}
-		.answer-opt.col2 {
-		    width: 48%;
-		}
-		.answer-opt.col4 {
-		    width: 24%;
-		}
-		.image-question ul {
-		    list-style: none;
-		}
-		div.two-blog {
-		    display: inline-block;
-		    width: 40%;
-			vertical-align: top;
-		}
-		.row-data .fill-in {
-		    display: inline-block;
-		    width: 80%;
-		}
-		.image-class {
-		    text-align: center;
-		}
-		input.full-width {
-		    width: 80%;
-		}
-		input::placeholder {
-		    padding: 5px;
-		    font-size: 14px;
-		    font-style: italic;
-		}
-		table.table_answer {
-		    width: 100%;
-		}
-		select.option-answer {
-		    max-width: 165px;
-		}
-		span.inline-value {
-		    display: inline-block;
-		}
-		span.value-list {
-		    display: inline-block;
-		    padding: 0 20px;
-		}
-		</style>
-	</head>
-	<body class="nav-md soria exam-test ">
-	<div class="container body">
-    	<div class="main_container">
+
         	<div class="col-md-3 left_col ">
           		<div class="left_col scroll-view">
 		            <div class="navbar nav_title">
@@ -224,9 +18,9 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 		            			<h2><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $tr->translate("រយៈពេលប្រឡង");?></h2>
 		            		</div>
 		            		<div class="test-min">
-		            			<span class="min">60</span>
-		            			<span class="point">:</span>
-		            			<span class="sec">00</span>
+		            			<span id="hours" class="min">60</span>
+		            			<span id="minutes" class="min">60</span>
+		            			<span id="seconds" class="min">00</span>
 		            		</div>
             			</div>
             			<div class="blog-score">
@@ -247,30 +41,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
             	</div>
             	
             </div>
-            <!-- top navigation -->
-		        <div class="top_nav">
-		          	<div class="nav_menu">
-		            	<nav>
-				              <div class="nav toggle">
-				              </div>
-              				  <ul class="nav navbar-nav navbar-right">
-			                	<li class="">
-				                  	<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                       	<img src="<?php echo $this->baseUrl()?>/images/user.png" alt="">
-				                    <?php echo "USER";?> <span class=" fa fa-angle-down"></span>
-					                 </a>
-				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
-					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">
-					                    <i class="fa fa-sign-out pull-right"></i> <?php echo $tr->translate("SIGN_OUT");?></a>
-					                    </li>
-				                  </ul>
-				                </li>
-             				</ul>
-            			</nav>
-          			</div>
-       			</div>
-       		 <!-- /top navigation -->
+           
             <!-- page content -->
        		<div class="right_col" role="main" >
        		 	<div class="right-conten" style="min-height: 570px;">
@@ -316,15 +87,16 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    						
 						    						
 						    						<?php 
+						    						$question_type = $rs['question_type'];
 						    						//Question Block
-						    						if ($rs['question_type']==1){ 
+						    						if ($question_type==1){ 
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							$question_id = $rs['id'];
 						    							if (!empty($rowQ)){
 						    							?>
 						    							<div class="section-exam-question">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<ul>
 											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
@@ -336,10 +108,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 												    							<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex?>.</span>
 													    							<div class="fill-in">
-														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex;?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
-													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex;?>">
-								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id'];?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
 													    							</div>
 												    							</div>
 												    							<?php }?>
@@ -352,7 +121,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    								</ul>
 						    							</div>
 						    							<?php }?>
-						    						<?php }else if ($rs['question_type']==2){ 
+						    						<?php }else if ($question_type==2){ 
 						    							$image = $this->baseUrl().'/images/no-photo.png';
 						    							if (!empty($rs['images'])){
 						    								if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
@@ -361,27 +130,24 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							}
 						    							?>
 						    							<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    									<div class="image-question answer-opt col4">
-						    										<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<span class="question-num"><?php echo $number?>.</span>
 								    								<img class="img-question" src="<?php echo $image;?>" />
 								    								<ul>
 								    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
 							    										<li>
-							    											<input type="radio" id="answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $index+1?>.</span> <?php echo $question['answer_label'];?>
-							    											<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-										    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-					    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+							    											<input type="radio" onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id;?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $index+1?>.</span> <?php echo $question['answer_label'];?>
 							    										</li>
 							    										<?php }?>
 								    								</ul>
 								    							</div>
 						    							<?php }?>
 						    							
-						    						<?php }else if ($rs['question_type']==3){
+						    						<?php }else if ($question_type==3){
 						    							$image = $this->baseUrl().'/images/no-photo.png';
 						    							if (!empty($rs['images'])){
 						    								if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
@@ -390,11 +156,11 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							}
 						    							?>	
 						    							<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    								<div class="image-question answer-opt col2">
-						    										<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="two-blog ans-left">
 								    									<span class="question-num"><?php echo $number?>.</span>
 									    								<img class="img-question" src="<?php echo $image;?>" />
@@ -404,10 +170,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    									<ul>
 									    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
 								    										<li>
-								    											<input type="radio" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
-								    											<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-											    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-						    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    											<input type="radio" onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
 								    										</li>
 								    										<?php }?>
 									    								</ul>
@@ -415,16 +178,16 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    								
 								    							</div>
 						    							<?php }?>
-						    						<?php }else if ($rs['question_type']==4){?>
+						    						<?php }else if ($question_type==4){?>
 						    							
 						    							<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    							<div class="section-exam-question ">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<ul>
 											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
@@ -443,10 +206,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 											    								<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex;?>.</span>
 													    							<div class="fill-in">
-														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo$rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
 													    							</div>
 												    							</div>
 											    							</li>
@@ -459,8 +219,9 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							</div>
 						    							<?php }?>
 						    							
-						    						<?php }else if ($rs['question_type']==5){?>
+						    						<?php }else if ($question_type==5){?>
 						    							<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
@@ -470,7 +231,6 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    								<div class="text-center">
 								    									<?php echo $rs['question_title'];?>
 								    								</div>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<ul>
 											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
@@ -482,10 +242,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 												    							<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex;?>.</span>
 													    							<div class="fill-in">
-														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
-													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
-													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" >
 													    							</div>
 												    							</div>
 												    							<?php }?>
@@ -499,16 +256,16 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							</div>
 						    							<?php }?>
 						    								
-						    						<?php }else if ($rs['question_type']==6){?>
+						    						<?php }else if ($question_type==6){?>
 						    						
 						    							<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    							<div class="section-exam-question ">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<div class="two-blog">
 									    									<div class="text-center">
@@ -537,7 +294,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 												    							<?php 
 												    							$tdAnswer="";
 												    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
-												    								$tdAnswer.='<td><select class="option-answer full-width" dojoType="dijit.form.FilteringSelect"  id="answere_'.$rs['id']."_".$keyIndex.'" name="answere_'.$rs['id']."_".$keyIndex.'">';
+												    								$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" class="option-answer full-width" dojoType="dijit.form.FilteringSelect">';
 												    								$tdAnswer.=$options;
 												    								$tdAnswer.='</select></td>';
 												    							?>
@@ -561,15 +318,17 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							</div>
 						    							<?php }?>
 						    							
-						    						<?php }else if ($rs['question_type']==7){?>
+						    						<?php }else if ($question_type==7){?>
 						    						
 						    						<?php 
-						    						$image = $this->baseUrl().'/images/no-photo.png';
-						    						if (!empty($rs['images'])){
-						    							if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
-						    								$image = $this->baseUrl()."/images/placement/".$rs['images'];
-						    							}
-						    						}
+						    						
+							    						$image = $this->baseUrl().'/images/no-photo.png';
+							    						if (!empty($rs['images'])){
+							    							if (file_exists(PUBLIC_PATH."/images/placement/".$rs['images'])){
+							    								$image = $this->baseUrl()."/images/placement/".$rs['images'];
+							    							}
+							    						}
+							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
 						    							if (!empty($rowQ)){
@@ -577,7 +336,6 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							<div class="section-exam-question ">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<ul>
 								    										<li class="answer-opt col1">
@@ -592,12 +350,9 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 													    								?>
 													    								</span>
 													    								<span class="inline-value ">
-													    									<select class="option-answer full-width" dojoType="dijit.form.FilteringSelect" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
+													    									<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.FilteringSelect" >
 													    									<?php echo $optAnswer;?>
 													    									</select>
-														    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-														    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex;?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-									    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex;?>">
 													    								</span>
 											    								<?php }?>
 										    									</div>
@@ -609,9 +364,10 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    					</div>
 								    					<?php }?>
 								    					
-						    						<?php }else if ($rs['question_type']==8){?>
+						    						<?php }else if ($question_type==8){?>
 						    						
 						    						<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
 						    							$answerList = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type']);
@@ -620,7 +376,6 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							<div class="section-exam-question ">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<?php if ($number==1){?>
 								    									<div style="text-align: center;margin: 20px 0;">
@@ -641,20 +396,15 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 											    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
 													    								<?php if (empty($question['answer_label'])){?>
 													    								<span class="inline-value ">
-													    								<select class="option-answer full-width" dojoType="dijit.form.FilteringSelect" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex?>">
-													    								<?php echo $optAnswer;?>
-													    								</select>
-													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    								<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']?>" dojoType="dijit.form.FilteringSelect" >
+														    								<?php echo $optAnswer;?>
+														    								</select>
 													    								</span>
 													    								<?php }else{?>
 													    								<span class="inline-value ">
 													    									<?php echo $question['answer_label'];?>
 													    								</span>
 													    								<?php }?>
-													    								
-												    							
 											    								<?php }?>
 											    							</li>
 						    											</ul>
@@ -664,9 +414,10 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    					</div>
 								    					<?php }?>
 								    					
-						    						<?php }else if ($rs['question_type']==9){?>
+						    						<?php }else if ($question_type==9){?>
 						    						
 						    						<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
@@ -683,10 +434,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 											    									<?php $keyIndex=0; foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
 													    								<?php if (empty($question['answer_label'])){?>
 													    								<span class="inline-value ">
-														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" id="answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex;?>">
-								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    								<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
 													    								</span>
 													    								<?php }else{?>
 													    								<span class="inline-value ">
@@ -704,9 +452,10 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    					</div>
 								    					<?php }?>
 								    					
-						    						<?php }else if ($rs['question_type']==10){?>
-						    						<?php }else if ($rs['question_type']==11){?>
+						    						<?php }else if ($question_type==10){?>
+						    						<?php }else if ($question_type==11){?>
 						    						<?php 
+						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
@@ -723,12 +472,8 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 												    									<span class="question-num"><?php echo $keyIndex; ?>.</span> <?php echo $question['answer_label'];?>
 												    								</div>
 												    								<div class="two-blog">
-														    							<input class="full-width" type="text" dojoType="dijit.form.TextBox" dojoType="dijit.form.TextBox"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$index+1?>">
-													    								<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>">
-													    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex?>">
-								    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" dojoType="dijit.form.TextBox"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  >
 												    								</div>
-													    							
 												    							</div>
 											    							</li>
 											    							<?php }?>
@@ -739,28 +484,25 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    								</ul>
 						    							</div>
 						    							<?php }?>
-						    						<?php }else if ($rs['question_type']==12){?>
+						    						<?php }else if ($question_type==12){?>
 							    						<?php if ($number==1){?>
 							    							<?php echo $rs['article']; ?>
 							    						<?php }?>
 							    						
 							    						<?php 
+							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    							<div class="section-exam-question ">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<span class="question-num"><?php echo $number?>.</span> <?php echo $rs['question_title'];?>
 								    									<ul>
 								    										<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
 								    										<li class="answer-opt col4">
-								    											<input type="radio" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
-								    											<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex?>" name="answere_<?php echo $rs['id']."_".$keyIndex?>">
-											    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>">
-						    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex; ?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
+								    											<input type="radio" onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
 								    										</li>
 								    										<?php }?>
 						    											</ul>
@@ -770,23 +512,21 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							</div>
 						    							<?php }?>
 						    							
-						    						<?php }else if ($rs['question_type']==13){?>
+						    						<?php }else if ($question_type==13){?>
 						    							
-							    						
-							    						
 						    							
-						    						<?php }else if ($rs['question_type']==14){?>	
+						    						<?php }else if ($question_type==14){?>	
 						    							<?php if ($number==1){?>
 							    							<?php echo $rs['article']; ?>
 							    						<?php }?>
 							    						<?php 
+							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    							<div class="section-exam-question ">
 								    						<ul>
 								    							<li>
-								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<table class="table_answer">
 								    										<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
@@ -794,10 +534,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 								    												<tr>
 								    													<td width="80%"> <?php echo $question['answer_label'];?> </td>
 								    													<td valign="top">
-								    														<input type="hidden" value="<?php echo $question['id'];?>" id="id_row_answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$index+1?>">
-														    								<input type="hidden" value="<?php echo $question['answer_key'];?>" id="correct_value_<?php echo $rs['id']."_".$keyIndex; ?>" name="correct_value_<?php echo $rs['id']."_".$keyIndex;?>">
-									    													<input type="hidden" value="<?php echo $question['point'];?>" id="point_<?php echo $rs['id']."_".$keyIndex;?>" name="point_<?php echo $rs['id']."_".$keyIndex; ?>">
-											    											<select class="option-answer full-width" dojoType="dijit.form.FilteringSelect" id="answere_<?php echo $rs['id']."_".$keyIndex; ?>" name="answere_<?php echo $rs['id']."_".$keyIndex;?>">
+											    											<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.FilteringSelect" >
 														    								<?php echo $this->truefalse_opt;;?>
 														    								</select>
 								    													</td>
@@ -812,9 +549,10 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    							</div>
 						    							<?php }?>
 						    							
-							    					<?php }else if ($rs['question_type']==15){?>
+							    					<?php }else if ($question_type==15){?>
 							    					
 							    						<?php 
+							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
@@ -849,7 +587,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 									    							<?php 
 									    							$tdAnswer="";
 									    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
-									    								$tdAnswer.='<td><select dojoType="dijit.form.FilteringSelect" class="option-answer full-width" id="answere_'.$rs['id']."_".$keyIndex.'" name="answere_'.$rs['id']."_".$keyIndex.'">';
+									    								$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" dojoType="dijit.form.FilteringSelect" class="option-answer full-width" >';
 									    								$tdAnswer.=$options;
 									    								$tdAnswer.='</select></td>';
 									    							?>
@@ -888,9 +626,77 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
              		
        		 	</div>
        		</div>
-         </div>
-     </div>
-	<script src="<?php echo $this->baseUrl()?>/admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="<?php echo $this->baseUrl()?>/admin/build/js/custom.min.js"></script>
-	</body>
-</html>
+     <style>
+			.test-min {
+				    padding: 10px;
+				    border-radius: 8px;
+				    font-weight: 600;
+				    font-size: 21px;
+				    color: #fff;
+				}
+			span.min {
+			    background: #333d98;
+			    padding: 10px;
+			    border: solid 1px #ccc;
+			    display:inline-block;
+				border-radius: 10px;
+			}
+		span.min span { display:block; width:100%;}
+     </style>
+     <script type="text/javascript">
+	     url_enter_answer= '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'enteranswer'));?>';
+	     function enterAnswer(question_type,question_id,answer_id){
+		     if(question_type==2 || question_type==3 || question_type==12){
+		    	 var answer = $("input[name='answere_"+question_id+"']:checked").val();
+		     }else{
+		    	 var answer = dijit.byId('answere_'+question_id+'_'+answer_id).get('value');
+		     }
+		    alert(answer);
+		    return false;
+	     	dojo.xhrPost({
+	     		url: url_enter_answer,
+	     		content:{
+	     			'question_type':question_type,'question_id':question_id,'answer_id':answer_id
+	     			},
+	     		handleAs:"json",
+	     		load: function(data) {
+	     			
+	     		},
+	     		error: function(err) {
+	     		}
+	     	});
+	     }
+
+	     function makeTimer() {
+
+    		//	var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");	
+    			var endTime = new Date("<?php echo date("d M Y H:i:s",strtotime($endTiem));?>");			
+    				endTime = (Date.parse(endTime) / 1000);
+
+    				var now = new Date();
+    				now = (Date.parse(now) / 1000);
+
+    				var timeLeft = endTime - now;
+
+    				var days = Math.floor(timeLeft / 86400); 
+    				var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+    				var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+    				var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+    	  
+    				if (hours < "10") { hours = "0" + hours; }
+    				if (minutes < "10") { minutes = "0" + minutes; }
+    				if (seconds < "10") { seconds = "0" + seconds; }
+
+    				//$("#days").html(days + "<span>Days</span>");
+    				$("#hours").html(hours + "<span> Hrs </span>");
+    				$("#minutes").html(minutes+ "<span> Min </span>");
+    				$("#seconds").html(seconds+ "<span> Sec </span>");	
+    				if(hours==00 && minutes==00 && seconds==00 ){
+	    				//redirect
+    				}	
+
+    		}
+
+    		setInterval(function() { makeTimer(); }, 1000);
+     </script>
+	

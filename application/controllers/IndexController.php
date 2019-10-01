@@ -289,7 +289,7 @@ class IndexController extends Zend_Controller_Action
     	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
     	$user_id = $session_user->student_id;
     	if (!empty($user_id)){
-    		$this->_redirect("/index/testexam");
+    		$this->_redirect("/index/home");
     	}
     	
     	$this->_helper->layout()->disableLayout();
@@ -329,9 +329,11 @@ class IndexController extends Zend_Controller_Action
     				$session_user->stu_khname= $studnet_info['stu_khname'];
     				$session_user->stu_enname= $studnet_info['stu_enname'];
     				$session_user->last_name= $studnet_info['last_name'];
+    				$session_user->test_type= $studnet_info['test_type'];
+    				$session_user->test_setting_id= $studnet_info['test_setting_id'];
     
     				
-    				Application_Form_FrmMessage::redirectUrl("/index/testexam");
+    				Application_Form_FrmMessage::redirectUrl("/index/home");
     				exit();
     			}
     			else{
@@ -348,19 +350,71 @@ class IndexController extends Zend_Controller_Action
     	}
     	$this->view->rslang = $session_lang->lang_id;
     }
+    public function signoutAction()
+    {
+    	if($this->getRequest()->getParam('value')==1){
+    		$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    		if(!empty($session_user->student_id)){
+    			$session_user->unsetAll();
+    			Application_Form_FrmMessage::redirectUrl("/index/login");
+    			exit();
+    		}
+    	}
+    }
     public function testexamAction()
     {
-    	 
+    	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    	$test_type = $session_user->test_type;
+    	$test_setting_id = $session_user->test_setting_id;
+    	$user_id = $session_user->student_id;
+    	if (empty($user_id)){
+    		$this->_redirect("/index/login");
+    	}
     	
-    	$this->_helper->layout()->disableLayout();
-    
+    	$_data = array('test_setting_id'=>$test_setting_id);
+    	
+//     	$this->_helper->layout()->disableLayout();
     	$branch_id =2;
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	
     	$_dbgb= new Application_Model_DbTable_DbGlobal();
-    	$this->view->question=$_dbgb->getAllQuestionBySettingExam();
+    	$this->view->question=$_dbgb->getAllQuestionBySettingExam($_data);
     	$this->view->truefalse_opt=$_dbgb->getOptionTrueFalse(1);
+    }
+    
+    public function homeAction()
+    {
+    	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    	$test_type = $session_user->test_type;
+    	$test_setting_id = $session_user->test_setting_id;
+    	$user_id = $session_user->student_id;
+    	if (empty($user_id)){
+    		$this->_redirect("/index/login");
+    	}
+    	$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+    	$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
+    	$this->view->settingDetail = $_dbpl->getPlacementSettingDetail($test_setting_id);
+    	
+    	$branch_id =2;
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    
+    function enteranswerAction(){
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Application_Model_DbTable_DbPlacementTest();
+//     			$teacher = $db->getSubjectByGroupId($data['group_id']);
+//     			print_r(Zend_Json::encode($teacher));
+    			exit();
+    		}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			
+    		}
+    	}
     }
 
 }

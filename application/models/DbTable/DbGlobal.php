@@ -2593,6 +2593,13 @@ function getAllgroupStudyNotPass($action=null){
 		WHERE s.id = q.section_id
 		
   		";
+  	if (!empty($_data['test_setting_id'])){
+  		$setting_id = $_data['test_setting_id'];
+  		$sql.=" AND (s.id IN (SELECT  st.section_id FROM `rms_placementtest_setting_detail` AS st
+			WHERE st.setting_id =$setting_id) OR s.parent IN (SELECT  st.section_id FROM `rms_placementtest_setting_detail` AS st
+			WHERE st.setting_id =$setting_id))";
+  	}
+  	
   	$sql.="ORDER BY 
 		(SELECT sp.ordering FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) ASC,
 		s.ordering ASC,

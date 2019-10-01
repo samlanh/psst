@@ -1,0 +1,129 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("HOME"));
+$_dbgb= new Application_Model_DbTable_DbGlobal();
+
+
+?>
+<style>
+.card-box {
+    padding: 10px;
+    background: #fff;
+    position: relative;
+    margin-top: 15px;
+    color: #333;
+    overflow: hidden;
+    height: 100%;
+}
+.accounting-management a {
+    color: #fff;
+}
+.accounting-management .capital-box span {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 55px;
+    margin-top: 10px;
+    display: inline-block;
+}
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-55, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+    padding: 5px;
+}
+</style>
+
+        	<div class="col-md-3 left_col ">
+          		<div class="left_col scroll-view">
+		            <div class="navbar nav_title">
+		            </div>
+            		<div class="clearfix"></div>
+            		
+            		<div class="left-content">
+	            	</div>
+            	</div>
+            	
+            </div>
+           
+            <!-- page content -->
+       		<div class="right_col" role="main" >
+       		 	<div class="right-conten" style="min-height: 570px;">
+             		<div id="page-wrapper">
+						<!-- Page content start -->
+						<div class="page-contentbar">
+							<!-- START PAGE CONTENT -->
+							<div id="page-right-content">
+								<div class="container">
+									 <div class="row" style="margin-top: 15px;">
+									 	
+									 	<div class="card-box">
+										 	<div class="header-row">
+							    				<?php echo $this->rsheader;?>
+							    			</div>
+							    			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						    					<div class="title-examination text-center">
+							    					<h2><?php echo $this->setting['title'];?></h2>
+							    					<h5><?php echo $tr->translate("DURATION")?> : <?php echo $this->setting['duration'];?> <?php echo $tr->translate("MIN")?></h5>
+							    				</div>
+							    				<div class="exam-content">
+							    					<span><?php echo $tr->translate("EXAM_CONTENT")?></span> : 
+								    				<ul>
+								    					<?php if ($this->settingDetail) foreach ($this->settingDetail as $rs){?>
+								    					<li><span><?php echo $rs['section_title'];?></span></li>
+								    					<?php }?>
+								    				</ul>
+							    				</div>
+							    			</div>
+											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+												<div class="accounting-management text-center">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+														<a title="<?php echo $tr->translate("START_EXAM")?>" href="/Installmentnew/trunk/public/report/loan/rpt-loancollect">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #203864;">
+															<span data-bind="text: currentRatio"><i class="fa fa-pencil-square-o"></i></span> 
+															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("START_EXAM")?></p>
+														</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+												<div class="accounting-management text-center">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+														<a title="<?php echo $tr->translate("EXAM_HISTORY")?>" href="/Installmentnew/trunk/public/report/loan/rpt-loancollect">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #750a14;">
+															<span data-bind="text: currentRatio"><i class="fa fa-sliders"></i></span> 
+															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("EXAM_HISTORY")?></p>
+														</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+												<div class="accounting-management text-center">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+														<a title="<?php echo $tr->translate("VIEW_LAST_RESULT")?>" href="/Installmentnew/trunk/public/report/loan/rpt-loancollect">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #0f575b;">
+															<span data-bind="text: currentRatio"><i class="fa fa-file-text-o"></i></span> 
+															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("VIEW_LAST_RESULT")?></p>
+														</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+												<div class="accounting-management text-center">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+														<a title="Customer Unpaid" href="/Installmentnew/trunk/public/report/loan/rpt-loancollect">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #144673;">
+															<span data-bind="text: currentRatio"><i class="fa fa-pencil-square-o"></i></span> 
+															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("START_EXAM")?></p>
+														</div>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					</div>
+       		 	</div>
+       		</div>
+	

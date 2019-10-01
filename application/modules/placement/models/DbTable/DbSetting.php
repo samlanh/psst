@@ -49,6 +49,7 @@ class Placement_Model_DbTable_DbSetting extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'test_type'=>$_data['test_type'],
 					'title'=>$_data['title'],
+					'duration'=>$_data['duration'],
 					'note'=>$_data['note'],
 					'status'=>1,
 					'create_date'=>date("Y-m-d H:i:s"),
@@ -94,6 +95,7 @@ class Placement_Model_DbTable_DbSetting extends Zend_Db_Table_Abstract
 	   		$_arr = array(
 	   				'test_type'=>$_data['test_type'],
 				'title'=>$_data['title'],
+	   				'duration'=>$_data['duration'],
 				'note'=>$_data['note'],
 				'status'=>$_data['status'],
 				'modify_date'=>date("Y-m-d H:i:s"),

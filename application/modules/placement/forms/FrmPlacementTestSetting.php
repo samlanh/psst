@@ -59,6 +59,16 @@ class Placement_Form_FrmPlacementTestSetting extends Zend_Dojo_Form
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));
     	
+    	$duration = new Zend_Dojo_Form_Element_NumberTextBox('duration');
+    	$duration->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'required'=>'true',
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'missingMessage'=>$this->tr->translate("Forget Enter Duration")
+    	));
+    	
     	$note=  new Zend_Form_Element_Textarea('note');
     	$note->setAttribs(array(
     			'dojoType'=>'dijit.form.Textarea',
@@ -142,6 +152,7 @@ class Placement_Form_FrmPlacementTestSetting extends Zend_Dojo_Form
     		$_branch_id->setValue($data["branch_id"]);
     		$_test_type->setValue($data["test_type"]);
     		$title->setValue($data["title"]);
+    		$duration->setValue($data["duration"]);
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
@@ -150,6 +161,7 @@ class Placement_Form_FrmPlacementTestSetting extends Zend_Dojo_Form
     			$_branch_id,
     			$_test_type,
     			$title,
+    			$duration,
 				$note,
 				$_status,
 				$id,

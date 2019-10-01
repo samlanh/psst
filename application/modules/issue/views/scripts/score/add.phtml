@@ -192,7 +192,6 @@
 dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 
 dojo.ready(function(){
@@ -287,10 +286,10 @@ function filterStudent(){
 				str='';
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
-					+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff;  "><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
-					+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
-					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
-					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
+					+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff;  "><td  class="tdheader"><?php echo $tr->translate('DEL');?></td>'
+					+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
+					+'<td class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
+					+'<td class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
 					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
 				  for(j=0;j<subject.length;j++){
@@ -326,10 +325,10 @@ function filterStudent(){
 					num++;
 					inx = inx+1;
 					temp += '<tr class="hover normal" id="row'+inx+'">';
-					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-					temp += '<td align="center">&nbsp;'+inx+'</td>';
+					temp +='<td width="10px" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+					temp += '<td width="10px" align="center">&nbsp;'+inx+'</td>';
 					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
-					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
+					temp += '<td style="min-width:100px;text-align:left;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
 						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" onblur="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';

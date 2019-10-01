@@ -66,6 +66,16 @@ class Global_Form_FrmMetion extends Zend_Dojo_Form
     	
     	$id = new Zend_Form_Element_Hidden('id');
     	
+    	$_arr = array(0=>$this->tr->translate("BY_DEGREE"),1=>$this->tr->translate("BY_GRADE"));
+    	$setting_type = new Zend_Dojo_Form_Element_FilteringSelect("setting_type");
+    	$setting_type->setMultiOptions($_arr);
+    	$setting_type->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$setting_type->setMultiOptions($_arr);
+    	 
     	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
@@ -89,6 +99,7 @@ class Global_Form_FrmMetion extends Zend_Dojo_Form
     	if(!empty($data)){
     		$_academic->setValue($data["academic_year"]);
     		$_degree->setValue($data["degree"]);
+    		$setting_type->setValue($data["setting_type"]);
     		$title->setValue($data["title"]);
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
@@ -100,6 +111,7 @@ class Global_Form_FrmMetion extends Zend_Dojo_Form
     			$title,
     			$_degree,
 				$note,
+    			$setting_type,
 				$_academic,
     			$_status,
     			$id,

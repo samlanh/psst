@@ -191,10 +191,10 @@
 						<tbody id="table_row"></tbody>
 						<tr>
 							<td colspan="3" align="right"><?php echo $tr->translate("TOTAL_SUBJECT");?> :&nbsp;&nbsp;</td>
-							<td><input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.TextBox" /></td>
-							<td><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.TextBox" /></td>
-							<td><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.TextBox" /></td>
-							<td><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.TextBox" /></td>
+							<td><input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
+							<td><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
+							<td><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
+							<td><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
 							<td colspan="2" ></td>
 						</tr>
 					</table>
@@ -851,10 +851,10 @@ function calculateTotalSubject(){
 			total_amt_subject_month = total_amt_subject_month + amt_subject_month;
 			total_amt_subject_semester = total_amt_subject_semester + amt_subject_semester;
 		}
-		dijit.byId("total_max_score").attr("value",total_max_score);
-		dijit.byId("total_score_cut").attr("value",total_score_cut);
-		dijit.byId("total_subject_month").attr("value",total_amt_subject_month);
-		dijit.byId("total_subject_semester").attr("value",total_amt_subject_semester);
+		dijit.byId("total_max_score").attr("value",dojo.number.format(total_max_score,2));
+		dijit.byId("total_score_cut").attr("value",dojo.number.format(total_score_cut,2));
+		dijit.byId("total_subject_month").attr("value",dojo.number.format(total_amt_subject_month,2));
+		dijit.byId("total_subject_semester").attr("value",dojo.number.format(total_amt_subject_semester,2));
 	}
 }
 

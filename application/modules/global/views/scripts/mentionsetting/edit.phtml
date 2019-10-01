@@ -67,6 +67,18 @@
 		                	<input id="degree" />
 		                </div>
 		             </div>
+		              <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("setting_type");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input id="grade" />
+		                </div>
+		             </div>
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -118,9 +130,24 @@
 			class: "fullside", 
 			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",
 			onChange: function() {  
-				checkMentionExisting();
+				//checkMentionExisting();
+				getallGrade();
 			}          
 		}, "degree");
+
+		new dijit.form.FilteringSelect({
+			store: dept_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,
+			id: "grade",
+			name: "grade",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",   
+			onChange: function() {  
+				
+			}       
+		}, "grade");
 		 var academic_year = dijit.byId('academic_year');
 		 academic_year.on('change', function(evt) {
 			 getAllDegreeByAcademicSchoolOption();
@@ -159,7 +186,30 @@
 			error: function(err) {
 			}
 		});		
-}	
+}
+
+	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id=='' || dept_id==-1){return false;}
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id,'noaddnew':1
+					},
+				handleAs:"json",
+				load: function(data){
+					dijit.byId('grade').attr('value','');
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store);   
+				    if(dept_id==<?php echo $this->row['degree'];?>){
+				   	 	dijit.byId('grade').attr('value','<?php echo $this->row['grade'];?>');
+				    }
+				},
+				error: function(err){
+				}
+			});
+	}
 var col= 0; var no=0;
 var title = 0;
 function addRow() {

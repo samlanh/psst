@@ -22,12 +22,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-// 			$sql="SELECT id FROM rms_group WHERE branch_id =".$_data['branch_id'];
-// 			$sql.=" AND group_code='".$_data['group_code']."'";
-// 			$rs = $db->fetchOne($sql);
-// 			if(!empty($rs)){
-// 				return -1;
-// 			}
 			$_arr=array(
 					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],

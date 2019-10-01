@@ -41,6 +41,8 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
     		$arr = array(
     				'academic_year'	=>$data['academic_year'],
     				'degree'		=>$data['degree'],
+    				'setting_type'		=>$data['setting_type'],
+    				'grade'			=>$data['grade'],
     				'title'			=>$data['title'],
     				'note'			=>$data['note'],
     				'status'		=>1,
@@ -77,6 +79,8 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 			$arr = array(
     				'academic_year'	=>$data['academic_year'],
     				'degree'		=>$data['degree'],
+					'setting_type'		=>$data['setting_type'],
+					'grade'			=>$data['grade'],
     				'title'			=>$data['title'],
     				'note'			=>$data['note'],
     				'status'		=>1,

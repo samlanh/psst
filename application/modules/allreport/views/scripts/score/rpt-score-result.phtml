@@ -13,19 +13,19 @@
 	$dbgb = new Application_Model_DbTable_DbGlobal();
 	
 	$month = array(
-				"01"=>"មករា",
-				"02"=>"កុម្ភៈ",
-				"03"=>"មីនា",
-				"04"=>"មេសា",
-				"05"=>"ឧសភា",
-				"06"=>"មិថុនា",
-				"07"=>"កក្កដា",
-				"08"=>"សីហា",
-				"09"=>"កញ្ញា",
-				"10"=>"តុលា",
-				"11"=>"វិច្ឆិកា",
-				"12"=>"ធ្នូ"
-			);
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
@@ -83,8 +83,8 @@
         	</div>
         	<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
         		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-						<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
-						<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
+					<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
+					<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
 				</select>
         	</div>
         	<div id="month" class="col-md-2 col-sm-2 col-xs-12">
@@ -167,16 +167,16 @@
 				?>
 				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 				<?php $i=0; $count_fail=0;?>
-					<tr>
-						<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-							<div​​ style="color:#4839bd; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">
-								<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
-							</div><br />
-							<div​​ style="color:red; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">
-								<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span>
-							</div>
-						</td>
-						<td align="center" valign="top"></td>
+				<tr>
+					<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+						<div​​ style="color:#4839bd; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
+						</div><br />
+						<div​​ style="color:red; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span>
+						</div>
+					</td>
+					<td align="center" valign="top"></td>
 				</tr>
 				<tr>
 				<?php 
@@ -185,12 +185,12 @@
 					$colspan=2;
 				}?>
 					<td colspan="3" id="exportExcel" valign="top">
-						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1" >
+						<table class="header"  cellpadding="2"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1" >
 							<tr class="cheader" align="center" >
 								<td><?php echo $tr->translate("NUM");?>
 									<br />No
 								</td>
-								<td style="width:100px;"><?php echo $tr->translate("ID_NUMBER");?>
+								<td style="width:80px;"><?php echo $tr->translate("ID_NUMBER");?>
 									<br />ID
 								</td>
 								<td><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?>
@@ -213,12 +213,10 @@
 								</td>
 							</tr>
 							<?php } $i++;?>
-							<tr class="style hover" style=" line-height: 20px;">
-								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+							<tr class="style hover" style="line-height: 20px;">
+								<td align="center"><?php echo $i;?></td>
 							    <td align="center" style="white-space:nowrap;">
-							    	&nbsp;
 							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&group_id=".$rs['group_id']."&exam_type=".$rs['exam_type']."&for_semester=".$rs['for_semester']."&for_month=".$rs['for_month_id'];?>"><?php echo $rs['stu_code'];?></a>
-							    	&nbsp;
 							    </td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
 								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
@@ -245,7 +243,6 @@
 									<?php
 										$total_score = number_format($total_score,2);
 										echo $total_score;
-// 										$total_subject =($rs['exam_type']==2)?$rs['amount_subjectsem']:$rs['amount_subject'];
 										$average = number_format($rs['total_avg'],2);
 									?>
 								</td>
@@ -281,7 +278,7 @@
 							</table>
 							<br />
 							<?php if (!empty($this->studentgroup)){?>
-									<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Fasthand';font-size: 14px;color:#4839bd;">
+									<table cellpadding="0" cellspacing="0" width="100%" style="line-height:22px;font-family:'Khmer OS Fasthand';font-size: 14px;color:#4839bd;">
 										<tr>
 											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT");?> : </span><span style="color:red; display: inline-block; text-align: right; width: 28%;"><?php if ($i>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));}else{ echo $dbgb->getNumberInkhmer($i);} echo " ".$tr->translate("STUDENT_UNIT");?></span></td>
 											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
@@ -302,7 +299,7 @@
 												<br />
 												បានឃើញ និងឯកភាព</td>
 											<td width="33%" valign="top">&nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;font-family:'Khmer os battambang'" valign="top"><?php echo $tr->translate("CREATE_WORK_DATE");?></td>
+											<td width="33%" style="color:#1949d6;white-space: nowrap;font-family:'Khmer os battambang'" valign="top"><br /><?php echo $tr->translate("CREATE_WORK_DATE");?></td>
 										</tr>
 										<tr>
 											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:16px;text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>

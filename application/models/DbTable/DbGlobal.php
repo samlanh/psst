@@ -2219,7 +2219,7 @@ function getAllgroupStudyNotPass($action=null){
   		return 'Excellent';
   	}
   }
-  function getMentionScore($score,$academic,$degree,$mentiontype=1){
+  function getMentionScore($score,$academic,$degree,$mentiontype=1,$grade=null){
   	$db = $this->getAdapter();
   	$column="sd.metion_grade";
   	if ($mentiontype==1){//grade A/B/C
@@ -2232,13 +2232,13 @@ function getAllgroupStudyNotPass($action=null){
   	$score = empty($score)?0:$score;
   	$sql="SELECT $column AS mention
 			FROM `rms_metionscore_setting_detail` AS sd,
-			`rms_metionscore_setting` AS s
+				`rms_metionscore_setting` AS s
 			WHERE s.id = sd.metion_score_id
-			AND s.academic_year=$academic
-			AND degree = $degree
-			AND $score < sd.max_score
-			ORDER BY sd.max_score ASC
-			LIMIT 1";
+				AND s.academic_year=$academic
+				AND degree = $degree
+				AND $score < sd.max_score
+				ORDER BY sd.max_score ASC
+				LIMIT 1";
   	return $db->fetchOne($sql);
   }
   function updateReadNotif($type,$notif_id){

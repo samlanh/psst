@@ -31,7 +31,6 @@
 ?>	
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.data.ObjectStore");
 
 dojo.ready(function(){
 		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
@@ -193,7 +192,7 @@ dojo.ready(function(){
 							<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
 						</tr>
 						<tr>
-							<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
+							<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['last_name']." ".$this->rs['stu_enname'])?></td>
 							<td align="right" style="width: 30px;">Gender:</td>
 							<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
 							<td align="right" style="width: 60px;">ID:</td>
@@ -427,7 +426,7 @@ dojo.ready(function(){
 							<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
 						</tr>
 						<tr>
-							<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
+							<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['last_name']." ".$this->rs['stu_enname'])?></td>
 							<td align="right" style="width: 30px;">Gender:</td>
 							<td align="center" style="width: 40px;"><?php echo $sexen;?></td>
 							<td align="right" style="width: 60px;">ID:</td>
@@ -811,7 +810,7 @@ dojo.ready(function(){
 										<tr>
 											<td ><?php echo $tr->translate('STUDENT_NAME');?></td>
 											<td >:</td>
-											<td class="bold"><?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name']);?></td>
+											<td class="bold"><?php echo strtoupper($this->rs['last_name']." ".$this->rs['stu_enname']);?></td>
 										</tr>
 										<tr>
 											<td ><?php echo $tr->translate('GENDER');?></td>
@@ -1103,7 +1102,7 @@ dojo.ready(function(){
 										<tr>
 											<td ><?php echo $tr->translate('STUDENT_NAME');?></td>
 											<td >:</td>
-											<td class="bold"><?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name']);?></td>
+											<td class="bold"><?php echo strtoupper($this->rs['last_name']." ".$this->rs['stu_enname']);?></td>
 										</tr>
 										<tr>
 											<td ><?php echo $tr->translate('GENDER');?></td>

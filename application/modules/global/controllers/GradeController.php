@@ -135,6 +135,19 @@ class Global_GradeController extends Zend_Controller_Action {
     	$frm->FrmAddItemsDetail($row,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$d_row = $_dbgb->getAllItems(1);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
+    	
+    	$_db = new Foundation_Model_DbTable_DbGroup();
+    	$this->view->row_year=$_db->getAllYears();
+    	$this->view->subject_opt = $_db->getAllSubjectStudy();
+    	 
+    	$db = new Global_Model_DbTable_DbItems();
+    	$rs =  $db->getGradeSubjectById($id);
+    	$this->view->row=$rs;
     }
     function adddegreeAction(){
     	if($this->getRequest()->isPost()){

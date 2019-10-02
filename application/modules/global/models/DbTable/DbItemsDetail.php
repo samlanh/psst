@@ -139,8 +139,8 @@
 			$db_items = new Global_Model_DbTable_DbItems();
 			$schooloption="";
 			if (!empty($_data['items_id'])){
-			$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
-			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
+				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
 			$_arr=array(
 					'items_id'		=> $_data['items_id'],

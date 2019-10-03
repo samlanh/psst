@@ -57,6 +57,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";

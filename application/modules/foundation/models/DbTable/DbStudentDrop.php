@@ -80,7 +80,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				date_stop,
 				reason,
 				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name
-				 ";
+			";
 // 		$sql.=$dbp->caseStatusShowImage("s.status");
 		$sql.=" FROM `rms_student_drop` AS s WHERE 1 ";
 		$where = "";

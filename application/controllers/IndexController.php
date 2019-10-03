@@ -322,7 +322,8 @@ class IndexController extends Zend_Controller_Action
     			if($db_user->userAuthenticateStudentTest($user_name,$password)){
     				$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
     				$studnet_info = $db_user->getStudentInfo($user_name,$password);
-    					
+
+    				$session_user->branch_id= $studnet_info['branch_id'];
     				$session_user->student_id= $studnet_info['stu_id'];
     				$session_user->serial=$user_name;
     				$session_user->pwd=$password;
@@ -331,7 +332,7 @@ class IndexController extends Zend_Controller_Action
     				$session_user->last_name= $studnet_info['last_name'];
     				$session_user->test_type= $studnet_info['test_type'];
     				$session_user->test_setting_id= $studnet_info['test_setting_id'];
-    
+    				$session_user->exam_id = 0;
     				
     				Application_Form_FrmMessage::redirectUrl("/index/home");
     				exit();
@@ -366,21 +367,41 @@ class IndexController extends Zend_Controller_Action
     	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
     	$test_type = $session_user->test_type;
     	$test_setting_id = $session_user->test_setting_id;
+    	$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
+    	$exam_id = $session_user->exam_id;
     	$user_id = $session_user->student_id;
     	if (empty($user_id)){
     		$this->_redirect("/index/login");
     	}
+    	if (empty($exam_id)){
+    		$this->_redirect("/index/home");
+    	}
     	
+    	$exam_id = empty($exam_id)?0:$exam_id;
+    	 
     	$_data = array('test_setting_id'=>$test_setting_id);
-    	
-//     	$this->_helper->layout()->disableLayout();
-    	$branch_id =2;
-    	$frm = new Application_Form_FrmGlobal();
-    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	
     	$_dbgb= new Application_Model_DbTable_DbGlobal();
     	$this->view->question=$_dbgb->getAllQuestionBySettingExam($_data);
     	$this->view->truefalse_opt=$_dbgb->getOptionTrueFalse(1);
+    	
+    	$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+    	$exam = $_dbpl->getStartPlacementTest($exam_id);
+    	$this->view->exam = $exam;
+    	$this->view->exam_id = $exam_id;
+    	$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
+    	
+    	$startTime  = date("Y-m-d H:i:s",strtotime($exam['start'])); //"2019-10-01 15:52:12";
+    	$duration = empty($exam['duration'])?1:number_format($exam['duration'],0);
+    	$endTiem = date("Y-m-d H:i:s",strtotime("+$duration min $startTime"));
+    	
+    	if((time()-(60*60*24)) > strtotime($endTiem)){
+    		$this->_redirect("/index/complete");
+    	}
+    	
+    	$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
     
     public function homeAction()
@@ -388,26 +409,59 @@ class IndexController extends Zend_Controller_Action
     	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
     	$test_type = $session_user->test_type;
     	$test_setting_id = $session_user->test_setting_id;
+    	$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
     	$user_id = $session_user->student_id;
+    	$exam_id = $session_user->exam_id;
     	if (empty($user_id)){
     		$this->_redirect("/index/login");
+    	}
+    	if (!empty($exam_id)){
+    		$this->_redirect("/index/testexam");
     	}
     	$_dbpl= new Application_Model_DbTable_DbPlacementTest();
     	$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
     	$this->view->settingDetail = $_dbpl->getPlacementSettingDetail($test_setting_id);
     	
-    	$branch_id =2;
+    	$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
-    
+    function startexamAction(){
+    	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    	$test_type = $session_user->test_type;
+    	$test_setting_id = $session_user->test_setting_id;
+    	$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
+    	$user_id = $session_user->student_id;
+    	if (empty($user_id)){
+    		$this->_redirect("/index/login");
+    	}
+    	
+    	$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+    	$setting = $_dbpl->getPlacementSetting($test_setting_id);
+    	$exam = $_dbpl->startPlacementTest($setting);
+    	
+    	$session_user->unlock();
+    	$session_user->exam_id = $exam;
+    	$session_user->lock();
+    	$this->_redirect("/index/testexam");
+    	exit();
+    }
     function enteranswerAction(){
     	if($this->getRequest()->isPost()){
     		try{
     			$data = $this->getRequest()->getPost();
+    			
+    			$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    			$test_type = $session_user->test_type;
+    			$test_setting_id = $session_user->test_setting_id;
+    			$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
+    			$exam_id = $session_user->exam_id;
+    			$exam_id = empty($exam_id)?0:$exam_id;
+    			
+    			$data['placemnet_id'] = $exam_id;
     			$db = new Application_Model_DbTable_DbPlacementTest();
-//     			$teacher = $db->getSubjectByGroupId($data['group_id']);
-//     			print_r(Zend_Json::encode($teacher));
+    			$result = $db->enterPlacementTestAnswer($data);
+    			print_r(Zend_Json::encode($result));
     			exit();
     		}catch(Exception $e){
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -416,7 +470,52 @@ class IndexController extends Zend_Controller_Action
     		}
     	}
     }
-
+    function completeAction(){
+    	$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+    	$test_type = $session_user->test_type;
+    	$test_setting_id = $session_user->test_setting_id;
+    	$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
+    	$exam_id = $session_user->exam_id;
+    	$user_id = $session_user->student_id;
+    	if (empty($user_id)){
+    		$this->_redirect("/index/login");
+    	}
+    	if (empty($exam_id)){
+    		$this->_redirect("/index/home");
+    	}
+    	
+    	$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+    	$exam = $_dbpl->completePlacementTest($exam_id);
+    	
+    	$session_user->unlock();
+    	$session_user->exam_id = 0;
+    	$session_user->lock();
+    	$this->_redirect("/index/home");
+    	exit();
+    }
+	function examhistoryAction(){
+		$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+		$test_type = $session_user->test_type;
+		$test_setting_id = $session_user->test_setting_id;
+		$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
+		$exam_id = $session_user->exam_id;
+		$user_id = $session_user->student_id;
+		if (empty($user_id)){
+			$this->_redirect("/index/login");
+		}
+		
+		$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+		$row = $_dbpl->getExamHistoryStudent();
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/index/home");
+			exit();
+		}
+		$this->view->row = $row;
+		
+		$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+	}
 }
 
 

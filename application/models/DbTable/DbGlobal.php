@@ -2560,17 +2560,29 @@ function getAllgroupStudyNotPass($action=null){
   	return $cate_tree_array;
   }
   
-  function getOptionTrueFalse($hav_empty_opt=null){
-  	$db=$this->getAdapter();
-  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-  	$options='';
-  	if (!empty($hav_empty_opt)){
-  	$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_TRUE_FALSE"), ENT_QUOTES).'</option>';
-  	}
+  function getOptionTrueFalse($hav_empty_opt=null,$is_arr=null){
+  	if (!empty($is_arr)){
+  		$_arr = array(
+  					array(
+  						"id"=>"true",
+  						"name"=>"True"
+  					),
+	  				array(
+	  						"id"=>"false",
+	  						"name"=>"False"
+	  				),
+  				);
+  		return $_arr;
+  	}else{
+	  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	  	$options='';
+	  	if (!empty($hav_empty_opt)){
+	  		$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_TRUE_FALSE"), ENT_QUOTES).'</option>';
+	  	}
   		$options .= '<option value="true" >'.htmlspecialchars("True", ENT_QUOTES).'</option>';
   		$options .= '<option value="false" >'.htmlspecialchars("False", ENT_QUOTES).'</option>';
   		return $options;
-  	return $options;
+  	}
   }
   
   function getAllQuestionBySettingExam($_data=null){
@@ -2609,7 +2621,7 @@ function getAllgroupStudyNotPass($action=null){
   function getGetAnswerKeyById($section_id,$question_type,$is_opt=null){
   	$db = $this->getAdapter();
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-  	$sql=" SELECT qd.answer_key FROM `rms_question_detail` AS qd,rms_question as q WHERE qd.question_id = q.id AND q.section_id =$section_id AND q.question_type=$question_type  ";
+  	$sql=" SELECT qd.* FROM `rms_question_detail` AS qd,rms_question as q WHERE qd.question_id = q.id AND q.section_id =$section_id AND q.question_type=$question_type  ";
   	if ($question_type==8){
   		$sql.=" AND qd.answer_label = '' ";
   	}

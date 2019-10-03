@@ -2,8 +2,13 @@
 $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate("PLACEMENT_TEST"));
 $_dbgb= new Application_Model_DbTable_DbGlobal();
-$startTime  = "2019-10-01 15:52:12";
-$endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
+$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+$startTime  = date("Y-m-d H:i:s",strtotime($this->exam['start'])); //"2019-10-01 15:52:12";
+$duration = empty($this->exam['duration'])?1:number_format($this->exam['duration'],0);
+$endTiem = date("Y-m-d H:i:s",strtotime("+$duration min $startTime"));
+
+$placemnet_id = $this->exam_id; 
+$truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 ?>
 
         	<div class="col-md-3 left_col ">
@@ -56,7 +61,9 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 						    			</div>
 						    			<div class="content exam-test-data">
 						    				<div class="title-examination text-center">
-						    					<h2>YOUNG LEARNER’S PROGRAM PLACEMENT TEST </h2>
+						    					<?php if (!empty($this->setting)){?>
+						    					<h2><?php echo $this->setting['test_type_title'];?></h2>
+						    					<?php }?>
 						    				</div>
 						    				<?php 
 						    				$parent=0;
@@ -103,12 +110,14 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 											    							<li class="answer-opt col5">
 												    							<?php if (!empty($question['answer_label'])){?>
 												    								<span class="question-num"><?php echo $keyIndex?>.</span> <?php echo $question['answer_label'];?>
-												    							<?php }else{?>
+												    							<?php }else{
+												    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+												    							?>
 												    							
 												    							<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex?>.</span>
 													    							<div class="fill-in">
-														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id'];?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id'];?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  >
 													    							</div>
 												    							</div>
 												    							<?php }?>
@@ -138,9 +147,11 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 								    								<span class="question-num"><?php echo $number?>.</span>
 								    								<img class="img-question" src="<?php echo $image;?>" />
 								    								<ul>
-								    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+								    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+								    									$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+								    									?>
 							    										<li>
-							    											<input type="radio" onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id;?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $index+1?>.</span> <?php echo $question['answer_label'];?>
+							    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id;?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $index+1?>.</span> <?php echo $question['answer_label'];?>
 							    										</li>
 							    										<?php }?>
 								    								</ul>
@@ -168,9 +179,11 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 								    								</div>
 								    								<div class="two-blog ans-right">
 								    									<ul>
-									    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+									    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+									    									$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+									    									?>
 								    										<li>
-								    											<input type="radio" onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
+								    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
 								    										</li>
 								    										<?php }?>
 									    								</ul>
@@ -197,6 +210,7 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 											    										$image = $this->baseUrl()."/images/placement/".$question['image'];
 											    									}
 											    								}
+											    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
 											    							?>
 											    							<li class="answer-opt col4">
 											    								
@@ -206,7 +220,7 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 											    								<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex;?>.</span>
 													    							<div class="fill-in">
-														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  >
 													    							</div>
 												    							</div>
 											    							</li>
@@ -237,12 +251,14 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 											    							<li class="answer-opt col1">
 												    							<?php if (!empty($question['answer_label'])){?>
 												    								<span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
-												    							<?php }else{?>
+												    							<?php }else{
+												    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+												    							?>
 												    							
 												    							<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex;?>.</span>
 													    							<div class="fill-in">
-														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" >
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" >
 													    							</div>
 												    							</div>
 												    							<?php }?>
@@ -292,11 +308,32 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 										    								</div>
 									    									<ul>
 												    							<?php 
+												    							$script='';
 												    							$tdAnswer="";
 												    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+												    							
 												    								$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" class="option-answer full-width" dojoType="dijit.form.FilteringSelect">';
-												    								$tdAnswer.=$options;
+												    								
+												    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+												    								if (!empty($result)){
+												    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+													    								foreach ($rowQ as $index => $quest){
+												    										$selected = '';
+												    										if ($quest['column_b']==$result['answer_key']){
+												    											$selected = 'selected="selected"';
+												    										}
+												    										$colB = $quest['column_b'];
+												    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+												    									}
+												    									$tdAnswer.=$opti;
+												    								}else{
+												    									$tdAnswer.=$options;
+												    								}
+												    								
+												    								
 												    								$tdAnswer.='</select></td>';
+												    								
+												    								
 												    							?>
 												    							<li class="answer-opt col1">
 												    								<?php echo $question['column_b'];?>
@@ -331,6 +368,7 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
+						    							$answerList = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    							<div class="section-exam-question ">
@@ -351,7 +389,25 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 													    								</span>
 													    								<span class="inline-value ">
 													    									<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.FilteringSelect" >
-													    									<?php echo $optAnswer;?>
+													    									<?php 
+													    									
+													    									$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+													    									if (!empty($result)){
+													    										$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+													    										foreach ($answerList as $quest){
+													    											$selected = '';
+													    											if ($quest['answer_key']==$result['answer_key']){
+													    												$selected = 'selected="selected"';
+													    											}
+													    											$colB = $quest['answer_key'];
+													    											$opti.= '<option '.$selected.' value="'.$quest['answer_key'].'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+													    										}
+													    										echo $opti;
+													    									}else{
+													    										echo $optAnswer;
+													    									}
+													    									
+													    									?>
 													    									</select>
 													    								</span>
 											    								<?php }?>
@@ -397,7 +453,21 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 													    								<?php if (empty($question['answer_label'])){?>
 													    								<span class="inline-value ">
 														    								<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']?>" dojoType="dijit.form.FilteringSelect" >
-														    								<?php echo $optAnswer;?>
+														    								<?php $result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+													    									if (!empty($result)){
+													    										$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+													    										foreach ($answerList as $quest){
+													    											$selected = '';
+													    											if ($quest['answer_key']==$result['answer_key']){
+													    												$selected = 'selected="selected"';
+													    											}
+													    											$colB = $quest['answer_key'];
+													    											$opti.= '<option '.$selected.' value="'.$quest['answer_key'].'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+													    										}
+													    										echo $opti;
+						    																}else{
+						    																	echo $optAnswer;
+						    																}?>
 														    								</select>
 													    								</span>
 													    								<?php }else{?>
@@ -431,10 +501,13 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 								    											<span class="inline-value ">
 								    											<span class="question-num"><?php echo $number?>.</span>
 								    											</span>
-											    									<?php $keyIndex=0; foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+											    									<?php $keyIndex=0; foreach ($rowQ as $index => $question){ 
+											    										$keyIndex = $index+1;
+											    										$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+											    									?>
 													    								<?php if (empty($question['answer_label'])){?>
 													    								<span class="inline-value ">
-														    								<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
+														    								<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
 													    								</span>
 													    								<?php }else{?>
 													    								<span class="inline-value ">
@@ -465,14 +538,17 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 								    								<input type="hidden" value="<?php echo $rs['id'];?>" id="question_id_<?php echo $key+1?>" name="question_id_<?php echo $key+1?>">
 								    								<div class="answer-blog">
 								    									<ul>
-											    							<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+											    							<?php foreach ($rowQ as $index => $question){ 
+											    								$keyIndex = $index+1; 
+											    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+											    							?>
 											    							<li class="answer-opt col1">
 												    							<div class="row-data">
 												    								<div class="two-blog">
 												    									<span class="question-num"><?php echo $keyIndex; ?>.</span> <?php echo $question['answer_label'];?>
 												    								</div>
 												    								<div class="two-blog">
-														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" dojoType="dijit.form.TextBox"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  >
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  >
 												    								</div>
 												    							</div>
 											    							</li>
@@ -500,9 +576,12 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 								    								<div class="answer-blog">
 								    									<span class="question-num"><?php echo $number?>.</span> <?php echo $rs['question_title'];?>
 								    									<ul>
-								    										<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+								    										<?php foreach ($rowQ as $index => $question){ 
+								    											$keyIndex = $index+1; 
+								    											$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+								    										?>
 								    										<li class="answer-opt col4">
-								    											<input type="radio" onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
+								    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
 								    										</li>
 								    										<?php }?>
 						    											</ul>
@@ -529,13 +608,30 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 								    							<li>
 								    								<div class="answer-blog">
 								    									<table class="table_answer">
-								    										<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
+								    										<?php foreach ($rowQ as $index => $question){ 
+								    											$keyIndex = $index+1;
+								    											$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+								    										?>
 								    											
 								    												<tr>
 								    													<td width="80%"> <?php echo $question['answer_label'];?> </td>
 								    													<td valign="top">
 											    											<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.FilteringSelect" >
-														    								<?php echo $this->truefalse_opt;;?>
+														    								<?php 
+														    								if (!empty($result)){
+														    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_TRUE_FALSE"), ENT_QUOTES).'</option>';
+														    									foreach ($truefalseList as $quest){
+														    										$selected = '';
+														    										if ($quest['id']==$result['answer_key']){
+														    											$selected = 'selected="selected"';
+														    										}
+														    										$colB = $quest['name'];
+														    										$opti.= '<option '.$selected.' value="'.$quest['id'].'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+														    									}
+														    									echo $opti;
+														    								}else{
+														    									echo $this->truefalse_opt;
+														    								}?>
 														    								</select>
 								    													</td>
 								    												</tr>
@@ -587,8 +683,24 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 									    							<?php 
 									    							$tdAnswer="";
 									    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
+									    							
+									    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+									    							
 									    								$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" dojoType="dijit.form.FilteringSelect" class="option-answer full-width" >';
-									    								$tdAnswer.=$options;
+									    								if (!empty($result)){
+									    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+									    									foreach ($rowQ as $index => $quest){
+									    										$selected = '';
+									    										if ($quest['column_b']==$result['answer_key']){
+									    											$selected = 'selected="selected"';
+									    										}
+									    										$colB = $quest['column_b'];
+									    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+									    									}
+									    									$tdAnswer.=$opti;
+									    								}else{
+									    									$tdAnswer.=$options;
+									    								}
 									    								$tdAnswer.='</select></td>';
 									    							?>
 									    							<li class="answer-opt col1">
@@ -619,7 +731,11 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 						    				
 						    			</div>
 						    		</div>
+						    		<div class="foot-bt text-center">
+						    			<a class="bt-complete" href="<?php echo $this->baseUrl()."/index/complete"?>"><?php echo $tr->translate("COMPLETE")?> </a>
+						    		</div>
 						    	</div>
+						    	<div style="clear:both;"></div>
 						    </div>
 						</section>
        		 		</form>
@@ -627,6 +743,19 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
        		 	</div>
        		</div>
      <style>
+			.foot-bt {
+			    display: block;
+			    margin: 45px 0;
+			}
+			a.bt-complete {
+			    background: #0d8e75;
+			    padding: 10px;
+			    color: #fff;
+			    border-radius: 5px;
+			}
+			a.bt-complete:hover {
+			    background: #046754;
+			}
 			.test-min {
 				    padding: 10px;
 				    border-radius: 8px;
@@ -651,16 +780,13 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
 		     }else{
 		    	 var answer = dijit.byId('answere_'+question_id+'_'+answer_id).get('value');
 		     }
-		    alert(answer);
-		    return false;
 	     	dojo.xhrPost({
 	     		url: url_enter_answer,
 	     		content:{
-	     			'question_type':question_type,'question_id':question_id,'answer_id':answer_id
+	     			'question_type':question_type,'question_id':question_id,'answer_id':answer_id,'answer_key':answer
 	     			},
 	     		handleAs:"json",
 	     		load: function(data) {
-	     			
 	     		},
 	     		error: function(err) {
 	     		}
@@ -691,8 +817,9 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+60min $startTime"));
     				$("#hours").html(hours + "<span> Hrs </span>");
     				$("#minutes").html(minutes+ "<span> Min </span>");
     				$("#seconds").html(seconds+ "<span> Sec </span>");	
-    				if(hours==00 && minutes==00 && seconds==00 ){
+    				if(hours==00 && minutes==00 && seconds==05 ){
 	    				//redirect
+    					window.location.href = "<?php echo $this->baseUrl()."/index/complete"?>";
     				}	
 
     		}

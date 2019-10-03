@@ -1,0 +1,107 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("PLACEMENT_TEST"));
+$_dbgb= new Application_Model_DbTable_DbGlobal();
+$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+$startTime  = date("Y-m-d H:i:s",strtotime($this->exam['start'])); //"2019-10-01 15:52:12";
+$duration = empty($this->exam['duration'])?1:number_format($this->exam['duration'],0);
+$endTiem = date("Y-m-d H:i:s",strtotime("+$duration min $startTime"));
+
+$placemnet_id = $this->exam_id; 
+$truefalseList=$_dbgb->getOptionTrueFalse(1,1);
+?>
+
+        	<div class="col-md-3 left_col ">
+          		<div class="left_col scroll-view">
+		            <div class="navbar nav_title">
+		            </div>
+            		<div class="clearfix"></div>
+            		
+            		<div class="left-content">
+	            	</div>
+            	</div>
+            	
+            </div>
+           
+            <!-- page content -->
+       		<div class="right_col" role="main" >
+       		 	<div class="right-conten" style="min-height: 570px;">
+       		 		<div style="clear:both;"></div>
+       		 			<section class="inputmask">
+							<div class="row">
+						    	<div class="col-sm-12">
+						    		<div class="reportblog">
+						    			<div class="header-row">
+						    				<?php echo $this->rsheader;?>
+						    			</div>
+						    			<style>
+						    				table.content-data{
+												border-collapse:collapse;
+												width:100%;
+												border:1px solid #000; 
+												font-family:'Times New Roman','Khmer OS Battambang';
+												font-size:13px;
+												white-space: nowrap;
+												margin:0 auto;
+												color: #000;
+											}
+											table.content-data tr.style-head {
+											   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+												background: #ccd9ff;
+												text-align: center;;
+											}
+											table.content-data tr td {
+												padding: 0 2px;
+											}
+											table.content-data tr.style-rowdata {
+												font-size:12px; 
+												height: 23px;
+											}	
+						    			</style>
+						    			<table class="content-data" cellpadding="5"​ border="1" width="100%" >
+						    				<tr>
+						    					<td  align="center" colspan="8" style=" border: 1px #fff solid; ">
+						    						<h2><?php echo $tr->translate("EXAM_HISTORY");?></h2>
+						    					</td>
+						    				</tr>
+						    				<tr>
+						    					<td colspan="8" style=" border-left: 1px #fff solid; border-right: 1px #fff solid; ">&nbsp;</td>
+						    				</tr>
+											<tr class="style-head" align="center" >
+												<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+												<td colspan="4"><?php echo $tr->translate("EXAM_INFO");?></td>
+												
+												<td colspan="3"><?php echo $tr->translate("DATE_INFO");?></td>
+											</tr>
+											<tr class="style-head" align="center" >
+												<td><?php echo $tr->translate("EXAM");?></td>
+												<td><?php echo $tr->translate("DURATION");?></td>
+												<td><?php echo $tr->translate("EXAM_SCORE");?></td>
+												<td><?php echo $tr->translate("RESULT_SCORE");?></td>
+												
+												<td><?php echo $tr->translate("DATE");?></td>
+												<td><?php echo $tr->translate("START");?></td>
+												<td><?php echo $tr->translate("STOP");?></td>
+											</tr>
+											<?php if (!empty($this->row)) foreach ($this->row as $key => $rs){?>
+											<tr class="style-rowdata hover context-menu-one">
+												<td align="center"><?php echo $key+1;?></td>
+												<td><?php echo $rs['test_type_title'];?></td>
+												<td align="center"><?php echo number_format($rs['duration'],0)." ".$tr->translate("MIN");?></td>
+												<td align="center"><?php echo number_format($rs['total_point'],2);?></td>
+												<td align="center"><?php echo number_format($rs['result_score'],2);?></td>
+												
+												<td align="center"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
+												<td align="center"><?php echo date("H:i:s",strtotime($rs['start']));?></td>
+												<td align="center"><?php echo date("H:i:s",strtotime($rs['stop']));?></td>
+											</tr>
+											<?php }?>
+										</table>
+						    		</div>
+						    	</div>
+						    	<div style="clear:both;"></div>
+						    </div>
+						</section>
+             		
+       		 	</div>
+       		</div>

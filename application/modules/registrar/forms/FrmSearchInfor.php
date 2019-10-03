@@ -663,6 +663,20 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		$school_option->setValue($request->getParam("school_option"));
 		
+		
+		$_arr_opt = array(''=>$this->tr->translate("TEST_TYPE"));
+		$rows = $_dbgb->getPlacementTestType();
+		if(!empty($rows))foreach($rows AS $row) $_arr_opt[$row['id']]= preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($row['name'])));
+		$_test_type = new Zend_Dojo_Form_Element_FilteringSelect("test_type");
+		$_test_type->setMultiOptions($_arr_opt);
+		$_test_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside height-text',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',));
+		$_test_type->setValue($request->getParam("test_type"));
+		
 		$this->addElements(array($school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
@@ -675,6 +689,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$_exam_type,
 				$_for_semester,
 				$_for_month,
+				$_test_type
 				));
 	
 		return $this;

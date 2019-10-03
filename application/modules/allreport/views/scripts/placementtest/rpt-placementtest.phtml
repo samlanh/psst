@@ -1,0 +1,224 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("DAILY_PLACEMENT_TEST"));
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	
+	$month = array(
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+?>
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('DAILY_PLACEMENT_TEST');?></h4>
+    	   </div>
+    	   <div class="col-sm-4 text-right">
+    	   </div>
+    	</div>
+    </div>
+<form  action="" dojoType="dijit.form.Form" method="post">
+	<div class="form-group">
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("title");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("branch_id");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("test_type");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("start_date");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("end_date");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+    	</div>
+    </div>
+</form>
+<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			.padding td{padding: 0 1px !important;}
+			table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto }
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			tr.line td{ border-bottom: 2px solid #000; }
+			
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				border:1px solid #000; 
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color: #000;
+			}
+			table.content-data thead tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #ccd9ff;
+				text-align: center;;
+			}
+			table.content-data tr td {
+				padding: 0 2px;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}	
+		</style>
+		<table style="width: 100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td width="28%" align="left">
+					</td>
+					<td width="44%" align="center">
+						<span style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("DAILY_PLACEMENT_TEST");?></span>
+					</td>
+					<td align="right" width="28%"></td>
+				</tr>
+				<tr>
+					<td style="height: 10px">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel">
+						<table class="content-data" cellpadding="5"​ border="1" width="100%">
+							 <thead>
+								 <tr class="style-head" align="center" >
+									<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+									<td rowspan="2"><?php echo $tr->translate("BRANCH");?></td>
+									<td colspan="3"><?php echo $tr->translate("STUDENT_INFO");?></td>
+									<td colspan="4"><?php echo $tr->translate("EXAM_INFO");?></td>
+									
+									<td colspan="3"><?php echo $tr->translate("DATE_INFO");?></td>
+								</tr>
+								  <tr class="style-head" align="center">
+								  
+								    <td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								    <td><?php echo $tr->translate("NAME_ENGLISH");?></td>
+									<td><?php echo $tr->translate("SEX");?></td>
+									
+									<td><?php echo $tr->translate("EXAM");?></td>
+									<td><?php echo $tr->translate("DURATION");?></td>
+									<td><?php echo $tr->translate("EXAM_SCORE");?></td>
+									<td><?php echo $tr->translate("RESULT_SCORE");?></td>
+									
+									<td><?php echo $tr->translate("DATE");?></td>
+									<td><?php echo $tr->translate("START");?></td>
+									<td><?php echo $tr->translate("STOP");?></td>
+								  </tr>
+							  </thead>
+							<?php
+							 if (!empty($this->row)){ foreach($this->row as $key=> $rs){ 
+							?>
+							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" align="center" >
+							    <td><?php echo $key+1;?></td>
+							    <td><?php echo $rs['branch_name']; ?></td>
+							    <td><?php echo $rs['stu_khname']; ?></td>
+							     <td><?php echo $rs['stu_name_en']; ?></td>
+							    <td align="center"><?php echo $rs['sexTitle']; ?></td>
+							    
+								<td><?php echo $rs['test_type_title'];?></td>
+								<td align="center"><?php echo number_format($rs['duration'],0)." ".$tr->translate("MIN");?></td>
+								<td align="center"><?php echo number_format($rs['total_point'],2);?></td>
+								<td align="center"><?php echo number_format($rs['result_score'],2);?></td>
+								
+								<td align="center"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
+								<td align="center"><?php echo date("H:i:s",strtotime($rs['start']));?></td>
+								<td align="center"><?php echo date("H:i:s",strtotime($rs['stop']));?></td>
+							  </tr>
+							<?php 
+							 }
+							}?>
+						</table>
+					</td>
+				</tr>
+				<tr >
+					<td colspan="3" width="100%">
+						<?php echo $this->rsfooteracc;?>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<?php 
+	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
+	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
+	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
+<script type="text/javascript">
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="outstanding"){
+				url='<?php echo $urlOutStanding;?>';
+			}else if(key=="outstandingNophoto"){
+				url='<?php echo $urlOutStandingNoPhoto;?>';
+			}else if(key=="scoreresult"){
+				url='<?php echo $urlScoreResult;?>';
+			}else if(key=="scoredetail"){
+				url='<?php echo $urlScoreDetail;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
+			"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
+			"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
+			"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
+}
+
+
+</script> 

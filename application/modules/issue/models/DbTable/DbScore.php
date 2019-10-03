@@ -40,6 +40,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
+			$rs_groupscore = $dbpush->getSumCutScorebyGroup($_data['group']);
+			$total_cutscore = $rs_groupscore['score_short'];
 // 			$dbpush->getTokenUser($_data['group'],null, 4);
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
@@ -56,7 +58,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									'student_id'=>$old_studentid,
 									'total_score'=>$total_score,
 									'amount_subject'=>$subject_amt,
-									'total_avg' =>number_format($total_score/$subject_amt,2)
+									'total_avg' =>number_format(($total_score)/$subject_amt,2)
 							);
 							$this->_name='rms_score_monthly';
 							$this->insert($arr);
@@ -65,7 +67,20 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						
 						$old_studentid=$_data['student_id'.$i];
 						$subject_amt = $_data['amount_subject'.$i];
-						$total_score = $total_score+$_data["score_".$i."_".$subject];
+						if($total_cutscore<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
+							$total_score = $total_score+$_data["score_".$i."_".$subject];
+							$score_cut = 0;
+						}else{//ពិន្ទុកាត់តាមមុខវិជ្ជា
+							$rs_scorebygroup = $dbpush->getSumCutScorebyGroup($_data['group'],$subject);
+							
+							if(($_data["score_".$i."_".$subject]-$rs_scorebygroup['score_short'])<=0){
+								$score = 0;
+							}else{
+								$score = $_data["score_".$i."_".$subject] - $rs_scorebygroup['score_short'];
+							}
+							$total_score = $total_score+$score;
+							$score_cut = $rs_scorebygroup['score_short'];
+						}
 						
 						$arr=array(
 								'score_id'=>$id,
@@ -74,6 +89,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'amount_subject'=>$_data['amount_subject'.$i],
 								'subject_id'=> $subject,
 								'score'=> $_data["score_".$i."_".$subject],
+								'score_cut'=> $score_cut,
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
 								'is_parent'=> 1

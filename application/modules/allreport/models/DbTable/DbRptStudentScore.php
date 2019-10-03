@@ -254,7 +254,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.reportdate,
 		   	s.title_score,
 		   	s.max_score,
-		   	SUM(sd.`score`) AS total_score,
+		   	(SELECT sm.total_score FROM rms_score_monthly AS sm WHERE sm.score_id=s.id AND sm.student_id=st.stu_id LIMIT 1 ) AS total_score,
 		   	total_score AS total_scoreallsubject,
 		    (SELECT sm.total_avg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS average,
 		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
@@ -846,7 +846,9 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    public function getScoreBySubject($score_id,$student_id,$subject_id){
    	$db = $this->getAdapter();
    	$sql="SELECT
-     sd.`score`,sd.`subject_id`
+     sd.`score`,
+     sd.score_cut,
+     sd.`subject_id`
      ,sd.amount_subject
 	 FROM  `rms_score_detail` AS sd
 	 WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id ";

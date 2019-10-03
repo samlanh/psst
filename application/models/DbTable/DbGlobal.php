@@ -2632,5 +2632,14 @@ function getAllgroupStudyNotPass($action=null){
   		return $row;
   	}
   }
+  function getSumCutScorebyGroup($group_id,$subject_id=null){
+  	$db = $this->getAdapter();
+  	$sql="SELECT SUM(score_short) AS score_short FROM `rms_group_subject_detail` WHERE group_id=$group_id ";
+  	if($subject_id!=null){
+  		$sql.=" AND subject_id = $subject_id ";
+  	}
+  	$sql.=" LIMIT 1";
+  	return $db->fetchRow($sql);
+  }
 }
 ?>

@@ -118,11 +118,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			}
 		}
 		
-		
 		if($group_info['is_pass']==1){
 			//Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
 		}
-		
 		$this->view->row = $db->getGroupSubjectById($id);
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();

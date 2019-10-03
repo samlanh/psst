@@ -238,8 +238,13 @@
 								<td align="center">
 									<?php 
 										$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
-										$tscore_subject = number_format($score['score'],2);
-										echo $tscore_subject;
+										
+										if($score['score_cut']>=$score['score']){
+											$tscore_subject = 0;
+										}else{
+											$tscore_subject = $score['score']-$score['score_cut'];
+										}
+										echo number_format($tscore_subject,2);
 										$total_score = $total_score + $tscore_subject;
 										$amount_subject = $score['amount_subject'];
 									?>
@@ -252,7 +257,7 @@
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}
-									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+									$total_score = $rs['total_score'];
 								?>
 								<td align="center"><?php
 								$total_score = number_format($total_score,2);

@@ -346,7 +346,6 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT s.id,s.subject_titleen,s.is_parent
 		FROM rms_subject AS s,rms_score_detail AS sd WHERE s.id=sd.subject_id AND sd.score_id=$id";
-		//echo $sql;
 		return $db->fetchAll($sql);
 	}
 	

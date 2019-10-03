@@ -41,13 +41,6 @@ class Allreport_Model_DbTable_DbRptStudentServicePayment extends Zend_Db_Table_A
     	}
     	return $db->fetchAll($sql.$where);
     }
-    function getFeebyOther($fee_id){
-    	$db = $this->getAdapter();
-    	$sql = "select *,
-    	(SELECT major_enname FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id) as class
-    	from rms_tuitionfee_detail where fee_id =".$fee_id." ORDER BY id";
-    	return $db->fetchAll($sql);
-    }
 }
    
     

@@ -927,13 +927,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->getStudentinfoById($stu_id);
     }
 
-//  function getDegree(){
-// //     	$db=$this->getAdapter();
-// //     	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
-// //     	return $db->fetchAll($sql);
-//     	$_dbg = new Application_Model_DbTable_DbGlobal();
-//     	return $_dbg->getAllItems(1,null);
-//     }
+
 
     //function add rms_student_detailpayment
     function addStudentPaymentDetail($data,$type,$paymentid,$complete,$comment,$payment_id_ser){
@@ -989,39 +983,21 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = new Application_Model_DbTable_DbGlobal();
     	return $db->getAllGradeStudy($type);
     }  
-    function getGradeAll(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1 AND major_enname!='' ";
-    	return $db->fetchAll($sql);
-    }
+    
     function getAllDegree(){
     	$db=$this->getAdapter();
-//     	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE is_active=1 AND en_name!='' ";
-//     	return $db->fetchAll($sql);
     	$_dbg = new Application_Model_DbTable_DbGlobal();
     	return $_dbg->getAllItems(1,null);
     }
-//     function getAllDegreeGEP(){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE en_name!=''  AND is_active=1 ";
-//     	return $db->fetchAll($sql);
-//     }
+
     
     function getAllDegreeBac($type){
     	$db=new Application_Model_DbTable_DbGlobal();
     	return $db->getAllItems($type,null);
     }
    
-    function getGradeAllBac(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND  is_active=1 ";
-    	return $db->fetchAll($sql);
-    }
-    function getGradeAllKid(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND dept_id =1  AND is_active=1 ";
-    	return $db->fetchAll($sql);
-    }
+   
+    
     
     function getAllUser(){
     	$db=$this->getAdapter();
@@ -1033,16 +1009,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    function getGradeGepAll(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1 ";
-    	return $db->fetchAll($sql);
-    }
-    function getAllGrades(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1";
-    	return $db->fetchAll($sql);
-    }
+    
+    
     function getServicesAll(){
     	$db=$this->getAdapter();
     	$sql="SELECT service_id AS id,title FROM rms_program_name WHERE `type` = 2 AND title!='' ";
@@ -1061,29 +1029,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
-    function getAllGradeGEP($grade_id){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT CONCAT(major_enname,'-',major_khname) As name,major_id As id FROM rms_major WHERE dept_id=".$grade_id;
-    	$order=' ORDER BY id DESC';
-    	return $db->fetchAll($sql.$order);
-    }
-//     function getAllpaymentTerm(){
-//     	$db = $this->getAdapter();
-//     	$sql="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
-//     	return $db->fetchAll($sql);
-//     }
-    
-//     public function getAllService(){
-//     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-//     	$rows = $this->getAllServiceForOption();
-//     	//array_unshift($rows,array('service_id' => '-1',"title"=>$tr->translate("ADD")) );
-//     	array_unshift($rows,array('id' => '',"name"=>"Select Grade"));
-//     	$options = '';
-//     	if(!empty($rows))foreach($rows as $value){
-//     		$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
-//     	}
-//     	return $options;
-//     }
+   
     
     public function getAllService(){
     	$db = $this->getAdapter();

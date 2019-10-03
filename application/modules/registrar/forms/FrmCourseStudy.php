@@ -444,7 +444,7 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$rows = $_db->getAllFecultyNamess(2);
-		//$rows = $_db->getGlobalDb('SELECT en_name,dept_id FROM rms_dept WHERE is_active=1 AND en_name !="" ');
+		
 		$opt = array();
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name'];
 			

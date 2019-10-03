@@ -893,7 +893,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		sd.`student_id`,st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`,s.`reportdate`,DATE_FORMAT(s.`reportdate`,'%Y-%m') AS month_of_semester,
-		g.`amount_month`,g.`start_date`
+		g.`start_date`
 		 FROM `rms_score` AS s, 
 		 `rms_score_detail` AS sd,
 		 `rms_student` AS st,
@@ -1000,7 +1000,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
    	AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
    	sd.`student_id`,st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`,s.`reportdate`,DATE_FORMAT(s.`reportdate`,'%Y-%m') AS month_of_semester,
-   	g.`amount_month`,g.`start_date`
+   	g.`start_date`
    	FROM `rms_score` AS s,
    	`rms_score_detail` AS sd,
    	`rms_student` AS st,
@@ -1084,36 +1084,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
    	return $db->fetchAll($sql.$where.$order);
    }
-   public function getStundetInfo($id,$group_id){ // fro student score by teacher input
-   	$db = $this->getAdapter();
-   	$sql="SELECT tsd.*,
-	   	ts.`academic_id`,
-	   	ts.`group_id`,
-	   	g.`group_code`,
-	   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
-	   	ts.`for_academic_year`,
-	   	(SELECT month_kh FROM rms_month WHERE rms_month.id = ts.for_month LIMIT 1) AS for_month,
-	   	ts.`for_month`,ts.`for_semester`,ts.`for_year`,
-	   	ts.`date_input`,
-	   	(SELECT CONCAT(from_academic,'-',to_academic)
-	   	FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-	   	st.`stu_code`,
-	   	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,
-	   	(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title
-	   	FROM `rms_teacherscore_detail` AS tsd,
-	   	`rms_teacherscore` AS ts,
-	   	`rms_student` AS st,
-	   	`rms_group` AS g,
-	   	`rms_subject` AS sj
-	   	WHERE ts.`id`=tsd.`score_id`
-	   	AND st.`stu_id`=tsd.`student_id`
-	   	AND g.`id`=ts.`group_id`
-	   	AND sj.`id` = tsd.`subject_id`
-	   	AND tsd.`student_id` = $id and tsd.group_id = $group_id";
-   	$where='';
-   	$order = "  GROUP BY sj.id ASC 	LIMIT 1";
-   	return $db->fetchRow($sql.$where.$order);
-   }
+   
    public function getStundetScoreDetail($id,$group_id){ // fro student score by teacher input
    	$db = $this->getAdapter();
    	$sql="SELECT tsd.*,

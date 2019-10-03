@@ -220,7 +220,7 @@ public function init()
 //     				'id'=>$rs['id'],
 //     				'group_code'=>$rs['group_code'],
 //     				'group_id'=>$rs['group_id'],
-//     				'tuitionfee_id'=>$rs['tuitionfee_id'],
+//     				
 //     				'room_id'=>$rs['room_id'],
 //     				'from_academic'=>$rs['from_academic'],
 //     				'to_academic'=>$rs['to_academic'],
@@ -228,8 +228,8 @@ public function init()
 //     				'session'=>$rs['session'],
 //     				'degree'=>$rs['degree'],
 //     				'grade'=>$rs['grade'],
-//     				'amount_month'=>$rs['amount_month'],
-//     				'is_check'=>$rs['is_check'],
+//     			
+//     				
 //     				'start_date'=>$rs['start_date'],
 //     				'expired_date'=>$rs['expired_date'],
 //     				'user_id'=>$rs['user_id'],
@@ -277,8 +277,8 @@ public function init()
     				'session'=>$rs['session'],
     				'degree'=>$rs['degree'],
     				'grade'=>$rs['grade'],
-    				'amount_month'=>$rs['amount_month'],
-    				'is_check'=>$rs['is_check'],
+    				
+    				
     				'start_date'=>$rs['start_date'],
     				'expired_date'=>$rs['expired_date'],
     				'user_id'=>$rs['user_id'],
@@ -349,8 +349,7 @@ public function init()
     				'session'=>$rs['session'],
     				'degree'=>$rs['degree'],
     				'grade'=>$rs['grade'],
-    				'amount_month'=>$rs['amount_month'],
-    				'is_check'=>$rs['is_check'],
+    				
     				'start_date'=>$rs['start_date'],
     				'expired_date'=>$rs['expired_date'],
     				'user_id'=>$rs['user_id'],
@@ -367,10 +366,8 @@ public function init()
     			$result[$key]['total_score'.$index]=$item['total_score'];
     		}
     	}
-    	//$data= $this->view->row_group=$parent->getStudenetGroupSubject();
     
     	$data= $this->view->row_group=$result;
-    	//     	print_r($data);exit();
     	$test = $this->array_2D_inverse($result);
     	print_r($test);
         

@@ -31,7 +31,7 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
 					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.from_group=rms_group.id LIMIT 1) limit 1) AS grade,
 					(SELECT room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS room_name,
 					(SELECT start_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS start_date,
-					(SELECT amount_month from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS amount_month,
+					
 					(SELECT expired_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS expired_date,
 					(SELECT group_code from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.to_group LIMIT 1) LIMIT 1) as to_academic,

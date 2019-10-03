@@ -20,65 +20,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	public function getAllStudentGraduated($search){
-		$_db = $this->getAdapter();
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql = "SELECT 
-					gs.id,
-					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
-					g.group_code,
-					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS academic,
-					(SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
-					(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
-					(SELECT name_en from rms_view where type=5 and key_code = gs.type LIMIT 1) as type,
-					gs.note,
-					gs.create_date,
-					(select first_name from rms_users where id = gs.user_id) as user
-				 ";
-		$sql.=$dbp->caseStatusShowImage("gs.status");
-		$sql.=" FROM 
-					rms_graduated_student as gs,
-					rms_group as g
-				WHERE 
-					g.id=gs.group_id ";
-		$order_by = " order by id DESC";
-		$where=" ";
-		$where.=$dbp->getAccessPermission('g.branch_id');
-		if(empty($search)){
-			return $_db->fetchAll($sql.$order_by);
-		}
-		if(!empty($search['title'])){
-			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
-			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.from_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.to_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id=(select grade from rms_group where rms_group.id=
-							rms_group_student_change_group.from_group limit 1)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id=(select grade from rms_group where rms_group.id=
-							rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
-							rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
-							rms_group_student_change_group.from_group limit 1)) LIKE '%{$s_search}%'";
-			$where .=' AND ( '.implode(' OR ',$s_where).')';
-		}
-		if(!empty($search['branch_id'])){
-			$where.=" AND g.branch_id=".$search['branch_id'];
-		}
-		if(!empty($search['study_year'])){
-			$where.=" AND g.academic_year=".$search['study_year'];
-		}
-		if(!empty($search['grade'])){
-			$where.=" AND g.grade=".$search['grade'];
-		}
-		if(!empty($search['session'])){
-			$where.=" AND g.session=".$search['session'];
-		}
-		if(!empty($search['group'])){
-			$where.=" AND g.id=".$search['group'];
-		}
-		return $_db->fetchAll($sql.$where.$order_by);
-	}
+	
 	public function getAllDropById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_graduated_student WHERE id =".$id;
@@ -279,16 +221,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getGroupStudentChangeGroup1ById($id,$type){
-		$db = $this->getAdapter();
-		$sql = "SELECT start_date,expired_date,
-		(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year ,
-		(select major_enname from `rms_major` where `rms_major`.`major_id`=`rms_group`.`grade`)AS grade,
-		(select en_name from rms_dept where rms_dept.dept_id=rms_group.degree) as degree,
-		(select name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session`)AS session
-		FROM `rms_group` WHERE  id=$id";
-		return $db->fetchRow($sql);
-	}
+	
 	
 	function getAllYears(){
 		$db = $this->getAdapter();
@@ -303,11 +236,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getGradeByDegree($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id as id,major_enname as name FROM rms_major WHERE dept_id = $degree";
-		return $db->fetchAll($sql);
-	}
 	
 	public function AddNewGroupAjaxold($_data){
 		print_r($_data);exit();
@@ -322,7 +250,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 // 					'session' 		=> $_data['session'],
 // 					'degree' 		=> $_data['degree'],
 // 					'grade' 		=> $_data['grade'],
-// 					'amount_month' 	=> $_data['amountmonth'],
+
 // 					'start_date'	=> $_data['start_date'],
 // 					'expired_date'	=> $_data['end_date'],
 // 					'date' 			=> date("Y-m-d"),
@@ -351,7 +279,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 				'session' 		=> $data['session_group'],
 				'degree' 		=> $data['degree_group'],
 				'grade' 		=> $data['grade_group'],
-				'amount_month' 	=> $data['amountmonth'],
 				'start_date'	=> $data['start_date'],
 				'expired_date'	=> $data['end_date'],
 				'date' 			=> date("Y-m-d"),

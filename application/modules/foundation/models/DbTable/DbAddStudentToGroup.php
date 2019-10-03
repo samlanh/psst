@@ -155,88 +155,9 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	public function getGroupDetail($search){
-		$db = $this->getAdapter();
-		$_db  = new Application_Model_DbTable_DbGlobal();
-		$lang = $_db->currentlang();
-		if($lang==1){// khmer
-			$label = "name_kh";
-			$branch = "branch_namekh";
-			$grade = "rms_itemsdetail.title";
-			$degree = "rms_items.title";
-		}else{ // English
-			$label = "name_en";
-			$branch = "branch_nameen";
-			$grade = "rms_itemsdetail.title_en";
-			$degree = "rms_items.title_en";
-		}
-		$sql = " SELECT
-					`g`.`id`,
-					(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-					`g`.`group_code` AS `group_code`,
-					(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year LIMIT 1) as academic,
-					(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
-					(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
-					(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
-					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-					`g`.`semester` AS `semester`,
-					`g`.`note`,
-					(select $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id LIMIT 1)AS remain_Student
-				FROM 
-					rms_group g 
-				where 
-					g.status=1 
-					and g.is_pass != 1  ";
-		
-		$order = " ORDER BY `g`.`id` DESC " ;	
-		
-		$where=" ";
-		
-		if(empty($search)){
-			return $db->fetchAll($sql.$order);
-		}
-		if(!empty($search['adv_search'])){
-			$s_where = array();
-			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]="(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
-			$s_where[]="group_code LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT room_name FROM rms_room WHERE rms_room.room_id = g.room_id) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=g.degree) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT major_enname FROM rms_major WHERE rms_major.major_id=g.grade) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT	rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = g.session) LIKE '%{$s_search}%'";
-			$where .=' AND ( '.implode(' OR ',$s_where).')';
-		}
-		
-		if(!empty($search['study_year'])){
-			$where.=' AND g.academic_year='.$search['study_year'];
-		}
-		if(!empty($search['group'])){
-			$where.=' AND g.id='.$search['group'];
-		}
-		if(!empty($search['grade_all'])){
-			$where.=' AND g.grade='.$search['grade_all'];
-		}
-		if(!empty($search['session'])){
-			$where.=' AND g.session='.$search['session'];
-		}
-		if(!empty($search['room'])){
-			$where.=' AND g.room_id='.$search['room'];
-		}
-		if(!empty($search['branch_id'])){
-			$where.=' AND g.branch_id='.$search['branch_id'];
-		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission('g.`branch_id`');
-		
-		return $db->fetchAll($sql.$where.$order);
-	}
+
 	
 	public function getAllFecultyName(){
-// 		$db = $this->getAdapter();
-// 		$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!=''  ORDER BY id DESC";
-// 		return $db->fetchAll($sql);
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		return $_dbgb->getAllItems(1,null);
 	}

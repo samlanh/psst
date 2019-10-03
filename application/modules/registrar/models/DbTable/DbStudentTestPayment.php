@@ -91,57 +91,6 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 	
 	}
 	
-    function getAllStudentTestPayment($search=null){
-    	$_db  = new Application_Model_DbTable_DbGlobal();
-        $branch_id = $_db->getAccessPermission('st.branch_id');
-    	
-    	$db=$this->getAdapter();
-    	$sql=" select 
-    				id,
-    				serial,
-    				receipt_no,
-    				CONCAT(kh_name,'-',en_name) as name,
-    				sex,
-    				phone,
-    				(select en_name from rms_dept where dept_id = st.degree LIMIT 1) as degree_name,
-    				price,
-    				paid_date,
-    				(select first_name from rms_users where id = st.user_id LIMIT 1) as user
-    				
-    			From
-    				rms_student_test as st
-    			where 
-    				status = 1
-    				and is_paid = 1
-    				$branch_id ";
-    	
-    	$where=" ";
-    	$from_date =(empty($search['start_date']))? '1': " st.paid_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " st.paid_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
-    	
-    	if(!empty($search['adv_search'])){
-    		$s_where=array();
-    		$s_search=addslashes(trim($search['adv_search']));
-    		$s_where[]= " serial LIKE '%{$s_search}%'";
-    		$s_where[]=" receipt_no LIKE '%{$s_search}%'";
-    		$s_where[]= " kh_name LIKE '%{$s_search}%'";
-    		$s_where[]= " en_name LIKE '%{$s_search}%'";
-    		$where.=' AND ('.implode(' OR ', $s_where).')';
-    	}
-    	
-    	if(($search['branch_id']>0)){
-    		$where.= " AND st.branch_id = ".$search['branch_id'];
-    	}
-    	if(!empty($search['degree'])){
-    		$where.=" AND st.degree=".$search['degree'];
-    	}
-    	if(!empty($search['user'])){
-    		$where.=" AND st.user_id=".$search['user'];
-    	}
-    	$order=" ORDER BY st.id DESC";
-    	return $db->fetchAll($sql.$where.$order);
-	}
 	public function getRecieptNo(){
     	$db = $this->getAdapter();
     	
@@ -172,11 +121,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
     	return $pre.$new_acc_no;
     }
 
-    function getAllDegree(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE is_active=1 AND en_name!='' ";
-    	return $db->fetchAll($sql);
-    }
+   
     
     public function getNewStudent($newid,$stu_type){
     	$db = $this->getAdapter();

@@ -273,21 +273,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	
-	function getStudentTestProfileById($id){
-		$db = $this->getAdapter();
-		$sql=" SELECT 
-					*,
-					(select en_name from rms_dept where dept_id = degree_result) as degree_name,
-					(select major_enname from rms_major where major_id = grade_result) as grade_name,
-					(select name_en from rms_view where type=4 and key_code = session_result) as session_name,
-					(select name_en from rms_view where type=2 and key_code=sex) as sex,
-					(select name_en from rms_view where type=16 and key_code=student_status) as student_status
-				FROM 
-					rms_student_test 
-				where 
-					id=$id ";
-		return $db->fetchRow($sql);
-	}
+	
 	
 	
 	function createStudentTestFromCrm($data){

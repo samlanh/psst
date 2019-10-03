@@ -229,15 +229,6 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 		$where.=$dbp->getAccessPermission('gr.branch_id');
 		return $db->fetchAll($sql.$where.$order);
 	}
-	
-	function getAllGrade($grade_id){
-// 		$db = $this->getAdapter();
-// 		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
-// 		$order=' ORDER BY id DESC';
-// 		return $db->fetchAll($sql.$order);
-		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		return $_dbgb->getAllGradeStudy(1);
-	}
 	function getAllYears(){
 		$db = $this->getAdapter();
 		$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years FROM rms_tuitionfee WHERE `status`=1 and is_finished=0
@@ -288,9 +279,6 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	}
 	
 	public function getAllFecultyName(){
-// 		$db = $this->getAdapter();
-// 		$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY en_name";
-// 		return $db->fetchAll($sql);
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		return $_dbgb->getAllItems(1,null);
 	}
@@ -313,23 +301,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
-	public function addGradeAjax($_data){
-		$this->_name='rms_major';
-		try{
-			$db = $this->getAdapter();
-			$arr = array(
-					'major_enname'  => $_data['major_enname'],
-					'shortcut'	  => $_data['shortcut'],
-					'dept_id'	  => $_data['degree_popup1'],
-					'modify_date' => Zend_Date::now(),
-					'is_active'	  => $_data['grade_status'],
-					'user_id'	  => $this->getUserId()
-			);
-			return $this->insert($arr);
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
+	
 	
 	function getAllTeacher(){
 		$db = $this->getAdapter();

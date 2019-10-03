@@ -50,13 +50,6 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
     	return $db->fetchAll($sql.$where.$order);
     	 
     }
-   
-    function getAllTitle(){
-    	$db=$this->getAdapter();
-    	$sql="select major_id,major_enname from rms_major";
-    	return $db->fetchAll($sql);
-    }
-    
     function getAllSession(){
     	$db=$this->getAdapter();
     	$sql="select key_code,name_en from rms_view where type=4";

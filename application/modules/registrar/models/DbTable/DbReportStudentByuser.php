@@ -205,67 +205,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}   
-// 	function getAllStudentTest($search=null){
-// 		try{
-// 			$_db = new Application_Model_DbTable_DbGlobal();
-// 			$branch_id = $_db->getAccessPermission('st.branch_id');
-	
-// 			$db=$this->getAdapter();
-	
-// 			$from_date =(empty($search['start_date']))? '1': "st.paid_date >= '".$search['start_date']." 00:00:00'";
-// 			$to_date = (empty($search['end_date']))? '1': "st.paid_date <= '".$search['end_date']." 23:59:59'";
-			
-// 			$sql="SELECT
-// 					st.*,
-// 					st.receipt_no,
-// 					st.paid_date,
-// 					st.kh_name,
-// 					st.en_name,
-// 					(select name_en from rms_view where type=2 and key_code=st.sex) as sex,
-// 					st.dob,
-// 					st.phone,
-// 					(select en_name from rms_dept where dept_id = st.degree) as degree,
-// 					st.create_date,
-// 					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = st.account_userid) AS user,
-// 					st.serial,
-// 					st.register,
-// 					st.old_school,
-// 					st.old_grade,
-// 					st.total_price,
-// 					st.price,
-// 					st.note
-// 				FROM
-// 					rms_student_test AS st
-// 				WHERE 
-// 				total_price>0
-// 				AND status=1  
-// 					$branch_id ";
-	
-// 			$where = " AND ".$from_date." AND ".$to_date;
-	
-// 			if(!empty($search['adv_search'])){
-// 				$s_where=array();
-// 				$s_search= addslashes(trim($search['adv_search']));
-// 				$s_where[]= " st.receipt_no LIKE '%{$s_search}%'";
-// 				$s_where[]= " st.kh_name LIKE '%{$s_search}%'";
-// 				$s_where[]= " st.en_name LIKE '%{$s_search}%'";
-// 				$s_where[]= " st.serial LIKE '%{$s_search}%'";
-// 				$where.=' AND ('.implode(' OR ', $s_where).')';
-// 			}
-// 			if(!empty($search['degree'])){
-// 				$where.= " AND st.degree = ".$search['degree'];
-// 			}
-// 			if(!empty($search['user'])){
-// 				$where.=" AND account_userid = ".$search['user'] ;
-// 			}
-// 			$order=" ORDER By st.id DESC ";
-// 			return $db->fetchAll($sql.$where.$order);
-			
-// 		}catch(Exception $e){
-// 			echo $e->getMessage();
-// 		}
-// 	}	
-	
+
 	
 	function getAllChangeProduct($search){
 		try{
@@ -435,22 +375,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		return $db->fetchRow($sql);
 	}
 	
-	function getStudentTestPaymentById($id){
-		$db=$this->getAdapter();
-		$sql="select 
-					*,
-					(select name_kh from rms_view where type=2 and key_code=sex) as sex,
-					(select en_name from rms_dept where dept_id = degree) as degree, 
-					(select first_name from rms_users as u where u.id = account_userid) as first_name,
-					(select last_name from rms_users as u where u.id = account_userid) as last_name
-				from 
-					rms_student_test 
-				where 
-					id = $id 
-				limit 1
-			";
-		return $db->fetchRow($sql);
-	}
+	
 	
 	function getChangeProductById($id){
 		$db=$this->getAdapter();

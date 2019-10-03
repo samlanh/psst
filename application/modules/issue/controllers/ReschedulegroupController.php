@@ -81,14 +81,7 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 		
 		$this->view->subject = $model->getAllSubjectName();
 		
-		$db=new Global_Model_DbTable_DbGrade();
-// 		$d_row=$db->getNameGradeAll();
-// 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		$this->view->grade_name=$d_row;
-		
-// 		$dept = $db->getAllDept();
-// 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		$this->view->dept = $dept;
+
 		
 		$db_glob = new Application_Model_GlobalClass();
 		$this->view->optday = $db_glob->getAllDays();
@@ -147,14 +140,6 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 		
 		$this->view->branch_name = $model->getAllBranch();
 		
-		$db=new Global_Model_DbTable_DbGrade();
-// 		$d_row=$db->getNameGradeAll();
-// 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		$this->view->grade_name=$d_row;
-		
-// 		$dept = $db->getAllDept();
-// 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		$this->view->dept = $dept;
 		
 		$db_glob = new Application_Model_GlobalClass();
 		$this->view->optday = $db_glob->getAllDays();
@@ -212,14 +197,6 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 		
 		$this->view->branch_name = $model->getAllBranch();
 		
-		$db=new Global_Model_DbTable_DbGrade();
-// 		$d_row=$db->getNameGradeAll();
-// 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		$this->view->grade_name=$d_row;
-		
-// 		$dept = $db->getAllDept();
-// 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		$this->view->dept = $dept;
 		
 		$db_glob = new Application_Model_GlobalClass();
 		$this->view->optday = $db_glob->getAllDays();

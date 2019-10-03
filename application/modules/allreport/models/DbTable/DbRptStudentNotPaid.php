@@ -13,31 +13,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('s.branch_id');
-//     	$sql="SELECT 
-// 				  s.stu_id,
-// 				  (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
-// 				  s.tel,
-// 				  s.`stu_code`,
-// 				  s.`stu_khname`,
-// 				  s.`stu_enname`,
-// 				  s.tel,
-// 				  (SELECT en_name FROM rms_dept WHERE dept_id = g.`degree`) AS degree,
-// 				  (SELECT major_enname FROM rms_major WHERE major_id = g.grade ) AS grade,
-// 				  (SELECT name_en FROM rms_view WHERE `type` = 4 AND key_code = g.`session`) AS `session`,
-// 				  (SELECT group_code FROM `rms_group` WHERE id=gds.group_id LIMIT 1) as group_name
-// 				FROM
-// 				  rms_student AS s,
-// 				  `rms_group_detail_student` AS gds,
-// 				  `rms_group` AS g
-// 				WHERE 
-// 				  s.status=1
-// 				  AND gds.`stu_id`=s.stu_id
-// 				  AND g.id = gds.`group_id`
-// 				  AND gds.`is_pass`=0
-// 				  AND gds.`type`=1
-// 				  AND s.`stu_id` NOT IN 
-// 				  (SELECT student_id FROM rms_student_payment AS sp,`rms_student_paymentdetail` AS spd WHERE sp.id=spd.`payment_id` AND spd.`service_id`=4)
-//     			  $branch_id ";
+
 
     	$sql="SELECT
 	    	s.stu_id,

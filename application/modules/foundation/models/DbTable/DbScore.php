@@ -272,15 +272,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql="SELECT * FROM rms_score WHERE id=$score_id";
 		return $db->fetchRow($sql);
 	}
-	function getHomeWorkDetailScoreById($score_id){
-		$db=$this->getAdapter();
-		$sql="SELECT sd.id,s.id,sd.student_no,sd.student_id,sd.score_id,
-              (SELECT CONCAT(stu_enname,'-',stu_khname)  FROM rms_student WHERE  stu_id=sd.student_id) AS student_name,
-	           sd.sex,(SELECT CONCAT(major_enname,' - ',major_khname ) AS major_enname
-	           FROM rms_major WHERE rms_major.major_id=sd.grade_id) AS grade,sd.grade_id,sd.score,sd.note
-               FROM rms_score AS s,rms_score_detail AS sd WHERE s.id=sd.score_id AND sd.score_id=$score_id";
-		return $db->fetchAll($sql);
-	}
+	
 	function getGroupName($academic,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
@@ -318,12 +310,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getAllGrade($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$degree;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	
 	
 	function getStudent($year,$grade,$session){//not use

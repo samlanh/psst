@@ -53,13 +53,7 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 // 	    echo ($sql.$where.$order);
     	return $db->fetchAll($sql.$where.$order);
     }
-    function getFeebyOther($fee_id){
-    	$db = $this->getAdapter();
-    	$sql = "select *,(SELECT CONCAT(name_en,'-',name_kh) FROM rms_view WHERE rms_tuitionfee_detail.session=rms_view.key_code AND rms_view.type=4)  AS `session`,
-		(SELECT CONCAT(major_enname,'-',major_khname) FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id) as class
-    	from rms_tuitionfee_detail where fee_id =".$fee_id." ORDER BY id";
-    	return $db->fetchAll($sql);
-    }
+    
     function getCondition($_data){
     	$db = $this->getAdapter();
     	$find="select id from rms_tuitionfee where from_academic=".$_data['from_year']." and to_academic=".$_data['to_year']." 
@@ -207,11 +201,7 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
         $oder=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$oder);
     }
-    function getGrad(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,CONCAT(major_enname,'-',major_khname) AS `name` FROM rms_major WHERE is_active=1";
-    	return $db->fetchAll($sql);
-    }
+   
  
     function getAllBranch(){
     	$db = $this->getAdapter();

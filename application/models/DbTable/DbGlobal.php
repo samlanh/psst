@@ -148,13 +148,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$time = strtotime($date);
     	return date($format, $time);
     }
-    public function getMarjorById($major_id){
-    	$db = $this->getAdapter();
-    	$sql=" SELECT major_id AS id,major_enname AS name FROM `rms_major`
-    	WHERE `dept_id` = $major_id ";
-    	$db->fetchAll($sql);
-    	return $db->fetchAll($sql);
-    }   
+    
 
     public static function getResultWarning(){
           return array('err'=>1,'msg'=>'មិន​ទាន់​មាន​ទន្និន័យ​នូវ​ឡើយ​ទេ!');	

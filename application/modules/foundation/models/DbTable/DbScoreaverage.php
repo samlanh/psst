@@ -122,64 +122,14 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$order);
 	}
 	
-	function getAllScore($search=null){
-		$db=$this->getAdapter();
-		$sql="SELECT s.id,s.title_score,
-			(SELECT name_en FROM `rms_view` WHERE TYPE=14 AND key_code =s.exam_type LIMIT 1) as exam_type,
-			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
-			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
-			(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
-			(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1)AS grade,
-			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session`) AS session_id,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			s.status
-			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1";
-		//before add more =>AND g.degree IN(1,2) 
-		$where ='';
-		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;
-		
-		if(!empty($search['title'])){
-			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
-			$s_where[]=" s.title_score LIKE '%{$s_search}%'";
-			$s_where[]=" s.note LIKE '%{$s_search}%'";
-			$where .=' AND ( '.implode(' OR ',$s_where).')';
-		}
-		if($search['degree']>0){
-			$where.= " AND g.degree =".$search['degree'];
-		}
-		if(!empty($search['study_year'])){
-			$where.=" AND g.academic_year =".$search['study_year'];
-		}
-		if(!empty($search['grade'])){
-			$where.=" AND `g`.`grade` =".$search['grade'];
-		}
-		if(!empty($search['session'])){
-			$where.=" AND `g`.`session` =".$search['session'];
-		}
-		if(!empty($search['room'])){
-			$where.=" AND `g`.`room_id` =".$search['room'];
-		}
-		$order=" ORDER BY id DESC ";
-		return $db->fetchAll($sql.$where.$order);
-	}
+	
 	
 	function getScoreById($score_id){
 		$db=$this->getAdapter();
 		$sql="SELECT * FROM rms_score WHERE id=$score_id";
 		return $db->fetchRow($sql);
 	}
-	function getHomeWorkDetailScoreById($score_id){
-		$db=$this->getAdapter();
-		$sql="SELECT sd.id,s.id,sd.student_no,sd.student_id,sd.score_id,
-              (SELECT CONCAT(stu_enname,'-',stu_khname)  FROM rms_student WHERE  stu_id=sd.student_id) AS student_name,
-	           sd.sex,(SELECT CONCAT(major_enname,' - ',major_khname ) AS major_enname
-	           FROM rms_major WHERE rms_major.major_id=sd.grade_id) AS grade,sd.grade_id,sd.score,sd.note
-               FROM rms_score AS s,rms_score_detail AS sd WHERE s.id=sd.score_id AND sd.score_id=$score_id";
-		return $db->fetchAll($sql);
-	}
+	
 	function getGroupName($academic,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
@@ -217,12 +167,7 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getAllGrade($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$degree;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	
 	
 	function getStudent($year,$grade,$session){//not use

@@ -161,9 +161,7 @@ dojo.ready(function(){
 								<!-- <td rowspan="4"><?php //echo $tr->translate("STUDENT_CODE");?></td> -->
 								<td rowspan="4" style="white-space: nowrap;"><?php echo $tr->translate("Stuent's Name");?></td>
 								<td rowspan="4"><?php echo $tr->translate("Sex");?></td>
-								<?php for ($month=0; $month <$rs['amount_month']; $month++){?>
-									<td rowspan="4" class="rotate1"><div><span><?php $start_date = $rs['start_date']; echo "Monthly Score ".$month_english[date("m",strtotime(" $start_date + $month month"))];?></span></div></td>
-								<?php }?>
+								
 								<td rowspan="4" class="rotate1"><div><span><?php echo $tr->translate("Average Month Score");?></span></div></td>
 								<td colspan="<?php echo $count;?>"><?php echo $tr->translate("Semester Exam")?></td>
 								<td class="rotate1" rowspan="4"><div><span><?php echo $tr->translate("Sum Up Semester Score");?></span></div></td>
@@ -195,10 +193,7 @@ dojo.ready(function(){
 								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<!-- Score Exam per month -->
-								<?php $total_score_allmonth =0; for ($month=0; $month < $rs['amount_month']; $month++){?>
-									<?php  $start_date = $rs['start_date']; $monthlyscore = $db->getMonthlyScoreInSemester($rs['student_id'], $rs['group_id'], date("Y-m-d",strtotime(" $start_date + $month month")));?>
-									<td align="center">&nbsp;<?php echo number_format($monthlyscore,2); $total_score_allmonth = $total_score_allmonth+$monthlyscore;?>&nbsp;</td>
-								<?php }?>
+								
 								<!-- End Score Exam per month -->
 								
 								<td align="center"><?php echo number_format(($total_score_allmonth/$month),2)?></td>

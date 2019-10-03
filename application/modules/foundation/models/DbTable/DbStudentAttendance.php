@@ -200,12 +200,6 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		return $db->fetchAll($sql);
 	}
 
-	function getAllGrade($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$degree;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
 	
 	function getStudent($year,$grade,$session){
 		$db=$this->getAdapter();

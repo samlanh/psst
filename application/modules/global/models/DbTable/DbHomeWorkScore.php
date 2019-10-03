@@ -147,14 +147,7 @@ class Global_Model_DbTable_DbHomeWorkScore extends Zend_Db_Table_Abstract
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$order);
 	}
-	function getStudent($data){
-		$db=$this->getAdapter();
-		$sql="SELECT s.stu_id,s.stu_code,CONCAT(s.stu_enname,' - ',s.stu_khname) AS stu_khname,s.sex,(SELECT CONCAT(major_enname,' - ',major_khname ) AS major_enname
-		    FROM rms_major WHERE rms_major.major_id=s.grade) AS grade
-	    	FROM rms_student AS s,rms_group_detail_student AS g  WHERE s.stu_id=g.stu_id AND g.group_id=$data";
-		$order=" ORDER BY stu_code DESC";
-		return $db->fetchAll($sql.$order);
-	}
+	
 	function getAllHoweWorkScore($search=null){
 		$db=$this->getAdapter();
 		$sql="SELECT s.id,(SELECT group_code FROM rms_group WHERE id=s.group_id ) AS  group_id,
@@ -196,15 +189,7 @@ class Global_Model_DbTable_DbHomeWorkScore extends Zend_Db_Table_Abstract
 		$sql="SELECT id,academic_id,session_id,group_id,parent_id,subject_id,term_id FROM rms_score WHERE id=$score_id";
 		return $db->fetchRow($sql);
 	}
-	function getHomeWorkDetailScoreById($score_id){
-		$db=$this->getAdapter();
-		$sql="SELECT sd.id,s.id,sd.student_no,sd.student_id,sd.score_id,
-              (SELECT CONCAT(stu_enname,'-',stu_khname)  FROM rms_student WHERE  stu_id=sd.student_id) AS student_name,
-	           sd.sex,(SELECT CONCAT(major_enname,' - ',major_khname ) AS major_enname
-	           FROM rms_major WHERE rms_major.major_id=sd.grade_id) AS grade,sd.grade_id,sd.score,sd.note
-               FROM rms_score AS s,rms_score_detail AS sd WHERE s.id=sd.score_id AND sd.score_id=$score_id";
-		return $db->fetchAll($sql);
-	}
+	
 	function getGroupName($academic,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE degree IN(1,2) AND `session`=$session AND academic_year=$academic  ";

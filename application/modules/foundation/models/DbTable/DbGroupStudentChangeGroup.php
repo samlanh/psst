@@ -497,13 +497,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.old_group=$id";
 		return $db->fetchAll($sql);
 	}
-	
-	function getGradeByDegree($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id as id,major_enname as name FROM rms_major WHERE dept_id = $degree";
-		return $db->fetchAll($sql);
-	}
-	
+
 	public function AddNewGroupAjaxold($_data){
 		print_r($_data);exit();
 		$db = $this->getAdapter();
@@ -517,7 +511,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 // 					'session' 		=> $_data['session'],
 // 					'degree' 		=> $_data['degree'],
 // 					'grade' 		=> $_data['grade'],
-// 					'amount_month' 	=> $_data['amountmonth'],
 // 					'start_date'	=> $_data['start_date'],
 // 					'expired_date'	=> $_data['end_date'],
 // 					'date' 			=> date("Y-m-d"),
@@ -546,7 +539,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				'session' 		=> $data['session_group'],
 				'degree' 		=> $data['degree_group'],
 				'grade' 		=> $data['grade_group'],
-				'amount_month' 	=> $data['amountmonth'],
 				'start_date'	=> $data['start_date'],
 				'expired_date'	=> $data['end_date'],
 				'date' 			=> date("Y-m-d"),

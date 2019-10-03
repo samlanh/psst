@@ -124,18 +124,18 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{			
 			$_arr = array(
-					'branch_id'=>$_data['branch_id'],
-					'title_score'=>$_data['title'],
-					'group_id'=>$_data['group'],
-					'max_score'=>$_data['max_score'],
-			        'exam_type'=>$_data['exam_type'],
-					'date_input'=>date("Y-m-d"),
-					'note'=>$_data['note'],
-					'user_id'=>$this->getUserId(),
-					'type_score'=>1, 
-					'for_academic_year'=>$_data['year_study'],
-					'for_semester'=>$_data['for_semester'],
-					'for_month'=>$_data['for_month'],
+				'branch_id'=>$_data['branch_id'],
+				'title_score'=>$_data['title'],
+				'group_id'=>$_data['group'],
+				'max_score'=>$_data['max_score'],
+		        'exam_type'=>$_data['exam_type'],
+				'date_input'=>date("Y-m-d"),
+				'note'=>$_data['note'],
+				'user_id'=>$this->getUserId(),
+				'type_score'=>1, 
+				'for_academic_year'=>$_data['year_study'],
+				'for_semester'=>$_data['for_semester'],
+				'for_month'=>$_data['for_month'],
 			);
 		$where="id=".$_data['score_id'];
 		$this->update($_arr, $where);
@@ -147,6 +147,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$this->_name='rms_score_monthly';
 		$this->delete("score_id=".$_data['score_id']);
 		$old_studentid = 0;
+		
+		$dbpush = new Application_Model_DbTable_DbGlobal();
+		$rs_groupscore = $dbpush->getSumCutScorebyGroup($_data['group']);
+		$total_cutscore = $rs_groupscore['score_short'];
 		
 		if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
@@ -172,7 +176,21 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							
 						$old_studentid=$_data['student_id'.$i];
 						$subject_amt = $_data['amount_subject'.$i];
-						$total_score = $total_score+$_data["score_".$i."_".$subject];
+						
+						if($total_cutscore<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
+							$total_score = $total_score+$_data["score_".$i."_".$subject];
+							$score_cut = 0;
+						}else{//ពិន្ទុកាត់តាមមុខវិជ្ជា
+							$rs_scorebygroup = $dbpush->getSumCutScorebyGroup($_data['group'],$subject);
+								
+							if(($_data["score_".$i."_".$subject]-$rs_scorebygroup['score_short'])<=0){
+								$score = 0;
+							}else{
+								$score = $_data["score_".$i."_".$subject] - $rs_scorebygroup['score_short'];
+							}
+							$total_score = $total_score+$score;
+							$score_cut = $rs_scorebygroup['score_short'];
+						}
 						
 						$arr=array(
 								'score_id'=>$id,
@@ -181,6 +199,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'amount_subject'=>$_data['amount_subject'.$i],
 								'subject_id'=> $subject,
 								'score'=> $_data["score_".$i."_".$subject],
+								'score_cut'=> $score_cut,
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
 								'is_parent'=> 1
@@ -312,15 +331,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
-	function getHomeWorkDetailScoreById($score_id){
-		$db=$this->getAdapter();
-		$sql="SELECT sd.id,s.id,sd.student_no,sd.student_id,sd.score_id,
-              (SELECT CONCAT(stu_enname,'-',stu_khname)  FROM rms_student WHERE  stu_id=sd.student_id) AS student_name,
-	           sd.sex,(SELECT CONCAT(major_enname,' - ',major_khname ) AS major_enname
-	           FROM rms_major WHERE rms_major.major_id=sd.grade_id) AS grade,sd.grade_id,sd.score,sd.note
-               FROM rms_score AS s,rms_score_detail AS sd WHERE s.id=sd.score_id AND sd.score_id=$score_id";
-		return $db->fetchAll($sql);
-	}
+
 	function getGroupName($academic,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
@@ -358,12 +369,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getAllGrade($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$degree;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	
 	
 	function getStudent($year,$grade,$session){//not use

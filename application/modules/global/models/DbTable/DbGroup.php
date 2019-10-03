@@ -206,51 +206,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	function getAllGroup($search){
-		$db = $this->getAdapter();
-		
-		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
-		}
-		
-//   		$sql = ' SELECT * FROM `v_getallgroup` WHERE 1';
-// 		$sql = ' SELECT group_code , CONCAT(from_academic,'-',to_academic) as year,semester,session,degree,grade,room_id,start_date,expired_date,note,status FROM `rms_group` WHERE 1';
-		
-		$sql = 'SELECT `g`.`id`,`g`.`group_code` AS `group_code`,academic_year as academic ,`g`.`semester` AS `semester`,
-	(SELECT rms_items.'.$colunmname.' FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		(SELECT rms_itemsdetail.'.$colunmname.' FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)AS grade,
-		
-		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
-		`g`.`start_date`,`g`.`expired_date`,`g`.`note`
-		FROM `rms_group` `g`
-		';	
-		
-// 		(SELECT `rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 1)
-// 				AND (`rms_view`.`key_code` = `g`.`status`)) LIMIT 1) AS `status`
-		
-		$where =' WHERE 1 ';
-		$order =  ' ORDER BY `g`.`id` DESC ' ;
-		if(empty($search)){
-			return $db->fetchAll($sql.$order);
-		}
-		if(!empty($search['title'])){
-		    $s_where = array();
-			$s_search = addslashes(trim($search['title']));
-			$s_where[] = " `g`.`group_code` LIKE '%{$s_search}%'";
-			$s_where[] = " `g`.`semester` LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_khname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) LIKE '%{$s_search}%'";
-			$where .=' AND ('.implode(' OR ',$s_where).')';
-		}
-		return $db->fetchAll($sql.$where.$order);
-	}
+	
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		
@@ -323,12 +279,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
 		return $db->fetchAll($sql.$where.$order);
 	}
-	function getAllGrade($grade_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	function getAllYears($is_completed=1){
 		$db = new Application_Model_DbTable_DbGlobal();
 		return $db->getAllYear(1,$is_completed);
@@ -370,9 +321,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	public function getAllFecultyName(){
-		//$db = $this->getAdapter();
-		//$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY en_name";
-		//return $db->fetchAll($sql);
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		return $_db->getAllItems(1,null);
 	}
@@ -398,23 +347,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
-	public function addGradeAjax($_data){
-		$this->_name='rms_major';
-		try{
-			$db = $this->getAdapter();
-			$arr = array(
-					'major_enname'  => $_data['major_enname'],
-					'shortcut'	  => $_data['shortcut'],
-					'dept_id'	  => $_data['degree_popup1'],
-					'modify_date' => Zend_Date::now(),
-					'is_active'	  => $_data['grade_status'],
-					'user_id'	  => $this->getUserId()
-			);
-			return $this->insert($arr);
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
 	
 	function getAllTeacher($schoolOptin=null){
 		$db = $this->getAdapter();

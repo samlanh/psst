@@ -198,12 +198,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 				WHERE sd.score_id =$id ";
 		return $db->fetchAll($sql);
 	}
-	function getAllGrade($degree){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$degree;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	function getStudent($year,$grade,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex

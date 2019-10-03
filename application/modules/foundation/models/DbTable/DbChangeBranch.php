@@ -132,12 +132,7 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	function getAllGrade($grade_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	function getStudentChangeGroup1ById($id){
 		$db = new Application_Model_DbTable_DbGlobal();
 		return $db->getStudentGroupInfoById($id);

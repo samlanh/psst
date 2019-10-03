@@ -64,7 +64,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 // 		$branch_id= empty($search['branch_id'])?1:$search['branch_id'];
 // 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 // 		$this->view->rsfooteracc = $frm->getFooterAccount();
-		
 	}
 	
 	public	function addAction(){

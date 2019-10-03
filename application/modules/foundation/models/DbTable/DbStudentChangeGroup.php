@@ -275,12 +275,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 			echo $e->getMessage();
 		}
 	}
-	function getAllGrade($grade_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	function getStudentChangeGroup1ById($id){
 // 		$db = $this->getAdapter();
 // 		$sql = "SELECT start_date,expired_date,

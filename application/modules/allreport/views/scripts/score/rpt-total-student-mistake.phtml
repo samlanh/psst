@@ -136,7 +136,7 @@ table.tb-footer tr.style-head {
 						<?php if ($key>0){ 
 						?>
 						<tr>
-							<td align="right" colspan="7" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+							<td align="right" colspan="12" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 								<span style="font-family: Times New Roman,Khmer OS Battambang; font-size: 12px;">
 								<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span>
@@ -145,7 +145,7 @@ table.tb-footer tr.style-head {
 						<?php }$i=0; ?>	
 						<thead>										
 							<tr>
-								<td align="center" colspan="7" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+								<td align="center" colspan="13" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<span​​ style=" font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
 									<span​​ style=" font-size: 12px;font-family:'Times New Roman','Khmer OS Muol light';">
 										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
@@ -166,12 +166,18 @@ table.tb-footer tr.style-head {
 								<td rowspan="2">Name in Latin</td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
 								<td colspan="4" style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $tr->translate("DISCIPLINE_TYPE");?>&nbsp;</td>
+								<td colspan="4" align="center"><?php echo $tr->translate("ABSENT");?></td>
 							</tr>							
 							<tr class="style-head">
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("SMALL_MISTACK");?>&nbsp;</td>
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("MEDIUM_MISTACK");?>&nbsp;</td>
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("BIG_MISTACK");?>&nbsp;</td>
 								<td style="width: 40px;">&nbsp;<?php echo $tr->translate("OTHER");?>&nbsp;</td>
+								
+								<td align="center"><?php echo $tr->translate("NO_PERMISSION");?></td>
+								<td align="center"><?php echo $tr->translate("PERMISSION");?></td>
+								<td align="center"><?php echo $tr->translate("LATE");?></td>
+								<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>	
 							</tr>
 						</thead>
 						<?php } $i++;?>
@@ -208,11 +214,50 @@ table.tb-footer tr.style-head {
 							<td align="center"><?php echo $m;?></td>
 							<td align="center"><?php echo $b;?></td>
 							<td align="center"><?php echo $other;?></td>
+							
+							
+							<?php 
+							$_db = new Home_Model_DbTable_DbStudent();
+							$attentence_status = $_db->getSumStatusAttendence($rs['stu_id'], $rs['group_id']);
+							$absent=0;
+							$permission=0;
+							$late=0;
+							$early_leave=0;
+							foreach ($attentence_status as $rs){
+									if ($rs['attendence_status']==2){
+										$absent =$absent+$rs['total'];
+										//$A=$A+1;
+										//Absent
+									}
+									else if ($rs['attendence_status']==3){
+										$permission =$permission+$rs['total'];
+										//$P = $P+1;
+										//Permission
+									}
+									else if ($rs['attendence_status']==4){
+										$late =$late+$rs['total'];
+										//$L = $L+1;
+										//Late
+									}
+									else if ($rs['attendence_status']==5){
+										$early_leave =$early_leave+$rs['total'];
+										//$EL = $EL+1;
+										//Early Leave
+									}else{
+										echo " ";
+									}
+								}
+							?>
+							<td align="center"><?php echo $absent;?></td>
+							<td align="center"><?php echo $permission;?></td>
+							<td align="center"><?php echo $late;?></td>
+							<td align="center"><?php echo $early_leave;?></td>
+							
 						</tr>
 							<?php $old_groupid = $rs['group_id'];
 						}?>
 						<tr>
-							<td align="right" colspan="7" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+							<td align="right" colspan="12" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 								<span style="font-family: Times New Roman,Khmer OS Battambang; font-size: 12px;">
 									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span><br />

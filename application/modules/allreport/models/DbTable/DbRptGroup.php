@@ -74,21 +74,21 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
     	 
     }
    public function getStudentGroup($id,$search,$type){
-   	$session_lang=new Zend_Session_Namespace('lang');
-	$lang_id=$session_lang->lang_id;
-		$gender_str = 'name_en';
-		$str_village='village_name';
-		$str_commune='commune_name';
-		$str_district='district_name';
-		$str_province='province_en_name';
-	if($lang_id==1){//for kh
-		$gender_str = 'name_kh';
-		$str_village='village_namekh';
-		$str_commune='commune_namekh';
-		$str_district='district_namekh';
-		$str_province='province_kh_name';
-	}
-   	$db = $this->getAdapter();
+	   	$session_lang=new Zend_Session_Namespace('lang');
+		$lang_id=$session_lang->lang_id;
+			$gender_str = 'name_en';
+			$str_village='village_name';
+			$str_commune='commune_name';
+			$str_district='district_name';
+			$str_province='province_en_name';
+		if($lang_id==1){//for kh
+			$gender_str = 'name_kh';
+			$str_village='village_namekh';
+			$str_commune='commune_namekh';
+			$str_district='district_namekh';
+			$str_province='province_kh_name';
+		}
+	   	$db = $this->getAdapter();
 		$sql="SELECT
 					 g.gd_id,
 					 (SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,

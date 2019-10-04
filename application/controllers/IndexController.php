@@ -190,7 +190,7 @@ class IndexController extends Zend_Controller_Action
     }
     
     protected function sortMenu($menus){
-    	$menus_order = Array ( 'home','test','registrar','foundation','issue','accounting','stock','library','global','mobileapp','allreport','rsvacl','setting');
+    	$menus_order = Array ( 'home','test','placement','registrar','foundation','issue','accounting','stock','library','global','mobileapp','allreport','rsvacl','setting');
     	$temp_menu = Array();
     	$menus=array_unique($menus);
     	foreach ($menus_order as $i => $val){
@@ -507,7 +507,7 @@ class IndexController extends Zend_Controller_Action
 		$_dbpl= new Application_Model_DbTable_DbPlacementTest();
 		$row = $_dbpl->getExamHistoryStudent();
 		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("No Record","/index/home");
+			Application_Form_FrmMessage::messageAlert("No Record","/index/home");
 			exit();
 		}
 		$this->view->row = $row;

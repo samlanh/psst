@@ -74,6 +74,9 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 							    					<div class="section-exam">
 							    						<div class="section-exam-title">
 								    						<h2><?php echo $rs['parent_title'];?></h2>
+								    						<?php if (!empty($rs['parent_instruction'])){?>
+								    						<small>Instruction: <?php echo $rs['parent_instruction'];?></small>
+								    						<?php }?>
 								    					</div>
 							    					</div>
 							    					<?php }
@@ -592,8 +595,34 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 						    							<?php }?>
 						    							
 						    						<?php }else if ($question_type==13){?>
-						    							
-						    							
+						    							<?php if ($number==1){?>
+							    							<?php echo empty($rs['article'])?"":$rs['article']; ?>
+							    						<?php }?>
+						    							<?php 
+							    						$question_id = $rs['id'];
+						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
+						    							if (!empty($rowQ)){
+						    								?>
+						    							<div class="section-exam-question ">
+								    						<ul>
+								    							<li>
+								    								<div class="answer-blog">
+								    									<span class="question-num"><?php echo $number?>.</span> <?php echo $rs['question_title'];?>
+								    									<ul>
+								    										<?php foreach ($rowQ as $index => $question){ 
+								    											$keyIndex = $index+1; 
+								    											$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+								    										?>
+								    										<li class="answer-opt col2">
+								    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
+								    										</li>
+								    										<?php }?>
+						    											</ul>
+						    										</div>
+						    									</li>
+						    								</ul>
+						    							</div>
+						    							<?php }?>
 						    						<?php }else if ($question_type==14){?>	
 						    							<?php if ($number==1){?>
 							    							<?php echo $rs['article']; ?>
@@ -775,7 +804,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
      <script type="text/javascript">
 	     url_enter_answer= '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'enteranswer'));?>';
 	     function enterAnswer(question_type,question_id,answer_id){
-		     if(question_type==2 || question_type==3 || question_type==12){
+		     if(question_type==2 || question_type==3 || question_type==12 || question_type==13){
 		    	 var answer = $("input[name='answere_"+question_id+"']:checked").val();
 		     }else{
 		    	 var answer = dijit.byId('answere_'+question_id+'_'+answer_id).get('value');

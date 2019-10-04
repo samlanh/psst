@@ -2589,6 +2589,7 @@ function getAllgroupStudyNotPass($action=null){
   	$db = $this->getAdapter();
   	$sql="SELECT s.parent,
 		(SELECT sp.title FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) AS parent_title,
+		(SELECT sp.instruction FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) AS parent_instruction,
 		s.title AS section_title,
 		s.instruction,
 		s.article,

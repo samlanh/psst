@@ -68,6 +68,16 @@ class Application_Form_FrmMessage extends Zend_Form
 		      </script>';
 	}
 	
+	public static function messageAlert($msg,$url)
+	{
+		$tr= Application_Form_FrmLanguages::getCurrentlanguage();
+		$msg = $tr->translate($msg);
+		echo '<script language="javascript">
+		alert("'.$msg.'");
+		window.location = "'.Zend_Controller_Front::getInstance()->getBaseUrl().$url.'";
+		</script>';
+	}
+	
 	public static function  getBrowser(){ 
 	    $u_agent = $_SERVER['HTTP_USER_AGENT']; 
 	    $bname = 'Unknown';

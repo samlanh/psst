@@ -112,6 +112,7 @@ class Placement_IndexController extends Zend_Controller_Action
     		Application_Form_FrmMessage::MessageBacktoOldHistory("NO_RECORD");
     		exit();
     	}
+    	$this->view->row = $row;
     	$frm = new Placement_Form_FrmSection();
     	$frm->FrmAddSection($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

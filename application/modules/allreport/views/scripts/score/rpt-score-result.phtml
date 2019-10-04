@@ -254,7 +254,7 @@
 								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['max_score']/2)){echo ' background: #fdbdbd;';}?>">
 									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],2);?>
 									<?php 
-									if($average>=($rs['max_score']/2)){
+									if($average>=($rs['pass_avrage'])){
 										$count_pass++;
 										if($rs['sex']==2){
 											$pass_female=$pass_female+1;

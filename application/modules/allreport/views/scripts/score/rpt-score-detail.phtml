@@ -277,8 +277,8 @@
 								&nbsp;
 								</td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php if($average>=($rs['max_score']/2)){
+								<td align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
+									<?php if($average>=($rs['pass_avrage'])){
 										echo $tr->translate("STUDENT_PASS");
 										$count_pass++;
 										if($rs['sex']==2){$pass_female=$pass_female+1;}//femail

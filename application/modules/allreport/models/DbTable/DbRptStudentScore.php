@@ -257,6 +257,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(SELECT sm.total_score FROM rms_score_monthly AS sm WHERE sm.score_id=s.id AND sm.student_id=st.stu_id LIMIT 1 ) AS total_score,
 		   	g.total_score AS total_scoreallsubject,
 		    (SELECT sm.total_avg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS average,
+		    g.max_average/2 as pass_avrage,
 		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
 		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem 
 		   
@@ -366,6 +367,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.max_score,
 		   	sm.total_score,
 		    sm.total_avg,
+		    g.max_average/2 as pass_avrage,
 		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
 		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
 		   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass

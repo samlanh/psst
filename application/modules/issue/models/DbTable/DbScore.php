@@ -406,7 +406,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				gsjd.*,
 				g.amount_subject AS amount_subjectdivide,
-				(SELECT max_score FROM `rms_dept_subject_detail` WHERE subject_id=gsjd.subject_id AND dept_id=g.degree LIMIT 1) AS max_subjectscore,
+				gsjd.max_score AS max_subjectscore,
 				(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
 				(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 				(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,

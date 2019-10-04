@@ -1,5 +1,6 @@
 <?php class Global_Model_DbTable_DbItems extends Zend_Db_Table_Abstract{
 	protected $_name = 'rms_items';
+	
     public function getUserId(){
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	return $_dbgb->getUserId();
@@ -89,6 +90,7 @@
 	}
 	public function AddDegree($_data){
 		$_db= $this->getAdapter();
+		$show = SHOW_IN_DEGREE;
 		try{
 			$_arr=array(
 					'title'	  		=> $_data['title'],
@@ -113,16 +115,34 @@
 						$arr = array(
 								'dept_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
-								'max_score'		=> $_data['max_score'.$i],
-								'score_in_class'=> $_data['scoreinclass_'.$i],
-								'score_out_class'=> $_data['scoreoutclass_'.$i],
-								'score_short'	=> $_data['scoreshort_'.$i],
+								
 								'status'    	=> 1,
 								'note'   		=> $_data['note_'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId()
 						);
+						if($show==1){
+							$arr['max_score']=$_data['max_score'.$i];
+							$arr['score_in_class']=$_data['scoreinclass_'.$i];
+							$arr['score_out_class']=$_data['scoreoutclass_'.$i];
+							$arr['score_short']=$_data['scoreshort_'.$i];
+						}
 						$this->insert($arr);
+					}
+				}
+				
+				if(!empty($_data['identity1'])){
+					$idss = explode(',', $_data['identity1']);
+					foreach ($idss as $j){
+						$array = array(
+								'degree_id'		=> $id,
+								'comment_id'	=> $_data['comment_'.$j],
+								'note'   		=> $_data['remark'.$j],
+								'create_date' 	=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
+						);
+						$this->_name='rms_degree_comment';
+						$this->insert($array);
 					}
 				}
 			}else{
@@ -139,22 +159,7 @@
 				$this->_name = "rms_items";
 				$id =  $this->insert($_arr);
 			}
-			if($_data['type']==1){
-				if(!empty($_data['identity1'])){
-					$idss = explode(',', $_data['identity1']);
-					foreach ($idss as $j){
-						$arr = array(
-								'degree_id'		=> $id,
-								'comment_id'	=> $_data['comment_'.$j],
-								'note'   		=> $_data['remark'.$j],
-								'create_date' 	=> date("Y-m-d"),
-								'user_id'		=> $this->getUserId()
-						);
-						$this->_name='rms_degree_comment';
-						$this->insert($arr);
-					}
-				}
-			}
+			
 			return $id;	
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -163,6 +168,7 @@
 	}
 	public function UpdateDegree($_data){
 		$_db= $this->getAdapter();
+		$show = SHOW_IN_DEGREE;
 		try{
 			$_arr=array(
 					'title'	  		=> $_data['title'],
@@ -212,52 +218,39 @@
 							$arr = array(
 									'dept_id'		=>$id,
 									'subject_id'	=>$_data['subject_study_'.$i],
-									'max_score'		=> $_data['max_score'.$i],
-									'score_in_class'=>$_data['scoreinclass_'.$i],
-									'score_out_class'=>$_data['scoreoutclass_'.$i],
-									'score_short'	=>$_data['scoreshort_'.$i],
 									'note'   		=> $_data['note_'.$i],
 									'date' 			=> date("Y-m-d"),
 									'user_id'		=> $this->getUserId()
 							);
+							
+							if($show==1){
+								$arr['max_score']=$_data['max_score'.$i];
+								$arr['score_in_class']=$_data['scoreinclass_'.$i];
+								$arr['score_out_class']=$_data['scoreoutclass_'.$i];
+								$arr['score_short']=$_data['scoreshort_'.$i];
+							}
+							
 							$where =" id =".$_data['detailid'.$i];
 							$this->update($arr, $where);
 						}else{
 							$arr = array(
 									'dept_id'		=>$id,
 									'subject_id'	=>$_data['subject_study_'.$i],
-									'max_score'		=> $_data['max_score'.$i],
-									'score_in_class'=>$_data['scoreinclass_'.$i],
-									'score_out_class'=>$_data['scoreoutclass_'.$i],
-									'score_short'	=>$_data['scoreshort_'.$i],
 									'note'   		=> $_data['note_'.$i],
 									'date' 			=> date("Y-m-d"),
 									'user_id'		=> $this->getUserId()
 							);
+							if($show==1){
+								$arr['max_score']=$_data['max_score'.$i];
+								$arr['score_in_class']=$_data['scoreinclass_'.$i];
+								$arr['score_out_class']=$_data['scoreoutclass_'.$i];
+								$arr['score_short']=$_data['scoreshort_'.$i];
+							}
 							$this->insert($arr);
 						}
 					}
 				}
-			}else{
-				$schooloption="";
-				if (!empty($_data['selector'])){
-					foreach ($_data['selector'] as $rs){
-						if (empty($schooloption)){
-							$schooloption = $rs;
-						}else { $schooloption = $schooloption.",".$rs;
-						}
-					}
-				}
-				$_arr['schoolOption'] = $schooloption;
 				
-				$this->_name = "rms_items";
-				$id = $_data["id"];
-				$where = $this->getAdapter()->quoteInto("id=?",$id);
-				$this->update($_arr, $where);
-			}
-			
-		//////////////////////// degree comment ////////////////////////////////////	
-		if($_data['type']==1){
 				$identitys1 = explode(',',$_data['identity1']);
 				$oldId="";
 				if(!empty($identitys1)){
@@ -306,8 +299,27 @@
 							$this->insert($arr);
 						}
 					}
-				}							
+				}
+				
+			}else{
+				$schooloption="";
+				if (!empty($_data['selector'])){
+					foreach ($_data['selector'] as $rs){
+						if (empty($schooloption)){
+							$schooloption = $rs;
+						}else { $schooloption = $schooloption.",".$rs;
+						}
+					}
+				}
+				$_arr['schoolOption'] = $schooloption;
+				
+				$this->_name = "rms_items";
+				$id = $_data["id"];
+				$where = $this->getAdapter()->quoteInto("id=?",$id);
+				$this->update($_arr, $where);
 			}
+			
+		//////////////////////// degree comment ////////////////////////////////////	
 			$this->updateItemsDetailByItems($_data);
 			return $id;
 		}catch(exception $e){

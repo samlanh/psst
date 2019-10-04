@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate("EDIT_DEGREE"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
  	$frm_degree= $this->frm_degree;
+	$show = SHOW_IN_DEGREE;
 ?>	
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
@@ -122,10 +123,12 @@ span#message {
 												<th><?php echo $tr->translate("DEL");?></th>
 												<th><?php echo $tr->translate("N_O");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+												<?php if($show==1){?>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>
+												<?php }?>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>
 											</tr>
 										</thead>
@@ -328,10 +331,12 @@ function addRow() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');popupsubject('+col+');" >'+subject+'</select></td>';
+		<?php if($show==1){?>
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'"  value="0" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
+		<?php }?>
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -443,10 +448,12 @@ function Initailize() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');" >'+subjectold+'</select></td>';
+		<?php if($show==1){?>
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="" type="text"></td>';
+		<?php }?>
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"><input type="hidden" value="<?php echo $rows['id'];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -461,10 +468,12 @@ function Initailize() {
 	});
 	dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 	dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
+	<?php if($show==1){?>
 	dijit.byId('max_score'+col).attr('value','<?php echo $rows['max_score'];?>');
 	dijit.byId('scoreinclass_'+col).attr('value','<?php echo $rows['score_in_class'];?>');
 	dijit.byId('scoreoutclass_'+col).attr('value','<?php echo $rows['score_out_class'];?>');
 	dijit.byId('scoreshort_'+col).attr('value','<?php echo $rows['score_short'];?>');
+	<?php }?>
 	<?php }}?>
 }
 

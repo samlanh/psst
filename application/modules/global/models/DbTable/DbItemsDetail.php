@@ -73,6 +73,7 @@
 	
 	public function AddItemsDetail($_data){
 		$_db= $this->getAdapter();
+		$show = SHOW_IN_GRADE;
 		try{
 			$db_items = new Global_Model_DbTable_DbItems();
 			$schooloption="";
@@ -103,6 +104,13 @@
 					'status'		=> 1,
 					'user_id'	  	=> $this->getUserId()
 			);
+			
+			if($_data['items_type']==1){
+				$_arr['total_score']=$_data['total_score'];
+				$_arr['amount_subject']=$_data['amount_subject'];
+				$_arr['max_average']=$_data['max_average'];
+			}
+			
 			$this->_name = "rms_itemsdetail";
 			$id =  $this->insert($_arr);
 			
@@ -115,14 +123,16 @@
 						$arr = array(
 								'grade_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
-								'max_score'=>$_data['max_score'.$i],
-								'amount_subject'=>$_data['amount_subject'.$i],
-								'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
-								'cut_score'	=>$_data['score_cut_'.$i],
+								'max_score'		=>$_data['max_score'.$i],
+								'cut_score'		=>$_data['score_cut_'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,
 						);
+						if($show==1){
+							$arr['amount_subject']=$_data['amount_subject'.$i];
+							$arr['amount_subject_sem']=$_data['amount_subject_semester'.$i];
+						}
 						$this->insert($arr);
 					}
 				}
@@ -135,6 +145,7 @@
 	}
 	public function updateItemsDetail($_data){
 		$_db= $this->getAdapter();
+		$show = SHOW_IN_GRADE;
 		try{
 			$db_items = new Global_Model_DbTable_DbItems();
 			$schooloption="";
@@ -157,13 +168,19 @@
 					'status'		=> $_data['status'],
 					'user_id'	  	=> $this->getUserId()
 			);
+			
+			if($_data['items_type']==1){
+				$_arr['total_score']=$_data['total_score'];
+				$_arr['amount_subject']=$_data['amount_subject'];
+				$_arr['max_average']=$_data['max_average'];
+			}
+			
 			$this->_name = "rms_itemsdetail";
 			$id = $_data["id"];
 			$where = $this->getAdapter()->quoteInto("id=?",$id);
 			$this->update($_arr, $where);		
 
 			if($_data['items_type']==1){
-				
 				$this->_name='rms_grade_subject_detail';
 				$where = 'grade_id = '.$id;
 				$this->delete($where);
@@ -175,20 +192,20 @@
 								'grade_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
 								'max_score'=>$_data['max_score'.$i],
-								'amount_subject'=>$_data['amount_subject'.$i],
-								'amount_subject_sem'=>$_data['amount_subject_semester'.$i],
 								'cut_score'	=>$_data['score_cut_'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,
 						);
+						if($show==1){
+							$arr['amount_subject']=$_data['amount_subject'.$i];
+							$arr['amount_subject_sem']=$_data['amount_subject_semester'.$i];
+						}
 						$this->insert($arr);
 					}
 				}
 			}
-			
 			return $id;
-			
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");

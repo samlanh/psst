@@ -233,6 +233,33 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$auto_payment->setValue($request->getParam("auto_payment"));
     	
+    	$_total_score = new Zend_Dojo_Form_Element_NumberTextBox('total_score');
+    	$_total_score->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'required'=>'true',
+    			'readonly'=>'true',
+    			'placeholder'=>$this->tr->translate("TOTAL_SCORE"),
+    	));
+    	
+    	$_amount_subject = new Zend_Dojo_Form_Element_NumberTextBox('amount_subject');
+    	$_amount_subject->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'required'=>'true',
+    			'onKeyUp'=>'calculateMaxAverage();',
+    			'placeholder'=>$this->tr->translate("AMOUNT_SUBJECT"),
+    	));
+    	
+    	$_max_average = new Zend_Dojo_Form_Element_NumberTextBox('max_average');
+    	$_max_average->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'required'=>'true',
+    			'readonly'=>'true',
+    			'placeholder'=>$this->tr->translate("MAX_AVERAGE"),
+    	));
+    	
     	if(!empty($data)){
     		$title->setValue($data["title"]);
 			$title_en->setValue($data["title_en"]);
@@ -251,9 +278,15 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 	    		$_cost->setValue($data["cost"]);
 	    		$_price->setValue($data["price"]);
     		}
+    		$_total_score->setValue($data["total_score"]);
+    		$_amount_subject->setValue($data["amount_subject"]);
+    		$_max_average->setValue($data["max_average"]);
     	}
     	$this->addElements(array(
     			$auto_payment,
+    			$_total_score,
+    			$_amount_subject,
+    			$_max_average,
     			$title,
 				$title_en,
 				$_shortcut,

@@ -7,7 +7,6 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-    //dojo.require("dojo.data.ObjectStore");
     dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.NumberTextBox');
@@ -30,12 +29,15 @@
 					dijit.byId('academic_year').focus();
                     return false;
 				}
+ 				<?php if (EDUCATION_LEVEL==1){?>
 				cal=dijit.byId("calture").get("value");
                 if(cal==-1 || cal==''){
 					alert("<?php echo $tr->translate("PLEASE_SELECT_CALTURE");?>");
 					dijit.byId('calture').focus();
                     return false;
 				}
+				<?php } ?>
+
     			var rowId = $('#identity1').val();
 				if(rowId!=''){ 
 				var rowIDArray = rowId.split(',');
@@ -145,6 +147,24 @@
     	</div>
     	<div class="col-md-4 col-sm-4 col-xs-12">
     		<div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12" >
+                	<input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.TextBox" />
+                </div>
+             </div>
+    		<div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12" >
+                	<?php echo $frm->getElement("divide_subject");?>
+                </div>
+             </div>
+             <div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12" >
+                	<?php echo $frm->getElement("max_average");?>
+                </div>
+             </div>
+    		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12" >
                 	<?php echo $frm->getElement("notes");?>
@@ -169,8 +189,8 @@
                			</thead>
 						<tbody id="table_row"></tbody>
 						<tr>
-							<td colspan="3" align="right"><?php echo $tr->translate("TOTAL_SUBJECT");?> :&nbsp;&nbsp;</td>
-							<td ><input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.TextBox" /></td>
+							<td colspan="3" align="right">&nbsp;&nbsp;</td>
+							<td ></td>
 							<td ><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.TextBox" /></td>
 							<td ><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.TextBox" /></td>
 							<td ><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.TextBox" /></td>
@@ -188,12 +208,8 @@
     	<div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+               		<input type="submit" onclick="submitDataClose();" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<!-- 
-					<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php //echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					 -->
 					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
@@ -537,7 +553,6 @@ function getSubject(){
 			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 			    }
 		    }
-		    //getRefreshTeacher();
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -680,6 +695,7 @@ function getSubjectByGrade(){
 						dojo.html.set(dojo.byId("row"+col),template , {
 							 parseContent: true,
 						});
+						dijit.byId('divide_subject').attr('value',data[i].divide_subject);
 						dijit.byId('group_subject_study_'+col).attr('value',data[i].subject_id);
 						dijit.byId('max_score'+col).attr('value',data[i].max_score);
 						dijit.byId('scoreshort_'+col).attr('value',data[i].cut_score);
@@ -741,13 +757,23 @@ function calculateTotalSubject(){
 			total_amt_subject_month = total_amt_subject_month + amt_subject_month;
 			total_amt_subject_semester = total_amt_subject_semester + amt_subject_semester;
 		}
-		dijit.byId("total_max_score").attr("value",total_max_score);
+		dijit.byId("total_max_score").attr("value",total_max_score-total_score_cut);
 		dijit.byId("total_score_cut").attr("value",total_score_cut);
 		dijit.byId("total_subject_month").attr("value",total_amt_subject_month);
 		dijit.byId("total_subject_semester").attr("value",total_amt_subject_semester);
+		CulculateAverage();
 	}
 }
+function CulculateAverage(){
+	total_max_score = dijit.byId("total_max_score").get("value");
+	total_max_score=isNaN(total_max_score)?1:total_max_score;
 
+	divide_subject = dijit.byId("divide_subject").get("value");
+	divide_subject=isNaN(divide_subject)?1:divide_subject;
+
+	max_average = parseFloat(total_max_score/divide_subject).toFixed(2);
+	dijit.byId("max_average").attr("value",max_average);
+}
 function submitDataClose(){
     branch_id=dijit.byId("branch_id").get("value");
     if(branch_id==-1 || branch_id==''){
@@ -761,12 +787,14 @@ function submitDataClose(){
 		dijit.byId('academic_year').focus();
         return false;
 	}
-    cal=dijit.byId("calture").get("value");
-    if(cal==-1 || cal==''){
-		alert("<?php echo $tr->translate("PLEASE_SELECT_CALTURE");?>");
-		dijit.byId('calture').focus();
-        return false;
-	}
+    <?php if (EDUCATION_LEVEL==1){?>
+	    cal=dijit.byId("calture").get("value");
+	    if(cal==-1 || cal==''){
+			alert("<?php echo $tr->translate("PLEASE_SELECT_CALTURE");?>");
+			dijit.byId('calture').focus();
+	        return false;
+		}
+	<?php }?>
     var rowId = $('#identity1').val();
 	if(rowId!=''){ 
 		var rowIDArray = rowId.split(',');

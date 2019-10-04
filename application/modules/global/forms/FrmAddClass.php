@@ -76,12 +76,13 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
 		$_branch_id->setMultiOptions($_arr_opt_branch);
 		$_branch_id->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'missingMessage'=>'Invalid Module!',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
-				'class'=>'fullside height-text',));
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'required'=>'true',
+			'missingMessage'=>'Invalid Module!',
+			'queryExpr'=>'*${0}*',
+			'autoComplete'=>'false',
+			'class'=>'fullside height-text',)
+		);
 		
 		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
 		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
@@ -182,6 +183,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'dojoType'=>$this->filter,
 				'required'=>'true',
 				'class'=>'fullside',));
+		
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('gender');
 		$_sex->setAttribs(array('dojoType'=>$this->filter,
 				'class'=>'fullside',
@@ -223,6 +225,16 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
 		$is_pass->setMultiOptions($opt);
 		
+		$max_avg = new Zend_Dojo_Form_Element_NumberTextBox('max_average');
+		$max_avg->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
+				'required'=>true,
+				'readOnly'=>true));
+		
+		$divide_subject = new Zend_Dojo_Form_Element_NumberTextBox('divide_subject');
+		$divide_subject->setAttribs(array('dojoType'=>$this->t_num,
+				'class'=>'fullside',
+				'onkeyup'=>'CulculateAverage();',
+				'required'=>true));
 			
 		$id = new Zend_Form_Element_hidden('id');
 		if($data!=null){
@@ -233,8 +245,11 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_calture->setValue($data['calture']);
 			$_time->setValue($data['time']);
 			$_note->setValue($data['note']);
+			$max_avg->setValue($data['max_average']);
+			$divide_subject->setValue($data['amount_subject']);
+			
 		}
-		$this->addElements(array($is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array($divide_subject,$max_avg,$is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
 	

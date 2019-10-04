@@ -7,7 +7,6 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-    //dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require('dijit.form.Textarea');
@@ -143,9 +142,7 @@
 		                   	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 		                 </div>
 		             </div>
-	    		</div>
-	    		<div class="col-md-4 col-sm-4 col-xs-12">
-	    			 <div class="form-group">
+		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_COMPLETED_GROUP");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select name="is_pass" id="is_pass" class="fullside" dojoType="dijit.form.FilteringSelect">
@@ -155,13 +152,33 @@
 							</select>
 		                </div>
 		             </div>
+	    		</div>
+	    		<div class="col-md-4 col-sm-4 col-xs-12">
+		             <div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12" >
+		                	<input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.TextBox" />
+		                </div>
+		             </div>
+		    		<div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12" >
+		                	<?php echo $frm->getElement("divide_subject");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12" >
+		                	<?php echo $frm->getElement("max_average");?>
+		                </div>
+		             </div>
 	    			 <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("notes");?>
 		                </div>
 		             </div>
-		              <div class="form-group">
+		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
@@ -190,8 +207,7 @@
                			</thead>
 						<tbody id="table_row"></tbody>
 						<tr>
-							<td colspan="3" align="right"><?php echo $tr->translate("TOTAL_SUBJECT");?> :&nbsp;&nbsp;</td>
-							<td><input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
+							<td colspan="4" align="right">&nbsp;&nbsp;</td>
 							<td><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
 							<td><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
 							<td><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
@@ -851,13 +867,23 @@ function calculateTotalSubject(){
 			total_amt_subject_month = total_amt_subject_month + amt_subject_month;
 			total_amt_subject_semester = total_amt_subject_semester + amt_subject_semester;
 		}
-		dijit.byId("total_max_score").attr("value",dojo.number.format(total_max_score,2));
+		dijit.byId("total_max_score").attr("value",dojo.number.format(total_max_score-total_score_cut,2));
 		dijit.byId("total_score_cut").attr("value",dojo.number.format(total_score_cut,2));
 		dijit.byId("total_subject_month").attr("value",dojo.number.format(total_amt_subject_month,2));
 		dijit.byId("total_subject_semester").attr("value",dojo.number.format(total_amt_subject_semester,2));
+		CulculateAverage();
 	}
 }
+function CulculateAverage(){
+	total_max_score = dijit.byId("total_max_score").get("value");
+	total_max_score=isNaN(total_max_score)?1:total_max_score;
 
+	divide_subject = dijit.byId("divide_subject").get("value");
+	divide_subject=isNaN(divide_subject)?1:divide_subject;
+
+	max_average = parseFloat(total_max_score/divide_subject).toFixed(2);
+	dijit.byId("max_average").attr("value",max_average);
+}
 function hideDialogGrade() {		
 	dijit.byId("popup_grate").hide();
 }

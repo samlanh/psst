@@ -41,6 +41,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'teacher_assistance'=> $_data['teacher_ass'],
 					'note'   		=> $_data['notes'],
 					'user_id'	 	=> $this->getUserId(),
+					'total_score' 		=> $_data['total_max_score'],
+					'amount_subject' 	=> $_data['divide_subject'],
+					'max_average' 		=> $_data['max_average'],
 					'is_use' 		=> 0
 			);
 			if (EDUCATION_LEVEL==1){
@@ -97,7 +100,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'status'   		=> $_data['status'],
 					'note'   		=> $_data['notes'],
 					'is_pass'   	=> $_data['is_pass'],
-// 					'is_use'   		=> $_data['is_use'],
+					'total_score' 		=> $_data['total_max_score'],
+					'amount_subject' 	=> $_data['divide_subject'],
+					'max_average' 		=> $_data['max_average'],
 					'user_id'	  	=> $this->getUserId()
 			);
 			

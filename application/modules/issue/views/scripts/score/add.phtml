@@ -91,16 +91,18 @@
 							</select>
 		                </div>
 		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCORE_LEVEL");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" >
-								<option value="10">10</option>
-								<option value="50">50</option>
-								<option value="100">100</option>
-							</select>
-		                </div>
-		             </div>
+		             <!-- 
+			             <div class="form-group">
+			                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("SCORE_LEVEL");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" >
+									<option value="10">10</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+			                </div>
+			             </div>
+		              -->
 		             <div class="form-group">
 		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -292,13 +294,15 @@ function filterStudent(){
 					+'<td class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
 					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
+				
 				  for(j=0;j<subject.length;j++){
-					  if(exam_type==1){//for month
+					  /*if(exam_type==1){//for month
 						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_month);
 					  }else{//for year
 						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_semester);
-						}
+						}*/
 	      			  no++;
+		      		  amtsubject = subject[j].amount_subjectdivide;
 	      			  stringsname = subject[j].name.replace(' ','');
 		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
@@ -333,11 +337,9 @@ function filterStudent(){
 					for(j=0;j<subject.length;j++){
 						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" onblur="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
-					
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';
-					
 					var no=0;
 				    if($("#identity").val()!="") {
 						var identity = $("#identity").val();
@@ -368,7 +370,7 @@ function CheckSubjectExam(subject_id){
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
-				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
+				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
 			}
@@ -378,7 +380,7 @@ function CheckSubjectExam(subject_id){
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
-				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
+				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
 			}

@@ -248,10 +248,10 @@
 								</td>
 								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
+								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
 								<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],1);?>
 								</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['max_score']/2)){echo ' background: #fdbdbd;';}?>">
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd;';}?>">
 									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],2);?>
 									<?php 
 									if($average>=($rs['pass_avrage'])){
@@ -267,7 +267,7 @@
 									}
 									?>
 								</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['max_score']/2)){echo ' background: #fdbdbd;"';}?>">
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd;"';}?>">
 									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],3);?>
 								</td>
 							</tr>

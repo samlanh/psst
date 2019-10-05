@@ -238,7 +238,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.NumberTextBox',
     			'class'=>' fullside height-text',
     			'required'=>'true',
-    			'readonly'=>'true',
+    			//'readonly'=>'true',
+    			'onKeyUp'=>'calculateMaxAverage();',
     			'placeholder'=>$this->tr->translate("TOTAL_SCORE"),
     	));
     	

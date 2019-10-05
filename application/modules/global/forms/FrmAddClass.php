@@ -225,6 +225,14 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
 		$is_pass->setMultiOptions($opt);
 		
+		
+		
+		$total_max_score = new Zend_Dojo_Form_Element_NumberTextBox('total_max_score');
+		$total_max_score->setAttribs(array('dojoType'=>$this->t_num,
+				'class'=>'fullside',
+				'onkeyup'=>'CulculateAverage();',
+				'required'=>true));
+		
 		$max_avg = new Zend_Dojo_Form_Element_NumberTextBox('max_average');
 		$max_avg->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
 				'required'=>true,
@@ -247,9 +255,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_note->setValue($data['note']);
 			$max_avg->setValue($data['max_average']);
 			$divide_subject->setValue($data['amount_subject']);
-			
+			$total_max_score->setValue($data['total_score']);
 		}
-		$this->addElements(array($divide_subject,$max_avg,$is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array($total_max_score,$divide_subject,$max_avg,$is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
 	

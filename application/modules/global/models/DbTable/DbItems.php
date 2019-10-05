@@ -379,6 +379,7 @@
 	public function getGradeSubjectById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT *,
+			(SELECT total_score FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS total_max_score,
 			(SELECT amount_subject FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS divide_subject
 			FROM rms_grade_subject_detail WHERE grade_id = ".$db->quote($id);
 		return $db->fetchAll($sql);

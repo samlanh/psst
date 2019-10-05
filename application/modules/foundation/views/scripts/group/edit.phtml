@@ -157,7 +157,7 @@
 		             <div class="form-group">
 		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12" >
-		                	<input type="text" readonly style="color:red" name="total_max_score" id="total_max_score" class="fullside" dojoType="dijit.form.TextBox" />
+		                	<?php echo $frm->getElement("total_max_score");?>
 		                </div>
 		             </div>
 		    		<div class="form-group">
@@ -867,7 +867,7 @@ function calculateTotalSubject(){
 			total_amt_subject_month = total_amt_subject_month + amt_subject_month;
 			total_amt_subject_semester = total_amt_subject_semester + amt_subject_semester;
 		}
-		dijit.byId("total_max_score").attr("value",dojo.number.format(total_max_score-total_score_cut,2));
+		//dijit.byId("total_max_score").attr("value",dojo.number.format(total_max_score-total_score_cut,2));
 		dijit.byId("total_score_cut").attr("value",dojo.number.format(total_score_cut,2));
 		dijit.byId("total_subject_month").attr("value",dojo.number.format(total_amt_subject_month,2));
 		dijit.byId("total_subject_semester").attr("value",dojo.number.format(total_amt_subject_semester,2));

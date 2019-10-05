@@ -379,17 +379,16 @@ function CheckSubjectExam(subject_id){
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
+				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
 			}
 		}
 	}else{
-		
 		if(rowId!=''){ 
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
-				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
+				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);

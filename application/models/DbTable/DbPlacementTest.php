@@ -218,5 +218,14 @@ class Application_Model_DbTable_DbPlacementTest extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY pt.id DESC";
 		return $db->fetchAll($sql);
 	}
+	
+	function getPlacementTestbyId($id){
+		$db = $this->getAdapter();
+		$student_id = $this->getStudnetId();
+		$sql="SELECT pt.* FROM rms_placement_test AS pt WHERE pt.id = $id ";
+		$sql.=" AND pt.student_id = $student_id";
+		$sql.="  LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
 }
 ?>

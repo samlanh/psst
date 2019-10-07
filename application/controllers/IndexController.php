@@ -516,6 +516,44 @@ class IndexController extends Zend_Controller_Action
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
+	
+	function reviewAction(){
+		
+		$id = $this->getRequest()->getParam("id");
+		
+		$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+// 		$test_type = $session_user->test_type;
+// 		$test_setting_id = $session_user->test_setting_id;
+// 		$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
+// 		$exam_id = $session_user->exam_id;
+		$user_id = $session_user->student_id;
+		if (empty($user_id)){
+			$this->_redirect("/index/login");
+		}
+		if (empty($id)){
+			$this->_redirect("/index/home");
+		}
+		$exam_id = empty($id)?0:$id;
+		$this->view->exam_id = $exam_id;
+		
+		
+		 
+		$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+		$_dbgb= new Application_Model_DbTable_DbGlobal();
+		
+		$row = $_dbpl->getPlacementTestbyId($exam_id);
+		$test_setting_id = empty($row['placement_setting_id'])?0:$row['placement_setting_id'];
+		
+		$_data = array('test_setting_id'=>$test_setting_id);
+		$this->view->question=$_dbgb->getAllQuestionBySettingExam($_data);
+		$this->view->truefalse_opt=$_dbgb->getOptionTrueFalse(1);
+	
+		$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
+		 
+		$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+	}
 }
 
 

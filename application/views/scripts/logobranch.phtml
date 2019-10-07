@@ -1,0 +1,14 @@
+<?php 
+$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
+$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
+$_dbgb= new Application_Model_DbTable_DbGlobal();
+$rs = $_dbgb->getBranchInfo($branch_id);
+$rsbranch = $rs;
+
+if (!empty($rsbranch['photo'])){
+      		if (file_exists(PUBLIC_PATH."/images/".$rsbranch['photo'])){
+?>
+     <a href="<?php echo $this->baseUrl()."/index/home";?>" class="site_title" title="<?php echo $rsbranch['school_nameen'];?>"><span>
+      	 	<img style=" height: 100%; width: auto;" src="<?php echo $this->baseUrl()."/images/".$rsbranch['photo'];?>" alt="<?php echo $rsbranch['school_nameen'];?>"></span>
+	  </a>
+<?php } }?>

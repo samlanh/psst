@@ -10,10 +10,20 @@ $endTiem = date("Y-m-d H:i:s",strtotime("+$duration min $startTime"));
 $placemnet_id = $this->exam_id; 
 $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 ?>
+<style>
+	a.link {
+	    color: #000;
+	    text-decoration: none;
+	}
+</style>
 
         	<div class="col-md-3 left_col ">
           		<div class="left_col scroll-view">
 		            <div class="navbar nav_title">
+		            	<?php 
+							echo $this->render('logobranch.phtml');
+						?>
+            			<div class="clearfix"></div>
 		            </div>
             		<div class="clearfix"></div>
             		
@@ -60,18 +70,19 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 						    			</style>
 						    			<table class="content-data" cellpadding="5"​ border="1" width="100%" >
 						    				<tr>
-						    					<td  align="center" colspan="8" style=" border: 1px #fff solid; ">
+						    					<td  align="center" colspan="9" style=" border: 1px #fff solid; ">
 						    						<h2><?php echo $tr->translate("EXAM_HISTORY");?></h2>
 						    					</td>
 						    				</tr>
 						    				<tr>
-						    					<td colspan="8" style=" border-left: 1px #fff solid; border-right: 1px #fff solid; ">&nbsp;</td>
+						    					<td colspan="9" style=" border-left: 1px #fff solid; border-right: 1px #fff solid; ">&nbsp;</td>
 						    				</tr>
 											<tr class="style-head" align="center" >
 												<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 												<td colspan="4"><?php echo $tr->translate("EXAM_INFO");?></td>
 												
 												<td colspan="3"><?php echo $tr->translate("DATE_INFO");?></td>
+												<td rowspan="2"><?php echo $tr->translate("CHECK_RESULT");?></td>
 											</tr>
 											<tr class="style-head" align="center" >
 												<td><?php echo $tr->translate("EXAM");?></td>
@@ -84,7 +95,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												<td><?php echo $tr->translate("STOP");?></td>
 											</tr>
 											<?php if (!empty($this->row)) foreach ($this->row as $key => $rs){?>
-											<tr class="style-rowdata hover context-menu-one">
+											<tr class="style-rowdata hover context-menu-one" >
 												<td align="center"><?php echo $key+1;?></td>
 												<td><?php echo $rs['test_type_title'];?></td>
 												<td align="center"><?php echo number_format($rs['duration'],0)." ".$tr->translate("MIN");?></td>
@@ -94,6 +105,11 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												<td align="center"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 												<td align="center"><?php echo date("H:i:s",strtotime($rs['start']));?></td>
 												<td align="center"><?php echo date("H:i:s",strtotime($rs['stop']));?></td>
+												<td align="center">
+													<a class="link" href="<?php echo $this->baseUrl()."/index/review/id/".$rs['id']; ?>">
+													<?php echo $tr->translate("CHECK_RESULT");?>
+													</a>
+												</td>
 											</tr>
 											<?php }?>
 										</table>

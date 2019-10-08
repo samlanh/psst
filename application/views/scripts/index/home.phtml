@@ -65,6 +65,7 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 						    					<div class="title-examination text-center">
 							    					<h2><?php echo $this->setting['title'];?></h2>
 							    					<h5><?php echo $tr->translate("DURATION")?> : <?php echo $this->setting['duration'];?> <?php echo $tr->translate("MIN")?></h5>
+							    					<h5><?php echo $tr->translate("SCORE")?> : <?php echo $this->totalPoint;?> <?php echo $tr->translate("POINT")?></h5>
 							    				</div>
 							    				<div class="exam-content">
 							    					<span><?php echo $tr->translate("EXAM_CONTENT")?></span> : 
@@ -95,30 +96,6 @@ $_dbgb= new Application_Model_DbTable_DbGlobal();
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #750a14;">
 															<span data-bind="text: currentRatio"><i class="fa fa-sliders"></i></span> 
 															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("EXAM_HISTORY")?></p>
-														</div>
-														</a>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-												<div class="accounting-management text-center">
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
-														<a title="<?php echo $tr->translate("VIEW_LAST_RESULT")?>" href="/Installmentnew/trunk/public/report/loan/rpt-loancollect">
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #0f575b;">
-															<span data-bind="text: currentRatio"><i class="fa fa-file-text-o"></i></span> 
-															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("VIEW_LAST_RESULT")?></p>
-														</div>
-														</a>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-												<div class="accounting-management text-center">
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
-														<a title="Customer Unpaid" href="/Installmentnew/trunk/public/report/loan/rpt-loancollect">
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="background: #144673;">
-															<span data-bind="text: currentRatio"><i class="fa fa-pencil-square-o"></i></span> 
-															<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("START_EXAM")?></p>
 														</div>
 														</a>
 													</div>

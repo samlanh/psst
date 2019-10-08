@@ -422,6 +422,9 @@ class IndexController extends Zend_Controller_Action
     	$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
     	$this->view->settingDetail = $_dbpl->getPlacementSettingDetail($test_setting_id);
     	
+    	$total_point = $_dbpl->getTotalScoreExam($test_setting_id);
+    	$this->view->totalPoint = $total_point;
+    	
     	$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
@@ -490,7 +493,7 @@ class IndexController extends Zend_Controller_Action
     	$session_user->unlock();
     	$session_user->exam_id = 0;
     	$session_user->lock();
-    	$this->_redirect("/index/home");
+    	$this->_redirect("/index/review/id/".$exam);
     	exit();
     }
 	function examhistoryAction(){
@@ -522,10 +525,6 @@ class IndexController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam("id");
 		
 		$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
-// 		$test_type = $session_user->test_type;
-// 		$test_setting_id = $session_user->test_setting_id;
-// 		$test_setting_id = empty($test_setting_id)?0:$test_setting_id;
-// 		$exam_id = $session_user->exam_id;
 		$user_id = $session_user->student_id;
 		if (empty($user_id)){
 			$this->_redirect("/index/login");
@@ -550,6 +549,11 @@ class IndexController extends Zend_Controller_Action
 	
 		$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
 		 
+		
+		$total_point = $_dbpl->getTotalScoreExam($test_setting_id);
+		$this->view->totalPoint = $total_point;
+		$this->view->result_score = $_dbpl->getTotalScoreResult($exam_id);
+		
 		$branch_id = empty($session_user->branch_id)?1:$session_user->branch_id;
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);

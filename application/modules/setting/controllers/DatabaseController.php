@@ -28,7 +28,6 @@ public function init()
 			if (exec("$mysqldumpart  --user={$user} --password={$pass} --host={$host} --routines {$database} --result-file={$dir} 2>&1 ", $output)){
 				Application_Form_FrmMessage::Sucessfull("BACKUP_SUCCESS","/setting/database");
 			}else{
-	
 				Application_Form_FrmMessage::Sucessfull("BACKUP_FAIL","/setting/database");
 			}
 		}

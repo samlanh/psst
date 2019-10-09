@@ -8,42 +8,41 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction(){
-			$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
-			
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-						'adv_search' => '',
-						'branch_id' => '',
-						'study_year' => '',
-						'group' => '',
-						'degree' => '',
-						'grade_all' => '',
-						'session' => '',
-						'room' => '',
-						);
-			}
-			
-			$rs= $db->getGroupDetail($search);
-			$list = new Application_Form_Frmtable();
-			$this->view->search = $search;
-			if(!empty($rs)){
-			}
-			else{
-				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-			}
-			$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
-			$link=array(
-					'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
-			
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
+		$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'adv_search' => '',
+					'branch_id' => '',
+					'study_year' => '',
+					'group' => '',
+					'degree' => '',
+					'grade_all' => '',
+					'session' => '',
+					'room' => '',
+					);
+		}
+		
+		$rs= $db->getGroupDetail($search);
+		$list = new Application_Form_Frmtable();
+		$this->view->search = $search;
+		if(!empty($rs)){
+		}
+		else{
+			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
+		}
+		$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
+		$link=array(
+				'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
+		);
+		$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
 	}
 	function addAction(){
 		$db = new Foundation_Model_DbTable_DbAddStudentToGroup();

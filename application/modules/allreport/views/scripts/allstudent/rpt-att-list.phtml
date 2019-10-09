@@ -4,6 +4,8 @@
 	$gender = array(
 			1=>'Male',
 			2=>'Female');
+	$_db  = new Application_Model_DbTable_DbGlobal();
+	$lang = $_db->currentlang();
 	
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("STUDENT_ATTENDANT_LIST")); 
@@ -24,6 +26,7 @@
 	
 	$amount_day = $amount_day + 1;
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+	$day = array("Mon"=>"ចន័្ទ","Tue"=>"អង្គារ","Wed"=>"ពុធ","Thu"=>"ព្រហស្បតិ៍","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
 ?>	
 <div class="reportblog">
 	<div class="card-box">
@@ -81,17 +84,37 @@
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-					<span style="color:#000; font-size: 18px;font-family:Times New Roman,'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></span>
+					<span style="color:#000; font-size: 18px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></span> <br/>
+					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?></span> 
 				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 			<?php $total_day=0;for($k=0;$k<$amount_day;$k++){?>
 				<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));
 					$total_day++;
 				}?>
-			<?php }?>					
+			<?php }?>
+			<tr>
+				<td colspan="<?php echo 4+$total_day;?>">
+					<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;line-height: 20px;">
+						<tr>
+							<td >
+								Attendance sheet for : <?php echo $this->rr['grade']?>
+							</td>
+						</tr>
+						<tr>		
+							<td>
+								Class report for Academic Year : <?php echo $this->rr['academic']?>
+							</td>
+						</tr>
+						<tr>	
+							<td>
+								Room : <?php echo $this->rr['room_name']?>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+								
 			<tr>
 				<td colspan="3" id="exportExcel">
 					<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
@@ -111,28 +134,9 @@
 							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 						</style>
 						<thead>									
+							
 							<tr>
-								<td colspan="<?php echo 4+$total_day;?>">
-									<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;line-height: 25px;">
-										<tr>
-											<td width="20%" style="border-right: 1px solid #000;">
-												Attendance sheet for : <?php echo $this->rr['grade']?>
-											</td>
-											<td width="40%" style="border-right: 1px solid #000;">
-												Class report for Academic Year : <?php echo $this->rr['academic']?>
-											</td>
-											<td width="20%" align="center" style="border-right: 1px solid #000;">
-												From <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> to <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
-											</td>
-											<td width="20%" >
-												Room : <?php echo $this->rr['room_name']?>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="<?php echo 4+$total_day;?>">
+								<td colspan="<?php echo 5+$total_day;?>">
 									<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;font-weight: bold;line-height: 25px;">
 										<tr>
 											<td width="50%" style="border-right: 1px solid #000;">
@@ -147,7 +151,7 @@
 							</tr>
 							<?php if($this->datasearch['showsign']==1){?>
 							<tr align="center" style="height: 65px; background: #ccd9ff;" class="signnature">
-								<td colspan="4" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
+								<td colspan="5" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td class="rotate"></td>
@@ -156,23 +160,23 @@
 							</tr>
 							<?php }?>
 							<tr class="cheader" align="center" style="background: #ccd9ff;">
-								<td colspan="4"><?php echo $tr->translate("Month");?></td>
+								<td colspan="5"><?php echo $tr->translate("Month");?></td>
 								<td style="background: none;" align="center" colspan="<?php echo $total_day;?>">
 									From &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;to&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 								</td>
 							</tr>
 							
 							<tr class="cheader" align="center" style="background: #ccd9ff;" >
-								<td colspan="4"><?php echo $tr->translate("Weekday");?></td>
+								<td colspan="5"><?php echo $tr->translate("Weekday");?></td>
 								
 								<?php for($k=0;$k<$amount_day;$k++){?>
 								<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
-									<td class=""><div><span><?php  echo date("D",strtotime($date));?></span></div></td>
+									<td class=""><div><span><?php if($lang==1){echo $day[date("D",strtotime($date))];}else{echo date("D",strtotime($date));}?></span></div></td>
 								<?php }?>
 							<?php }?>
 							</tr>
 							<tr class="cheader" align="center" style="background: #ccd9ff;" >
-								<td colspan="4"><?php echo $tr->translate("Today's Date");?></td>
+								<td colspan="5"><?php echo $tr->translate("Today's Date");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td class=""><div><span><?php  echo date("d",strtotime($date));?></span></div></td>
@@ -202,7 +206,7 @@
 									$femle=$femle+1;
 								}?>
 							</td>
-							
+							<td><?php echo $row['tel'];?></td>
 							<?php $p=0; $a=0;$l=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
 							<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 								<td align="center" >
@@ -212,8 +216,13 @@
 						</tr>
 						<?php }?>	
 						<tr>
-							<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;"><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></span></td>
-							<td colspan="3" align="center" style="border:1px solid #fff;border-top:1px solid #000;"><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT")."  <br />";?><?php echo $tr->translate("MALE")." ".$male;?><?php echo $tr->translate("STUDENT_UNIT");?></span></td>
+							<td colspan="5" valign="top" style="padding-top:2px;border:1px solid #fff; border-top:1px solid #000;">
+								<span style="font-size: 13px;;">
+									<?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?>
+									<?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT");?>
+									<?php echo $tr->translate("MALE")." ".$male;?> <?php echo $tr->translate("STUDENT_UNIT");?>
+								</span>
+							</td>
 						</tr>
 					</table>	
 				</td>

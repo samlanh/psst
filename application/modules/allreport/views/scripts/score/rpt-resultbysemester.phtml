@@ -1,20 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("Semester Score Result")); 
-	echo $this->headTitle();
-	$frm =  $this->form_search;
-	$base_url = Application_Form_FrmMessage::getUrl("/");
+	echo $this->headTitle($tr->translate("Semester Score Result")); 
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	$dbgb = new Application_Model_DbTable_DbGlobal();
-	$day = array(
-		"Mon" =>'ច័ន្ទ',
-		"Tue" =>'អង្គារ',
-		"Wed" =>'ពុធ',
-		"Thu" =>'ព្រហស្បតិ៍',
-		"Fri" =>'សុក្រ',
-		"Sat" =>'សៅរ៍',
-		"Sun" =>'អាទិត្យ',
-	);
+	
 	$month = array(
 		"01"=>"មករា",
 		"02"=>"កុម្ភៈ",
@@ -32,9 +21,6 @@
 ?>	
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.data.ObjectStore");
-	dojo.ready(function(){
-	});
 </script>
 <form  action="" dojoType="dijit.form.Form" method="post">
 </form>
@@ -63,13 +49,13 @@
 				<?php
 					$semester_str = array(1=>"I",2=>"II");
 					$student=0; $female=0;
-					 $old_groupid=0; $i=0; $count_fail=0;  $old_totalscore = 0; $old_rank=0;
+					 $old_groupid=0; $i=0; $count_fail=0;  $old_average = 0; $old_rank=0;
 					 $duplicate=0;$count_pass=0;
 					 
 					 $pass_female=0;
 					 $fail_female=0;
 					 $date_input =date("Y-m-d");
-					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
+					 if (!empty($this->rs_scoresemester)){ foreach($this->rs_scoresemester as $key=> $rs){ 
 						if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");}else{ $female++; $sex = $tr->translate("FEMALE_SHORT");}
 						$student++;
 				?>
@@ -131,15 +117,15 @@
 									$total_score = 0; 
 									$avg_semester = $rs['avg_forsemester'];
 									$avg_allmonth = $rs['avg_formonth'];
-									$score_average = ($avg_semester+$avg_allmonth)/2;
-									if($score_average==$old_totalscore){
+									$semester_average = ($avg_semester+$avg_allmonth)/2;
+									if($semester_average==$old_average){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}
 									
-									if($score_average>=($rs['max_score']/2)){
+									if($semester_average>=($rs['max_average']/2)){
 										$count_pass++;
 										if($rs['sex']==2){
 											$pass_female=$pass_female+1;
@@ -154,16 +140,16 @@
 								<td align="center"><?php echo number_format($avg_allmonth,2); ?></td>
 								<td align="center"><?php echo number_format($avg_semester,2);?></td>
 								<td align="center"><?php echo number_format($avg_allmonth+$avg_semester,2);?></td>
-								<td align="center"><?php echo number_format(($avg_semester+$avg_allmonth)/2,2);?></td>
+								<td align="center"><?php echo number_format($semester_average);?></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td>&nbsp;</td>
 							</tr>
 							<?php 
 								$old_groupid=$rs['group_id'];
-								$old_totalscore = $score_average;
+								$old_average = $semester_average;
 							?>
 							<?php }}?>
-							<?php if (!empty($this->studentgroup)){
+							<?php if (!empty($this->rs_scoresemester)){
 								for($i=$i+1;$i<=45;$i++){
 							?>
 								<tr class="style">
@@ -222,13 +208,13 @@
 											<tr>
 												<td valign="top" width="33%" valign="top" align="center" style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
 													<?php echo $tr->translate("CHECKANDAPPROVED");?><br/>
-													<?php echo $tr->translate("DISTRIC_DIRECTOR_OFFICE_MINISTRY");//ប្រធានការិយាល័យអប់រំយុវជន និងកីឡាខណ្ឌពោធិ៍សែនជ័យ?>
+													<?php echo $tr->translate("DISTRIC_DIRECTOR_OFFICE_MINISTRY");?>
 												</td>
 												<td width="33%" valign="top" align="center" style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
-													<?php echo $tr->translate("CHECKANDAPPROVED");//បានឃើញ និងឯកភាព?><br/>
-													<?php echo $tr->translate("PRINCIPAL");//?>
+													<?php echo $tr->translate("CHECKANDAPPROVED");?><br/>
+													<?php echo $tr->translate("PRINCIPAL");?>
 												</td>
-												<td width="33%"  align="center" style="white-space: nowrap;" valign="top"><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;<?php echo @$this->studentgroup[0]['teacher_name'];?></td>
+												<td width="33%"  align="center" style="white-space: nowrap;" valign="top"><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;<?php echo @$this->rs_scoresemester[0]['teacher_name'];?></td>
 											</tr>
 											
 										</table>

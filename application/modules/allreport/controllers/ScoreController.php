@@ -222,7 +222,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	if(empty($result_semester)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
-    	$this->view->studentgroup = $result_semester;
+    	$this->view->rs_scoresemester = $result_semester;
     	
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = $result_semester[0]['branch_id'];

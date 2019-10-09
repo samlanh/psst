@@ -322,4 +322,43 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
 	}
+	
+	function chcekSectionInUse($section){
+		$db = $this->getAdapter();
+		$sql=" SELECT psd.section_id,pt.* FROM `rms_placement_test` AS pt,
+				`rms_placementtest_setting_detail` AS psd
+				WHERE psd.setting_id = pt.placement_setting_id ";
+		
+		$condiction = $this->getChildSection($section);
+		if (!empty($condiction)){
+			$sql.=" AND psd.section_id IN ($condiction)";
+		}else{
+			$sql.=" AND psd.section_id=".$section;
+		}
+		$sql.=" LIMIT 1";
+		$rs = $db->fetchRow($sql);
+	   	if (!empty($rs)){
+	   		return 1;
+	   	}
+	   	return 0;
+	}
+	function getChildSection($id,$idetity=null){
+		$where='';
+		$db = $this->getAdapter();
+		$sql=" SELECT c.`parent` as id FROM `rms_section` AS c WHERE c.`id` = $id AND c.`status`=1 ";
+		$child = $db->fetchAll($sql);
+		foreach ($child as $va) {
+			if (empty($idetity)){
+				if ($va['id']!=0){
+					$idetity=$id.",".$va['id'];
+				}
+			}else{
+				if ($va['id']!=0){
+					$idetity=$idetity.",".$va['id'];
+				}
+			}
+			$idetity = $this->getChildSection($va['id'],$idetity);
+		}
+		return $idetity;
+	}
 }

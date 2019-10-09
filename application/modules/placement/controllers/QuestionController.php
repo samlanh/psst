@@ -116,6 +116,13 @@ class Placement_QuestionController extends Zend_Controller_Action
     	$this->view->row = $row;
     	$this->view->rowDetail = $db->getQuestionDetailById($id);
     	
+    	$section_id = empty($row['section_id'])?0:$row['section_id'];
+    	$check = $db->chcekSectionInUse($section_id);
+    	if (!empty($check)){
+    		Application_Form_FrmMessage::MessageBacktoOldHistory("UNAVAILABLE_TO_EDIT");
+    		exit();
+    	}
+    	
     	$frm = new Placement_Form_FrmQuestion();
     	$frm->FrmAddQuestion($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

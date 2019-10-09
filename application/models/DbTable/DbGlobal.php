@@ -2539,6 +2539,12 @@ function getAllgroupStudyNotPass($action=null){
   	$sql=" SELECT id,title AS name FROM rms_section WHERE 1 ";
   	if (!empty($_data['test_type'])){
   		$sql.=" AND test_type = ".$_data['test_type'];
+  		if (!empty($_data['free_section'])){
+  			$parent_section = $this->getPlacementTestSection($_data['test_type']);
+  			if (!empty($parent_section)){
+  				$sql.=" AND id NOT IN ($parent_section) ";
+  			}
+  		}
   	}
   	if (!empty($is_parent)){
   		$sql.=" AND parent = 0 ";
@@ -2546,7 +2552,6 @@ function getAllgroupStudyNotPass($action=null){
   	}else{
   		$sql.=" AND parent = $parent ";
   	}
-  	
   	$rows = $db->fetchAll($sql);
   	if (!is_array($cate_tree_array))
   		$cate_tree_array = array();
@@ -2558,6 +2563,16 @@ function getAllgroupStudyNotPass($action=null){
   			
   	}
   	return $cate_tree_array;
+  }
+  function getPlacementTestSection($test_type){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT GROUP_CONCAT(DISTINCT psd.section_id) AS section_id
+			FROM `rms_placement_test` AS pt,
+			`rms_placementtest_setting_detail` AS psd
+			WHERE psd.setting_id = pt.placement_setting_id ";
+  	$sql.=" AND (SELECT ps.test_type FROM `rms_placementtest_setting` AS ps WHERE ps.id = psd.setting_id LIMIT 1 ) =$test_type";
+  	$row = $db->fetchOne($sql);
+  	return $row;
   }
   
   function getOptionTrueFalse($hav_empty_opt=null,$is_arr=null){

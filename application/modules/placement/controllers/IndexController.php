@@ -125,8 +125,10 @@ class Placement_IndexController extends Zend_Controller_Action
     	
     		$test_type = empty($data['test_type'])?"":$data['test_type'];
     		$parent = empty($data['parent'])?null:$data['parent'];
+    		$free_section = empty($data['free_section'])?null:$data['free_section'];
     		$arr  = array(
     				'test_type'=>$test_type,
+    				'free_section'=>$free_section,
     		);
     		$_dbmodel = new Application_Model_DbTable_DbGlobal();
     		$result=$_dbmodel->getAllSections($arr,$parent);

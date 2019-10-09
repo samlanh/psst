@@ -157,4 +157,15 @@ class Placement_Model_DbTable_DbSetting extends Zend_Db_Table_Abstract
    		$db->rollBack();
    	}
    }
+   
+   function checkSettingInUse($placement_setting_id){
+   	$db = $this->getAdapter();
+	   	$sql=" SELECT pt.* FROM `rms_placement_test` AS pt WHERE pt.placement_setting_id=$placement_setting_id ";
+	   	$sql.=" ORDER BY pt.id DESC LIMIT 1 ";
+   	$rs = $db->fetchRow($sql);
+   	if (!empty($rs)){
+   		return 1;
+   	}
+   	return 0;
+   }
 }

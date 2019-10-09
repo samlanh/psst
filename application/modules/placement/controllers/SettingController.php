@@ -84,9 +84,15 @@ class Placement_SettingController extends Zend_Controller_Action {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
+    	
+    	$check = $db->checkSettingInUse($id);
+    	if (!empty($check)){
+    		Application_Form_FrmMessage::messageAlert("UNAVAILABLE_TO_EDIT", self::REDIRECT_URL."/index");
+    		exit();
+    	}
     	$row = $db->getPlacementTestSettingById($id);
     	if (empty($row)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    		Application_Form_FrmMessage::messageAlert("NO_RECORD", self::REDIRECT_URL."/index");
     		exit();
     	}
     	$this->view->detail = $db->getPlacementTestSettingDetail($id);

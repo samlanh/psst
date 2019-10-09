@@ -102,7 +102,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		);
     		$result = $db->getStundetScoreResult($search,$id,1);
     		$this->view->studentgroup = $result;
-    		
     	}
     	$this->view->search=$search;
     	

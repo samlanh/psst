@@ -1,14 +1,12 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
+	echo $this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
 	$show_subject=1;//1=subject name,0 shortcut
 	
 	$session_lang=new Zend_Session_Namespace('lang');
 	$lang_id=$session_lang->lang_id;
 	
-	echo $this->headTitle();
 	$frm =  $this->form_search;
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	$dbgb = new Application_Model_DbTable_DbGlobal();
 	$month = array(
@@ -105,7 +103,6 @@
 				font-family: 'Times New Roman','Khmer OS Battambang';
 				
 			}
-			.padding{ padding: 0 1px !important;}
 			table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			.header tr{ page-break-inside:avoid; page-break-after:auto }
 			#header {
@@ -143,9 +140,8 @@
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
-				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
+				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
 				 $duplicate=0;$count_pass=0;
-				 $default_col = 0;
 				 $m=0;$f=0;
 				 $pass_female=0;$fail_female=0;
 				 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
@@ -213,7 +209,6 @@
 								<tr class="cheader" align="center" >
 									<?php
 									if (!empty($subj)){
-										$default_col = count($subj);
 										foreach ($subj as $subject){
 										 if($this->data['scoreresulttye']==1){
 										 	if($show_subject==1){
@@ -246,12 +241,11 @@
 										}
 										echo number_format($tscore_subject,2);
 										$total_score = $total_score + $tscore_subject;
-										$amount_subject = $score['amount_subject'];
 									?>
 								</td>
 								<?php } ?>
 								<?php }
-									if($rs['average']==$old_totalscore){
+									if($rs['average']==$old_average){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
@@ -292,7 +286,7 @@
 								</td>
 							</tr>
 							<?php 
-								$old_totalscore = $rs['average'];
+								$old_average = $rs['average'];
 								$old_groupid=$rs['group_id']; ?>
 							<?php }}?>
 							</table>

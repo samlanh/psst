@@ -282,11 +282,11 @@ function filterStudent(){
 		   tem="";
 		   temp='';
 	       if(data!=""){
-				num =0;
 				title=0;
 				temp='';
 				str='';
 				column = 0;
+				record_num = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
 					+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff;  "><td  class="tdheader"><?php echo $tr->translate('DEL');?></td>'
 					+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
@@ -326,16 +326,16 @@ function filterStudent(){
 				  temp+='</thead>';
 				  
 				for(i=0;i<data.length;i++){
-					num++;
 					inx = inx+1;
+					record_num ++;
 					temp += '<tr class="hover normal" id="row'+inx+'">';
 					temp +='<td width="10px" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-					temp += '<td width="10px" align="center">&nbsp;'+num+'</td>';
+					temp += '<td width="10px" align="center">&nbsp;'+record_num+'</td>';
 					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
 					temp += '<td style="min-width:100px;text-align:left;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" onblur="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
+						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';

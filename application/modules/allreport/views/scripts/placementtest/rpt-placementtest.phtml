@@ -178,10 +178,8 @@ table.tb-footer tr.style-head {
 		</div>
 	</div>
 <?php 
-	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
-	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
-	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
-	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
+	$urlReview = $this->baseUrl()."/allreport/placementtest/review/id/";
+	$urlPlacementProfile = $this->baseUrl()."/allreport/placementtest/placement-profile/id/";
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
 <script type="text/javascript">
@@ -192,22 +190,16 @@ $(function(){
 		selector: '.context-menu-one', 
 		callback: function(key, options) {
 			var m = "clicked: " + key;
-			if(key=="outstanding"){
-				url='<?php echo $urlOutStanding;?>';
-			}else if(key=="outstandingNophoto"){
-				url='<?php echo $urlOutStandingNoPhoto;?>';
-			}else if(key=="scoreresult"){
-				url='<?php echo $urlScoreResult;?>';
-			}else if(key=="scoredetail"){
-				url='<?php echo $urlScoreDetail;?>';
+			if(key=="review"){
+				url='<?php echo $urlReview;?>';
+			}else if(key=="placementProfile"){
+				url='<?php echo $urlPlacementProfile;?>';
 			}
 			gotoAction();
 		},
 		items: {
-			"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
-			"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
-			"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
-			"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+			"review": {name: "<?php echo $tr->translate("REVIEW_RESUlT");?>", icon: "fa-sitemap",},
+			"placementProfile": {name: "<?php echo $tr->translate("PLACEMENT_PROFILE");?>", icon: "fa-sitemap",},
 		}
 	});
 });

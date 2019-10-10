@@ -68,6 +68,46 @@ class Allreport_Model_DbTable_DbPlacementest extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
+    function getPlacementById($id){
+    	$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$_db=new Application_Model_DbTable_DbGlobal();
+    
+    	$lang = $_db->currentlang();
+    	$v_name ="v.name_kh";
+    	$branch = "b.branch_namekh";
+    	$stu_name ="s.stu_khname";
+    	if($lang==2){// English
+    		$branch = "b.branch_nameen";
+    		$stu_name = " CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ";
+    		$v_name ="v.name_en";
+    	}
+    	$sql = "SELECT
+    	pt.*,
+    	(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = pt.branch_id LIMIT 1) AS branch_name,
+    	s.stu_khname,
+    	s.photo,
+    	CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS stu_name_en,
+    	CASE
+    	WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
+    	WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'
+    	END AS sexTitle,
+    	s.dob,
+    	s.pob,
+    	ps.title,
+    	(SELECT t.title FROM `rms_test_type` AS t WHERE t.id = ps.test_type LIMIT 1) AS test_type_title,
+    	(SELECT $v_name FROM rms_view AS v WHERE v.key_code=pt.speaking AND v.type = 33 LIMIT 1) AS speaking,
+		(SELECT $v_name FROM rms_view AS v WHERE v.key_code=pt.listening AND v.type = 33 LIMIT 1) AS listening
+			
+    	FROM `rms_placement_test` AS pt,
+    	`rms_placementtest_setting` AS ps,
+    	`rms_student` AS  s
+    	WHERE
+    	ps.id = pt.placement_setting_id AND s.stu_id = pt.student_id AND pt.id = $id ";
+    	$sql.= $_db->getAccessPermission('pt.branch_id');
+    	 
+    	return $db->fetchRow($sql);
+    }
 }
    
     

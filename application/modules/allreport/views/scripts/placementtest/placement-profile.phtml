@@ -1,0 +1,97 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("PLACEMENT_TEST_INFO"));
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+?>
+<div class="reportblog">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PLACEMENT_TEST_INFO');?></h4>
+    	   </div>
+    	   <div class="col-sm-4 text-right">
+    	   </div>
+    	</div>
+    </div>
+    <div id="divPrint">
+    	<style>
+    		.content-table{
+				font-size:12px; 
+				border-collapse:collapse; 
+				border: 1px solid #000;
+				font-family: 'Times New Roman','Khmer OS Battambang'; 
+				white-space: nowrap;
+			}
+			.content-table td{
+				padding: 5px;
+			}
+			.content-table td.title-lb {
+				font-weight: bold;
+			}
+    	</style>
+    	<?php echo $this->rsheader;?>
+    	<table class="content-table" width="100%" border="1"  style="">
+			<tr >
+				<td colspan="2" align="center">
+					<?php 
+						$image = $this->baseUrl().'/images/no-profile.png';
+						if(!empty($this->row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$this->row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$this->row['photo'];
+							}
+						}
+					?>
+					<img id="profile_wiew" src="<?php echo $image;?>" alt=""  /><br />
+					<span>Test Date : <?php echo date("d/M/Y",strtotime($this->row['create_date'])); ?></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="title-lb" width="50%">Name:</td>
+				<td><?php echo $this->row['stu_name_en']?></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Gender</td>
+				<td><?php echo $this->row['sexTitle']?></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Date Of Birth:</td>
+				<td><?php echo date("d/M/Y",strtotime($this->row['dob']))?></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Place Of Birth:</td>
+				<td><?php echo $this->row['pob']?></td>
+			</tr>
+			<tr>
+				<td colspan="2"><h2 style="padding: 0; font-weight:bold;    margin: 0;">Test Result</h2></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Appropiate Respone</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Grammer</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Reading</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="title-lb" align="right">Total</td>
+				<td><?php echo $this->row['result_score'];?></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Speaking:</td>
+				<td><strong><?php echo $this->row['speaking']?></strong></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Listening:</td>
+				<td><strong><?php echo $this->row['listening']?></strong></td>
+			</tr>
+			<tr>
+				<td class="title-lb">Level</td>
+				<td></td>
+			</tr>
+		</table>
+    </div>
+ </div>

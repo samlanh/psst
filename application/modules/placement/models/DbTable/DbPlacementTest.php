@@ -14,13 +14,15 @@ class Placement_Model_DbTable_DbPlacementTest extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_db=new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
+    	
     	$lang = $_db->currentlang();
     	$branch = "b.branch_namekh";
     	$stu_name ="s.stu_khname";
+    	$v_name ="v.name_kh";
     	if($lang==2){// English
     		$branch = "b.branch_nameen";
     		$stu_name = " CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ";
+    		$v_name ="v.name_en";
     	}
     	$sql = "SELECT 
     		pt.id,
@@ -35,13 +37,16 @@ class Placement_Model_DbTable_DbPlacementTest extends Zend_Db_Table_Abstract
 			(SELECT t.title FROM `rms_test_type` AS t WHERE t.id = ps.test_type LIMIT 1) AS test_type_title,
 			pt.duration,
 			pt.total_point,
-			pt.result_score
+			pt.result_score,
+			(SELECT $v_name FROM rms_view AS v WHERE v.key_code=pt.speaking AND v.type = 33 LIMIT 1) AS speaking,
+			(SELECT $v_name FROM rms_view AS v WHERE v.key_code=pt.listening AND v.type = 33 LIMIT 1) AS listening
 			 FROM `rms_placement_test` AS pt,
 			`rms_placementtest_setting` AS ps,
 			`rms_student` AS  s
 			WHERE 
 			ps.id = pt.placement_setting_id AND s.stu_id = pt.student_id ";
     	$where= ' ';
+    	$where.= $_db->getAccessPermission('pt.branch_id');
     	$order=" ORDER BY pt.id DESC ";
     	
     	$from_date =(empty($search['start_date']))? '1': " pt.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
@@ -69,48 +74,64 @@ class Placement_Model_DbTable_DbPlacementTest extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
+    function getPlacementById($id){
+    	$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$_db=new Application_Model_DbTable_DbGlobal();
+    	 
+    	$lang = $_db->currentlang();
+    	$branch = "b.branch_namekh";
+    	$stu_name ="s.stu_khname";
+    	if($lang==2){// English
+    		$branch = "b.branch_nameen";
+    		$stu_name = " CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ";
+    	}
+    	$sql = "SELECT
+    	pt.*,
+    	(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = pt.branch_id LIMIT 1) AS branch_name,
+    	s.stu_khname,
+    	CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS stu_name_en,
+    	CASE
+    	WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
+    	WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'
+    	END AS sexTitle,
+    	ps.title,
+    	(SELECT t.title FROM `rms_test_type` AS t WHERE t.id = ps.test_type LIMIT 1) AS test_type_title
+    	FROM `rms_placement_test` AS pt,
+    	`rms_placementtest_setting` AS ps,
+    	`rms_student` AS  s
+    	WHERE
+    	ps.id = pt.placement_setting_id AND s.stu_id = pt.student_id AND pt.id = $id ";
+    	$sql.= $_db->getAccessPermission('pt.branch_id');
+    	
+    	return $db->fetchRow($sql);
+    }
     
     
     
     
     
     
-    
-	public function addSection($_data){
+	public function updatePlacementTest($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
 			$_arr = array(
-					'parent'=>$_data['parent'],
-					'title'=>$_data['title'],
-					'test_type'=>$_data['test_type'],
-					'ordering'=>$_data['ordering'],
-					'instruction'=>$_data['instruction'],
-					'note'=>$_data['note'],
-					'article'=>$_data['article'],
+					'speaking'=>$_data['speaking'],
+					'listening'=>$_data['listening'],
 					'modify_date'=>date("Y-m-d H:i:s"),
 					'user_id'=>$this->getUserId(),
 			);
-			$this->_name='rms_section';
-			if (!empty($_data['id'])){
-				$_arr['status']=$_data['status'];
-				$where = "id=".$_data['id'];
-				$this->update($_arr, $where);
-			}else{
-				$_arr['status']=1;
-				$_arr['create_date']=date("Y-m-d H:i:s");
-				$this->insert($_arr);
-			}
+			$this->_name='rms_placement_test';
+			$where = "id=".$_data['id'];
+			$this->update($_arr, $where);
+			
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	function getSectionById($id){
-		$db = $this->getAdapter();
-		$sql=" SELECT * FROM rms_placement_test WHERE id = $id LIMIT 1";
-		return $db->fetchRow($sql);
-	}
+	
 	
 }

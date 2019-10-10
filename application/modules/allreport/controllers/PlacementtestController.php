@@ -36,5 +36,20 @@ class Allreport_PlacementtestController extends Zend_Controller_Action {
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	$this->view->rsfooteracc = $frm->getFooterAccount();
     }
-    
+    function placementProfileAction(){
+    	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
+    	$db = new Allreport_Model_DbTable_DbPlacementest();
+    	$row = $db->getPlacementById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::messageAlert("NO_RECORD","/allreport/placementtest/rpt-placementtest");
+    		exit();
+    	}
+    	$this->view->row = $row;
+    	$frm = new Application_Form_FrmGlobal();
+    	$branch_id= empty($row['branch_id'])?1:$row['branch_id'];
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	$this->view->rsfooteracc = $frm->getFooterAccount();
+    }
 }

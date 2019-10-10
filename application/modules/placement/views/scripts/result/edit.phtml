@@ -3,6 +3,17 @@
 	echo $this->headTitle($tr->translate('UPDATE_RESULT_PLACEMENT_TEST'));
 	$frm = $this->frm_crm;
 ?>
+<style>
+ul.result-pl {
+    padding: 0;
+    list-style: none;
+}
+ul.result-pl li span.title-lb {
+    min-width: 145px;
+    display: inline-block;
+    font-style: italic;
+}
+</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<form id='frm_teststudent' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
@@ -26,16 +37,32 @@
 	    	<div class="card-box">
 	        	<div class="col-md-6 col-sm-6 col-xs-12">
 	        		<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_TYPE");?> :
+	        			<ul class="result-pl" > 
+	        				<li><?php echo $this->row['branch_name']?></li>
+	        				<li><span class="title-lb"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> : <strong><?php echo $this->row['stu_khname']?></strong></li>
+	        				<li><span class="title-lb"><?php echo $tr->translate("NAME_ENGLISH");?></span> : <strong><?php echo $this->row['stu_name_en']?></strong></li>
+	        				<li><span class="title-lb"><?php echo $tr->translate("SEX");?></span> : <strong><?php echo $this->row['sexTitle']?></strong></li>
+	        				<li><span class="title-lb"><?php echo $tr->translate("SETTING_EXAME");?></span> : <strong><?php echo $this->row['title']?></strong></li>
+	        				<li><span class="title-lb"><?php echo $tr->translate("EXAM");?></span> : <strong><?php echo $this->row['test_type_title']?></strong></li>
+	        			</ul>
+	        		</div>
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+	             	<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SPEAKING");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php //echo $frm->getElement("test_type");?>
+	                   		<?php echo $frm->getElement("speaking");?>
+	                   		<?php echo $frm->getElement("id");?>
 	                   </div>
 	                </div>
-	        		
-	             </div>
-	             <div class="col-md-6 col-sm-7 col-xs-12">
-	             	
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("LISTENNING");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("listening");?>
+	                   </div>
+	                </div>
 	             </div>
 	        </div>
 	        <div class="card-box">

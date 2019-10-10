@@ -276,4 +276,56 @@ class Placement_Form_FrmSection extends Zend_Dojo_Form
     	return $this;
     }
     
+    function FrmUpdateResult($data){
+    	 
+    	$request=Zend_Controller_Front::getInstance()->getRequest();
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$userinfo = $_dbgb->getUserInfo();
+    	 
+    	
+    	 
+    	$_arr_opt =  array(0=>$this->tr->translate("PLEASE_SELECT"));
+    	$rows = $_dbgb->getViewById(33);
+    	if(!empty($rows))foreach($rows AS $row) $_arr_opt[$row['id']]= preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($row['name'])));
+    	$_speaking = new Zend_Dojo_Form_Element_FilteringSelect("speaking");
+    	$_speaking->setMultiOptions($_arr_opt);
+    	$_speaking->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
+    	 
+    	$_arr_opt =  array(0=>$this->tr->translate("PLEASE_SELECT"));
+    	$rows = $_dbgb->getViewById(33);
+    	if(!empty($rows))foreach($rows AS $row) $_arr_opt[$row['id']]= preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($row['name'])));
+    	$_listening = new Zend_Dojo_Form_Element_FilteringSelect("listening");
+    	$_listening->setMultiOptions($_arr_opt);
+    	$_listening->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
+    
+    	$id = new Zend_Form_Element_Hidden('id');
+    	$id->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    	));
+    	if(!empty($data)){
+    
+    		$_speaking->setValue($data["speaking"]);
+    		$_listening->setValue($data["listening"]);
+    		$id->setValue($data["id"]);
+    	}
+    	 
+    	$this->addElements(array(
+    			$_speaking,
+    			$_listening,
+    			$id,
+    	));
+    	return $this;
+    }
 }

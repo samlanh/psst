@@ -34,7 +34,7 @@ class Placement_ResultController extends Zend_Controller_Action
     		$this->view->adv_search = $search;
 			$rs_rows= $db->getAllPlacementTest($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","SETTING","EXAM","DURATION","EXAM_SCORE","RESULT_SCORE");
+    		$collumns = array("BRANCH","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","SETTING_EXAME","EXAM","DURATION","EXAM_SCORE","RESULT_SCORE","SPEAKING","LISTENNING");
     		$link=array(
     				'module'=>'placement','controller'=>'result','action'=>'edit',
     		);
@@ -62,33 +62,33 @@ class Placement_ResultController extends Zend_Controller_Action
     	$id = empty($id)?0:$id;
     	$db = new Placement_Model_DbTable_DbPlacementTest();
     	if($this->getRequest()->isPost()){
-//     		// Check Session Expire
-//     		$dbgb = new Application_Model_DbTable_DbGlobal();
-//     		$checkses = $dbgb->checkSessionExpire();
-//     		if (empty($checkses)){
-//     			$dbgb->reloadPageExpireSession();
-//     			exit();
-//     		}
+    		// Check Session Expire
+    		$dbgb = new Application_Model_DbTable_DbGlobal();
+    		$checkses = $dbgb->checkSessionExpire();
+    		if (empty($checkses)){
+    			$dbgb->reloadPageExpireSession();
+    			exit();
+    		}
     		
-//     		$data=$this->getRequest()->getPost();
-//     		try {
-//     			$db->addSection($data);
-//     			$this->_redirect(self::REDIRECT_URL);
-// 				exit();
-//     		} catch (Exception $e) {
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     			Application_Form_FrmMessage::message("INSERT_FAIL");
-//     		}
+    		$data=$this->getRequest()->getPost();
+    		try {
+    			$db->updatePlacementTest($data);
+    			$this->_redirect(self::REDIRECT_URL);
+				exit();
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    		}
     	}
-    	$row = $db->getSectionById($id);
+    	$row = $db->getPlacementById($id);
     	if (empty($row)){
     		Application_Form_FrmMessage::MessageBacktoOldHistory("NO_RECORD");
     		exit();
     	}
     	$this->view->row = $row;
-//     	$frm = new Placement_Form_FrmSection();
-//     	$frm->FrmAddSection($row);
-//     	Application_Model_Decorator::removeAllDecorator($frm);
-//     	$this->view->frm_crm = $frm;
+    	$frm = new Placement_Form_FrmSection();
+    	$frm->FrmUpdateResult($row);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_crm = $frm;
     }
 }

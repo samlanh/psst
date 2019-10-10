@@ -1,37 +1,25 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("Yearly Score Result")); 
-	echo $this->headTitle();
-	$frm =  $this->form_search;
-	$base_url = Application_Form_FrmMessage::getUrl("/");
+	echo $this->headTitle($tr->translate("Yearly Score Result")); 
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	$dbgb = new Application_Model_DbTable_DbGlobal();
-	$day = array(
-			"Mon" =>'ច័ន្ទ',
-			"Tue" =>'អង្គារ',
-			"Wed" =>'ពុធ',
-			"Thu" =>'ព្រហស្បតិ៍',
-			"Fri" =>'សុក្រ',
-			"Sat" =>'សៅរ៍',
-			"Sun" =>'អាទិត្យ',
-	);
+	
 	$month = array(
-			"01"=>"មករា",
-			"02"=>"កុម្ភៈ",
-			"03"=>"មីនា",
-			"04"=>"មេសា",
-			"05"=>"ឧសភា",
-			"06"=>"មិថុនា",
-			"07"=>"កក្កដា",
-			"08"=>"សីហា",
-			"09"=>"កញ្ញា",
-			"10"=>"តុលា",
-			"11"=>"វិច្ឆិកា",
-			"12"=>"ធ្នូ"
-			);
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
 ?>	
 <script type="text/javascript">
-
 </script>
 	<div style="background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
@@ -57,20 +45,17 @@
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 			
 				<?php
-				$date_input =date("Y-m-d");
-				$student=0; $female=0;
-				$pass_female=0;
-				$fail_female=0;
-				
-					$semester_str = array(1=>"I",2=>"II");
-					 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
-					 $duplicate=0;$count_pass=0;
-					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
+					$date_input =date("Y-m-d");
+					$student=0; $female=0;
+					$pass_female=0;
+					$fail_female=0;
+					$old_groupid=0; $i=0; $count_fail=0; $count=0; $old_yearaverage = 0; $old_rank=0;
+					$duplicate=0;$count_pass=0;
+					if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 					 	$student++;
-						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE"); $female++;}
-					 if ($old_groupid!=$rs['group_id']){ if (!empty($rs['date_input'])){ $date_input = $rs['date_input'];}  ?>
+					if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");}else{$sex = $tr->translate("FEMALE_SHORT"); $female++;}
+					if ($old_groupid!=$rs['group_id']){ if (!empty($rs['date_input'])){ $date_input = $rs['date_input'];}  ?>
 				    <?php $i=0; $count_fail=0;?>
-				    
 				<tr>
 					<td valign="top" align="center" width="32%" >
 						<span​​ style="color:#000; font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
@@ -118,16 +103,16 @@
 								<?php 
 									$average_semester1 = ($rs['avg_forsemester1']+$rs['avg_formonthsemester1'])/2;
 									$average_semester2 = ($rs['avg_forsemester2']+$rs['avg_formonthsemester2'])/2;
-									$score_average = ($average_semester1+$average_semester2)/2;
+									$year_average = ($average_semester1+$average_semester2)/2;
 									
-									if($score_average==$old_totalscore){
+									if($year_average==$old_yearaverage){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}
 									
-									if($score_average>=($rs['max_score']/2)){
+									if($year_average>=($rs['max_average']/2)){
 										$count_pass++;
 										if($rs['sex']==2){
 											$pass_female=$pass_female+1;
@@ -141,13 +126,13 @@
 								?>
 								<td align="center"><strong><?php echo empty($average_semester1)?"0":number_format($average_semester1,2);?></strong></td>
 								<td align="center"><strong><?php echo empty($average_semester2)?"0":number_format($average_semester2,2); ?></strong></td>
-								<td align="center"><strong><?php echo empty($score_average)?"0":number_format($score_average,2);?></strong></td>
+								<td align="center"><strong><?php echo empty($year_average)?"0":number_format($year_average,2);?></strong></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td align="center"></td>
 							</tr>
 									<?php 
 										$old_groupid=$rs['group_id'];
-										$old_totalscore = $score_average;
+										$old_yearaverage = $year_average;
 									?>
 									<?php }}?>
 									<?php if (!empty($this->studentgroup)){
@@ -167,7 +152,6 @@
 										<tr>
 											<td align="right" colspan="9" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;"></td>
 										</tr>
-										
 										<tr>
 											<td align="right" colspan="9" style="  border: 1px solid #fff; border-right: 1px solid #fff;">
 												<table cellpadding="0" cellspacing="0" width="100%" style="font-family:Arial,'Khmer OS Battambang';font-size: 13px">

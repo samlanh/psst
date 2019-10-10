@@ -254,7 +254,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     
     function rptResultbyyearAction(){
     	$group_id=$this->getRequest()->getParam("id");
-//     	$type=$this->getRequest()->getParam("type");
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$result_year = $db->getStundetScorebyYear($group_id);
        if(empty($result_year)){

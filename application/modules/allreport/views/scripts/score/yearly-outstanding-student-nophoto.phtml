@@ -1,43 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("តារាងកិត្តិយស")); 
-	echo $this->headTitle();
-	$frm =  $this->form_search;
-	$base_url = Application_Form_FrmMessage::getUrl("/");
+	echo $this->headTitle($tr->translate("តារាងកិត្តិយស")); 
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	$day = array(
-		"Mon" =>'ច័ន្ទ',
-		"Tue" =>'អង្គារ',
-		"Wed" =>'ពុធ',
-		"Thu" =>'ព្រហស្បតិ៍',
-		"Fri" =>'សុក្រ',
-		"Sat" =>'សៅរ៍',
-		"Sun" =>'អាទិត្យ',
-	);
-	$month = array(
-		"01"=>"មករា",
-		"02"=>"កុម្ភៈ",
-		"03"=>"មីនា",
-		"04"=>"មេសា",
-		"05"=>"ឧសភា",
-		"06"=>"មិថុនា",
-		"07"=>"កក្កដា",
-		"08"=>"សីហា",
-		"09"=>"កញ្ញា",
-		"10"=>"តុលា",
-		"11"=>"វិច្ឆិកា",
-		"12"=>"ធ្នូ"
-			);
-	$semester = array(
-				"1"=>"១",
-				"2"=>"២",
-			); 
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
-<script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.data.ObjectStore");
-</script>
 <form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student')); ?>" dojoType="dijit.form.Form" method="post">
 </form>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
@@ -61,29 +27,23 @@ dojo.require("dojo.data.ObjectStore");
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
-					 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
-					 $duplicate=0;$count_pass=0;$female=0;
+					 $old_groupid=0; $count_fail=0; $count=0; $old_yearaverage = 0; $old_rank=0;
+					 $duplicate=0;
 					 $rank1="";$rank2="";$rank3="";$rank4="";$rank5="";
 					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
-					 	$i++;
-						if($rs['sex']==1){ 
-								$sex = $tr->translate("MALE");
-						}else{
-								$sex = $tr->translate("FEMALE");$female++;
-						}
 						
 						$average_semester1 = ($rs['avg_forsemester1']+$rs['avg_formonthsemester1'])/2;
 						$average_semester2 = ($rs['avg_forsemester2']+$rs['avg_formonthsemester2'])/2;
-						$score_average = ($average_semester1+$average_semester2)/2;
+						$year_average = ($average_semester1+$average_semester2)/2;
 							
-						if($score_average==$old_totalscore){
+						if($year_average==$old_yearaverage){
 							$duplicate=$duplicate+1;
 						}else{
 							$old_rank=$old_rank+1+$duplicate;
 							$duplicate=0;
 						}
 						
-						if($score_average == $old_totalscore){
+						if($year_average == $old_yearaverage){
 							if($key==1){
 								$rank2=$old_rank;
 							}
@@ -120,7 +80,7 @@ dojo.require("dojo.data.ObjectStore");
 						}
 					?>
 					<?php 
-						$old_totalscore = $score_average;
+						$old_yearaverage = $year_average;
 					?>
 				<?php }}?>
 				<tr>

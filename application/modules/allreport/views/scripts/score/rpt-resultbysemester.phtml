@@ -33,6 +33,7 @@
 				white-space: nowrap;
 				color:#000;
 			}
+			.style:hover{background: #eee;}
 			.padding{ padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto }
@@ -140,7 +141,7 @@
 								<td align="center"><?php echo number_format($avg_allmonth,2); ?></td>
 								<td align="center"><?php echo number_format($avg_semester,2);?></td>
 								<td align="center"><?php echo number_format($avg_allmonth+$avg_semester,2);?></td>
-								<td align="center"><?php echo number_format($semester_average);?></td>
+								<td align="center" style="font-weight: bold;"><?php echo number_format($semester_average,2);?></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td>&nbsp;</td>
 							</tr>

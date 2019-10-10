@@ -248,9 +248,6 @@
 								<tr>
 									<td colspan="3" align="center" style="font-size: 16px;"><?php echo $tr->translate("TEST_HISTORY");?></td>
 								</tr>
-								<tr>
-									<td colspan="2">&nbsp;</td>
-								</tr>
 						   </table>
 					   </td>
 					</tr>
@@ -297,12 +294,12 @@
 											</tr>
 											<?php $subject = $db->getSubjectScoreByTest($record['id']);
 												if (!empty($subject)) foreach ($subject as $ss){
-													$title="";
-													if ($ss['subjecttest_id']==1){
-														$title = $tr->translate("KHMER");
-													}else if ($ss['subjecttest_id']==2){
-														$title = $tr->translate("MATH");
-													}
+													$title=$ss["subject"];
+// 													if ($ss['subjecttest_id']==1){
+// 														$title = $tr->translate("KHMER");
+// 													}else if ($ss['subjecttest_id']==2){
+// 														$title = $tr->translate("MATH");
+// 													}
 											?>
 											<tr class="row-value">
 												<td colspan="4" class="borderbottom-none" style="border-top: none;">&nbsp;</td>
@@ -351,7 +348,7 @@
 											<tr class="row-value">
 												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>" >&nbsp;<?php if ($record['is_current']==1){?><i class="fa fa-check" aria-hidden="true"></i><?php }?> <?php echo $key+1;?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo date("d/M/Y",strtotime($record['test_date']))?>&nbsp;</td>
-				                				<td align="left" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
+				                				<td align="left" class="<?php if($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo empty($record['result_date'])?"":date("d/M/Y",strtotime($record['result_date']));?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_result_title'];?>&nbsp;</td>

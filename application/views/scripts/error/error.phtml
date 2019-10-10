@@ -2,9 +2,9 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $file = PUBLIC_PATH."/images/logo.png";
 if (file_exists($file)) {
-	$file = $this->baseUrl()."/images/camappold.png";
+	$file = $this->baseUrl()."/images/camapplogo.png";
 } else {
-	$file = $this->baseUrl()."/images/camappold.png";
+	$file = $this->baseUrl()."/images/camapplogo.png";
 }
 $dbgb = new Application_Model_DbTable_DbGlobal();
 ?>
@@ -30,7 +30,7 @@ $dbgb = new Application_Model_DbTable_DbGlobal();
 		      <p><?php echo $tr->translate("Please Try Again");?> !</p>
 		      <p><a href="javascript:history.go(-1)">&laquo; <?php echo $tr->translate("GO_BACK");?></a> / <a href="<?php echo $this->baseUrl();?>"><?php echo $tr->translate("Go Home");?> &raquo;</a></p>
 		    </section>
-		    <div style="display: block;">
+		    <div style="display: none;">
 		    	<h1>An error occurred</h1>
   				<h2 style="padding-top:20px; color: red;"><?php echo $this->message ?></h2>
 			  	<?php if (isset($this->exception)): ?>

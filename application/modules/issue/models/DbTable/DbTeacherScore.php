@@ -582,7 +582,13 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 						
 						$old_studentid=$_data['student_id'.$i];
 						$subject_amt = $_data['amount_subject'.$i];
-						$total_score = $total_score+$_data["score_".$i."_".$subject];
+						
+						if($_data["score_".$i."_".$subject]-$_data["score_short_".$i."_".$subject]<=0){
+							$score = 0;
+						}else{
+							$score = $_data["score_".$i."_".$subject]-$_data["score_short_".$i."_".$subject];
+						}
+						$total_score = $total_score + $score;
 						
 						$arr=array(
 								'score_id'=>$id,
@@ -591,6 +597,7 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 								'amount_subject'=>$_data['amount_subject'.$i],
 								'subject_id'=> $subject,
 								'score'=> $_data["score_".$i."_".$subject],
+								'score_cut'=> $_data["score_short_".$i."_".$subject],
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
 								'is_parent'=> 1
@@ -696,7 +703,6 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			$this->update($_arr, $where);
 	
 			
-			
 			$id=$_data['score_id'];
 			$this->_name='rms_teacherscore_detail';
 			$this->delete("score_id=".$_data['score_id']);
@@ -796,12 +802,8 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
 	}
+	
+	
 }
-
-
-
-
-
-
 
 

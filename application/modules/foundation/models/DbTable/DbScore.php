@@ -339,6 +339,9 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT 
 					gsjd.*,
+					g.amount_subject AS amount_subjectdivide,
+					gsjd.max_score AS max_subjectscore,
+					gsjd.score_short as cut_score,
 					(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
 					(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 					(SELECT CONCAT(sj.subject_titleen) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name_en,

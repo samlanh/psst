@@ -5,6 +5,7 @@
 	$formList = new Application_Form_Frmtable();
 	$urlCopy = $this->baseUrl()."/placement/setting/copy/id/";
 	$urlEdit = $this->baseUrl()."/placement/setting/edit/id/";
+	$urlAnswerSheet = $this->baseUrl()."/allreport/placementtest/answer-sheet/id/";
 	 $frm =  $this->form_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -85,12 +86,15 @@ dojo.require("dijit.form.DateTextBox");
 					url='<?php echo $urlEdit;?>';
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
+				}else if(key=="asnwer"){
+					url='<?php echo $urlAnswerSheet;?>';
 				}
 				gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+				"asnwer": {name: "<?php echo $tr->translate("ANSWER_SHEET");?>", icon: "fa-file-text"},
 			}
 		});
 	});

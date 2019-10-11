@@ -285,7 +285,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    							$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 												    							foreach ($rowQ as $index => $question){ 
 												    								$colB = $question['column_b'];
-												    								$options .= '<option value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+												    								$sppB = str_split($question['column_b']);
+												    								$options .= '<option value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 												    								$tdHead.='<td align="center">'.($index+1).'</td>';
 												    								?>
 												    							<li class="answer-opt col1">
@@ -316,7 +317,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    											$selected = 'selected="selected"';
 												    										}
 												    										$colB = $quest['column_b'];
-												    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+												    										$sppB = str_split($quest['column_b']);
+												    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 												    									}
 												    									$tdAnswer.=$opti;
 												    								}else{
@@ -681,7 +683,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    									$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 									    									foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
 									    										$colB = $question['column_b'];
-									    										$options .= '<option value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+									    										$sppB = str_split($question['column_b']);
+									    										$options .= '<option value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 									    										$tdHead.='<td align="center">'.$keyIndex.'</td>';
 									    										?>
 									    										<span class="inline-value ">
@@ -714,7 +717,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    											$selected = 'selected="selected"';
 									    										}
 									    										$colB = $quest['column_b'];
-									    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+									    										$sppB = str_split($quest['column_b']);
+									    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 									    									}
 									    									$tdAnswer.=$opti;
 									    								}else{

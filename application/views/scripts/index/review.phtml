@@ -360,9 +360,13 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    							$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 												    							foreach ($rowQ as $index => $question){ 
 												    								$colB = $question['column_b'];
-												    								$options .= '<option value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+												    								$sppB = str_split($question['column_b']);
+												    								$options .= '<option value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 												    								$tdHead.='<td align="center">'.($index+1).'</td>';
-												    								$tdRow.="<td>".$question['answer_key']."</td>";
+												    								
+												    								$spp = str_split($question['answer_key']);
+												    								$tdRow.="<td align='center'> <strong style=' padding: 2px;  width: 100%; display: block;'>".$spp[0]."</strong> </td>";
+												    								
 												    								?>
 												    							<li class="answer-opt col1">
 												    								<span class="question-num"><?php echo $index+1;?>.</span> <?php echo $question['answer_label'];?>
@@ -396,7 +400,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    									$answerStatus.='</span>';
 												    									}
 												    								}
-												    								$tdAnswer.='<td>'.$answerStatus.'<select style="width: 90%;" readonly="readonly" disabled="disabled" onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" class="option-answer full-width" dojoType="dijit.form.FilteringSelect">';
+												    								$tdAnswer.='<td align="center">'.$answerStatus.'<select style=" text-align: center; width: 90%;" readonly="readonly" disabled="disabled" onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" class="option-answer full-width" dojoType="dijit.form.FilteringSelect">';
 												    								if (!empty($result)){
 												    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 													    								foreach ($rowQ as $index => $quest){
@@ -405,7 +409,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    											$selected = 'selected="selected"';
 												    										}
 												    										$colB = $quest['column_b'];
-												    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+												    										$sppB = str_split($quest['column_b']);
+												    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 												    									}
 												    									$tdAnswer.=$opti;
 												    								}else{
@@ -863,9 +868,12 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    									$options= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 									    									foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
 									    										$colB = $question['column_b'];
-									    										$options .= '<option value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+									    										$sppB = str_split($question['column_b']);
+									    										$options .= '<option value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 									    										$tdHead.='<td align="center">'.$keyIndex.'</td>';
-									    										$tdRow.="<td>".$question['answer_key']."</td>";
+									    										
+									    										$spp = str_split($question['answer_key']);
+									    										$tdRow.="<td align='center'> <strong style=' padding: 2px;  width: 100%; display: block;'>".$spp[0]."</strong> </td>";
 									    										?>
 									    										<span class="inline-value ">
 											    									<?php echo $question['answer_label'];?>
@@ -900,7 +908,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    										$answerStatus.='</span>';
 									    									}
 									    								}
-									    								$tdAnswer.='<td>'.$answerStatus.'<select style="width: 90%;" readonly="readonly" disabled="disabled" onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" dojoType="dijit.form.FilteringSelect" class="option-answer full-width" >';
+									    								$tdAnswer.='<td>'.$answerStatus.'<select style="width: 80%;" readonly="readonly" disabled="disabled" onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" dojoType="dijit.form.FilteringSelect" class="option-answer full-width" >';
 									    								if (!empty($result)){
 									    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 									    									foreach ($rowQ as $index => $quest){
@@ -909,7 +917,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    											$selected = 'selected="selected"';
 									    										}
 									    										$colB = $quest['column_b'];
-									    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+									    										$sppB = str_split($quest['column_b']);
+									    										$opti.= '<option '.$selected.' value="'.$colB.'" >'.htmlspecialchars($sppB[0], ENT_QUOTES).'</option>';
 									    									}
 									    									$tdAnswer.=$opti;
 									    								}else{

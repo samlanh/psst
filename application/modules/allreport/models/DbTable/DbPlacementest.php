@@ -108,6 +108,34 @@ class Allreport_Model_DbTable_DbPlacementest extends Zend_Db_Table_Abstract
     	 
     	return $db->fetchRow($sql);
     }
+    
+    function getAllQuestionBySettingExam($setting_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT s.parent,
+    	(SELECT sp.title FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) AS parent_title,
+    	(SELECT sp.instruction FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) AS parent_instruction,
+    	s.title AS section_title,
+    	s.instruction,
+    	s.article,
+    	s.ordering AS section_ordering,
+    	q.*
+    	FROM `rms_question` AS q,
+    	`rms_section` AS s
+    	WHERE s.id = q.section_id
+    
+    	";
+    	if (!empty($setting_id)){
+    		$sql.=" AND (s.id IN (SELECT  st.section_id FROM `rms_placementtest_setting_detail` AS st
+    		WHERE st.setting_id =$setting_id) OR s.parent IN (SELECT  st.section_id FROM `rms_placementtest_setting_detail` AS st
+    		WHERE st.setting_id =$setting_id))";
+    	}
+    	 
+    	$sql.="ORDER BY
+    	(SELECT sp.ordering FROM `rms_section` AS sp WHERE sp.id = s.parent LIMIT 1 ) ASC,
+    	s.ordering ASC,
+    	q.ordering ASC";
+    	return $db->fetchAll($sql);
+    }
 }
    
     

@@ -52,4 +52,15 @@ class Allreport_PlacementtestController extends Zend_Controller_Action {
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	$this->view->rsfooteracc = $frm->getFooterAccount();
     }
+    function answerSheetAction(){
+    	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
+    	$db = new Allreport_Model_DbTable_DbPlacementest();
+    	$question = $db->getAllQuestionBySettingExam($id);
+    	$this->view->question = $question;
+    	
+    	$_dbpl= new Application_Model_DbTable_DbPlacementTest();
+    	$this->view->setting = $_dbpl->getPlacementSetting($id);
+    }
 }

@@ -569,11 +569,11 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 					foreach ($rssubject as $subject){
 						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
 							$arr = array(
-									'score_id'=>$id,
-									'student_id'=>$old_studentid,
-									'total_score'=>$total_score,
-									'amount_subject'=>$subject_amt,
-									'total_avg' =>number_format($total_score/$subject_amt,2)
+								'score_id'=>$id,
+								'student_id'=>$old_studentid,
+								'total_score'=>$total_score,
+								'amount_subject'=>$subject_amt,
+								'total_avg' =>number_format($total_score/$subject_amt,2)
 							);
 							$this->_name='rms_score_monthly';
 							$this->insert($arr);
@@ -591,16 +591,16 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 						$total_score = $total_score + $score;
 						
 						$arr=array(
-								'score_id'=>$id,
-								'group_id'=>$_data['group'],
-								'student_id'=>$_data['student_id'.$i],
-								'amount_subject'=>$_data['amount_subject'.$i],
-								'subject_id'=> $subject,
-								'score'=> $_data["score_".$i."_".$subject],
-								'score_cut'=> $_data["score_short_".$i."_".$subject],
-								'status'=>1,
-								'user_id'=>$this->getUserId(),
-								'is_parent'=> 1
+							'score_id'=>$id,
+							'group_id'=>$_data['group'],
+							'student_id'=>$_data['student_id'.$i],
+							'amount_subject'=>$_data['amount_subject'.$i],
+							'subject_id'=> $subject,
+							'score'=> $_data["score_".$i."_".$subject],
+							'score_cut'=> $_data["score_short_".$i."_".$subject],
+							'status'=>1,
+							'user_id'=>$this->getUserId(),
+							'is_parent'=> 1
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
@@ -630,13 +630,19 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 	function getStudentSccoreforEditTeacherScore($score_id){
 		$db = $this->getAdapter();
 		$sql="SELECT
-		sd.student_id,
-		(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-		(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-		(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex
-		FROM
-		rms_teacherscore_detail AS sd
-		WHERE sd.score_id =$score_id GROUP BY sd.`student_id` order by (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) DESC";
+					sd.student_id,
+					(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
+					(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
+					(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex
+				FROM
+					rms_teacherscore_detail AS sd
+				WHERE 
+					sd.score_id =$score_id 
+				GROUP BY 
+					sd.`student_id` 
+				order by 
+					(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) DESC
+			";
 		return $db->fetchAll($sql);
 	}
 	function getScoreTeacherById($score_id){
@@ -653,20 +659,22 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 	function getSubjectByIdTeacherScore($id){
 		$db = $this->getAdapter();
 		$sql =" SELECT
-		sd.*,
-		(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-		(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-		(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-		sd.subject_id,
-		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
-		(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-		(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-		(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-		sd.score ,
-		sd.`is_parent`
-		FROM
-		rms_teacherscore_detail AS sd
-		WHERE sd.score_id =$id ";
+					sd.*,
+					(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
+					(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
+					(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
+					sd.subject_id,
+					(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
+					(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
+					(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
+					(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
+					sd.score ,
+					sd.`is_parent`
+				FROM
+					rms_teacherscore_detail AS sd
+				WHERE 
+					sd.score_id =$id 
+			";
 		return $db->fetchAll($sql);
 	}
 	

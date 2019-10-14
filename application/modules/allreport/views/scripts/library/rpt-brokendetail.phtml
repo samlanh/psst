@@ -37,7 +37,6 @@
 					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 				</td>
 				<td align="center" width="70%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BROKEN_BOOK_DETAIL_REPORT"); ?></strong><br />
 					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO"); ?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 				</td>

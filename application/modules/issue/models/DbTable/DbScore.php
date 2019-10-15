@@ -126,7 +126,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'branch_id'=>$_data['branch_id'],
 				'title_score'=>$_data['title'],
 				'group_id'=>$_data['group'],
-				'max_score'=>$_data['max_score'],
+				//'max_score'=>$_data['max_score'],
 		        'exam_type'=>$_data['exam_type'],
 				'date_input'=>date("Y-m-d"),
 				'note'=>$_data['note'],
@@ -273,7 +273,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name` ";
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1  ";
+		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 and s.score_option=1 ";
 		
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
@@ -431,7 +431,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$sql.=" AND gsjd.amount_subject_sem >0 ";
 			}
 			$sql.=' ORDER BY gsjd.id ASC ';
-	 	    return $db->fetchAll($sql);
+			return $db->fetchAll($sql);
+	 	    
 	}
 	function getChildSubject($subject_id){
 		$db=$this->getAdapter();

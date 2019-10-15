@@ -470,28 +470,39 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
 		if ($currentLang==1){
 			$colunmname='title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
 		}
 		
 		$session_t=new Zend_Session_Namespace('authteacher');
 		$teacher_id = $session_t->teacher_id;
-		$sql="SELECT s.id,s.title_score,
-		(SELECT name_en FROM `rms_view` WHERE TYPE=14 AND key_code =s.exam_type LIMIT 1) as exam_type,
-		(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
-		(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)AS grade,
-			
-			
-		(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session`) AS session_id,
-		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name` ";
-		
+		$sql="SELECT s.id,
+			(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
+			s.title_score,
+			(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
+			s.for_semester,
+			CASE
+				WHEN s.exam_type = 2 THEN ''
+			ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+			END 
+			as for_month,
+			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
+			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
+			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
+			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+			(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
+			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name` ";
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_teacherscore AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 ";
+		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 and s.score_option=2 ";
 		
 		if (!empty($teacher_id)){
-			$sql.=" AND s.teacher_id=$teacher_id";
+			$sql.=" AND s.user_id=$teacher_id";
 		}
 		//before add more =>AND g.degree IN(1,2)
 		$where ='';
@@ -525,37 +536,41 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			$where.=" AND `g`.`branch_id` =".$search['branch_id'];
 		}
 		$order=" ORDER BY id DESC ";
+		//echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
-	function existingReadyinputExamScore($group_id,$exam_type,$for_semster,$for_month,$teacher_id){
-		$sql="SELECT id FROM `rms_teacherscore` WHERE group_id=$group_id AND exam_type=$exam_type AND for_semester=$for_semster AND for_month=$for_month AND teacher_id=$teacher_id";
+	function existingReadyinputExamScore($group_id,$exam_type,$for_semster,$for_month){
+		$sql="SELECT id FROM `rms_score` WHERE group_id=$group_id AND exam_type=$exam_type AND for_semester=$for_semster AND for_month=$for_month limit 1 ";
 		return $this->getAdapter()->fetchOne($sql);
 	}
 	public function addTeacherStudentScore($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		//print_r($_data); exit();
 		try{
 			$session_t=new Zend_Session_Namespace('authteacher');
 			$teacher_id = $session_t->teacher_id;
 			$branch_id = $session_t->branch_id;
-			$_arr = array(
-					'branch_id'		=>$branch_id,
-					'title_score'	=>$_data['title'],
-					'group_id'		=>$_data['group'],
-					'max_score'		=>$_data['max_score'],
-			        'exam_type'		=>$_data['exam_type'],
-					'date_input'	=>date("Y-m-d"),
-					'note'			=>$_data['note'],
-					'user_id'		=>$teacher_id,
-					'type_score'	=>1, // 1 => BacII score , 2 => Eng score
-					'for_academic_year'=>$_data['year_study'],
-					'for_semester'	=>$_data['for_semester'],
-					'for_month'		=>$_data['for_month'],
-					'score_option'	=>2, // 1=user input , 2=teacher input
-			);
-			$id=$this->insert($_arr);
+			
+			$id = $this->existingReadyinputExamScore($_data['group'],$_data['exam_type'],$_data['for_semester'],$_data['for_month']);
+			if(empty($id)){
+				$_arr = array(
+						'branch_id'		=>$branch_id,
+						'title_score'	=>$_data['title'],
+						'group_id'		=>$_data['group'],
+						//'max_score'		=>$_data['max_score'],
+				        'exam_type'		=>$_data['exam_type'],
+						'date_input'	=>date("Y-m-d"),
+						'note'			=>$_data['note'],
+						'user_id'		=>$teacher_id,
+						'type_score'	=>1, // 1 => BacII score , 2 => Eng score
+						'for_academic_year'=>$_data['year_study'],
+						'for_semester'	=>$_data['for_semester'],
+						'for_month'		=>$_data['for_month'],
+						'score_option'	=>2, // 1=user input , 2=teacher input
+				);
+				$id=$this->insert($_arr);
+			}
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 // 			$dbpush->getTokenUser($_data['group'],null, 4);
 			$old_studentid = 0;
@@ -627,6 +642,109 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
 	}
+	
+	public function updateTeacherStudentScore($_data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		//print_r($_data);exit();
+		try{
+			$session_t=new Zend_Session_Namespace('authteacher');
+			$teacher_id = $session_t->teacher_id;
+			$_arr = array(
+					'title_score'	=>$_data['title'],
+					'group_id'		=>$_data['group'],
+					//'max_score'		=>$_data['max_score'],
+			        'exam_type'		=>$_data['exam_type'],
+					'date_input'	=>date("Y-m-d"),
+					'note'			=>$_data['note'],
+					'user_id'		=>$teacher_id,
+					'type_score'	=>1, // 1 => BacII score , 2 => Eng score
+					'for_academic_year'=>$_data['year_study'],
+					'for_semester'	=>$_data['for_semester'],
+					'for_month'		=>$_data['for_month'],
+					'score_option'	=>2, // 1=user input , 2=teacher input
+			);
+			$where="id=".$_data['score_id'];
+			$this->update($_arr, $where);
+				
+			$id=$_data['score_id'];
+			$this->_name='rms_score_detail';
+			$this->delete("score_id=".$_data['score_id']);
+				
+			$this->_name='rms_score_monthly';
+			$this->delete("score_id=".$_data['score_id']);
+			
+			$old_studentid = 0;
+				
+			if(!empty($_data['identity'])){
+				$ids = explode(',', $_data['identity']);
+				$total_score = 0;
+				$rssubject = $_data['selector'];
+				$subject_amt = 1 ;
+				if(!empty($ids))foreach ($ids as $i){
+					
+					foreach ($rssubject as $subject){
+						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							$arr = array(
+								'score_id'=>$id,
+								'student_id'=>$old_studentid,
+								'total_score'=>$total_score,
+								'amount_subject'=>$subject_amt,
+								'total_avg' =>number_format($total_score/$subject_amt,2)
+							);
+							$this->_name='rms_score_monthly';
+							$this->insert($arr);
+							$total_score = 0;
+						}
+						
+						$old_studentid=$_data['student_id'.$i];
+						$subject_amt = $_data['amount_subject'.$i];
+						
+						if($_data["score_".$i."_".$subject]-$_data["score_short_".$i."_".$subject]<=0){
+							$score = 0;
+						}else{
+							$score = $_data["score_".$i."_".$subject]-$_data["score_short_".$i."_".$subject];
+						}
+						$total_score = $total_score + $score;
+						
+						$arr=array(
+							'score_id'=>$id,
+							'group_id'=>$_data['group'],
+							'student_id'=>$_data['student_id'.$i],
+							'amount_subject'=>$_data['amount_subject'.$i],
+							'subject_id'=> $subject,
+							'score'=> $_data["score_".$i."_".$subject],
+							'score_cut'=> $_data["score_short_".$i."_".$subject],
+							'status'=>1,
+							'user_id'=>$this->getUserId(),
+							'is_parent'=> 1
+						);
+						$this->_name='rms_score_detail';
+						$this->insert($arr);
+					}
+				}
+				
+				if(!empty($ids)){
+					if($total_score>0){
+						$arr = array(
+								'score_id'=>$id,
+								'student_id'=>$old_studentid,
+								'total_score'=>$total_score,
+								'amount_subject'=>$subject_amt,
+								'total_avg' =>number_format($total_score/$subject_amt,2)
+						);
+						$this->_name='rms_score_monthly';
+						$this->insert($arr);
+					}
+				}
+			}
+			$db->commit();
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+		}
+	}
+	
 	function getStudentSccoreforEditTeacherScore($score_id){
 		$db = $this->getAdapter();
 		$sql="SELECT
@@ -647,7 +765,14 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 	}
 	function getScoreTeacherById($score_id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_teacherscore WHERE id=$score_id";
+		$sql="SELECT 
+					s.*,
+					(SELECT g.is_pass FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) as is_pass 
+				FROM 
+					rms_score AS s 
+				WHERE 
+					s.id=$score_id
+			";
 		return $db->fetchRow($sql);
 	}
 	function getScoreStudentsTeacherscore($id){
@@ -684,134 +809,7 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	public function updateTeacherStudentScore($_data){
-		$db = $this->getAdapter();
-		$db->beginTransaction();
-		try{
-			$session_t=new Zend_Session_Namespace('authteacher');
-			$teacher_id = $session_t->teacher_id;
-			
-			$_arr = array(
-					'title_score'=>$_data['title'],
-					'group_id'=>$_data['group'],
-					//'reportdate'=>$_data['reportdate'],
-					//'date_input'=>date("Y-m-d"),
-					'exam_type'=>$_data['exam_type'],
-					'note'=>$_data['note'],
-					'status'=>$_data['status'],
-					'user_id'=>$this->getUserId(),
-					'for_academic_year'=>$_data['year_study'],
-					'for_semester'=>$_data['for_semester'],
-					'for_month'=>$_data['for_month'],
-					'teacher_id'=>$teacher_id,
-			);
-			$this->_name='rms_teacherscore';
-			$where="id=".$_data['score_id'];
-			$db->getProfiler()->setEnabled(true);
-			$this->update($_arr, $where);
-	
-			
-			$id=$_data['score_id'];
-			$this->_name='rms_teacherscore_detail';
-			$this->delete("score_id=".$_data['score_id']);
-			if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				$k=0;
-				if(!empty($ids))foreach ($ids as $i){
-					$k=$k+1;
-					foreach ($this->getSubjectByGroup($_data['group'],$teacher_id) as $index => $rs_parent){
-						$parent_id = $rs_parent["subject_id"];
-						$getChildren= $this->getChildSubject($parent_id);
-						if(!empty($getChildren)){
-							$no = $index + 1;
-							// 									$parent_score = 0;
-							// 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
-							// 										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
-							// 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-							// 										$subject_id = $rs_parent['subject_id'];
-							// 										$no = $key+1;
-							// 										$parent_score = $parent_score + $_data["$sub_name".$no];
-	
-							// 									}
-								
-							$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-							$sub_name = $_data['stu_id_'.$k].$sub_name;
-							$subject_id = $rs_parent['subject_id'];
-								
-								
-							// 									if(!$_data["$sub_name".$i]==''){
-							$arr=array(
-									'score_id'=>$id,
-									'group_id'=>$_data['group'],
-									'student_id'=>$_data['stu_id_'.$k],
-									'subject_id'=> $subject_id,
-									'score'=> $_data["$sub_name".$no],
-									'status'=>1,
-									'user_id'=>$this->getUserId(),
-									'is_parent'=> $rs_parent["is_parent"],
-									'behavior_comment'=> $_data['behavior'.$sub_name.$no],
-									'homework_comment'=> $_data['homework'.$sub_name.$no],
-									'class_participate_comment'=> $_data['classprticipate'.$sub_name.$no],
-									'comment'=> $_data['comment'.$sub_name.$no],
-							);
-							$this->_name='rms_teacherscore_detail';
-							$this->insert($arr);
-							// 									}
-							foreach ($this->getChildSubject($parent_id) as $key2 => $rs_sub){
-								$no2= $key2+1;/////////if parent have subjects
-								$subject_id = $rs_sub["id"];
-								$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
-								$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-								//if(!$_data["$sub_name".$no2]==''){
-								$arr=array(
-										'score_id'=>$id,
-										'group_id'=>$_data['group'],
-										'student_id'=>$_data['stu_id_'.$k],
-										'subject_id'=> $subject_id,
-										'score'=> $_data["$sub_name".$no2],
-										'status'=>1,
-										'user_id'=>$this->getUserId(),
-										'is_parent'=> $rs_sub["is_parent"]
-								);
-								$this->_name='rms_teacherscore_detail';
-								$this->insert($arr);
-								//}
-							}
-						}else{/////////if parent have not subjects
-							$no3 = $index+1;
-							$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-							$sub_name = $_data['stu_id_'.$k].$sub_name;
-							$subject_id = $rs_parent['subject_id'];
-							//if($_data["$sub_name".$no3]==''){
-							$arr=array(
-									'score_id'=>$id,
-									'group_id'=>$_data['group'],
-									'student_id'=>$_data['stu_id_'.$k],
-									'subject_id'=> $subject_id,
-									'score'=> $_data["$sub_name".$no3],
-									'status'=>1,
-									'user_id'=>$this->getUserId(),
-									'is_parent'=> $rs_parent["is_parent"],
-									'behavior_comment'=> $_data['behavior'.$sub_name.$no3],
-									'homework_comment'=> $_data['homework'.$sub_name.$no3],
-									'class_participate_comment'=> $_data['classprticipate'.$sub_name.$no3],
-									'comment'=> $_data['comment'.$sub_name.$no3],
-							);
-							$this->_name='rms_teacherscore_detail';
-							$this->insert($arr);
-							//}
-						}
-					}
-				}
-			}
-			$db->commit();
-		}catch (Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$db->rollBack();
-		}
-	}
 	
 	
 }
-
 

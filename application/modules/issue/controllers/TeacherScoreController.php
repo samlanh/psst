@@ -29,7 +29,7 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 			$rs = $db->getAllTeacherScore($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","EXAM_TYPE","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("BRANCH","EXAM_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'teacherscore','action'=>'edit',
 			);
@@ -90,32 +90,46 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['score_id']=$id;
 			try {
-				if(isset($_data['save_close'])){
-					$rs =  $_model->updateTeacherStudentScore($_data);
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/teacherscore");
-				}
+				$rs =  $_model->updateTeacherStudentScore($_data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/teacherscore");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$this->view->score_id = $id;
-		$this->view->score = $_model->getScoreTeacherById($id);
-		$this->view->student= $_model->getStudentSccoreforEditTeacherScore($id);
-		$this->view->rows_scor=$_model->getScoreStudentsTeacherscore($id);
-		$data=$this->view->rows_detail=$_model->getSubjectByIdTeacherScore($id);
-		$this->view->row_g=$_model->getGroupStudentTeacherScore($id);
-	
+		
+		$row = $_model->getScoreTeacherById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::MessageBacktoOldHistory("NO_RECORD");
+			exit();
+		}
+		if ($row['is_pass']==1){
+			Application_Form_FrmMessage::MessageBacktoOldHistory("CLASS_COMPLETED_CAN_NOT_EDIT");
+			exit();
+		}
+		$this->view->score = $row;
+		$session_t=new Zend_Session_Namespace('authteacher');
+		$teacher_id = $session_t->teacher_id;
+		
+		$db = new Issue_Model_DbTable_DbScore();
+		$this->view->student= $db->getStudentSccoreforEdit($id);
+		$this->view->subjectGroup = $db->getSubjectByGroup($row['group_id'],$teacher_id,$row['exam_type']);
+		//print_r($this->view->student);
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result = $db_global->getAllgroupStudy();
+	
+		$session_t=new Zend_Session_Namespace('authteacher');
+		$teacher_id = $session_t->teacher_id;
+	
+		$result= $db_global->getAllgroupStudy($teacher_id);
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
-	
+			
 		$db = new Foundation_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}

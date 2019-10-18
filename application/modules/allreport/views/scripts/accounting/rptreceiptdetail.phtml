@@ -16,24 +16,10 @@ table tr td strong{
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint">
 		<?php 
-		$amount_print = $this->data['receipt_print'];
-		for($prin=0;$prin<$amount_print;$prin++){?>
-			<?php 
-				echo $this->officailreceipt;
+			$amount_print = $this->data['receipt_print'];
+			echo $this->officailreceipt;
 			?>
-		<?php
-		}?>
-		<style>
-			.blogbranchlogo{
-				margin:0 auto;position:absolute;top:10px !important;left:100px;
-			}
-		</style>
 	</div>
-	<style>
-			.blogbranchlogo{
-				margin:0 auto;position:absolute;top:50px !important;left:100px;
-			}
-	</style>
 <script type="text/javascript">
 dojo.ready(function(){
 	readMoneyInKhmer("<?php echo $this->rr['paid_amount'];?>");
@@ -41,7 +27,6 @@ dojo.ready(function(){
 	setDatatoReceipt();
 });	
 function setDatatoReceipt(){	
-	
 		dojo.byId("lb_receipt_no").innerHTML = '<?php echo $result['receipt_number'];?>';	
 		dojo.byId("lb_date").innerHTML  = '<?php echo date('d-m-Y g:i A',strtotime($result['create_date']));?>';
 		dojo.byId("lb_stu_id").innerHTML = '<?php echo $result['stu_code'];?>';	

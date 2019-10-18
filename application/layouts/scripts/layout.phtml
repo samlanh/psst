@@ -435,10 +435,18 @@ function checkSession(){
 <?php if($module=='allreport' AND $action!='index' OR $action='allreports' OR $action='studentnearlyendservice' OR $action='studentpaymentlate'){?>
 
 function doPrint() {
-	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+	<?php 
+		$key = new Application_Model_DbTable_DbKeycode();
+		$result=$key->getKeyCodeMiniInv(TRUE);
+		$amount_print = $result['receipt_print'];
+		for($prin=0;$prin<$amount_print-1;$prin++){?>
+			dojo.byId("printblog2").innerHTML ='';
+			dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
+	<?php }?>
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId('divPrint').innerHTML ;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-    hideDialog();
+   // hideDialog();
 }
 function hideleft(){
 	(dojo.style("leftmenu","display") == "none") ? 'show':'hide'();

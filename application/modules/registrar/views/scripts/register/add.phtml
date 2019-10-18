@@ -561,12 +561,10 @@ function getMonthByNumber(m){
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 13.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+		<div id="divPrint">
 		<?php 
 			echo $this->officailreceipt;
 		?>
-		<div id="PrintReceipt1">
-			<div style="border: 1px dotted #000;width:100%;margin-bottom: 20px;"></div>
-			<div id="innerPrintReceipt"></div>
 		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
@@ -1244,10 +1242,18 @@ function printSubmit(){
 		form: dojo.byId("office_receipt"),		    
 		load: function(data){
 			dojo.byId("lb_receipt_no").innerHTML = data;
-			dojo.byId('innerPrintReceipt').innerHTML = dojo.byId('PrintReceipt').innerHTML;
-			window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML<?php if($this->data['receipt_print']==2){ ?>+dojo.byId('PrintReceipt1').innerHTML<?php }?>;
+			<?php 
+				$key = new Application_Model_DbTable_DbKeycode();
+				$result=$key->getKeyCodeMiniInv(TRUE);
+				$amount_print = $result['receipt_print'];
+				for($prin=0;$prin<$amount_print-1;$prin++){?>
+					dojo.byId("printblog2").innerHTML ='';
+					dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
+			<?php }?>
+			window.frames["print_frame"].document.body.innerHTML = dojo.byId('divPrint').innerHTML ;
 		    window.frames["print_frame"].window.focus();
 		    window.frames["print_frame"].window.print();
+			    
 		    hideDialog1();
 			hideDialog();
 		    alert('<?php echo $tr->translate('INSERT_SUCCESS');?>!');

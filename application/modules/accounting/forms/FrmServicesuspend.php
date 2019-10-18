@@ -61,11 +61,6 @@ Class Accounting_Form_FrmServicesuspend extends Zend_Dojo_Form {
 	
 		));
 		$arr_opt = Application_Model_DbTable_DbGlobal::getAllDegreeById();
-		// 		$arr_opt = array(
-		// 				1=>$this->tr->translate("ASSOCIATE"),
-		// 				2=>$this->tr->translate("BACHELOR"),
-		// 				3=>$this->tr->translate('MASTER'),
-		// 				4=>$this->tr->translate('DOCTORATE'));
 		$this->_degree->setMultiOptions($arr_opt);
 	
 	
@@ -117,129 +112,129 @@ Class Accounting_Form_FrmServicesuspend extends Zend_Dojo_Form {
 				//	'constraints'=>'{datePattern:"dd/MM/yyyy"'
 		));
 	}
-	public function FrmServiceSuspend($data=null){
-		$_degree = $this->_degree;
-		$_khname = $this->_khname;
-		$_enname = $this->_enname;
-		$_phone  = $this->_phone;
-		$_batch  = $this->_batch;
-		$_year   = $this->_year;
-		$_session= $this->_session;
-		$_dob = $this->_dob;
-		$_pay_date=$this->_pay_date;
-		$_remark=$this->_remark;
+// 	public function FrmServiceSuspend($data=null){
+// 		$_degree = $this->_degree;
+// 		$_khname = $this->_khname;
+// 		$_enname = $this->_enname;
+// 		$_phone  = $this->_phone;
+// 		$_batch  = $this->_batch;
+// 		$_year   = $this->_year;
+// 		$_session= $this->_session;
+// 		$_dob = $this->_dob;
+// 		$_pay_date=$this->_pay_date;
+// 		$_remark=$this->_remark;
 	
-		$_dob->setValue(date("Y-m-d"));
+// 		$_dob->setValue(date("Y-m-d"));
 	
-		$_invoice_no = new Zend_Dojo_Form_Element_TextBox('suspend_no');
-		$_invoice_no->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',
-				//'onkeyup'=>'CheckReceipt()'
-				'required'=>'true',
-				'readonly'=>'true',
-				'style'=>'color:red;'
-		));
-		$reciept = new  Accounting_Model_DbTable_DbSuspendservice();
-		$opt=$reciept->getSuspendNo();
-		$_invoice_no->setValue($opt);
+// 		$_invoice_no = new Zend_Dojo_Form_Element_TextBox('suspend_no');
+// 		$_invoice_no->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',
+// 				//'onkeyup'=>'CheckReceipt()'
+// 				'required'=>'true',
+// 				'readonly'=>'true',
+// 				'style'=>'color:red;'
+// 		));
+// 		$reciept = new  Accounting_Model_DbTable_DbSuspendservice();
+// 		$opt=$reciept->getSuspendNo();
+// 		$_invoice_no->setValue($opt);
 	
-		$generation = new Zend_Dojo_Form_Element_FilteringSelect('study_year');
-		$generation->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',
-				//'onkeyup'=>'CheckReceipt()'
-				'required'=>'true',
-				'class'=>'fullside',
-				'onchange'=>'getStudentID();getStudentName();',
-		));
-		$db_years=new Registrar_Model_DbTable_DbRegister();
-		$years=$db_years->getAllYears();
-		$opt = array(-1=>$this->tr->translate("SELECT_YEAR"));
-		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'].$row['time'];
-		$generation->setMultiOptions($opt);
+// 		$generation = new Zend_Dojo_Form_Element_FilteringSelect('study_year');
+// 		$generation->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',
+// 				//'onkeyup'=>'CheckReceipt()'
+// 				'required'=>'true',
+// 				'class'=>'fullside',
+// 				'onchange'=>'getStudentID();getStudentName();',
+// 		));
+// 		$db_years=new Registrar_Model_DbTable_DbRegister();
+// 		$years=$db_years->getAllYears();
+// 		$opt = array(-1=>$this->tr->translate("SELECT_YEAR"));
+// 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'].$row['time'];
+// 		$generation->setMultiOptions($opt);
 	
-		$rs_metion_opt = Application_Model_DbTable_DbGlobal::getAllMention();
-		$metion = new Zend_Dojo_Form_Element_FilteringSelect('metion');
-		$metion->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				//'onchange'=>'getTuitionFee();]
-		));
-		$metion->setMultiOptions($rs_metion_opt);
+// 		$rs_metion_opt = Application_Model_DbTable_DbGlobal::getAllMention();
+// 		$metion = new Zend_Dojo_Form_Element_FilteringSelect('metion');
+// 		$metion->setAttribs(array('dojoType'=>$this->filter,
+// 				'class'=>'fullside',
+// 				//'onchange'=>'getTuitionFee();]
+// 		));
+// 		$metion->setMultiOptions($rs_metion_opt);
 
-		$_is_hold = new Zend_Form_Element_Checkbox('is_hold');
-		$_is_hold->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
-				'class'=>'fullside',
-		));
-		//$_is_hold->setValue(1);
+// 		$_is_hold = new Zend_Form_Element_Checkbox('is_hold');
+// 		$_is_hold->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
+// 				'class'=>'fullside',
+// 		));
+// 		//$_is_hold->setValue(1);
 	
-		$_year_one = new Zend_Dojo_Form_Element_TextBox('is_year_one');
-		$_year_one->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
-				'class'=>'fullside',
-				'Onchange'=>"getNewStudent();"));
+// 		$_year_one = new Zend_Dojo_Form_Element_TextBox('is_year_one');
+// 		$_year_one->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
+// 				'class'=>'fullside',
+// 				'Onchange'=>"getNewStudent();"));
 	
-		$_studid = new Zend_Dojo_Form_Element_TextBox('stu_id');
-		$_studid->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',
-				'style'=>'color:red;','readonly'=>'true'));
+// 		$_studid = new Zend_Dojo_Form_Element_TextBox('stu_id');
+// 		$_studid->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',
+// 				'style'=>'color:red;','readonly'=>'true'));
 	
-		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
-		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readonly'=>'true'));
-		$sex_opt = array(
-				1=>$this->tr->translate("MALE"),
-				2=>$this->tr->translate("FEMALE"));
-		$_sex->setMultiOptions($sex_opt);
+// 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
+// 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readonly'=>'true'));
+// 		$sex_opt = array(
+// 				1=>$this->tr->translate("MALE"),
+// 				2=>$this->tr->translate("FEMALE"));
+// 		$_sex->setMultiOptions($sex_opt);
 	
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$rows = $_db->getAllFecultyName();
-		$opt = '' ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
-		if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name'];
+// 		$_db = new Application_Model_DbTable_DbGlobal();
+// 		$rows = $_db->getAllFecultyName();
+// 		$opt = '' ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
+// 		if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name'];
 			
-		$_dept = new Zend_Dojo_Form_Element_FilteringSelect("dept");
-		$_dept->setMultiOptions($opt);
-		$_dept->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',
-				'onchange'=>'changeMajor();'));
+// 		$_dept = new Zend_Dojo_Form_Element_FilteringSelect("dept");
+// 		$_dept->setMultiOptions($opt);
+// 		$_dept->setAttribs(array(
+// 				'dojoType'=>$this->filter,
+// 				'required'=>'true',
+// 				'class'=>'fullside',
+// 				'onchange'=>'changeMajor();'));
 	
-		$opt_marjor = array(-1=>$this->tr->translate("SELECT_MAJOR"));
-		$_major = new Zend_Dojo_Form_Element_FilteringSelect("major");
-		$_major->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside'));
+// 		$opt_marjor = array(-1=>$this->tr->translate("SELECT_MAJOR"));
+// 		$_major = new Zend_Dojo_Form_Element_FilteringSelect("major");
+// 		$_major->setAttribs(array(
+// 				'dojoType'=>$this->filter,
+// 				'required'=>'true',
+// 				'class'=>'fullside'));
 	
-		$_term = new Zend_Dojo_Form_Element_FilteringSelect("payment_term");
-		$opt_term = $_db->getAllPaymentTerm();
-		// 		  $opt_term = array(
-		// 		  		1=>$this->tr->translate('QUARTER'),
-		// 		  		2=>$this->tr->translate('SEMESTER'),
-		// 		  		3=>$this->tr->translate('YEAR'),
-		// 		  		4=>$this->tr->translate('OTHER')
-		// 		  );
-		$_term->setMultiOptions($opt_term);
-		$_term->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',
-				'onchange'=>'paymentTerm();'
-		));
+// 		$_term = new Zend_Dojo_Form_Element_FilteringSelect("payment_term");
+// 		$opt_term = $_db->getAllPaymentTerm();
+// 		// 		  $opt_term = array(
+// 		// 		  		1=>$this->tr->translate('QUARTER'),
+// 		// 		  		2=>$this->tr->translate('SEMESTER'),
+// 		// 		  		3=>$this->tr->translate('YEAR'),
+// 		// 		  		4=>$this->tr->translate('OTHER')
+// 		// 		  );
+// 		$_term->setMultiOptions($opt_term);
+// 		$_term->setAttribs(array(
+// 				'dojoType'=>$this->filter,
+// 				'required'=>'true',
+// 				'class'=>'fullside',
+// 				'onchange'=>'paymentTerm();'
+// 		));
 	
 	
 	
-		$id = new Zend_Form_Element_hidden('id');
-		if($data!=null){
-			$id->setValue($data['stu_id']);
-			$_studid->setValue($data['stu_code']);
-			$_invoice_no->setValue($data['receipt_number']);
-			$this->_khname->setValue($data['stu_khname']);
-			$this->_enname->setValue($data['stu_enname']);
-			$_sex->setValue($data['sex']);
-			$_session->setValue($data['session']);
-			$generation->setValue($data['academic_year']);
-			$_term->setValue($data['payment_term']);
-		}
-		$this->addElements(array(
-				$id,$generation, $_year_one,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,$metion,
-				$_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_is_hold ));
+// 		$id = new Zend_Form_Element_hidden('id');
+// 		if($data!=null){
+// 			$id->setValue($data['stu_id']);
+// 			$_studid->setValue($data['stu_code']);
+// 			$_invoice_no->setValue($data['receipt_number']);
+// 			$this->_khname->setValue($data['stu_khname']);
+// 			$this->_enname->setValue($data['stu_enname']);
+// 			$_sex->setValue($data['sex']);
+// 			$_session->setValue($data['session']);
+// 			$generation->setValue($data['academic_year']);
+// 			$_term->setValue($data['payment_term']);
+// 		}
+// 		$this->addElements(array(
+// 				$id,$generation, $_year_one,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,$metion,
+// 				$_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_is_hold ));
 	
-		return $this;
-	}
+// 		return $this;
+// 	}
 	
 }

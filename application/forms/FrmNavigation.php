@@ -89,8 +89,8 @@ class Application_Form_FrmNavigation{
 			$pre='<button dojoType="dijit.form.Button" showLabel="true" type="button" disabled >Previous</button>';
 		}
 		//generate link number 1 2 3 4 5
-		
-		$i; $num_add;
+		//$i; $num_add;//before
+		$i=0; $num_add=0;
 		if($cur_page == 0){
 			$i = 0;
 			$num_add = 4;

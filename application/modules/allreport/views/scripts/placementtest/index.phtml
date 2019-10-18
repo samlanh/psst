@@ -36,9 +36,10 @@
 // 					   print_r($report_url);exit();
 					   if(!empty($report_url)){
 						   foreach($report_url as $url){
-						   if($url['controller']=='score' AND $url['action']!='index' 
-						   		
-						   		){
+						   if($url['controller']=='placementtest' AND $url['action']!='index'){
+						   	if($url['action']=='placement-profile' OR $url['action']=='answer-sheet'){
+						   		continue;
+						   	}
 				   ?>
 				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">

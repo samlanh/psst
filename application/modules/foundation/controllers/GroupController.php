@@ -14,22 +14,23 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title' => '',
+						'title' 	=> '',
 						'branch_id' => '',
-						'study_year' => '',
-						'degree'=>'',
-						'grade' => '',
-						'time' => '',
-						'session' =>'',
-						'status'=>-1,
-						);
+						'study_year'=> '',
+						'degree'	=>'',
+						'grade' 	=> '',
+						'time' 		=> '',
+						'session' 	=>'',
+						'status'	=>-1,
+						'teacher' 	=> '',
+					);
 			}
 			$this->view->adv_search = $search;
 			$db = new Foundation_Model_DbTable_DbGroup();
 			$rs_rows= $db->getAllGroups($search);
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("BRANCH","GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","NOTE","PROCESS_TYPE","STATUS");
+			$collumns = array("BRANCH","GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","TEACHER_ROOM","TIME","NOTE","PROCESS_TYPE","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'group','action'=>'edit',
 			);

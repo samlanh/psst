@@ -240,6 +240,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
+			time,
 			`g`.`note`,
 			(select $label from rms_view where type=9 and key_code=is_pass) as group_status ";
 		
@@ -283,6 +285,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['branch_id'])){
 			$where.=' AND g.branch_id='.$search['branch_id'];
+		}
+		if(!empty($search['teacher'])){
+			$where.=' AND g.teacher_id='.$search['teacher'];
 		}
 		if(!empty($search['is_pass']) AND $search['is_pass']>-1){
 			$where.=' AND g.is_pass='.$search['is_pass'];

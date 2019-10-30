@@ -36,6 +36,11 @@ class Stock_importController extends Zend_Controller_Action {
 			else{
 			}
 			
+			$frm = new Stock_Form_FrmImport();
+			$frm->FrmImport(null);
+			Application_Model_Decorator::removeAllDecorator($frm);
+			$this->view->frm = $frm;
+			
 		}catch (Exception $e){
 			echo $e->getMessage();exit();
 			Application_Form_FrmMessage::message("Application Error");

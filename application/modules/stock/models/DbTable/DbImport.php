@@ -32,9 +32,9 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	$db_items = new Global_Model_DbTable_DbItems();
     	for($i=1; $i<=$count; $i++){
     		
-    		$pro_title = empty($data[$i]['D'])?null:$data[$i]['D'];
+    		$pro_title = empty($data[$i]['C'])?null:$data[$i]['C'];
     		
-    		$cate_title = empty($data[$i]['E'])?null:$data[$i]['E'];
+    		$cate_title = empty($data[$i]['D'])?null:$data[$i]['D'];
     		$cate = $this->checkItemsTypeId($cate_title);
     		$items_id = 0;
     		$schooloption="";
@@ -44,7 +44,7 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
     		}
     		$product_type = 2;
-    		if($data[$i]['G']=="Product For Sell"){
+    		if($data[$i]['F']=="Product For Sell"){
     			$product_type = 1;
     		}
     		
@@ -54,13 +54,13 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 	    		$_arr=array(
 	    				'items_id'		=> $items_id,
 	    				'items_type'	=> 3,
-	    				'code'			=> $data[$i]['C'],
+	    				'code'			=> $data[$i]['B'],
 	    				'title'	 	 	=> $pro_title,
 	    				'title_en'		=> $pro_title,
-	    				'note'    		=> $data[$i]['F'],
+	    				'note'    		=> $data[$i]['E'],
 	    				'product_type' 	=> $product_type,
 	    				'is_onepayment' => 1,
-	    				'cost'    		=> $data[$i]['H'],
+	    				'cost'    		=> $data[$i]['G'],
 	    				'schoolOption'  => $schooloption,
 	    				'create_date' 	=> date("Y-m-d H:i:s"),
 	    				'modify_date' 	=> date("Y-m-d H:i:s"),
@@ -71,16 +71,14 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 	    		$pro_id =  $this->insert($_arr);
     		}
     		
-    		$cate_title = empty($data[$i]['B'])?null:$data[$i]['B'];
-    		$branch = $this->checkBranchID($cate_title);
-    		$branch_id = empty($branch['br_id'])?0:$branch['br_id'];
-    		if(!empty($data[$i]['i'])){
+    		$branch_id = empty($data['branch_id'])?0:$data['branch_id'];
+    		if(!empty($data[$i]['H'])){
     			$_arr_prolocation =array(
     				'pro_id'		=> $pro_id,
     				'brand_id'		=>$branch_id,
-					'pro_qty'		=>$data[$i]['i'],
-					'price'			=>$data[$i]['j'],
-					'stock_alert'	=>$data[$i]['k'],
+					'pro_qty'		=>$data[$i]['H'],
+					'price'			=>$data[$i]['i'],
+					'stock_alert'	=>$data[$i]['j'],
     			);
     			$this->_name = "rms_product_location";
     			$this->insert($_arr_prolocation);

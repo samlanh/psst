@@ -331,7 +331,7 @@ function filterStudent(){
 					temp += '<tr class="hover normal" id="row'+inx+'">';
 					temp +='<td width="10px" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td width="10px" align="center">&nbsp;'+record_num+'</td>';
-					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
+					temp += '<td style="text-align:left;">&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'" value="'+data[i].stu_id+'" type="hidden" ></td>';
 					temp += '<td style="min-width:100px;text-align:left;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){

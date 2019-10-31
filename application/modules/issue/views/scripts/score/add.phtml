@@ -45,6 +45,12 @@
 		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    			if(this.validate()) {
+				var rowId = $('#identity').val();
+				if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					alert("<?php echo $tr->translate('NO_RECORD_TO_SUBMIT');?>");
+					return false;
+				}
 				var txt;
 				var r = confirm("Are you sure to submit ?");
 				if (r == true) {

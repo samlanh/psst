@@ -1515,10 +1515,6 @@ function getAllgroupStudyNotPass($action=null){
 //   	return $db->fetchAll($sql);
 //   }
   function getAllTermStudy($branch=null,$year=null,$option=null){
-//   	$db = $this->getAdapter();
-//   	$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name
-//   	FROM rms_startdate_enddate WHERE status=1 ORDER BY start_date ASC";
-//   	return $db->fetchAll($sql);
 
   	$db = $this->getAdapter();
   	$sql=" SELECT id,CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name from rms_startdate_enddate WHERE 1 ";

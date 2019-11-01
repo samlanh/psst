@@ -25,7 +25,7 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	$sql="SELECT d.* FROM rms_itemsdetail AS d WHERE d.title = '$title' AND d.items_type=3 LIMIT 1";
     	return $db->fetchRow($sql);
     }
-    public function updateItemsByImport($data){
+    public function updateItemsByImport($data,$branch_id){
     	$db = $this->getAdapter();
     	$count = count($data);
     	$dbg = new Application_Model_DbTable_DbGlobal();
@@ -71,7 +71,6 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 	    		$pro_id =  $this->insert($_arr);
     		}
     		
-    		$branch_id = empty($data['branch_id'])?0:$data['branch_id'];
     		if(!empty($data[$i]['H'])){
     			$_arr_prolocation =array(
     				'pro_id'		=> $pro_id,

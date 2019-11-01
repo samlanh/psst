@@ -17,6 +17,7 @@ class Stock_importController extends Zend_Controller_Action {
 			$db=new Stock_Model_DbTable_DbImport();
 			if($this->getRequest()->isPost()){
 				$data=$this->getRequest()->getPost();
+				$branch_id = empty($data['branch_id'])?0:$data['branch_id'];
 				$adapter = new Zend_File_Transfer_Adapter_Http();
 				$part= PUBLIC_PATH.'/images';
 				$adapter->setDestination($part);
@@ -30,7 +31,7 @@ class Stock_importController extends Zend_Controller_Action {
 				}
 				
 				$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-				$db->updateItemsByImport($sheetData);
+				$db->updateItemsByImport($sheetData,$branch_id);
 				Application_Form_FrmMessage::message("Import Successfully");
 			}
 			else{

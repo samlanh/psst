@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('IMPORT_FILE_ITEMS_PRICE')); 
-	$url_save = $this->url(array('module'=>'foundation','controller'=>'import','action'=>'index'));
+	$url_save = $this->url(array('module'=>'stock','controller'=>'import','action'=>'index'));
 	$frm = $this->frm;
 ?>
 <head>

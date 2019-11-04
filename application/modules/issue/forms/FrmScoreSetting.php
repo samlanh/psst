@@ -139,6 +139,18 @@ class Issue_Form_FrmScoreSetting extends Zend_Dojo_Form
     	}
     	$_branch_search->setValue($request->getParam("branch_search"));
     	
+    	$_total_percent = new Zend_Dojo_Form_Element_NumberTextBox('total_percent');
+    	$_total_percent->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'required'=>'true',
+    			'readOnly'=>'readOnly',
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'placeholder'=>$this->tr->translate("TOTAL_PERCENT"),
+    	));
+    	$_total_percent->setValue(0);
+    	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
     		$title->setValue($data["title"]);
@@ -157,7 +169,8 @@ class Issue_Form_FrmScoreSetting extends Zend_Dojo_Form
 				$_status_search,
     			$start_date,
     			$end_date,
-    			$_branch_search
+    			$_branch_search,
+    			$_total_percent
     			));
     	return $this;
     }

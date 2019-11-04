@@ -104,6 +104,9 @@ input.btn_borwse_image {
 	                   <div class="col-md-5 col-sm-5 col-xs-12">
 	                   		<?php echo $frm_items->getElement("examtype_items");?>
 	                   </div>
+	                   <div class="col-md-5 col-sm-5 col-xs-12">
+	                    	<?php echo $frm_items->getElement("total_percent");?>
+	                   </div>
 	                   <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
@@ -142,6 +145,7 @@ input.btn_borwse_image {
 		$("#title").keyup(function(){
 		});
 		oldRow();
+		totalPercent();
 	});	
 
 	var template = '';
@@ -184,7 +188,7 @@ input.btn_borwse_image {
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
 				template+='<td>'+examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
-				template+='<td> <input class="fullside" type="text" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td> <input class="fullside" type="text" onKeyup="totalPercent()" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";
@@ -216,7 +220,7 @@ input.btn_borwse_image {
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
 				template+='<td><?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['exam_typeid'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
-				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['pecentage_score'];?>" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td> <input class="fullside" type="text" onKeyup="totalPercent()" value="<?php echo $rs['pecentage_score'];?>" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['note'];?>" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/><input class="fullside" type="hidden" value="<?php echo $rs['id'];?>" required="true" name="detailid'+col+'" id="detailid'+col+'" dojoType="dijit.form.TextBox" /></td>';
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";
@@ -231,6 +235,19 @@ input.btn_borwse_image {
 			});
 		<?php }?>
 	 }
+	function totalPercent(){
+		 var total_percent =0;
+		 var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			percent_row = dijit.byId('percentage'+arrays[i]).get('value');
+			percent_row=isNaN(percent_row)?0:percent_row;
+			
+			total_percent = total_percent + percent_row;
+		}
+		dijit.byId('total_percent').set('value',total_percent);
+		 
+	 }
 	function deleteRecord(index) {
 			var identity = $('#identity').val();
 			var arrays = identity.split(',');
@@ -240,5 +257,7 @@ input.btn_borwse_image {
 			var strings = arrays.join(',');
 			$('#identity').val(strings);
 			dojo.query("#row"+index).remove();
+
+			totalPercent();
 	}
 </script>

@@ -147,7 +147,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		}else{
 			$table = 'ln_expense';
 		}
-		$sql="select count(id) from $table where status = 1 and branch_id = $branch_id limit 1 ";
+		$sql="select count(id) from $table where branch_id = $branch_id limit 1 ";
 		$id = $db->fetchOne($sql);
 		$id = $id + 1;
 		$length = strlen($id) + 1;

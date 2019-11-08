@@ -16,7 +16,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
 					(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS school_nameen,
 					(SELECT b.website FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS website,
 					(SELECT b.email FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS email,
-    				CONCAT(s.stu_enname,' ',s.last_name) AS name_englsih,
+    				CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
     				(select name_en from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				(SELECT name_kh FROM rms_view WHERE TYPE=2 AND key_code=s.sex LIMIT 1) AS sexkh,
     				(SELECT province_kh_name FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS province_khname,

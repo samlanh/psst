@@ -94,7 +94,7 @@ class Application_Form_FrmGlobal{
 		}
 		$rs = $db->getBranchInfo($branch_id);
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
-		$color = empty($rs['color'])?"":"#".$rs['color'];
+		$color = empty($rs['color'])?"#000":"#".$rs['color'];
 		$type_header = HEADER_REPORT_TYPE;
 		$str="";
 		
@@ -104,7 +104,13 @@ class Application_Form_FrmGlobal{
 		$home_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/home.png';
 		
 		if ($type_header==1){
-		$str="<table width='100%'>
+		$str="
+		<style>
+				table{
+				color:".$color."
+				}
+		</style>
+		<table width='100%'>
 				<tr>
 					<td width='20%' align='center'>
 						<img style='max-height:100px;' src=".$logo."><br>
@@ -140,6 +146,9 @@ class Application_Form_FrmGlobal{
 		}else if ($type_header==2){
 			$str="
 			<style>
+				table{
+				color:".$color."
+				}
 				span.space {
 					padding:0;
 				    padding-right: 10px;
@@ -189,6 +198,9 @@ class Application_Form_FrmGlobal{
 				    margin:0;
 				        line-height: inherit;
 				}
+				table{
+					color:".$color."
+					}
 			</style>
 			<table width='100%'>
 				<tr>

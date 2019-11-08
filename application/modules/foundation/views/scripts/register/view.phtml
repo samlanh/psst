@@ -115,37 +115,37 @@ table#exportExcel tr td {
 								<tr>
 									<td width="10%" class="title padding-left">នាមត្រកូល-ខ្លួន</td>
 									<td width="1%">:</td>
-									<td width="22%" class="value"><?php echo $this->rs['stu_khname'];?></label></td>
+									<td width="22%" class="value"><?php echo $this->rs['stu_khname'];?></td>
 									<td width="10%">ជាអក្សរឡាតាំង</td>
 									<td width="1%">:</td>
-									<td width="22%" class="value"><?php echo $this->rs['last_name']." ".$this->rs['stu_enname'];?></label></td>
+									<td width="22%" class="value"><?php echo $this->rs['last_name']." ".$this->rs['stu_enname'];?></td>
 									<td width="10%">អត្តលេខ</td>
 									<td width="1%">:</td>
-									<td width="22%" class="value"><?php echo $this->rs['stu_code'];?></label></td>
+									<td width="22%" class="value"><?php echo $this->rs['stu_code'];?></td>
 								</tr>
 								<tr>
 									<td class="title padding-left">សញ្ជាតិ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['nationality'];?></label></td>
+									<td class="value"><?php echo $this->rs['nationality'];?></td>
 									<td >ភេទ</td>
 									<td >:</td>
-									<td class="value"><?php echo $sex;?></label></td>
+									<td class="value"><?php echo $sex;?></td>
 									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
 									<td >:</td>
-									<td class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label></td>
+									<td class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></td>
 								</tr>
 								<tr>
 									<td class="title padding-left">ទីកន្លែងកំណើត</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['pob'];?></label></td>
+									<td class="value"><?php echo $this->rs['pob'];?></td>
 								</tr>
 								<tr>
 									<td class="title padding-left">លេខទូរសព្ទ</td>
 									<td >:</td>
-									<td colspan="4" class="value"><?php echo $this->rs['tel'];?></label></td>
+									<td colspan="4" class="value"><?php echo $this->rs['tel'];?></td>
 									<td >អ៊ីម៉ែល</td>
 									<td >:</td>
-									<td class="value"><?php $this->rs['email'];?></label></td>
+									<td class="value"><?php $this->rs['email'];?></td>
 								</tr>
 								<tr><td colspan="9">&nbsp;</td></tr>
 								<tr>
@@ -157,26 +157,26 @@ table#exportExcel tr td {
 								<tr>
 									<td class="title">ឆ្នាំសិក្សា</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['academic_year'];?></label></td>
+									<td class="value"><?php echo $this->rs['academic_year'];?></td>
 									<td >កម្រិតសិក្សា</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['degreeTitle'];?></label></td>
+									<td class="value"><?php echo $this->rs['degreeTitle'];?></td>
 									<td >ថ្នាក់សិក្សា</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['grade_name'];?></label></td>
+									<td class="value"><?php echo $this->rs['grade_name'];?></td>
 								</tr>
 								<tr>
 									<td class="title">វេនសិក្សា</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['session'];?></label></td>
+									<td class="value"><?php echo $this->rs['session'];?></td>
 									<td >បន្ទប់សិក្សា</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['room_name'];?></label></td>
+									<td class="value"><?php echo $this->rs['room_name'];?></td>
 								</tr>
 								<tr>
 									<td class="title">ផ្សេងៗ</td>
 									<td >:</td>
-									<td colspan="7" class="value"><?php echo $this->rs['remark'];?></label></td>
+									<td colspan="7" class="value"><?php echo $this->rs['remark'];?></td>
 								</tr>
 						    	<tr><td colspan="9">&nbsp;</td></tr>
 						    	<tr>
@@ -188,40 +188,40 @@ table#exportExcel tr td {
 								<tr>
 									<td class="title">ឈ្មោះឪពុក</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_enname'];?></label></td>
+									<td class="value"><?php echo $this->rs['father_enname'];?></td>
 									<td >សញ្ជាតិ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_nation'];?></label></td>
+									<td class="value"><?php echo $this->rs['father_nation'];?></td>
 									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
 									<td >:</td>
-									<td class="value"><?php echo empty($this->rs['father_dob'])?"":date("d/m/Y",strtotime($this->rs['father_dob']));?></label></td>
+									<td class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['mother_dob']!="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?></td>
 								</tr>
 								<tr>
 									<td class="title">មុខរបរ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['fa_job'];?></label></td>
+									<td class="value"><?php echo $this->rs['fa_job'];?></td>
 									<td >លេខទូរសព្ទ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_phone'];?></label></td>
+									<td class="value"><?php echo $this->rs['father_phone'];?></td>
 								</tr>
 								<tr>
 									<td class="title">ឈ្មោះម្ដាយ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_enname'];?></label></td>
+									<td class="value"><?php echo $this->rs['mother_enname'];?></td>
 									<td >សញ្ជាតិ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_nation'];?></label></td>
+									<td class="value"><?php echo $this->rs['mother_nation'];?></td>
 									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
 									<td >:</td>
-									<td class="value"><?php echo empty($this->rs['mother_dob'])?"":date("d/m/Y",strtotime($this->rs['mother_dob']));?></label></td>
+									<td class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?></td>
 								</tr>
 								<tr>
 									<td class="title">មុខរបរ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['mo_job'];?></label></td>
+									<td class="value"><?php echo $this->rs['mo_job'];?></td>
 									<td >លេខទូរសព្ទ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_phone'];?></label></td>
+									<td class="value"><?php echo $this->rs['mother_phone'];?></td>
 								</tr>
 						    	<tr><td colspan="9">&nbsp;</td></tr>
 						    	<tr>
@@ -233,24 +233,24 @@ table#exportExcel tr td {
 								<tr>
 									<td class="title">ឈ្មោះអាណាព្យាបាល</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_enname'];?></label></td>
+									<td class="value"><?php echo $this->rs['guardian_enname'];?></td>
 									<td >សញ្ជាតិ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_nation'];?></label></td>
+									<td class="value"><?php echo $this->rs['guardian_nation'];?></td>
 									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
 									<td >:</td>
-									<td class="value"><?php echo empty($this->rs['guardian_dob'])?"":date("d/m/Y",strtotime($this->rs['guardian_dob']));?></label></td>
+									<td class="value"><?php if (!empty($this->rs['guardian_dob']) AND $this->rs['guardian_dob'] !="0000-00-00" AND $this->rs['guardian_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['guardian_dob']));}?> </td>
 								</tr>
 								<tr>
 									<td class="title">មុខរបរ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['gu_job'];?></label></td>
+									<td class="value"><?php echo $this->rs['gu_job'];?></td>
 									<td >លេខទូរសព្ទ</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_tel'];?></label></td>
+									<td class="value"><?php echo $this->rs['guardian_tel'];?></td>
 									<td >លេខអត្ត./លិខិតឆ្លងដែន</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_document'];?></label></td>
+									<td class="value"><?php echo $this->rs['guardian_document'];?></td>
 								</tr>
 						    </table>
 					   </td>

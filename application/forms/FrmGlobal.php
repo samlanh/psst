@@ -97,6 +97,12 @@ class Application_Form_FrmGlobal{
 		$color = empty($rs['color'])?"":"#".$rs['color'];
 		$type_header = HEADER_REPORT_TYPE;
 		$str="";
+		
+		
+		$email_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/email.png';
+		$global_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/global.png';
+		$home_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/home.png';
+		
 		if ($type_header==1){
 		$str="<table width='100%'>
 				<tr>
@@ -140,6 +146,10 @@ class Application_Form_FrmGlobal{
 				    margin:0;
 				        line-height: inherit;
 				}
+				img.icon-head {
+				    width: 12px;
+				    filter: sepia(100%) hue-rotate(190deg) saturate(500%);
+				}
 			</style>
 			<table width='100%'>
 					<tr>
@@ -157,12 +167,12 @@ class Application_Form_FrmGlobal{
 										<ul style='font-size:12px; color:inherit; list-style-type: none; padding: 0; margin: 0; line-height: initial;'>
 											<li><span class='space'>&#9742;</span> ".$rs['branch_tel']."</li>";
 											if (!empty($rs['email'])){
-												$str.="<li><span class='space' style='font-size:15px;' >&#9993;</span> ".$rs['email']."</li>";
+												$str.="<li><span class='space'>&#128386;</span> ".$rs['email']."</li>";
 											}							
 											if (!empty($rs['website'])){
-												$str.="<li><span class='space'>&#127758;</span> ".$rs['website']."</li>";
+												$str.="<li><span class='space'>🌐</span> ".$rs['website']."</li>";
 											}
-											$str.="<li><span class='space' style='font-size:15px;'>&#127963;</span> ".$rs['br_address']."</li>
+											$str.="<li><span class='space'>&#127988;</span> ".$rs['br_address']."</li>
 										</ul>
 									</td>
 								</tr>

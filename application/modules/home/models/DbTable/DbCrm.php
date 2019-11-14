@@ -18,9 +18,10 @@
 			c.tel,
 			CASE    
 				WHEN  c.ask_for = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
-				WHEN  c.ask_for = 2 THEN '".$tr->translate("ENGLISH")."'
+				WHEN  c.ask_for = 2 THEN '".$tr->translate("ENGLISH_KNOWLEDGE")."'
 				WHEN  c.ask_for = 3 THEN '".$tr->translate("UNIVERSITY")."'
-				WHEN  c.ask_for = 4 THEN '".$tr->translate("OTHER")."'
+				WHEN  c.ask_for = 4 THEN '".$tr->translate("CHINESE_KNOWLEDGE")."'
+				WHEN  c.ask_for = 5 THEN '".$tr->translate("OTHER")."'
 				END AS ask_for,
 			c.create_date,
 			CASE    

@@ -47,15 +47,15 @@
     	</div>
 		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
-   				if(this.validate()) {
-					var rowId = $('#identity').val();
-					if(rowId==''){ 
-						alert("<?php echo $tr->translate('NO_RECORD_TO_SUBMIT');?>");
+   				if(this.validate()){
+					var identity = $('#identity').val();
+					if(identity==''){
+						alert("There is no record to save");
 						return false;
 					}
 					loadingBlock();
    				 	return true;
-   				}else {
+   				}else{
     				return false;
   				 }
 			</script>
@@ -310,8 +310,7 @@ function filterStudentOld(){
 			  <?php 
 			  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
 			  ?>
-		      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
-	             
+		      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>'; 
 		<?php }?>
 		 temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
 		  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';

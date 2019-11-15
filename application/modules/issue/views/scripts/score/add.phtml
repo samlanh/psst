@@ -44,7 +44,12 @@
     	</div>
 		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
-   			if(this.validate()) {
+   			if(this.validate()){
+				var identity = $('#identity').val();
+				if(identity==''){
+					alert("There is no record to save");
+					return false;
+				}
 				var rowId = $('#identity').val();
 				if(rowId==''){ 
 					alert("<?php echo $tr->translate('NO_RECORD_TO_SUBMIT');?>");
@@ -52,11 +57,11 @@
 				}
 				var txt;
 				var r = confirm("Are you sure to submit ?");
-				if (r == true) {
+				if(r == true){
     				 dijit.byId('save_new').set('disabled',true);
 					 loadingBlock();
     				 return true;
-				} else {
+				}else{
   					  return false;
 				}
    			}else {
@@ -308,7 +313,8 @@ function filterStudent(){
 						}*/
 	      			  no++;
 		      		  amtsubject = subject[j].amount_subjectdivide;
-	      			  stringsname = subject[j].name.replace(' ','');
+	      			  //stringsname = subject[j].name.replace(' ','');
+		      		  stringsname = subject[j].name;
 		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
 				  temp+='<td  class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
@@ -322,7 +328,8 @@ function filterStudent(){
 					  no=0;
 					  for(j=0;j<subject.length;j++){
 		      			  no++;
-		      			  stringsname = subject[j].subject_titleen.replace(' ','');
+		      			  //stringsname = subject[j].subject_titleen.replace(' ','');
+			      		  stringsname = subject[j].subject_titleen;
 			      	      temp+='<td title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/></td>';
 		              }
 				  temp+='<td>&nbsp;</td>';
@@ -346,7 +353,7 @@ function filterStudent(){
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';
 					var no=0;
-				    if($("#identity").val()!="") {
+				    if($("#identity").val()!=""){
 						var identity = $("#identity").val();
 						$("#identity").val(identity+','+inx);
 					} else {$("#identity").val(inx);}
@@ -375,7 +382,6 @@ function CheckSubjectExam(subject_id){
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
-				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
 			}
@@ -385,7 +391,6 @@ function CheckSubjectExam(subject_id){
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
-				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
 			}

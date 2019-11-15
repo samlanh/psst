@@ -27,6 +27,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.stu_id,
     				sp.branch_id,
     				s.stu_code,
+    				s.serial,
     				s.stu_khname,
     				s.stu_enname,
     				s.last_name,

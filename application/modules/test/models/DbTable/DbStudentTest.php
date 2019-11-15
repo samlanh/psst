@@ -373,6 +373,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'dob'		=>$data['dob'],
 					'pob'		=>$data['pob'],
 					'phone'		=>$data['phone'],
+					'tel'		=>$data['phone'],
 					'email'		=>$data['email'],
 					'address'	=>$data['address'],
 					'student_status'	=>$data['student_status'],

@@ -29,7 +29,7 @@ dojo.ready(function(){
 function setDatatoReceipt(){	
 		dojo.byId("lb_receipt_no").innerHTML = '<?php echo $result['receipt_number'];?>';	
 		dojo.byId("lb_date").innerHTML  = '<?php echo date('d-m-Y g:i A',strtotime($result['create_date']));?>';
-		dojo.byId("lb_stu_id").innerHTML = '<?php echo $result['stu_code'];?>';	
+		dojo.byId("lb_stu_id").innerHTML = '<?php echo empty($result['stu_code'])?$result['serial']:$result['stu_code'];?>';	
 		dojo.byId("lb_sex").innerHTML = '<?php echo $result['sex'];?>';	
 		dojo.byId("lbl_note").innerHTML = '<?php echo $result['note'];?>';	
 		dojo.byId("lb_name").innerHTML = '<?php echo $result['stu_khname'].' / '.$result['last_name'].' '.$result['stu_enname'];?>';	

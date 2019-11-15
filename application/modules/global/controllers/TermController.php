@@ -29,7 +29,7 @@ class Global_TermController extends Zend_Controller_Action {
     		$link=array(
     				'module'=>'global','controller'=>'term','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('academic_year'=>$link,'start_date'=>$link,'title'=>$link ));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('academic_year'=>$link,'title'=>$link,'create_date'=>$link,'start_date'=>$link,'end_date'=>$link ));
 			
     		$db = new Accounting_Model_DbTable_DbFee();
     		$this->view->year = $db->getAceYear();

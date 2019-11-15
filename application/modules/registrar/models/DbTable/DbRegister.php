@@ -398,9 +398,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where = "id = ".$cut_id;
 					$this->update($_arr, $where);
 				}
-				
 				$db->commit();
-				return $receipt_number;
+// 				return $receipt_number;
+				$rs_stu = $gdb->getStudentinfoById($stu_id);
+				$rs_stu['receipt_number'] = $receipt_number;
+				return $rs_stu;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();//

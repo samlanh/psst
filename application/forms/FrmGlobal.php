@@ -364,7 +364,7 @@ class Application_Form_FrmGlobal{
 					<td align='center' valign='bottom' colspan='3'>
 						<table  width='100%' style='font-size: 11px;line-height:9px !important;'>
 							<tr>
-								<td width='15%'>Student ID </td>
+								<td width='15%'>Student ID/Test ID </td>
 								<td width='25%'> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
 								<td width='15%'><div style='font-size: 12px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
 								<td width='25%'> : &nbsp;<label id='lb_receipt_no'></label></td>
@@ -568,7 +568,7 @@ class Application_Form_FrmGlobal{
 			<td align='center' valign='bottom' colspan='3'>
 			<table  width='100%' style='font-size: 11px;line-height:9px !important;'>
 			<tr>
-			<td width='15%'>Student ID </td>
+			<td width='15%'>Student ID/Test ID </td>
 			<td width='25%'> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
 			<td width='15%'><div style='font-size: 12px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
 			<td width='25%'> : &nbsp;<label id='lb_receipt_no'></label></td>

@@ -990,7 +990,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     function checkDateAttendence($date_att,$group,$subject=null){
     	$db = $this->getAdapter();
     	$sql="SELECT sat.`id` FROM `rms_student_attendence` AS sat 
-			WHERE sat.`date_attendence`='$date_att' AND sat.`group_id`=$group";
+			WHERE sat.type=1 and sat.`date_attendence`='$date_att' AND sat.`group_id`=$group";
     	$where='';
     	if (!empty($subject)){// high school student
     		$where.=" AND sat.`subject_id`=".$subject;

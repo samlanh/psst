@@ -16,7 +16,7 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	for($i=1; $i<=$count; $i++){
     		$stu_code = $dbg->getnewStudentId(7,1);
     		$arr = array(
-    				'branch_id'=>7,
+    				'branch_id'=>9,
     				'user_id'=>1,
     				'stu_code'=>$stu_code,
     				'stu_khname'=>$data[$i]['C'],

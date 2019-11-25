@@ -139,18 +139,28 @@
 		                <div class="form-group">
 		                	<div class="col-md-3 col-sm-3 col-xs-12">
 		                   		<?php echo $frm_items->getElement("age_stu");?>
-		                   </div>
-		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                    </div>
+							<div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<?php echo $frm_items->getElement("tel_stu");?>
+		                    </div>
+		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                   		<?php echo $frm_items->getElement("degree");?>
-		                   </div>
-		                  <div class="col-md-3 col-sm-3 col-xs-12">
+		                    </div>
+		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                   		<input id="grade" />
-		                   </div>
-		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                    </div>
+		                    
+		                </div>
+						<div class="form-group">
+							<div class="col-md-5 col-sm-3 col-xs-12">
+		                    </div>
+							<div class="col-md-2 col-sm-3 col-xs-12">
 		                   		<input type="button" label="<?php echo $tr->translate('Add To Record');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitIconEditProperty" onclick="addRow();" />
-		                   </div>
-		                </div>
+		                    </div>
+							<div class="col-md-5 col-sm-3 col-xs-12">
+		                    </div>
+						</div>
 	                 </div>
 	               <div class="form-group">
 		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
@@ -339,6 +349,7 @@ function copyfromcustomer(){
 	dijit.byId('last_name_stu').attr("value",dijit.byId('last_name').get('value'));
 	dijit.byId('first_name_stu').attr("value",dijit.byId('first_name').get('value'));
 	dijit.byId('sex_stu').attr("value",dijit.byId('sex').get('value'));
+	dijit.byId('tel_stu').attr("value",dijit.byId('tel').get('value'));
 }
 var col = 0;
 var no = 0;
@@ -351,6 +362,7 @@ function addRow() {
 	last_name_stu = dijit.byId('last_name_stu').get('value');
 	sex_stu = dijit.byId('sex_stu').get('value');
 	age_stu = dijit.byId('age_stu').get('value');
+	tel_stu = dijit.byId('tel_stu').get('value');
 	degree = dijit.byId('degree').get('value');
 	if(degree==''){
 		dijit.byId('degree').focus();
@@ -377,10 +389,11 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>';
-		temp+='<th ><?php echo $tr->translate("First Name");?></th>';
 		temp+='<th ><?php echo $tr->translate("Last Name");?></th>';
+		temp+='<th ><?php echo $tr->translate("First Name");?></th>';
 		temp+='<th ><?php echo $tr->translate("SEX");?></th>';
 		temp+='<th ><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
+		temp+='<th ><?php echo $tr->translate("PHONE");?></th>';
 		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
 		dojo.query("#head-title").append(temp);
@@ -389,10 +402,11 @@ function addRow() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="kh_name_'+col+'" id="kh_name_'+col+'" value="'+kh_name_stu+'" type="hidden">'+kh_name_stu+'&nbsp;</td>';	
-		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="'+first_name_stu+'" type="hidden">'+first_name_stu+'&nbsp;</td>';	
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("Last Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="last_name_'+col+'" id="last_name_'+col+'" value="'+last_name_stu+'" type="hidden">'+last_name_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="'+first_name_stu+'" type="hidden">'+first_name_stu+'&nbsp;</td>';	
 		template+='<td>&nbsp;<input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="gender_'+col+'" id="gender_'+col+'" value="'+sex_stu+'" type="hidden">'+sex_stulabel+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="'+age_stu+'" type="hidden">'+age_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+tel_stu+'" type="hidden">'+tel_stu+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
 	tmp='<tr id="row'+col+'">';
@@ -411,6 +425,7 @@ function addRow() {
 	last_name_stu = dijit.byId('last_name_stu').set('value','');
 	sex_stu = dijit.byId('sex_stu').set('value',1);
 	age_stu = dijit.byId('age_stu').set('value','');
+	age_stu = dijit.byId('tel_stu').set('value','');
 	grade = dijit.byId('grade').set('value','');
 }
 function deleteRecord(index) {

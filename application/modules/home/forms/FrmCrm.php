@@ -119,6 +119,16 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	
     	));
     	
+    	$_tel_stu = new Zend_Dojo_Form_Element_TextBox('tel_stu');
+    	$_tel_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			//'required'=>'true',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("PHONE"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Tel")
+    			 
+    	));
+    	
     	$note=  new Zend_Form_Element_Textarea('note');
     	$note->setAttribs(array(
     			'dojoType'=>'dijit.form.Textarea',
@@ -324,6 +334,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	}
     	
     	$this->addElements(array(
+    			$_tel_stu,
     			$_branch_id,
     			$kh_name,
 				$_first_name,

@@ -154,6 +154,7 @@
 							'stu_enname'=> $_data['first_name_'.$i],
 							'last_name'=> $_data['last_name_'.$i],
 							'sex'=> $_data['gender_'.$i],
+							'tel'=> $_data['tel_'.$i],
 							'degree'=> $_data['degree_'.$i],//May Not User
 							'grade'=> $_data['grade_'.$i],//May Not User
 							'crm_degree'=> $_data['degree_'.$i],
@@ -263,6 +264,7 @@
 							'stu_enname'=> $_data['first_name_'.$i],
 							'last_name'=> $_data['last_name_'.$i],
 							'sex'=> $_data['gender_'.$i],
+							'tel'=> $_data['tel_'.$i],
 // 							'degree'=> $_data['degree_'.$i],//May Not User
 // 							'grade'=> $_data['grade_'.$i],//May Not User
 							'crm_degree'=> $_data['degree_'.$i],
@@ -288,6 +290,7 @@
 							'stu_enname'=> $_data['first_name_'.$i],
 							'last_name'=> $_data['last_name_'.$i],
 							'sex'=> $_data['gender_'.$i],
+							'tel'=> $_data['tel_'.$i],
 							'degree'=> $_data['degree_'.$i],//May Not User
 							'grade'=> $_data['grade_'.$i],//May Not User
 							'crm_degree'=> $_data['degree_'.$i],

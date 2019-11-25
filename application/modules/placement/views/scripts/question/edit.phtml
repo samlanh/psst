@@ -21,7 +21,7 @@
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_QUESTION');?></h4>
 	    				<div id="isExample">
 	    					<?php echo $tr->translate("IS_EXAMPLE");?> 
-	    					<input type="checkbox" name="is_example" id="is_example" >
+	    					<input type="checkbox" name="is_example" id="is_example" <?php if ($this->row['is_example']==1){ echo 'checked="checked"';}?> >
 	    				</div>
 	    			</div>
 	    			<div class="col-sm-4 text-right">
@@ -225,7 +225,7 @@ thead#head-title tr th {
     	if((question_type==2 || question_type==3 || question_type==7)){
 			$("#image-question").css("display", "block");
 		}
-    	if((question_type==2 || question_type==3 || question_type==7 || question_type==8 || question_type==9 || question_type==10)){
+    	if((question_type==2 || question_type==3 || question_type==7 || question_type==8 || question_type==9 || question_type==10 || question_type==12)){
 			$("#isExample").css("display", "block");
 		}
 		if(oldquestion_type==question_type){
@@ -247,7 +247,7 @@ thead#head-title tr th {
     		dijit.byId('question_type').focus();
     		return false;
     	}
-    	if(question_type==1 || question_type==5 || question_type==7 || question_type==8 || question_type==9 || question_type==10 || question_type==11){
+    	if(question_type==1 || question_type==5 || question_type==7 || question_type==8 || question_type==9 || question_type==10){
     		var iden = $("#identity").val();
 			var arrays = iden.split(',');
 			col++;no++;
@@ -362,6 +362,32 @@ thead#head-title tr th {
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
+    	}else if(question_type==11){
+    		var iden = $("#identity").val();
+			var arrays = iden.split(',');
+			col++;no++;
+			template='';
+			if(title!=1){
+				$("#head-title").html("");
+				temp+='<tr><th><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th><?php echo $tr->translate("IS_EXAMPLE");?></th>';
+				temp+='<th><?php echo $tr->translate("ANSWER_LABEL");?></th>';
+				temp+='<th><?php echo $tr->translate("ANSWER_KEY");?></th>';
+				temp+='<th><?php echo $tr->translate("POINT");?></th></tr>';
+				dojo.query("#head-title").append(temp);
+				title=1;
+			}
+				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+				template+='<td width="35px" align="center">'+no+'</td>';
+				template+='<td align="center"><input onClick="isExample('+col+')" type="checkbox" name="is_example'+col+'" id="is_example'+col+'" ></td>';	
+				template+='<td> <input class="fullside" type="text"  name="answer_label'+col+'" id="answer_label'+col+'" dojoType="dijit.form.TextBox"/></td>';
+				template+='<td> <input class="fullside" type="text" required="required"  name="answer_key'+col+'" id="answer_key'+col+'" dojoType="dijit.form.TextBox"/></td>';
+				template+='<td> <input class="fullside" type="text" value="0" required="true" name="point'+col+'" id="point'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			dojo.query("#table_row").append(tmp);
     	}else if(question_type==14){
         	var option_true_false = '<?php echo $this->optionTrueFalse?>';
     		var iden = $("#identity").val();
@@ -398,7 +424,7 @@ thead#head-title tr th {
 			});
 	 }
 	function oldRow() {
-		if(oldquestion_type==1 || oldquestion_type==5  || oldquestion_type==7 || oldquestion_type==8 || oldquestion_type==9 || oldquestion_type==10 || oldquestion_type==11){
+		if(oldquestion_type==1 || oldquestion_type==5  || oldquestion_type==7 || oldquestion_type==8 || oldquestion_type==9 || oldquestion_type==10 ){
 			<?php if(!empty($this->rowDetail)) foreach ($this->rowDetail as $rs){?>
 			col++;no++;
 			template='';
@@ -495,6 +521,7 @@ thead#head-title tr th {
 				template+='<td><div class="account-image text-center">';
 				template+='<div class="image-box">';
 					template+='<img id="image_view'+col+'" src="<?php echo $image;?>" alt=""  />';
+					template+='<input class="fullside" value="<?php echo $rs['image'];?>" type="hidden" name="old_image'+col+'" id="old_image'+col+'" dojoType="dijit.form.TextBox"/>';
 				template+='</div>';
 				template+='<div class="button_browse">';
 					template+='<div id="preview"></div>';
@@ -537,11 +564,45 @@ thead#head-title tr th {
 			}
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
-				template+='<td align="center"><input onClick="isExample('+col+')" type="checkbox" name="is_example'+col+'" id="is_example'+col+'" ></td>';	
+				template+='<td align="center"><input <?php if ($rs['is_example']==1){ echo 'checked="checked"';}?> onClick="isExample('+col+')" type="checkbox" name="is_example'+col+'" id="is_example'+col+'" ></td>';	
 				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['answer_label']?>"  name="answer_label'+col+'" id="answer_label'+col+'" dojoType="dijit.form.TextBox"/></td>';
 				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['column_b']?>" name="column_b'+col+'" id="column_b'+col+'" dojoType="dijit.form.TextBox"/></td>';
 				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['answer_key']?>" required="required"  name="answer_key'+col+'" id="answer_key'+col+'" dojoType="dijit.form.TextBox"/></td>';
 				template+='<td width="35px"> <input class="fullside" type="text" value="<?php echo $rs['point']?>" required="true" name="point'+col+'" id="point'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			dojo.query("#table_row").append(tmp);
+
+			if($("#identity").val()!="") {
+				var identity = $("#identity").val();
+				$("#identity").val(identity+','+col);
+			} else {$("#identity").val(col);}
+			dojo.html.set(dojo.byId("row"+col),template , {
+			     parseContent: true,
+			});
+			<?php }?>
+    	}else if(oldquestion_type==11){
+    		<?php if(!empty($this->rowDetail)) foreach ($this->rowDetail as $rs){?>
+			col++;no++;
+			template='';
+			if(title!=1){
+				$("#head-title").html("");
+				temp+='<tr><th><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th><?php echo $tr->translate("IS_EXAMPLE");?></th>';
+				temp+='<th><?php echo $tr->translate("ANSWER_LABEL");?></th>';
+				temp+='<th><?php echo $tr->translate("ANSWER_KEY");?></th>';
+				temp+='<th><?php echo $tr->translate("POINT");?></th></tr>';
+				dojo.query("#head-title").append(temp);
+				title=1;
+			}
+				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+				template+='<td width="35px" align="center">'+no+'</td>';
+				template+='<td align="center"><input <?php if ($rs['is_example']==1){ echo 'checked="checked"';}?> onClick="isExample('+col+')" type="checkbox" name="is_example'+col+'" id="is_example'+col+'" ></td>';	
+				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['answer_label']?>"  name="answer_label'+col+'" id="answer_label'+col+'" dojoType="dijit.form.TextBox"/></td>';
+				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['answer_key']?>" required="required"  name="answer_key'+col+'" id="answer_key'+col+'" dojoType="dijit.form.TextBox"/></td>';
+				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['point']?>" required="true" name="point'+col+'" id="point'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";

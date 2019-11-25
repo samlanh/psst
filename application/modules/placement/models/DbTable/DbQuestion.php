@@ -73,6 +73,7 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 					'create_date'=>date("Y-m-d H:i:s"),
 					'modify_date'=>date("Y-m-d H:i:s"),
 					'user_id'=>$this->getUserId(),
+					'is_example'=>empty($_data['is_example'])?0:1,
 			);
 			$this->_name='rms_question';
 			
@@ -90,7 +91,7 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 				}
 			}
 			$id = $this->insert($_arr);
-			if ($question_type==1 || $question_type==7 || $question_type==8 || $question_type==9 || $question_type==10 || $question_type==11){
+			if ($question_type==1 || $question_type==7 || $question_type==8 || $question_type==9 || $question_type==10 ){
 				if(!empty($_data['identity'])){
 					$ids = explode(',', $_data['identity']);
 					if(!empty($ids))foreach ($ids as $i){
@@ -171,6 +172,21 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 						$this->insert($arr);
 					}
 				}
+			}else if ($question_type==11){
+				if(!empty($_data['identity'])){
+					$ids = explode(',', $_data['identity']);
+					if(!empty($ids))foreach ($ids as $i){
+						$arr=array(
+								'question_id'=>$id,
+								'answer_label'=>$_data['answer_label'.$i],
+								'answer_key'=>$_data['answer_key'.$i],
+								'point'=>$_data['point'.$i],
+								'is_example'=>empty($_data['is_example'.$i])?0:1,
+						);
+						$this->_name='rms_question_detail';
+						$this->insert($arr);
+					}
+				}
 			}else if ($question_type==8){
 					
 			}
@@ -207,6 +223,7 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 					'status'=>$_data['status'],
 					'modify_date'=>date("Y-m-d H:i:s"),
 					'user_id'=>$this->getUserId(),
+					'is_example'=>empty($_data['is_example'])?0:1,
 			);
 			$this->_name='rms_question';
 			$part= PUBLIC_PATH.'/images/placement/';
@@ -230,7 +247,7 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 			$whereDelete="question_id = ".$id;
 			$this->delete($whereDelete);
 			
-			if ($question_type==1 || $question_type==7 || $question_type==8 || $question_type==9 || $question_type==10 || $question_type==11){
+			if ($question_type==1 || $question_type==7 || $question_type==8 || $question_type==9 || $question_type==10 ){
 				if(!empty($_data['identity'])){
 					$ids = explode(',', $_data['identity']);
 					if(!empty($ids))foreach ($ids as $i){
@@ -276,6 +293,10 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 							if(move_uploaded_file($tmp, $part.$image_name)){
 								$arr['image'] = $image_name;
 							}
+						}else{
+							if (!empty($_data['old_image'.$i])){
+								$arr['image'] = $_data['old_image'.$i];
+							}
 						}
 						$this->_name='rms_question_detail';
 						$this->insert($arr);
@@ -303,6 +324,21 @@ class Placement_Model_DbTable_DbQuestion extends Zend_Db_Table_Abstract
 								'question_id'=>$id,
 								'answer_label'=>$_data['answer_label'.$i],
 								'column_b'=>$_data['column_b'.$i],
+								'answer_key'=>$_data['answer_key'.$i],
+								'point'=>$_data['point'.$i],
+								'is_example'=>empty($_data['is_example'.$i])?0:1,
+						);
+						$this->_name='rms_question_detail';
+						$this->insert($arr);
+					}
+				}
+			}else if ($question_type==11){
+				if(!empty($_data['identity'])){
+					$ids = explode(',', $_data['identity']);
+					if(!empty($ids))foreach ($ids as $i){
+						$arr=array(
+								'question_id'=>$id,
+								'answer_label'=>$_data['answer_label'.$i],
 								'answer_key'=>$_data['answer_key'.$i],
 								'point'=>$_data['point'.$i],
 								'is_example'=>empty($_data['is_example'.$i])?0:1,

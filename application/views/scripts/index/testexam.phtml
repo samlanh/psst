@@ -109,7 +109,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    							
 												    							<div class="row-data">
 													    							<span class="question-num"><?php echo $keyIndex?>.</span>
-													    							<div class="fill-in">
+													    							<div class="fill-in ordering-answer">
 														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id'];?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Enter Answer");?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  >
 													    							</div>
 												    							</div>
@@ -132,6 +132,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 						    							}
 						    							?>
 						    							<?php 
+						    							$is_example = $rs['is_example'];
 						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
@@ -144,7 +145,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 								    									$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
 								    									?>
 							    										<li>
-							    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id;?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $index+1?>.</span> <?php echo $question['answer_label'];?>
+							    											<input type="radio" <?php if ($is_example==1){  if ($question['is_correct']==1){ echo 'checked="checked"'; } echo 'disabled';}else{ if (!empty($result)){ echo 'checked="checked"';} }?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id;?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>" > <!-- <span class="question-num"><?php //echo $index+1?>.</span> --> <?php echo $question['answer_label'];?>
 							    										</li>
 							    										<?php }?>
 								    								</ul>
@@ -160,15 +161,23 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 						    							}
 						    							?>	
 						    							<?php 
+						    							$is_example = $rs['is_example'];
 						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
 						    								?>
 						    								<div class="image-question answer-opt col2">
 								    								<div class="two-blog ans-left">
-								    									<span class="question-num"><?php echo $number?>.</span>
-									    								<img class="img-question" src="<?php echo $image;?>" />
-									    								<span><?php echo $rs['question_title'];?></span>
+								    									<span class="question-num"><?php echo $number?>. <span><?php echo $rs['question_title'];?></span> </span>
+									    								
+									    								
+									    								<div class="row-data">
+											    							<span class="question-num"></span>
+											    							<div class="fill-in">
+											    								<img class="img-question" src="<?php echo $image;?>" />
+											    							</div>
+										    							</div>
+												    							
 								    								</div>
 								    								<div class="two-blog ans-right">
 								    									<ul>
@@ -176,7 +185,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    									$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
 									    									?>
 								    										<li>
-								    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <span class="question-num"><?php echo $keyIndex;?>.</span> <?php echo $question['answer_label'];?>
+								    											<input type="radio" <?php if ($is_example==1){  if ($question['is_correct']==1){ echo 'checked="checked"'; } echo 'disabled';}else{ if (!empty($result)){ echo 'checked="checked"';} }?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>"> <!-- <span class="question-num"><?php //echo $keyIndex;?>.</span> --> <?php echo $question['answer_label'];?>
 								    										</li>
 								    										<?php }?>
 									    								</ul>
@@ -306,8 +315,10 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    							$tdAnswer="";
 												    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
 												    							
-												    								$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" class="option-answer full-width" dojoType="dijit.form.FilteringSelect">';
-												    								
+													    							if ($question['is_example']==1){
+													    							}else{
+												    									$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" class="option-answer full-width" dojoType="dijit.form.FilteringSelect">';
+													    							}
 												    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
 												    								if (!empty($result)){
 												    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
@@ -322,7 +333,12 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 												    									}
 												    									$tdAnswer.=$opti;
 												    								}else{
-												    									$tdAnswer.=$options;
+												    									if ($question['is_example']==1){
+												    										$sppB = str_split($question['answer_key']);
+												    										$tdAnswer.='<td align="center">'.$sppB[0].'<select style="visibility: hidden; height: 0;" class="option-answer full-width" dojoType="dijit.form.FilteringSelect"></select></td>';
+												    									}else{
+												    										$tdAnswer.=$options;
+												    									}
 												    								}
 												    								
 												    								
@@ -360,6 +376,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 							    								$image = $this->baseUrl()."/images/placement/".$rs['images'];
 							    							}
 							    						}
+							    						$is_example = $rs['is_example'];
 							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
@@ -372,11 +389,21 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 								    								<div class="answer-blog">
 								    									<ul>
 								    										<li class="answer-opt col1">
-												    							<div class="row-data">
+												    							<div class="row-data view-image-opt">
 												    								<span class="question-num"><?php echo $number?>.</span>
-												    								<img class="img-question" src="<?php echo $image;?>" />
+												    								<span class="inline-value">
+												    									<img class="img-question" src="<?php echo $image;?>" />
+												    								</span>
 											    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1;?>
 													    								
+													    								<?php if ($is_example ==1){?>
+													    									<span class="inline-value">
+													    										<?php echo $question['answer_label'];?>
+													    									</span>
+													    									<span class="inline-value">
+													    									<span style="display: block;width: 100%;border-bottom: solid 1px #332f2f;text-align: center;"><?php echo $question['answer_key'];?></span>
+													    									</span>
+													    								<?php }else{?>
 													    								<span class="inline-value">
 													    								<?php 
 													    									echo $question['answer_label'];
@@ -405,6 +432,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 													    									?>
 													    									</select>
 													    								</span>
+													    								<?php }?>
 											    								<?php }?>
 										    									</div>
 											    							</li>
@@ -418,6 +446,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 						    						<?php }else if ($question_type==8){ //Complete the sentences Layout (words in the box)?>
 						    						
 						    						<?php 
+						    							$is_example = $rs['is_example'];
 						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							$optAnswer = $_dbgb->getGetAnswerKeyById($rs['section_id'],$rs['question_type'],1);
@@ -442,34 +471,48 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 								    									<ul>
 								    										<li class="answer-opt col1">
 								    											<span class="inline-value ">
-								    											<span class="question-num"><?php echo $number?>.</span>
+								    												<span class="question-num"><?php echo $number?>.</span>
 								    											</span>
-											    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
-													    								<?php if (empty($question['answer_label'])){?>
-													    								<span class="inline-value ">
-														    								<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']?>" dojoType="dijit.form.FilteringSelect" >
-														    								<?php $result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
-													    									if (!empty($result)){
-													    										$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
-													    										foreach ($answerList as $quest){
-													    											$selected = '';
-													    											if ($quest['answer_key']==$result['answer_key']){
-													    												$selected = 'selected="selected"';
-													    											}
-													    											$colB = $quest['answer_key'];
-													    											$opti.= '<option '.$selected.' value="'.$quest['answer_key'].'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
-													    										}
-													    										echo $opti;
-						    																}else{
-						    																	echo $optAnswer;
-						    																}?>
-														    								</select>
-													    								</span>
-													    								<?php }else{?>
-													    								<span class="inline-value ">
-													    									<?php echo $question['answer_label'];?>
-													    								</span>
-													    								<?php }?>
+								    												<?php if ($is_example==1){?>
+								    													<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+									    													<?php if (empty($question['answer_label'])){?>
+									    														<span class="inline-value ">
+									    														<strong style="padding:0 10px; display: block;width: 100%;border-bottom: solid 1px #332f2f;text-align: center;"><?php echo $question['answer_key'];?></strong>
+									    														</span>
+									    													<?php }else{?>
+									    														<span class="inline-value ">
+															    									<?php echo $question['answer_label'];?>
+															    								</span>
+									    													<?php }?>
+								    													<?php }?>
+								    												<?php }else{?>
+												    									<?php foreach ($rowQ as $index => $question){ $keyIndex = $index+1; ?>
+														    								<?php if (empty($question['answer_label'])){?>
+														    								<span class="inline-value ">
+															    								<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id']?>" dojoType="dijit.form.FilteringSelect" >
+															    								<?php $result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+														    									if (!empty($result)){
+														    										$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
+														    										foreach ($answerList as $quest){
+														    											$selected = '';
+														    											if ($quest['answer_key']==$result['answer_key']){
+														    												$selected = 'selected="selected"';
+														    											}
+														    											$colB = $quest['answer_key'];
+														    											$opti.= '<option '.$selected.' value="'.$quest['answer_key'].'" >'.htmlspecialchars($colB, ENT_QUOTES).'</option>';
+														    										}
+														    										echo $opti;
+							    																}else{
+							    																	echo $optAnswer;
+							    																}?>
+															    								</select>
+														    								</span>
+														    								<?php }else{?>
+														    								<span class="inline-value ">
+														    									<?php echo $question['answer_label'];?>
+														    								</span>
+														    								<?php }?>
+												    									<?php }?>
 											    								<?php }?>
 											    							</li>
 						    											</ul>
@@ -482,6 +525,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 						    						<?php }else if ($question_type==9){ //Complete the sentences Layout I (In Row Sentence)?>
 						    						
 						    						<?php 
+						    							$is_example = $rs['is_example'];
 						    							$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
@@ -493,24 +537,41 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 								    								<div class="answer-blog">
 								    									<ul>
 								    										<li class="answer-opt col1">
-								    											<span class="inline-value ">
-								    											<span class="question-num"><?php echo $number?>.</span>
-								    											</span>
-											    									<?php $keyIndex=0; foreach ($rowQ as $index => $question){ 
-											    										$keyIndex = $index+1;
-											    										$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
-											    									?>
-													    								<?php if (empty($question['answer_label'])){?>
-													    								<span class="inline-value ">
-														    								<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
-													    								</span>
-													    								<?php }else{?>
-													    								<span class="inline-value ">
-													    									<?php echo $question['answer_label'];?>
-													    								</span>
-													    								<?php }?>
-													    								
-												    							
+								    											<?php if ($is_example==1){?>
+								    												<span class="inline-value ">
+									    												<span class="question-num"><?php echo $number?>.</span>
+									    											</span>
+									    											<?php $keyIndex=0; foreach ($rowQ as $index => $question){ 
+												    										$keyIndex = $index+1;
+												    								?>
+												    								<?php if (empty($question['answer_label'])){?>
+														    								<span class="inline-value ">
+														    									<strong style="padding:0 10px; display: block;width: 100%;border-bottom: solid 1px #332f2f;text-align: center;"><?php echo $question['answer_key'];?></strong>
+														    								</span>
+														    								<?php }else{?>
+														    								<span class="inline-value ">
+														    									<?php echo $question['answer_label'];?>
+														    								</span>
+														    								<?php }?>
+												    								<?php }?>
+								    											<?php }else{?>
+									    											<span class="inline-value ">
+									    												<span class="question-num"><?php echo $number?>.</span>
+									    											</span>
+												    									<?php $keyIndex=0; foreach ($rowQ as $index => $question){ 
+												    										$keyIndex = $index+1;
+												    										$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
+												    									?>
+														    								<?php if (empty($question['answer_label'])){?>
+														    								<span class="inline-value ">
+															    								<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']?>" name="answere_<?php echo $question_id."_".$question['id']; ?>" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>" dojoType="dijit.form.TextBox"  placeholder="<?php echo $tr->translate("Enter Answer");?>" autocomplete="off" dojoType="dijit.form.TextBox" autocorrect="off" autocapitalize="off" spellcheck="false" >
+														    								</span>
+														    								<?php }else{?>
+														    								<span class="inline-value ">
+														    									<?php echo $question['answer_label'];?>
+														    								</span>
+														    								<?php }?>
+												    								<?php }?>
 											    								<?php }?>
 											    							</li>
 						    											</ul>
@@ -539,12 +600,21 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 											    							?>
 											    							<li class="answer-opt col1">
 												    							<div class="row-data">
-												    								<div class="two-blog">
+												    								<!-- <div class="two-blog">-->
 												    									<span class="question-num"><?php echo $keyIndex; ?>.</span> <?php echo $question['answer_label'];?>
-												    								</div>
+												    								<!-- </div>-->
+												    								<!-- 
 												    								<div class="two-blog">
-														    							<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  >
+														    							<input class="full-width" type="text" onChange="enterAnswer('<?php //echo $question_type;?>','<?php //echo $question_id;?>','<?php //echo $question['id'];?>');" id="answere_<?php //echo $question_id."_".$question['id']; ?>" name="answere_<?php //echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" value="<?php //if (!empty($result)){ echo $result['answer_key']; }?>"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php //echo $tr->translate("Enter Answer");?>"  >
 												    								</div>
+												    								 -->
+												    							</div>
+												    							<div class="row-data">
+												    								<?php if($question['is_example']==1){?>
+												    									<strong style="padding:0 10px; font-style:italic; display: block;width: 100%;border-bottom: solid 1px #332f2f;text-align: left;"><?php echo $question['answer_key'];?></strong>
+												    								<?php }else{?>
+												    								<input class="full-width" type="text" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.TextBox" value="<?php if (!empty($result)){ echo $result['answer_key']; }?>"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="<?php echo $tr->translate("Enter Answer");?>"  >
+												    								<?php }?>
 												    							</div>
 											    							</li>
 											    							<?php }?>
@@ -561,6 +631,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 							    						<?php }?>
 							    						
 							    						<?php 
+							    						$is_example = $rs['is_example'];
 							    						$question_id = $rs['id'];
 						    							$rowQ = $_dbgb->getQuestionDetailById($rs['id']);
 						    							if (!empty($rowQ)){
@@ -576,7 +647,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 								    											$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
 								    										?>
 								    										<li class="answer-opt col4">
-								    											<input type="radio" <?php if (!empty($result)){ echo 'checked="checked"';}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
+								    											<input type="radio" <?php if ($is_example==1){ if ($question['is_correct']==1){ echo 'checked="checked"'; } echo 'disabled';}else{ if (!empty($result)){ echo 'checked="checked"';}}?> onClick="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id; ?>" name="answere_<?php echo $question_id; ?>" value="<?php echo $question['answer_label'];?>">  <?php echo $question['answer_label'];?>
 								    										</li>
 								    										<?php }?>
 						    											</ul>
@@ -635,7 +706,7 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 								    										?>
 								    											
 								    												<tr>
-								    													<td width="80%"> <?php echo $question['answer_label'];?> </td>
+								    													<td width="50%"> <?php echo $question['answer_label'];?> </td>
 								    													<td valign="top">
 											    											<select class="option-answer full-width" onChange="enterAnswer('<?php echo $question_type;?>','<?php echo $question_id;?>','<?php echo $question['id'];?>');" id="answere_<?php echo $question_id."_".$question['id']; ?>" name="answere_<?php echo $question_id."_".$question['id'];?>" dojoType="dijit.form.FilteringSelect" >
 														    								<?php 
@@ -654,6 +725,8 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 														    									echo $this->truefalse_opt;
 														    								}?>
 														    								</select>
+								    													</td>
+								    													<td width="40%">
 								    													</td>
 								    												</tr>
 								    											
@@ -707,8 +780,10 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    							foreach ($rowQ as $index => $question){ $keyIndex = $index+1;
 									    							
 									    								$result = $_dbpl->getPlacementTestAnswerRow($placemnet_id, $question_id, $question['id']);
-									    							
-									    								$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" dojoType="dijit.form.FilteringSelect" class="option-answer full-width" >';
+									    								if ($question['is_example']==1){
+									    								}else{
+									    									$tdAnswer.='<td><select onChange="enterAnswer('."'".$question_type."'".','."'".$question_id."'".','."'".$question['id']."'".');" id="answere_'.$question_id."_".$question['id'].'" name="answere_'.$question_id."_".$question['id'].'" dojoType="dijit.form.FilteringSelect" class="option-answer full-width" >';
+									    								}
 									    								if (!empty($result)){
 									    									$opti= '<option value="" >'.htmlspecialchars($tr->translate("SELECT_ANSWER"), ENT_QUOTES).'</option>';
 									    									foreach ($rowQ as $index => $quest){
@@ -722,7 +797,12 @@ $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 									    									}
 									    									$tdAnswer.=$opti;
 									    								}else{
-									    									$tdAnswer.=$options;
+									    									if ($question['is_example']==1){
+									    										$sppB = str_split($question['answer_key']);
+									    										$tdAnswer.='<td align="center">'.$sppB[0].'<select style="visibility: hidden; height: 0;" class="option-answer full-width" dojoType="dijit.form.FilteringSelect"></select></td>';
+									    									}else{
+									    										$tdAnswer.=$options;
+									    									}
 									    								}
 									    								$tdAnswer.='</select></td>';
 									    							?>

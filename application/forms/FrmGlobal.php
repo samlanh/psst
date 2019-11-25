@@ -284,7 +284,9 @@ class Application_Form_FrmGlobal{
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$last_name=$session_user->last_name;
 		$username = $session_user->first_name;
-		$receipt_type = 2;
+		$receipt_type = 1;
+		$key = new Application_Model_DbTable_DbKeycode();
+		$result=$key->getKeyCodeMiniInv(TRUE);
 		if($receipt_type==1){//elt
 		$str="<style>
 			.hearder_table{height:20px !important;}
@@ -495,6 +497,12 @@ class Application_Form_FrmGlobal{
 				</tr>
 			</table>
 		</div>";
+			if($result['receipt_print']>1){
+				$str.="<div id='divPrint1'>
+				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
+				<div id='printblog2'></div>
+				</div>";
+			}
 		return $str;
 		}elseif($receipt_type==2){//newworld
 			$str="<style>
@@ -693,8 +701,7 @@ class Application_Form_FrmGlobal{
 					</table>
 				</div>
 			</div>";
-			$key = new Application_Model_DbTable_DbKeycode();
-			$result=$key->getKeyCodeMiniInv(TRUE);
+			
 			if($result['receipt_print']>1){
 				$str.="<div id='divPrint1'>
 						<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>

@@ -117,7 +117,7 @@ class Application_Form_FrmGlobal{
 					</td>
 					<td width='80%' valign='top'>
 						<div class='schoo-headkh' style='text-align: center;'>
-							<h2 style='padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px;background: $color;color: #fff;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
+							<h2 style=".'"'."padding: 0;margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';font-size:24px;background: $color;color: #fff;padding: 8px 0px;".'"'.">".$rs['school_namekh']."</h2>
 						</div>
 						<table width='100%' >
 							<tr>
@@ -169,7 +169,7 @@ class Application_Form_FrmGlobal{
 							<table width='100%' >
 								<tr>
 									<td width='60%' align='left' valign='top'>
-										<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:18px; color: inherit;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
+										<h2 style=".'"'."padding: 0;margin: 0; font-weight:normal; font-family: 'Times New Roman' , 'Khmer OS Muol Light';font-size:18px; color: inherit;padding: 8px 0px;".'"'.">".$rs['school_namekh']."</h2>
 										<h2 style='white-space:nowrap; font-weight:bold; font-size:14px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
 									</td>
 									<td width='40%' align='left' valign='top'>
@@ -284,9 +284,7 @@ class Application_Form_FrmGlobal{
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$last_name=$session_user->last_name;
 		$username = $session_user->first_name;
-		$receipt_type = 1;
-		$key = new Application_Model_DbTable_DbKeycode();
-		$result=$key->getKeyCodeMiniInv(TRUE);
+		$receipt_type = 2;
 		if($receipt_type==1){//elt
 		$str="<style>
 			.hearder_table{height:20px !important;}
@@ -295,7 +293,7 @@ class Application_Form_FrmGlobal{
 				font-weight:bold;
 			}
 			.blogbranchlogo{
-					margin:0 auto;position:absolute;top:50px !important;left:100px;
+					margin:0 auto;position:absolute;top:10px !important;left:100px;
 				}
 		</style>
 		<div id='PrintReceipt' style='width:100%cm !important; padding: 0px;'>
@@ -349,7 +347,7 @@ class Application_Form_FrmGlobal{
 					</td>
 				</tr>
 				<tr>
-					<td width='30%'>
+					<td width='30%' style='position:relative'>
 						<div id='lbl_branchlogo'></div>
 						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
 							<label id='lb_branchname'></label>
@@ -497,12 +495,6 @@ class Application_Form_FrmGlobal{
 				</tr>
 			</table>
 		</div>";
-			if($result['receipt_print']>1){
-				$str.="<div id='divPrint1'>
-				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
-				<div id='printblog2'></div>
-				</div>";
-			}
 		return $str;
 		}elseif($receipt_type==2){//newworld
 			$str="<style>
@@ -701,7 +693,8 @@ class Application_Form_FrmGlobal{
 					</table>
 				</div>
 			</div>";
-			
+			$key = new Application_Model_DbTable_DbKeycode();
+			$result=$key->getKeyCodeMiniInv(TRUE);
 			if($result['receipt_print']>1){
 				$str.="<div id='divPrint1'>
 						<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>

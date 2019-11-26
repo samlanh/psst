@@ -9,48 +9,54 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     
     }
-    public function updateItemsByImport($data){
+    public function updateItemsByImport($formData,$data){
     	$db = $this->getAdapter();
+    	//print_r($formData);exit();
     	$count = count($data);
     	$dbg = new Application_Model_DbTable_DbGlobal();
-    	for($i=1; $i<=$count; $i++){
-    		$stu_code = $dbg->getnewStudentId(7,1);
+    	for($i=2; $i<=$count; $i++){
+    		$stu_code = $dbg->getnewStudentId($formData['branch'],1);
+    		$remark = $data[$i]['P'];
+    		if(!empty($data[$i]['Q'])){
+    			$remark = "(".$data[$i]['Q'].") ".$data[$i]['P'];
+    		}
     		$arr = array(
-    				'branch_id'=>7,
-    				'user_id'=>1,
-    				'stu_code'=>$stu_code,
-    				'stu_khname'=>$data[$i]['C'],
-    				'stu_enname'=>trim($data[$i]['D']),
-    				'last_name'=>trim($data[$i]['E']),
-    				'sex'=>($data[$i]['F']=="M")?1:2,
-    				'tel'=>$data[$i]['G'],
-    				'dob'=>date("Y-m-d",strtotime($data[$i]['H'])),
-    				'pob'=>$data[$i]['I'],
+    				'branch_id'		=>$formData['branch'],
+    				'user_id'		=>1,
+    				'stu_code'		=>$stu_code,
+    				'stu_khname'	=>$data[$i]['C'],
+    				'stu_enname'	=>trim($data[$i]['D']),
+    				'last_name'		=>trim($data[$i]['E']),
+    				'sex'			=>($data[$i]['F']=="M")?1:2,
+    				'tel'			=>$data[$i]['G'],
+    				'dob'			=>date("Y-m-d",strtotime($data[$i]['H'])),
+    				'pob'			=>$data[$i]['I'],
     				
-    				'father_enname'=>$data[$i]['J'],
-    				'father_khname'=>$data[$i]['J'],
-    				'father_phone'=>$data[$i]['K'],
+    				'father_enname'	=>$data[$i]['J'],
+    				'father_khname'	=>$data[$i]['J'],
+    				'father_phone'	=>$data[$i]['K'],
     				
-    				'mother_khname'=>$data[$i]['L'],
-    				'mother_enname'=>$data[$i]['L'],
-    				'mother_phone'=>$data[$i]['M'],
+    				'mother_khname'	=>$data[$i]['L'],
+    				'mother_enname'	=>$data[$i]['L'],
+    				'mother_phone'	=>$data[$i]['M'],
     				
     				'guardian_first_name'=>$data[$i]['N'],
     				'guardian_enname'=>$data[$i]['N'],
     				'guardian_khname'=>$data[$i]['N'],
-    				'guardian_tel'=>$data[$i]['O'],
+    				'guardian_tel'	=>$data[$i]['O'],
     				
     				//'stu_code'=>$data[$i]['P'],
     				
 //     				'degree'=>3,
 //     				'grade'=>16,
-    				'remark'=>$data[$i]['P'],
     				
-    				'is_stu_new'=>0,
-    				'customer_type'=>1,
-    				'status'=>1,
-    				'modify_date'=>date("Y-m-d H:i:s"),
-    				'create_date'=>date("Y-m-d H:i:s")
+    				'remark'		=>$remark, // old stu_code and remark
+    				
+    				'is_stu_new'	=>0,
+    				'customer_type'	=>1,
+    				'status'		=>1,
+    				'modify_date'	=>date("Y-m-d H:i:s"),
+    				'create_date'	=>date("Y-m-d H:i:s")
     				//'note'=>$data[$i]['J'].",".$data[$i]['K'].",".$data[$i]['L'],
     		);
      		$this->_name='rms_student';

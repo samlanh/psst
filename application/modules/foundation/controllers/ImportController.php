@@ -30,11 +30,12 @@ class Foundation_importController extends Zend_Controller_Action {
 				}
 				
 				$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-				$db->updateItemsByImport($sheetData);
+				$db->updateItemsByImport($data,$sheetData);
 				Application_Form_FrmMessage::message("Import Successfully");
+				
 			}
-			else{
-			}
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$this->view->branch = $_dbgb->getAllBranch();
 			
 		}catch (Exception $e){
 			echo $e->getMessage();exit();

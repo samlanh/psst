@@ -95,6 +95,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(tel,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(father_phone,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_phone,' ','') LIKE '%{$s_search}%'";
@@ -183,7 +185,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getAccessPermission();
 		$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
 		return $db->fetchRow($sql);
-		echo $sql; exit();
+		//echo $sql; exit();
 	}
 	
 	public function getStudentDocumentById($id){
@@ -684,9 +686,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	function getStudyHishotryById($id){
 		$db = $this->getAdapter();
-		$sql="SELECT * FROM rms_study_history WHERE stu_id= ".$id;
+		$sql="SELECT * FROM rms_study_history WHERE stu_id = ".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql.=$dbp->getAccessPermission();
+		//$sql.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql);
 	}
 	

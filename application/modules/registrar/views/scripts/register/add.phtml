@@ -1141,7 +1141,7 @@ function printSave(){
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
-		dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
+		//dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
 		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
@@ -1245,6 +1245,12 @@ function printSubmit(){
 		load: function(data){
 			dojo.byId("lb_phone").innerHTML = data.tel;
 			dojo.byId("lb_receipt_no").innerHTML = data.receipt_number;
+			if(data.customer_type==1){
+				dojo.byId("lb_stu_id").innerHTML = data.stu_code;
+			}else{
+				dojo.byId("lb_stu_id").innerHTML = data.serial;
+			};
+			 
 			<?php 
 				$key = new Application_Model_DbTable_DbKeycode();
 				$result=$key->getKeyCodeMiniInv(TRUE);

@@ -239,7 +239,8 @@
 										}else{
 											$tscore_subject = $score['score']-$score['score_cut'];
 										}
-										echo number_format($tscore_subject,2);
+										//echo number_format($tscore_subject,2);
+										echo (float) $tscore_subject;
 										$total_score = $total_score + $tscore_subject;
 									?>
 								</td>
@@ -253,9 +254,12 @@
 									}
 									$total_score = $rs['total_score'];
 								?>
-								<td align="center"><?php
-								$total_score = number_format($total_score,2);
-								echo $total_score;?></td>
+								<td align="center">
+									<?php
+										//$total_score = number_format($total_score,2);
+										echo (float) $total_score;
+									?>
+								</td>
 								<?php 
 									$average=$rs['average'];
 								?>
@@ -315,7 +319,7 @@
 										<tr>
 											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
 											<td valign="top">&nbsp;</td>
-											<td valign="top" style="color:red; text-align: center;font-family:'Khmer os battambang'">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
+											<td valign="top" style="color:#1949d6; text-align: center;font-family:'Khmer os battambang'">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
 										</tr>
 										<tr>
 											<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">នាយករង</td>

@@ -108,7 +108,12 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$reason->setAttribs(array(
     			'dojoType'=>'dijit.form.Textarea',
     			'class'=>'fullside',
-    			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
+    			'style'=>'font-family: inherit; width:99%;  min-height:70px !important;'));
+    	$current_address=  new Zend_Form_Element_Textarea('current_address');
+    	$current_address->setAttribs(array(
+    			'dojoType'=>'dijit.form.Textarea',
+    			'class'=>'fullside',
+    			'style'=>'font-family: inherit; width:99%;  min-height:60px !important;'));
     	
     	$_tel = new Zend_Dojo_Form_Element_TextBox('tel');
     	$_tel->setAttribs(array(
@@ -331,10 +336,12 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     		$_crm_status->setValue($data["crm_status"]);
     		$id->setValue($data["id"]);
     		$note->setValue($data["note"]);
+    		$current_address->setValue($data["current_address"]);
     	}
     	
     	$this->addElements(array(
     			$_tel_stu,
+    			$current_address,
     			$_branch_id,
     			$kh_name,
 				$_first_name,

@@ -1,0 +1,253 @@
+<?php 
+	$class='soria';
+	$them_style='soria';
+	$base_url = $this->baseUrl()."/";
+	
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$schoolName = "សាលា អ៊ី អិល ធី ប៊េីខឹលី អន្តរជាតិ";
+	$schoolNameEn= "ELT Berkeley International Academy";
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/<?php echo $them_style."/".$them_style?>.css" />
+		<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <!-- Meta, title, CSS, favicons, etc. -->
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <!-- Bootstrap -->
+	    <link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <!-- Font Awesome -->
+	    <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	    <!-- NProgress -->
+	    <link href="<?php echo $base_url;?>admin/vendors/nprogress/nprogress.css" rel="stylesheet">
+	    
+	    <!-- Custom Theme Style -->
+    	<link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
+    
+	   <script src="<?php echo $base_url;?>js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
+	   <script>dojoConfig = {parseOnLoad: true}</script>
+	   <script>
+	   		require(["dijit/form/Form","dijit/form/FilteringSelect","dijit/form/Button","dijit/Dialog"]);
+	   </script>
+	   
+	   <link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
+	   <link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
+	   
+	   <title><?php echo $schoolName;?></title>
+	   <style>
+		body{width: 99.6%;}
+		.fullside {
+		    width: 98%;
+		    height: 30px;
+		}
+		.dijitArrowButtonInner, .dijitIconSearch {
+		    margin-top: 6px !important;
+		}
+		.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
+		    height: 28px;
+		}
+		
+			section.to-header {
+			    background: #050533;
+			    display: block;
+			    width: 100%;
+			    padding: 10px;
+			    position: relative;
+			    color: #ffff;
+			}
+			.to-header .blg-logo{
+				text-align: center;
+			}
+			.to-header .blg-title {
+			    padding: 10px;
+			}
+			.to-header .blg-logo img.logo {
+			    max-height: 90px;
+			}
+			.to-header .blg-title span.school-title {
+			    margin: 0;
+			    font-weight: normal;
+			    font-family: 'Times New Roman' , 'Khmer OS Muol Light';
+			    font-size: 24px;
+			    color: inherit;
+			    display: block;
+			}
+section.mid-content {
+    border: solid 5px #0582bd;
+}
+			section.mid-content .blg-search {
+			    text-align: center;
+			    padding: 10px 0;
+			    background: #fff;
+			}
+.blg-display-rs {
+    padding: 20px 0;
+    border-top: 5px #0582bd solid;
+}
+.blg-display-rs div.blg-profile {
+    text-align: center;
+}
+.blg-display-rs div.profile-img {
+    padding-top: 20px;
+}
+div.blg-profile img.profile-img {
+    border: solid 4px #050533;
+    border-radius: 8px;
+}
+.student-name ul.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.student-name ul.info-list li {
+    line-height: 24px;
+}
+.student-name ul.info-list li span.value-sheet {
+    font-weight: 600;
+    font-style: italic;
+    text-transform: uppercase;
+}
+.blg-display-rs div.blg-information {
+    border-left: 5px solid #0582bd;
+    min-height: 370px;
+    font-size: 18px;
+    padding: 10px;
+}
+.blg-information ul.study-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.blg-information ul.study-info-list li span.value-title {
+    min-width: 161px;
+    display: inline-block;
+}
+.blg-information ul.study-info-list li span.value-sheet {
+    font-weight: 600;
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+section.footer-blog {
+    background: #050533;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    position: relative;
+    color: #ffff;
+	text-align: center;
+	min-height: 80px
+}
+section.footer-blog span.school-title {
+    margin: 0;
+    font-weight: normal;
+    font-family: 'Times New Roman' , 'Khmer OS Muol Light';
+    font-size: 24px;
+    color: inherit;
+    display: block;
+}
+	   </style>
+	</head>
+	<body class="nav-md soria  ">
+		<div class="container body">
+			<div class="overlay">
+				<div class="overlay-load">
+					<div class="overlay-msg">
+				    </div>
+				</div>
+			</div>
+			<section class="to-header">
+				<div class="row">
+					<div class="container">
+						<div class="col-md-4 col-sm-4 col-xs-12 blg-logo">
+							<img class="logo" src="/elt/trunk/public/images/branch_201812171545012822.png">
+						</div>
+						<div class="col-md-8 col-sm-8 col-xs-12 blg-title">
+							<span class="school-title"><?php echo $schoolName;?></span>
+							<span class="school-title"><?php echo $schoolNameEn;?></span>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</section>	
+			<section class="mid-content">
+				<div class="row">
+					<div class="container">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="blg-search">
+								<div class="form-group">
+					                <div class="col-md-12 col-sm-12 col-xs-12">
+					                	<input id="students" />
+					                </div>
+					                <div class="clearfix"></div>
+					             </div>
+							</div>
+							<div class="blg-display-rs">
+								<div class="col-md-4 col-sm-4 col-xs-12 blg-profile">
+									<div class="profile-img">
+										<img class="profile-img" src="/elt/trunk/public/images/no-profile.png">
+									</div>
+									<div class="student-name">
+										<ul class="info-list">
+											<li><span class="value-sheet">ELTKH0022</span></li>
+											<li><span class="value-sheet">ជាង ខារ៉ូលីន</span></li>
+											<li><span class="value-sheet">Cheang Carolyn</span></li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-md-8 col-sm-8 col-xs-12 blg-information">
+									<div class="study-info">
+										<ul class="study-info-list">
+											<li><span class="value-title">ACADEMIC</span>: <span class="value-sheet">2019-2020(N-Full Day)</span></li>
+											<li><span class="value-title">GRADE</span>: <span class="value-sheet">Kindergarden FD</span></li>
+											<li><span class="value-title">CLASS</span>: <span class="value-sheet">K 2</span></li>
+											
+										</ul>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="footer-blog">
+				<div class="row">
+					<div class="container">
+						<div class="col-md-12 col-sm-12 col-xs-12 blg-title">
+							<span class="school-title"><i class="fa fa-check-circle" aria-hidden="true"></i> បានមកដល់សាលា</span>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<script src="<?php echo $base_url;?>js/help.js"></script>
+	<script type="text/javascript">
+	    dojo.require("dojo.data.ItemFileWriteStore");  
+		dojo.require("dojo.NodeList-manipulate");
+		var value_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dojo.ready(function(){
+			new dijit.form.FilteringSelect({
+				store: value_store,
+				queryExpr: "*${0}*",
+				autoComplete: false,                     
+				required: false,
+				id: "students",
+				name: "students",           
+				class: "fullside", 
+				placeHolder:"<?php echo $tr->translate("SELECT_STUDENT");?>",          
+				onChange: function() {  
+				}
+			}, "students");
+
+
+		});
+		</script>
+	</body>
+</html>

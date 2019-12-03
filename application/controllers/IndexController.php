@@ -558,6 +558,11 @@ class IndexController extends Zend_Controller_Action
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
+	
+	public function uiAction()
+	{
+		 $this->_helper->layout()->disableLayout();
+	}
 }
 
 

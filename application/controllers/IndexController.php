@@ -563,6 +563,25 @@ class IndexController extends Zend_Controller_Action
 	{
 		 $this->_helper->layout()->disableLayout();
 	}
+	public function scanningAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$qr_serial = empty($data['students'])?0:$data['students'];
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+	
+			$check = $dbgb->getStudentinfoById($qr_serial);
+			if (!empty($check)){
+				$string = $dbgb->resultScan($qr_serial);
+				print_r(Zend_Json::encode($string));
+				exit();
+// 				return $string;
+			}else{
+				$return =0;
+			}
+			print_r(Zend_Json::encode($return));
+			exit();
+		}
+	}
 }
 
 

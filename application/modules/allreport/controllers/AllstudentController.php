@@ -769,7 +769,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'end_date'		=> date('Y-m-d',strtotime('+1 month')),
 					'teacher' 		=> 0,
 					'subject' 		=> 0,
-					'showsign'		=>1,
+					'showsign'		=> 1,
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();

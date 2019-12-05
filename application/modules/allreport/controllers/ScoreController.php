@@ -631,6 +631,37 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
+    public function rptMistakeAction(){
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'session' 		=>'',
+    				'group' 		=>'',
+    				'branch_id'=>0,
+    				'degree'=>0,
+    				'start_date'	=> date('Y-m-d'),
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    	$this->view->datasearch = $search;
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$this->view->student = $db->getStudentAttendence($search);
+    
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister(null,"action");
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$db_global=new Application_Model_DbTable_DbGlobal();
+    	$result= $db_global->getAllgroupStudy();
+    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+    	$this->view->group = $result;
+    }
     public function rptStudentMistakeAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();

@@ -934,7 +934,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					sta.type=1
 					AND gsd.status=1
 					AND gsd.type=1
-					AND sta.type=1
 	    			AND g.`id` = gsd.`group_id`
 				 	AND sta.group_id = g.id 
 				 	AND st.`stu_id` = gsd.`stu_id` 
@@ -1066,18 +1065,30 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function checkDateMistake($mistake_date,$group,$subject=null){
+    function getStatusMistakeStudent($stu_id,$date_att,$group){
     	$db = $this->getAdapter();
-    	$sql="SELECT 
-    				sd.`id` 
-    			FROM 
-    				`rms_student_discipline` AS sd
-    			WHERE 
-    				sd.`mistake_date`= $mistake_date  
-    				AND sd.`group_id`=$group
-    		";
+    	$sql='SELECT
+		    	sat.`group_id`,
+		    	sat.type,
+		    	satd.`attendence_status`,
+		    	sat.`date_attendence`
+    		FROM
+		    	`rms_student_attendence` AS sat,
+		    	`rms_student_attendence_detail` AS satd
+    		WHERE
+		    	sat.`id`= satd.`attendence_id`
+		    	AND (sat.type=2 OR (sat.type=1 AND satd.`attendence_status` IN (4,5)))
+		    	AND satd.`stu_id`='.$stu_id.'
+		    	AND sat.`date_attendence`="'.$date_att.'"
+		    	AND sat.`group_id`='.$group;
+    	return $db->fetchRow($sql.' LIMIT 1');
+    }
+    
+	function checkDateMistake($date_att,$group){
+    	$db = $this->getAdapter();
+    	$sql="SELECT sat.`id` FROM `rms_student_attendence` AS sat 
+			WHERE sat.`date_attendence`='$date_att' AND sat.`group_id`=$group";
     	$where='';
-    	    	echo $sql.$where.' LIMIT 1';//exit();
     	return $db->fetchRow($sql.$where.' LIMIT 1');
     }
     
@@ -1107,7 +1118,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	`rms_student_attendence` AS sd,
 	    	`rms_student_attendence_detail` AS sdd
 	    	WHERE
-	    	(sd.type=2 OR sdd.`attendence_status` IN (4,5))
+	    	(sd.type=2 OR (sd.type=1 AND sdd.`attendence_status` IN (4,5)))
 	    	AND sd.`id` = sdd.`attendence_id`
 	    	AND sdd.`stu_id` = $stu_id
 	    	AND sd.`date_attendence` = '".$date_att."'
@@ -1131,7 +1142,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	`rms_student_attendence` AS sd,
     	`rms_student_attendence_detail` AS sdd
     	WHERE
-    	(sd.type=2 OR sdd.`attendence_status` IN (4,5))
+    	(sd.type=2 OR (sd.type=1 AND sdd.`attendence_status` IN (4,5)))
     	AND sd.`id` = sdd.`attendence_id`
     	AND sdd.`stu_id` = $stu_id
     	AND sd.`group_id` = $group ";

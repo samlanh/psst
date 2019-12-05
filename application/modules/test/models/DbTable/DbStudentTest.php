@@ -272,6 +272,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				s.from_school,
 				s.guardian_khname,
 				s.guardian_tel,
+				(select count(id) from rms_student_test_result where s.stu_id  = rms_student_test_result.stu_test_id and test_type=2) as result_test_fl,
+				(select count(id) from rms_student_test_result where s.stu_id  = rms_student_test_result.stu_test_id and test_type=1) as result_test_gn,
 				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name,
 				'$print'
 			 FROM `rms_student` AS s

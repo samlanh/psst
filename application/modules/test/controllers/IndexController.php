@@ -29,7 +29,7 @@ class Test_IndexController extends Zend_Controller_Action
     		$this->view->adv_search = $search;
 			$rs_rows= $db->getAllStudentTest($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","SERIAL","STUDENT_NAMEKHMER","First Name","Last Name","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","PARENT_NAME","CONTACT_NO","BY_USER","PRINT_PROFILE");
+    		$collumns = array("BRANCH","SERIAL","STUDENT_NAMEKHMER","First Name","Last Name","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
     		$link=array(
     				'module'=>'test','controller'=>'index','action'=>'edit',
     		);

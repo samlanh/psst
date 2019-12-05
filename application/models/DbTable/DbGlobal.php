@@ -2418,6 +2418,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	rms_student as st
   	WHERE
 	  	gds.stu_id=st.stu_id
+	  	and gds.stop_type=0
 	  	and gds.group_id=$group_id";
   	//and gds.is_pass=0
   	return $db->fetchAll($sql);

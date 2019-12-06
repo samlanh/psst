@@ -2666,27 +2666,34 @@ function getAllgroupStudyNotPass($action=null){
   
   function resultScan($student_id){
   	$rs = $this->getStudentinfoById($student_id);
-  	$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/no-profile.png";
+  	$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+  	$photo = $baseUrl."/images/no-profile.png";
   	if (!empty($rs["photo"])){
   		if (file_exists(PUBLIC_PATH."/images/photo/".$rs["photo"])){
-  			$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/photo/".$rs["photo"];
+  			$photo = $baseUrl."/images/photo/".$rs["photo"];
   		}
   	}
   	$string='';
-  	$string.='<div class="col-md-4 col-sm-4 col-xs-12 blg-profile">
+  	$string.='
+  	<div class="bg-border-top"></div>
+	<div class="bg-border-bottom"></div>
+  	<div class="col-md-4 col-sm-4 col-xs-12 blg-profile">
 				<div class="profile-img">
 					<img class="profile-img" src="'.$photo.'">
 				</div>
 				<div class="student-name">
 					<ul class="info-list">
-						<li><span class="value-sheet">'.$rs["stu_code"].'</span></li>
+						<li><span class="value-sheet stu-code">'.$rs["stu_code"].'</span></li>
 						<li><span class="value-sheet">'.$rs["stu_khname"].'</span></li>
 						<li><span class="value-sheet">'.$rs["last_name"]." ".$rs["stu_enname"].'</span></li>
 					</ul>
 				</div>
 			</div>';
   	$string.='
-  			<div class="col-md-8 col-sm-8 col-xs-12 blg-information">
+  				<div class="col-md-1 col-sm-1 col-xs-12 blg-border-images">
+					<img class="border-img" src="'.$baseUrl.'/images/horizontal-line-border.png">
+				</div>
+  			<div class="col-md-7 col-sm-7 col-xs-12 blg-information">
 				<div class="study-info">
 					<ul class="study-info-list">
 						<li><span class="value-title">ACADEMIC</span>: <span class="value-sheet">2019-2020(N-Full Day)</span></li>

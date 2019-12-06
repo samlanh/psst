@@ -8,11 +8,13 @@
 	$schoolNameEn= "ELT Berkeley International Academy";
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html class="dj_quirks dj_webkit dj_chrome dj_contentbox">
 	<head>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/<?php echo $them_style."/".$them_style?>.css" />
 		<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
+		<script src="https://code.createjs.com/easeljs-0.7.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	    <!-- Meta, title, CSS, favicons, etc. -->
@@ -40,7 +42,13 @@
 	   
 	   <title><?php echo $schoolName;?></title>
 	   <style>
-		body{width: 99.6%;}
+		body{width: 99.6%; height: 100%;}
+		.container.body{
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			overflow: hidden;
+		}
 		.fullside {
 		    width: 98%;
 		    height: 30px;
@@ -63,11 +71,13 @@
 		
 			section.to-header {
 			    background: #050533;
-			    display: block;
+			   
 			    width: 100%;
 			    padding: 10px;
 			    position: relative;
 			    color: #ffff;
+				
+				
 			}
 			.to-header .blg-logo{
 				text-align: center;
@@ -87,28 +97,75 @@
 			    display: block;
 			}
 section.mid-content {
-    border: solid 5px #0582bd;
+    border: solid 5px #32aaba;
+   
 }
-			section.mid-content .blg-search {
-			    text-align: center;
-			    padding: 10px 0;
-			    background: #fff;
-			}
+
+section.mid-content .blg-border-images {
+    height: 400px;
+    text-align: center;
+}
+section.mid-content .blg-border-images img.border-img {
+    height: 100%;
+}
+
+
+section.mid-content .blg-search {
+	text-align: center;
+	padding: 10px 0;
+	background: #fff;
+}
 .blg-display-rs {
-    padding: 20px 0;
-    border-top: 5px #0582bd solid;
+    /* padding: 20px 0; */
+    border-top: 5px #32aaba solid;
+	position:relative;
+				
+}.blg-display-rs .bg-border-top,
+.blg-display-rs .bg-border-bottom{
+	position: absolute;
+    height: 100%;
+    width: 100%;
+	
+	background: url("<?php echo $base_url."images/border-shap.png"?>") no-repeat;
+	background-size: 150px;
+    
+}
+.blg-display-rs .bg-border-bottom{
+	-webkit-transform: rotate(180deg);
+    -moz-transform: rotate(120deg);
+    background-position: right;
+    top: 120px;;
+}
+.blg-display-rs .bg-border-top{
+    top: 0;
+    background-position-x: right;
+}
+		
+.blg-display-rs .bg-watermak{
+	opacity: 0.07;
+    position: absolute;
+    display: block;
+    background: url(/elt/trunk/public/images/branch_201812171545012822.png) no-repeat;
+    background-size: 40%;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+	top: 0;
+	z-index: -1;
 }
 .blg-display-rs div.blg-profile {
     text-align: center;
 }
 .blg-display-rs div.profile-img {
     padding-top: 20px;
+	
 }
 div.blg-profile img.profile-img {
-        border: solid 4px #050533;
-    border-radius: 8px;
+    border: solid 4px #3391aa;
+    border-radius: 3px;
     width: 165px;
     height: 190px;
+    box-shadow: 3px 1px 5px #cac5c5;
 }
 .student-name ul.info-list {
     list-style: none;
@@ -116,23 +173,36 @@ div.blg-profile img.profile-img {
     margin: 0;
 }
 .student-name ul.info-list li {
-    line-height: 24px;
+    line-height: 35px;
+    font-size: 26px;
+    color: #336887;
+    text-shadow: 0px 1px 1px #332f2f;
 }
 .student-name ul.info-list li span.value-sheet {
     font-weight: 600;
-    font-style: italic;
+    /*font-style: italic;*/
     text-transform: uppercase;
 }
+.student-name ul.info-list span.value-sheet.stu-code {
+    color: #ffb100;
+}
 .blg-display-rs div.blg-information {
-    border-left: 5px solid #0582bd;
-    min-height: 370px;
+    /* border-left: 5px solid #32aaba; */
+    min-height: 400px;
     font-size: 18px;
     padding: 10px;
+    position: relative;
+
 }
 .blg-information ul.study-info-list {
     list-style: none;
     padding: 0;
     margin: 0;
+	
+	line-height: 32px;
+    font-size: 22px;
+    color: #336887;
+    text-shadow: 0px 1px 1px #332f2f;
 }
 .blg-information ul.study-info-list li span.value-title {
     min-width: 161px;
@@ -145,14 +215,26 @@ div.blg-profile img.profile-img {
 }
 
 section.footer-blog {
-    background: #050533;
-    display: block;
+    background: #336887;
+    
     width: 100%;
     padding: 10px;
     position: relative;
     color: #ffff;
 	text-align: center;
-	min-height: 80px
+	
+	display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 100px;
+}
+section.footer-blog .blg-footer-info {
+    position: absolute;
+    z-index: 12;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0;
 }
 section.footer-blog span.school-title {
     margin: 0;
@@ -161,6 +243,47 @@ section.footer-blog span.school-title {
     font-size: 24px;
     color: inherit;
     display: block;
+}
+
+
+#projector {
+  position: absolute; 
+  top: 0px;
+  left: 0px;
+  width:100%;
+  height:100%;
+} 
+
+.center-div {
+	width:580px;
+    height:374px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left: -290px;
+    margin-top:  -187px;
+}
+
+#preloaderDiv
+{
+	position:absolute;
+	left:50%;
+    top:50%;
+    margin-left: -27px;
+    margin-top:  -27px;
+}
+
+
+
+#date2014
+{
+	position:absolute;
+	padding-left: 210px;
+	padding-top:15px;
+	opacity:0;
+	top:303px;
+	left:0;
+    filter: alpha(opacity=0);
 }
 	   </style>
 	</head>
@@ -199,19 +322,28 @@ section.footer-blog span.school-title {
 					             </div>
 							</div>
 							<div id="blg-result" class="blg-display-rs">
+								<div class="bg-border-top"></div>
+								<div class="bg-border-bottom"></div>
+								
+								
 								<div class="col-md-4 col-sm-4 col-xs-12 blg-profile">
 									<div class="profile-img">
 										<img class="profile-img" src="/elt/trunk/public/images/no-profile.png">
 									</div>
 									<div class="student-name">
 										<ul class="info-list">
-											<li><span class="value-sheet">ELTKH0022</span></li>
+											<li><span class="value-sheet stu-code">ELTKH0022</span></li>
 											<li><span class="value-sheet">ជាង ខារ៉ូលីន</span></li>
 											<li><span class="value-sheet">Cheang Carolyn</span></li>
 										</ul>
 									</div>
 								</div>
-								<div class="col-md-8 col-sm-8 col-xs-12 blg-information">
+								<div class="col-md-1 col-sm-1 col-xs-12 blg-border-images">
+									<img class="border-img" src="/elt/trunk/public/images/horizontal-line-border.png">
+								</div>
+								<div class="col-md-7 col-sm-7 col-xs-12 blg-information">
+									
+									<div class="bg-watermak"></div>
 									<div class="study-info">
 										<ul class="study-info-list">
 											<li><span class="value-title">ACADEMIC</span>: <span class="value-sheet">2019-2020(N-Full Day)</span></li>
@@ -230,10 +362,11 @@ section.footer-blog span.school-title {
 			<section class="footer-blog">
 				<div class="row">
 					<div class="container">
-						<div class="col-md-12 col-sm-12 col-xs-12 blg-title">
+						<div class="col-md-12 col-sm-12 col-xs-12 blg-footer-info">
 							<span class="school-title"><i class="fa fa-check-circle" aria-hidden="true"></i> បានមកដល់សាលា</span>
 						</div>
 						<div class="clearfix"></div>
+						<canvas id="projector">Your browser does not support the Canvas element.</canvas>
 					</div>
 				</div>
 			</section>
@@ -291,6 +424,221 @@ section.footer-blog span.school-title {
 		function HideloadingBlock(){
 		  document.getElementsByClassName("overlay")[0].style.display="none";
 		}
+		
+		////////////////////////// PARTICLE ENGINE ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+var ParticleEngine = (function() {
+	'use strict';
+
+	function ParticleEngine(canvas_id) {
+		// enforces new
+		if (!(this instanceof ParticleEngine)) {
+			return new ParticleEngine(args);
+		}
+		
+		var _ParticleEngine = this;
+
+		this.canvas_id = canvas_id;
+		this.stage = new createjs.Stage(canvas_id);
+		this.totalWidth = this.canvasWidth = document.getElementById(canvas_id).width = document.getElementById(canvas_id).offsetWidth;
+		this.totalHeight = this.canvasHeight = document.getElementById(canvas_id).height = document.getElementById(canvas_id).offsetHeight;
+		this.compositeStyle = "lighter";
+
+		this.particleSettings = [{id:"small", num:300, fromX:0, toX:this.totalWidth, ballwidth:3, alphamax:0.4, areaHeight:.5, color:"#0cdbf3", fill:false}, 
+								{id:"medium", num:100, fromX:0, toX:this.totalWidth,  ballwidth:8, alphamax:0.3, areaHeight:1, color:"#6fd2f3", fill:true}, 
+								{id:"large", num:10, fromX:0, toX:this.totalWidth, ballwidth:30,  alphamax:0.2, areaHeight:1, color:"#93e9f3", fill:true}];
+		this.particleArray = [];
+		this.lights = [{ellipseWidth:400, ellipseHeight:100, alpha:0.6, offsetX:0, offsetY:0, color:"#6ac6e8"}, 
+						{ellipseWidth:350, ellipseHeight:250, alpha:0.3, offsetX:-50, offsetY:0, color:"#54d5e8"}, 
+						{ellipseWidth:100, ellipseHeight:80, alpha:0.2, offsetX:80, offsetY:-50, color:"#2ae8d8"}];
+
+		this.stage.compositeOperation = _ParticleEngine.compositeStyle;
+
+
+		function drawBgLight()
+		{
+			var light;
+			var bounds;
+			var blurFilter;
+			for (var i = 0, len = _ParticleEngine.lights.length; i < len; i++) {				
+				light = new createjs.Shape();
+				light.graphics.beginFill(_ParticleEngine.lights[i].color).drawEllipse(0, 0, _ParticleEngine.lights[i].ellipseWidth, _ParticleEngine.lights[i].ellipseHeight);
+				light.regX = _ParticleEngine.lights[i].ellipseWidth/2;
+				light.regY = _ParticleEngine.lights[i].ellipseHeight/2; 
+				light.y = light.initY = _ParticleEngine.totalHeight/2 + _ParticleEngine.lights[i].offsetY;
+				light.x = light.initX =_ParticleEngine.totalWidth/2 + _ParticleEngine.lights[i].offsetX;
+
+				blurFilter = new createjs.BlurFilter(_ParticleEngine.lights[i].ellipseWidth, _ParticleEngine.lights[i].ellipseHeight, 1);
+				bounds = blurFilter.getBounds();
+				light.filters = [blurFilter];
+				light.cache(bounds.x-_ParticleEngine.lights[i].ellipseWidth/2, bounds.y-_ParticleEngine.lights[i].ellipseHeight/2, bounds.width*2, bounds.height*2);
+				light.alpha = _ParticleEngine.lights[i].alpha;
+
+				light.compositeOperation = "screen";
+				_ParticleEngine.stage.addChildAt(light, 0);
+
+				_ParticleEngine.lights[i].elem = light;
+			}
+
+			TweenMax.fromTo(_ParticleEngine.lights[0].elem, 10, {scaleX:1.5, x:_ParticleEngine.lights[0].elem.initX, y:_ParticleEngine.lights[0].elem.initY},{yoyo:true, repeat:-1, ease:Power1.easeInOut, scaleX:2, scaleY:0.7});
+			TweenMax.fromTo(_ParticleEngine.lights[1].elem, 12, { x:_ParticleEngine.lights[1].elem.initX, y:_ParticleEngine.lights[1].elem.initY},{delay:5, yoyo:true, repeat:-1, ease:Power1.easeInOut, scaleY:2, scaleX:2, y:_ParticleEngine.totalHeight/2-50, x:_ParticleEngine.totalWidth/2+100});
+			TweenMax.fromTo(_ParticleEngine.lights[2].elem, 8, { x:_ParticleEngine.lights[2].elem.initX, y:_ParticleEngine.lights[2].elem.initY},{delay:2, yoyo:true, repeat:-1, ease:Power1.easeInOut, scaleY:1.5, scaleX:1.5, y:_ParticleEngine.totalHeight/2, x:_ParticleEngine.totalWidth/2-200});
+		}
+		
+		var blurFilter;
+		function drawParticles(){
+
+			for (var i = 0, len = _ParticleEngine.particleSettings.length; i < len; i++) {
+				var ball = _ParticleEngine.particleSettings[i];
+
+				var circle;
+				for (var s = 0; s < ball.num; s++ )
+				{
+					circle = new createjs.Shape();
+					if(ball.fill){
+						circle.graphics.beginFill(ball.color).drawCircle(0, 0, ball.ballwidth);
+						blurFilter = new createjs.BlurFilter(ball.ballwidth/2, ball.ballwidth/2, 1);
+						circle.filters = [blurFilter];
+						var bounds = blurFilter.getBounds();
+						circle.cache(-50+bounds.x, -50+bounds.y, 100+bounds.width, 100+bounds.height);
+					}else{
+						circle.graphics.beginStroke(ball.color).setStrokeStyle(1).drawCircle(0, 0, ball.ballwidth);
+					}
+					
+					circle.alpha = range(0, 0.1);
+					circle.alphaMax = ball.alphamax;
+					circle.distance = ball.ballwidth * 2;
+					circle.ballwidth = ball.ballwidth;
+					circle.flag = ball.id;
+					_ParticleEngine.applySettings(circle, ball.fromX, ball.toX, ball.areaHeight);
+					circle.speed = range(2, 10);
+					circle.y = circle.initY;
+					circle.x = circle.initX;
+					circle.scaleX = circle.scaleY = range(0.3, 1);
+
+					_ParticleEngine.stage.addChild(circle);
+					
+
+					animateBall(circle);
+
+					_ParticleEngine.particleArray.push(circle);
+				}
+			}	
+		}
+
+		this.applySettings = function(circle, positionX, totalWidth, areaHeight)
+		{
+			circle.speed = range(1, 3);
+			circle.initY = weightedRange(0, _ParticleEngine.totalHeight , 1, [_ParticleEngine.totalHeight * (2-areaHeight/2)/4, _ParticleEngine.totalHeight*(2+areaHeight/2)/4], 0.8 );
+			circle.initX = weightedRange(positionX, totalWidth, 1, [positionX+ ((totalWidth-positionX))/4, positionX+ ((totalWidth-positionX)) * 3/4], 0.6);
+		}
+
+		function animateBall(ball)
+		{
+			var scale = range(0.3, 1);
+			var xpos = range(ball.initX - ball.distance, ball.initX + ball.distance);
+			var ypos = range(ball.initY - ball.distance, ball.initY + ball.distance);
+			var speed = ball.speed;
+			TweenMax.to(ball, speed, {scaleX:scale, scaleY:scale, x:xpos, y:ypos, onComplete:animateBall, onCompleteParams:[ball], ease:Cubic.easeInOut});	
+			TweenMax.to(ball, speed/2, {alpha:range(0.1, ball.alphaMax), onComplete:fadeout, onCompleteParams:[ball, speed]});	
+		}	
+
+		function fadeout(ball, speed)
+		{
+			ball.speed = range(2, 10);
+			TweenMax.to(ball, speed/2, {alpha:0 });
+		}
+
+		drawBgLight();
+		drawParticles();
+	}
+
+	ParticleEngine.prototype.render = function()
+	{
+		this.stage.update();
+	}
+
+	ParticleEngine.prototype.resize = function()
+	{
+		this.totalWidth = this.canvasWidth = document.getElementById(this.canvas_id).width = document.getElementById(this.canvas_id).offsetWidth;
+		this.totalHeight = this.canvasHeight = document.getElementById(this.canvas_id).height = document.getElementById(this.canvas_id).offsetHeight;
+		this.render();
+
+		for (var i= 0, length = this.particleArray.length; i < length; i++)
+		{
+			this.applySettings(this.particleArray[i], 0, this.totalWidth, this.particleArray[i].areaHeight);
+		}
+
+		for (var j = 0, len = this.lights.length; j < len; j++) {
+			this.lights[j].elem.initY = this.totalHeight/2 + this.lights[j].offsetY;
+			this.lights[j].elem.initX =this.totalWidth/2 + this.lights[j].offsetX;
+			TweenMax.to(this.lights[j].elem, .5, {x:this.lights[j].elem.initX, y:this.lights[j].elem.initY});			
+		}
+	}
+
+	return ParticleEngine;
+
+}());
+
+
+////////////////////////UTILS//////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+function range(min, max)
+{
+	return min + (max - min) * Math.random();
+}
+		
+function round(num, precision)
+{
+   var decimal = Math.pow(10, precision);
+   return Math.round(decimal* num) / decimal;
+}
+
+function weightedRange(to, from, decimalPlaces, weightedRange, weightStrength)
+{
+	if (typeof from === "undefined" || from === null) { 
+	    from = 0; 
+	}
+	if (typeof decimalPlaces === "undefined" || decimalPlaces === null) { 
+	    decimalPlaces = 0; 
+	}
+	if (typeof weightedRange === "undefined" || weightedRange === null) { 
+	    weightedRange = 0; 
+	}
+	if (typeof weightStrength === "undefined" || weightStrength === null) { 
+	    weightStrength = 0; 
+	}
+
+   var ret
+   if(to == from){return(to);}
+ 
+   if(weightedRange && Math.random()<=weightStrength){
+	  ret = round( Math.random()*(weightedRange[1]-weightedRange[0]) + weightedRange[0], decimalPlaces )
+   }else{
+	  ret = round( Math.random()*(to-from)+from, decimalPlaces )
+   }
+   return(ret);
+}
+
+///////////////// RUN CODE //////////////////////////
+//////////////////////////////////////////////////////
+
+var particles
+(function(){
+	particles = new ParticleEngine('projector');
+	createjs.Ticker.addEventListener("tick", updateCanvas);
+	window.addEventListener('resize', resizeCanvas, false);
+
+	function updateCanvas(){
+		particles.render();
+	}
+
+	function resizeCanvas(){
+		particles.resize();
+	}
+}());
 		</script>
 	</body>
 </html>

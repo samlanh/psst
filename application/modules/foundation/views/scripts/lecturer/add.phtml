@@ -543,6 +543,27 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			dijit.byId('province_id').attr('value',12)
 			oldRow();
 	});
+	require(["dojo/ready"], function(ready){
+		new dijit.form.FilteringSelect({
+			name: "nationality",
+			id: "nationality",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+				popupNation(1);
+		    }
+		}, "nationality");
+		new dijit.form.FilteringSelect({
+			name: "nation",
+			id: "nation",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+				popupNation(2);
+		    }
+		}, "nation");
+		setSelected();
+	});
 </script>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("ADD_NATION")?>'" style="width:500px;" id="popup_nation" >
@@ -795,27 +816,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 	    readURL(this);
 	});
 	
-	require(["dojo/ready"], function(ready){
-		new dijit.form.FilteringSelect({
-			name: "nationality",
-			id: "nationality",
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(1);
-		    }
-			}, "nationality");
-		new dijit.form.FilteringSelect({
-			name: "nation",
-			id: "nation",
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(2);
-		    }
-			}, "nation");
-			setSelected();
-	});
+	
 	function popupNation(key){
 		dijit.byId("save_nation").attr("disabled",false);
 		if(key==1){

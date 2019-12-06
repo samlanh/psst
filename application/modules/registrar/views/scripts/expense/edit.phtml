@@ -384,7 +384,7 @@ table.collape tbody td {
 		dijit.byId('price_'+col).attr('value',"<?php echo $row['price'];?>");
 		dijit.byId('qty_'+col).attr('value',"<?php echo $row['qty'];?>");
 		dijit.byId('total_'+col).attr('value',"<?php echo $row['total'];?>");
-		dijit.byId('remark_'+col).attr('value',"<?php echo $row['description'];?>");
+		dijit.byId('remark_'+col).attr('value','<?php echo addslashes($row["description"]);?>');
 		
 		<?php }}?>
 	}

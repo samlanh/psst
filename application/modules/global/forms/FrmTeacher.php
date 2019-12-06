@@ -221,7 +221,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$id=  new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
  			$id->setValue($_data['id']);
- 			$_nation->setValue($_data['nation']);
 			$code->setValue($_data['teacher_code']);
 			$_enname->setValue($_data['teacher_name_en']);
 			$_khname->setValue($_data['teacher_name_kh']);
@@ -231,6 +230,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_teacher->setValue($_data['teacher_type']);
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);
+			$_nation->setValue($_data['nation']);
 			$dob->setValue($_data['dob']);
 			$pob->setValue($_data['pob']);
 			$_email->setValue($_data['email']);

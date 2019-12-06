@@ -1611,7 +1611,8 @@ function getAllgroupStudyNotPass($action=null){
   				 
   		);
   		$this->_name="rms_view";
-  		return $this->insert($arr);
+  		$id = $this->insert($arr);
+  		return $key_code;
   	}catch (Exception $e){
   		echo '<script>alert('."$e".');</script>';
   	}

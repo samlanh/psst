@@ -825,7 +825,7 @@ function addRow() {
 			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
 			template+='<option value="0"></option>';	
 			<?php if(!empty($this->rsdiscount))foreach($this->rsdiscount as $rsdis){?>
-				template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo $rsdis['dis_name'];?></option>';
+				template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo addslashes($rsdis['dis_name']);?></option>';
 			<?php }?>
 			template+='</select></td>';
 			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';

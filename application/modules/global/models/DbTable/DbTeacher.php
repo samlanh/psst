@@ -273,8 +273,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT t.*,
-			(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=t.department LIMIT 1) AS dept_name
+		$sql = "SELECT 
+					t.*,
+				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=t.department LIMIT 1) AS dept_name
 		FROM rms_teacher AS t WHERE t.id =$id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getAccessPermission('t.branch_id');
@@ -282,6 +283,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;
+		//(select key_code from rms_view as v where v.type=21 and ) as nation,
 	}
 	function getAllDegree(){
 		$db=$this->getAdapter();

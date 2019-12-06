@@ -689,6 +689,28 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			initialize();
 			checkStaffType();
 	});
+	
+	require(["dojo/ready"], function(ready){
+		new dijit.form.FilteringSelect({
+			name: "nationality",
+			id: "nationality",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+				popupNation(1);
+		    }
+		}, "nationality");
+		new dijit.form.FilteringSelect({
+			name: "nation",
+			id: "nation",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+				popupNation(2);
+		    }
+		}, "nation");
+	});
+	
 </script>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("ADD_NATION")?>'" style="width:500px;" id="popup_nation" >
@@ -947,26 +969,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	$("#photo").change(function(){
 	    readURL(this);
 	});
-	require(["dojo/ready"], function(ready){
-		new dijit.form.FilteringSelect({
-			name: "nationality",
-			id: "nationality",
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(1);
-		    }
-			}, "nationality");
-		new dijit.form.FilteringSelect({
-			name: "nation",
-			id: "nation",
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(2);
-		    }
-			}, "nation");
-	});
+	
 	function popupNation(key){
 		dijit.byId("save_nation").attr("disabled",false);
 		if(key==1){

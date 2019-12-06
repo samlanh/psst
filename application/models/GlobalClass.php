@@ -226,7 +226,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$options .= '<option Value="0">'.$tr->translate("SELECT_CATEGORY").'</option>';
 			$options .= '<option Value="-1">'.$tr->translate("ADD_NEW").'</option>';
 			if(!empty($rows))foreach($rows as $value){
-				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
+				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars(addslashes($value['name'])).'</option>';
 			}			
 			return $options;
 		}

@@ -191,7 +191,7 @@ table.history-record tbody tr td {
 	                 </div>
 	               <div class="form-group">
 		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
+							<tr id="head-title" class="head-td" align="right" style="white-space:nowrap;"></tr>
 						</table>
 						<input type="hidden" name="identity" id="identity"  />
 		         	 </div>
@@ -376,6 +376,7 @@ function addRow(){
 		temp+='<th ><?php echo $tr->translate("PHONE");?></th>';
 		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
+		temp+='<th ><?php echo $tr->translate("EDIT");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -389,6 +390,7 @@ function addRow(){
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+tel_stu+'" type="hidden">'+tel_stu+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+		template+='<td width="4%"align="center"><img style="width:15px;" onclick="editStudent('+col+');deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/edit.jpg"></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -417,26 +419,28 @@ function initailize(){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>';
-		temp+='<th><?php echo $tr->translate("First Name");?></th>';
 		temp+='<th><?php echo $tr->translate("Last Name");?></th>';
+		temp+='<th><?php echo $tr->translate("First Name");?></th>';
 		temp+='<th><?php echo $tr->translate("SEX");?></th>';
 		temp+='<th><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
 		temp+='<th ><?php echo $tr->translate("PHONE");?></th>';
 		temp+='<th><?php echo $tr->translate("DEGREE");?></th>';
 		temp+='<th><?php echo $tr->translate("GRADE");?></th>';
+		temp+='<th ><?php echo $tr->translate("EDIT");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
 		template+='<td width="4%"align="center"><?php if ($rs['customer_type']==3){?><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"><?php }?></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="kh_name_'+col+'" id="kh_name_'+col+'" value="<?php echo $rs['stu_khname'];?>" type="hidden"><?php echo $rs['stu_khname'];?>&nbsp;</td>';	
-		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="<?php echo $rs['stu_enname'];?>" type="hidden"><?php echo $rs['stu_enname'];?>&nbsp;</td>';	
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("Last Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="last_name_'+col+'" id="last_name_'+col+'" value="<?php echo $rs['last_name'];?>" type="hidden"><?php echo $rs['last_name'];?>&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="<?php echo $rs['stu_enname'];?>" type="hidden"><?php echo $rs['stu_enname'];?>&nbsp;</td>';	
 		template+='<td>&nbsp;<input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="gender_'+col+'" id="gender_'+col+'" value="<?php echo $rs['sex'];?>" type="hidden"><?php echo $rs['sextitle'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="<?php echo $rs['age'];?>" type="hidden"><?php echo $rs['age'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+'<?php echo $rs['tel'];?>'+'" type="hidden">'+'<?php echo $rs['tel'];?>'+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="<?php echo $rs['crm_degree'];?>" type="hidden"><?php echo $rs['degree_title'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="<?php echo $rs['crm_grade'];?>" type="hidden"><?php echo $rs['grade_title'];?>&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="detailid'+col+'" id="detailid'+col+'" value="<?php echo $rs['stu_id'];?>" type="hidden"></td>';
+		template+='<td width="4%"align="center"><?php if ($rs['customer_type']==3){?><img style="width:15px;" onclick="editStudent('+col+');deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/edit.jpg"><?php }?></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -460,4 +464,24 @@ function deleteRecord(index) {
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
 }
+function editStudent(index) {
+	kh_name = dijit.byId('kh_name_'+index).get("value");
+	last_name = dijit.byId('last_name_'+index).get("value");
+	first_name = dijit.byId('first_name_'+index).get("value");
+	gender = dijit.byId('gender_'+index).get("value");
+	age = dijit.byId('age_'+index).get("value");
+	tel = dijit.byId('tel_'+index).get("value");
+	degree = dijit.byId('degree_'+index).get("value");
+	grade = dijit.byId('grade_'+index).get("value");
+	
+	dijit.byId("kh_name_stu").attr("value",kh_name);
+	dijit.byId("last_name_stu").attr("value",last_name);
+	dijit.byId("first_name_stu").attr("value",first_name);
+	dijit.byId("sex_stu").attr("value",gender);
+	dijit.byId("age_stu").attr("value",age);
+	dijit.byId("tel_stu").attr("value",tel);
+	dijit.byId("degree").attr("value",degree);
+	dijit.byId("grade").attr("value",grade);
+}
+
 </script>

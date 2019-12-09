@@ -72,7 +72,12 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				s.stu_khname,
 				CONCAT(s.last_name,' ',s.stu_enname),
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
-				tel ,
+				CASE
+					WHEN primary_phone = 1 THEN s.tel
+					WHEN primary_phone = 2 THEN s.father_phone
+					WHEN primary_phone = 3 THEN s.mother_phone
+					ELSE s.guardian_tel
+				END as tel,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
@@ -214,7 +219,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	public function addStudent($_data){
 			$_db = $this->getAdapter();
 			$_db->beginTransaction();
-		
 			$id = $this->getStudentExist($_data['name_kh'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
 			if(!empty($id)){
 				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
@@ -263,6 +267,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
 						'tel'			=>$_data['phone'],
+						'primary_phone'	=>$_data['primary_phone'],
 						'pob'			=>$_data['pob'],
 						'home_num'		=>$_data['home_note'],
 						'street_num'	=>$_data['way_note'],
@@ -451,6 +456,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
 					'tel'			=>$_data['phone'],
+					'primary_phone'	=>$_data['primary_phone'],
 					'pob'			=>$_data['pob'],
 					'home_num'		=>$_data['home_note'],
 					'street_num'	=>$_data['way_note'],

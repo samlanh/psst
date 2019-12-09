@@ -129,39 +129,55 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}
-// 	function rptStudentpaymentdetailAction(){
-// 		try{
-// 			if($this->getRequest()->isPost()){
-// 				$search=$this->getRequest()->getPost();
-// 			}
-// 			else{
-// 				$search = array(
-// 						'title' =>'',
-// 						'branch_id'=>'',
-// 						'study_year' =>-1,
-// 						'degree'=>-1,
-// 						'grade_all' =>-1,
-// 						'user'=>-1,
-// 						'start_date'=> date('Y-m-d'),
-// 						'end_date'=>date('Y-m-d'),
-// 						'service'=>'',
-// 						'session'=>'',
-// 						'payment_by'=>-1,
-// 				);
-// 			}
-// 			$db = new Allreport_Model_DbTable_DbRptPayment();
-// 			$this->view->row = $db->getStudentPaymentDetail($search,1);
-// 			$this->view->rs = $db->getStudentPayment($search);
-// 			$this->view->search = $search;
-// 		}catch(Exception $e){
-// 			Application_Form_FrmMessage::message("Application Error");
-// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 		}
-// 		$form=new Registrar_Form_FrmSearchInfor();
-// 		$form->FrmSearchRegister();
-// 		Application_Model_Decorator::removeAllDecorator($form);
-// 		$this->view->form_search=$form;		
-// 	}
+	function rptStudentpaymentdetailAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'txtsearch' =>'',
+						'branch_id' =>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+						'service_type'=>'',
+						'payment_by'=>-1,
+						'study_year'=>-1,
+						'item'=>'',
+						'service'=>'',
+						'group'=>'',
+						'degree'=>-1,
+						'grade_all'=>-1,
+						'user'=>-1,
+						'session'=>-1,
+						'pay_term'=>'',
+				);
+			}
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$this->view->row_detail = $db->getStudentPaymentDetail($search,1);
+			
+			$this->view->row = $db->getStudentPayment($search);
+			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
+			$this->view->rsincome = $db->getAllOtherIncome($search);
+			
+			$this->view->search = $search;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error");
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->rs_type = $_db->getAllItems();
+	}
 	function rptStudentpaymenthistoryAction(){
 		try{
 			if($this->getRequest()->isPost()){

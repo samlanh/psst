@@ -176,7 +176,7 @@
 	                 </div>
 	               <div class="form-group">
 		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
+							<tr id="head-title" class="head-td" align="right" style="white-space:nowrap;"></tr>
 						</table>
 						<input type="hidden" name="identity" id="identity"  />
 		         	 </div>
@@ -408,6 +408,7 @@ function addRow() {
 		temp+='<th ><?php echo $tr->translate("PHONE");?></th>';
 		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
+		temp+='<th ><?php echo $tr->translate("EDIT");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
@@ -421,6 +422,7 @@ function addRow() {
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+tel_stu+'" type="hidden">'+tel_stu+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+		template+='<td width="4%"align="center"><img style="width:15px;" onclick="editStudent('+col+');deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/edit.jpg"></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -449,5 +451,24 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
+}
+function editStudent(index) {
+	kh_name = dijit.byId('kh_name_'+index).get("value");
+	last_name = dijit.byId('last_name_'+index).get("value");
+	first_name = dijit.byId('first_name_'+index).get("value");
+	gender = dijit.byId('gender_'+index).get("value");
+	age = dijit.byId('age_'+index).get("value");
+	tel = dijit.byId('tel_'+index).get("value");
+	degree = dijit.byId('degree_'+index).get("value");
+	grade = dijit.byId('grade_'+index).get("value");
+	
+	dijit.byId("kh_name_stu").attr("value",kh_name);
+	dijit.byId("last_name_stu").attr("value",last_name);
+	dijit.byId("first_name_stu").attr("value",first_name);
+	dijit.byId("sex_stu").attr("value",gender);
+	dijit.byId("age_stu").attr("value",age);
+	dijit.byId("tel_stu").attr("value",tel);
+	dijit.byId("degree").attr("value",degree);
+	dijit.byId("grade").attr("value",grade);
 }
 </script>

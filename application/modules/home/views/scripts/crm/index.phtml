@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate("CRM"));
 	$frm_items= $this->frm_crm;
 	$urlContact = $this->baseUrl()."/home/crm/contact/id/";
+	$urlEdit = $this->baseUrl()."/home/crm/edit/id/";
 	$urlTest = $this->baseUrl()."/registrar/studenttest/makecrmtest/id/";
 	$urlTestPayment = $this->baseUrl()."/registrar/studenttest/testpayment/id/";
 ?>
@@ -67,9 +68,13 @@ dojo.require("dijit.form.DateTextBox");
 				if(key=="contact"){
 					url='<?php echo $urlContact;?>';
 				}
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}
 				gotoAction();
 			},
 			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit"},
 				"contact": {name: "<?php echo $tr->translate("CREATE_CONTACT_HISTORY");?>", icon: "fa-phone"},
 			}
 		});

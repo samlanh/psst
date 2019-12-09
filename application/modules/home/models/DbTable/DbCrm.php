@@ -185,7 +185,6 @@
 	public function updateCrm($_data){
 		$_db= $this->getAdapter();
 		try{
-				
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$prev = "";
 			if (!empty($_data['prev_concern'])){
@@ -261,7 +260,7 @@
 						$array = array(
 							'branch_id'	  => $_data['branch_id'],
 							'crm_id'	  => $id,
-							'customer_type'=>3,
+							//'customer_type'=>3,
 							'stu_khname'=> $_data['kh_name_'.$i],
 							'stu_enname'=> $_data['first_name_'.$i],
 							'last_name'=> $_data['last_name_'.$i],
@@ -305,14 +304,12 @@
 							'guardian_tel'=> $_data['tel'],
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
-								
-							);
+						);
 						$this->_name="rms_student";
 						$this->insert($array);
 					}
 				}
 			}
-			
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

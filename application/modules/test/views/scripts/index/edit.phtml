@@ -539,11 +539,27 @@ a.btn.btn-primary.btn-xs {
 	</div>
 </div>		
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:415px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
-		<div id="my_camera"></div>
-		<button type="button" onClick="take_snapshot()" class="btn btn-success btn-sm">ចុចថត</button>
+	<div data-dojo-type="dijit.Dialog" style="width:320px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
+		<div class="app">
+		    <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
+		    <video id="camera-stream"></video>
+		    <img id="snap">
+		
+		    <p id="error-message"></p>
+		
+		    <div class="controls">
+		      <a href="#" id="delete-photo" title="Re-take Photo" class="disabled"><i class="fa fa-refresh"></i></a>
+		      <a href="#" id="take-photo" title="Take Photo"><i class="fa fa-camera"></i></a>
+		      <a href="#" id="close-photo" class="disabled" onClick='dijit.byId("showcamera").hide();'><i class="fa fa-times"></i></a>
+		      <!-- <a href="#" id="download-photo" download="selfie.png" title="Save Photo" class="disabled"><i class="fa fa-download"></i></a>  --> 
+		    </div>
+		
+		    <!-- Hidden canvas element. Used for taking snapshot of video. -->
+		    <canvas></canvas>
+			
+		  </div>
 	</div>
-</div>
+</div>	
 <script type="text/javascript">
 
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -1030,16 +1046,12 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		dijit.byId("remark_"+col).attr("value",'<?php echo $rs_detail['note']?>');
 	<?php }?>
 	}
-	Webcam.set({
-		width: 320,
-		height: 240,
-		image_format: 'jpeg',
-		jpeg_quality: 90
-	});
 	function setup() {
+		// dijit.byId("showcamera").show();	
+		// Webcam.reset();
+		// Webcam.attach('#my_camera' );
 		dijit.byId("showcamera").show();	
-		Webcam.reset();
-		Webcam.attach('#my_camera' );
+		startWebCam();
 	}
 	var shutter = new Audio();
 	shutter.autoplay = false;
@@ -1064,3 +1076,5 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 	    $("#uploaded").val(image_return);
 	}
 </script>
+<script src="<?php echo $this->baseUrl()."/webcam/scripttakephoto.js"?>"></script>
+<link href="<?php echo $this->baseUrl();?>/webcam/scripttakephoto.css" rel="stylesheet">

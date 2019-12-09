@@ -228,16 +228,16 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['user']>0){
     		$where .= " and sp.user_id = ".$search['user'];
     	}
-//     	if($order_no==1){
-//     		$order=" ORDER BY payment_id DESC ";
-//     	}elseif($order_no==2){//used order by student 
-//     		$order=" ORDER BY sp.student_id DESC ";
-//     	}else{
-//     		$order="  ";
-//     	}
+    	if($order_no==1){
+    		$order=" ORDER BY sp.branch_id ASC, sp.id ASC ";
+    	}elseif($order_no==2){//used order by student 
+    		$order=" ORDER BY sp.branch_id ASC, sp.student_id DESC ";
+    	}else{
+    		$order=" ORDER BY sp.branch_id ASC, d.items_id ";
+    	}
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$where.= $_db->getAccessPermission('sp.branch_id');
-    	$order=" ORDER BY d.items_id ";
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     

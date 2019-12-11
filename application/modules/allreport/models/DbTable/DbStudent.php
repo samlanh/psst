@@ -145,7 +145,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$epl = explode(",", $search['prev_concern']);
 			$array = array();
 			foreach ($epl as $ss){
-				$key = $this->checkPrevConcern($ss);
+				$key = $this->checkPrevConcern($ss,22);
 				$array[$key] = $key;
 			}
 			
@@ -161,9 +161,10 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		return $resutl;
 	}
-	function checkPrevConcern($value){
+	function checkPrevConcern($value,$type){
 		$db = $this->getAdapter();
-		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=22  LIMIT 1";
+// 		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=22  LIMIT 1";
+		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=$type  LIMIT 1";
 		return $db->fetchOne($sql);
 	}
 	function getAllCRMDailyContact($search = ''){
@@ -190,6 +191,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				cc.feedback,
 				cc.next_contact,
 				cc.user_contact,
+				cc.feedback_type,
 				(SELECT CONCAT(first_name) FROM rms_users WHERE cc.user_contact=id LIMIT 1 ) AS user_contact,
 				(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 				(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=rms_users.id LIMIT 1 ) AS userby,
@@ -244,7 +246,29 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('c.branch_id');
 		$where.=" ORDER BY cc.id DESC";
-		return $db->fetchAll($sql.$where);
+		$row = $db->fetchAll($sql.$where);
+		
+		$resutl = $row;
+		if (!empty($search['feedback_type'])){
+			$resutl = array();
+			$epl = explode(",", $search['feedback_type']);
+			$array = array();
+			foreach ($epl as $ss){
+				$key = $this->checkPrevConcern($ss,34);
+				$array[$key] = $key;
+			}
+				
+			if (!empty($row)) foreach ($row as $key => $rs){
+				$exp = explode(",", $rs['feedback_type']);
+				foreach ($exp as $ss){
+					if (in_array($ss, $array)) {
+						$resutl[$key] = $rs;
+						break;
+					}
+				}
+			}
+		}
+		return $resutl;
 	}
 	
 	function getAllStudentTest($search=null){

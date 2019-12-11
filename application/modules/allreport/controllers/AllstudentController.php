@@ -623,6 +623,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'status_search' => -1,
 					'start_date'=> date('Y-m-d'),
 					'end_date'=>date('Y-m-d'),
+					'feedback_type'  => "",
 				);
 			}
 				
@@ -642,6 +643,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm->FrmAddCRM(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_crm = $frm;
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$pevconcer = $_dbgb->getViewByType(34);
+		$this->view->feedback_type = $pevconcer;
 	}
 	function rptStudenttestAction(){
 		try{

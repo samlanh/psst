@@ -162,6 +162,10 @@ class Home_CrmController extends Zend_Controller_Action
 		$frm->FrmAddCRMContactHistory($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_crmhistory = $frm;
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$pevconcer = $_dbgb->getViewByType(34);
+		$this->view->feedback_type = $pevconcer;
 	}
 	
 	function getcrmbybranchAction(){

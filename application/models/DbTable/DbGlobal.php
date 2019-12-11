@@ -1009,7 +1009,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql .=' AND school_option IN ('.$user['schoolOption'].')';
 	  	}
 	  	
-	  	if(!empty($school_option)){
+	  	if(!empty($school_option)){//Extra Condiciton From Create Test Exam : /test/index/createtestexam?type=3&id=31
 	  		$sql.=" AND school_option = $school_option ";
 	  	}
 	  	

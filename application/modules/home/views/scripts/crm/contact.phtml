@@ -56,6 +56,12 @@ table.history-record tbody tr td {
 		                	<?php echo $frm_items->getElement("id");?>
 		                </div>
 		             </div>
+		             <div class="form-group">
+		               <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("Previous Concern");?> </label>
+		               <div class="col-md-9 col-sm-9 col-xs-12">
+		                	<input value="" type="text" id="e15" name="feedback_type" style="width: 100%">
+		                </div>
+		             </div>
 					<div class="form-group">
 		                <label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FEEDBACK");?> </label>
 		                <div class="col-md-9 col-sm-9 col-xs-12">
@@ -132,3 +138,24 @@ table.history-record tbody tr td {
 		</form>
     </div>
 </div>
+ <link href="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.css" /> 
+ <script src="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.js"></script>
+  <?php 
+ $tags="";
+ if (!empty($this->feedback_type)) foreach ($this->feedback_type as $rs){
+ 	if (empty($tags)){
+ 		$tags = '"'.$rs['name'].'"';
+ 	}else{
+ 		if (!empty($rs['name'])){
+ 			$tags=$tags.',"'.$rs['name'].'"';
+ 		}
+ 	}
+ }
+?>
+<script type="text/javascript">
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("FEEDBACK_OPTION");?>",allowClear: true});
+	});
+});
+</script>

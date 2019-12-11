@@ -105,8 +105,8 @@
 			if (!empty($_data['prev_concern'])){
 				$epl = explode(",", $_data['prev_concern']);
 				foreach ($epl as $ss){
-					$key = $this->checkPrevConcern($ss);
-					if (empty($key)){
+					$key_code = $this->checkPrevConcern($ss);
+					if (empty($key_code)){
 						$key_code = $_dbgb->getLastKeycodeByType(22);
 						$_arrview=array(
 								'name_en'	  => $ss,
@@ -118,7 +118,7 @@
 						$this->_name="rms_view";
 						$key = $this->insert($_arrview);
 					}
-					if (empty($prev)){$prev=$key;}else{$prev=$prev.",".$key;}
+					if (empty($prev)){$prev=$key_code;}else{$prev=$prev.",".$key_code;}
 				}
 			}
 			
@@ -190,8 +190,8 @@
 			if (!empty($_data['prev_concern'])){
 				$epl = explode(",", $_data['prev_concern']);
 				foreach ($epl as $ss){
-					$key = $this->checkPrevConcern($ss);
-					if (empty($key)){
+					$key_code = $this->checkPrevConcern($ss);
+					if (empty($key_code)){
 						$key_code = $_dbgb->getLastKeycodeByType(22);
 						$_arrview=array(
 								'name_en'	  => $ss,
@@ -203,7 +203,7 @@
 						$this->_name="rms_view";
 						$key = $this->insert($_arrview);
 					}
-					if (empty($prev)){$prev=$key;}else{$prev=$prev.",".$key;}
+					if (empty($prev)){$prev=$key_code;}else{$prev=$prev.",".$key_code;}
 				}
 			}
 			
@@ -382,15 +382,48 @@
 		FROM `rms_crm_history_contact` AS c WHERE crm_id = $crm_id ORDER BY c.id DESC";
 		return $db->fetchAll($sql);
 	}
+	
+	function checkFeedBackConcer($value){
+		$db = $this->getAdapter();
+		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=34  LIMIT 1";
+		return $db->fetchOne($sql);
+	}
 	public function addCrmContactHistory($_data){
 		$_db= $this->getAdapter();
 		try{
 	
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$prev = "";
+			if (!empty($_data['feedback_type'])){
+				$epl = explode(",", $_data['feedback_type']);
+				foreach ($epl as $ss){
+					$key = $this->checkFeedBackConcer($ss);
+					if (empty($key)){
+						$key_code = $_dbgb->getLastKeycodeByType(34);
+						$_arrview=array(
+								'name_en'	  => $ss,
+								'name_kh' => $ss,
+								'key_code'=> $key_code,
+								'type'=>34,
+								'note'=>"For Contact FeedBack Option",
+								'status'=> 1,
+						);
+						$this->_name="rms_view";
+						$key = $this->insert($_arrview);
+					}
+					if (empty($prev)){
+						$prev=$key_code;
+					}else{$prev=$prev.",".$key_code;
+					}
+				}
+			}
+			
 			$_arr=array(
 					'crm_id'	  => $_data['id'],
 					'contact_date' => $_data['contact_date'],
 					'feedback'=> $_data['feedback'],
 					'proccess'=> $_data['proccess'],
+					'feedback_type'=> $prev,
 					'next_contact'=> $_data['next_contact'],
 					'user_contact'=> $_data['user_contact'],
 					'create_date' => date("Y-m-d H:i:s"),
@@ -432,5 +465,11 @@
 			$sql.=" AND c.branch_id=$branch_id";
 		}
 		return $db->fetchAll($sql);
+	}
+	
+	function getTitleViewKeyCode($value,$type){
+		$db = $this->getAdapter();
+		$sql="SELECT v.name_kh  FROM `rms_view` AS v WHERE v.key_code = $value AND v.type=$type  LIMIT 1";
+		return $db->fetchOne($sql);
 	}
 }

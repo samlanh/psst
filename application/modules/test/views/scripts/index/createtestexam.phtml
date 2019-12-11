@@ -336,11 +336,14 @@ function getAllAcademicByBranch(){
 		return false;
 	}
 	degree = "";//dijit.byId('degree').get('value'); 
+	school_option="<?php echo $this->type ?>";
 	dojo.xhrPost({
 		url: url_getacademic,
 		content:{
-			'branch_id':branch_id,'degree':degree
-			},
+			'branch_id':branch_id,
+			'degree':degree,
+			'school_option':school_option,
+		},
 		handleAs:"json",
 		load: function(data) {
 			academic_store  = getDataStorefromJSON('id','name', data);

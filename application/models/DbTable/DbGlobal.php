@@ -979,38 +979,43 @@ function getAllgroupStudyNotPass($action=null){
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
-   function getAllYearByBranch($branch=1,$degree=null,$showall=null){
-   	$db = $this->getAdapter();
-   	$branch_id = $this->getAccessPermission();
-   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
-   	CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years
-   	FROM rms_tuitionfee WHERE 
-   	 type=1 AND `status`=1
-   	$branch_id ";
-   	$sql.=" AND branch_id=$branch ";
-   	
-   	if (!empty($showall)){
-   		$sql.="";
-   	}else{
-   		$sql.=" AND is_finished=0   ";
-   	}
-   	
-   	if (!empty($degree)){
-   		$dbdeg = new Global_Model_DbTable_DbItems();
-   		$type=1; //Degree
-   		$row =$dbdeg->getDegreeById($degree,$type);
-   		if (!empty($row['schoolOption'])){
-   			$sql.=" AND school_option IN (".$row['schoolOption'].") ";
-   		}
-   	}
-   	$user = $this->getUserInfo();
-  	$level = $user['level'];
-  	if ($level!=1){
-  		$sql .=' AND school_option IN ('.$user['schoolOption'].')';
-  	}
-   	$sql.=" GROUP BY from_academic,to_academic,generation";
-   	$order=' ORDER BY id DESC';
-   	return $db->fetchAll($sql.$order);
+   function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){
+	   	$db = $this->getAdapter();
+	   	$branch_id = $this->getAccessPermission();
+	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
+	   	CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years
+	   	FROM rms_tuitionfee WHERE 
+	   	 type=1 AND `status`=1
+	   	$branch_id ";
+	   	$sql.=" AND branch_id=$branch ";
+	   	
+	   	if (!empty($showall)){
+	   		$sql.="";
+	   	}else{
+	   		$sql.=" AND is_finished=0   ";
+	   	}
+	   	
+	   	if (!empty($degree)){
+	   		$dbdeg = new Global_Model_DbTable_DbItems();
+	   		$type=1; //Degree
+	   		$row =$dbdeg->getDegreeById($degree,$type);
+	   		if (!empty($row['schoolOption'])){
+	   			$sql.=" AND school_option IN (".$row['schoolOption'].") ";
+	   		}
+	   	}
+	   	$user = $this->getUserInfo();
+	  	$level = $user['level'];
+	  	if ($level!=1){
+	  		$sql .=' AND school_option IN ('.$user['schoolOption'].')';
+	  	}
+	  	
+	  	if(!empty($school_option)){
+	  		$sql.=" AND school_option = $school_option ";
+	  	}
+	  	
+	   	$sql.=" GROUP BY from_academic,to_academic,generation";
+	   	$order=' ORDER BY id DESC';
+	   	return $db->fetchAll($sql.$order);
    }
    function getAllGrade(){
 	  return $this->getAllGradeStudy();

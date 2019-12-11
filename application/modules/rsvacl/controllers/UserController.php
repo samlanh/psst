@@ -152,4 +152,29 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			exit();
 		}
 	}
+	
+	public function changepasswordAction()
+	{
+		// action body
+		if ($this->getRequest()->isPost()){
+			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+			$pass_data=$this->getRequest()->getPost();
+			if ($pass_data['password'] == $session_user->pwd){
+				 
+				$db_user = new Application_Model_DbTable_DbUsers();
+				try {
+					$db_user->changePassword($pass_data['new_password'], $session_user->user_id);
+					$session_user->unlock();
+					$session_user->pwd=$pass_data['new_password'];
+					$session_user->lock();
+					Application_Form_FrmMessage::Sucessfull('ការផ្លាស់ប្តូរដោយជោគជ័យ', self::REDIRECT_URL."/user");
+				} catch (Exception $e) {
+					Application_Form_FrmMessage::message('ការផ្លាស់ប្តូរត្រូវបរាជ័យ');
+				}
+			}
+			else{
+				Application_Form_FrmMessage::message('ការផ្លាស់ប្តូរត្រូវបរាជ័យ');
+			}
+		}
+	}
 }

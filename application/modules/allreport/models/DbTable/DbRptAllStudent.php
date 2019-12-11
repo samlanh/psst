@@ -81,6 +81,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
     		$s_where[]=" tel LIKE '%{$s_search}%'";
     		$s_where[]=" father_phone LIKE '%{$s_search}%'";
     		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
@@ -153,11 +156,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	sex,
     	CONCAT(stu_khname) as name_kh,
     	CONCAT(stu_enname," ",last_name) as name_en,
-   
+   			
     	tel,email,stu_code,home_num,street_num,tel,
     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=father_job LIMIT 1) AS fa_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=mother_job LIMIT 1) AS mo_job,
-		
+		photo,
     	is_subspend,
     	degree as dept,
     	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
@@ -185,8 +188,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" last_name LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$s_where[]=" tel LIKE '%{$s_search}%'";
     		$s_where[]=" father_phone LIKE '%{$s_search}%'";
     		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
@@ -216,6 +224,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
     	}
+    	echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){
@@ -247,6 +256,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$s_where[]=" tel LIKE '%{$s_search}%'";
     		$s_where[]=" father_phone LIKE '%{$s_search}%'";
     		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
@@ -530,6 +544,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]=" last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$s_where[] = " last_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
@@ -819,6 +838,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
+    		$s_where[]=" last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$s_where[] = " (SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
@@ -1339,6 +1363,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$s_where[]=" tel LIKE '%{$s_search}%'";
     		$s_where[]=" father_phone LIKE '%{$s_search}%'";
     		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
@@ -1465,6 +1493,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" s.stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" s.stu_enname LIKE '%{$s_search}%'";
     		$s_where[]=" s.last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$s_where[]=" s.tel LIKE '%{$s_search}%'";
     		$s_where[]=" s.father_phone LIKE '%{$s_search}%'";
     		$s_where[]=" s.mother_phone LIKE '%{$s_search}%'";
@@ -1729,6 +1761,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" st.last_name LIKE '%{$s_search}%'";
     		$s_where[]=" st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" st.stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){
@@ -1840,6 +1876,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$s_where[]=" st.last_name LIKE '%{$s_search}%'";
     	$s_where[]=" st.stu_khname LIKE '%{$s_search}%'";
     	$s_where[]=" st.stu_code LIKE '%{$s_search}%'";
+    	$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    	$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
+    	$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
+    	$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     	$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){

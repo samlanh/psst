@@ -182,7 +182,7 @@
 							<?php $image = $this->baseUrl().'/images/no-profile.png';
 								if(!empty($row['photo'])){
 									if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-									$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+										$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 									}
 								}?>
 							<tr align="center" class="hover" >

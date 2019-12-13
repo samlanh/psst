@@ -49,7 +49,8 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		$_startdate->setAttribs(array('dojoType'=>$this->date,
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				));
+				'placeholder'=>$this->tr->translate("START_DATE"),
+			));
 		$_date = $request->getParam("start_date");
 
 		if(empty($_date)){
@@ -59,8 +60,13 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		
 		
 		$_enddate = new Zend_Dojo_Form_Element_DateTextBox('end_date');
-		$_enddate->setAttribs(array('dojoType'=>$this->date,'required'=>'true','class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				));
+		$_enddate->setAttribs(array(
+				'dojoType'=>$this->date,
+				'required'=>'true',
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'placeholder'=>$this->tr->translate("END_DATE"),
+			));
 		$_date = $request->getParam("end_date");
 		
 		if(empty($_date)){
@@ -92,11 +98,14 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		}
 		
 		
-		$this->addElements(array($_btn_search,
-		$_status_search,
-		$_title,
-		$_user_id,
-		$_startdate,$_enddate));
+		$this->addElements(array(
+				$_btn_search,
+				$_status_search,
+				$_title,
+				$_user_id,
+				$_startdate,
+				$_enddate)
+			);
 		return $this;
 	}
 	

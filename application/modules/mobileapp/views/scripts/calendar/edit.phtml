@@ -22,8 +22,6 @@ if (!empty($dept)) {
 		<form  id='add_techer' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-                dijit.byId("save_new").set("disabled",true);
-				dijit.byId("save_close").set("disabled",true);
 				return true;
 			} else {
 				return false;

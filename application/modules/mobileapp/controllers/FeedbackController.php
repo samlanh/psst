@@ -37,8 +37,8 @@ class Mobileapp_FeedbackController extends Zend_Controller_Action
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	
-		$frm = new Application_Form_FrmSearch();
-		$frm = $frm->FrmSearch();
+		$form = new Application_Form_FrmSearch();
+		$frm = $form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
     }

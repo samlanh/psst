@@ -224,7 +224,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
     	}
-    	echo $sql.$where.$order;
+    	//echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){

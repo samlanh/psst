@@ -106,7 +106,7 @@
 							<tr>
 								<td align="center" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
-									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
+									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_MISTAKE");?></strong><br />
 									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
 										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 										<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
@@ -142,11 +142,11 @@
 							</tr>
 							
 							<?php } $i++;?>
-							<tr class="style">
+							<tr class="style hover">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
-								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
-								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_enname'];?>&nbsp;</td>
+								<td align="center"><a style=" text-decoration: none;color:#000" href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp;<?php echo $rs['stu_code'];?></a>&nbsp;</td>
+								<td style="white-space:nowrap;"><a style=" text-decoration: none;color:#000" href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp;<?php echo $rs['stu_khname'];?></a>&nbsp;</td>
+								<td style="white-space:nowrap;"><a style=" text-decoration: none;color:#000" href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp;<?php echo $rs['last_name']." ".$rs['stu_enname'];?></a>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php $s=0; $m=0;$b=0;$o=0; for($k=0;$k<$amount_day;$k++){?>
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>

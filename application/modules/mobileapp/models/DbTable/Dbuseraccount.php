@@ -8,8 +8,101 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	
 	}
-	
-public function getStudentById($id){
+	public function getAllStudent($search){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$change_pwd = $tr->translate("CHANGE_PASSWORD");
+		$db = $this->getAdapter();
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+		}else{ // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+		}
+		
+		$sql = "SELECT  s.stu_id,
+		(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+		s.stu_code,
+		s.stu_khname,
+		CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name,
+		(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
+		tel ,
+		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+		
+		(SELECT $degree FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+		(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		
+		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
+		(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
+		'".$change_pwd."',
+		(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status,
+		(SELECT COUNT(t.`token`) FROM `mobile_mobile_token` AS t WHERE t.`stu_id` = s.`stu_id` LIMIT 1 ) AS number_mobile
+		FROM rms_student AS s  WHERE  s.is_subspend=0 ";
+		
+		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		
+		$orderby = " ORDER BY stu_id DESC ";
+		if(empty($search)){
+			return $db->fetchAll($sql.$orderby);
+		}
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[]=" stu_code LIKE '%{$s_search}%'";
+			$s_where[]=" stu_khname LIKE '%{$s_search}%'";
+			$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+			
+			$s_where[]=" REPLACE(CONCAT(last_name,' ',stu_enname),' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(last_name,' ',stu_enname) LIKE '%{$s_search}%'";
+			
+			$s_where[]=" tel LIKE '%{$s_search}%'";
+			$s_where[]=" father_phone LIKE '%{$s_search}%'";
+			$s_where[]=" mother_phone LIKE '%{$s_search}%'";
+			$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
+				
+			$s_where[]=" father_enname LIKE '%{$s_search}%'";
+			$s_where[]=" mother_enname LIKE '%{$s_search}%'";
+			$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
+			$s_where[]=" remark LIKE '%{$s_search}%'";
+			$s_where[]=" home_num LIKE '%{$s_search}%'";
+			$s_where[]=" street_num LIKE '%{$s_search}%'";
+			$s_where[]=" village_name LIKE '%{$s_search}%'";
+			$s_where[]=" commune_name LIKE '%{$s_search}%'";
+			$s_where[]=" district_name LIKE '%{$s_search}%'";
+				
+			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['study_year'])){
+			$where.=" AND s.academic_year=".$search['study_year'];
+		}
+		if(!empty($search['degree'])){
+			$where.=" AND s.degree=".$search['degree'];
+		}
+		if(!empty($search['grade_all'])){
+			$where.=" AND s.grade=".$search['grade_all'];
+		}
+		if(!empty($search['session'])){
+			$where.=" AND s.session=".$search['session'];
+		}
+		if($search['status'] != ""){
+			$where.=" AND s.status=".$search['status'];
+		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission();
+		//echo $sql.$where.$orderby;
+		return $db->fetchAll($sql.$where.$orderby);
+	}
+	public function getStudentById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT *,(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -17,7 +110,7 @@ public function getStudentById($id){
 		return $db->fetchRow($sql);
 	}
 	
-public function updateStudent($_data){
+	public function updateStudent($_data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		try{	
 			$_arr=array(

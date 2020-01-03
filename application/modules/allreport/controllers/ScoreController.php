@@ -794,6 +794,52 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
+    
+    function rptHonorStudentAction(){
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search=array(
+    				'title' 		=>'',
+    				'branch_id'		=>'',
+    				'degree'		=>'',
+    				'study_year' 	=>'',
+    				'grade_all' 	=>'',
+    				'group'			=>'',
+    				'student'			=>'',
+    				'start_date'	=> date('Y-m-d'),
+    				'end_date'		=> date('Y-m-d'),
+    		);
+    	}
+    
+    	$this->view->row = $db->getHonorStudent($search);
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$this->view->search=$search;
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
+    function honorCertificateAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$result = $db->getHonorCertificateById($id);
+    	if (empty($result)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-student-letterofpraise");
+    		exit();
+    	}
+    	$this->view->rs = $result;
+    }
+    
     function rptStudentCetificateAction(){
     	$db = new Allreport_Model_DbTable_DbRptAllStudent();
     	if($this->getRequest()->isPost()){
@@ -834,6 +880,23 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$id = empty($id)?0:$id;
     	$db = new Allreport_Model_DbTable_DbRptAllStudent();
     	$result = $db->getStudenLetterofpraiseById($id);
+    	if (empty($result)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-student-letterofpraise");
+    		exit();
+    	}
+    	$this->view->rs = $result;
+    }
+    function certificateLetterofpraisenewAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$stu_id=$this->getRequest()->getParam("stu_id");
+    	$rank=$this->getRequest()->getParam("rank");
+    	$score_id = empty($id)?0:$id;
+    	$stu_id = empty($stu_id)?0:$stu_id;
+    	$rank = empty($rank)?0:$rank;
+    	$this->view->rank = $rank;
+    	
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$result = $db->getStudenLetterofpraiseNewById($score_id,$stu_id);
     	if (empty($result)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-student-letterofpraise");
     		exit();

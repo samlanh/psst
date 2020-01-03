@@ -197,11 +197,9 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 				'dojoType'=>"dijit.form.DateTextBox",
 				'value'=>'now',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'placeholder'=>$this->tr->translate("START_DATE"),
 				'class'=>'fullside',));
 		$_date = $request->getParam("start_date");
-		if(empty($_date)){
-			$_date = date("Y-m-d");
-		}
 		$start_date->setValue($_date);
 		 
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
@@ -209,6 +207,7 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$end_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("END_DATE"),
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>false));
 		$_date = $request->getParam("end_date");

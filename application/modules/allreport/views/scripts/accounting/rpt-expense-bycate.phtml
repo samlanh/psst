@@ -25,10 +25,10 @@
        			<?php echo $frm->getElement("user");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<input constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->search['start_date'];?>" type="text">
+       			<?php echo $frm->getElement("start_date");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<input constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->search['end_date'];?>" type="text">
+       			<?php echo $frm->getElement("end_date");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -55,13 +55,19 @@
 					<td colspan="3"></td>
 				</tr>
 				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
 					<td width="15%" align="center"></td>
 					<td width="70%" align="center">
 						<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'khmer os muol light';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
-						<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'khmer os muol light';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+						<span style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td width="15%" align="center">
 					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">

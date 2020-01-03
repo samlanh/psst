@@ -101,7 +101,7 @@ table.tb-footer tr.style-head {
 				</td>
 				<td align="center" width="70%">
 					<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_SUMMARY_STOCK');?></span> 
-					<div style="font-size:12px;"><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';}?><?php echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
+					<div style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></div>
 				</td>
 				<td width="15%" align="center">
 				</td>

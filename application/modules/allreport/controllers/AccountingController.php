@@ -814,8 +814,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     		echo $e->getMessage();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-		$frm = new Registrar_Form_FrmSearchexpense();
-    	$frm = $frm->AdvanceSearch();
+		$form = new Registrar_Form_FrmSearchexpense();
+    	$frm = $form->AdvanceSearch();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_search = $frm;
 	}

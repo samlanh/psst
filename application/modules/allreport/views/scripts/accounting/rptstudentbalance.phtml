@@ -50,17 +50,22 @@
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line"><td colspan="3"></td>
+				<tr class="line">
+					<td colspan="3"></td>
+				</tr>
+				<tr >
+					<td colspan="3">&nbsp;</td>
 				</tr>
 				<tr>
 					<td width="15%" align="center">
 					</td>
 					<td  align="center" width="70%">
 						<strong style="font-weight:normal; font-size: 14px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('STUDENT_BALANCE_REPORT')?></strong><br />
-						<span style="font-weight:normal;font-size: 12px; ">From &nbsp;<?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;To&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
+						<span style="color:#2e3192; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span><br/>
 					</td>
 					<td width="15%" align="center"></td>
 				</tr>
+				
 				<tr>
 					<td colspan="3">
 						<table cellpadding="5"​ style="border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Times New Roman,Khmer OS Battambang;"  border="1" >

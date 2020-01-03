@@ -48,9 +48,6 @@ table.tb-footer tr.style-head {
              </div>
              <div class="form-group">
                     <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("start_date");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
                     	<?php echo $frm->getElement("end_date");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
@@ -69,7 +66,7 @@ table.tb-footer tr.style-head {
 					<td width="15%" align="center"></td>
 					<td width="70%"  align="center">
 						<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
-						<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></span>
+						<span style="color:#4839bd; font-size: 13px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center"></td>
 				</tr>

@@ -1907,6 +1907,107 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    $order=" ORDER BY c.id DESC";
 	    return $db->fetchAll($sql.$where.$order);
     }
+    function getHonorStudent($search){
+    	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$month='month_en';
+		$label="name_en";
+		$branch = "branch_nameen";
+		if ($currentLang==1){
+			$month='month_kh';
+			$label="name_kh";
+			$branch = "branch_namekh";
+		}
+		$sql = "select 
+					id,
+					(select $branch from rms_branch where br_id = h.branch_id limit 1) as branch_name,
+					s.stu_code,
+					CONCAT(COALESCE(stu_khname,''),'-',COALESCE(last_name,''),' ',COALESCE(stu_enname,'')) as stu_name,
+					(select $month from rms_month where rms_month.id = month limit 1) as for_month,
+					year,
+					teacher_name,
+					teacher_position,
+					admin_name,
+					admin_position,
+					code,
+					h.create_date,
+					(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE h.user_id=rms_users.id LIMIT 1 ) AS user
+				from 
+					rms_honor as h,
+					rms_student as s
+				where 
+					h.status = 1
+					and h.student_id = s.stu_id
+			";
+		$where = ' ';
+		$from_date =(empty($search['start_date']))? '1': "h.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "h.create_date <= '".$search['end_date']." 23:59:59'";
+		$where .= " AND ".$from_date." AND ".$to_date;
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+			$s_where[] = " CONCAT(s.last_name,' ',s.stu_enname) LIKE '%{$s_search}%'";
+			$s_where[] = " CONCAT(s.stu_enname,' ',s.last_name) LIKE '%{$s_search}%'";
+			$s_where[] = " h.code LIKE '%{$s_search}%'";
+			$s_where[] = " h.year LIKE '%{$s_search}%'";
+			$s_where[] = " h.teacher_name LIKE '%{$s_search}%'";
+			$s_where[] = " h.teacher_position LIKE '%{$s_search}%'";
+			$s_where[] = " h.admin_name LIKE '%{$s_search}%'";
+			$s_where[] = " h.admin_position LIKE '%{$s_search}%'";
+			$where .=' AND '.implode(' OR ',$s_where);
+		}
+		if(!empty($search['branch_id'])){
+			$where.=" AND h.branch_id=".$search['branch_id'];
+		}
+		if(!empty($search['for_month'])){
+			$where.=" AND h.month=".$search['for_month'];
+		}
+		$order = " ORDER BY h.id DESC ";
+// 		echo $sql.$where.$order;
+		return $db->fetchAll($sql.$where.$order);	
+    }
+    function getHonorCertificateById($id){
+    	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
+    	$month='month_en';
+    	$label="name_en";
+    	$branch = "branch_nameen";
+    	if ($currentLang==1){
+    		$month='month_kh';
+    		$label="name_kh";
+    		$branch = "branch_namekh";
+    	}
+    	$sql = "select
+			    	id,
+			    	(select $branch from rms_branch where br_id = h.branch_id limit 1) as branch_name,
+			    	s.stu_code,
+			    	last_name,
+			    	stu_enname,
+			    	CONCAT(COALESCE(stu_khname,''),'-',COALESCE(last_name,''),' ',COALESCE(stu_enname,'')) as stu_name,
+			    	(select month_en from rms_month where rms_month.id = month limit 1) as for_month,
+			    	year,
+			    	teacher_name,
+			    	teacher_position,
+			    	admin_name,
+			    	admin_position,
+			    	code,
+			    	h.create_date,
+			    	(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE h.user_id=rms_users.id LIMIT 1 ) AS user
+			    from
+			    	rms_honor as h,
+			    	rms_student as s
+			    where
+			    	h.status = 1
+			    	and h.student_id = s.stu_id
+			    	and h.id=$id
+			    limit 1
+	    	";
+    	return $db->fetchRow($sql);
+    }
     
     function getStudenLetterofpraiseById($id){
     	$db = $this->getAdapter();
@@ -1957,5 +2058,41 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
    		$sql="select key_code as id , $label as name from rms_view where type=5 and status=1 order by key_code ASC";
    		return $db->fetchAll($sql);
    	} 
-    
+   	function getStudenLetterofpraiseNewById($score_id,$stu_id){
+   		$db = $this->getAdapter();
+   		 
+   		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$currentLang = $dbp->currentlang();
+   		$colunmname='name_en';
+   		$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
+   		if ($currentLang==1){
+   			$colunmname='name_kh';
+   			$stu_name="st.stu_khname";
+   		}
+   		$sql="SELECT sc.*,
+		   		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sc.branch_id LIMIT 1) AS branch_name,
+		   		g.group_code as grade,
+		   		(SELECT CONCAT(from_academic,'-',to_academic,' (',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year) AS academic_year,
+		   		st.stu_enname,
+		   		st.last_name,
+		   		st.stu_khname,
+		   		st.stu_code,
+		   		st.dob,
+		   		st.photo,
+		   		$stu_name AS stu_name,
+		   		(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+   			FROM
+		   		rms_score as sc,
+		   		rms_group as g,
+		   		rms_student as st
+   			WHERE
+				sc.group_id = g.id
+				and sc.id = $score_id			
+		   		AND st.stu_id = $stu_id 
+   		";
+   		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$sql.=$dbp->getAccessPermission("sc.branch_id");
+   		$sql." LIMIT 1 ";
+   		return $db->fetchRow($sql);
+   	}
 }

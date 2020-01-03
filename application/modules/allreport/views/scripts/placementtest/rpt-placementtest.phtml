@@ -110,6 +110,7 @@ table.tb-footer tr.style-head {
 					</td>
 					<td width="44%" align="center">
 						<span style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("DAILY_PLACEMENT_TEST");?></span>
+						<div style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></div>
 					</td>
 					<td align="right" width="28%"></td>
 				</tr>

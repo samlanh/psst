@@ -121,6 +121,10 @@
 			.border-bottom-none{
     			border-bottom: #fff solid 1px;
 			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}	
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
@@ -190,7 +194,7 @@
 								</td>
 							</tr>
 							<?php } $i++;?>
-							<tr class="style hover" style="line-height: 20px;">
+							<tr class="style style-rowdata hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id'];?>','<?php echo $rs['stu_id'];?>','<?php echo $i;?>','<?php echo $rs['group_id'];?>','<?php echo $rs['exam_type'];?>','<?php echo $rs['for_semester'];?>','<?php echo $rs['for_month_id'];?>');return false;" style="line-height: 20px;">
 								<td align="center"><?php echo $i;?></td>
 							    <td align="center" style="white-space:nowrap;">
 							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&group_id=".$rs['group_id']."&exam_type=".$rs['exam_type']."&for_semester=".$rs['for_semester']."&for_month=".$rs['for_month_id'];?>"><?php echo $rs['stu_code'];?></a>
@@ -224,6 +228,7 @@
 								</td>
 								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
+								<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i;?>" id="rank<?php echo $i;?>" value="<?php echo $old_rank;?>" />
 								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
 								<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade']);?>
 								</td>
@@ -293,7 +298,55 @@
 		<?php }?>
 		</div>
 </div>
+<?php 
+	$urlOutStanding = $this->baseUrl()."/allreport/score/certificate-letterofpraisenew/id/";
+	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/rpt-monthly-score-student/";
+?>
 <script type="text/javascript">
+
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="letterofprais"){
+					url='<?php echo $urlOutStanding;?>';
+					gotoAction();
+				}else if(key=="transcript"){
+					url='<?php echo $urlOutStandingNoPhoto;?>';
+					gotoAction1();
+				}
+				
+			},
+			items: {
+				"letterofprais": {name: "<?php echo $tr->translate("HORNOR_CERTIFICATE");?>", icon: "fa-file",},
+				"transcript": {name: "<?php echo $tr->translate("TRANSCRIPT");?>", icon: "fa-file",},
+			}
+		});
+	});
+	function setrowdata(id,stu_id,index,group,exam_type,for_semester,for_month){
+		rank = dijit.byId('rank'+index).get("value");
+		row = id;
+		student_id = stu_id;
+		group_id = group;
+		type_exam = exam_type;
+		semester = for_semester;
+		month = for_month;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row+'/stu_id/'+student_id+'/rank/'+rank);
+	}
+	function gotoAction1(){
+		window.open(url+'stu_id/'+student_id+'/group_id/'+group_id+'/exam_type/'+type_exam+'/for_semester/'+semester+'/for_month/'+month);
+	}
+	
+	
+	
+
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -366,8 +419,8 @@
 			}
 		});
 	}
-url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-function getAllGroupByBranch(){
+	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
+	function getAllGroupByBranch(){
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
@@ -403,4 +456,7 @@ function getAllGroupByBranch(){
 			$("#month").css("display", "none");
 		}
 	}
+	
+	
+	
 </script>

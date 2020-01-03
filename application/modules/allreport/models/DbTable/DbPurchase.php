@@ -206,7 +206,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('sp.branch_id');
-    	echo $sql.$where;
+    	//echo $sql.$where;
     	return $db->fetchAll($sql.$where);
     }
     

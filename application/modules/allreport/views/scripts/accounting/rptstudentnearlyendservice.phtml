@@ -73,9 +73,12 @@
 					<td width="15%" align="center"></td>
 					<td align="center" width="70%">
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'khmer os muol light';"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></strong><br />
-						<span style="font-weight: bold;font-size: 12px;">&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span>
+						<span​​ style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 					</td>
 					<td width="15%" align="center">&nbsp;</td>					
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<style>
 					table{ page-break-inside:auto;font-family:Times New Roman,'Khmer OS Battambang'; }

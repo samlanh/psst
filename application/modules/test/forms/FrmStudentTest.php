@@ -437,8 +437,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'placeholder'=>$this->tr->translate("START_DATE"),
     			'class'=>'fullside',));
     	$_date = $request->getParam("start_date");
-    	if(empty($_date)){
-    	}
     	$start_date->setValue($_date);
     		
     	$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');

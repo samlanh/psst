@@ -70,6 +70,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	if(($search['degree']>0)){
      		$where.= " AND sp.degree = ".$search['degree'];
      	}
+     	if(($search['branch_id']>0)){
+     		$where.= " AND sp.branch_id = ".$search['branch_id'];
+     	}
     	if(!empty($search['adv_search'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['adv_search']));

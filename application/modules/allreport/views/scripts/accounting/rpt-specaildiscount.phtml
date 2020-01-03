@@ -56,6 +56,7 @@
 					</td>
 					<td align="center" width="50%">
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'khmer os muol light';"><?php echo $tr->translate('RPT_SPECAIL_DISCOUNT');?></strong><br >
+						<span style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td align="right" width="25%">&nbsp;</td>
 				</tr>

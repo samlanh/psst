@@ -134,6 +134,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 					AND g.stu_id = s.stu_id
 		   			AND `g`.`status` = 1 
 		   			AND g.stop_type = 0
+		   			and g.is_pass = 0
 			";
 			if (!empty($id)){
 				$sql.=' AND g.group_id='.$id;

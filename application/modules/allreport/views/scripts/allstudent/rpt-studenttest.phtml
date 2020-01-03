@@ -35,12 +35,12 @@ table.content-data thead tr.style-head {
                 </div>
                 <div class="form-group">
                		<div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" value="<?php  echo $this->search['start_date']; ?>"  type="text">
+						<?php echo $frm->getElement("start_date");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text">
+						<?php echo $frm->getElement("end_date");?>
                    </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("type_exam");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
@@ -82,11 +82,15 @@ table.content-data thead tr.style-head {
 								<td width="15%" align="center">
 								</td>
 								<td align="center"  width="70%">
-									<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></span><br />
-									<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." ".$tr->translate("TO")." ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span>
+									<strong style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></strong><br />
+									<strong​​ style="font-family: 'Times New Roman','Khmer OS Battambang';color:#4839bd; font-size: 13px;"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 								</td>
 								<td width="15%">&nbsp;</td>
 							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							
 							<tr>
 								<td colspan="3" id="exportExcel">
 										<style> 

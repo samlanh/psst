@@ -893,20 +893,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
              }
     }
     
-    public function getCustomerPaymentDeatilById($id){
-    	$db = $this->getAdapter();
-    	$sql=" SELECT
-			    	cpd.*,
-			    	(select title from rms_program_name as p where p.service_id = cpd.service_id) as service_name,
-			    	(select name_en from rms_view where type=6 and key_code = payment_term) as payment_term
-    			FROM
-			    	rms_customer_payment_detail as cpd
-    			WHERE 
-    				cpd.customer_id = $id
-    	";
-    	
-    	return $db->fetchAll($sql);
-    }
     
     
 }   

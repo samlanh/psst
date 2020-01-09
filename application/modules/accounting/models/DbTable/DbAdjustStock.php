@@ -309,48 +309,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    public function ajaxAddProduct($data){
-    	$db = $this->getAdapter();
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	$userName=$session_user->user_name;
-    	$GetUserId= $session_user->user_id;
-    	$_arr = array(
-    			'pro_name'	=>$data['product_name'],
-    			'pro_code'	=>$data['product_code'],
-    			'cat_id'	=>$data['category_id'],
-    			'pro_price'	=>$data['pro_price'],
-    			'pro_des'	=>$data['descript'],
-    			'pro_type'	=>$data['pro_type'],
-    			'status'	=>$data['p_status'],
-    			'date'		=>date("Y-m-d"),
-    			'user_id'	=>$this->getUserId()
-    	);
-    	$this->_name = "rms_product";
-    	$pro_id = $this->insert($_arr);
-    	$_arr = array(
-    			'pro_id'=>$pro_id,
-    			'brand_id'=>$data['location_id'],
-    			'pro_qty'=>0,
-    			'total_amount'=>0,
-    			'note'=>'',
-    	);
-    	$this->_name='rms_product_location';
-    	$this->insert($_arr);
-    	$array = array(
-    			'ser_cate_id'	=>$pro_id,
-    			'title'			=>$data['product_name'],
-    			'description'	=>$data['descript'],
-    			'price'			=>$data['pro_price'],
-    			'status'		=>1,
-    			'create_date'	=>date("Y-m-d H:i:s"),
-    			'user_id'		=>$this->getUserId(),
-    			'type'			=>1, // type=1 => product
-    			'pro_type'		=>$data['pro_type'], // 1=cut stock , 2=cut stock later
-    	);
-    	$this->_name='rms_program_name';
-    	$this->insert($array);
-    	return $pro_id;
-    }
+   
     
     function getProductQty($location,$pro_id){
     	$db=$this->getAdapter();

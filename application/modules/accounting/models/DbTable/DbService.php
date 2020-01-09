@@ -2,7 +2,7 @@
 class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'rms_program_name';
+  
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
@@ -51,11 +51,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	return ($this->insert($_arr));
     }
     
-    public function serviceExist($service_name,$_type){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT service_id FROM `rms_program_name` WHERE title= '".$service_name."' AND ser_cate_id=$_type";
-    	return $db->fetchRow($sql);
-    }
+   
 public function updateservice($_data){
     	$_arr=array(
 	    			'title'=>$_data['add_title'],
@@ -67,45 +63,7 @@ public function updateservice($_data){
     	$where=$this->getAdapter()->quoteInto("service_id=?", $_data["id"]);
     	$this->update($_arr, $where);
     }
-public function getServiceById($id){
-    $db = $this->getAdapter();
-    $sql = "SELECT *
-    FROM rms_program_name WHERE service_id = ".$id;
-    return $db->fetchRow($sql);
-}	
- public function getAllServiceNames($search=''){
-    	$db = $this->getAdapter();
-    	$where='';
-    	$sql = "SELECT 
-    				service_id AS id,
-    				p.title,
-			    	(SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) AS cate_name,
-			    	`description`,p.`create_date`,
-			    	(SELECT first_name FROM rms_users WHERE p.user_id=id ) AS user_name,
-			    	p.`status`
-    			FROM 
-    				`rms_program_name` AS p 
-    			WHERE 
-    				type=2 
-    				and p.title!='' ";
-    	
-    	$order=" ORDER BY service_id DESC";
-    	 
-    	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
-    	}
-	    if(!empty($search['txtsearch'])){
-	    	$s_where = array();
-	    	$s_search = addslashes(trim($search['txtsearch']));
-		 	$s_where[] = " p.title LIKE '%{$s_search}%'";
-	    	$s_where[] = " (SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) LIKE '%{$s_search}%'";
-	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
-	    }
-	    if($search['cate_name']>0){
-	    	$sql.=" AND ser_cate_id=".$search['cate_name'];
-	    }
-    	return $db->fetchAll($sql.$where.$order);
-    }
+ 
 public function AddServiceType($_data){
     	try{
     	$this->_name='rms_program_type';

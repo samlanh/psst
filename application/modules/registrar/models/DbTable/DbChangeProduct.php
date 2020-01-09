@@ -277,11 +277,7 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 
-	function getAllProduct(){
-		$db = $this->getAdapter();
-		$sql=" select service_id as id,title as name, pro_type from rms_program_name where status=1 and type=1";
-		return $db->fetchAll($sql);
-	}
+	
 	
 	function getAllStuCode(){
 		$db = $this->getAdapter();
@@ -293,12 +289,6 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql=" select stu_id as id,CONCAT(stu_enname,'-',stu_khname) as name from rms_student where status=1 and is_subspend=0";
 		return $db->fetchAll($sql);
-	}
-
-	function getProductPrice($pro_id){
-		$db = $this->getAdapter();
-		$sql=" select price,pro_type,ser_cate_id as pro_id from rms_program_name where service_id=$pro_id";
-		return $db->fetchRow($sql);
 	}
 
 }

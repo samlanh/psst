@@ -3,7 +3,6 @@ class Api_IndexController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/api/index';
 	
-	
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
@@ -11,44 +10,62 @@ class Api_IndexController extends Zend_Controller_Action
     }
     public function indexAction()
     {
-    	
-    }
-    public function paymentAction(){
-    	
-    	
     	$this->_helper->layout()->disableLayout();
-    	$search = $this->getRequest()->getParam('issearch');
-    	if(!empty($search)){
-    		$search = $this->getRequest()->getParams();
+    	$GetData = $this->getRequest()->getParams();
+    	if ($_SERVER['REQUEST_METHOD'] == "GET"){
+    		if ($GetData['url']=="profile"){
+    		}else if ($GetData['url']=="payment"){
+    			$this->payment($GetData);
+    		}else if ($GetData['url']=="schedule"){
+    		}else if ($GetData['url']=="score"){
+    		}else if ($GetData['url']=="attendance"){
+    		}else if ($GetData['url']=="evaluation"){
+//     				$this->payment($GetData);
+    		}else{
+    			echo Zend_Http_Response::responseCodeAsText(401,true);
+    		}
+    	}else if ($_SERVER['REQUEST_METHOD'] == "POST"){
+    		if($this->getRequest()->isPost()){
+    			$PostData = $this->getRequest()->getPost();
+    			if ($GetData['url']=="auth"){ // login
+    				echo $_SERVER['REQUEST_METHOD'];exit();
+    			}else{
+    				echo Zend_Http_Response::responseCodeAsText(401,true);
+    			}
+				
+			}else{
+				echo Zend_Http_Response::responseCodeAsText(405,true);
+			}
+    	}else{
+    		echo Zend_Http_Response::responseCodeAsText(405,true);
     	}
-    	else{
-    		$search = array(
-						'adv_search' =>'',
-						'branch_id'     =>0,
-						'degree'     =>'',
-						'grade_all'  =>'',
-						'session'    =>'',
-						'all_payment'=>'all',
-						'student_payment'=>'',
-						'student_test'=>'',
-						'income'    =>'',
-						'stu_code'  =>'',
-						'stu_name'  =>'',
-						'expense'   =>'',
-						'change_product'=>'',
-						'customer_payment'=>'',
-						'clear_balance'=>'',
-						'start_date'=> '',
-						'end_date'  => date('Y-m-d'),
-				);
+    }
+    public function payment($search){
+    	try{
+	    	$search['stu_id'] = 46;
+	    	$db = new Api_Model_DbTable_DbApi();
+	    	$row = $db->getDailyReport($search);
+	    	if ($row['status']){
+	    		$arrResult = array(
+	    				"result" => $row['value'],
+	    				"code" => "SUCCESS",
+	    		);
+	    	}else{
+	    		$arrResult = array(
+	    				"code" => "ERR_",
+	    				"message" => $row['value'],
+	    		);
+	    	}
+	    	print_r(Zend_Json::encode($arrResult));
+	    	exit();
+    	}catch(Exception $e){
+    		$arrResult = array(
+	    			"code" => "ERR_",
+    				"message" => $e->getMessage(),
+	    	);
+	    	print_r(Zend_Json::encode($arrResult));
+	    	exit();
     	}
-    	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    	$studentPayment = $db->getDailyReport($search);
-    	$array_data = array(
-    			'studentPayment' => $studentPayment,
-    			);
-    	print_r(Zend_Json::encode($array_data));
-    	exit();
     }
 }
 

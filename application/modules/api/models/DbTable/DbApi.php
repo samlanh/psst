@@ -2,6 +2,35 @@
 
 class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 {
+	function getStudentLogin($_data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+	
+			$sql ="
+			SELECT
+				s.*
+			FROM
+				rms_student AS s
+			WHERE 1 ";
+			$sql.= " AND ".$db->quoteInto('s.stu_code=?', $_data['studentCode']);
+			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
+			$row = $db->fetchRow($sql);
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 	function getStudentInformation($stu_id=0,$currentLang=1){
 		$_db = $this->getAdapter();
 		$_db->beginTransaction();
@@ -99,7 +128,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		SELECT
 	    		sp.id,
 	    		sp.receipt_number,
-	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS  createDate,
+	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
 	    		sp.is_void,
 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
 	    		(SELECT $lbView FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS voidStatus,
@@ -137,6 +166,73 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				);
     		return $result;
     	}
+    }
+    
+    public function getPaymentDetail($payment_id,$currentLang=1){
+    	$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+	    	$label = "name_en";
+	    	$branch = "branch_nameen";
+	    	$grade = "rms_itemsdetail.title_en";
+	    	$degree = "rms_items.title_en";
+	    	if($currentLang==1){// khmer
+	    		$label = "name_kh";
+	    		$branch = "branch_namekh";
+	    		$grade = "rms_itemsdetail.title";
+	    		$degree = "rms_items.title";
+	    	}
+    	$sql=" 
+	    	SELECT
+		    	spd.id,
+		    	spd.payment_id,
+		    	spd.is_onepayment,
+		    	sp.receipt_number as receipt_number,
+		    	
+		    	FORMAT(sp.grand_total,2)  AS totalPayment,
+		    	FORMAT(sp.paid_amount,2)  AS paidAmount,
+		    	FORMAT(sp.balance_due,2)  AS balanceDue,
+		    	sp.`amount_in_khmer` as amount_in_khmer,
+		    	
+		    	FORMAT(spd.subtotal,2)  AS subTotal,
+		    	FORMAT(spd.paidamount,2)  AS paidAmountDetail,
+		    	FORMAT(spd.fee,2)  AS fee,
+		    	FORMAT(spd.qty,2)  AS qty,
+		    	FORMAT(spd.extra_fee,2)  AS extraFee,
+		    	FORMAT(spd.discount_amount,2)  AS discountAmount,
+		    	FORMAT(spd.discount_percent,2)  AS discountPercent,
+		    	
+		    	DATE_FORMAT(spd.start_date, '%d-%m-%Y %H:%i') AS  startDate,
+		    	DATE_FORMAT(spd.validate, '%d-%m-%Y %H:%i') AS  validate,
+		    	(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
+		    	spd.service_type,
+		    	spd.note,
+		    	(SELECT $grade FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS serviceTitle,
+		    	(SELECT items_type FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS items_type,
+		    	(SELECT $label FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
+		    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		    	(SELECT first_name FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) AS byUser
+	    	FROM
+		    	rms_student_payment as sp,
+		    	rms_student_paymentdetail AS spd ";
+		    	$sql.='WHERE sp.id=spd.payment_id
+		    	AND spd.payment_id = '.$payment_id;
+		    	
+	    	$row = $db->fetchAll($sql);
+	    	
+	    	$result = array(
+	    			'status' =>true,
+	    			'value' =>$row,
+	    	);
+	    	return $result;
+	    }catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+	    }
     }
     
     

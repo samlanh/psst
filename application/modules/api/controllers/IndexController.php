@@ -18,6 +18,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->profileAction($GetData);
     		}else if ($GetData['url']=="payment"){
     			$_dbAction->paymentAction($GetData);
+    		}else if ($GetData['url']=="paymentDetail"){
+    			$_dbAction->paymentDetailAction($GetData);
     		}else if ($GetData['url']=="schedule"){
     		}else if ($GetData['url']=="score"){
     		}else if ($GetData['url']=="attendance"){
@@ -28,9 +30,9 @@ class Api_IndexController extends Zend_Controller_Action
     		}
     	}else if ($_SERVER['REQUEST_METHOD'] == "POST"){
     		if($this->getRequest()->isPost()){
-    			$PostData = $this->getRequest()->getPost();
-    			if ($GetData['url']=="auth"){ // login
-    				echo $_SERVER['REQUEST_METHOD'];exit();
+    			$postData = $this->getRequest()->getPost();
+    			if ($GetData['url']=="auth"){// login
+    				$_dbAction->loginAction($postData);
     			}else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);
     			}

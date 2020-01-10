@@ -278,12 +278,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	AND spd.payment_id = '.$payment_id;
 		    	
 	    	$row = $db->fetchAll($sql);
-	    	
-	    	$result = array(
-	    			'status' =>true,
-	    			'value' =>$row,
-	    	);
-	    	return $result;
+	    	return $row;
+// 	    	$result = array(
+// 	    			'status' =>true,
+// 	    			'value' =>$row,
+// 	    	);
+// 	    	return $result;
 	    }catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$result = array(

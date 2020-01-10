@@ -83,13 +83,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-			$colunmname='title_en';
 			$lbView="name_en";
 			$branch = "branch_nameen";
 			$schoolName = "school_nameen";
 			
 			if ($currentLang==1){
-				$colunmname='title';
 				$lbView="name_kh";
 				$branch = "branch_namekh";
 				$schoolName = "school_namekh";
@@ -101,9 +99,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		SELECT
 	    		sp.id,
 	    		sp.receipt_number,
-	    		(SELECT $colunmname FROM `rms_items` WHERE rms_items.id=sp.degree LIMIT 1 ) AS degreeTitle,
-	    		(SELECT $colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS gradeTile,
-	    		
 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS  createDate,
 	    		sp.is_void,
 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,

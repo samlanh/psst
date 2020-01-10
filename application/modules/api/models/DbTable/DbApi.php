@@ -173,9 +173,63 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	}
     }
     
+    function getPayment($payment_id,$currentLang=1){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+    		$lbView="name_en";
+    		$branch = "branch_nameen";
+    		$schoolName = "school_nameen";
+    			
+    		if ($currentLang==1){
+    			$lbView="name_kh";
+    			$branch = "branch_namekh";
+    			$schoolName = "school_namekh";
+    		}
+    		$sql="
+    		SELECT
+	    		sp.id,
+	    		sp.receipt_number,
+	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
+	    		sp.is_void,
+	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
+	    		(SELECT $lbView FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS voidStatus,
+	    		 
+	    		FORMAT(sp.grand_total,2)  AS totalPayment,
+	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
+	    		FORMAT(sp.penalty,2)  AS penalty,
+	    		FORMAT(sp.paid_amount,2)  AS paidAmount,
+	    		FORMAT(sp.balance_due,2)  AS balanceDue,
+	    		(SELECT $lbView FROM rms_view WHERE type=8 AND key_code=sp.payment_method LIMIT 1) AS paymentMethod,
+	    		(SELECT rms_users.first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS byUser
+    		FROM
+    			rms_student_payment AS sp
+    		WHERE sp.id = ".$payment_id;
+    		$where = "";
+    		$row = $db->fetchRow($sql.$where);
+    		
+    		$rowDetail = $this->getPaymentDetail($payment_id,$currentLang);
+    		$queryArr = array(
+    				'row' =>$row,
+    				'rowDetail' =>$rowDetail,
+    				);
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$queryArr,
+    		);
+    		return $result;
+    	}catch(Exception $e){
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    	$result = array(
+	    			'status' =>false,
+	    			'value' =>$e->getMessage(),
+	    			);
+	    			return $result;
+	    	}
+    	}
+    		
     public function getPaymentDetail($payment_id,$currentLang=1){
     	$db = $this->getAdapter();
-		$db->beginTransaction();
 		try{
 	    	$label = "name_en";
 	    	$branch = "branch_nameen";

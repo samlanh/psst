@@ -99,7 +99,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$payment_id = empty($search['payment_id'])?1:$search['payment_id'];
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 			$db = new Api_Model_DbTable_DbApi();
-			$row = $db->getPaymentDetail($payment_id,$currentLang);
+			$row = $db->getPayment($payment_id,$currentLang);
 			if ($row['status']){
 				$arrResult = array(
 						"result" => $row['value'],

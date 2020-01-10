@@ -42,7 +42,8 @@ class Api_IndexController extends Zend_Controller_Action
     }
     public function payment($search){
     	try{
-	    	$search['stu_id'] = 46;
+	    	$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+	    	$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 	    	$db = new Api_Model_DbTable_DbApi();
 	    	$row = $db->getDailyReport($search);
 	    	if ($row['status']){

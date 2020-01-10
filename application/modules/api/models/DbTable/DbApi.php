@@ -12,7 +12,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				s.*
 			FROM
 				rms_student AS s
-			WHERE 1 ";
+			WHERE s.status = 1 AND s.customer_type =1 ";
 			$sql.= " AND ".$db->quoteInto('s.stu_code=?', $_data['studentCode']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
 			$row = $db->fetchRow($sql);

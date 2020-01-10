@@ -9,7 +9,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	
 			$sql ="
 			SELECT
-				s.*
+				s.stu_id AS id,
+				s.stu_code AS stuCode,
+				s.stu_khname AS stuNameKH,
+				s.stu_enname AS stuFirstName,
+				s.last_name AS stuLastName,
+				s.photo
 			FROM
 				rms_student AS s
 			WHERE s.status = 1 AND s.customer_type =1 ";

@@ -11,11 +11,13 @@ class Api_IndexController extends Zend_Controller_Action
     public function indexAction()
     {
     	$this->_helper->layout()->disableLayout();
+    	$_dbAction = new Api_Model_DbTable_DbActions();
     	$GetData = $this->getRequest()->getParams();
     	if ($_SERVER['REQUEST_METHOD'] == "GET"){
     		if ($GetData['url']=="profile"){
+    			$_dbAction->profileAction($GetData);
     		}else if ($GetData['url']=="payment"){
-    			$this->payment($GetData);
+    			$_dbAction->paymentAction($GetData);
     		}else if ($GetData['url']=="schedule"){
     		}else if ($GetData['url']=="score"){
     		}else if ($GetData['url']=="attendance"){
@@ -40,34 +42,7 @@ class Api_IndexController extends Zend_Controller_Action
     		echo Zend_Http_Response::responseCodeAsText(405,true);
     	}
     }
-    public function payment($search){
-    	try{
-	    	$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
-	    	$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
-	    	$db = new Api_Model_DbTable_DbApi();
-	    	$row = $db->getDailyReport($search);
-	    	if ($row['status']){
-	    		$arrResult = array(
-	    				"result" => $row['value'],
-	    				"code" => "SUCCESS",
-	    		);
-	    	}else{
-	    		$arrResult = array(
-	    				"code" => "ERR_",
-	    				"message" => $row['value'],
-	    		);
-	    	}
-	    	print_r(Zend_Json::encode($arrResult));
-	    	exit();
-    	}catch(Exception $e){
-    		$arrResult = array(
-	    			"code" => "ERR_",
-    				"message" => $e->getMessage(),
-	    	);
-	    	print_r(Zend_Json::encode($arrResult));
-	    	exit();
-    	}
-    }
+   
 }
 
 

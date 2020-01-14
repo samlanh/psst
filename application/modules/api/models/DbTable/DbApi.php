@@ -298,8 +298,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	try{
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
-    		$dayStudy = $this->getDaySchedule($stuInfo, $currentLang);
-    		$timeStudy = $this->getTimeSchelduleByYGS($stuInfo, $currentLang);
+    		$dayStudy = $this->getDaySchedule($stuInfo,$search,$currentLang);
+    		$timeStudy = $this->getTimeSchelduleByYGS($stuInfo,$search,$currentLang);
     		
     		$arrStudyValue = array();
     		$dayIndex="";
@@ -331,7 +331,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
 	    }
     }
-    public function getDaySchedule($stuInfo,$currentLang){
+    public function getDaySchedule($stuInfo,$search,$currentLang){
     	$db=$this->getAdapter();
     	$label = "name_en";
     	if($currentLang==1){// khmer
@@ -339,6 +339,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	}
     	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
     	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
     	$sql="
     		SELECT
 		    	v.key_code as id,
@@ -360,10 +361,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 //     	and gs.branch_id = $branch
     	return $db->fetchAll($sql);
     }
-    function getTimeSchelduleByYGS($stuInfo,$currentLang){ /* get Time for show in schedule VD*/
+    function getTimeSchelduleByYGS($stuInfo,$search,$currentLang){ /* get Time for show in schedule VD*/
     	$db=$this->getAdapter();
     	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
     	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
     	$sql="
     	SELECT gr.from_hour,
     		REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times

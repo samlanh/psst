@@ -21,10 +21,12 @@ class Api_IndexController extends Zend_Controller_Action
     		}else if ($GetData['url']=="paymentDetail"){
     			$_dbAction->paymentDetailAction($GetData);
     		}else if ($GetData['url']=="schedule"){
+    			$_dbAction->scheduleAction($GetData);
     		}else if ($GetData['url']=="score"){
+    			$_dbAction->scoreAction($GetData);
     		}else if ($GetData['url']=="attendance"){
     		}else if ($GetData['url']=="evaluation"){
-//     				$this->payment($GetData);
+    			$_dbAction->envaluationAction($GetData);
     		}else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
     		}

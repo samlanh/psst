@@ -83,7 +83,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
 			 
 			(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
-			CONCAT(t.from_academic,' - ',t.to_academic) as academic_year,
+			CONCAT(t.from_academic,' - ',t.to_academic) as academicYearTitle,
 			t.generation
 			FROM
 			rms_student as s,
@@ -293,6 +293,399 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
 	    }
     }
+    function getSchedule($stu_id, $search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
+    		$dayStudy = $this->getDaySchedule($stuInfo, $currentLang);
+    		$timeStudy = $this->getTimeSchelduleByYGS($stuInfo, $currentLang);
+    		
+    		$arrStudyValue = array();
+    		$dayIndex="";
+    		if (!empty($dayStudy)){
+    			foreach ($dayStudy as $key => $days){
+    				if (!empty($timeStudy)){
+    					foreach($timeStudy As $keyIndex => $time){
+    						$arrStudyValue[$days['name']][$keyIndex] = $this->getSubjectTeacherByScheduleAndGroup($stuInfo,$time['times'], $days['id'],$currentLang);
+	    				}
+	    			}
+	    		}
+    		}
+    		$arrQuery = array(
+    				'dayStudy' =>$dayStudy,
+    				'timeStudy' =>$timeStudy,
+    				'arrStudyValue' => $arrStudyValue
+    				);
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$arrQuery,
+    		);
+    		return $result;
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+	    }
+    }
+    public function getDaySchedule($stuInfo,$currentLang){
+    	$db=$this->getAdapter();
+    	$label = "name_en";
+    	if($currentLang==1){// khmer
+    		$label = "name_kh";
+    	}
+    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
+    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$sql="
+    		SELECT
+		    	v.key_code as id,
+		    	v.$label as name
+	    	FROM
+		    	rms_view as v,
+		    	rms_group_reschedule as gs
+	    	WHERE
+		    	v.key_code = gs.day_id
+		    	AND v.type = 18
+		    	AND gs.group_id = $groupId
+		    
+		    	group by
+		    	gs.day_id
+		    	ORDER BY
+		    	gs.day_id ASC
+    	";
+//     	AND gs.year_id = $academicYear
+//     	and gs.branch_id = $branch
+    	return $db->fetchAll($sql);
+    }
+    function getTimeSchelduleByYGS($stuInfo,$currentLang){ /* get Time for show in schedule VD*/
+    	$db=$this->getAdapter();
+    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
+    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$sql="
+    	SELECT gr.from_hour,
+    		REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times
+    	FROM 
+    		rms_group_reschedule AS gr
+    	WHERE 
+    		 gr.group_id=$groupId
+    	GROUP BY REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','')
+    	ORDER BY times ASC";
+    	//gr.year_id=$academicYear AND
+    	$row = $db->fetchAll($sql);
+    	return $row;
+    }
+    function getSubjectTeacherByScheduleAndGroup($stuInfo,$time,$day,$currentLang){
+    	$db=$this->getAdapter();
+    	$subjecct = "subject_titleen";
+    	$teacher = "teacher_name_en";
+    	if($currentLang==1){// khmer
+    		$subjecct = "subject_titlekh";
+    		$teacher = "teacher_name_kh";
+    	}
+    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
+    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$sql="
+    	SELECT gr.from_hour,
+	    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+	    	(SELECT s.$subjecct FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+	    	(SELECT t.$teacher FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+	    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
+    	FROM 
+    		rms_group_reschedule AS gr
+    	WHERE 
+    		 gr.group_id=$groupId
+	    	AND REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') ='$time'
+	    	AND gr.`day_id` =$day LIMIT 1";
+    	//gr.year_id=$academicYear AND
+    	return $db->fetchRow($sql);
+    }
     
+    function getRatingValuation(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT r.id,r.rating AS `name` FROM `rms_rating` AS r ";
+    	return $db->fetchAll($sql);
+    }
+    function getStudentEvaluation($data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+	    	$sql="
+		    	SELECT ed.*,
+			    	(SELECT cm.comment FROM `rms_comment` AS cm WHERE cm.id = ed.comment_id LIMIT 1) AS comments,
+			    	(SELECT rt.rating FROM `rms_rating` AS rt WHERE rt.id = ed.rating_id LIMIT 1) AS ratingTitle,
+			    	e.issue_date,
+			    	e.return_date,
+			    	e.teacher_comment
+		    	FROM 
+		    		`rms_student_evaluation_detail` AS ed,
+		    		`rms_student_evaluation` AS e
+		    	WHERE
+			    	e.id = ed.evaluation_id
+			    	AND e.status=1
+	    	";
+	    	if (!empty($data['group_id'])){
+	    		$sql.=" AND e.group_id=".$data['group_id'];
+	    	}
+	    	if (!empty($data['stu_id'])){
+	    		$sql.=" AND e.student_id=".$data['stu_id'];
+	    	}
+	    	if (!empty($data['exam_type'])){
+	    		$sql.=" AND e.for_type=".$data['exam_type'];
+	    		if ($data['exam_type']==1){
+	    			if (!empty($data['for_month'])){
+	    				$sql.=" AND e.for_month=".$data['for_month'];
+	    			}
+	    		}else if ($data['exam_type']==2){
+	    			if (!empty($data['for_semester'])){
+	    				$sql.=" AND e.for_semester=".$data['for_semester'];
+	    			}
+	    		}
+	    	}
+	    	$sql.=" ORDER BY e.id DESC";
+	    	$row = $db->fetchAll($sql);
+	    	$rating = $this->getRatingValuation();
+	    	
+	    	$row = array(
+	    			'rating'=> $rating,
+	    			'envaluation'=> $row
+	    			);
+	    	
+	    	$result = array(
+	    			'status' =>true,
+	    			'value' =>$row,
+	    	);
+	    	return $result;
+	    	
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+    	}
+    }
+    function getScoreExame($search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
+    		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
+    		
+    		$row = $this->getExamRow($stuInfo,$search);
+    		$subject = $this->getSubjectByGroup($stuInfo,$search);
+    		$arrScoreValue = array();
+    		if (!empty($subject)){
+    			foreach ($subject as $keyIndex => $rs){
+    				$score = $this->getScoreBySubject($row['id'],$stu_id,$rs['subject_id'],$currentLang);
+    				$rangSubje = $this->getRankSubjectMonthlyExam($row['group_id'], $stu_id, $rs['subject_id'], $row['for_month_id']);
+    				$custArray = array(
+    						'score' =>$score,
+    						'rangSubje' =>$rangSubje,
+    						);
+    				
+    				$arrScoreValue[$keyIndex] = $custArray;
+    				
+    			}
+    		}
+    		$row = array(
+    				'row'=> $row,
+    				'subject'=> $subject,
+    				'subjectScore'=> $arrScoreValue
+    		);
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$row,
+    		);
+    		return $result;
+    		
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+    	}
+    }
+    function getExamRow($stuInfo,$search = array()){
+    	$db = $this->getAdapter();
+    	try{
+	    	$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+	    	$for_month = "month_en";
+	    	if($currentLang==1){// khmer
+	    		$for_month = "month_kh";
+	    	}
+	    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
+	    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
+	    	
+	    	$stuId = empty($stuInfo['value']['stu_id'])?0:$stuInfo['value']['stu_id'];
+	    	$sql="
+	    		SELECT
+		    	s.`id`,
+		    	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthTitle,
+		    	s.exam_type,
+		    	s.for_month AS for_month_id,
+		    	s.for_semester,
+		    	s.reportdate,
+		    	s.title_score,
+		    	s.max_score,
+		    	s.group_id,
+		    	sd.`student_id`,
+		    	sm.total_score,
+		    	sm.total_avg,
+		    	FIND_IN_SET( total_avg, 
+			    	(
+				    	SELECT GROUP_CONCAT( total_avg
+				    	ORDER BY total_avg DESC )
+				    	FROM rms_score_monthly AS dd ,rms_score AS ss WHERE
+				    	ss.`id`=dd.`score_id`
+				    	AND ss.group_id= s.`id`
+				    	AND ss.id=s.`id`
+			    	)
+		    	) AS rank
+		    	
+	    	FROM
+		    	`rms_score` AS s,
+		    	`rms_score_detail` AS sd,
+		    	`rms_score_monthly` AS sm
+		    	
+	    	WHERE 
+	    		s.`id`=sd.`score_id`
+		    	AND sd.student_id = sm.`student_id`
+			    	AND s.`id`=sm.`score_id`
+			    	AND s.status = 1
+			    	AND s.type_score=1
+	    	";
+	    		$sql.=" AND s.`group_id`=".$groupId;
+	    		$sql.=" AND sd.`student_id`=".$stuId;
+	    	if (!empty($search['exam_type'])){
+	    		$sql.=" AND s.exam_type=".$search['exam_type'];
+	    		if ($search['exam_type']==1){
+	    			if (!empty($search['for_month'])){
+	    				$sql.=" AND s.`for_month`=".$search['for_month'];
+	    			}
+	    		}else if ($search['exam_type']==2){
+	    			if (!empty($search['for_semester'])){
+	    				$sql.=" AND s.`for_semester`=".$search['for_semester'];
+	    			}
+	    		}
+	    	}
+	    	$sql.=" ORDER BY s.id DESC LIMIT 1";
+	    	return $db->fetchRow($sql);
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+    	}
+    }
     
+    function getSubjectByGroup($stuInfo,$search = array()){
+    	$db=$this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$subjectTitle = "subject_titleen";
+    		if($currentLang==1){// khmer
+    			$subjectTitle = "subject_titlekh";
+    		}
+    		$examType = empty($search['exam_type'])?0:$search['exam_type'];
+    		$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    		$stuId = empty($stuInfo['value']['stu_id'])?0:$stuInfo['value']['stu_id'];
+    		$sql="
+    		SELECT
+	    		gsjd.*,
+	    		g.amount_subject AS amount_subjectdivide,
+	    		gsjd.max_score AS max_subjectscore,
+	    		gsjd.score_short as cut_score,
+	    		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+	    		
+	    		(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjecTitle,
+	    		
+	    		(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+	    		(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+	    		(gsjd.amount_subject) amtsubject_month,
+	    		(gsjd.amount_subject_sem) amtsubject_semester,
+	    		(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
+	    		(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
+    		FROM
+	    		rms_group_subject_detail AS gsjd ,
+	    		rms_group as g
+    		WHERE
+    		g.id = gsjd.group_id
+    		and gsjd.group_id = ".$groupId;
+    		if($examType==1){//for month
+    			$sql.=" AND gsjd.amount_subject > 0 ";
+    		}else{//for semester
+    			$sql.=" AND gsjd.amount_subject_sem > 0 ";
+    		}
+    		$sql.=' ORDER BY gsjd.id ASC ';
+    		return $db->fetchAll($sql);
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+    	}
+    }
+    public function getScoreBySubject($score_id,$student_id,$subject_id,$currentLang){
+    	$db = $this->getAdapter();
+    	$subjectTitle = "subject_titleen";
+    	if($currentLang==1){// khmer
+    		$subjectTitle = "subject_titlekh";
+    	}
+    	$sql="SELECT
+	    	sd.`score`,
+	    	sd.score_cut,
+	    	sd.`subject_id`,
+	    	(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
+	    	,sd.amount_subject
+	    	FROM  `rms_score_detail` AS sd
+	    	WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id ";
+    	return $db->fetchRow($sql);
+    }
+    function getRankSubjectMonthlyExam($group_id,$stu_id,$subject_id,$formonth){
+    	$db = $this->getAdapter();
+    	$sql="
+    	SELECT
+	    	score,
+	    	SUM(score) AS total_score,
+	    	FIND_IN_SET( score, (
+	    	SELECT GROUP_CONCAT( score
+	    	ORDER BY score DESC )
+	    	FROM rms_score_detail AS dd ,rms_score AS ss WHERE
+	    	ss.`id`=dd.`score_id`
+	    	AND ss.exam_type=1
+	    	AND ss.group_id= $group_id
+	    	AND dd.subject_id=$subject_id
+	    	AND dd.`is_parent`=1
+	    	AND ss.for_month=$formonth
+	    	)
+	    	) AS rank
+    	FROM
+	    	`rms_score` AS s,
+	    	`rms_score_detail` AS sd,
+	    	`rms_group` AS g
+    	WHERE s.`id`=sd.`score_id`
+	    	AND g.`id`=s.`group_id`
+	    	AND sd.`is_parent`=1
+	    	AND s.status = 1
+	    	AND s.type_score=1
+	    	AND s.exam_type=1
+	    	AND g.id= $group_id
+	    	AND sd.subject_id= $subject_id
+	    	AND sd.student_id= $stu_id
+	    	AND s.for_month=$formonth
+    	ORDER BY s.id DESC
+    	";
+    	return $db->fetchRow($sql);
+    }
 }

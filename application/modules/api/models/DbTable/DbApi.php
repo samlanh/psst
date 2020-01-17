@@ -420,6 +420,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			    	(SELECT rt.rating FROM `rms_rating` AS rt WHERE rt.id = ed.rating_id LIMIT 1) AS ratingTitle,
 			    	e.issue_date,
 			    	e.return_date,
+			    	DATE_FORMAT(e.issue_date, '%d-%m-%Y %H:%i') AS  issueDate,
+			    	DATE_FORMAT(e.return_date, '%d-%m-%Y %H:%i') AS  returnDate,
 			    	e.teacher_comment
 		    	FROM 
 		    		`rms_student_evaluation_detail` AS ed,
@@ -689,5 +691,49 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	ORDER BY s.id DESC
     	";
     	return $db->fetchRow($sql);
+    }
+    
+    function getAttendenceBydate($search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$stuId = $search['stu_id'];
+    		$stuInfo = $this->getStudentInformation($stuId,$search['currentLang']);
+	    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
+	    	
+	    	
+	    	$sql="SELECT sade.*,sta.`group_id`,
+	    	DATE_FORMAT(sta.date_attendence, '%d-%m-%Y %H:%i') AS  dateAttendence,
+	    	(SELECT st.`type` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `type`,
+	    	(SELECT st.`for_session` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `for_session`,
+	    	
+	    	CASE
+			   	WHEN  sade.attendence_status = 1 THEN 'COME'
+			   	WHEN  sade.attendence_status = 2 THEN 'ABSENT'
+			   	WHEN  sade.attendence_status = 3 THEN 'PERMISSION'
+			   	WHEN  sade.attendence_status = 4 THEN 'LATE'
+			   	WHEN  sade.attendence_status = 5 THEN 'EarlyLeave'
+		   	END AS attendenceStatusTitle
+   	
+	    	FROM rms_student_attendence_detail AS sade,
+	    	`rms_student_attendence` AS sta
+	    	WHERE sta.`id` = sade.`attendence_id`";
+	    	$where = "";
+	    	$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId ORDER BY sta.`date_attendence` ASC";
+	    	$row =  $db->fetchAll($sql.$where);
+	    	$result = array(
+	    			'status' =>true,
+	    			'value' =>$row,
+	    	);
+	    	return $result;
+	    	
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
+    	}
     }
 }

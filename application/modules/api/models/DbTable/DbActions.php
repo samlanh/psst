@@ -180,4 +180,24 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		exit();
 	}
 	
+	public function attendanceAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getAttendenceBydate($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
 }

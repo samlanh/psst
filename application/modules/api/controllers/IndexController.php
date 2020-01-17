@@ -25,6 +25,7 @@ class Api_IndexController extends Zend_Controller_Action
     		}else if ($GetData['url']=="score"){
     			$_dbAction->scoreAction($GetData);
     		}else if ($GetData['url']=="attendance"){
+    			$_dbAction->attendanceAction($GetData);
     		}else if ($GetData['url']=="evaluation"){
     			$_dbAction->envaluationAction($GetData);
     		}else{

@@ -18,6 +18,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$commune_name = "commune_namekh";
     		$district_name = "district_namekh";
     		$province = "province_kh_name";
+			
+			$stu_name = "s.stu_khname";
     	}else{ // English
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
@@ -28,6 +30,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$commune_name = "commune_name";
     		$district_name = "district_name";
     		$province = "province_en_name";
+			
+			$stu_name = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
     	}
     	$sql ="SELECT 
     				*,
@@ -36,6 +40,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	       stu_khname,
 	    	       last_name,
 	    	       stu_enname,
+				   CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS en_name,
+				   $stu_name as stu_name,
 	    	      (SELECT $label FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
 	    		  (SELECT $label FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
 	    		   degree as dept,
@@ -426,6 +432,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$commune_name = "commune_namekh";
     		$district_name = "district_namekh";
     		$province = "province_kh_name";
+			$stu_name = "s.stu_khname";
     	}else{ // English
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
@@ -436,6 +443,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$commune_name = "commune_name";
     		$district_name = "district_name";
     		$province = "province_en_name";
+			$stu_name = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
     	}
     	
     	$sql ="SELECT
@@ -447,6 +455,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	last_name,
 			    	stu_enname as en_name,
 			    	stu_enname,
+					$stu_name as stu_name,
 			    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
 			    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
 			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
@@ -473,7 +482,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			from
     				rms_student as s
     			where
-    				stu_id =$stu_id
+    				stu_id = $stu_id
     		";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('s.branch_id');

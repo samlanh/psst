@@ -377,7 +377,7 @@ display: table-cell !important;
 					<?php 
 					$prefix="";
 					$validDate="";
-						$stu_name = $row['stu_enname']." ".$row['last_name'];
+						//$stu_name = $row['stu_enname']." ".$row['last_name'];
 						$image = $this->baseUrl().'/images/no-profile.png';
 						if(!empty($row['photo'])){
 							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
@@ -388,7 +388,7 @@ display: table-cell !important;
 						$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
 						if (!empty($bg)){
 							if ($bg['display_by']==2){
-								$stu_name = $row['stu_khname'];
+								//$stu_name = $row['stu_khname'];
 							}
 							$prefix = $bg['card_prefix'];
 							$validDate = $bg['valid'];
@@ -401,7 +401,7 @@ display: table-cell !important;
 							
 							<div class="name-card-block">
 								<ul class="list-data">
-									<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+									<li><span class="title_value student-name">&nbsp;<?php echo $row['stu_name'];?></span></li>
 									<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
 									<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
 									<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
@@ -463,7 +463,7 @@ display: table-cell !important;
 									</div> 
 									<div class="name-card-block-front">
 										<ul class="list-data">
-											<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+											<li><span class="title_value student-name">&nbsp;<?php echo $row['stu_name'];?></span></li>
 											<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span></li>
 											<li><span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
 											<li><span class="title_value acadimicyear">&nbsp;<?php echo $row['academic_year'];?></span></li>

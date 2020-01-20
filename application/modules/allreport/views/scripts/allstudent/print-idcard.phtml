@@ -308,12 +308,12 @@ function getKHMonthByNumber(m){
 					$prefix="";
 					$issueDate="";
 					$validDate="";
-					$stu_name = $row['last_name']." ".$row['stu_enname'];
+					//$stu_name = $row['last_name']." ".$row['stu_enname'];
 					$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
 					//print_r($bg);exit();
 					if (!empty($bg)){
 						if ($bg['display_by']==2){
-							$stu_name = $row['stu_khname'];
+							//$stu_name = $row['stu_khname'];
 						}
 						$prefix = $bg['card_prefix'];
 						$validDate = $bg['valid'];
@@ -329,7 +329,7 @@ function getKHMonthByNumber(m){
 							</div>
 							<div class="name-card-block">
 								<ul class="list-data">
-									<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo $row['stu_name'];?></span></li>
 									<li><span class="title_value">&nbsp;<?php echo $row['stu_code'];?></span></li>
 									<li><span class="title_value">&nbsp;<?php echo $row['grade'];?></span></li>
 									<li><span class="title_value">&nbsp;<?php echo $row['tel'];?></span></li>

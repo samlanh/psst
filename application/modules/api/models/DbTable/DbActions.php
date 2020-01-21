@@ -9,6 +9,10 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$row = $db->getStudentLogin($_data);
 			if ($row['status']){
 				if (!empty($row['value'])){
+					$row['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
+					$row['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
+					$token = $db->generateToken($row['value']);
+					
 					$arrResult = array(
 							"result" => $row['value'],
 							"code" => "SUCCESS",

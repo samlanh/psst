@@ -736,4 +736,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
+    function generateToken($_data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+    		$token = md5(time()).date("Y").date("m").date("d");
+    		$token = empty($_data['mobileToken'])?$token:$_data['mobileToken'];
+    		$_arr =array(
+    				'stu_id' 	=> $_data['id'],
+    				'token' 	=> $token,
+    				'date' 		=> date("Y-m-d H:i:s"),
+    				'device_type' => $_data['deviceType'],
+    				'device_model' 		=> "",
+    				'serial' 		=> "",
+    		);
+    		$this->_name = "mobile_mobile_token";
+    		$this->insert($_arr);
+    		
+    		$db->commit();
+    		return $token;
+    	}catch (Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$db->rollBack();
+    		return null;
+    	}
+    }
 }

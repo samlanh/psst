@@ -7,35 +7,36 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		try{
 			$db = new Api_Model_DbTable_DbApi();
 			$row = $db->getStudentLogin($_data);
+			
 			if ($row['status']){
 				if (!empty($row['value'])){
-					$row['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
+					$row['value']['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
 					$row['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
 					$token = $db->generateToken($row['value']);
 					
 					$arrResult = array(
-							"result" => $row['value'],
-							"code" => "SUCCESS",
+						"result" => $row['value'],
+						"code" => "SUCCESS",
 					);
 				}else{
 					$arrResult = array(
-							"result" => $row['value'],
-							"code" => "FAIL",
+						"result" => $row['value'],
+						"code" => "FAIL",
 					);
 				}
 				
 			}else{
 				$arrResult = array(
-						"code" => "ERR_",
-						"message" => $row['value'],
+					"code" => "ERR_",
+					"message" => $row['value'],
 				);
 			}
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){
 			$arrResult = array(
-					"code" => "ERR_",
-					"message" => $e->getMessage(),
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
 			);
 			print_r(Zend_Json::encode($arrResult));
 			exit();

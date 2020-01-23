@@ -134,9 +134,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		sp.id,
 	    		sp.receipt_number,
 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
-	    		sp.is_void,
 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
-	    		(SELECT $lbView FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS voidStatus,
 	    		
 	    		FORMAT(sp.grand_total,2)  AS totalPayment,
 	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
@@ -738,7 +736,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     }
     function generateToken($_data){
     	$db = $this->getAdapter();
-    	$db->beginTransaction();
+//     	$db->beginTransaction();
     	try{
     		$token = md5(time()).date("Y").date("m").date("d");
     		$token = empty($_data['mobileToken'])?$token:$_data['mobileToken'];
@@ -753,11 +751,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$this->_name = "mobile_mobile_token";
     		$this->insert($_arr);
     		
-    		$db->commit();
+//     		$db->commit();
     		return $token;
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		$db->rollBack();
+//     		$db->rollBack();
     		return null;
     	}
     }

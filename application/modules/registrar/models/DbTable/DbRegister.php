@@ -905,26 +905,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getAllService(){
     	$db = $this->getAdapter();
-//     	$sql = "SELECT
-// 				  p.service_id ,
-// 				  p.`title`
-// 				FROM
-// 				  `rms_servicefee_detail` as sfd,
-// 				  `rms_servicefee`  as sf,
-// 				  `rms_program_name` as p
-// 				WHERE `sf`.id = `sfd`.`service_feeid`
-// 				  AND p.`service_id`=sfd.`service_id`
-// 				  or type=1
-// 				GROUP BY service_id ";
-//     	return $db->fetchAll($sql);
     }
     
     function getAllProductName(){
     	$db = $this->getAdapter();
     	$sql="SELECT id,pro_name FROM `rms_product` WHERE STATUS=1 AND pro_name!='' ORDER BY pro_name";
     	return $db->fetchAll($sql);
-    }
-    
+    } 
     
     public function getServiceFee($year,$item_id,$termid,$student_id,$branch_id){
     	$db=$this->getAdapter();
@@ -1051,65 +1038,58 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="select price,cost from rms_program_name where service_id=$service_id";
     	return $db->fetchRow($sql);
-    }
-    
+    }    
     function getStudentPaymentByID($id){
     	$db=$this->getAdapter();
     	$sql="SELECT 
-    			 sp.*,
-	    		 s.stu_enname,
-	    		 s.stu_khname,
-	    		 s.sex,
-	    		 s.stu_code,
-	    		 s.stu_id,
-	    		 s.is_stu_new,
-	    		 sp.degree as degree_id,
-	    		 (SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
-	    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-	    		 (select first_name from rms_users as u where u.id=sp.user_id) as first_name,
-	    		 (select last_name from rms_users as u where u.id=sp.user_id) as last_name
+    			sp.*,
+	    		s.stu_enname,
+	    		s.stu_khname,
+	    		s.sex,
+	    		s.stu_code,
+	    		s.stu_id,
+	    		s.is_stu_new,
+				sp.degree as degree_id,
+	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+	    		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
+	    		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name
     		FROM
     		  	rms_student_payment as sp,
     		  	rms_student as s
-    		where 
+    		WHERE 
     			s.stu_id = sp.student_id
     			AND sp.id=$id AND is_closed=0 ";
     	return $db->fetchRow($sql);
-    }
-    
+    }    
     function getCustomerPaymentByID($id){
     	$db=$this->getAdapter();
     	$sql="SELECT
     				*
     			FROM
 			    	rms_customer_payment
-    			where
+    			WHERE
 			    	id=$id ";
     	return $db->fetchRow($sql);
     }
-    
     function getCustomerPaymentDetailByID($id){
     	$db=$this->getAdapter();
     	$sql="select * from rms_customer_payment_detail where customer_id=$id ";
     	return $db->fetchAll($sql);
     }
-    
     function getStudentPaymentDetailServiceByID($id){
     	$db=$this->getAdapter();
     	$sql="SELECT sd.*,
 			(SELECT (title) FROM `rms_itemsdetail` WHERE id=itemdetail_id LIMIT 1) as item_name
     	FROM rms_student_paymentdetail AS sd 
-    	
     	WHERE sd.payment_id=$id ";
     	return $db->fetchAll($sql);
     }
-    
     function getServiceOnlyByID($id){
     	$db=$this->getAdapter();
     	$sql="select * from rms_student_paymentdetail where payment_id=$id ";
     	return $db->fetchAll($sql);
     }
-    
     function getProductOnlyByID($id){
     	$db=$this->getAdapter();
     	$sql="select * from rms_student_paymentdetail where payment_id=$id ";

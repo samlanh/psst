@@ -14,7 +14,7 @@ class Api_IndexController extends Zend_Controller_Action
     	$_dbAction = new Api_Model_DbTable_DbActions();
     	$GetData = $this->getRequest()->getParams();
     	if ($_SERVER['REQUEST_METHOD'] == "GET"){
-    		if ($GetData['url']=="profile"){
+    		if($GetData['url']=="profile"){
     			$_dbAction->profileAction($GetData);
     		}else if ($GetData['url']=="payment"){
     			$_dbAction->paymentAction($GetData);

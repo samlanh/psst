@@ -175,45 +175,45 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    		$lbView="name_en";
-    		$branch = "branch_nameen";
-    		$schoolName = "school_nameen";
+//     		$lbView="name_en";
+//     		$branch = "branch_nameen";
+//     		$schoolName = "school_nameen";
     			
-    		if ($currentLang==1){
-    			$lbView="name_kh";
-    			$branch = "branch_namekh";
-    			$schoolName = "school_namekh";
-    		}
-    		$sql="
-    		SELECT
-	    		sp.id,
-	    		sp.receipt_number,
-	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
-	    		sp.is_void,
-	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
-	    		(SELECT $lbView FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS voidStatus,
+//     		if ($currentLang==1){
+//     			$lbView="name_kh";
+//     			$branch = "branch_namekh";
+//     			$schoolName = "school_namekh";
+//     		}
+//     		$sql="
+//     		SELECT
+// 	    		sp.id,
+// 	    		sp.receipt_number,
+// 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
+// 	    		sp.is_void,
+// 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
+// 	    		(SELECT $lbView FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS voidStatus,
 	    		 
-	    		FORMAT(sp.grand_total,2)  AS totalPayment,
-	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
-	    		FORMAT(sp.penalty,2)  AS penalty,
-	    		FORMAT(sp.paid_amount,2)  AS paidAmount,
-	    		FORMAT(sp.balance_due,2)  AS balanceDue,
-	    		(SELECT $lbView FROM rms_view WHERE type=8 AND key_code=sp.payment_method LIMIT 1) AS paymentMethod,
-	    		(SELECT rms_users.first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS byUser
-    		FROM
-    			rms_student_payment AS sp
-    		WHERE sp.id = ".$payment_id;
-    		$where = "";
-    		$row = $db->fetchRow($sql.$where);
+// 	    		FORMAT(sp.grand_total,2)  AS totalPayment,
+// 	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
+// 	    		FORMAT(sp.penalty,2)  AS penalty,
+// 	    		FORMAT(sp.paid_amount,2)  AS paidAmount,
+// 	    		FORMAT(sp.balance_due,2)  AS balanceDue,
+// 	    		(SELECT $lbView FROM rms_view WHERE type=8 AND key_code=sp.payment_method LIMIT 1) AS paymentMethod,
+// 	    		(SELECT rms_users.first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS byUser
+//     		FROM
+//     			rms_student_payment AS sp
+//     		WHERE sp.id = ".$payment_id;
+//     		$where = "";
+//     		$row = $db->fetchRow($sql.$where);
     		
     		$rowDetail = $this->getPaymentDetail($payment_id,$currentLang);
-    		$queryArr = array(
-    				'row' =>$row,
-    				'rowDetail' =>$rowDetail,
-    				);
+//     		$queryArr = array(
+//     				'row' =>$row,
+//     				'rowDetail' =>$rowDetail,
+//     				);
     		$result = array(
     				'status' =>true,
-    				'value' =>$queryArr,
+    				'value' =>$rowDetail,
     		);
     		return $result;
     	}catch(Exception $e){
@@ -245,12 +245,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	spd.payment_id,
 		    	spd.is_onepayment,
 		    	sp.receipt_number as receipt_number,
-		    	
 		    	FORMAT(sp.grand_total,2)  AS totalPayment,
 		    	FORMAT(sp.paid_amount,2)  AS paidAmount,
 		    	FORMAT(sp.balance_due,2)  AS balanceDue,
 		    	sp.`amount_in_khmer` as amount_in_khmer,
-		    	
 		    	FORMAT(spd.subtotal,2)  AS subTotal,
 		    	FORMAT(spd.paidamount,2)  AS paidAmountDetail,
 		    	FORMAT(spd.fee,2)  AS fee,
@@ -259,12 +257,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	FORMAT(spd.discount_amount,2)  AS discountAmount,
 		    	FORMAT(spd.discount_percent,2)  AS discountPercent,
 		    	
-		    	DATE_FORMAT(spd.start_date, '%d-%m-%Y %H:%i') AS  startDate,
-		    	DATE_FORMAT(spd.validate, '%d-%m-%Y %H:%i') AS  validate,
+		    	DATE_FORMAT(spd.start_date, '%d-%m-%Y') AS  startDate,
+		    	DATE_FORMAT(spd.validate, '%d-%m-%Y') AS  validate,
 		    	(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
 		    	spd.service_type,
 		    	spd.note,
-		    	(SELECT $grade FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS serviceTitle,
+		    	(SELECT $grade FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=spd.itemdetail_id LIMIT 1) AS serviceTitle,
+		    	(SELECT $degree FROM rms_items,rms_itemsdetail As itd  WHERE rms_items.id =itd.items_id AND itd.id=spd.itemdetail_id LIMIT 1 ) AS serviceCategory,
 		    	(SELECT items_type FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS items_type,
 		    	(SELECT $label FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
 		    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,

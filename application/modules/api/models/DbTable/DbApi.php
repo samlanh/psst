@@ -708,25 +708,45 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
 	    	
+// 	    	$sql="SELECT sade.*,
+// 	    	COUNT(sade.id) as attAmount,
+// 	    	sta.`group_id`,
+// 	    	DATE_FORMAT(sta.date_attendence, '%d-%m-%Y %H:%i') AS  dateAttendence,
+// 	    	(SELECT st.`type` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `type`,
+// 	    	(SELECT st.`for_session` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `for_session`,
 	    	
-	    	$sql="SELECT sade.*,sta.`group_id`,
-	    	DATE_FORMAT(sta.date_attendence, '%d-%m-%Y %H:%i') AS  dateAttendence,
-	    	(SELECT st.`type` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `type`,
-	    	(SELECT st.`for_session` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `for_session`,
+// 	    	CASE
+// 	    	WHEN  sade.attendence_status = 1 THEN 'COME'
+// 	    	WHEN  sade.attendence_status = 2 THEN 'ABSENT'
+// 	    	WHEN  sade.attendence_status = 3 THEN 'PERMISSION'
+// 	    	WHEN  sade.attendence_status = 4 THEN 'LATE'
+// 	    	WHEN  sade.attendence_status = 5 THEN 'EarlyLeave'
+// 	    	END AS attendenceStatusTitle
 	    	
-	    	CASE
-			   	WHEN  sade.attendence_status = 1 THEN 'COME'
-			   	WHEN  sade.attendence_status = 2 THEN 'ABSENT'
-			   	WHEN  sade.attendence_status = 3 THEN 'PERMISSION'
-			   	WHEN  sade.attendence_status = 4 THEN 'LATE'
-			   	WHEN  sade.attendence_status = 5 THEN 'EarlyLeave'
-		   	END AS attendenceStatusTitle
+// 	    	FROM rms_student_attendence_detail AS sade,
+// 	    	`rms_student_attendence` AS sta
+// 	    	WHERE sta.`id` = sade.`attendence_id`";
+	    	
+	    	$where_status = " WHERE att.id=sad.attendence_id AND att.group_id=$groupId AND sad.`stu_id`=$stuId AND att.date_attendence = sta.date_attendence GROUP BY MONTH(att.date_attendence)  ";
+	    	$sql="SELECT
+		    	
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 1 ) AS COME,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 2 ) AS ABSENT,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 3 ) AS PERMISSION,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 4 ) AS LATE,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 5 ) AS EarlyLeave,
+		    	DATE_FORMAT(sta.date_attendence, '%m') AS  dateAttendence,
+		    	DATE_FORMAT(sta.date_attendence, '%M') AS  dateAtt
+	    	
    	
 	    	FROM rms_student_attendence_detail AS sade,
-	    	`rms_student_attendence` AS sta
-	    	WHERE sta.`id` = sade.`attendence_id`";
-	    	$where = "";
-	    	$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId ORDER BY sta.`date_attendence` ASC";
+		    	`rms_student_attendence` AS sta
+		    	WHERE sta.`id` = sade.`attendence_id`";
+		    	$where = "";
+		    	$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId 
+		    	GROUP BY MONTH(sta.date_attendence) ORDER BY sta.`date_attendence` DESC ";
+		    
+// 		    echo $sql.$where;
 	    	$row =  $db->fetchAll($sql.$where);
 	    	$result = array(
 	    			'status' =>true,

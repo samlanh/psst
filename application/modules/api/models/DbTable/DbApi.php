@@ -48,6 +48,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$province = "province_en_name";
 			$commune = "commune_name";
 			$district = "district_name";
+			$vill = 'village_name';
 			if ($currentLang==1){
 				$colunmname='title';
 				$lbView="name_kh";
@@ -57,45 +58,57 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$province = "province_kh_name";
 				$commune = "commune_namekh";
 				$district = "district_namekh";
+				$vill = 'village_namekh';
 			}
 	
 			$sql ="SELECT
-			s.*,
-			(SELECT b.$branch FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branchName,
-			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branchLogo,
-			(SELECT b.branch_tel FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branchTel,
-			(SELECT b.branch_tel1 FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branchTel1,
-			(SELECT b.br_address FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS brAddress,
-			(SELECT b.$schoolName FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS schoolName,
-			(SELECT b.website FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS website,
-			(SELECT b.email FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS email,
-			 
-			CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
-			(select $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
-			 
-			(SELECT $province FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS provinceTitle,
-			(SELECT $commune FROM ln_commune AS p WHERE p.com_id=s.commune_name LIMIT 1) AS communeTitle,
-			(SELECT $district FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS districtTitle,
-			 
-			(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fatherOccupation,
-			(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS motherOccupation,
-			 
-			(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
-			 
-			(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
-			CONCAT(t.from_academic,' - ',t.to_academic) as academicYearTitle,
-			t.generation
+						s.stu_id,
+						s.stu_khname,
+						s.stu_code,
+						s.tel,
+						s.pob,
+						s.home_num,
+						s.street_num,
+						s.father_enname,
+						s.father_phone,
+						s.mother_enname,
+						s.mother_phone,
+						s.guardian_enname,
+						s.guardian_tel,
+						s.photo,
+						g.id AS group_id,
+						g.academic_year,
+						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
+						(select $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
+						(SELECT $lbView FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+						(SELECT $lbView FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS fatherNation,
+		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS motherNation,
+		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardianNation,
+						 
+						(SELECT $province FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS provinceTitle,
+						(SELECT $district FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS districtTitle,
+						(SELECT $commune FROM ln_commune AS p WHERE p.com_id=s.commune_name LIMIT 1) AS communeTitle,
+						(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+						 
+						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fatherOccupation,
+						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS motherOccupation,
+						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS guardian_job,
+						(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
+						 
+						(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
+						CONCAT(t.from_academic,' - ',t.to_academic) as academicYearTitle,
+						t.generation
 			FROM
-			rms_student as s,
-			rms_group as g,
-			rms_group_detail_student as gds,
-			rms_tuitionfee as t
+				rms_student as s,
+				rms_group as g,
+				rms_group_detail_student as gds,
+				rms_tuitionfee as t
 			WHERE
-			s.stu_id = gds.stu_id
-			and g.id=gds.group_id
-			and g.academic_year=t.id
-			and s.stu_id=$stu_id";
-			$row = $_db->fetchRow($sql);
+				s.stu_id = gds.stu_id
+				and g.id=gds.group_id
+				and g.academic_year=t.id
+				and s.stu_id=$stu_id";
+			$row = $_db->fetchAll($sql);
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -334,8 +347,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	if($currentLang==1){// khmer
     		$label = "name_kh";
     	}
-    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
-    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
+    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
     	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
     	$sql="
     		SELECT
@@ -352,16 +365,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	group by
 		    	gs.day_id
 		    	ORDER BY
-		    	gs.day_id ASC
-    	";
-//     	AND gs.year_id = $academicYear
-//     	and gs.branch_id = $branch
+		    	gs.day_id ASC ";
     	return $db->fetchAll($sql);
     }
     function getTimeSchelduleByYGS($stuInfo,$search,$currentLang){ /* get Time for show in schedule VD*/
     	$db=$this->getAdapter();
-    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
-    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
+    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
     	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
     	$sql="
     	SELECT gr.from_hour,
@@ -384,8 +394,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$subjecct = "subject_titlekh";
     		$teacher = "teacher_name_kh";
     	}
-    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
-    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+    	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
+    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
     	$sql="
     	SELECT gr.from_hour,
 	    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
@@ -695,7 +705,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	try{
     		$stuId = $search['stu_id'];
     		$stuInfo = $this->getStudentInformation($stuId,$search['currentLang']);
-	    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
+	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
 	    	
 	    	

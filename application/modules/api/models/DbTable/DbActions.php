@@ -134,13 +134,13 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$row = $db->getSchedule($stu_id,$search);
 		if ($row['status']){
 			$arrResult = array(
-					"result" => $row['value'],
-					"code" => "SUCCESS",
+				"result" => $row['value'],
+				"code" => "SUCCESS",
 			);
 		}else{
 			$arrResult = array(
-					"code" => "ERR_",
-					"message" => $row['value'],
+				"code" => "ERR_",
+				"message" => $row['value'],
 			);
 		}
 		print_r(Zend_Json::encode($arrResult));

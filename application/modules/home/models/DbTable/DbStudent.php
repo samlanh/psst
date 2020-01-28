@@ -156,7 +156,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			  
 				 (SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1 ) AS room_name,
-				  (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
 				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
 				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
 				 (SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,

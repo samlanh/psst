@@ -395,7 +395,10 @@ function getInfoBygroup(){
 			dijit.byId('grade').set('readOnly',true);
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
-			dijit.byId('room').set('value',data.room_id);
+			
+			if(data.room_id>0){
+				dijit.byId('room').set('value',data.room_id);
+			}
 			filterStudentBygroup();
 		},
 		error:function(err){

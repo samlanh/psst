@@ -1127,20 +1127,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStatusMistake($stu_id,$date_att,$group){//old
     	$db = $this->getAdapter();
-//     	$sql="SELECT
-// 			    	sd.`group_id`,
-// 			    	sdd.`mistake_type`,
-// 			    	sdd.description,
-// 			    	sd.`mistake_date`
-// 			    FROM 
-// 			    	`rms_student_discipline` AS sd,
-// 			    	`rms_student_discipline_detail` AS sdd
-// 			    WHERE 
-// 			    	sd.`id` = sdd.`discipline_id`
-// 			    	AND sdd.`stu_id` = $stu_id 
-//     				AND sd.`mistake_date` = '".$date_att."' 
-//     				AND sd.`group_id` = $group
-//     		";
     	$sql="SELECT
 	    	sd.`group_id`,
 	    	sd.`type`,
@@ -1186,40 +1172,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     function getTotalStatusMistake($stu_id,$date_att,$group){
     	$db = $this->getAdapter();
-// old    	$sql="SELECT
-// 			    	sd.`group_id`,
-// 			    	sdd.`mistake_type`,
-// 			    	sdd.description,
-// 			    	sd.`mistake_date`
-// 			    FROM 
-// 			    	`rms_student_discipline` AS sd,
-// 			    	`rms_student_discipline_detail` AS sdd
-// 			    WHERE 
-// 			    	sd.`id` = sdd.`discipline_id`
-// 			    	AND sdd.`stu_id` = $stu_id 
-//     				AND sd.`mistake_date` = '".$date_att."' 
-//     				AND sd.`group_id` = $group
-//     		";
-    	
-//     	$where='';
-// //     	echo $sql.$where.' LIMIT 1';//exit();
-//     	return $db->fetchRow($sql.$where.' LIMIT 1');
-// 		$sql="SELECT
-// 			    	sd.`group_id`,
-// 			    	sdd.`mistake_type`,
-// 			    	sdd.description,
-// 			    	sd.`mistake_date`,
-// 			    	sdd.`stu_id`,
-// 			    	COUNT(sdd.`mistake_type`) AS count_mistack			    	
-// 			    FROM 
-// 			    	`rms_student_discipline` AS sd,
-// 			    	`rms_student_discipline_detail` AS sdd
-// 			    WHERE 
-// 			    	sd.`id` = sdd.`discipline_id`
-// 			    	AND sdd.`stu_id` = $stu_id 
-//     				AND sd.`group_id` = $group
-//     			GROUP BY mistake_type
-// 			";
     	$sql="SELECT
 			    	sd.`group_id`,
 			    	sdd.`attendence_status` as mistake_type,

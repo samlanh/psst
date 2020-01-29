@@ -2,7 +2,6 @@
 
 class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 {
-//     protected $_name = 'rms_student_discipline';
 	protected $_name = 'rms_student_attendence';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -99,7 +98,6 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 									'attendence_status'=>$_data['mistake_type'.$i],
 									'description'=>$_data['comment'.$i],
 							);
-// 							$this->_name ='rms_student_discipline_detail';
 							$this->_name ='rms_student_attendence_detail';
 							$this->insert($arr);
 						}
@@ -136,7 +134,6 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 			$db->getProfiler()->setEnabled(true);
 			$this->update($_arr, $where);
 			
-// 		   $this->_name='rms_student_discipline_detail';
 		   $this->_name ='rms_student_attendence_detail';
 		   $this->delete("attendence_id=".$_data['id']);
 		  
@@ -153,14 +150,12 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 									'attendence_status'=>$_data['mistake_type'.$i],
 									'description'=>$_data['comment'.$i],
 							);
-// 							$this->_name ='rms_student_discipline_detail';
 							$this->_name ='rms_student_attendence_detail';
 							$this->insert($arr);
 						}
 					}
 				}
 			}
-// 			exit();
 		  $db->commit();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -241,13 +236,12 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		$db=$this->getAdapter();
 		$sql="SELECT gsd.`subject_id` as id,
 		(SELECT CONCAT(sj.subject_titleen,' - ',sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsd.`subject_id` LIMIT 1) AS name
-		FROM `rms_group_subject_detail` AS gsd
-		WHERE gsd.`group_id`= $group_id";
+			FROM `rms_group_subject_detail` AS gsd
+				WHERE gsd.`group_id`= $group_id";
 		return $db->fetchAll($sql);
 	}
 	function getAttendencetByID($id){
 		$db=$this->getAdapter();
-// 		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id;
 		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id." AND sd.type=2";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('sd.`branch_id`');
@@ -263,44 +257,8 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name 
-		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1";
-
+		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1 ";
 		return $db->fetchAll($sql);
-	}
-	function updateDisiplinetoAtt(){
-		$sql="SELECT id,branch_id,for_semester,note,group_id,mistake_date,date_create,
-				modify_date,status,user_id FROM `rms_student_discipline`";
-		$result = $this->getAdapter()->fetchAll($sql);
-		foreach($result as $rs){
-			$_arr = array(
-					'branch_id'=>$rs['branch_id'],
-					'group_id'=>$rs['group_id'],
-					'date_attendence'=>date("Y-m-d",strtotime($rs['mistake_date'])),
-					'date_create'=>$rs['date_create'],
-					'modify_date'=>$rs['modify_date'],
-					'for_semester'=> $rs['for_semester'],
-					'note'=>$rs['note'],
-					'status'=>$rs['status'],
-					'user_id'=>$rs['user_id'],
-					'type'=>2, //for displince
-			);
-			$this->_name ='rms_student_attendence';
-			$id=$this->insert($_arr);
-			
-			$sql="SELECT * FROM `rms_student_discipline_detail` WHERE discipline_id = ".$rs['id'];
-			$rows = $this->getAdapter()->fetchAll($sql);
-			
-			foreach($rows as $row){
-				$arr1 = array(
-						'attendence_id'=>$id,
-						'stu_id'=>$row['stu_id'],
-						'attendence_status'=>$row['mistake_type'],
-						'description'=>$row['description'],
-				);
-				$this->_name ='rms_student_attendence_detail';
-				$this->insert($arr1);
-		   }
-	  }
-  }  
+	} 
 }
 

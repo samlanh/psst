@@ -7,8 +7,6 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-	
-
     
     function getAllDiscipline($search=null){
     	$db=$this->getAdapter();
@@ -265,41 +263,6 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1";
 
 		return $db->fetchAll($sql);
-	}
-	function updateDisiplinetoAtt(){
-		$sql="SELECT id,branch_id,for_semester,note,group_id,mistake_date,date_create,
-				modify_date,status,user_id FROM `rms_student_discipline`";
-		$result = $this->getAdapter()->fetchAll($sql);
-		foreach($result as $rs){
-			$_arr = array(
-					'branch_id'=>$rs['branch_id'],
-					'group_id'=>$rs['group_id'],
-					'date_attendence'=>date("Y-m-d",strtotime($rs['mistake_date'])),
-					'date_create'=>$rs['date_create'],
-					'modify_date'=>$rs['modify_date'],
-					'for_semester'=> $rs['for_semester'],
-					'note'=>$rs['note'],
-					'status'=>$rs['status'],
-					'user_id'=>$rs['user_id'],
-					'type'=>2, //for displince
-			);
-			$this->_name ='rms_student_attendence';
-			$id=$this->insert($_arr);
-			
-			$sql="SELECT * FROM `rms_student_discipline_detail` WHERE discipline_id = ".$rs['id'];
-			$rows = $this->getAdapter()->fetchAll($sql);
-			
-			foreach($rows as $row){
-				$arr1 = array(
-						'attendence_id'=>$id,
-						'stu_id'=>$row['stu_id'],
-						'attendence_status'=>$row['mistake_type'],
-						'description'=>$row['description'],
-				);
-				$this->_name ='rms_student_attendence_detail';
-				$this->insert($arr1);
-		   }
-	  }
-  }  
+	} 
 }
 

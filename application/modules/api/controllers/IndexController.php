@@ -22,10 +22,17 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->paymentDetailAction($GetData);
     		}else if ($GetData['url']=="schedule"){
     			$_dbAction->scheduleAction($GetData);
-    		}else if ($GetData['url']=="score"){
-    			$_dbAction->scoreAction($GetData);
     		}else if ($GetData['url']=="attendance"){
     			$_dbAction->attendanceAction($GetData);
+    		}else if ($GetData['url']=="attendanceDetail"){
+    			$_dbAction->attendanceDetailAction($GetData);
+    		}else if ($GetData['url']=="discipline"){
+    			$_dbAction->disciplineAction($GetData);
+    		}else if ($GetData['url']=="attendanceDetail"){
+    			$_dbAction->attendanceDetailAction($GetData);
+    		}
+    		else if ($GetData['url']=="score"){
+    			$_dbAction->scoreAction($GetData);
     		}else if ($GetData['url']=="evaluation"){
     			$_dbAction->envaluationAction($GetData);
     		}else{

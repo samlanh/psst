@@ -708,49 +708,59 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
 	    	
-// 	    	$sql="SELECT sade.*,
-// 	    	COUNT(sade.id) as attAmount,
-// 	    	sta.`group_id`,
-// 	    	DATE_FORMAT(sta.date_attendence, '%d-%m-%Y %H:%i') AS  dateAttendence,
-// 	    	(SELECT st.`type` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `type`,
-// 	    	(SELECT st.`for_session` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `for_session`,
-	    	
-// 	    	CASE
-// 	    	WHEN  sade.attendence_status = 1 THEN 'COME'
-// 	    	WHEN  sade.attendence_status = 2 THEN 'ABSENT'
-// 	    	WHEN  sade.attendence_status = 3 THEN 'PERMISSION'
-// 	    	WHEN  sade.attendence_status = 4 THEN 'LATE'
-// 	    	WHEN  sade.attendence_status = 5 THEN 'EarlyLeave'
-// 	    	END AS attendenceStatusTitle
-	    	
-// 	    	FROM rms_student_attendence_detail AS sade,
-// 	    	`rms_student_attendence` AS sta
-// 	    	WHERE sta.`id` = sade.`attendence_id`";
-	    	
-	    	$where_status = " WHERE att.id=sad.attendence_id AND att.group_id=$groupId AND sad.`stu_id`=$stuId AND att.date_attendence = sta.date_attendence GROUP BY MONTH(att.date_attendence)  ";
+	    	$where_status = " AND att.type =1 AND att.id=sad.attendence_id AND att.group_id=$groupId AND sad.`stu_id`=$stuId AND MONTH(att.date_attendence) = MONTH(sta.date_attendence) GROUP BY MONTH(att.date_attendence) ";
 	    	$sql="SELECT
-		    	
-		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 1 ) AS COME,
-		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 2 ) AS ABSENT,
-		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 3 ) AS PERMISSION,
-		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 4 ) AS LATE,
-		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad $where_status AND sad.attendence_status = 5 ) AS EarlyLeave,
 		    	DATE_FORMAT(sta.date_attendence, '%m') AS  dateAttendence,
-		    	DATE_FORMAT(sta.date_attendence, '%M') AS  dateAtt
-	    	
+		    	DATE_FORMAT(sta.date_attendence, '%M') AS  dateLabel,
+		    	sta.group_id,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 1 $where_status  ) AS COME,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 2 $where_status) AS ABSENT,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 3 $where_status) AS PERMISSION,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 4 $where_status) AS LATE,
+		    	(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 5 $where_status) AS EarlyLeave
    	
 	    	FROM rms_student_attendence_detail AS sade,
 		    	`rms_student_attendence` AS sta
-		    	WHERE sta.`id` = sade.`attendence_id`";
-		    	$where = "";
-		    	$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId 
+		    	WHERE sta.`id` = sade.`attendence_id` AND sta.type=1 ";
+	    	$where = "";
+	    	$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId 
 		    	GROUP BY MONTH(sta.date_attendence) ORDER BY sta.`date_attendence` DESC ";
 		    
-// 		    echo $sql.$where;
 	    	$row =  $db->fetchAll($sql.$where);
+	    	
+	    	$come = 0;$absent=0;$permission=0;$late=0;$earlyleave=0;$amt = 0;$className='';$academicYear='';
+	    	$result = array();
+	    	foreach($row as  $index => $rs){
+	    		$result[$index]['dateAttendence'] = $rs['dateAttendence'];
+	    		$result[$index]['dateLabel'] = $rs['dateLabel'];
+	    		$result[$index]['COME'] = empty($rs['COME'])?0:$rs['COME'];
+	    		$result[$index]['ABSENT'] = empty($rs['ABSENT'])?0:$rs['ABSENT'];
+	    		$result[$index]['PERMISSION'] = empty($rs['PERMISSION'])?0:$rs['PERMISSION'];
+	    		$result[$index]['LATE'] = empty($rs['LATE'])?0:$rs['LATE'];
+	    		$result[$index]['EarlyLeave'] = empty($rs['EarlyLeave'])?0:$rs['EarlyLeave'];
+	    		$result[$index]['TOTAL_ATTRECORD'] = $rs['ABSENT']+$rs['PERMISSION']+$rs['LATE']+$rs['EarlyLeave'];	    		
+	    		$result[$index]['group_id'] = $rs['group_id'];
+	    		
+	    		$come = $come+$rs['COME'];
+	    		$absent=$absent+$rs['ABSENT'];
+	    		$permission=$permission+$rs['PERMISSION'];
+	    		$late=$late+$rs['LATE'];
+	    		$earlyleave=$earlyleave+$rs['EarlyLeave'];
+	    		
+	    	}
+	    	$sql=" SELECT CONCAT(f.from_academic,'-',f.to_academic,'(',f.generation,')') AS acarYear,group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
+	    	$rsGroup = $db->fetchRow($sql);
+	      
+	    	if(!empty($rsGroup)){
+	    		$className = $rsGroup['className'];
+	    		$academicYear = $rsGroup['acarYear'];
+	    	}
+	    	$amt = $absent+$permission+$late+$earlyleave;
+	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'COME'=>$come,"ABSENT"=>$absent,"PERMISSION"=>$permission,"LATE"=>$late,"EarlyLeave"=>$earlyleave,"TOTALAMT"=>$amt);
+	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr);
 	    	$result = array(
 	    			'status' =>true,
-	    			'value' =>$row,
+	    			'value' =>$arr_merch,
 	    	);
 	    	return $result;
 	    	
@@ -763,6 +773,121 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
+    function getAttendenceDetail($search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$stuId = $search['stu_id'];
+    		$currentLang = $search['currentLang'];
+    		$currentMonth = $search['currentMonth'];
+    		$groupId = $search['groupId'];
+    
+    		$sql=" SELECT
+    					sade.description,
+	    			    DATE_FORMAT(sta.date_attendence, '%d-%m-%Y') AS dateAttendence,
+    			    CASE
+    			    	WHEN  sade.attendence_status = 1 THEN 'C'
+    			    	WHEN  sade.attendence_status = 2 THEN 'A'
+    			    	WHEN  sade.attendence_status = 3 THEN 'P'
+    			    	WHEN  sade.attendence_status = 4 THEN 'L'
+    			    	WHEN  sade.attendence_status = 5 THEN 'EL'
+    			    	END AS attendenceStatusTitle    			    	
+    			    FROM rms_student_attendence_detail AS sade,
+    			    	`rms_student_attendence` AS sta
+    			    	WHERE sta.`id` = sade.`attendence_id` AND sta.type =1 ";
+    		
+    		    	$where=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId
+    		    		AND MONTH(date_attendence)= $currentMonth ORDER BY sta.`date_attendence` DESC ";
+    
+    		$row =  $db->fetchAll($sql.$where);
+    
+    		$result = array(
+	    		'status' =>true,
+	    		'value' =>$row,
+    		);
+    		return $result;
+    
+    }catch(Exception $e){
+    Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    $result = array(
+		    'status' =>false,
+		    'value' =>$e->getMessage(),
+	    );
+	    return $result;
+	    }
+    }
+    function getDisciplineBydate($search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$stuId = $search['stu_id'];
+    		$stuInfo = $this->getStudentInformation($stuId,$search['currentLang']);
+    		$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
+    		$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
+    
+    			$where_status = " AND att.type =2 AND att.id=sad.attendence_id AND att.group_id=$groupId AND sad.`stu_id`=$stuId AND MONTH(att.date_attendence) = MONTH(sta.date_attendence) GROUP BY MONTH(att.date_attendence) ";
+	    		$sql="SELECT
+	    		DATE_FORMAT(sta.date_attendence, '%m') AS  dateAttendence,
+	    		DATE_FORMAT(sta.date_attendence, '%M') AS  dateLabel,
+	    		sta.group_id,
+	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 1 $where_status) AS COME,
+	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 2 $where_status) AS ABSENT,
+	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 3 $where_status) AS PERMISSION,
+	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 4 $where_status) AS LATE,
+	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 5 $where_status) AS EarlyLeave
+	    
+	    		FROM rms_student_attendence_detail AS sade,
+	    		`rms_student_attendence` AS sta
+	    		WHERE sta.`id` = sade.`attendence_id` AND sta.type=2 ";
+	    		$where = "";
+	    		$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId
+	    		GROUP BY MONTH(sta.date_attendence) ORDER BY sta.`date_attendence` DESC ";
+	    
+	    				$row =  $db->fetchAll($sql.$where);
+	    
+	    		$come = 0;$absent=0;$permission=0;$late=0;$earlyleave=0;$amt = 0;$className='';$academicYear='';
+	    		$result = array();
+	    		foreach($row as  $index => $rs){
+	    		$result[$index]['dateAttendence'] = $rs['dateAttendence'];
+	    			$result[$index]['dateLabel'] = $rs['dateLabel'];
+	    			$result[$index]['COME'] = empty($rs['COME'])?0:$rs['COME'];
+	    			$result[$index]['ABSENT'] = empty($rs['ABSENT'])?0:$rs['ABSENT'];
+	    			$result[$index]['PERMISSION'] = empty($rs['PERMISSION'])?0:$rs['PERMISSION'];
+	    			$result[$index]['LATE'] = empty($rs['LATE'])?0:$rs['LATE'];
+	    					$result[$index]['EarlyLeave'] = empty($rs['EarlyLeave'])?0:$rs['EarlyLeave'];
+	    			$result[$index]['TOTAL_ATTRECORD'] = $rs['ABSENT']+$rs['PERMISSION']+$rs['LATE']+$rs['EarlyLeave'];
+	    			$result[$index]['group_id'] = $rs['group_id'];
+	    	   
+	    			$come = $come+$rs['COME'];
+	    			$absent=$absent+$rs['ABSENT'];
+	    			$permission=$permission+$rs['PERMISSION'];
+	    			$late=$late+$rs['LATE'];
+	    			$earlyleave=$earlyleave+$rs['EarlyLeave'];
+	    	   
+	    		}
+	    		$sql=" SELECT CONCAT(f.from_academic,'-',f.to_academic,'(',f.generation,')') AS acarYear,group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
+	    		$rsGroup = $db->fetchRow($sql);
+	    		 
+	    		if(!empty($rsGroup)){
+	    		$className = $rsGroup['className'];
+	    		$academicYear = $rsGroup['acarYear'];
+	    	}
+	    	$amt = $absent+$permission+$late+$earlyleave;
+	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'COME'=>$come,"ABSENT"=>$absent,"PERMISSION"=>$permission,"LATE"=>$late,"EarlyLeave"=>$earlyleave,"TOTALAMT"=>$amt);
+	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr);
+	    	$result = array(
+		    	'status' =>true,
+		    	'value' =>$arr_merch,
+	    	);
+	    	return $result;
+    
+    	}catch(Exception $e){
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    	$result = array(
+	    			'status' =>false,
+	    			'value' =>$e->getMessage(),
+	    			);
+	    			return $result;
+	    	}
+    	}
     function generateToken($_data){
     	$db = $this->getAdapter();
 //     	$db->beginTransaction();

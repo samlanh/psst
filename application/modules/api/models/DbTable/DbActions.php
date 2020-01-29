@@ -184,12 +184,52 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
-	
 	public function attendanceAction($search){
 		$db = new Api_Model_DbTable_DbApi();
 		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$row = $db->getAttendenceBydate($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function attendanceDetailAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['currentMonth'] = empty($search['currentMonth'])?1:$search['currentMonth'];
+		$search['groupId'] = empty($search['groupId'])?1:$search['groupId'];
+		
+		$row = $db->getAttendenceDetail($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function disciplineAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getDisciplineBydate($search);
 		if ($row['status']){
 			$arrResult = array(
 					"result" => $row['value'],

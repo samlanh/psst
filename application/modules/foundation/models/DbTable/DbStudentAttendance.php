@@ -251,7 +251,6 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){
 		$db = $this->getAdapter();
-// 		$sql="SELECT sdd.`mistake_type`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_discipline_detail` AS sdd WHERE sdd.`discipline_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		return $db->fetchRow($sql);
 	}

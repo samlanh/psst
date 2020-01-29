@@ -825,42 +825,40 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     
     			$where_status = " AND att.type =2 AND att.id=sad.attendence_id AND att.group_id=$groupId AND sad.`stu_id`=$stuId AND MONTH(att.date_attendence) = MONTH(sta.date_attendence) GROUP BY MONTH(att.date_attendence) ";
 	    		$sql="SELECT
-	    		DATE_FORMAT(sta.date_attendence, '%m') AS  dateAttendence,
-	    		DATE_FORMAT(sta.date_attendence, '%M') AS  dateLabel,
-	    		sta.group_id,
-	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 1 $where_status) AS COME,
-	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 2 $where_status) AS ABSENT,
-	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 3 $where_status) AS PERMISSION,
-	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 4 $where_status) AS LATE,
-	    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 5 $where_status) AS EarlyLeave
+		    		DATE_FORMAT(sta.date_attendence, '%m') AS  dateDiscipline,
+		    		DATE_FORMAT(sta.date_attendence, '%M') AS  dateLabel,
+		    		sta.group_id,
+		    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 1 $where_status) AS Minor,
+		    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 2 $where_status) AS MODERATE,
+		    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 3 $where_status) AS MAJOR,
+		    		(SELECT COUNT(sad.id) FROM rms_student_attendence AS att, rms_student_attendence_detail AS sad WHERE sad.attendence_status = 4 $where_status) AS OTHER
 	    
 	    		FROM rms_student_attendence_detail AS sade,
-	    		`rms_student_attendence` AS sta
-	    		WHERE sta.`id` = sade.`attendence_id` AND sta.type=2 ";
+	    			`rms_student_attendence` AS sta
+	    			WHERE sta.`id` = sade.`attendence_id` AND sta.type=2 ";
 	    		$where = "";
 	    		$where.=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId
 	    		GROUP BY MONTH(sta.date_attendence) ORDER BY sta.`date_attendence` DESC ";
 	    
-	    				$row =  $db->fetchAll($sql.$where);
+	    		$row =  $db->fetchAll($sql.$where);
 	    
-	    		$come = 0;$absent=0;$permission=0;$late=0;$earlyleave=0;$amt = 0;$className='';$academicYear='';
+	    		$minor = 0;$moderate=0;$major = 0;$other=0;$amt = 0;$className='';$academicYear='';
 	    		$result = array();
 	    		foreach($row as  $index => $rs){
-	    		$result[$index]['dateAttendence'] = $rs['dateAttendence'];
+	    			$result[$index]['dateDiscipline'] = $rs['dateDiscipline'];
 	    			$result[$index]['dateLabel'] = $rs['dateLabel'];
-	    			$result[$index]['COME'] = empty($rs['COME'])?0:$rs['COME'];
-	    			$result[$index]['ABSENT'] = empty($rs['ABSENT'])?0:$rs['ABSENT'];
-	    			$result[$index]['PERMISSION'] = empty($rs['PERMISSION'])?0:$rs['PERMISSION'];
-	    			$result[$index]['LATE'] = empty($rs['LATE'])?0:$rs['LATE'];
-	    					$result[$index]['EarlyLeave'] = empty($rs['EarlyLeave'])?0:$rs['EarlyLeave'];
-	    			$result[$index]['TOTAL_ATTRECORD'] = $rs['ABSENT']+$rs['PERMISSION']+$rs['LATE']+$rs['EarlyLeave'];
+	    			
+	    			$result[$index]['Minor'] = empty($rs['Minor'])?0:$rs['Minor'];
+	    			$result[$index]['MODERATE'] = empty($rs['MODERATE'])?0:$rs['MODERATE'];
+	    			$result[$index]['MAJOR'] = empty($rs['MAJOR'])?0:$rs['MAJOR'];
+	    			$result[$index]['OTHER'] = empty($rs['OTHER'])?0:$rs['OTHER'];
 	    			$result[$index]['group_id'] = $rs['group_id'];
+	    			$result[$index]['TOTAL_ATTRECORD'] = $rs['Minor']+$rs['MODERATE']+$rs['MAJOR']+$rs['OTHER'];
 	    	   
-	    			$come = $come+$rs['COME'];
-	    			$absent=$absent+$rs['ABSENT'];
-	    			$permission=$permission+$rs['PERMISSION'];
-	    			$late=$late+$rs['LATE'];
-	    			$earlyleave=$earlyleave+$rs['EarlyLeave'];
+	    			$minor = $minor+$rs['Minor'];
+	    			$moderate=$moderate+$rs['MODERATE'];
+	    			$major=$major+$rs['MAJOR'];
+	    			$other=$other+$rs['OTHER'];
 	    	   
 	    		}
 	    		$sql=" SELECT CONCAT(f.from_academic,'-',f.to_academic,'(',f.generation,')') AS acarYear,group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
@@ -870,9 +868,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		$className = $rsGroup['className'];
 	    		$academicYear = $rsGroup['acarYear'];
 	    	}
-	    	$amt = $absent+$permission+$late+$earlyleave;
-	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'COME'=>$come,"ABSENT"=>$absent,"PERMISSION"=>$permission,"LATE"=>$late,"EarlyLeave"=>$earlyleave,"TOTALAMT"=>$amt);
+	    	
+	    	$amt = $minor+$moderate+$major+$other;
+	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'Minor'=>$minor,"MODERATE"=>$moderate,"MAJOR"=>$major,"OTHER"=>$other,"TOTALAMT"=>$amt);
 	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr);
+	    	
 	    	$result = array(
 		    	'status' =>true,
 		    	'value' =>$arr_merch,

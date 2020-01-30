@@ -35,6 +35,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->scoreAction($GetData);
     		}else if ($GetData['url']=="evaluation"){
     			$_dbAction->envaluationAction($GetData);
+    		}else if ($GetData['url']=="news"){
+    			$_dbAction->newsAction($GetData);
     		}else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
     		}

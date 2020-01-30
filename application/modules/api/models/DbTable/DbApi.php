@@ -482,6 +482,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     function getScoreExame($search = array()){
     	$db = $this->getAdapter();
     	try{
+    		$dbgb = new Application_Model_DbTable_DbGlobal();
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
     		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
@@ -490,9 +491,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$subject = $this->getSubjectByGroup($stuInfo,$search);
     		$arrScoreValue = array();
     		if (!empty($subject)){
+    			
     			foreach ($subject as $keyIndex => $rs){
     				$score = $this->getScoreBySubject($row['id'],$stu_id,$rs['subject_id'],$currentLang);
     				$rangSubje = $this->getRankSubjectMonthlyExam($row['group_id'], $stu_id, $rs['subject_id'], $row['for_month_id']);
+    				$mentiontype = 3;
+    				if ($currentLang==1){
+    					$mentiontype = 2;
+    				}
+    				$rangSubje['mention'] = $dbgb->getMentionScore($rangSubje['total_score'], $rs['academicYearId'],$rs['degreeId'],$mentiontype,$rs['gradeId']);
     				$custArray = array(
     						'score' =>$score,
     						'rangSubje' =>$rangSubje,
@@ -530,11 +537,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	if($currentLang==1){// khmer
 	    		$for_month = "month_kh";
 	    	}
-	    	$academicYear = empty($stuInfo['value']['academic_year'])?0:$stuInfo['value']['academic_year'];
-	    	$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
-	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
 	    	
-	    	$stuId = empty($stuInfo['value']['stu_id'])?0:$stuInfo['value']['stu_id'];
+	    	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
+	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
+	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
+	    	$stuId = empty($stuInfo['value'][0]['stu_id'])?0:$stuInfo['value'][0]['stu_id'];
 	    	$sql="
 	    		SELECT
 		    	s.`id`,
@@ -607,11 +614,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			$subjectTitle = "subject_titlekh";
     		}
     		$examType = empty($search['exam_type'])?0:$search['exam_type'];
-    		$groupId = empty($stuInfo['value']['group_id'])?0:$stuInfo['value']['group_id'];
-    		$stuId = empty($stuInfo['value']['stu_id'])?0:$stuInfo['value']['stu_id'];
+    		$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
+    		$stuId = empty($stuInfo['value'][0]['stu_id'])?0:$stuInfo['value'][0]['stu_id'];
     		$sql="
     		SELECT
 	    		gsjd.*,
+	    		g.academic_year AS academicYearId,
+	    		g.degree AS degreeId,
+	    		g.grade AS gradeId,
 	    		g.amount_subject AS amount_subjectdivide,
 	    		gsjd.max_score AS max_subjectscore,
 	    		gsjd.score_short as cut_score,
@@ -912,5 +922,40 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 //     		$db->rollBack();
     		return null;
     	}
+    }
+    
+    public function getAllNews($search){
+    	$db = $this->getAdapter();
+    	try{
+	    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+	    		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+		    	$sql="SELECT
+			    	act.*,
+			    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
+			    	act.`publish_date`,
+			    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
+			    	CASE
+					   	WHEN  act.`status` = 1 THEN '$base_url'
+					  END AS imageUrl
+		    	";
+		    	$sql.=" FROM `ln_news` AS act WHERE act.`status` =1 ";
+		    	$sql.= "  ORDER BY act.publish_date,act.`id` DESC";
+		    	if (!empty($search['limit'])){
+		    		$sql.= "  LIMIT ".$search['limit'];
+		    	}
+		    $row = $db->fetchAll($sql);
+		    $result = array(
+		    		'status' =>true,
+		    		'value' =>$row,
+		    );
+		    return $result;
+	    }catch(Exception $e){
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    	$result = array(
+	    			'status' =>false,
+	    			'value' =>$e->getMessage(),
+	    	);
+	    	return $result;
+	    }
     }
 }

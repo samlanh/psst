@@ -605,6 +605,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	if ($currentLang==1){
     		$mentiontype = 2;
     	}
+    	$column="metion_grade";
+    	if ($mentiontype==1){//grade A/B/C
+    		$column="metion_grade";
+    	}else if ($mentiontype==2){// ល្អប្រសើរ/ល្អណាស់/ល្អ
+    		$column="metion_in_khmer";
+    	}else if ($mentiontype==3){// Excellent/Very  Good/Good
+    		$column="mention_in_english";
+    	}//,sd.max_score
     	$sql="
     	SELECT
 	    	sd.`score`,
@@ -624,8 +632,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		sd.`subject_id`,
 	    	(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
 	    	,sd.amount_subject,
-	    	(SELECT 
-				 setd.mention_in_english AS mention
+			(SELECT 
+				 setd.$column AS mention
 					FROM `rms_metionscore_setting_detail` AS setd,
 						`rms_metionscore_setting` AS sets
 					WHERE sets.id = setd.metion_score_id
@@ -634,7 +642,18 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND sd.`score` < setd.max_score
 						ORDER BY setd.max_score ASC
 						LIMIT 1
-			) AS mention
+			) AS mention,
+			(SELECT 
+				 setd.metion_grade AS mention
+					FROM `rms_metionscore_setting_detail` AS setd,
+						`rms_metionscore_setting` AS sets
+					WHERE sets.id = setd.metion_score_id
+						AND sets.academic_year=$academicYearId
+						AND sets.degree = $degreeId
+						AND sd.`score` < setd.max_score
+						ORDER BY setd.max_score ASC
+						LIMIT 1
+			) AS mentionGrade
 
     	FROM  `rms_score_detail` AS sd
     	WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id ";
@@ -999,6 +1018,18 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
     		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+    		$mentiontype = 3;
+    		if ($currentLang==1){
+    			$mentiontype = 2;
+    		}
+    		$column="metion_grade";
+    		if ($mentiontype==1){//grade A/B/C
+    			$column="metion_grade";
+    		}else if ($mentiontype==2){// ល្អប្រសើរ/ល្អណាស់/ល្អ
+    			$column="metion_in_khmer";
+    		}else if ($mentiontype==3){// Excellent/Very  Good/Good
+    			$column="mention_in_english";
+    		}//,sd.max_score
     		$sql="
     		SELECT
 	    		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
@@ -1025,6 +1056,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			    	)
 		    	) AS rank,
 		    	
+		    	(SELECT 
+				 setd.$column AS mention
+					FROM `rms_metionscore_setting_detail` AS setd,
+						`rms_metionscore_setting` AS sets
+					WHERE sets.id = setd.metion_score_id
+						AND sets.academic_year=g.academic_year
+						AND sets.degree = `g`.`degree`
+						AND FORMAT(sm.total_avg,2) < setd.max_score
+						ORDER BY setd.max_score ASC
+						LIMIT 1
+				) AS mention,
+				(SELECT 
+				 setd.metion_grade AS mention
+					FROM `rms_metionscore_setting_detail` AS setd,
+						`rms_metionscore_setting` AS sets
+					WHERE sets.id = setd.metion_score_id
+						AND sets.academic_year=g.academic_year
+						AND sets.degree = `g`.`degree`
+						AND FORMAT(sm.total_avg,2) < setd.max_score
+						ORDER BY setd.max_score ASC
+						LIMIT 1
+				) AS metionGrade,
+			
 	    		s.`id`,
 	    		g.`group_code` AS groupCode,
 	    		s.for_academic_year AS forAcademicYearId,

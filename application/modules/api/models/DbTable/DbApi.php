@@ -36,7 +36,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
-	function getStudentInformation($stu_id=0,$currentLang=1,$action=null){
+	function getStudentInformation($stu_id=0,$currentLang=1){
 		$_db = $this->getAdapter();
 		$_db->beginTransaction();
 		try{
@@ -75,17 +75,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						s.mother_phone,
 						s.guardian_enname,
 						s.guardian_tel,
-						CASE
-	    			    	WHEN  s.primary_phone = 1 THEN s.tel
-	    			    	WHEN  s.primary_phone = 2 THEN s.father_phone
-	    			    	WHEN  s.primary_phone = 3 THEN s.mother_phone
-	    			    	WHEN  s.primary_phone = 4 THEN s.guardian_tel
-    			    	END AS PrimaryContact, 
 						s.photo,
 						g.id AS group_id,
 						g.academic_year,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
-						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
+						(select $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS fatherNation,
 		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS motherNation,
@@ -114,11 +108,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				and g.id=gds.group_id
 				and g.academic_year=t.id
 				and s.stu_id=$stu_id";
-// 			if(!$action!=null){
-// 				$row = $_db->fetchRow($sql);
-// 			}else{
-				$row = $_db->fetchAll($sql);
-// 			}
+			$row = $_db->fetchAll($sql);
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -158,6 +148,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		sp.receipt_number,
 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
+	    		
 	    		FORMAT(sp.grand_total,2)  AS totalPayment,
 	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
 	    		FORMAT(sp.penalty,2)  AS penalty,
@@ -488,41 +479,19 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
-    function getScoreExame($search = array()){
+	function getScoreExame($search = array()){
     	$db = $this->getAdapter();
     	try{
     		$dbgb = new Application_Model_DbTable_DbGlobal();
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
     		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
-    		
-    		$rows = $this->getExamRow($stuInfo,$search);
-    		$subject = $this->getSubjectByGroup($stuInfo,$search);
-    		$arrScoreValue = array();
-    		if (!empty($subject) AND !empty($rows)){
-		    	  foreach ($rows as $scorelist){		
-		    			foreach ($subject as $keyIndex => $rs){
-		    				$score = $this->getScoreBySubject($scorelist['id'],$stu_id,$rs['subject_id'],$currentLang);
-		    				$rangSubje = $this->getRankSubjectMonthlyExam($scorelist['group_id'], $stu_id, $rs['subject_id'], $scorelist['for_month_id']);
-		    				$mentiontype = 3;
-		    				if ($currentLang==1){
-		    					$mentiontype = 2;
-		    				}
-		    				$rangSubje['mention'] = $dbgb->getMentionScore($rangSubje['total_score'], $rs['academicYearId'],$rs['degreeId'],$mentiontype,$rs['gradeId']);
-		    				$custArray = array(
-		    						'score' =>$score,
-		    						'rangSubje' =>$rangSubje,
-		    						);
-		    				
-		    				$arrScoreValue[$keyIndex] = $custArray;
-		    				
-		    			}
-		    	  }
-    		}
+    		$score_id = empty($search['score_id'])?1:$search['score_id'];
+    		$examRow = $this->getExamRow($stuInfo,$search);
+    		$rowDetail = $this->getExamRowDetail($examRow, $stu_id, $currentLang);
     		$row = array(
-    				'row'=> $rows,
-    				'subject'=> $subject,
-    				'subjectScore'=> $arrScoreValue
+    				'row'=> $examRow,
+    				'rowDetail'=> $rowDetail
     		);
     		$result = array(
     				'status' =>true,
@@ -539,8 +508,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
-    
-    function getExamRow($stuInfo,$search = array()){
+	function getExamRow($stuInfo,$search = array()){
     	$db = $this->getAdapter();
     	try{
 	    	$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
@@ -548,7 +516,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	if($currentLang==1){// khmer
 	    		$for_month = "month_kh";
 	    	}
-	    	
+	    	$score_id = empty($search['score_id'])?1:$search['score_id'];
 	    	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
 	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
@@ -564,16 +532,19 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	s.title_score,
 		    	s.max_score,
 		    	s.group_id,
+		    	(SELECT g.academic_year FROM rms_group as g WHERE g.id =s.group_id LIMIT 1 ) AS academicYearId,
+		    	(SELECT g.degree FROM rms_group as g WHERE g.id =s.group_id LIMIT 1 ) AS degreeId,
+		    	(SELECT g.grade FROM rms_group as g WHERE g.id =s.group_id LIMIT 1 ) AS gradeId,
 		    	sd.`student_id`,
 		    	sm.total_score,
 		    	sm.total_avg,
-		    	FIND_IN_SET(total_avg, 
+		    	FIND_IN_SET( total_avg, 
 			    	(
 				    	SELECT GROUP_CONCAT( total_avg
 				    	ORDER BY total_avg DESC )
 				    	FROM rms_score_monthly AS dd ,rms_score AS ss WHERE
 				    	ss.`id`=dd.`score_id`
-				    	AND ss.group_id= s.`id`
+				    	AND ss.group_id= s.`group_id`
 				    	AND ss.id=s.`id`
 			    	)
 		    	) AS rank
@@ -582,28 +553,35 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	`rms_score` AS s,
 		    	`rms_score_detail` AS sd,
 		    	`rms_score_monthly` AS sm
+		    	
 	    	WHERE 
 	    		s.`id`=sd.`score_id`
 		    	AND sd.student_id = sm.`student_id`
 			    	AND s.`id`=sm.`score_id`
 			    	AND s.status = 1
-			    	AND s.type_score=1 ";
+			    	AND s.type_score=1
+	    	";
+	    	if (!empty($score_id)){
+	    		$sql.=" AND s.`id`=".$score_id;
+	    	}else{
 	    		$sql.=" AND s.`group_id`=".$groupId;
 	    		$sql.=" AND sd.`student_id`=".$stuId;
-	    	if (!empty($search['exam_type'])){
-	    		$sql.=" AND s.exam_type=".$search['exam_type'];
-	    		if ($search['exam_type']==1){
-	    			if (!empty($search['for_month'])){
-	    				$sql.=" AND s.`for_month`=".$search['for_month'];
-	    			}
-	    		}else if ($search['exam_type']==2){
-	    			if (!empty($search['for_semester'])){
-	    				$sql.=" AND s.`for_semester`=".$search['for_semester'];
+	    		if (!empty($search['exam_type'])){
+	    			$sql.=" AND s.exam_type=".$search['exam_type'];
+	    			if ($search['exam_type']==1){
+	    				if (!empty($search['for_month'])){
+	    					$sql.=" AND s.`for_month`=".$search['for_month'];
+	    				}
+	    			}else if ($search['exam_type']==2){
+	    				if (!empty($search['for_semester'])){
+	    					$sql.=" AND s.`for_semester`=".$search['for_semester'];
+	    				}
 	    			}
 	    		}
 	    	}
-	    	$sql.=" GROUP BY s.id ORDER BY s.id DESC ";
-	    	return $db->fetchAll($sql);
+	    		
+	    	$sql.=" ORDER BY s.id DESC LIMIT 1";
+	    	return $db->fetchRow($sql);
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$result = array(
@@ -613,111 +591,159 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
-    
-    function getSubjectByGroup($stuInfo,$search = array()){
-    	$db=$this->getAdapter();
-    	try{
-    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-    		$subjectTitle = "subject_titleen";
-    		if($currentLang==1){// khmer
-    			$subjectTitle = "subject_titlekh";
-    		}
-    		$examType = empty($search['exam_type'])?0:$search['exam_type'];
-    		$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
-    		$stuId = empty($stuInfo['value'][0]['stu_id'])?0:$stuInfo['value'][0]['stu_id'];
-    		$sql="
-    		SELECT
-	    		gsjd.*,
-	    		g.academic_year AS academicYearId,
-	    		g.degree AS degreeId,
-	    		g.grade AS gradeId,
-	    		g.amount_subject AS amount_subjectdivide,
-	    		gsjd.max_score AS max_subjectscore,
-	    		gsjd.score_short as cut_score,
-	    		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
-	    		
-	    		(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjecTitle,
-	    		
-	    		(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
-	    		(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
-	    		(gsjd.amount_subject) amtsubject_month,
-	    		(gsjd.amount_subject_sem) amtsubject_semester,
-	    		(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
-	    		(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
-    		FROM
-	    		rms_group_subject_detail AS gsjd ,
-	    		rms_group as g
-    		WHERE
-    		g.id = gsjd.group_id
-    		and gsjd.group_id = ".$groupId;
-    		if($examType==1){//for month
-    			$sql.=" AND gsjd.amount_subject > 0 ";
-    		}else{//for semester
-    			$sql.=" AND gsjd.amount_subject_sem > 0 ";
-    		}
-    		$sql.=' ORDER BY gsjd.id ASC ';
-    		return $db->fetchAll($sql);
-    	}catch(Exception $e){
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		$result = array(
-    				'status' =>false,
-    				'value' =>$e->getMessage(),
-    		);
-    		return $result;
-    	}
-    }
-    public function getScoreBySubject($score_id,$student_id,$subject_id,$currentLang){
+    public function getExamRowDetail($examRow,$student_id,$currentLang){
     	$db = $this->getAdapter();
     	$subjectTitle = "subject_titleen";
     	if($currentLang==1){// khmer
     		$subjectTitle = "subject_titlekh";
     	}
-    	$sql="SELECT
-	    	sd.`score`,
-	    	sd.score_cut,
-	    	sd.`subject_id`,
-	    	(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
-	    	,sd.amount_subject
-	    	FROM  `rms_score_detail` AS sd
-	    	WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id ";
-    	return $db->fetchRow($sql);
-    }
-    function getRankSubjectMonthlyExam($group_id,$stu_id,$subject_id,$formonth){
-    	$db = $this->getAdapter();
+    	$score_id = empty($examRow['id'])?0:$examRow['id'];
+    	$academicYearId = empty($examRow['academicYearId'])?0:$examRow['academicYearId'];
+    	$degreeId = empty($examRow['degreeId'])?0:$examRow['degreeId'];
+    	$gradeId = empty($examRow['gradeId'])?0:$examRow['gradeId'];
+    	$mentiontype = 3;
+    	if ($currentLang==1){
+    		$mentiontype = 2;
+    	}
     	$sql="
     	SELECT
-	    	score,
-	    	SUM(score) AS total_score,
-	    	FIND_IN_SET( score, (
-	    	SELECT GROUP_CONCAT( score
-	    	ORDER BY score DESC )
-	    	FROM rms_score_detail AS dd ,rms_score AS ss WHERE
-	    	ss.`id`=dd.`score_id`
-	    	AND ss.exam_type=1
-	    	AND ss.group_id= $group_id
-	    	AND dd.subject_id=$subject_id
-	    	AND dd.`is_parent`=1
-	    	AND ss.for_month=$formonth
-	    	)
-	    	) AS rank
-    	FROM
-	    	`rms_score` AS s,
-	    	`rms_score_detail` AS sd,
-	    	`rms_group` AS g
-    	WHERE s.`id`=sd.`score_id`
-	    	AND g.`id`=s.`group_id`
-	    	AND sd.`is_parent`=1
-	    	AND s.status = 1
-	    	AND s.type_score=1
-	    	AND s.exam_type=1
-	    	AND g.id= $group_id
-	    	AND sd.subject_id= $subject_id
-	    	AND sd.student_id= $stu_id
-	    	AND s.for_month=$formonth
-    	ORDER BY s.id DESC
-    	";
-    	return $db->fetchRow($sql);
+	    	sd.`score`,
+	    	FIND_IN_SET( sd.`score`, (
+		    	SELECT GROUP_CONCAT( dd.score
+		    		ORDER BY dd.score DESC )
+		    	FROM 
+			    	rms_score_detail AS dd ,
+			    	rms_score AS ss 
+			    WHERE
+			    	ss.`id`=dd.`score_id`
+			    	AND ss.`id`= $score_id
+			    	AND dd.subject_id=sd.`subject_id`
+		    	)
+		    ) AS rank,
+    		sd.score_cut,
+    		sd.`subject_id`,
+	    	(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
+	    	,sd.amount_subject,
+	    	(SELECT 
+				 setd.mention_in_english AS mention
+					FROM `rms_metionscore_setting_detail` AS setd,
+						`rms_metionscore_setting` AS sets
+					WHERE sets.id = setd.metion_score_id
+						AND sets.academic_year=$academicYearId
+						AND sets.degree = $degreeId
+						AND sd.`score` < setd.max_score
+						ORDER BY setd.max_score ASC
+						LIMIT 1
+			) AS mention
+
+    	FROM  `rms_score_detail` AS sd
+    	WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id ";
+    	return $db->fetchAll($sql);
     }
+// 	function getSubjectByGroup($stuInfo,$search = array()){
+//     	$db=$this->getAdapter();
+//     	try{
+//     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+//     		$subjectTitle = "subject_titleen";
+//     		if($currentLang==1){// khmer
+//     			$subjectTitle = "subject_titlekh";
+//     		}
+//     		$examType = empty($search['exam_type'])?0:$search['exam_type'];
+//     		$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
+//     		$stuId = empty($stuInfo['value'][0]['stu_id'])?0:$stuInfo['value'][0]['stu_id'];
+//     		$sql="
+//     		SELECT
+// 	    		gsjd.*,
+// 	    		g.academic_year AS academicYearId,
+// 	    		g.degree AS degreeId,
+// 	    		g.grade AS gradeId,
+// 	    		g.amount_subject AS amount_subjectdivide,
+// 	    		gsjd.max_score AS max_subjectscore,
+// 	    		gsjd.score_short as cut_score,
+// 	    		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+	    		
+// 	    		(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjecTitle,
+	    		
+// 	    		(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+// 	    		(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+// 	    		(gsjd.amount_subject) amtsubject_month,
+// 	    		(gsjd.amount_subject_sem) amtsubject_semester,
+// 	    		(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
+// 	    		(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
+//     		FROM
+// 	    		rms_group_subject_detail AS gsjd ,
+// 	    		rms_group as g
+//     		WHERE
+//     		g.id = gsjd.group_id
+//     		and gsjd.group_id = ".$groupId;
+//     		if($examType==1){//for month
+//     			$sql.=" AND gsjd.amount_subject > 0 ";
+//     		}else{//for semester
+//     			$sql.=" AND gsjd.amount_subject_sem > 0 ";
+//     		}
+//     		$sql.=' ORDER BY gsjd.id ASC ';
+//     		return $db->fetchAll($sql);
+//     	}catch(Exception $e){
+//     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     		$result = array(
+//     				'status' =>false,
+//     				'value' =>$e->getMessage(),
+//     		);
+//     		return $result;
+//     	}
+//     }
+// 	public function getScoreBySubject($score_id,$student_id,$subject_id,$currentLang){
+//     	$db = $this->getAdapter();
+//     	$subjectTitle = "subject_titleen";
+//     	if($currentLang==1){// khmer
+//     		$subjectTitle = "subject_titlekh";
+//     	}
+//     	$sql="SELECT
+// 	    	sd.`score`,
+// 	    	sd.score_cut,
+// 	    	sd.`subject_id`,
+// 	    	(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
+// 	    	,sd.amount_subject
+// 	    	FROM  `rms_score_detail` AS sd
+// 	    	WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id ";
+//     	return $db->fetchRow($sql);
+//     }
+//     function getRankSubjectMonthlyExam($group_id,$stu_id,$subject_id,$formonth){
+//     	$db = $this->getAdapter();
+//     	$sql="
+//     	SELECT
+// 	    	score,
+// 	    	SUM(score) AS total_score,
+// 	    	FIND_IN_SET( score, (
+// 	    	SELECT GROUP_CONCAT( score
+// 	    	ORDER BY score DESC )
+// 	    	FROM rms_score_detail AS dd ,rms_score AS ss WHERE
+// 	    	ss.`id`=dd.`score_id`
+// 	    	AND ss.exam_type=1
+// 	    	AND ss.group_id= $group_id
+// 	    	AND dd.subject_id=$subject_id
+// 	    	AND dd.`is_parent`=1
+// 	    	AND ss.for_month=$formonth
+// 	    	)
+// 	    	) AS rank
+//     	FROM
+// 	    	`rms_score` AS s,
+// 	    	`rms_score_detail` AS sd,
+// 	    	`rms_group` AS g
+//     	WHERE s.`id`=sd.`score_id`
+// 	    	AND g.`id`=s.`group_id`
+// 	    	AND sd.`is_parent`=1
+// 	    	AND s.status = 1
+// 	    	AND s.type_score=1
+// 	    	AND s.exam_type=1
+// 	    	AND g.id= $group_id
+// 	    	AND sd.subject_id= $subject_id
+// 	    	AND sd.student_id= $stu_id
+// 	    	AND s.for_month=$formonth
+//     	ORDER BY s.id DESC
+//     	";
+//     	return $db->fetchRow($sql);
+//     }
     
     function getAttendenceBydate($search = array()){
     	$db = $this->getAdapter();
@@ -906,48 +932,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			);
 	    			return $result;
 	    	}
-    }
-    function getDisciplineDetail($search = array()){
-    	$db = $this->getAdapter();
-    	try{
-    		$stuId = $search['stu_id'];
-    		$currentLang = $search['currentLang'];
-    		$currentMonth = $search['currentMonth'];
-    		$groupId = $search['groupId'];
-    
-    		$sql=" SELECT
-    		sade.description,
-    		DATE_FORMAT(sta.date_attendence, '%d-%m-%Y') AS dateAttendence,
-    		CASE
-    		WHEN  sade.attendence_status = 1 THEN 'ស្រាល'
-    		WHEN  sade.attendence_status = 2 THEN 'មធ្យម'
-    		WHEN  sade.attendence_status = 3 THEN 'ធ្ងន់'
-    		WHEN  sade.attendence_status = 4 THEN 'ផ្សេងៗ'
-    		END AS attendenceStatusTitle
-    		FROM rms_student_attendence_detail AS sade,
-    		`rms_student_attendence` AS sta
-    		WHERE sta.`id` = sade.`attendence_id` AND sta.type =2 ";
-    
-    		$where=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId
-    		AND MONTH(date_attendence)= $currentMonth ORDER BY sta.`date_attendence` DESC ";
-    
-    		$row =  $db->fetchAll($sql.$where);
-    
-    		$result = array(
-    				'status' =>true,
-    				'value' =>$row,
-    		);
-    		return $result;
-    
-    	}catch(Exception $e){
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		$result = array(
-    				'status' =>false,
-    				'value' =>$e->getMessage(),
-    		);
-    		return $result;
     	}
-    }
     function generateToken($_data){
     	$db = $this->getAdapter();
 //     	$db->beginTransaction();
@@ -982,8 +967,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	$sql="SELECT
 			    	act.*,
 			    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
-			    	(SELECT SUBSTR(ad.description, 1, 95) FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description,
-			    	DATE_FORMAT(act.`publish_date`,'%d-%m-%Y') AS publishDate,
+			    	act.`publish_date`,
 			    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
 			    	CASE
 					   	WHEN  act.`status` = 1 THEN '$base_url'
@@ -1009,4 +993,204 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	return $result;
 	    }
     }
+    public function getMainScore($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
+    		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+    		$sql="
+    		SELECT
+	    		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+	    		s.title_score,
+	    		s.for_semester AS forSemesterId,
+	    		s.for_month AS forMonthId,
+	    		s.reportdate,
+	    		s.max_score AS maxScore,
+	    		g.max_average AS maxAverage,
+    			FORMAT(sm.total_avg,2) AS totalAverage,
+    			sm.total_score AS totalScore,
+	    		CASE
+	    			WHEN sm.total_avg >= g.max_average/2 THEN 'PASS'
+	    			ELSE 'FAIL'
+	    		END AS restultStatus,
+    			FIND_IN_SET( sm.total_score, 
+			    	(
+				    	SELECT GROUP_CONCAT( dd.total_score
+				    	ORDER BY dd.total_score DESC )
+				    	FROM rms_score_monthly AS dd ,rms_score AS ss WHERE
+				    	ss.`id`=dd.`score_id`
+				    	AND ss.group_id= s.`group_id`
+				    	AND ss.id=s.`id`
+			    	)
+		    	) AS rank,
+		    	
+	    		s.`id`,
+	    		g.`group_code` AS groupCode,
+	    		s.for_academic_year AS forAcademicYearId,
+    			
+	    		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academicYear,
+	    		(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle,
+	    		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle,
+	    		`g`.`semester` AS `semester`,
+	    		(SELECT teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName,
+	    		(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS averagePass
+    		FROM
+    		`rms_score` AS s,
+    		`rms_score_monthly` AS sm,
+    			
+    		`rms_group` AS g
+    		WHERE
+	    		s.`id`=sm.`score_id`
+	    			
+	    		AND g.`id` = s.`group_id`
+	    		AND s.status = 1
+	    		AND sm.`student_id` = $stu_id
+	    		GROUP BY
+	    		s.id,
+	    		sm.`student_id`,
+	    		sm.score_id,
+	    		s.`reportdate`
+    		ORDER BY
+    			s.id DESC
+    		";
+    
+    		$row = $db->fetchAll($sql);
+    		$result = array(
+    		'status' =>true,
+    		'value' =>$row,
+    		);
+    		return $result;
+    	}catch(Exception $e){
+    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	$result = array(
+    	'status' =>false,
+    	'value' =>$e->getMessage(),
+    	);
+    	return $result;
+    	}
+    	}
+//     public function getMainScore($search){
+//     	$db = $this->getAdapter();
+//     	try{
+//     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+//     		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
+//     		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+//     		$sql="SELECT 
+// 					(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month, 
+// 					s.exam_type, 
+// 					s.title_score, 
+// 					sm.`student_id`,
+// 					s.for_semester AS forSemesterId, 
+// 					s.for_month AS forMonthId, 
+// 					s.reportdate, 
+// 					s.max_score AS maxScore, 
+// 					g.max_average AS maxAverage,
+// 					CASE
+// 						WHEN  s.exam_type = 1 THEN FORMAT(sm.total_avg,2)
+// 						WHEN  s.exam_type = 2 THEN 
+// 							FORMAT(((SELECT FORMAT(AVG(sm2.total_avg),2)
+// 							FROM `rms_score_monthly` AS sm2,
+// 							  rms_score s2
+// 							WHERE 
+// 								s2.id = sm2.score_id 
+// 								AND s2.for_semester=s.for_semester
+// 								AND s2.`group_id`=s.`group_id`
+// 								AND s2.exam_type=1
+// 								AND sm2.student_id=sm.`student_id`
+// 							LIMIT 1)+sm.total_avg)/2,2)
+// 					END AS totalAverage,
+// 					CASE
+// 						WHEN  s.exam_type = 1 THEN FORMAT(sm.total_score,2)
+// 						WHEN  s.exam_type = 2 THEN 
+// 							FORMAT(((SELECT FORMAT(AVG(sm2.total_avg),2)
+// 							FROM `rms_score_monthly` AS sm2,
+// 							  rms_score s2
+// 							WHERE 
+// 								s2.id = sm2.score_id 
+// 								AND s2.for_semester=s.for_semester
+// 								AND s2.`group_id`=s.`group_id`
+// 								AND s2.exam_type=1
+// 								AND sm2.student_id=sm.`student_id`
+// 							LIMIT 1)+sm.total_avg),2)
+// 					END AS totalScore,
+// 					CASE
+// 						WHEN  s.exam_type = 1 THEN 
+// 							CASE
+// 								WHEN sm.total_avg >= g.max_average/2 THEN 'PASS'
+// 								ELSE 'FAIL'
+// 							END
+						
+// 						WHEN  s.exam_type = 2 THEN 
+// 							CASE
+// 								WHEN 
+// 								FORMAT(((SELECT FORMAT(AVG(sm2.total_avg),2)
+// 							FROM `rms_score_monthly` AS sm2,
+// 							  rms_score s2
+// 							WHERE 
+// 								s2.id = sm2.score_id 
+// 								AND s2.for_semester=s.for_semester
+// 								AND s2.`group_id`=s.`group_id`
+// 								AND s2.exam_type=1
+// 								AND sm2.student_id=sm.`student_id`
+// 							LIMIT 1)+sm.total_avg)/2,2) >= g.max_average/2 THEN 'PASS'
+// 								ELSE 'FAIL'
+// 							END
+							
+// 					END AS restultStatus,  
+					  
+					
+// 					s.`id`, 
+// 					g.`branch_id`, 
+// 					g.`group_code` AS groupCode, 
+// 					s.for_academic_year AS forAcademicYearId, 
+// 					`g`.`degree` AS degreeId, 
+					
+// 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academicYear, 
+// 					(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS startYear, 
+// 					(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS endYear, 
+// 					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle, 
+// 					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle, 
+// 					`g`.`semester` AS `semester`, 
+// 					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `roomTitle`, 
+// 					(SELECT name_kh FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`, 
+// 					(SELECT teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName,	
+// 					(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubject , 
+// 					(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubjectsem , 
+// 					(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS averagePass 
+// 				FROM 
+// 					`rms_score` AS s, 
+// 					`rms_score_monthly` AS sm, 
+					
+// 					`rms_group` AS g 
+// 				WHERE 
+// 					s.`id`=sm.`score_id` 
+					
+// 					AND g.`id` = s.`group_id` 	
+// 					AND s.status = 1 
+// 					AND sm.`student_id` = $stu_id 
+// 				GROUP BY 
+// 					s.id,
+// 					sm.`student_id`,
+// 					sm.score_id,
+// 					s.`reportdate` 
+// 				ORDER BY 
+// 					s.id DESC
+//     		";
+    		
+//     		$row = $db->fetchAll($sql);
+//     		$result = array(
+//     				'status' =>true,
+//     		'value' =>$row,
+//     		);
+//     		return $result;
+//     	}catch(Exception $e){
+// 	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 	    	$result = array(
+// 	    			'status' =>false,
+// 	    			'value' =>$e->getMessage(),
+//     		);
+//     		return $result;
+//     		}
+//     }
 }

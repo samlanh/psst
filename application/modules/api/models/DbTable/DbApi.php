@@ -1042,8 +1042,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			FORMAT(sm.total_avg,2) AS totalAverage,
     			sm.total_score AS totalScore,
 	    		CASE
-	    			WHEN sm.total_avg >= g.max_average/2 THEN 'PASS'
-	    			ELSE 'FAIL'
+	    			WHEN sm.total_avg >= g.max_average/2 THEN 'PASSED'
+	    			ELSE 'FAILED'
 	    		END AS restultStatus,
     			FIND_IN_SET( sm.total_score, 
 			    	(
@@ -1091,8 +1091,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS averagePass
     		FROM
     		`rms_score` AS s,
-    		`rms_score_monthly` AS sm,
-    			
+    		`rms_score_monthly` AS sm,    			
     		`rms_group` AS g
     		WHERE
 	    		s.`id`=sm.`score_id`
@@ -1105,9 +1104,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		sm.`student_id`,
 	    		sm.score_id,
 	    		s.`reportdate`
-    		ORDER BY
-    			s.id DESC
-    		";
+    			ORDER BY
+    			s.id DESC ";
     
     		$row = $db->fetchAll($sql);
     		$result = array(

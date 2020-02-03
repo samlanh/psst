@@ -1019,9 +1019,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
     		$mentiontype = 3;
     		$columnMonth="month_en";
+    		$colunmname='title_en';
     		if ($currentLang==1){
     			$mentiontype = 2;
     			$columnMonth="month_kh";
+    			$colunmname='title';
     		}
     		$column="metion_grade";
     		if ($mentiontype==1){//grade A/B/C
@@ -1085,8 +1087,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		s.for_academic_year AS forAcademicYearId,
     			
 	    		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academicYear,
-	    		(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle,
-	    		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle,
+	    		(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle,
+	    		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle,
 	    		`g`.`semester` AS `semester`,
 	    		(SELECT teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName,
 	    		(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS averagePass

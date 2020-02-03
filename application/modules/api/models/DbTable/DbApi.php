@@ -594,17 +594,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     public function getExamRowDetail($examRow,$student_id,$currentLang){
     	$db = $this->getAdapter();
     	$subjectTitle = "subject_titleen";
+    	$mentiontype = 3;
     	if($currentLang==1){// khmer
     		$subjectTitle = "subject_titlekh";
+    		$mentiontype = 2;
     	}
     	$score_id = empty($examRow['id'])?0:$examRow['id'];
     	$academicYearId = empty($examRow['academicYearId'])?0:$examRow['academicYearId'];
     	$degreeId = empty($examRow['degreeId'])?0:$examRow['degreeId'];
     	$gradeId = empty($examRow['gradeId'])?0:$examRow['gradeId'];
-    	$mentiontype = 3;
-    	if ($currentLang==1){
-    		$mentiontype = 2;
-    	}
+    	
     	$column="metion_grade";
     	if ($mentiontype==1){//grade A/B/C
     		$column="metion_grade";

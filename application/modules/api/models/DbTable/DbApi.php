@@ -36,7 +36,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
-	function getStudentInformation($stu_id=0,$currentLang=1){
+	function getStudentInformation($stu_id=0,$currentLang=1,$action=null){
 		$_db = $this->getAdapter();
 		$_db->beginTransaction();
 		try{
@@ -75,11 +75,17 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						s.mother_phone,
 						s.guardian_enname,
 						s.guardian_tel,
+						CASE
+	    			    	WHEN  s.primary_phone = 1 THEN s.tel
+	    			    	WHEN  s.primary_phone = 2 THEN s.father_phone
+	    			    	WHEN  s.primary_phone = 3 THEN s.mother_phone
+	    			    	WHEN  s.primary_phone = 4 THEN s.guardian_tel
+    			    	END AS PrimaryContact, 
 						s.photo,
 						g.id AS group_id,
 						g.academic_year,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
-						(select $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
+						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS fatherNation,
 		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS motherNation,
@@ -108,7 +114,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				and g.id=gds.group_id
 				and g.academic_year=t.id
 				and s.stu_id=$stu_id";
-			$row = $_db->fetchAll($sql);
+// 			if(!$action!=null){
+// 				$row = $_db->fetchRow($sql);
+// 			}else{
+				$row = $_db->fetchAll($sql);
+// 			}
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -148,7 +158,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		sp.receipt_number,
 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
-	    		
 	    		FORMAT(sp.grand_total,2)  AS totalPayment,
 	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
 	    		FORMAT(sp.penalty,2)  AS penalty,
@@ -487,30 +496,31 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
     		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
     		
-    		$row = $this->getExamRow($stuInfo,$search);
+    		$rows = $this->getExamRow($stuInfo,$search);
     		$subject = $this->getSubjectByGroup($stuInfo,$search);
     		$arrScoreValue = array();
-    		if (!empty($subject)){
-    			
-    			foreach ($subject as $keyIndex => $rs){
-    				$score = $this->getScoreBySubject($row['id'],$stu_id,$rs['subject_id'],$currentLang);
-    				$rangSubje = $this->getRankSubjectMonthlyExam($row['group_id'], $stu_id, $rs['subject_id'], $row['for_month_id']);
-    				$mentiontype = 3;
-    				if ($currentLang==1){
-    					$mentiontype = 2;
-    				}
-    				$rangSubje['mention'] = $dbgb->getMentionScore($rangSubje['total_score'], $rs['academicYearId'],$rs['degreeId'],$mentiontype,$rs['gradeId']);
-    				$custArray = array(
-    						'score' =>$score,
-    						'rangSubje' =>$rangSubje,
-    						);
-    				
-    				$arrScoreValue[$keyIndex] = $custArray;
-    				
-    			}
+    		if (!empty($subject) AND !empty($rows)){
+		    	  foreach ($rows as $scorelist){		
+		    			foreach ($subject as $keyIndex => $rs){
+		    				$score = $this->getScoreBySubject($scorelist['id'],$stu_id,$rs['subject_id'],$currentLang);
+		    				$rangSubje = $this->getRankSubjectMonthlyExam($scorelist['group_id'], $stu_id, $rs['subject_id'], $scorelist['for_month_id']);
+		    				$mentiontype = 3;
+		    				if ($currentLang==1){
+		    					$mentiontype = 2;
+		    				}
+		    				$rangSubje['mention'] = $dbgb->getMentionScore($rangSubje['total_score'], $rs['academicYearId'],$rs['degreeId'],$mentiontype,$rs['gradeId']);
+		    				$custArray = array(
+		    						'score' =>$score,
+		    						'rangSubje' =>$rangSubje,
+		    						);
+		    				
+		    				$arrScoreValue[$keyIndex] = $custArray;
+		    				
+		    			}
+		    	  }
     		}
     		$row = array(
-    				'row'=> $row,
+    				'row'=> $rows,
     				'subject'=> $subject,
     				'subjectScore'=> $arrScoreValue
     		);
@@ -529,6 +539,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
+    
     function getExamRow($stuInfo,$search = array()){
     	$db = $this->getAdapter();
     	try{
@@ -556,7 +567,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	sd.`student_id`,
 		    	sm.total_score,
 		    	sm.total_avg,
-		    	FIND_IN_SET( total_avg, 
+		    	FIND_IN_SET(total_avg, 
 			    	(
 				    	SELECT GROUP_CONCAT( total_avg
 				    	ORDER BY total_avg DESC )
@@ -571,14 +582,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	`rms_score` AS s,
 		    	`rms_score_detail` AS sd,
 		    	`rms_score_monthly` AS sm
-		    	
 	    	WHERE 
 	    		s.`id`=sd.`score_id`
 		    	AND sd.student_id = sm.`student_id`
 			    	AND s.`id`=sm.`score_id`
 			    	AND s.status = 1
-			    	AND s.type_score=1
-	    	";
+			    	AND s.type_score=1 ";
 	    		$sql.=" AND s.`group_id`=".$groupId;
 	    		$sql.=" AND sd.`student_id`=".$stuId;
 	    	if (!empty($search['exam_type'])){
@@ -593,8 +602,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			}
 	    		}
 	    	}
-	    	$sql.=" ORDER BY s.id DESC LIMIT 1";
-	    	return $db->fetchRow($sql);
+	    	$sql.=" GROUP BY s.id ORDER BY s.id DESC ";
+	    	return $db->fetchAll($sql);
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$result = array(
@@ -897,7 +906,48 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			);
 	    			return $result;
 	    	}
+    }
+    function getDisciplineDetail($search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$stuId = $search['stu_id'];
+    		$currentLang = $search['currentLang'];
+    		$currentMonth = $search['currentMonth'];
+    		$groupId = $search['groupId'];
+    
+    		$sql=" SELECT
+    		sade.description,
+    		DATE_FORMAT(sta.date_attendence, '%d-%m-%Y') AS dateAttendence,
+    		CASE
+    		WHEN  sade.attendence_status = 1 THEN 'ស្រាល'
+    		WHEN  sade.attendence_status = 2 THEN 'មធ្យម'
+    		WHEN  sade.attendence_status = 3 THEN 'ធ្ងន់'
+    		WHEN  sade.attendence_status = 4 THEN 'ផ្សេងៗ'
+    		END AS attendenceStatusTitle
+    		FROM rms_student_attendence_detail AS sade,
+    		`rms_student_attendence` AS sta
+    		WHERE sta.`id` = sade.`attendence_id` AND sta.type =2 ";
+    
+    		$where=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId
+    		AND MONTH(date_attendence)= $currentMonth ORDER BY sta.`date_attendence` DESC ";
+    
+    		$row =  $db->fetchAll($sql.$where);
+    
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$row,
+    		);
+    		return $result;
+    
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
     	}
+    }
     function generateToken($_data){
     	$db = $this->getAdapter();
 //     	$db->beginTransaction();
@@ -932,7 +982,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	$sql="SELECT
 			    	act.*,
 			    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
-			    	act.`publish_date`,
+			    	(SELECT SUBSTR(ad.description, 1, 95) FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description,
+			    	DATE_FORMAT(act.`publish_date`,'%d-%m-%Y') AS publishDate,
 			    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
 			    	CASE
 					   	WHEN  act.`status` = 1 THEN '$base_url'

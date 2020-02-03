@@ -47,7 +47,8 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$stu_id = empty($search['stu_id'])?46:$search['stu_id'];
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 			$db = new Api_Model_DbTable_DbApi();
-			$row = $db->getStudentInformation($stu_id,$currentLang);
+			$row = $db->getStudentInformation($stu_id,$currentLang,$action='profile');
+		
 			if ($row['status']){
 				$arrResult = array(
 					"result" => $row['value'],
@@ -230,6 +231,28 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$row = $db->getDisciplineBydate($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function disciplineDetailAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['currentMonth'] = empty($search['currentMonth'])?1:$search['currentMonth'];
+		$search['groupId'] = empty($search['groupId'])?1:$search['groupId'];
+	
+		$row = $db->getDisciplineDetail($search);
 		if ($row['status']){
 			$arrResult = array(
 					"result" => $row['value'],

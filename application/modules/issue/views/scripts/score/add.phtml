@@ -347,7 +347,9 @@ function filterStudent(){
 					temp += '<td style="min-width:100px;text-align:left;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'}" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
+						maxValue = "'The value maximumn "+subject[j].max_subjectscore+"'";
+						invalidesms = "rangeMessage:"+maxValue;
+						temp += '<td id="score_'+j+'"><input data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';

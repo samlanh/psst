@@ -524,7 +524,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	$sql="
 	    		SELECT
 		    	s.`id`,
-		    	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthTitle,
+		    	(SELECT $for_month FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthTitle,
 		    	s.exam_type,
 		    	s.for_month AS for_month_id,
 		    	s.for_semester,
@@ -1018,8 +1018,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
     		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
     		$mentiontype = 3;
+    		$columnMonth="month_en";
     		if ($currentLang==1){
     			$mentiontype = 2;
+    			$columnMonth="month_kh";
     		}
     		$column="metion_grade";
     		if ($mentiontype==1){//grade A/B/C
@@ -1031,7 +1033,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		}//,sd.max_score
     		$sql="
     		SELECT
-	    		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+	    		(SELECT $columnMonth FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
 	    		s.title_score,
 	    		s.for_semester AS forSemesterId,
 	    		s.for_month AS forMonthId,

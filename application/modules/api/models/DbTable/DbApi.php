@@ -629,7 +629,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    ) AS rank,
     		sd.score_cut,
     		sd.`subject_id`,
-	    	(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
+	    	(SELECT (sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = sd.`subject_id` LIMIT 1) AS subjecTitle
 	    	,sd.amount_subject,
 			(SELECT 
 				 setd.$column AS mention
@@ -950,7 +950,48 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			);
 	    			return $result;
 	    	}
+    }
+    function getDisciplineDetail($search = array()){
+    	$db = $this->getAdapter();
+    	try{
+    		$stuId = $search['stu_id'];
+    		$currentLang = $search['currentLang'];
+    		$currentMonth = $search['currentMonth'];
+    		$groupId = $search['groupId'];
+    
+    		$sql=" SELECT
+    		sade.description,
+    		DATE_FORMAT(sta.date_attendence, '%d-%m-%Y') AS dateAttendence,
+    		CASE
+    		WHEN  sade.attendence_status = 1 THEN 'Minor'
+    		WHEN  sade.attendence_status = 2 THEN 'Moderate'
+    		WHEN  sade.attendence_status = 3 THEN 'Major'
+    		WHEN  sade.attendence_status = 4 THEN 'Other'
+    		END AS attendenceStatusTitle
+    		FROM rms_student_attendence_detail AS sade,
+    		`rms_student_attendence` AS sta
+    		WHERE sta.`id` = sade.`attendence_id` AND sta.type =2 ";
+    
+    		$where=" AND sade.`stu_id`=$stuId AND sta.`group_id`=$groupId
+    		AND MONTH(date_attendence)= $currentMonth ORDER BY sta.`date_attendence` DESC ";
+    
+    		$row =  $db->fetchAll($sql.$where);
+    
+    		$result = array(
+    			'status' =>true,
+    			'value' =>$row,
+    		);
+    		return $result;
+    
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
     	}
+    }
     function generateToken($_data){
     	$db = $this->getAdapter();
 //     	$db->beginTransaction();

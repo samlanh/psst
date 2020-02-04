@@ -30,10 +30,10 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->disciplineAction($GetData);
     		}else if ($GetData['url']=="disciplineDetail"){
     			$_dbAction->disciplineDetailAction($GetData);
-    		}else if ($GetData['url']=="scoredetail"){
-    			$_dbAction->scoredetailAction($GetData);
     		}else if ($GetData['url']=="score"){
     			$_dbAction->scorelAction($GetData);
+    		}else if ($GetData['url']=="scoredetail"){
+    			$_dbAction->scoredetailAction($GetData);
     		}else if ($GetData['url']=="evaluation"){
     			$_dbAction->envaluationAction($GetData);
     		}else if ($GetData['url']=="news"){

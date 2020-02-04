@@ -38,6 +38,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->envaluationAction($GetData);
     		}else if ($GetData['url']=="news"){
     			$_dbAction->newsAction($GetData);
+    		}else if ($GetData['url']=="notification"){
+    			$_dbAction->notificationAction($GetData);
     		}else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
     		}

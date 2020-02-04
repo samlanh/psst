@@ -307,24 +307,24 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$dayId = empty($search['dayId'])?1:$search['dayId'];
     		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
-    		$dayStudy = $this->getDaySchedule($stuInfo,$search,$currentLang);
-    		$timeStudy = $this->getTimeSchelduleByYGS($stuInfo,$search,$currentLang);
+//     		$dayStudy = $this->getDaySchedule($stuInfo,$search,$currentLang);
+//     		$timeStudy = $this->getTimeSchelduleByYGS($stuInfo,$search,$currentLang);
     		
     		$arrStudyValue = array();
     		$dayIndex="";
-    		if (!empty($dayStudy)){
-    			foreach ($dayStudy as $key => $days){
-    				if (!empty($timeStudy)){
-    					foreach($timeStudy As $keyIndex => $time){
-    						$arrStudyValue[$days['name']][$keyIndex] = $this->getSubjectTeacherByScheduleAndGroup($stuInfo,$time['times'], $days['id'],$currentLang);
-	    				}
-	    			}
-	    		}
-    		}
+    		$arrStudyValue = $this->getSubjectTeacherByScheduleAndGroup($stuInfo,$dayId ,$currentLang);
+//     		if (!empty($dayStudy)){
+//     			foreach ($dayStudy as $key => $days){
+//     				if (!empty($timeStudy)){
+//     					foreach($timeStudy As $keyIndex => $time){
+//     						$arrStudyValue[$days['name']][$keyIndex] = $this->getSubjectTeacherByScheduleAndGroup($stuInfo,$time['times'], $days['id'],$currentLang);
+// 	    				}
+// 	    			}
+// 	    		}
+//     		}
     		$arrQuery = array(
-    				'dayStudy' =>$dayStudy,
-    				'timeStudy' =>$timeStudy,
     				'arrStudyValue' => $arrStudyValue
     				);
     		$result = array(
@@ -341,33 +341,33 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
 	    }
     }
-    public function getDaySchedule($stuInfo,$search,$currentLang){
-    	$db=$this->getAdapter();
-    	$label = "name_en";
-    	if($currentLang==1){// khmer
-    		$label = "name_kh";
-    	}
-    	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
-    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
-    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
-    	$sql="
-    		SELECT
-		    	v.key_code as id,
-		    	v.$label as name
-	    	FROM
-		    	rms_view as v,
-		    	rms_group_reschedule as gs
-	    	WHERE
-		    	v.key_code = gs.day_id
-		    	AND v.type = 18
-		    	AND gs.group_id = $groupId
+//     public function getDaySchedule($stuInfo,$search,$currentLang){
+//     	$db=$this->getAdapter();
+//     	$label = "name_en";
+//     	if($currentLang==1){// khmer
+//     		$label = "name_kh";
+//     	}
+//     	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
+//     	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
+//     	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
+//     	$sql="
+//     		SELECT
+// 		    	v.key_code as id,
+// 		    	v.$label as name
+// 	    	FROM
+// 		    	rms_view as v,
+// 		    	rms_group_reschedule as gs
+// 	    	WHERE
+// 		    	v.key_code = gs.day_id
+// 		    	AND v.type = 18
+// 		    	AND gs.group_id = $groupId
 		    
-		    	group by
-		    	gs.day_id
-		    	ORDER BY
-		    	gs.day_id ASC ";
-    	return $db->fetchAll($sql);
-    }
+// 		    	group by
+// 		    	gs.day_id
+// 		    	ORDER BY
+// 		    	gs.day_id ASC ";
+//     	return $db->fetchAll($sql);
+//     }
     function getTimeSchelduleByYGS($stuInfo,$search,$currentLang){ /* get Time for show in schedule VD*/
     	$db=$this->getAdapter();
     	$academicYear = empty($stuInfo['value'][0]['academic_year'])?0:$stuInfo['value'][0]['academic_year'];
@@ -386,7 +386,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$row = $db->fetchAll($sql);
     	return $row;
     }
-    function getSubjectTeacherByScheduleAndGroup($stuInfo,$time,$day,$currentLang){
+    function getSubjectTeacherByScheduleAndGroup($stuInfo,$day,$currentLang){
     	$db=$this->getAdapter();
     	$subjecct = "subject_titleen";
     	$teacher = "teacher_name_en";
@@ -406,10 +406,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		rms_group_reschedule AS gr
     	WHERE 
     		 gr.group_id=$groupId
-	    	AND REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') ='$time'
-	    	AND gr.`day_id` =$day LIMIT 1";
+	    	AND gr.`day_id` =$day ";
     	//gr.year_id=$academicYear AND
-    	return $db->fetchRow($sql);
+    	return $db->fetchAll($sql);
     }
     
     function getRatingValuation(){
@@ -849,10 +848,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			    DATE_FORMAT(sta.date_attendence, '%d-%m-%Y') AS dateAttendence,
     			    CASE
     			    	WHEN  sade.attendence_status = 1 THEN 'C'
-    			    	WHEN  sade.attendence_status = 2 THEN 'A'
-    			    	WHEN  sade.attendence_status = 3 THEN 'P'
-    			    	WHEN  sade.attendence_status = 4 THEN 'L'
-    			    	WHEN  sade.attendence_status = 5 THEN 'EL'
+    			    	WHEN  sade.attendence_status = 2 THEN 'Absent'
+    			    	WHEN  sade.attendence_status = 3 THEN 'Permission'
+    			    	WHEN  sade.attendence_status = 4 THEN 'Late'
+    			    	WHEN  sade.attendence_status = 5 THEN 'Early Leave'
     			    	END AS attendenceStatusTitle    			    	
     			    FROM rms_student_attendence_detail AS sade,
     			    	`rms_student_attendence` AS sta
@@ -1166,6 +1165,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	return $result;
     	}
     	}
+    	public function getAllNotification($search){
+    		$db = $this->getAdapter();
+    		try{
+    			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+    			$sql=" SELECT id,title as Title,description AS Description,DATE_FORMAT(date,'%d-%m-%Y %H:%i') As ShowDate FROM `mobile_notice` WHERE active=1   ";
+    			$sql.=" ORDER BY id DESC ";
+    			
+    			$row = $db->fetchAll($sql);
+    			$result = array(
+    					'status' =>true,
+    			'value' =>$row,
+    			);
+    			return $result;
+    		}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    			$result = array(
+	    				'status' =>false,
+	    				'value' =>$e->getMessage(),
+	    			);
+	    			return $result;
+    			}
+    		}
 //     public function getMainScore($search){
 //     	$db = $this->getAdapter();
 //     	try{

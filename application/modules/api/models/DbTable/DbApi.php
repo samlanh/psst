@@ -36,6 +36,52 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	function checkChangePassword($_data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+	
+			$sql ="
+			SELECT
+			s.stu_id AS id,
+			s.stu_code AS stuCode,
+			s.stu_khname AS stuNameKH,
+			s.stu_enname AS stuFirstName,
+			s.last_name AS stuLastName,
+			s.photo
+			FROM
+			rms_student AS s
+			WHERE s.status = 1 AND s.customer_type =1 ";
+			$sql.= " AND ".$db->quoteInto('s.stu_id=?', $_data['stu_id']);
+			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['oldPassword']));
+			$row = $db->fetchRow($sql);
+			if (empty($row)){
+				return false;
+			}
+			return true;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
+	function changePassword($_data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+	
+			$_arr=array(
+					'password'	  	=> md5($_data['password']),
+					'user_id'	 	=> $this->getUserId()
+			);
+			$this->_name = "rms_items";
+			$where = $this->getAdapter()->quoteInto("id=?",$_data['stu_id']);
+			$this->update($_arr, $where);
+			return true;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
 	function getStudentInformation($stu_id=0,$currentLang=1){
 		$_db = $this->getAdapter();
 		$_db->beginTransaction();

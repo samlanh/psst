@@ -33,7 +33,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			$rs_rows = $db->getAllScore($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","EXAM_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","SCORE_LEVEL","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("BRANCH","EXAM_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","SCORE_LEVEL","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'score','action'=>'edit',
 			);

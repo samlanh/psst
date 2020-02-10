@@ -29,7 +29,9 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 	    	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
 	    	(SELECT
 	    	(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
-	    	sa.`date_attendence` ";
+	    	sa.`date_attendence`,
+    		(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE sa.user_id=rms_users.id LIMIT 1 ) AS user_name
+    	";
     	$sql.=$dbp->caseStatusShowImage("sa.`status`");
     	$sql.=" FROM `rms_student_attendence` AS sa ";
     	$where =' WHERE sa.`type` = 1 ';

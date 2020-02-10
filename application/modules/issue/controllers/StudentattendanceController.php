@@ -30,7 +30,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			$this->view->search=$search;
 			$rs_rows = $db->getAllAttendence($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","ATTENDANCE_DATE","STATUS");
+			$collumns = array("BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","ATTENDANCE_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'studentattendance','action'=>'edit',
 			);

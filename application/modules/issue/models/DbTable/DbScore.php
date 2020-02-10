@@ -271,7 +271,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name` ";
+			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
+			(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name
+		";
 		$sql.=$dbp->caseStatusShowImage("s.status");
 		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 and s.score_option=1 ";
 		

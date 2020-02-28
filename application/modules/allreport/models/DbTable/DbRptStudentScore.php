@@ -489,6 +489,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	st.`stu_id` = gs.`stu_id`
 				   	AND g.`id`= gs.`group_id`
 				   	AND g.id = $group_id ";//only month
+			   	$sql.=" AND gs.`stop_type`=0 ";
    	
    	$where='';
    	$order = "GROUP BY gs.`stu_id` ORDER BY ((avg_forsemester+avg_formonth)/2) DESC,g.academic_year,g.semester ASC ";
@@ -575,6 +576,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	st.`stu_id` = gs.`stu_id`
 				   	AND g.`id`= gs.`group_id`
 				   	AND g.id = $group_id ";
+			   	$sql.=" AND gs.`stop_type`=0 ";
    		$where='';
    		$order = "GROUP BY gs.`stu_id` ORDER BY ((((avg_forsemester1+avg_formonthsemester1)/2)+((avg_forsemester2+avg_formonthsemester2)/2))/2) DESC,g.academic_year,g.semester ASC ";
    	

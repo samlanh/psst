@@ -11,12 +11,17 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
     function getAllIssueCertification($search){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql = "SELECT c.id,
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
 			c.academic_year,
 			c.grade,
 			c.issue_date,
+			CASE
+				WHEN  c.for_type = 1 THEN '". $tr->translate("KHMER")."'
+				WHEN  c.for_type = 2 THEN '". $tr->translate("ENGLISH")."'
+			END AS for_type,
 			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user
     	";
     	$sql.=$dbp->caseStatusShowImage("c.status");
@@ -63,6 +68,7 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 					'academic_year'		=>$_data['academic_year'],
 					'grade'		=>$_data['grade'],
 					'issue_date'		=>$_data['issue_date'],
+					'for_type'		=>$_data['for_type'],
 					'note'		=>$_data['note'],
 					'create_date'		=>date("Y-m-d H:i:s"),
 					'modify_date'		=>date("Y-m-d H:i:s"),
@@ -103,6 +109,7 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 					'academic_year'		=>$_data['academic_year'],
 					'grade'		=>$_data['grade'],
 					'issue_date'		=>$_data['issue_date'],
+					'for_type'		=>$_data['for_type'],
 					'note'		=>$_data['note'],
 					'modify_date'		=>date("Y-m-d H:i:s"),
 					'status'		=>$_data['status'],

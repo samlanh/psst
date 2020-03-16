@@ -67,6 +67,14 @@ class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
     			'class'=>'fullside',
     			'style'=>'width:99%; font-family: inherit;  min-height:100px !important;'));
     	
+		$_for_type=  new Zend_Dojo_Form_Element_FilteringSelect('for_type');
+    	$_for_type->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
+    	$_for_type_opt = array(
+    			1=>$this->tr->translate("KHMER"),
+    			2=>$this->tr->translate("ENGLISH"));
+    	$_for_type->setMultiOptions($_for_type_opt);
+    	$_for_type->setValue($request->getParam("for_type"));
+		
     	$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
     	$_status->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
     	$_status_opt = array(
@@ -134,6 +142,7 @@ class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
+			$_for_type->setValue($data["for_type"]);
     		
     	}
     	
@@ -149,7 +158,7 @@ class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
     			$start_date,
     			$end_date,
     			$_status_search,
-    			
+    			$_for_type
     			));
     	return $this;
     }

@@ -7,7 +7,107 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 <div style="margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
 		<div id="divPrint">
-			<?php $image = $this->baseUrl().'/images/card/certificate/LetterOfPraise.jpg';?>
+			<?php  
+				if($this->rs['for_type']==1){
+				$image = $this->baseUrl().'/images/card/certificate/LetterOfPraiseKh.jpg';
+			?>
+			<style>
+				.certificate{
+					background-image: url('<?php echo $image;?>');
+					background-size: 100%;
+					background-repeat: no-repeat;
+					position: relative;
+					display:inline-block; 
+					line-height: 23px;   
+					top:13px;
+					width: 28cm; 
+					height:20cm;   
+					color: #6d542b; 
+					font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
+				}
+				.one-row-certif{
+					text-align:center; 
+					margin: 0 auto; 
+					padding: 0;
+		
+				}
+					
+				span.value{
+					 font-size: 22px;
+					 display: inline-block;
+					 color: #6d542b;
+					 font-family: 'Times New Roman', sans-serif,'Khmer Os Metal Chrieng';
+				}
+				span.student_name {
+				    position: absolute;
+					top: 374px;
+					left: 260px;
+					min-width: 550px;
+					text-align: center;
+					font-size: 38px;
+				}
+					
+				span.rank {
+				    position: absolute;
+					top: 442px;
+					right: 165px;
+					min-width: 70px;
+					text-align: center;
+				}	
+				
+				
+				
+				span.issue_month {
+					position: absolute;
+					top: 478px;
+					right: 286px;
+					min-width: 70px;
+					text-align: center;
+				}
+				span.issue_year {
+					 position: absolute;
+					top: 478px;
+					right: 184px;
+					min-width: 76px;
+					text-align: center;
+				}
+				span.teacher {
+					position: absolute;
+					top: 607px;
+					font-size: 18px;
+					left: 205px;
+					min-width: 230px;
+					text-align: center;
+				}
+				span.value.teacher-class {
+					position: absolute;
+					top: 627px;
+					left: 205px;
+					min-width: 230px;
+					text-align: center;
+					font-size: 18px;
+				}
+			</style>
+			<div class="one-row-certif" >
+				<div class="certificate">
+					<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
+					
+					<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rs['rank']);?></span>
+					
+					
+					<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
+					<!-- <span class="value issue_day"><?php //echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span> -->
+					<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
+					<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
+					<?php }?>
+					<span class="teacher"><?php echo $this->rs['teacherNameKh'];?></span>
+					<span class="value teacher-class">គ្រូបន្ទុកថ្នាក់ <?php echo $this->rs['grade'];?></span>
+				</div>
+			</div>
+			<?php 
+				}else if($this->rs['for_type']==2){
+				$image = $this->baseUrl().'/images/card/certificate/LetterOfPraise.jpg';
+			?>
 			<style>
 				.certificate{
 					background-image: url('<?php echo $image;?>');
@@ -64,7 +164,8 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 				    min-width: 145px;
 				    text-align: center;
 				}
-									span.stu_code {
+					
+				span.stu_code {
 					position: absolute;
 					top: 364px;
 					right: 140px;
@@ -151,6 +252,8 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					<?php }?>
 				</div>
 			</div>
+			<?php }?>
+			
 		</div>
 	</div>
 </div>

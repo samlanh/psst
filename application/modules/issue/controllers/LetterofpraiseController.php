@@ -25,7 +25,7 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllIssueCertification($search);
 			$list = new Application_Form_Frmtable();
 				
-			$collumns = array("BRANCH","GROUP_CODE","ACADEMIC_YEAR","GROUP","ISSUE_DATE","USER","STATUS");
+			$collumns = array("BRANCH","GROUP_CODE","ACADEMIC_YEAR","GROUP","ISSUE_DATE","TYPE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'letterofpraise','action'=>'edit',
 			);

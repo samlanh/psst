@@ -277,7 +277,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			$sql.=" AND branch_id =".$search['branch_id'];
 		}
 		
-		$sql.=" ORDER BY stu_enname ASC ";
+		$sql.=" ORDER BY stu_id ASC ";
+// 		$sql.=" ORDER BY stu_enname ASC ";
 		return $db->fetchAll($sql);
 	}
 }

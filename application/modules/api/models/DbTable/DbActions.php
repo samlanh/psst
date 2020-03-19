@@ -50,23 +50,22 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$row = $db->checkChangePassword($_data);
 			if (!$row){
 				$arrResult = array(
-						"code" => "FAIL",
-						"message" => "INVALID_OLD_PASSWORD",
+					"code" => "FAIL",
+					"message" => "INVALID_OLD_PASSWORD",
 				);
 			}else{
 				$row = $db->changePassword($_data);
 				if (!$row){
 					$arrResult = array(
-							"code" => "FAIL",
-							"message" => "UNABLE_TO_CHANGE_PASSWORD",
+						"code" => "FAIL",
+						"message" => "UNABLE_TO_CHANGE_PASSWORD",
 					);
 				}else{
 					$arrResult = array(
-							"code" => "SUCCESS",
-							"message" => "",
+						"code" => "SUCCESS",
+						"message" => "",
 					);
 				}
-				
 			}
 			print_r(Zend_Json::encode($arrResult));
 			exit();

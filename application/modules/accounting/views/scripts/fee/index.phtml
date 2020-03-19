@@ -39,17 +39,20 @@
 						<input id="academic_year" />
 					 </div>
 					 <div class="col-md-3 col-sm-3 col-xs-12">
-					  	<?php echo $frm_fee->getElement("school_option");?>
+					  	<?php echo $frm_fee->getElement("type_study");?>
 					 </div>
 			    </div>
 				<div class="form-group">
+					<div class="col-md-3 col-sm-3 col-xs-12">
+					  	<?php echo $frm_fee->getElement("school_option");?>
+					 </div>
 					 <div class="col-md-3 col-sm-3 col-xs-12">
 					  	<?php echo $frm_fee->getElement("is_finished_search");?>
 					 </div>
 					 <div class="col-md-3 col-sm-3 col-xs-12">
 					  	<?php echo $frm->getElement("status");?>
 					 </div>
-					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
 					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 					 </div>
 				</div>

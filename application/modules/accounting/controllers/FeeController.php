@@ -18,6 +18,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	    				'title' 			=> '',
 	    				'academic_year' 	=> '',
 	    				'branch_id'			=>'',
+    					'type_study'		=>-1,
     					'school_option'		=>-1,
     					'is_finished_search' => '',
     					'status' 			=>-1,
@@ -26,11 +27,11 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		$db = new Accounting_Model_DbTable_DbFee();
     		$rs_rows= $db->getAllTuitionFee($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","School Option","CREATED_DATE","PROCESS_TYPE","BY_USER","STATUS");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE_STUDY","IS_MULTY_STUDY","TYPE","School Option","CREATED_DATE","PROCESS_TYPE","BY_USER","STATUS");
     		$link=array(
     			'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'class'=>$link,'generation'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'study_type'=>$link,'is_multistudy'=>$link,'class'=>$link,'generation'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -71,7 +72,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$frm->FrmTutionfee();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_fee = $frm;
-    	
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
     }

@@ -967,23 +967,25 @@ function getAllgroupStudyNotPass($action=null){
    function getAllYear($type=1,$is_completed=0){
 	   	$db = $this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
-	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
-	   	CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years 
-	   		FROM rms_tuitionfee WHERE `status`=1
-	   		AND type=1
-	   		$branch_id ";
+	   	$sql = "SELECT tf.id,
+		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS name,
+		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS years
+	   			FROM rms_tuitionfee AS tf WHERE `status`=1
+	   				AND tf.type=1
+	   	$branch_id ";
 	   	if($is_completed==0){
-	   		$sql.=' AND is_finished=0 ';
+	   		$sql.=' AND tf.is_finished=0 ';
 	   	}
-	   	$sql.=' GROUP BY branch_id,from_academic,to_academic,generation ';
+	   	$sql.=' GROUP BY tf.branch_id,tf.academic_year,tf.generation ';
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
    function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){
 	   	$db = $this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
-	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
-	   	CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years
+	   	$sql = "SELECT id,
+		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'(',generation,')') AS name,
+		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'(',generation,')') AS years
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
 	   	$branch_id ";
@@ -1013,7 +1015,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql.=" AND school_option = $school_option ";
 	  	}
 	  	
-	   	$sql.=" GROUP BY from_academic,to_academic,generation";
+	   	$sql.=" GROUP BY academic_year,generation";
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
@@ -2713,6 +2715,53 @@ function getAllgroupStudyNotPass($action=null){
 			<div class="clearfix"></div>
   	';
   	return array('string'=>$string);
+  }
+  public function getAllAcademicYear($option=null){
+  		$db=$this->getAdapter();
+		  	$sql="SELECT id, CONCAT(fromYear,'-',toYear) as name
+		  			FROM
+		  		rms_academicyear
+		  			WHERE status = 1 ORDER by toYear DESC ";
+  		$result =  $db->fetchAll($sql);
+  		if($option!=null){
+	  		$options=array();
+	  		if(!empty($result))foreach($result AS $row){
+	  			$options[$row['id']]=$row['name'];
+	  		}
+	  		return $options;
+  		}
+  		return $result;
+  }
+  public function getAllTermStudyTitle($option=null){
+	  		$db=$this->getAdapter();
+	  	  	$_db  = new Application_Model_DbTable_DbGlobal();
+	  	  	$lang = $_db->currentlang();
+	  	  	if($lang==1){// khmer
+	  	  		$label = "title_kh";
+	  	  	}else{ // English
+	  	  		$label = "title_eng";
+	  	  	}
+	  	  	
+	  	$sql="SELECT id, $label as name
+	  			FROM
+	  				rms_studytype
+	  					WHERE status = 1 AND $label!='' ";
+	  	$result =  $db->fetchAll($sql);
+	  	
+	  	if($option!=null){
+	  		
+	  		$options=array();
+	  		$request=Zend_Controller_Front::getInstance()->getRequest();
+	  		if($request->getActionName()=='index'){
+	  			$options = array(-1=>$this->tr->translate("SELECT_TYPE"));
+	  		}
+	  		
+	  		if(!empty($result))foreach($result AS $row){
+	  			$options[$row['id']]=$row['name'];
+	  		}
+	  		return $options;
+	  	}
+	  	return $result;
   }
 }
 ?>

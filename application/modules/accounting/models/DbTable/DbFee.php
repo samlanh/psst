@@ -14,13 +14,21 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	$session_lang=new Zend_Session_Namespace('lang');
     	$lang = $session_lang->lang_id;
     	$field = 'name_en';
+    	$str = 'title_eng';
     	if ($lang==1){
     		$field = 'name_kh';
+    		$str = 'title_kh';
     	}
     	
     	$sql = "SELECT t.id,
-	    	(SELECT CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
-	    		CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
+	    	(SELECT CONCAT(branch_nameen) from rms_branch WHERE br_id =t.branch_id LIMIT 1) AS branch,
+	    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) as academic,
+	    	(SELECT $str FROM rms_studytype WHERE rms_studytype.id =t.term_study  LIMIT 1) AS study_type,
+	    	CASE is_multi_study
+			    WHEN 1 THEN 'MULTY_PROGRAM'
+			     WHEN 0 THEN 'ONE_PROGRAM_ONLY'
+			END is_multistudy,
+	    	t.generation,
 	    	(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
 	    		t.create_date,
 	    	(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,
@@ -45,7 +53,10 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['branch_id'])){
     		$where.=" AND t.branch_id=".$search['branch_id'];
-    	}    	 
+    	} 
+    	if($search['type_study']>0){
+    		$where.=" AND t.term_study=".$search['type_study'];
+    	}   	 
     	if($search['is_finished_search']!=""){
     		$where.=" AND t.is_finished=".$search['is_finished_search'];
     	}
@@ -62,9 +73,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     }
     function getCondition($_data){
     	$db = $this->getAdapter();
-    	$find="select id from rms_tuitionfee where from_academic=".$_data['from_academic']." and to_academic=".$_data['to_academic']."
-    	and generation='".$_data['generation']."'  AND branch_id = ".$_data['branch_id'];
-    	 
+    	$find="SELECT id FROM rms_tuitionfee WHERE 
+    		academic_year =".$_data['from_academic']." AND branch_id = ".$_data['branch_id']." AND term_study = ".$_data['type_study']." AND generation ='".$_data['generation']."'";
     	return $db->fetchOne($find);
     }
 	public function addTuitionFee($_data){
@@ -73,18 +83,20 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	$fee_id = $this->getCondition($_data);
     	try{
     		if(!empty($fee_id)){
+    			Application_Form_FrmMessage::Sucessfull("RECORD_EXIS","/accounting/fee");
     		}else{
 	    		$_arr = array(
-	    				'from_academic'=>$_data['from_academic'],
-	    				'to_academic'=>$_data['to_academic'],
-	    				'generation'=>$_data['generation'],
-	    				'school_option'=>$_data['school_option'],
-	    				'note'=>$_data['note'],
-	    				'type'=>1,//Tuition Fee
-	    				'branch_id'=>$_data['branch_id'],
-	    				'create_date'=>date("Y-m-d"),
-	    				'user_id'=>$this->getUserId()
-	    				);
+	    			'academic_year'=>$_data['from_academic'],
+ 	    			'term_study'=>$_data['type_study'],
+ 	    			'is_multi_study'=>$_data['ismulty_study'],
+	    			'generation'=>$_data['generation'],
+	    			'school_option'=>$_data['school_option'],
+	    			'note'=>$_data['note'],
+	    			'type'=>1,//Tuition Fee
+	    			'branch_id'=>$_data['branch_id'],
+	    			'create_date'=>date("Y-m-d"),
+	    			'user_id'=>$this->getUserId()
+	    		);
 	    		$fee_id = $this->insert($_arr);
     		}
 	    		$this->_name='rms_tuitionfee_detail';
@@ -95,7 +107,6 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    				$_arr = array(
 	    						'fee_id'=>$fee_id,
 	    						'class_id'=>$_data['class_'.$i],
-	    						//'session'=>$_data['session_'.$i],
 	    						'payment_term'=>$j,
 	    						'tuition_fee'=>$_data['fee'.$i.'_'.$j],
 	    						'remark'=>$_data['remark'.$i]
@@ -107,8 +118,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	    return true;
     		
     	}catch (Exception $e){
-    		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$db->rollBack();
     		return false;
     	}
     }
@@ -132,15 +143,15 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
     	try{
     		$_arr = array(
-    				'from_academic'	=>$_data['from_academic'],
-    				'to_academic'	=>$_data['to_academic'],
+    				'academic_year'	=>$_data['from_academic'],
+    				'term_study'=>$_data['type_study'],
+ 	    			'is_multi_study'=>$_data['ismulty_study'],
     				'generation'	=>$_data['generation'],
     				'school_option'=>$_data['school_option'],
     				'note'			=>$_data['note'],
     				'status'		=>$_data['status'],
     				'type'=>1,//Tuition Fee
     				'is_finished'	=>$_data['is_finished'],
-    				//'time'			=>$_data['time'],
     				'branch_id'		=>$_data['branch_id'],
     				'user_id'		=>$this->getUserId()
     		);
@@ -161,11 +172,9 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     					$_arr = array(
     							'fee_id'=>$_data['id'],
     							'class_id'=>$_data['class_'.$i],
-    							//'session'=>$_data['session_'.$i],
     							'payment_term'=>$j,
     							'tuition_fee'=>$_data['fee'.$i.'_'.$j],
     							'remark'=>$_data['remark'.$i],
-    							//'status'=>$_data['status_'.$i]
     					);
     					$this->insert($_arr);
     				}
@@ -175,19 +184,14 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     		return true;
     	}catch (Exception $e){
     		$db->rollBack();
-    		echo $e->getMessage();
+    		$db->rollBack();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
-    
     function getAceYear(){
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	return $_db->getAllYear(2);
-//     	$branch_id = $_db->getAccessPermission();
-//     	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS `name`
-//     	FROM rms_tuitionfee WHERE `status`=1 $branch_id  group by from_academic,to_academic,generation,time ";
-//     	$oder=" ORDER BY id DESC ";
-//     	return $db->fetchAll($sql.$oder);
     }
     //for get Grade By School Option
     function getAllGradeStudySchoolOption($option=1,$schoolOption){

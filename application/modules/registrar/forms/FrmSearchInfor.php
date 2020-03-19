@@ -677,6 +677,18 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',));
 		$_test_type->setValue($request->getParam("test_type"));
 		
+// 		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
+// 		$type_study->setAttribs(array(
+// 				'dojoType'=>'dijit.form.FilteringSelect',
+// 				'required' =>'true',
+// 				'class'=>'fullside',
+// 				'onchange'=>'filterClient();',
+// 				'queryExpr'=>'*${0}*',
+// 				'autoComplete'=>"false"
+// 		));
+// 		$typestudy_opt = $db->getAllTermStudyTitle(1);
+// 		$type_study->setMultiOptions($typestudy_opt);
+		
 		$this->addElements(array($school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
@@ -685,7 +697,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				
 				$allacademicyear,
 				$_sortby,
-				
 				$_exam_type,
 				$_for_semester,
 				$_for_month,

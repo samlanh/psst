@@ -73,9 +73,15 @@ table .set-style td, table .set-style th {
 			                </div>
 		             	</div>
 		             	<div class="form-group">
-			                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TO");?> </label>
+			                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE_STUDY");?> </label>
 			                <div class="col-md-7 col-sm-7 col-xs-12">
-		                		<?php echo $frm->getElement("to_academic");?>
+		                		<?php echo $frm->getElement("type_study");?>
+		                </div>
+		             	</div>
+		             	<div class="form-group">
+			                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_MULTY_STUDY");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+		                		<?php echo $frm->getElement("ismulty_study");?>
 			                </div>
 		             	</div>
 		             	<div class="form-group">
@@ -140,16 +146,16 @@ table .set-style td, table .set-style th {
 			<table cellspacing="10" style="margin: 0 auto; width:100%">
 			    <tr>
 					<td align="center" style="font-size: 20px;color: red;">
-						DO you really want to save ?
+						<?php echo $tr->translate("CONFIRM_SAVE");?>
 					</td>
 				</tr>
 				<tr>
 					<td align="center">
-						<input type="button"  label="<?php echo $tr->translate("Yes");?>" id="yes" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="submitDataClose();"/>
-							
-						<input type="button"  label="<?php echo $tr->translate("No");?>" id="no" 
+						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="no" 
 							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideAlert();"/>
+							
+						<input type="button"  label="<?php echo $tr->translate("AGREE");?>" id="yes" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="submitDataClose();"/>
 					</td>
 				</tr>
 			</table>

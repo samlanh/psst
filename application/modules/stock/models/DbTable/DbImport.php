@@ -30,8 +30,8 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	$count = count($data);
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$db_items = new Global_Model_DbTable_DbItems();
-    	for($i=1; $i<=$count; $i++){
-    		
+    	for($i=2; $i<=$count; $i++){
+    		$data[$i]['C'] = htmlspecialchars($data[$i]['C']);
     		$pro_title = empty($data[$i]['C'])?null:$data[$i]['C'];
     		
     		$cate_title = empty($data[$i]['D'])?null:$data[$i]['D'];
@@ -48,15 +48,15 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     			$product_type = 1;
     		}
     		
-    		$product = $this->getProductId($pro_title);
-    		$pro_id = empty($product['id'])?0:$product['id'];
-    		if (empty($product)){
+//     		$product = $this->getProductId($pro_title);
+//     		$pro_id = empty($product['id'])?0:$product['id'];
+//     		if (empty($product)){
 	    		$_arr=array(
 	    				'items_id'		=> $items_id,
 	    				'items_type'	=> 3,
 	    				'code'			=> $data[$i]['B'],
-	    				'title'	 	 	=> $pro_title,
-	    				'title_en'		=> $pro_title,
+	    				'title'	 	 	=> $data[$i]['C'],
+	    				'title_en'		=> $data[$i]['C'],
 	    				'note'    		=> $data[$i]['E'],
 	    				'product_type' 	=> $product_type,
 	    				'is_onepayment' => 1,
@@ -69,19 +69,31 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 	    		);
 	    		$this->_name = "rms_itemsdetail";
 	    		$pro_id =  $this->insert($_arr);
-    		}
+//     		}
     		
-    		if(!empty($data[$i]['H'])){
-    			$_arr_prolocation =array(
-    				'pro_id'		=> $pro_id,
-    				'brand_id'		=>$branch_id,
-					'pro_qty'		=>$data[$i]['H'],
-					'price'			=>$data[$i]['i'],
-					'stock_alert'	=>$data[$i]['j'],
-    			);
-    			$this->_name = "rms_product_location";
-    			$this->insert($_arr_prolocation);
+    		$rsbranch = $dbg->getAllBranch();
+    		foreach ($rsbranch as $row){
+    			    $_arr_prolocation =array(
+    			    	'pro_id'		=> $pro_id,
+    			    	'brand_id'		=>$row['id'],
+    					'pro_qty'		=>0,
+    					'price'			=>0,
+    					'stock_alert'	=>0,
+    			    );
+    			    $this->_name = "rms_product_location";
+    			    $this->insert($_arr_prolocation);
     		}
+//     		if(!empty($data[$i]['H'])){
+//     			$_arr_prolocation =array(
+//     				'pro_id'		=> $pro_id,
+//     				'brand_id'		=>$branch_id,
+// 					'pro_qty'		=>$data[$i]['H'],
+// 					'price'			=>$data[$i]['i'],
+// 					'stock_alert'	=>$data[$i]['j'],
+//     			);
+//     			$this->_name = "rms_product_location";
+//     			$this->insert($_arr_prolocation);
+//     		}
     	}
     }
 }   

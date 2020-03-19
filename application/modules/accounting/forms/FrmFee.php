@@ -34,14 +34,11 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 			'autoComplete'=>"false",
 			'onchange'=>'filterClient();'
 		));
-		$from_academic_opt = array();
-		 for($i=date('Y')-1;$i<=date('Y')+1;$i++){
-			$from_academic_opt[$i]=$i;
-		}
+		$from_academic_opt = $db->getAllAcademicYear(1);
 		$_from_academic->setMultiOptions($from_academic_opt);
 		
-		$_to_academic = new Zend_Dojo_Form_Element_FilteringSelect('to_academic');
-		$_to_academic->setAttribs(array(
+		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
+		$type_study->setAttribs(array(
 			'dojoType'=>'dijit.form.FilteringSelect',
 			'required' =>'true',
 			'class'=>'fullside',
@@ -49,11 +46,9 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 			'queryExpr'=>'*${0}*',
 			'autoComplete'=>"false"
 		));
-		$to_academic_opt = array();
-		for($i=date('Y');$i<=date('Y')+2;$i++){
-			$to_academic_opt[$i]=$i;
-		}
-		$_to_academic->setMultiOptions($to_academic_opt);
+		$typestudy_opt = $db->getAllTermStudyTitle(1);
+		$type_study->setMultiOptions($typestudy_opt);
+		$type_study->setValue($request->getParam("type_study"));
 		
 		$generation = new Zend_Dojo_Form_Element_TextBox('generation');
 		$generation->setAttribs(array(
@@ -148,10 +143,21 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		$schooloption->setMultiOptions($options);
 		$schooloption->setValue($request->getParam("school_option"));
 		
+		$ismulty_study = new Zend_Dojo_Form_Element_FilteringSelect('ismulty_study');
+		$ismulty_study ->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>"false"
+		));
+		$options= array(0=>$this->tr->translate("ONE_PROGRAM_ONLY"),1=>$this->tr->translate("MULTY_PROGRAM"),);
+		$ismulty_study->setMultiOptions($options);
+		
 		if($data!=null){
 			$_branch_id->setValue($data['branch_id']);
-			$_from_academic->setValue($data['from_academic']);
-			$_to_academic->setValue($data['to_academic']);
+			$_from_academic->setValue($data['academic_year']);
+			$type_study->setValue($data['term_study']);
+			$ismulty_study->setValue($data['is_multi_study']);
 			$generation->setValue($data['generation']);
 			$schooloption->setValue($data['school_option']);
 			$note->setValue($data['note']);
@@ -160,8 +166,9 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 			$_is_finished->setValue($data['is_finished']);
 		}
 		$this->addElements(array($_branch_id,
+			$ismulty_study,
 			$_from_academic,
-			$_to_academic,
+			$type_study,
 			$generation,
 			$note,
 			$_is_finished,
@@ -169,7 +176,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 			$schooloption,
 			$_year,
 			$_is_finished_search
-				));
+		));
 		return $this;		
 	}	
 }

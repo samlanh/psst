@@ -66,15 +66,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	}
 	function changePassword($_data){
 		$db = $this->getAdapter();
-		$db->beginTransaction();
 		try{
-	
 			$_arr=array(
-					'password'	  	=> md5($_data['password']),
-					'user_id'	 	=> $this->getUserId()
+					'password'	  	=> md5($_data['newPassword']),
 			);
-			$this->_name = "rms_items";
-			$where = $this->getAdapter()->quoteInto("id=?",$_data['stu_id']);
+			$this->_name = "rms_student";
+			$where = $this->getAdapter()->quoteInto("stu_id=?",$_data['stu_id']);
 			$this->update($_arr, $where);
 			return true;
 		}catch(Exception $e){

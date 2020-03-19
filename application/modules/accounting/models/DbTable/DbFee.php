@@ -32,8 +32,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    	(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
 	    		t.create_date,
 	    	(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,
-	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
-    		";
+	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user ";
     	
     	$sql.=$dbp->caseStatusShowImage("t.status");
     	$sql.=" FROM `rms_tuitionfee` AS t
@@ -44,7 +43,6 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " CONCAT(from_academic,'-',to_academic) LIKE '%{$s_search}%'";
     		$s_where[] = " t.generation LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
@@ -68,7 +66,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	}
     	
     	$where.=$dbp->getAccessPermission();
-    	$order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
+    	$order=" GROUP BY t.branch_id,t.academic_year ORDER BY t.id DESC ";
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     function getCondition($_data){

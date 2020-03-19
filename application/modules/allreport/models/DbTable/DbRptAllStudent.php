@@ -1608,15 +1608,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     //for rpt-student-static
     function getAllYearTuitionfee($limit =null){
+//     	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS name,
+//     	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS years
+    	
+    	
     	$db = $this->getAdapter();
-    	$sql="SELECT CONCAT(t.from_academic,'-',t.to_academic) AS academicyear FROM `rms_tuitionfee` AS t
-			GROUP BY t.from_academic,t.to_academic 
-			
-		";
+    	$sql=" SELECT (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academicyear FROM `rms_tuitionfee` AS t
+			GROUP BY t.academic_year ";
     	if (!empty($limit)){ // Add new Case For Limit Record on Dashboard
-    		$sql.=" ORDER BY t.from_academic ASC LIMIT $limit ";
+    		$sql.=" ORDER BY t.academic_year ASC LIMIT $limit ";
     	}else {
-    		$sql.=" ORDER BY t.from_academic DESC ";
+    		$sql.=" ORDER BY t.academic_year DESC ";
     	}
     	return $db->fetchAll($sql);
     }

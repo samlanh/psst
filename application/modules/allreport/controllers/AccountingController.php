@@ -472,15 +472,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'finished_status'=>-1,
 					'txtsearch' =>'',
 					'study_year' =>'',
+					'type_study'=>-1,
 					'grade_all' =>'',
 					'branch_id' =>'',
 					'degree'=>0,
 					'school_option'=>'');
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
 		
 		$db = new Allreport_Model_DbTable_DbRptFee();
 		$group= new Allreport_Model_DbTable_DbRptFee();
@@ -539,6 +536,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$rs_rows=array();
 			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 		}
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		
 		$data=$this->view->rs = $rs_rows;
 		$this->view->search = $search;
 	}
@@ -547,13 +550,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				'id' 	  => $rs['id'],
 				'branch_id'=>$rs['branch_name'],
 				'academic'=> $rs['academic'],
+				'study_type'=> $rs['study_type'],
 				'generation'=> $rs['generation'],
 				'class'=>'',
 				'session'=>'',
 				'quarter'=>'',
 				'semester'=>'',
 				'year'=>'',
-				'time'=>$rs['time'],
 				'date'=>$rs['create_date'],
 				'status'=>''
 		);

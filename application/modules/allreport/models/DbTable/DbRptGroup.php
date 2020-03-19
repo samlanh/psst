@@ -92,7 +92,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		$sql="SELECT
 					 g.gd_id,
 					 (SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
-					 (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=gr.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_yeartitle,
+					 (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=gr.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_yeartitle,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
 					 `g`.`group_id` AS `group_id`,
 					 `g`.`stu_id`   AS `stu_id`,

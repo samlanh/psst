@@ -688,21 +688,35 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 // 		));
 // 		$typestudy_opt = $db->getAllTermStudyTitle(1);
 // 		$type_study->setMultiOptions($typestudy_opt);
+
+		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
+		$type_study->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required' =>'true',
+				'class'=>'fullside',
+				'onchange'=>'filterClient();',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>"false"
+		));
+		$typestudy_opt = $db->getAllTermStudyTitle(1);
+		$type_study->setMultiOptions($typestudy_opt);
+		$type_study->setValue($request->getParam("type_study"));
 		
-		$this->addElements(array($school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
+		
+		$this->addElements(array(
+				   $type_study,
+					$school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
-				
-				$allacademicyear,
-				$_sortby,
-				$_exam_type,
-				$_for_semester,
-				$_for_month,
-				$_test_type
+					$allacademicyear,
+					$_sortby,
+					$_exam_type,
+					$_for_semester,
+					$_for_month,
+					$_test_type
 				));
-	
 		return $this;
 	} 
 }

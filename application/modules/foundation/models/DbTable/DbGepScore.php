@@ -243,7 +243,7 @@ class Foundation_Model_DbTable_DbGepScore extends Zend_Db_Table_Abstract
 
 	function getAllYears(){
 		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
+		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
 		GROUP BY from_academic,to_academic,generation";
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);
@@ -400,7 +400,7 @@ class Foundation_Model_DbTable_DbGepScore extends Zend_Db_Table_Abstract
 	function getAllgroupStudyNotPass($action=null){
 		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
 		FROM `rms_group` AS `g` WHERE g.status =1 AND g.`degree` NOT IN(1,2)";
 		$where ='';
 		if (!empty($action)){

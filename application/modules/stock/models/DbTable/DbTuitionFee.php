@@ -196,7 +196,7 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
-    	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS `name`     
+    	$sql="SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS `name`     
                      FROM rms_tuitionfee WHERE `status`=1 $branch_id  group by from_academic,to_academic,generation,time ";
         $oder=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$oder);

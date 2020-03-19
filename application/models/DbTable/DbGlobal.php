@@ -344,7 +344,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 function getAllgroupStudy($teacher_id=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
+   			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
    		FROM `rms_group` AS `g` ";
    	if($teacher_id!=null){
    		$sql.=" ,rms_group_subject_detail AS gsd WHERE g.id =gsd.group_id AND gsd.teacher= ".$teacher_id;
@@ -361,7 +361,7 @@ function getAllgroupStu($branch_id=null){
 	$db = $this->getAdapter();
 	$sql ="SELECT 
 				g.id,
-				CONCAT(g.group_code,' ',(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY f.from_academic,f.to_academic,f.generation,f.branch_id limit 1) ) AS name
+				CONCAT(g.group_code,' ',(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY f.from_academic,f.to_academic,f.generation,f.branch_id limit 1) ) AS name
 			FROM 
 				rms_group AS g 
 			where 
@@ -375,7 +375,7 @@ function getAllgroupStu($branch_id=null){
 function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+   	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
    	FROM `rms_group` AS `g` WHERE g.status =1";
    	$where ='';
    	if (!empty($action)){
@@ -1202,7 +1202,7 @@ function getAllgroupStudyNotPass($action=null){
    		return $rows;
    	}else{
    		if($option!=null){
-   			$opt_gen = array(-1=>$tr->translate("Please Select Type"));
+   			$opt_gen = array(-1=>$tr->translate("SELECT_TYPE"));
    		}else{
    			$opt_gen=array();
    		}
@@ -2077,7 +2077,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	
   	$sql = "SELECT start_date,expired_date,group_code,
-  	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
+  	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year_only,
   	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
   	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
@@ -2718,10 +2718,10 @@ function getAllgroupStudyNotPass($action=null){
   }
   public function getAllAcademicYear($option=null){
   		$db=$this->getAdapter();
-		  	$sql="SELECT id, CONCAT(fromYear,'-',toYear) as name
-		  			FROM
-		  		rms_academicyear
-		  			WHERE status = 1 ORDER by toYear DESC ";
+		$sql="SELECT id, CONCAT(fromYear,'-',toYear) as name
+		  		FROM
+		  	rms_academicyear
+		  		WHERE status = 1 ORDER by toYear DESC ";
   		$result =  $db->fetchAll($sql);
   		if($option!=null){
 	  		$options=array();
@@ -2733,15 +2733,14 @@ function getAllgroupStudyNotPass($action=null){
   		return $result;
   }
   public function getAllTermStudyTitle($option=null){
-	  		$db=$this->getAdapter();
-	  	  	$_db  = new Application_Model_DbTable_DbGlobal();
-	  	  	$lang = $_db->currentlang();
-	  	  	if($lang==1){// khmer
-	  	  		$label = "title_kh";
-	  	  	}else{ // English
-	  	  		$label = "title_eng";
-	  	  	}
-	  	  	
+  		$db=$this->getAdapter();
+  	  	$_db  = new Application_Model_DbTable_DbGlobal();
+  	  	$lang = $_db->currentlang();
+  	  	if($lang==1){// khmer
+  	  		$label = "title_kh";
+  	  	}else{ // English
+  	  		$label = "title_eng";
+  	  	}
 	  	$sql="SELECT id, $label as name
 	  			FROM
 	  				rms_studytype
@@ -2749,10 +2748,9 @@ function getAllgroupStudyNotPass($action=null){
 	  	$result =  $db->fetchAll($sql);
 	  	
 	  	if($option!=null){
-	  		
 	  		$options=array();
 	  		$request=Zend_Controller_Front::getInstance()->getRequest();
-	  		if($request->getActionName()=='index'){
+	  		if($request->getActionName()=='index' OR $request->getModuleName()=='allreport'){
 	  			$options = array(-1=>$this->tr->translate("SELECT_TYPE"));
 	  		}
 	  		

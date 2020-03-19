@@ -190,7 +190,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		sp.id,
 	    		sp.receipt_number,
 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
-	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
+	    		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
 	    		
 	    		FORMAT(sp.grand_total,2)  AS totalPayment,
 	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
@@ -246,7 +246,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 // 	    		sp.receipt_number,
 // 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
 // 	    		sp.is_void,
-// 	    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
+// 	    		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
 // 	    		(SELECT $lbView FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS voidStatus,
 	    		 
 // 	    		FORMAT(sp.grand_total,2)  AS totalPayment,

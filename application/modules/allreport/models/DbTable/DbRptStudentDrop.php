@@ -28,7 +28,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 					st.stu_enname,
 					st.last_name,
 					st.tel,
-			    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=stdp.academic_year) AS academic_year,
+			    	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=stdp.academic_year) AS academic_year,
 			    	(SELECT $str from rms_view where rms_view.type=4 and rms_view.key_code=stdp.session limit 1) AS session,
 			    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=stdp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 					(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1 ) AS sex,

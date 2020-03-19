@@ -26,6 +26,9 @@
        			<input id="study_year" />
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('type_study')?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement('generation')?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
@@ -87,6 +90,7 @@
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('TYPE_STUDY')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('TYPE')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('DEGREE')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('GRADE')?></td>
@@ -102,6 +106,7 @@
 							<td style="border: 1px solid #000;"><?php echo $i;?></td>
 							<td style="border: 1px solid #000; text-align: left;padding:2px;"><?php echo @$row['branch_id'];?></td>
 							<td style="border: 1px solid #000;"><?php echo @$row['academic'];?></td>
+							<td style="border: 1px solid #000;"><?php echo @$row['study_type'];?></td>
 							<td style="border: 1px solid #000;"><?php echo @$row['generation'];?></td>
 							<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['degree'];?></td>	
 							<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['class'];?></td>	

@@ -151,7 +151,7 @@ class Global_Model_DbTable_DbHomeWorkScore extends Zend_Db_Table_Abstract
 	function getAllHoweWorkScore($search=null){
 		$db=$this->getAdapter();
 		$sql="SELECT s.id,(SELECT group_code FROM rms_group WHERE id=s.group_id ) AS  group_id,
-	           (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=s.academic_id AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
+	           (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE id=s.academic_id AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
 		       (SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code=s.session_id) AS session_id,
 		        (SELECT CONCAT(subject_titleen,' - ',subject_titlekh) FROM rms_subject WHERE id=s.subject_id ) AS subject_id,
 		        s.term_id,s.status
@@ -167,7 +167,7 @@ class Global_Model_DbTable_DbHomeWorkScore extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT s.id,d.student_no,
 		(SELECT CONCAT(stu_enname,' - ',stu_khname) FROM rms_student  WHERE rms_student.stu_id=d.score_id ) AS student_id,
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=s.academic_id AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
+		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE id=s.academic_id AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
 		s.session_id,
 		(select group_code from rms_group where id=s.group_id ) as  group_id,
 		(SELECT CONCAT(subject_titleen,' - ',subject_titlekh) FROM rms_subject WHERE id=s.subject_id ) AS subject_id,
@@ -179,7 +179,7 @@ class Global_Model_DbTable_DbHomeWorkScore extends Zend_Db_Table_Abstract
 	}
 	function getAllYears(){
 		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
+		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
 		GROUP BY from_academic,to_academic,generation";
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);

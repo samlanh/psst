@@ -1,6 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	$format_type = CARD_TYPE; // 1=ELT , 2=Good Will
 ?>	
 <script type="text/javascript">
 	function convertEnglishToKhmerNumber(num) {
@@ -61,120 +62,125 @@
 	   return false;
 	      
 	}
-	
 
 </script>
+
+<?php 
+	//class="dijitHidden" 
+	//data-dojo-type="dijit.Dialog"  
+?>
+
 <div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog"  align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
+	<div data-dojo-type="dijit.Dialog" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
 		<div id="print_student_card" >
+			<?php if($format_type==1){// ELT format ?>
 			<style>
-					<?php if(!empty($this->groupByType)) foreach($this->groupByType as $bck){
-						$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						$color = "000000";
-						
-						$type = 3;
-						if ($bck['staff_type']==1){
-							$type = 2;
-						}else if ($bck['staff_type']==1){
-							$type = 3;
-						}
-						
-						$bg = $_dbgb->getCardBackground($bck['branch_id'],$type);
-						if(!empty($bg['background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
-							$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
-							}
-							if (!empty($bg['colorcode'])){
-								$color = str_replace("#", "", $bg['colorcode']);
-							}
-						}
-						?>
-						.card-content-print.staff-<?php echo $bck['staff_type'];?> {
-								background-image: url('<?php echo $imagebg;?>');
-							 	background-size: 100%;background-repeat: no-repeat;	
-								
-							}
-						.card-content-print .name-card-block ul.list-data li .staff-id-<?php echo $bck['staff_type'];?>{
-							color:#<?php echo $color;?>;
-						}
-					<?php }?>
+				<?php if(!empty($this->groupByType)) foreach($this->groupByType as $bck){
+					$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
+					$color = "000000";
 					
-					.profile-card-block {
-								    position: relative;
-								}
-								.profile-card-block .photo {
-								    text-align: center;
-								    width: 100%;
-								    position: absolute;
-								    top: 96px;
-									left: -0.58px;
-								}
-								.photo img {
-								    width: 70.7px;
-								    height: 92px;
-								}
-								.name-card-block {
-								    position: relative;
-								}
-						
-								.name-card-block ul.list-data {
-								    list-style-type: none;
-								    padding: 0;
-								    width: 100%;
-								    position: absolute;
-								    text-align: center;
-								    top: 182.5px;
-								    color: #01049f;
-								    font-weight: bold;
-								    font-size: 12px;
-								}	
-							.name-card-block ul.list-data li{
-								line-height: 16px;	    
-							}
-							.card-content-print .name-card-block ul.list-data li .staff-id{
-								color:#000000;
-							}		    
-								
-							.name-card-block ul.list-data li.utiliy-value{
-								font-size: 10px;
-								line-height: 14px;
-							}
-							.foot-left-block {
-							    position: relative;
-							}
-							.qrimages {
-							    position: absolute;
-							    top: 262px;
-							    width: 100%;
-							    text-align: center;
-							}
-							.qrimages img {
-							    width: 80%;
-							    text-align: center;
-								height: 17px;
-							}
-							.validdate {
-							    position: relative;
-							}
-							.validdate .exp_date {
-									 color: #01049f;
-							    position: absolute;
-							    top: 245.5px;
-							    right: 5px;
-							    font-size: 5px;
-							    font-weight: 700 !important;
-							}
-						div.pagese{ 
-								/*page-break-inside:always; page-break-after:always;*/
-								display: inline-block;
-								     }
-	</style>
-		<?php $con=4;$i=0; $student= count($this->rs);
+					$type = 3;
+					if ($bck['staff_type']==1){
+						$type = 2;
+					}else if ($bck['staff_type']==1){
+						$type = 3;
+					}
+					
+					$bg = $_dbgb->getCardBackground($bck['branch_id'],$type);
+					if(!empty($bg['background'])){
+						if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+						$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
+						}
+						if (!empty($bg['colorcode'])){
+							$color = str_replace("#", "", $bg['colorcode']);
+						}
+					}
+					?>
+					.card-content-print.staff-<?php echo $bck['staff_type'];?> {
+							background-image: url('<?php echo $imagebg;?>');
+							background-size: 100%;background-repeat: no-repeat;	
+							
+						}
+					.card-content-print .name-card-block ul.list-data li .staff-id-<?php echo $bck['staff_type'];?>{
+						color:#<?php echo $color;?>;
+					}
+				<?php }?>
+				
+				.profile-card-block {
+					position: relative;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 96px;
+					left: -0.58px;
+				}
+				.photo img {
+					width: 70.7px;
+					height: 92px;
+				}
+				.name-card-block {
+					position: relative;
+				}
+		
+				.name-card-block ul.list-data {
+					list-style-type: none;
+					padding: 0;
+					width: 100%;
+					position: absolute;
+					text-align: center;
+					top: 182.5px;
+					color: #01049f;
+					font-weight: bold;
+					font-size: 12px;
+				}	
+				.name-card-block ul.list-data li{
+					line-height: 16px;	    
+				}
+				.card-content-print .name-card-block ul.list-data li .staff-id{
+					color:#000000;
+				}		    
+					
+				.name-card-block ul.list-data li.utiliy-value{
+					font-size: 10px;
+					line-height: 14px;
+				}
+				.foot-left-block {
+					position: relative;
+				}
+				.qrimages {
+					position: absolute;
+					top: 262px;
+					width: 100%;
+					text-align: center;
+				}
+				.qrimages img {
+					width: 80%;
+					text-align: center;
+					height: 17px;
+				}
+				.validdate {
+					position: relative;
+				}
+				.validdate .exp_date {
+						 color: #01049f;
+					position: absolute;
+					top: 245.5px;
+					right: 5px;
+					font-size: 5px;
+					font-weight: 700 !important;
+				}
+				div.pagese{ 
+					/*page-break-inside:always; page-break-after:always;*/
+					display: inline-block;
+				}
+			</style>
+			<?php $con=4;$i=0; $student= count($this->rs);
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
-					<div class="pagese">
-				<div class="card-content-print staff-<?php echo $row['staff_type'];?>" style=" <?php if($key>0){ echo "margin-top :7px;";}?> line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-                    		<?php 
-                    		
+				<div class="pagese">
+					<div class="card-content-print staff-<?php echo $row['staff_type'];?>" style=" <?php if($key>0){ echo "margin-top :7px;";}?> line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+                    	<?php 
                     		$card_type = 3;
                     		if ($row['staff_type']==1){
                     			$card_type = 2;
@@ -192,48 +198,174 @@
 									$teacher_name = $row['teacher_name_kh'];
 								}
                     		}
-                    		
-                    			$image = $this->baseUrl().'/images/no-profile-admin.png';
-								  if(!empty($row['photo'])){
-									if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+                    		$image = $this->baseUrl().'/images/no-profile-admin.png';
+							if(!empty($row['photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
 									$image = $this->baseUrl().'/images/photo/'.$row['photo'];
-									}
-								  }
-							?>
-                    		<div class="profile-card-block">
-                    			<div class="photo">
-                    				<img  src="<?php echo $image;?>" alt="profile-image" >
-                    			</div>
-                    		</div>
-                    		<div class="name-card-block">
-	                    		<ul class="list-data">
-	                    			<li><span class="title_value">&nbsp;<?php echo $teacher_name;?></span></li>
-	                    			<li class="utiliy-value"><span class="title_value">Position:&nbsp;<?php echo $row['position_add'];?></span></li>
-	                    			<li class="utiliy-value"><span class="title_value">Dept:&nbsp;<?php echo $row['dept_name'];?></span></li>
-	                    			<li><span class="title_value staff-id-<?php echo $row['staff_type'];?>">&nbsp;ID: <?php echo $row['teacher_code'];?></span></li>
-	                    		</ul>
-	                    	</div>
-	                    	<div class="validdate">
-	                    		<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
-	                    	</div>
-	                    	<?php  
+								}
+							}
+						?>
+						<div class="profile-card-block">
+							<div class="photo">
+								<img  src="<?php echo $image;?>" alt="profile-image" >
+							</div>
+						</div>
+						<div class="name-card-block">
+							<ul class="list-data">
+								<li><span class="title_value">&nbsp;<?php echo $teacher_name;?></span></li>
+								<li class="utiliy-value"><span class="title_value">Position:&nbsp;<?php echo $row['position_add'];?></span></li>
+								<li class="utiliy-value"><span class="title_value">Dept:&nbsp;<?php echo $row['dept_name'];?></span></li>
+								<li><span class="title_value staff-id-<?php echo $row['staff_type'];?>">&nbsp;ID: <?php echo $row['teacher_code'];?></span></li>
+							</ul>
+						</div>
+						<div class="validdate">
+							<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
+						</div>
+						<?php  
 // 	                    	$prefix = $this->data["prefix_barcode_teacher"];
 // 	                    	if ($this->rs['staff_type']==2){
 // 	                    		$prefix = $this->data["prefix_barcode_staff"];
 // 	                    	}
-	                    	$barcode = $prefix."-".$row['teacher_code']."-".date("y",strtotime($validDate));
-	                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
-	                    	<div class="foot-left-block">
-                    			<div class="qrimages">
-                    				<img  src="<?php echo $url;?>" alt="profile-image" >
-                    			</div>
-                    		</div>
-                    		<div class="foot-right-block">
-                    		</div>
+						$barcode = $prefix."-".$row['teacher_code']."-".date("y",strtotime($validDate));
+						$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
+						<div class="foot-left-block">
+							<div class="qrimages">
+								<img  src="<?php echo $url;?>" alt="profile-image" >
+							</div>
+						</div>
+						<div class="foot-right-block">
+						</div>
                     </div>
 				</div>
-		<?php }
-			}?>
+			<?php }}?>
+			<?php }else if($format_type==2){ // Good Will Format ?>
+					<style>
+						<?php if(!empty($this->groupByType)) foreach($this->groupByType as $bck){
+							$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
+							$color = "000000";
+							
+							$type = 2;
+							if ($bck['staff_type']==1){
+								$type = 2;
+							}else if ($bck['staff_type']==1){
+								$type = 3;
+							}
+							
+							$bg = $_dbgb->getCardBackground($bck['branch_id'],$type);
+							$issue_date = $bg['issue'];
+							$valid_date = $bg['valid'];
+							if(!empty($bg['background'])){
+								if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+									$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
+								}
+								if (!empty($bg['colorcode'])){
+									$color = str_replace("#", "", $bg['colorcode']);
+								}
+							}
+							?>
+							.card-content-print.staff-<?php echo $bck['staff_type'];?> {
+								background-image: url('<?php echo $imagebg;?>');
+								background-size: 100%;background-repeat: no-repeat;	
+							}
+							.card-content-print .name-card-block ul.list-data li .staff-id-<?php echo $bck['staff_type'];?>{
+								color:#<?php echo $color;?>;
+							}
+						<?php }?>
+				
+						.profile-card-block {
+							position: relative;
+						}
+						.profile-card-block .photo {
+							text-align: center;
+							width: 100%;
+							position: absolute;
+							top: 73px;
+							left: -1.5px;
+						}
+						.photo img {
+							width: 101px;
+							height: 107px;
+						}
+						.name-card-block {
+							position: relative;
+						}
+				
+						.name-card-block ul.list-data {
+							list-style-type: none;
+							padding: 0;
+							width: 100%;
+							position: absolute;
+							text-align: left;
+							top: 176px;
+							left: 98px;
+							color: #000000;
+							font-size: 16px;
+						}	
+						.name-card-block ul.list-data li{
+							line-height: 19px;	    
+						}
+						.name-card-block ul.list-data li.utiliy-value{
+							font-size: 10px;
+							line-height: 14px;
+						}
+						.foot-left-block {
+							position: relative;
+						}
+						div.pagese{ 
+							/*page-break-inside:always; page-break-after:always;*/
+							display: inline-block;
+						}
+					</style>
+				<?php $con=4;$i=0; $student= count($this->rs);
+				if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
+					<div class="pagese">
+						<div class="card-content-print staff-<?php echo $row['staff_type'];?>" style=" <?php if($key>0){ echo "margin-top :7px;";}?> line-height: 16.285px;  width: 7.1cm; height:10cm; color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+							<?php 
+								$card_type = 3;
+								if ($row['staff_type']==1){
+									$card_type = 2;
+								}else if ($row['staff_type']==1){
+									$card_type = 3;
+								}
+								$bg = $_dbgb->getCardBackground($bck['branch_id'],$card_type);
+								$prefix="";
+								$teacher_name = $row['teacher_name_en'];
+								if (!empty($bg)){
+									$prefix = $bg['card_prefix'];
+									if ($bg['display_by']==2){
+										$teacher_name = $row['teacher_name_kh'];
+									}
+								}
+								$image = $this->baseUrl().'/images/no-profile-admin.png';
+								if(!empty($row['photo'])){
+									if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+										$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+									}
+								}
+							?>
+							<div class="profile-card-block">
+								<div class="photo">
+									<img  src="<?php echo $image;?>" alt="profile-image" >
+								</div>
+							</div>
+							<div class="name-card-block">
+								<ul class="list-data">
+									<li><span class="title_value"><?php echo $teacher_name;?>&nbsp;</span></li>
+									<li><span class="title_value"><?php echo $row['teacher_code'];?>&nbsp;</span></li>
+									<li><span class="title_value"><?php echo $row['dept_name'];?>&nbsp;</span></li>
+									<li><span class="title_value"><?php echo $row['position_add'];?>&nbsp;</span></li>
+									<li><span class="title_value"><?php echo date("d-m-Y",strtotime($row['start_date']));?>&nbsp;</span></li>
+									<li><span class="title_value"><?php echo date("d-m-Y",strtotime($issue_date));?>&nbsp;</span></li>
+									<li><span class="title_value"><?php echo date("d-m-Y",strtotime($valid_date));?>&nbsp;</span></li>
+								</ul>
+							</div>
+							<div class="foot-right-block">
+							</div>
+						</div>
+					</div>
+				<?php }}?>		
+			
+			<?php }?>
 		</div>		
 	</div>
 </div>

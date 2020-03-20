@@ -100,7 +100,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		$this->view->degree = $db->getAllFecultyName();
 		$this->view->province = $db->getProvince();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
@@ -127,7 +126,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/foundation/register/index");
 					exit();
 				}
-// 				$data["id"]=$id;
 				$row=$db->updateStudent($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
 			}catch(Exception $e){
@@ -161,13 +159,12 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		$this->view->degree = $db->getAllFecultyName();
 		$this->view->province = $db->getProvince();
 		
 		$student_rs =  $db->getStudentById($id);
-// 		print_r($student_rs);exit();
 		$this->view->rs = $student_rs;
 		$this->view->row = $db->getStudentDocumentById($id);
+		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($student_rs);
@@ -218,7 +215,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$degree=$data['dept_id'];
+			$degree=empty($data['dept_id'])?0:$data['dept_id'];
 			$branch_id=$data['branch_id'];
 			$stu_no = $db->getNewAccountNumber($branch_id,$degree);
 			print_r(Zend_Json::encode($stu_no));
@@ -253,8 +250,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
 			exit();
 		}
-		$rr = $db->getStudyHishotryById($id);
-		$this->view->rr = $rr;
+		
 		if($this->getRequest()->isPost())
 		{
 			try{
@@ -275,7 +271,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
+		$rr = $db->getStudyHishotryById($id);
+		$this->view->rr = $rr;
+		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -507,7 +505,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbStudent();
 			$idStu = empty($_data['id'])?0:$_data['id'];
-			$id_existing = $db->getStudentExist($_data['name_kh'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session'],$idStu);
+			$id_existing = $db->getStudentExist($_data,$idStu);
 			$return = 0;
 			if (!empty($id_existing)){
 				$return = 1;

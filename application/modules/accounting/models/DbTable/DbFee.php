@@ -66,7 +66,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	}
     	
     	$where.=$dbp->getAccessPermission();
-    	$order=" GROUP BY t.branch_id,t.academic_year ORDER BY t.id DESC ";
+    	$order=" GROUP BY t.branch_id,t.academic_year,t.term_study ORDER BY t.id DESC ";
     	
     	return $db->fetchAll($sql.$where.$order);
     }

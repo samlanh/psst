@@ -619,6 +619,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				}
 			}
 			
+			$currentFee =  $db->getCurentFeeStudentHistory($stu_id);
 			$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
@@ -631,8 +632,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'modify_date'	=>date("Y-m-d H:i:s"),
 			);
 			$this->_name="rms_student_fee_history";
-			$where=$this->getAdapter()->quoteInto("is_current=?", 1);
-			$this->update($_arr, $where);
+			if (!empty($currentFee)){
+				$where=$this->getAdapter()->quoteInto("is_current=?", 1);
+				$this->update($_arr, $where);
+			}else{
+				$_arr['create_date']=date("Y-m-d H:i:s");
+				$this->insert($_arr);
+			}
 			
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){

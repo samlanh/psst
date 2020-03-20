@@ -1514,8 +1514,8 @@ function addJob(){
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td>
 									<select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"  class="fullside">
-	    								<option value="1" label="active">Active</option>
-	    								<option value="0" label="deactive">Deactive</option>
+	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
+	    								<option value="0" ><?php echo $tr->translate('DEACTIVE');?></option>
 									</select>
 								</td>
 							</tr>
@@ -1615,8 +1615,8 @@ function addJob(){
 							<tr>
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_na" id="status_na" dojoType="dijit.form.FilteringSelect"   class="fullside">
-	    								<option value="1" >Active</option>
-	    								<option value="0" >Deactive</option>
+	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
+	    								<option value="0" ><?php echo $tr->translate('DEACTIVE');?></option>
 									</select>
 								</td>
 							</tr>

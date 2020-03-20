@@ -182,6 +182,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			if(empty($data['noaddnew'])){
 				array_unshift($grade, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")));
 			}
+			array_unshift($grade, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GRADE")));
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

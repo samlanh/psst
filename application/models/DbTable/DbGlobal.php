@@ -2761,5 +2761,29 @@ function getAllgroupStudyNotPass($action=null){
 	  	}
 	  	return $result;
   }
+  function getAllGroupName($data=null){
+  	$db = $this->getAdapter();
+  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`) AS name
+  	FROM `rms_group` AS `g` WHERE g.status=1 ";
+  	 
+  	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
+  	if (!empty($forfilterreport)){
+  		$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+  	}else{
+  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
+  	}
+  	if (!empty($data['branch_id'])){
+  		$sql.=" AND g.branch_id = ".$data['branch_id'];
+  	}
+  	if (!empty($data['degree'])){
+  		$sql.=" AND g.degree = ".$data['degree'];
+  	}
+  	if (!empty($data['grade'])){
+  		$sql.=" AND g.grade = ".$data['grade'];
+  	}
+  	$sql.= $this->getAccessPermission('g.branch_id');
+  	$sql.=" ORDER BY `g`.`id` DESC ";
+  	return $db->fetchAll($sql);
+  }
 }
 ?>

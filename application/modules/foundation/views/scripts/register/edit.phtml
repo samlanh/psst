@@ -636,6 +636,13 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>  
 				                <?php }?>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("status");?>
+				                   </div>
+				                </div>
 				            </div>
 				            <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -649,13 +656,6 @@ input.btn_borwse_image {
 				                   		<input id="academic_year" />
 				                   </div>
 				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("status");?>
-				                   </div>
-				                </div>   
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMARK");?>  :
 				                   </label>
@@ -1539,8 +1539,8 @@ function addJob(){
 							<tr>
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
-	    								<option value="1" >Active</option>
-	    								<option value="0" >Deactive</option>
+	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
+	    								<option value="0" ><?php echo $tr->translate('DEACTIVE');?></option>
 									</select>
 								</td>
 							</tr>
@@ -1581,8 +1581,8 @@ function addJob(){
 							<tr>
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_na" id="status_na" dojoType="dijit.form.FilteringSelect"   class="fullside">
-	    								<option value="1" >Active</option>
-	    								<option value="0" >Deactive</option>
+	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
+	    								<option value="0" ><?php echo $tr->translate('DEACTIVE');?></option>
 									</select>
 								</td>
 							</tr>

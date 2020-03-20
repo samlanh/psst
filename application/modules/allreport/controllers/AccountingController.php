@@ -566,11 +566,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			$search['generation']='';
+			$search['type_study']=-1;
 		}
 		else{
 			$search=array(
 					'generation'=>'',
 					'finished_status'=>-1,
+					'type_study'=>-1,
 					'txtsearch' =>'',
 					'study_year' =>'',
 					'grade_all' =>'',

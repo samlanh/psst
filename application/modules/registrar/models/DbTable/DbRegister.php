@@ -534,52 +534,52 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			        (SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 	 		        sp.penalty,sp.grand_total,sp.credit_memo,sp.paid_amount,sp.balance_due,
 					(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=payment_method LIMIT 1) AS payment_method,
-					number,sp.create_date ,
-	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+					number,sp.create_date,
+	 		       (SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 	 		       (SELECT $label FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS void,
-	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
+	 		       (SELECT first_name FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
  			   FROM 
     				rms_student AS s,
 					rms_student_payment AS sp
 				WHERE 
 					s.stu_id=sp.student_id 
 					$user 
-					$branch_id 
-    		";
-    	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
+					$branch_id ";
     	
-    	if(!empty($search['adv_search'])){
-    		$s_where=array();
-    		$s_search=addslashes(trim($search['adv_search']));
-    		$s_where[]= " stu_code LIKE '%{$s_search}%'";
-    		$s_where[]=" receipt_number LIKE '%{$s_search}%'";
-    		$s_where[]= " stu_khname LIKE '%{$s_search}%'";
-    		$s_where[]= " stu_enname LIKE '%{$s_search}%'";
-    		$s_where[]= " last_name LIKE '%{$s_search}%'";
-    		$s_where[]= " sp.grade LIKE '%{$s_search}%'";
-    		$where.=' AND ('.implode(' OR ', $s_where).')';
-    	}
-    	if(($search['branch_id']>0)){
-    		$where.= " AND sp.branch_id = ".$search['branch_id'];
-    	}
-    	if(!empty($search['degree'])){
-    		$where.=" AND sp.degree=".$search['degree'];
-    	}
-    	if(!empty($search['study_year'])){
-    		$where.=" AND sp.academic_year=".$search['study_year'];
-    	}
-    	if(!empty($search['session'])){
-    		$where.=" AND sp.session=".$search['session'];
-    	}
-    	if(!empty($search['grade_all'])){
-    		$where.=" AND sp.grade=".$search['grade_all'];
-    	}
-    	if(!empty($search['user'])){
-    		$where.=" AND sp.user_id=".$search['user'];
-    	}
-    	$order=" ORDER BY sp.id DESC";
+	    	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
+	    	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
+	    	$where = " AND ".$from_date." AND ".$to_date;
+    	
+	    	if(!empty($search['adv_search'])){
+	    		$s_where=array();
+	    		$s_search=addslashes(trim($search['adv_search']));
+	    		$s_where[]= " stu_code LIKE '%{$s_search}%'";
+	    		$s_where[]=" receipt_number LIKE '%{$s_search}%'";
+	    		$s_where[]= " stu_khname LIKE '%{$s_search}%'";
+	    		$s_where[]= " stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[]= " last_name LIKE '%{$s_search}%'";
+	    		$s_where[]= " sp.grade LIKE '%{$s_search}%'";
+	    		$where.=' AND ('.implode(' OR ', $s_where).')';
+	    	}
+	    	if(($search['branch_id']>0)){
+	    		$where.= " AND sp.branch_id = ".$search['branch_id'];
+	    	}
+	    	if(!empty($search['degree'])){
+	    		$where.=" AND sp.degree=".$search['degree'];
+	    	}
+	    	if(!empty($search['study_year'])){
+	    		$where.=" AND sp.academic_year=".$search['study_year'];
+	    	}
+	    	if(!empty($search['session'])){
+	    		$where.=" AND sp.session=".$search['session'];
+	    	}
+	    	if(!empty($search['grade_all'])){
+	    		$where.=" AND sp.grade=".$search['grade_all'];
+	    	}
+	    	if(!empty($search['user'])){
+	    		$where.=" AND sp.user_id=".$search['user'];
+	    	}
+	    	$order=" ORDER BY sp.id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
 

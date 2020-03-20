@@ -207,4 +207,13 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	public function getExitsingFeeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$dbgb = new Accounting_Model_DbTable_DbFee();
+			$d_row= $dbgb->getCondition($data);
+			print_r(Zend_Json::encode($d_row));
+			exit();
+		}
+	}
 }

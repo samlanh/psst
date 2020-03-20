@@ -132,19 +132,21 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		
 		$db = $this->getAdapter();
 		$sql="SELECT
-			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
-			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
-			(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_title,
-			   (SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_title,	 
-			s.* FROM 
-			`rms_student` AS s
-			WHERE s.customer_type =1
-			AND s.status=1
-			AND s.is_subspend=0
-			AND s.is_setgroup =0 ";//(s.group_id=0 OR s.group_id='')
+				(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
+				(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
+				(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=gd.grade) AS grade_title,
+			    (SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=gd.degree AND rms_items.type=1 LIMIT 1) AS degree_title,	 
+				s.* FROM 
+				`rms_student` AS s,
+				rms_group_detail_student AS gd
+			WHERE 
+				s.customer_type =1
+				AND s.status=1
+				AND s.is_subspend=0
+				AND s.stu_id = gd.stu_id AND gd.group_id=0 ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission("s.branch_id");
-		$limit=" LIMIT 10";
+		$limit=" LIMIT 10 ";
 		return $db->fetchAll($sql.$limit);
 	}
 	

@@ -30,7 +30,7 @@ $dbgb = new Application_Model_DbTable_DbGlobal();
 		      <p><?php echo $tr->translate("Please Try Again");?> !</p>
 		      <p><a href="javascript:history.go(-1)">&laquo; <?php echo $tr->translate("GO_BACK");?></a> / <a href="<?php echo $this->baseUrl();?>"><?php echo $tr->translate("Go Home");?> &raquo;</a></p>
 		    </section>
-		    <div style="display: none;">
+		    <div style="display: block;">
 		    	<h1>An error occurred</h1>
   				<h2 style="padding-top:20px; color: red;"><?php echo $this->message ?></h2>
 			  	<?php if (isset($this->exception)): ?>

@@ -66,7 +66,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	}
     	
     	$where.=$dbp->getAccessPermission();
-    	$order=" GROUP BY t.branch_id,t.academic_year,t.term_study ORDER BY t.id DESC ";
+    	$order=" GROUP BY t.branch_id,t.academic_year,t.term_study,generation ORDER BY t.id DESC ";
     	
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -74,16 +74,18 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$find="SELECT id FROM rms_tuitionfee WHERE 
     		academic_year =".$_data['from_academic']." AND branch_id = ".$_data['branch_id']." AND term_study = ".$_data['type_study']." AND generation ='".$_data['generation']."'";
-    	return $db->fetchOne($find);
+    	$result = $db->fetchOne($find);
+    	if(empty($result)){
+    		return 0;
+    	}else{
+    		return 1;
+    	}
     }
 	public function addTuitionFee($_data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
-    	$fee_id = $this->getCondition($_data);
     	try{
-    		if(!empty($fee_id)){
-    			Application_Form_FrmMessage::Sucessfull("RECORD_EXIS","/accounting/fee");
-    		}else{
+    		
 	    		$_arr = array(
 	    			'academic_year'=>$_data['from_academic'],
  	    			'term_study'=>$_data['type_study'],
@@ -97,7 +99,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    			'user_id'=>$this->getUserId()
 	    		);
 	    		$fee_id = $this->insert($_arr);
-    		}
+    		
 	    		$this->_name='rms_tuitionfee_detail';
 	    		$ids = explode(',', $_data['identity']);
 	    		$id_term =explode(',', $_data['iden_term']);

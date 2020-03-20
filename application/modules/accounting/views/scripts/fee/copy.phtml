@@ -177,7 +177,24 @@ function alertBeforeSubmit(){
 			alert("Please set fee to grade !!! ");
 			return false;
 		}
-		dijit.byId("popup_alert").show();
+		if(dijit.byId('frm_fee').validate()) {
+			var url_submitcheck = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'get-exitsing-fee')); ?>';
+			dojo.xhrPost({
+			    url: url_submitcheck,	
+				form: dojo.byId("frm_fee"),		    
+				load: function(data){
+					if(data==0){
+						dijit.byId("popup_alert").show();
+					}else{
+						alert('<?php echo $tr->translate('RECORD_EXIST');?>');
+					}
+				},
+				error:function(e){
+				}
+			});
+		}
+		
+		
 	}
 }
 function hideAlert(){

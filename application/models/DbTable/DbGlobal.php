@@ -1044,7 +1044,7 @@ function getAllgroupStudyNotPass($action=null){
    	if($branchid!=null){
    		$sql.=" AND branch_id=".$branchid;
    	}
-   	$sql.=" ORDER BY degree DESC,stu_khname ASC";
+   	$sql.=" ORDER BY stu_khname ASC";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));
@@ -2261,16 +2261,15 @@ function getAllgroupStudyNotPass($action=null){
   	$db  = $this->getAdapter();
   	$sql = " SELECT 
   					t.id ,
-  					CONCAT(t.from_academic,' - ',t.to_academic) AS name 
+  					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS name
   				FROM 
   					`rms_tuitionfee` as t 
   				WHERE 
   					status=1 
-  					and type=2
-  					and branch_id = $branch_id
+  					AND type=2
+  					AND branch_id = $branch_id
   				ORDER BY 
-  					id DESC 
-  			";
+  					id DESC ";
   	return $db->fetchAll($sql);
   }
   function getExamTypeEngItems(){

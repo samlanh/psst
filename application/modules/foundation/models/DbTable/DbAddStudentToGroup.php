@@ -188,43 +188,61 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			}
 		}
 	}
-	
-	
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
 		try{
+			
 			if(!empty($_data['public-methods'])){
-				
+				$dbGroup = new Foundation_Model_DbTable_DbGroup();
+				$group_info = $dbGroup->getGroupById($_data['group']);
 				$all_stu_id = $_data['public-methods'];
 				foreach ($all_stu_id as $stu_id){
-					$arr = array(
-						'user_id'	=>$this->getUserId(),
-						'group_id'	=>$_data['group'],
-						'stu_id'	=>$stu_id,
-						'status'	=>1,
-						'date'		=>date('Y-m-d')
-					);
-					$this->_name='rms_group_detail_student';
-					$this->insert($arr);
 					
-					$this->_name='rms_student';
-					$data=array(
-						'is_setgroup'	=> 1,
-						'academic_year'	=> $_data['academic_year_group'],
-						'degree'		=> $_data['degree_group'],
-						'grade'			=> $_data['grade_group'],
-						'session'		=> $_data['session_group'],
-						'room'			=> $_data['room_group'],
-						'group_id'		=> $_data['group'],
-					);
-					$where='stu_id = '.$stu_id;
-					$this->update($data, $where);
+					$_arrcheck = array(
+							'gd_id'	=>$stu_id,
+							'degree'			=>$group_info['degree'],
+							'grade'				=>$group_info['grade'],
+							);
+					$checkRecord = $this->checkStudentGroupDetail($_arrcheck);
+					if (!empty($checkRecord)){
+						$arr_up = array(
+								'user_id'	=>$this->getUserId(),
+								'group_id'	=>$_data['group'],
+								'stu_id'	=>$checkRecord['stu_id'],
+								'status'	=>1,
+								'degree'			=>$group_info['degree'],
+								'grade'				=>$group_info['grade'],
+								'is_current'		=>1,
+								'is_setgroup'	=>1,
+								'date'				=>date('Y-m-d'),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+						);
+						$where=  "stu_id = ".$checkRecord['stu_id']." AND gd_id=".$checkRecord['gd_id'];
+						$this->_name='rms_group_detail_student';
+						$this->update($arr_up, $where);
+					}else{
+						$arr = array(
+								'user_id'	=>$this->getUserId(),
+								'group_id'	=>$_data['group'],
+								'stu_id'	=>$stu_id,
+								'status'	=>1,
+								'is_setgroup'	=>1,
+								'degree'			=>$group_info['degree'],
+								'grade'				=>$group_info['grade'],
+								'is_current'		=>1,
+								'date'				=>date('Y-m-d'),
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+						);
+						$this->_name='rms_group_detail_student';
+						$this->insert($arr);
+					}
+						
 				}
-				
 				$this->_name = 'rms_group';
 				$data_gro = array(
-					'is_use'=> 1,//ប្រើប្រាស់
-					'is_pass'=> 2,//កំពុងសិក្សា
+						'is_use'=> 1,//ប្រើប្រាស់
+						'is_pass'=> 2,//កំពុងសិក្សា
 				);
 				$where = 'id = '.$_data['group'];
 				$this->update($data_gro, $where);
@@ -233,53 +251,176 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+// 	public function addStudentGroup($_data){
+// 		$db = $this->getAdapter();
+// 		try{
+// 			if(!empty($_data['public-methods'])){
+				
+// 				$all_stu_id = $_data['public-methods'];
+// 				foreach ($all_stu_id as $stu_id){
+// 					$arr = array(
+// 						'user_id'	=>$this->getUserId(),
+// 						'group_id'	=>$_data['group'],
+// 						'stu_id'	=>$stu_id,
+// 						'status'	=>1,
+// 						'date'		=>date('Y-m-d')
+// 					);
+// 					$this->_name='rms_group_detail_student';
+// 					$this->insert($arr);
+					
+// 					$this->_name='rms_student';
+// 					$data=array(
+// 						'is_setgroup'	=> 1,
+// 						'academic_year'	=> $_data['academic_year_group'],
+// 						'degree'		=> $_data['degree_group'],
+// 						'grade'			=> $_data['grade_group'],
+// 						'session'		=> $_data['session_group'],
+// 						'room'			=> $_data['room_group'],
+// 						'group_id'		=> $_data['group'],
+// 					);
+// 					$where='stu_id = '.$stu_id;
+// 					$this->update($data, $where);
+// 				}
+				
+// 				$this->_name = 'rms_group';
+// 				$data_gro = array(
+// 					'is_use'=> 1,//ប្រើប្រាស់
+// 					'is_pass'=> 2,//កំពុងសិក្សា
+// 				);
+// 				$where = 'id = '.$_data['group'];
+// 				$this->update($data_gro, $where);
+// 			}
+// 		}catch(Exception $e){
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
+// 	}
 
 	
 	public function getAllFecultyName(){
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		return $_dbgb->getAllItems(1,null);
 	}
-	
 	function getSearchStudent($search){
 		$db=$this->getAdapter();
 		$sql="SELECT 
-				stu_id,
-				stu_code,
-				stu_enname,
-				stu_khname,
-				last_name,
-				sex,
-				degree,
-				grade,
-				academic_year ,
-				(SELECT `title` FROM `rms_items` WHERE `id`=degree AND type=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=grade AND items_type=1 LIMIT 1) AS grade_title
-			  from 
-			  	rms_student 
+				sd.gd_id,
+				s.stu_id,
+				s.stu_code,
+				s.stu_enname,
+				s.stu_khname,
+				s.last_name,
+				s.sex,
+				sd.degree,
+				sd.grade,
+				s.academic_year,
+				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+			  FROM 
+			  	rms_student AS s,
+			  	`rms_group_detail_student` AS sd 
 		 	  WHERE 
-				`status`=1 
-				AND is_setgroup = 0 
-				AND customer_type = 1 
-				and is_subspend=0 ";
+				s.stu_id = sd.stu_id
+				AND s.`status`=1 
+				AND s.customer_type = 1 
+				AND s.is_subspend=0
+				AND sd.is_setgroup = 0 ";
 		if(!empty($search['academy'])){
-			$sql.=" AND academic_year =".$search['academy'];
+			$sql.=" AND s.academic_year =".$search['academy'];
 		}
 		if(!empty($search['degree'])){
-			$sql.=" AND degree =".$search['degree'];
+			$sql.=" AND sd.degree =".$search['degree'];
 		}
 		if(!empty($search['grade'])){
-			$sql.=" AND grade =".$search['grade'];
+			$sql.=" AND sd.grade =".$search['grade'];
 		}
 		if(!empty($search['session'])){
 			$sql.=" AND session =".$search['session'];
 		}
 		if(!empty($search['branch_id'])){
-			$sql.=" AND branch_id =".$search['branch_id'];
+			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}
-		
-		$sql.=" ORDER BY stu_id ASC ";
-// 		$sql.=" ORDER BY stu_enname ASC ";
+		$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade ";
+		$sql.=" ORDER BY s.stu_id DESC ";
 		return $db->fetchAll($sql);
 	}
+	function checkStudentGroupDetail($_data){
+		$db=$this->getAdapter();
+		$sql=" SELECT
+				sd.gd_id,
+				s.stu_id,
+				s.stu_code,
+				s.stu_enname,
+				s.stu_khname,
+				s.last_name,
+				s.sex,
+				sd.degree,
+				sd.grade,
+				s.academic_year,
+				sd.is_setgroup
+			  FROM 
+			  	rms_student AS s,
+			  	`rms_group_detail_student` AS sd 
+		 	  WHERE 
+				s.stu_id = sd.stu_id
+				AND s.`status`=1 
+				AND s.customer_type = 1 
+				AND s.is_subspend=0
+				AND sd.is_setgroup=0
+			 ";
+		if(!empty($_data['gd_id'])){
+			$sql.=" AND sd.gd_id =".$_data['gd_id'];
+		}
+		if(!empty($_data['degree'])){
+			$sql.=" AND sd.degree =".$_data['degree'];
+		}
+		if(!empty($_data['grade'])){
+			$sql.=" AND sd.grade =".$_data['grade'];
+		}
+		$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade ";
+		$sql.=" ORDER BY s.stu_id DESC LIMIT 1";
+		return $db->fetchRow($sql);
+	}
+// 	function getSearchStudent($search){
+// 		$db=$this->getAdapter();
+// 		$sql="SELECT 
+// 				stu_id,
+// 				stu_code,
+// 				stu_enname,
+// 				stu_khname,
+// 				last_name,
+// 				sex,
+// 				degree,
+// 				grade,
+// 				academic_year ,
+// 				(SELECT `title` FROM `rms_items` WHERE `id`=degree AND type=1 LIMIT 1) AS degree_title,
+// 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=grade AND items_type=1 LIMIT 1) AS grade_title
+// 			  from 
+// 			  	rms_student 
+// 		 	  WHERE 
+// 				`status`=1 
+// 				AND is_setgroup = 0 
+// 				AND customer_type = 1 
+// 				and is_subspend=0 ";
+// 		if(!empty($search['academy'])){
+// 			$sql.=" AND academic_year =".$search['academy'];
+// 		}
+// 		if(!empty($search['degree'])){
+// 			$sql.=" AND degree =".$search['degree'];
+// 		}
+// 		if(!empty($search['grade'])){
+// 			$sql.=" AND grade =".$search['grade'];
+// 		}
+// 		if(!empty($search['session'])){
+// 			$sql.=" AND session =".$search['session'];
+// 		}
+// 		if(!empty($search['branch_id'])){
+// 			$sql.=" AND branch_id =".$search['branch_id'];
+// 		}
+		
+// 		$sql.=" ORDER BY stu_id ASC ";
+// // 		$sql.=" ORDER BY stu_enname ASC ";
+// 		return $db->fetchAll($sql);
+// 	}
 }
 

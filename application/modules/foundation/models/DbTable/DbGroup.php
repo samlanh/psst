@@ -233,7 +233,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$sql = "SELECT `g`.`id`,
 			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 			`g`.`group_code` AS `group_code`,
-			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,		 
+			(SELECT CONCAT((SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = tf.academic_year LIMIT 1),' (',tf.generation,')')  FROM `rms_tuitionfee` AS tf WHERE tf.id = g.academic_year LIMIT 1) AS tuitionfee_id,		 
 			 `g`.`semester` AS `semester`, 
 			(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
 			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,

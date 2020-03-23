@@ -2131,9 +2131,12 @@ function getAllgroupStudyNotPass($action=null){
 //   }
   function getAllGroupByBranch($branch_id=null,$forfilterreport=null){
   	$db = $this->getAdapter();
-  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-  	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-  	FROM `rms_group` AS `g` WHERE status=1 ";
+//   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+//   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+//   	FROM `rms_group` AS `g` WHERE status=1 ";
+  	$sql ="SELECT `g`.`id`, 
+  	CONCAT( g.group_code,' ',(SELECT CONCAT((SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = tf.academic_year LIMIT 1),' (',tf.generation,')')  FROM `rms_tuitionfee` AS tf WHERE tf.id = g.academic_year LIMIT 1) ) AS name
+  	FROM `rms_group` AS `g` WHERE g.status=1 ";
   	
   	if (!empty($forfilterreport)){
   		$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed

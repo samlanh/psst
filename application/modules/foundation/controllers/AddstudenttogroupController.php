@@ -83,23 +83,17 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 				
 				$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 				$db->addStudentGroup($_data);
-				
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				
 				if(isset($_data['save_close'])){
-					//Application_Form_FrmMessage::message("INSERT_SUCCESS","/foundation/addstudenttogroup");
 					$this->_redirect('/foundation/addstudenttogroup');
 				}else{
-					//Application_Form_FrmMessage::message("INSERT_SUCCESS","/foundation/addstudenttogroup/add");
 					$this->_redirect('/foundation/addstudenttogroup/add');
 				}
-				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		//$this->_redirect('/foundation/studentgroup/add');
 	}
 	
 	public function submit1Action(){

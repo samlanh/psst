@@ -402,6 +402,31 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				);
 				$this->_name="rms_student_fee_history";
 				$this->insert($_arr);
+				
+				if(!empty($_data['identity_study'])){
+					$ids = explode(',', $_data['identity_study']);
+					foreach ($ids as $i){
+						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						$_arr = array(
+								'stu_id'			=>$id,
+								'is_newstudent'		=>$_data['stu_denttype'],
+								'status'			=>1,
+								'group_id'			=>$group_id,
+								'degree'			=>$_data['degree_'.$i],
+								'grade'				=>$_data['grade_'.$i],
+								'is_current'		=>1,
+								'is_setgroup'		=>$is_setgroup,
+								'date'				=>date("Y-m-d"),
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$this->getUserId(),
+						);
+						$this->_name="rms_group_detail_student";
+						$this->insert($_arr);
+					}
+				}
+				
 // 				//for update depart m
 // 				$sql="SELECT id_start FROM `rms_items` WHERE id=".$_data['degree']." LIMIT 1";
 // 				$id_start = $_db->fetchOne($sql);
@@ -619,7 +644,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				}
 			}
 			
-			$currentFee =  $db->getCurentFeeStudentHistory($stu_id);
+			$currentFee =  $this->getCurentFeeStudentHistory($stu_id);
 			$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
@@ -638,6 +663,53 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}else{
 				$_arr['create_date']=date("Y-m-d H:i:s");
 				$this->insert($_arr);
+			}
+			if(!empty($_data['identity_study'])){
+				$ids = explode(',', $_data['identity_study']);
+				foreach ($ids as $i){
+					if (!empty($_data['detailid_study'.$i])){
+						echo 1;exit();
+						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						$_arr = array(
+								'stu_id'			=>$stu_id,
+								'is_newstudent'		=>$_data['stu_denttype'],
+								'status'			=>1,
+								'group_id'			=>$group_id,
+								'degree'			=>$_data['degree_'.$i],
+								'grade'				=>$_data['grade_'.$i],
+								'is_current'		=>1,
+								'is_setgroup'		=>$is_setgroup,
+								'date'				=>date("Y-m-d"),
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$this->getUserId(),
+						);
+						$this->_name="rms_group_detail_student";
+						$where=  "stu_id = $stu_id AND gd_id=".$_data['detailid_study'.$i];
+						$this->update($_arr, $where);
+					}else{
+						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						$_arr = array(
+								'stu_id'			=>$stu_id,
+								'is_newstudent'		=>$_data['stu_denttype'],
+								'status'			=>1,
+								'group_id'			=>$group_id,
+								'degree'			=>$_data['degree_'.$i],
+								'grade'				=>$_data['grade_'.$i],
+								'is_current'		=>1,
+								'is_setgroup'		=>$is_setgroup,
+								'date'				=>date("Y-m-d"),
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$this->getUserId(),
+						);
+						$this->_name="rms_group_detail_student";
+						$this->insert($_arr);
+					}
+					
+				}
 			}
 			
 			$db->commit();//if not errore it do....
@@ -752,6 +824,21 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT sh.* FROM rms_student_fee_history AS sh WHERE sh.student_id=$student_id AND sh.is_current=1 ORDER BY sh.id DESC LIMIT 1";
 		return $db->fetchRow($sql);
+	}
+	function getCurentStudentStudy($student_id){
+		$db=$this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		$sql="SELECT sh.*,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sh.degree AND type=1 LIMIT 1) AS degreeTitle,
+				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=sh.grade AND items_type=1 LIMIT 1) AS gradeTitle,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sh.group_id LIMIT 1) AS groupCode
+			FROM rms_group_detail_student AS sh WHERE sh.stu_id=$student_id AND sh.is_current=1 ORDER BY sh.gd_id ASC";
+		return $db->fetchAll($sql);
 	}
 	
 }

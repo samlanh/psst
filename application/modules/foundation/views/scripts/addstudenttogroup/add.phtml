@@ -23,6 +23,12 @@ table .set-style tr td a {
     background: #bcd5f0;
     border-radius: 5px;
 }
+
+.ms-container .ms-selectable li.ms-elem-selectable, .ms-container .ms-selection li.ms-elem-selection {
+    font-size: 13px;
+    white-space: nowrap;
+    color: #000;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -173,7 +179,7 @@ table .set-style tr td a {
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<select multiple id="public-methods" name="public-methods[]">
 									<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
-										<option value="<?php echo $row['stu_id'];?>">
+										<option value="<?php echo $row['gd_id'];?>">
 											<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
 										</option>
 									<?php }?>

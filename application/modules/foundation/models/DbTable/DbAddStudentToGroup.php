@@ -73,11 +73,12 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			$grade = "rms_itemsdetail.title_en";
 			$degree = "rms_items.title_en";
 		}
+		//(select CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year LIMIT 1) as academic,
 		$sql = " SELECT
 					`g`.`id`,
 					(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 					`g`.`group_code` AS `group_code`,
-					(select CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year LIMIT 1) as academic,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) as academic,
 					(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
 					(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 					(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
@@ -118,8 +119,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['group'])){
 			$where.=' AND g.id='.$search['group'];
 		}
-		if(!empty($search['grade_all'])){
-			$where.=' AND g.grade='.$search['grade_all'];
+		if(!empty($search['grade'])){
+			$where.=' AND g.grade='.$search['grade'];
 		}
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
@@ -203,7 +204,9 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 							'degree'			=>$group_info['degree'],
 							'grade'				=>$group_info['grade'],
 							);
+					
 					$checkRecord = $this->checkStudentGroupDetail($_arrcheck);
+					
 					if (!empty($checkRecord)){
 						$arr_up = array(
 								'user_id'	=>$this->getUserId(),
@@ -212,15 +215,18 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 								'status'	=>1,
 								'degree'			=>$group_info['degree'],
 								'grade'				=>$group_info['grade'],
+								'session'				=>$group_info['session'],
 								'is_current'		=>1,
 								'is_setgroup'	=>1,
 								'date'				=>date('Y-m-d'),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 						);
+						
 						$where=  "stu_id = ".$checkRecord['stu_id']." AND gd_id=".$checkRecord['gd_id'];
 						$this->_name='rms_group_detail_student';
 						$this->update($arr_up, $where);
 					}else{
+						exit();
 						$arr = array(
 								'user_id'	=>$this->getUserId(),
 								'group_id'	=>$_data['group'],
@@ -313,7 +319,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.sex,
 				sd.degree,
 				sd.grade,
-				s.academic_year,
+				(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) AS fee_id,
+				(SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) AS academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
 			  FROM 
@@ -323,10 +330,10 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
-				AND s.is_subspend=0
+				AND sd.is_subspend=0
 				AND sd.is_setgroup = 0 ";
-		if(!empty($search['academy'])){
-			$sql.=" AND s.academic_year =".$search['academy'];
+		if(!empty($search['academic_year'])){
+			$sql.=" AND (SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) =".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
 			$sql.=" AND sd.degree =".$search['degree'];
@@ -335,12 +342,12 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			$sql.=" AND sd.grade =".$search['grade'];
 		}
 		if(!empty($search['session'])){
-			$sql.=" AND session =".$search['session'];
+			$sql.=" AND sd.session =".$search['session'];
 		}
 		if(!empty($search['branch_id'])){
 			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}
-		$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade ";
+		$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade";
 		$sql.=" ORDER BY s.stu_id DESC ";
 		return $db->fetchAll($sql);
 	}
@@ -356,7 +363,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.sex,
 				sd.degree,
 				sd.grade,
-				s.academic_year,
+				(SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) AS academic_year,
 				sd.is_setgroup
 			  FROM 
 			  	rms_student AS s,
@@ -365,7 +372,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
-				AND s.is_subspend=0
+				AND sd.is_subspend=0
 				AND sd.is_setgroup=0
 			 ";
 		if(!empty($_data['gd_id'])){

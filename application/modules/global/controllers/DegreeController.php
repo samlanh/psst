@@ -143,7 +143,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     		$_dbgb = new Application_Model_DbTable_DbGlobal();
     		$type = empty($data['items_type'])?null:$data['items_type'];
     		$d_row = $_dbgb->getAllItems($type);
-    		//array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		array_unshift($d_row, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_DEGREE")));
     		print_r(Zend_Json::encode($d_row));
     		exit();
@@ -169,13 +168,9 @@ class Global_DegreeController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
-    
     function checkduplicateAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-//     		$type=$this->type; //Degree
-    		
     		$title = empty($data['title'])?"":$data['title'];
     		$title_en = empty($data['title_en'])?"":$data['title_en'];
     		$schoolOption = empty($data['schoolOption'])?"":$data['schoolOption'];
@@ -193,6 +188,23 @@ class Global_DegreeController extends Zend_Controller_Action {
     		
     		$result=$_dbmodel->checkuDuplicate($arr);
     		print_r(Zend_Json::encode($result));
+    		exit();
+    	}
+    }
+    
+    //new create on 24-3-2020
+    function getdegreebybranchAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		
+    		$_db = new RsvAcl_Model_DbTable_DbBranch();
+    		$row = $_db->getBranchById($data['branch_id']);//get branch info
+    		$schoolOption = $row['schooloptionlist'];
+    		
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$group = $db->getAllItems(1,null,$schoolOption);
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_DEGREE")));
+    		print_r(Zend_Json::encode($group));
     		exit();
     	}
     }

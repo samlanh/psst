@@ -739,7 +739,7 @@ function getAllgroupStudyNotPass($action=null){
 		$sql.=" AND branch_id =$branch_id";
 	}
 	$sql.= $this->getAccessPermission();
-	$sql.=" order by room_id DESC ";
+	$sql.=" ORDER BY room_name ASC ";
    	return $db->fetchAll($sql);
    }
    public function getAllDegreeMent(){
@@ -1490,16 +1490,50 @@ function getAllgroupStudyNotPass($action=null){
 //   	}
 //   	return $db->fetchAll($sql);
   } 
-  public function getAllTeahcerName($branch_id=null){
+  public function getAllTeahcerName($branch_id=null,$schooloption=null){
   	$db = $this->getAdapter();
   	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != ''  ";
   	if (!empty($branch_id)){
   		$sql.=" AND branch_id = $branch_id";
   	}
+  	
+  	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		if (!empty($user['schoolOption'])){
+  			$userSchO = explode(",", $user['schoolOption']);
+  			$s_wheres = array();
+  			foreach ($userSchO as $schooloptionId){
+  				$s_wheres[] = $schooloptionId." IN (schoolOption)";
+  			}
+  			$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
+  		}
+  	}
+  	if (!empty($schooloption)){
+  		$schooloptionParam = explode(",", $schooloption);
+  		$s_whereee = array();
+  		foreach ($schooloptionParam as $schooloptionId){
+  			$s_whereee[] = $schooloptionId." IN (schoolOption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
+  	}
+  	$sql.= $this->getAccessPermission();
   	$sql.=" ORDER BY id DESC";
   	return $db->fetchAll($sql);
   }
-   
+  public function getAllTeacherOption($schoolOption=null,$branch_id=null,$addNew=null){
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	$teacher = $this->getAllTeahcerName($branch_id,$schoolOption);
+  	if (!empty($addNew)){
+  	array_unshift($teacher,array('id' => -1,"name"=>$tr->translate("ADD_NEW")));
+  	}
+  	$teacher_options = '<option value="0">'.$tr->translate("PLEASE_SELECT").'</option>';
+  	if(!empty($teacher))foreach($teacher as $value){
+  		$teacher_options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+  	}
+  	return $teacher_options;
+  }
+  
   public function getAllDayName(){
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
@@ -2075,10 +2109,12 @@ function getAllgroupStudyNotPass($action=null){
   	if ($currentLang==1){
   		$colunmname='title';
   	}
-  	
+  	//(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
+  	//(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year_only,
   	$sql = "SELECT start_date,expired_date,group_code,
-  	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
-  	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year_only,
+  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year,
+  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year_only,
+  	
   	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
   	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
   	(SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=4 AND `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1) AS session,

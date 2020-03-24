@@ -6,6 +6,7 @@ class Global_RoomController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function indexAction(){
 		try{
@@ -100,5 +101,20 @@ class Global_RoomController extends Zend_Controller_Action {
    			print_r(Zend_Json::encode($roomid));
    			exit();
 	   	}
+   }
+   
+   //new create on 24-3-2020
+   function getroomAction(){
+   	if($this->getRequest()->isPost()){
+   		$data=$this->getRequest()->getPost();
+   		$model = new Application_Model_DbTable_DbGlobal();
+   		$room = $model->getAllRoom($data['branch_id']);
+   		if (empty($data['has_addnew'])){
+   			array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+   		}
+   		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
+   		print_r(Zend_Json::encode($room));
+   		exit();
+   	}
    }
 }

@@ -1,6 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_GROUP')); 
+	$frm =  $this->form_search;
 ?>	
 <head>
  <link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/multi-select.css" media="screen" rel="stylesheet" type="text/css" />
@@ -72,13 +73,7 @@ table .set-style tr td a {
 		                	<div class="col-md-6 col-sm-6 col-xs-12">
 				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 				                <div class="col-md-7 col-sm-7 col-xs-12">
-				                	<?php $counbranhc = count($this->branch);?>
-				                	<select class="fullside" <?php if ($counbranhc==1){ echo 'readonly="readonly"';}?> tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllAcademicByBranch();getAllGroupByBranch();">
-										<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
-										<?php if(!empty($this->branch))foreach ($this->branch as $row){?>
-										<option value="<?php echo $row['id']?>" <?php if ($counbranhc==1){ echo 'selected="selected"';}else if($this->value['branch_id']==$row['id']){ echo 'selected="selected"';} ?> ><?php echo $row['name']?></option>
-										<?php }?>
-									</select>
+				                	<?php echo $frm->getElement("branch_id");?>
 				                </div>
 				              </div>
 			             </div>
@@ -88,7 +83,7 @@ table .set-style tr td a {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACADEMIC_YEAR");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="academy" />
+				                   		<?php echo $frm->getElement("academic_year");?>
 				                   </div>
 				                 </div>
 			                </div>
@@ -100,12 +95,7 @@ table .set-style tr td a {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade();">
-											<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
-											<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
-												<option value="<?php echo $row['id']?>"<?php if($row['id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['name']?></option>
-											<?php }?>
-										</select>
+				                   		<?php echo $frm->getElement("degree");?>
 				                   </div>
 				                </div>
 			                </div>
@@ -116,7 +106,7 @@ table .set-style tr td a {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		 <input id="grade" value="<?php echo $this->value['grade'];?>" />
+				                   		<input id="grade" />
 				                   </div>
 				                </div>
 							</div>
@@ -127,12 +117,7 @@ table .set-style tr td a {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SESSION");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		 <select class="fullside"  tabindex="24" name="session" id="session" dojoType="dijit.form.FilteringSelect" >
-										  	<option value=""><?php echo $tr->translate("SELECT_SESSION");?></option>
-										    <?php if(!empty($this->rs_session)) foreach ($this->rs_session As $rs_sesion){?>
-												<option value="<?php echo $rs_sesion['key_code'];?>" <?php if($rs_sesion['key_code']==$this->value['session']) echo "selected='selected'"?> ><?php echo $rs_sesion['view_name'];?></option>
-										    <?php }?>		
-										</select>
+				                   		 <?php echo $frm->getElement("session");?>
 				                   </div>
 				                </div>
 							</div>
@@ -152,8 +137,8 @@ table .set-style tr td a {
 		       	<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {
-						branch_id = dijit.byId('branch').get('value');
-						if(branch_id==''){
+						branch_id = dijit.byId('branch_id').get('value');
+						if(branch_id=='' || branch_id==-1){
 							alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
 							dijit.byId('branch_id').focus();
 							return false;
@@ -203,7 +188,7 @@ table .set-style tr td a {
 		                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
 		                   		</div>
 		                   		<div class="col-md-3 col-sm-3 col-xs-12">
-		                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+		                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getAllGroup();"/>
 		                   		</div>
 		                   </div>
 		                </div>
@@ -245,33 +230,26 @@ dojo.require("dojo.NodeList-manipulate");
 dojo.require('dijit.form.Textarea');
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
+dojo.require("dojo.data.ItemFileWriteStore"); 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.ready(function(){
+
 	new dijit.form.FilteringSelect({
-		store: academic_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "academy",
-		name: "academy",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		autoComplete: false, 
+		required: false,
+		id: "grade",
+		name: "grade",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
 		}
-	}, "academy");
-	
-	new dijit.form.FilteringSelect({
-	    queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                        
-	    id: "grade",
-	    name: "grade",           
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 	}, "grade");
-	dijit.byId('grade').attr('value','');
+	var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getAllGroup();
+  	});
+	
 
 	new dijit.form.FilteringSelect({
 	    store: group_store,
@@ -292,32 +270,31 @@ dojo.ready(function(){
 			}        
 	    } 
 	}, "group");
-	//toStudentGroup();
-	getAllGroupByBranch();
-	getAllAcademicByBranch();
 	getallGrade();
-}); 
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'get-grade')); ?>';
-	function getallGrade(){
-		dept_id = dijit.byId('degree').get('value');
-		if(dept_id){
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id,
-					},
-				handleAs:"json",
-				load: function(data) {
-					grade_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('grade').set('store',grade_store);   
-					dijit.byId('grade').attr('value','<?php echo $this->value['grade']; ?>');  
+	getAllGroup();
+});
+
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
 				},
-				error: function(err) {
-				}
-			});
-		}
-	}
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('grade').attr('value','');
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store); 
+			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');    
+			},
+			error: function(err) {
+			}
+		});
+}
 </script>
 <script type="text/javascript">
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
@@ -345,57 +322,12 @@ function toStudentGroup(){
 		}
 	});
 }
-var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
-function getRefreshGroup(){
-	branch_id = dijit.byId('branch_id').get('value');
-	loading();
-	dojo.xhrPost({
-		url:url_getgroup1,
-		content:{
-			'branch_id':branch_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			group_store  = getDataStorefromJSON('id','name', data.group);
-		    dijit.byId('group').set('store',group_store);  
-		    document.getElementsByClassName("overlay")[0].style.display="none";
-		},
-		error: function(err) {
-			document.getElementsByClassName("overlay")[0].style.display="none";
-		}
-	});
-}
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-function getAllAcademicByBranch(){
-	dijit.byId('academy').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('academy').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('academy').set('store',academic_store);  
-			dijit.byId('academy').attr('value','<?php echo $this->value['academy']; ?>');  
-		},
-		error: function(err) {
-		}
-	});
-}
-url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-function getAllGroupByBranch(){
+url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroup(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -404,13 +336,19 @@ function getAllGroupByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dijit.byId('branch').set('value',branch_id);  
-	
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){
+		degree ="";
+	}
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){
+		grade ="";
+	}
 	dojo.xhrPost({
-		url: url_getgroup,
+		url: url_getallgroup,
 		content:{
-			'branch_id':branch_id
-			},
+			'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':1
+		},
 		handleAs:"json",
 		load: function(data) {
 		    group_store  = getDataStorefromJSON('id','name', data);
@@ -421,18 +359,3 @@ function getAllGroupByBranch(){
 	});
 }
 </script>
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
-}
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>

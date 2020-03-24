@@ -14,9 +14,9 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title' 	=> '',
+						'adv_search' 	=> '',
 						'branch_id' => '',
-						'study_year'=> '',
+						'academic_year'=> '',
 						'degree'	=>'',
 						'grade' 	=> '',
 						'time' 		=> '',
@@ -39,8 +39,8 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
@@ -128,18 +128,17 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
 	
-		$_db = new Accounting_Model_DbTable_DbFee();
-		$tution = $_db->getFeeById($row['academic_year']);
-		$schoolOption = $tution['school_option'];
+		$_dbBranch = new RsvAcl_Model_DbTable_DbBranch();
+		$rowBr = $_dbBranch->getBranchById($row['branch_id']);//get branch info
+		$schoolOption = $rowBr['schooloptionlist'];
 		
 		$_dggroup = new Foundation_Model_DbTable_DbGroup();
 		if (!empty($schoolOption)){
-			$db = new Foundation_Model_DbTable_DbGroup();
-			$teacher = $_dggroup->getAllTeacher($schoolOption,$row['branch_id']);
+			$teacher = $model->getAllTeahcerName($row['branch_id'],$schoolOption);
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
-			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption,$row['branch_id']);
+			$this->view->teacher_option = $model->getAllTeacherOption($schoolOption,$row['branch_id']);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -181,26 +180,23 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
-
-		$_db = new Accounting_Model_DbTable_DbFee();
-		$tution = $_db->getFeeById($row['academic_year']);
-		$schoolOption = $tution['school_option'];
+		
+		$_dbBranch = new RsvAcl_Model_DbTable_DbBranch();
+		$rowBr = $_dbBranch->getBranchById($row['branch_id']);//get branch info
+		$schoolOption = $rowBr['schooloptionlist'];
 		
 		$_dggroup = new Foundation_Model_DbTable_DbGroup();
 		if (!empty($schoolOption)){
-			$db = new Foundation_Model_DbTable_DbGroup();
-			$teacher = $_dggroup->getAllTeacher($schoolOption,$row['branch_id']);
+			$teacher = $model->getAllTeahcerName($row['branch_id'],$schoolOption);
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
-				
-			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption,$row['branch_id']);
+			$this->view->teacher_option = $model->getAllTeacherOption($schoolOption,$row['branch_id']);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		
 		$_db = new Foundation_Model_DbTable_DbGroup();
 		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
-// 		$this->view->subject = $_db->getAllSubjectStudy();
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->parent_subject = $_db->getParentSubject();
 		
@@ -244,23 +240,13 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getsubjectbygradeAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Global_Model_DbTable_DbItems();
-			$group = $db->getGradeSubjectById($data['grade_id']);
-			print_r(Zend_Json::encode($group));
-			exit();
-		}
-	}
+	
 	function addGraddjaxAction(){
     	if($this->getRequest()->isPost()){
     		try{
     			$data = $this->getRequest()->getPost();
     			$db = new Global_Model_DbTable_DbItemsDetail();
     			$row = $db->AddGradeByAjax($data);
-//     			$db = new Foundation_Model_DbTable_DbGroup();
-//     			$row = $db->addGradeAjax($data);
     			print_r(Zend_Json::encode($row));
     			exit();
     		}catch(Exception $e){
@@ -272,11 +258,6 @@ class Foundation_GroupController extends Zend_Controller_Action {
     function getgroupAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		//$db = new Foundation_Model_DbTable_DbStudent();
-    		//$group = $db->getAllgroup();
-    		
-    		//$degree = $db->getAllFecultyName();    		
-    		//array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
     		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
     		$model = new Application_Model_DbTable_DbGlobal();
     		
@@ -293,58 +274,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     	}
     }
     
-    function getteacherAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		
-    		$_db = new Accounting_Model_DbTable_DbFee();
-    		$schoolOption = null;
-    		if (!empty($data['academic_year'])){
-	    		$row = $_db->getFeeById($data['academic_year']);
-	    		$schoolOption = $row['school_option'];
-    		}
-    		
-    		$db = new Foundation_Model_DbTable_DbGroup();
-    		$teacher = $db->getAllTeacher($schoolOption,$data['branch_id']);
-    		if (empty($data['has_addnew'])){
-    			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
-    		}
-    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("SELECT_TEACHER")));
-    		print_r(Zend_Json::encode($teacher));
-    		exit();
-    	}
-    }
     
-    function getsubjectAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    
-    		$_db = new Accounting_Model_DbTable_DbFee();
-    		$row = $_db->getFeeById($data['academic_year']);
-    		$schoolOption = $row['school_option'];
-    
-    		if (!empty($schoolOption)){
-    			$db = new Application_Model_DbTable_DbGlobal();
-				$subject = $db->getAllSubjectStudy($schoolOption);
-				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
-				print_r(Zend_Json::encode($subject));
-    			exit();
-    		}
-    	}
-    }
-    function getroomAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$model = new Application_Model_DbTable_DbGlobal();
-    		$room = $model->getAllRoom($data['branch_id']);
-			if (empty($data['has_addnew'])){
-    			array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-			}
-    		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
-    		print_r(Zend_Json::encode($room));
-    		exit();
-    	}
-    }
     function getgroupbybranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -360,7 +290,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getgroupbyacademicAction(){
+    function getgroupbyacademicAction(){//may not use
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
@@ -387,19 +317,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getdegreeAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$_db = new Accounting_Model_DbTable_DbFee();
-    		$row = $_db->getFeeById($data['academic_year']);
-    		$schoolOption = $row['school_option'];
-    		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllItems(1,null,$schoolOption);
-    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_DEGREE")));
-    		print_r(Zend_Json::encode($group));
-    		exit();
-    	}
-    }
+   
     
     function getallgroupAction(){
     	if($this->getRequest()->isPost()){

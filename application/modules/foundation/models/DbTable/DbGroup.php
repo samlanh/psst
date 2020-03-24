@@ -218,7 +218,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	
 	function getAllGroups($search){
 		$db = $this->getAdapter();
-		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
@@ -233,7 +232,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$sql = "SELECT `g`.`id`,
 			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 			`g`.`group_code` AS `group_code`,
-			(SELECT CONCAT((SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = tf.academic_year LIMIT 1),' (',tf.generation,')')  FROM `rms_tuitionfee` AS tf WHERE tf.id = g.academic_year LIMIT 1) AS tuitionfee_id,		 
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS tuitionfee_id,	
 			 `g`.`semester` AS `semester`, 
 			(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
 			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
@@ -253,11 +252,11 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': "g.date <= '".$search['end_date']." 23:59:59'";
 		$where.= " AND ".$from_date." AND ".$to_date;
 		
-		if(!empty($search['title'])){
+		if(!empty($search['adv_search'])){
 			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
+			$s_search = addslashes(trim($search['adv_search']));
 			$s_where[] = " `g`.`group_code` LIKE '%{$s_search}%'";
-			$s_where[]="(select CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
+			$s_where[]="(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " `g`.`semester` LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[]=" (SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) LIKE '%{$s_search}%'";
@@ -268,8 +267,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
-		if(!empty($search['study_year'])){
-			$where.=' AND g.academic_year='.$search['study_year'];
+		if(!empty($search['academic_year'])){
+			$where.=' AND g.academic_year='.$search['academic_year'];
 		}
 		if(!empty($search['grade'])){
 			$where.=' AND g.grade='.$search['grade'];

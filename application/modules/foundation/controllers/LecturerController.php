@@ -256,4 +256,24 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
+	//new create on 24-3-2020
+	function getteacherAction(){ 
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+	
+			$_db = new RsvAcl_Model_DbTable_DbBranch();
+    		$row = $_db->getBranchById($data['branch_id']);//get branch info
+    		$schoolOption = $row['schooloptionlist'];
+	
+			$db = new Application_Model_DbTable_DbGlobal();
+			$teacher = $db->getAllTeahcerName($data['branch_id'],$schoolOption);
+			if (empty($data['has_addnew'])){
+				array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+			}
+			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("SELECT_TEACHER")));
+			print_r(Zend_Json::encode($teacher));
+			exit();
+		}
+	}
 }

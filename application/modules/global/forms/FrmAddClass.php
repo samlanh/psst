@@ -126,10 +126,11 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		));
 		
 		$_academic->setValue($request->getParam("academic_year"));
-		$db = new Global_Model_DbTable_DbGroup();
-		$rows= $db->getAllYears(1);
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		$rows =  $_dbgb->getAllAcademicYear();
+// 		$db = new Global_Model_DbTable_DbGroup();
+// 		$rows= $db->getAllYears(1);
 		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_academic->setMultiOptions($opt);
 		
@@ -256,6 +257,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$max_avg->setValue($data['max_average']);
 			$divide_subject->setValue($data['amount_subject']);
 			$total_max_score->setValue($data['total_score']);
+			$_academic->setValue($data['academic_year']);
 		}
 		$this->addElements(array($total_max_score,$divide_subject,$max_avg,$is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;

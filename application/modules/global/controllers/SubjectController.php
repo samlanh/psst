@@ -123,7 +123,6 @@ class Global_SubjectController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
 			$data['schoolOption'] = empty($data['schoolOption'])?null:$data['schoolOption'];
-// 			$subject = $db->getAllSubjectStudy($data['schoolOption']);
 			if (!empty($data['academic_year'])){
 				$_dbfee = new Accounting_Model_DbTable_DbFee();
 				$row = $_dbfee->getFeeById($data['academic_year']);
@@ -134,6 +133,34 @@ class Global_SubjectController extends Zend_Controller_Action {
 			$subject = $db->getAllSubjectName($data['schoolOption'],1); // 1=select only study subject
 			array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			print_r(Zend_Json::encode($subject));
+			exit();
+		}
+	}
+	
+	//new create on 24-3-2020
+	function getsubjectbybranchAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+	
+			$_db = new RsvAcl_Model_DbTable_DbBranch();
+    		$row = $_db->getBranchById($data['branch_id']);//get branch info
+    		$schoolOption = $row['schooloptionlist'];
+	
+			if (!empty($schoolOption)){
+				$db = new Application_Model_DbTable_DbGlobal();
+				$subject = $db->getAllSubjectName($schoolOption,1);
+				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+				print_r(Zend_Json::encode($subject));
+				exit();
+			}
+		}
+	}
+	function getsubjectbygradeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Global_Model_DbTable_DbItems();
+			$group = $db->getGradeSubjectById($data['grade_id']);
+			print_r(Zend_Json::encode($group));
 			exit();
 		}
 	}

@@ -19,7 +19,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 					'study_year' => '',
 					'group' => '',
 					'degree' => '',
-					'grade_all' => '',
+					'grade' => '',
 					'session' => '',
 					'room' => '',
 					);
@@ -39,9 +39,9 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		);
 		$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
 		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
 	function addAction(){
@@ -58,23 +58,18 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 						'degree' => '',
 						'grade' => '',
 						'session' => '',
-						'academy'=> ''
+						'academic_year'=> ''
 					);
 			}
-			$this->view->value=$search;
+			$this->view->search=$search;
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$this->view->academy = $db->getAllYear();
-		$this->view->degree = $db->getAllFecultyName();
-		
-		$this->view->room = $db->getRoom();
-		
-		$db=new Application_Model_DbTable_DbGlobal();
-		$this->view->rs_session=$db->getSession();
-		$branch = $db->getAllBranch();
-		$this->view->branch = $branch;
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	public function submitAction(){
 		if($this->getRequest()->isPost()){

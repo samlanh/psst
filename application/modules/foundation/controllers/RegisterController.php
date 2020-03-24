@@ -31,7 +31,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$db_student= new Foundation_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
 			$list = new Application_Form_Frmtable();
-				$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","GROUP","SUSPEND_STATUS","USER","STATUS");
+			
+				$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","SUSPEND_STATUS","USER","STATUS");
 				$link=array(
 						'module'=>'foundation','controller'=>'register','action'=>'edit',
 				);
@@ -302,7 +303,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		
 		$this->view->degree = $db->getAllFecultyName();
 		
 		$this->view->province = $db->getProvince();
@@ -311,8 +311,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->rs = $test;
 		$this->view->row = $db->getStudentDocumentById($id);
 		
-		$this->view->year = $db->getAllYear();
-		$this->view->room = $row =$db->getAllRoom();
+// 		$this->view->year = $db->getAllYear();
+// 		$this->view->room = $row =$db->getAllRoom();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($test);
@@ -321,7 +321,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	}
 	
 	public function stutrandropAction(){
-	$id=$this->getRequest()->getParam("id");
+		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$row = $db->getStudentById($id);
 		if(empty($row)){

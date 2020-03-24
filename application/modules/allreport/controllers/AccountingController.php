@@ -7,40 +7,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 	}
-	public function rptAccountRecAction(){
-	}
-// 	function rptStudentpaymentAction(){
-// 		try{
-// 			if($this->getRequest()->isPost()){
-// 					$search=$this->getRequest()->getPost();
-// 				}
-// 				else{
-// 					$search = array(
-// 							'title' =>'',
-// 							'branch_id'=>'',
-// 							'study_year' =>'',
-// 							'session'=>'',
-// 							'degree' =>'',
-// 							'grade_all' =>'',
-// 							'session' =>'',
-// 							'user' =>'',
-// 							'session' =>'',
-// 							'start_date'=> date('Y-m-d'),
-// 	                        'end_date'=>date('Y-m-d'),
-// 					);
-// 				}
-// 			$this->view->search = $search;
-// 			$db = new Allreport_Model_DbTable_DbRptPayment();
-// 			$this->view->row = $db->getStudentPayment($search);
-// 		}catch(Exception $e){
-// 			Application_Form_FrmMessage::message("Application Error");
-// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 		}
-// 		$form=new Registrar_Form_FrmSearchInfor();
-// 		$form->FrmSearchRegister();
-// 		Application_Model_Decorator::removeAllDecorator($form);
-// 		$this->view->form_search=$form;
-// 	}
 	function rptSpecaildiscountAction(){
 		try{
 			if($this->getRequest()->isPost()){

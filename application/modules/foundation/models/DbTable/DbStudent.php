@@ -78,18 +78,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					WHEN primary_phone = 3 THEN s.mother_phone
 					ELSE s.guardian_tel
 				END as tel,
-				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
-				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
-				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
-				(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
-				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(SELECT fee_id FROM `rms_student_fee_history` WHERE student_id=s.stu_id AND is_current=1 LIMIT 1) LIMIT 1) AS academic,
 				(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
-				(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";//AND s.is_subspend=0
+				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";//AND s.is_subspend=0
 				
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_student AS s  WHERE  s.customer_type=1 ";
 		
+		$sql.=" FROM rms_student AS s  WHERE  s.customer_type=1 ";
 		$orderby = " ORDER BY stu_id DESC ";
 
 		if(!empty($search['adv_search'])){
@@ -117,25 +112,24 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(commune_name,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(district_name,' ','') LIKE '%{$s_search}%'";
 			
-// 			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session LIMIT 1) LIKE '%{$s_search}%'";
-// 			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex  LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		if(!empty($search['study_year'])){
-			$where.=" AND s.academic_year=".$search['study_year'];
-		}
-		if(!empty($search['group'])){
-			$where.=" AND s.group_id=".$search['group'];
-		}
-		if(!empty($search['degree'])){
-			$where.=" AND s.degree=".$search['degree'];
-		}
-		if(!empty($search['grade_all'])){
-			$where.=" AND s.grade=".$search['grade_all'];
-		}
-		if(!empty($search['session'])){
-			$where.=" AND s.session=".$search['session'];
-		}
+		
+// 		if(!empty($search['study_year'])){
+// 			$where.=" AND s.academic_year=".$search['study_year'];
+// 		}
+// 		if(!empty($search['group'])){
+// 			$where.=" AND s.group_id=".$search['group'];
+// 		}
+// 		if(!empty($search['degree'])){
+// 			$where.=" AND s.degree=".$search['degree'];
+// 		}
+// 		if(!empty($search['grade_all'])){
+// 			$where.=" AND s.grade=".$search['grade_all'];
+// 		}
+// 		if(!empty($search['session'])){
+// 			$where.=" AND s.session=".$search['session'];
+// 		}
 		if($search['status']>-1){
 			$where.=" AND s.status=".$search['status'];
 		}
@@ -143,54 +137,43 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
-		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
+		$where.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1 LIMIT 1)');
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){
 		$db = $this->getAdapter();
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
 		
 		if($lang==1){// khmer
-		
 			$village_name = "village_namekh";
 			$commune_name = "commune_namekh";
 			$district_name = "district_namekh";
 			$province = "province_kh_name";
 		}else{ // English
-		
 			$village_name = "village_name";
 			$commune_name = "commune_name";
 			$district_name = "district_name";
 			$province = "province_en_name";
 		}
 		
-	$sql = "SELECT *,
-				s.academic_year as stu_academic_year,
-				(SELECT CONCAT(f.from_academic,'-',f.to_academic) FROM rms_tuitionfee AS f WHERE f.id=(SELECT g.academic_year FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AND f.`status`=1 GROUP BY f.from_academic,f.to_academic,f.generation)  AS academic_year,
-				(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-				(SELECT g.academic_year FROM `rms_group` AS g WHERE g.id=(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1)  LIMIT 1 ) as academic_id,
-				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-				(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
-				(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
-    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
-    			(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-				(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-				(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
-				 
-				(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
-		    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
-		    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
-				(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title
-				
+		$sql = "SELECT *,
+					(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
+	    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
+	    			(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+					(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
+			    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
+			    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
+					(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title
 				FROM rms_student as s
 				WHERE s.stu_id =".$id." 
 				AND s.customer_type=1";
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql.=$dbp->getAccessPermission();
-		$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
-		return $db->fetchRow($sql);
+			$dbp = new Application_Model_DbTable_DbGlobal();
+			$sql.=$dbp->getAccessPermission();
+			$sql.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1 LIMIT 1)');
+			return $db->fetchRow($sql);
 	}
 	
 	public function getStudentDocumentById($id){

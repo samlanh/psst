@@ -2036,38 +2036,9 @@ function initialize() {
 	    }, 2000);
 	   return false;
 	}		
-	url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
-	var oldbranch = '<?php echo $this->rs['branch_id']?>';
-	function getAllGroupByBranch(){
-		  dijit.byId('group').reset();   
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getgroup,
-			content:{
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data) {
-			    group_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('group').set('store',group_store);   
-			    if(oldbranch==branch_id){
-			    	dijit.byId('group').set('value','<?php echo $this->rs['group_id']?>');   
-			    }
-			},
-			error: function(err) {
-			}
-		});
-	}
 	function readURLguardian(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            
             reader.onload = function (e) {
                 $('#guardian_wiew').attr('src', e.target.result);
             }

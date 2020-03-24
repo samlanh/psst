@@ -403,11 +403,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->_name="rms_student_fee_history";
 				$this->insert($_arr);
 				
+				$dbGroup = new Foundation_Model_DbTable_DbGroup();
 				if(!empty($_data['identity_study'])){
 					$ids = explode(',', $_data['identity_study']);
 					foreach ($ids as $i){
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						$group_info = $dbGroup->getGroupById($group_id);
 						$_arr = array(
 								'stu_id'			=>$id,
 								'is_newstudent'		=>$_data['stu_denttype'],
@@ -422,6 +424,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
 						);
+						if (!empty($group_info)){
+							$_arr['session'] = $group_info['session'];
+						}
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);
 					}
@@ -664,13 +669,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$_arr['create_date']=date("Y-m-d H:i:s");
 				$this->insert($_arr);
 			}
+			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			if(!empty($_data['identity_study'])){
 				$ids = explode(',', $_data['identity_study']);
 				foreach ($ids as $i){
 					if (!empty($_data['detailid_study'.$i])){
-						echo 1;exit();
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						$group_info = $dbGroup->getGroupById($group_id);
 						$_arr = array(
 								'stu_id'			=>$stu_id,
 								'is_newstudent'		=>$_data['stu_denttype'],
@@ -685,11 +691,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
 						);
+						if (!empty($group_info)){
+							$_arr['session'] = $group_info['session'];
+						}
 						$this->_name="rms_group_detail_student";
 						$where=  "stu_id = $stu_id AND gd_id=".$_data['detailid_study'.$i];
 						$this->update($_arr, $where);
 					}else{
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+						$group_info = $dbGroup->getGroupById($group_id);
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
 						$_arr = array(
 								'stu_id'			=>$stu_id,
@@ -705,6 +715,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
 						);
+						if (!empty($group_info)){
+							$_arr['session'] = $group_info['session'];
+						}
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);
 					}

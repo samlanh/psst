@@ -276,7 +276,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 		$rr = $db->getStudyHishotryById($id);
 		$this->view->rr = $rr;
-		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -310,7 +310,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
 		$this->view->row = $db->getStudentDocumentById($id);
-		
+		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
 // 		$this->view->year = $db->getAllYear();
 // 		$this->view->room = $row =$db->getAllRoom();
 		

@@ -41,6 +41,25 @@ input.btn_borwse_image {
     width: 165px;
     margin: 0 auto;
 }
+
+.bd-bg {
+    background: #f7f7f7;
+    padding: 5px 10px;
+    border: solid 1px #062b61;
+    margin-bottom: 10px;
+}
+.bd-bg .form-group {
+    margin-bottom: 0;
+}
+table#table_row tr td {
+    padding: 5px 2px;
+    background: #f7f7f7;
+}
+table#table_row_study tr td {
+    padding: 5px 0px;
+    border-bottom: solid 1px #eee;
+}
+</style>
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div class="card">
@@ -671,6 +690,36 @@ input.btn_borwse_image {
 				                </div> 
 				            </div>
 						</div>
+						
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="bd-bg">
+					                <div class="form-group">
+					                    <div class="col-md-3 col-sm-3 col-xs-12">
+					                   		<input id="degree" />
+					                    </div>
+					                    <div class="col-md-3 col-sm-3 col-xs-12">
+					                   		<input id="grade" />
+					                    </div>
+					                    <div class="col-md-3 col-sm-3 col-xs-12">
+					                   		<input id="group" />
+					                    </div>
+					                     <div class="col-md-3 col-sm-3 col-xs-12">
+					                     	<input dojoType="dijit.form.TextBox" class="fullside" name="recordEdit" id="recordEdit" value="" type="hidden">
+					                     	<input dojoType="dijit.form.TextBox" class="fullside" name="rowIndex" id="rowIndex" value="" type="hidden">
+					                   		<input type="button" label="<?php echo $tr->translate('Add To Record');?>" dojoType="dijit.form.Button" iconClass="dijitIconEditProperty" onclick="addRowStudy();" />
+					                    </div>
+					                </div>
+									<div class="form-group">
+						         	 	<table id="table_row_study" style="border-collapse: collapse; border:1px solid #ccc;">
+											<tr id="head-title_study" class="head-td" align="right" style="white-space:nowrap;"></tr>
+										</table>
+										<input type="hidden" name="identity_study" id="identity_study"  />
+						         	 </div>
+				                 </div>
+							</div>
+						</div>
+						
 				     </div>
 				     <!--/.Panel 4-->
 			    </div>
@@ -729,7 +778,52 @@ var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json:
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
+var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                        
+	    id: "group",
+	    name: "group",  
+	    class: 'fullside', 
+	    readonly:false,
+	    required:false,
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	    onChange: function() {  
+	    }
+	}, "group");
+	
+	new dijit.form.FilteringSelect({
+		store: degree_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,
+		id: "degree",
+		name: "degree",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+		onChange: function() {  
+			getallGrade();
+			getAllGroup();
+		}
+	}, "degree");
+	
+	new dijit.form.FilteringSelect({
+	    queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                   
+	    id: "grade",
+	    name: "grade",  
+	    tabindex: "16",  
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+	    onChange: function() {  
+	    	getAllGroup();
+	    }
+	}, "grade");
+	getallGrade();
 	
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
@@ -1092,7 +1186,87 @@ dojo.ready(function(){
 		 date_of_birth.on('change', function(evt) {
 			 checkDuplicateStudent();
 		});
+		
+	 var branch_id = dijit.byId('branch_id');
+		 branch_id.on('change', function(evt) {
+		 getRefreshItems();
+	 });
+	 getRefreshItems();	
+	 addRowStudy();
 });
+
+url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroup(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){
+		degree ="";
+	}
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){
+		grade ="";
+	}
+	dojo.xhrPost({
+		url: url_getallgroup,
+		content:{
+			'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':1
+		},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);   
+		},
+		error: function(err) {
+		}
+	});
+}
+function getRefreshItems(){
+	dijit.byId('degree').reset();   
+	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
+	dojo.xhrPost({
+		url: url_getItems,
+		content:{
+			'items_type':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			degree_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('degree').set('store',degree_store);  
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store);   
+			},
+			error: function(err) {
+			}
+		});
+}
+
 var isDuplicate = 0;
 var url_duplicate = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"checkstudentcode"));?>';										
 function checkDuplicateRecord(){
@@ -1931,6 +2105,93 @@ function readURLguardian(input) {
         var image_return=event.target.responseText;
         $("#uploaded").val(image_return);
     }
+	
+	var col_study = 0;
+	    var no_study = 0;
+	    var title_study = 0;
+	    tmp_study = '';
+	    temp_study='';
+	    function addRowStudy() {
+	    	degree = dijit.byId('degree').get('value');
+	    	if(degree==''){
+	    		dijit.byId('degree').focus();
+	    		return false;
+	    	}
+	    	degreelabel = dijit.byId("degree").attr('displayedValue');
+	    	gradelabel = dijit.byId("grade").attr('displayedValue');
+	    	groupabel = dijit.byId("group").attr('displayedValue');
+	    	grade = dijit.byId('grade').get('value');
+	    	if(grade==''){
+	    		grade = "";
+	    		gradelabel="";
+	    	}
+	    	group = dijit.byId('group').get('value');
+	    	if(group==''){
+	    		group = "";
+	    		groupabel="";
+	    	}
+	    	col_study++;no_study++;
+
+
+	    	templateStudyEdit="";
+	    	recordEdit = dijit.byId('recordEdit').get('value');
+		    if(recordEdit!=""){
+		    	rowIndex = dijit.byId('rowIndex').get('value');
+		    	templateStudyEdit+='<td width="4%"align="center"><img style="width:15px; cursor: pointer;" onclick="editStudent('+col_study+');deleteRecord_study('+col_study+');" src="<?php echo $this->baseUrl();?>/images/edit.jpg">';
+		    	templateStudyEdit+='<input dojoType="dijit.form.TextBox" type="hidden" id="detailid_study'+col_study+'" name="detailid_study'+col_study+'"  value="'+recordEdit+'" /></td>';
+	    		deleteRecord_study(rowIndex);
+			}else{
+				templateStudyEdit+='<td></td>';
+		    }
+		    	
+	    	template_study='';
+	    	if(title_study!=1){
+	    		temp_study+='<th><?php echo $tr->translate("DEL");?></th>';
+	    		temp_study+='<th><?php echo $tr->translate("N_O");?></th>';
+	    		temp_study+='<th ><?php echo $tr->translate("DEGREE");?></th>';
+	    		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
+	    		temp_study+='<th ><?php echo $tr->translate("GROUP");?></th>';
+	    		temp_study+='<th ><?php echo $tr->translate("EDIT");?></th>';
+	    		dojo.query("#head-title_study").append(temp_study);
+	    		title_study=1;
+	    	}
+	    		template_study+='<td width="4%"align="center"><img onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+	    		template_study+='<td width="4%" align="center">'+no_study+'</td>';
+	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col_study+'" id="degree_'+col_study+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
+	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GROUP");?>" dojoType="dijit.form.TextBox" class="fullside" name="group_'+col_study+'" id="group_'+col_study+'" value="'+group+'" type="hidden">'+groupabel+'&nbsp;</td>';
+
+	    		template_study+=templateStudyEdit;
+	    		
+	    		
+		 	    tmp_study='<tr id="row_study'+col_study+'">';
+	    	tmp_study+="</tr>";
+	    	dojo.query("#table_row_study").append(tmp_study);
+
+	    	if($("#identity_study").val()!="") {
+	    		var identity_study = $("#identity_study").val();
+	    		$("#identity_study").val(identity_study+','+col_study);
+	    	} else {$("#identity_study").val(col_study);}
+	    	dojo.html.set(dojo.byId("row_study"+col_study),template_study , {
+	    	     parseContent: true,
+	    	});
+	    	dijit.byId('degree').reset();
+	    	dijit.byId('grade').reset();
+	    	dijit.byId('group').reset();
+	    	dijit.byId('recordEdit').reset();
+	    	dijit.byId('rowIndex').reset();
+	    }
+	    function deleteRecord_study(index) {
+	    	var identity = $('#identity_study').val();
+	    	var arrays = identity.split(',');
+	    	for(var i=0;i<arrays.length;i++) {
+	    	if(arrays[i] == index) arrays.splice(i,1);
+	    	}
+	    	var strings = arrays.join(',');
+	    	$('#identity_study').val(strings);
+	    	dojo.query("#row_study"+index).remove();
+	    }
+	    
 </script>
 <script src="<?php echo $this->baseUrl()."/webcam/scripttakephoto.js"?>"></script>
 <link href="<?php echo $this->baseUrl();?>/webcam/scripttakephoto.css" rel="stylesheet">

@@ -530,8 +530,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
 	    			(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 	    			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
-	    	        (SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
-			        (SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 	 		        sp.penalty,sp.grand_total,sp.credit_memo,sp.paid_amount,sp.balance_due,
 					(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=payment_method LIMIT 1) AS payment_method,
 					number,sp.create_date,
@@ -558,24 +556,24 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		$s_where[]= " stu_khname LIKE '%{$s_search}%'";
 	    		$s_where[]= " stu_enname LIKE '%{$s_search}%'";
 	    		$s_where[]= " last_name LIKE '%{$s_search}%'";
-	    		$s_where[]= " sp.grade LIKE '%{$s_search}%'";
 	    		$where.=' AND ('.implode(' OR ', $s_where).')';
 	    	}
 	    	if(($search['branch_id']>0)){
 	    		$where.= " AND sp.branch_id = ".$search['branch_id'];
 	    	}
-	    	if(!empty($search['degree'])){
-	    		$where.=" AND sp.degree=".$search['degree'];
-	    	}
+	    	
 	    	if(!empty($search['study_year'])){
 	    		$where.=" AND sp.academic_year=".$search['study_year'];
 	    	}
-	    	if(!empty($search['session'])){
-	    		$where.=" AND sp.session=".$search['session'];
-	    	}
-	    	if(!empty($search['grade_all'])){
-	    		$where.=" AND sp.grade=".$search['grade_all'];
-	    	}
+// 	    	if(!empty($search['session'])){
+// 	    		$where.=" AND sp.session=".$search['session'];
+// 	    	}
+// 	    	if(!empty($search['degree'])){
+// 	    		$where.=" AND sp.degree=".$search['degree'];
+// 	    	}
+// 	    	if(!empty($search['grade_all'])){
+// 	    		$where.=" AND sp.grade=".$search['grade_all'];
+// 	    	}
 	    	if(!empty($search['user'])){
 	    		$where.=" AND sp.user_id=".$search['user'];
 	    	}

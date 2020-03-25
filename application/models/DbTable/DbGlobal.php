@@ -1097,8 +1097,7 @@ function getAllgroupStudyNotPass($action=null){
 		   		FROM 
 		   			rms_student as s
 	   			WHERE 
-	   				s.stu_id=$stu_id LIMIT 1 
-	   		";
+	   				s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
    function getStudentTestinfoById($stu_id){//for student with result

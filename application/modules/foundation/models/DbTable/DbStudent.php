@@ -393,6 +393,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
 						$group_info = $dbGroup->getGroupById($group_id);
+						
+						$isMain = 0;
+						if($i==$_data['is_main']){ $isMain =1;}
 						$_arr = array(
 								'stu_id'			=>$id,
 								'is_newstudent'		=>$_data['stu_denttype'],
@@ -402,6 +405,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'grade'				=>$_data['grade_'.$i],
 								'is_current'		=>1,
 								'is_setgroup'		=>$is_setgroup,
+								'is_maingrade'		=>$isMain,
 								'date'				=>date("Y-m-d"),
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
@@ -660,6 +664,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
 						$group_info = $dbGroup->getGroupById($group_id);
+						
+						$isMain = 0;
+						if($i==$_data['is_main']){ $isMain =1;}
+						
 						$_arr = array(
 								'stu_id'			=>$stu_id,
 								'is_newstudent'		=>$_data['stu_denttype'],
@@ -669,6 +677,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'grade'				=>$_data['grade_'.$i],
 								'is_current'		=>1,
 								'is_setgroup'		=>$is_setgroup,
+								'is_maingrade'		=>$isMain,
 								'date'				=>date("Y-m-d"),
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
@@ -684,6 +693,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$group_info = $dbGroup->getGroupById($group_id);
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						$isMain = 0;
+						if($i==$_data['is_main']){ $isMain =1;}
+						
 						$_arr = array(
 								'stu_id'			=>$stu_id,
 								'is_newstudent'		=>$_data['stu_denttype'],
@@ -693,6 +705,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'grade'				=>$_data['grade_'.$i],
 								'is_current'		=>1,
 								'is_setgroup'		=>$is_setgroup,
+								'is_maingrade'		=>$isMain,
 								'date'				=>date("Y-m-d"),
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),

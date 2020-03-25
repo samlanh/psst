@@ -2177,6 +2177,7 @@ function initialize() {
 	    		temp_study+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("GROUP");?></th>';
+				temp_study+='<th ></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("EDIT");?></th>';
 	    		dojo.query("#head-title_study").append(temp_study);
 	    		title_study=1;
@@ -2186,7 +2187,7 @@ function initialize() {
 	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col_study+'" id="degree_'+col_study+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
 	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
 	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GROUP");?>" dojoType="dijit.form.TextBox" class="fullside" name="group_'+col_study+'" id="group_'+col_study+'" value="'+group+'" type="hidden">'+groupabel+'&nbsp;</td>';
-
+				template_study+='<td>&nbsp;<input type="radio" name="is_main" id="is_main" value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
 	    		template_study+=templateStudyEdit;
 	    		
 	    		
@@ -2229,6 +2230,7 @@ function initialize() {
 	    		temp_study+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("GROUP");?></th>';
+				temp_study+='<th ></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("EDIT");?></th>';
 	    		dojo.query("#head-title_study").append(temp_study);
 	    		title_study=1;
@@ -2240,7 +2242,8 @@ function initialize() {
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="<?php echo $row['grade'];?>" type="hidden"><?php echo $row['gradeTitle'];?>&nbsp;</td>';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GROUP");?>" dojoType="dijit.form.TextBox" class="fullside" name="group_'+col_study+'" id="group_'+col_study+'" value="<?php echo $row['group_id'];?>" type="hidden"><?php echo $row['groupCode'];?>&nbsp;';
     		template_study+='<input dojoType="dijit.form.TextBox" type="hidden" id="detailid_study'+col_study+'" name="detailid_study'+col_study+'"  value="<?php echo $row['gd_id'];?>" /></td>';
-    		template_study+='<td width="4%"align="center"><img style="width:15px; cursor: pointer;" onclick="editStudent('+col_study+');" src="<?php echo $this->baseUrl();?>/images/edit.jpg"></td>';
+    		template_study+='<td>&nbsp;<input type="radio" name="is_main" id="is_main" <?php if($row['is_maingrade']==1){ echo 'checked="checked"'; }?> value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
+			template_study+='<td width="4%"align="center"><img style="width:15px; cursor: pointer;" onclick="editStudent('+col_study+');" src="<?php echo $this->baseUrl();?>/images/edit.jpg"></td>';
   	        tmp_study='<tr id="row_study'+col_study+'">';
 	    	tmp_study+="</tr>";
 	    	dojo.query("#table_row_study").append(tmp_study);

@@ -2133,16 +2133,7 @@ function readURLguardian(input) {
 	    	col_study++;no_study++;
 
 
-	    	templateStudyEdit="";
-	    	recordEdit = dijit.byId('recordEdit').get('value');
-		    if(recordEdit!=""){
-		    	rowIndex = dijit.byId('rowIndex').get('value');
-		    	templateStudyEdit+='<td width="4%"align="center"><img style="width:15px; cursor: pointer;" onclick="editStudent('+col_study+');deleteRecord_study('+col_study+');" src="<?php echo $this->baseUrl();?>/images/edit.jpg">';
-		    	templateStudyEdit+='<input dojoType="dijit.form.TextBox" type="hidden" id="detailid_study'+col_study+'" name="detailid_study'+col_study+'"  value="'+recordEdit+'" /></td>';
-	    		deleteRecord_study(rowIndex);
-			}else{
-				templateStudyEdit+='<td></td>';
-		    }
+	    	
 		    	
 	    	template_study='';
 	    	if(title_study!=1){
@@ -2151,7 +2142,8 @@ function readURLguardian(input) {
 	    		temp_study+='<th ><?php echo $tr->translate("DEGREE");?></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
 	    		temp_study+='<th ><?php echo $tr->translate("GROUP");?></th>';
-	    		temp_study+='<th ><?php echo $tr->translate("EDIT");?></th>';
+				temp_study+='<th ></th>';
+	    		
 	    		dojo.query("#head-title_study").append(temp_study);
 	    		title_study=1;
 	    	}
@@ -2160,8 +2152,8 @@ function readURLguardian(input) {
 	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col_study+'" id="degree_'+col_study+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
 	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
 	    		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GROUP");?>" dojoType="dijit.form.TextBox" class="fullside" name="group_'+col_study+'" id="group_'+col_study+'" value="'+group+'" type="hidden">'+groupabel+'&nbsp;</td>';
-
-	    		template_study+=templateStudyEdit;
+				template_study+='<td>&nbsp;<input type="radio" name="is_main" id="is_main" value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
+	    		
 	    		
 	    		
 		 	    tmp_study='<tr id="row_study'+col_study+'">';

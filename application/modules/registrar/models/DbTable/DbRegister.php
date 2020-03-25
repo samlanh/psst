@@ -130,13 +130,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'create_date'	=> $paid_date,
 					'user_id'		=> $this->getUserId(),
 					'academic_year'	=> $data['study_year'],
-					'group_id'      => $rs_stu['group_id'],
 					'paystudent_type'=> $rs_stu['is_stu_new'],
 					'degree'		=> $rs_stu['degree'],
 					'grade'			=> $rs_stu['grade'],
-					'session'		=> $rs_stu['session'],
+// 					'session'		=> $rs_stu['session'],
+// 					'room_id'		=> $rs_stu['room'],
+// 					'group_id'      => $rs_stu['group_id'],
 					'degree_culture'=> $rs_stu['calture'],
-					'room_id'		=> $rs_stu['room'],
 				);
 				$paymentid = $this->insert($arr);
 		
@@ -144,7 +144,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					if(!empty($data['credit_memo_id'])){
 						if($data['credit_memo']>0){
 							$array=array(
-									'total_amountafter'=>$credit_after,
+								'total_amountafter'=>$credit_after,
 							);
 							$this->_name='rms_creditmemo';
 							$where = " id = ".$rs_stu['credit_memo_id'];
@@ -300,7 +300,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							$sale_detailid= $this->insert($arr_sale);
 							
 							if ($condictionSale!=1){
-								
 								$arrs = array(
 										'cutstock_id'=>$cut_id,
 										'student_paymentdetail_id'=>$sale_detailid,
@@ -315,9 +314,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								$dbpu = new Stock_Model_DbTable_DbPurchase();
 								$dbpu->updateStock($data['item_id'.$i],$data['branch_id'],-$data['qty_'.$i]);
 							}
-							
-
-
 						}
 					}
 				}
@@ -326,7 +322,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$dbstock = new Stock_Model_DbTable_DbCutStock();
 					$itemsCode = $dbstock->getCutStockode($data['branch_id']);
 					$_arr=array(
-							'total_received'=>$totalQty,
+						'total_received'=>$totalQty,
 					);
 					$this->_name ='rms_cutstock';
 					$where = "id = ".$cut_id;
@@ -630,7 +626,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT 
 				  s.stu_id,
-				  s.academic_year,
 				  (SELECT id FROM rms_creditmemo WHERE student_id = $studentid AND total_amountafter>0 LIMIT 1) AS id,
 				  (SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $studentid AND total_amountafter>0 LIMIT 1) AS total_amountafter,
 				  (SELECT SUM(sp.balance_due) FROM rms_student_payment AS sp WHERE sp.student_id=$studentid LIMIT 1 )AS balance
@@ -1048,7 +1043,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		s.stu_id,
 	    		s.is_stu_new,
 				sp.degree as degree_id,
-	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 	    		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
 	    		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name

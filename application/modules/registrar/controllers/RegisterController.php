@@ -50,7 +50,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     public function addAction(){
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
-      	try {
+      	try{
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
       		if(!empty($_data['save_close'])){
@@ -59,7 +59,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
       		}
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-      	} catch (Exception $e) {
+      	}catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
       	}
@@ -86,11 +86,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 // 	   print_r($dbclass->getAllPayMentTermOption());
 	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
 	   
-	 //  print_r($dbclass->getAllPayMentTermOption());
-	   
-	   
+   //  print_r($dbclass->getAllPayMentTermOption());	   
 // 	   print_r($frmreceipt->getFormatReceipt());exit();
-	   
 // 	   $db = new Application_Model_DbTable_DbGlobal();
 // 	   $grade = $db->getAllGradeStudyByDegree(null,8);
 // 	   $prodcut = $db->getProductbyBranch(10);
@@ -115,7 +112,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     }
-    
     
     public function editAction(){
     	$id=$this->getRequest()->getParam("id");

@@ -74,7 +74,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	if($all==0){
     		$sql.=" and key_code != 7 ";
     	}
-    	
     	return $db->fetchAll($sql);
     }
     public function getDaySchedule($branch,$year,$group){
@@ -983,9 +982,26 @@ function getAllgroupStudyNotPass($action=null){
    function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){
 	   	$db = $this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
+	   	
+	   	$lang = $this->currentlang();
+	   	if($lang==1){// khmer
+	   		$label = "title_kh";
+	   	}else{ // English
+	   		$label = "title_eng";
+	   	}
+	   	$sql="SELECT id, $label as name
+	   	FROM
+	   	rms_studytype
+	   	WHERE status = 1 AND $label!='' ";
+	   	
 	   	$sql = "SELECT id,
-		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'(',generation,')') AS name,
-		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'(',generation,')') AS years
+		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1), 
+		   	( SELECT $label
+		   			FROM
+		   				rms_studytype AS st
+		   				WHERE st.id =rms_tuitionfee.term_study LIMIT 1 )
+		   	,'(',generation,')') AS name,
+		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'',generation,'') AS years
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
 	   	$branch_id ";
@@ -1015,7 +1031,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql.=" AND school_option = $school_option ";
 	  	}
 	  	
-	   	$sql.=" GROUP BY academic_year,generation";
+	   	$sql.=" GROUP BY academic_year, term_study, generation";
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
@@ -1062,14 +1078,13 @@ function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$sql="SELECT 
-   	s.stu_id As id,
-   	s.stu_id As stu_id,
-   	s.stu_code As stu_code,
-   	s.stu_code AS name,
-   	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
-   	FROM rms_student AS s
-   	WHERE s.status=1 and s.is_subspend=0 AND customer_type=1 $branch_id  ORDER BY stu_type DESC ";
-   	
+			   	s.stu_id As id,
+			   	s.stu_id As stu_id,
+			   	s.stu_code As stu_code,
+			   	s.stu_code AS name,
+			   	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
+			   	FROM rms_student AS s
+   			WHERE s.status=1 and s.is_subspend=0 AND customer_type=1 $branch_id  ORDER BY stu_type DESC ";
    	return $db->fetchAll($sql);
    }
    function getAllStuName(){
@@ -1086,18 +1101,20 @@ function getAllgroupStudyNotPass($action=null){
 	   		$colunmname='title';
 	   	}
 	   	$sql="SELECT s.*,
-			   		(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
-			   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
-			   		(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
-			   		(SELECT title FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
-			   		(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
-			   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
-			   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
-			   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id
-		   		FROM 
-		   			rms_student as s
-	   			WHERE 
-	   				s.stu_id=$stu_id LIMIT 1 ";
+	   			sgd.grade,
+	   			sgd.degree,
+			   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label,
+		   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,			   		
+		   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
+		   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
+		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id
+	   		FROM 
+	   			rms_student AS s
+	   			LEFT JOIN rms_group_detail_student AS sgd
+	   			ON s.stu_id=sgd.stu_id
+   			WHERE 
+   				s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
    function getStudentTestinfoById($stu_id){//for student with result
@@ -1861,7 +1878,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if($student_id!=null AND !empty($student_id)){
   		if(empty($is_stutested)){//for normal student
-  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM rms_student WHERE status=1 AND stu_id= $student_id )) ";
+  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
   		}else{//will check expired of result test later //for tested student
   			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result ))";
   		}
@@ -1886,8 +1903,7 @@ function getAllgroupStudyNotPass($action=null){
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
   	}
-  	$sql.=" GROUP BY i.id ORDER BY i.items_id DESC, i.ordering DESC ";
-  	//echo $sql;
+  	$sql.=" GROUP BY i.id ORDER BY i.items_type ASC, i.items_id DESC, i.ordering DESC ";
   	return $db->fetchAll($sql);
   }
   function getProductbyBranch($category_id=null,$product_type=null){
@@ -2064,17 +2080,15 @@ function getAllgroupStudyNotPass($action=null){
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
   			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("CULTURE_LEVEL").'</span> : <span id="lbl_culturelevel" class="inf-value" >'.$rs['degree_culture'].'</span><br />
-  			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
-  			                            <span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
-  			                            <span class="title-info">'.$tr->translate("SESSION").'</span> : <span id="lbl_session" class="inf-value">'.$rs['session_label'].'</span><br />
-  			                            <span class="title-info">'.$tr->translate("ROOM").'</span> : <span id="lbl_room" class="inf-value">'. $rs['room_label'].'</span><br />';
+  			                        	<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
+  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />';
   			         	 		  $str.='</p>
   		          </div>
   		      <div style="clear: both;"></div>
   		 </div>
   	</div>';
+  			         	 		  
   	}
   	return $str;
   }
@@ -2298,7 +2312,7 @@ function getAllgroupStudyNotPass($action=null){
   function getAllYearServiceFeeByBranch($branch_id){
   	$db  = $this->getAdapter();
   	$sql = " SELECT 
-  					t.id ,
+  					t.academic_year AS id ,
   					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS name
   				FROM 
   					`rms_tuitionfee` as t 
@@ -2772,7 +2786,7 @@ function getAllgroupStudyNotPass($action=null){
   public function getAllTermStudyTitle($option=null){
   		$db=$this->getAdapter();
   	  	$_db  = new Application_Model_DbTable_DbGlobal();
-  	  	$lang = $_db->currentlang();
+  	  	$lang = $this->currentlang();
   	  	if($lang==1){// khmer
   	  		$label = "title_kh";
   	  	}else{ // English

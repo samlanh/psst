@@ -34,7 +34,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.photo,
     				s.tel,
     				s.dob,
-    				(select $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
+    				(SELECT $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				sp.receipt_number,
     				sp.create_date,
     				(SELECT CONCAT(last_name,' ',first_name) FROM rms_users where id=sp.user_id LIMIT 1) as user,
@@ -45,23 +45,22 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.paid_amount,
     				sp.balance_due,
     				sp.note,
-    			   (SELECT name_en from rms_view where rms_view.type = 8 and key_code=sp.payment_method LIMIT 1) AS payment_method,
+    			   (SELECT $label FROM rms_view where rms_view.type = 8 and key_code=sp.payment_method LIMIT 1) AS payment_method,
     			   sp.number,
-    				(SELECT CONCAT(from_academic,'-',to_academic) 
+    				(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_tuitionfee.academic_year LIMIT 1)
 						FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
 					
 					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
 					(SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
-					
-					(select $label from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session
-    			from
+					(SELECT $label from rms_view where rms_view.type = 4 AND key_code=sp.session LIMIT 1) as session
+    			FROM
     				rms_student_payment as sp,
 					rms_student as s,
     				rms_student_paymentdetail as spd
     			WHERE 
     				sp.student_id=s.stu_id 
     				and sp.id=$id ";
-    	return $db->fetchRow($sql);
+    		return $db->fetchRow($sql);
     }
     
     public function getPaymentDetailByType($search){

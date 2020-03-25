@@ -359,13 +359,13 @@
 								  		<tr>
 								  			<td colspan="10">
 									  			<div style="width:33%;float: left;text-align: center;color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
-									  				សាច់ប្រាក់&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
+									  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
 									  			</div>
 									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
-									  				ធនាគារ &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp,2);?>
+									  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp,2);?>
 									  			</div>
 									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
-									  				សែក&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp,2);?>
+									  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp,2);?>
 									  			</div>
 									  		</td>
 								  		</tr>

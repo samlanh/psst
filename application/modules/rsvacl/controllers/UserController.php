@@ -68,6 +68,8 @@ class RsvAcl_UserController extends Zend_Controller_Action
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_user = $frm;
+    	$this->view->user_type = $_data['user_type'];
+    	$this->view->active = $_data['status_search'];
     }
 	public function addAction()
 	{

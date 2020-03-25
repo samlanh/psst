@@ -253,6 +253,9 @@ tr.head-td th{padding: 5px 2px;}
   			                       		<span class="title-info"><?php echo $tr->translate("DOB"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
 			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
 			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate("CULTURE_LEVEL"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
+			                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
 			                        </p>
 		                        </div>
 		                         <div style="clear: both;"></div>
@@ -877,11 +880,10 @@ function removeOption(service_id,academic_year){
 		load: function(data){
 			term_option = data;
 			addRow();
-	},
-	error: function(err){
-		
-	}
-});
+		},
+		error: function(err){
+		}
+	});
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -1302,7 +1304,7 @@ function getCreditMemo(){
 				if(data){
 					dijit.byId("credit_memo").attr("value",data.total_amountafter);
 					dijit.byId("credit_memo_id").attr("value",data.id);
-					dijit.byId("study_year").attr("value",data.academic_year);
+					//dijit.byId("study_year").attr("value",data.academic_year);
 					dijit.byId("balance").attr("value",data.balance);
 				}else{
 					dijit.byId("credit_memo").attr("value",0);

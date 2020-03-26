@@ -89,10 +89,11 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			$str_province='province_kh_name';
 		}
 	   	$db = $this->getAdapter();
+	   	// (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=gr.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_yeartitle,
 		$sql="SELECT
 					 g.gd_id,
 					 (SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
-					 (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=gr.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_yeartitle,
+					 (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
 					 `g`.`group_id` AS `group_id`,
 					 `g`.`stu_id`   AS `stu_id`,
@@ -127,7 +128,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			    	
 				FROM 
 					`rms_group_detail_student` AS g,
-					rms_student as s,
+					 rms_student as s,
 					`rms_group` AS gr
 				WHERE 
 					gr.id = g.group_id
@@ -269,6 +270,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   		$grade = "rms_itemsdetail.title_en";
 	   		$degree = "rms_items.title_en";
 	   	}
+	   	//(SELECT CONCAT(from_academic,' - ',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 	   	$sql = "SELECT
 				   	`g`.`id`,
 				   	`g`.`branch_id`,
@@ -277,7 +279,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS school_nameen,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_logo,
 				   	`g`.`group_code`    AS `group_code`,
-				   	(SELECT CONCAT(from_academic,' - ',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
+				   	
+				   	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
 				   	`g`.`degree` as degree_id,
 				   	(SELECT $degree FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,

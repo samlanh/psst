@@ -143,7 +143,7 @@ table.tb-footer tr.style-head {
 				<td colspan="3" valign="top">
 				<div id="exportExcel">
 					<table class="content-data-main" cellpadding="2"​ border="0" >
-					<?php $i=0;$degree="";$count=0; 
+					<?php $i=0;$degree="";$count=0; $grade="";
 						$all_total = 0;$all_drop = 0; $all_female=0; $all_femaledrop=0;
 						$female=0;$male=0;
 						if(!empty($this->rs))foreach ($this->rs AS $key=>$row) { 
@@ -157,7 +157,7 @@ table.tb-footer tr.style-head {
 							if ($row['sex_key']==2){ $all_female++;}
 						}
 					?>
-						<?php if($degree!=$row['degree_id']){?>
+						<?php if($grade!=$row['grade']){?>
 							<?php if ($key>0){?>
 							<tr>
 								<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
@@ -230,35 +230,37 @@ table.tb-footer tr.style-head {
 							<td class="border" >&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
 							<td class="border" <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>>&nbsp;<?php echo $row['status'];?>&nbsp;</td>	
 						</tr>
-						<?php $degree=$row['degree_id'];?>
+						<?php $grade=$row['grade'];?>
 					<?php }?>	
 						<tr>
 							<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
 							</td>
 						</tr>
-						<tr><td colspan="14" style="border:1px solid #fff;">&nbsp;</td></tr>
+						<tr>
+								<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px;white-space:nowrap;">
+										<tr>
+											<td valign="top" style="width:33%;">
+												<span>
+													<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo str_pad($count, 2, '0', STR_PAD_LEFT); ?> <?php echo $tr->translate("STUDENT_UNIT");?>
+												</span> 
+											</td>
+											<td  valign="top" style="width:33%; text-align: center;">
+												<span>
+													<?php echo $tr->translate("FEMALE");?> : <?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); ?>
+												</span> 
+											</td>
+											<td  style="width:33%;white-space: nowrap;" valign="top">
+												<span style=" text-align: center;">
+													<?php echo $tr->translate("MALE");?> : <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
+												</span> 
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 					</table>	
 					<table border="0" align="right" width="60%" style="color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Battambang'; margin:0 auto; white-space:nowrap;">
-						<tr>
-							<td valign="top" style="width:33%;">
-								<?php echo $tr->translate("STUDENT_TOTAL");?> 
-							</td>
-							<td>
-								: <?php echo $count; $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
-							</td>
-							<td  valign="top" style="width:33%; text-align: right;">
-								<?php echo $tr->translate("FEMALE");?> 
-							</td>
-							<td>
-								: <?php echo $female." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
-							</td>
-							<td  style="width:33%;white-space: nowrap;" valign="top">
-								<?php echo $tr->translate("MALE");?> 
-							</td>
-							<td>
-								: <?php echo $male;?> <?php echo $tr->translate("STUDENT_UNIT");?>
-							</td>
-						</tr>
 						<tr>
 							<td width="15%" >
 								<?php echo $tr->translate("TOTAL_STUDYING_STUDENT");?>

@@ -330,7 +330,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
-				AND sd.is_subspend=0
+				AND sd.stop_type=0
 				AND sd.is_setgroup = 0 ";
 		if(!empty($search['academic_year'])){
 			$sql.=" AND (SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) =".$search['academic_year'];
@@ -372,7 +372,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
-				AND sd.is_subspend=0
+				AND sd.stop_type=0
 				AND sd.is_setgroup=0
 			 ";
 		if(!empty($_data['gd_id'])){

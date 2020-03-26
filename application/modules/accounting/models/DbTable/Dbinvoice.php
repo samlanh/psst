@@ -9,7 +9,6 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		$db= $this->getAdapter();
 		$sql="SELECT v.id ,
 					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=v.branch_id)AS branch,
-					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) AS group_name,
 					s.stu_code ,
 					s.stu_khname,
 					s.last_name,
@@ -21,16 +20,14 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					v.input_date ,
 					v.remark ,
 					v.totale_amount ,
-					u.first_name  
+					(SELECT first_name FROM rms_users WHERE rms_users.id = v.user_id LIMIT 1) AS first_name
 				FROM 
 					rms_invoice_account  AS v ,
-					rms_student AS s ,
-					rms_users AS u 
+					rms_student AS s 
 				WHERE 
 				    stu_id = student_name 
-					AND v.user_id=u.id
 					AND s.status=1 
-					AND s.customer_type=1";
+					AND s.customer_type=1 ";
 		
     	$from_date =(empty($search['start_date']))? '1': " v.input_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " v.input_date <= '".$search['end_date']." 23:59:59'";
@@ -49,18 +46,18 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND v.branch_id=".$search['branch_id'];
     	}
-		if(!empty($search['group'])){
-    		$where.= " AND s.group_id =".$search['group'];
-    	}
+// 		if(!empty($search['group'])){
+//     		$where.= " AND s.group_id =".$search['group'];
+//     	}
     	if(!empty($search['student_name'])){
     		$where.=" AND v.student_name=".$search['student_name'];
     	}
-    	if($search['degree']!=""){
-    		$where.=" AND s.degree=".$search['degree'];
-    	}
-    	if($search['grade'] !=""){
-    		$where.=" AND s.grade=".$search['grade'];
-    	}
+//     	if($search['degree']!=""){
+//     		$where.=" AND s.degree=".$search['degree'];
+//     	}
+//     	if($search['grade'] !=""){
+//     		$where.=" AND s.grade=".$search['grade'];
+//     	}
 		$order=" ORDER BY v.id DESC";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('v.branch_id');
@@ -125,8 +122,9 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 			}
 		    $db->commit();
     	}catch(Exception $e){
-    		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$db->rollBack();
+    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     	}
     }
 	public function editinvice($data,$id){
@@ -171,6 +169,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		    	
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     	}
 	}
 	public function getvCode($branch_id){
@@ -196,7 +195,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	 		$sql.=" AND i.items_type=".$option;
 	 	}
 	 	if($student_id!=null){//new parameter for invoice09-1-019
-	 		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
+	 		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
 	 	}
 	 	$dbbg = new Application_Model_DbTable_DbGlobal();
 	 	$branchlist = $dbbg->getAllSchoolOption();
@@ -215,6 +214,3 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	 	return $db->fetchAll($sql);
 	}
 }
-
-
-

@@ -14,8 +14,8 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 					id,
 					(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 					title,
-					(SELECT CONCAT(tu.from_academic,'-',tu.to_academic,'(',tu.generation,')') FROM rms_tuitionfee AS tu WHERE tu.`status`=1 AND tu.id = academic_year 
-						GROUP BY tu.from_academic,tu.to_academic,tu.generation,tu.time LIMIT 1) AS `academic_year`,
+					(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tu.academic_year LIMIT 1),'(',tu.generation,')') FROM rms_tuitionfee AS tu WHERE tu.`status`=1 AND tu.id =tu.academic_year 
+						GROUP BY tu.academic_year,tu.term_study,tu.generation LIMIT 1) AS `academic_year`,
 					start_date,
 					end_date,
 					note,

@@ -101,6 +101,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->adv_search=$search;
 			$student = $db->getStudentById($id);
 			$this->view->rs =$student;
+			$this->view->rsStudentRerecord = $db->getAllStudentStudyRecord($id);
 			$this->view->document =$db->getStudentDocumentById($id);
 			
 			$rs=$this->view->row = $db->getStudentPaymentDetail($id);

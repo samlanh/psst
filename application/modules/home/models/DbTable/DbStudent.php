@@ -131,11 +131,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
     			(SELECT $view FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
     			(SELECT $view FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
     			
- 				(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 				(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 		    	(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 		    	(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
 				(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
+				ds.group_id,
 				(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
 				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS year_name,
 				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
@@ -151,11 +151,37 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student as s,
 					rms_group_detail_student AS ds
- 			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id";
+ 			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id LIMIT 1 ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql.$where);
+	}
+	function getAllStudentStudyRecord($stu_id){
+		$db = $this->getAdapter();
+
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
+ 		$sql =" SELECT 
+	 				ds.group_id,
+					(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year,
+					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
+				    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+					(SELECT room_name FROM rms_room WHERE room_id=(SELECT room_id FROM `rms_group` WHERE rms_group.id=ds.group_id LIMIT 1) LIMIT 1 ) AS room_name
+				FROM 
+					rms_group_detail_student AS ds
+ 			WHERE ds.stu_id = $stu_id AND ds.is_current=1 ";
+		$where='';
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission();
+		return $db->fetchAll($sql.$where);
 	}
 	
 	public function getStudentPaymentDetail($stu_id){

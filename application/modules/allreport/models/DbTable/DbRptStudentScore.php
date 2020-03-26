@@ -142,8 +142,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    				g.`group_code`,
 		   		(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as examtype,
 		   		title_score,s.for_semester,s.note,
-		   		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') 
-				FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+		   		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_year,
 		 		(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 
 			 	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 			 	`g`.`semester` AS `semester`,
@@ -833,11 +832,12 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	return $db->fetchRow($sql);
    }
    function getAllgroupStudyNotPass(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT `g`.`id` as id, CONCAT(`g`.`group_code`,' ',
-   	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-   	FROM `rms_group` AS `g` WHERE g.status =1 ";
-   	return $db->fetchAll($sql);
+	   	$db = $this->getAdapter();
+	   	$sql ="SELECT 
+	   		`g`.`id` as id, CONCAT(`g`.`group_code`,' ',
+	   		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
+	   	FROM `rms_group` AS `g` WHERE g.status =1 ";
+	   	return $db->fetchAll($sql);
    }
 
    //---------------gep score report

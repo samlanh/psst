@@ -204,7 +204,8 @@ function getallGrade(){
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -213,7 +214,6 @@ function getallGrade(){
 			dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -242,7 +242,6 @@ function getallstudentname(){//
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

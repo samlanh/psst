@@ -52,7 +52,6 @@ label.title {
 	    		</div>
 	    	</div>
 		<div class="card-box">
-				<!-- Tab Menu -->
 		    	<div class="card-box">
 		    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 			            <li class="nav-item active">
@@ -205,29 +204,40 @@ label.title {
 										    	</tr>
 										    	<tr>
 										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
-										    			<p class="padding-left">
-										    			<label class="title">ឆ្នាំសិក្សា </label> : <label class="value"><?php echo $this->rs['year_name'];?></label> <label class="title">កម្រិតសិក្សា</label> : <label class="value"><?php echo $this->rs['degree_name'];?></label> <label class="title">ថ្នាក់សិក្សា</label> : <label class="value"><?php echo $this->rs['grade_name'];?></label>
-										    			</p>
-										    			<p class="padding-left">
-										    			<label class="title">វេនសិក្សា </label> : <label class="value">
-										    				<?php 
-// 										    					if($this->rs['session']==1){
-// 											    					echo $tr->translate("MORNING");
-// 														   		  }elseif ($this->rs['session']==2){
-// 														   		  		echo $tr->translate("AFTERNOON");
-// 														   		  } elseif ($this->rs['session']==3){
-// 														   		  		echo $tr->translate("EVERNING");
-// 														   		  } else{
-// 														   		  		echo $tr->translate("WEEKEND");
-// 														   		  }
-															 ?>   	 </label> <label class="title">បន្ទប់សិក្សា</label> : <label class="value"><?php echo $this->rs['room_name'];?></label> 
-										    			</p>
-										    			<p class="padding-left">
-										    			<label class="title">ផ្សេងៗ  </label> : <label class="value"><?php echo $this->rs['remark'];?></label>
-										    			</p>
-										    			<p class="padding-left">
-										    			<label class="title">ស្ថានការណ៍  </label> : <label class="value"><?php echo $this->rs['status_student'];?></label>
-										    			</p>
+										    			<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
+															<thead>
+																<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px; align="center" >
+																	<td><?php echo $tr->translate('N_O');?></td>
+																	<td><?php echo $tr->translate('STUDY_YEAR');?></td>
+																	<td><?php echo $tr->translate('STUDENT_GROUP');?></td>
+																	<td><?php echo $tr->translate('DEGREE');?></td>
+																	<td><?php echo $tr->translate('GRADE');?></td>
+																	<td><?php echo $tr->translate('SESSION');?></td>
+																	<td><?php echo $tr->translate('ROOM_NAME');?></td>
+																</tr>
+															</thead>
+															<style> 
+																td{padding:0 2px; }
+																.hover:hover{background: #ccc;}
+															</style>
+															<tbody>
+															<?php 		
+																$i=0;
+																if(!empty($this->rsStudentRerecord)){ foreach($this->rsStudentRerecord as $rs){ 
+																	$i++;
+															?>
+																<tr class="hover" style="font-size:12px; color:#000; height: 22px;"​ align="center">
+																	<td><?php echo $i;?></td>
+																	<td><?php echo $rs['academic_year']; ?></td>
+																	<td align="left">&nbsp;<?php echo $rs['group_name']; ?></td>
+																	<td align="left">&nbsp;<?php echo $rs['degree_name']; ?></td>
+																	<td align="left">&nbsp;<?php echo $rs['grade_name']; ?></td>
+																	<td><?php //echo $rs['session_id'];?></td>
+																	<td align="left"><?php echo $rs['room_name']; ?></td>
+																</tr>
+															<?php } }?>
+															</tbody>
+														</table>
 										    		</td>
 										    	</tr>
 										    	<tr><td>&nbsp;</td></tr>

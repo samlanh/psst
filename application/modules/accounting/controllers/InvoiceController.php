@@ -35,6 +35,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 			$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		}catch (Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view->search=$search;
@@ -90,7 +91,6 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$this->view->all_grade =  $_db->getAllMajor();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);

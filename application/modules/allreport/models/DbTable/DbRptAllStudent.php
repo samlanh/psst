@@ -1525,16 +1525,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				g.branch_id,
 				(SELECT $branch FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
 				g.academic_year,
-				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic_year_name,
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gds.academic_year LIMIT 1) AS academic_year_name,
 				g.session,
 				(SELECT $label FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1) AS `session_name`, 
 				g.grade,
 				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
 				g.degree,
 				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
-				(SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS from_academic,
-				(SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS to_academic,
-				(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS generation,
 				COUNT(gds.stu_id) AS total_stu
 			FROM 
 				`rms_group_detail_student` AS gds,
@@ -1552,32 +1549,18 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(($search['study_status'])>0){
     		$where.=' AND g.is_pass='.$search['study_status'];
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND g.academic_year='.$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND g.academic_year='.$search['academic_year'];
     	}
     	if(!empty($search['degree'])){
     		$where.=' AND g.degree='.$search['degree'];
     	}
-    	if(!empty($search['grade_all'])){
-    		$where.=' AND g.grade='.$search['grade_all'];
+    	if(!empty($search['grade'])){
+    		$where.=' AND g.grade='.$search['grade'];
     	}
     	if(!empty($search['session'])){
     		$where.=' AND g.session='.$search['session'];
     	}
-    	if (!empty($search['allacademicyear'])){
-    		$acad = explode("-", $search['allacademicyear']);
-    		if (!empty($acad)){
-    			$from_year=$acad[0];
-    			$to_year=$acad[1];
-    			if (!empty($from_year)){
-    			$where.=" AND (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$from_year'";
-    			}
-    			if (!empty($from_year)){
-    				$where.=" AND (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$to_year'";
-    			}
-    		}
-    	}
-    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("g.branch_id");
     	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
@@ -1618,67 +1601,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchOne($sql);
     }
-    //for rpt-student-static
-    function getAllYearTuitionfee($limit =null){
-//     	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS name,
-//     	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS years
-    	
-    	
-    	$db = $this->getAdapter();
-    	$sql=" SELECT (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academicyear FROM `rms_tuitionfee` AS t
-			GROUP BY t.academic_year ";
-    	if (!empty($limit)){ // Add new Case For Limit Record on Dashboard
-    		$sql.=" ORDER BY t.academic_year ASC LIMIT $limit ";
-    	}else {
-    		$sql.=" ORDER BY t.academic_year DESC ";
-    	}
-    	return $db->fetchAll($sql);
-    }
-    
-//     public function getStudentInfo($id){
-//     	$db = $this->getAdapter();
-    
-//     	$_db = new Application_Model_DbTable_DbGlobal();
-//     	$lang = $_db->currentlang();
-    
-//     	if($lang==1){// khmer
-//     		$label = "name_kh";
-//     		$village_name = "village_namekh";
-//     		$commune_name = "commune_namekh";
-//     		$district_name = "district_namekh";
-//     		$province = "province_kh_name";
-//     	}else{ // English
-//     		$label = "name_en";
-//     		$village_name = "village_name";
-//     		$commune_name = "commune_name";
-//     		$district_name = "district_name";
-//     		$province = "province_en_name";
-//     	}
-    
-//     	$sql = "SELECT *,
-//     	(SELECT CONCAT(f.from_academic,'-',f.to_academic) FROM rms_tuitionfee AS f WHERE f.id=(SELECT g.academic_year FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AND f.`status`=1 GROUP BY f.from_academic,f.to_academic,f.generation)  AS academic_year,
-//     	(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-//     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-//     	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
-//     	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
-//     	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
-//     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-//     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-//     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
-    		
-//     	(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
-//     	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
-//     	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
-//     	(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title,
-//     	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex
-    	
-//     	FROM rms_student as s
-//     	WHERE s.stu_id =".$id."
-//     	AND s.customer_type=1";
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$sql.=$dbp->getAccessPermission();
-//     	return $db->fetchRow($sql);
-//     }
     
     function getStudenCetificate($search){
     	$db = $this->getAdapter();

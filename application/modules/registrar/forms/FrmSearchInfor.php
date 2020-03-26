@@ -576,20 +576,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$_user_id->setValue($request->getParam("user_id"));
 		
 		
-		$allacademicyear = new Zend_Dojo_Form_Element_FilteringSelect('allacademicyear');
-		$allacademicyear->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
-		$yeartran = $db_yeartran->getAllYearTuitionfee();
-		$opt = array();
-		if(!empty($yeartran))foreach($yeartran AS $row) $opt[$row['academicyear']]=$row['academicyear'];
-		$allacademicyear->setMultiOptions($opt);
-		$allacademicyear->setValue($request->getParam("allacademicyear"));
 		
 		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
 		$is_pass->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
@@ -710,7 +696,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
-					$allacademicyear,
 					$_sortby,
 					$_exam_type,
 					$_for_semester,

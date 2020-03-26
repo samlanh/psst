@@ -172,13 +172,15 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false',
 				));
-		$opt_session = array(
-				1=>$tr->translate('MORNING'),
-				2=>$tr->translate('AFTERNOON'),
-				3=>$tr->translate('EVERNING'),
-				4=>$tr->translate('WEEKEND'),
-		);
-		
+// 		$opt_session = array(
+// 				1=>$tr->translate('MORNING'),
+// 				2=>$tr->translate('AFTERNOON'),
+// 				3=>$tr->translate('EVERNING'),
+// 				4=>$tr->translate('WEEKEND'),
+// 		);
+		$opt_sesion=$_dbgb->getSession();
+		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
+		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$session->setMultiOptions($opt_session);
 		$session->setAttribs(array(
 				'dojoType'=>$this->filter,

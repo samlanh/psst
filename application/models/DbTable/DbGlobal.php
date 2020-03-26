@@ -2832,6 +2832,9 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($data['grade'])){
   		$sql.=" AND g.grade = ".$data['grade'];
   	}
+  	if (!empty($data['academic_year'])){
+  		$sql.=" AND g.academic_year = ".$data['academic_year'];
+  	}
   	$sql.= $this->getAccessPermission('g.branch_id');
   	$sql.=" ORDER BY `g`.`id` DESC ";
   	return $db->fetchAll($sql);

@@ -24,13 +24,13 @@ display: table-cell !important;
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("title");?>
+                   		<?php echo $frm->getElement("adv_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                     	<?php echo $frm->getElement("branch_id");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<input id="study_year" />
+                    	<?php echo $frm->getElement("academic_year");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input id="group" />
@@ -39,7 +39,7 @@ display: table-cell !important;
                     	<?php echo $frm->getElement("degree");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<input id="grade_all" />
+                    	<input id="grade" />
                    </div>
              </div>
              <div class="form-group">
@@ -53,20 +53,11 @@ display: table-cell !important;
                     	<?php echo $frm->getElement("end_date");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<select name="stu_type" id="stu_type" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
-							<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>><?php echo $tr->translate("ALL_STUDENT");?></option>
-							<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("OLD_STUDENTS");?></option>
-							<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("NEW_STUDENT");?></option>
-						</select>
-                    </div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-                    	<select name="stu_status" id="stu_status" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
-							<option value="-1"><?php echo $tr->translate("STATUS");?></option>
-							<?php if(!empty($this->status)){foreach($this->status as $row){?>
-								<option value="<?php echo $row['id']?>" <?php if($this->search['stu_status']==$row['id']){echo 'selected="selected"';}?>><?php echo $row['name']?></option>
-							<?php }}?>
-						</select>
-                    </div>
+                    	<?php echo $frm->getElement("stu_type");?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("study_type");?>
+                   </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
@@ -645,22 +636,8 @@ display: table-cell !important;
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
-var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: academic_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "study_year",
-		name: "study_year",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-		onChange: function() {  
-			academic_year = dijit.byId('study_year').get('value');
-		}
-	}, "study_year");
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -680,54 +657,28 @@ dojo.ready(function(){
 		queryExpr: "*${0}*",
 		autoComplete: false,                     
 		required: false,                        
-		id: "grade_all",
-		name: "grade_all",  
+		id: "grade",
+		name: "grade",  
 		class: 'fullside',  
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
-
+			 getAllGroupByBranch();
 		}
-	}, "grade_all");
-	getallGrade();
+	}, "grade");
 	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
     });
-	 getAllAcademicByBranch();
+	 var academic_year = dijit.byId('academic_year');
+	 academic_year.on('change', function(evt) {
+		 getAllGroupByBranch();
+    });
 	 getAllGroupByBranch();
+	 getallGrade();
 });
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-var oldBranch = "<?php echo $this->search['branch_id']?>";
-function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
-			
-		}
-	});
-}
-url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
+var oldBranch = '<?php echo $this->search['branch_id']?>'
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -737,10 +688,17 @@ function getAllGroupByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){degree ="";}
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){grade ="";}
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){academic_year ="";}
+	
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'degree':degree,'grade':grade,'academic_year':academic_year,'noaddnew':1,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -751,31 +709,31 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			
 		}
 	});
 }
 
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getallGrade(){
+	getAllGroupByBranch();  
 	dept_id = dijit.byId('degree').get('value');
-	if(dept_id==''){return false;}
-	dojo.xhrPost({
-		url:url_dept,
-		content:{
-			'dept_id':dept_id,
-			'noaddnew':1,
+	if(dept_id=='' || dept_id==-1){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('grade').attr('value','');
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store); 
+			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
 			},
-		handleAs:"json",
-		load: function(data) {
-			grade_store  = getDataStorefromJSON('id','name', data);
-			dijit.byId('grade_all').set('store',grade_store);   
-			dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
-		},
-		error: function(err) {
-		}
-	});
+			error: function(err) {
+			}
+		});
 }
 
 	

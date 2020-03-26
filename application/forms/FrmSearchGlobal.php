@@ -170,6 +170,35 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_status_search->setMultiOptions($_status_opt);
 		$_status_search->setValue($request->getParam("status"));
 		
+		$_stu_type=  new Zend_Dojo_Form_Element_FilteringSelect('stu_type');
+		$_stu_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_stu_opt = array(
+				-1=>$this->tr->translate("ALL_STUDENT"),
+				0=>$this->tr->translate("OLD_STUDENTS"),
+				1=>$this->tr->translate("NEW_STUDENT"));
+		$_stu_type->setMultiOptions($_stu_opt);
+		$_stu_type->setValue($request->getParam("stu_type"));
+		$_study_type=  new Zend_Dojo_Form_Element_FilteringSelect('study_type');
+		$_study_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		
+		
+		$optRs=$_dbgb->getViewById(5);
+		$opt_study_type = array(''=>$this->tr->translate("STUDENT_TYPE"));
+		if(!empty($optRs))foreach ($optRs As $rs)$opt_study_type[$rs['key_code']]=$rs['view_name'];
+		$_study_type->setMultiOptions($opt_study_type);
+		$_study_type->setValue($request->getParam("study_type"));
+		
+		$study_status = new Zend_Dojo_Form_Element_FilteringSelect('study_status');
+		$study_status->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$study_option = $_dbgb->getViewById(9,1);
+		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
+		$study_status->setMultiOptions($study_option);
+		
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
 		$userinfo = $_dbgb->getUserInfo();
 		$optionUser = $_dbgb->getAllUser();
@@ -205,7 +234,10 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_enddate,
 				$_status_search,
 				$_user_id,
-				$_room
+				$_room,
+				$_stu_type,
+				$_study_type,
+				$study_status
 				)
 			);
 		return $this;

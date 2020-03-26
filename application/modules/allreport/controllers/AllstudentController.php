@@ -55,31 +55,30 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-				'title' 		=>'',
+				'adv_search' 		=>'',
 				'branch_id'		=>0,
 				'degree'		=>0,
-				'study_year' 	=>'',
-				'grade_all' 	=>'',
+				'academic_year' 	=>'',
+				'grade' 	=>'',
 				'session' 		=>'',
 				'group'			=>'',
 				'stu_type'		=>-1,
-				'stu_status'	=>-1,
+				'study_type'	=>"",
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
 		
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$rs_rows = $group->getAllStudent($search);
 		$this->view->rs = $rs_rows;
-		$this->view->status = $group->getAllStatus();
-		
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 		$this->view->search=$search;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
@@ -91,11 +90,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 		=>'',
+					'adv_search' 		=>'',
 					'branch_id'		=>0,
 					'degree'		=>0,
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
+					'academic_year' 	=>'',
+					'grade' 	=>'',
 					'session' 		=>'',
 					'group'			=>'',
 					'stu_type'=>'',
@@ -103,16 +102,16 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'end_date'		=> date('Y-m-d'),
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$rs_rows = $group->getAllStudentpro($search);
 		$this->view->rs = $rs_rows;
-	
 		$this->view->search=$search;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	public function rptAllStudentOldAction(){
 		if($this->getRequest()->isPost()){
@@ -146,9 +145,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 		=>'',
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
+					'adv_search' 		=>'',
+					'academic_year' 	=>'',
+					'grade' 	=>'',
 					'session' 		=>'',
 					'branch_id'		=>0,
 					'group'			=>'',
@@ -158,14 +157,15 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'end_date'		=> date('Y-m-d'),
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs =  $group->getAllAmountStudent($search);
 		$this->view->search=$search;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
@@ -337,10 +337,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search = array(
-					'title' 		=> "",
+					'adv_search' 		=> "",
 					'group' 		=> "",
 					'branch_id' 	=> "",
-					'study_year'	=> "",
+					'academic_year'	=> "",
 					'grade' 		=> "",
 					'session' 		=> "",
 					'teacher' 		=> "",
@@ -351,20 +351,21 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$this->view->rs = $db->getGroupDetail($search);
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
 		
 		$_db = new Global_Model_DbTable_DbGroup();
 		$teacher = $_db->getAllTeacher();
 		$this->view->teacher = $teacher;
 		
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		
-		$this->view->search = $search;
 	}
 	public function rptgroupstudentchangegroupAction()
 	{

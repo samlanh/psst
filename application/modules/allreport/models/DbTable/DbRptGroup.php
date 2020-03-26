@@ -213,9 +213,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   				 group_code != '' ";
 	   	
 	   	$where=" ";
-	   	if(!empty($search['title'])){
+	   	if(!empty($search['adv_search'])){
 	   		$s_where = array();
-	   		$s_search = addslashes(trim($search['title']));
+	   		$s_search = addslashes(trim($search['adv_search']));
 	   		$s_where[] = " `g`.`group_code` LIKE '%{$s_search}%'";
 	   		$s_where[] = " 	`g`.`semester` LIKE '%{$s_search}%'";
 	   		$s_where[] = "  (SELECT	name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = g.session LIMIT 1) LIKE '%{$s_search}%'";
@@ -225,8 +225,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	if(!empty($search['branch_id'])){
 	   		$where.=' AND g.branch_id='.$search['branch_id'];
 	   	}
-	   	if(!empty($search['study_year'])){
-	   		$where.=' AND g.academic_year='.$search['study_year'];
+	   	if(!empty($search['academic_year'])){
+	   		$where.=' AND g.academic_year='.$search['academic_year'];
 	   	}
 	   	if(!empty($search['teacher'])){
 	   		$where.=' AND g.teacher_id='.$search['teacher'];

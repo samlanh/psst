@@ -8,7 +8,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
 	}
-	public function getAllStudent($search){
+	public function getAllStudentFronDesk($search){//getAllStudent($search){
 		$curr = new Application_Model_DbTable_DbGlobal();
 		$lang= $curr->currentlang();
 		$_db = $this->getAdapter();
@@ -21,31 +21,33 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$field = 'name_kh';
 					$colunmname='title';
 				}
-				$sql = "SELECT  s.stu_id,
-				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.stu_code,s.stu_khname,s.stu_enname,s.last_name,s.group_id,
-				s.is_subspend,
-				(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
-    			(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
-    			
-				(SELECT $field from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
-				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
-				tel ,
-				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
-				(SELECT group_code FROM `rms_group` WHERE rms_group.id=s.group_id LIMIT 1) AS group_name,
-				
-			  (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree,
-			  (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade,
-			 
-				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
-				s.sex as sexcode,
-				status,
-				photo
-				FROM rms_student AS s  WHERE  s.status = 1 AND s.customer_type = 1";
-// 				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status,
-		$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
+				//(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
+// 				(SELECT $field FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+// 				(SELECT $field FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+// 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+// 				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
+// 				(SELECT $field FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
+				$sql ="SELECT  s.stu_id,
+							s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
+							CASE
+								WHEN primary_phone = 1 THEN s.tel
+								WHEN primary_phone = 2 THEN s.father_phone
+								WHEN primary_phone = 3 THEN s.mother_phone
+								ELSE s.guardian_tel
+							END as tel,
+							s.is_subspend,
+							s.sex as sexcode,
+							s.status,
+							photo,
+							(SELECT $field from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
+							(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
+						    (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
+						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
+						    ds.group_id,
+						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
+						FROM rms_student AS s,rms_group_detail_student AS ds
+						  WHERE  ds.is_maingrade=1 AND s.stu_id=ds.stu_id AND s.status = 1 AND s.customer_type = 1";
+			$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);
 		}
@@ -62,40 +64,30 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(father_enname,' ','')  LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(mother_enname,' ','')  LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(guardian_enname,' ','')LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(remark,' ','')  		LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
-			
-			//$s_where[]="(SELECT	rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
-			//$s_where[]="(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		if(!empty($search['study_year'])){
-			$where.=" AND s.academic_year=".$search['study_year'];
+			$where.=" AND ds.academic_year=".$search['study_year'];
 		}
 		if(!empty($search['group'])){
-			$where.=" AND s.group_id=".$search['group'];
+			$where.=" AND ds.group_id=".$search['group'];
 		}
 		if(!empty($search['degree'])){
-			$where.=" AND s.degree=".$search['degree'];
+			$where.=" AND ds.degree=".$search['degree'];
 		}
 		if(!empty($search['grade_all'])){
-			$where.=" AND s.grade=".$search['grade_all'];
+			$where.=" AND ds.grade=".$search['grade_all'];
 		}
 		if(!empty($search['session'])){
-			$where.=" AND s.session=".$search['session'];
-		}
-		if(!empty($search['time'])){
-			$where.=" AND sp.time=".$search['time'];
+			$where.=" AND ds.session=".$search['session'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
@@ -135,7 +127,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
  				(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
     			(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
-    			
     			(SELECT $view FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
     			(SELECT $view FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
     			(SELECT $view FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
@@ -145,15 +136,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		    	(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 		    	(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
 				(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
-				
-				(SELECT CONCAT(g.group_code,' ',
-				(SELECT (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation))  AS NAME 
-				 FROM rms_group AS g WHERE g.id=s.group_id )  AS group_name,
-				 
-				 (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')')AS years FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year GROUP BY from_academic,to_academic,generation,TIME ) AS year_name,
-				 
-				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree_name,
-			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+				(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
+				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS year_name,
+				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
+			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			  
 				 (SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1 ) AS room_name,
 				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
@@ -162,7 +148,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				 (SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
 				 (SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 				  
-				FROM rms_student as s WHERE 1 AND s.stu_id=$stu_id";
+				FROM 
+					rms_student as s,
+					rms_group_detail_student AS ds
+ 			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();

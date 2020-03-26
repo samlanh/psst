@@ -148,9 +148,9 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group">
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("session");?>
-                   </div>
+<!--                    <div class="col-md-2 col-sm-2 col-xs-12"> -->
+                   		<?php //echo $frm->getElement("session");?>
+<!--                    </div> -->
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("start_date");?>
                    </div>
@@ -240,15 +240,15 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
                        		<h4 class="blue m-b-5"><?php echo $rs['stu_code'];?>&nbsp;</h4>
                        		<h4 class="m-b-5"><?php echo $rs['stu_khname'];?>&nbsp;</h4>
                        		<h4 class="m-b-5"><?php echo $rs['last_name']." ".$rs['stu_enname'];?>&nbsp;</h4>
-                            <p class="text-muted"><span><?php echo $rs['academic'];?>&nbsp;</span></p>
+                            <p class="text-muted"><span><?php echo $rs['academic_year'];?>&nbsp;</span></p>
                        </div>
                        <p class="text-muted info-list font-13">
-                       		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" title="<?php echo $rs['group_name'];?>"><?php echo $rs['group_name'];?></span><br />
-                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" title="<?php echo $rs['degree'];?>"><?php echo $rs['degree'];?></span> <br />
-                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" title="<?php echo $rs['grade'];?>"><?php echo $rs['grade'];?></span><br />
-                            <span class="title-info"><?php echo $tr->translate('SESSION');?></span> : <span class="inf-value" title="<?php echo $rs['session'];?>"><?php echo $rs['session'];?></span><br />
-                            <span class="title-info"><?php echo $tr->translate('ROOM');?></span> : <span class="inf-value" title="<?php echo $rs['room'];?>"><?php echo $rs['room'];?></span><br />
-                            <span class="title-info"><?php echo $tr->translate('TEL');?></span> : <span class="inf-value" title="<?php echo $rs['tel'];?>"><?php echo $rs['tel'];?></span>
+                       		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" ><?php echo !empty($rs['group_name'])?$rs['group_name']:"N/A";?></span><br />
+                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" ><?php echo $rs['degree'];?></span> <br />
+                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" ><?php echo $rs['grade'];?></span><br />
+                            <!-- <span class="title-info"><?php //echo $tr->translate('SESSION');?></span> : <span class="inf-value" ><?php //echo $rs['session'];?></span><br />
+                            <span class="title-info"><?php //echo $tr->translate('ROOM');?></span> : <span class="inf-value" ><?php //echo $rs['room'];?></span><br />-->
+                            <span class="title-info"><?php echo $tr->translate('TEL');?></span> : <span class="inf-value" ><?php echo $rs['tel'];?></span>
                         </p>
                      </div>
                       <a class="btn btn-default btn-detail btn-sm m-t-10" href="<?php echo $this->baseUrl()."/home/searchstudentinfo/student-detail/id/".$rs['stu_id'];?>"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $tr->translate('VIEW_DETAIL');?></a>

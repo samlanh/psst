@@ -44,7 +44,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		));
 		$study_year->setValue($request->getParam("study_year"));
 		$db_years=new Registrar_Model_DbTable_DbRegister();
-		$years=$db_years->getAllYears($type);
+		$years=$_dbgb->getAllAcademicYear();
 		$opt = array(''=>$this->tr->translate("SELECT_YEAR"));
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['name'];
 		$study_year->setMultiOptions($opt);

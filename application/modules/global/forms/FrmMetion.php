@@ -45,7 +45,7 @@ class Global_Form_FrmMetion extends Zend_Dojo_Form
     			'style'=>'font-family: inherit;  min-height:100px !important; max-width:99%;'));
     	
     	$_typopt = array(""=>$this->tr->translate("PLEASE_SELECT"));
-    	$academic = $_dbgb->getAllYear(1);
+    	$academic = $_dbgb->getAllAcademicYear();
     	if(!empty($academic))foreach($academic AS $row) $_typopt[$row['id']]=$this->tr->translate(strtoupper($row['name']));
     	$_academic = new Zend_Dojo_Form_Element_FilteringSelect("academic_year");
     	$_academic->setMultiOptions($_typopt);

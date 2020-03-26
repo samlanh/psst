@@ -2775,7 +2775,10 @@ function getAllgroupStudyNotPass($action=null){
 		  		WHERE status = 1 ORDER by toYear DESC ";
   		$result =  $db->fetchAll($sql);
   		if($option!=null){
-	  		$options=array();
+  			$request=Zend_Controller_Front::getInstance()->getRequest();
+  			if($request->getActionName()=='index' OR $request->getModuleName()=='allreport'){
+  				$options = array(-1=>$this->tr->translate("SELECT_TYPE"));
+  			}
 	  		if(!empty($result))foreach($result AS $row){
 	  			$options[$row['id']]=$row['name'];
 	  		}

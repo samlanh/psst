@@ -143,7 +143,6 @@ class Home_CrmController extends Zend_Controller_Action
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				 
 				$row = $db->addCrmContactHistory($_data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
 			}catch(Exception $e){

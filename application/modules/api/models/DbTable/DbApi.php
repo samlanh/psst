@@ -1168,7 +1168,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		s.`id`,
 	    		g.`group_code` AS groupCode,
 	    		s.for_academic_year AS forAcademicYearId,
-    			
 	    		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academicYear,
 	    		(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle,
 	    		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle,
@@ -1194,20 +1193,20 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			s.id DESC ";
     
     		$row = $db->fetchAll($sql);
-    		$result = array(
-    		'status' =>true,
-    		'value' =>$row,
+	    		$result = array(
+	    		'status' =>true,
+	    		'value' =>$row,
     		);
     		return $result;
     	}catch(Exception $e){
-    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	$result = array(
-    	'status' =>false,
-    	'value' =>$e->getMessage(),
-    	);
-    	return $result;
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		    	$result = array(
+		    	'status' =>false,
+		    	'value' =>$e->getMessage(),
+    		);
+    		return $result;
     	}
-    	}
+    }
     	public function getAllNotification($search){
     		$db = $this->getAdapter();
     		try{
@@ -1230,7 +1229,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			);
 	    			return $result;
     			}
-    		}
+    	}
 //     public function getMainScore($search){
 //     	$db = $this->getAdapter();
 //     	try{

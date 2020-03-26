@@ -99,6 +99,7 @@
     }
 	public function AddCRM($_data){
 		$_db= $this->getAdapter();
+		$_db->beginTransaction();
 		try{
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$prev = "";
@@ -156,13 +157,10 @@
 							'last_name'=> $_data['last_name_'.$i],
 							'sex'=> $_data['gender_'.$i],
 							'tel'=> $_data['tel_'.$i],
-							'degree'=> $_data['degree_'.$i],//May Not User
-							'grade'=> $_data['grade_'.$i],//May Not User
 							'crm_degree'=> $_data['degree_'.$i],
 							'crm_grade'=> $_data['grade_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
-							
 							'guardian_khname' => $_data['kh_name'],
 							'guardian_first_name'=> $_data['first_name'],
 							'guardian_enname'=> $_data['last_name'],
@@ -174,16 +172,18 @@
 					$this->insert($array);
 				}
 			}
+			$_db->commit();
 			return $id;	
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	
 	public function updateCrm($_data){
 		$_db= $this->getAdapter();
+		$_db->beginTransaction();
 		try{
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$prev = "";
@@ -266,8 +266,6 @@
 							'last_name'=> $_data['last_name_'.$i],
 							'sex'=> $_data['gender_'.$i],
 							'tel'=> $_data['tel_'.$i],
-// 							'degree'=> $_data['degree_'.$i],//May Not User
-// 							'grade'=> $_data['grade_'.$i],//May Not User
 							'crm_degree'=> $_data['degree_'.$i],
 							'crm_grade'=> $_data['grade_'.$i],
 							'age'=> $_data['age_'.$i],
@@ -292,8 +290,6 @@
 							'last_name'=> $_data['last_name_'.$i],
 							'sex'=> $_data['gender_'.$i],
 							'tel'=> $_data['tel_'.$i],
-							'degree'=> $_data['degree_'.$i],//May Not User
-							'grade'=> $_data['grade_'.$i],//May Not User
 							'crm_degree'=> $_data['degree_'.$i],
 							'crm_grade'=> $_data['grade_'.$i],
 							'age'=> $_data['age_'.$i],
@@ -310,11 +306,12 @@
 					}
 				}
 			}
+			$_db->commit();
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	public function getCRMById($id){
@@ -367,14 +364,6 @@
 		return $db->fetchAll($sql);
 	}
 	
-// 	public function getCRMById($id){
-// 		$db = $this->getAdapter();
-// 		$sql="SELECT st.*	FROM `rms_student_test` AS st WHERE st.id = $id AND st.is_makestudenttest = 0 ";
-// 		$dbp = new Application_Model_DbTable_DbGlobal();
-// 		$sql.=$dbp->getAccessPermission('st.branch_id');
-// 		return $db->fetchRow($sql);
-// 	}
-	
 	public function AllHistoryContact($crm_id){
 		$db = $this->getAdapter();
 		$sql="SELECT c.*,
@@ -390,8 +379,8 @@
 	}
 	public function addCrmContactHistory($_data){
 		$_db= $this->getAdapter();
+		$_db->beginTransaction();
 		try{
-	
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$prev = "";
 			if (!empty($_data['feedback_type'])){
@@ -440,12 +429,12 @@
 			$this->_name = "rms_crm";
 			$where="id=".$_data['id'];
 			$this->update($_arr, $where);
-			
+			$_db->commit();
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	

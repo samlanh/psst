@@ -193,7 +193,7 @@ table.history-record tbody tr td {
 						</div>
 	                 </div>
 	               <div class="form-group">
-		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
 							<tr id="head-title" class="head-td" align="right" style="white-space:nowrap;"></tr>
 						</table>
 						<input type="hidden" name="identity" id="identity"  />
@@ -311,7 +311,7 @@ dojo.ready(function(){
 	initailize();
 });
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
-function getAllGrade(){
+function getAllGrade(grade_id=0){
 	dijit.byId('grade').set('value',''); 
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id==''){
@@ -325,7 +325,10 @@ function getAllGrade(){
 		handleAs:"json",
 		load: function(data){
 			grade_store  = getDataStorefromJSON('id','name', data);
-			dijit.byId('grade').set('store',grade_store);  
+			dijit.byId('grade').set('store',grade_store);
+			if(grade_id>0){
+				grade = dijit.byId('grade').attr("value",grade_id);  
+			}
 		},
 		error: function(err){
 		}
@@ -484,7 +487,8 @@ function editStudent(index) {
 	dijit.byId("age_stu").attr("value",age);
 	dijit.byId("tel_stu").attr("value",tel);
 	dijit.byId("degree").attr("value",degree);
-	dijit.byId("grade").attr("value",grade);
+	getAllGrade(grade);
+	//dijit.byId("grade").attr("value",grade);
 }
 
 </script>

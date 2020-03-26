@@ -12,7 +12,6 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 		try{
 			$param = $this->getRequest()->getParams();
 			if(isset($param['search'])){
-// 			if(!empty($param['adv_search'])){
 				$search=$param;
 			}
 			else{
@@ -29,7 +28,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			}
 			$this->view->adv_search=$search;
 			$db_student= new Home_Model_DbTable_DbStudent();
-			$rs_rows = $db_student->getAllStudent($search);
+			$rs_rows = $db_student->getAllStudentFronDesk($search);
 			$this->view->rowdata = $rs_rows;
 			$this->view->list ="";
 			
@@ -66,12 +65,6 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 				$this->view->previousPage = $currentPage-1;
 			}
 			
-// 			$list = new Application_Form_Frmtable();
-// 			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
-// 			$link=array(
-// 					'module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail',
-// 			);
-// 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -104,7 +97,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
-		    $id= $this->getRequest()->getParam('id');
+		    $id = $this->getRequest()->getParam('id');
 			$this->view->adv_search=$search;
 			$student = $db->getStudentById($id);
 			$this->view->rs =$student;

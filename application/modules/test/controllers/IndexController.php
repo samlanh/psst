@@ -145,7 +145,7 @@ class Test_IndexController extends Zend_Controller_Action
     	}
     }
     function createtestexamAction(){
-    	$id = $this->getRequest()->getParam("id");
+    	
     	$type = $this->getRequest()->getParam("type");
     	if ($type!=1 AND $type!=2 AND $type!=3){ // check it again with branch that has schooloption
     		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
@@ -165,7 +165,7 @@ class Test_IndexController extends Zend_Controller_Action
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     		}
     	}
-    	
+    	$id = $this->getRequest()->getParam("id");
     	$db = new Test_Model_DbTable_DbStudentTest();
     	$row  = $db->getStudentTestById($id);
     	$this->view->rs = $row;

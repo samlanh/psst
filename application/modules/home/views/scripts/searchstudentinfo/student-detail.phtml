@@ -209,16 +209,18 @@ label.title {
 										    			<label class="title">ឆ្នាំសិក្សា </label> : <label class="value"><?php echo $this->rs['year_name'];?></label> <label class="title">កម្រិតសិក្សា</label> : <label class="value"><?php echo $this->rs['degree_name'];?></label> <label class="title">ថ្នាក់សិក្សា</label> : <label class="value"><?php echo $this->rs['grade_name'];?></label>
 										    			</p>
 										    			<p class="padding-left">
-										    			<label class="title">វេនសិក្សា </label> : <label class="value"><?php if($this->rs['session']==1){
-												    					echo $tr->translate("MORNING");
-															   		  }elseif ($this->rs['session']==2){
-															   		  		echo $tr->translate("AFTERNOON");
-															   		  } elseif ($this->rs['session']==3){
-															   		  		echo $tr->translate("EVERNING");
-															   		  } else{
-															   		  		echo $tr->translate("WEEKEND");
-															   		  }
-															   	 ?>   	 </label> <label class="title">បន្ទប់សិក្សា</label> : <label class="value"><?php echo $this->rs['room_name'];?></label> 
+										    			<label class="title">វេនសិក្សា </label> : <label class="value">
+										    				<?php 
+// 										    					if($this->rs['session']==1){
+// 											    					echo $tr->translate("MORNING");
+// 														   		  }elseif ($this->rs['session']==2){
+// 														   		  		echo $tr->translate("AFTERNOON");
+// 														   		  } elseif ($this->rs['session']==3){
+// 														   		  		echo $tr->translate("EVERNING");
+// 														   		  } else{
+// 														   		  		echo $tr->translate("WEEKEND");
+// 														   		  }
+															 ?>   	 </label> <label class="title">បន្ទប់សិក្សា</label> : <label class="value"><?php echo $this->rs['room_name'];?></label> 
 										    			</p>
 										    			<p class="padding-left">
 										    			<label class="title">ផ្សេងៗ  </label> : <label class="value"><?php echo $this->rs['remark'];?></label>

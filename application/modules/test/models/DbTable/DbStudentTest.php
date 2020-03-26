@@ -444,13 +444,12 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function insertTestExam($data,$type=null){
 		$db=$this->getAdapter();
+		$db->beginTransaction();
 		try{
 			$array = array(
 				'stu_test_id'	=> $data['stu_test_id'],
 				'test_type'		=> $type,//General English
-				'academic_year'	=> $data['academic_year'],
-				'degree'	    => $data['degree'],
-				'grade'	        => $data['grade'],
+// 				'academic_year'	=> $data['academic_year'],
 				'study_term'    => $data['term_test'],
 				'test_date'		=> $data['test_date'],
 				'note'		    => $data['note'],
@@ -469,16 +468,16 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['result_by']=$this->getUserId();
 			}
 			
-			if(!empty($data['stu_test_id'])){
-				$array1 = array(
-						'degree'	=>$data['degree_result'],
-						'grade'		=>$data['grade_result'],
-				);
-				$stu_code = $data['stu_test_id'];
-				$where = "stu_id = ".$stu_code;
-				$this->_name='rms_student';
-				$this->update($array1,$where);
-			}
+// 			if(!empty($data['stu_test_id'])){
+// 				$array1 = array(
+// 						'degree'	=>$data['degree_result'],
+// 						'grade'		=>$data['grade_result'],
+// 				);
+// 				$stu_code = $data['stu_test_id'];
+// 				$where = "stu_id = ".$stu_code;
+// 				$this->_name='rms_student';
+// 				$this->update($array1,$where);
+// 			}
 			
 			if (!empty($data['id'])){
 				$id = $data['id'];
@@ -545,10 +544,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			$db->commit();
 			return $id;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 			echo $e->getMessage();
+			$db->rollBack();
 		}
 	}
 	

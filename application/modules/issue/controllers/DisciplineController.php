@@ -2,7 +2,6 @@
 class Issue_DisciplineController extends Zend_Controller_Action {
     public function init()
     {    	
-     /* Initialize action controller here */
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -10,19 +9,19 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 	public function indexAction(){
 		try{
 			$db = new Issue_Model_DbTable_DbStudentdiscipline();
-			
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
 			else{
 				$search = array(
-						'branch_id' => '',
-						'group_name' => '',
-						'study_year'=> '',
-						'grade'=> '',
-						'session'=> '',
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'));
+					'branch_id' => '',
+					'group_name' => '',
+					'study_year'=> '',
+					'grade'=> '',
+					'session'=> '',
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d')
+				);
 			}
 			
 			$this->view->search=$search;

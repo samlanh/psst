@@ -20,21 +20,19 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     		$branch = "branch_namekh";
     	}
     	$sql="SELECT sa.`id`,
-	    	(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = sa.branch_id LIMIT 1) AS branch_name,
-	    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS group_name,
-	    	(SELECT (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS academy,
-	    	(SELECT (SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS degree,
-	    	(SELECT (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS grade,
-	    	(SELECT g.semester FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS semester,
-	    	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
-	    	(SELECT
-	    	(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
-	    	sa.`date_attendence`,
-    		(SELECT CONCAT(COALESCE(last_name,''),' ',COALESCE(first_name,'-')) FROM rms_users WHERE sa.user_id=rms_users.id LIMIT 1 ) AS user_name
-    	";
+			    	(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = sa.branch_id LIMIT 1) AS branch_name,
+			    	g.group_code AS group_name,
+			    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
+			    	(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1)  AS degree,
+			    	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 ) AS grade,
+			    	(SELECT g.semester FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS semester,
+			    	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS room,
+			    	(SELECT`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS session,
+			    	sa.`date_attendence`,
+		    		(SELECT first_name FROM rms_users WHERE sa.user_id=rms_users.id LIMIT 1 ) AS user_name ";
     	$sql.=$dbp->caseStatusShowImage("sa.`status`");
-    	$sql.=" FROM `rms_student_attendence` AS sa ";
-    	$where =' WHERE sa.`type` = 1 ';
+    	$sql.=" FROM `rms_student_attendence` AS sa,rms_group as g ";
+    	$where =' WHERE g.id=sa.group_id ANd sa.`type` = 1 ';
     	$from_date =(empty($search['start_date']))? '1': " sa.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sa.date_attendence <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
@@ -45,19 +43,18 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     		$where.= " AND sa.`group_id` =".$search['group'];
     	}
     	if(!empty($search['study_year'])){
-    		$where.=" AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) =".$search['study_year'];
+    		$where.=" AND  g.academic_year =".$search['study_year'];
     	}
     	if(!empty($search['grade'])){
-    		$where.=" AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1)=".$search['grade'];
+    		$where.=" AND g.grade =".$search['grade'];
     	}
     	if(!empty($search['session'])){
-    		$where.=" AND (SELECT  `g`.`session` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1)=".$search['session'];
+    		$where.=" AND `g`.`session` =".$search['session'];
     	}
    		if(!empty($search['room'])){
-			$where.=" AND (select `g`.`room_id` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1 )=".$search['room'];
+			$where.=" AND `g`.`room_id` =".$search['room'];
 		}
     	$order=" ORDER BY id DESC ";
-    	
     	$where.=$dbp->getAccessPermission('sa.branch_id');
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -254,16 +251,8 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	function getAllgroupStudy(){
-		$db = $this->getAdapter();
-		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name 
-		FROM 
-			`rms_group` AS `g` 
-			WHERE 
-			g.status=1 
-			AND g.is_pass!=1
-			ORDER BY group_code ASC,g.degree ASC ";
-		return $db->fetchAll($sql);
+		$db = new Issue_Model_DbTable_DbStudentAttendanceOne();
+		return $db->getAllgroupStudy();
 	}
 	function getAttendeceStatus($att_id , $stu_id){
 		$db = $this->getAdapter();

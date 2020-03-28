@@ -484,12 +484,15 @@ function getInfoBygroup(type=null){
 			
 			dijit.byId('grade').set('value',data.grade);
 			dijit.byId('grade').set('readOnly',true);
-			
-			dijit.byId('session').set('value',data.session);
-			dijit.byId('session').set('readOnly',true);
-			
-			dijit.byId('room').set('value',data.room_id);
-			//dijit.byId('room').set('readOnly',true);
+
+			if(data.session>0){
+				dijit.byId('session').set('value',data.session);
+				dijit.byId('session').set('readOnly',true);
+			}
+			if(data.room_id>0){
+				dijit.byId('room').set('value',data.room_id);
+				dijit.byId('room').set('readOnly',true);
+			}
 			filterStudentBygroup(type);
 
 			if(data.degree==2){

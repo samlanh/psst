@@ -343,7 +343,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 function getAllgroupStudy($teacher_id=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
+   			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
    		FROM `rms_group` AS `g` ";
    	if($teacher_id!=null){
    		$sql.=" ,rms_group_subject_detail AS gsd WHERE g.id =gsd.group_id AND gsd.teacher= ".$teacher_id;
@@ -360,10 +360,10 @@ function getAllgroupStu($branch_id=null){
 	$db = $this->getAdapter();
 	$sql ="SELECT 
 				g.id,
-				CONCAT(g.group_code,' ',(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY f.from_academic,f.to_academic,f.generation,f.branch_id limit 1) ) AS name
+				CONCAT(g.group_code,' ',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
 			FROM 
 				rms_group AS g 
-			where 
+			WHERE 
 				branch_id=$branch_id 
 				AND g.status =1 
 				AND group_code!=''

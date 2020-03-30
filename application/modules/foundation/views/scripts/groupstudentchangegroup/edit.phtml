@@ -1,6 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_GROUP_STUDENT_CHANGE_GROUP')); 
+	$frm =  $this->frm;
 ?>
 <div class="card">
 	<div class="card-content collapse show">
@@ -41,6 +42,12 @@
 		                   </label>
 		                </div>
 		                <div class="form-group">
+			                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+			                <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("branch_id");?>
+			                </div>
+			            </div>
+		                <div class="form-group">
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_GROUP");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -58,29 +65,26 @@
 		                </div>
 		                <div class="form-group">
 		                   <div class="col-md-12 col-sm-12 col-xs-12">
-		                   		<label id="lblfromgroup" readonly="readonly" name="detail_from_group" style="background:#fff;height:70px;display:block; font-size: 14px; padding: 10px; border: solid 1px #ccc;"></label>
-		                   </div>
-		                </div>
-						
-						<div class="form-group">
-						   <div class="col-md-9 col-sm-6 col-xs-6"></div>
-						   <div class="col-md-1 col-sm-2 col-xs-2">
-								<strong><?php echo $tr->translate("NOTE")?> :</strong>
-		                   </div>
-		                   <div class="col-md-2 col-sm-10 col-xs-10 right">
-		                   		<input type="checkbox" onclick="return false;" checked ><?php echo $tr->translate("PASS")?> / <?php echo $tr->translate("CHANGE")?>
+		                   		<div  id="lblfromgroup"></div>
 		                   </div>
 		                </div>
 						<div class="form-group">
-							<div class="col-md-6 col-sm-6 col-xs-6"></div>
-		                   <div class="col-md-4 col-sm-10 col-xs-10 right"></div>
-						   <div class="col-md-2 col-sm-2 col-xs-2" style="white-space:nowrap;">
-		                   		<input type="checkbox"  onclick="return false;"> <?php echo $tr->translate("FAIL")?> / <?php echo $tr->translate("NOT_CHANGE")?>
+		                   <div class="col-md-12 col-sm-12 col-xs-12">
+		                   		<strong><?php echo $tr->translate("NOTE")?> :</strong>
+		                   		<br />
+		                   		<ul style="list-style: none;">
+		                   			<li>
+		                   				<span>&#x2611;</span> <?php echo $tr->translate("PASS")?> / <?php echo $tr->translate("CHANGE")?>
+		                   			</li>
+		                   			<li>
+		                   				<span>&#x2610;</span> <?php echo $tr->translate("FAIL")?> / <?php echo $tr->translate("NOT_CHANGE")?>
+		                   			</li>
+		                   		</ul>
 		                   </div>
 		                </div>
 		                <div class="form-group">
 		                   <div id="data_table" style="min-height: 300px !important;overflow-y: auto;border: solid 1px #d0d0d0ee; padding: 5px 10px;" class="col-md-12 col-sm-12 col-xs-12"></div>
-						   <input type="text" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
+						   <input type="hidden" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
 		                </div>
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog">
@@ -106,7 +110,7 @@
 		                </div>
 		                <div class="form-group">
 		                   <div class="col-md-12 col-sm-12 col-xs-12">
-		                   		<label id="lbltogroup" readonly="readonly" name="detail_to_group" style="background:#fff;height:100px;display:block; font-size: 14px;  padding: 5px; border: solid 1px #ccc;"></label>
+		                   		<div  id="lbltogroup"></div>
 		                   </div>
 		                </div>
 		                <div class="form-group">
@@ -167,6 +171,50 @@
     	</div>
     </div>
 </div>
+<style>
+ul.listFor {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    border: solid 1px #02014a;
+    width: 100%;
+    display: block;
+    background: #feffca;
+    border-radius: 5px;
+}
+li.row-value {
+    display: inline-block;
+    width: 50%;
+}
+li.row-value span.title {
+    min-width: 22%;
+    display: inline-block;
+    font-weight: 600;
+    color: #0063a5;
+}
+li.row-value span.value {
+    color: #02014a;
+}
+
+table#table {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    font-size: 12px;
+    background-color: white;
+    width: 99.5%;
+    font-family: 'Times New Roman','Khmer OS Battambang';
+}
+table#table tr.header-row td {
+    background: #02014a;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    padding: 5px 1px;
+}
+table#table tr td {
+    padding: 3px 1px;
+}
+</style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -191,8 +239,8 @@ function getStudentFromGroup(){
 			},
 		handleAs:"json",
 		load: function(respone) {
-			tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table">'
-				+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
+			tem='<table border="1" id="table">'
+				+'<thead><tr align="center" class="header-row"><td><?php echo $tr->translate('NUM');?></td>'
 					+'<td><?php echo $tr->translate('CODE');?></td>'
 					+'<td><?php echo $tr->translate('NAME_KH');?></td>'
 					+'<td><?php echo $tr->translate('NAME_EN');?></td>'
@@ -208,10 +256,10 @@ function getStudentFromGroup(){
 					inx = i+1;
 						tem += '<tr style="border:1px solid #000;">';
 						tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
-						tem += '<td>&nbsp;<label >'+respone[i].stu_code+'</label></td>';
-						tem += '<td>&nbsp;<label >'+respone[i].stu_khname+'</label></td>';
-						tem += '<td>&nbsp;<label >'+respone[i].last_name+" "+respone[i].stu_enname+'</label></td>';
-						tem += '<td colspan="2" align="center">&nbsp;<label >'+respone[i].sex+'</label></td>';
+						tem += '<td>&nbsp;'+respone[i].stu_code+'</td>';
+						tem += '<td>&nbsp;'+respone[i].stu_khname+'</td>';
+						tem += '<td>&nbsp;'+respone[i].last_name+" "+respone[i].stu_enname+'</td>';
+						tem += '<td colspan="2" align="center">&nbsp;'+respone[i].sex+'</td>';
 						tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
 						tem += '</tr>';
 						if($("#identity").val()!="") {
@@ -283,9 +331,24 @@ function toStudentGroup(type){
 		handleAs:"json",
 		load: function(data) {
 			if(type==1){
-				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
+				string='';
+				string+='<ul class="listFor">';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("ACADEMIC_YEAR")?></span> <span class="value">:'+data.year+'</span></li>';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("DEGREE")?></span> <span class="value">:'+data.degree+'</span></li>';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("GRADE")?></span> <span class="value">:'+data.grade+'</span></li>';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("SESSION")?></span> <span class="value">:'+data.session+'</span></li>';
+				string+='</ul>';
+				dojo.byId('lblfromgroup').innerHTML=string;
+				
 			}else{
-				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
+				string='';
+				string+='<ul class="listFor">';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("ACADEMIC_YEAR")?></span> <span class="value">:'+data.year+'</span></li>';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("DEGREE")?></span> <span class="value">:'+data.degree+'</span></li>';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("GRADE")?></span> <span class="value">:'+data.grade+'</span></li>';
+					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("SESSION")?></span> <span class="value">:'+data.session+'</span></li>';
+				string+='</ul>';
+				dojo.byId('lbltogroup').innerHTML=string;
 			}
 			if(type==1){
 				dijit.byId('identity').attr('value','');

@@ -137,7 +137,6 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				$stuInfo = $dbstu->getStudentStudyInfo($_data['studentid']);
 				if (!empty($stuInfo)){
 					$stu_id = $stuInfo['stu_id'];
-					
 					$_arr= array(
 							'branch_id'=>$_data['branch_id'],
 							'study_id'	=>$_data['studentid'],

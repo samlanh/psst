@@ -25,7 +25,6 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$list = new Application_Form_Frmtable();
 			
 			
-			
 			$collumns = array("BRANCH","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit',
@@ -60,17 +59,10 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			}
 		}
 		
-		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-		$this->view->row = $add =$db->getfromGroup();
-		$this->view->rs = $add =$db->gettoGroup();
-		
-		$this->view->change_type = $db->getChangeType();
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $_db->getAllDegreeName();
-		
-		$branch = $_db->getAllBranch();
-		$this->view->branch = $branch;
+		$tsub= new Foundation_Form_FrmGroupStuChangeGroup();
+		$frm=$tsub->FrmAddGroupChangeGroup();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -100,18 +92,13 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		array_unshift($g_new,array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->g_new=$g_new;
 		$this->view->rows = $db->gettoGroup();
-// 		$this->view->academy = $db->getAllYears();
 		$this->view->change_type = $db->getChangeType();
+
+		$tsub= new Foundation_Form_FrmGroupStuChangeGroup();
+		$frm=$tsub->FrmAddGroupChangeGroup($result);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
 		
-// 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$this->view->degree = $_db->getAllFecultyName();
-		
-// 		$db=new Application_Model_DbTable_DbGlobal();
-// 		$this->view->rs_session=$db->getSession();
-		
-// 		$room =  $db->getRoom();
-// 		array_unshift($room, array ( 'room_id' => 0, 'room_name' =>$this->tr->translate("SELECT_ROOM")) );
-// 		$this->view->room = $room;
 		$db=new Application_Model_DbTable_DbGlobal();
 		$branch = $db->getAllBranch();
 		$this->view->branch = $branch;

@@ -56,9 +56,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$to_date = (empty($search['end_date']))? '1': " stdp.date_stop <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
     	
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " st.last_name LIKE '%{$s_search}%'";
@@ -69,8 +69,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=' AND stdp.branch_id='.$search['branch_id'];
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND stdp.academic_year='.$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND stdp.academic_year='.$search['academic_year'];
     	}
     	if(!empty($search['grade'])){
 	   		$where.=' AND stdp.grade='.$search['grade'];

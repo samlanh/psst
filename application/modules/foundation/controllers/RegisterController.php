@@ -517,4 +517,24 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 	}
 	
+	//new get student study class new create on 24-3-2020
+	function getallstudentAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
+			$rows = $db->getAllStudentStudy(null,$branch_id);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	function getstudentstudyinfoAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Foundation_Model_DbTable_DbStudent();
+			$grade = $db->getStudentStudyInfo($data['study_id']);
+			print_r(Zend_Json::encode($grade));
+			exit();
+		}
+	}
 }

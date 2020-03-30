@@ -856,5 +856,28 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			FROM rms_group_detail_student AS sh WHERE sh.stu_id=$student_id AND sh.is_current=1 ORDER BY sh.gd_id ASC";
 		return $db->fetchAll($sql);
 	}
-	
+	function getStudentStudyInfo($studyId){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT
+				s.*,
+				gds.academic_year,
+				gds.group_id,
+				gds.degree,
+				gds.grade
+				
+			FROM
+				rms_student AS s,
+				rms_group_detail_student AS gds
+			WHERE
+				gds.stu_id = s.stu_id
+				AND (stu_enname!='' OR s.stu_khname!='')
+				AND s.status=1
+				AND gds.stop_type=0
+				AND s.customer_type=1
+				AND gds.gd_id = $studyId
+			LIMIT 1
+		";
+		return $db->fetchRow($sql);
+	}
 }

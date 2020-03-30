@@ -303,9 +303,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 	=>'',
+					'adv_search' 	=>'',
 					'branch_id' =>'',
-					'study_year'=>'',
+					'academic_year'=>'',
 					'degree' 	=>'',
 					'grade' 	=>'',
 					'session' 	=>'',
@@ -322,8 +322,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
@@ -370,29 +370,29 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$search=$this->getRequest()->getPost();
 		}else{
 			$search=array(
-					'title' => '',
+					'adv_search' => '',
 					'branch_id' => '',
-					'study_year' => '',
+					'academic_year' => '',
 					'grade_bac' => '',
 					'session' => '',
 					'change_type' => '',
+					'changegroup_id'=>''
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	
 		$db= new Allreport_Model_DbTable_DbRptGroupStudentChangeGroup();
 		$this->view->rs = $db->getAllStu($search);
 		$this->view->change_type = $db->getChangeType();
 		$this->view->all_change_group = $db->getAllChangeGroup(1); // 1=ប្តូរក្រុម
 		
-		$this->view->search=$search;
-		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$this->view->search=$search;
 	}
 	public function rptStudentChangeGroupAction(){
 		if($this->getRequest()->isPost()){
@@ -691,21 +691,16 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-				'title' 		=>'',
+				'adv_search' 		=>'',
 				'branch_id'		=>0,
 				'degree'		=>0,
-				'study_year' 	=>'',
-				'grade_all' 	=>'',
+				'academic_year' 	=>'',
+				'grade' 	=>'',
 				'group'			=>'',
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d',strtotime("+5 day")),
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$rs_rows = $group->getStuDocumentNotEnough($search);
 		$this->view->rs = $rs_rows;
@@ -715,6 +710,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	public function suspensionletterAction(){
 		$id=$this->getRequest()->getParam("id");

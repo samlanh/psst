@@ -2817,7 +2817,12 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getAllGroupName($data=null){
   	$db = $this->getAdapter();
-  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`) AS name
+  	$lang = $this->currentlang();
+  	$grade = "rms_itemsdetail.title_en";
+  	if($lang==1){// khmer
+  		$grade = "rms_itemsdetail.title";
+  	}
+  	$sql ="SELECT `g`.`id`, CONCAT(COALESCE(`g`.`group_code`,''),' (',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1),''),')') AS name
   	FROM `rms_group` AS `g` WHERE g.status=1 ";
   	 
   	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
@@ -2838,9 +2843,70 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($data['academic_year'])){
   		$sql.=" AND g.academic_year = ".$data['academic_year'];
   	}
+  	if (!empty($data['group_id'])){
+  		$sql.=" AND g.id != ".$data['group_id'];
+  	}
   	$sql.= $this->getAccessPermission('g.branch_id');
-  	$sql.=" ORDER BY `g`.`id` DESC ";
+  	$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
   	return $db->fetchAll($sql);
+  }
+  public function getAllChangeGroup($type){//1=ប្តូរក្រុម , 2=ឡើងថ្នាក់
+  	$db=$this->getAdapter();
+  	$sql="SELECT
+	  	id,
+	  	CONCAT(COALESCE((SELECT group_code FROM rms_group as g WHERE g.id = from_group LIMIT 1),''),'-',COALESCE((SELECT group_code FROM rms_group as g WHERE g.id = to_group LIMIT 1),'')) as name,
+	  	(SELECT group_code FROM rms_group as g WHERE g.id = from_group LIMIT 1) as from_group,
+	  	(SELECT group_code FROM rms_group as g WHERE g.id = to_group LIMIT 1) as to_group
+	  	FROM
+	  	rms_group_student_change_group
+	  	WHERE
+	  	change_type=$type
+  		and status=1
+  	";
+  	return $db->fetchAll($sql);
+  }
+  function getAllStudentStudy($opt=null,$branchid=null){
+  	$db=$this->getAdapter();
+  	$branch_id = $this->getAccessPermission();
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	$lang = $this->currentlang();
+  	$stuName = "COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
+  	$grade = "rms_itemsdetail.title_en";
+  	if($lang==1){// khmer
+  		$stuName = "COALESCE(s.stu_khname,'')";
+  		$grade = "rms_itemsdetail.title";
+  	}
+  	$sql="
+	  	SELECT 
+		  	gds.gd_id AS id,
+	  		CONCAT( COALESCE(s.stu_code,''),'-',$stuName,'-',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) AS name
+	  	FROM
+		  	rms_student AS s,
+		  	rms_group_detail_student AS gds
+	  	WHERE
+		  	gds.stu_id = s.stu_id
+		  	AND (stu_enname!='' OR s.stu_khname!='')
+		  	AND s.status=1
+		  	AND gds.stop_type=0
+		  	AND s.customer_type=1
+		  	AND gds.is_current = 1
+		  	AND gds.is_setgroup = 1
+  	";
+  	if($branchid!=null){
+  		$sql.=" AND s.branch_id=".$branchid;
+  	}
+  	$sql.=" ORDER BY CONCAT( COALESCE(s.stu_code,''),'-',$stuName,COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) ASC";
+  	$rows = $db->fetchAll($sql);
+  	if($opt!=null){
+  		$options=array(0=>$tr->translate("CHOOSE"));
+  		if(!empty($rows))foreach($rows AS $row){
+  			$lable = $row['name'];
+  			$options[$row['id']]=$lable;
+  		}
+  		return $options;
+  	}else{
+  		return $rows;
+  	}
   }
 }
 ?>

@@ -178,10 +178,10 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				1=>$this->tr->translate("NEW_STUDENT"));
 		$_stu_type->setMultiOptions($_stu_opt);
 		$_stu_type->setValue($request->getParam("stu_type"));
+		
+		
 		$_study_type=  new Zend_Dojo_Form_Element_FilteringSelect('study_type');
 		$_study_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		
-		
 		$optRs=$_dbgb->getViewById(5);
 		$opt_study_type = array(''=>$this->tr->translate("STUDENT_TYPE"));
 		if(!empty($optRs))foreach ($optRs As $rs)$opt_study_type[$rs['key_code']]=$rs['view_name'];
@@ -198,6 +198,36 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$study_option = $_dbgb->getViewById(9,1);
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
 		$study_status->setMultiOptions($study_option);
+		$study_status->setValue($request->getParam("study_status"));
+		
+		
+		$changegroup_id = new Zend_Dojo_Form_Element_FilteringSelect('changegroup_id');
+		$changegroup_id->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$optRsChange = $_dbgb->getAllChangeGroup(1); // 1=ប្តូរក្រុម
+		$changegrou_opt = array(''=>$this->tr->translate("SELECT_GROUP"));
+		if(!empty($optRsChange))foreach ($optRsChange As $rs)$changegrou_opt[$rs['id']]=$rs['name'];
+		$changegroup_id->setMultiOptions($changegrou_opt);
+		$changegroup_id->setValue($request->getParam("changegroup_id"));
+		
+		
+		$change_type = new Zend_Dojo_Form_Element_FilteringSelect('change_type');
+		$change_type->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$optRs=$_dbgb->getViewById(17);
+		$opt_change_type = array(''=>$this->tr->translate("CHANGE_TYPE"));
+		if(!empty($optRs))foreach ($optRs As $rs)$opt_change_type[$rs['key_code']]=$rs['view_name'];
+		$change_type->setMultiOptions($opt_change_type);
+		$change_type->setValue($request->getParam("change_type"));
+		
 		
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
 		$userinfo = $_dbgb->getUserInfo();
@@ -237,7 +267,9 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_room,
 				$_stu_type,
 				$_study_type,
-				$study_status
+				$study_status,
+				$changegroup_id,
+				$change_type
 				)
 			);
 		return $this;

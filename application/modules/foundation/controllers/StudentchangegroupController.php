@@ -13,31 +13,32 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		}else{
 			$search=array(
 				'branch_id'	=>'',
-				'title'	=>'',
-				'study_year'=> '',
+				'adv_search'	=>'',
+				'academic_year'=> '',
 				'grade'=> '',
 				'session'=> ''
 			);
 		}
 		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
 		$db_student= new Foundation_Model_DbTable_DbStudentChangeGroup();
 		$rs_rows = $db_student->selectAllStudentChangeGroup($search);
 		$list = new Application_Form_Frmtable();
-			if(!empty($rs_rows)){
-			}
-			else{
-				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-			}
-			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","Last Name","First Name","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE");
-			$link=array(
-					'module'=>'foundation','controller'=>'studentchangegroup','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'kh_name'=>$link,'en_name'=>$link));
-			$this->view->adv_search=$search;	
+		if(!empty($rs_rows)){
+		}
+		else{
+			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
+		}
+		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","Last Name","First Name","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
+		$link=array(
+				'module'=>'foundation','controller'=>'studentchangegroup','action'=>'edit',
+		);
+		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'kh_name'=>$link,'en_name'=>$link));
+		$this->view->adv_search=$search;	
+			
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	function addAction(){
 		if($this->getRequest()->isPost()){
@@ -57,17 +58,14 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		
 		$_add = new Foundation_Model_DbTable_DbStudentChangeGroup();
 		
-// 		$this->view->stu_id = $_add->getAllStudentID();
-// 		$this->view->stu_name  = $_add->getAllStudentName();
-		
-// 		$this->view->row = $add =$_add->getAllGroup();
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch = $_db->getAllBranch();
 		$this->view->branch = $branch;
-// 		$this->view->degree = $rows = $_db->getAllFecultyName();
-// 		$this->view->occupation = $row =$_db->getOccupation();
-// 		$this->view->province = $row =$_db->getProvince();
+		
+		$tsub= new Foundation_Form_FrmStudentChangeGroup();
+		$frm=$tsub->FrmAddStudentChangeGroup();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -84,7 +82,6 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
-				$data["id"]=$id;
 				$db = new Foundation_Model_DbTable_DbStudentChangeGroup();
 				$row=$db->updateStudentChangeGroup($data);
 				
@@ -95,15 +92,10 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 			}
 		}	
 		
-		$_add = new Foundation_Model_DbTable_DbStudentChangeGroup();
-		
-		$this->view->stu_id = $_add->getAllStudentID();
-		$test = $this->view->stu_name  = $_add->getAllStudentName();
-		$this->view->row = $add =$_add->getAllGroup();
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$branch = $_db->getAllBranch();
-		$this->view->branch = $branch;
+		$tsub= new Foundation_Form_FrmStudentChangeGroup();
+		$frm=$tsub->FrmAddStudentChangeGroup($row);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
 		
 	}
 
@@ -119,18 +111,6 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		}
 	}
 	
-// 	function getGroupAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data=$this->getRequest()->getPost();
-// // 			$db = new Foundation_Model_DbTable_DbStudentChangeGroup();
-// // 			$grade = $db->getStudentChangeGroupById($data['from_group']);
-// 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$grade = $db->getStudentGroupInfoById($data['from_group']);
-// 			print_r(Zend_Json::encode($grade));
-// 			exit();
-// 		}
-// 	}
-	
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -143,7 +123,7 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		}
 	}
 	
-	function getStudentAction(){
+	function getStudentAction(){// May not use
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbStudentChangeGroup();

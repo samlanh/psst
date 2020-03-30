@@ -22,7 +22,7 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 				WHEN  c.for_type = 1 THEN '". $tr->translate("KHMER")."'
 				WHEN  c.for_type = 2 THEN '". $tr->translate("ENGLISH")."'
 			END AS for_type,
-			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user
+			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
     	";
     	$sql.=$dbp->caseStatusShowImage("c.status");
     	$sql.=" FROM `rms_issue_letterpraise` AS c WHERE 1 ";
@@ -45,7 +45,6 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 	    if($search['status_search']>-1){
 	    	$where.=' AND c.status='.$search['status_search'];
 	    }
-	   
 	    $where.=$dbp->getAccessPermission('c.branch_id');
 	    $order =  ' ORDER BY c.`id` DESC ' ;
 	    return $db->fetchAll($sql.$where.$order);

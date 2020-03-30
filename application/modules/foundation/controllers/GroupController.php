@@ -274,7 +274,6 @@ class Foundation_GroupController extends Zend_Controller_Action {
     	}
     }
     
-    
     function getgroupbybranchAction(){//May not Use
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -303,15 +302,16 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getacademicAction(){
+    function getacademicAction(){//year for study only
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$degree = empty($data['degree'])?null:$data['degree']; 
-    		$showall = empty($data['showall'])?null:$data['showall'];
-    		$school_option = empty($data['school_option'])?null:$data['school_option'];
+//     		$degree = empty($data['degree'])?null:$data['degree']; 
+//     		$showall = empty($data['showall'])?null:$data['showall'];
+//     		$school_option = empty($data['school_option'])?null:$data['school_option'];
+    		//$group = $db->getAllYearByBranch($data['branch_id'],$degree,$showall,$school_option);
     		
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllYearByBranch($data['branch_id'],$degree,$showall,$school_option);
+    		$group = $db->getAllAcademicYear();
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
     		print_r(Zend_Json::encode($group));
     		exit();

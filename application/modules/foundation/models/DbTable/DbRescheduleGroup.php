@@ -192,17 +192,18 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = "SELECT gr.group_id,
 			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
-			(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')') 
-       		FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
-       		(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
-       		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
+       		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS years,
+       		 group_code  AS group_code,
+       		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1) AS days,
        		gr.from_hour,gr.to_hour,
        		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
        		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.id = gr.techer_id and rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
        		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT first_name FROM rms_users WHERE rms_users.id = gr.user_id) AS user
      		";
 		$sql.=$dbp->caseStatusShowImage("gr.status");
-		$sql.=" FROM rms_group_reschedule AS gr  WHERE gr.status=1 ";
+		$sql.=" FROM 
+					rms_group_reschedule AS gr,
+					rms_group as g  WHERE g.id=gr.group_id AND gr.status=1 ";
 		$where =' ';
 		$order =  ' ORDER BY `gr`.`id` DESC ' ;
 		if(!empty($search['title'])){
@@ -230,11 +231,12 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function getAllYears(){
-		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS years FROM rms_tuitionfee WHERE `status`=1 and is_finished=0
-		        GROUP BY from_academic,to_academic,generation";
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
+		$db = new Issue_Model_DbTable_DbStudentdisciplineOne();
+		return $db->getAllYears();
+// 		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS years FROM rms_tuitionfee WHERE `status`=1 and is_finished=0
+// 		        GROUP BY from_academic,to_academic,generation";
+// 		$order=' ORDER BY id DESC';
+// 		return $db->fetchAll($sql.$order);
 	}
 	
 	

@@ -965,21 +965,22 @@ function getAllgroupStudyNotPass($action=null){
    }
    function getAllYear($type=1,$is_completed=0){
 	   	$db = $this->getAdapter();
-	   	$branch_id = $this->getAccessPermission();
-	   	$sql = "SELECT tf.id,
-		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS name,
-		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS years
-	   			FROM rms_tuitionfee AS tf WHERE `status`=1
-	   				AND tf.type=1
-	   	$branch_id ";
-	   	if($is_completed==0){
-	   		$sql.=' AND tf.is_finished=0 ';
-	   	}
-	   	$sql.=' GROUP BY tf.branch_id,tf.academic_year,tf.generation ';
-	   	$order=' ORDER BY id DESC';
-	   	return $db->fetchAll($sql.$order);
+	   	return $this->getAllAcademicYear();
+// 	   	$branch_id = $this->getAccessPermission();
+// 	   	$sql = "SELECT tf.id,
+// 		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS name,
+// 		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS years
+// 	   			FROM rms_tuitionfee AS tf WHERE `status`=1
+// 	   				AND tf.type=1
+// 	   	$branch_id ";
+// 	   	if($is_completed==0){
+// 	   		$sql.=' AND tf.is_finished=0 ';
+// 	   	}
+// 	   	$sql.=' GROUP BY tf.branch_id,tf.academic_year,tf.generation ';
+// 	   	$order=' ORDER BY id DESC';
+// 	   	return $db->fetchAll($sql.$order);
    }
-   function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){
+   function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){//for fee id only
 	   	$db = $this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
 	   	
@@ -2183,21 +2184,21 @@ function getAllgroupStudyNotPass($action=null){
 //   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
 //   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
 //   	FROM `rms_group` AS `g` WHERE status=1 ";
-  	$sql ="SELECT `g`.`id`, 
-  	CONCAT( g.group_code,' ',(SELECT CONCAT((SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = tf.academic_year LIMIT 1),' (',tf.generation,')')  FROM `rms_tuitionfee` AS tf WHERE tf.id = g.academic_year LIMIT 1) ) AS name
-  	FROM `rms_group` AS `g` WHERE g.status=1 ";
+  		$sql ="SELECT `g`.`id`, 
+	  			CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS name
+	  				FROM `rms_group` AS `g` WHERE g.status=1 ";
   	
-  	if (!empty($forfilterreport)){
-  		$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
-  	}else{
-  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
-  	}
-  	if (!empty($branch_id)){
-  		$sql.=" AND g.branch_id = $branch_id";
-  	}
-  	$sql.= $this->getAccessPermission('g.branch_id');
-  	$sql.=" ORDER BY `g`.`id` DESC ";
-  	return $db->fetchAll($sql);
+	  	if (!empty($forfilterreport)){
+	  		$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+	  	}else{
+	  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
+	  	}
+	  	if (!empty($branch_id)){
+	  		$sql.=" AND g.branch_id = $branch_id";
+	  	}
+	  	$sql.= $this->getAccessPermission('g.branch_id');
+	  	$sql.=" ORDER BY `g`.`id` DESC ";
+  		return $db->fetchAll($sql);
   }
   function getAllGroupByAcademic($academic=null){
   	$db = $this->getAdapter();

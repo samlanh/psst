@@ -172,7 +172,7 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 	function getAllYears(){
 		$db = $this->getAdapter();
 		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
-		GROUP BY from_academic,to_academic,generation";
+		GROUP BY academic_year";
 		$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql.$order);
 	}

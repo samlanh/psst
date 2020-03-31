@@ -253,8 +253,8 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$to_date = (empty($search['end_date']))? '1': "str.create_date <= '".$search['end_date']." 23:59:59'";
 	
 			$sql=" SELECT st.*,
-					(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=str.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic,
 					(SELECT $label FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=str.academic_year LIMIT 1) AS academic,
 					(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=str.study_term) AS study_term,
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 					(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
@@ -275,10 +275,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				WHERE 
 					st.is_studenttest = 1
 					AND str.stu_test_id = st.stu_id
-					AND STATUS=1
+					AND status=1
 					AND st.stu_khname!=''
-					$branch_id
-			";
+					$branch_id ";
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	
@@ -293,7 +292,6 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$s_where[]= " st.tel LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
-			
 			if(($search['branch_search']>0)){
 				$where.= " AND st.branch_id = ".$search['branch_search'];
 			}
@@ -333,10 +331,6 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 		}
 	}
 }
-
-
-

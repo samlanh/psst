@@ -169,7 +169,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	//End Block Purchase
-	
 	//Start Block Sale Product
 	public function rptProductsoldAction(){
 		try{
@@ -178,15 +177,15 @@ class Allreport_StockController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title' 		=>'',
-						'branch_id'		=>'',
-						'study_year'	=>'',
-						'user' 			=>'',
-						'product'		=>'',
-						'category_id'	=>'',
-						'product_type'	=>'',
-						'start_date'	=> date('Y-m-d'),
-						'end_date'		=>date('Y-m-d'),
+					'title' 		=>'',
+					'branch_id'		=>'',
+					'study_year'	=>'',
+					'user' 			=>'',
+					'product'		=>'',
+					'category_id'	=>'',
+					'product_type'	=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=>date('Y-m-d'),
 				);
 			}
 			$this->view->search = $search;

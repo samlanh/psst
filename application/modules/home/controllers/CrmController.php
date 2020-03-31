@@ -83,7 +83,7 @@ class Home_CrmController extends Zend_Controller_Action
     	$this->view->frm_crm = $frm;
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$row = $_db->getAllKnoyBy(); // degree language
+    	$row = $_db->getAllKnowBy(); // degree language
     	array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
     	$this->view->know_by = $row;

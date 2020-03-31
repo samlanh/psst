@@ -617,8 +617,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 //     		$s_where[] = " p.title LIKE '%{$s_search}%'";
 //     		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
 //     		$where .=' AND ( '.implode(' OR ',$s_where).')';
-         //(SELECT title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate
-    	}//	(SELECT pg.name_kh FROM `rms_pro_category` AS pg WHERE pg.id = (SELECT pp.cat_id FROM `rms_product` AS pp WHERE pp.id = p.ser_cate_id LIMIT 1) LIMIT 1) AS product_category,
+        
+    	}
     	if($search['branch_id']>0){
     		$where .= " and sp.branch_id = ".$search['branch_id'];
     	}

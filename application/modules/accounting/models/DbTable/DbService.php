@@ -7,23 +7,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-    public function getServiceType($type=null,$option=null){
-    	$db = $this->getAdapter();
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$sql ="SELECT DISTINCT title as name,id FROM rms_program_type WHERE title!='' AND status=1 ";
-    	if(!empty($type)){
-    		$sql.=" AND type=$type";
-    	}
-    	$order = " ORDER BY title ";
-    	$rs = $db->fetchAll($sql.$order);
-    	if($option==null){
-    		return $rs;
-    	}else{
-    		$opt=array(-1=>$tr->translate("SELECT_SERVICE_TYPE"));
-    		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
-    		return $opt;
-    	}
-    }
+    
     public function addservice($_data){
     	$db = $this->getAdapter();
     		$_arr = array(

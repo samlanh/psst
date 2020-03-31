@@ -90,7 +90,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0, 'name' => $this->tr->translate("SELECT_NATION")));
 		$this->view->nation = $row;
 		
-		$row = $_db->getAllKnoyBy(); // degree language
+		$row = $_db->getAllKnowBy(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->know_by = $row;
@@ -150,7 +150,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->lang_level = $row;
 		
-		$row = $_db->getAllKnoyBy(); // degree language
+		$row = $_db->getAllKnowBy(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->know_by = $row;
@@ -293,7 +293,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->lang_level = $row;
 		
-		$row = $_db->getAllKnoyBy(); // degree language
+		$row = $_db->getAllKnowBy(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->know_by = $row;
@@ -351,7 +351,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$row = $_db->getAllLangLevel(); // degree language
 		$this->view->lang_level = $row;
 		
-		$row = $_db->getAllKnoyBy(); // degree language
+		$row = $_db->getAllKnowBy(); // degree language
 		$this->view->know_by = $row;
 		
 		$row = $_db->getAllDocumentType(); // degree language

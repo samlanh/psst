@@ -173,11 +173,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     		FROM rms_tuitionfee_detail WHERE fee_id = ".$service_id." ORDER BY id ";
     	return $db->fetchAll($sql);    	 
     }    
-    public function setServiceChargeExist($service_id,$pay_type){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT servicefee_id,price FROM `rms_servicefee_detail` WHERE service_id=$service_id AND pay_type=$pay_type ";
-    	return $db->fetchRow($sql);
-    }    
+   
     function getAllBranch(){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();

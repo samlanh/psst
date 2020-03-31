@@ -10,12 +10,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	
-	/**
-	 * get selected record of $sql
-	 * @param string $sql
-	 * @return array $row;
-	 */
 	function currentlang(){
 		$session_lang=new Zend_Session_Namespace('lang');
 		$lang = $session_lang->lang_id;
@@ -40,12 +34,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   		return $row;
   	}
   	
-  	public static function getActionAccess($action)
-    {
-    	$arr=explode('-', $action);
-    	return $arr[0];    	
-    }     
-    
     public function isRecordExist($conditions,$tbl_name){
 		$db=$this->getAdapter();		
 		$sql="SELECT * FROM ".$tbl_name." WHERE ".$conditions." LIMIT 1"; 
@@ -53,14 +41,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if(!$row) return NULL;
 		return $row;	
     }
-    /*for select 1 record by id of earch table by using params*/
-    public function GetRecordByID($conditions,$tbl_name){
-    	$db=$this->getAdapter();
-    	$sql="SELECT * FROM ".$tbl_name." WHERE ".$conditions." LIMIT 1";
-    	$row= $db->fetchRow($sql);
-    	return $row;
-    }
-    
     public function getAllDay($all=0){
     	$db=$this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
@@ -100,71 +80,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     			group by
     				gs.day_id
     			order by
-    				gs.day_id ASC	
-    		";
+    				gs.day_id ASC ";
     	return $db->fetchAll($sql);
     }
     
-    /**
-     * insert record to table $tbl_name
-     * @param array $data
-     * @param string $tbl_name
-     */
-    public function addRecord($data,$tbl_name){
-    	//print_r($data);exit;    	
-    	$this->setName($tbl_name);
-    	return $this->insert($data);
-    }
-    
-    /**
-     * update record to table $tbl_name
-     * @param array $data
-     * @param int $id
-     * @param string $tbl_name
-     */
-    public function updateRecord($data,$id,$tbl_name){
-    	//print_r($data);exit;
-    	$this->setName($tbl_name);
-    	$where=$this->getAdapter()->quoteInto('id=?',$id);
-    	$this->update($data,$where);    	
-    }
-    
-    public function DeleteRecord($tbl_name,$id){
-    	$db = $this->getAdapter();
-		$sql = "UPDATE ".$tbl_name." SET status=0 WHERE id=".$id;
-		return $db->query($sql);
-    } 
-
-     public function DeleteData($tbl_name,$where){
-    	$db = $this->getAdapter();
-		$sql = "DELETE FROM ".$tbl_name.$where;
-		return $db->query($sql);
-    } 
-    
-    public function convertStringToDate($date, $format = "Y-m-d H:i:s")
-    {
-    	if(empty($date)) return NULL;
-    	$time = strtotime($date);
-    	return date($format, $time);
-    }
-    
-
-    public static function getResultWarning(){
-          return array('err'=>1,'msg'=>'មិន​ទាន់​មាន​ទន្និន័យ​នូវ​ឡើយ​ទេ!');	
+   public static function getResultWarning(){
+         return array('err'=>1,'msg'=>'មិន​ទាន់​មាន​ទន្និន័យ​នូវ​ឡើយ​ទេ!');	
    }
-
    public function getUserId(){
    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
    	return $session_user->user_id;
    }
    public  function caseStatusShowImage($status="status"){
    	$base_url = Zend_Controller_Front::getInstance()->getBaseUrl();
-   	$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
-   	$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
-   	$string=", CASE
-   	WHEN  $status = 1 THEN '$imgtick'
-   	WHEN  $status = 0 THEN '$imgnone'
-   	END AS status ";
+	   	$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
+	   	$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
+	   	$string=", CASE
+		   	WHEN  $status = 1 THEN '$imgtick'
+		   	WHEN  $status = 0 THEN '$imgnone'
+		   	END AS status ";
    	return $string;
    }
    function getAllUser($branchId=null){
@@ -263,30 +197,22 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	return $db->fetchAll($sql);
    }
    
-
-//    public function getProvince(){
-//    	$db = $this->getAdapter();
-//    	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
-//    	return $db->fetchAll($sql);
-//    }
-
-
    public function getProvince(){
-   	$db = $this->getAdapter();
-   	$lang = $this->currentlang();
-   	$field = 'province_en_name';
-   	if ($lang==1){
-   		$field = 'province_kh_name';
-   	}
-   	$sql ="SELECT $field as province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
-   	return $db->fetchAll($sql);
+	   	$db = $this->getAdapter();
+	   	$lang = $this->currentlang();
+	   	$field = 'province_en_name';
+	   	if ($lang==1){
+	   		$field = 'province_kh_name';
+	   	}
+	   	$sql ="SELECT $field as province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
+	   	return $db->fetchAll($sql);
    }
 
    public function getOccupation(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT occupation_id as id, occu_name as name FROM rms_occupation WHERE status=1 AND occu_name!='' 
-   	ORDER BY occu_name ASC ";
-   	return $db->fetchAll($sql);
+	   	$db = $this->getAdapter();
+	   	$sql ="SELECT occupation_id as id, occu_name as name FROM rms_occupation WHERE status=1 AND occu_name!='' 
+	   	ORDER BY occu_name ASC ";
+	   	return $db->fetchAll($sql);
    }
    
    public function getAllLangLevel(){
@@ -311,15 +237,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql = "SELECT id as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
    	return $db->fetchAll($sql);
    }
-   public function getAllKnowBy(){
-   	$db = $this->getAdapter();
-   	$sql = "SELECT id as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
-   	return $db->fetchAll($sql);
-   }
+  
    public function getAllDocumentType(){
-   	$db = $this->getAdapter();
-   	$sql = "SELECT name as id, name FROM rms_document_type WHERE types=1 AND status=1 AND name!='' ORDER BY rms_document_type.id ASC ";
-   	return $db->fetchAll($sql);
+	   	$db = $this->getAdapter();
+	   	$sql = "SELECT name as id, name FROM rms_document_type WHERE types=1 AND status=1 AND name!='' ORDER BY rms_document_type.id ASC ";
+	   	return $db->fetchAll($sql);
    }
    
    public function getAllDocteacherType(){
@@ -352,7 +274,6 @@ function getAllgroupStudy($teacher_id=null){
    	}
    	$sql.=" AND g.status =1 AND group_code!=''";
    	$sql.=" group by g.id ";
-   	//echo $sql;
    	return $db->fetchAll($sql);
 }
 
@@ -389,8 +310,6 @@ function getAllgroupStudyNotPass($action=null){
    		$db = $this->getAdapter();
    		return $this->getAllItems(null);
    }   
-  
-   
    
    function getAllDept($search, $start, $limit){
    	$db = $this->getAdapter();
@@ -401,15 +320,7 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    
-   function getCountDept($search=''){
-   	$db = $this->getAdapter();
-   	$sql = $this->_buildQuery();
-   	if(!empty($search)){
-   		$sql = $this->_buildQuery($search);
-   	}
-   	$_result = $db->fetchAll($sql);
-   	return count($_result);
-   }
+  
    public function getGlobalResultList($sql,$sql_count){
    	$db = $this->getAdapter();
    	$rows= $db->fetchAll($sql);
@@ -418,13 +329,6 @@ function getAllgroupStudyNotPass($action=null){
 //get all result by param 0 ,get count record by param1
    }
    
-   /*@author Mok Channy
-    * for use session navigetor 
-    * */
-   public static function SessionNavigetor($name_space,$array=null){
-   	$session_name = new Zend_Session_Namespace($name_space);
-   	return $session_name;   	
-   }
    public function getAllDegree($id=null){
 	   $rs = array(
 	   			0=>$this->tr->translate("SELECT_DEGREE"),
@@ -456,97 +360,89 @@ function getAllgroupStudyNotPass($action=null){
    }
    
    public static  function getAllStatus($id=null){
-   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$rs = array(
+	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   	$rs = array(
    			1=>$tr->translate("ACTIVE"),
    			0=>$tr->translate("DEACTIVE"));
-   	if($id==null)return $rs;
-   	return $rs[$id];
+	   	if($id==null)return $rs;
+	   	return $rs[$id];
    }
    public function AllStatus($id=null){
-   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$rs = array(
-   			1=>$tr->translate("ACTIVE"),
-   			0=>$tr->translate("DEACTIVE"));
-   	if($id==null)return $rs;
-   	return $rs[$id];
+	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   	$rs = array(
+	   			1=>$tr->translate("ACTIVE"),
+	   			0=>$tr->translate("DEACTIVE"));
+	   	if($id==null)return $rs;
+	   	return $rs[$id];
    }
    public function AllStatusHour($id=null){
-   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$rs = array(
-   			1=>$tr->translate("FULL_TIME"),
-   			0=>$tr->translate("PART_TIME"));
-   	if($id==null)return $rs;
-   	return $rs[$id];
+	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   	$rs = array(
+	   			1=>$tr->translate("FULL_TIME"),
+	   			0=>$tr->translate("PART_TIME"));
+	   	if($id==null)return $rs;
+	   	return $rs[$id];
    }
    public function AllStatusRe($id=null){
-   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$rs = array(
+	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   	$rs = array(
    			0=>$tr->translate("PLEASE_SELECT_STATUS"),
    			1=>$tr->translate("RELATIVE"),
    			2=>$tr->translate("FRIEND"),
    			3=>$tr->translate("BUSINESS_PARTNER"),
    			4=>$tr->translate("OTHER")
-   			);
-   	if($id==null)return $rs;
-   	return $rs[$id];
+	   	);
+	   	if($id==null)return $rs;
+	   	return $rs[$id];
    }
    public static function getAllDegreeById($id=null){
-   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$rs = array(
-   			1=>$tr->translate("Grade School"),
-   			2=>$tr->translate("Pramary School"),
-   			3=>$tr->translate('Other'),
-   			);
-   	if($id==null)return $rs;
-   	return $rs[$id];
+	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   	$rs = array(
+	   			1=>$tr->translate("Grade School"),
+	   			2=>$tr->translate("Pramary School"),
+	   			3=>$tr->translate('Other'),
+	   			);
+	   	if($id==null)return $rs;
+	   	return $rs[$id];
    }
    public function getAllPaymentTerm($id=null,$hidemonth=null){
-   	if($hidemonth!=null){
-   		$opt_term = array(
-   				2=>$this->tr->translate('TERM'),
-   				3=>$this->tr->translate('SEMESTER'),
-   				4=>$this->tr->translate('YEAR'),
-   		);
-   		return $opt_term;
-   	}
-   	$opt_term = array(
-   			1=>$this->tr->translate('MONTHLY'),
-   			2=>$this->tr->translate('TERM'),
-   			3=>$this->tr->translate('SEMESTER'),
-   			4=>$this->tr->translate('YEAR'),
-   			
-   	);
-   	if($id==null){return $opt_term;}
-   	else {
-   		return $opt_term[$id]; 
-   	}
+	   	if($hidemonth!=null){
+	   		$opt_term = array(
+	   				2=>$this->tr->translate('TERM'),
+	   				3=>$this->tr->translate('SEMESTER'),
+	   				4=>$this->tr->translate('YEAR'),
+	   		);
+	   		return $opt_term;
+	   	}
+	   	$opt_term = array(
+	   			1=>$this->tr->translate('MONTHLY'),
+	   			2=>$this->tr->translate('TERM'),
+	   			3=>$this->tr->translate('SEMESTER'),
+	   			4=>$this->tr->translate('YEAR'),
+	   			
+	   	);
+	   	if($id==null){return $opt_term;}
+	   	else {
+	   		return $opt_term[$id]; 
+	   	}
    }
    public function getAllServicePayment($id=null){
-   	$opt_term = array(
-   		1=>$this->tr->translate('RIEL'),
-   		2=>$this->tr->translate('PRICE1'),
-   		3=>$this->tr->translate('PRICE2'));
-   	if($id==null)return $opt_term;
-   	else return $opt_term[$id];
+	   	$opt_term = array(
+	   		1=>$this->tr->translate('RIEL'),
+	   		2=>$this->tr->translate('PRICE1'),
+	   		3=>$this->tr->translate('PRICE2'));
+	   	if($id==null)return $opt_term;
+	   	else return $opt_term[$id];
    }
    public function getAllGEPPrgramPayment($id=null){
-   	$opt_term = array(
-   			1=>$this->tr->translate('FEE'),
-   			2=>$this->tr->translate('2TERM'),
-   			3=>$this->tr->translate('3TERM'));
-   	if($id==null)return $opt_term;
-   	else return $opt_term[$id];
+	   	$opt_term = array(
+	   			1=>$this->tr->translate('FEE'),
+	   			2=>$this->tr->translate('2TERM'),
+	   			3=>$this->tr->translate('3TERM'));
+	   	if($id==null)return $opt_term;
+	   	else return $opt_term[$id];
    }
-//    public static function getSessionById($id){
-//    	$tr= Application_Form_FrmLanguages::getCurrentlanguage();
-//    	$arr_opt = array(
-//    			1=>$tr->translate('MORNING'),
-// 			2=>$tr->translate('AFTERNOON'),
-// 			3=>$tr->translate('EVERNING'),
-// 			4=>$tr->translate('WEEKEND'));
-//    	return $arr_opt[$id];
-//    }
+
    public static function getAllMention($id=null){
    	$tr= Application_Form_FrmLanguages::getCurrentlanguage();
     $opt_rank = array(
@@ -559,40 +455,7 @@ function getAllgroupStudyNotPass($action=null){
     if($id==null)return $opt_rank;
     else return $opt_rank[$id];
    }
- 
-   public function getServiceType($type=null){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT DISTINCT title,id FROM rms_program_type WHERE title!='' AND status=1 ";
-   	if(!empty($type)){$sql.=" AND type=$type";}
-   	$order = " ORDER BY title ";
-   	return $db->fetchAll($sql.$order);
-   }
-   public function getAllTypeCategory($id = null){
-   	$_status_type = array(
-   			1=>$this->tr->translate("SERVICE"),
-   			2=>$this->tr->translate("PROGRAM"));
-   	if($id==null)return $_status_type;
-   	else return $_status_type[$id];
-    
-   }
-   public function getServicTypeByName($cate_title,$type){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT * FROM rms_program_type WHERE title!='' AND title='".$cate_title."' AND type= $type";
-   	return $db->fetchRow($sql);
-   }
-   public function getServiceFeeByServiceWtPayType($service_id,$pay_type){
-   	$sql = "SELECT * FROM rms_servicefee_detail WHERE service_id = $service_id AND pay_type =$pay_type LIMIT 1";
-   	return $this->getAdapter()->fetchRow($sql);
-   }
-   public function getProgramFeeByServiceWtPayType($service_id,$pay_type){
-   	$sql = "SELECT * FROM mrs_programfee_detail WHERE programfeeid = $service_id AND pay_type =$pay_type LIMIT 1";
-   	return $this->getAdapter()->fetchRow($sql);
-   }
-   public function getRate(){
-   	$_db = $this->getAdapter();
-   	$_sql = "SELECT * FROM rms_rate ";
-   	return $_db->fetchRow($_sql);
-   }
+     
    public  function getTutionFeebyCondition($data){
    	$db = $this->getAdapter();
    	//for bachelor
@@ -627,7 +490,6 @@ function getAllgroupStudyNotPass($action=null){
    	for($i = $acc_no;$i<5;$i++){
    		$pre.='0';
    	}
-   	//$last = '/CAS';
    	return $pre.$new_acc_no;
    }
    
@@ -636,17 +498,17 @@ function getAllgroupStudyNotPass($action=null){
 	   	$sql = " SELECT prefix FROM `rms_branch` WHERE br_id = $branch_id LIMIT 1 ";
 	   	return $db->fetchOne($sql);
    }
-   function getallComposition(){
-   	$db  = $this->getAdapter();
-   	$sql = " SELECT occupation_id AS id,occu_name AS name FROM `rms_occupation` WHERE occu_name!='' AND status=1 ORDER BY id DESC ";
-   	return $db->fetchAll($sql);
-   
-   }
-   function getallSituation(){
-   	$db  = $this->getAdapter();
-   	$sql = " SELECT situ_id AS id ,situ_name AS name FROM `rms_situation` WHERE situ_name!='' AND status=1 ORDER BY id DESC ";
-   	return $db->fetchAll($sql);
-   }
+//    function getallComposition(){
+// 	   	$db  = $this->getAdapter();
+// 	   	$sql = " SELECT occupation_id AS id,occu_name AS name FROM `rms_occupation` WHERE occu_name!='' AND status=1 ORDER BY id DESC ";
+// 	   	return $db->fetchAll($sql);
+//    }
+
+//    function getallSituation(){
+//    	$db  = $this->getAdapter();
+//    	$sql = " SELECT situ_id AS id ,situ_name AS name FROM `rms_situation` WHERE situ_name!='' AND status=1 ORDER BY id DESC ";
+//    	return $db->fetchAll($sql);
+//    }
    function getAllProvince($opt=null,$option=null){
    	$db= $this->getAdapter();
    	$lang = $this->currentlang();
@@ -666,40 +528,35 @@ function getAllgroupStudyNotPass($action=null){
    		if(!empty($rows))foreach($rows AS $row) $opt_province[$row['id']]=$row['province_name'];
    		return $opt_province;
    	}
-   	
    }
    
    public function getAllDistrict(){
-   	$this->_name='ln_district';
-   	$lang = $this->currentlang();
-   	$field = 'district_name';
-   	if ($lang==1){
-   		$field = 'district_namekh';
-   	}
-//    	$sql = " SELECT dis_id,pro_id,CONCAT(district_name,'-',district_namekh) district_name FROM $this->_name WHERE status=1 AND district_name!='' ";
-   	$sql = " SELECT dis_id,pro_id,$field AS district_name FROM $this->_name WHERE status=1 AND district_name!='' ";
-   	$db = $this->getAdapter();
-   	return $db->fetchAll($sql);
+	   	$this->_name='ln_district';
+	   	$lang = $this->currentlang();
+	   	$field = 'district_name';
+	   	if ($lang==1){
+	   		$field = 'district_namekh';
+	   	}
+	   	$sql = " SELECT dis_id,pro_id,$field AS district_name FROM $this->_name WHERE status=1 AND district_name!='' ";
+	   	$db = $this->getAdapter();
+	   	return $db->fetchAll($sql);
    }
    
    public function getAllsubject(){
-   	$db = $this->getAdapter();
-   	
-   	$lang = $this->currentlang();
-   	$field = 'subject_titleen';
-   	if ($lang==1){
-   		$field = 'subject_titlekh';
-   	}
-//    	$sql = "SELECT id ,CONCAT(subject_titleen,'-',subject_titlekh) AS  subject_name
-//    	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
-   	$sql = "SELECT id ,$field AS  subject_name
-   	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
-   	return $db->fetchAll($sql);
+	   	$db = $this->getAdapter();
+	   	
+	   	$lang = $this->currentlang();
+	   	$field = 'subject_titleen';
+	   	if ($lang==1){
+	   		$field = 'subject_titlekh';
+	   	}
+	   	$sql = "SELECT id ,$field AS  subject_name
+	   	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
+	   	return $db->fetchAll($sql);
    }
    function getAllMajor(){
-   	return $this->getAllGradeStudy();
+   		return $this->getAllGradeStudy();
    }
-  
    
    public function getAllGroup(){
 	   	$db = $this->getAdapter();
@@ -714,22 +571,10 @@ function getAllgroupStudyNotPass($action=null){
    	                        WHERE status = 1  $branch_id  Order BY id DESC";
    	return $db->fetchAll($sql);
    }
-   public static function getSessionById($id=null){
-   	$tr= Application_Form_FrmLanguages::getCurrentlanguage();
-   	$arr_opt = array(
-   			1=>$tr->translate('MORNING'),
-   			2=>$tr->translate('AFTERNOON'),
-   			3=>$tr->translate('EVERNING'),
-   			4=>$tr->translate('WEEKEND'));
-   	if($id!=null){
-   		return $arr_opt[$id];
-   	}return $arr_opt;
-   
-   }
    function getRoom(){
-   	$db=$this->getAdapter();
-   	$sql="SELECT room_id,room_name FROM rms_room ";
-   	return $db->fetchAll($sql.'ORDER  BY room_id DESC');
+	   	$db=$this->getAdapter();
+	   	$sql="SELECT room_id,room_name FROM rms_room ";
+	   	return $db->fetchAll($sql.'ORDER  BY room_id DESC');
    }
    public function getAllRoom($branch_id=null){
    	$db = $this->getAdapter();
@@ -765,16 +610,6 @@ function getAllgroupStudyNotPass($action=null){
    	$sql="SELECT key_code AS id,key_code,$label as name,$label AS view_name 
    		FROM rms_view WHERE `type`=4 AND `status`=1";
 	return $db->fetchAll($sql);
-   }
-   function getGender(){
-   	$db=$this->getAdapter();
-   	$lang = $this->currentlang();
-   	$field = 'name_en';
-   	if ($lang==1){
-   		$field = 'name_kh';
-   	}
-   	$sql="SELECT key_code,$field AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
-   	return $db->fetchAll($sql);
    }
    function getAllBranchName(){
    	return $this->getAllBranch();
@@ -1090,8 +925,6 @@ function getAllgroupStudyNotPass($action=null){
    }
    function getAllStuName(){
    	$db = $this->getAdapter();
-//    	$sql=" select stu_id as id , CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END AS name from rms_student where status=1 and is_subspend=0 ";
-//    	return $db->fetchAll($sql);
 	return $this->getAllStudent();
    }
    function getStudentinfoById($stu_id){
@@ -1184,30 +1017,24 @@ function getAllgroupStudyNotPass($action=null){
    	$sql.=" ORDER BY stu_id DESC";
    	return $db->fetchAll($sql);
    }
-//    function getStudentTestbyId($stu_test_id){
-//    		$db=$this->getAdapter();
-//    		$sql="SELECT * FROM rms_student_test WHERE id = $stu_test_id ";
-//    		return $db->fetchRow($sql);
-//    }
-   /*end blog student*/
+
    function getDeduct(){
 	   	$db = $this->getAdapter();
 	   	$sql=" SELECT value FROM `ln_system_setting` WHERE id=19 ";
 	   	return $db->fetchOne($sql);
    }
    public function getExpenseRecieptNo(){
-   	$db = $this->getAdapter();
-   	$_db = new Application_Model_DbTable_DbGlobal();
-//    	$branch_id = $_db->getAccessPermission();
-   	$sql="SELECT id FROM ln_expense WHERE 1 ORDER BY id DESC LIMIT 1 ";
-   	$acc_no = $db->fetchOne($sql);
-   	$new_acc_no= (int)$acc_no+1;
-   	$acc_no= strlen((int)$acc_no+1);
-   	$pre=0;
-   	for($i = $acc_no;$i<6;$i++){
-   		$pre.='0';
-   	}
-   	return $pre.$new_acc_no;
+	   	$db = $this->getAdapter();
+	   	$_db = new Application_Model_DbTable_DbGlobal();
+	   	$sql="SELECT id FROM ln_expense WHERE 1 ORDER BY id DESC LIMIT 1 ";
+	   	$acc_no = $db->fetchOne($sql);
+	   	$new_acc_no= (int)$acc_no+1;
+	   	$acc_no= strlen((int)$acc_no+1);
+	   	$pre=0;
+	   	for($i = $acc_no;$i<6;$i++){
+	   		$pre.='0';
+	   	}
+	   	return $pre.$new_acc_no;
    }
    
    function getAllGeneration($opt=null,$option=null){
@@ -1438,11 +1265,8 @@ function getAllgroupStudyNotPass($action=null){
       	imagejpeg($im, $uploadimage, 90);
     }
   //  imagedestroy($uploadimage);
-    	
     return $new_name;
-      
   }
-   
   
   public function getAllSubjectName($schooloption=null,$typesubject=0){
   	$db = $this->getAdapter();
@@ -1493,19 +1317,6 @@ function getAllgroupStudyNotPass($action=null){
   
   public function getAllSubjectStudy($schoolOption=null){
   	return $this->getAllSubjectName($schoolOption,1);
-//   	$db = $this->getAdapter();
-  
-//   	$lang = $this->currentlang();
-//   	$field = 'subject_titleen';
-//   	if ($lang==1){
-//   		$field = 'subject_titlekh';
-//   	}
-//   	$sql = " SELECT id,$field as name,shortcut FROM `rms_subject` WHERE
-//   	is_parent=1 AND status = 1 and subject_titlekh!='' ";
-//   	if (!empty($schoolOption)){
-//   	$sql.=" AND schoolOption = $schoolOption";
-//   	}
-//   	return $db->fetchAll($sql);
   } 
   public function getAllTeahcerName($branch_id=null,$schooloption=null){
   	$db = $this->getAdapter();
@@ -1562,19 +1373,6 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
 
-//   function getAllStudent(){
-//   	$db=$this->getAdapter();
-//   	$_db = new Application_Model_DbTable_DbGlobal();
-//   	$branch_id = $_db->getAccessPermission();
-//   	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
-//     		CONCAT(s.stu_code,'-',s.stu_khname,'-',s.stu_enname,' ',s.last_name) AS name
-//     		FROM rms_student AS s
-//     		WHERE 
-//     		(stu_enname!='' OR s.stu_khname!='') 
-//     		AND s.status=1 AND s.is_subspend=0 AND customer_type=1 
-//   		$branch_id ORDER BY stu_type DESC,stu_khname ASC ";
-//   	return $db->fetchAll($sql);
-//   }
   function getAllTermStudy($branch=null,$year=null,$option=null){
 
   	$db = $this->getAdapter();
@@ -1640,25 +1438,19 @@ function getAllgroupStudyNotPass($action=null){
   }
   
   function addLangLevel($data){
-  	$array = array(
-  				"title"		=>$data['title'],
-	  			"user_id"	=>$this->getUserId(),
-	  			"modify_date"=>date("Y-m-d"),
-  			);
-  	$this->_name="rms_degree_language";
-  	return $this->insert($array);
+	  	$array = array(
+	  				"title"		=>$data['title'],
+		  			"user_id"	=>$this->getUserId(),
+		  			"modify_date"=>date("Y-m-d"),
+	  			);
+	  	$this->_name="rms_degree_language";
+	  	return $this->insert($array);
   }
   
   function addNationType($data){
   	try{
   		$db = $this->getAdapter();
   		$key_code = $this->getLastKeycodeByType(21);
-//   		$sql="SELECT id FROM rms_view WHERE status =".$data['status_na'];
-//   		$sql.=" AND name_kh='".$data['name_kh']."'";
-//   		$rs = $db->fetchOne($sql);
-//   		if(!empty($rs)){
-//   			return -1;
-//   		}
   		$arr = array(
   				'name_en'	=>$data['title_en'],
   				'name_kh'	=>$data['title_kh'],
@@ -1666,7 +1458,6 @@ function getAllgroupStudyNotPass($action=null){
   				'key_code'	=>$key_code,
   				'displayby'	=>1,
   				'type'=>21,
-  				 
   		);
   		$this->_name="rms_view";
   		$id = $this->insert($arr);
@@ -1824,7 +1615,6 @@ function getAllgroupStudyNotPass($action=null){
   	$pre = empty($pre['prefix'])?"":$pre['prefix'];
   	$new_acc_no= (int)$acc_no+1;
   	$acc_no= strlen((int)$acc_no+1);
-//   	$pre="";
   	for($i = $acc_no;$i<5;$i++){
   		$pre.='0';
   	}
@@ -2123,8 +1913,6 @@ function getAllgroupStudyNotPass($action=null){
   	if ($currentLang==1){
   		$colunmname='title';
   	}
-  	//(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
-  	//(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year_only,
   	$sql = "SELECT start_date,expired_date,group_code,
   	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year,
   	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year_only,
@@ -2168,22 +1956,8 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT * FROM rms_group_detail_student WHERE stu_id=$student_id AND group_id=$group_id";
   	return $db->fetchRow($sql);
   }
-//   function getAllGroupByBranch($branch_id=null){
-//   	$db = $this->getAdapter();
-//   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-//   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-//   	FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ";
-//   	if (!empty($branch_id)){
-//   		$sql.=" AND g.branch_id = $branch_id";
-//   	}
-//   	$sql.=" ORDER BY `g`.`id` DESC ";
-//   	return $db->fetchAll($sql);
-//   }
   function getAllGroupByBranch($branch_id=null,$forfilterreport=null){
   	$db = $this->getAdapter();
-//   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-//   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-//   	FROM `rms_group` AS `g` WHERE status=1 ";
   		$sql ="SELECT `g`.`id`, 
 	  			CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS name
 	  				FROM `rms_group` AS `g` WHERE g.status=1 ";
@@ -2770,7 +2544,9 @@ function getAllgroupStudyNotPass($action=null){
   }
   public function getAllAcademicYear($option=null){
   		$db=$this->getAdapter();
-		$sql="SELECT id, CONCAT(fromYear,'-',toYear) as name
+		$sql="SELECT id,
+				CONCAT(fromYear,'-',toYear) as name,
+				CONCAT(fromYear,'-',toYear) as years
 		  		FROM
 		  	rms_academicyear
 		  		WHERE status = 1 ORDER by toYear DESC ";

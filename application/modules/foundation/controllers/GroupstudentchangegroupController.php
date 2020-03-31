@@ -14,8 +14,9 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 				$search = $this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'title'	=>'',
-						'study_year' => '',
+						'adv_search'	=>'',
+						'branch_id' => '',
+						'academic_year' => '',
 						'grade'	=>'',
 						'session' => '',
 				);
@@ -23,8 +24,6 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$db_student= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 			$rs_rows = $db_student->selectAllStudentChangeGroup($search);
 			$list = new Application_Form_Frmtable();
-			
-			
 			$collumns = array("BRANCH","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit',
@@ -37,9 +36,8 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}	
-		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}

@@ -18,17 +18,18 @@
 			<script type="dojo/method" event="onSubmit" >			
 				if(this.validate()) {
               	 	studentid=dijit.byId('studentid').get('value');
-			   		studentname=dijit.byId('studentname').get('value');
-               		if(studentid==0 || studentid=='' || studentid ==-1){
-						alert('Select studentid feld!');
+      				if(studentid==0 || studentid=='' || studentid ==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT");?>");
 						dijit.byId('studentid').focus();
 						return false;
 					}
-					if(studentname==0 || studentname=='' || studentname ==-1){
-						alert('Select student name feld!');
-						dijit.byId('studentname').focus();
+  					if(dijit.byId('type').get('value')==''){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_TYPE");?>");
+  						dijit.byId('type').focus();
 						return false;
-					}
+  	  	  			}
+					loadingBlock();
+					dijit.byId('save_close').set('disabled',true);
 					return true;
 				}else {
 					return false;
@@ -40,6 +41,7 @@
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("branch_id");?>
+	                   		<?php echo $frm->getElement("id");?>
 	                   </div>
 		             </div>
 		    		<div class="form-group">
@@ -124,7 +126,7 @@
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
               		 <input iconClass="dijitIconClear" type="reset"  label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" onclick="submitDataClose();" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+					<input type="submit" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
             	 </div>
             </div>
@@ -176,10 +178,9 @@ dojo.ready(function(){
 		queryExpr: "*${0}*",                     
 		id: "studentid",
 		name: "studentid",  
-		readOnly:true,  
+		readOnly:true,   
 		required:true,        
 		class: 'fullside',
-		value:'<?php echo $this->row['stu_id'];?>',
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() { 
 			getStudentInfo();
@@ -192,8 +193,8 @@ dojo.ready(function(){
 	 		getallstudentname();
 	    });
 });
-
-var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+var study_id = '<?php echo $this->row['study_id']?>';
+var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudent')); ?>';
 function getallstudentname(){//
 	branch_id = dijit.byId("branch_id").attr("value");
 	if(branch_id==''){  
@@ -202,52 +203,30 @@ function getallstudentname(){//
 	dojo.xhrPost({
 		url:url_data,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,'study_id':study_id
 		},
 		handleAs:"json",
 		load: function(data) {
 			student_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('studentid').set('store',student_store);  
+		    dijit.byId('studentid').set('value',study_id);  
 		},
 		error: function(err) {
 			alert(err);
 		}
 	});
 }
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
+function getallGrade(){
+	
 }
-function submitDataClose(){
-	if(dijit.byId('add_studentdrop').validate()) {
-		studentid=dijit.byId('studentid').get('value');
-		 if(studentid==0 || studentid=='' || studentid ==-1){
-			alert('Select studentid feld!');
-			dijit.byId('studentid').focus();
-			return false;
-		}
- 		if(dijit.byId('type').get('value')==''){
-				dijit.byId('type').focus();
-			return false;
-	  	  	}
-  	  	
-		dijit.byId('save_close').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'edit')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("add_studentdrop"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";	
-				alert('<?php echo $tr->translate('EDIT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/foundation/studentdrop";
-			},
-			error: function(e) {
-			}
-		});
-	}
+function getStudentNo(){
+	
 }
-
-var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'get-student')); ?>';
+function getStudentInfo(){
+	
+}
+//var url_student = '<?php //echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'get-student')); ?>';
+/*var url_student = '<?php //echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getstudentstudyinfo')); ?>';
 function getStudentInfo(){
 	studentid = dijit.byId('studentid').get('value');
 	if(studentid==''){
@@ -257,7 +236,7 @@ function getStudentInfo(){
 	dojo.xhrPost({
 		url:url_student,
 		content:{
-			'studentid':studentid
+			'study_id':studentid
 			},
 		handleAs:"json",
 		load: function(data) { 
@@ -273,10 +252,12 @@ function getStudentInfo(){
 			}
 			dijit.byId('calture').set('readOnly',true);
 			dijit.byId('session').set('readOnly',true);
-			if(data.group_id>0){
-				dijit.byId("group").attr("value",data.group_id);
-				dijit.byId('group').set('readOnly',true);
-			}
+
+			//if(data.group_id>0){
+				//dijit.byId("group").attr("value",data.group_id);
+				//dijit.byId('group').set('readOnly',true);
+			//}
+			
 			dijit.byId('degree').set('value',data.degree);
 			dijit.byId('degree').set('readOnly',true);
 			dijit.byId('grade').set('value',data.grade);
@@ -289,21 +270,6 @@ function getStudentInfo(){
 		error: function(err) {
 		}
 	});
-}
+}*/
 </script>
 
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>	
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
-}
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>

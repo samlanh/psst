@@ -19,14 +19,13 @@
 			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['adv_search']; ?>"  class="fullside" type="text">
+					 	<?php echo $frm->getElement("adv_search");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<?php echo $frm->getElement("branch_id");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<?php echo $frm->getElement("academic_year");?>
-                   		<!-- <input id="study_year" /> -->
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<input id="group" />
@@ -137,27 +136,30 @@
 			}
 		});
 	}
+	
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
 		dept_id = dijit.byId('degree').get('value');
-		if(dept_id==''){return false;}
-		dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'dept_id':dept_id
+		if(dept_id=='' || dept_id==-1){return false;}
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id,
+					'noaddnew':1
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('grade').attr('value','');
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store); 
+				    <?php if (!empty($this->search['grade'])){?>
+					dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+					<?php }?> 
 				},
-			handleAs:"json",
-			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('grade').set('store',grade_store);   
-				<?php if (!empty($this->search['grade'])){?>
-				dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
-				<?php }?>
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+				error: function(err) {
+				}
+			});
 	}
+	
 </script>

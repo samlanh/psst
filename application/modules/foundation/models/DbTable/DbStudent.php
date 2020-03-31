@@ -864,7 +864,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				gds.academic_year,
 				gds.group_id,
 				gds.degree,
-				gds.grade
+				gds.grade,
+				gds.session,
+				(SELECT g.room_id FROM `rms_group` AS g WHERE g.id = gds.group_id LIMIT 1) AS room
 				
 			FROM
 				rms_student AS s,
@@ -873,11 +875,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				gds.stu_id = s.stu_id
 				AND (stu_enname!='' OR s.stu_khname!='')
 				AND s.status=1
-				AND gds.stop_type=0
 				AND s.customer_type=1
 				AND gds.gd_id = $studyId
 			LIMIT 1
 		";
+		//AND gds.stop_type=0
 		return $db->fetchRow($sql);
 	}
 }

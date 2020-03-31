@@ -146,7 +146,9 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 							'moving_date'=>$_data['moving_date'],
 							'note'		=>$_data['note'],
 							'user_id'	=>$this->getUserId(),
-							'status'	=>1
+							'status'	=>1,
+							'create_date'=> date('Y-m-d H:i:s'),
+							'modify_date'=> date('Y-m-d H:i:s'),
 					);
 					$this->_name='rms_student_change_group';
 					$id = $this->insert($_arr);
@@ -184,6 +186,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 							'moving_date'=>$_data['moving_date'],
 							'note'		=>$_data['note'],
 							'status'	=>$_data['status'],
+							'modify_date'=> date('Y-m-d H:i:s'),
 					);
 					$where=" id = ".$_data['id'];
 					$this->update($_arr, $where);

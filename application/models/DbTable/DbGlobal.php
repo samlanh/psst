@@ -2866,8 +2866,10 @@ function getAllgroupStudyNotPass($action=null){
   	";
   	return $db->fetchAll($sql);
   }
-  function getAllStudentStudy($opt=null,$branchid=null){
+  function getAllStudentStudy($opt=null,$data=array()){
   	$db=$this->getAdapter();
+  	
+  	$branchid = empty($data['branch_id'])?$data['branch_id']:null;
   	$branch_id = $this->getAccessPermission();
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
   	$lang = $this->currentlang();
@@ -2888,13 +2890,18 @@ function getAllgroupStudyNotPass($action=null){
 		  	gds.stu_id = s.stu_id
 		  	AND (stu_enname!='' OR s.stu_khname!='')
 		  	AND s.status=1
-		  	AND gds.stop_type=0
 		  	AND s.customer_type=1
 		  	AND gds.is_current = 1
 		  	AND gds.is_setgroup = 1
+		  
   	";
   	if($branchid!=null){
   		$sql.=" AND s.branch_id=".$branchid;
+  	}
+  	if (!empty($data['study_id'])){
+  		$sql.="AND (gds.stop_type=0 OR gds.gd_id =".$data['study_id'].")";
+  	}else{
+  		$sql.="	AND gds.stop_type=0";
   	}
   	$sql.=" ORDER BY CONCAT( COALESCE(s.stu_code,''),'-',$stuName,COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) ASC";
   	$rows = $db->fetchAll($sql);

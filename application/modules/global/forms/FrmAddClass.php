@@ -319,7 +319,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 	
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
 		$_academic->setAttribs(array('dojoType'=>$this->filter,'readOnly'=>'readOnly',
-				'placeholder'=>$this->tr->translate("SERVIC"),
+				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
 				'class'=>'fullside',
 				'required'=>false,
 				'queryExpr'=>'*${0}*',
@@ -327,8 +327,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		));
 	
 		$_academic->setValue($request->getParam("academic_year"));
-		$db = new Global_Model_DbTable_DbGroup();
-		$rows= $db->getAllYears();
+		$rows =  $_dbgb->getAllAcademicYear();
+// 		$db = new Global_Model_DbTable_DbGroup();
+// 		$rows= $db->getAllYears();
 		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];

@@ -69,7 +69,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_kh,
 				(SELECT CONCAT(last_name,' ',stu_enname) FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
 				(SELECT $label FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
-				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.academic_year LIMIT 1) AS academic,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				
@@ -81,20 +81,19 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				reason,
 				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name
 			";
-// 		$sql.=$dbp->caseStatusShowImage("s.status");
+		$sql.=$dbp->caseStatusShowImage("s.status");
 		$sql.=" FROM `rms_student_drop` AS s WHERE 1 ";
 		$where = "";
 		$from_date =(empty($search['start_date']))? '1': " s.date_stop >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " s.date_stop <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
 		$order_by=" order by id DESC";
-		
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}
-		if(!empty($search['title'])){
+		if(!empty($search['adv_search'])){
 			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
+			$s_search = addslashes(trim($search['adv_search']));
 			$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
@@ -102,8 +101,8 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.=" AND s.branch_id = ".$search['branch_id'];
 		}
-		if(!empty($search['study_year'])){
-			$where.=" AND s.academic_year = ".$search['study_year'];
+		if(!empty($search['academic_year'])){
+			$where.=" AND s.academic_year = ".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
 			$where.=" AND s.degree=".$search['degree'];
@@ -128,41 +127,55 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		try{	
-			$_arr= array(
-				'branch_id'	 => $_data['branch_id'],
-				'stu_id'	 => $_data['studentid'],
-				'studentname'=> $_data['studentname'],
-				'type'		 => $_data['type'],
-				'date_stop'	 => $_data['datestop'],
-				'reason'	 => $_data['reason'],
-				'create_date'=> date('Y-m-d'),
-				'gender'	 => $_data['gender'],
-				'group'		 => $_data['group'],
-				'academic_year'	=> $_data['academic_year'],
-				'calture'	 => $_data['calture'],
-				'session'	 => $_data['session'],
-				'degree'	 => $_data['degree'],
-				'grade'		 => $_data['grade'],
-				'room'		 => $_data['room'],
-				'user_id'	 => $this->getUserId(),
+			$dbstu = new Foundation_Model_DbTable_DbStudent();
+			$stuInfo = $dbstu->getStudentStudyInfo($_data['studentid']);
+			if (!empty($stuInfo)){
+				$stu_id = $stuInfo['stu_id'];
+				$_arr= array(
+						'branch_id'	 => $_data['branch_id'],
+						'study_id'	=>$_data['studentid'],
+						'stu_id'	=>$stu_id,
+						'studentname'=> $_data['studentname'],
+						'gender'	 => $_data['gender'],
+						
+						'type'		 => $_data['type'],
+						'date_stop'	 => $_data['datestop'],
+						'reason'	 => $_data['reason'],
+						
+						'group'		 => $_data['group'],
+						'academic_year'	=> $_data['academic_year'],
+						'calture'	 => $_data['calture'],
+						'session'	 => $_data['session'],
+						'degree'	 => $_data['degree'],
+						'grade'		 => $_data['grade'],
+						'room'		 => $_data['room'],
+						
+						'user_id'	 => $this->getUserId(),
+						'create_date'=> date('Y-m-d H:i:s'),
+						'modify_date'=> date('Y-m-d H:i:s'),
+						'status' 	=>1
 				);
-			$id = $this->insert($_arr);
-			
-			$this->_name='rms_student';
-			$where=" stu_id=".$_data['studentid'];
-			$arr=array(
-				'is_subspend'	=>	$_data['type'],
-			);
-			$this->update($arr, $where);
+				$id = $this->insert($_arr);
 				
-			$this->_name='rms_group_detail_student';
-			$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
-			$ar=array(
-				'stop_type'	=>	$_data['type'],
-			);
-			$this->update($ar, $where);
-			$_db->commit();
+				$this->_name='rms_group_detail_student';
+				// 			$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
+				$where = " gd_id=".$_data['studentid'];
+				$ar=array(
+						'stop_type'	=>	$_data['type'],
+				);
+				$this->update($ar, $where);
+			}
 			
+// 			$this->_name='rms_student';
+// 			$where=" stu_id=".$_data['studentid'];
+// 			$arr=array(
+// 				'is_subspend'	=>	$_data['type'],
+// 			);
+// 			$this->update($arr, $where);
+				
+			
+			$_db->commit();
+			return true;
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -172,17 +185,21 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{	
-			$_arr=array(
+			$dbstu = new Foundation_Model_DbTable_DbStudent();
+			$stuInfo = $dbstu->getStudentStudyInfo($_data['studentid']);
+			if (!empty($stuInfo)){
+				$stu_id = $stuInfo['stu_id'];
+				$_arr=array(
 						'branch_id'	=>$_data['branch_id'],
-						'stu_id'	=>$_data['studentid'],
-						'studentname'=>$_data['studentname'],
+						'study_id'	=>$_data['studentid'],
+						'stu_id'	=>$stu_id,
+						
 						'type'		=>$_data['type'],
-						//'status'	=>$_data['status'],
+// 						'status'	=>$_data['status'],
 						'date_stop'	=>$_data['datestop'],
 						'reason'	=>$_data['reason'],
-						'create_date'=>date('Y-m-d'),
-						'gender'	=>$_data['gender'],
 						
+						'gender'	=>$_data['gender'],
 						'group'		=>$_data['group'],
 						'academic_year'	=>$_data['academic_year'],
 						'calture'	=>$_data['calture'],
@@ -191,17 +208,28 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'grade'		=>$_data['grade'],
 						'room'		=>$_data['room'],
 						'user_id'	=>$this->getUserId(),
-					);
-			$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
-			$this->update($_arr, $where);
+						'modify_date'=> date('Y-m-d H:i:s'),
+				);
+				$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
+				$this->update($_arr, $where);
+				
+				$this->_name='rms_group_detail_student';
+// 				$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
+				$where = " gd_id=".$_data['studentid'];
+				$ar=array(
+						'stop_type'	=>	$_data['type'],
+				);
+				$this->update($ar, $where);
+			}
 			
-			$this->_name='rms_student';
-			$where=" stu_id=".$_data['studentid'];
 			
-			$arr=array(
-				'is_subspend'	=>	$_data['type'],
-			);
-			$this->update($arr, $where);
+// 			$this->_name='rms_student';
+// 			$where=" stu_id=".$_data['studentid'];
+			
+// 			$arr=array(
+// 				'is_subspend'	=>	$_data['type'],
+// 			);
+// 			$this->update($arr, $where);
 			
 			
 // 			$this->_name='rms_student_payment';
@@ -211,12 +239,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 // 			);			
 // 			$this->update($arr, $where);
 			
-			$this->_name='rms_group_detail_student';
-			$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
-			$ar=array(
-				'stop_type'	=>	$_data['type'],
-			);
-			$this->update($ar, $where);
 
 			$db->commit();
 		}catch(Exception $e){

@@ -232,7 +232,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
-   public function getAllKnoyBy(){
+   public function getAllKnowBy(){
    	$db = $this->getAdapter();
    	$sql = "SELECT id as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
    	return $db->fetchAll($sql);

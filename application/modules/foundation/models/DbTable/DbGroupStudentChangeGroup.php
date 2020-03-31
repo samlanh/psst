@@ -451,15 +451,20 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	
 	function getAllStudentFromGroup($from_group){
 		$db=$this->getAdapter();
-		$sql="select gds.stu_id as stu_id,st.stu_enname,st.last_name,st.stu_khname,st.stu_code,
-			 (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
-			 FROM rms_group_detail_student as gds,rms_student as st 
+		$sql="SELECT 
+				gds.stu_id as stu_id,
+				st.stu_enname,
+				st.last_name,
+				st.stu_khname,
+				st.stu_code,
+			 	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) as sex
+			FROM rms_group_detail_student as gds,
+				rms_student as st 
 			WHERE st.is_subspend = 0 AND 
 				gds.type=1 
-				and gds.stu_id=st.stu_id 
-				and gds.group_id=$from_group
-				and gds.is_pass=0 ";
-		//remove and gds.is_pass=0  but bat old student when have repeat student 
+				AND gds.stu_id=st.stu_id 
+				AND gds.group_id=$from_group
+				AND gds.is_pass=0 ";
 		return $db->fetchAll($sql);
 	}
 	

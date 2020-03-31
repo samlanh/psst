@@ -20,18 +20,6 @@
 						dijit.byId("studentid").focus();
 						return false;
 					}
-					to_group = dijit.byId("to_group").get('value');		
-					if(to_group==""){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>");
-						dijit.byId("to_group").focus();
-						return false;
-					}
-					from_group = dijit.byId("from_group").get('value');	
-					if(to_group==from_group){
-						alert("<?php echo $tr->translate("You can not change student to same group");?> !!!");
-						dijit.byId("to_group").focus();
-						return false;
-					}
 					loadingBlock();
        				return true;
   				}else {
@@ -76,13 +64,7 @@
 							</select>
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_GROUP");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="from_group" />
-	                   </div>
-	                </div>
+	               
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
 	                   </label>
@@ -107,13 +89,6 @@
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input id="to_branch" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_GROUP")?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="to_group" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -195,23 +170,6 @@
 		    queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: true,                      
-		    id: "from_group",
-		    name: "from_group",  
-		    class: 'fullside', 
-		    readOnly:true,
-		    required:false,
-		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function() {  
-		    	group_id = dijit.byId('from_group').get('value');
-		    	toStudentGroup(1);
-		    }
-		}, "from_group");
-		
-		new dijit.form.FilteringSelect({
-			store: group_store,
-		    queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,                      
 		    id: "to_branch",
 		    name: "to_branch",  
 		    class: 'fullside', 
@@ -219,36 +177,16 @@
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("TO_BRANCH");?>",          
 		    onChange: function() {  
-		    	getAllGroupByBranch(2);
 		    }
 		}, "to_branch");
 
-		new dijit.form.FilteringSelect({
-			store: group_store,
-		    queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,                      
-		    id: "to_group",
-		    name: "to_group",  
-		    class: 'fullside', 
-		    readonly:false,
-		    required:false,
-		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function() {  
-		    	group_id = dijit.byId('to_group').get('value');
-		    	toStudentGroup(2);
-				popupAddGroup();
-		    }
-		}, "to_group");
 		
 		getallstudentname();
-		getAllGroupByBranch(1);
 		getAllToBranch();
 		
 		var branch_id = dijit.byId('branch_id');
 		branch_id.on('change', function(evt) {
 			getallstudentname();
-			getAllGroupByBranch(1);
 			getAllToBranch();
 		});
 	}); 
@@ -277,8 +215,7 @@
 			}
 		});
 	}
-	
-	var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'changebranch','action'=>'get-student')); ?>';
+	var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getstudentstudyinfo')); ?>';
 	function getStudentInfo(){
 		studentid = dijit.byId('studentid').get('value');
 		if(studentid==0 || studentid==0){ 
@@ -288,12 +225,11 @@
 		dojo.xhrPost({
 			url:url_student,
 			content:{
-				'studentid':studentid
+				'study_id':studentid
 				},
 			handleAs:"json",
 			load: function(data) {
 				dijit.byId("gender").attr("value",data.sex);
-				dijit.byId("from_group").attr("value",data.group_id);
 			},
 			error: function(err) {
 				
@@ -301,114 +237,8 @@
 		});
 	}
 	
-	var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'changebranch','action'=>'get-to-group')); ?>';
-	function toStudentGroup(type){
-		if(type==1){
-			togroup = dijit.byId('from_group').get('value');
-			if(togroup==""){
-				dojo.byId('lblfromgroup').innerHTML="";
-			}
-		}else{
-			togroup = dijit.byId('to_group').get('value');
-			if(togroup==""){
-				dojo.byId('lblfromgroup').innerHTML="";
-			}
-		}
-		if(togroup==""){
-			return false;
-		}
-		dojo.xhrPost({
-			url:url_to_group,
-			content:{
-				'to_group':togroup
-				},
-			handleAs:"json",
-			load: function(data) {
-				var temp='';
-				temp+='<div  style=" padding: 5px !important; border: solid 2px #02014a;   border-radius: 1px;"><ul>';
-					temp+='<li>';
-						temp+='<span class="lbl-tt"><?php echo $tr->translate("ACADEMIC_YEAR")?></span> : '+data.year;
-					temp+='</li>';
-					temp+='<li>';
-						temp+='<span class="lbl-tt"><?php echo $tr->translate("DEGREE")?></span> : '+data.degree;
-					temp+='</li>';
-					temp+='<li>';
-						temp+='<span class="lbl-tt"><?php echo $tr->translate("GRADE")?></span> : '+data.grade;
-					temp+='</li>';
-					temp+='<li>';
-						temp+='<span class="lbl-tt"><?php echo $tr->translate("SESSION")?></span> : '+data.session;
-					temp+='</li>';
-				temp+='</ul></div>';
-				if(type==1){
-					dojo.byId('lblfromgroup').innerHTML=temp;
-				}else{
-					dojo.byId('lbltogroup').innerHTML=temp;
-				}
-			},
-			error: function(err) {
-			}
-		});
-	}
-	function clear(){
-		dojo.byId('lblfromgroup').innerHTML='';
-		dojo.byId('lbltogroup').innerHTML='';
-		dijit.byId("studentid").attr("value",'');
-		dijit.byId("from_group").attr("value",'');
-		dijit.byId("studentname").attr("value",'');
-		dijit.byId("to_group").attr("value",'');
-		dijit.byId("moving_date").attr("value",'');
-		dijit.byId("note").attr("value",'');
-		clear1();
-	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-	function getAllGroupByBranch(type){
-		if(type==1){
-			branch_id = dijit.byId('branch_id').get('value');
-			if(branch_id=='' || branch_id==-1){
-				var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-				dijit.byId('from_group').set('store',group_store);  
-				dijit.byId('branch_id').focus();
-				return false;
-			}
-		}else{
-			dijit.byId('to_group').reset();
-			branch_id = dijit.byId('to_branch').get('value');
-			if(branch_id=='' || branch_id==-1){
-				var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-				dijit.byId('to_group').set('store',group_store);  
-				dijit.byId('to_branch').focus();
-				return false;
-			}
-		}
-		dojo.xhrPost({
-			url: url_getgroup,
-			content:{
-				'branch_id':branch_id,'noaddnew':1
-			},
-			handleAs:"json",
-			load: function(data) {
-				group_store  = getDataStorefromJSON('id','name', data);
-				if(type==1){
-					dijit.byId('from_group').set('store',group_store);   
-				}else{
-					dijit.byId('to_group').set('store',group_store);  
-				}
-			},
-			error: function(err) {
-			}
-		});
-	}
-	
-	function popupAddGroup(){
-		id = dijit.byId('to_group').get('value');
-		if(id==-1){
-			window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
-		}
-	}
-	
-	function getallstudentname(){
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
-		dijit.byId('from_group').reset();
+	function getallstudentname(){//
+		var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudent')); ?>';
 		dijit.byId('studentid').reset();
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id=='' || branch_id==-1){
@@ -417,16 +247,17 @@
 			dijit.byId('branch_id').focus();
 			return false;
 		}
+		loadingBlock();
 		dojo.xhrPost({
 			url:url_data,
 			content:{
-				'student_name':1,
-				'branch_id':branch_id
+				'branch_id':branch_id,'is_maingrade':1
 			},
 			handleAs:"json",
 			load: function(data) {
 				student_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('studentid').set('store',student_store);  
+			    HideloadingBlock();
 			},
 			error: function(err) {
 			}

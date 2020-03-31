@@ -883,7 +883,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sh.degree AND type=1 LIMIT 1) AS degreeTitle,
 				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=sh.grade AND items_type=1 LIMIT 1) AS gradeTitle,
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sh.group_id LIMIT 1) AS groupCode
-			FROM rms_group_detail_student AS sh WHERE sh.stu_id=$student_id AND sh.is_current=1 ORDER BY sh.gd_id ASC";
+			FROM rms_group_detail_student AS sh 
+			WHERE sh.stu_id=$student_id 
+				AND sh.is_current=1 AND sh.is_pass=0";
+		$sql.=" ORDER BY sh.gd_id ASC ";
 		return $db->fetchAll($sql);
 	}
 	function getStudentStudyInfo($studyId){
@@ -911,5 +914,30 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		";
 		//AND gds.stop_type=0
 		return $db->fetchRow($sql);
+	}
+	function getAllStudyByStudent($_data){
+		$db = $this->getAdapter();
+		$stu_id = empty($_data['stu_id'])?0:$_data['stu_id'];
+		$branch_id = empty($_data['branch_id'])?0:$_data['branch_id'];
+		$sql="
+		SELECT
+			gds.*,
+			gds.academic_year,
+			gds.group_id,
+			gds.degree,
+			gds.grade,
+			gds.session,
+			(SELECT g.room_id FROM `rms_group` AS g WHERE g.id = gds.group_id LIMIT 1) AS room
+		
+			FROM
+				rms_group_detail_student AS gds
+			WHERE
+				gds.is_current =1
+				AND gds.stu_id = $stu_id
+				AND (SELECT g.branch_id FROM `rms_group` AS g WHERE g.id = gds.group_id LIMIT 1) = $branch_id
+		";
+		//AND gds.stop_type=0
+		//AND gds.stop_type=0
+		return $db->fetchAll($sql);
 	}
 }

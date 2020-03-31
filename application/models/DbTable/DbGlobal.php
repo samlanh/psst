@@ -2239,15 +2239,14 @@ function getAllgroupStudyNotPass($action=null){
 	  	st.last_name,
 	  	CONCAT(st.stu_enname,' - ',st.stu_khname) AS stu_name,
 	  	CONCAT(COALESCE(st.stu_code,''),'-',COALESCE(st.stu_khname,''),'-',COALESCE(st.stu_enname,''),' ',COALESCE(st.last_name,'')) AS name,
-	  	
 	  	(SELECT $coloum FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) AS sex
   	FROM
 	  	rms_group_detail_student as gds,
 	  	rms_student as st
   	WHERE
 	  	gds.stu_id=st.stu_id
-	  	and gds.stop_type=0
 	  	and gds.group_id=$group_id";
+  	//	and gds.stop_type=0
   	//and gds.is_pass=0
   	return $db->fetchAll($sql);
   }
@@ -2672,6 +2671,9 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.="AND (gds.stop_type=0 OR gds.gd_id =".$data['study_id'].")";
   	}else{
   		$sql.="	AND gds.stop_type=0";
+  	}
+  	if (!empty($data['is_maingrade'])){
+  		$sql.=" AND gds.is_maingrade=".$data['is_maingrade'];
   	}
   	$sql.=" ORDER BY CONCAT( COALESCE(s.stu_code,''),'-',$stuName,COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) ASC";
   	$rows = $db->fetchAll($sql);

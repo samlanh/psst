@@ -11,10 +11,11 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 			$search = $this->getRequest()->getPost();
 		}else{
 			$search=array(
-				'title'	=>'',
+				'adv_search'	=>'',
 				'branch_id'=>'',
-				'study_year' => '',
+				'academic_year' => '',
 				'group'	=>'',
+				'degree'	=>'',
 				'grade'	=>'',
 				'session' => '',
 			);
@@ -33,8 +34,9 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view-> adv_search = $search;
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
@@ -44,18 +46,19 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$_add = new Foundation_Model_DbTable_DbGraduatedStudent();
  				$_add->addGraduatedStudent($data);
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+ 				if(!empty($data['save_close'])){
+ 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent");
+ 				}
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent/add");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
-		$_dbgb = new Application_Model_DbTable_DbGlobal();		
-		$this->view->branch_name = $_dbgb->getAllBranch();
-		$rs = $_dbgb->getViewById(9);
-		unset($rs[0]);
-		$this->view->rstype = $rs;
+		$tsub= new Foundation_Form_FrmGraduate();
+		$frm_student=$tsub->FrmAddGraduate();
+		Application_Model_Decorator::removeAllDecorator($frm_student);
+		$this->view->frm = $frm_student;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -81,11 +84,10 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		$this->view->rs = $result;
 		$this->view->studentpass = $db->selectStudentPass($result['group_id']);
 		
-		$_dbgb = new Application_Model_DbTable_DbGlobal();		
-		$this->view->branch_name = $_dbgb->getAllBranch();
-		$rs = $_dbgb->getViewById(9);
-		unset($rs[0]);
-		$this->view->rstype = $rs;
+		$tsub= new Foundation_Form_FrmGraduate();
+		$frm_student=$tsub->FrmAddGraduate($result);
+		Application_Model_Decorator::removeAllDecorator($frm_student);
+		$this->view->frm = $frm_student;
 	}
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){

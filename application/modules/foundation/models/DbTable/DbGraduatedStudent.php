@@ -36,14 +36,25 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	public function getAllStudentGraduated($search){
 		$_db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
+		
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label="name_en";
+		$branch = "branch_nameen";
+		if ($currentLang==1){
+			$colunmname='title';
+			$label="name_kh";
+			$branch = "branch_namekh";
+		}
+		
 		$sql = "SELECT
 		gs.id,
-		(SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
+		(SELECT $branch FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
 		g.group_code,
-		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS academic,
-		(SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
-		(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
-		(SELECT name_en from rms_view where type=5 and key_code = gs.type LIMIT 1) as type,
+		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic,
+		(SELECT rms_itemsdetail.$colunmname from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
+		(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
+		(SELECT $label from rms_view where type=9 and key_code = gs.type LIMIT 1) as type,
 		gs.note,
 		gs.create_date,
 		(select first_name from rms_users where id = gs.user_id) as user
@@ -60,26 +71,22 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}
-		if(!empty($search['title'])){
+		if(!empty($search['adv_search'])){
 			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
-			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.from_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.to_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id=(select grade from rms_group where rms_group.id=
-			rms_group_student_change_group.from_group limit 1)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id=(select grade from rms_group where rms_group.id=
-					rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
-					$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
-							rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
-							$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
-									rms_group_student_change_group.from_group limit 1)) LIKE '%{$s_search}%'";
-									$where .=' AND ( '.implode(' OR ',$s_where).')';
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[] = " g.group_code LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
 			$where.=" AND g.branch_id=".$search['branch_id'];
 		}
-		if(!empty($search['study_year'])){
-			$where.=" AND g.academic_year=".$search['study_year'];
+		if(!empty($search['academic_year'])){
+			$where.=" AND g.academic_year=".$search['academic_year'];
+		}
+		if(!empty($search['degree'])){
+			$where.=" AND g.degree=".$search['degree'];
 		}
 		if(!empty($search['grade'])){
 			$where.=" AND g.grade=".$search['grade'];
@@ -100,44 +107,49 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 			$_arr= array(
 				'user_id'		=>$this->getUserId(),
 				'branch_id'		=>$_data['branch_id'],
-				'group_id'		=>$_data['from_group'],
+				'group_id'		=>$_data['group'],
+				'graduate_date'		=>$_data['graduate_date'],
 				'type'			=>$_data['type'],
 				'note'			=>$_data['note'],
 				'status'		=>1,
 				'array_checkbox'=>$identity,
-				'create_date'	=>date("Y-m-d"),
+				'create_date'	=>date("Y-m-d H:i:s"),
+				'modify_date'	=>date("Y-m-d H:i:s"),
 			);
 			$id = $this->insert($_arr);
-				
+
+			
 			if (!empty($_data['selector'])){
 				foreach ($_data['selector'] as $rs){
 					$stu=array(
 						'stop_type'		=>3,// graduated
 					);
-					$where=" stu_id=".$rs;
+// 					$where=" stu_id=".$rs;
+					$where=" stu_id=".$rs." AND group_id=".$_data['group'];
 					$this->_name='rms_group_detail_student';
 					$this->update($stu, $where);
 					
-					$array=array(
-						'is_subspend'=>3,
-					);
-					$where = " stu_id=".$rs;
-					$this->_name = 'rms_student';
-					$this->update($array, $where);
+// 					$array=array(
+// 						'is_subspend'=>3,
+// 					);
+// 					$where = " stu_id=".$rs;
+// 					$this->_name = 'rms_student';
+// 					$this->update($array, $where);
 				}
 			}
 			
-			$this->_name = 'rms_group';
 			$group=array(
 				'is_use'	=>1,//used
 				'is_pass'	=>1,//finish
 			);
-			$where=" id=".$_data['from_group'];
+			$where=" id=".$_data['group'];
+			$this->_name = 'rms_group';
 			$this->update($group, $where);
-			return $_db->commit();
+			$_db->commit();
+			return true;
 		}catch(Exception $e){
-			$_db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 		}
 	}	
 	function getGroupDetail($group_id){
@@ -155,9 +167,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
  		$_db->beginTransaction();
 		try{	
 			$id = $_data['id'];
-			/////////////////////// Update student to study in old_group in group_detail_student  //////////////////////////////////
 			$this->_name='rms_group_detail_student';
-			$StudentOldGroup = $this->getAllStudentOldGroup($_data['from_group']);
+			$StudentOldGroup = $this->getAllStudentOldGroup($_data['group']);
 			if(!empty($StudentOldGroup)){
 				foreach($StudentOldGroup as $result){
 					$arra=array(
@@ -167,22 +178,22 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					$this->update($arra, $where);
 				}
 			}
-			$this->_name='rms_student';
-			if(!empty($StudentOldGroup)){
-				foreach($StudentOldGroup as $result){
-					$arra=array(
-							'is_subspend'=>0,
-					);
-					$where=" stu_id = ".$result['stu_id'];
-					$this->update($arra, $where);
-				}
-			}
+// 			$this->_name='rms_student';
+// 			if(!empty($StudentOldGroup)){
+// 				foreach($StudentOldGroup as $result){
+// 					$arra=array(
+// 							'is_subspend'=>0,
+// 					);
+// 					$where=" stu_id = ".$result['stu_id'];
+// 					$this->update($arra, $where);
+// 				}
+// 			}
 			$this->_name = 'rms_group';
 			$group=array(
 					'is_use'	=>1, // true
 					'is_pass'	=>2, // studying
 			);
-			$where=" id=".$_data['from_group'];
+			$where=" id=".$_data['group'];
 			$this->update($group, $where);
 			
 			if($_data['status']==1){
@@ -190,10 +201,12 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 				$_arr=array(
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$_data['branch_id'],
-						'group_id'		=>$_data['from_group'],
+						'group_id'		=>$_data['group'],
 						'type'			=>$_data['type'],
 						'note'			=>$_data['note'],
 						'status'		=>$_data['status'],
+						'graduate_date'		=>$_data['graduate_date'],
+						'modify_date'	=>date("Y-m-d H:i:s"),
 						'array_checkbox'=>$identity,
 				);
 				$this->_name='rms_graduated_student';
@@ -210,24 +223,26 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						$this->_name='rms_group_detail_student';
 						$this->update($stu, $where);
 				
-						$array=array(
-								'is_subspend'=>3,
-						);
-						$where = " stu_id=".$rs;
-						$this->_name = 'rms_student';
-						$this->update($array, $where);
+// 						$array=array(
+// 								'is_subspend'=>3,
+// 						);
+// 						$where = " stu_id=".$rs;
+// 						$this->_name = 'rms_student';
+// 						$this->update($array, $where);
 					}
 				}
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
-						'is_pass'	=>2,
+						'is_pass'	=>1,
 					);
-				$where=" id=".$_data['from_group'];
+				$where=" id=".$_data['group'];
 				$this->update($group, $where);
 								
 			}else{  //////// status == 0 => deactive    ===> so update all student to old info
 				$_arr=array(
+						'graduate_date'		=>$_data['graduate_date'],
+						'modify_date'	=>date("Y-m-d H:i:s"),
 						'user_id'=>$this->getUserId(),
 						'status'=>$_data['status']
 				);
@@ -237,8 +252,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 			}			
 			return $_db->commit();
 		}catch(Exception $e){
-			$_db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 		}
 	}	
 	function getAllStudentFromGroup($from_group){

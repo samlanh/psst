@@ -62,30 +62,28 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		$sql = "SELECT 
 		scg.id,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = scg.branch_id LIMIT 1) AS branch_name,
-		(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS code,
-		(SELECT stu_khname FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS kh_name,
-		(SELECT CONCAT(COALESCE(stu_enname,'-'),' ',COALESCE(last_name,'') ) FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS last_name,
+		(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` LIMIT 1) AS code,
+		(SELECT stu_khname FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` LIMIT 1) AS kh_name,
+		(SELECT CONCAT(COALESCE(stu_enname,'-'),' ',COALESCE(last_name,'') ) FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` LIMIT 1) AS last_name,
 		
-		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=(SELECT sex FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) limit 1)AS sex,
-		(SELECT group_code from rms_group where rms_group.id = scg.from_group limit 1)AS from_group,
-		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id = scg.from_group limit 1)) AS from_academic,
-		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id = scg.from_group LIMIT 1)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as from_grade,
-		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = (select session from rms_group where rms_group.id = scg.from_group limit 1))) LIMIT 1) AS `from_session`,
-		
+		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 AND `rms_view`.`key_code`=st.stu_id limit 1)AS sex,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = scg.to_branch LIMIT 1) AS to_branch_name,
-		group_code AS to_group,
-		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year limit 1) AS to_academic,
-		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=rms_group.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
-		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = rms_group.session )) LIMIT 1) AS `to_session`,
-			moving_date
+		moving_date
 		";
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->caseStatusShowImage("scg.status");
-		$sql.=" FROM `rms_student_change_branch` as scg,
-			rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 ";
+		$sql.=" 
+			FROM 
+					`rms_student_change_branch` AS scg,
+					rms_student AS st,
+					rms_group_detail_student AS gds
+			WHERE  scg.stu_id=st.stu_id 
+					AND gds.stu_id=st.stu_id 
+					AND gds.stop_type=0
+					AND gds.is_maingrade=1 ";
 		
-		$order_by=" order by id DESC";
+		$order_by=" ORDER BY scg.id DESC";
 		$where=' ';
 		$from_date =(empty($search['start_date']))? '1': "scg.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "scg.create_date <= '".$search['end_date']." 23:59:59'";
@@ -93,24 +91,13 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}
-		if(!empty($search['title'])){
+		if(!empty($search['adv_search'])){
 			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
+			$s_search = addslashes(trim($search['adv_search']));
 			$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id`) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT stu_khname FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id`) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT stu_enname FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id`) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT group_code from rms_group where rms_group.id = scg.from_group) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT group_code from rms_group where rms_group.id = scg.to_group) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
-		}
-		if(!empty($search['study_year'])){
-			$where.=" AND rms_group.academic_year like ".$search['study_year'];
-		}
-		if(!empty($search['grade'])){
-			$where.=" AND rms_group.grade=".$search['grade'];
-		}
-		if(!empty($search['session'])){
-			$where.=" AND rms_group.session=".$search['session'];
 		}
 		if(!empty($search['branch_id'])){
 			$where.=" AND scg.branch_id=".$search['branch_id'];
@@ -148,68 +135,70 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		try{
-			$stu_id=$_data['studentid'];
-			$_arr= array(
-					'branch_id'		=>$_data['branch_id'],
-					'stu_id'		=>$_data['studentid'],
-					'to_branch'		=>$_data['to_branch'],
-					'to_group'		=>$_data['to_group'],
-					'from_group'	=>$_data['from_group'],
-					'moving_date'	=>$_data['moving_date'],
-					'reason'		=>$_data['reason'],
-					'note'			=>$_data['note'],
-					'user_id'		=>$this->getUserId(),
-					'status'		=>1,
-					'create_date' 	=> date("Y-m-d H:i:s"),
-					'modify_date' 	=> date("Y-m-d H:i:s")
-			);
-			$this->_name='rms_student_change_branch';
-			$id = $this->insert($_arr);
-	
-			$this->_name='rms_group_detail_student';
-			$arr= array(
-					'group_id'=>$_data['from_group'],
-					'is_pass'=>1,
-					'stop_type'=>1,
-					'note'=>'Student Change Branch'
-			);
-			$where="stu_id=".$stu_id." and is_pass=0 and group_id=".$_data['from_group'];
-			$this->update($arr, $where);
-	
-			if(!empty($_data['to_group'])){
-				$this->_name='rms_group_detail_student';
-				$arr= array(
-						'stu_id'	=>$stu_id,
-						'group_id'=>$_data['to_group'],
-						'old_group'	=>$_data['from_group'],
-						'status'	=>1,
-						'date'		=>date('Y-m-d')
+			$dbstu = new Foundation_Model_DbTable_DbStudent();
+			$stuInfo = $dbstu->getStudentStudyInfo($_data['studentid']);
+			if (!empty($stuInfo)){
+				$stu_id = $stuInfo['stu_id'];
+				$_arr= array(
+						'branch_id'		=>$_data['branch_id'],
+						'study_id'		=>$_data['studentid'],
+						'stu_id'		=>$stu_id,
+						
+						'to_branch'		=>$_data['to_branch'],
+// 						'to_group'		=>$_data['to_group'],
+// 						'from_group'	=>$_data['from_group'],
+						'moving_date'	=>$_data['moving_date'],
+						'reason'		=>$_data['reason'],
+						'note'			=>$_data['note'],
+						'user_id'		=>$this->getUserId(),
+						'status'		=>1,
+						'create_date' 	=> date("Y-m-d H:i:s"),
+						'modify_date' 	=> date("Y-m-d H:i:s")
 				);
-				$this->insert($arr);
+				$this->_name='rms_student_change_branch';
+				$id = $this->insert($_arr);
+				
+				$array = array(
+						'branch_id'	 => $_data['branch_id'],
+						'stu_id'	=>$stu_id,
+				);
+				$studyStudent = $dbstu->getAllStudyByStudent($array);
+				if (!empty($studyStudent)) foreach ($studyStudent as $st){
+					$this->_name='rms_group_detail_student';
+					$arr= array(
+							'is_pass'=>1,
+							'stop_type'=>1,
+							'note'=>'Student Change Branch'
+					);
+					$where = " gd_id=".$st['gd_id'];
+					$this->update($arr, $where);
+					
+					$arr= array(
+							'stu_id'		=>$stu_id,
+							'old_group'		=>$st['group_id'],
+							'academic_year'	=>$st['academic_year'],
+							'degree'		=>$st['degree'],
+							'grade'			=>$st['grade'],
+							'is_maingrade'	=>$st['is_maingrade'],
+							'status'	=>1,
+							'is_current'	=>1,
+							'is_newstudent'	=>1,
+							'date'		=>date('Y-m-d'),
+							'create_date' 	=> date("Y-m-d H:i:s"),
+							'modify_date' 	=> date("Y-m-d H:i:s"),
+							'user_id'		=>$this->getUserId(),
+					);
+					$this->insert($arr);
+					
+					$this->_name='rms_student';
+					$array = array(
+							'branch_id'		=>$_data['to_branch'],
+					);
+					$where = " stu_id=".$stu_id;
+					$this->update($array, $where);
+					
+				}
 			}
-	
-			$this->_name='rms_group';
-			$arra = array(
-					'is_pass'	=> 2,
-			);
-			$where = " id = ".$_data['to_group'];
-			$this->update($arra, $where);
-	
-			$this->_name='rms_student';
-			$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
-	
-			$array = array(
-					'branch_id'		=>$_data['to_branch'],
-					'academic_year'	=>$test['academic_year'],
-					'degree'		=>$test['degree'],
-					'grade'			=>$test['grade'],
-					'session'		=>$test['session'],
-					'room'			=>$test['room_id'],
-					'group_id'		=>$_data['to_group'],
-			);
-			$where = " stu_id=".$_data['studentid'];
-			$this->update($array, $where);
-	
 			return $_db->commit();
 	
 		}catch(Exception $e){
@@ -221,6 +210,7 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		try{
+			$dbstu = new Foundation_Model_DbTable_DbStudent();
 			$row = $this->getStudentChangeBranchById($id);
 			if (!empty($row)){
 				
@@ -233,30 +223,31 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 				$where = "id = ".$id;
 				$id = $this->update($_arr, $where);
 				
-				$this->_name='rms_group_detail_student';
-				$arr= array(
-					'is_pass'=> 0,
-					'stop_type'=> 0,
-					'note'=> 'Revert Student Change Branch'
+				$array = array(
+						'branch_id'	 => $row['branch_id'],
+						'stu_id'	=>$row['stu_id'],
 				);
-				$where="stu_id=".$id." and is_pass=0 and group_id=".$row['from_group'];
-				$this->update($arr, $where);
+				$studyStudent = $dbstu->getAllStudyByStudent($array);//revert old
+				if (!empty($studyStudent)) foreach ($studyStudent as $st){
+					$this->_name='rms_group_detail_student';
+					$arr= array(
+							'is_pass'=> 0,
+							'stop_type'=> 0,
+							'note'=> 'Revert Student Change Branch'
+					);
+					$where = " gd_id=".$st['gd_id'];
+					$this->update($arr, $where);
+				}
 				
 				$this->_name='rms_group_detail_student';
-				$where="stu_id=".$row['stu_id']." and group_id=".$row['to_group'];
+				$where="stu_id=".$row['stu_id']." AND is_current =1";
+				$where.=" AND CASE WHEN (SELECT g.branch_id FROM `rms_group` AS g WHERE g.id = group_id LIMIT 1) IS NULL THEN '0' 
+				ELSE (SELECT g.branch_id FROM `rms_group` AS g WHERE g.id = group_id LIMIT 1) END <> ".$row['branch_id'];
 				$this->delete($where);//must check student att,discipline,score...
 				
 				$this->_name='rms_student';
-				$test = $this->getDegreeAndGradeToGroup($row['from_group']);
-				
 				$array = array(
 					'branch_id'		=>$row['branch_id'],
-					'academic_year'	=>$test['academic_year'],
-					'degree'		=>$test['degree'],
-					'grade'			=>$test['grade'],
-					'session'		=>$test['session'],
-					'room'			=>$test['room_id'],
-					'group_id'		=>$row['from_group'],
 				);
 				$where = " stu_id=".$row['stu_id'];
 				$this->update($array, $where);

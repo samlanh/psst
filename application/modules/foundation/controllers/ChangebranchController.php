@@ -13,19 +13,14 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 		}else{
 			$search=array(
 				'branch_id'	=>'',
-				'title'	=>'',
-				'study_year'=> '',
+				'adv_search'	=>'',
+				'academic_year'=> '',
 				'grade'=> '',
 				'session'=> '',
 				'start_date'=> date('Y-m-d'),
 				'end_date'=>date('Y-m-d'),
 			);
 		}
-		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
 		
 		$db_student= new Foundation_Model_DbTable_DbChangeBranch();
 		$rs_rows = $db_student->selectAllStudentChangeGroup($search);
@@ -35,12 +30,17 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 		}else{
 			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 		}
-		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_BRANCH","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","STATUS");
+		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","TO_BRANCH","MOVING_DATE","STATUS");
 		$link=array(
 				'module'=>'foundation','controller'=>'changebranch','action'=>'edit',
 		);
 		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array());
 		$this->view->adv_search=$search;	
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	function addAction(){
 		if($this->getRequest()->isPost()){
@@ -114,12 +114,12 @@ class Foundation_ChangebranchController extends Zend_Controller_Action {
 		$db = new Foundation_Model_DbTable_DbChangeBranch();
 		try {
 			$dbacc = new Application_Model_DbTable_DbUsers();
-			$rs = $dbacc->getAccessUrl($module,$controller,'revert');
-			if(!empty($rs)){
+// 			$rs = $dbacc->getAccessUrl($module,$controller,'revert');
+// 			if(!empty($rs)){
 				$db->revertChangeBranch($id);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/changebranch");
 				exit();
-			}
+// 			}
 			Application_Form_FrmMessage::Sucessfull("You no permission","/foundation/changebranch");
 			exit();
 		}catch (Exception $e) {

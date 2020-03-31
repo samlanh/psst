@@ -379,14 +379,16 @@ function initailize(){
 	dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
 	<?php } }?>
 }
- function deleteRecord(index) {
-		var identity = $('#identity').val();
-		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
-		}
-		var strings = arrays.join(',');
-		$('#identity').val(strings);
-		dojo.query("#row"+index).remove();
+function filterClient(){
+}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
 	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
 </script>

@@ -74,6 +74,12 @@ table#table_row_study {
 					dijit.byId('branch_id').focus();
 					return false;
 				}
+				academic_year = dijit.byId('academic_year').get('value');
+				if(academic_year==''){
+					dijit.byId('academic_year').focus();
+					return false;
+				}
+
 				if(isDuplicate==1){
 					alert("<?php echo $tr->translate("ALREADY_EXISTING_STUDENT_CODE");?>");
 					dijit.byId("student_id").focus();
@@ -633,7 +639,7 @@ table#table_row_study {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FEE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<input id="academic_year" />
@@ -696,7 +702,7 @@ table#table_row_study {
 					                   		<input id="group" />
 					                    </div>
 					                     <div class="col-md-3 col-sm-3 col-xs-12">
-					                   		<input type="button" label="<?php echo $tr->translate('Add To Record');?>" dojoType="dijit.form.Button" iconClass="dijitIconEditProperty" onclick="addRowStudy();" />
+					                   		<input type="button" label="<?php echo $tr->translate('Add Study Record');?>" dojoType="dijit.form.Button" iconClass="dijitIconEditProperty" onclick="addRowStudy();" />
 					                    </div>
 					                </div>
 									<div class="form-group">
@@ -1352,7 +1358,7 @@ function getStudentNo(){
 	});
 }	
 
-url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 	function getAllAcademicByBranch(){
 		dijit.byId('academic_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');
@@ -1371,16 +1377,13 @@ url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controlle
 			load: function(data){
 				academic_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('academic_year').set('store',academic_store);  
-				
 				dijit.byId('academic_year').attr("value","<?php echo $this->adv_search['academic_year']?>");
 			},
 			error: function(err) {
 			}
 		});
 	}
-
 </script>
-
 <style>
  @media (min-width: 1401px) and (max-width: 1601px){
 	#mainTabContainer{

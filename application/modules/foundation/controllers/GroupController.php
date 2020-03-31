@@ -308,7 +308,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
 //     		$degree = empty($data['degree'])?null:$data['degree']; 
 //     		$showall = empty($data['showall'])?null:$data['showall'];
 //     		$school_option = empty($data['school_option'])?null:$data['school_option'];
-    		//$group = $db->getAllYearByBranch($data['branch_id'],$degree,$showall,$school_option);
+    		//$group = $db->getAllYearByBranch($data['branch_id'],$degree,$showall,$school_option);//move it to accounting/fee/getfeeid
     		
     		$db = new Application_Model_DbTable_DbGlobal();
     		$group = $db->getAllAcademicYear();

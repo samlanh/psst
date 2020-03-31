@@ -825,11 +825,6 @@ function getAllgroupStudyNotPass($action=null){
 	   	}else{ // English
 	   		$label = "title_eng";
 	   	}
-	   	$sql="SELECT id, $label as name
-	   	FROM
-	   	rms_studytype
-	   	WHERE status = 1 AND $label!='' ";
-	   	
 	   	$sql = "SELECT id,
 		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1), 
 		   	( SELECT $label
@@ -1039,7 +1034,7 @@ function getAllgroupStudyNotPass($action=null){
    
    function getAllGeneration($opt=null,$option=null){
    	$db= $this->getAdapter();
-   	$sql="SELECT  DISTINCT(generation) AS generation FROM `rms_tuitionfee` WHERE generation!=''ORDER BY id DESC ";
+   	$sql="SELECT DISTINCT(generation) AS generation FROM `rms_tuitionfee` WHERE generation!=''ORDER BY id DESC ";
    	$rows =  $db->fetchAll($sql);
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	if($opt==null){
@@ -1053,7 +1048,6 @@ function getAllgroupStudyNotPass($action=null){
    		if(!empty($rows))foreach($rows AS $row) $opt_gen[$row['generation']]=$row['generation'];
    		return $opt_gen;
    	}
-   
    }
    /**notification alert*/
 //    function gettokenbystudentid($student_id){

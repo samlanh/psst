@@ -102,7 +102,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 		$this->view->province = $db->getProvince();
-		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister();
 		Application_Model_Decorator::removeAllDecorator($frm_register);

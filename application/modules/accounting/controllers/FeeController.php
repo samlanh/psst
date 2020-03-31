@@ -216,4 +216,17 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	function getfeeidAction(){//year for study only
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+    		$degree = empty($data['degree'])?null:$data['degree'];
+    		$showall = empty($data['showall'])?null:$data['showall'];
+    		$school_option = empty($data['school_option'])?null:$data['school_option'];
+    		$db = new Application_Model_DbTable_DbGlobal();
+			$group = $db->getAllYearByBranch($data['branch_id'],$degree,$showall,$school_option);
+			array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
+			print_r(Zend_Json::encode($group));
+			exit();
+		}
+	}
 }

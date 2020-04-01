@@ -165,9 +165,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    				AND s.type_score=1 ";
    		
    		$where='';
-	   	if(!empty($search['title'])){
+	   	if(!empty($search['adv_search'])){
    			$s_where=array();
-   			$s_search=addslashes(trim($search['title']));
+   			$s_search=addslashes(trim($search['adv_search']));
    			$s_where[]= " s.title_score LIKE '%{$s_search}%'";
    			$s_where[]=" g.group_code LIKE '%{$s_search}%'";
    			$s_where[]=" s.note LIKE '%{$s_search}%'";
@@ -180,8 +180,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	if(!empty($search['group'])){
 	   		$where.= " AND g.id =".$search['group'];
 	   	}
-	   	if(!empty($search['study_year'])){
-	   		$where.=" AND s.for_academic_year =".$search['study_year'];
+	   	if(!empty($search['academic_year'])){
+	   		$where.=" AND s.for_academic_year =".$search['academic_year'];
 	   	}
 	   	if($search['degree']>0){
 	   		$where.=" AND `g`.`degree` =".$search['degree'];
@@ -1155,21 +1155,34 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 					AND ss.id=s.`id`
 					)
 				) AS rank,
-				vst.* 
+				vst.*,
+				(SELECT rms_group.group_code FROM rms_group WHERE rms_group.id=gds.group_id LIMIT 1) AS group_code,
+				gds.group_id AS group_id,
+				(SELECT t.`teacher_name_kh` FROM `rms_teacher` t WHERE t.id =(SELECT rms_group.teacher_id FROM rms_group WHERE rms_group.id=gds.group_id LIMIT 1) LIMIT 1) AS teacher,
+				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=gds.academic_year LIMIT 1) as academic_year,
+		    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
+		    	gds.degree AS degree_id,
+		    	gds.academic_year AS for_academic_year
 			FROM 
 				`rms_score` AS s,
 				`rms_score_detail` AS sd,
 				`rms_score_monthly` AS sm,
-				`v_studentinfo_by_group_detail_student` AS vst
+				
+				rms_student AS vst,
+				rms_group_detail_student AS gds
 			WHERE s.`id`=sd.`score_id`
 				AND vst.stu_id = sm.`student_id`
 				AND vst.stu_id = sd.`student_id`
+				AND vst.stu_id = gds.`stu_id`
+				AND s.group_id = gds.`group_id`
+				
 				AND s.`id`=sm.`score_id`
 				AND s.status = 1
 				AND s.type_score=1 
    			";
    		if (!empty($data['group_id'])){
-   			$sql.=" AND vst.`group_id`=".$data['group_id'];
+   			$sql.=" AND gds.`group_id`=".$data['group_id'];
    		}
    		if (!empty($data['stu_id'])){
    			$sql.=" AND vst.`stu_id`=".$data['stu_id'];
@@ -1294,7 +1307,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    		$sql="
    			SELECT 
 				g.id,
-				CONCAT(g.group_code,' (',(SELECT CONCAT(t.from_academic,' - ',t.to_academic,' ',t.generation) FROM `rms_tuitionfee` AS t WHERE t.id = g.academic_year LIMIT 1),')' ) AS `name`
+				CONCAT(g.group_code,' (',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1),')' ) AS `name`
 				FROM 
 				`rms_group_detail_student`  AS gds,
 				`rms_group` AS g

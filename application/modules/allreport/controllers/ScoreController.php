@@ -14,13 +14,13 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search = array(
-    			'title'=>'',
+    			'adv_search'=>'',
     			'branch_id'=> '',
     			'room'=>0,
     			'exam_type'=>-1,
     			'for_semester'=>-1,
     			'group' => '',
-    			'study_year'=> '',
+    			'academic_year'=> '',
     			'grade'=> 0,
     			'degree'=>0,
     			'session'=> 0,
@@ -29,6 +29,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	
     	$this->view->search=$search;
+    	
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$this->view->studentgroup = $db->getStundetScoreGroup($search);
     	$group = $db->getAllgroupStudyNotPass();
@@ -44,6 +45,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id= empty($search['branch_id'])?1:$search['branch_id'];
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	$this->view->rsfooteracc = $frm->getFooterAccount();
+    	
+    	$form=new Application_Form_FrmSearchGlobal();
+    	$forms=$form->FrmSearch();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
     }
     function rptScoreDetailAction(){//តាមមុខវិជ្ជាលម្អិត
     	$id=$this->getRequest()->getParam("id");

@@ -27,7 +27,7 @@
 			);
 	$monthview = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 	$show=2;// 1 for hide evaluation,2 show evaluation
-	$type=2; //1 for elt/2 goodwill layout
+	$type=1; //1 for elt/2 goodwill layout
 ?>	
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
@@ -165,8 +165,8 @@ dojo.ready(function(){
 				<td width="60%" align="center" >
 					<h3 style=" font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';">លទ្ធផលនៃការសិក្សាប្រចាំ ខែ<?php echo $this->rs['for_month']?></h3>
 					<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Monthly Result  For <?php echo $this->rs['for_monthen']?></h3>
-					<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
-					<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+					<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['academic_year']);//." - ".$this->rs['end_year'] ?></h3>
+					<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['academic_year'];//." - ".$this->rs['end_year']?></h3>
 				</td>
 				<td width="20%" align="center" >
 				</td>
@@ -399,8 +399,8 @@ dojo.ready(function(){
 					?>
 					<h3 style="font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $semster;?></h3>
 					<h3 class="red bold" style="font-weight:normal; font-size: 18px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $semsteren;?></h3>
-					<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
-					<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+					<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['academic_year']);//." - ".$this->rs['end_year'] ?></h3>
+					<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['academic_year'];//." - ".$this->rs['end_year']?></h3>
 				</td>
 				<td width="20%" align="center" >
 				</td>
@@ -805,7 +805,7 @@ dojo.ready(function(){
 										<tr>
 											<td width="20%"><?php echo $tr->translate('ACADEMIC_YEAR');?></td>
 											<td width="2%">:</td>
-											<td width="78%" class="bold"><?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></td>
+											<td width="78%" class="bold"><?php echo $this->rs['academic_year']//." - ".$this->rs['end_year']?></td>
 										</tr>
 										<tr>
 											<td ><?php echo $tr->translate('STUDENT_NAME');?></td>
@@ -1074,8 +1074,8 @@ dojo.ready(function(){
 						?>
 						<h3 style="font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $semster;?></h3>
 						<h3 class="red bold" style="font-weight:normal; font-size: 18px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $semsteren;?></h3>
-						<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
-						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['academic_year']);//." - ".$this->rs['end_year'] ?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['academic_year'];//." - ".$this->rs['end_year']?></h3>
 					</td>
 					<td width="20%" align="center" >
 					</td>
@@ -1097,7 +1097,7 @@ dojo.ready(function(){
 										<tr>
 											<td width="20%"><?php echo $tr->translate('ACADEMIC_YEAR');?></td>
 											<td width="2%">:</td>
-											<td width="78%" class="bold"><?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></td>
+											<td width="78%" class="bold"><?php echo $this->rs['academic_year'];//." - ".$this->rs['end_year']?></td>
 										</tr>
 										<tr>
 											<td ><?php echo $tr->translate('STUDENT_NAME');?></td>

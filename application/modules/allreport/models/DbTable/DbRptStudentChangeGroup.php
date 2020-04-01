@@ -20,62 +20,68 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
     		$branch = "branch_nameen";
     	}
     	$sql = "SELECT 
-    				stu_id,
-    				(SELECT CONCAT(stu_khname,' - ',last_name,' ',stu_enname) FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) AS name,
-			    	(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) AS stu_code,
-					(SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=(SELECT sex FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) limit 1)AS sex,
-					(SELECT group_code from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS code,
-					(SELECT CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.from_group LIMIT 1) limit 1) as academic,
-					(SELECT semester from rms_group where rms_group.id=rms_student_change_group.from_group limit 1 ) AS semester,
-					(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.from_group=rms_group.id LIMIT 1) limit 1) AS session,
-					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.from_group=rms_group.id LIMIT 1) limit 1) AS grade,
-					(SELECT room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS room_name,
-					(SELECT start_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS start_date,
+    				scg.stu_id,
+    				(SELECT CONCAT(stu_khname,' - ',last_name,' ',stu_enname) FROM `rms_student` WHERE `rms_student`.`stu_id`=scg.`stu_id` limit 1) AS name,
+			    	(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=scg.`stu_id` limit 1) AS stu_code,
+					(SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=(SELECT sex FROM `rms_student` WHERE `rms_student`.`stu_id`=scg.`stu_id` limit 1) limit 1)AS sex,
+					(SELECT group_code from rms_group WHERE rms_group.id=scg.from_group limit 1) AS code,
 					
-					(SELECT expired_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS expired_date,
-					(SELECT group_code from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_code,
-					(SELECT CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_student_change_group.to_group LIMIT 1) LIMIT 1) as to_academic,
-					(SELECT semester from rms_group where rms_group.id=rms_student_change_group.to_group limit 1) AS to_semester,
-					(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.to_group=rms_group.id LIMIT 1) limit 1) AS to_session,
-					(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.to_group=rms_group.id LIMIT 1) limit 1) AS to_grade,
-					(SELECT room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.to_group=rms_group.id LIMIT 1) limit 1) AS to_room_name,
-				 	 moving_date,
-				 	 rms_student_change_group.note,
-					(SELECT $label from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`rms_student_change_group`.`status`)AS status
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =(SELECT academic_year FROM rms_group WHERE rms_group.id=scg.from_group limit 1 ) LIMIT 1) AS academic,
+					
+					(SELECT semester FROM rms_group WHERE rms_group.id=scg.from_group limit 1 ) AS semester,
+					(SELECT $label FROM rms_view WHERE rms_view.type=4 and rms_view.key_code=(SELECT session FROM rms_group WHERE scg.from_group=rms_group.id LIMIT 1) LIMIT 1) AS session,
+					(SELECT $grade FROM rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(SELECT grade from rms_group WHERE scg.from_group=rms_group.id LIMIT 1) limit 1) AS grade,
+					(SELECT room_name FROM rms_room WHERE rms_room.room_id=(select room_id from rms_group WHERE scg.from_group=rms_group.id) LIMIT 1) AS room_name,
+					(SELECT start_date FROM rms_group WHERE rms_group.id=scg.from_group limit 1) AS start_date,
+					
+					(SELECT expired_date FROM rms_group WHERE rms_group.id=scg.from_group limit 1) AS expired_date,
+					(SELECT group_code FROM rms_group WHERE rms_group.id=scg.to_group limit 1) AS to_code,
+					
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)AS to_academic,
+					(SELECT semester FROM rms_group WHERE rms_group.id=scg.to_group limit 1) AS to_semester,
+					(SELECT $label FROM rms_view WHERE rms_view.type=4 and rms_view.key_code=g.id limit 1) AS to_session,
+					(SELECT $grade FROM rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=g.grade limit 1) AS to_grade,
+					(SELECT room_name FROM rms_room WHERE rms_room.room_id=g.room_id limit 1) AS to_room_name,
+				 	 scg.moving_date,
+				 	 scg.note,
+					(SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=6 AND `rms_view`.`key_code`=scg.`status`)AS status
 		 		FROM 
-    				`rms_student_change_group`,
-    				rms_group 
+    				`rms_student_change_group` AS scg,
+    				rms_group  AS g
     			WHERE 
-    				rms_student_change_group.to_group=rms_group.id ";
+    				scg.to_group=g.id ";
     	
     	$where=' ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission("rms_group.branch_id");
-    	$order=" order by rms_student_change_group.id DESC";
+    	$where.=$dbp->getAccessPermission("g.branch_id");
+    	$order=" order by scg.id DESC";
     	if(empty($search)){
     		return $db->fetchAll($sql.$where.$order);
     	}
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (SELECT CONCAT(stu_khname,' - ',stu_enname) FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_change_group`.`stu_id` limit 1) LIKE '%{$s_search}%'";
+    		$s_search = addslashes(trim($search['adv_search']));
+    		$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=scg.`stu_id` limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT CONCAT(stu_khname,' - ',stu_enname) FROM `rms_student` WHERE `rms_student`.`stu_id`=scg.`stu_id` limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND rms_group.academic_year='.$search['study_year'];
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND g.branch_id='.$search['branch_id'];
     	}
-    	if(!empty($search['grade_bac'])){
-    		$where.=' AND rms_group.grade='.$search['grade_bac'];
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND g.academic_year='.$search['academic_year'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND g.degree='.$search['degree'];
+    	}
+    	if(!empty($search['grade'])){
+    		$where.=' AND g.grade='.$search['grade'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND rms_group.session='.$search['session'];
-    	}
-    	if(!empty($search['branch_id'])){
-    		$where.=' AND rms_group.branch_id='.$search['branch_id'];
+    		$where.=' AND g.session='.$search['session'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('rms_group.branch_id');
+    	$where.=$dbp->getAccessPermission('g.branch_id');
     	return $db->fetchAll($sql.$where.$order);
     }    
 }

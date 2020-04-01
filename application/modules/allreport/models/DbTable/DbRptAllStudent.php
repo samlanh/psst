@@ -1448,9 +1448,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	$order=" ORDER BY stu_id,g.degree,g.grade,g.academic_year DESC";
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" s.stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" s.stu_enname LIKE '%{$s_search}%'";
@@ -1474,8 +1474,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" s.district_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND g.academic_year='.$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND g.academic_year='.$search['academic_year'];
     	}
     	if(!empty($search['degree'])){
     		$where.=' AND g.degree='.$search['degree'];

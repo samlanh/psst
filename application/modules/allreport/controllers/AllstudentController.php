@@ -400,19 +400,20 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-				'title' => '',
+				'adv_search' => '',
 				'branch_id' => '',
-				'study_year' => '',
-				'grade_bac' => '',
+				'academic_year' => '',
+				'degree'	=>'',
+				'grade' 	=> '',
 				'session' => '',
 			);
 		}
 		$group= new Allreport_Model_DbTable_DbRptStudentChangeGroup();
 		$this->view->rs = $rs_rows = $group->getAllStudentChangeGroup($search);
 		$this->view->search=$search;
-	
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
@@ -732,20 +733,15 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-				'title' 	=> '',
+				'adv_search' 	=> '',
 				'branch_id'	=> 0,
 				'degree'	=> 0,
-				'study_year'=> '',
+				'academic_year'=> '',
 				'grade' 	=> '',
 				'group'		=> '',
 				'stu_type'	=> '',
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$rs_rows = $group->getAllStudentNotYetGroup($search);
 		$this->view->rs = $rs_rows;
@@ -758,6 +754,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	public function rptAttListAction()
 	{

@@ -42,8 +42,11 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 	    if(!empty($search['group'])){
 	    	$where.=' AND c.group_id='.$search['group'];
 	    }
-	    if($search['status_search']>-1){
-	    	$where.=' AND c.status='.$search['status_search'];
+	    if(!empty($search['language_type'])){
+	    	$where.=' AND c.for_type='.$search['language_type'];
+	    }
+	    if($search['status']>-1){
+	    	$where.=' AND c.status='.$search['status'];
 	    }
 	    $where.=$dbp->getAccessPermission('c.branch_id');
 	    $order =  ' ORDER BY c.`id` DESC ' ;

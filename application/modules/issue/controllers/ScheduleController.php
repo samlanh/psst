@@ -12,10 +12,9 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title' => '',
+						'adv_search' => '',
 						'branch_id' => '',
-						'day' => '',
-						'study_year' => '',
+						'academic_year' => '',
 						'group' => '',
 						'start_date'=>date("Y-m-d"),
 						'end_date' => date("Y-m-d")
@@ -34,8 +33,8 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}

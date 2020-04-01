@@ -20,31 +20,23 @@
 		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-                   <div class="col-md-3 col-sm-3 col-xs-12">
-                   		<?php echo $frm->getElement("title");?>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("adv_search");?>
                    </div>
-                   <div class="col-md-3 col-sm-3 col-xs-12">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("branch_id");?>
                    </div>
-                   <div class="col-md-3 col-sm-3 col-xs-12">
-                   		<input id="study_year" />
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("academic_year");?>
                    </div>
-                   <div class="col-md-3 col-sm-3 col-xs-12">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
                    		 <input id="group" />
-                   </div>
-                 </div>
-                <div class="form-group">
-                   <div class="col-md-3 col-sm-3 col-xs-12">
-                   		 <?php echo $frm->getElement("subject");?>
-                   </div>
-                   <div class="col-md-3 col-sm-3 col-xs-12">
-                   		 <?php echo $frm->getElement("day");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
                    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
-                </div>
+                 </div>
 			</form>
 		</div>
 		<div class="card-box">
@@ -58,22 +50,8 @@
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 	
-	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-			store: academic_store,
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                     
-			id: "study_year",
-			name: "study_year",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-			onChange: function() {  
-				academic_year = dijit.byId('study_year').get('value');
-			}
-		}, "study_year");
 		new dijit.form.FilteringSelect({
 			store: group_store,
 		    queryExpr: "*${0}*",
@@ -85,73 +63,50 @@
 		    readonly:false,
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function(){  
+		    onChange: function() {  
 		    }
 		}, "group");
-		
-		 var branch_id = dijit.byId('branch_id');
+
+		var branch_id = dijit.byId('branch_id');
 		 branch_id.on('change', function(evt) {
-			 getAllAcademicByBranch();
-			 getAllGroupByBranch();
+			 getAllGroup();
+		});
+		 var academic_year = dijit.byId('academic_year');
+		 academic_year.on('change', function(evt) {
+			 getAllGroup();
 	    });
-		 getAllAcademicByBranch();
-		 getAllGroupByBranch();
+		 getAllGroup();
 });
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-var oldBranch = "<?php echo $this->search['branch_id']?>";
-function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
+	var oldBranch = "<?php echo $this->search['branch_id']?>";
+	url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+	function getAllGroup(){
+		dijit.byId('group').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('group').set('store',group_store);  
+			dijit.byId('branch_id').focus();
+			return false;
 		}
-	});
-}
-url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-function getAllGroupByBranch(){
-	dijit.byId('group').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('group').set('store',group_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getgroup,
-		content:{
-			'branch_id':branch_id,'noaddnew':1
+		academic_year = dijit.byId('academic_year').get('value');
+		if(academic_year=='' || academic_year==-1){academic_year ="";}
+		dojo.xhrPost({
+			url: url_getallgroup,
+			content:{
+				'branch_id':branch_id,'academic_year':academic_year,'noaddnew':1
 			},
-		handleAs:"json",
-		load: function(data) {
-		    group_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('group').set('store',group_store);   
-		    if(oldBranch==branch_id){
-		    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-		    }
-		},
-		error: function(err){
-		}
-	});
-}
+			handleAs:"json",
+			load: function(data) {
+			    group_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('group').set('store',group_store);  
+			    <?php if (!empty($this->search['group'])){?>
+				dijit.byId('group').attr('value','<?php echo $this->search['group']?>');  
+				<?php }?> 
+			},
+			error: function(err) {
+			}
+		});
+	}
 function copyRecord(url){
 	 id = dijit.byId('recordcopy').get('value');
 	 if(id!=''){

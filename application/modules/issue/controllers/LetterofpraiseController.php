@@ -17,7 +17,8 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 					'adv_search' => '',
 					'branch_id' => '',
 					'group' => '',
-					'status_search' => -1,
+					'language_type'=>0,
+					'status' => -1,
 				);
 			}
 			
@@ -36,10 +37,10 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$frm = new Issue_Form_FrmIssueLetterofpraise();
-		$frm->FrmIssueCertificate(null);
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm = $frm;
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->frm=$form;
 	}
 	public function addAction(){
 		$_db = new Issue_Model_DbTable_DbLetterofpraise();

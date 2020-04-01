@@ -15,8 +15,7 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		$sql="
     		SELECT gsch.id,
 			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) AS branch_name,	
-			(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')') 
-			 FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gsch.academic_year LIMIT 1) AS years,
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsch.academic_year LIMIT 1) AS years,
 			 (SELECT group_code FROM rms_group WHERE rms_group.id= gsch.group_id LIMIT 1) AS group_code,
 			 (SELECT st.title FROM `rms_schedulesetting` AS st WHERE st.id = gsch.schedule_setting LIMIT 1) AS sch_setting,
 			 DATE_FORMAT(gsch.create_date,'%d-%m-%Y') AS create_date, (SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id) AS user_name
@@ -26,9 +25,9 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		
     		$where =' ';
     		$order =  ' ORDER BY `gsch`.`id` DESC ' ;
-    		if(!empty($search['title'])){
+    		if(!empty($search['adv_search'])){
     			$s_where = array();
-    			$s_search = addslashes(trim($search['title']));
+    			$s_search = addslashes(trim($search['adv_search']));
     			$s_where[] = " gsch.`note` LIKE '%{$s_search}%'";
     			$s_where[] = " (SELECT group_code FROM rms_group WHERE rms_group.id= gsch.group_id LIMIT 1) LIKE '%{$s_search}%'";
     			$s_where[] = " (SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) LIKE '%{$s_search}%'";
@@ -37,8 +36,8 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		if(!empty($search['branch_id'])){
     			$where.=' AND gsch.branch_id='.$search['branch_id'];
     		}
-    		if(!empty($search['study_year'])){
-    			$where.=' AND gsch.year_id='.$search['study_year'];
+    		if(!empty($search['academic_year'])){
+    			$where.=' AND gsch.year_id='.$search['academic_year'];
     		}
     		if(!empty($search['group'])){
     			$where.=' AND gsch.group_id='.$search['group'];

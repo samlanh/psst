@@ -27,10 +27,10 @@
                    		<input id="group" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement('type_search');?>
+                   		<?php echo $frm->getElement('language_type');?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement('status_search');?>
+                   		<?php echo $frm->getElement('status');?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -64,10 +64,12 @@ dojo.ready(function(){
 	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
-	    	getStudetnOptionByGroup();
-	    	getGroupInfo();
 	    }
 	}, "group");
+	 var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getCompleteGroup();
+	});
 	getCompleteGroup();
 }); 
 var oldBranch='<?php echo $this->search['branch_id'];?>';

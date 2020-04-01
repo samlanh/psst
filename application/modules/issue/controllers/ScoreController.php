@@ -15,10 +15,10 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title'=>'',
+						'adv_search'=>'',
 						'branch_id' => '',
 						'group' => '',
-						'study_year'=> '',
+						'academic_year'=> '',
 						'exam_type'=>-1,
 						'for_semester'=>-1,
 						'for_month'=>'',
@@ -44,26 +44,11 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
 		
-		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-// 		$this->view->studentgroup = $db->getStundetScoreGroup($search);
-// 		$group = $db->getAllgroupStudyNotPass();
-// 		array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));
-// 		$this->view->g_all_name=$group;
-		$this->view->month = $db->getAllMonth();
-// 		$form=new Registrar_Form_FrmSearchInfor();
-// 		$form->FrmSearchRegister();
-// 		Application_Model_Decorator::removeAllDecorator($form);
-// 		$this->view->form_search=$form;
-		 
-// 		$frm = new Application_Form_FrmGlobal();
-// 		$branch_id= empty($search['branch_id'])?1:$search['branch_id'];
-// 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-// 		$this->view->rsfooteracc = $frm->getFooterAccount();
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	
 	public	function addAction(){

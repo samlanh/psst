@@ -228,7 +228,65 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$change_type->setMultiOptions($opt_change_type);
 		$change_type->setValue($request->getParam("change_type"));
 		
+		/* START
+		 * 
+		 * For search score 
+		 * */
+		$_arr = array(0=>$this->tr->translate("SELECT_TYPE"),1=>$this->tr->translate("MONTHLY"),2=>$this->tr->translate("SEMESTER"));
+		$_exam_type = new Zend_Dojo_Form_Element_FilteringSelect("exam_type");
+		$_exam_type->setMultiOptions($_arr);
+		$_exam_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_exam_type->setValue($request->getParam("exam_type"));
 		
+		$_arr = array(0=>$this->tr->translate("SELECT_SEMESTER"),1=>$this->tr->translate("SEMESTER1"),2=>$this->tr->translate("SEMESTER2"));
+		$_for_semester = new Zend_Dojo_Form_Element_FilteringSelect("for_semester");
+		$_for_semester->setMultiOptions($_arr);
+		$_for_semester->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_for_semester->setValue($request->getParam("for_semester"));
+		
+		$_opt_month = array(0=>$this->tr->translate("CHOOSE_MONTH"));
+		$_allMonth = $_dbgb->getAllMonth();
+		if(!empty($_allMonth))foreach($_allMonth AS $row) $_opt_month[$row['id']]=$row['name'];
+		$_for_month = new Zend_Dojo_Form_Element_FilteringSelect("for_month");
+		$_for_month->setMultiOptions($_opt_month);
+		$_for_month->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_for_month->setValue($request->getParam("for_month"));
+		
+		/* END
+		 *
+		* For search score
+		* */
+		
+		/* START
+		 *
+		* For Issue Certificate/Letter Praise
+		* */
+		$_language_type=  new Zend_Dojo_Form_Element_FilteringSelect('language_type');
+		$_language_type->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
+		$_language_opt = array(
+				0=>$this->tr->translate("PLEASE_SELECT"),
+				1=>$this->tr->translate("KHMER"),
+				2=>$this->tr->translate("ENGLISH"));
+		$_language_type->setMultiOptions($_language_opt);
+		$_language_type->setValue($request->getParam("language_type"));
+		/* END
+		 *
+		* For Issue Certificate/Letter Praise
+		* */
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
 		$userinfo = $_dbgb->getUserInfo();
 		$optionUser = $_dbgb->getAllUser();
@@ -269,7 +327,13 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_study_type,
 				$study_status,
 				$changegroup_id,
-				$change_type
+				$change_type,
+				
+				$_exam_type,
+				$_for_semester,
+				$_for_month,
+				
+				$_language_type
 				)
 			);
 		return $this;

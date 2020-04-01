@@ -15,10 +15,10 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title'=>'',
+						'adv_search'=>'',
 						'branch_id' => '',
 						'group' => '',
-						'study_year'=> '',
+						'academic_year'=> '',
 						'degree'=>0,
 						'grade'=> 0,
 						'session'=> 0,
@@ -41,10 +41,10 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;;
 	}
 	public	function addAction(){
 		if($this->getRequest()->isPost()){

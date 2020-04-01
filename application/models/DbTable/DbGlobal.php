@@ -2110,8 +2110,10 @@ function getAllgroupStudyNotPass($action=null){
   
   function getAllCompleteGroupByBranch($branch_id=null){
   	$db = $this->getAdapter();
-  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-  	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+  	$sql ="SELECT `g`.`id`, CONCAT( COALESCE(`g`.`group_code`,''),' ',
+  	 COALESCE((SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1),'')
+  		
+  	 ) AS name
   	FROM `rms_group` AS `g` WHERE g.is_pass=1 ";
   	if (!empty($branch_id)){
   		$sql.=" AND g.branch_id = $branch_id";

@@ -57,10 +57,7 @@
 </div>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-
 	dojo.require("dojo.data.ItemFileWriteStore"); 
-	
-	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 		
@@ -98,6 +95,10 @@
 		 branch_id.on('change', function(evt) {
 			 getAllGroup();
 		});
+		 var academic_year = dijit.byId('academic_year');
+		 academic_year.on('change', function(evt) {
+			 getAllGroup();
+	    });
 		 getAllGroup();
 	});
 	var oldBranch = "<?php echo $this->search['branch_id']?>";
@@ -119,10 +120,12 @@
 		if(grade=='' || grade==-1){
 			grade ="";
 		}
+		academic_year = dijit.byId('academic_year').get('value');
+		if(academic_year=='' || academic_year==-1){academic_year ="";}
 		dojo.xhrPost({
 			url: url_getallgroup,
 			content:{
-				'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':1
+				'branch_id':branch_id,'degree':degree,'grade':grade,'academic_year':academic_year,'noaddnew':1
 			},
 			handleAs:"json",
 			load: function(data) {
@@ -136,10 +139,10 @@
 			}
 		});
 	}
-	
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
+		getAllGroup();
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id=='' || dept_id==-1){return false;}
 			dojo.xhrPost({

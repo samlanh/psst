@@ -283,13 +283,13 @@ dojo.ready(function(){
 		getAllGroupByBranch();
 });
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function filterGrade(){
 	degree = dijit.byId('degree').get('value');
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
-			'degree':degree
+			'dept_id':degree
 			},
 		handleAs:"json",
 		load: function(data) {

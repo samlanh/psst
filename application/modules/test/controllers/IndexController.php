@@ -145,7 +145,6 @@ class Test_IndexController extends Zend_Controller_Action
     	}
     }
     function createtestexamAction(){
-    	
     	$type = $this->getRequest()->getParam("type");
     	if ($type!=1 AND $type!=2 AND $type!=3){ // check it again with branch that has schooloption
     		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
@@ -192,7 +191,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->form = $frm;
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rs_subjecttestkhmer = $db->getViewById(31);
-//     	print_r($db->getViewById(31));
     }
     function getstudenttestbybranchAction(){
     	if($this->getRequest()->isPost()){

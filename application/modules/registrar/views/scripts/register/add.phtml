@@ -29,7 +29,7 @@
     	margin-bottom: 20px;
     	color: #000;
 	}
-span.user-badge.bg-warning {
+span.user-badge.bg-warning{
     position: absolute;
     top: 33px;
     left: 0;
@@ -494,7 +494,7 @@ require(["dojo/ready"], function(ready){
 	}, "study_year");
 });	
 
-url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');

@@ -90,7 +90,7 @@
 		});
 		getAllAcademicByBranch();
 	});
-	url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+	url_getacademic= '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 	var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
 	function getAllAcademicByBranch(){
 		dijit.byId('study_year').reset();

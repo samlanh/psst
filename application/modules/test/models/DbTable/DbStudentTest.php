@@ -480,6 +480,25 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['create_date']=date("Y-m-d H:i:s");
 				$this->_name="rms_student_test_result";
 				$id = $this->insert($array);
+				
+// 				$_arr = array(
+// 						'stu_id'			=>$id,
+// 						'is_newstudent'		=>1,
+// 						'status'			=>1,
+// 						'group_id'			=>0,
+// 						'degree'			=>$data['degree_result'],
+// 						'grade'				=>$data['grade_result'],
+// 						'is_current'		=>1,
+// 						'is_setgroup'		=>0,
+// 						'is_maingrade'		=>1,
+// 						'date'				=>date("Y-m-d"),
+// 						'create_date'		=>date("Y-m-d H:i:s"),
+// 						'modify_date'		=>date("Y-m-d H:i:s"),
+// 						'user_id'			=>$this->getUserId(),
+// 				);
+// 				$this->_name="rms_group_detail_student";
+// 				$this->insert($_arr);
+				
 			}
 			 
 			if ($type==1){

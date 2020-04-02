@@ -611,9 +611,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search=array(
-    				'title' 		=>'',
-    				'study_year' 	=>'',
-    				'grade_all' 	=>'',
+    				'adv_search' 		=>'',
+    				'academic_year' 	=>'',
+    				'grade' 	=>'',
     				'session' 		=>'',
     				'group' 		=>'',
     				'branch_id'		=>0,
@@ -626,15 +626,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Allreport_Model_DbTable_DbRptAllStudent();
     	$this->view->student = $db->getStudentAttendence($search);
     
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$forms=$form->FrmSearchRegister(null,"action");
-    	Application_Model_Decorator::removeAllDecorator($forms);
-    	$this->view->form_search=$form;
-    
-    	$db_global=new Application_Model_DbTable_DbGlobal();
-    	$result= $db_global->getAllgroupStudy();
-    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
-    	$this->view->group = $result;
+    	$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
     
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
@@ -677,9 +672,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search=array(
-    				'title' 		=>'',
-    				'study_year' 	=>'',
-    				'grade_all' 	=>'',
+    				'adv_search' 		=>'',
+    				'academic_year' 	=>'',
+    				'grade' 	=>'',
     				'session' 		=>'',
     				'group' 		=>'',
     				'branch_id'		=>0,
@@ -688,19 +683,15 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     				'end_date'		=> date('Y-m-d'),
     		);
     	}
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$forms=$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($forms);
-    	$this->view->form_search=$form;
     
     	$group= new Allreport_Model_DbTable_DbRptAllStudent();
     	$this->view->student = $rs_rows = $group->getStudentMistake($search);
     	$this->view->search = $search;
     
-    	$db_global=new Application_Model_DbTable_DbGlobal();
-    	$result= $db_global->getAllgroupStudy();
-    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
-    	$this->view->group = $result;
+    	$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
     
     	$frm = new Application_Form_FrmGlobal();
     	$this->view->rsfooteracc = $frm->getFooterAccount();
@@ -711,30 +702,26 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search=array(
-    				'title' 		=>'',
-    				'study_year' 	=>'',
-    				'grade_all' 	=>'',
+    				'adv_search' 		=>'',
+    				'academic_year' 	=>'',
+    				'grade' 	=>'',
     				'session' 		=>'',
     				'group' 		=>'',
     				'branch_id'		=>0,
     				'degree'		=>0,
     		);
     	}
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$forms=$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($forms);
-    	$this->view->form_search=$form;
     
     	$group= new Allreport_Model_DbTable_DbRptAllStudent();
     	$this->view->student = $rs_rows = $group->getStudentMistake($search);
     	$this->view->search=$search;
     	$this->view->datasearch = $search;
     
-    	$db_global=new Application_Model_DbTable_DbGlobal();
-    	$result= $db_global->getAllgroupStudy();
-    	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
-    	$this->view->group = $result;
-    
+    	$form=new Application_Form_FrmSearchGlobal();
+    	$forms=$form->FrmSearch();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    	
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
@@ -777,24 +764,20 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search=array(
-    				'title' 		=>'',
+    				'adv_search' 		=>'',
     				'branch_id'		=>'',
     				'degree'		=>'',
-    				'study_year' 	=>'',
-    				'grade_all' 	=>'',
+    				'academic_year' 	=>'',
+    				'grade' 	=>'',
     				'group'			=>'',
     				'student'			=>'',
+    				'language_type'			=>'',
     				'start_date'	=> date('Y-m-d'),
     				'end_date'		=> date('Y-m-d'),
     		);
     	}
     
     	$this->view->row = $db->getStudenLetterofpraise($search);
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$forms=$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($forms);
-    	$this->view->form_search=$form;
-    
     	$this->view->search=$search;
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
@@ -802,6 +785,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	
+    	$form=new Application_Form_FrmSearchGlobal();
+    	$forms=$form->FrmSearch();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
     }
     
     function rptHonorStudentAction(){
@@ -856,25 +844,20 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search=array(
-    				'title' 		=>'',
+    				'adv_search' 		=>'',
     				'branch_id'		=>'',
     				'degree'		=>'',
-    				'study_year' 	=>'',
-    				'grade_all' 	=>'',
+    				'academic_year' 	=>'',
+    				'grade' 	=>'',
     				'group'			=>'',
     				'student'			=>'',
+    				'language_type' 	=> '',
     				'start_date'	=> date('Y-m-d'),
     				'end_date'		=> date('Y-m-d'),
     		);
     	}
     
     	$this->view->row = $db->getStudenCetificate($search);
-    
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$forms=$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($forms);
-    	$this->view->form_search=$form;
-    
     
     	$this->view->search=$search;
     	$key = new Application_Model_DbTable_DbKeycode();
@@ -883,6 +866,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	
+    	$form=new Application_Form_FrmSearchGlobal();
+    	$forms=$form->FrmSearch();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
     }
     function certificateLetterofpraiseAction(){
     	$id=$this->getRequest()->getParam("id");

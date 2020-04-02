@@ -101,7 +101,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$_session->setValue($request->getParam("session"));
-		$opt_sesion=$_dbgb->getSession();
+		$opt_sesion=$_dbgb->getViewById(4);
 		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);

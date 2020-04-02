@@ -960,7 +960,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					g.id as group_id,
 					g.`group_code`,
 					g.`branch_id`,
-					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
 					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 		
@@ -993,14 +993,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.= " AND g.id =".$search['group'];
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=" AND g.academic_year =".$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=" AND g.academic_year =".$search['academic_year'];
     	}
     	if(!empty($search['degree'])){
     		$where.=" AND `g`.`degree` =".$search['degree'];
     	}
-    	if(!empty($search['grade_all'])){
-    		$where.=" AND `g`.`grade`=".$search['grade_all'];
+    	if(!empty($search['grade'])){
+    		$where.=" AND `g`.`grade`=".$search['grade'];
     	}
     	if(!empty($search['session'])){
     		$where.=" AND `g`.`session`=".$search['session'];
@@ -1048,7 +1048,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql="SELECT 
 					g.id as group_id,
 					g.`group_code`,
-					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year, 
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
 					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 LIMIT 1) AS grade,
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
@@ -1075,9 +1075,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$from_date =(empty($search['start_date']))? '1': "sd.`date_attendence` >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sd.`date_attendence` <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
@@ -1090,14 +1090,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND `g`.`branch_id`=".$search['branch_id'];
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=" AND g.academic_year =".$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=" AND g.academic_year =".$search['academic_year'];
     	}
     	if(!empty($search['degree'])){
     		$where.=" AND `g`.`degree` =".$search['degree'];
     	}
-    	if(!empty($search['grade_all'])){
-    		$where.=" AND `g`.`grade`=".$search['grade_all'];
+    	if(!empty($search['grade'])){
+    		$where.=" AND `g`.`grade`=".$search['grade'];
     	}
     	if(!empty($search['session'])){
     		$where.=" AND `g`.`session`=".$search['session'];
@@ -1593,6 +1593,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     function getStudenCetificate($search){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	
     	$currentLang = $dbp->currentlang();
     	$colunmname='name_en';
     	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
@@ -1619,7 +1621,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				st.stu_code,
 				$stu_name AS stu_name,
 				(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex,
-				(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
+				(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user,
+				CASE
+				   	WHEN  c.type= 1 THEN '".$tr->translate("KHMER")."'
+				   	WHEN  c.type= 2 THEN '".$tr->translate("ENGLISH")."'
+		   		END AS languageType
 			FROM 
 				`rms_issuecertificate_detail` AS cd,
 				rms_student AS st,
@@ -1635,9 +1641,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where .= " AND ".$from_date." AND ".$to_date;
     	
     	
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " c.dept_kh LIKE '%{$s_search}%'";
     		$s_where[]=" c.dept_en LIKE '%{$s_search}%'";
     		$s_where[]=" c.program_kh LIKE '%{$s_search}%'";
@@ -1652,8 +1658,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['academic_year'];
     	}
     	if(!empty($search['group'])){
     		$where.=' AND c.group_id='.$search['group'];
@@ -1661,17 +1667,18 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['degree'])){
     		$where.=' AND (SELECT g.degree FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['degree'];
     	}
-    	if(!empty($search['grade_all'])){
-    		$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade_all'];
+    	if(!empty($search['grade'])){
+    		$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade'];
     	}
     	if(!empty($search['student'])){
     		$where.=' AND st.stu_id ='.$search['student'];
     	}
-    	
     	if(!empty($search['branch_id'])){
     		$where.=' AND c.branch_id='.$search['branch_id'];
     	}
-    	
+    	if(!empty($search['language_type'])){
+    		$where.=' AND c.type='.$search['language_type'];
+    	}
     	$where.=$dbp->getAccessPermission("c.branch_id");
     	$order=" ORDER BY c.id DESC";
     	return $db->fetchAll($sql.$where.$order);
@@ -1715,6 +1722,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$currentLang = $dbp->currentlang();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$colunmname='name_en';
     	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
     	if ($currentLang==1){
@@ -1734,7 +1742,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	st.stu_code,
 		    	$stu_name AS stu_name,
 		    	(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex,
-		    	(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
+		    	(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user,
+		    	CASE
+				   	WHEN  c.for_type=1 THEN '".$tr->translate("KHMER")."'
+				   	WHEN  c.for_type=2 THEN '".$tr->translate("ENGLISH")."'
+		   		END AS languageType
 	    	FROM
 		    	`rms_issue_letterpraise_detail` AS cd,
 		    	rms_student AS st,
@@ -1750,9 +1762,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where .= " AND ".$from_date." AND ".$to_date;
     	 
     	 
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     	$s_where = array();
-    	$s_search = addslashes(trim($search['title']));
+    	$s_search = addslashes(trim($search['adv_search']));
     	$s_where[]=" c.academic_year LIKE '%{$s_search}%'";
     	$s_where[]=" c.grade LIKE '%{$s_search}%'";
     	$s_where[] = " (SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) LIKE '%{$s_search}%'";
@@ -1767,8 +1779,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
     	$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	if(!empty($search['study_year'])){
-    	$where.=' AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    	$where.=' AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['academic_year'];
     	}
     	if(!empty($search['group'])){
     			$where.=' AND c.group_id='.$search['group'];
@@ -1776,8 +1788,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['degree'])){
 	    	$where.=' AND (SELECT g.degree FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['degree'];
 	    }
-	    if(!empty($search['grade_all'])){
-	    	$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade_all'];
+	    if(!empty($search['grade'])){
+	    	$where.=' AND (SELECT g.grade FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) ='.$search['grade'];
 	    }
 	    
 	    if(!empty($search['student'])){
@@ -1787,7 +1799,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    if(!empty($search['branch_id'])){
 	   		 $where.=' AND c.branch_id='.$search['branch_id'];
 	    }
-     
+	    if(!empty($search['language_type'])){
+	    	$where.=' AND c.for_type='.$search['language_type'];
+	    }
 	    $where.=$dbp->getAccessPermission("c.branch_id");
 	    $order=" ORDER BY c.id DESC";
 	    return $db->fetchAll($sql.$where.$order);

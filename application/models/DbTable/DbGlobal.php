@@ -2677,6 +2677,18 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($data['is_maingrade'])){
   		$sql.=" AND gds.is_maingrade=".$data['is_maingrade'];
   	}
+  	if (!empty($data['academic_year'])){
+  		$sql.=" AND gds.academic_year=".$data['academic_year'];
+  	}
+  	if (!empty($data['group'])){
+  		$sql.=" AND gds.group_id=".$data['group'];
+  	}
+  	if (!empty($data['degree'])){
+  		$sql.=" AND gds.degree=".$data['degree'];
+  	}
+  	if (!empty($data['grade'])){
+  		$sql.=" AND gds.grade=".$data['grade'];
+  	}
   	$sql.=" ORDER BY CONCAT( COALESCE(s.stu_code,''),'-',$stuName,COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) ASC";
   	$rows = $db->fetchAll($sql);
   	if($opt!=null){

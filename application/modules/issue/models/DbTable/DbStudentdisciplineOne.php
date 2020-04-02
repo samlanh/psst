@@ -24,15 +24,15 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
     				sad.`id`,
 			    	(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sa.branch_id LIMIT 1) AS branch_name,
 			    	(SELECT stu_code from rms_student as s where s.stu_id = sad.stu_id limit 1) as stu_code,
-			    	(select stu_khname from rms_student as s where s.stu_id = sad.stu_id limit 1) as stu_name,
+			    	(SELECT stu_khname from rms_student as s where s.stu_id = sad.stu_id limit 1) as stu_name,
 			    	g.group_code AS group_name,
-			    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
+			    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_year,
 			    	(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 			    	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 ) AS grade,
 			    	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS room,
 			    	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS session,
 	    			sa.`date_attendence`,
-	    			(select $label from rms_view as v where v.type=1 and key_code = sa.status LIMIT 1) as status
+	    			(SELECT $label from rms_view as v where v.type=1 and key_code = sa.status LIMIT 1) as status
     			FROM 
     				`rms_student_attendence` AS sa,
     				rms_student_attendence_detail as sad,

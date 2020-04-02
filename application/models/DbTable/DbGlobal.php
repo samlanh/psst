@@ -295,7 +295,7 @@ function getAllgroupStu($branch_id=null){
 function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+   	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=f.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
    	FROM `rms_group` AS `g` WHERE g.status =1";
    	$where ='';
    	if (!empty($action)){

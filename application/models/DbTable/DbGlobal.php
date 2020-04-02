@@ -2158,7 +2158,7 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-  function getAllStudentList($branchid=null,$data=array()){
+  /*function getAllStudentList($branchid=null,$data=array()){
   	$db=$this->getAdapter();
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
   	
@@ -2194,7 +2194,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	$sql.=" ORDER BY s.degree DESC".$orderyby;
   		$rows = $db->fetchAll($sql);
   		return $rows;
-  }
+  }*/
   
   function getAllStudentByGroup($group_id){
   	$db=$this->getAdapter();

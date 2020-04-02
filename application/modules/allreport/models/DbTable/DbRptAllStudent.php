@@ -684,7 +684,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
-    public function getStudentStatistic($search){
+    /*public function getStudentStatistic($search){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
@@ -741,7 +741,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission("s.branch_id");
     	
     	return $db->fetchAll($sql.$where.$group_by.$order_by);
-    }
+    }*/
     /*public function getAllStudyHistory($search){
     	$db = $this->getAdapter();
 	    	$sql = 'SELECT 

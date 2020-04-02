@@ -392,7 +392,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			}
 		}
     }
-    public function getAllStudentBepay($search){
+    /*public function getAllStudentBepay($search){
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,
 					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
@@ -486,7 +486,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	}
     
     	return $db->fetchAll($sql.$where.$order);
-    }
+    }*/
     
     
     public function getAllStudentBepayService($search){

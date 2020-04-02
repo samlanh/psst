@@ -51,7 +51,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		return $_db->fetchAll($sql.$orderby);
 	}
 	
-	public function getAllStudentDrop($search){
+	public function getAllStudentDrop($search){//
 		$_db = $this->getAdapter();
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();

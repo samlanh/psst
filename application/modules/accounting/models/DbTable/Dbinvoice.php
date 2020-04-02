@@ -52,12 +52,6 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	if(!empty($search['student_name'])){
     		$where.=" AND v.student_name=".$search['student_name'];
     	}
-//     	if($search['degree']!=""){
-//     		$where.=" AND s.degree=".$search['degree'];
-//     	}
-//     	if($search['grade'] !=""){
-//     		$where.=" AND s.grade=".$search['grade'];
-//     	}
 		$order=" ORDER BY v.id DESC";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('v.branch_id');

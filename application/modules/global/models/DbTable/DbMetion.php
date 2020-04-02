@@ -9,8 +9,7 @@ class Global_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
     }
     public function getAllMentionSetting($search){
     	$db= $this->getAdapter();
-//     	(SELECT CONCAT(tu.from_academic,'-',tu.to_academic,'(',tu.generation,')') FROM rms_tuitionfee AS tu
-//     	WHERE tu.`status`=1 AND tu.id = ms.academic_year GROUP BY tu.from_academic,tu.to_academic,tu.generation,tu.time LIMIT 1) AS `academic_year`,
+
     	$sql="SELECT ms.id,
     		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ms.academic_year LIMIT 1) AS academic_year,
 			ms.title,

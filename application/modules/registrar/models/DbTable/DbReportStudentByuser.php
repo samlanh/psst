@@ -82,13 +82,13 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					$where.= " AND sp.user_id = ".$search['user'];
 			}
 			if(!empty($search['degree'])){
-				$where.= " AND s.degree = ".$search['degree'];
+				$where.= " AND sp.degree = ".$search['degree'];
 			}
 			if(!empty($search['grade_all'])){
-				$where.= " AND s.grade = ".$search['grade_all'];
+				$where.= " AND sp.grade = ".$search['grade_all'];
 			}
 			if(!empty($search['session'])){
-				$where.= " AND s.session = ".$search['session'];
+				$where.= " AND sp.session = ".$search['session'];
 			}
 			if(!empty($search['stu_name'])){
 				$where.= " AND sp.student_id = ".$search['stu_name'];

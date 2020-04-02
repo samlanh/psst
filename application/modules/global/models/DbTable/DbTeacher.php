@@ -381,24 +381,26 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	function getTeachDocumentAlert($search){
 		$db = $this->getAdapter();
-		$sql =" SELECT s.branch_id,
-			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex) AS sex,
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=s.teacher_type) AS teacher_type, 
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality, 
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=s.degree) AS degree,
-			s.teacher_code,s.teacher_name_kh,s.tel,
-			s.email,
+		$sql =" SELECT t.branch_id,
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=t.branch_id LIMIT 1) AS branch_name,
+			(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=t.sex) AS sex,
+			(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=t.teacher_type) AS teacher_type, 
+			(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=t.nationality) AS nationality, 
+			(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=t.degree) AS degree,
+			t.teacher_code,t.teacher_name_kh,t.tel,
+			t.email,
 			sd.*
-			FROM `rms_teacher_document` AS sd, `rms_teacher` AS s
-			WHERE s.id = sd.stu_id
+			FROM 
+			`rms_teacher_document` AS sd, 
+			`rms_teacher` AS t
+			WHERE t.id = sd.stu_id
 			AND sd.is_receive=0
 		";
 		$where ='';
 		$to_date = (empty($search['end_date']))? '1': " sd.date_end <= '".$search['end_date']." 23:59:59'";
 		$where.= " AND ".$to_date;
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission("s.branch_id");
+		$where.=$dbp->getAccessPermission("t.branch_id");
 		
 		if(!empty($search['title'])){
 			$s_where = array();

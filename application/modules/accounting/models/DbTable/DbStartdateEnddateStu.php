@@ -96,18 +96,18 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 	
 	function getAllStartDateEndDate(){
 		$db = $this->getAdapter();
-		$sql=" select * from rms_startdate_enddate_stu";
+		$sql=" SELECT * from rms_startdate_enddate_stu";
 		return $db->fetchAll($sql);
 	}
 	
 	function getAllpaymentTerm(){
 		$db = $this->getAdapter();
-		$SQL="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
+		$SQL="SELECT key_code as id , name_en as name from rms_view where type=6 and status=1 ";
 		return $db->fetchAll($SQL);
 	}
 	
 	//select all Gerneral old student
-	function getAllGerneralOldStudent(){
+	/*function getAllGerneralOldStudent(){
 		$db=$this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
@@ -131,7 +131,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
 		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY s.degree DESC ";
 		return $db->fetchAll($sql);
-	}
+	}*/
 }
 
 

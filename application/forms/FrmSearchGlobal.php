@@ -287,6 +287,21 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		 *
 		* For Issue Certificate/Letter Praise
 		* */
+		
+		$_day= new Zend_Dojo_Form_Element_FilteringSelect('day');
+		$_day->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$result = $_dbgb->getAllDayName();
+		$opt_group = array(''=>$this->tr->translate("SELECT_DAY"));
+		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
+		$_day->setMultiOptions($opt_group);
+		$_day->setValue($request->getParam("day"));
+		
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
 		$userinfo = $_dbgb->getUserInfo();
 		$optionUser = $_dbgb->getAllUser();
@@ -333,7 +348,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_for_semester,
 				$_for_month,
 				
-				$_language_type
+				$_language_type,
+				$_day
 				)
 			);
 		return $this;

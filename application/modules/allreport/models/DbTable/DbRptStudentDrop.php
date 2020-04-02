@@ -100,8 +100,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT 
 			    	gr.group_id,
 			    	(SELECT $branch FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
-			    	(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')')
-			    	 FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
+			    	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.year_id LIMIT 1) AS years,	
+			    	
+			    	
 			    	(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
 			    	(SELECT $label FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
 			    	gr.from_hour,gr.to_hour,
@@ -120,23 +121,23 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     			$to_date = (empty($search['end_date']))? '1': "gr.create_date <= '".$search['end_date']." 23:59:59'";
     			$where.= " AND ".$from_date." AND ".$to_date;
     	$order =  ' ORDER BY `gr`.`group_id` DESC ,gr.day_id ASC ,from_hour ASC ' ;
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " gr.`note` LIKE '%{$s_search}%'";
     		$where .=' AND ('.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['branch_id'])){
     		$where.=' AND gr.branch_id='.$search['branch_id'];
     	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND gr.year_id='.$search['study_year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND gr.year_id='.$search['academic_year'];
     	}
     	if(!empty($search['group'])){
     		$where.=' AND gr.group_id='.$search['group'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND  gr.from_hour '.$search['session'];
+    		$where.=' AND  CAST(gr.from_hour AS UNSIGNED) '.$search['session'];
     	}
     	if(!empty($search['subject'])){
     		$where.=' AND  gr.subject_id ='.$search['subject'];
@@ -147,10 +148,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['day'])){
     		$where.=' AND  gr.day_id ='.$search['day'];
     	}
-    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("gr.branch_id");
-    	
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -176,31 +175,34 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$to_date = (empty($search['end_date']))? '1': "gr.create_date <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
     
-    	if(!empty($search['title'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " gr.`note` LIKE '%{$s_search}%'";
     		$where .=' AND ('.implode(' OR ',$s_where).')';
     	}
     
     	$order=" GROUP BY gr.year_id,gr.group_id
     	ORDER BY gr.year_id,gr.group_id,times DESC ";
-    	 
-    	if(!empty($search['room'])){
-    		$where.=' AND (SELECT rms_group.room_id FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1)='.$search['room'];
-    	}
-    	if(!empty($search['grade'])){
-    		$where.=' AND (SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1)='.$search['grade'];
-    	}
-    	if(!empty($search['study_year'])){
-    		$where.=' AND gr.year_id='.$search['study_year'];
-    	}
     	if(!empty($search['branch_id'])){
     		$where.=' AND gr.branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND gr.year_id='.$search['academic_year'];
     	}
     	if(!empty($search['group'])){
     		$where.=' AND gr.group_id='.$search['group'];
     	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND (SELECT rms_group.degree FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1)='.$search['degree'];
+    	}
+    	if(!empty($search['grade'])){
+    		$where.=' AND (SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1)='.$search['grade'];
+    	}
+    	if(!empty($search['room'])){
+    		$where.=' AND (SELECT rms_group.room_id FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1)='.$search['room'];
+    	}
+    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("gr.branch_id");
     	return $db->fetchAll($sql.$where.$order);

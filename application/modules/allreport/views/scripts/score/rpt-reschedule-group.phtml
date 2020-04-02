@@ -86,23 +86,22 @@ table.tb-footer tr.style-head {
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("title");?>
+            	<?php echo $frm->getElement("adv_search");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("academic_year");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="group" />
             </div>
+            
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="study_year" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("teacher");?>
             	<input id="teacher" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("subject");?>
             	<input id="subject" />
             </div>
          </div>
@@ -110,8 +109,8 @@ table.tb-footer tr.style-head {
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="session" name="session" type="text">								
 					<option value=''><?php echo $tr->translate("CHOOSE_SESSION");?></option>
-					<option value="<=12"><?php echo $tr->translate("MORNING");?> </option>
-					<option value=">12"><?php echo $tr->translate("AFTERNOON");?> </option>
+					<option value="<=12" ><?php echo $tr->translate("MORNING");?> </option>
+					<option value=">12" ><?php echo $tr->translate("AFTERNOON");?> </option>
 				</select>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
@@ -250,12 +249,6 @@ table.tb-footer tr.style-head {
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 
-$( document ).ready(function() {
-	if('<?php echo $this->search['session']?>'){
-	 dijit.byId("session").set("value","<?php echo $this->search['session']?>");
-	}
-});
-
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -275,21 +268,6 @@ dojo.ready(function(){
 		}
 	}, "teacher");
 	
-	new dijit.form.FilteringSelect({
-		store: academic_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "study_year",
-		name: "study_year",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-		onChange: function() {  
-			academic_year = dijit.byId('study_year').get('value');
-			getRefreshTeacher();
-			getAllSubject();
-		}
-	}, "study_year");
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -318,18 +296,20 @@ dojo.ready(function(){
 		    
 	    }
 	}, "subject");
-	
+
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
 		 getRefreshTeacher();
 		 getAllSubject();
     });
-	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
 	 getRefreshTeacher();
 	 getAllSubject();
+
+	 if('<?php echo $this->search['session']?>'){
+		 dijit.byId("session").set("value","<?php echo $this->search['session']?>");
+		}
 });
 
 
@@ -344,10 +324,7 @@ function getAllSubject(){
 	if(branch_id=='' || branch_id==-1){
 		branch_id = "";
 	}
-	study_year = dijit.byId('study_year').get('value');
-	if(study_year=='' || study_year==-1){
-		study_year = "";
-	}
+	study_year = "";
 	dojo.xhrPost({
 		url:url_getsubject,
 		content:{
@@ -363,71 +340,8 @@ function getAllSubject(){
 		}
 	});
 }
-
-var olstudy_year = '<?php echo $this->search['study_year']?>';  
-var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getteacher"));?>';										
-function getRefreshTeacher(){
-	dijit.byId('teacher').reset();
-	academic_year = dijit.byId('study_year').get('value');
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('teacher').set('store',teacher_store);  
-		return false;
-	}
-	//if(academic_year=='' || academic_year == -1){
-		//return false;
-	//}
-	dojo.xhrPost({
-		url:url_gettecher,
-		content:{
-			'academic_year':academic_year,'branch_id':branch_id,'has_addnew':1
-			},
-		handleAs:"json",
-		load: function(data) {
-		    teacher_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('teacher').set('store',teacher_store);  
-		    if(olstudy_year==academic_year){
-		    	dijit.byId('teacher').set('value','<?php echo $this->search['teacher']?>');  
-		    }
-		    document.getElementsByClassName("overlay")[0].style.display="none";
-		},
-		error: function(err){
-			document.getElementsByClassName("overlay")[0].style.display="none";
-		}
-	});
-}
-
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
-function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
-			
-		}
-	});
-}
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -437,10 +351,14 @@ function getAllGroupByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
+	degree ="";
+	grade ="";
+	academic_year ="";
+	
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':0
+			'branch_id':branch_id,'degree':degree,'grade':grade,'academic_year':academic_year,'noaddnew':1,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -451,7 +369,34 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			
+		}
+	});
+}
+var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
+function getRefreshTeacher(){
+	dijit.byId('teacher').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('teacher').set('store',teacher_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_gettecher,
+		content:{
+			'branch_id':branch_id,'has_addnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    teacher_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher').set('store',teacher_store);  
+		    if(oldBranch==branch_id){
+		   	 dijit.byId('teacher').set('value','<?php echo $this->search['teacher']?>'); 
+		    }
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err){
+			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
 	});
 }

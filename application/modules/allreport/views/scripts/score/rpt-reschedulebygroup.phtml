@@ -18,13 +18,13 @@
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("title");?>
+            	<?php echo $frm->getElement("adv_search");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="study_year" />
+            	<?php echo $frm->getElement("academic_year");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="group" />
@@ -32,11 +32,14 @@
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="room" />
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("grade");?>
-            </div>
          </div>	
          <div class="form-group">
+         	<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("degree");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input id="grade" />
+            </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("start_date");?>
             </div>
@@ -219,21 +222,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var room_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-
 dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: academic_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "study_year",
-		name: "study_year",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-		onChange: function() {  
-			academic_year = dijit.byId('study_year').get('value');
-		}
-	}, "study_year");
+
 	new dijit.form.FilteringSelect({
 		store: room_store,
 		queryExpr: "*${0}*",
@@ -247,11 +237,11 @@ dojo.ready(function(){
 			  
 		}
 	}, "room");
+	
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -263,18 +253,89 @@ dojo.ready(function(){
 	    }
 	}, "group");
 	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+		id: "grade",
+		name: "grade",  
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
+		}
+	}, "grade");
+	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
 		 getRefreshRoom();
     });
-	 getAllAcademicByBranch();
+	 var academic_year = dijit.byId('academic_year');
+	 academic_year.on('change', function(evt) {
+		 getAllGroupByBranch();
+    });
+	 getallGrade();
 	 getAllGroupByBranch();
-	 getRefreshRoom();
 });
+var oldBranch = "<?php echo $this->search['branch_id']?>";
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){degree ="";}
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){grade ="";}
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){academic_year ="";}
+	
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,'degree':degree,'grade':grade,'academic_year':academic_year,'noaddnew':1,'forfilter':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);   
+		    if(oldBranch==branch_id){
+		    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
+		    }
+		},
+		error: function(err) {
+		}
+	});
+}
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	getAllGroupByBranch();  
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('grade').attr('value','');
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store); 
+			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+			},
+			error: function(err) {
+			}
+		});
+}
 
-var url_getRoom = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getroom"));?>';										
+var url_getRoom = '<?php echo $this->url(array("module"=>"global","controller"=>"room","action"=>"getroom"));?>';	
 function getRefreshRoom(){
 	dijit.byId('room').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -290,67 +351,13 @@ function getRefreshRoom(){
 		load: function(data) {
 			room_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('room').set('store',room_store);  
-		    dijit.byId('room').set('value','<?php echo $this->search['room']?>');  
+		    if(oldBranch==branch_id){
+		    	dijit.byId('room').set('value','<?php echo $this->search['room']?>');  
+		    }
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
 			document.getElementsByClassName("overlay")[0].style.display="none";
-		}
-	});
-}
-
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-var oldBranch = "<?php echo $this->search['branch_id']?>";
-function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
-		}
-	});
-}
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
-function getAllGroupByBranch(){
-	dijit.byId('group').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('group').set('store',group_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getgroup,
-		content:{
-			'branch_id':branch_id,'noaddnew':0
-			},
-		handleAs:"json",
-		load: function(data) {
-		    group_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('group').set('store',group_store);   
-		    if(oldBranch==branch_id){
-		    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-		    }
-		},
-		error: function(err) {
 		}
 	});
 }

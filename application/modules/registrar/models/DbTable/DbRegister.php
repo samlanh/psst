@@ -1010,7 +1010,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				AND tfd.tuition_fee>0
     				AND tfd.class_id = $item_id
     				AND tf.branch_id = $branch_id ";
-    		if($item_type==1){//school fee
+    		if($item_type==1 AND !empty($year)){//school fee
     			$sql.=" AND tf.type =1 AND tf.id = $year ";
     		}
     		$rows = $db->fetchAll($sql);

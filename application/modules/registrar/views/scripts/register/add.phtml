@@ -440,7 +440,6 @@ div.img-back {
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 
-item_store = getDataStorefromJSON('id','name');
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		getbranchinfo();
@@ -466,7 +465,6 @@ require(["dojo/ready"], function(ready){
 	}, "old_stu");
 
 	new dijit.form.FilteringSelect({
-		store: item_store,
 		autoComplete: false,
 		queryExpr: "*${0}*",                     
 		id: "item",

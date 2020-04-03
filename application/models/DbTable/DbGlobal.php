@@ -2537,14 +2537,19 @@ function getAllgroupStudyNotPass($action=null){
   	';
   	return array('string'=>$string);
   }
-  public function getAllAcademicYear($option=null){
+  public function getAllAcademicYear($option=null,$ordering=null){
   		$db=$this->getAdapter();
 		$sql="SELECT id,
 				CONCAT(fromYear,'-',toYear) as name,
 				CONCAT(fromYear,'-',toYear) as years
 		  		FROM
 		  	rms_academicyear
-		  		WHERE status = 1 ORDER by toYear DESC ";
+		  		WHERE status = 1 ";
+		$string=" ORDER By toYear DESC";
+		if (!empty($ordering)){
+			$string=" ORDER By toYear ASC";
+		}
+		$sql.=$string;
   		$result =  $db->fetchAll($sql);
   		if($option!=null){
   			$request=Zend_Controller_Front::getInstance()->getRequest();
@@ -2650,10 +2655,21 @@ function getAllgroupStudyNotPass($action=null){
   		$stuName = "COALESCE(s.stu_khname,'')";
   		$grade = "rms_itemsdetail.title";
   	}
+  	
+  	$string="
+  			gds.gd_id AS id,
+	  		CONCAT( COALESCE(s.stu_code,''),'-',$stuName,'-',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) AS name
+  	";
+  	$where="";
+  	if (!empty($data['typeQuery'])){//for get student main
+  		$string = " s.stu_id  AS id,
+  		CONCAT( COALESCE(s.stu_code,''),'-',$stuName ) AS name
+  		";
+  		$where =" AND gds.is_maingrade=1 ";
+  	} 
   	$sql="
 	  	SELECT 
-		  	gds.gd_id AS id,
-	  		CONCAT( COALESCE(s.stu_code,''),'-',$stuName,'-',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1),'') ) AS name
+		  	$string
 	  	FROM
 		  	rms_student AS s,
 		  	rms_group_detail_student AS gds
@@ -2666,16 +2682,22 @@ function getAllgroupStudyNotPass($action=null){
 		  	AND gds.is_setgroup = 1
 		  
   	";
+  	$sql.=$where;
   	if($branchid!=null){
   		$sql.=" AND s.branch_id=".$branchid;
   	}
   	if (!empty($data['study_id'])){
   		$sql.="AND (gds.stop_type=0 OR gds.gd_id =".$data['study_id'].")";
   	}else{
-  		$sql.="	AND gds.stop_type=0";
+  		if (!empty($data['completedStudent'])){
+  			$sql.="	AND gds.stop_type=3";
+  		}else{
+  			$sql.="	AND gds.stop_type=0";
+  		}
+  		
   	}
   	if (!empty($data['is_maingrade'])){
-  		$sql.=" AND gds.is_maingrade=".$data['is_maingrade'];
+  		$sql.=" AND gds.is_maingrade=1";
   	}
   	if (!empty($data['academic_year'])){
   		$sql.=" AND gds.academic_year=".$data['academic_year'];

@@ -304,14 +304,16 @@ function getAllStudentBranch(){
 	dojo.xhrPost({
 		url: url_getstudent,
 		content:{
-			'branch_id':branch_id,'academic_year':academic_year,'group':group,'degree':degree,'grade':grade
+			'branch_id':branch_id,'academic_year':academic_year,'group':group,'degree':degree,'grade':grade,'typeQuery':1,'completedStudent':1
 			},
 		handleAs:"json",
 		load: function(data) {
 			
 			student_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('student').set('store',student_store);  
+		    <?php if (!empty($this->search['student'])){?>
 		    dijit.byId('student').set('value','<?php echo $this->search['student']?>');  
+		    <?php }?>
 		},
 		error: function(err) {
 			

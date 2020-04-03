@@ -387,9 +387,9 @@ var $stckedData  = [];
 //creating Stacked chart
 var $stckedData  = [
                     <?php if (!empty($this->yearly)) foreach ($this->yearly as $yearly){
-                    	$stu = $db->getAmountStudent($yearly['academicyear']);
+                    	$stu = $db->getAmountStudent($yearly['id']);
                     	?>
-                   	 { y: '<?php echo $yearly['academicyear'];?>', a: <?php echo $stu;?>},
+                   	 { y: '<?php echo $yearly['name'];?>', a: <?php echo $stu;?>},
                     <?php }?>
                    
                 ];

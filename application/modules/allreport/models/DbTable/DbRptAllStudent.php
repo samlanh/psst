@@ -298,7 +298,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
-    public function getAmountStudent($year=null){//count to dashboard
+    public function getAmountStudent($acadmic_year=null){//count to dashboard
     	$db = $this->getAdapter();
     	$sql="SELECT COUNT(sg.`stu_id`) 
 					FROM
@@ -307,7 +307,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					   `rms_group_detail_student` AS sg 
 					WHERE 
 						s.status=1 
-						AND s.is_subspend=0
+						AND sg.stop_type=0
 						AND s.customer_type=1 
 						AND g.group_code != ''
 						AND s.stu_id =sg.`stu_id` 
@@ -315,19 +315,22 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 						  ";
     	//AND g.is_pass=2
     	$where='';
-    	if (!empty($year)){
-    		$acad = explode("-", $year);
-    		if (!empty($acad)){
-    			$from_year=$acad[0];
-    			$to_year=$acad[1];
-    			if (!empty($from_year)){
-    				$where.=" AND (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$from_year'";
-    			}
-    			if (!empty($from_year)){
-    				$where.=" AND (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$to_year'";
-    			}
-    		}
+    	if (!empty($acadmic_year)){
+    	$where.=" AND sg.academic_year = ".$acadmic_year;
     	}
+//     	if (!empty($year)){
+//     		$acad = explode("-", $year);
+//     		if (!empty($acad)){
+//     			$from_year=$acad[0];
+//     			$to_year=$acad[1];
+//     			if (!empty($from_year)){
+//     				$where.=" AND (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$from_year'";
+//     			}
+//     			if (!empty($from_year)){
+//     				$where.=" AND (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$to_year'";
+//     			}
+//     		}
+//     	}
 //     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
 //     	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
 //     	if (!empty($year)){

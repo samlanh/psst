@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('RPT_STUDENT_GOT_PRODUCT')); 
-	$frm = $this->frm_payment;
+	$frm = $this->form_search;
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
@@ -22,7 +22,7 @@
                    		<?php echo $frm->getElement("adv_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("branch_search");?>
+                   		<?php echo $frm->getElement("branch_id");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input id="student_id" />
@@ -181,35 +181,34 @@
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		}, "student_id");
-		getallstudentname();
-		 var branch_id = dijit.byId('branch_search');
+		getAllStudentBranch();
+		 var branch_id = dijit.byId('branch_id');
 		 	branch_id.on('change', function(evt) {
-				getallstudentname();
+		 		getAllStudentBranch();
 		    });
 	});
-	function getallstudentname(){//
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
-		branch_id = dijit.byId("branch_search").attr("value");
-		if(branch_id==''){
-			dijit.byId("branch_search").focus();
+	var url_getstudent = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudent'));?>';
+	function getAllStudentBranch(){
+		dijit.byId('student_id').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('student_id').set('store',student_store);  
+		if(branch_id=='' || branch_id==-1){
 			return false;
 		}
 		dojo.xhrPost({
-			url:url_data,
+			url: url_getstudent,
 			content:{
-				'student_name':1,
-				'branch_id':branch_id,
-			},
+				'branch_id':branch_id,'typeQuery':1
+				},
 			handleAs:"json",
 			load: function(data) {
 				student_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('student_id').set('store',student_store);  
-			    <?php if (!empty($this->search['student_id'])){?>
-			    dijit.byId('student_id').set('value','<?php echo $this->search['student_id'];?>'); 
-			   
-			    <?php }?>
+			    dijit.byId('student_id').set('value','<?php echo $this->search['student_id']?>');  
 			},
-			error: function(err){
+			error: function(err) {
+				
 			}
 		});
 	}

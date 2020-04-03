@@ -682,7 +682,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'branch_search' => '',
+    							'branch_id' => '',
     							'adv_search' => '',
     					        'student_id'=>'',
     							'start_date'=> date('Y-m-d'),
@@ -702,10 +702,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view->search = $search;
-		$frm = new Stock_Form_FrmCutStock();
-		$frm->FrmAddCutStock(null);
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_payment = $frm;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	public function rptClosingProductstudentAction(){
 		try{

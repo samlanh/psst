@@ -47,7 +47,8 @@ class Home_IndexController extends Zend_Controller_Action
       $this->view->notread = empty($notread)?0:$notread;
       
       $db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
-      $this->view->yearly = array();//$db_yeartran->getAllYearTuitionfee(6);
+      $this->view->yearly =$ddgb->getAllAcademicYear(null,1);
+//       $this->view->yearly = array();//$db_yeartran->getAllYearTuitionfee(6);
     }
 
     public function dashboardAction()

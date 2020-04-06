@@ -121,9 +121,8 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 					$dbgb->updateReadNotif(1, $drid);
 				}
 			}
-			$_db = new Application_Model_DbTable_DbGlobal();
-			$this->view->day = $_db->getAllDay();
 			
+			$this->view->day = $dbgb->getAllDay();
 			$branch_id = empty($student['branch_id'])?1:$student['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);

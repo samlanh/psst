@@ -537,7 +537,8 @@ dojo.ready(function(){
 	}, "group");
 	getAllGroupByBranch();
 }); 
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+//url_getgroup = '<?php //echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');

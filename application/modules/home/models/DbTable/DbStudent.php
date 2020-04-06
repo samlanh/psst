@@ -357,7 +357,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql="SELECT
 					g.id as group_id,
 					g.`group_code`,
-					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
 					(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 				
@@ -377,9 +377,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND sd.status=1
 					AND st.`stu_id` = sdd.`stu_id` 
 					AND st.is_subspend = 0
-					AND g.is_pass!=1
 					and sdd.stu_id = $stu_id
 			";
+		//AND g.is_pass!=1
 		 
 		$order =" GROUP BY sd.group_id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
 		return $db->fetchAll($sql.$order);
@@ -420,7 +420,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql="SELECT
 					g.id AS group_id,
 					g.`group_code`,
-					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
 					(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 				
@@ -446,7 +446,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		$order =" GROUP BY sta.group_id,sdd.stu_id
 		ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC,st.stu_khname ASC ";
-		 
 		return $db->fetchAll($sql.$order);
 	}
 	
@@ -541,7 +540,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		$sql="SELECT
 					g.group_code,
-					(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_id,
 					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 					(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 					(SELECT $view FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
@@ -549,7 +548,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher,
 					(SELECT $view FROM `rms_view` WHERE TYPE=12 AND key_code = gds.is_pass LIMIT 1) as is_pass_label,
 					gds.is_pass,
-					gds.type
+					gds.type,
+					gds.stop_type
 				FROM
 					rms_group_detail_student AS gds,
 					rms_group AS g,

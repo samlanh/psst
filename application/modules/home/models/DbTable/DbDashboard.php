@@ -95,7 +95,7 @@
 			s.tel,
 			s.sex,
 			s.photo,
-			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=d.academic_year LIMIT 1) AS academic,
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = d.academic_year LIMIT 1) AS academic,
 			(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=d.degree AND TYPE=1 LIMIT 1) AS degree,
 			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=d.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=d.group LIMIT 1 ) AS group_name,

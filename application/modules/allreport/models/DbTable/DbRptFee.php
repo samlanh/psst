@@ -43,8 +43,8 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		return $db->fetchAll($sql.$order);
     	}
     	
-    	if(!empty($search['study_year'])){
-    		$where.=" AND id = ".$search['study_year'] ;
+    	if(!empty($search['academic_year'])){
+    		$where.=" AND academic_year = ".$search['academic_year'] ;
     	}
     	
     	if(!empty($search['branch_id'])){
@@ -62,9 +62,9 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		$where.=" AND generation = '".$search['generation']."'" ;
     	}
     	
-    	if(!empty($search['txtsearch'])){
+    	if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['txtsearch']));
+    		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " rms_tuitionfee.generation LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}

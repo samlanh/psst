@@ -434,23 +434,22 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
+					'adv_search' =>'',
+					'academic_year' =>'',
 					'generation'=>'',
 					'finished_status'=>-1,
-					'txtsearch' =>'',
-					'study_year' =>'',
 					'type_study'=>-1,
-					'grade_all' =>'',
-					'branch_id' =>'',
 					'degree'=>0,
+					'grade' =>'',
+					'branch_id' =>'',
 					'school_option'=>'');
 		}
-		
 		$db = new Allreport_Model_DbTable_DbRptFee();
 		$group= new Allreport_Model_DbTable_DbRptFee();
 		$rs_rows = $group->getAllTuitionFee($search);
 	
-		$year = $db->getAllYearFee();
-		$this->view->row = $year;
+// 		$year = $db->getAllYearFee();
+// 		$this->view->row = $year;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
@@ -461,7 +460,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$row=0;$indexterm=1;$key=0;
 		if(!empty($rs_rows)){
 			foreach ($rs_rows as $i => $rs) {
-				$rows = $db->getFeebyOther($rs['id'],$search['grade_all'],$search['degree'],$search);
+				$rows = $db->getFeebyOther($rs['id'],$search['grade'],$search['degree'],$search);
 				$fee_row=1;
 				if(!empty($rows))foreach($rows as $payment_tran){
 					if($payment_tran['payment_term']==1){

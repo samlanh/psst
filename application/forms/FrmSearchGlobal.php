@@ -302,6 +302,59 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_day->setMultiOptions($opt_group);
 		$_day->setValue($request->getParam("day"));
 		
+		
+		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
+		$type_study->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required' =>'true',
+				'class'=>'fullside',
+				'onchange'=>'filterClient();',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>"false"
+		));
+		$typestudy_opt = $_dbgb->getAllTermStudyTitle(1);
+		$type_study->setMultiOptions($typestudy_opt);
+		$type_study->setValue($request->getParam("type_study"));
+		
+		$generation = new Zend_Dojo_Form_Element_FilteringSelect('generation');
+		$generation->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$generation->setValue($request->getParam("generation"));
+		$generoption=$_dbgb->getAllGeneration(1,1);
+		$generation->setMultiOptions($generoption);
+		
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"));
+		$Option = $_dbgb->getAllSchoolOption();
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$school_option = new Zend_Dojo_Form_Element_FilteringSelect("school_option");
+		$school_option->setMultiOptions($_arr_opt);
+		$school_option->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$school_option->setValue($request->getParam("school_option"));
+		
+		$finished_status = new Zend_Dojo_Form_Element_FilteringSelect('finished_status');
+		$finished_status->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$finish_opt = new Accounting_Model_DbTable_DbTuitionFee();
+		$fin_row=$finish_opt->getProcessTypeView();
+		$opt = array('-1'=>$this->tr->translate("PROCESS_TYPE"));
+		if(!empty($fin_row))foreach($fin_row AS $row) $opt[$row['id']]=$row['name'];
+		$finished_status->setMultiOptions($opt);
+		$finished_status->setValue($request->getParam("finished_status"));
+		
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
 		$userinfo = $_dbgb->getUserInfo();
 		$optionUser = $_dbgb->getAllUser();
@@ -349,7 +402,12 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_for_month,
 				
 				$_language_type,
-				$_day
+				$_day,
+				
+				$type_study,
+				$generation,
+				$school_option,
+				$finished_status
 				)
 			);
 		return $this;

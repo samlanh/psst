@@ -82,6 +82,7 @@ table#exportExcel tr td {
 					    height: 1px;
 					    margin-bottom: 10px;
 					}
+					.hover:hover{background: #ccc;}
 		  		 </style>
 				<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
 					<tr class="head">
@@ -155,29 +156,46 @@ table#exportExcel tr td {
 						    		</td>
 						    	</tr>
 								<tr>
-									<td class="title">ឆ្នាំសិក្សា</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['academic_year'];?></td>
-									<td >កម្រិតសិក្សា</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['degreeTitle'];?></td>
-									<td >ថ្នាក់សិក្សា</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['grade_name'];?></td>
+									<td colspan="9">
+										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;">
+												<thead>
+													<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px; " >
+														<td><?php echo $tr->translate('N_O');?></td>
+														<td><?php echo $tr->translate('STUDY_YEAR');?></td>
+														<td><?php echo $tr->translate('STUDENT_GROUP');?></td>
+														<td><?php echo $tr->translate('DEGREE');?></td>
+														<td><?php echo $tr->translate('GRADE');?></td>
+														<td><?php echo $tr->translate('SESSION');?></td>
+														<td><?php echo $tr->translate('ROOM_NAME');?></td>
+													</tr>
+												</thead>
+												<tbody>
+											<?php 		
+												$i=0;
+												if(!empty($this->rsStudentRerecord)){ foreach($this->rsStudentRerecord as $rs){ 
+													$i++;
+											?>
+												<tr class="hover" style="font-size:12px; height: 22px;"​ align="center">
+													<td><?php echo $i;?></td>
+													<td><?php echo $rs['academic_year']; ?></td>
+													<td align="left">&nbsp;<?php echo $rs['group_name']; ?>&nbsp;</td>
+													<td align="left">&nbsp;<?php echo $rs['degree_name']; ?>&nbsp;</td>
+													<td align="left">&nbsp;<?php echo $rs['grade_name']; ?>&nbsp;</td>
+													<td>&nbsp;<?php echo $rs['session'];?>&nbsp;</td>
+													<td align="left">&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
+												</tr>
+											<?php } }?>
+											</tbody>
+										</table>
+									</td>
 								</tr>
-								<tr>
-									<td class="title">វេនសិក្សា</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['session'];?></td>
-									<td >បន្ទប់សិក្សា</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['room_name'];?></td>
-								</tr>
+								<!-- 
 								<tr>
 									<td class="title">ផ្សេងៗ</td>
 									<td >:</td>
-									<td colspan="7" class="value"><?php echo $this->rs['remark'];?></td>
+									<td colspan="7" class="value"><?php //echo $this->rs['remark'];?></td>
 								</tr>
+								 -->
 						    	<tr><td colspan="9">&nbsp;</td></tr>
 						    	<tr>
 						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">

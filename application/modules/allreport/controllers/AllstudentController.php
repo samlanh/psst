@@ -654,11 +654,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-					'advance_search' =>'',
+					'adv_search' =>'',
 					'user'=>'',
-					'branch_search'=>0,
-					'study_year' =>'',
-					'degree_search' =>'',
+					'branch_id'=>0,
+					'academic_year' =>'',
+					'degree' =>'',
 					'term_test' =>'',
 					'student_option_search' =>'',
 					'province_search' =>'',
@@ -681,6 +681,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm->FrmAddStudentTest(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->form_search = $frm;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 		
 		$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
 		$frm = new Application_Form_FrmGlobal();

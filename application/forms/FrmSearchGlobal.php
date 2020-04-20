@@ -373,6 +373,67 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			$_user_id->setValue($userinfo['user_id']);
 		}
 		$_user_id->setValue($request->getParam("user_id"));
+		
+		
+		/* START
+		 *
+		* For Student Test
+		* */
+		$_arr = array(
+				""=>$this->tr->translate("TYPE_TEST"),
+				1=>$this->tr->translate("CREATE_TEST_EXAM_KH"),
+				2=>$this->tr->translate("CREATE_TEST_EXAM_EN"),
+				3=>$this->tr->translate("CREATE_TEST_EXAM_UNIV")
+		);
+		$_type_exam = new Zend_Dojo_Form_Element_FilteringSelect("type_exam");
+		$_type_exam->setMultiOptions($_arr);
+		$_type_exam->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside height-text',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',));
+		$_type_exam->setValue($request->getParam("type_exam"));
+		
+		if($userinfo['level']!=1){
+			$_type_exam->setAttribs(array('readonly'=>'readonly'));
+			if(!empty($userinfo['schoolOption'])){
+				$_type_exam->setValue($userinfo['schoolOption']);
+			}
+		}
+		
+		$_arr = array(""=>$this->tr->translate("OCCUPATION"),1=>
+				$this->tr->translate("STUDENT"),
+				2=>$this->tr->translate("STAFF"),
+				3=>$this->tr->translate("OWN_BUSSINESS"));
+		$_student_option_search = new Zend_Dojo_Form_Element_FilteringSelect("student_option_search");
+		$_student_option_search->setMultiOptions($_arr);
+		$_student_option_search->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside height-text',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',));
+		$_student_option_search->setValue($request->getParam("student_option_search"));
+		
+		$rs_province = $_dbgb->getProvince();
+		$opt = array(""=>$this->tr->translate("SELECT_PROVINCE"));
+		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
+		$_province_search = new Zend_Dojo_Form_Element_FilteringSelect("province_search");
+		$_province_search->setMultiOptions($opt);
+		$_province_search->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside',
+				'onChange'=>'filterDistrict();',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$_province_search->setValue($request->getParam("province_search"));
+		/* ENT
+		 *
+		* For Student Test
+		* */
+		
 		if(!empty($_data)){
 		
 		}
@@ -407,7 +468,11 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$type_study,
 				$generation,
 				$school_option,
-				$finished_status
+				$finished_status,
+				
+				$_type_exam,
+				$_student_option_search,
+				$_province_search
 				)
 			);
 		return $this;

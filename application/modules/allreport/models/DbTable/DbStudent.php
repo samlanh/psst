@@ -281,9 +281,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	
-			if(!empty($search['advance_search'])){
+			if(!empty($search['adv_search'])){
 				$s_where=array();
-				$s_search= addslashes(trim($search['advance_search']));
+				$s_search= addslashes(trim($search['adv_search']));
 				$s_where[]= " st.serial LIKE '%{$s_search}%'";
 				$s_where[]= " st.stu_code LIKE '%{$s_search}%'";
 				$s_where[]= " st.stu_khname LIKE '%{$s_search}%'";
@@ -292,11 +292,11 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$s_where[]= " st.tel LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
-			if(($search['branch_search']>0)){
-				$where.= " AND st.branch_id = ".$search['branch_search'];
+			if(($search['branch_id']>0)){
+				$where.= " AND st.branch_id = ".$search['branch_id'];
 			}
-			if(!empty($search['study_year'])){
-				$where .= " AND str.academic_year = ".$search['study_year'];
+			if(!empty($search['academic_year'])){
+				$where .= " AND str.academic_year = ".$search['academic_year'];
 			}
 			if(!empty($search['term_test'])){
 				$where .= " AND str.study_term = ".$search['term_test'];
@@ -307,8 +307,8 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($search['type_exam'])){
 				$where .= " AND str.test_type = ".$search['type_exam'];
 			}
-			if(!empty($search['degree_search'])){
-				$where .= " AND str.degree_result = ".$search['degree_search'];
+			if(!empty($search['degree'])){
+				$where .= " AND str.degree_result = ".$search['degree'];
 			}
 			if(!empty($search['student_option_search'])){
 				$where .= " AND st.student_option = ".$search['student_option_search'];

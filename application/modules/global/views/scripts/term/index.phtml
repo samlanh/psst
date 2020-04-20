@@ -1,7 +1,7 @@
 <?php
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-$frm = $this->form_search;
+$frm =  $this->form_search;
 $formList = new Application_Form_Frmtable();
 ?>
 <title><?php echo $tr->translate("START_DATE_END_DATE");?></title>
@@ -20,24 +20,17 @@ $formList = new Application_Form_Frmtable();
 		<div class="card-box">
 			<form action=" " dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-					<div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SEARCH");?>..." class="fullside" id="search" name="search" value="<?php echo $this->search['search']?>" type="text" >
-					 </div>
+					<div class="col-md-2 col-sm-3 col-xs-12">
+                   		<?php echo $frm->getElement("adv_search");?>
+                   </div>
+                   <div class="col-md-2 col-sm-3 col-xs-12">
+                   		<?php echo $frm->getElement("branch_id");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                  		<?php echo $frm->getElement("academic_year");?>
+                   </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-						<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
-							<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
-							<?php if(!empty($this->branch)){ foreach ($this->branch as $year){?>	
-								<option value="<?php echo $year['id'];?>" <?php if ($this->search['branch_id']==$year['id']){ echo 'selected="selected"';}?>><?php echo $year['name'];?></option>
-							<?php }}?>
-						</select>	
-					 </div>
-					 
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<input id="academic_year" />
-					 </div>
-					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 					 </div>
 				</div>
 			</form>
@@ -52,51 +45,4 @@ $formList = new Application_Form_Frmtable();
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dijit.form.DateTextBox");
-   
-	
-	dojo.ready(function(){ 
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                     
-			id: "academic_year",
-			name: "academic_year",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-			onChange: function() {  
-				academic_year = dijit.byId('academic_year').get('value');
-			}
-		}, "academic_year");
-		
-		getAllAcademicByBranch();
-	});
-	
-	url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-	function getAllAcademicByBranch(){
-		dijit.byId('academic_year').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('academic_year').set('store',academic_store);  
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getacademic,
-			content:{
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data){
-				academic_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('academic_year').set('store',academic_store);  
-				
-				dijit.byId('academic_year').attr("value","<?php echo $this->search['academic_year']?>");
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
-	
 </script>

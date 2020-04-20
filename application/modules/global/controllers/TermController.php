@@ -13,7 +13,7 @@ class Global_TermController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-					'search'=>"",
+					'adv_search'=>"",
     				'branch_id'=>"",
     				'academic_year'=>"",
 				);
@@ -23,18 +23,17 @@ class Global_TermController extends Zend_Controller_Action {
     		
 			$db = new Global_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
-			
 			$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH","TITLE","ACADEMIC_YEAR","START_DATE","END_DATE","NOTE","CREATE_DATE","USER");
     		$link=array(
     				'module'=>'global','controller'=>'term','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('academic_year'=>$link,'title'=>$link,'create_date'=>$link,'start_date'=>$link,'end_date'=>$link ));
-			
-    		$db = new Accounting_Model_DbTable_DbFee();
-    		$this->view->year = $db->getAceYear();
-    		$_db = new Application_Model_DbTable_DbGlobal();
-    		$this->view->branch = $_db->getAllBranch();
+    		
+    		$form=new Application_Form_FrmSearchGlobal();
+    		$forms=$form->FrmSearch();
+    		Application_Model_Decorator::removeAllDecorator($forms);
+    		$this->view->form_search=$form;
     		
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

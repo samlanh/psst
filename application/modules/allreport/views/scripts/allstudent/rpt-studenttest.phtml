@@ -15,19 +15,19 @@ table.content-data thead tr.style-head {
 			<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("advance_search");?>
+                   		<?php echo $frm->getElement("adv_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("branch_search");?>
+                   		<?php echo $frm->getElement("branch_id");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input id="study_year" />
+                   		<?php echo $frm->getElement("academic_year");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<input id="term_test" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("degree_search");?>
+                   		<?php echo $frm->getElement("degree");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<?php echo $frm->getElement("student_option_search");?>
@@ -250,19 +250,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: academic_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "study_year",
-		name: "study_year",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-		onChange: function() {  
-			getAllTermStudy();
-		}
-	}, "study_year");
 
 	new dijit.form.FilteringSelect({
 		placeHolder:"<?php echo $tr->translate("SELECT_TERM");?>",   
@@ -275,51 +262,21 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "term_test");
-
-	
-	 var branch_id = dijit.byId('branch_search');
-	 branch_id.on('change', function(evt) {
-		 getAllAcademicByBranch();
+	 var academic_year = dijit.byId('academic_year');
+	 academic_year.on('change', function(evt) {
 		 getAllTermStudy();
     });
-	 getAllAcademicByBranch();
 	 getAllTermStudy();
 });
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-var oldBranch = "<?php echo $this->search['branch_search']?>";
-function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_search').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
-		}
-	});
-}
+
 url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
-var oldterm = "<?php echo $this->search['branch_search']?>";
+var oldterm = "<?php echo $this->search['branch_id']?>";
 function getAllTermStudy(){
-	branch_id = dijit.byId('branch_search').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
 		return false;
 	}
-	study_year = dijit.byId('study_year').get('value');
+	study_year = dijit.byId('academic_year').get('value');
 	if(study_year==''){study_year=0;}
 	dojo.xhrPost({
 		url: url_term_study,

@@ -116,8 +116,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
 			exit();
 		}
-		$rr = $db->getStudyHishotryById($id);
-		$this->view->rr = $rr;
+// 		$rr = $db->getStudyHishotryById($id);
+// 		$this->view->rr = $rr;
 		if($this->getRequest()->isPost())
 		{
 			try{
@@ -276,8 +276,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$rr = $db->getStudyHishotryById($id);
-		$this->view->rr = $rr;
+// 		$rr = $db->getStudyHishotryById($id);
+// 		$this->view->rr = $rr;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
@@ -329,8 +329,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if(empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
 		}
-		$rr = $db->getStudyHishotryById($id);
-		$this->view->rr = $rr;
+// 		$rr = $db->getStudyHishotryById($id);
+// 		$this->view->rr = $rr;
 		if($this->getRequest()->isPost())
 		{
 			try{

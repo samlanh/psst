@@ -135,7 +135,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'branch_id'	 => $_data['branch_id'],
 						'study_id'	=>$_data['studentid'],
 						'stu_id'	=>$stu_id,
-						'studentname'=> $_data['studentname'],
+// 						'studentname'=> $_data['studentname'],
 						'gender'	 => $_data['gender'],
 						
 						'type'		 => $_data['type'],

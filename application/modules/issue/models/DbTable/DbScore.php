@@ -265,7 +265,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
 			END 
 			as for_month,
-			s.max_score,
+			
 			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
 			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
 			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
@@ -274,6 +274,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
 			(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name
 		";
+		//s.max_score,
 		$sql.=$dbp->caseStatusShowImage("s.status");
 		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 and s.score_option=1 ";
 		

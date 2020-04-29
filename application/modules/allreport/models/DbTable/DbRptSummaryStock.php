@@ -374,17 +374,23 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    		s.last_name,
 	    		s.stu_code,
 	    		s.tel,
-	    		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
-	    		(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
-	    		(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
+	    		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gds.academic_year LIMIT 1) AS academic,
+	    		(SELECT `title` FROM `rms_items` WHERE `id`=gds.degree AND type=1 LIMIT 1) AS degree,
+	    		(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=gds.grade AND items_type=1 LIMIT 1) AS grade,
 	    		pp.*,
 	    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.closed_by LIMIT 1) as user_close,
 	    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.user_id LIMIT 1) as user_enter
-	    		FROM `rms_cutstock` AS pp,
-	    		`rms_student` AS s
-	    		WHERE s.stu_id = pp.student_id
+	    		FROM 
+		    		`rms_cutstock` AS pp,
+		    		`rms_student` AS s,
+		    		rms_group_detail_student AS gds 
+	    		WHERE 
+	    		s.stu_id = pp.student_id
+	    		AND s.stu_id = gds.stu_id
 	    		AND pp.is_closed = 0
 	    		AND pp.status = 1
+	    		AND gds.is_maingrade=1
+	    		AND gds.is_current=1
 	    		";
 	    		$from_date =(empty($search['start_date']))? '1': " pp.received_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
 	    		$to_date = (empty($search['end_date']))? '1': " pp.received_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";

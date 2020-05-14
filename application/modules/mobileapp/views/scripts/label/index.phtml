@@ -15,69 +15,114 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		</div>
     	</div>
     	<form action="" method="post" enctype="application/x-www-form-urlencoded" >
+    		<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					loadingBlock();
+					return true;
+				}else{
+					return false;
+				}
+			</script>
     	<div class="card-box">
-    		<div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smspaymentpaid");?> :
+    		<div class="col-md-12 col-sm-12 col-xs-12">
+    			<div class="form-group">
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name">
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<strong><?php echo $tr->translate("KHMER");?></strong>
+                   </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<strong><?php echo $tr->translate("ENGLISH");?></strong>
+                   </div>
+                </div>
+                <div class="form-group">
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smspaymentpaid");?> :
+                   </label>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_smspaymentpaid']['keyValue']?>"  name="lbl_smspaymentpaid" id="lbl_smspaymentpaid" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_smspaymentpaid']['keyValueEn']?>"  name="lbl_smspaymentpaidEn" id="lbl_smspaymentpaidEn" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
                 </div>
                 <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsatt");?> :
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsatt");?> :
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_smsatt']['keyValue']?>"  name="lbl_smsatt" id="lbl_smsatt" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_smsatt']['keyValueEn']?>"  name="lbl_smsattEn" id="lbl_smsattEn" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
                 </div>
                 <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsmistake");?> :
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsmistake");?> :
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_smsmistake']['keyValue']?>"  name="lbl_smsmistake" id="lbl_smsmistake" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_smsmistake']['keyValueEn']?>"  name="lbl_smsmistakeEn" id="lbl_smsmistakeEn" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
                 </div>
+                
+                
+                
                 <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsscore");?> :
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsscore");?> :
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_smsscore']['keyValue']?>"  name="lbl_smsscore" id="lbl_smsscore" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_smsscore']['keyValueEn']?>"  name="lbl_smsscoreEn" id="lbl_smsscoreEn" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
                 </div>
                 <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsnews");?> :
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsnews");?> :
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_smsnews']['keyValue']?>"  name="lbl_smsnews" id="lbl_smsnews" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_smsnews']['keyValueEn']?>"  name="lbl_smsnewsEn" id="lbl_smsnewsEn" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
                 </div>
                 <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsnotification");?> :
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_smsnotification");?> :
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_smsnotification']['keyValue']?>"  name="lbl_smsnotification" id="lbl_smsnotification" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
-                </div>
-                <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_paymentnotification");?> :
-                   </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
-                   		<input type="text" value="<?php echo $this->row['lbl_paymentnotification']['keyValue']?>"  name="lbl_paymentnotification" id="lbl_paymentnotification" dojoType="dijit.form.TextBox" class="fullside"  />
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_smsnotification']['keyValueEn']?>"  name="lbl_smsnotificationEn" id="lbl_smsnotificationEn" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
                 </div>
                 <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_schoolphone");?> :
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_paymentnotification");?> :
                    </label>
-                   <div class="col-md-7 col-sm-7 col-xs-12">
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_paymentnotification']['keyValue']?>"  name="lbl_paymentnotification" id="lbl_paymentnotification" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_paymentnotification']['keyValueEn']?>"  name="lbl_paymentnotificationEn" id="lbl_paymentnotificationEn" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
+                </div>
+                <div class="form-group">
+                   <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name"><?php echo $tr->translate("lbl_schoolphone");?> :
+                   </label>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
                    		<input type="text" value="<?php echo $this->row['lbl_schoolphone']['keyValue']?>"  name="lbl_schoolphone" id="lbl_schoolphone" dojoType="dijit.form.TextBox" class="fullside"  />
+                   </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12">
+                   		<input type="text" value="<?php echo $this->row['lbl_schoolphone']['keyValueEn']?>"  name="lbl_schoolphoneEn" id="lbl_schoolphoneEn" dojoType="dijit.form.TextBox" class="fullside"  />
                    </div>
                 </div>
             </div>
     	</div>
     	<div class="clearfix"></div>
 		    <div class="card-box">
-               	<div class="col-md-6 col-sm-6 col-xs-12 border-top mt-20 ptb-10 text-center">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		 <input type="hidden" name="id" value="<?php echo $this->rs['code'];?>"  />
 		  			 <input type="submit" value="រក្សាទុក" label="រក្សាទុក" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 
 	    		</div>

@@ -16,14 +16,14 @@ class Mobileapp_UseraccountController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'adv_search' => '',
-						'study_year'=> '',
+						'academic_year'=> '',
 						'grade'=> '',
 						'session'=> '',
 						'time'=> '',
 						'degree'=> '',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
-						'status'=> '',
+						'status'=> '-1',
 					);
 				
 			}
@@ -38,14 +38,17 @@ class Mobileapp_UseraccountController extends Zend_Controller_Action {
 				$link1=array(
 						'module'=>'mobileapp','controller'=>'useraccount','action'=>'view',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link1,'stu_code'=>$link1,'name'=>$link1,'stu_khname'=>$link1,'ប្តូរលេខសម្ងាត់'=>$link,'CHANGE_PASSWORD'=>$link));
+				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,
+						array(
+								'ប្តូរលេខសម្ងាត់'=>$link,
+								'CHANGE_PASSWORD'=>$link));//'branch_name'=>$link1,'stu_code'=>$link1,'name'=>$link1,'stu_khname'=>$link1,
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}	
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
 	function addAction(){
@@ -62,7 +65,6 @@ class Mobileapp_UseraccountController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
-				$data["id"]=$id;
 				$row=$db->updateStudent($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/mobileapp/useraccount");
 			}catch(Exception $e){
@@ -70,22 +72,14 @@ class Mobileapp_UseraccountController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$group = $db->getAllgroup();
-// 		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
-// 		$this->view->group = $group;
 		$this->view->rs = $row;
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$row =$_db->getOccupation();
-		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
-		$this->view->occupation = $row;
+		
 }
 	
 // 	//view detial student by id
 	public function viewAction(){
 		$id=$this->getRequest()->getParam("id");
-		$db= new Mobileapp_Model_DbTable_Dbuseraccount();
-		$this->view->rs = $db->getStudentViewDetailById($id);
+// 		$db= new Mobileapp_Model_DbTable_Dbuseraccount();
+// 		$this->view->rs = $db->getStudentViewDetailById($id);
 	}
 }

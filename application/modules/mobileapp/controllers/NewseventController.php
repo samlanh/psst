@@ -2,6 +2,8 @@
 
 class Mobileapp_NewseventController extends Zend_Controller_Action
 {
+	const REDIRECT_URL='/mobileapp/newsevent';
+	protected $tr;
     public function init()
     {       
         /* Initialize action controller here */
@@ -10,8 +12,7 @@ class Mobileapp_NewseventController extends Zend_Controller_Action
         $this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     }
 
-    public function indexAction()
-    {
+public function indexAction(){
 		try{
 			$db = new Mobileapp_Model_DbTable_DbNewsEvent();
 			if($this->getRequest()->isPost()){
@@ -19,104 +20,132 @@ class Mobileapp_NewseventController extends Zend_Controller_Action
 			}
 			else{
 				$search = array(
-						'adv_search' => '',
-						'search_status' => -1,
-						'start_date'=> date('Y-m-01'),
-						'end_date'=>date('Y-m-d'));
+						'adv_search' 		=> '',
+						'status_search' 	=> '',
+						'start_date' 		=> '',
+						'end_date' 			=> date("Y-m-d"));
 			}
-			$rs_rows= $db->getAllNewEvent($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+			$rs_rows= $db->getAllArticle($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","DATE","STATUS");
+			$collumns = array("TITLE","PUBLISH_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'newsevent','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'zone_num'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-	
-		$frm = new Application_Form_FrmSearch();
-		$frm = $frm->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm = $frm;
-    }
-
-
-    public function addAction()
-    {
-       try{
-        $db = new Mobileapp_Model_DbTable_DbNewsEvent();
-        if($this->getRequest()->isPost()){
-            $_data = $this->getRequest()->getPost();
-            $db->add($_data);
-            if(isset($_data['save_close'])){
-                $this->_redirect("mobileapp/newsevent");
-            }else{
-                Application_Form_FrmMessage::message("INSERT_SUCCESS");
-            }
-        }
-       // $frm = new Other_Form_FrmBanner();
-       // $frm_manager=$frm->FrmAddBanner();
-     //   Application_Model_Decorator::removeAllDecorator($frm_manager);
-       // $this->view->frm = $frm_manager;
-    }catch (Exception $e){
-        Application_Form_FrmMessage::message("Application Error");
-        Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    }
-  //  $dbglobal = new Application_Model_DbTable_DbVdGlobal();
-    //    $this->view->lang = $dbglobal->getLaguage();
-    }
-
-    public function editAction()
-    {
-       
-    $db = new Mobileapp_Model_DbTable_DbNewsEvent();
-    if($this->getRequest()->isPost()){
-      $_data = $this->getRequest()->getPost();
-      try{
-        $db->add($_data);
-        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
-        $this->_redirect("mobileapp/newsevent");
-      }catch(Exception $e){
-        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
-        $err =$e->getMessage();
-        Application_Model_DbTable_DbUserLog::writeMessageError($err);
-      }
-    }
-
-    $id = $this->getRequest()->getParam("id");
-    $row = $db->getById($id);
-    $this->view->row = $row;
-  
-    if(empty($row)){
-     $this->_redirect('mobileapp/newsevent');
-    }   
-    //$fm = new Other_Form_FrmBanner();
-    //$frm = $fm->FrmAddBanner($row);
-    //Application_Model_Decorator::removeAllDecorator($frm);
-    //$this->view->frm = $frm;  
-
-
-    }
-    function deleteAction(){
-    	try{
-    		$id = $this->getRequest()->getParam("id");
-    		$db = new Mobileapp_Model_DbTable_DbNewsEvent();
-    		if (!empty($id)) {
-    			$db->deleteData($id);
-    			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
-    			echo "<script>window.close();</script>";
-    		}
-    	}catch(Exception $e){
-    		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
-    		$err =$e->getMessage();
-    		Application_Model_DbTable_DbUserLog::writeMessageError($err);
-    		echo "<script>window.close();</script>";
-    	}
-    }
+		$frm1 = new Mobileapp_Form_FrmNews();
+	   	$frm=$frm1->FrmAddNews();
+	   	Application_Model_Decorator::removeAllDecorator($frm);
+	   	$this->view->frm_new = $frm;
+	}
+   function addAction(){
+	   	if($this->getRequest()->isPost()){
+	   		try{
+	   			$_data = $this->getRequest()->getPost();
+	   			$db = new Mobileapp_Model_DbTable_DbNewsEvent();
+	   			$db->addArticle($_data);
+	   			if(!empty($_data['save_new'])){
+	   				 Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL."/add");
+	   			}else{
+	   				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL);
+	   			}
+	   		}catch(Exception $e){
+	   			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	   			$err =$e->getMessage();
+	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	   		}
+	   	}
+    	$frm1 = new Mobileapp_Form_FrmNews();
+	   	$frm=$frm1->FrmAddNews();
+	   	Application_Model_Decorator::removeAllDecorator($frm);
+	   	$this->view->frm_new = $frm;
+   	
+   		$dbglobal = new Application_Model_DbTable_DbGlobal();
+   		$this->view->lang = $dbglobal->getLaguage();
+   }
+   function editAction(){
+	   	$db = new Mobileapp_Model_DbTable_DbNewsEvent();
+	   	$id = $this->getRequest()->getParam('id');
+	   	$id = empty($id)?0:$id;
+  	 	if($this->getRequest()->isPost()){
+	   		try{
+	   			$_data = $this->getRequest()->getPost();
+	   			$db->addArticle($_data);
+	   			Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
+	   		}catch(Exception $e){
+	   			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	   			$err =$e->getMessage();
+	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	   		}
+	   	}
+	   	$row = $db->getArticleById($id);
+	   	if (empty($row)){
+	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
+	   		exit();
+	   	}
+	   	$this->view->row = $row;
+	   	$this->view->id = $id;
+	   	
+    	$frm = new Mobileapp_Form_FrmNews();
+	   	$frm=$frm->FrmAddNews($row);
+	   	Application_Model_Decorator::removeAllDecorator($frm);
+	   	$this->view->frm_new = $frm;
+   	
+	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
+	   	$this->view->lang = $dbglobal->getLaguage();
+   }
+   function copyAction(){
+	   	$db = new Mobileapp_Model_DbTable_DbNewsEvent();
+	   	$id = $this->getRequest()->getParam('id');
+	   	if($this->getRequest()->isPost()){
+	   		try{
+	   			$_data = $this->getRequest()->getPost();
+	   			$db->addArticle($_data);
+	   			Application_Form_FrmMessage::Sucessfull($this->tr->translate('COPY_SUCCESS'), self::REDIRECT_URL);
+	   		}catch(Exception $e){
+	   			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	   			$err = $e->getMessage();
+	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	   		}
+	   	}
+	   	$row = $db->getArticleById($id);
+	   	$this->view->row = $row;
+	   	$this->view->id = $id;
+	   	 
+	   	$frm = new Mobileapp_Form_FrmNews();
+	   	$frm=$frm->FrmAddNews($row);
+	   	Application_Model_Decorator::removeAllDecorator($frm);
+	   	$this->view->frm_new = $frm;
+	   
+	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
+	   	$this->view->lang = $dbglobal->getLaguage();
+   }
+   function deleteAction(){
+	   	try{
+	   		$request=Zend_Controller_Front::getInstance()->getRequest();
+	   		$action=$request->getActionName();
+	   		$controller=$request->getControllerName();
+	   		$module=$request->getModuleName();
+	   
+	   		$dbacc = new Application_Model_DbTable_DbUsers();
+	   		$rs = $dbacc->getAccessUrl($module,$controller,'delete');
+	   		if(!empty($rs)){
+	   			$id = $this->getRequest()->getParam('id');
+	   			$db = new Mobileapp_Model_DbTable_DbNewsEvent();
+	   			if(!empty($id)){
+	   				$db->deleteNews($id);
+	   				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS",self::REDIRECT_URL);
+	   			}
+	   		}
+	   		Application_Form_FrmMessage::Sucessfull("You no permission to delete",self::REDIRECT_URL);
+	   	}catch (Exception $e){
+	   		Application_Form_FrmMessage::message("Application Error");
+	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	   	}
+   }
 
 }
 

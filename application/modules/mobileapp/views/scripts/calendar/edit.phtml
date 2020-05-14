@@ -22,6 +22,7 @@ if (!empty($dept)) {
 		<form  id='add_techer' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				loadingBlock();
 				return true;
 			} else {
 				return false;
@@ -39,11 +40,18 @@ if (!empty($dept)) {
 	    	<div class="card-box">
 	        	<div class="col-md-6 col-sm-6 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("HOLIDAY_NAME");?> :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("HOLIDAY_TITLE_KH");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php  echo $holiday->getElement('holiday_name');?>
 	                   		<?php  echo $holiday->getElement('id');?>
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("HOLIDAY_TITLE_EN");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php  echo $holiday->getElement('title_en');?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -114,6 +122,7 @@ if (!empty($dept)) {
 	                	</div>
 	                </div>
 	            </div>
+	         </div>
 		</form>
 	</div>
 </div>

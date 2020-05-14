@@ -53,7 +53,6 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     function addArticle($data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
-    	//print_r($_FILES); exit();
     	try{
     		$valid_formats = array("jpg", "png","gif","bmp","jpeg");
     		$part= PUBLIC_PATH.'/images/news/';

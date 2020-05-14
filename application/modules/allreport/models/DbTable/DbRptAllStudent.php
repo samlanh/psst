@@ -75,7 +75,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			WHERE 
     				s.stu_id = gds.stu_id
     				AND s.status=1 
-    				AND gds.is_maingrade
+    				AND gds.is_maingrade =1
     				AND s.customer_type=1 ";
     	
     	$where=' ';

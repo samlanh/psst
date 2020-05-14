@@ -2,13 +2,13 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD ATTENDENCENOTE')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
+	$countlang = count($this->lang);
 ?>
 <script>
-dojo.require("dijit/Editor");
-require(["dijit/form/Textarea","dijit/form/NumberTextBox"]);
+	dojo.require("dijit/Editor");
+	require(["dijit/form/Textarea","dijit/form/NumberTextBox"]);
 </script>
-<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
+	<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <style>
 body, #dijitEditorBody {
     height: 100%;
@@ -25,8 +25,7 @@ body, #dijitEditorBody {
 		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-                dijit.byId("save_close").attr("disabled",true);
-				dijit.byId("save_new").attr("disabled",true);
+                loadingBlock();
 				return true;
 			}else {
 				return false;
@@ -41,27 +40,77 @@ body, #dijitEditorBody {
 		    		</div>
 	    		</div>
 	    	</div>
-	    	<div class="card-box mb-10">
-	        	<div class="col-md-10 col-sm-10 col-xs-10">
+	    	<div class="card-box mb-12">
+	    		<div class="col-md-8 col-sm-8 col-xs-12">
+	        		<?php if ($countlang>1){?>
+			    	<div class="card-box">
+			    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+			    		 	<?php $alias=''; foreach($this->lang as $key=> $rs){
+		                      	$alias = str_replace(' ','',$rs['title']);?>
+				            <li class="nav-item <?php if ($key<1){echo "active";}?>">
+				                <a class="nav-link " data-toggle="tab" href="<?php echo "#".$alias;?>" role="tab"><i class="fa fa-flag ml-2"></i> <?php echo $tr->translate(strtoupper($rs['title']));?></a>
+				            </li>
+				            <?php }?>
+				        </ul>
+				    </div>
+				    <?php }?>
+				    <?php if ($countlang>1){?>
+				    <div class="col-md-12">
+				        <!-- Tab panels -->
+				        <div class="tab-content vertical">
+				         <?php $alias=''; foreach($this->lang as $key=> $rs){
+		                      	$alias = str_replace(' ','',$rs['title']);?>
+					        <!--Panel <?php echo $key+1?>-->
+					        <div class="tab-pane fade <?php if ($key<1){echo "active in";}?>" id="<?php echo $alias;?>" role="tabpanel">
+					        	<div class="col-md-12 col-sm-12 col-xs-12">
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+					                   </label>
+					                   <div class="col-md-12 col-sm-12 col-xs-12">
+					                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"></textarea>
+					                   </div>
+					                </div>
+					          	</div>
+					        </div>
+					        <?php }?>
+					   </div>
+					</div>
+					<?php }else{?>
+					 <div class="col-md-12">
+						 <?php $alias=''; foreach($this->lang as $key=> $rs){
+		                      	$alias = str_replace(' ','',$rs['title']);?>
+				        	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+				                   </label>
+				                   <div class="col-md-12 col-sm-12 col-xs-12">
+				                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"></textarea>
+				                   </div>
+				                </div>
+				          	</div>
+				        <?php }?>
+					 </div>
+					<?php }?>
+		            </div>
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="title" name="title" value="" type="text">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ORDERING");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   <label class="control-label col-md-3 col-md-3 col-xs-12" for="first-name"><?php echo $tr->translate("ORDERING");?> :</label>
+	                   <div class="col-md-9 col-sm-9 col-xs-12">
 	                   		<input dojoType="dijit.form.NumberTextBox" required="true" class="fullside" id="ordering" name="ordering" value="0" type="text">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DESCRIPTION");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<textarea class="ckeditor" dojoType="dijit.form.Textarea" id="description" name="description" style=" width:99%; min-height: 60px"></textarea>
 	                   </div>
 	                </div>
 	           </div>

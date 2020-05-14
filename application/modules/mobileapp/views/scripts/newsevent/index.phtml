@@ -1,30 +1,41 @@
 <?php 
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate("newsevent"));
-$frm = $this->frm;
-$urlDelete = $this->baseUrl()."/mobileapp/newsevent/delete/id/";
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("NEWSEVENT"));
+	$frm = $this->frm_new;
+	$urlEdit = $this->baseUrl()."/mobileapp/newsevent/edit/id/";
+	$urlDelete = $this->baseUrl()."/mobileapp/newsevent/delete/id/";
+	$urlCopy = $this->baseUrl()."/mobileapp/newsevent/copy/id/";
 ?>
+<script type="text/javascript">	
+	dojo.require("dijit.form.DateTextBox");
+</script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('NEWSEVENT');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-				<div class="form-group">
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<?php echo $frm->getElement("adv_search");?>
-	            	</div>
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<?php echo $frm->getElement("start_date");?>
-	            	</div>
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<?php echo $frm->getElement("end_date");?>
-	            	</div>
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<?php echo $frm->getElement('search_status');?>
-	            	</div>
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-	            	</div>
-	            </div>
+			  	<div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("adv_search");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                  	  <?php echo $frm->getElement('start_date');?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                 	   <?php echo $frm->getElement('end_date');?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                     <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+                </div>
 			</form>
 		</div>
 		<div class="card-box">
@@ -33,7 +44,6 @@ $urlDelete = $this->baseUrl()."/mobileapp/newsevent/delete/id/";
 	</div>
 </div>
 <script>
-dojo.require("dijit.form.DateTextBox");
 var row=0;
 var url="";
 var indexkey="";
@@ -41,17 +51,23 @@ $(function(){
 	$.contextMenu({
 		selector: '.context-menu-one', 
 		callback: function(key, options) {
-		
+			indexkey="";
 			var m = "clicked: " + key;
-			if(key=="delete"){
+			if(key=="edit"){
+				url='<?php echo $urlEdit;?>';
+			}else if(key=="delete"){
 				url='<?php echo $urlDelete;?>';
+				indexkey = 'delete';
+			}else if(key=="copy"){
+				url='<?php echo $urlCopy;?>';
+				indexkey = 'copy';
 			}
-			
 			gotoAction();
-			//window.console && console.log(m) || alert(m); 
 		},
 		items: {
-			"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete", accesskey: "e"},
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "c o p y"},
+			"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy", accesskey: "c o p y"},
+			"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete"},
 		}
 	});
 });

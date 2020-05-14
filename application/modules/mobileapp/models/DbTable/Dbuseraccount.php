@@ -33,17 +33,25 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 		CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name,
 		(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 		tel ,
-		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gds.academic_year LIMIT 1) AS academic,
 		
-		(SELECT $degree FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
-		(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-		
-		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-		(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
+		(SELECT $degree FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    (SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+
+	     (SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(SELECT g.session FROM rms_group AS g WHERE g.id = gds.group_id LIMIT 1) LIMIT 1)AS session,
+	     
+		(select room_name from rms_room where room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id = gds.group_id LIMIT 1) LIMIT 1) as room,
 		'".$change_pwd."',
-		(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status,
+		(SELECT $label FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status,
 		(SELECT COUNT(t.`token`) FROM `mobile_mobile_token` AS t WHERE t.`stu_id` = s.`stu_id` LIMIT 1 ) AS number_mobile
-		FROM rms_student AS s  WHERE  s.is_subspend=0 ";
+		FROM rms_student AS s,
+			rms_group_detail_student AS gds
+		WHERE  
+			s.stu_id = gds.stu_id
+    		AND s.status=1 
+    		AND gds.is_maingrade =1
+    		AND s.customer_type=1
+		";
 		
 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
@@ -77,29 +85,25 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			$s_where[]=" village_name LIKE '%{$s_search}%'";
 			$s_where[]=" commune_name LIKE '%{$s_search}%'";
 			$s_where[]=" district_name LIKE '%{$s_search}%'";
-				
-			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
-			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		if(!empty($search['study_year'])){
-			$where.=" AND s.academic_year=".$search['study_year'];
+		if(!empty($search['academic_year'])){
+			$where.=" AND gds.academic_year=".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
-			$where.=" AND s.degree=".$search['degree'];
+			$where.=" AND gds.degree=".$search['degree'];
 		}
-		if(!empty($search['grade_all'])){
-			$where.=" AND s.grade=".$search['grade_all'];
+		if(!empty($search['grade'])){
+			$where.=" AND gds.grade=".$search['grade'];
 		}
 		if(!empty($search['session'])){
-			$where.=" AND s.session=".$search['session'];
+			$where.=" AND (SELECT g.session FROM rms_group AS g WHERE g.id = gds.group_id LIMIT 1)=".$search['session'];
 		}
-		if($search['status'] != ""){
+		if($search['status']>-1){
 			$where.=" AND s.status=".$search['status'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
-		//echo $sql.$where.$orderby;
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){
@@ -216,7 +220,7 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 	
 	function getMobileLabel($keyName=""){
 		$db = $this->getAdapter();
-		$sql="SELECT ml.code ,ml.keyName,ml.keyValue FROM `moble_label` AS ml 
+		$sql="SELECT ml.code ,ml.keyName,ml.keyValue,ml.keyValueEn FROM `moble_label` AS ml 
 			WHERE ml.status=1 AND ml.access_type=0";
 		if (!empty($keyName)){
 			$sql.=" AND ml.`keyName` = '$keyName' ";
@@ -229,48 +233,56 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			$this->_name="moble_label";
 			$_arr=array(
 					'keyValue'=>$data['lbl_smspaymentpaid'],
+					'keyValueEn'=>$data['lbl_smspaymentpaidEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smspaymentpaid");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_smsatt'],
+					'keyValueEn'=>$data['lbl_smsattEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsatt");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_smsmistake'],
+					'keyValueEn'=>$data['lbl_smsmistakeEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsmistake");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_smsscore'],
+					'keyValueEn'=>$data['lbl_smsscoreEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsscore");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_smsnews'],
+					'keyValueEn'=>$data['lbl_smsnewsEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsnews");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_smsnotification'],
+					'keyValueEn'=>$data['lbl_smsnotificationEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsnotification");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_paymentnotification'],
+					'keyValueEn'=>$data['lbl_paymentnotificationEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_paymentnotification");
 			$this->update($_arr, $where);
 			
 			$_arr=array(
 					'keyValue'=>$data['lbl_schoolphone'],
+					'keyValueEn'=>$data['lbl_schoolphoneEn'],
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_schoolphone");
 			$this->update($_arr, $where);

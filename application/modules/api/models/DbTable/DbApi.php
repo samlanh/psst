@@ -1067,14 +1067,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
 		    	$sql="SELECT
 			    	act.*,
-			    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
+			    	(SELECT ad.title FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
 			    	act.`publish_date`,
 			    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
 			    	CASE
 					   	WHEN  act.`status` = 1 THEN '$base_url'
 					  END AS imageUrl
 		    	";
-		    	$sql.=" FROM `ln_news` AS act WHERE act.`status` =1 ";
+		    	$sql.=" FROM `mobile_news_event` AS act WHERE act.`status` =1 ";
 		    	$sql.= "  ORDER BY act.publish_date,act.`id` DESC";
 		    	if (!empty($search['limit'])){
 		    		$sql.= "  LIMIT ".$search['limit'];

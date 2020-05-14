@@ -1,6 +1,7 @@
 <?php 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate('ADD_NOTIFICATION'));
+$countlang = count($this->lang);
 ?>
 <script>
 dojo.require("dijit/Editor");
@@ -24,8 +25,7 @@ body, #dijitEditorBody {
 		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-                dijit.byId("save_close").attr("disabled",true);
-				dijit.byId("save_new").attr("disabled",true);
+                loadingBlock();
 				return true;
 			}else {
 				return false;
@@ -42,71 +42,123 @@ body, #dijitEditorBody {
 	    	</div>
 	    	<div class="card-box mb-10">
 	        	<div class="col-md-8 col-sm-8 col-xs-12">
-	        		<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE");?> :
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="title" name="title" value="" type="text">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DESCRIPTION");?> :
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description" name="description"></textarea>
-	                   </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4 col-sm-4 col-xs-12">
-	            	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("NORTIFICATION_OPT");?> :
-	                   </label>
-	                </div>
-	            	<div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<select name="opt_notification" id="opt_notification" class="fullside" onChange="Checkchange();" dojoType="dijit.form.FilteringSelect" >
-								<option value="1"><?php echo $tr->translate("FOR_ALL");?></option>
-								<option value="2"><?php echo $tr->translate("GROUP");?></option>
-								<option value="3"><?php echo $tr->translate("STUDENT");?></option>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("GROUP");?> :
-	                   </label>
-	                </div>
-	            	<div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<select name="group" id="group" class="fullside" placeholder="<?php echo $tr->translate("GROUP");?>"  dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*">
-	                   			<option value=""></option>
-	                   			<?php if (!empty($this->group)) foreach ($this->group as $rs){?>
-								<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-								<?php }?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT");?> :
-	                   </label>
-	                </div>
-	            	<div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<select  name="student" id="student" placeholder="<?php echo $tr->translate("STUDENT");?>" class="fullside"  dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*">
-	                   			<option value=""></option>
-	                   			<?php if (!empty($this->all_student)) foreach ($this->all_student as $rs){?>
-								<option value="<?php echo $rs['stu_id']; ?>"><?php echo $rs['stu_code']." ".$rs['stu_name']; ?></option>
-								<?php }?>
-							</select>
-	                   </div>
-	                </div>
-	            </div>
-	         </div>
-	         <div class="card-box">
-               	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
+	        		<?php if ($countlang>1){?>
+			    	<div class="card-box">
+			    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+			    		 	<?php $alias=''; foreach($this->lang as $key=> $rs){
+		                      	$alias = str_replace(' ','',$rs['title']);?>
+				            <li class="nav-item <?php if ($key<1){echo "active";}?>">
+				                <a class="nav-link " data-toggle="tab" href="<?php echo "#".$alias;?>" role="tab"><i class="fa fa-flag ml-2"></i> <?php echo $tr->translate(strtoupper($rs['title']));?></a>
+				            </li>
+				            <?php }?>
+				        </ul>
+				    </div>
+				    <?php }?>
+				    <?php if ($countlang>1){?>
+				    <div class="col-md-12">
+				        <!-- Tab panels -->
+				        <div class="tab-content vertical">
+				         <?php $alias=''; foreach($this->lang as $key=> $rs){
+		                      	$alias = str_replace(' ','',$rs['title']);?>
+					        <!--Panel <?php echo $key+1?>-->
+					        <div class="tab-pane fade <?php if ($key<1){echo "active in";}?>" id="<?php echo $alias;?>" role="tabpanel">
+					        	<div class="col-md-12 col-sm-12 col-xs-12">
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+					                   </label>
+					                   <div class="col-md-12 col-sm-12 col-xs-12">
+					                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"></textarea>
+					                   </div>
+					                </div>
+					          	</div>
+					        </div>
+					        <?php }?>
+					   </div>
+					</div>
+					<?php }else{?>
+					 <div class="col-md-12">
+						 <?php $alias=''; foreach($this->lang as $key=> $rs){
+		                      	$alias = str_replace(' ','',$rs['title']);?>
+				        	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+				                   </label>
+				                   <div class="col-md-12 col-sm-12 col-xs-12">
+				                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"></textarea>
+				                   </div>
+				                </div>
+				          	</div>
+				        <?php }?>
+					 </div>
+					<?php }?>
+		            </div>
+		            <div class="col-md-4 col-sm-4 col-xs-12">
+		            	<div class="form-group">
+			            	<label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+								<?php echo $tr->translate("NORTIFICATION_OPT");?>
+		                   </label>
+	                   		<div class="col-md-7 col-sm-7 col-xs-12">
+								<select name="opt_notification" id="opt_notification" class="fullside" onChange="Checkchange();" dojoType="dijit.form.FilteringSelect" >
+									<option value="1"><?php echo $tr->translate("FOR_ALL");?></option>
+									<option value="2"><?php echo $tr->translate("GROUP");?></option>
+									<option value="3"><?php echo $tr->translate("STUDENT");?></option>
+								</select>
+	                  		 </div>
+		                </div>
+		            	<div class="form-group">
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+								<?php echo $tr->translate("GROUP");?>
+		                   </label>
+	                   		<div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select name="group" id="group" class="fullside" placeholder="<?php echo $tr->translate("GROUP");?>"  dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*">
+		                   			<option value=""></option>
+		                   			<?php if (!empty($this->group)) foreach ($this->group as $rs){?>
+									<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+									<?php }?>
+								</select>
+		                   </div>
+		                </div>
+		            	<div class="form-group">
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+								<?php echo $tr->translate("STUDENT");?>
+		                   </label>
+	                   		<div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select  name="student" id="student" placeholder="<?php echo $tr->translate("STUDENT");?>" class="fullside"  dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*">
+		                   			<option value=""></option>
+		                   			<?php if (!empty($this->all_student)) foreach ($this->all_student as $rs){?>
+									<option value="<?php echo $rs['stu_id']; ?>"><?php echo $rs['stu_code']." ".$rs['stu_name']; ?></option>
+									<?php }?>
+								</select>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <div class="form-group">
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+								<?php echo $tr->translate("PUBLISH_DATE");?>
+		                   </label>
+	                   		<div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input  constraints="{datePattern:'dd/MM/yyyy'}" type="text" class="fullside" dojoType="dijit.form.DateTextBox" name="public_date" id="public_date"  value="<?php echo date("Y-m-d");?>" >
+		                   </div>
+		                </div>
+		            </div>
+		         </div>
+	        	</div>
+        	 <div class="card-box">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
 						<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
 						<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
@@ -117,6 +169,7 @@ body, #dijitEditorBody {
 	</div>
 </div>
 <script>
+dojo.require("dijit.form.DateTextBox");
 dojo.ready(function(){
 	try{
 		Checkchange();

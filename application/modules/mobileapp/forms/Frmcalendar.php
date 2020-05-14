@@ -48,6 +48,9 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 		$_holiday_name = new Zend_Dojo_Form_Element_TextBox('holiday_name');
 		$_holiday_name->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
+		$_title_en = new Zend_Dojo_Form_Element_TextBox('title_en');
+		$_title_en->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+		
 		$_startdate = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$_startdate->setAttribs(array('dojoType'=>$this->date,
 				'class'=>'fullside',
@@ -108,15 +111,20 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
 			$_holiday_name->setValue($_data['title']);
+			$_title_en->setValue($_data['title_en']);
 			$_startdate->setValue($_data['start_date']);
 			$_amount_day->setValue($_data['amount_day']);
 			$_enddate->setValue($_data['end_date']);
 			$_status->setValue($_data['status']);
-			$_id->setValue($_data['id']);
+// 			$_id->setValue($_data['id']);
+			$_id->setValue($_data['keycode']);
 			$_note->setValue($_data['description']);
 			$_dept->setValue($_data['dept']);
 		}
-		$this->addElements(array($_btn_search,$_status_search,$_title,$_id,$_holiday_name,$_note,$_startdate,$_enddate,$_amount_day,$_status,$_dept));
+		$this->addElements(array($_btn_search,$_status_search,$_title,$_id,
+				$_holiday_name,
+				$_title_en,
+				$_note,$_startdate,$_enddate,$_amount_day,$_status,$_dept));
 		return $this;
 	}
 	

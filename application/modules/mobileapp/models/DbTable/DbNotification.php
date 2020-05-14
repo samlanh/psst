@@ -10,17 +10,23 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 
 	function getAllNotification($search){
 		$db=$this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+		
 		$from_date =(empty($search['start_date']))? '1': "mba.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "mba.date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;	
-		$sql="SELECT mba.id,mba.title,mba.date,mba.active as status FROM $this->_name AS mba WHERE 1";
+		$sql="SELECT mba.id,
+		(SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1) AS title,
+		mba.date,mba.status as status FROM $this->_name AS mba WHERE 1";
 		if($search['search_status']>-1){
-			$where.= " AND mba.active = ".$search['search_status'];
+			$where.= " AND mba.status = ".$search['search_status'];
 		}
 		if(!empty($search['adv_search'])){
 			$s_where=array();
 			$s_search=$search['adv_search'];
-			$s_where[]= " mba.title LIKE '%{$s_search}%'";
+			$s_where[]= " (SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1) LIKE '%{$s_search}%'";
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 		}
 		$order = " ORDER BY mba.id DESC";
@@ -38,46 +44,91 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 
 
 	function add($data){
-		if(!empty($data['description'])){
-			$des =  $data['description'];
-		}else{
-			$des = '';
-		}
-
       	$db = $this->getAdapter();
         $db->beginTransaction();
         try{
             
-            $_arr=array(
-                    'title' => $data['title'], 
+            $arr=array(
             		'opt_notification' => $data['opt_notification'],
             		'group' => empty($data['group'])?"":$data['group'],
             		'student' => empty($data['student'])?"":$data['student'],
-                    'description' => $des,                  
-                    'active' => 1,//use instead status
-                    'date'=>date("Y-m-d H:i:s"),
+                    'date'=>$data['public_date'],
 					'modify_date'=>date("Y-m-d H:i:s"),
 					'user_id'=>$this->getUserId(),
-					'status' => 1,					
             );
-         $this->_name;
-        if(!empty($data['id'])){  
-            $where = 'id='.$data['id'];          
-           $this->update($_arr, $where);                     
-        }else{
-       		
-			$_arr['create_date']=date("Y-m-d H:i:s");
-            $id =  $this->insert($_arr);
-           
-            $dbpush = new  Application_Model_DbTable_DbGlobal();
-            if ($data['opt_notification']==2){
-            	$token =	$dbpush->getTokenUser(null,$data['group']);
-            }else if ($data['opt_notification']==3){
-            	$token = $dbpush->getTokenUser($data['student'],null,6);
-            }else{
-            	$token = $dbpush->getTokenUser(null,null,6);
-            }
-        }           
+            $dbglobal = new Application_Model_DbTable_DbGlobal();
+            $lang = $dbglobal->getLaguage();
+        	 if (!empty($data['id'])){
+        	 	$arr['status']= $data['status'];
+        	 	$where=" id=".$data['id'];
+        	 	$this->_name="mobile_notice";
+        	 	$this->update($arr, $where);
+        	 	$article_id =$data['id'];
+        	 	 
+        	 	if(!empty($lang)){
+        	 		$iddetail="";
+        	 		foreach($lang as $row){
+        	 			$title = str_replace(' ','',$row['title']);
+        	 			if (empty($iddetail)){
+        	 				if (!empty($data['iddetail'.$title])){
+        	 					$iddetail=$data['iddetail'.$title];
+        	 				}
+        	 			}
+        	 			else{
+        	 				if (!empty($data['iddetail'.$title])){
+        	 					$iddetail=$iddetail.",".$data['iddetail'.$title];
+        	 				}
+        	 			}
+        	 		}
+        	 		$this->_name="mobile_notice_detail";
+        	 		$where1=" notification_id=".$data['id'];
+        	 		if (!empty($iddetail)){
+        	 			$where1.=" AND id NOT IN (".$iddetail.")";
+        	 		}
+        	 		$this->delete($where1);
+        	 			
+        	 		foreach($lang as $row){
+        	 			$title = str_replace(' ','',$row['title']);
+        	 			if (!empty($data['iddetail'.$title])){
+        	 				$arr_article = array(
+        	 						'notification_id'=>$article_id,
+        	 						'title'=>$data['title'.$title],
+        	 						'description'=>$data['description'.$title],
+        	 						'lang'=>$row['id'],
+        	 				);
+        	 				$this->_name="mobile_notice_detail";
+        	 				$wheredetail=" notification_id=".$data['id']." AND id=".$data['iddetail'.$title];
+        	 				$this->update($arr_article,$wheredetail);
+        	 			}else{
+        	 				$arr_article = array(
+        	 						'notification_id'=>$article_id,
+        	 						'title'=>$data['title'.$title],
+        	 						'description'=>$data['description'.$title],
+        	 						'lang'=>$row['id'],
+        	 				);
+        	 				$this->_name="mobile_notice_detail";
+        	 				$this->insert($arr_article);
+        	 			}
+        	 		}
+        	 	}
+        	 }else{
+        	 	$this->_name="mobile_notice";
+        	 	$arr['create_date']= date("Y-m-d H:i:s");
+        	 	$arr['status']= 1;
+        	 	$article_id = $this->insert($arr);
+        	 
+        	 	if(!empty($lang)) foreach($lang as $row){
+        	 		$title = str_replace(' ','',$row['title']);
+        	 		$arr_article = array(
+        	 				'notification_id'=>$article_id,
+        	 				'title'=>$data['title'.$title],
+        	 				'description'=>$data['description'.$title],
+        	 				'lang'=>$row['id'],
+        	 		);
+        	 		$this->_name="mobile_notice_detail";
+        	 		$this->insert($arr_article);
+        	 	}
+        	 }
             $db->commit();
         }catch(exception $e){
             Application_Form_FrmMessage::message("Application Error");
@@ -87,27 +138,27 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 
  }
  
-// 	 function getTokenStudentGroup($group_id){
-// 	 	$db = $this->getAdapter();
-// 	 	$sql="
-// 	 		SELECT mb.`token`
-// 			FROM `rms_group_detail_student` AS sd
-// 			,`mobile_mobile_token` AS mb
-// 			WHERE sd.`group_id` = $group_id
-// 			AND sd.`stu_id` = mb.`stu_id`
-// 	 	";
-// 	 	return $db->fetchCol($sql);
-// 	 }
 	 function deleteData($id){
 	 	$db = $this->getAdapter();
 	 	try{
+	 		$this->_name = "mobile_notice";
 	 		$where=$this->getAdapter()->quoteInto("id=?", $id);
 	 		$this->delete($where);
+	 		
+	 		$this->_name = "mobile_notice_detail";
+	 		$where=$this->getAdapter()->quoteInto("notification_id=?", $id);
+	 		$this->delete($where);
 	 	}catch(exception $e){
-	 		Application_Form_FrmMessage::message("Application Error");
 	 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	 		Application_Form_FrmMessage::message("Application Error");
 	 		$db->rollBack();
 	 	}
+	 }
+	 
+	 function getArticleTitleByLang($article_id,$lang){
+	 	$db = $this->getAdapter();
+	 	$sql="SELECT acd.id,acd.`title`,acd.`lang`,acd.description FROM `mobile_notice_detail` AS acd WHERE acd.`notification_id`=$article_id AND acd.`lang`=$lang";
+	 	return $db->fetchRow($sql);
 	 }
 
 

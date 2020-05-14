@@ -2,11 +2,14 @@
 
 class Mobileapp_CalendarController extends Zend_Controller_Action
 {
+	const REDIRECT_URL='/mobileapp/calendar';
+	protected $tr;
     public function init()
     {       
         /* Initialize action controller here */
         header('content-type: text/html; charset=utf8');
         defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+        $this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     }
 
     public function indexAction()
@@ -43,7 +46,6 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 		$this->view->frm = $frm;
     }
 
-
     public function addAction()
     {
        try{
@@ -52,10 +54,9 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 				$_data = $this->getRequest()->getPost();
 				$db->add($_data);
 				if(!empty($_data['save_close'])){
-					$this->_redirect("mobileapp/calendar");
-				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL);
 				}
+				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL."/add");
 			}
 		
 		}catch (Exception $e){
@@ -69,6 +70,7 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 		$frm_holiday=$frm->FrmAddHoliday(null);
 		Application_Model_Decorator::removeAllDecorator($frm_holiday);
 		$this->view->frm_holiday = $frm_holiday;
+		
 
     }
 
@@ -80,11 +82,11 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 		  $_data = $this->getRequest()->getPost();
 		  try{
 			$db->add($_data);
-			$this->_redirect("mobileapp/calendar");
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 		  }catch(Exception $e){
-			Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
 			$err =$e->getMessage();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_FAIL'), self::REDIRECT_URL);
 		  }
 		}
 
@@ -92,9 +94,10 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 		$row = $db->getById($id);
 		$this->view->row = $row;
 	  
-		if(empty($row)){
-		 $this->_redirect('mobileapp/calendar');
-		}   
+    	if(empty($row)){
+	     	Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
+	   		exit();
+	    }   
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->faculty = $_db->getAllFecultyNamess(1);
 		
@@ -102,10 +105,8 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 		$frm_holiday=$frm->FrmAddHoliday($row);
 		Application_Model_Decorator::removeAllDecorator($frm_holiday);
 		$this->view->frm_holiday = $frm_holiday; 
-
-
+		
     }
-
 
 }
 

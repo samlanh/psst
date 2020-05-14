@@ -2,6 +2,8 @@
 
 class Mobileapp_NotificationController extends Zend_Controller_Action
 {
+	const REDIRECT_URL='/mobileapp/notification';
+	protected $tr;
     public function init()
     {    	
         /* Initialize action controller here */
@@ -47,34 +49,28 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
     public function addAction()
     {
        try{
-        $db = new Mobileapp_Model_DbTable_DbNotification();
-        if($this->getRequest()->isPost()){
-            $_data = $this->getRequest()->getPost();
-            $db->add($_data);
-            if(isset($_data['save_close'])){
-                $this->_redirect("mobileapp/notification");
-            }else{
-                Application_Form_FrmMessage::message("INSERT_SUCCESS");
-            }
-        }
-        
-        $dbstudent = new Foundation_Model_DbTable_DbStudent();
-        $group = $dbstudent->getAllgroup();
-        $this->view->group = $group;
-        
-        $dbre = new Registrar_Model_DbTable_DbRegister();
-        $this->view->all_student = $dbre->getAllGerneralOldStudent();
-        
-       // $frm = new Other_Form_FrmBanner();
-       // $frm_manager=$frm->FrmAddBanner();
-       // Application_Model_Decorator::removeAllDecorator($frm_manager);
-       // $this->view->frm = $frm_manager;
-    }catch (Exception $e){
-        Application_Form_FrmMessage::message("Application Error");
-        Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    }
-  //  $dbglobal = new Application_Model_DbTable_DbVdGlobal();
-    //    $this->view->lang = $dbglobal->getLaguage();
+	        $db = new Mobileapp_Model_DbTable_DbNotification();
+	        if($this->getRequest()->isPost()){
+	            $_data = $this->getRequest()->getPost();
+	            $db->add($_data);
+	            if(isset($_data['save_close'])){
+	              Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL);
+	            }else{
+	                Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL."/add");
+	            }
+	        }
+	        $dbstudent = new Foundation_Model_DbTable_DbStudent();
+	        $group = $dbstudent->getAllgroup();
+	        $this->view->group = $group;
+	        $dbre = new Registrar_Model_DbTable_DbRegister();
+	        $this->view->all_student = $dbre->getAllGerneralOldStudent();
+	        $dbglobal = new Application_Model_DbTable_DbGlobal();
+	        $this->view->lang = $dbglobal->getLaguage();
+	        
+	    }catch (Exception $e){
+	        Application_Form_FrmMessage::message("Application Error");
+	        Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    }
     }
 
     public function editAction()
@@ -85,12 +81,11 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	      $_data = $this->getRequest()->getPost();
 	      try{
 	        $db->add($_data);
-	        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
-	        $this->_redirect("mobileapp/notification");
+	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	      }catch(Exception $e){
-	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
 	        $err =$e->getMessage();
 	        Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
 	      }
 	    }
 	
@@ -98,37 +93,36 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	    $row = $db->getById($id);
 	    $this->view->row = $row;
 	  
-	    if(empty($row)){
-	     $this->_redirect('mobileapp/notification');
-	    }   
+    	if (empty($row)){
+	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
+	   		exit();
+	   	}
 	    
 	    $dbstudent = new Foundation_Model_DbTable_DbStudent();
 	    $group = $dbstudent->getAllgroup();
 	    $this->view->group = $group;
-	    
 	    $dbre = new Registrar_Model_DbTable_DbRegister();
 	    $this->view->all_student = $dbre->getAllGerneralOldStudent();
-	    //$fm = new Other_Form_FrmBanner();
-	    //$frm = $fm->FrmAddBanner($row);
-	    //Application_Model_Decorator::removeAllDecorator($frm);
-	    //$this->view->frm = $frm;  
+	    
+	    $dbglobal = new Application_Model_DbTable_DbGlobal();
+	    $this->view->lang = $dbglobal->getLaguage();
 
    }
    function deleteAction(){
-   	try{
-   		$id = $this->getRequest()->getParam("id");
-   		$db = new Mobileapp_Model_DbTable_DbNotification();
-   		if (!empty($id)) {
-   			$db->deleteData($id);
-   			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
-   			echo "<script>window.close();</script>";
-   		}
-   	}catch(Exception $e){
-   		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
-   		$err =$e->getMessage();
-   		Application_Model_DbTable_DbUserLog::writeMessageError($err);
-   		echo "<script>window.close();</script>";
-   	}
+	   	try{
+	   		$id = $this->getRequest()->getParam("id");
+	   		$db = new Mobileapp_Model_DbTable_DbNotification();
+	   		if (!empty($id)) {
+	   			$db->deleteData($id);
+	   			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
+	   			echo "<script>window.close();</script>";
+	   		}
+	   	}catch(Exception $e){
+	   		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
+	   		$err =$e->getMessage();
+	   		Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	   		echo "<script>window.close();</script>";
+	   	}
    }
 
 }

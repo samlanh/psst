@@ -12,7 +12,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 		$from_date =(empty($search['start_date']))? '1': "mba.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "mba.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;	
-		$sql="SELECT mba.id,mba.title,mba.amount_day,mba.start_date,mba.end_date,mba.active as status FROM $this->_name AS mba WHERE 1";
+		$sql="SELECT mba.keycode as id ,mba.title,mba.amount_day,mba.start_date,mba.end_date,mba.active as status FROM $this->_name AS mba WHERE 1";
 		if($search['search_status']>-1){
 			$where.= " AND mba.active = ".$search['search_status'];
 		}
@@ -20,72 +20,74 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 			$s_where=array();
 			$s_search=$search['adv_search'];
 			$s_where[]= " mba.title LIKE '%{$s_search}%'";
+			$s_where[]= " mba.title_en LIKE '%{$s_search}%'";
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 		}
-		$order = " ORDER BY mba.id DESC";
+		$order = " GROUP BY mba.keycode  ORDER BY mba.id DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 
 	public function getById($id)
 	{
 		$db=$this->getAdapter();
-        $sql="SELECT *  FROM ".$this->_name." WHERE id = ".$db->quote($id);
+//         $sql="SELECT *  FROM ".$this->_name." WHERE id = ".$db->quote($id);
+		$sql="SELECT *  FROM ".$this->_name." WHERE keycode = ".$db->quote($id);
         $sql.=" ORDER BY id ASC LIMIT 1 ";
         $row=$db->fetchRow($sql);
         return $row;
 	}
 
-
+	public function getLastById()
+	{
+		$db = $this->getAdapter();
+		$sql="SELECT id FROM mobile_calendar ORDER BY id DESC LIMIT 1";
+		$row =$db->fetchOne($sql);
+		$row = $row+1;
+		return $row;
+	}
 	function add($data)
 	{
-		if(!empty($data['note'])){
-				$des =  $data['note'];
-			}else{
-				$des = '';
-			}
 	      	$db = $this->getAdapter();
 	        $db->beginTransaction();
 	        try{
-	            $dept = "";
-	           if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
-	                if (empty($dept)){ $dept = $rs;}else{ $dept = $dept.",".$rs;}
-	            }
-				if(!empty($data['id'])){
-				  $where = 'id='.$data['id'];
-				  $this->delete($where);
-				}		  
-					   
-	            //if($data['amount_day']>1){
+	        		$lastId = $this->getLastById();
+		            $dept = "";
+		           	if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
+		                if (empty($dept)){ $dept = $rs;}else{ $dept = $dept.",".$rs;}
+		            }
+					if(!empty($data['id'])){
+					  $where = 'keycode='.$data['id'];
+					  $this->delete($where);
+					}		  
 	            	$date_next=$data['start_date'];
+	            	
 	            	for($i=1;$i<=$data['amount_day'];$i++){
 						if($i>1){
 							$d = new DateTime($date_next);
 							$str_next = '+1 day';
-							
 							$d->modify($str_next);
 							$date_next =  $d->format( 'Y-m-d' );
 							$data['start_date']=$date_next;
 						}
 	            
 			            $_arr=array(
-							'title' => $data['holiday_name'],
+			            	'title' => $data['holiday_name'],
+			            	'title_en' => $data['title_en'],
 							'start_date' => $data['start_date'],
 							'end_date' => $data['end_date'],
 							'amount_day' => $data['amount_day'],					
-							'description' => $des,                  
+							'description' => $data['note'],                  
 							'active' => $data['status'],//use instead status
 							'date'=> $data['start_date'],
 							'modify_date'=>date("Y-m-d H:i:s"),
 							'user_id'=>$this->getUserId(),
 							'status' => 1,		
-							'dept' => $dept,					
+							'dept' => $dept,	
+			            	'keycode' => $lastId,
 			            );
-			        
 						$_arr['create_date']=date("Y-m-d H:i:s");
-			            $this->insert($_arr);
-			        
+			      	  	$this->insert($_arr);
 	        	}
-	        //}
 	        $db->commit();
 	     }catch(exception $e){
 	            Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

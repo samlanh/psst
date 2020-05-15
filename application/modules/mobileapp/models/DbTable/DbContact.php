@@ -87,16 +87,88 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
  	$db->beginTransaction();
  	try{
  		$this->_name = "mobile_location";
- 		$_arr=array(
- 				'title' => $data['title'],
+ 		$arr=array(
+//  				'title' => $data['title'],
  				'latitude' => $data['latitude'],
  				'longitude' => $data['longitude'],
- 				'address' => $data['address'],
+//  				'address' => $data['address'],
  				'date'=>date("Y-m-d H:i:s"),
  				'phone' => $data['phone'],
  		);
- 		$where="";
- 			$this->update($_arr, $where);
+ 		
+ 		$dbglobal = new Application_Model_DbTable_DbGlobal();
+ 		$lang = $dbglobal->getLaguage();
+ 		if (!empty($data['id'])){
+//  			$arr['status']= $data['status'];
+ 			$where=" id=".$data['id'];
+ 			$this->_name="mobile_location";
+ 			$this->update($arr, $where);
+ 			$article_id =$data['id'];
+ 		
+ 			if(!empty($lang)){
+ 				$iddetail="";
+ 				foreach($lang as $row){
+ 					$title = str_replace(' ','',$row['title']);
+ 					if (empty($iddetail)){
+ 						if (!empty($data['iddetail'.$title])){
+ 							$iddetail=$data['iddetail'.$title];
+ 						}
+ 					}
+ 					else{
+ 						if (!empty($data['iddetail'.$title])){
+ 							$iddetail=$iddetail.",".$data['iddetail'.$title];
+ 						}
+ 					}
+ 				}
+ 				$this->_name="mobile_location_detail";
+ 				$where1=" location_id=".$data['id'];
+ 				if (!empty($iddetail)){
+ 					$where1.=" AND id NOT IN (".$iddetail.")";
+ 				}
+ 				$this->delete($where1);
+ 				 
+ 				foreach($lang as $row){
+ 					$title = str_replace(' ','',$row['title']);
+ 					if (!empty($data['iddetail'.$title])){
+ 						$arr_article = array(
+ 								'location_id'=>$article_id,
+ 								'title'=>$data['title'.$title],
+ 								'description'=>$data['description'.$title],
+ 								'lang'=>$row['id'],
+ 						);
+ 						$this->_name="mobile_location_detail";
+ 						$wheredetail=" location_id=".$data['id']." AND id=".$data['iddetail'.$title];
+ 						$this->update($arr_article,$wheredetail);
+ 					}else{
+ 						$arr_article = array(
+ 								'location_id'=>$article_id,
+ 								'title'=>$data['title'.$title],
+ 								'description'=>$data['description'.$title],
+ 								'lang'=>$row['id'],
+ 						);
+ 						$this->_name="mobile_location_detail";
+ 						$this->insert($arr_article);
+ 					}
+ 				}
+ 			}
+ 		}else{
+ 			$this->_name="mobile_location";
+ 			$arr['create_date']= date("Y-m-d H:i:s");
+ 			$arr['status']= 1;
+ 			$article_id = $this->insert($arr);
+ 		
+ 			if(!empty($lang)) foreach($lang as $row){
+ 				$title = str_replace(' ','',$row['title']);
+ 				$arr_article = array(
+ 						'location_id'=>$article_id,
+ 						'title'=>$data['title'.$title],
+ 						'description'=>$data['description'.$title],
+ 						'lang'=>$row['id'],
+ 				);
+ 				$this->_name="mobile_location_detail";
+ 				$this->insert($arr_article);
+ 			}
+ 		}
  		$db->commit();
  	}catch(exception $e){
  		Application_Form_FrmMessage::message("Application Error");
@@ -104,6 +176,11 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
  		$db->rollBack();
  	}
  
+ }
+ function getArticleTitleByLang($article_id,$lang){
+ 	$db = $this->getAdapter();
+ 	$sql="SELECT acd.id,acd.`title`,acd.`lang`,acd.description FROM `mobile_location_detail` AS acd WHERE acd.`location_id`=$article_id AND acd.`lang`=$lang";
+ 	return $db->fetchRow($sql);
  }
 
 

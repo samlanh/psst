@@ -2,6 +2,8 @@
 
 class Mobileapp_ContactController extends Zend_Controller_Action
 {
+	const REDIRECT_URL='/mobileapp/contact';
+	protected $tr;
     public function init()
     {       
         /* Initialize action controller here */
@@ -17,11 +19,14 @@ class Mobileapp_ContactController extends Zend_Controller_Action
 	    	if($this->getRequest()->isPost()){
 	    		$_data = $this->getRequest()->getPost();
 	    		$db->updateContactLocation($_data);
-	    		Application_Form_FrmMessage::message("EDIT_SUCCESS");
-	    		$this->_redirect("mobileapp/contact");
+	    		Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	    	}
 	    	$row = $db->getContact();
 	    	$this->view->contact = $row;
+	    	
+	    	$dbglobal = new Application_Model_DbTable_DbGlobal();
+	    	$this->view->lang = $dbglobal->getLaguage();
+	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -70,54 +75,40 @@ class Mobileapp_ContactController extends Zend_Controller_Action
             $_data = $this->getRequest()->getPost();
             $db->add($_data);
             if(!empty($_data['save_close'])){
-                $this->_redirect("mobileapp/contact");
+                Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL);
             }else{
-                Application_Form_FrmMessage::message("INSERT_SUCCESS");
+                Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL."/add");
             }
         }
-       // $frm = new Other_Form_FrmBanner();
-       // $frm_manager=$frm->FrmAddBanner();
-     //   Application_Model_Decorator::removeAllDecorator($frm_manager);
-       // $this->view->frm = $frm_manager;
     }catch (Exception $e){
         Application_Form_FrmMessage::message("Application Error");
         Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     }
-  //  $dbglobal = new Application_Model_DbTable_DbVdGlobal();
-    //    $this->view->lang = $dbglobal->getLaguage();
     }
 
     public function editAction()
     {
-       
-    $db = new Mobileapp_Model_DbTable_DbContact();
-    if($this->getRequest()->isPost()){
-      $_data = $this->getRequest()->getPost();
-      try{
-        $db->add($_data);
-        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
-        $this->_redirect("mobileapp/contact");
-      }catch(Exception $e){
-        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
-        $err =$e->getMessage();
-        Application_Model_DbTable_DbUserLog::writeMessageError($err);
-      }
+	    $db = new Mobileapp_Model_DbTable_DbContact();
+	    if($this->getRequest()->isPost()){
+	      $_data = $this->getRequest()->getPost();
+	      try{
+	        $db->add($_data);
+	        Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
+	      }catch(Exception $e){
+	        $err =$e->getMessage();
+	        Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	        Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_FAIL'), self::REDIRECT_URL);
+	      }
+	    }
+	    $id = $this->getRequest()->getParam("id");
+	    $id = empty($id)?0:$id;
+	    $row = $db->getById($id);
+	    $this->view->row = $row;
+   		if (empty($row)){
+	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
+	   		exit();
+	   	}  
     }
-
-    $id = $this->getRequest()->getParam("id");
-    $row = $db->getById($id);
-    $this->view->row = $row;
-  
-    if(empty($row)){
-     $this->_redirect('mobileapp/contact');
-    }   
-    //$fm = new Other_Form_FrmBanner();
-    //$frm = $fm->FrmAddBanner($row);
-    //Application_Model_Decorator::removeAllDecorator($frm);
-    //$this->view->frm = $frm;  
-
-    }
-
 
 }
 

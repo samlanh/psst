@@ -425,6 +425,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$_arr['academic_year'] = $academic_year;
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);
+						
+						if($group_id>0){
+							$this->_name = 'rms_group';
+							$data_gro = array(
+									'is_use'=> 1,//ប្រើប្រាស់
+									'is_pass'=> 2,//កំពុងសិក្សា
+							);
+							$whereGroup = 'id = '.$group_id;
+							$this->update($data_gro, $whereGroup);
+						}
+						
 					}
 				}
 				
@@ -709,6 +720,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$this->_name="rms_group_detail_student";
 						$where=  "stu_id = $stu_id AND gd_id=".$_data['detailid_study'.$i];
 						$this->update($_arr, $where);
+						
+						if($group_id>0){
+							$this->_name = 'rms_group';
+							$data_gro = array(
+									'is_use'=> 1,//ប្រើប្រាស់
+									'is_pass'=> 2,//កំពុងសិក្សា
+							);
+							$whereGroup = 'id = '.$group_id;
+							$this->update($data_gro, $whereGroup);
+						}
+						
 					}else{
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$group_info = $dbGroup->getGroupById($group_id);
@@ -747,6 +769,16 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);
+						
+						if($group_id>0){
+							$this->_name = 'rms_group';
+							$data_gro = array(
+									'is_use'=> 1,//ប្រើប្រាស់
+									'is_pass'=> 2,//កំពុងសិក្សា
+							);
+							$whereGroup = 'id = '.$group_id;
+							$this->update($data_gro, $whereGroup);
+						}
 					}
 				}
 			}

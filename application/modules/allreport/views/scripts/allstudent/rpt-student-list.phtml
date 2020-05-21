@@ -36,17 +36,13 @@ table.tb-footer tr.style-head {
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="study_year" />
+            	<?php echo $frm->getElement("academic_year");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="group" />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
-				<select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type" class="fullside">
-					<option value=""><?php echo $tr->translate("STUDENT_TYPE");?></option>
-					<option value="1" <?php if($this->search['study_type']==1){echo "selected";}?>><?php echo $tr->translate("STUDENT_STUDY");?></option>
-					<option value="2" <?php if($this->search['study_type']==2){echo "selected";}?>><?php echo $tr->translate("STUDENT_DROP");?></option>
-				</select>
+            	<?php echo $frm->getElement("study_type");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -257,24 +253,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: academic_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "study_year",
-		name: "study_year",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-		onChange: function() {  
-			academic_year = dijit.byId('study_year').get('value');
-		}
-	}, "study_year");
+
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -288,42 +271,16 @@ dojo.ready(function(){
 	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
     });
-	 getAllAcademicByBranch();
+	 var academic_year = dijit.byId('academic_year');
+	 academic_year.on('change', function(evt) {
+		 getAllGroupByBranch();
+    });
 	 getAllGroupByBranch();
 });
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
-function getAllAcademicByBranch(){
-	dijit.byId('study_year').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('study_year').set('store',academic_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-		    }
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
-}
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -333,10 +290,13 @@ function getAllGroupByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){academic_year ="";}
+	
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'academic_year':academic_year,'noaddnew':1,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -347,7 +307,6 @@ function getAllGroupByBranch(){
 		    }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

@@ -227,89 +227,91 @@ ol{margin: 10px;}
 
 });
 
-var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student')); ?>';
-function filterStudent(){
-	year = dijit.byId('year_study').get('value');
-	grade = dijit.byId('grade').get('value');
-	session = dijit.byId('session').get('value');
-	if(year==''){
-		return false;
-	}
-	if(grade==''){
-		return false;
-	}
-	if(session==''){
-		return false;
-	}
-	dojo.xhrPost({
-	    url: url_getStudent,
-	    content : { 
-		    'year':year,
-			'grade':grade,
-			'session':session,
-		},				    
-	   handleAs:"json", 
-	   load: function(data) {
-		   tem="";
-	       if(data!=""){
-				num =0;
-				title=0;
-				temp='';
-				str='';
-				column = 0;
-				str='';
-				for(i=0;i<data.length;i++){ 
-					inx = i+1;
-					num++;
-					var gender='';
-					if(data[i].sex==1){
-						gender="<?php echo $tr->translate("MALE");?>";
-					}else{
-						gender="<?php echo $tr->translate("FEMALE");?>";
+/*
+	var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student')); ?>';
+	function filterStudent(){
+		year = dijit.byId('year_study').get('value');
+		grade = dijit.byId('grade').get('value');
+		session = dijit.byId('session').get('value');
+		if(year==''){
+			return false;
+		}
+		if(grade==''){
+			return false;
+		}
+		if(session==''){
+			return false;
+		}
+		dojo.xhrPost({
+		    url: url_getStudent,
+		    content : { 
+			    'year':year,
+				'grade':grade,
+				'session':session,
+			},				    
+		   handleAs:"json", 
+		   load: function(data) {
+			   tem="";
+		       if(data!=""){
+					num =0;
+					title=0;
+					temp='';
+					str='';
+					column = 0;
+					str='';
+					for(i=0;i<data.length;i++){ 
+						inx = i+1;
+						num++;
+						var gender='';
+						if(data[i].sex==1){
+							gender="<?php echo $tr->translate("MALE");?>";
+						}else{
+							gender="<?php echo $tr->translate("FEMALE");?>";
+						}
+						if(i<1){
+						str+='<tr class="head-td">';
+							str+='<th><?php echo $tr->translate("NUM");?></th>';
+							str+='<th><?php echo $tr->translate("STUDEN_CODE");?></th>';
+							str+='<th><?php echo $tr->translate("STUDEN_NAME");?></th>';
+							str+='<th><?php echo $tr->translate("GENDER");?></th>';
+							str+='<th><?php echo $tr->translate("HAVE_MISTACK");?></th>';
+							str+='<th><?php echo $tr->translate("DISCIPLINE_TYPE");?></th>';
+							str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
+						str+='</tr>';
+						}
+						str+='<tr style=" background: #fff;">';
+							str+='<td>'+inx+'</td>';
+							str+='<td>'+data[i].stu_code+'</td>';
+							str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
+							str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
+							str+='<td>';
+							str+='<input type="checkbox"  name="have_mistake'+inx+'" id="have_mistake'+inx+'"  style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("HAVE_MISTACK");?></label>';
+							str+='</td>';
+							str+='<td>';
+								str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
+								str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typem'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("MEDIUM_MISTACK");?></label>';
+								str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
+							str+='</td>';
+							str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value=""></td>';
+						str+='</tr>';
+					    if(inx!=1) {
+							var identity = $('#identity').val();
+							$('#identity').val(identity+','+inx);
+						} else {
+							$('#identity').val(inx);
+						}
 					}
-					if(i<1){
-					str+='<tr class="head-td">';
-						str+='<th><?php echo $tr->translate("NUM");?></th>';
-						str+='<th><?php echo $tr->translate("STUDEN_CODE");?></th>';
-						str+='<th><?php echo $tr->translate("STUDEN_NAME");?></th>';
-						str+='<th><?php echo $tr->translate("GENDER");?></th>';
-						str+='<th><?php echo $tr->translate("HAVE_MISTACK");?></th>';
-						str+='<th><?php echo $tr->translate("DISCIPLINE_TYPE");?></th>';
-						str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
-					str+='</tr>';
-					}
-					str+='<tr style=" background: #fff;">';
-						str+='<td>'+inx+'</td>';
-						str+='<td>'+data[i].stu_code+'</td>';
-						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
-						str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
-						str+='<td>';
-						str+='<input type="checkbox"  name="have_mistake'+inx+'" id="have_mistake'+inx+'"  style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("HAVE_MISTACK");?></label>';
-						str+='</td>';
-						str+='<td>';
-							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
-							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typem'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("MEDIUM_MISTACK");?></label>';
-							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
-						str+='</td>';
-						str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value=""></td>';
-					str+='</tr>';
-				    if(inx!=1) {
-						var identity = $('#identity').val();
-						$('#identity').val(identity+','+inx);
-					} else {
-						$('#identity').val(inx);
-					}
-				}
-				document.getElementById("table_row").innerHTML = str;
-	       }else{
-	    	   $('#identity').val('');
-	    	   document.getElementById("table_row").innerHTML = '';
-	       }
-	   },		
-	    error: function(err) {
-	    }
-	});
-}
+					document.getElementById("table_row").innerHTML = str;
+		       }else{
+		    	   $('#identity').val('');
+		    	   document.getElementById("table_row").innerHTML = '';
+		       }
+		   },		
+		    error: function(err) {
+		    }
+		});
+	}
+*/	
 function gender(sex){
 	if(sex==1){
 		sex='Male';

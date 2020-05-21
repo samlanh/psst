@@ -308,88 +308,90 @@ dojo.ready(function(){
 		});
 	}
 
-var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student')); ?>';
-function filterStudent(){
-	year = dijit.byId('year_study').get('value');
-	grade = dijit.byId('grade').get('value');
-	session = dijit.byId('session').get('value');
+/*
+	var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student')); ?>';
+	function filterStudent(){
+		year = dijit.byId('year_study').get('value');
+		grade = dijit.byId('grade').get('value');
+		session = dijit.byId('session').get('value');
 
-	if(year==''){
-		return false;
-	}
-	if(grade==''){
-		return false;
-	}
-	if(session==''){
-		return false;
-	}
-	dojo.xhrPost({
-	    url: url_getStudent,
-	    content : { 
-		    'year':year,
-			'grade':grade,
-			'session':session,
-		},				    
-	   handleAs:"json", 
-	   load: function(data) {
-		   tem="";
-	       if(data!=""){
-				num =0;
-				title=0;
-				temp='';
-				str='';
-				column = 0;
-				str='';
-				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
-					inx = i+1;
-					num++;
-					var gender='';
-					if(data[i].sex==1){
-						gender="<?php echo $tr->translate("MALE");?>";
-					}else{
-						gender="<?php echo $tr->translate("FEMALE");?>";
+		if(year==''){
+			return false;
+		}
+		if(grade==''){
+			return false;
+		}
+		if(session==''){
+			return false;
+		}
+		dojo.xhrPost({
+		    url: url_getStudent,
+		    content : { 
+			    'year':year,
+				'grade':grade,
+				'session':session,
+			},				    
+		   handleAs:"json", 
+		   load: function(data) {
+			   tem="";
+		       if(data!=""){
+					num =0;
+					title=0;
+					temp='';
+					str='';
+					column = 0;
+					str='';
+					for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
+						inx = i+1;
+						num++;
+						var gender='';
+						if(data[i].sex==1){
+							gender="<?php echo $tr->translate("MALE");?>";
+						}else{
+							gender="<?php echo $tr->translate("FEMALE");?>";
+						}
+						if(i<1){
+						str+='<tr class="head-td">';
+							str+='<th><?php echo $tr->translate("NUM");?></th>';
+							str+='<th><?php echo $tr->translate("STUDENT_ID");?></th>';
+							str+='<th><?php echo $tr->translate("STUDEN_NAME");?></th>';
+							str+='<th><?php echo $tr->translate("GENDER");?></th>';
+							str+='<th><?php echo $tr->translate("STUDENT_MARK");?></th>';
+							str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
+						str+='</tr>';
+						}
+						str+='<tr style=" background: #fff;">';
+							str+='<td>'+inx+'</td>';
+							str+='<td>'+data[i].stu_code+'</td>';
+							str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
+							str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
+							str+='<td>';
+								str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
+								str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
+								str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
+							str+='</td>';
+							str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value=""></td>';
+						str+='</tr>';
+					    if(inx!=1) {//identity set value 1,2,3,4,5
+							var identity = $('#identity').val();
+							$('#identity').val(identity+','+inx);
+						} else {
+							$('#identity').val(inx);
+						}
 					}
-					if(i<1){
-					str+='<tr class="head-td">';
-						str+='<th><?php echo $tr->translate("NUM");?></th>';
-						str+='<th><?php echo $tr->translate("STUDENT_ID");?></th>';
-						str+='<th><?php echo $tr->translate("STUDEN_NAME");?></th>';
-						str+='<th><?php echo $tr->translate("GENDER");?></th>';
-						str+='<th><?php echo $tr->translate("STUDENT_MARK");?></th>';
-						str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
-					str+='</tr>';
-					}
-					str+='<tr style=" background: #fff;">';
-						str+='<td>'+inx+'</td>';
-						str+='<td>'+data[i].stu_code+'</td>';
-						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
-						str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
-						str+='<td>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
-						str+='</td>';
-						str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value=""></td>';
-					str+='</tr>';
-				    if(inx!=1) {//identity set value 1,2,3,4,5
-						var identity = $('#identity').val();
-						$('#identity').val(identity+','+inx);
-					} else {
-						$('#identity').val(inx);
-					}
-				}
-				document.getElementById("table_row").innerHTML = str;
-				
-	       }else{
-	    	   $('#identity').val('');
-	    	   document.getElementById("table_row").innerHTML = '';
-	       }
-	   },		
-	    error: function(err) {
-	    }
-	});
-	
-}
+					document.getElementById("table_row").innerHTML = str;
+					
+		       }else{
+		    	   $('#identity').val('');
+		    	   document.getElementById("table_row").innerHTML = '';
+		       }
+		   },		
+		    error: function(err) {
+		    }
+		});
+		
+	}
+*/
 function gender(sex){
 	if(sex==1){
 		sex='Male';
@@ -523,7 +525,8 @@ function getSubjectByGroup(type=null){
 		}
 	});
 }
-var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
+//var url_getStudentbygroup= '<?php //echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
+var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(type=null){
 	group = dijit.byId('group').get('value');
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
@@ -570,7 +573,7 @@ function filterStudentBygroup(type=null){
 					str+='<tr style=" background: #fff;">';
 						str+='<td>'+inx+'</td>';
 						str+='<td>'+data[i].stu_code+'</td>';
-						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_khname+'</td>';
+						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
 						str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
 						str+='<td>';
 							str+='<input type="radio" checked="checked" name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
@@ -641,7 +644,7 @@ function initailize(){
 				str+='<tr style=" background: #fff;">';
 				str+='<td>'+inx+'</td>';
 				str+='<td><?php echo $row['stu_code'];?></td>';
-				str+='<td style="text-align: left;">&nbsp;<?php echo $row['stu_khname'];?></td>';
+				str+='<td style="text-align: left;">&nbsp;<?php echo $row['stu_name'];?></td>';
 				str+='<td><?php echo $gender;?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="<?php echo $row['stu_id'];?>" ></td>';
 				str+='<td>';
 					str+='<input type="radio" <?php if (empty($student_att['attendence_status'])){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';

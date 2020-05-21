@@ -1581,14 +1581,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if (!empty($is_new)){
     		$sql.=" AND gds.is_newstudent = 1";
     	}else{
-//     		if($status_study!=0){
-//     			$sql.=" AND gds.stop_type != 0";
-//     		}else{
-//     			$sql.=" AND gds.stop_type = 0";
-//     		}
-    		if($status_study>0){
-    			$sql.=' AND g.is_pass='.$status_study;
+    		if($status_study!=0){
+    			$sql.=" AND gds.stop_type != 0";
+    		}else{
+    			$sql.=" AND gds.stop_type = 0";
     		}
+//     		if($status_study>0){
+//     			$sql.=' AND g.is_pass='.$status_study;
+//     		}
     	}
     	return $db->fetchOne($sql);
     }

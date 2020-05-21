@@ -118,7 +118,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getStudentAction(){
+	function getStudentAction(){//May not use
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbStudentAttendance();

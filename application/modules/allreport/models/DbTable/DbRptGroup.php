@@ -162,18 +162,24 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   	if(!empty($search['branch_id'])){
 		   		$sql.=' AND gr.branch_id = '.$search['branch_id'];
 		   	}
-		   	if(!empty($search['study_year'])){
-		   		$sql.=' AND gr.academic_year = '.$search['study_year'];
+		   	if(!empty($search['academic_year'])){
+		   		$sql.=' AND gr.academic_year = '.$search['academic_year'];
 		   	}
 		   	if(!empty($search['group'])){
 		   		$sql.=' AND gr.id = '.$search['group'];
 		   	}
-		   	if(!empty($search['study_type']) AND $search['study_type']==1){
+		   	if(!empty($search['study_type'])){
+		   		$sql.=' AND g.stop_type = '.$search['study_type'];
+		   	}
+		   	if(!empty($search['study_type']) AND $search['study_type']==0){
 		   		$sql.=' AND g.stop_type = 0';
 		   	}
-		   	if(!empty($search['study_type']) AND $search['study_type']!=1){
-		   		$sql.=' AND g.stop_type != 0 ';
-		   	}
+// 		   	if(!empty($search['study_type']) AND $search['study_type']==1){
+// 		   		$sql.=' AND g.stop_type = 0';
+// 		   	}
+// 		   	if(!empty($search['study_type']) AND $search['study_type']!=1){
+// 		   		$sql.=' AND g.stop_type != 0 ';
+// 		   	}
 		 return $db->fetchAll($sql.$order);
 	}
 	public function getGroupDetail($search){

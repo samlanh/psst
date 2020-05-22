@@ -4,11 +4,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 {
 	function getStudentLogin($_data){
 		$db = $this->getAdapter();
-		$db->beginTransaction();
+// 		$db->beginTransaction();
+		$_data['studentCode']=trim($_data['studentCode']);
+		$_data['password']=trim($_data['password']);
 		try{
-	
-			$sql ="
-			SELECT
+			$sql =" SELECT
 				s.stu_id AS id,
 				s.stu_code AS stuCode,
 				s.stu_khname AS stuNameKH,
@@ -21,6 +21,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.= " AND ".$db->quoteInto('s.stu_code=?', $_data['studentCode']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
 			$row = $db->fetchRow($sql);
+			
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -122,7 +123,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						g.id AS group_id,
 						g.academic_year,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
-						(select $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
+						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS fatherNation,
 		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS motherNation,
@@ -137,19 +138,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS motherOccupation,
 						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS guardian_job,
 						(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
-						 
 						(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
-						CONCAT(t.from_academic,' - ',t.to_academic) as academicYearTitle,
-						t.generation
+						(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
+						
 			FROM
 				rms_student as s,
 				rms_group as g,
-				rms_group_detail_student as gds,
-				rms_tuitionfee as t
+				rms_group_detail_student as gds
 			WHERE
 				s.stu_id = gds.stu_id
 				and g.id=gds.group_id
-				and g.academic_year=t.id
 				and s.stu_id=$stu_id";
 			$row = $_db->fetchAll($sql);
 			$result = array(
@@ -191,7 +189,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		sp.receipt_number,
 	    		DATE_FORMAT(sp.create_date, '%d-%m-%Y %H:%i') AS  createDate,
 	    		(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
-	    		
 	    		FORMAT(sp.grand_total,2)  AS totalPayment,
 	    		FORMAT(sp.credit_memo,2)  AS creditMemo,
 	    		FORMAT(sp.penalty,2)  AS penalty,
@@ -853,7 +850,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		$earlyleave=$earlyleave+$rs['EarlyLeave'];
 	    		
 	    	}
-	    	$sql=" SELECT CONCAT(f.from_academic,'-',f.to_academic,'(',f.generation,')') AS acarYear,group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
+	    	$sql=" SELECT 
+	    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS acarYear,
+	    	group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
 	    	$rsGroup = $db->fetchRow($sql);
 	      
 	    	if(!empty($rsGroup)){
@@ -966,7 +965,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			$other=$other+$rs['OTHER'];
 	    	   
 	    		}
-	    		$sql=" SELECT CONCAT(f.from_academic,'-',f.to_academic,'(',f.generation,')') AS acarYear,group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
+	    		$sql=" SELECT 
+	    			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS acarYear,
+	    			group_code AS className FROM rms_tuitionfee AS f,rms_group as g WHERE g.id=$groupId AND f.id=g.academic_year LIMIT 1 ";
 	    		$rsGroup = $db->fetchRow($sql);
 	    		 
 	    		if(!empty($rsGroup)){
@@ -1212,7 +1213,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
-    			$sql=" SELECT id,title as Title,description AS Description,DATE_FORMAT(date,'%d-%m-%Y %H:%i') As ShowDate FROM `mobile_notice` WHERE active=1   ";
+    			$sql=" SELECT id,title as Title,description AS Description,DATE_FORMAT(date,'%d-%m-%Y %H:%i') As ShowDate FROM `mobile_notice` WHERE 1   ";
     			$sql.=" ORDER BY id DESC ";
     			
     			$row = $db->fetchAll($sql);

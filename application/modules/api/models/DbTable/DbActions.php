@@ -7,9 +7,8 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		try{
 			$db = new Api_Model_DbTable_DbApi();
 			$row = $db->getStudentLogin($_data);
-			
 			if ($row['status']){
-				if (!empty($row['value'])){
+				if(!empty($row['value'])){
 					$row['value']['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
 					$row['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
 					$token = $db->generateToken($row['value']);
@@ -24,7 +23,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 						"code" => "FAIL",
 					);
 				}
-				
 			}else{
 				$arrResult = array(
 					"code" => "ERR_",

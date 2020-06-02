@@ -23,7 +23,15 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	    		</div>
     		</div>
     	</div>
-    	<form action="" method="post" enctype="application/x-www-form-urlencoded" >
+    	<form action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+    		<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+                 loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+			</script>
 	    	<div class="card-box">
 	    		<div class="col-md-8 col-sm-8 col-xs-12">
 	        		<?php if ($countlang>1){?>
@@ -130,6 +138,48 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['phone']?>"  name="phone" id="phone" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $row['email']?>"  name="email" id="email" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("WEBSITE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $row['website']?>"  name="website" id="website" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FACEBOOK");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $row['facebook']?>"  name="facebook" id="facebook" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("YOUTUBE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $row['youtube']?>"  name="youtube" id="youtube" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INSTAGRAM");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $row['instagram']?>"  name="instagram" id="instagram" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OTHER_SOCIAL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $row['other_social']?>"  name="other_social" id="other_social" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                <!-- 

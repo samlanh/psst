@@ -94,6 +94,12 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
 //  				'address' => $data['address'],
  				'date'=>date("Y-m-d H:i:s"),
  				'phone' => $data['phone'],
+ 				'email' => $data['email'],
+ 				'website' => $data['website'],
+ 				'facebook' => $data['facebook'],
+ 				'youtube' => $data['youtube'],
+ 				'instagram' => $data['instagram'],
+ 				'other_social' => $data['other_social'],
  		);
  		
  		$dbglobal = new Application_Model_DbTable_DbGlobal();

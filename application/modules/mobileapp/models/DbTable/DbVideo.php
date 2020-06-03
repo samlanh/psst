@@ -1,7 +1,7 @@
 <?php
-class Mobileapp_Model_DbTable_DbNewsEvent extends Zend_Db_Table_Abstract
+class Mobileapp_Model_DbTable_DbVideo extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'mobile_news_event';
+	protected $_name = 'mobile_video';
 
 public static function getUserId(){
     	$dbg = new Application_Model_DbTable_DbGlobal();
@@ -16,14 +16,15 @@ public static function getUserId(){
     	$lang = $dbp->currentlang();
     	$sql="SELECT
 		    	act.`id`,
-		    	(SELECT ad.title FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
+		    	(SELECT ad.title FROM `mobile_video_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
+		    	(SELECT cat.title FROM `mobile_category_video_detail` AS cat WHERE cat.news_id = act.`category` AND cat.lang=$lang LIMIT 1) AS cate_title,
 		    	act.`publish_date`,
 		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
 		    	";
     	
     	
     	$sql.=$dbp->caseStatusShowImage("act.`status`");
-    	$sql.=" FROM `mobile_news_event` AS act WHERE 1 ";
+    	$sql.=" FROM `mobile_video` AS act WHERE 1 ";
     	
     	$where='';
     	$from_date =(empty($search['start_date']))? '1': " act.publish_date >= '".$search['start_date']." 00:00:00'";
@@ -33,8 +34,11 @@ public static function getUserId(){
     	if(!empty($search['adv_search'])){
 	    	$s_where = array();
 	    	$s_search = addslashes(trim($search['adv_search']));
-	    	$s_where[] = " (SELECT ad.title FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) LIKE '%{$s_search}%'";
+	    	$s_where[] = " (SELECT ad.title FROM `mobile_video_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) LIKE '%{$s_search}%'";
 	    	$where .=' AND ('.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['category'])){
+    		$where .=' AND act.category = '.$search['category'];
     	}
     	if($search['status_search']>-1){
     		$where .=' AND act.`status` = '.$search['status_search'];
@@ -43,44 +47,24 @@ public static function getUserId(){
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function addArticle($data){
+    function addVideos($data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    		$valid_formats = array("jpg", "png","gif","bmp","jpeg");
-    		$part= PUBLIC_PATH.'/images/newsevent/';
-    		if (!file_exists($part)) {
-    			mkdir($part, 0777, true);
-    		}
-    		$name = $_FILES['photo']['name'];
-    		$size = $_FILES['photo']['size'];
-    		$photo='default.jpg';
-    		if (!empty($name)){
-    			$tem =explode(".", $name);
-    			$image_name = date("Y").date("m").date("d").time().".".end($tem);
-    			$tmp = $_FILES['photo']['tmp_name'];
-    			if(move_uploaded_file($tmp, $part.$image_name)){
-    				$photo = $image_name;
-    			}
-    			else
-    				$string = "Image Upload failed";
-    		}
     		$dbglobal = new Application_Model_DbTable_DbGlobal();
     		$lang = $dbglobal->getLaguage();
     		$arr = array(
-    				'status'		=>$data['status'],
-    				'publish_date'	=>$data['public_date'],
+    				'category'		=>$data['category'],
+    				'video_link'		=>$data['video_link'],
+    				'publish_date'		=>$data['public_date'],
     				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),
     		);
     		
     		if (!empty($data['id'])){
-    			
-    			if (!empty($name)){
-    				$arr['image_feature']= $photo;
-    			}
+    			$arr['status']		=$data['status'];
     			$where=" id=".$data['id'];
-    			$this->_name="mobile_news_event";
+    			$this->_name="mobile_video";
     			$this->update($arr, $where);
     			$article_id =$data['id'];
     			
@@ -100,7 +84,7 @@ public static function getUserId(){
     					}
     				}
     	    
-     				$this->_name="mobile_news_event_detail";
+     				$this->_name="mobile_video_detail";
      				$where1=" news_id=".$data['id'];
     				if (!empty($iddetail)){
     					$where1.=" AND id NOT IN (".$iddetail.")";
@@ -116,7 +100,7 @@ public static function getUserId(){
 		    						'description'=>$data['description'.$title],
 		    						'lang'=>$row['id'],
     						);
-    						$this->_name="mobile_news_event_detail";
+    						$this->_name="mobile_video_detail";
     						$wheredetail=" news_id=".$data['id']." AND id=".$data['iddetail'.$title];
     						$this->update($arr_article,$wheredetail);
     					}else{
@@ -126,14 +110,14 @@ public static function getUserId(){
 		    						'description'=>$data['description'.$title],
 		    						'lang'=>$row['id'],
     						);
-    						$this->_name="mobile_news_event_detail";
+    						$this->_name="mobile_video_detail";
     						$this->insert($arr_article);
     					}
     				}
     			}
     		}else{
-    			$this->_name="mobile_news_event";
-    			$arr['image_feature']= $photo;
+    			$this->_name="mobile_video";
+    			$arr['status']		=1;
     			$arr['created_date']= date("Y-m-d H:i:s");
     			$article_id = $this->insert($arr);
     
@@ -145,7 +129,7 @@ public static function getUserId(){
     						'description'=>$data['description'.$title],
     						'lang'=>$row['id'],
     				);
-    				$this->_name="mobile_news_event_detail";
+    				$this->_name="mobile_video_detail";
     				$this->insert($arr_article);
     			}
     		}
@@ -156,14 +140,14 @@ public static function getUserId(){
     		$db->rollBack();
     	}
     }
-    function getArticleById($id){
+    function getVideoById($id){
     	$db= $this->getAdapter();
     	$sql="SELECT * FROM $this->_name WHERE id =".$id;
     	return $db->fetchRow($sql);
     }
     function getArticleTitleByLang($article_id,$lang){
     	$db = $this->getAdapter();
-    	$sql="SELECT acd.id,acd.`title`,acd.`lang`,acd.description FROM `mobile_news_event_detail` AS acd WHERE acd.`news_id`=$article_id AND acd.`lang`=$lang";
+    	$sql="SELECT acd.id,acd.`title`,acd.`lang`,acd.description FROM `mobile_video_detail` AS acd WHERE acd.`news_id`=$article_id AND acd.`lang`=$lang";
     	return $db->fetchRow($sql);
     }
     function deleteNews($id){
@@ -173,7 +157,7 @@ public static function getUserId(){
 	    	$where=" id= $id";
 	    	$this->delete($where);
 	    	
-	    	$this->_name="mobile_news_event_detail";
+	    	$this->_name="mobile_video_detail";
 	    	$where=" news_id= $id";
 	    	$this->delete($where);
 	    	$db->commit();

@@ -1,10 +1,10 @@
 <?php 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("NEWSEVENT"));
+	echo $this->headTitle($tr->translate("VIDEO"));
 	$frm = $this->frm_new;
-	$urlEdit = $this->baseUrl()."/mobileapp/newsevent/edit/id/";
-	$urlDelete = $this->baseUrl()."/mobileapp/newsevent/delete/id/";
-	$urlCopy = $this->baseUrl()."/mobileapp/newsevent/copy/id/";
+	$urlEdit = $this->baseUrl()."/mobileapp/video/edit/id/";
+	$urlDelete = $this->baseUrl()."/mobileapp/video/delete/id/";
+	$urlCopy = $this->baseUrl()."/mobileapp/video/copy/id/";
 ?>
 <script type="text/javascript">	
 	dojo.require("dijit.form.DateTextBox");
@@ -14,7 +14,7 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('NEWSEVENT');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('VIDEO');?></h4>
 	    			</div>
 	    			<div class="col-sm-4 text-right">
 	    			</div>
@@ -27,12 +27,15 @@
                    		<?php echo $frm->getElement("adv_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("category");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
                   	  <?php echo $frm->getElement('start_date');?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                  	   <?php echo $frm->getElement('end_date');?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
+                    <div class="col-md-2 col-sm-2 col-xs-12">
                  	   <?php echo $frm->getElement('status_search');?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">

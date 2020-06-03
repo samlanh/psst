@@ -1,11 +1,11 @@
 <?php 
-Class Mobileapp_Form_FrmNews extends Zend_Dojo_Form {
+Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 	protected $tr;
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	public function FrmAddNews($data=null){
+	public function FrmAddVideo($data=null){
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
 		$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -22,7 +22,26 @@ Class Mobileapp_Form_FrmNews extends Zend_Dojo_Form {
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		
-			
+
+		$dbCate = new Mobileapp_Model_DbTable_DbCategory();
+		$_arr_opt_cate = array(""=>$this->tr->translate("SELECT_CATEGORY"));
+		$optionBranch = $dbCate->getAllCategoryList();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_cate[$row['id']]=$row['name'];
+		$_category = new Zend_Dojo_Form_Element_FilteringSelect("category");
+		$_category->setMultiOptions($_arr_opt_cate);
+		$_category->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
+		$video_link=  new Zend_Form_Element_Textarea('video_link');
+		$video_link->setAttribs(array(
+				'dojoType'=>'dijit.form.Textarea',
+				'class'=>'fullside',
+				'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
 		
 		$public_date = new Zend_Dojo_Form_Element_DateTextBox('public_date');
 		$public_date->setAttribs(array(
@@ -85,10 +104,16 @@ Class Mobileapp_Form_FrmNews extends Zend_Dojo_Form {
 		if($data!=null){
 			$_status->setValue($data['status']);
 			$id->setValue($data['id']);
+			$video_link->setValue($data['video_link']);
+			$_category->setValue($data['category']);
 			$public_date->setValue($data['publish_date']);
 		}
 		
-		$this->addElements(array($id,$public_date,$_btn_search,$_status,$_adv_search,$_status_search,$from_date,$to_date));
+		$this->addElements(array($id,
+				$_category,
+				$video_link,
+				$public_date,
+				$_btn_search,$_status,$_adv_search,$_status_search,$from_date,$to_date));
 		return $this;
 	}	
 	

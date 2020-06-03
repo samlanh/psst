@@ -38,7 +38,14 @@ public static function getUserId(){
 	    	$where .=' AND ('.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['category'])){
-    		$where .=' AND act.category = '.$search['category'];
+    		$dbCate = new Mobileapp_Model_DbTable_DbCategory();
+//     		$where .=' AND act.category = '.$search['category'];
+    		$condiction = $dbCate->getChildCategory($search['category']);
+    		if (!empty($condiction)){
+    			$where.=" AND act.category IN ($condiction)";
+    		}else{
+    			$where.=" AND act.category=".$search['category'];
+    		}
     	}
     	if($search['status_search']>-1){
     		$where .=' AND act.`status` = '.$search['status_search'];

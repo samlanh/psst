@@ -42,7 +42,34 @@
 			</form>
 		</div>
 		<div class="card-box">
-			<?php echo $this->list;?>
+			<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
+    			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
+    				<thead>
+    					<tr>
+    						<th class="tdheader text-center"><?php echo $tr->translate("NUM");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("TITLE");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("DATE");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("STATUS");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("BY_USER");?></th>
+    					</tr>
+    				</thead>
+    				<tbody>
+    					<?php $r=0; if (!empty($this->row)) foreach ($this->row as $rs){ 
+    						if($r%2==0)$attb='normal';
+    						else $attb='alternate';
+    						$r++?>
+    					<tr class="context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['id']?>);return false;">
+    						<td style="text-align:center;" ><?php echo $r;?></td>
+    						<td class="itesms" ><a class="edit" href="<?php echo $this->baseUrl()."/mobileapp/category/edit/id/".$rs['id'];?> "><?php echo $rs['title']?></a></td>
+    						<td class="itesms" ><a class="edit" href="<?php echo $this->baseUrl()."/mobileapp/category/edit/id/".$rs['id'];?> "><?php echo date("d-M-Y H:i:s",strtotime($rs['created_date']))?></a></td>
+    						<td class="itesms text-center" ><?php echo $rs['status']?></td>
+    						<td class="itesms" ><a class="edit" href="<?php echo $this->baseUrl()."/mobileapp/category/edit/id/".$rs['id'];?> "><?php echo $rs['user_name']?></a></td>
+    						
+    					</tr>
+    					<?php }?>
+    				</tbody>
+    			</table>
+    		</div>	
 		</div>
 	</div>
 </div>

@@ -23,6 +23,17 @@ Class Mobileapp_Form_FrmNews extends Zend_Dojo_Form {
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		
 			
+		$_is_feature = new Zend_Dojo_Form_Element_FilteringSelect("is_feature");
+		$_arr=array(
+				"1"=>$this->tr->translate("NORMAL"),
+				"2"=>$this->tr->translate("FEATURE"),
+		);
+		$_is_feature->setMultiOptions($_arr);
+		$_is_feature->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside'));
+		$_is_feature->setValue($request->getParam('is_feature'));
 		
 		$public_date = new Zend_Dojo_Form_Element_DateTextBox('public_date');
 		$public_date->setAttribs(array(
@@ -38,6 +49,19 @@ Class Mobileapp_Form_FrmNews extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.Button',
 				'iconclass'=>'dijitIconSearch'
 		));
+		
+		$_is_feature_search = new Zend_Dojo_Form_Element_FilteringSelect("is_feature_search");
+		$_arr=array(
+				"0"=>$this->tr->translate("PLEASE_SELECT"),
+				"1"=>$this->tr->translate("NORMAL"),
+				"2"=>$this->tr->translate("FEATURE"),
+		);
+		$_is_feature_search->setMultiOptions($_arr);
+		$_is_feature_search->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside'));
+		$_is_feature_search->setValue($request->getParam('is_feature_search'));
 		
 		
 		$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
@@ -86,9 +110,13 @@ Class Mobileapp_Form_FrmNews extends Zend_Dojo_Form {
 			$_status->setValue($data['status']);
 			$id->setValue($data['id']);
 			$public_date->setValue($data['publish_date']);
+			$_is_feature->setValue($data['is_feature']);
 		}
 		
-		$this->addElements(array($id,$public_date,$_btn_search,$_status,$_adv_search,$_status_search,$from_date,$to_date));
+		$this->addElements(array($id,$public_date,$_btn_search,$_status,$_is_feature,
+				$_adv_search,$_status_search,$from_date,$to_date,
+				$_is_feature_search
+				));
 		return $this;
 	}	
 	

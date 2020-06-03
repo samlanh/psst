@@ -27,7 +27,7 @@ public function indexAction(){
 			}
 			$rs_rows= $db->getAllArticle($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","PUBLISH_DATE","BY_USER","STATUS");
+			$collumns = array("TITLE","PUBLISH_DATE","IS_FEATURE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'newsevent','action'=>'edit',
 			);

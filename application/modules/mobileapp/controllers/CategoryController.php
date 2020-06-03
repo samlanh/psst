@@ -26,12 +26,13 @@ public function indexAction(){
 						'end_date' 			=> date("Y-m-d"));
 			}
 			$rs_rows= $db->getAllArticle($search);
-			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","DATE","BY_USER","STATUS");
-			$link=array(
-					'module'=>'mobileapp','controller'=>'category','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'zone_num'=>$link));
+			$this->view->row = $rs_rows;
+// 			$list = new Application_Form_Frmtable();
+// 			$collumns = array("TITLE","DATE","BY_USER","STATUS");
+// 			$link=array(
+// 					'module'=>'mobileapp','controller'=>'category','action'=>'edit',
+// 			);
+// 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'zone_num'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -42,10 +43,11 @@ public function indexAction(){
 	   	$this->view->frm_new = $frm;
 	}
    function addAction(){
+   	$db = new Mobileapp_Model_DbTable_DbCategory();
 	   	if($this->getRequest()->isPost()){
 	   		try{
 	   			$_data = $this->getRequest()->getPost();
-	   			$db = new Mobileapp_Model_DbTable_DbCategory();
+	   			
 	   			$db->addCategory($_data);
 	   			if(!empty($_data['save_new'])){
 	   				 Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL."/add");
@@ -58,7 +60,8 @@ public function indexAction(){
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 	   		}
 	   	}
-   	
+	   	$this->view->cateParent = $db->getAllCategoryListParent();
+	   	
    		$dbglobal = new Application_Model_DbTable_DbGlobal();
    		$this->view->lang = $dbglobal->getLaguage();
    }
@@ -84,7 +87,7 @@ public function indexAction(){
 	   	}
 	   	$this->view->row = $row;
 	   	$this->view->id = $id;
-	   	
+	   	$this->view->cateParent = $db->getAllCategoryListParent($id);
    	
 	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
 	   	$this->view->lang = $dbglobal->getLaguage();
@@ -106,7 +109,7 @@ public function indexAction(){
 	   	$row = $db->getCategoryById($id);
 	   	$this->view->row = $row;
 	   	$this->view->id = $id;
-	   	 
+	   	$this->view->cateParent = $db->getAllCategoryListParent();
 	   
 	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
 	   	$this->view->lang = $dbglobal->getLaguage();

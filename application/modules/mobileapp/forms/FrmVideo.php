@@ -36,6 +36,7 @@ Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
+		$_category->setValue($request->getParam('category'));
 		
 		$video_link=  new Zend_Form_Element_Textarea('video_link');
 		$video_link->setAttribs(array(

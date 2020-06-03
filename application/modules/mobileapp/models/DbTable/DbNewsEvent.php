@@ -17,10 +17,14 @@ public static function getUserId(){
     	$sql="SELECT
 		    	act.`id`,
 		    	(SELECT ad.title FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
-		    	act.`publish_date`,
-		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
+		    	act.`publish_date`
+		    	
 		    	";
-    	
+    	$sql.=", CASE
+    	WHEN  act.`is_feature` = 1 THEN '".$this->tr->translate("NORMAL")."'
+    	WHEN  act.`is_feature` = 2 THEN '".$this->tr->translate("FEATURE")."'
+    	END AS is_feature, ";
+    	$sql.="(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name ";
     	
     	$sql.=$dbp->caseStatusShowImage("act.`status`");
     	$sql.=" FROM `mobile_news_event` AS act WHERE 1 ";
@@ -38,6 +42,9 @@ public static function getUserId(){
     	}
     	if($search['status_search']>-1){
     		$where .=' AND act.`status` = '.$search['status_search'];
+    	}
+    	if(!empty($search['is_feature_search'])){
+    		$where .=' AND act.`is_feature` = '.$search['is_feature_search'];
     	}
     	$order = "  ORDER BY act.`id` DESC";
     	return $db->fetchAll($sql.$where.$order);
@@ -70,6 +77,7 @@ public static function getUserId(){
     		$arr = array(
     				'status'		=>$data['status'],
     				'publish_date'	=>$data['public_date'],
+    				'is_feature'		=>$data['is_feature'],
     				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),
     		);

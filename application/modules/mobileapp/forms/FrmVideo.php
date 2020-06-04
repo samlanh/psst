@@ -23,6 +23,13 @@ Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		
 
+		$_ordering = new Zend_Dojo_Form_Element_NumberTextBox('ordering');
+		$_ordering->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("ORDERING")
+		));
+		$_ordering->setValue(0);
+		
 		$dbCate = new Mobileapp_Model_DbTable_DbCategory();
 		$_arr_opt_cate = array(""=>$this->tr->translate("SELECT_CATEGORY"));
 		$optionBranch = $dbCate->getAllCategoryList();
@@ -108,12 +115,14 @@ Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 			$video_link->setValue($data['video_link']);
 			$_category->setValue($data['category']);
 			$public_date->setValue($data['publish_date']);
+			$_ordering->setValue($data['ordering']);
 		}
 		
 		$this->addElements(array($id,
 				$_category,
 				$video_link,
 				$public_date,
+				$_ordering,
 				$_btn_search,$_status,$_adv_search,$_status_search,$from_date,$to_date));
 		return $this;
 	}	

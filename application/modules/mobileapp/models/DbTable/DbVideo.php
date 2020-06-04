@@ -64,6 +64,7 @@ public static function getUserId(){
     				'category'		=>$data['category'],
     				'video_link'		=>$data['video_link'],
     				'publish_date'		=>$data['public_date'],
+    				'ordering'		=>$data['ordering'],
     				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),
     		);

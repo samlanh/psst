@@ -88,6 +88,40 @@ class Api_IndexController extends Zend_Controller_Action
    }
    function transcriptpdfAction(){
    	$this->_helper->layout()->disableLayout();
+   	
+   	if ($_SERVER['REQUEST_METHOD'] == "GET"){
+   		$stu_id =$this->getRequest()->getParam("stu_id");
+   		$stu_id = empty($stu_id)?0:$stu_id;
+   		$group_id =$this->getRequest()->getParam("group_id");
+   		$group_id = empty($group_id)?0:$group_id;
+   		$exam_type =$this->getRequest()->getParam("exam_type");
+   		$exam_type = empty($exam_type)?0:$exam_type;
+   		$for_semester =$this->getRequest()->getParam("for_semester");
+   		$for_semester = empty($for_semester)?0:$for_semester;
+   		$for_month =$this->getRequest()->getParam("for_month");
+   		$for_month = empty($for_month)?0:$for_month;
+   		$data = array(
+   				'stu_id'=>$stu_id,
+   				'group_id'=>$group_id,
+   				'exam_type'=>$exam_type,
+   				'for_semester'=>$for_semester,
+   				'for_month'=>$for_month,
+   		);
+   	}
+   $dbApi = new Api_Model_DbTable_DbApi();
+   	
+   	$rs = $dbApi->getExamByExamIdAndStudent($data);
+   	$this->view->rs = $rs;
+   	if ($rs['exam_type']==2){
+   		$monthlysemesterAverage = $dbApi->getAverageMonthlyForSemester($rs['group_id'], $rs['for_semester'], $rs['student_id']);
+   		$this->view->monthlySemester = $monthlysemesterAverage;
+   		$semesterAverage = $dbApi->getAverageSemesterFull($rs['group_id'], $rs['for_semester'], $rs['student_id']);
+   		$this->view->Semester = $semesterAverage;
+   	}
+   	$db = new Foundation_Model_DbTable_DbScore();
+   	$subject =$db->getSubjectByGroup($data['group_id'],null,$data['exam_type']);
+   	$this->view->subject = $subject;
+   	
    }
    function downloadAction(){
    	

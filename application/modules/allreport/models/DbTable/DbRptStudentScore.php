@@ -1153,7 +1153,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				ORDER BY total_avg DESC ) 
 				FROM rms_score_monthly AS dd ,rms_score AS ss WHERE  
 					ss.`id`=dd.`score_id` 
-					AND ss.group_id= s.`id`
+					AND ss.group_id= s.`group_id`
 					AND ss.id=s.`id`
 					)
 				) AS rank,
@@ -1222,7 +1222,8 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 					AND dd.`is_parent`=1
 					AND ss.for_month=$formonth
 					)
-				) AS rank
+				) AS rank,
+				(SELECT gs.max_score FROM rms_group_subject_detail as gs WHERE gs.group_id=$group_id AND gs.subject_id=$subject_id LIMIT 1) as subjectMaxScore
 				FROM 
 					`rms_score` AS s,
 					`rms_score_detail` AS sd,

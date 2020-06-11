@@ -1554,4 +1554,123 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 //     		return $result;
 //     		}
 //     }
+
+    function getExamByExamIdAndStudent($data){
+    	$db = $this->getAdapter();
+    	$sql="
+    	SELECT
+	    	s.`id`,
+	    	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+	    	(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_monthen,
+	    	s.exam_type,
+	    	s.for_month AS for_month_id,
+	    	s.for_semester,
+	    	s.reportdate,
+	    	s.title_score,
+	    	s.max_score,
+	    	sd.`student_id`,
+	    	sm.total_score,
+	    	sm.total_avg,
+	    	FIND_IN_SET( total_avg, 
+	    		(
+			    	SELECT GROUP_CONCAT( total_avg ORDER BY total_avg DESC )
+			    	FROM rms_score_monthly AS dd ,rms_score AS ss WHERE
+			    	ss.`id`=dd.`score_id`
+			    	AND ss.group_id= s.`group_id`
+			    	AND ss.id=s.`id`
+	    		)
+	    	) AS rank,
+	    	(SELECT count(ss.`id`) FROM rms_score_monthly AS dd ,rms_score AS ss WHERE
+			    	ss.`id`=dd.`score_id`
+			    	AND ss.group_id= s.`group_id`
+			    	AND ss.id=s.`id` LIMIT 1) as amountStudent,
+	    	vst.*,
+	    	(SELECT rms_group.group_code FROM rms_group WHERE rms_group.id=gds.group_id LIMIT 1) AS group_code,
+	    	gds.group_id AS group_id,
+	    	(SELECT t.`teacher_name_kh` FROM `rms_teacher` t WHERE t.id =(SELECT rms_group.teacher_id FROM rms_group WHERE rms_group.id=gds.group_id LIMIT 1) LIMIT 1) AS teacher,
+	    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=gds.academic_year LIMIT 1) as academic_year,
+	    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+	    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    	gds.degree AS degree_id,
+	    	gds.academic_year AS for_academic_year,
+	    	(SELECT br.school_namekh FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_namekh,
+	    	(SELECT br.school_nameen FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_nameen
+    	FROM
+    	`rms_score` AS s,
+    	`rms_score_detail` AS sd,
+    	`rms_score_monthly` AS sm,
+    
+    	rms_student AS vst,
+    	rms_group_detail_student AS gds
+    	WHERE s.`id`=sd.`score_id`
+    	AND vst.stu_id = sm.`student_id`
+    	AND vst.stu_id = sd.`student_id`
+    	AND vst.stu_id = gds.`stu_id`
+    	AND s.group_id = gds.`group_id`
+    
+    	AND s.`id`=sm.`score_id`
+    	AND s.status = 1
+    	AND s.type_score=1
+    	";
+    	if (!empty($data['group_id'])){
+    		$sql.=" AND gds.`group_id`=".$data['group_id'];
+    	}
+    	if (!empty($data['stu_id'])){
+    		$sql.=" AND vst.`stu_id`=".$data['stu_id'];
+    	}
+    	if (!empty($data['exam_type'])){
+    		$sql.=" AND s.exam_type=".$data['exam_type'];
+    
+    		if ($data['exam_type']==1){
+    			if (!empty($data['for_month'])){
+    				$sql.=" AND s.`for_month`=".$data['for_month'];
+    			}
+    		}else if ($data['exam_type']==2){
+    			if (!empty($data['for_semester'])){
+    				$sql.=" AND s.`for_semester`=".$data['for_semester'];
+    			}
+    		}
+    	}
+    	$sql.=" ORDER BY s.id DESC LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
+    function getAverageMonthlyForSemester($group_id,$semester,$stu_id){
+    	$db = $this->getAdapter();
+    	$sql="
+    	SELECT
+	    	v.*,
+	    	FIND_IN_SET( total_avg, (
+	    	SELECT GROUP_CONCAT( total_avg
+	    	ORDER BY total_avg DESC )
+	    	FROM v_average_semster_monthly_exam AS dd WHERE
+	    		
+	    	dd.group_id=v.group_id
+	    	AND dd.for_semester = v.for_semester
+	    	)
+	    	) AS rank
+    	FROM `v_average_semster_monthly_exam` AS v
+	    	WHERE v.group_id=$group_id
+	    	AND v.stu_id=$stu_id
+	    	AND v.for_semester =$semester
+    	";
+    	return $db->fetchRow($sql);
+    }
+    function getAverageSemesterFull($group_id,$semester,$stu_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT v.*,
+	    	FIND_IN_SET( average_semester_score, (
+	    	SELECT GROUP_CONCAT( average_semester_score
+	    	ORDER BY average_semester_score DESC )
+	    	FROM v_average_semester_full AS dd WHERE
+	    	dd.group_id=v.group_id
+	    	AND dd.for_semester =v.for_semester
+	    	)
+	    	) AS rank
+	    	FROM `v_average_semester_full` AS v
+	    	WHERE v.for_semester = $semester
+	    	AND v.group_id =$group_id
+	    	AND v.stu_id = $stu_id
+	    	LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
 }

@@ -82,6 +82,8 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 			$db = new Api_Model_DbTable_DbApi();
 			$row = $db->getStudentInformation($stu_id,$currentLang,$action='profile');
+// 			print_r($row);
+// 			print(Zend_Json::encode($row));exit();
 		
 			if ($row['status']){
 				$arrResult = array(
@@ -94,6 +96,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){
@@ -344,6 +347,78 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$row = $db->getAllNotification($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function contactUsAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getAllContact($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function elearningAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getAllCategoryLearning($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function getAllVideoLearningAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getAllVideoLearning($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function slidshowAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getAllSlider($search);
 		if ($row['status']){
 			$arrResult = array(
 					"result" => $row['value'],

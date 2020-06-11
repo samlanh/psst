@@ -1,0 +1,30 @@
+<?php 
+
+ require_once PUBLIC_PATH.'\dompdf\autoload.inc.php';
+
+use Dompdf\Dompdf;
+$document = new Dompdf();
+$html='<table style="width:100%" border="1">
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>Jill</td>
+    <td>Smith</td>
+    <td>50</td>
+  </tr>
+  <tr>
+    <td>Eve</td>
+    <td>Jackson</td>
+    <td>94</td>
+  </tr>
+</table>';
+$document->loadHtml($html);
+$document->setPaper('A4', 'landscap');
+$document->render();
+$document->stream("Transcript",array("Attachment"=>0));
+//0 preview,1 download
+
+?>

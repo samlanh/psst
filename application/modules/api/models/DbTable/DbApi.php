@@ -104,10 +104,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$district = "district_namekh";
 				$vill = 'village_namekh';
 			}
-	
+	//s.stu_khname,
 			$sql ="SELECT
 						s.stu_id,
-						s.stu_khname,
+						
 						s.stu_code,
 						s.tel,
 						s.pob,
@@ -806,7 +806,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$stuId = $search['stu_id'];
-    		$stuInfo = $this->getStudentInformation($stuId,$search['currentLang']);
+    		$LangId = $search['currentLang'];
+    		$stuInfo = $this->getStudentInformation($stuId,$LangId);
 	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
 	    	
@@ -861,7 +862,17 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	}
 	    	$amt = $absent+$permission+$late+$earlyleave;
 	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'COME'=>$come,"ABSENT"=>$absent,"PERMISSION"=>$permission,"LATE"=>$late,"EarlyLeave"=>$earlyleave,"TOTALAMT"=>$amt);
-	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr);
+	    	
+	    	$sql_note = "SELECT 
+								atnd.title,atnd.description
+							FROM `mobile_attendencenote` AS atn,
+								`mobile_attendencenote_detail` AS atnd
+							WHERE atn.id=atnd.attendance_id
+								AND atnd.lang=$LangId
+							ORDER BY atn.ordering ASC ";
+	    	$result_note = $db->fetchAll($sql);
+	    	
+	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr,'rsNote'=>$result_note);
 	    	$result = array(
 	    			'status' =>true,
 	    			'value' =>$arr_merch,
@@ -923,7 +934,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$stuId = $search['stu_id'];
-    		$stuInfo = $this->getStudentInformation($stuId,$search['currentLang']);
+    		$LangId = $search['currentLang'];
+    		$stuInfo = $this->getStudentInformation($stuId,$LangId);
     		$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
     		$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
     
@@ -977,7 +989,18 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	
 	    	$amt = $minor+$moderate+$major+$other;
 	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'Minor'=>$minor,"MODERATE"=>$moderate,"MAJOR"=>$major,"OTHER"=>$other,"TOTALAMT"=>$amt);
-	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr);
+	    	
+	    	$sql_note = "SELECT
+					    	atnd.title,atnd.description
+					    FROM `mobile_disciplinenote` AS atn,
+					    	`mobile_disciplinenote_detail` AS atnd
+					    WHERE atn.id=atnd.displicipline_id
+					    	AND atnd.lang=$LangId
+					    	ORDER BY atn.ordering ASC ";
+	    	
+	    	$result_note = $db->fetchAll($sql);
+	    	
+	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr,'rsNote'=>$result_note);
 	    	
 	    	$result = array(
 		    	'status' =>true,
@@ -1037,7 +1060,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     }
     function generateToken($_data){
     	$db = $this->getAdapter();
-//     	$db->beginTransaction();
     	try{
     		$token = md5(time()).date("Y").date("m").date("d");
     		$token = empty($_data['mobileToken'])?$token:$_data['mobileToken'];
@@ -1056,7 +1078,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $token;
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     		$db->rollBack();
     		return null;
     	}
     }
@@ -1066,24 +1087,35 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	try{
 	    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 	    		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+		    	
 		    	$sql="SELECT
 			    	act.*,
+			    	(SELECT ad.description FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description,
 			    	(SELECT ad.title FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
-			    	act.`publish_date`,
+			    	DATE_FORMAT(act.`publish_date`, '%d-%m-%Y') AS publish_date,
+			    	act.image_feature,
 			    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
 			    	CASE
 					   	WHEN  act.`status` = 1 THEN '$base_url'
 					  END AS imageUrl
 		    	";
 		    	$sql.=" FROM `mobile_news_event` AS act WHERE act.`status` =1 ";
-		    	$sql.= "  ORDER BY act.publish_date,act.`id` DESC";
+		    	$sql_order= "  ORDER BY act.publish_date,act.`id` DESC";
+		    	
 		    	if (!empty($search['limit'])){
 		    		$sql.= "  LIMIT ".$search['limit'];
 		    	}
-		    $row = $db->fetchAll($sql);
+		    $row = $db->fetchAll($sql.$sql_order);
+		    
+		    $sql.=" AND is_feature=2 ";
+		    
+		    $row_feature = $db->fetchAll($sql.$sql_order);
+		     
+		    $merch_result = array('feature_news'=>$row_feature,'normal_news'=>$row);
+		   
 		    $result = array(
 		    		'status' =>true,
-		    		'value' =>$row,
+		    		'value' =>$merch_result,
 		    );
 		    return $result;
 	    }catch(Exception $e){
@@ -1169,7 +1201,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		s.`id`,
 	    		g.`group_code` AS groupCode,
 	    		s.for_academic_year AS forAcademicYearId,
-	    		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academicYear,
+	    		
+	    		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear,
+	    		
 	    		(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle,
 	    		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle,
 	    		`g`.`semester` AS `semester`,
@@ -1208,13 +1242,23 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
-    	public function getAllNotification($search){
+    public function getAllNotification($search){
     		$db = $this->getAdapter();
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
-    			$sql=" SELECT id,title as Title,description AS Description,DATE_FORMAT(date,'%d-%m-%Y %H:%i') As ShowDate FROM `mobile_notice` WHERE 1   ";
-    			$sql.=" ORDER BY id DESC ";
+    			$sql=" SELECT
+						nf.id,
+						nf.opt_notification,
+						nf.group,
+						nf.student,
+						nf.type,
+						DATE_FORMAT(nf.`date`,'%d-%m-%Y %H:%i') AS ShowDate,
+					    	nfd.title,nfd.description
+					    FROM `mobile_notice` AS nf,
+					    	`mobile_notice_detail` AS nfd
+					    WHERE nf.id=nfd.notification_id
+					    	AND nfd.lang= ".$currentLang;
     			
     			$row = $db->fetchAll($sql);
     			$result = array(
@@ -1223,14 +1267,170 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			);
     			return $result;
     		}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    			);
+    			return $result;
+    		}
+    }
+    public function getAllContact($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		
+    		$sql=" SELECT 
+						ad.title,ad.description
+					FROM `mobile_about` AS a,
+						`mobile_about_detail` AS ad
+					WHERE a.id=ad.abouts_id
+						AND ad.lang= $currentLang ";
+    		
+    		$rowabout = $db->fetchAll($sql);
+    		
+    		$sql=" SELECT
+    		l.*,
+    		ld.title,ld.description
+    		FROM `mobile_location` AS l,
+    		`mobile_location_detail` AS ld
+    		WHERE l.id=ld.location_id
+    		AND ld.lang= $currentLang ";
+    		
+    		$rowcontact = $db->fetchAll($sql);
+    		
+    		$all_result = array('about'=>$rowabout,'contact'=>$rowcontact);
+    		
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$all_result,
+    		);
+    		return $result;
+    	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-	    			$result = array(
-	    				'status' =>false,
-	    				'value' =>$e->getMessage(),
-	    			);
-	    			return $result;
-    			}
+    		$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    		);
+    		return $result;
     	}
+    }
+    public function getAllCategoryLearning($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$sql=" SELECT 
+						cat.id,
+						cat.created_date,
+						catd.title AS category_title
+					FROM `mobile_category_video` AS cat,
+						`mobile_category_video_detail` AS catd
+					WHERE cat.id=catd.news_id
+						AND catd.lang=$currentLang AND cat.parent=0";
+    		$rows = $db->fetchAll($sql);
+    		$cate_result = array();
+    		if(!empty($rows)){
+    			foreach($rows as $key=> $row){
+    				$cate_result[$key]['id']=$row['id'];
+    				$cate_result[$key]['created_date']=$row['created_date'];
+    				$cate_result[$key]['category_title']=$row['category_title'];
+    				
+    				
+    				$sql=" SELECT
+			    				cat.id,
+			    				cat.created_date,
+			    				cat.parent,
+			    				catd.title AS category_title
+			    			FROM `mobile_category_video` AS cat,
+			    				`mobile_category_video_detail` AS catd
+			    			WHERE cat.id=catd.news_id
+			    				AND cat.parent = ".$row['id']." AND catd.lang=".$currentLang;
+    				$subrows = $db->fetchAll($sql);
+    				
+    				$sub_cate = array();
+    				if(!empty($subrows)){
+		    			foreach($subrows as $index=> $subrow){
+		    				$sub_cate[$index]['id']=$subrow['id'];
+		    				$sub_cate[$index]['created_date']=$subrow['created_date'];
+		    				$sub_cate[$index]['category_title']=$subrow['category_title'];
+		    				$sub_cate[$index]['parent']=$subrow['parent'];
+		    			}
+    				}
+    				
+    				$cate_result[$key]['sub_cate']=$sub_cate;
+    			}
+    		}
+    
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$cate_result,
+    		);
+    		return $result;
+    	}catch(Exception $e){
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    	$result = array(
+    			'status' =>false,
+    			'value' =>$e->getMessage(),
+    		);
+    		return $result;
+    	}
+    }
+    public function getAllVideoLearning($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$CateId = empty($search['cateId'])?1:$search['cateId'];
+    		
+    		$sql="SELECT 
+				    vi.id,
+				    vi.publish_date,
+					vid.title,
+					vi.video_link 
+				  FROM `mobile_video` AS vi,
+					 `mobile_video_detail` AS vid
+				  WHERE 
+					vi.id=vid.news_id
+					AND vid.lang=$currentLang
+					AND vi.category=$CateId ";
+    		$rows = $db->fetchAll($sql);
+
+    			$result = array(
+    				'status' =>true,
+    				'value' =>$rows,
+    			);
+    			return $result;
+    		}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    			);
+    			return $result;
+    	}
+    }
+    public function getAllSlider($search){
+    	$db = $this->getAdapter();
+    	try{
+    		
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$sql=" SELECT * FROM `mobile_slideshow` ";
+    		$rows = $db->fetchAll($sql);
+    		
+    
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$rows,
+    				);
+    				return $result;
+    		}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    				$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    				);
+    				return $result;
+    	}
+    }
 //     public function getMainScore($search){
 //     	$db = $this->getAdapter();
 //     	try{

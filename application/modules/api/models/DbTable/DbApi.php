@@ -807,6 +807,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	try{
     		$stuId = $search['stu_id'];
     		$LangId = $search['currentLang'];
+    		
     		$stuInfo = $this->getStudentInformation($stuId,$LangId);
 	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
@@ -863,16 +864,17 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	$amt = $absent+$permission+$late+$earlyleave;
 	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'COME'=>$come,"ABSENT"=>$absent,"PERMISSION"=>$permission,"LATE"=>$late,"EarlyLeave"=>$earlyleave,"TOTALAMT"=>$amt);
 	    	
-	    	$sql_note = "SELECT 
-								atnd.title,atnd.description
-							FROM `mobile_attendencenote` AS atn,
-								`mobile_attendencenote_detail` AS atnd
-							WHERE atn.id=atnd.attendance_id
-								AND atnd.lang=$LangId
-							ORDER BY atn.ordering ASC ";
-	    	$result_note = $db->fetchAll($sql);
 	    	
-	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr,'rsNote'=>$result_note);
+	    	$sql="SELECT atnd.title,atnd.description
+			    	FROM `mobile_attendencenote` AS atn,
+			    		`mobile_attendencenote_detail` AS atnd
+			    	WHERE atn.id=atnd.attendance_id
+			    		AND atnd.lang=$LangId
+	    	ORDER BY atn.ordering ASC ";
+	    	$renote = $db->fetchAll($sql);
+	    	
+	    	
+	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr,'rsNote'=>$renote);
 	    	$result = array(
 	    			'status' =>true,
 	    			'value' =>$arr_merch,
@@ -998,7 +1000,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					    	AND atnd.lang=$LangId
 					    	ORDER BY atn.ordering ASC ";
 	    	
-	    	$result_note = $db->fetchAll($sql);
+	    	$result_note = $db->fetchAll($sql_note);
 	    	
 	    	$arr_merch = array('rsDetail'=>$result,'rsSummary'=>$summary_arr,'rsNote'=>$result_note);
 	    	

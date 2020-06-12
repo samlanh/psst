@@ -86,10 +86,10 @@ if ($this->rs['exam_type']==1){
 					<img style=" width:120px;" src="'. $image.'">
 				</td>
 				<td width="60%" align="center" >
-					<h3 style=" font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
+					<h3 style=" font-weight:bold; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
 						KINGDOM OF CAMBODIA
 					</h3>
-					<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
+					<h3 style=" font-weight:bold; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
 						NATION RELIGION KING
 					</h3>
 					<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
@@ -105,34 +105,35 @@ if ($this->rs['exam_type']==1){
 			</tr>
 			<tr>
 				<td colspan="3" style=" border-top:#4839bd solid 3px;" align="center">
+					<br />
 					<h3 style=" font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
-						របាយការណ៍ចំពោះមាតាបិតា REPORT TO PARENTS
+						របាយការណ៍ចំពោះមាតាបិតា <strong>REPORT TO PARENTS</strong>
 					</h3>
-					<table style="width:100%;" border="0" style="font-family: '.$fontStlye.';">
+					<table cellpadding="0"​ border="0" style="font-family: width:100%;color: #4839bd; '.$fontStlye.'; line-height: 20px;">
 						<tr>
 							<td align="right" width="25%" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".'">សិស្សឈ្មោះ : </td>
-							<td align="left" width="23%">'.$this->rs['stu_khname'].'</td>
+							<td class="bold" align="left" width="23%">'.$this->rs['stu_khname'].'</td>
 							<td width="4%">&nbsp;</td>
 							<td align="right" width="30%">Ref No : </td>
-							<td align="left" width="25%"></td>
+							<td class="bold" align="left" width="25%"></td>
 						</tr>
 						<tr>
 							<td align="right" width="25%">អត្តលេខ / ID : </td>
-							<td align="left" width="23%">'.$this->rs['stu_code'].'</td>
+							<td class="bold" align="left" width="23%">'.$this->rs['stu_code'].'</td>
 							<td >&nbsp;</td>
 							<td align="right" width="25%">ថ្នាក់ទី​ / Grade : </td>
-							<td align="left" width="23%">'.$this->rs['group_code'].'</td>
+							<td class="bold" align="left" width="23%">'.$this->rs['group_code'].'</td>
 						</tr>
 						<tr>
 							<td align="right" width="25%">ភេទ / Gender : </td>
-							<td align="left" width="23%">'.$sexen.'</td>
+							<td class="bold" align="left" width="23%">'.$sexen.'</td>
 							<td >&nbsp;</td>
 							<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
-							<td align="left" width="23%">'.$this->rs['academic_year'].'</td>
+							<td class="bold" align="left" width="23%">'.$this->rs['academic_year'].'</td>
 						</tr>
 					</table>
 					<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
-						ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន STUDENTS PROGESS IN BASIC SKILLS
+						ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENTS PROGESS IN BASIC SKILLS</strong>
 					</h3>
 				</td>
 			</tr>
@@ -207,7 +208,7 @@ if ($this->rs['exam_type']==1){
 			$html.='
 			
 			<tr class="cheader">
-				<td class="red" colspan="6" style=" font-family:'.$fontStlye.'; text-align:center; border: solid 3px #4839bd;">&nbsp;
+				<td class="red" colspan="6" style=" font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".'; text-align:center; border: solid 3px #4839bd;">&nbsp;
 					អវត្តមាន ABSENTEEISM
 				</td>
 			</tr>

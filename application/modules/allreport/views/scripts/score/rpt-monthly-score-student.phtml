@@ -27,7 +27,7 @@
 			);
 	$monthview = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 	$show=2;// 1 for hide evaluation,2 show evaluation
-	$type=1; //1 for elt/2 goodwill layout
+	$type=3; //1 for elt/2 goodwill layout/3 PSIS layout
 ?>	
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
@@ -1418,6 +1418,221 @@ dojo.ready(function(){
 				</tr>
 			</table>
 			<?php }?>
+			
+		<?php }else if($type==3){ // PSIS Layout ?>
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				color:#4839bd;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			.header tr{ page-break-inside:avoid; page-break-after:auto }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			.cheader{height: 30px;background: #ffdbdb; white-space: nowrap;
+			height:50px;
+						color:#5a71b5;font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';"
+}
+			.hover:hover{background: #ccc;}
+			 td.rotate {
+				height: 130px;
+	    		vertical-align: bottom;
+			}				
+			td.rotate > div {
+				transform: rotate(270deg);
+				width: 30px;
+			}
+			td.rotate span{
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: inline-block;
+			}
+			td.bg_1 {
+			    background: #fffbcb73;
+			}
+			td.bg_2 {
+			    background: #fbbdbd73;
+			}
+			h3.green {
+			    color: #1ABB9C;
+			}
+			.red {
+			    color: #ff1a02;
+			}
+			
+			.border-right-none{
+    			border-right: #fff solid 1px;
+			}
+			.border-bottom-none{
+    			border-bottom: #fff solid 1px;
+			}
+		</style>
+		<?php if ($this->rs['exam_type']==1){?>
+		<?php 
+			$sexkh="ប";
+			$sexen="M";
+			if ($this->rs['sex']==2){
+				$sexkh="ស";
+				$sexen="F";
+			}
+		?>
+		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+			<tr >
+				<td width="20%" align="center" >
+					<br />
+					<?php $image = $this->baseUrl()."/images/logo.png";
+						if (!empty($this->rs['photo_branch'])){
+							$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+						}
+						
+					?>
+					<img style=" width:120px;" src="<?php echo $image;?>">
+				</td>
+				<td width="60%" align="center" >
+					<h3 style=" font-weight:bold; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman';">
+						KINGDOM OF CAMBODIA
+					</h3>
+					<h3 style=" font-weight:bold; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: 'Times New Roman';">
+						NATION RELIGION KING
+					</h3>
+					<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<?php echo $this->rs['school_nameen'];?>
+					</h3>
+					<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
+						&#9702; Disciplina &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#9702; Virtus &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#9702; Successus
+					</h3>
+				</td>
+				<td width="20%" align="center" >
+				&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style=" border-top:#4839bd solid 3px;" align="center">
+					<br />
+					<h3 style=" font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';">
+						របាយការណ៍ចំពោះមាតាបិតា <strong>REPORT TO PARENTS</strong>
+					</h3>
+					<table  cellpadding="0"​ border="0" style="width:100%;color: #4839bd; line-height: 20px;" >
+						<tr>
+							<td align="right" width="25%" style="font-family: 'Times New Roman','Khmer OS Muol Light';">សិស្សឈ្មោះ : </td>
+							<td class="bold" align="left" width="23%"><?php echo $this->rs['stu_khname']?></td>
+							<td width="4%">&nbsp;</td>
+							<td align="right" width="30%">Ref No : </td>
+							<td class="bold" align="left" width="25%"></td>
+						</tr>
+						<tr>
+							<td align="right" width="25%">អត្តលេខ / ID : </td>
+							<td class="bold" align="left" width="23%"><?php echo $this->rs['stu_code'];?></td>
+							<td >&nbsp;</td>
+							<td align="right" width="25%">ថ្នាក់ទី​ / Grade : </td>
+							<td class="bold" align="left" width="23%"><?php echo $this->rs['group_code']; ?></td>
+						</tr>
+						<tr>
+							<td align="right" width="25%">ភេទ / Gender : </td>
+							<td class="bold" align="left" width="23%"><?php echo $sexen;?></td>
+							<td >&nbsp;</td>
+							<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
+							<td class="bold" align="left" width="23%"><?php echo $this->rs['academic_year'];?></td>
+						</tr>
+					</table>
+					<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';">
+						ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENTS PROGESS IN BASIC SKILLS</strong>
+					</h3>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel" valign="top">
+					<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 3px #4839bd;" border="1" >
+						<tr class="cheader" align="center" style=" font-family:'Times New Roman','Khmer OS Battambang';" >
+							<td>ល.រ</td>
+							<td colspan="2">មុខវិជ្ជា Subject</td>
+							<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
+							<td>ពិន្ទុ score</td>
+							<td >និទ្ទេស Grade</td>
+						</tr>
+						<?php 
+						$totalscore=0; 
+						$totalSubjectMaxScore=0;
+						$i=0; 
+						if (!empty($this->subject)){ ?>
+							<?php foreach ($this->subject as $rs){ $i++;
+								$score = $db->getScoreBySubject($this->rs['id'],$this->rs['student_id'],$rs['subject_id']);
+								$rangsubje = $db->getRankSubjectMonthlyExam($this->rs['group_id'], $this->rs['student_id'], $rs['subject_id'], $this->rs['for_month_id']);
+								$totalscore = $totalscore+$score['score'];
+								$totalSubjectMaxScore = $totalSubjectMaxScore+$rangsubje['subjectMaxScore'];
+								$grade = $dbgb->getMentionScore($score['score'],$this->rs['for_academic_year'],$this->rs['degree_id'],$rangsubje['subjectMaxScore']);
+							?>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $rs['sub_name']; ?>&nbsp;</td>
+								<td align="left" >&nbsp;<?php echo $rs['sub_name_en']; ?>&nbsp;</td>
+								<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $rangsubje['subjectMaxScore']; ?>&nbsp;</td>
+								<td class=""  align="center"><?php echo $score['score']; ?></td>
+								<td class=""  align="center"><?php echo $grade?></td>
+							</tr>
+							<?php }?>
+						<?php }?>
+						
+						<tr class="style hover" style=" line-height: 20px;">
+							<td colspan="3" align="left">
+								ពិន្ទុសរុប Overall Score
+							</td>
+							<td class="" align="center">&nbsp;<strong><?php echo number_format($totalSubjectMaxScore,2); ?></strong>&nbsp;</td>
+							<td class="" align="center">&nbsp;<strong><?php echo number_format($totalscore,2); ?></strong>&nbsp;</td>
+							<td class="">&nbsp;</td>
+						</tr>
+						<tr class="style hover" style=" line-height: 20px;">
+							<td colspan="3" align="left">
+							កម្រិតពិន្ទុ Grade
+							</td>
+							<td class="" align="center">&nbsp;<strong></strong>&nbsp;</td>
+							<td class="" align="center">&nbsp;<strong></strong>&nbsp;</td>
+							<td class="">&nbsp;</td>
+						</tr>
+						<tr class="style hover" style=" line-height: 20px;">
+							<td colspan="3" align="left">
+							មធ្យមភាគពិន្ទុ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
+							</td>
+							<td class="">&nbsp;</td>
+							<td class="" align="center">&nbsp;<strong><?php echo $this->rs['total_avg']; ?></strong>&nbsp;</td>
+							<td class="" align="center">&nbsp;<strong><?php echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],1); ?>&nbsp;&nbsp;&nbsp;<?php echo $this->rs['rank'].'/'.$this->rs['amountStudent'];?></strong>&nbsp;</td>
+						</tr>
+						
+						
+						<tr class="cheader">
+							<td class="red" colspan="6" style=" font-family:'Times New Roman','Khmer OS Muol Light'; text-align:center; border: solid 3px #4839bd;">&nbsp;
+								អវត្តមាន ABSENTEEISM
+							</td>
+						</tr>
+						<tr class="style hover" style=" line-height: 20px;">
+							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃមករៀន Days Present&nbsp;</td>
+							<td colspan="3" align="right">&nbsp;&nbsp;</td>
+						</tr>
+						<tr class="style hover" style=" line-height: 20px;">
+							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days Excused absences&nbsp;</td>
+							<td colspan="3" align="center">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']); ?>&nbsp;</td>
+						</tr>
+						<tr class="style hover" style=" line-height: 20px;">
+							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days Unxcused absences&nbsp;</td>
+							<td colspan="3" align="center" class="">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,$this->rs['for_month_id'])?>&nbsp;</td>
+						</tr>
+						<tr class="style hover" style=" line-height: 20px;">
+							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
+							<td colspan="3" align="center" class="">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
+						</tr>
+					</table>
+					
+				</td>
+			</tr>
+		</table>
+		<?php }else if ($this->rs['exam_type']==2){?>
+		<?php }?>
 		<?php }?>		
 	</div>
 </div>

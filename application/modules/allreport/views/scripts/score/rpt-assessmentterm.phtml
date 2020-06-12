@@ -145,7 +145,18 @@ table.tb-footer tr.style-head {
 							</thead>
 							<?php  $i=0;
 							$male=0;$femle=0; 
-							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;?>
+							$duplicate=0;
+							$old_rank=0;
+							$oldTotal_score=0;
+							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;
+							if($row['total_score']==$oldTotal_score){
+								$duplicate=$duplicate+1;
+							}else{
+								$old_rank=$old_rank+1+$duplicate;
+								$duplicate=0;
+							}
+							$oldTotal_score = $row['total_score'];
+							?>
 							<tr align="center" class='style-rowdata hover context-menu-one' oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;">
 								<td>&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $row['last_name'].' '.$row['en_name'];?>&nbsp;</td>
@@ -167,7 +178,7 @@ table.tb-footer tr.style-head {
 								<td align="center">&nbsp;<?php echo empty($score['score'])?"-":$score['score'];?>&nbsp;</td>	
 								<?php }?>
 								<td>&nbsp;<?php echo $totalscore;?>&nbsp;</td>
-								<td>&nbsp;&nbsp;</td>
+								<td>&nbsp;<?php echo $old_rank;?>&nbsp;</td>
 								<td>&nbsp;<?php  echo $dbgb->getMentionScore($totalscore, $this->rr['academic_year'],$this->rr['degree_id'],1); //Mention Grade?>&nbsp;</td>
 							</tr>
 							<?php }}?>	

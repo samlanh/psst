@@ -280,6 +280,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		$db = new Application_Model_DbTable_DbGlobal();
     		
     		$forfilter=empty($data['forfilter'])?null:$data['forfilter'];
+    		$data['academic_year']=empty($data['academic_year'])?null:$data['academic_year'];
     		$group = $db->getAllGroupByBranch($data['branch_id'],$forfilter,$data);
     		if(empty($data['noaddnew'])){
     			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));

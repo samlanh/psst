@@ -498,7 +498,8 @@ function getInfoBygroup(){
 			}
 		});
 }
-url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+//url_getgroup = '<?php //echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -508,10 +509,14 @@ function getAllGroupByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
+	study_year = dijit.byId('study_year').get('value');
+	if(study_year=='' || study_year==-1){
+		study_year = null;
+	}
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'academic_year':study_year,'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -524,26 +529,6 @@ function getAllGroupByBranch(){
 }
 url_getgroupbyAca = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbyacademic'));?>';
 function getAllGroupByAcademic(){
-	dijit.byId('group').reset();
-	study_year = dijit.byId('study_year').get('value');
-	if(study_year=='' || study_year==-1){
-		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('group').set('store',group_store);  
-		dijit.byId('study_year').focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_getgroupbyAca,
-		content:{
-			'academic_year':study_year,'noaddnew':1
-			},
-		handleAs:"json",
-		load: function(data) {
-		    group_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('group').set('store',group_store);   
-		},
-		error: function(err) {
-		}
-	});
+	getAllGroupByBranch();
 }
 </script>

@@ -1950,8 +1950,9 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT * FROM rms_group_detail_student WHERE stu_id=$student_id AND group_id=$group_id";
   	return $db->fetchRow($sql);
   }
-  function getAllGroupByBranch($branch_id=null,$forfilterreport=null){
-  	$db = $this->getAdapter();
+  function getAllGroupByBranch($branch_id=null,$forfilterreport=null,$data=array()){
+  		$academic_year=empty($data['academic_year'])?null:$data['academic_year'];
+  		$db = $this->getAdapter();
   		$sql ="SELECT `g`.`id`, 
 	  			CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS name
 	  				FROM `rms_group` AS `g` WHERE g.status=1 ";
@@ -1964,10 +1965,14 @@ function getAllgroupStudyNotPass($action=null){
 	  	if (!empty($branch_id)){
 	  		$sql.=" AND g.branch_id = $branch_id";
 	  	}
+	  	if (!empty($academic_year)){
+	  		$sql.=" AND g.academic_year = $academic_year";
+	  	}
 	  	$sql.= $this->getAccessPermission('g.branch_id');
 	  	$sql.=" ORDER BY `g`.`id` DESC ";
   		return $db->fetchAll($sql);
   }
+  
   function getAllGroupByAcademic($academic=null){
   	$db = $this->getAdapter();
   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',

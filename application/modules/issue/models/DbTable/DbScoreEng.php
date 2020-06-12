@@ -279,7 +279,7 @@ class Issue_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 		}
 		$db = $this->getAdapter();
 		$sql ="SELECT g.*,
-				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
+		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=g.degree AND type=1 LIMIT 1) AS degreetitle,
 				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=g.grade AND items_type=1 LIMIT 1) AS gradetitle
 		FROM `rms_group` AS g WHERE g.`id`=$group_id LIMIT 1";

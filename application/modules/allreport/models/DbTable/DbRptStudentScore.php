@@ -1575,4 +1575,93 @@ function getExamByExamIdAndStudent($data){
    		$sql.=" ORDER BY e.id DESC";
    		return $db->fetchAll($sql);
    	}
+   	
+   	function getStudentGroupScoreEn($id,$search){
+   		$session_lang=new Zend_Session_Namespace('lang');
+		$lang_id=$session_lang->lang_id;
+			$gender_str = 'name_en';
+			$str_village='village_name';
+			$str_commune='commune_name';
+			$str_district='district_name';
+			$str_province='province_en_name';
+		if($lang_id==1){//for kh
+			$gender_str = 'name_kh';
+			$str_village='village_namekh';
+			$str_commune='commune_namekh';
+			$str_district='district_namekh';
+			$str_province='province_kh_name';
+		}
+		
+	   	$db = $this->getAdapter();
+   		$sql="SELECT 
+				(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle,
+				(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
+				`se`.`group_id` AS `group_id`,
+				`s`.`stu_id`   AS `stu_id`,
+				`s`.`stu_code` AS `stu_code`,
+				`s`.`stu_khname` AS `kh_name`,
+				`s`.`stu_enname` AS `en_name`,
+				`s`.`last_name` AS `last_name`,
+				`s`.`address` AS `address`,
+				s.pob,
+				`s`.`tel` AS `tel`,
+				`s`.`sex` AS `gender`,
+				`s`.`dob` AS `dob`,
+				s.father_enname AS father_name,
+				(SELECT name_kh FROM rms_view WHERE TYPE=21 AND key_code=`s`.`nationality` LIMIT 1) AS nationality,
+				(SELECT name_kh FROM rms_view WHERE TYPE=21 AND key_code=`s`.`nation` LIMIT 1) AS nation,
+				 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
+				 s.mother_enname AS mother_name,
+				 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
+				 
+				 (SELECT
+				        `rms_view`.$gender_str
+				      FROM `rms_view`
+				      WHERE ((`rms_view`.`type` = 2)
+				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
+				  s.home_num,
+				  s.street_num,
+				    (SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+			    	(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+			    	(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+			    	(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province,
+			    	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = gr.teacher_id LIMIT 1) as teacher,
+			    gr.academic_year,
+			    gr.degree as degree_id,
+			    	
+				sed.*,
+				SUM(sed.score) AS total_score 
+				
+				FROM 
+					`rms_score_eng_detail` AS sed,
+					`rms_score_eng` AS se,
+					rms_student AS s,
+					`rms_group` AS gr
+				WHERE sed.score_id=se.id
+				AND sed.student_id = s.stu_id
+				AND se.group_id = gr.id
+				
+				
+   		";
+   		if (!empty($id)){
+   			$sql.=' AND se.group_id='.$id;
+   		}
+   		if(!empty($search['branch_id'])){
+   			$sql.=' AND se.branch_id = '.$search['branch_id'];
+   		}
+   		if(!empty($search['academic_year'])){
+   			$sql.=' AND gr.academic_year = '.$search['academic_year'];
+   		}
+   		if(!empty($search['group'])){
+   			$sql.=' AND gr.id = '.$search['group'];
+   		}
+   		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$sql.=$dbp->getAccessPermission("se.branch_id");
+   		$sql.=" GROUP BY sed.student_id
+				ORDER BY SUM(sed.score) DESC";
+   		
+   		return $db->fetchAll($sql);
+   		
+   	}
 }

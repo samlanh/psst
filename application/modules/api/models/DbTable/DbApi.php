@@ -1675,4 +1675,114 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	LIMIT 1";
     	return $db->fetchRow($sql);
     }
+    
+    
+    
+    public function getAllMobileCouse($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    		$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+    		 
+    		$sql="
+	    		SELECT
+		    		act.*,
+		    		(SELECT ad.description FROM `mobile_course_detail` AS ad WHERE ad.course_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description,
+		    		(SELECT ad.title FROM `mobile_course_detail` AS ad WHERE ad.course_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
+		    		DATE_FORMAT(act.`publish_date`, '%d-%m-%Y') AS publish_date,
+		    		act.image_feature,
+		    		act.ordering,
+		    		(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
+		    		CASE
+			    		WHEN  act.`status` = 1 THEN '$base_url'
+		    		END AS imageUrl
+    		";
+    		$sql.=" FROM `mobile_course` AS act WHERE act.`status` =1 ";
+    		$sql_order= "  ORDER BY act.ordering ASC";
+    		 
+    		if (!empty($search['limit'])){
+    		$sql.= "  LIMIT ".$search['limit'];
+    		}
+    		$row = $db->fetchAll($sql.$sql_order);
+    		 
+    		$result = array(
+    		'status' =>true,
+    		'value' =>$row,
+    		);
+    		return $result;
+    	}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    		$result = array(
+		    		'status' =>false,
+		    		'value' =>$e->getMessage(),
+	    			);
+    			return $result;
+    		}
+    	}
+    	
+    	public function getCalendar($search){
+    		$db = $this->getAdapter();
+    		try{
+    			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+    			 
+    			$sql="
+    			SELECT c.*
+	    			, CASE
+					   	WHEN  $currentLang = 1 THEN c.title
+					   	WHEN  $currentLang = 2 THEN c.title_en
+					END AS titleHoliday 
+    			FROM `mobile_calendar` AS c
+				WHERE c.`active` =1
+    			";
+    			if (!empty($search['type_holiday'])){
+    				$sql.=" c.`type_holiday` = ".$search['type_holiday'];
+    			}
+    			if (!empty($search['formatMonth'])){
+    				$sql.=" DATE_FORMAT(c.date, '%m') = ".date("m",strtotime($search['formatMonth']));
+    			}
+    			if (!empty($search['formatMonthDay'])){
+    				$sql.=" DATE_FORMAT(c.date, '%m-%d') = ".date("m-d",strtotime($search['formatMonthDay']));
+    			}
+    			if (!empty($search['formatMonthDayYear'])){
+    				$sql.=" DATE_FORMAT(c.date, '%m-%d-%Y') = ".date("m-d-Y",strtotime($search['formatMonthDayYear']));
+    			}
+    			$sql_order= "  ORDER BY c.id ASC ";
+    			$row = $db->fetchAll($sql.$sql_order);
+    			
+    			$degreeIdlist = $search['degree_id'];
+    			$slist = explode(",", $degreeIdlist);
+    			$result =array();
+    			if (!empty($degreeIdlist)){
+    				$array = array();
+    				foreach ($slist as $ss) {
+    					$array[$ss] = $ss;
+    				}
+    				if (!empty($row)) foreach ($row as $key => $rs){
+    					$exp = explode(",", $rs['dept']);
+    					foreach ($exp as $ss){
+    						if (in_array($ss, $array)) {
+    							$result[$key] = $rs;
+    							break;
+    						}
+    					}
+    				}
+    			}
+    			if (!empty($result)){
+    				$row = $result;
+    			}
+    			$result = array(
+    					'status' =>true,
+    				'value' =>$row,
+    			);
+    			return $result;
+    		}catch(Exception $e){
+	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    		$result = array(
+	    				'status' =>false,
+	    				'value' =>$e->getMessage(),
+	    			);
+    			return $result;
+    		}
+    	}
 }

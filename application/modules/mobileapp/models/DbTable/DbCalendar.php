@@ -61,6 +61,11 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 					}		  
 	            	$date_next=$data['start_date'];
 	            	
+	            	$status=1;
+	            	if (empty($data['add'])){
+	            		$status=$data['status'];
+	            	}
+	            	
 	            	for($i=1;$i<=$data['amount_day'];$i++){
 						if($i>1){
 							$d = new DateTime($date_next);
@@ -69,21 +74,23 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 							$date_next =  $d->format( 'Y-m-d' );
 							$data['start_date']=$date_next;
 						}
-	            
 			            $_arr=array(
 			            	'title' => $data['holiday_name'],
 			            	'title_en' => $data['title_en'],
 							'start_date' => $data['start_date'],
 							'end_date' => $data['end_date'],
 							'amount_day' => $data['amount_day'],					
-							'description' => $data['note'],                  
-							'active' => $data['status'],//use instead status
+							'description' => $data['note'], 
+			            		                 
+							'active' => $status,//use instead status
+							
 							'date'=> $data['start_date'],
 							'modify_date'=>date("Y-m-d H:i:s"),
 							'user_id'=>$this->getUserId(),
 							'status' => 1,		
 							'dept' => $dept,	
 			            	'keycode' => $lastId,
+			            		'type_holiday' => $data['type_holiday'],
 			            );
 						$_arr['create_date']=date("Y-m-d H:i:s");
 			      	  	$this->insert($_arr);

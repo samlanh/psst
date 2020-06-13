@@ -52,6 +52,7 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 			$db = new Mobileapp_Model_DbTable_DbCalendar();
 			if($this->getRequest()->isPost()){
 				$_data = $this->getRequest()->getPost();
+				$_data['add']=1;
 				$db->add($_data);
 				if(!empty($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL);

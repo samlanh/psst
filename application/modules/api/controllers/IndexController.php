@@ -51,6 +51,10 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->notificationAction($GetData);
     		}else if ($GetData['url']=="contactus"){
     			$_dbAction->contactUsAction($GetData);
+    		}else if ($GetData['url']=="course"){
+    				$_dbAction->coursePostAction($GetData);
+    		}else if ($GetData['url']=="calendar"){
+    			$_dbAction->calendarAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

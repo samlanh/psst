@@ -96,6 +96,13 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 		$_status->setMultiOptions($_status_opt);
 		
 		
+		$_type_holiday=  new Zend_Dojo_Form_Element_FilteringSelect('type_holiday');
+		$_type_holiday->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_type_holiday_opt = array(
+				1=>$this->tr->translate("Every Year"),
+				2=>$this->tr->translate("One Time Only"));
+		$_type_holiday->setMultiOptions($_type_holiday_opt);
+		
 		$rows = $_db->getAllFecultyNamess(1);
 		$opt = '' ;
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
@@ -115,16 +122,19 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 			$_startdate->setValue($_data['start_date']);
 			$_amount_day->setValue($_data['amount_day']);
 			$_enddate->setValue($_data['end_date']);
-			$_status->setValue($_data['status']);
+			$_status->setValue($_data['active']);
 // 			$_id->setValue($_data['id']);
 			$_id->setValue($_data['keycode']);
 			$_note->setValue($_data['description']);
 			$_dept->setValue($_data['dept']);
+			$_type_holiday->setValue($_data['type_holiday']);
 		}
 		$this->addElements(array($_btn_search,$_status_search,$_title,$_id,
 				$_holiday_name,
 				$_title_en,
-				$_note,$_startdate,$_enddate,$_amount_day,$_status,$_dept));
+				$_note,$_startdate,$_enddate,$_amount_day,$_status,$_dept,
+				$_type_holiday
+				));
 		return $this;
 	}
 	

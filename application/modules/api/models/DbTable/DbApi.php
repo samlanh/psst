@@ -107,21 +107,30 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	//s.stu_khname,
 			$sql ="SELECT
 						s.stu_id,
-						
 						s.stu_code,
+						s.stu_khname,
 						s.tel,
+						CASE
+								WHEN primary_phone = 1 THEN s.tel
+								WHEN primary_phone = 2 THEN s.father_phone
+								WHEN primary_phone = 3 THEN s.mother_phone
+								ELSE s.guardian_tel
+						END as PrimaryContact,
+						DATE_FORMAT(s.dob, '%d-%m-%Y') AS dob,
 						s.pob,
 						s.home_num,
 						s.street_num,
 						s.father_enname,
 						s.father_phone,
+						DATE_FORMAT(s.father_dob, '%d-%m-%Y') AS father_dob,
 						s.mother_enname,
+						DATE_FORMAT(s.mother_dob, '%d-%m-%Y') AS mother_dob,
 						s.mother_phone,
 						s.guardian_enname,
 						s.guardian_tel,
+						DATE_FORMAT(s.guardian_dob, '%d-%m-%Y') AS guardian_dob,
 						s.photo,
-						g.id AS group_id,
-						g.academic_year,
+						gds.group_id,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
 						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
@@ -147,8 +156,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				rms_group_detail_student as gds
 			WHERE
 				s.stu_id = gds.stu_id
-				and g.id=gds.group_id
-				and s.stu_id=$stu_id";
+				AND s.stu_id=$stu_id ";
 			$row = $_db->fetchAll($sql);
 			$result = array(
 					'status' =>true,
@@ -1154,6 +1162,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$sql="
     		SELECT
 	    		(SELECT $columnMonth FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+	    		s.exam_type,
 	    		s.title_score,
 	    		s.for_semester AS forSemesterId,
 	    		s.for_month AS forMonthId,
@@ -1202,6 +1211,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 	    		s.`id`,
 	    		g.`group_code` AS groupCode,
+	    		g.group_id,
 	    		s.for_academic_year AS forAcademicYearId,
 	    		
 	    		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear,
@@ -1217,7 +1227,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		`rms_group` AS g
     		WHERE
 	    		s.`id`=sm.`score_id`
-	    			
 	    		AND g.`id` = s.`group_id`
 	    		AND s.status = 1
 	    		AND sm.`student_id` = $stu_id
@@ -1287,7 +1296,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					FROM `mobile_about` AS a,
 						`mobile_about_detail` AS ad
 					WHERE a.id=ad.abouts_id
-						AND ad.lang= $currentLang ";
+						AND ad.lang= $currentLang AND a.status=1 ";
     		
     		$rowabout = $db->fetchAll($sql);
     		
@@ -1317,6 +1326,35 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
+    public function getSingleContact($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    
+    		$sql=" SELECT
+    		l.*,
+    		ld.title,ld.description
+    		FROM `mobile_location` AS l,
+    		`mobile_location_detail` AS ld
+    		WHERE l.id=ld.location_id
+    		AND ld.lang= $currentLang ";
+    
+    		$rowcontact = $db->fetchRow($sql);
+    
+    		$result = array(
+    				'status' =>true,
+    				'value' =>$rowcontact,
+    		);
+    		return $result;
+    	}catch(Exception $e){
+    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	$result = array(
+    			'status' =>false,
+    			'value' =>$e->getMessage(),
+    			);
+    			return $result;
+    	}
+    	}
     public function getAllCategoryLearning($search){
     	$db = $this->getAdapter();
     	try{
@@ -1739,13 +1777,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				$sql.=" c.`type_holiday` = ".$search['type_holiday'];
     			}
     			if (!empty($search['formatMonth'])){
-    				$sql.=" DATE_FORMAT(c.date, '%m') = ".date("m",strtotime($search['formatMonth']));
+    				$sql.=" AND DATE_FORMAT(c.date, '%m') = ".date("m",strtotime($search['formatMonth']));
     			}
     			if (!empty($search['formatMonthDay'])){
-    				$sql.=" DATE_FORMAT(c.date, '%m-%d') = ".date("m-d",strtotime($search['formatMonthDay']));
+    				$sql.=" AND DATE_FORMAT(c.date, '%m-%d') = ".date("m-d",strtotime($search['formatMonthDay']));
     			}
     			if (!empty($search['formatMonthDayYear'])){
-    				$sql.=" DATE_FORMAT(c.date, '%m-%d-%Y') = ".date("m-d-Y",strtotime($search['formatMonthDayYear']));
+    				$sql.=" AND DATE_FORMAT(c.date, '%m-%d-%Y') = ".date("m-d-Y",strtotime($search['formatMonthDayYear']));
+    			}
+    			if (!empty($search['formatMonthYear'])){
+    				$sql.=" AND DATE_FORMAT(c.date, '%m-%Y') = ".date("m-Y",strtotime($search['formatMonthDayYear']));
     			}
     			$sql_order= "  ORDER BY c.id ASC ";
     			$row = $db->fetchAll($sql.$sql_order);

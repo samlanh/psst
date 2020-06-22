@@ -9,8 +9,10 @@ $html="
 	<head>
 	<meta charset='UTF-8'>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+	
 	<link href='https://fonts.googleapis.com/css2?family=Khmer&display=swap' rel='stylesheet'>
 	<style type='text/css'>
+			body { font-family: KH-BATTAMBANG; }
 			.style{
 				line-height: 20px; font-size: 12px !important;
 				color:#4839bd;
@@ -65,7 +67,7 @@ $html="
 		</style>
 	</head> ";
 $html.='<div style="min-height:10cm; margin-left:-70px;">';
-$fontStlye="'Times New Roman'".','."'Khmer OS Battambang'";
+$fontStlye="'Times New Roman'".','."'kh battambang'";
 // $fontStlye="'Times New Roman'".','."'Khmer'";
 $image = PUBLIC_PATH."/images/logo.png";
 if (!empty($this->rs['photo_branch'])){
@@ -78,7 +80,7 @@ if ($this->rs['sex']==2){
 	$sexen="F";
 }
 if ($this->rs['exam_type']==1){
-	$html.='
+	$html.='<body>
 		<table style="width:90%;background:#fff; margin: 0 auto; font-family: '.$fontStlye.'; ">
 			<tr >
 				<td width="20%" align="center" >
@@ -237,7 +239,7 @@ if ($this->rs['exam_type']==1){
 }else{
 	
 }
-$html.='</div>';
+$html.='</div></body>';
 $html.="</html>";
 // echo $html;exit();
 $fileName="Transcript";

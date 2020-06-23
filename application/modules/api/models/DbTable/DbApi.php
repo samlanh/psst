@@ -1211,7 +1211,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 	    		s.`id`,
 	    		g.`group_code` AS groupCode,
-	    		g.group_id,
+	    		g.id AS group_id,
 	    		s.for_academic_year AS forAcademicYearId,
 	    		
 	    		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear,

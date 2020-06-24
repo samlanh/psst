@@ -1,14 +1,10 @@
-<?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
-	
-	$session_lang=new Zend_Session_Namespace('lang');
-	$lang_id=$session_lang->lang_id;
-	
-	$frm =  $this->form_search;
-	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	$dbgb = new Application_Model_DbTable_DbGlobal();
-	$month = array(
+<?php  
+header('Content-Type: application/pdf; charset=utf-8');
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+$db = new Allreport_Model_DbTable_DbRptStudentScore();
+$dbgb = new Application_Model_DbTable_DbGlobal();
+$month = array(
 		"01"=>"មករា",
 		"02"=>"កុម្ភៈ",
 		"03"=>"មីនា",
@@ -21,83 +17,35 @@
 		"10"=>"តុលា",
 		"11"=>"វិច្ឆិកា",
 		"12"=>"ធ្នូ"
-	);
-?>	
-<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
-<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
-	<div class="card-box">
-       	<div class="col-sm-12 border-botom">
-		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_SCORE_REPORT');?></h4>
-    		</div>
-    		<div class="col-sm-4 text-right">
-    		</div>
-    	</div>
-    </div>
-	<form  action="" dojoType="dijit.form.Form" method="post">
-			<script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
-					branch_id = dijit.byId("branch_id").get('value');
-					if(branch_id=='' || branch_id==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
-						dijit.byId("branch_id").focus();
-						return false;
-					}
-					study_year = dijit.byId("study_year").get('value');
-					if(study_year=='' || study_year==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
-						dijit.byId("study_year").focus();
-						return false;
-					}
-					group = dijit.byId("group").get('value');
-					if(group=='' || group==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_CLASS");?>");
-						dijit.byId("group").focus();
-						return false;
-					}
-					loadingBlock();
-					return true;
-				}else {
-					return false;
-				}
-			</script>
-		<div class="form-group">
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("branch_id");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<input id="study_year" />
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<input id="group" />
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<select id="exam_type" name="exam_type" class="fullside" onChange="displaymonth();"  dojoType="dijit.form.FilteringSelect" >
-			   		<option value="1" <?php if ($this->search['exam_type']==1){ echo 'selected="selected"';}?>>ប្រចាំខែ</option>
-			   		<option value="2" <?php if ($this->search['exam_type']==2){ echo 'selected="selected"';}?>>ប្រលងឆមាស</option>
-			   	</select>
-        	</div>
-        	<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
-        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-					<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
-					<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
-				</select>
-        	</div>
-        	<div id="month" class="col-md-2 col-sm-2 col-xs-12">
-        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
-					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month']?></option>
-					<?php }}?>
-				</select>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-        	</div>
-        </div>
-	</form>
-	<div id="divPrint">
-		<style type="text/css">
-			.style{
+);
+ob_start();
+
+require_once PUBLIC_PATH.'\dompdf\autoload.inc.php';
+use Dompdf\Dompdf;
+$document = new Dompdf();
+
+
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <style type="text/css">
+		@font-face {
+		    font-family: "Khmer OS Battambang";
+		    src: url("<?php echo PUBLIC_PATH."/";?>dompdf/lib/fonts/KhmerOSbattambang.ttf");
+		}
+		@font-face {
+		    font-family: "Khmer OS Muol";
+		    src: url("<?php echo PUBLIC_PATH."/";?>dompdf/lib/fonts/KhmerOSmuol.ttf");
+		}
+		@font-face {
+		    font-family: "Khmer OS Muol Light";
+		    src: url("<?php echo PUBLIC_PATH."/";?>dompdf/lib/fonts/KhmerOSmuollight.ttf");
+		}
+    * { font-family: 'Times New Roman','Khmer OS Battambang'; }
+    .style{
 				line-height: 20px; font-size: 12px !important;
 				color:#4839bd;
 				font-family: 'Times New Roman','Khmer OS Battambang';
@@ -125,7 +73,10 @@
 				font-size:12px; 
 				height: 23px;
 			}	
-		</style>
+  </style>
+</head>
+<body>
+<div style="min-height:10cm; margin-left:-10px;">
 		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
 					<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
@@ -146,7 +97,7 @@
 				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 				<?php $i=0; $count_fail=0;?>
 				<tr>
-					<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+					<td colspan="3" align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 						<div​​ style="color:#4839bd; font-size: 14px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 							<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
 						</div><br />
@@ -157,7 +108,6 @@
 							<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span>
 						</div>
 					</td>
-					<td align="center" valign="top"></td>
 				</tr>
 				<tr>
 				<?php 
@@ -194,12 +144,12 @@
 								</td>
 							</tr>
 							<?php } $i++;?>
-							<tr class="style style-rowdata hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id'];?>','<?php echo $rs['stu_id'];?>','<?php echo $i;?>','<?php echo $rs['group_id'];?>','<?php echo $rs['exam_type'];?>','<?php echo $rs['for_semester'];?>','<?php echo $rs['for_month_id'];?>');return false;" style="line-height: 20px;">
+							<tr class="style style-rowdata hover  style="line-height: 20px;">
 								<td align="center"><?php echo $i;?></td>
 							    <td align="center" style="white-space:nowrap;">
-							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&group_id=".$rs['group_id']."&exam_type=".$rs['exam_type']."&for_semester=".$rs['for_semester']."&for_month=".$rs['for_month_id'];?>"><?php echo $rs['stu_code'];?></a>
+							    	<?php echo $rs['stu_code'];?>
 							    </td>
-								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?trim($rs['stu_khname']):trim($rs['stu_enname']);?>&nbsp;</td>
+								<td style="white-space:nowrap;">&nbsp;<?php echo trim($rs['stu_khname']);?>&nbsp;</td>
 								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
 									$amount_subject=0;
@@ -228,7 +178,6 @@
 								</td>
 								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i;?>" id="rank<?php echo $i;?>" value="<?php echo $old_rank;?>" />
 								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
 								<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade']);?>
 								</td>
@@ -297,166 +246,11 @@
 				</table>
 		<?php }?>
 		</div>
-</div>
-<?php 
-	$urlOutStanding = $this->baseUrl()."/allreport/score/certificate-letterofpraisenew/id/";
-	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/rpt-monthly-score-student/";
-?>
-<script type="text/javascript">
+	</body>
+</html>
+		<?php $document->load_html(ob_get_clean());
 
-	var row=0;
-	var url="";
-	$(function(){
-		$.contextMenu({
-			selector: '.context-menu-one', 
-			callback: function(key, options) {
-				var m = "clicked: " + key;
-				if(key=="letterofprais"){
-					url='<?php echo $urlOutStanding;?>';
-					gotoAction();
-				}else if(key=="transcript"){
-					url='<?php echo $urlOutStandingNoPhoto;?>';
-					gotoAction1();
-				}
-				
-			},
-			items: {
-				"letterofprais": {name: "<?php echo $tr->translate("HORNOR_CERTIFICATE");?>", icon: "fa-file",},
-				"transcript": {name: "<?php echo $tr->translate("TRANSCRIPT");?>", icon: "fa-file",},
-			}
-		});
-	});
-	function setrowdata(id,stu_id,index,group,exam_type,for_semester,for_month){
-		rank = dijit.byId('rank'+index).get("value");
-		row = id;
-		student_id = stu_id;
-		group_id = group;
-		type_exam = exam_type;
-		semester = for_semester;
-		month = for_month;
-	}
-
-	var recordid ='';
-	function gotoAction(){
-		window.open(url+row+'/stu_id/'+student_id+'/rank/'+rank);
-	}
-	function gotoAction1(){
-		window.open(url+'stu_id/'+student_id+'/group_id/'+group_id+'/exam_type/'+type_exam+'/for_semester/'+semester+'/for_month/'+month);
-	}
-	
-	
-	
-
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-			store: academic_store,
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                     
-			id: "study_year",
-			name: "study_year",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-			onChange: function() {  
-				academic_year = dijit.byId('study_year').get('value');
-			}
-		}, "study_year");
-		new dijit.form.FilteringSelect({
-			store: group_store,
-		    queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,                      
-		    id: "group",
-		    name: "group",  
-		    class: 'fullside', 
-		    readonly:false,
-		    required:false,
-		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function() {  
-		    }
-		}, "group");
-		
-		 var branch_id = dijit.byId('branch_id');
-		 branch_id.on('change', function(evt) {
-			 getAllAcademicByBranch();
-			 getAllGroupByBranch();
-	    });
-		 getAllAcademicByBranch();
-		 getAllGroupByBranch();
-		 <?php if (!empty($this->search['branch_id'])){?>
-		 dijit.byId('branch_id').set('value','<?php echo $this->search['branch_id']?>'); 
-		 <?php }?>
-		 displaymonth();
-	});
-	url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
-	var oldBranch = "<?php echo $this->search['branch_id']?>";
-	function getAllAcademicByBranch(){
-		dijit.byId('study_year').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('study_year').set('store',academic_store);  
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getacademic,
-			content:{
-				'branch_id':branch_id,'showall':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				academic_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('study_year').set('store',academic_store);  
-			    if(oldBranch==branch_id){
-			    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
-			    }
-			},
-			error: function(err) {
-			}
-		});
-	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-	function getAllGroupByBranch(){
-		dijit.byId('group').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getgroup,
-			content:{
-				'branch_id':branch_id,'forfilter':1
-				},
-			handleAs:"json",
-			load: function(data) {
-			    group_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('group').set('store',group_store);   
-			    if(oldBranch==branch_id){
-			    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-			    }
-			},
-			error: function(err) {
-			}
-		});
-	}
-	function displaymonth(){
-		exam_type = dijit.byId('exam_type').get('value');
-		if(exam_type==1){
-			$("#semester").css("display", "none");
-			$("#month").css("display", "block");
-		}else{
-			$("#semester").css("display", "block");
-			$("#month").css("display", "none");
-		}
-	}
-	
-	
-	
-</script>
+// $document->loadHtml($html, 'UTF-8');
+$document->setPaper('A4', 'portrait');
+$document->render();
+$document->stream("Transcript",array("Attachment"=>0));?>

@@ -133,6 +133,31 @@ class Api_IndexController extends Zend_Controller_Action
    function downloadAction(){
    	
    }
+   
+   function examscorepdfAction(){
+	   	$this->_helper->layout()->disableLayout();
+	   	if ($_SERVER['REQUEST_METHOD'] == "GET"){
+	   		$id=$this->getRequest()->getParam("id");
+	   		$dbApi = new Api_Model_DbTable_DbApi();
+	   		 
+	   		$result = $dbApi->getStundetScoreResult($id);
+	   		$this->view->studentgroup = $result;
+	   	}
+	   		
+
+   		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	   	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
+	   	$this->view->month = $db->getAllMonth();
+	   	 
+	   	$key = new Application_Model_DbTable_DbKeycode();
+	   	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	   	 
+	   	$frm = new Application_Form_FrmGlobal();
+	   	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];
+	   	$this->view->header = $frm->getHeaderReceipt($branch_id,1);
+	   	
+   }
+   
 }
 
 

@@ -28,7 +28,7 @@ class Application_Form_FrmGlobal{
 			$str.='</tr>';						
 				return $str;
 	}
-	public function getHeaderReceipt($branch_id=null){
+	public function getHeaderReceipt($branch_id=null,$forGenerate=0){
 		$key = new Application_Model_DbTable_DbKeycode();
 		$setting = $key->getKeyCodeMiniInv(TRUE);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -55,11 +55,18 @@ class Application_Form_FrmGlobal{
 				$website = $rs['website'];
 			}
 		}
+		if ($forGenerate==1){
+			$baseUrl =PUBLIC_PATH;
+			$styleLogo = "width:120px;";
+		}else{
+			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+			$styleLogo = "max-width: 98%;max-height:90px;";
+		}
 	    if($setting['show_header_receipt']==1){
 			$str="<table width='100%' style='white-space:nowrap;'>
 				<tr>
 					<td width='17%' valign='top'>
-						<img style='max-width: 98%;max-height:90px;' src=".Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$img.">
+						<img style='".$styleLogo."' src=".$baseUrl.'/images/'.$img.">
 					</td>
 					<td width='43%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
 						<div style='font-size:18px;margin-top: 10px;font-family:Khmer OS Muol Light'>".$school_khname."</div>

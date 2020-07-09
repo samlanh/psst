@@ -107,13 +107,22 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 	}
 	
 	//select all Gerneral old student
-	/*function getAllGerneralOldStudent(){
+	/**/
+	function getAllGerneralOldStudent(){
 		$db=$this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
-		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY s.degree DESC ";
+		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` 
+		FROM rms_student AS s,
+			rms_group_detail_student AS sgd
+		WHERE 
+		s.stu_id=sgd.stu_id
+		AND 
+		s.status=1 
+		AND sgd.stop_type=0
+		  $branch_id  ORDER BY s.degree DESC ";
+// 		and s.is_subspend=0
 		$rows=$db->fetchAll($sql);
 		//array_unshift($rows,array('id' => '-1',"name"=>"Add New"));
 		array_unshift($rows,array('id' => '',"name"=>$tr->translate("CHOOSE")));
@@ -128,10 +137,17 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		$db=$this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
-		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY s.degree DESC ";
+		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` 
+		FROM rms_student AS s,
+			rms_group_detail_student AS sgd
+		WHERE 
+			s.stu_id=sgd.stu_id
+			AND s.status=1 
+			AND sgd.stop_type=0
+			$branch_id  ORDER BY sgd.degree DESC ";
+// 		s.is_subspend=0
 		return $db->fetchAll($sql);
-	}*/
+	}
 }
 
 

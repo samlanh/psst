@@ -16,9 +16,9 @@
 </style>
 <title><?php echo $this->tr->translate("ADD_START_DATE_AND_END_DATE")?></title>
 <form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-	var rowId = $('#identity').val();
+	<script type="dojo/method" event="onSubmit">   
+   		if(this.validate()) {
+				var rowId = $('#identity').val();
     			if(rowId!=''){ 
 					var rowIDArray = rowId.split(',');
 					for(var n = 0; n < rowIDArray.length; n++){
@@ -31,13 +31,14 @@
 						}
 					}
 				}
-	dijit.byId('save_close').set('disabled',true);
-	dijit.byId('save_new').set('disabled',true);
-    return true;
-   }else {
-    return false;
-   }
-</script>
+				loadingBlock();
+				dijit.byId('save_close').set('disabled',true);
+				dijit.byId('save_new').set('disabled',true);
+    			return true;
+  		}else {
+    		return false;
+   		}
+	</script>
 	
 	<table cellspacing="10" width="100%" style="margin: 0 auto;">
 		<tr>
@@ -84,7 +85,7 @@
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-
+	dojo.require("dijit.form.DateTextBox");
 	dojo.ready(function(){ 
 		addRow();
 	});
@@ -177,6 +178,7 @@
 		}
 
 		if(dijit.byId('add_province').validate()) {
+			loadingBlock();
 			dijit.byId('save_close').set('disabled',true);
 			dijit.byId('save_new').set('disabled',true);
 			var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'startdateenddatestu','action'=>'add')); ?>';
@@ -192,4 +194,5 @@
 			});
 		}
 	}
+	function showAddBlock(index){}
 </script>

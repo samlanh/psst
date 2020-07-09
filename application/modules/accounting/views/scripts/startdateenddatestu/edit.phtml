@@ -29,7 +29,7 @@
 				}
 			}
 		}
-			
+			loadingBlock();
 			dijit.byId('save_close').set('disabled',true);
 			return true;
 	   }else {
@@ -81,7 +81,7 @@
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-
+	dojo.require("dijit.form.DateTextBox");
 	dojo.ready(function(){ 
 		Initialize();
 	});

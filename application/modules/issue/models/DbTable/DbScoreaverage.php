@@ -24,6 +24,10 @@ class Issue_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$dbGroup = new Foundation_Model_DbTable_DbGroup();
+			$group_info = $dbGroup->getGroupById($_data['group']);
+			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
+			
 			$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
@@ -32,7 +36,7 @@ class Issue_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
 					'type_score'=>1, // 1 => BacII score
-					'for_academic_year'=>$_data['year_study'],
+					'for_academic_year'=>$year_study,
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
 			);
@@ -68,6 +72,10 @@ class Issue_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{			
+			$dbGroup = new Foundation_Model_DbTable_DbGroup();
+			$group_info = $dbGroup->getGroupById($_data['group']);
+			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
+			
 				$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
@@ -75,7 +83,7 @@ class Issue_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 					'note'=>$_data['note'],
 					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId(),
-					'for_academic_year'=>$_data['year_study'],
+					'for_academic_year'=>$year_study,
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
 				);

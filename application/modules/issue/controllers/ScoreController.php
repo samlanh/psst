@@ -77,12 +77,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
-		$this->view->row_year=$db_global->getAllYear();
-		$this->view->session=$db_global->getSession();
-		$this->view->degree=$db_global->getDegree();
 	
-		$db_global=new Application_Model_DbTable_DbGlobal();
-		$this->view->room = $row =$db_global->getAllRoom();
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
 	}

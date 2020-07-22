@@ -69,6 +69,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			$session = $_data['session_type'];
 			$sql="select id from rms_student_attendence where branch_id = $branch and group_id = $group and for_semester = $for_semester and for_session = $session and date_attendence = '$date' and type=1 limit 1";
 			$id = $db->fetchOne($sql);
+			
 			if(empty($id)){
 				$_arr = array(
 					'branch_id'		=>$_data['branch_id'],

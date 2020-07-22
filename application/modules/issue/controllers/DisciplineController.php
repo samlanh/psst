@@ -69,11 +69,6 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 		$branch = $db_global->getAllBranch();
 		$this->view->branch = $branch;
 		
-		$this->view->row_year = $db_global->getAllYear();
-		$this->view->session = $db_global->getSession();
-		$this->view->degree = $db_global->getDegree();
-		$this->view->grade = $db_global->getAllGrade();
-		$this->view->room = $db_global->getAllRoom();
 	}
 	
 	public	function editAction(){
@@ -104,12 +99,6 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 		$branch = $db_global->getAllBranch();
 		$this->view->branch = $branch;
 		
-		$this->view->row_year=$db_global->getAllYear();
-		$this->view->session=$db_global->getSession();
-		$this->view->degree=$db_global->getDegree();
-		$this->view->group = $db_global->getAllgroupStudyNotPass($result['group_id']);
-		$this->view->room = $row =$db_global->getAllRoom();
-		$this->view->grade = $db_global->getAllGrade();
 		
 	}
 	

@@ -482,7 +482,7 @@ function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
 		if(group==''){
-			alert("Please Select Group");
+			alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>");
 			return false;
 		}
 		dojo.xhrPost({

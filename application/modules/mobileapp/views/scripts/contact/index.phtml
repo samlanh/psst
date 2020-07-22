@@ -58,7 +58,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 						        <div class="tab-pane fade <?php if ($key<1){echo "active in";}?>" id="<?php echo $alias;?>" role="tabpanel">
 						        	<div class="col-md-12 col-sm-12 col-xs-12">
 						                <div class="form-group">
-						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
 						                   </label>
 						                   <div class="col-md-7 col-sm-7 col-xs-12">
 						                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="<?php echo $lang['title']?>" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
@@ -66,7 +66,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 						                   </div>
 						                </div>
 						                <div class="form-group">
-						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('ADDRESS_'.strtoupper($rs['title']))?><span class="required">*</span>
+						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate('ADDRESS_'.strtoupper($rs['title']))?><span class="required">*</span>
 						                   </label>
 						                   <div class="col-md-12 col-sm-12 col-xs-12">
 						                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"><?php echo $lang['description']?></textarea>
@@ -88,7 +88,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 			                  ?>
 						        	<div class="col-md-12 col-sm-12 col-xs-12">
 						                <div class="form-group">
-						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
 						                   </label>
 						                   <div class="col-md-7 col-sm-7 col-xs-12">
 						                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="<?php echo $lang['title']?>" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
@@ -96,7 +96,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 						                   </div>
 						                </div>
 						                <div class="form-group">
-						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('ADDRESS_'.strtoupper($rs['title']))?><span class="required">*</span>
+						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate('ADDRESS_'.strtoupper($rs['title']))?><span class="required">*</span>
 						                   </label>
 						                   <div class="col-md-12 col-sm-12 col-xs-12">
 						                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"><?php echo $lang['description']?></textarea>
@@ -111,7 +111,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	                <!-- 
 	                
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php //echo $tr->translate("TITLE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("TITLE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php //echo $row['title']?>"  name="title" id="title" dojoType="dijit.form.TextBox" class="fullside"  />
@@ -119,7 +119,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	                </div>
 	                 -->
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Latitude");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Latitude");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="hidden" dojoType="dijit.form.TextBox" name="id"  id="id" value="<?php echo $row['id'];?>" class="fullside" />
@@ -127,56 +127,56 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Longitude");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Longitude");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['longitude']?>"  name="longitude" id="longitude" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['phone']?>"  name="phone" id="phone" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['email']?>"  name="email" id="email" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("WEBSITE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("WEBSITE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['website']?>"  name="website" id="website" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FACEBOOK");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FACEBOOK");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['facebook']?>"  name="facebook" id="facebook" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("YOUTUBE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("YOUTUBE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['youtube']?>"  name="youtube" id="youtube" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INSTAGRAM");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INSTAGRAM");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['instagram']?>"  name="instagram" id="instagram" dojoType="dijit.form.TextBox" class="fullside"  />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OTHER_SOCIAL");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OTHER_SOCIAL");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $row['other_social']?>"  name="other_social" id="other_social" dojoType="dijit.form.TextBox" class="fullside"  />
@@ -184,7 +184,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	                </div>
 	                <!-- 
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php //echo $tr->translate("ADDRESS");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("ADDRESS");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input style="min-height: 80px;" type="text" value="<?php //echo $row['address']?>"  name="address" id="address" dojoType="dijit.form.Textarea" class="fullside"  />

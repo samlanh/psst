@@ -39,25 +39,25 @@ $baseurl = $this->baseUrl();
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("RETURN_INFO");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("RETURN_INFO");?> 
 	                   </label>
 	                </div>
 	        		<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RETURN_NO");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RETURN_NO");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input dojoType="dijit.form.TextBox" class="fullside"   name="borrow_id" id="borrow_id" value="<?php echo $this->borr_no;?>"  type="text" readonly>
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RETURN_DATE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RETURN_DATE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input class="fullside"  dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}">
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<textarea id="notes" class="fullside" name="notes" dojoType="dijit.form.Textarea" style="min-height:60px;"><?php echo $this->rs_return['note']?></textarea>	
@@ -66,7 +66,7 @@ $baseurl = $this->baseUrl();
 	            </div>
 	            <div class="col-md-8 col-sm-12 col-xs-12">
 	            	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("DETAIL_INFORMATION");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("DETAIL_INFORMATION");?> 
 	                   </label>
 	                </div>
 					

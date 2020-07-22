@@ -70,7 +70,7 @@ body, #dijitEditorBody {
 						        <div class="tab-pane fade <?php if ($key<1){echo "active in";}?>" id="<?php echo $alias;?>" role="tabpanel">
 						        	<div class="col-md-12 col-sm-12 col-xs-12">
 						                <div class="form-group">
-						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
 						                   </label>
 						                   <div class="col-md-7 col-sm-7 col-xs-12">
 						                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="<?php echo $lang['title']?>" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
@@ -78,7 +78,7 @@ body, #dijitEditorBody {
 						                   </div>
 						                </div>
 						                <div class="form-group">
-						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
 						                   </label>
 						                   <div class="col-md-12 col-sm-12 col-xs-12">
 						                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"><?php echo $lang['description']?></textarea>
@@ -100,7 +100,7 @@ body, #dijitEditorBody {
 			                  ?>
 						        	<div class="col-md-12 col-sm-12 col-xs-12">
 						                <div class="form-group">
-						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+						                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
 						                   </label>
 						                   <div class="col-md-7 col-sm-7 col-xs-12">
 						                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="<?php echo $lang['title']?>" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
@@ -108,7 +108,7 @@ body, #dijitEditorBody {
 						                   </div>
 						                </div>
 						                <div class="form-group">
-						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+						                   <label class="control-label col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
 						                   </label>
 						                   <div class="col-md-12 col-sm-12 col-xs-12">
 						                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"><?php echo $lang['description']?></textarea>
@@ -121,7 +121,7 @@ body, #dijitEditorBody {
 	            </div>
 	        	<div class="col-md-4 col-md-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"><?php echo $tr->translate("ORDERING");?> :
+	                   <label class="control-label col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("ORDERING");?> :
 	                   </label>
 	                   <div class="col-md-9 col-sm-9 col-xs-12">
 	                   		<input type="hidden" dojoType="dijit.form.TextBox" name="id"  id="id" value="<?php echo $row['id'];?>" class="fullside" />
@@ -129,7 +129,7 @@ body, #dijitEditorBody {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-sm-3 col-sm-3 col-xs-12" for="first-name">
+	                   <label class="control-label col-sm-3 col-sm-3 col-xs-12" >
 							<?php echo $tr->translate("STATUS");?>
 	                   </label>
                    		<div class="col-md-9 col-sm-9 col-xs-12">

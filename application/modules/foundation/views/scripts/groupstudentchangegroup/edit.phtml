@@ -38,7 +38,7 @@
 				<div class="card-box">
 		        	<div class="col-md-8 col-sm-8 col-xs-12 search-blog">
 		                <div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("FROM_GROUP");?> 
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("FROM_GROUP");?> 
 		                   </label>
 		                </div>
 		                <div class="form-group">
@@ -48,7 +48,7 @@
 			                </div>
 			            </div>
 		                <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_GROUP");?>  :
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_GROUP");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<select dojoType="dijit.form.FilteringSelect" required="required" readOnly="readOnly"  class="fullside" id="from_group" name="from_group" type="text" queryExpr="*${0}*" autoComplete="false" onchange="toStudentGroup(1);getStudentFromGroup();">
@@ -60,7 +60,7 @@
 		                   </div>
 		                </div>
 		                 <div class="form-group">
-		                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DETAIL")?> :
+		                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("DETAIL")?> :
 		                   </label>
 		                </div>
 		                <div class="form-group">
@@ -89,10 +89,10 @@
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog">
 		            	<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TO_GROUP");?></label>
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TO_GROUP");?></label>
 		                </div>
 		                <div class="form-group">
-		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_GROUP");?> <span class="required">*</span> :
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_GROUP");?> <span class="required">*</span> :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   			<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" queryExpr="*${0}*" autoComplete="false" onchange="toStudentGroup(2);popupAddGroup();">
@@ -105,7 +105,7 @@
 		                   </div>
 		                </div>
 		                <div class="form-group">
-		                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DETAIL")?> :
+		                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("DETAIL")?> :
 		                   </label>
 		                </div>
 		                <div class="form-group">
@@ -114,7 +114,7 @@
 		                   </div>
 		                </div>
 		                <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>  :
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text" queryExpr="*${0}*" autoComplete="false">
@@ -125,21 +125,21 @@
 		                   </div>
 		                </div>
 		                <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("MOVING_DATE");?>  :
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MOVING_DATE");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<input  dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="moving_date" name="moving_date" value="<?php echo $this->rs['moving_date'];?>" type="text">
 		                   </div>
 		                </div>
 		                 <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>  :
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<input dojoType="dijit.form.TextBox" class="fullside" value="<?php echo $this->rs['note'];?>" id="note" name="note" type="text" />
 		                   </div>
 		                </div>
 		                 <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>  :
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<select class="fullside" dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">

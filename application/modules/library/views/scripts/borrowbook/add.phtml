@@ -54,11 +54,11 @@ $baseurl = $this->baseUrl();
 					<div class="col-md-6 col-sm-12 col-xs-12">
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="form-group">
-							   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
+							   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
 							   </label>
 							</div>
 							<div class="form-group">
-							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CHOOSE_ONE");?> <span class="required">*</span> :
+							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHOOSE_ONE");?> <span class="required">*</span> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<select name="type" id="type" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="hideControll()" >
@@ -70,7 +70,7 @@ $baseurl = $this->baseUrl();
 							   </div>
 							</div>
 							<div class="form-group">
-							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> :
+							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_ID");?> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<span id="span_stu_id">
@@ -87,7 +87,7 @@ $baseurl = $this->baseUrl();
 							   </div>
 							</div>
 							 <div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name">
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
 								 <span id="student_name_lbl"><?php echo $tr->translate("STUDENT_NAME")?></span><span id="name_lbl"><?php echo $tr->translate("NAME")?></span> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -106,7 +106,7 @@ $baseurl = $this->baseUrl();
 							   </div>
 							</div>
 							 <div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input dojoType="dijit.form.TextBox"   name="phone" id="phone" value="" class="fullside"  type="text">
@@ -117,32 +117,32 @@ $baseurl = $this->baseUrl();
 					<div class="col-md-6 col-sm-12 col-xs-12">
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="form-group">
-							   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
+							   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
 							   </label>
 							</div>
 							<div class="form-group">
-							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BORROW_NO");?> :
+							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BORROW_NO");?> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->borr_no;?>"  type="text" readonly class="fullside" >
 							   </div>
 							</div>
 							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BORROW_DATE");?> :
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BORROW_DATE");?> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" class="fullside" value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}" type="text">
 							   </div>
 							</div>
 							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RETURN_DATE");?> :
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RETURN_DATE");?> :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}">
 							   </div>
 							</div>
 							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT");?> (<?php echo $tr->translate("DAY");?>) :
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> (<?php echo $tr->translate("DAY");?>) :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountday" id="amountday" value="" onkeyup="setEndDate();" type="text"   class="fullside">
@@ -151,7 +151,7 @@ $baseurl = $this->baseUrl();
 						</div>
 					</div>	
 					<div class="col-md-12 col-sm-12 col-xs-12">
-						<label class="control-label  col-md-12 col-sm-12 col-xs-12" for="first-name">&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("NOTE");?> :
+						<label class="control-label  col-md-12 col-sm-12 col-xs-12" >&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("NOTE");?> :
 						</label>
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<textarea style="min-height: 60px;" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"></textarea>	

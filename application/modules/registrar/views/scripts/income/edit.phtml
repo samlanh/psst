@@ -44,7 +44,7 @@ $frm = $this->frm_expense;
 	    	<div class="card-box">
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
 	    			<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="branch_id" id="branch_id" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="filterClient();" >
@@ -55,28 +55,28 @@ $frm = $this->frm_expense;
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" style="color:red;" name="invoice"  value="<?php echo $this->rs['invoice'];?>"  id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INCOME_CATEGORY");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_CATEGORY");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input id="cate_income" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INCOME_TITLE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_TITLE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="title" id="title" dojoType="dijit.form.TextBox" value="<?php echo $this->rs['title'];?>" class="fullside" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FOR_DATE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FOR_DATE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['date'];?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" />
@@ -84,7 +84,7 @@ $frm = $this->frm_expense;
 	                </div>
 	                
 					<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
@@ -96,14 +96,14 @@ $frm = $this->frm_expense;
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_INCOME");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_INCOME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="total_income" id="total_income" required="true" value="<?php echo $this->rs['total_amount'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAYMENT_METHOD");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
@@ -116,14 +116,14 @@ $frm = $this->frm_expense;
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CHEQUE_NO");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="cheqe_no" id="cheqe_no"  value="<?php echo $this->rs['cheqe_no'];?>" dojoType="dijit.form.TextBox" class="fullside" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 							<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:65px;" ><?php echo $this->rs['description'];?></textarea>							

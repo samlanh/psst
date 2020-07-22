@@ -94,14 +94,14 @@ input.btn_borwse_image {
 			        <div class="tab-pane fade <?php if ($key<1){echo "active in";}?>" id="<?php echo $alias;?>" role="tabpanel">
 			        	<div class="col-md-12 col-sm-12 col-xs-12">
 			                <div class="form-group">
-			                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+			                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
 			                   </label>
 			                   <div class="col-md-7 col-sm-7 col-xs-12">
 			                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
 			                   </div>
 			                </div>
 			                <div class="form-group">
-			                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+			                   <label class="control-label col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
 			                   </label>
 			                   <div class="col-md-12 col-sm-12 col-xs-12">
 			                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"></textarea>
@@ -118,14 +118,14 @@ input.btn_borwse_image {
                       	$alias = str_replace(' ','',$rs['title']);?>
 		        	<div class="col-md-12 col-sm-12 col-xs-12">
 		                <div class="form-group">
-		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<input   type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="title<?php echo str_replace(' ','',$rs['title']);?>"  id="title<?php echo str_replace(' ','',$rs['title']);?>" value="" class="fullside" placeholder="<?php echo $tr->translate("TITLE_IN_".strtoupper($rs['title']));?>" />
 		                   </div>
 		                </div>
 		                <div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate('CONTENT_'.strtoupper($rs['title']))?><span class="required">*</span>
 		                   </label>
 		                   <div class="col-md-12 col-sm-12 col-xs-12">
 		                 	  <textarea class="ckeditor"   style="min-height:400px; height:400px;" id="description<?php echo str_replace(' ','',$rs['title']);?>" name="description<?php echo str_replace(' ','',$rs['title']);?>"></textarea>
@@ -138,7 +138,7 @@ input.btn_borwse_image {
 			</div>
 			<div class="col-md-4 col-sm-12 col-xs-12">
 				<div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT");?>
+                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT");?>
                    </label>
                    <div class="col-md-7 col-sm-7 col-xs-12">
                    <select  class="fullside" name="parent" id="parent" placeholder="<?php echo $tr->translate("PARENT");?>" class="fullside"  dojoType="dijit.form.FilteringSelect" >
@@ -151,7 +151,7 @@ input.btn_borwse_image {
                 </div>
                 
                  <div class="form-group">
-                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ORDERING");?>
+                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ORDERING");?>
                    </label>
                    <div class="col-md-7 col-sm-7 col-xs-12">
 	                   <input dojoType="dijit.form.NumberTextBox" required="true" class="fullside" id="ordering" name="ordering" value="0" type="text">

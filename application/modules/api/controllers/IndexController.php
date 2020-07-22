@@ -69,7 +69,10 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->loginAction($postData);
     			}else if ($GetData['url']=="changePassword"){// change password
     				$_dbAction->changePasswordAction($postData);
-    			}else{
+    			}else if ($GetData['url']=="addtoken"){// change password
+    				$_dbAction->addTokenAction($postData);
+    			}
+    			else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);
     			}
 				

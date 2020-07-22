@@ -46,7 +46,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 			$rs_groupscore = $dbpush->getSumCutScorebyGroup($_data['group']);
 			$total_cutscore = $rs_groupscore['score_short'];
-// 			$dbpush->getTokenUser($_data['group'],null, 4);
+			
+			$dbpush->pushNotification(null,$_data['group'],2,4);
+			
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
@@ -156,7 +158,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$old_studentid = 0;
 		
 		$dbpush = new Application_Model_DbTable_DbGlobal();
+		$dbpush->pushNotification(null,$_data['group'],2,4);
+		
 		$rs_groupscore = $dbpush->getSumCutScorebyGroup($_data['group']);
+		
 		$total_cutscore = $rs_groupscore['score_short'];
 		
 		if(!empty($_data['identity'])){

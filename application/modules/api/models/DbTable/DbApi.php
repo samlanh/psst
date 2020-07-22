@@ -1068,23 +1068,39 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
     	}
     }
-    function generateToken($_data){
+    function generateToken($row){
     	$db = $this->getAdapter();
     	try{
-    		$token = md5(time()).date("Y").date("m").date("d");
-    		$token = empty($_data['mobileToken'])?$token:$_data['mobileToken'];
-    		$_arr =array(
-    				'stu_id' 	=> $_data['id'],
-    				'token' 	=> $token,
-    				'date' 		=> date("Y-m-d H:i:s"),
-    				'device_type' => $_data['deviceType'],
-    				'device_model' 		=> "",
-    				'serial' 		=> "",
-    		);
     		$this->_name = "mobile_mobile_token";
-    		$this->insert($_arr);
     		
-//     		$db->commit();
+    		$token = $row['mobileToken'];
+    		
+    		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' LIMIT 1";
+    		$rsid = $db->fetchOne($sql);
+    		if(!empty($rsid)){
+    			$_arr =array(
+    					'stu_id' 	=> $row['id'],
+    					'date' 		=> date("Y-m-d H:i:s"),
+    					'device_type' => $row['deviceType'],
+    					'device_model' 		=> "",
+    			);
+    			$where ='id= '.$rsid;
+    			$this->update($_arr, $where);
+    		}else{
+	    		$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['id']." AND token='".$token."' LIMIT 1";
+	    		$rs = $db->fetchOne($sql);
+	    		if(empty($rs)){
+	    			$_arr =array(
+	    				'stu_id' 	=> $row['id'],
+	    				'token' 	=> $token,
+	    				'date' 		=> date("Y-m-d H:i:s"),
+	    				'device_type' => $row['deviceType'],
+	    				'device_model' 	> "",
+	    			);
+	    			$this->insert($_arr);
+	    		}
+    		}
+    		
     		return $token;
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -1824,6 +1840,21 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    				'value' =>$e->getMessage(),
 	    			);
     			return $result;
+    		}
+    	}
+    	function addAppTokenId($_data){
+    		$db = $this->getAdapter();
+    		try{
+    			$this->_name='mobile_mobile_token';
+    			$array = array(
+    				'token'	=>$_data['token'],
+    				'device_type'=>1,
+    				'date'	=>date('Y-m-d'),
+    			);
+    			return $this->insert($array);
+    		}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			return false;
     		}
     	}
     	

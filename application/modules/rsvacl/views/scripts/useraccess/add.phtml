@@ -1,39 +1,37 @@
 <title>User Access</title>
 <style>
-fieldset.fifthy {	
-	border-right: 0px;
-	width: 30%;
-}
-fieldset.fifthy table{
-	padding-right: 1px;
-}
-table.user td{
-	vertical-align: top;   
-}
+	fieldset.fifthy {	
+		border-right: 0px;
+		width: 30%;
+	}
+	fieldset.fifthy table{
+		padding-right: 1px;
+	}
+	table.user td{
+		vertical-align: top;   
+	}
 </style>       
-
 <?php 
-	
-	  //$acl=($this->acl=='')? array():$this->acl;
 	  $acl_name=($this->acl_name=='')? array(): $this->acl_name;
 	  $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	  $df=$this->data;
+	  
 	  $module_str = array(
-	  		'home'=>'HOME_PAGE',
-	  		'test'=>'STUDENT_TEST',
-	  		'registrar'=>'REGISTRAR',
-	  		'global'=>'OTHER_INFOMATION',
-	  		'foundation'=>'FOUNDATION',
-	  		'issue'=>'STUDENT_AFFAIR',
-	  		'accounting'=>'ACCOUNTING',
-	  		'stock'=>'ORIGINAL_PRODUCT',
-	  		'library'=>'LIBRARY',
-	  		'allreport'=>'ALL_REPORT',
-	  		'mobileapp'=>'mobileapp',
-	  		'rsvacl'=>'ACL',
-	  		'setting'=>'SETTING',
-	  		'placement'=>'PLACEMENT_TEST',
-	  	);
+  		'home'=>'HOME_PAGE',
+  		'test'=>'STUDENT_TEST',
+  		'registrar'=>'REGISTRAR',
+  		'global'=>'OTHER_INFOMATION',
+  		'foundation'=>'FOUNDATION',
+  		'issue'=>'STUDENT_AFFAIR',
+  		'accounting'=>'ACCOUNTING',
+  		'stock'=>'ORIGINAL_PRODUCT',
+  		'library'=>'LIBRARY',
+  		'allreport'=>'ALL_REPORT',
+  		'mobileapp'=>'MOBILEAPP',
+  		'rsvacl'=>'ACL',
+  		'setting'=>'SETTING',
+  		'placement'=>'PLACEMENT_TEST',
+	  );
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -57,8 +55,7 @@ table.user td{
 					</td>
 				</tr>
 				<tr>
-					<td>
-					</td>
+					<td></td>
 				</tr>
 				<tr>
 					<td>
@@ -66,7 +63,6 @@ table.user td{
 							$old_module = "";
 						?>
 						<div data-dojo-type="dijit/layout/TabContainer" style="width: 98%; height: 600px;" tabPosition="left-h" tabStrip="true">
-							
 							<?php if(!empty($this->rows)){foreach ($this->rows as $key=>$rs){ ?>
 								<?php if($old_module != $rs['module']){
 								   if($key==0){
@@ -102,7 +98,6 @@ table.user td{
 											</td>
 										</tr>
 								<?php }}?>
-										
 										<?php if($rs['is_menu'] == 1){
 													$space="";
 													$style="style='font-weight:bold;'";

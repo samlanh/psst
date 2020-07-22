@@ -86,15 +86,24 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					'type'			=>1, //for attendence
 				);
 				$id=$this->insert($_arr);
+				
+// 				$dbpush = new Application_Model_DbTable_DbGlobal();
+// 				$dbpush->pushNotification(null,$_data['group'],2,2);
+				
 			}
+			$stu_come='';$stu_absent='';
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					if ($_data['attedence'.$i]!=1){
-						if($_data['attedence'.$i]!=1){//ក្រៅពីមក sent all
-							$dbpush->getTokenUser($_data['student_id'.$i],null, 2);
+					if ($_data['attedence'.$i]!=1){//ក្រៅពីមក sent all
+						
+						if(empty($stu_absent)){
+							$stu_absent=$_data['student_id'.$i];
+						}else{
+							$stu_absent=$stu_absent.','.$_data['student_id'.$i];
 						}
+						
 						$arr = array(
 							'attendence_id'	=>$id,
 							'stu_id'		=>$_data['student_id'.$i],
@@ -104,7 +113,18 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 						$this->_name ='rms_student_attendence_detail';
 						$this->insert($arr);
 					}
+					else{
+						if(empty($stu_come)){
+							$stu_come=$_data['student_id'.$i];
+						}else{
+							$stu_come=$stu_come.','.$_data['student_id'.$i];
+						}
+						
+					}
 				}
+				
+				$dbpush->pushNotification($stu_absent,null,3,2);//absent
+				$dbpush->pushNotification($stu_come,null,3,2);//come
 			}
 		  $db->commit();
 		}catch (Exception $e){

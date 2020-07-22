@@ -1054,6 +1054,37 @@ function getAllgroupStudyNotPass($action=null){
 //    	$sql="SELECT token FROM `mobile_mobile_token` WHERE stu_id=$student_id";
 //    	return $this->getAdapter()->fetchAll($sql);
 //    }
+	function getTokenbyGroupId($groupId){ //get android token by groupid
+		$db = $this->getAdapter();
+		$sql_android="SELECT mb.`token`
+				FROM `rms_group_detail_student` AS sd
+					,`mobile_mobile_token` AS mb
+				WHERE sd.`group_id` = ".$groupId."
+					AND sd.`stu_id` = mb.`stu_id`
+					AND stop_type=0
+					AND mb.device_type=1 ";
+		return  $db->fetchCol($sql_android);
+	}
+	function getTokenbyStudentId($studentId){ //get android token by groupid
+		$db = $this->getAdapter();
+		$sql_android="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE device_type=1 AND t.`stu_id` IN(".$studentId.") LIMIT 1 ";
+		return  $db->fetchCol($sql_android);
+	}
+	function getTokenbyDegreeId($degreeId){ //get android token by groupid
+		$db = $this->getAdapter();
+		$sql_android="SELECT 
+        				mb.`token`
+					  FROM 
+		        		`rms_group_detail_student` AS sd
+		        		,`mobile_mobile_token` AS mb
+		        			WHERE sd.`degree` = ".$degreeId."
+		        		AND sd.`stu_id` = mb.`stu_id`
+		        		AND stop_type=0
+		        		AND is_subspend=0
+		        		AND mb.device_type=1 ";
+		return  $db->fetchCol($sql_android);
+	}
+   
    function setTitleTonotification($title_id){
    	$db = $this->getAdapter();
    	$title_label = array(
@@ -1065,39 +1096,82 @@ function getAllgroupStudyNotPass($action=null){
    			6=>'lbl_smsnotification',
    			7=>'lbl_paymentnotification',
    			8=>'lbl_replyfeedback',
-   			);
+   		);
    	$sql="SELECT keyValue FROM `moble_label` 
    		WHERE keyName='".$title_label[$title_id]."'";
    	return $db->fetchOne($sql);
    }
-   function getTokenUser($student=null,$group=null,$title_id){
-   		$db = $this->getAdapter();
-   		if (!empty($group)){//select by gorup
-	   		$sql_android="
-		 		SELECT mb.`token`
-				FROM `rms_group_detail_student` AS sd
-				,`mobile_mobile_token` AS mb
-				WHERE sd.`group_id` = $group
-				AND sd.`stu_id` = mb.`stu_id` AND device_type=1 ";
-	   		
-	   		$sql_ios="
-	   		SELECT mb.`token`
-	   		FROM `rms_group_detail_student` AS sd
-	   		,`mobile_mobile_token` AS mb
-	   		WHERE sd.`group_id` = $group
-	   		AND sd.`stu_id` = mb.`stu_id` AND device_type=0 ";
-	   		$androidToken =  $db->fetchCol($sql_android);
-	   		$iosToken =  $db->fetchCol($sql_ios);
-	   		$this->pushSendNotification($androidToken, $iosToken, $title_id);
-   		}else if (!empty($student)){//by student id
-   			$sql_android="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE device_type=1 AND t.`stu_id` =$student";
-   			$sql_ios="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE device_type=0 AND t.`stu_id` =$student";
-   			$androidToken =  $db->fetchCol($sql_android);
-   			$iosToken =  $db->fetchCol($sql_ios);
-   			$this->pushSendNotification($androidToken, $iosToken, $title_id);
-   		}else{//all 
-   			$this->sendMessageAllDevice($title_id);
+   function pushNotification($student=null,$groupId=null,$urlType,$titleId=null,$textTitle=null){//$urlType 1payment,2score,3att,4discipline,5news
+   		
+   		if(AUTO_PUSH_NOTIFICATION==0){
+   			return false;
    		}
+   		$db = $this->getAdapter();
+   		
+   		if($textTitle!=null){
+   			$title = $textTitle;
+   		}else{
+   			$title = $this->setTitleTonotification($titleId);
+   		}
+   		
+   		
+   		
+   		$content = array(
+   			"en" =>$title,
+   		);
+   		 
+   		$data_notify = array(
+   			"title" => $title,
+   			"urlType" => $urlType
+   		);
+   		
+   		if (!empty($groupId)){//select by gorup
+   			$androidToken = $this->getTokenbyGroupId($groupId);
+   			
+   			$fields = array(
+   					'app_id' => APP_ID,
+   					'include_player_ids' => $androidToken,
+   					'data' => $data_notify,
+   					'contents' => $content
+   			);
+   			
+   		}else if (!empty($student)){//by student id
+   			$androidToken = $this->getTokenbyStudentId($student);
+   			$fields = array(
+   					'app_id' => APP_ID,
+   					'include_player_ids' => $androidToken,
+   					'data' => $data_notify,
+   					'contents' => $content
+   			);
+//    			$this->pushSendNotification($androidToken, $iosToken, $title_id);
+   		}else{//all 
+   			$fields = array(
+   					'app_id' => APP_ID,
+   					'included_segments' => array('Active Users'),
+   					'data' => $data_notify,
+   					'contents' => $content,
+   					'headings'=>$content,
+   					//'subtitle'=>array('en'=>$data['descriptionKhmer']),
+   					//'template_id'=>'a13d6177-c4fd-4ba0-addf-07d9557b0460'
+   			);
+   		}
+   		
+//    		print_r($androidToken);exit();
+   		$fields = json_encode($fields);
+   		 
+   		$ch = curl_init();
+   		curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+   		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+   				'Authorization: Basic OGY3MGQ2M2EtMmQ3OS00MjZhLTk2MjYtYjYzMzExYTg5YWRm'));
+   		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+   		curl_setopt($ch, CURLOPT_HEADER, FALSE);
+   		curl_setopt($ch, CURLOPT_POST, TRUE);
+   		curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+   		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+   		 
+   		$response = curl_exec($ch);
+   		curl_close($ch);
+   		
    }
    
 //    function pushSendNotification($studentToken,$title_id,$body='',$data=''){//$stu_id//google
@@ -1216,6 +1290,8 @@ function getAllgroupStudyNotPass($action=null){
 	   
 	   	$response = curl_exec($ch);
 	   	curl_close($ch);
+	   	
+	   	exit();
    }
    
    //function for push all device

@@ -437,13 +437,14 @@ function checkSession(){
 function doPrint(){
 	<?php 
 		if($action=='rptreceiptdetail'){
-		$key = new Application_Model_DbTable_DbKeycode();
-		$result=$key->getKeyCodeMiniInv(TRUE);
-		$amount_print = $result['receipt_print'];
-		for($prin=0;$prin<$amount_print-1;$prin++){?>
-			dojo.byId("printblog2").innerHTML ='';
-			dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
-	<?php }}?>
+			$key = new Application_Model_DbTable_DbKeycode();
+			$result=$key->getKeyCodeMiniInv(TRUE);
+			$amount_print = $result['receipt_print'];
+			for($prin=0;$prin<$amount_print-1;$prin++){?>
+				dojo.byId("printblog2").innerHTML ='';
+				dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
+		<?php }
+		}?>
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('divPrint').innerHTML ;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();

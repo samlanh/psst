@@ -10,7 +10,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			if ($row['status']){
 				if(!empty($row['value'])){
 					$row['value']['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
-					$row['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
+					$row['value']['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
 					$token = $db->generateToken($row['value']);
 					
 					$arrResult = array(
@@ -490,6 +490,33 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		}
 		print_r(Zend_Json::encode($arrResult));
 		exit();
+	}
+	public function addTokenAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$recordId = $db->addAppTokenId($_data);
+			if(!empty($recordId)){
+				$arrResult = array(
+					"code" => "SUCCESS",
+					"result" =>$recordId,
+				);
+				
+			}else{
+				$arrResult = array(
+					"code" => "FAIL",
+					"message" => "INVALID_OLD_PASSWORD",
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
 	}
 	
 }

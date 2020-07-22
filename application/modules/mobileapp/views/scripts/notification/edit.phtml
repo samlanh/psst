@@ -119,14 +119,28 @@ body, #dijitEditorBody {
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
 							<?php echo $tr->translate("NORTIFICATION_OPT");?>
 	                   </label>
-                   		<div class="col-md-7 col-sm-7 col-xs-12">
+                   	   <div class="col-md-7 col-sm-7 col-xs-12">
                    			<input type="hidden" dojoType="dijit.form.TextBox" name="id"  id="id" value="<?php echo $row['id'];?>" class="fullside" />
 	                   		<select name="opt_notification" id="opt_notification" class="fullside" onChange="Checkchange();" dojoType="dijit.form.FilteringSelect" >
 								<option value="1" <?php if ($row['opt_notification']==1){ echo 'selected="selected"';} ?>><?php echo $tr->translate("FOR_ALL");?></option>
+								<option value="4" <?php if ($row['opt_notification']==4){ echo 'selected="selected"';} ?>><?php echo $tr->translate("DEGREE");?></option>
 								<option value="2" <?php if ($row['opt_notification']==2){ echo 'selected="selected"';} ?>><?php echo $tr->translate("GROUP");?></option>
 								<option value="3" <?php if ($row['opt_notification']==3){ echo 'selected="selected"';} ?>><?php echo $tr->translate("STUDENT");?></option>
 							</select>
-	                   </div>
+	                    </div>
+	                </div>
+	                <div class="form-group">
+		            	<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+							<?php echo $tr->translate("DEGREE");?>
+	                   </label>
+                   		<div class="col-md-7 col-sm-7 col-xs-12">
+							<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="0"><?php echo $tr->translate("PLEASE_SELECT");?></option>
+								<?php if(!empty($this->rsDegree))foreach($this->rsDegree as $rs){?>
+								<option value="<?php echo $rs['id'];?>" <?php if ($row['degree']==$rs['id']){ echo 'selected="selected"';} ?>><?php echo $rs['name'];?></option>
+								<?php }?>
+							</select>
+                  		 </div>
 	                </div>
 	            	<div class="form-group">
 	                    <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
@@ -187,14 +201,13 @@ body, #dijitEditorBody {
 <script>
 dojo.require("dijit.form.DateTextBox");
 dojo.ready(function(){
-	try{
-		Checkchange();
-	}catch(e){
-		alert(e);
-	}
+	Checkchange();
 });
 
 function Checkchange(){
+		dijit.byId('degree').set('readonly',true); 
+		dijit.byId('degree').set('disabled',true); 
+		
 	  if (dijit.byId("opt_notification").get('value')==1){
 		  dijit.byId('group').reset();
 		  dijit.byId('student').reset();
@@ -222,6 +235,18 @@ function Checkchange(){
 		  dijit.byId('student').set('required',true); 
 		  dijit.byId('student').set('readonly',false); 
 		  dijit.byId('student').set('disabled', false);
+	  }else if (dijit.byId("opt_notification").get('value')==4){
+		  dijit.byId('degree').set('readonly',false); 
+		  dijit.byId('degree').set('disabled',false); 
+		  
+		  dijit.byId('group').reset();
+		  dijit.byId('group').set('required',false); 
+		  dijit.byId('group').set('readonly',true); 
+		  dijit.byId('group').set('disabled', true);
+		  
+		  dijit.byId('student').set('required',false); 
+		  dijit.byId('student').set('readonly',true); 
+		  dijit.byId('student').set('disabled', true);
 	  }
 }
 </script>

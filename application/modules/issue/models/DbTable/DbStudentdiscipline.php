@@ -87,12 +87,19 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 				$id=$this->insert($_arr);
 			}
 			$dbpush = new  Application_Model_DbTable_DbGlobal();
+			$stu_mistack='';
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
 					if(isset($_data['have_mistake'.$i])){
 						if (!empty($_data['mistake_type'.$i])){
-							$dbpush->getTokenUser($_data['student_id'.$i],null, 3);
+							
+							if(empty($stu_mistack)){
+								$stu_mistack=$_data['student_id'.$i];
+							}else{
+								$stu_mistack=$stu_mistack.','.$_data['student_id'.$i];
+							}
+							
 							$arr = array(
 									'attendence_id'=>$id,
 									'stu_id'=>$_data['student_id'.$i],
@@ -104,6 +111,8 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 						}
 					}
 				}
+				$dbpush->pushNotification($stu_mistack,null,4,3);
+				
 			}
 		  $db->commit();
 		}catch (Exception $e){

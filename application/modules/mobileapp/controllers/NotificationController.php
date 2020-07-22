@@ -30,11 +30,11 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","DATE","STATUS");
+			$collumns = array("TITLE","NORTIFICATION_OPT","DATE","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'notification','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'option_type'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -66,6 +66,8 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	        $this->view->all_student = $dbre->getAllGerneralOldStudent();
 	        $dbglobal = new Application_Model_DbTable_DbGlobal();
 	        $this->view->lang = $dbglobal->getLaguage();
+	        
+	        $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
 	        
 	    }catch (Exception $e){
 	        Application_Form_FrmMessage::message("Application Error");
@@ -106,6 +108,7 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	    
 	    $dbglobal = new Application_Model_DbTable_DbGlobal();
 	    $this->view->lang = $dbglobal->getLaguage();
+	    $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
 
    }
    function deleteAction(){

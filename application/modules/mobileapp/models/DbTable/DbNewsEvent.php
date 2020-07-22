@@ -73,6 +73,9 @@ public static function getUserId(){
     				$string = "Image Upload failed";
     		}
     		$dbglobal = new Application_Model_DbTable_DbGlobal();
+    		
+    		$dbglobal->pushNotification(null,null,5,null,$data['titleKhmer']);
+    		
     		$lang = $dbglobal->getLaguage();
     		$arr = array(
     				'status'		=>$data['status'],
@@ -119,20 +122,20 @@ public static function getUserId(){
     					$title = str_replace(' ','',$row['title']);
     					if (!empty($data['iddetail'.$title])){
     						$arr_article = array(
-    								'news_id'=>$article_id,
-		    						'title'=>$data['title'.$title],
-		    						'description'=>$data['description'.$title],
-		    						'lang'=>$row['id'],
+    							'news_id'=>$article_id,
+		    					'title'=>$data['title'.$title],
+		    					'description'=>$data['description'.$title],
+		    					'lang'=>$row['id'],
     						);
     						$this->_name="mobile_news_event_detail";
     						$wheredetail=" news_id=".$data['id']." AND id=".$data['iddetail'.$title];
     						$this->update($arr_article,$wheredetail);
     					}else{
     						$arr_article = array(
-    								'news_id'=>$article_id,
-		    						'title'=>$data['title'.$title],
-		    						'description'=>$data['description'.$title],
-		    						'lang'=>$row['id'],
+    							'news_id'=>$article_id,
+		    					'title'=>$data['title'.$title],
+		    					'description'=>$data['description'.$title],
+		    					'lang'=>$row['id'],
     						);
     						$this->_name="mobile_news_event_detail";
     						$this->insert($arr_article);

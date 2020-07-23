@@ -102,6 +102,7 @@ class IndexController extends Zend_Controller_Action
 					if (empty($crm_acl)){
 						$session_user->isnot_crm_acl= 1;
 					}
+					$session_user->timeout= time();
 					
 					$session_user->lock();
 					$log=new Application_Model_DbTable_DbUserLog();
@@ -580,6 +581,37 @@ class IndexController extends Zend_Controller_Action
 			}
 			print_r(Zend_Json::encode($return));
 			exit();
+		}
+	}
+	
+	public function reloadrAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+			$session_user->timeout= time();
+			print_r(Zend_Json::encode($session_user->timeout));
+			exit();
+		}
+	}
+	public function sessioncheckAction(){
+	
+		if($this->getRequest()->isPost()){
+			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+			$t = time();
+			$t0 = $session_user->timeout;
+			$diff = $t - $t0;
+			//500 = 5 min
+			if ($diff > 1000 || !isset($t0))
+			{
+				$session_user->unsetAll();
+			}
+				
+			$db_global = new Application_Model_DbTable_DbGlobal();
+			$checkses = $db_global->checkSessionExpire();
+			if (empty($checkses)){
+				echo true; exit();
+			}
+			echo false; exit();
 		}
 	}
 }

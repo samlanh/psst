@@ -30,6 +30,8 @@ if($module!='default'){
 	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	$arr_module = $session_user->arr_acl;
 	$user_id = $session_user->user_id;
+	
+	
 	if(empty($username)){
 		$username =  $session_t->teacher_name;
 	}
@@ -38,6 +40,23 @@ if($module!='default'){
 	$level=$session_user->level;
 	if($level!=1 AND $module=='rsvacl'){
 	}	
+	
+	$t = time();
+	$t0 = $session_user->timeout;
+	$diff = $t - $t0;
+	//500 = 5 min
+	if ($diff > 1000 || !isset($t0))
+	{
+		$session_user->unsetAll();
+		Application_Form_FrmMessage::redirectUrl("/");
+		exit();
+	}
+	else
+	{
+		$session_user->unlock();
+		$session_user->timeout = time();
+		$session_user->lock();
+	}
  ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -343,6 +362,51 @@ span#message {
 </style>
 <!-- Custom Theme Scripts -->
 <script>
+$(document).ready(function(){
+	$("body").hover(function() {
+		updateTimeOut();
+		checkSessionExpire();
+	});
+});
+
+var urlReload = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'reloadr'));?> ';
+function updateTimeOut(){
+	var lang="";
+	jQuery.ajax({
+		url: urlReload,
+		type: "post",
+		data:{'lange':lang},
+		success: function(data){
+		},
+		error:function(err){
+			
+		}
+	});
+}
+
+var urlCheckSession = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'sessioncheck'));?> ';
+function checkSessionExpire(){
+	var lang="";
+	jQuery.ajax({
+		url: urlCheckSession,
+		type: "post",
+		data:{'lange':lang},
+		success: function(data){
+			if(data == true){
+				loadingBlock();
+				setTimeout(function () {
+					alert("<?php echo $tr->translate("Session Expire");?>");
+				  	window.location = '<?php echo $this->baseUrl();?>';
+			    }, 1000);
+				
+			}
+		},
+		error:function(err){
+			
+		}
+	});
+}
+
 var url_changelang = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'changelange'));?> ';
 function changeLange(lang){
 	jQuery.ajax({
@@ -413,23 +477,9 @@ jQuery(function () {
 	});
 })
 
-url_session = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'check-session'));?>';
+//url_session = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'check-session'));?>';
 function checkSession(){
-	dojo.xhrPost({
-		url: url_session,
-		content:{
-			'branch_id':1
-		},
-		handleAs:"json",
-		load: function(data) {
-		    if(data == false){
-				alert("Session Expired ! Please log in again ! ")
-				location.reload();
-			}
-		},
-		error: function(err) {
-		}
-	});
+	checkSessionExpire();
 }
 
 <?php if($module=='allreport' AND $action!='index' OR $action='allreports' OR $action='studentnearlyendservice' OR $action='studentpaymentlate'){?>

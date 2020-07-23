@@ -1,6 +1,7 @@
 <?php 
 $frm = $this->frm_search;
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$urlReceipt = $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";
 ?>
 <title><?php echo $tr->translate("OTHER_EXPENSE")?></title>
 <script>
@@ -52,5 +53,30 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		</div>
 	</div>
 </div>
-
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="receipt"){
+				url='<?php echo $urlReceipt;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"receipt": {name: "<?php echo $tr->translate("PAYMENT_VOUCHER");?>", icon: "fa-money", accesskey: "c"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>
 

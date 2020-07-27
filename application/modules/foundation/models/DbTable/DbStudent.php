@@ -370,11 +370,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					}
 				}
 				
+				$_dbfee = new Accounting_Model_DbTable_DbFee();
+				$feeID = empty($_data['academic_year'])?0:$_data['academic_year'];
+				$rowfee = $_dbfee->getFeeById($feeID);
+				$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+				
 				$_arr= array(
 						'branch_id'		=>$_data['branch_id'],
 						'user_id'		=>$this->getUserId(),
 						'student_id'	=>$id,
 						'fee_id'		=>$_data['academic_year'],
+						'academic_year'		=>$academicYear,
 						'note'			=>$_data['remark'],
 						'is_current'	=>1,
 						'is_new'		=>$_data['stu_denttype'],
@@ -655,12 +661,18 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				}
 			}
 			
+			$_dbfee = new Accounting_Model_DbTable_DbFee();
+			$feeID = empty($_data['academic_year'])?0:$_data['academic_year'];
+			$rowfee = $_dbfee->getFeeById($feeID);
+			$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+			
 			$currentFee =  $this->getCurentFeeStudentHistory($stu_id);
 			$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
 					'student_id'	=>$stu_id,
 					'fee_id'		=>$_data['academic_year'],
+					'academic_year'		=>$academicYear,
 					'note'			=>$_data['remark'],
 					'is_current'	=>1,
 					'is_new'		=>$_data['stu_denttype'],
@@ -669,7 +681,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			);
 			$this->_name="rms_student_fee_history";
 			if (!empty($currentFee)){
-				$where=$this->getAdapter()->quoteInto("is_current=?", 1);
+				$where="student_id = ".$stu_id." AND is_current=1";
 				$this->update($_arr, $where);
 			}else{
 				$_arr['create_date']=date("Y-m-d H:i:s");

@@ -167,6 +167,7 @@ class Allreport_Model_DbTable_DbRptReceiptVoid extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql =" SELECT
 			    	*,
+			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=ln_expense.branch_id LIMIT 1) AS branch_name,
 			    	(select CONCAT(last_name,' ',first_name) from rms_users as u where u.id = user_id) as user
     			FROM
     				ln_expense

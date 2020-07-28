@@ -83,6 +83,11 @@ table.tb-footer tr.style-head {
 						font-size:12px; 
 						height: 23px;
 					}
+					td.receiptNo,
+					td.receiptNo a{
+						font-weight: bold;
+						color: red;
+					}
 			</style>
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm;">
 				<tr>
@@ -109,28 +114,30 @@ table.tb-footer tr.style-head {
 						$totalvoidincome=0;
 						$totalvoidexpense=0;
 						?>
-							<table class="content-data" align="center" >	  
-								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
-									<td colspan="13" align="left" style="text-align:left;"><?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?></td>
-								  </tr>
-								  <tr class="style-head" align="center" style="font-size:10px;">
-									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
-									<td><?php echo $tr->translate("FINE"); ?></td>
-									<td><?php echo $tr->translate("TOTAL_PAYMENT"); ?></td>
-									<td><?php echo $tr->translate("Credit Memo"); ?></td>
-									<td><?php echo $tr->translate("PAID_AMOUNT"); ?></td>
-									<td><?php echo $tr->translate("BALANCE"); ?></td>
-									<td><?php echo $tr->translate("CREATE_DATE"); ?></td>
-									<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
-									<td><?php echo $tr->translate("VOID_BY"); ?></td>
-								  </tr>
-								 <?php $i=0; $total=0;if(!empty($this->void_stu)){foreach($this->void_stu as $key=>$rs){
+						
+						<table class="content-data" align="center" >	
+						<?php $i=0; $total=0;if(!empty($this->void_stu)){ ?>  
+							  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+								<td colspan="15" align="left" style="text-align:left;"><?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?></td>
+							  </tr>
+							  <tr class="style-head" align="center" style="font-size:10px;">
+								<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
+								<td><?php echo $tr->translate("FINE"); ?></td>
+								<td><?php echo $tr->translate("TOTAL_PAYMENT"); ?></td>
+								<td><?php echo $tr->translate("Credit Memo"); ?></td>
+								<td><?php echo $tr->translate("PAID_AMOUNT"); ?></td>
+								<td><?php echo $tr->translate("BALANCE"); ?></td>
+								<td><?php echo $tr->translate("CREATE_DATE"); ?></td>
+								<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								<td><?php echo $tr->translate("VOID_BY"); ?></td>
+							  </tr>
+								 <?php  foreach($this->void_stu as $key=>$rs){
 										$i++;
 										$stu_name = $rs['stu_enname'];
 										if($stu_name==""){
@@ -140,10 +147,10 @@ table.tb-footer tr.style-head {
 								 ?>
 								<tr class="style-rowdata hover" align="center" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​>
 										<td ><?php echo $i;?></td>
-										<td><?php echo $rs['branch_name']; ?></td>
+										<td align="left">&nbsp;<?php echo $rs['branch_name']; ?>&nbsp;</td>
 										<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
 										<td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
-										<td><a style=" text-decoration: none;color:#000; " href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_number']; ?></a></td>
+										<td class="receiptNo"><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_number']; ?></a></td>
 										<td><?php if($rs['penalty']>0){echo number_format($rs['penalty'],2);} ?></td>
 										<td><strong><?php echo number_format($rs['grand_total'],2); ?></strong></td>
 										<td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
@@ -156,32 +163,31 @@ table.tb-footer tr.style-head {
 										<td><?php echo $rs['void_by'];?></td>
 								  </tr>
 								 <?php } ?>
-								 <?php } ?>
-							</table>
-							<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
-								  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-									<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidstu,2);?></td>
+								 <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+									<td colspan="12" style="font-weight:bold;text-align: right;" >&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td colspan="3" style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidstu,2);?></td>
 								  </tr>
-							 </table>
-						<?php if(!empty($this->void_chang_product)){?>
-							<br />
-							<table class="content-data" align="center" >	  
-								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
-									<td colspan="13" align="left" style="text-align:left;">Change Product</td>
-								  </tr>
-								  <tr class="style-head" align="center" style="font-size:10px;">
-									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
-								  </tr>
-								 <?php $i=0; $total=0;foreach($this->void_chang_product as $key=>$rs){
+								<?php } ?>
+								<?php if(!empty($this->void_chang_product)){?>
+									<tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+										<td colspan="15" align="left" style="text-align:left;">Change Product</td>
+									  </tr>
+									  <tr class="style-head" align="center" style="font-size:10px;">
+										<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
+										<td colspan="3">&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
+									  </tr>
+								<?php $i=0; $total=0;foreach($this->void_chang_product as $key=>$rs){
 										$i++;
 										$stu_name = $rs['stu_enname'];
 										if($stu_name==""){
@@ -192,102 +198,116 @@ table.tb-footer tr.style-head {
 								 <tr class="style-rowdata hover" align="center" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​>
 										<td ><?php echo $i;?></td>
 										<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
-										<td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
-										<td><a style=" text-decoration: none;color:#000; " href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_no']; ?></a></td>
+										<td colspan="3" style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
+										<td class="receiptNo"><a style=" text-decoration: none; " href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_no']; ?></a></td>
 										<td><strong><?php if($rs['total_payment']>0){echo '$ '.$rs['total_payment'];} ?></strong></td>
 										<td><?php if($rs['credit_memo']>0){echo '$ '.$rs['credit_memo'];}?></td>
 										<td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
 										<td><?php echo $rs['user']; ?></td>
 										<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $rs['vois_status']; ?></td>
+										<td>&nbsp;-&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
+										<td>&nbsp;-&nbsp;</td>
 								  </tr>
 								 <?php } ?>
-							</table>
-							<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
-								  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-									<td style="width:146px; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidchang,2);?></td>
+								 <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+									<td colspan="12" style="font-weight:bold;text-align: right;" >&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td colspan="3" style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidchang,2);?></td>
 								  </tr>
-							 </table>
-						<?php } ?>
-						<?php if(!empty($this->void_income)){?>
-							<br />
-							<table class="content-data" align="center" >	  
-								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
-										<td colspan="13" align="left" style="text-align:left;"><?php echo $tr->translate('OTHER_INCOME');?></td>
+								<?php }?>
+								<?php if(!empty($this->void_income)){?>
+									<tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+										<td colspan="15" align="left" style="text-align:left;"><?php echo $tr->translate('OTHER_INCOME');?></td>
 								  </tr>
 								  <tr class="style-head" align="center" style="font-size:10px;">
 										<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('INCOME_CATEGORY');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('INCOME_TITLE');?>&nbsp;</td>
+										<td colspan="2">&nbsp;<?php echo $tr->translate('INCOME_CATEGORY');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
+										<td colspan="4">&nbsp;<?php echo $tr->translate('INCOME_TITLE');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('TOTAL_INCOME');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('FOR_DATE');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
+										<td colspan="2">&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
+										
 										<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 								  </tr>
-								 <?php $i=0; $total=0;foreach($this->void_income as $key=>$rs){
+								  <?php $i=0; $total=0;foreach($this->void_income as $key=>$rs){
 										$i++;
 										$totalvoidincome = $totalvoidincome +$rs['total_amount'];
 								 ?>
 								  <tr class="style-rowdata hover" align="center" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​>
 										<td ><?php echo $i;?></td>
-										<td><?php echo $rs['branch_name']; ?></td>
-										<td><?php echo $rs['cate_income']; ?></td>
-										<td><?php echo $rs['title']; ?></td>
-										<td><?php echo $rs['invoice']; ?></td>
+										<td align="left">&nbsp;<?php echo $rs['branch_name']; ?>&nbsp;</td>
+										<td colspan="2"><?php echo $rs['cate_income']; ?></td>
+										<td class="receiptNo" ><?php echo $rs['invoice']; ?></td>
+										<td colspan="4"><?php echo $rs['title']; ?></td>
+										
 										<td><strong><?php if($rs['total_amount']>0){echo '$ '.$rs['total_amount'];} ?></strong></td>
-										<td><?php echo $rs['description']; ?></td>
 										<td><?php echo date('d-M-Y', strtotime($rs['date'])); ?></td>
-										<td><?php echo $rs['user']; ?></td>
+										<td colspan="2"><?php echo $rs['description']; ?></td>
 										<td style="color:red;"><?php echo "Void"; ?></td>
+										<td><?php echo $rs['user']; ?></td>
 								  </tr>
 								 <?php } ?>
-							</table>
-							<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang'">
-								  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-									<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidincome,2);?></td>
+								 <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+									<td colspan="12" style="font-weight:bold;text-align: right;" >&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td colspan="3" style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidincome,2);?></td>
 								  </tr>
-							 </table>
-						<?php } ?>
-						<?php if(!empty($this->void_expense)){?>
-							<table class="content-data" align="center" >	 
+								<?php }?>
+								<?php if(!empty($this->void_expense)){?>
 								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
-										<td colspan="13" align="left" style="text-align:left;"><?php echo $tr->translate('OTHER_EXPENSE');?></td>
+										<td colspan="15" align="left" style="text-align:left;"><?php echo $tr->translate('OTHER_EXPENSE');?></td>
 								  </tr>
 								  <tr class="style-head" align="center" style="font-size:10px;">
 										<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('EXPENSE_TITLE');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
+										<td colspan="2">&nbsp;<?php echo $tr->translate('EXPENSE_TITLE');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
+										<td colspan="4">&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('TOTAL_EXPENSE');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
+										
 										<td>&nbsp;<?php echo $tr->translate('FOR_DATE');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
+										<td colspan="2">&nbsp;-&nbsp;</td>
+										
 										<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 								  </tr>
-								 <?php $i=0; $total=0;foreach($this->void_expense as $key=>$rs){
+								   <?php $i=0; $total=0;foreach($this->void_expense as $key=>$rs){
 										$i++;
 										$totalvoidexpense = $totalvoidexpense+$rs['total_amount'];
 								 ?>
 								 <tr class="style-rowdata hover" align="center" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​>
 										<td><?php echo $i;?></td>
-										<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['title']; ?></a></td>
-										<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['invoice']; ?></a></td>
+										<td align="left">&nbsp;<?php echo $rs['branch_name']; ?>&nbsp;</td>
+										<td colspan="2"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['title']; ?></a></td>
+										<td class="receiptNo" ><a style=" text-decoration: none; " href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['invoice']; ?></a></td>
+										<td colspan="4"><?php echo $rs['description']; ?></td>
 										<td><strong><?php if($rs['total_amount']>0){echo '$ '.$rs['total_amount'];} ?></strong></td>
-										<td><?php echo $rs['description']; ?></td>
+										
 										<td><?php echo date('d-M-Y', strtotime($rs['date'])); ?></td>
-										<td><?php echo $rs['user']; ?></td>
+										<td colspan="2">&nbsp;-&nbsp;</td>
 										<td style="color:red;"><?php echo "Void"; ?></td>
+										<td><?php echo $rs['user']; ?></td>
 								  </tr>
 								 <?php } ?>
+								  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+									<td colspan="12" style="font-weight:bold;text-align: right;" >&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td colspan="3" style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidexpense,2);?></td>
+								  </tr>
+								<?php }?>
+							</table>
+						
+						
+						<?php if(!empty($this->void_expense)){?>
+							<table class="content-data" align="center" >	 
+								  
+								  
+								
 							</table>
 							<table align="right" style="font-family: 'Times New Roman','Khmer OS Battambang';">
-							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-								<td style="width:146px; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-								<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($totalvoidexpense,2);?></td>
-							  </tr>
+							  
 						 </table>
 						<?php } ?>
 					</td>

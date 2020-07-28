@@ -928,7 +928,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	else{
     		$search = array(
     				'txtsearch' => "",
-    				'study_type'=>1);
+    				'study_type'=>0);
     	}
     	$this->view->search = $search;
     	$db = new Allreport_Model_DbTable_DbRptGroup();
@@ -1044,11 +1044,12 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	else{
     		$search = array(
     				'txtsearch' => "",
-    				'study_type'=>1);
+    				'study_type'=>0);
     	}
     	$this->view->search = $search;
     	$db = new Allreport_Model_DbTable_DbRptGroup();
     	$row = $db->getStudentGroup($id,$search,1);
+    	print_r($row);
     	$this->view->rs = $row;
     	$rs = $db->getGroupDetailByID($id);
     	$this->view->rr = $rs;

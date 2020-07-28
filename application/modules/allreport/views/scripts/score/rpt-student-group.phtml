@@ -33,8 +33,8 @@
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
 					<option value=""><?php echo $tr->translate("STUDENT_TYPE");?></option>
-					<option value="1" <?php if($this->search['study_type']==1){echo "selected";}?>><?php echo $tr->translate("STUDENT_STUDY");?></option>
-					<option value="2" <?php if($this->search['study_type']==2){echo "selected";}?>><?php echo $tr->translate("STUDENT_DROP");?></option>
+					<option value="0" <?php if($this->search['study_type']==0){echo "selected";}?>><?php echo $tr->translate("STUDENT_STUDY");?></option>
+					<option value="1" <?php if($this->search['study_type']==1){echo "selected";}?>><?php echo $tr->translate("STUDENT_DROP");?></option>
 				</select>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">

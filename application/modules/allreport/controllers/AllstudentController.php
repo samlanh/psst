@@ -434,7 +434,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search = array(
 				'txtsearch' => "",
-				'study_type'=>1);
+				'study_type'=>0);
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
@@ -473,7 +473,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 				'group' 		=> "",
 				'branch_id' 	=> "",
 				'academic_year'	=> "",
-				'study_type'	=>1
+				'study_type'	=>0
 			);
 			$row = $db->getStudentGroup($id,$search,1);
 			$rs= $db->getGroupDetailByID($id);

@@ -206,7 +206,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    		(SELECT rms_users.first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS byUser
     		FROM
 	    		rms_student_payment AS sp
-    		WHERE sp.student_id = ".$search['stu_id'];
+    		WHERE sp.status=1 AND sp.is_void=0 AND sp.student_id = ".$search['stu_id'];
     		$where = " AND ".$from_date." AND ".$to_date;
     		if(!empty($search['adv_search'])){
     			$s_where=array();

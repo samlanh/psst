@@ -1788,7 +1788,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			FROM `mobile_calendar` AS c
 				WHERE c.`active` =1 ";
     			if (!empty($search['type_holiday'])){
-    				$sql.=" c.`type_holiday` = ".$search['type_holiday'];
+    				$sql.=" AND c.`type_holiday` = ".$search['type_holiday'];
     			}
     			if (!empty($search['formatMonth'])){
     				$sql.=" AND DATE_FORMAT(c.date, '%m') = ".date("m",strtotime($search['formatMonth']));
@@ -1840,6 +1840,58 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			return $result;
     		}
     	}
+    	
+    	public function getCalendarHolidayEveryYear($search){
+    		$db = $this->getAdapter();
+    		try{
+    			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+		    	$title="title";
+		    	if ($currentLang==2){
+		    		$title="title_en";
+		    	}
+    			$sql="SELECT 
+					 DATE_FORMAT(c.date, '%m') AS mothHoliday						
+					FROM `mobile_calendar` AS c
+					WHERE c.`active` =1 
+						AND c.`type_holiday` =1
+						GROUP BY DATE_FORMAT(c.date, '%m') ";
+    			
+    			$sql_order= "  ORDER BY  DATE_FORMAT(c.date, '%m') ASC ";
+    			$row = $db->fetchAll($sql.$sql_order);
+    			 
+    			 $holidayInMonth = array();
+    			 if (!empty($row)){
+    			 	foreach ($row as $rs){
+    			 		$sql="SELECT 
+								GROUP_CONCAT(DATE_FORMAT(mc.date, '%d'),' ',mc.$title)
+							FROM 
+								`mobile_calendar` AS mc 
+							WHERE 
+								mc.`active` =1 
+								AND mc.`type_holiday` =1 
+								AND DATE_FORMAT(mc.date, '%m')= ".$rs['mothHoliday'];
+    			 		$res = $db->fetchOne($sql);
+    			 		if (!empty($res)){
+    			 		$holidayInMonth[$rs['mothHoliday']]=$res;
+    			 		}
+    			 	}
+    			 }
+    				$result = array(
+    					'status' =>true,
+    					'value' =>$holidayInMonth,
+    					);
+    					return $result;
+    					}catch(Exception $e){
+    					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    					$result = array(
+    					'status' =>false,
+    					'value' =>$e->getMessage(),
+    					);
+    					return $result;
+    			}
+    		}
+    			
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{

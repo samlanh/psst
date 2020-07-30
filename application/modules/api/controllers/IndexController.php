@@ -58,6 +58,8 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->coursePostAction($GetData);
     		}else if ($GetData['url']=="calendar"){
     			$_dbAction->calendarAction($GetData);
+    		}else if ($GetData['url']=="holiday-every-year"){
+    			$_dbAction->holidayEveryYearAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

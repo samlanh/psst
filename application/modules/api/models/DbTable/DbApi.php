@@ -1780,15 +1780,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
     			 
-    			$sql="
-    			SELECT c.*
-	    			, CASE
-					   	WHEN  $currentLang = 1 THEN c.title
-					   	WHEN  $currentLang = 2 THEN c.title_en
+    			$sql=" SELECT c.*
+	    			,CASE
+					   	WHEN $currentLang = 1 THEN c.title
+					   	WHEN $currentLang = 2 THEN c.title_en
 					END AS titleHoliday 
     			FROM `mobile_calendar` AS c
-				WHERE c.`active` =1
-    			";
+				WHERE c.`active` =1 ";
     			if (!empty($search['type_holiday'])){
     				$sql.=" c.`type_holiday` = ".$search['type_holiday'];
     			}

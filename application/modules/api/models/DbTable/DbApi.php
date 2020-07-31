@@ -1989,4 +1989,30 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	
     		return $db->fetchAll($sql.$where.$order);
     	}
+    	
+    	function getMobileLabel($search=array()){
+    		$db = $this->getAdapter();
+    		try{
+	    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+	    		$keyName = empty($search['keyName'])?1:$search['keyName'];
+	    		$title="keyValue";
+	    		if ($currentLang==2){
+	    			$title="keyValueEn";
+	    		}
+	    		$sql="SELECT 
+		    			ml.code,
+		    			ml.keyName,
+		    			ml.$title AS title
+	    			FROM `moble_label` AS ml
+	    			WHERE ml.status=1 AND ml.access_type=0";
+	    		if (!empty($keyName)){
+	    			$sql.=" AND ml.`keyName` = '$keyName' ";
+	    		}
+	    		$sql.=" LIMIT 1";
+	    		return  $db->fetchRow($sql);
+    		}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			return false;
+    		}
+    	}
 }

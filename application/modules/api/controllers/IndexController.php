@@ -53,13 +53,14 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->contactUsAction($GetData);
     		}else if ($GetData['url']=="singlecontact"){
     			$_dbAction->SinglecontactAction($GetData);
-    		}
-    		else if ($GetData['url']=="course"){
+    		}else if ($GetData['url']=="course"){
     				$_dbAction->coursePostAction($GetData);
     		}else if ($GetData['url']=="calendar"){
     			$_dbAction->calendarAction($GetData);
     		}else if ($GetData['url']=="holiday-every-year"){
     			$_dbAction->holidayEveryYearAction($GetData);
+    		}else if ($GetData['url']=="introduction-home"){
+    			$_dbAction->introductionHomeAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

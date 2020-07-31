@@ -290,5 +290,113 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+	
+	public function geLabelByKeyName($keyName){
+		$db = $this->getAdapter();
+		$sql = " SELECT s.*
+		FROM `moble_label` AS s
+		WHERE s.status=1
+		AND s.`keyName` ='$keyName' LIMIT 1";
+		return $db->fetchRow($sql);
+	}
+	
+	function updateMobileIntroduction($data){
+		try{
+			
+			$this->_name="moble_label";
+			$rows = $this->geLabelByKeyName('lbl_introduction');
+			
+			if (empty($rows)){
+				$_arr=array(
+						'keyName'=>"lbl_introduction",
+						'keyValue'=>$data['lbl_introduction'],
+						'keyValueEn'=>$data['lbl_introductionEn'],
+						'user_id'=>$this->getUserId(),
+						'access_type'=>0,
+				);
+				$this->insert($_arr);
+			}else{
+				$_arr=array(
+						'keyValue'=>$data['lbl_introduction'],
+						'keyValueEn'=>$data['lbl_introductionEn'],
+						'user_id'=>$this->getUserId(),
+				);
+				$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_introduction");
+				$this->update($_arr, $where);
+			}
+			
+			$rows = $this->geLabelByKeyName('lbl_introduction_i');
+			if (empty($rows)){
+				$_arr=array(
+						'keyName'=>"lbl_introduction_i",
+						'keyValue'=>$data['lbl_introduction_i'],
+						'keyValueEn'=>$data['lbl_introduction_iEn'],
+						'access_type'=>0,
+						'user_id'=>$this->getUserId(),
+				);
+				$this->insert($_arr);
+			}else{
+				$_arr=array(
+						'keyValue'=>$data['lbl_introduction_i'],
+						'keyValueEn'=>$data['lbl_introduction_iEn'],
+						'user_id'=>$this->getUserId(),
+				);
+				$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_introduction_i");
+				$this->update($_arr, $where);
+			}
+			
+			
+			$rows = $this->geLabelByKeyName('introduction_image');
+			if (empty($rows)){
+				$part= PUBLIC_PATH.'/images/newsevent/introduction_image/';
+				if (!file_exists($part)) {
+					mkdir($part, 0777, true);
+				}
+				
+				$_arr=array(
+						'keyName'=>"introduction_image",
+						'access_type'=>0,
+						'user_id'=>$this->getUserId(),
+				);
+				$name = $_FILES['images']['name'];
+				if (!empty($name)){
+					$ss = 	explode(".", $name);
+					$image_name = "introduction_image_".date("Y").date("m").date("d").time().".".end($ss);
+					$tmp = $_FILES['images']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$_arr['keyValue'] = $image_name;
+						$_arr['keyValueEn'] = $image_name;
+					}
+				}
+				$this->insert($_arr);
+			}else{
+				$part= PUBLIC_PATH.'/images/newsevent/introduction_image/';
+				if (!file_exists($part)) {
+					mkdir($part, 0777, true);
+				}
+				
+				$_arr=array(
+						'user_id'=>$this->getUserId(),
+				);
+				$name = $_FILES['images']['name'];
+				if (!empty($name)){
+					$ss = 	explode(".", $name);
+					$image_name = "introduction_image_".date("Y").date("m").date("d").time().".".end($ss);
+					$tmp = $_FILES['images']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$_arr['keyValue'] = $image_name;
+						$_arr['keyValueEn'] = $image_name;
+					}
+				}
+				$where=$this->getAdapter()->quoteInto("keyName=?", "introduction_image");
+				$this->update($_arr, $where);
+			}
+				
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 }
 

@@ -499,13 +499,13 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$row = $db->getCalendarHolidayEveryYear($search);
 		if ($row['status']){
 			$arrResult = array(
-					"result" => $row['value'],
-					"code" => "SUCCESS",
+				"result" => $row['value'],
+				"code" => "SUCCESS",
 			);
 		}else{
 			$arrResult = array(
-					"code" => "ERR_",
-					"message" => $row['value'],
+				"code" => "ERR_",
+				"message" => $row['value'],
 			);
 		}
 		print_r(Zend_Json::encode($arrResult));
@@ -549,6 +549,12 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$result['lbl_introduction_i']= $db->getMobileLabel($search);
 		$search['keyName'] = "introduction_image";
 		$result['introduction_image']= $db->getMobileLabel($search);
+		
+		$search['keyName'] = "lbl_videointro";
+		$result['lbl_videointro']= $db->getMobileLabel($search);
+		
+		$search['keyName'] = "lbl_howtouse";
+		$result['lbl_howtouse']= $db->getMobileLabel($search);
 		
 		$row = array(
 				'status' =>true,

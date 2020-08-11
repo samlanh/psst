@@ -1126,7 +1126,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					  END AS imageUrl
 		    	";
 		    	$sql.=" FROM `mobile_news_event` AS act WHERE act.`status` =1 ";
-		    	$sql_order= "  ORDER BY act.publish_date,act.`id` DESC";
+		    	$sql_order= "  ORDER BY act.publish_date DESC,act.`id` DESC";
 		    	
 		    	if (!empty($search['limit'])){
 		    		$sql.= "  LIMIT ".$search['limit'];
@@ -1348,19 +1348,34 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     
     		$sql=" SELECT
-    		l.*,
-    		ld.title,ld.description
-    		FROM `mobile_location` AS l,
-    		`mobile_location_detail` AS ld
-    		WHERE l.id=ld.location_id
-    		AND ld.lang= $currentLang ";
-    
+	    			l.*,
+		    		ld.title,
+		    		ld.description
+	    		FROM `mobile_location` AS l,
+	    			`mobile_location_detail` AS ld
+	    		WHERE l.id=ld.location_id
+    				AND ld.lang= $currentLang ";
     		$rowcontact = $db->fetchRow($sql);
+    		
+    		$resultintro = array();
+    		$search['keyName'] = "lbl_introduction";
+    		$resultintro['lbl_introduction']= $this->getMobileLabel($search);
+    		$search['keyName'] = "lbl_introduction_i";
+    		$resultintro['lbl_introduction_i']= $this->getMobileLabel($search);
+    		$search['keyName'] = "introduction_image";
+    		$resultintro['introduction_image']= $this->getMobileLabel($search);
+    		
+    		$search['keyName'] = "lbl_videointro";
+    		$resultintro['lbl_videointro']= $this->getMobileLabel($search);
+    		
+    		$search['keyName'] = "lbl_howtouse";
+    		$resultintro['lbl_howtouse']= $this->getMobileLabel($search);
     
     		$result = array(
-    				'status' =>true,
-    				'value' =>$rowcontact,
+    			'status' =>true,
+    			'value' =>array('contact'=>$rowcontact,'introduction'=>$resultintro)
     		);
+    		
     		return $result;
     	}catch(Exception $e){
     	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -1845,53 +1860,41 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$db = $this->getAdapter();
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-    			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
 		    	$title="title";
+		    	
 		    	if ($currentLang==2){
 		    		$title="title_en";
 		    	}
-    			$sql="SELECT 
-					 DATE_FORMAT(c.date, '%m') AS mothHoliday						
-					FROM `mobile_calendar` AS c
-					WHERE c.`active` =1 
-						AND c.`type_holiday` =1
-						GROUP BY DATE_FORMAT(c.date, '%m') ";
-    			
-    			$sql_order= "  ORDER BY  DATE_FORMAT(c.date, '%m') ASC ";
-    			$row = $db->fetchAll($sql.$sql_order);
+		    	
+				$month = date('m',strtotime($search['mothHoliday']));
+				$year_month = date('Y-m',strtotime($search['mothHoliday']));
     			 
-    			 $holidayInMonth = array();
-    			 if (!empty($row)){
-    			 	foreach ($row as $rs){
-    			 		$sql="SELECT 
-								GROUP_CONCAT(DATE_FORMAT(mc.date, '%d'),' ',mc.$title)
-							FROM 
-								`mobile_calendar` AS mc 
-							WHERE 
-								mc.`active` =1 
-								AND mc.`type_holiday` =1 
-								AND DATE_FORMAT(mc.date, '%m')= ".$rs['mothHoliday'];
-    			 		$res = $db->fetchOne($sql);
-    			 		if (!empty($res)){
-    			 		$holidayInMonth[$rs['mothHoliday']]=$res;
-    			 		}
-    			 	}
-    			 }
+    			 $sql="SELECT mc.$title AS holiday_name,
+							  DATE_FORMAT(mc.date, '%d') AS holiday_day,
+							  DATE_FORMAT(mc.date, '%a') AS holiday_string,
+							  DATE_FORMAT(mc.date, '%m') AS holiday_month
+					   FROM `mobile_calendar` AS mc 
+						WHERE 
+							mc.`active` =1 
+							AND (( mc.`type_holiday` =1  AND DATE_FORMAT(mc.date, '%m')= ".$month.") 
+    			 				OR  (mc.`type_holiday` =2  AND DATE_FORMAT(mc.date, '%Y-%m')='".$year_month."'))";
+    			 $sql.=" ORDER BY mc.date ASC ";
+    			 
+    			 		$res = $db->fetchAll($sql);
+	    				$result = array(
+	    					'status' =>true,
+	    					'value' =>$res,
+	    				);
+    				return $result;
+    			}catch(Exception $e){
+    				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     				$result = array(
-    					'status' =>true,
-    					'value' =>$holidayInMonth,
-    					);
-    					return $result;
-    					}catch(Exception $e){
-    					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    					$result = array(
-    					'status' =>false,
-    					'value' =>$e->getMessage(),
-    					);
-    					return $result;
+	    				'status' =>false,
+	    				'value' =>$e->getMessage(),
+    				);
+    				return $result;
     			}
-    		}
-    			
+    	}		
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{

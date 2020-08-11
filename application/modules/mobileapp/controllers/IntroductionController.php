@@ -20,6 +20,9 @@ class Mobileapp_IntroductionController extends Zend_Controller_Action {
 			$row['lbl_introduction']= $db->getMobileLabel("lbl_introduction");
 			$row['lbl_introduction_i']= $db->getMobileLabel("lbl_introduction_i");
 			$row['introduction_image']= $db->getMobileLabel("introduction_image");
+			
+			$row['lbl_videointro']= $db->getMobileLabel("lbl_videointro");
+			$row['lbl_howtouse']= $db->getMobileLabel("lbl_howtouse");
 			$this->view->row =$row;
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

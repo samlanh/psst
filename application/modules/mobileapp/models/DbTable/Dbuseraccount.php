@@ -392,6 +392,48 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 				$where=$this->getAdapter()->quoteInto("keyName=?", "introduction_image");
 				$this->update($_arr, $where);
 			}
+			
+			$rows = $this->geLabelByKeyName('lbl_videointro');
+				
+			if (empty($rows)){
+				$_arr=array(
+						'keyName'=>"lbl_videointro",
+						'keyValue'=>$data['lbl_videointro'],
+						'keyValueEn'=>$data['lbl_videointro'],
+						'user_id'=>$this->getUserId(),
+						'access_type'=>0,
+				);
+				$this->insert($_arr);
+			}else{
+				$_arr=array(
+						'keyValue'=>$data['lbl_videointro'],
+						'keyValueEn'=>$data['lbl_videointro'],
+						'user_id'=>$this->getUserId(),
+				);
+				$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_videointro");
+				$this->update($_arr, $where);
+			}
+			
+			$rows = $this->geLabelByKeyName('lbl_howtouse');
+				
+			if (empty($rows)){
+				$_arr=array(
+						'keyName'=>"lbl_howtouse",
+						'keyValue'=>$data['lbl_howtouse'],
+						'keyValueEn'=>$data['lbl_howtouse'],
+						'user_id'=>$this->getUserId(),
+						'access_type'=>0,
+				);
+				$this->insert($_arr);
+			}else{
+				$_arr=array(
+						'keyValue'=>$data['lbl_howtouse'],
+						'keyValueEn'=>$data['lbl_howtouse'],
+						'user_id'=>$this->getUserId(),
+				);
+				$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_howtouse");
+				$this->update($_arr, $where);
+			}
 				
 			
 		}catch(Exception $e){

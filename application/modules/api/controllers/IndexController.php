@@ -57,9 +57,9 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->coursePostAction($GetData);
     		}else if ($GetData['url']=="calendar"){
     			$_dbAction->calendarAction($GetData);
-    		}else if ($GetData['url']=="holiday-every-year"){
+    		}else if ($GetData['url']=="getholiday"){
     			$_dbAction->holidayEveryYearAction($GetData);
-    		}else if ($GetData['url']=="introduction-home"){
+    		}else if ($GetData['url']=="introductionhome"){
     			$_dbAction->introductionHomeAction($GetData);
     		}
     		else{

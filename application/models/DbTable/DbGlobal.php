@@ -702,6 +702,26 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
    }
    
+   function getAccessBranchForProduct($branch_str='branch_id'){
+	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+	   	$level = $session_user->level;
+	   	$branch_list = $session_user->branch_list;
+	   	if($level==1){
+	   		return ;
+	   	}
+	   
+	   	$user = $this->getUserInfo();
+	   	$branchOptionlist = $branch_list;
+	   	$slist = explode(",", $branchOptionlist);
+	   	$sql="";
+	   	$s_where = array();
+	   	foreach ($slist as $option_id){
+	   		$s_where[] = " $option_id IN ($branch_str)";
+	   	}
+	   	$sql .=' AND ( '.implode(' OR ',$s_where).')';
+	   	return $sql;
+   }
+   
    function getSchoolOptionAccess($schooloption_coloum="schoolOption"){
 	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$level = $session_user->level;

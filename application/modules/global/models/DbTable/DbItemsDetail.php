@@ -301,7 +301,8 @@
 		$location="";
 		if ($level!=1){
 			$string = $dbgb->getAccessPermission('pl.brand_id');
-			$location = $dbgb->getAccessPermission('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id LIMIT 1 )');
+			//$location = $dbgb->getAccessPermission('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id LIMIT 1 )');
+			$location = $dbgb->getAccessBranchForProduct('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  )');
 		}
 		
 		$sql = " SELECT ide.id,ide.code,$grade,

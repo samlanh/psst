@@ -243,6 +243,11 @@ dojo.ready(function(){
 	branch_id.on('change', function(evt) {
 		getAllGroupByBranch();
 	});
+	var change_type = dijit.byId('change_type');
+	change_type.on('change', function(evt) {
+		getAllGroupByBranch(1);
+	});
+	
 }); 
 
 var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
@@ -413,9 +418,11 @@ function getAllGroupByBranch(typeFrom=0){
 	}
 	fromGroup="";
 	fromDegree="";
+	changeType="";
 	if(typeFrom!=0){
 		fromGroup=dijit.byId('from_group').get('value');
 		fromDegree = dijit.byId('from_degree').get('value');
+		changeType = dijit.byId('change_type').get('value');
 	}
 	dojo.xhrPost({
 		url: url_getgroup,
@@ -423,7 +430,8 @@ function getAllGroupByBranch(typeFrom=0){
 			'branch_id':branch_id,
 			'degree':fromDegree,
 			'group_id':fromGroup,
-			'noaddnew':0
+			'noaddnew':0,
+			'change_type':changeType
 			},
 		handleAs:"json",
 		load: function(data) {

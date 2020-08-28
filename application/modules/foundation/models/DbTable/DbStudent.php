@@ -137,8 +137,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
-// 		$where.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1 LIMIT 1)');
 		$where.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1 )');
+
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){

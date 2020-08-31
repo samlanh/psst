@@ -728,12 +728,34 @@ function getOldStudentInfo(){
 				   dojo.byId("lbl_blog").innerHTML = data;
 			   }
 			   getgradebyDegree(-1,1,2);
+			   getStudentInformation();
 		},
 		error: function(err) {
 		}
 	});
 }
 
+function getStudentInformation(){
+	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinformation')); ?>';
+	student_id=dijit.byId('old_stu').get('value');
+	if(student_id==''){return false;}
+	loadingBlock();
+	dojo.xhrPost({
+		url:url_getdata,
+		content:{
+			'student_id':student_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			var fee_id = data.fee_id;
+			dijit.byId('study_year').set('value',fee_id);
+			HideloadingBlock();
+		},
+		error: function(err) {
+			HideloadingBlock();
+		}
+	});
+}
 var term_study_option = '';
 url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
 function getAllTermStudy(){

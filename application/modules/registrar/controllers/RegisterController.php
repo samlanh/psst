@@ -461,4 +461,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
+	function getstudentinformationAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$stuId = empty($data['student_id'])?0:$data['student_id'];
+			$rs = $db->getStudentinfoById($stuId);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
 }

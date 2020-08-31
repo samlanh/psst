@@ -727,8 +727,9 @@ function getOldStudentInfo(){
 			   if(data){
 				   dojo.byId("lbl_blog").innerHTML = data;
 			   }
-			   getgradebyDegree(-1,1,2);
 			   getStudentInformation();
+			   getgradebyDegree(-1,1,2);
+			   
 		},
 		error: function(err) {
 		}

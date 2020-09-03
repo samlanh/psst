@@ -14,6 +14,10 @@ table tr td strong{
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<style>
+		table{ border-collapse:collapse; margin:0 auto;
+			border-color:#000;font-size:12px !important; }
+	</style>
 	<div id="divPrint">
 		<?php 
 			$amount_print = $this->data['receipt_print'];
@@ -46,10 +50,13 @@ function setDatatoReceipt(){
 		dojo.byId("lb_paymentmethod").innerHTML = '<?php echo $result['payment_method'];?>';	
 		dojo.byId("lb_paymentnumber").innerHTML = '<?php echo $result['number'];?>';
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $result['user'];?>';
+
+		dojo.byId("lb_grade").innerHTML = '<?php echo empty($result['gradeTitle'])?"&nbsp;":$result['gradeTitle'];?>';
+		dojo.byId("lb_academic_year").innerHTML = '<?php echo empty($result['academic_year'])?"&nbsp;":$result['academic_year'];?>';
 	
 			template="";
-				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
-					  temp+='<tr class="hearder_table" style="font-size:11px !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
+				 temp='<table class="collape tablesorter" width="100%" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
+					  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
 						  temp+='<td style="border:1px solid #000;">No</td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
@@ -75,7 +82,7 @@ function setDatatoReceipt(){
 						if(items_type!=3){
 							term_label = '';//dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 						}
-					  temp+='<tr style="font-size:11px;height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<tr style="font-size:inherit;height: 18px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
 					 
 					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 

@@ -901,13 +901,24 @@ function getAllgroupStudyNotPass($action=null){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+//    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
+//    			stu_code,
+// 		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
+// 		   	FROM rms_student AS s
+// 		   	WHERE
+// 		   	(stu_enname!='' OR s.stu_khname!='')
+// 		   	AND s.status=1 AND s.is_subspend=0 AND customer_type=1 ";
    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
-   			stu_code,
-		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
-		   	FROM rms_student AS s
-		   	WHERE
-		   	(stu_enname!='' OR s.stu_khname!='')
-		   	AND s.status=1 AND s.is_subspend=0 AND customer_type=1 ";
+   	stu_code,
+   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
+   	FROM rms_student AS s,
+   	rms_group_detail_student as gds
+   	WHERE 
+   	gds.stu_id = s.stu_id 
+   	AND gds.is_current=1 AND gds.is_maingrade=1
+   	AND gds.stop_type=0
+   	AND (stu_enname!='' OR s.stu_khname!='')
+   	AND s.status=1  AND customer_type=1 ";
    	if($branchid!=null){
    		$sql.=" AND branch_id=".$branchid;
    	}
@@ -960,13 +971,16 @@ function getAllgroupStudyNotPass($action=null){
 		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
 		   		
 		   		(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) AS academic_year,
+		   		(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) ) ) AS academic_year_label,
 		   		(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id
 	   		FROM 
 	   			rms_student AS s
 	   			LEFT JOIN rms_group_detail_student AS sgd
 	   			ON s.stu_id=sgd.stu_id
    			WHERE 
-   				s.stu_id=$stu_id LIMIT 1 ";
+   				s.stu_id=$stu_id 
+	   			AND sgd.is_current=1 AND sgd.is_maingrade=1
+	   	LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
    function getStudentTestinfoById($stu_id){//for student with result

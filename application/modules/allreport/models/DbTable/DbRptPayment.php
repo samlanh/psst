@@ -52,7 +52,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					
 					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
 					(SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
-					(SELECT $label from rms_view where rms_view.type = 4 AND key_code=sp.session LIMIT 1) as session
+					(SELECT $label from rms_view where rms_view.type = 4 AND key_code=sp.session LIMIT 1) as session,
+					
+					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT gds.grade FROM rms_group_detail_student AS gds WHERE gds.stu_id = s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle
+					
     			FROM
     				rms_student_payment as sp,
 					rms_student as s,

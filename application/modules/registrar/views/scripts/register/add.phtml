@@ -562,6 +562,10 @@ function getMonthByNumber(m){
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 13.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+		<style>
+			table{ border-collapse:collapse; margin:0 auto;
+				border-color:#000;font-size:12px !important; }
+		</style>
 		<div id="divPrint">
 		<?php 
 			echo $this->officailreceipt;
@@ -739,6 +743,8 @@ function getOldStudentInfo(){
 function getStudentInformation(){
 	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinformation')); ?>';
 	student_id=dijit.byId('old_stu').get('value');
+	dojo.byId("lb_grade").innerHTML = "";
+	dojo.byId("lb_academic_year").innerHTML ="";
 	if(student_id==''){return false;}
 	loadingBlock();
 	dojo.xhrPost({
@@ -750,6 +756,9 @@ function getStudentInformation(){
 		load: function(data) {
 			var fee_id = data.fee_id;
 			dijit.byId('study_year').set('value',fee_id);
+
+			dojo.byId("lb_grade").innerHTML = data.grade_label;
+			dojo.byId("lb_academic_year").innerHTML = data.academic_year_label;
 			HideloadingBlock();
 		},
 		error: function(err) {
@@ -1195,8 +1204,8 @@ function printSave(){
 					var rowId = $('#identity').val();
 					var rowIDArray = rowId.split(',');
 					template="";
-						 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
-							  temp+='<tr class="hearder_table" style="font-size:11px !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
+						 temp='<table class="collape tablesorter" width="100%" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
+							  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
 								  temp+='<td style="border:1px solid #000;">No</td>';
 								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
 								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
@@ -1216,7 +1225,7 @@ function printSave(){
 								if(items_type!=3){
 									term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 								}
-							  temp+='<tr style="font-size:11px;height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+							  temp+='<tr style="font-size:inherit;height: 18px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 							  
 							  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
 							  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){

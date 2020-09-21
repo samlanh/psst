@@ -122,7 +122,12 @@ table.content-data thead tr.style-head {
 												height: 15px;
 												line-height: 15px;
 											}
-											
+											table { page-break-inside:auto }
+											tr{ page-break-inside:avoid; page-break-after:auto; }
+											#header {
+											  display: table-header-group;
+											  page-break-inside:avoid; page-break-after:auto;
+											}
 										</style>
 									<table class="content-data" width="100%" border="1" align="center" >
 										 <?php 
@@ -130,6 +135,7 @@ table.content-data thead tr.style-head {
 										 	$updated_result=0;
 										 	if (!empty($this->row)){  
 										 ?>
+										  <thead>
 										  <tr class="style-head" style="height: 20px;background:#ccd9ff;" align="center">
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 										    <td style="white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;
@@ -150,6 +156,7 @@ table.content-data thead tr.style-head {
 											<td>&nbsp;<?php echo $tr->translate("RESULT_DATE"); ?>&nbsp;</td>
 											<td style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word;">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
 										 </tr>
+										 </thead>
 										 <?php foreach($this->row as $rs){ $i++;?>
 											  <tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="left" style="height: 20px;"​ >
 												    <td rowspan="2" align="center"><?php echo $i;?></td>
@@ -162,7 +169,7 @@ table.content-data thead tr.style-head {
 												    <td valign="top" style="border-bottom:1px solid #fff;"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
 												    <td valign="top" rowspan="2"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
 												    <td valign="top" rowspan="2">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
-												    <td valign="top" rowspan="2"><?php echo $rs['note_result']; ?></td>
+												    <td valign="top" rowspan="2" style="max-width:150px;white-space:normal !important;"><?php echo $rs['note_result']; ?></td>
 													<td valign="top" rowspan="2"><?php echo $rs['user_id'];?></td>								    
 												    <td valign="top" rowspan="2" style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
 												    <td valign="top" rowspan="2" style="line-height: 18px; white-space: normal !important;max-width: 80px;width: 100px;padding: 2px;overflow-wrap: break-word; <?php if($rs['is_registered']==0){echo " color:red;";}?>">&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    

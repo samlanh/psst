@@ -89,10 +89,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'create_date' => date("Y-m-d H:i:s"),
 						'create_date_stu_test' => date("Y-m-d H:i:s"),
 						'modify_date' => date("Y-m-d H:i:s"),
-					
 						'test_type'=>$data['test_type'],
 						'test_setting_id'			=>$data['test_setting_id'],
-					
 					);
 					$this->_name="rms_student";
 					$stutest_id=$this->insert($array);
@@ -297,6 +295,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		
 		$order=" ORDER BY s.stu_id desc ";
+		
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	

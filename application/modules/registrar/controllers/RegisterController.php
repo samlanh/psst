@@ -16,17 +16,17 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     		else{
     			$search = array(
-    						'adv_search' => '',
-    		    			'study_year' => '',
-    		    			'degree' => '',
-    		    			'time'   =>'', 
-    		    			'session'=>'',
-    		    			'grade_all'=>'',
-    		    			'branch_id'=>0,
-    		    			'user'=>'',
-    		    			'start_date'=> date('Y-m-d'),
-    		    			'end_date'=>date('Y-m-d')
-    					);
+    				'adv_search' => '',
+    		    	'study_year' => '',
+    		    	'degree' => '',
+    		    	'time'   =>'', 
+    		    	'session'=>'',
+    		    	'grade_all'=>'',
+    		    	'branch_id'=>0,
+    		    	'user'=>'',
+    		    	'start_date'=> date('Y-m-d'),
+    		    	'end_date'=>date('Y-m-d')
+    			);
     		}
     		$this->view->adv_search=$search;
     		$rs_rows= $db->getAllStudentRegister($search);

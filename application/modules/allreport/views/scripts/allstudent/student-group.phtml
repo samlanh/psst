@@ -120,6 +120,7 @@ table.tb-footer tr.style-head {
 								font-size:12px; 
 								height: 23px;
 							}
+#BrowserPrintDefaults{display:none} 
 						</style>
 						<?php 
 						$all_student = 0;
@@ -161,7 +162,7 @@ table.tb-footer tr.style-head {
 						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+						    <td align="left">&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
 						  </tr>
 						  <?php 
 						  	

@@ -26,7 +26,7 @@
 	
 	$amount_day = $amount_day + 1;
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-	$day = array("Mon"=>"ចន័្ទ","Tue"=>"អង្គារ","Wed"=>"ពុធ","Thu"=>"ព្រហស្បតិ៍","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
+	$day = array("Mon"=>"ចន្ទ","Tue"=>"អង្គ","Wed"=>"ពុធ","Thu"=>"ព្រហ","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
 ?>	
 <div class="reportblog">
 	<div class="card-box">
@@ -97,7 +97,7 @@
 				<td colspan="<?php echo 4+$total_day;?>">
 					<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;line-height: 20px;">
 						<tr>
-							<td >
+							<td>
 								Attendance sheet for : <?php echo $this->rr['grade']?>
 							</td>
 						</tr>
@@ -114,7 +114,6 @@
 					</table>
 				</td>
 			</tr>
-								
 			<tr>
 				<td colspan="3" id="exportExcel">
 					<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
@@ -134,7 +133,6 @@
 							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 						</style>
 						<thead>									
-							
 							<tr>
 								<td colspan="<?php echo 5+$total_day;?>">
 									<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;font-weight: bold;line-height: 25px;">
@@ -165,10 +163,8 @@
 									From &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;to&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 								</td>
 							</tr>
-							
 							<tr class="cheader" align="center" style="background: #ccd9ff;" >
 								<td colspan="5"><?php echo $tr->translate("Weekday");?></td>
-								
 								<?php for($k=0;$k<$amount_day;$k++){?>
 								<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 									<td class=""><div><span><?php if($lang==1){echo $day[date("D",strtotime($date))];}else{echo date("D",strtotime($date));}?></span></div></td>
@@ -189,7 +185,7 @@
 							$male=0;$femle=0;
 							foreach ($this->rs as $row){ $i++;
 						?>
-						<tr style="font-size:12px;height: 23px;"​ align="center">
+						<tr style="font-size:12px;height: 23px;"​ align="left">
 							<td><?php echo $i;?></td>
 							<td><?php echo $row['stu_code'];?></td>
 							<td align="left"><?php echo ($lang_id==1)?$row['kh_name']:$row['en_name'];?></td>

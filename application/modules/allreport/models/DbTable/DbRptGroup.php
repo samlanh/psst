@@ -259,7 +259,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	$where.=$dbp->getAccessPermission('g.branch_id');
 	   	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
 	   	
-	   	$order = ' ORDER BY g.branch_id , g.academic_year DESC ,`g`.`is_pass` ASC ,`g`.`group_code` ASC ';
+	   	$order = ' ORDER BY g.branch_id , g.academic_year DESC ,`g`.`degree`,`g`.`grade`,`g`.`is_pass` ASC ,`g`.`group_code` ASC ';
 	   	return $db->fetchAll($sql.$where.$order);
 	}
    

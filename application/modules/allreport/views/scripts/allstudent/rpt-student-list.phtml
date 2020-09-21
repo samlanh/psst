@@ -161,7 +161,7 @@ table.tb-footer tr.style-head {
 								$str.=",".($key+1);
 							}
 							?>
-							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" id="<?php echo "row".$i?>"  align="center">
+							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" id="<?php echo "row".$i?>"  align="left">
 								<td width="10px">&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['stu_code']?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $row['kh_name'];?>&nbsp;</td>
@@ -182,7 +182,7 @@ table.tb-footer tr.style-head {
 								<td>&nbsp;<?php echo $row['father_job'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['mother_name'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['mother_job'];?>&nbsp;</td>
-								<td style="padding: 5px; line-height:18px; text-align: center;width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;">
+								<td style="padding: 5px; line-height:18px; text-align: left;width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;">
 										<?php if (!empty($row['home_num'])){ echo $tr->translate("NUMBER_HOME")." ".$row['home_num']." ";}?>
 										<?php if (!empty($row['street_num'])){ echo $tr->translate("STREET")." ".$row['street_num']." ";}?>
 										<?php if (!empty($row['village_name'])){ echo $tr->translate("VILLAGE")." ".str_replace('ភូមិ', '', $row['village_name'])." ";}?>

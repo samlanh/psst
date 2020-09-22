@@ -72,6 +72,16 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 	    			'user_id'	=>$this->getUserId(),					
 	    			);
 	    	
+	    	$dept = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($dept)){
+	    			$dept = $rs;
+	    		}else{ $dept = $dept.",".$rs;
+	    		}
+	    	}
+	    	$_arr['degree'] = $dept;
+	    	
+	    	
 	    	$frontimage_name="";
 	    	$frontname = $_FILES['front_background']['name'];
 	    	if (!empty($frontname)){
@@ -90,7 +100,6 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 	    	}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    		$_db->rollBack();
-	    		echo $e->getMessage(); exit();
 	    	}
     }
 
@@ -127,7 +136,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 					'user_id'	=>$this->getUserId(),		
 				);
 				$this->_name ="rms_cardbackground";
-				$whereother="id!=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption']." AND card_type=".$_data['card_type'];
+				$whereother="id=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption']." AND card_type=".$_data['card_type'];
 				$this->update($_arrother, $whereother);
 				
 				$default=1;
@@ -148,6 +157,16 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				'modify_date'	=>date("Y-m-d H:i:s"),
 				'user_id'	=>$this->getUserId(),		
 			);
+			
+			$dept = "";
+			if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+				if (empty($dept)){
+					$dept = $rs;
+				}else{ $dept = $dept.",".$rs;
+				}
+			}
+			$_arr['degree'] = $dept;
+			
     	
 			if (!empty($name)){
 				$ss = 	explode(".", $name);
@@ -177,7 +196,6 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
     	}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$_db->rollBack();
-    		echo $e->getMessage(); exit();
     	}
     }
    	

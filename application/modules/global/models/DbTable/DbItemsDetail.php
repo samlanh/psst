@@ -19,6 +19,7 @@
 					ide.shortcut,
 					ide.ordering,
 					(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+					ide.note,
 					ide.create_date,
 					ide.modify_date,
 					(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name

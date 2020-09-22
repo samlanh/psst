@@ -61,6 +61,8 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
 			}
 		}
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->faculty = $_db->getAllDegreeName();
 
 		$fm = new RsvAcl_Form_FrmCardMg();
 		$frm = $fm->FrmCardmg();
@@ -93,6 +95,9 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/cardmg/index");
 			exit();
 		}
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->faculty = $_db->getAllDegreeName();
 		
 		$fm = new RsvAcl_Form_FrmCardMg();
 		$frm = $fm->FrmCardmg($row);

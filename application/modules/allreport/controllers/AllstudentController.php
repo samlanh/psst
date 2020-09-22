@@ -45,7 +45,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 // 			}
 // 		}
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $rs_rows = $db->getAllStudentSelected($id);
+		$this->view->rs = $db->getAllStudentSelected($id);
 		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($id);
 	}
 	

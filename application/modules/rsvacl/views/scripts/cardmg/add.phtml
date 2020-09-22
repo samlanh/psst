@@ -85,7 +85,7 @@ ul.opt-school {
 				}
 			</script>
 			<div class="card-box">
-				<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BRANCH_INFO");?> 
 	                   </label>
@@ -161,7 +161,30 @@ ul.opt-school {
 	                   </div>
 	                </div>
 	            </div>
-	           <div class="col-md-4 col-sm-4 col-xs-12">
+	            <div id="degreee" class="col-md-3 col-sm-3 col-xs-12">
+	            	<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><?php echo $tr->translate("DEGREE");?> :
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                	<div class="col-md-12 col-sm-12 col-xs-12">
+	                	<input style=" display: inline-block; height: 15px; margin-right: 10px;" onchange="checkall();" type="checkbox"  class="checkbox" id="check_all"  name="check_all"/>
+	                		<span><?php echo $tr->translate("CHECK_ALL")?></span>
+	                	</div>
+	                </div>
+	                 <div class="form-group">
+	                	<div class="col-md-12 col-sm-12 col-xs-12">
+	                		<?php 
+								if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+								?>
+								<input style=" display: inline-block;  height: 15px; margin-right: 10px;" type="checkbox"  class="checkbox" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"/>
+								<span><?php echo $rs['name'];?></span>
+								<br />
+							<?php } ?>
+	                	</div>
+	                </div>
+	            </div>	
+	            <div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?> 
 	                   </label>
@@ -181,7 +204,7 @@ ul.opt-school {
 	                   </div>
 	                </div>
 	            </div>
-	            <div class="col-md-4 col-sm-4 col-xs-12">
+	            <div class="col-md-3 col-sm-3 col-xs-12">
 	            	<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
 	                   <i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("FRONT_CARD");?> 
@@ -226,6 +249,26 @@ ul.opt-school {
 <script>
 dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
+
+function checkCardType(){
+	cardvalue = dijit.byId('card_type').get('value');
+	if(cardvalue==1){
+		$("#degreee").css("display", "block");
+	}else{
+		$("#degreee").css("display", "none");
+		$("#check_all").prop('checked', false);
+		$(".checkbox").prop('checked', false);
+	}
+}
+
+function checkall(){
+	if ($('#check_all').is(':checked')) {
+		$(".checkbox").prop('checked', true);
+	}else{
+		$(".checkbox").prop('checked', false);
+	}
+}
+
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

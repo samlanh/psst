@@ -24,7 +24,7 @@ class Global_TermController extends Zend_Controller_Action {
 			$db = new Global_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","TITLE","ACADEMIC_YEAR","START_DATE","END_DATE","NOTE","CREATE_DATE","USER");
+    		$collumns = array("BRANCH","TITLE","ACADEMIC_YEAR","START_DATE","END_DATE","NOTE","CREATE_DATE","STATUS","USER");
     		$link=array(
     				'module'=>'global','controller'=>'term','action'=>'edit',
     		);

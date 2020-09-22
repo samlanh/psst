@@ -20,10 +20,14 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 					note,
 					create_date,
 					(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) as user_name 
-				FROM 
+				 ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->caseStatusShowImage("status");
+		$sql.=" FROM 
 					rms_startdate_enddate
 				WHERE 
 					1 ";
+		
 		$where = "";
     	if(!empty($search['adv_search'])){
     		$s_where=array();

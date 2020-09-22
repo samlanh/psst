@@ -254,7 +254,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    		return $this->getAllFecultyName();
    }
    public function getAllDegreeName(){
-   	return $this->getAllFecultyName();
+   	$db = $this->getAdapter();
+   	return $this->getAllItems(1,null);
    }
    
  public function getAllFecultyName(){

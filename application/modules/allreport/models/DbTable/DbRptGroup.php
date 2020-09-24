@@ -141,7 +141,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				$sql.=' AND g.group_id='.$id;
 			}
 			if($type == 0){
-				$sql.=' and g.type=1 ';
+				$sql.=' and g.stop_type=1 ';
 			}  
 			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
 			
@@ -180,6 +180,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 // 		   	if(!empty($search['study_type']) AND $search['study_type']!=1){
 // 		   		$sql.=' AND g.stop_type != 0 ';
 // 		   	}
+// echo $sql.$order;
 		 return $db->fetchAll($sql.$order);
 	}
 	public function getGroupDetail($search){

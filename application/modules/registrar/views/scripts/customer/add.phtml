@@ -1,0 +1,325 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$frm = $this->frm;
+?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<title><?php echo $tr->translate("ADD_CUSTOMER")?></title>
+<style>	
+.fullside {
+	width: 100%;
+	height: 30px;
+}
+#lbl_header {
+    display: initial !important;
+}
+table.collape tbody td {
+    padding: 2px;
+    border-bottom: solid 1px #eee;
+}
+.nomargin{
+	margin-top:0px !important;
+}
+</style>
+ <script>
+	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+ </script>
+<div class="card">
+	<div class="card-content collapse show">
+		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">	
+				if(this.validate()) {
+					
+					loadingBlock();
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+	             <div class="col-sm-12 border-botom">
+			    	<div class="col-sm-8 pd-0">
+			    		<h4 class="m-b-0"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_CUSTOMER');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box">
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
+	                <div class="form-group">
+					   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
+						<i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CUSTOMER_INFO");?> 
+					   </label>
+					</div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CUSTOMER_NAME");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  	 <?php echo $frm->getElement('stu_khname');?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Last Name");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   	<?php echo $frm->getElement('last_name');?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("First Name");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('name_en');?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('sex');?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('phone');?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('email');?>
+	                   </div>
+	                </div>
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+					   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
+						<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
+					   </label>
+					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NUMBER_HOME");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<?php echo $frm->getElement("home_note");?>
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STREET");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<?php echo $frm->getElement("way_note");?>
+					   </div>
+					</div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CITY_PROVINCE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('student_province');?>
+	                   </div>
+	                </div>
+					 <div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISTRICT");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input id="distric_note"  />
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COMMUNE");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input id="commun_note"  />
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("VILLAGE");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input id="village_note"  />
+					   </div>
+					</div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('remark');?>
+	                   </div>
+	                </div>
+	                
+	             </div>
+	        </div>
+	        <div class="clearfix"></div>
+	        
+	        <div class="clearfix"></div>
+	         <div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+						 iconClass="dijitIconSave"/>
+					
+               	</div>
+             </div>
+		</form>
+	</div>
+</div>
+
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+<script type="text/javascript">
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	
+	var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+	var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+	var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+		store: district_store,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "distric_note",
+		id: "distric_note",
+		searchAttr: "name",
+		class: 'fullside',
+		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
+			onChange: function() {
+				distric_note = dijit.byId('distric_note').get('value');
+				if(distric_note==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/district/add?rightclick=true";?>','_blank');
+				}
+					filterCommune();
+			}  
+		}, "distric_note");
+		 
+		new dijit.form.FilteringSelect({
+		store: commun_note,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "commun_note",
+		id: "commun_note",
+		searchAttr: "name",
+		class: 'fullside',
+		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
+			onChange: function() {
+				commun_note = dijit.byId('commun_note').get('value');
+				if(commun_note==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/commune/add?rightclick=true";?>','_blank');
+				}
+				else{
+					filterVillage();
+				}
+	  }
+		}, "commun_note");
+		 
+		new dijit.form.FilteringSelect({
+		store: village_store,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "village_note",
+		id: "village_note",
+		searchAttr: "name",
+		class: 'fullside',
+		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
+			onChange: function() {
+				vill = dijit.byId('village_note').get('value');
+				if(vill==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/village/add?rightclick=true";?>','_blank');
+				}
+			}
+		}, "village_note");
+		
+		filterDistrict();
+		dijit.byId('student_province').attr('value',12);
+		
+
+		
+	});
+	
+	function AllRefresh(){
+		loadingBlock();
+		student_province = dijit.byId('student_province').get('value');
+		if(student_province!=''){
+			filterDistrict();
+		}
+		distric_note = dijit.byId('distric_note').get('value');
+		if(distric_note!='' || distric_note!=-1){
+			filterCommune();
+		}
+		commun_note = dijit.byId('commun_note').get('value');
+		if(commun_note!='' || commun_note!=-1){
+			filterVillage();
+		}
+		
+	}
+
+	url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
+	function filterDistrict(){
+		student_province = dijit.byId('student_province').get('value');
+		if(student_province==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getdistrict,	
+			content:{ 
+				'pro_id': student_province
+			},
+			handleAs:"json",
+			load: function(data) {	
+				district_store  = getDataStorefromJSON('id','name', data);		
+				dijit.byId('distric_note').set('store', district_store);
+				document.getElementsByClassName("overlay")[0].style.display="none";	
+			},
+			error: function(err) {
+			}
+		});	
+	}
+	url_getcommune = '<?php echo $this->url(array('module'=>'global','controller'=>'commune','action'=>'get-commune'));?>';
+	function filterCommune(){
+		distict_id = dijit.byId('distric_note').get('value');
+		if(distict_id==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getcommune,	
+			content:{ 
+				'district_id': distict_id
+			},
+			handleAs:"json",
+			load: function(data) {	
+				commune_store  = getDataStorefromJSON('id','name', data);		
+				dijit.byId('commun_note').set('store', commune_store);
+				document.getElementsByClassName("overlay")[0].style.display="none";	
+			},
+			error: function(err) {
+			}
+		});
+	}
+	url_getvillage = '<?php echo $this->url(array('module'=>'global','controller'=>'village','action'=>'get-allvillage'));?>';
+	function filterVillage(){
+		commune_id = dijit.byId('commun_note').get('value');
+		if(commune_id==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getvillage,	
+			content:{ 
+				'commune_id': commune_id
+			},
+			handleAs:"json",
+			load: function(data) {	
+				village_store  = getDataStorefromJSON('id','name', data);		
+				dijit.byId('village_note').set('store', village_store);
+				document.getElementsByClassName("overlay")[0].style.display="none";	
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+</script>

@@ -13,7 +13,7 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
 
     public function indexAction()
     {
-    	try{
+    	try{ 
     		$db = new Registrar_Model_DbTable_DbCateExpense();
     		if($this->getRequest()->isPost()){
     			$search=$this->getRequest()->getPost();

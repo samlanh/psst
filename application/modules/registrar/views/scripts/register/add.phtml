@@ -170,7 +170,7 @@ tr.head-td th{padding: 5px 2px;}
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="">
 				    			<option value="1">Student Payment</option>
-				    			<!-- <option value="2">Customer Payment</option> -->
+				    			<option value="2">Customer Payment</option>
 				    		</select>
 	                   </div>
 	                </div>
@@ -186,7 +186,7 @@ tr.head-td th{padding: 5px 2px;}
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" id="lblNameControl" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 							<input id="old_stu" />
 	                   </div>
@@ -446,6 +446,7 @@ require(["dojo/ready"], function(ready){
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
 		getAllAcademicByBranch();
+
 	});
 
 	new dijit.form.FilteringSelect({
@@ -455,7 +456,7 @@ require(["dojo/ready"], function(ready){
 		name: "old_stu",   
 		required:true,        
 		class: 'fullside', 
-		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		placeHolder:"<?php echo $tr->translate("CHOOSE");//$tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() {  
 			getOldStudentInfo();
 			getCreditMemo();
@@ -490,8 +491,16 @@ require(["dojo/ready"], function(ready){
 			getAllTermStudy();
 		}
 	}, "study_year");
-});	
 
+	
+});	
+dojo.ready(function(){
+	var customer_type = dijit.byId('customer_type');
+	customer_type.on('change', function(evt) {
+		checkCustomerType();
+	});
+	checkCustomerType();
+});	
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();
@@ -611,6 +620,19 @@ function hideDialog(){
 function hideDialog1(){
 	dijit.byId('alertBeforePrint').hide();
 }
+function checkCustomerType(){
+	customer_type = dijit.byId("customer_type").attr("value");
+	dijit.byId("student_type").set('readOnly',false);
+	$( "#lblNameControl" ).html("<?php echo $tr->translate("STUDENT_NAME");?>");
+	if(customer_type==2){
+		$( "#lblNameControl" ).html("<?php echo $tr->translate("CUSTOMER_NAME");?>");
+		dijit.byId("student_type").attr("value",1);
+		dijit.byId("student_type").set('readOnly',true);
+		
+	}
+	getallstudentname();
+}
+
 function getallstudentname(){//
 	student_type = dijit.byId("student_type").attr("value");
 	if(student_type==1){//old
@@ -620,6 +642,8 @@ function getallstudentname(){//
 	}else if(student_type==3){//crm
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
+	dijit.byId("old_stu").reset();
+	customer_type = dijit.byId("customer_type").attr("value");
 	branch_id = dijit.byId("branch_id").attr("value");
 	if(branch_id==''){
 		dijit.byId("branch_id").focus();
@@ -629,7 +653,8 @@ function getallstudentname(){//
 		url:url_data,
 		content:{
 			'student_name':1,
-			'branch_id':branch_id
+			'branch_id':branch_id,
+			'customer_type':customer_type
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -1029,7 +1054,7 @@ function netTotal(){
 		total_payment = 0; 
 	
 		var customer_type = dijit.byId("customer_type").get("value");
-		if(customer_type!=2 || customer_type!=4){
+		if(customer_type!=4){//customer_type!=2 || 
 			for(var n = 0; n < rowIDArray.length; n++) {
 				netPaidAmount += dijit.byId('total_amount'+rowIDArray[n]).get('value');
 			}
@@ -1037,7 +1062,8 @@ function netTotal(){
 		if(customer_type==1){
 			grandTotal = parseFloat(netPaidAmount) + parseFloat(total_payment);
 		}else if(customer_type==2){
-			grandTotal = parseFloat(total_payment);
+			//grandTotal = parseFloat(total_payment);
+			grandTotal = parseFloat(netPaidAmount) + parseFloat(total_payment);
 		}else if(customer_type==3){
 			grandTotal = netPaidAmount;
 		}		

@@ -399,8 +399,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
+// 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
+// 			$rows = $db->getAllStudent(null,2,$branch_id);
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
-			$rows = $db->getAllStudent(null,2,$branch_id);
+			$customer_type = empty($data['customer_type'])?1:$data['customer_type'];
+			if ($customer_type==2){
+				$rows = $db->getAllCustomer(null,$branch_id);
+			}else{
+				$rows = $db->getAllStudent(null,2,$branch_id);
+			}
+			
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

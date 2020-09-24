@@ -937,6 +937,35 @@ function getAllgroupStudyNotPass($action=null){
    		return $rows;
    	}
    }
+   
+   function getAllCustomer($opt=null,$branchid=null){
+   	$db=$this->getAdapter();
+   	$branch_id = $this->getAccessPermission();
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$sql=" SELECT s.stu_id AS id,
+   		s.stu_id AS stu_id,
+	   	stu_code,
+	   	CONCAT(COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
+	   	FROM rms_student AS s
+	   	WHERE
+	   	s.stu_khname!=''
+	   	AND s.status=1  AND customer_type=2 ";
+//    	if($branchid!=null){
+//    		$sql.=" AND branch_id=".$branchid;
+//    	}
+   	$sql.=" ORDER BY stu_khname ASC";
+   	$rows = $db->fetchAll($sql);
+   	if($opt!=null){
+   		$options=array(0=>$tr->translate("CHOOSE"));
+   		if(!empty($rows))foreach($rows AS $row){
+   			$lable = $row['name'];
+   			$options[$row['id']]=$lable;
+   		}
+   		return $options;
+   	}else{
+   		return $rows;
+   	}
+   }
    function getAllStuCode(){
    	$db = $this->getAdapter();
    	$branch_id = $this->getAccessPermission();

@@ -169,7 +169,26 @@
 							'know_by'=> $_data['know_by'],
 							);
 					$this->_name="rms_student";
-					$this->insert($array);
+					$student_i = $this->insert($array);
+					
+					$_arr = array(
+							'stu_id'			=>$student_i,
+							'is_newstudent'		=>1,
+							'status'			=>1,
+							'group_id'			=>0,
+							'degree'			=>$_data['degree_'.$i],
+							'grade'				=>$_data['grade_'.$i],
+							'is_current'		=>1,
+							'is_setgroup'		=>0,
+							'is_maingrade'		=>1,
+							'date'				=>date("Y-m-d"),
+							'create_date'		=>date("Y-m-d H:i:s"),
+							'modify_date'		=>date("Y-m-d H:i:s"),
+							'user_id'			=>$this->getUserId(),
+					);
+					$this->_name="rms_group_detail_student";
+					$this->insert($_arr);
+					//rms_group_detail_student
 				}
 			}
 			$_db->commit();

@@ -923,7 +923,7 @@ function getAllgroupStudyNotPass($action=null){
    	if($branchid!=null){
    		$sql.=" AND branch_id=".$branchid;
    	}
-   	$sql.=" ORDER BY stu_khname ASC";
+   	$sql.=" GROUP BY s.stu_id ORDER BY stu_khname ASC";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));
@@ -1513,12 +1513,12 @@ function getAllgroupStudyNotPass($action=null){
   function getAllTermStudy($branch=null,$year=null,$option=null){
 
   	$db = $this->getAdapter();
-  	$sql=" SELECT id,CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name from rms_startdate_enddate WHERE 1 ";
+  	$sql=" SELECT id,CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name from rms_startdate_enddate WHERE status=1 ";
   	if($branch!=null){
   		$sql.=" AND branch_id = $branch ";
   	}
   	if($year!=null){
-  		$sql.=" AND academic_year = $year ";
+  		//$sql.=" AND academic_year = $year ";
   	}
   	$rows = $db->fetchAll($sql);
   	if($option==null){

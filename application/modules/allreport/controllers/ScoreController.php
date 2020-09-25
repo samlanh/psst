@@ -690,7 +690,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     
     	$group= new Allreport_Model_DbTable_DbRptAllStudent();
-    	$this->view->student = $rs_rows = $group->getStudentMistake($search);
+    	$this->view->student = $group->getStudentMistake($search);
     	$this->view->search = $search;
     
     	$form=new Application_Form_FrmSearchGlobal();

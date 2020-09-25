@@ -45,8 +45,14 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
 						    ds.group_id,
 						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
-						FROM rms_student AS s,rms_group_detail_student AS ds
-						  WHERE  ds.is_maingrade=1 AND s.stu_id=ds.stu_id AND s.status = 1 AND s.customer_type = 1";
+						FROM rms_student AS s,
+							rms_group_detail_student AS ds
+						  WHERE  ds.is_maingrade=1 
+									AND s.stu_id=ds.stu_id 
+				                   AND s.status = 1 AND s.customer_type = 1
+				                   ANd ds.is_pass=0
+				
+				";
 			$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);
@@ -151,10 +157,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student as s,
 					rms_group_detail_student AS ds
- 			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id LIMIT 1 ";
+ 			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id  ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
+		$where.=" LIMIT 1";
 		return $db->fetchRow($sql.$where);
 	}
 	function getAllStudentStudyRecord($stu_id){

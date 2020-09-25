@@ -72,7 +72,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
 				$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
 				$s_where[]= " s.last_name LIKE '%{$s_search}%'";
-				$s_where[]= " s.grade LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(!empty($search['branch_id'])){
@@ -93,7 +92,11 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			if(!empty($search['stu_name'])){
 				$where.= " AND sp.student_id = ".$search['stu_name'];
 			}
+			//$where.=" AND paystudent_type=3 AND revenue_type=2 AND data_from=4 ";
+// 			$where.=" AND  data_from=3 ";
+// 			$where.=" AND  paystudent_type=3 AND data_from=4 ";
 			$order=" ORDER By sp.id DESC ";
+// 			echo $sql.$where.$order;exit();
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

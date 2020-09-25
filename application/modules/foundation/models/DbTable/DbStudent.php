@@ -70,7 +70,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT $branch FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				s.stu_khname,
-				CONCAT(s.last_name,' ',s.stu_enname),
+				
+				CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				CASE
 					WHEN primary_phone = 1 THEN s.tel
@@ -189,7 +190,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$name_en = $_data['name_kh'];
 		$sex  = $_data['sex'];
 		$dob  = $_data['date_of_birth'];
-		$sql = "SELECT * FROM rms_student WHERE customer_type=1 AND stu_khname="."'$name_en'"." AND sex=".$sex." AND dob="."'$dob'";
+		$stu_code  = $_data['student_id'];
+		$sql = "SELECT * FROM rms_student WHERE customer_type=1 AND stu_code="."'$stu_code'"." AND stu_khname="."'$name_en'"." AND sex=".$sex." AND dob="."'$dob'";
 // 		"AND grade='".$grade."' AND session='".$session."'";      
 		if (!empty($idStu)){
 			$sql.=" AND stu_id !=$idStu";

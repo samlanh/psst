@@ -116,7 +116,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside'));
 		
 		$rs_province = $_db->getAllProvince();
-		$province_opt = '' ;
+		$province_opt =array() ;
 		if(!empty($rs_province))foreach($rs_province AS $row) $province_opt[$row['id']]=$row['name'];
 			
 		$_student_province = new Zend_Dojo_Form_Element_FilteringSelect("student_province");
@@ -408,7 +408,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$commun_note->setValue($data['commune_name']);
 			$distric_note->setValue($data['district_name']);
 			$_student_province->setValue($data['province_id']);
-			$student_id->setValue($data['stu_code']);
+			//$student_id->setValue($data['stu_code']);
 // 			$_academic_year->setValue($data['academic_year']);
 // 			$session->setValue($data['session']);
 // 			$degree->setValue($data['degree']);

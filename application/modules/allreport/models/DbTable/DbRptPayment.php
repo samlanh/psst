@@ -291,7 +291,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		   				sp.id,
     		   				sp.grand_total as total_payment,
     		   				sp.penalty,
-    		   				sp.credit_memo
+    		   				sp.credit_memo,
+    		   				sp.is_void
     		   			FROM
     		   				rms_student_payment as sp,
     						rms_student as s

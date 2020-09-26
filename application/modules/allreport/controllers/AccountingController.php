@@ -151,17 +151,21 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'title' =>'',
-						'branch_id'=>'',
-						'study_year' =>-1,
-						'session'=>-1,
-						'degree'=>-1,
-						'grade_all' =>-1,
-						'user'=>-1,
+						'txtsearch' =>'',
+						'branch_id' =>'',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
-						'service'=>'',
+						'service_type'=>'',
 						'payment_by'=>-1,
+						'study_year'=>-1,
+						'item'=>'',
+						'service'=>'',
+						'group'=>'',
+						'degree'=>-1,
+						'grade_all'=>-1,
+						'user'=>-1,
+						'session'=>-1,
+						'pay_term'=>'',
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();

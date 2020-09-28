@@ -83,9 +83,9 @@
 						<img style="width:60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 					</td>
 					<td  align="center" width="70%">
-						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_PAYMENT_HISTORY_REPORT');?></strong><br />
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>             
+						<strong style=" font-weight:200; color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+						<strong style="font-weight:200; color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_HISTORY_REPORT');?></strong><br />
+						<strong style="font-weight:200; color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>             
 					</td>
 					<td width="15%" align="center">
 					</td>
@@ -93,12 +93,15 @@
 				<tr>
 					<td colspan="3" id="exportExcel">
 						<style>
-						table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+						table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
 						tr{ page-break-inside:avoid; page-break-after:auto }
 						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
 						#header {
 						  display: table-header-group;
 						  page-break-inside:avoid; page-break-after:auto;
+						}
+						table tr th {
+							text-align: center;
 						}
 					.hover:hover{background:#eee;}										
 					</style>
@@ -112,7 +115,7 @@
 							$deduct=0;
 							$net_amount=0;
 						?>	
-						<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
+						<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
 							  <thead>
 								  <tr style="text-align:center;background-color:  #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
 								    <th><?php echo $tr->translate('N_O');?></th>
@@ -145,7 +148,7 @@
 								  <?php  if($student_id != $rs['student_id']){?>
 									  <?php if($key>0){?>
 									   <tr>
-									  	<td colspan="18"></td>
+									  	<td colspan="15"></td>
 									  	<td colspan="2" style="background: #ccc;">$ <?php echo number_format($total,2);?></td>
 									  </tr>
 								  	<?php 
@@ -153,7 +156,11 @@
 							  				}
 							  		?>
 							  		 <tr>
-									  	<td colspan="17"><?php echo $rs['stu_code']." ".$rs['stu_khname'].' '.$rs['last_name'].' '.$rs['stu_enname']; ?></td>
+									  	<td colspan="17"><?php echo $rs['stu_code']." ".$rs['stu_khname']; 
+									  	if (!empty($rs['last_name'])){
+									  		echo ' / '.$rs['last_name'].' '.$rs['stu_enname']; 
+									  	}
+									  	?></td>
 									  </tr>
 							  		<?php }?>
 								  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
@@ -210,20 +217,20 @@
 					<?php if(!empty($this->row)){ ?>
 					<tr>
 						<td colspan="3">
-							<table width="29.2%" border="1" align="right" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
+							<table width="29.2%" border="1" align="right" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
 								<tr>
-									<td style="font-size: 18px;font-family:'Khmer MEF2';background-color: #ccc; width: 38%; font-weight:bold;font-size: 12px;"><?php echo $tr->translate('GRAND_TOTAL');?></td>
-									<td style="font-family:'Khmer MEF2';background-color: #ccc; width: 38%; font-weight:bold; font-size: 12px;"><?php echo $tr->translate('FINE');?></td>
-									<td style="font-family:'Khmer MEF2';background-color: #ccc; width: 38%; font-weight:bold;font-size: 12px;"><?php echo $tr->translate('CREDIT_MEMO');?></td>
-									<td style="font-family:'Khmer MEF2';background-color: #ccc; width: 38%; font-weight:bold;font-size: 12px;"><?php echo $tr->translate('DEDUCT');?></td>
-									<td style="font-family:'Khmer MEF2';background-color: #ccc; width: 38%; font-weight:bold;font-size: 12px;"><?php echo $tr->translate('NET_AMOUNT');?></td>
+									<td style="font-size: 18px; font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200; font-size: 12px;"><?php echo $tr->translate('GRAND_TOTAL');?></td>
+									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200; font-size: 12px;"><?php echo $tr->translate('FINE');?></td>
+									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('CREDIT_MEMO');?></td>
+									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('DEDUCT');?></td>
+									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('NET_AMOUNT');?></td>
 								</tr>
 								<tr>
-									<td style="font-weight:bold;font-family: Arial Black; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($total,2);?></span></td>
-						  			<td style="font-weight:bold;font-family: Arial Black; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($credit_memo,2);?></span></td>
-							  		<td style="font-weight:bold;font-family: Arial Black; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($deduct,2);?></span></td>
-							  		<td style="font-weight:bold;font-family: Arial Black; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($total,2);?></span></td>
-							  		<td style="font-weight:bold;font-family: Arial Black; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($fine,2);?></span></td>
+									<td style="font-weight:bold;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($total,2);?></span></td>
+						  			<td style="font-weight:bold;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($credit_memo,2);?></span></td>
+							  		<td style="font-weight:bold;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($deduct,2);?></span></td>
+							  		<td style="font-weight:bold;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($total,2);?></span></td>
+							  		<td style="font-weight:bold;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($fine,2);?></span></td>
 								</tr>
 						  	</table>
 						</td>

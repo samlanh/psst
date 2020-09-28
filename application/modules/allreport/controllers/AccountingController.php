@@ -148,6 +148,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
+				$search['action']='paymentHistorty';
 			}
 			else{
 				$search = array(
@@ -166,11 +167,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'user'=>-1,
 						'session'=>-1,
 						'pay_term'=>'',
+						'action'=>'paymentHistorty',
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();
 			$this->view->row = $db->getStudentPaymentDetail($search,2);
 			$this->view->rs = $db->getStudentPayment($search);
+			
 			$this->view->search = $search;
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

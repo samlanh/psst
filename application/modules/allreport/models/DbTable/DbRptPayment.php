@@ -232,7 +232,15 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	}elseif($order_no==2){//used order by student 
     		$order=" ORDER BY sp.branch_id ASC, sp.student_id DESC ";
     	}else{
-    		$order=" ORDER BY sp.branch_id ASC, d.items_id ";
+//     		$order=" ORDER BY sp.branch_id ASC, d.items_id ";
+    		$order=" ORDER BY sp.branch_id ASC,d.items_type ASC,d.items_id ASC,sp.id DESC  ";
+    	}
+    	
+    	if (!empty($search['action'])){
+    		if ($search['action']=="paymentHistorty"){
+    			$order=" ORDER BY sp.branch_id ASC,sp.student_id ASC,sp.id DESC, d.items_type ASC,d.items_id ASC  ";
+    		}
+    	
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$where.= $_db->getAccessPermission('sp.branch_id');
@@ -300,13 +308,14 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		   				sp.student_id=s.stu_id AND is_void=0 AND sp.status=1 ";
     	    	$order=" ORDER BY id DESC";
     	 
-    if(!empty($search['title'])){
+    	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-    		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
+    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+    		$s_where[] = " REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(receipt_number,' ','') LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if($search['branch_id']>0){

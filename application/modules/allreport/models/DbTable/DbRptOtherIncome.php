@@ -58,8 +58,9 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " title LIKE '%{$s_search}%'";
-    		$s_where[] = " invoice LIKE '%{$s_search}%'";
+    		$s_search = str_replace(' ', '', addslashes(trim($search['txtsearch'])));
+    		$s_where[] = " REPLACE(title,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(invoice,' ','') LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();

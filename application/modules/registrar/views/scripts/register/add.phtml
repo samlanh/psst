@@ -703,7 +703,11 @@ function getPaymentHistory(student_id){
 				tem += '<td style="text-align:left;">'+respone[i].item_name+'</td>';
 				tem += '<td>'+respone[i].create_date+'</td>';
 				tem += '<td>'+respone[i].receipt_number+'</td>';
-				tem += '<td>'+respone[i].payment_term+'</td>';
+				payment_term='';
+				if(respone[i].payment_term!=null){
+					payment_term=respone[i].payment_term;
+					}
+				tem += '<td>'+payment_term+'</td>';
 				tem += '<td>'+respone[i].qty+'</td>';
 				tem += '<td>'+respone[i].fee+'</td>';
 				tem += '<td>'+respone[i].subtotal+'</td>';
@@ -714,7 +718,11 @@ function getPaymentHistory(student_id){
 					dis_type = respone[i].discount_type;
 				}
 				tem += '<td>'+dis_type+'</td>';
-				tem += '<td>'+respone[i].discount_percent+'/'+respone[i].discount_amount+'</td>';
+				discount_percent='';
+				if(respone[i].discount_percent>=0){
+					discount_percent=respone[i].discount_percent+'/';
+				}
+				tem += '<td>'+discount_percent+'/'+respone[i].discount_amount+'</td>';
 				start_date='';
 				validate='';
 				if(respone[i].is_onepayment==0){start_date=respone[i].start_date;}

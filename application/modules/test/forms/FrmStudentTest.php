@@ -1086,7 +1086,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	
     	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
     	$Option = $_dbgb->getAllItems(1,null,$type);//get degree type=1 and schooloption =1,2,3
-    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	if(!empty($Option))foreach($Option AS $row){$_arr_opt[$row['id']]=$row['name'];}
     	$_degree = new Zend_Dojo_Form_Element_FilteringSelect("degree");
     	$_degree->setMultiOptions($_arr_opt);
     	$_degree->setAttribs(array(

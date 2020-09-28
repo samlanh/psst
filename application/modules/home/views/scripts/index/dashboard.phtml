@@ -227,6 +227,7 @@ small.pull-right.showall-ann {
 					                        <div class="well profile_view">
 					                          <div class="col-sm-12">
 					                          <?php 
+					                          $style='';
 					                          if (!empty($drop['branch_photo'])){
 					                          	if (file_exists(PUBLIC_PATH.'/images/'.$drop['branch_photo'])) {
 					                          		$style="background: url(/elt/trunk/public/images/".$drop['branch_photo'].");  background-repeat: no-repeat; background-size: 100%;";

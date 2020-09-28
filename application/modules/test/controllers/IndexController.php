@@ -160,7 +160,7 @@ class Test_IndexController extends Zend_Controller_Action
     			if(!empty($data['saveclose'])){
     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
     			}
-    		} catch (Exception $e) {
+    		}catch (Exception $e){
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     		}
@@ -185,7 +185,6 @@ class Test_IndexController extends Zend_Controller_Action
     		$this->view->subjectScore = $subject;
     	}
     	$this->view->detailscore = $result;
-    	
     	$frm = new Test_Form_FrmStudentTest();
     	$frm->FrmEnterResultTest($row,$result,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);

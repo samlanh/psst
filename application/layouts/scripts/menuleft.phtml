@@ -102,6 +102,9 @@
 	                    	<?php  foreach ($arr_param_menu[$rs] as $key => $sub){
 		                       	$urlsub = $this->url(array('module'=>$rs,'controller'=>$key,'action'=>'index'), null, true);
 		                       	$title=$tr->translate(strtoupper($key));
+		                       	if($rs=='foundation' AND $key=='register'){
+		                       		$title=$tr->translate('STUDENT_INFO');
+		                       	}
 		                       	if ($rs=="home" and $key=="index" ){
 		                       		$title=$tr->translate(strtoupper($rs));
 		                       	}else if ($rs=="test" AND $key=="index"){

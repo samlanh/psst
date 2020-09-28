@@ -1044,7 +1044,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
 	   	if($result==0){//មិនទាន់គិតធ្វើតេស និងចេញលទ្ធផល
-	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
 	   		FROM rms_student
 	   		WHERE
 	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
@@ -1053,7 +1053,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		}
 	   		$sql.=" GROUP BY stu_id ORDER BY stu_id DESC";
 	   	}else{//ban ធ្វើតេស
-	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
 	   		FROM rms_student,rms_student_test_result AS result
 	   		WHERE
 	   		stu_id = result.stu_test_id AND result.updated_result=1 AND
@@ -1542,6 +1542,9 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getTestStudentId($branch=null){
   	$db = $this->getAdapter();
+  	
+  	$typeSerial  = STU_SERIAL_TYPE;
+  	
   	$sql ="SELECT COUNT(stu_id) AS number FROM `rms_student` WHERE  is_studenttest =1 ";//customer_type = 4
   	if (!empty($branch)){
   		$sql.= " AND branch_id=$branch";
@@ -1559,9 +1562,14 @@ function getAllgroupStudyNotPass($action=null){
   			$pre.= $row['prefix'];
   		}
   	}
+  	if ($typeSerial==2){
+  		$pre="";
+  	}
+  	
   	for($i = $acc_no;$i<6;$i++){
   		$pre.='0';
   	}
+  	
   	$last = '';
   	return $pre.$new_acc_no.$last;
   }
@@ -1942,6 +1950,7 @@ function getAllgroupStudyNotPass($action=null){
   function getnewStudentId($branch_id,$degree){//used global
 	  	$db = $this->getAdapter();
 	  	$option_type=1;//1 id by branch ,2 by degree
+	  	$option_type=STU_ID_TYPE;
 	  	$length = '';
 	  	$pre = '';
 	  	if($option_type==1){

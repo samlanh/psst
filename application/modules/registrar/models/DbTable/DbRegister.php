@@ -68,7 +68,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$dbg = new Application_Model_DbTable_DbGlobal();
 					$stu_code = $dbg->getnewStudentId($data['branch_id'],$rs_stu['degree']);
-					
+					$settingNewStuID = NEW_STU_ID_FROM_TEST;
+					if ($settingNewStuID==1){
+						$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];
+					}
 					$arr = array(
 						'customer_type' =>1,
 						'stu_code'=>$stu_code,
@@ -78,6 +81,29 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->_name='rms_student';
 					$where="stu_id = ".$data['old_stu'];
 					$this->update($arr, $where);
+					
+					// new setup fee_id for student from tested
+					if (!empty($data['study_year'])){
+						$_dbfee = new Accounting_Model_DbTable_DbFee();
+						$feeID = empty($data['study_year'])?0:$data['study_year'];
+						$rowfee = $_dbfee->getFeeById($feeID);
+						$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+						$_arr= array(
+								'branch_id'		=>$data['branch_id'],
+								'user_id'		=>$this->getUserId(),
+								'student_id'	=>$data['old_stu'],
+								'fee_id'		=>$feeID,
+								'academic_year'	=>$academicYear,
+								'note'			=>'',
+								'is_current'	=>1,
+								'is_new'		=>1,
+								'status'		=>1,
+								'create_date'	=>date("Y-m-d H:i:s"),
+								'modify_date'	=>date("Y-m-d H:i:s"),
+						);
+						$this->_name="rms_student_fee_history";
+						$this->insert($_arr);
+					}
 					
 				}elseif($data['student_type']==3){//from crm
 					$rs_stu = $gdb->getStudentinfoById($stu_id);

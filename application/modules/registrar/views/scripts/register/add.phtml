@@ -3,6 +3,8 @@
 	echo $this->headTitle($tr->translate('REGISTER')); 
 	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	$username=$session_user->last_name.$session_user->first_name;
+	
+	$settingNewStuID = NEW_STU_ID_FROM_TEST;
 ?>
 <style>
 	select{ width:100%;}
@@ -191,6 +193,13 @@ tr.head-td th{padding: 5px 2px;}
 							<input id="old_stu" />
 	                   </div>
 	                </div>
+	                <div class="form-group" id="stuCodeControl" <?php if ($settingNewStuID==0){?>style="display: none;"<?php }?>>
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("អត្តលេខសិស្សថ្មី");//$tr->translate("STUDENT_NEW_ID");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input  type="text" style="color: red;"  dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
+		                   </div>
+		              </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> :
 	                   		<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
@@ -500,7 +509,44 @@ dojo.ready(function(){
 		checkCustomerType();
 	});
 	checkCustomerType();
-});	
+
+	<?php if ($settingNewStuID==1){?>
+	var student_type = dijit.byId('student_type');
+	student_type.on('change', function(evt) {
+		checkStudentType();
+	});
+	checkStudentType();
+	<?php }?>
+});
+
+function checkStudentType(){
+	dijit.byId('student_code').attr('value',""); 
+	student_type = dijit.byId("student_type").attr("value");
+	$( "#stuCodeControl" ).css("display", "none");
+	if(student_type==2){
+		$( "#stuCodeControl" ).css("display", "flow-root");
+	}
+}
+
+var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
+function getStudentNo(degree_id=0){
+	dijit.byId('student_code').attr('value',""); 
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){return false;}
+	dojo.xhrPost({
+		url:url_getstuno,
+		content:{
+			'branch_id':branch_id,'dept_id':degree_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('student_code').attr('value',data);   
+		},
+		error: function(err) {
+		}
+	});
+}
+
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();
@@ -792,6 +838,10 @@ function getStudentInformation(){
 
 			dojo.byId("lb_grade").innerHTML = data.grade_label;
 			dojo.byId("lb_academic_year").innerHTML = data.academic_year_label;
+
+			//get New ID From Student Test
+			getStudentNo(data.degree);
+			
 			HideloadingBlock();
 		},
 		error: function(err) {
@@ -1297,6 +1347,15 @@ function printSave(){
 							  i++;
 							}
 		temp+='</table>';
+
+		<?php if ($settingNewStuID==1){?>
+		student_type = dijit.byId("student_type").attr("value");
+		if(student_type==2){
+			var NewStuCodeFromTest = dijit.byId('student_code').attr('value'); 
+			dojo.byId("lb_stu_id").innerHTML = NewStuCodeFromTest;
+		}
+		<?php }?>
+		
 		dojo.byId('t_amountmoneytype').innerHTML = temp;
 		dijit.byId("terms").show();	
 	}		
@@ -1316,6 +1375,14 @@ function printSubmit(){
 			}else{
 				dojo.byId("lb_stu_id").innerHTML = data.serial;
 			};
+
+			<?php if ($settingNewStuID==1){?>
+			student_type = dijit.byId("student_type").attr("value");
+			if(student_type==2){
+				var NewStuCodeFromTest = dijit.byId('student_code').attr('value'); 
+				dojo.byId("lb_stu_id").innerHTML = NewStuCodeFromTest;
+			}
+			<?php }?>
 			 
 			<?php 
 				$key = new Application_Model_DbTable_DbKeycode();

@@ -283,13 +283,14 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 			if(!empty($search['adv_search'])){
 				$s_where=array();
-				$s_search= addslashes(trim($search['adv_search']));
-				$s_where[]= " st.serial LIKE '%{$s_search}%'";
-				$s_where[]= " st.stu_code LIKE '%{$s_search}%'";
-				$s_where[]= " st.stu_khname LIKE '%{$s_search}%'";
-				$s_where[]= " st.stu_enname LIKE '%{$s_search}%'";
-				$s_where[]= " st.last_name LIKE '%{$s_search}%'";
-				$s_where[]= " st.tel LIKE '%{$s_search}%'";
+				$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+				$s_where[]= " REPLACE(st.serial,' ','') LIKE '%{$s_search}%'";
+				$s_where[]= " REPLACE(st.stu_code,' ','') LIKE '%{$s_search}%'";
+				$s_where[]= " REPLACE(st.stu_khname,' ','') LIKE '%{$s_search}%'";
+				$s_where[]= " REPLACE(st.stu_enname,' ','') LIKE '%{$s_search}%'";
+				$s_where[]= " REPLACE(st.last_name,' ','') LIKE '%{$s_search}%'";
+				$s_where[]=	" REPLACE(CONCAT(st.last_name,st.stu_enname),' ','') LIKE '%{$s_search}%'";
+				$s_where[]= " REPLACE(st.tel,' ','') LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(($search['branch_id']>0)){

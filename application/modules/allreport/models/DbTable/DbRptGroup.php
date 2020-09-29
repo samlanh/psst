@@ -140,9 +140,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			if (!empty($id)){
 				$sql.=' AND g.group_id='.$id;
 			}
-			if($type == 0){
-				$sql.=' and g.stop_type=1 ';
-			}  
+// 			if($type == 0){
+// 				$sql.=' and g.stop_type=0 ';
+// 			}  
 			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
 			
 			$dbp = new Application_Model_DbTable_DbGlobal();
@@ -217,7 +217,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				FROM 
 	   				`rms_group` `g`
 	   			WHERE 
-	   				 group_code != '' ";
+	   				 group_code != '' AND status=1 ";
 	   	
 	   	$where=" ";
 	   	if(!empty($search['adv_search'])){
@@ -352,18 +352,18 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			$iddetail ="";
 			if (!empty($ids)) foreach ($ids as $id){
 				if (empty($iddetail)){
-					if (!empty($data['stu_id'.$id])){
-						$iddetail=$data['stu_id'.$id];
+					if (!empty($data['gd_id'.$id])){
+						$iddetail=$data['gd_id'.$id];
 					}
 				}else{
-					if (!empty($data['stu_id'.$id])){
-						$iddetail=$iddetail.",".$data['stu_id'.$id];
+					if (!empty($data['gd_id'.$id])){
+						$iddetail=$iddetail.",".$data['gd_id'.$id];
 					}
 				}
 			}
 			$this->_name="rms_group_detail_student";
 			$where1=" group_id=".$data['group_id'];
-			if (!empty($iddetail)){
+			if(!empty($iddetail)){
 				$where1.=" AND gd_id NOT IN (".$iddetail.")";
 			}
 			$this->delete($where1);

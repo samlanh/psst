@@ -448,7 +448,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Allreport_Model_DbTable_DbRptGroup();
 			$db->UpdateAmountStudent($data);
-			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/allstudent/student-group");
+			$this->_redirect("/allreport/allstudent/student-group");
+	
+			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/allstudent/student-group");
 		}
 	}
 	public function rptStudentListAction()

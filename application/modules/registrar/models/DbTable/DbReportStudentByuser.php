@@ -66,12 +66,14 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 	
 			if(!empty($search['adv_search'])){
 				$s_where=array();
-				$s_search= addslashes(trim($search['adv_search']));
-				$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
-				$s_where[]=" sp.receipt_number LIKE '%{$s_search}%'";
-				$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
-				$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
-				$s_where[]= " s.last_name LIKE '%{$s_search}%'";
+				$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+				
+				$s_where[] = " REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(receipt_number,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(last_name,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
+				$s_where[]=	 " REPLACE(CONCAT(last_name,stu_enname),' ','') LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(!empty($search['branch_id'])){
@@ -96,7 +98,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 // 			$where.=" AND  data_from=3 ";
 // 			$where.=" AND  paystudent_type=3 AND data_from=4 ";
 			$order=" ORDER By sp.id DESC ";
-// 			echo $sql.$where.$order;exit();
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

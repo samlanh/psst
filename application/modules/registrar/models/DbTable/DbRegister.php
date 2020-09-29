@@ -606,38 +606,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
 
-    function getRegisterById($id){
-    	$db=$this->getAdapter();
-    	$sql=" SELECT 
-	    			s.stu_id,
-	    			s.stu_code,
-	    			sp.receipt_number,
-	    			sp.branch_id,
-	    			s.academic_year,
-	    			s.stu_khname,
-	    			s.stu_enname,
-	    			s.sex,
-	    			s.session,
-	    			sp.degree,
-	    			sp.grade,
-			    	sp.paid_amount,
-			    	sp.is_void,sp.create_date,
-			    	sp.balance_due,sp.amount_in_khmer,
-			    	sp.note,sp.time,
-			    	spd.start_date,
-			    	spd.validate,spd.is_start
-		    	FROM 
-		    		rms_student AS s,
-		    		rms_student_payment AS sp ,
-		    		rms_student_paymentdetail AS spd
-		    	WHERE 
-    				s.stu_id=sp.student_id 
-    				AND sp.id=spd.payment_id 
-    				AND sp.id=".$id;
-    	$dbl = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbl->getAccessPermission(" sp.branch_id ");
-    	return $db->fetchRow($sql);
-    }
+   
     function getAllGrade($grade_id,$student_id,$is_stutested){
     	$db = new Application_Model_DbTable_DbGlobal();
     	return $db->getAllGradeStudyByDegree($grade_id,$student_id,$is_stutested);

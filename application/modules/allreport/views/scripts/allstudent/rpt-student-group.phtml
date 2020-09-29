@@ -44,6 +44,7 @@
         </div>
 	</form>
 	<div id="divPrint">
+	<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table style="margin: 0 auto; width: 100%;color:#4839bd;"  >
 				<tr>
 					<td style="width:30%;" rowspan="2">
@@ -135,9 +136,20 @@
 							<?php  $i=0;
 							$male=0;$femle=0; 
 							$teacher_name="";
-							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++; $teacher_name=$row['teacher'];?>
-							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" >
-								<td align="center"><?php echo $i;?></td>
+							$str='';
+							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ 
+								if($key==0){
+									$str=$key+1;
+								}else{
+									$str.=",".($key+1);
+								}
+								
+								$i++; $teacher_name=$row['teacher'];?>
+							<tr class="style-rowdata hover context-menu-one"  id="<?php echo "row".$i?>" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" >
+								<td align="center"><?php echo $i;?>
+									<input type="hidden" name="gd_id<?php echo $i?>" id="gd_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['gd_id']?>" />
+									<input type="hidden" name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_id']?>" />
+								</td>
 								<td>&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $row['kh_name'];?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $row['last_name'].' '.$row['en_name'];?>&nbsp;</td>
@@ -151,12 +163,16 @@
 								?>&nbsp;
 								</td>
 								<td align="center">&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
-								<td></td>
+								<td align="center"><!-- 
+									<img style="cursor:pointer" onclick="deleteRecord(<?php //echo $i;?>)" src="<?php //echo $this->baseUrl();?>/images/Delete_16.png"></td>
+									 -->
 							</tr>
 							<?php }}?>	
 							<tr>
 								<td colspan="7" valign="top" style="padding-top:2px;border:1px solid #fff; border-top:1px solid #4839bd;">
 									<span style="font-weight:200;color:#4839bd; font-size: 12px;;">
+									<input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
+									<input type="hidden" name="group_id" id="group_id" value="<?php echo $this->rr['id'];?>" />
 										<?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?>
 										<?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 										<?php echo $tr->translate("MALE")." ".$male;?> <?php echo $tr->translate("STUDENT_UNIT");?>
@@ -184,23 +200,27 @@
 											<td valign="top" ></td>
 											<td valign="top" style="font-family:'Khmer MEF2';font-size:14px;text-align: center;"><br /><br /><?php echo $teacher_name;?></td>
 										</tr>
+										<!-- <tr style="text-align:center; border:1px solid #fff;"><td colspan="3" align="center"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit">
+										<?php //echo $tr->translate("SAVE_CLOSE");?></button>
+										 -->
 									</table>
 								</td>
 							</tr>
 						</table>	
 					</td>
 				</tr>
-		</table>
+		  </table>
+		</form>
 	</div>
 </div>
 <script type="text/javascript">
+dojo.require("dojo.NodeList-manipulate");
 var row=0;
 var url="";
 $(function(){
 	$.contextMenu({
 		selector: '.context-menu-one', 
 		callback: function(key, options) {
-		
 			var m = "clicked: " + key;
 			if(key=="certifykhmer"){
 				url='<?php echo $urlCertifyKhmer;?>';
@@ -222,4 +242,22 @@ var recordid ='';
 function gotoAction(){
 	window.open(url+row);
 }
+function deleteRecord(index) {
+	var txt;
+	var r = confirm("<?php echo $tr->translate("Do you want to remove this student");?>?");
+	if (r == true) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+	} else {
+	    return false;
+	}
+	
+	}
+</script>
 </script>

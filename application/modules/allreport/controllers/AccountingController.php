@@ -719,9 +719,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				}
 				$db = new Accounting_Model_DbTable_Dbinvoice();
 				$this->view->all_invoice = $db->getinvoice($search);
-// 				$db = new Registrar_Model_DbTable_DbRegister();
-// 				$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-// 				$this->view->all_student_code = $db->getAllGerneralOldStudent();
 
 				$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 				$frm = new Application_Form_FrmGlobal();

@@ -24,6 +24,11 @@ table tr td strong{
 			echo $this->officailreceipt;
 			?>
 	</div>
+	<div id="MainnoteContent" style="display: none;"><?php echo $result['note'];?></div>
+	<?php foreach($this->row  as $key=> $rs){ ?>
+		<div id="noteContent<?php echo $key?>" style="display: none;"><?php echo $rs['note'];?></div>
+	<?php } ?>
+	
 <script type="text/javascript">
 dojo.ready(function(){
 	readMoneyInKhmer("<?php echo $this->rr['paid_amount'];?>");
@@ -35,7 +40,11 @@ function setDatatoReceipt(){
 		dojo.byId("lb_date").innerHTML  = '<?php echo date('d-m-Y g:i A',strtotime($result['create_date']));?>';
 		dojo.byId("lb_stu_id").innerHTML = '<?php echo empty($result['stu_code'])?$result['serial']:$result['stu_code'];?>';	
 		dojo.byId("lb_sex").innerHTML = '<?php echo $result['sex'];?>';	
-		dojo.byId("lbl_note").innerHTML = '<?php echo $result['note'];?>';	
+
+		  var strNote = $( '#MainnoteContent').html();
+		  $('#lbl_note').text(strNote);
+
+		  
 		dojo.byId("lb_name").innerHTML = '<?php echo $result['stu_khname'].' / '.$result['last_name'].' '.$result['stu_enname'];?>';	
 		dojo.byId("lb_phone").innerHTML = '<?php echo $result['tel'];?>';	
 		//dojo.byId("lb_read_khmer").innerHTML = '<?php //echo $result['stu_code'];?>';	
@@ -44,9 +53,9 @@ function setDatatoReceipt(){
 		<?php } ?>
 		dojo.byId("lb_total_payment").innerHTML = '<?php echo number_format($result['grand_total'],2);?>';	
 		dojo.byId("lb_fine").innerHTML = '<?php echo number_format($result['fine'],2);?>';			
-		dojo.byId("lb_credit_memo").innerHTML = '<?php echo number_format($result['credit_memo'],1);?>';
-		dojo.byId("lb_paid_amount").innerHTML = '<?php echo number_format($result['paid_amount'],1);?>';	
-		dojo.byId("lb_balance_due").innerHTML = '<?php echo number_format($result['balance_due'],1);?>';	
+		dojo.byId("lb_credit_memo").innerHTML = '<?php echo number_format($result['credit_memo'],2);?>';
+		dojo.byId("lb_paid_amount").innerHTML = '<?php echo number_format($result['paid_amount'],2);?>';	
+		dojo.byId("lb_balance_due").innerHTML = '<?php echo number_format($result['balance_due'],2);?>';	
 		dojo.byId("lb_paymentmethod").innerHTML = '<?php echo $result['payment_method'];?>';	
 		dojo.byId("lb_paymentnumber").innerHTML = '<?php echo $result['number'];?>';
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $result['user'];?>';
@@ -70,7 +79,7 @@ function setDatatoReceipt(){
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
 					  temp+='</tr>';
 					i=1;  
-					<?php foreach($this->row  as $rs) { 
+					<?php foreach($this->row  as $key=> $rs) { 
 						$label="";
 						if($rs['service_type']==1){
 							$label="School Fee ";
@@ -102,7 +111,11 @@ function setDatatoReceipt(){
 					  	period='<?php if($rs['is_onepayment']!=1){echo date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }else{echo'&nbsp;';}?>';		  				  
 					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</td>';
 					  note = '<?php echo addslashes($rs['note']);?>';
-					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+note+'</td>';
+					  var div = document.getElementById('noteContent');
+					var htmlString = $( '#noteContent'+'<?php echo $key;?>').html();
+ 
+  
+					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+htmlString+'</td>';
 					  temp+='</tr>';
 					  i++;
 					<?php } ?>

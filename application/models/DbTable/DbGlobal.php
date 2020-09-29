@@ -2342,9 +2342,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	if(!empty($data['group'])){
 	  		$sql.=" AND s.group_id=".$data['group'];
 	  	}
-	  	if(!empty($data['degree'])){
-	  		$sql.=" AND s.degree=".$data['degree'];
-	  	}
+	  	
 	  	if(!empty($data['grade_all'])){
 	  		$sql.=" AND s.grade=".$data['grade_all'];
 	  	}
@@ -2855,9 +2853,7 @@ function getAllgroupStudyNotPass($action=null){
 		  	AND s.status=1
 		  	AND s.customer_type=1
 		  	AND gds.is_current = 1
-		  	AND gds.is_setgroup = 1
-		  
-  	";
+		  	AND gds.is_setgroup = 1 ";
   	$sql.=$where;
   	if($branchid!=null){
   		$sql.=" AND s.branch_id=".$branchid;
@@ -2870,7 +2866,6 @@ function getAllgroupStudyNotPass($action=null){
   		}else{
   			$sql.="	AND gds.stop_type=0";
   		}
-  		
   	}
   	if (!empty($data['is_maingrade'])){
   		$sql.=" AND gds.is_maingrade=1";

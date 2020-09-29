@@ -227,13 +227,19 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'missingMessage'=>$this->tr->translate("Forget Enter")
     	));
     	
-    	$_serial = new Zend_Dojo_Form_Element_TextBox('serial');
-    	$_serial->setAttribs(array(
+    	$serialType = STU_SERIAL_TYPE;
+    	$arrSerialAttribute = array(
     			'dojoType'=>'dijit.form.TextBox',
     			'class'=>' fullside height-text',
-    			'readonly'=>'readonly',
     			'missingMessage'=>$this->tr->translate("Forget Enter")
-    	));
+    			);
+    	if ($serialType!=2){
+    		$arrSerialAttribute['readonly']="readonly";
+    	}
+    	$_serial = new Zend_Dojo_Form_Element_TextBox('serial');
+    	$_serial->setAttribs(
+    			$arrSerialAttribute
+    	);
     	$newSerial = $_dbgb->getTestStudentId();
     	$_serial->setValue($newSerial);
     	

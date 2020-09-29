@@ -53,6 +53,12 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			}
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
+			
+			$serialType = STU_SERIAL_TYPE;
+			if ($serialType==2){
+				$newSerial = $data['serial'];
+			}
+			
 			$array = array(
 						'branch_id'	=>$data['branch_id'],
 						'serial'	=>$newSerial,

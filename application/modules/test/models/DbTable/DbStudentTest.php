@@ -229,9 +229,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	}
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM rms_student WHERE stu_id=$id AND customer_type =4 AND is_studenttest=1 ";
+		$sql=" SELECT * FROM rms_student WHERE stu_id=$id AND is_studenttest=1 "; //AND customer_type =4
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);
 	}	
 	
@@ -495,10 +496,24 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'user_id'			=>$this->getUserId(),
 					);
 					
-					$result  = $this->getTestResultById($test,$type,$data['stu_test_id']);
-					$where = "stu_id=".$data['stu_test_id']." AND degree = ".$result['degree_result']." AND grade=".$result['grade_result']." AND group_id=0";
-					$this->_name="rms_group_detail_student";
-					$this->update($_arr, $where);
+					$check  = $this->checkStudentInGroupDetail($data);
+					if (!empty($check)){
+						$result  = $this->getTestResultById($test,$type,$data['stu_test_id']);
+	// 					$where = "stu_id=".$data['stu_test_id']." AND degree = ".$result['degree_result']." AND grade=".$result['grade_result']." AND group_id=0";
+						$where = "stu_id=".$data['stu_test_id'];
+						$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
+						$where.=" AND degree = ".$degreeUp;
+						
+						$gradeUp = empty($result['grade_result'])?$data['grade_result']:$result['grade_result'];
+						$where.=" AND degree = ".$gradeUp;
+						$where." AND group_id=0 ";
+						
+						$this->_name="rms_group_detail_student";
+						$this->update($_arr, $where);
+					}else{
+						$this->_name="rms_group_detail_student";
+						$this->insert($_arr);
+					}
 				}
 				
 				$id = $data['id'];
@@ -517,8 +532,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'status'			=>1,
 						'group_id'			=>0,
 						'academic_year'		=>$data['academic_year'],
-						'degree'			=>$data['degree_result'],
-						'grade'				=>$data['grade_result'],
+						'degree'			=>empty($data['degree_result'])?$data['degree']:$data['degree_result'],
+						'grade'				=>empty($data['grade_result'])?$data['grade']:$data['grade_result'],
 						'is_current'		=>1,
 						'is_setgroup'		=>0,
 						'is_maingrade'		=>1,
@@ -598,7 +613,14 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
 	}
-	
+	function checkStudentInGroupDetail($_data){
+		$db = $this->getAdapter();
+		$stu_id = empty($_data['stu_test_id'])?0:$_data['stu_test_id'];
+		$degree = empty($_data['degree_result'])?0:$_data['degree_result'];
+		$sql=" SELECT sd.* FROM rms_group_detail_student AS sd WHERE sd.stu_id = $stu_id AND sd.degree=$degree ";
+		$sql.=" LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	function getAllTestResult($stu_id,$type=null){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();

@@ -580,6 +580,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		$s_where[]= " REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
 	    		$s_where[]= " REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
 	    		$s_where[]= " REPLACE(last_name,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]=	" REPLACE(CONCAT(last_name,stu_enname),' ','') LIKE '%{$s_search}%'";
 	    		$where.=' AND ('.implode(' OR ', $s_where).')';
 	    	}
 	    	if(($search['branch_id']>0)){

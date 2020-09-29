@@ -548,6 +548,26 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
     		
     		$_test_type->setValue($data["test_type"]);
+    		if (!empty($data["customer_type"])){
+    			if ($data["customer_type"]==1){
+    				$kh_name->setAttribs(array('readonly'=>'readonly'));
+    				$_first_name->setAttribs(array('readonly'=>'readonly'));
+    				$_last_name->setAttribs(array('readonly'=>'readonly'));
+    				$_sex->setAttribs(array('readonly'=>'readonly'));
+    				
+    				$_phone->setAttribs(array('readonly'=>'readonly'));
+    				$_email->setAttribs(array('readonly'=>'readonly'));
+    				
+    				$home_num->setAttribs(array('readonly'=>'readonly'));
+    				$street_num->setAttribs(array('readonly'=>'readonly'));
+    				$village_name->setAttribs(array('readonly'=>'readonly'));
+    				$commune_name->setAttribs(array('readonly'=>'readonly'));
+    				$district_name->setAttribs(array('readonly'=>'readonly'));
+    				$_province_id->setAttribs(array('readonly'=>'readonly'));
+    				
+    			}
+    			
+    		}
     	}
     	
     	$this->addElements(array(

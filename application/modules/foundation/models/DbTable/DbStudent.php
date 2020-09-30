@@ -225,6 +225,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				mkdir($part, 0777, true);
 			}	
 			$photo = "";
+			if(!empty($_data['old_photo'])){
+				$photo = $_data['old_photo'];
+			}
 			$name = $_FILES['photo']['name'];
 			if (!empty($_data['uploaded'])){
 				$photo=$_data['uploaded'];
@@ -317,7 +320,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				}
 				$dbg = new Application_Model_DbTable_DbGlobal();
 				$name = $_FILES['father_photo']['name'];
-				$size = $_FILES['father_photo']['size'];
+				//$size = $_FILES['father_photo']['size'];
+				if(!empty($_data['old_father_photo'])){
+					$_arr['father_photo'] = $_data['old_father_photo'];
+				}
 				if (!empty($name)){
 					$tem =explode(".", $name);
 					$new_image_name = "fatherprofile".date("Y").date("m").date("d").time().".".end($tem);
@@ -325,7 +331,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$_arr['father_photo']=$photopj;
 				}
 				$name = $_FILES['mother_photo']['name'];
-				$size = $_FILES['mother_photo']['size'];
+				//$size = $_FILES['mother_photo']['size'];
+				if(!empty($_data['old_mother_photo'])){
+					$_arr['mother_photo'] = $_data['old_mother_photo'];
+				}
 				if (!empty($name)){
 					$tem =explode(".", $name);
 					$new_image_name = "motherprofile".date("Y").date("m").date("d").time().".".end($tem);
@@ -333,7 +342,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$_arr['mother_photo']=$photopj;
 				}
 				$name = $_FILES['guardian_photo']['name'];
-				$size = $_FILES['guardian_photo']['size'];
+				//$size = $_FILES['guardian_photo']['size'];
+				if(!empty($_data['old_guardian_photo'])){
+					$_arr['guardian_photo'] = $_data['old_guardian_photo'];
+				}
 				if (!empty($name)){
 					$tem =explode(".", $name);
 					$new_image_name = "guardianprofile".date("Y").date("m").date("d").time().".".end($tem);

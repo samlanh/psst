@@ -340,7 +340,16 @@ table#table_row_study tr td {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                    	<div class="account-image" style="margin:0;">
 											<div class="image-box">
-												<img id="father_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+											<?php
+												$father_photo = $this->baseUrl().'/images/no-profile.png';
+												 if (!empty($this->rs['father_photo'])){
+													if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['father_photo'])){
+														$father_photo = $this->baseUrl().'/images/photo/'.$this->rs['father_photo'];
+													}
+												 }
+											?>
+												<img id="father_wiew" src="<?php echo $father_photo;?>" alt=""  />
+												<input type="hidden" name="old_father_photo" value="<?php echo $this->rs['father_photo'];?>" />
 											</div>
 											<div class="button_browse">
 											<div id='preview'></div>	
@@ -397,7 +406,16 @@ table#table_row_study tr td {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                    	<div class="account-image" style="margin:0;">
 											<div class="image-box">
-												<img id="mother_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+												<?php
+													$mother_photo = $this->baseUrl().'/images/no-profile.png';
+													 if (!empty($this->rs['mother_photo'])){
+														if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['mother_photo'])){
+															$mother_photo = $this->baseUrl().'/images/photo/'.$this->rs['mother_photo'];
+														}
+													 }
+												?>
+												<img id="mother_wiew" src="<?php echo $mother_photo;?>" alt=""  />
+												<input type="hidden" name="old_mother_photo" value="<?php echo $this->rs['mother_photo'];?>" />
 											</div>
 											<div class="button_browse">
 											<div id='preview'></div>	
@@ -454,7 +472,16 @@ table#table_row_study tr td {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                    	<div class="account-image" style="margin:0;">
 											<div class="image-box">
-												<img id="guardian_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+											<?php
+												$guardian_photo = $this->baseUrl().'/images/no-profile.png';
+												 if (!empty($this->rs['guardian_photo'])){
+													if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['guardian_photo'])){
+														$guardian_photo = $this->baseUrl().'/images/photo/'.$this->rs['guardian_photo'];
+													}
+												 }
+												?>
+												<img id="guardian_wiew" src="<?php echo $guardian_photo;?>" alt=""  />
+												<input type="hidden" name="old_guardian_photo" value="<?php echo $this->rs['guardian_photo'];?>" />
 											</div>
 											<div class="button_browse">
 											<div id='preview'></div>	

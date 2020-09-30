@@ -110,12 +110,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
-		$row = $db->getStudentById($id);
-		$this->view->rs = $row;
-		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
-			exit();
-		}
+		
 // 		$rr = $db->getStudyHishotryById($id);
 // 		$this->view->rr = $rr;
 		if($this->getRequest()->isPost())
@@ -133,6 +128,14 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		
+		$row = $db->getStudentById($id);
+		$this->view->rs = $row;
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
+			exit();
+		}
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));

@@ -33,7 +33,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->list ="";
 			
 			$paginator = Zend_Paginator::factory($rs_rows);
-			$paginator->setDefaultItemCountPerPage(30);
+			$paginator->setDefaultItemCountPerPage(35);
 			$allItems = $paginator->getTotalItemCount();
 			$countPages= $paginator->count();
 			$p = Zend_Controller_Front::getInstance()->getRequest()->getParam('pages');

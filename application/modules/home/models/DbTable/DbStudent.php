@@ -35,11 +35,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								WHEN primary_phone = 3 THEN s.mother_phone
 								ELSE s.guardian_tel
 							END as tel,
-							s.is_subspend,
+							ds.stop_type AS is_subspend,
 							s.sex as sexcode,
 							s.status,
 							photo,
-							(SELECT $field from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
+							(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
 							(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
 						    (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
@@ -50,10 +50,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						  WHERE  ds.is_maingrade=1 
 									AND s.stu_id=ds.stu_id 
 				                   AND s.status = 1 AND s.customer_type = 1
-				                   ANd ds.is_pass=0
-				
-				";
-			$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
+				                   ANd ds.is_pass=0 ";
+			$orderby = " ORDER BY s.stu_khname ASC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);
 		}

@@ -105,6 +105,9 @@
 		                       	if($rs=='foundation' AND $key=='register'){
 		                       		$title=$tr->translate('STUDENT_INFO');
 		                       	}
+		                       	if($rs=='global' AND $key=='term'){
+		                       		$title=$tr->translate('START_DATE_END_DATE');
+		                       	}
 		                       	if ($rs=="home" and $key=="index" ){
 		                       		$title=$tr->translate(strtoupper($rs));
 		                       	}else if ($rs=="test" AND $key=="index"){

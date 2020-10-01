@@ -95,9 +95,10 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	}
 	function getTermById($id=null){
 		$db = $this->getAdapter();
-		$sql=" select * from rms_startdate_enddate WHERE id = $id LIMIT 1 ";
+		$sql=" select * from rms_startdate_enddate WHERE id = $id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}
 	function getTermStudy($branch,$year=null,$option=1){

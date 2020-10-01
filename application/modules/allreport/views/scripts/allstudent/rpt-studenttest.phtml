@@ -277,12 +277,14 @@ dojo.ready(function(){
 });
 
 url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+<?php $testCondiction = TEST_CONDICTION; 
+if ($testCondiction==2){
+?>
+url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
+<?php }?>
 var oldterm = "<?php echo $this->search['branch_id']?>";
 function getAllTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		return false;
-	}
 	study_year = dijit.byId('academic_year').get('value');
 	if(study_year==''){study_year=0;}
 	dojo.xhrPost({

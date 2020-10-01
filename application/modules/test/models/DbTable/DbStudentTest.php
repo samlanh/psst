@@ -261,20 +261,32 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$label = "name_en";
 			$branch = "branch_nameen";
 		}
+// 		
+// 		
+
+		$testCondiction = TEST_CONDICTION;
 		
 		$sql="
 			SELECT 
-				s.stu_id,
-				(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,
-				s.serial,
+				s.stu_id,";
+		if ($testCondiction!=2){
+			$sql.="(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,";
+		}
+		$sql.="	s.serial,
 				s.stu_khname,
 				s.last_name,
 				s.stu_enname,
-				(SELECT $label from rms_view WHERE type=2 and key_code=s.sex LIMIT 1) as sex,
-				(SELECT $label FROM rms_view WHERE TYPE=21 AND key_code=s.nationality LIMIT 1) AS nationality,
+				(SELECT $label from rms_view WHERE type=2 and key_code=s.sex LIMIT 1) as sex,";
+		if ($testCondiction!=2){
+			$sql.="(SELECT $label FROM rms_view WHERE TYPE=21 AND key_code=s.nationality LIMIT 1) AS nationality,";
+		}
+		$sql.="
 				s.tel,
-				s.dob,
-				s.from_school,
+				s.dob,";
+		if ($testCondiction!=2){
+			$sql.="s.from_school,";
+		}
+		$sql.="
 				s.guardian_khname,
 				s.guardian_tel,
 				(select count(id) from rms_student_test_result where s.stu_id  = rms_student_test_result.stu_test_id and test_type=2) as result_test_fl,
@@ -522,6 +534,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$this->update($array, $where);
 				
 			}else{
+				
 				$array['create_date']=date("Y-m-d H:i:s");
 				$this->_name="rms_student_test_result";
 				$id = $this->insert($array);
@@ -542,6 +555,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'modify_date'		=>date("Y-m-d H:i:s"),
 						'user_id'			=>$this->getUserId(),
 				);
+				
+				
 				$this->_name="rms_group_detail_student";
 				$this->insert($_arr);
 				
@@ -553,8 +568,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			
 			
 			if ($type==1){
+				
 				if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
-					
 					$identitys = explode(',',$data['identity']);
 					$detailId="";
 					if (!empty($identitys)){
@@ -605,6 +620,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						}
 					}
 				}
+				
 			}
 			$db->commit();
 			return $id;

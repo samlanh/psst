@@ -1047,7 +1047,8 @@ function getAllgroupStudyNotPass($action=null){
 	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
 	   		FROM rms_student
 	   		WHERE
-	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
+	   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id  "; //AND customer_type=4
+	   		$sql.=" AND is_studenttest=1 ";
 	   		if (!empty($branch)){
 	   			$sql.=" AND branch_id = $branch";
 	   		}
@@ -1057,7 +1058,8 @@ function getAllgroupStudyNotPass($action=null){
 	   		FROM rms_student,rms_student_test_result AS result
 	   		WHERE
 	   		stu_id = result.stu_test_id AND result.updated_result=1 AND
-	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
+	   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id  "; //AND customer_type=4
+	   		$sql.=" AND is_studenttest=1 ";
 	   		if (!empty($branch)){
 	   			$sql.=" AND branch_id = $branch";
 	   		}
@@ -2894,6 +2896,30 @@ function getAllgroupStudyNotPass($action=null){
   	}else{
   		return $rows;
   	}
+  }
+  
+  function getAllTestTerm($data= array(),$option=null){
+  
+  	$db = $this->getAdapter();
+  	$sql=" SELECT 
+  			id,
+  			note as name 
+  			FROM rms_test_term WHERE status=1 AND note !=''  ";
+  	$sql.=" ORDER BY id DESC";
+  	$rows = $db->fetchAll($sql);
+  	if($option==null){
+  		return $rows;
+  	}else{
+  		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  		$options = " <option value=''>".$tr->translate("SELECT_TERM")."</option> ";
+  		if(!empty($rows)){
+  			foreach ($rows as $row){
+  				$options .= '<option value="'.$row['id'].'" >'.htmlspecialchars($row['name'], ENT_QUOTES).'</option>';
+  			}
+  		}
+  		return $options;
+  	}
+  	 
   }
 }
 ?>

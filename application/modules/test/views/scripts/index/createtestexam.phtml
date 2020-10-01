@@ -36,10 +36,17 @@
 					dijit.byId("degree").focus();
 					return false;
 				}
-				if(dijit.byId("grade_result").get("value")==''){
-                    alert("<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>");
-					dijit.byId("grade_result").focus();
-					return false;
+
+				var totalScore = dijit.byId('score').get('value'); 
+				if(isNaN(totalScore)){
+					totalScore=0;
+				}
+				if(totalScore>0){
+					if(dijit.byId("grade_result").get("value")==''){
+                   	 	alert("<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>");
+						dijit.byId("grade_result").focus();
+						return false;
+					}
 				}
 				if(dijit.byId('academic_year').get("value")==''){
 					alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
@@ -380,6 +387,11 @@ function getStudntTestByBranch(){
 }
 
 url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+<?php $testCondiction = TEST_CONDICTION; 
+if ($testCondiction==2){
+?>
+url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
+<?php }?>
 function getAllTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){

@@ -10,6 +10,7 @@
 	
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$userinfo = $_dbgb->getUserInfo();
+	$testCondiction = TEST_CONDICTION;
 ?>
 <script>
 	dojo.require("dijit.form.DateTextBox");
@@ -65,9 +66,11 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input type="text" name="txtsearch" id="txtsearch" dojoType="dijit.form.TextBox" value="<?php echo $this->adv_search['txtsearch']; ?>" placeholder="<?php echo $tr->translate('SEARCH');?>" class="fullside" />
                    </div>
+                   <?php if ($testCondiction!=2){?>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("branch_search");?>
                    </div>
+                   <?php }?>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("degree");?>
                    </div>

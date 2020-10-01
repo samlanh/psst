@@ -29,7 +29,14 @@ class Test_IndexController extends Zend_Controller_Action
     		$this->view->adv_search = $search;
 			$rs_rows= $db->getAllStudentTest($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
+    		
+    		$testCondiction = TEST_CONDICTION;
+    		$collumns = array("SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","PHONE","DOB","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
+    		
+    		if ($testCondiction!==2){
+    			$collumns = array("BRANCH","SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
+    			
+    		}
     		$link=array(
     				'module'=>'test','controller'=>'index','action'=>'edit',
     		);
@@ -172,7 +179,6 @@ class Test_IndexController extends Zend_Controller_Action
     	if(empty($row)){
     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
     	}
-    	
     	$result=null;
     	
     	if (!empty($test)){
@@ -208,6 +214,18 @@ class Test_IndexController extends Zend_Controller_Action
     		$_dbgb = new Test_Model_DbTable_DbStudentTest();
     		$serial = $_dbgb->uploadFile($data);
     		print_r($serial);
+    		exit();
+    	}
+    }
+    
+    function gettermstudyAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$option = empty($data['option'])?null:$data['option'];
+    		$rows = $db->getAllTestTerm($data,$option);
+    		array_unshift($rows,array ( 'id' =>"",'name' => $this->tr->translate("SELECT_TERM")));
+    		print_r(Zend_Json::encode($rows));
     		exit();
     	}
     }

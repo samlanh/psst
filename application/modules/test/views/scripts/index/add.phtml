@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 	$frm = $this->frm_crm;
+	$testCondiction = TEST_CONDICTION;
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
@@ -44,6 +45,9 @@ input.btn_borwse_image {
 }
 tr#head-title {
     text-align: center;
+}
+.hiddenControl{
+	display: none !important;
 }
 </style>
 <script type="text/javascript">
@@ -99,7 +103,7 @@ tr#head-title {
 				                   </label>
 				                </div>
 				               
-				                <div class="form-group">
+				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
 				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -155,14 +159,14 @@ tr#head-title {
 				                   		<?php echo $frm->getElement("student_status");?>
 				                   </div>
 				                </div>
-				                <div class="form-group">
+				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATIONALITY");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("nationality");?>
 				                   </div>
 				                </div>
-				                <div class="form-group">
+				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATION");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -183,7 +187,7 @@ tr#head-title {
 				                   		<?php echo $frm->getElement("pob");?>
 				                   </div>
 				                </div>
-				                <div class="form-group">
+				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_SCHOOL");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -551,6 +555,10 @@ dojo.ready(function(){
 			getAllTestSetting();
 		});
 		getAllTestSetting();
+
+		<?php if ($testCondiction==2){?>
+		dijit.byId('branch_id').set('value',1);  
+		<?php }?>
 
 });
 var url_section = '<?php echo $this->url(array("module"=>"placement","controller"=>"setting","action"=>"allsettings"));?>';										

@@ -917,7 +917,7 @@ function getAllgroupStudyNotPass($action=null){
    	WHERE 
    	gds.stu_id = s.stu_id 
    	AND gds.is_current=1 AND gds.is_maingrade=1
-   	AND gds.stop_type=0
+   	AND (gds.stop_type=0 OR gds.stop_type=3)
    	AND (stu_enname!='' OR s.stu_khname!='')
    	AND s.status=1  AND customer_type=1 ";
    	if($branchid!=null){
@@ -925,6 +925,7 @@ function getAllgroupStudyNotPass($action=null){
    	}
    	$sql.=" GROUP BY s.stu_id ORDER BY stu_khname ASC";
    	$rows = $db->fetchAll($sql);
+   	//OR gds.stop_type=3 retriv graduated student
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));
    		if(!empty($rows))foreach($rows AS $row){
@@ -2843,8 +2844,7 @@ function getAllgroupStudyNotPass($action=null){
   		";
   		$where =" AND gds.is_maingrade=1 ";
   	} 
-  	$sql="
-	  	SELECT 
+  	$sql="SELECT 
 		  	$string
 	  	FROM
 		  	rms_student AS s,

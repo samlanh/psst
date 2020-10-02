@@ -175,14 +175,14 @@ table.tb-footer tr.style-head {
 								?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['nation'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
-								<td style="padding: 5px; line-height:18px; text-align: center; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;"  >
+								<td style="padding: 3px; line-height:18px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;"  >
 									<?php echo $row['pob'];?>
 								</td>
 								<td>&nbsp;<?php echo $row['father_name'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['father_job'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['mother_name'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $row['mother_job'];?>&nbsp;</td>
-								<td style="padding: 5px; line-height:18px; text-align: left;width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;">
+								<td style="padding: 3px; line-height:18px; text-align: left;width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;">
 										<?php if (!empty($row['home_num'])){ echo $tr->translate("NUMBER_HOME")." ".$row['home_num']." ";}?>
 										<?php if (!empty($row['street_num'])){ echo $tr->translate("STREET")." ".$row['street_num']." ";}?>
 										<?php if (!empty($row['village_name'])){ echo $tr->translate("VILLAGE")." ".str_replace('ភូមិ', '', $row['village_name'])." ";}?>
@@ -190,7 +190,7 @@ table.tb-footer tr.style-head {
 										<?php if (!empty($row['district_name'])){ echo $tr->translate("DISTRICT")." ".$row['district_name']." ";}?>
 										<?php if (!empty($row['province'])){ echo $tr->translate("CITY_PROVINCE")." ".$row['province']." ";}?>
 								</td>
-								<td style="padding: 5px; text-align: left;width: 200px;min-width: 100px;white-space: normal; overflow-wrap: break-word;">
+								<td style="padding: 3px; text-align: left;width: 200px;min-width: 100px;white-space: normal; overflow-wrap: break-word;">
 									<?php echo $row['tel'];?>
 								</td>
 							</tr>

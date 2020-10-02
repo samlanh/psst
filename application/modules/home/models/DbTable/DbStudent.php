@@ -95,6 +95,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=" AND ds.session=".$search['session'];
 		}
+		if($search['study_status']>=0){
+			$where.=' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) ='.$search['study_status'];
+		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
 		return $_db->fetchAll($sql.$where.$orderby);

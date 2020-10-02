@@ -599,7 +599,137 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAllStudentgep($search){
+    	
+    	$curr = new Application_Model_DbTable_DbGlobal();
+    	$lang= $curr->currentlang();
+    	
     	$db = $this->getAdapter();
+    	$field = 'name_en';
+    	$colunmname='title_en';
+    	if ($lang==1){
+    		$field = 'name_kh';
+    		$colunmname='title';
+    	}
+    	
+    	$to_date = (empty($search['end_date']))? '1': " spd.validate >= '".$search['end_date']." 23:59:59'";
+    	$sql ="SELECT s.stu_id,
+    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+    	CONCAT(s.stu_enname) AS name,
+    	s.stu_khname,
+    	s.is_stu_new,
+    	s.remark,
+    	nationality,tel,
+    	email,
+    	stu_code,
+    	home_num,
+    	street_num,
+    	village_name,
+    	commune_name,
+    	district_name,
+    	gds.stop_type AS is_subspend,
+    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=gds.session limit 1)AS session,
+    	(SELECT major_enname from rms_major where rms_major.major_id=gds.grade limit 1 )AS grade,
+    	(SELECT en_name from rms_dept where rms_dept.dept_id=gds.degree limit 1)AS degree,
+    	(SELECT name_en from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status,
+    	(SELECT province_en_name from rms_province where rms_province.province_id = s.province_id limit 1)AS province,
+    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=s.sex limit 1)AS sex,
+    	(SELECT r.room_name FROM `rms_room` AS r where r.room_id=(SELECT room_id FROM `rms_group` WHERE rms_group.id=gds.gd_id LIMIT 1) LIMIT 1 ) AS room_name,
+    	
+    	(SELECT sp.`create_date` FROM  
+    	`rms_student_paymentdetail` AS spd,
+    	`rms_student_payment` AS sp
+    	WHERE
+		    	s.stu_id = sp.student_id
+		    	AND sp.id=spd.`payment_id`
+		    	AND sp.is_void!=1
+		    	AND spd.`is_start` = 1
+		    	AND spd.service_type=4
+		    	AND $to_date ORDER BY spd.`validate` DESC LIMIT 1) AS paid_date
+    	 
+    	FROM rms_student AS s,
+    	rms_group_detail_student AS gds 
+    	WHERE gds.stu_id = s.stu_id
+		  	AND (last_name!='' OR stu_enname!='' OR s.stu_khname!='')
+		  	AND s.status=1
+		  	AND s.customer_type=1
+		  	AND gds.is_current = 1
+    	     ";//AND gds.school_option=2
+    	$where=' ';
+    	
+    	$to_date = (empty($search['end_date']))? '1': "gds.date <= '".$search['end_date']." 23:59:59'";
+    	$where .=" AND ".$to_date;
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	
+    	$order="  order by gds.academic_year DESC,gds.degree ASC,gds.grade DESC,gds.session ASC,stu_enname ASC ";
+    	if(empty($search)){
+    	return $db->fetchAll($sql.$order);
+    	}
+    	if(!empty($search['title'])){
+    	$s_where = array();
+    	$s_search = addslashes(trim($search['title']));
+    	$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    	$s_where[] = " CONCAT(s.stu_enname,s.stu_khname) LIKE '%{$s_search}%'";
+    	//$s_where[] = " (SELECT en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
+    	//$s_where[] = " (SELECT major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
+    	//$s_where[] = " (SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
+    	$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    	$where.=' AND academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['grade_all'])){
+    	$where.=' AND grade='.$search['grade_all'];
+    	}
+    		if(!empty($search['session'])){
+    		$where.=' AND session='.$search['session'];
+    	}if($search['degree']>0){
+    			$where.=' AND degree='.$search['degree'];
+    		}
+    		if(($search['branch_id'])>0){
+    		$where.=' AND branch_id='.$search['branch_id'];
+    		}
+    		if($search['grade_all']>0){
+    		$where.=' AND grade='.$search['grade_all'];
+    		}
+//     		if($search['group']>0){
+//     			$where.=' AND group_id='.$search['group'];
+//     		}
+    		//     	if($search['pay_status']>0){
+    	
+    		// //     		(SELECT sp.`create_date` FROM  `rms_student_paymentdetail` AS spd,`rms_student_payment` AS sp
+    		// //     		WHERE
+    		// //     		rms_student.stu_id = sp.student_id
+    		// //     		AND sp.id=spd.`payment_id`
+    		// //     		AND sp.is_void!=1
+    		// //     		AND spd.`is_start` = 1
+    		// //     		AND spd.service_id=4
+    		// //     		AND $to_date ORDER BY spd.`validate` DESC LIMIT 1) AS paid_date
+    	
+    		//     		$where.=" AND (SELECT sp.`create_date` FROM  `rms_student_paymentdetail` AS spd,`rms_student_payment` AS sp
+    				//     		WHERE
+    				//     		rms_student.stu_id = sp.student_id
+    				//     		AND sp.id=spd.`payment_id`
+    				//     		AND sp.is_void!=1
+    				//     		AND spd.`is_start` = 1
+    				//     		AND spd.service_id=4
+    				//     		AND $to_date ORDER BY spd.`validate` DESC LIMIT 1)
+    		//     		!= '' " ;
+    		//     	}
+    		 
+    		if($search['study_type']!=''){
+    			
+    		if($search['study_type']==0){
+    		//$where.=' AND is_subspend='.$search['study_type'];
+    	}else{
+    		//$where.=' AND is_subspend!=0';
+    	}
+    	}
+    	echo $sql.$where.$order;
+    		return $db->fetchAll($sql.$where.$order);
+    		
+    	/*$db = $this->getAdapter();
     	$to_date = (empty($search['end_date']))? '1': " spd.validate >= '".$search['end_date']." 23:59:59'";
     	$sql ="SELECT stu_id,
     	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
@@ -679,7 +809,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			$where.=' AND is_subspend!=0';
     		}
     	}
-    	return $db->fetchAll($sql.$where.$order);
+    	return $db->fetchAll($sql.$where.$order);*/
     }
     
     function getAllStudentID(){

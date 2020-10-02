@@ -47,10 +47,12 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
 						FROM rms_student AS s,
 							rms_group_detail_student AS ds
-						  WHERE  ds.is_maingrade=1 
-									AND s.stu_id=ds.stu_id 
-				                   AND s.status = 1 AND s.customer_type = 1
-				                   ANd ds.is_pass=0 ";
+						  WHERE  
+						   ds.is_maingrade=1 
+						   AND ds.is_current=1 
+						   AND s.stu_id=ds.stu_id 
+		                   AND s.status = 1 
+						AND s.customer_type = 1 ";
 			$orderby = " ORDER BY s.stu_khname ASC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);

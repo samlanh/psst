@@ -78,7 +78,7 @@ Class Registrar_Form_FrmCustomer extends Zend_Dojo_Form {
 				'class'=>'fullside'));
 				
 		$rs_province = $_db->getAllProvince();
-		$province_opt = '' ;
+		$province_opt = array();
 		if(!empty($rs_province))foreach($rs_province AS $row) $province_opt[$row['id']]=$row['name'];
 			
 		$_student_province = new Zend_Dojo_Form_Element_FilteringSelect("student_province");

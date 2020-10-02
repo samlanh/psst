@@ -177,13 +177,15 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-				'title' 		=> '',
-				'study_year' 	=> '',
-				'grade_all' 	=> '',
-				'session' 		=> '',
+				'title' 		=>'',
+				'study_year' 	=>'',
+				'grade_all' 	=>'',
+				'session' 		=>'',
 				'branch_id'		=>0,
-				'degree'		=>0,
-				'study_type'	=> '',
+				'degree'=>0,
+				'study_type'	=>'',
+				'pay_status'	=> 0,
+				'group'	=>'',
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
 			);

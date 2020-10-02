@@ -252,12 +252,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		$db= new Foundation_Model_DbTable_DbStudent();
-		$row = $db->getStudentById($id);
-		$this->view->rs = $row;
-		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
-			exit();
-		}
+		
 		
 		if($this->getRequest()->isPost())
 		{
@@ -278,6 +273,12 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("COPY_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+		}
+		$row = $db->getStudentById($id);
+		$this->view->rs = $row;
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
+			exit();
 		}
 // 		$rr = $db->getStudyHishotryById($id);
 // 		$this->view->rr = $rr;

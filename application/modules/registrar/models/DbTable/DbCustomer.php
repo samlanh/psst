@@ -26,7 +26,7 @@ class Registrar_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 		$where = " AND ".$from_date." AND ".$to_date;
 	
 		$sql=" SELECT s.stu_id as id,
-				s.stu_khname,
+				(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				s.tel,
 				s.email,

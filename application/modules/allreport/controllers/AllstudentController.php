@@ -172,32 +172,39 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptenglishprogramAction(){
+		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search=array(
-				'title' 		=>'',
-				'study_year' 	=>'',
-				'grade_all' 	=>'',
-				'session' 		=>'',
-				'branch_id'		=>0,
-				'degree'=>0,
-				'study_type'	=>'',
-				'pay_status'	=> 0,
-				'group'	=>'',
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+					'adv_search' 		=>'',
+					'academic_year' 	=>'',
+					'grade' 	=>'',
+					'session' 		=>'',
+					'branch_id'		=>0,
+					'group'			=>'',
+					'degree'=>0,
+					'study_type'=>'',
+					'pay_status'	=> 0,
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	
+		
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getAllStudentgep($search);
 		$this->view->search=$search;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		
 	}	
 	public function rptStudentStatisticAction(){
 		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();

@@ -1014,23 +1014,32 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    
    public function getStundetScoreList($search){ // fro rpt-score
    	$db = $this->getAdapter();
-   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,title_score,s.for_month,s.for_semester,s.note,
-	   	(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')')
-	   	FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
-	   	,(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+   	$sql="SELECT 
+   			s.`id`, 
+   			g.`branch_id`,
+   			s.`group_id`, 
+   			g.`group_code`,
+   			title_score,
+   			s.for_month,
+   			s.for_semester,
+   			s.note,
+   			
+   			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
+   			(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 	   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1)  LIMIT 1 )AS grade,
 	   	`g`.`semester` AS `semester`,
 	   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 	   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`, (SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month, s.for_semester,
 	   	s.reportdate
-	   	FROM `rms_teacherscore` AS s, `rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
+	   	FROM `rms_teacherscore` AS s, 
+   			`rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
    	$where='';
    	if(!empty($search['title'])){
    		$s_where=array();
-   		$s_search=addslashes(trim($search['title']));
-   		$s_where[]= " s.title_score LIKE '%{$s_search}%'";
-   		$s_where[]=" s.note LIKE '%{$s_search}%'";
-   		$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
+   		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+   		$s_where[]=" REPLACE(s.title_score,' ','') LIKE '%{$s_search}%'";
+   		$s_where[]=" REPLACE(s.note,' ','') LIKE '%{$s_search}%'";
+   		$s_where[]=" REPLACE(s.for_semester,' ','') LIKE '%{$s_search}%'";
    		$where.=' AND ('.implode(' OR ', $s_where).')';
    	}
    	if(!empty($search['group_name'])){
@@ -1172,7 +1181,8 @@ function getExamByExamIdAndStudent($data){
 	    	gds.degree AS degree_id,
 	    	gds.academic_year AS for_academic_year,
 	    	(SELECT br.school_namekh FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_namekh,
-	    	(SELECT br.school_nameen FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_nameen
+	    	(SELECT br.school_nameen FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_nameen,
+	    	(SELECT br.photo FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS photo_branch
     	FROM
     	`rms_score` AS s,
     	`rms_score_detail` AS sd,

@@ -77,34 +77,75 @@
 		#footer{display: none;}
 	</style>
 	<div id="divPrint">
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding:0cm;font-family:'Khmer OS Battambang'; " >
+			<style>
+				table tr th{
+					border: solid 1px #4839bd;
+					text-align: center;
+					padding: 5px 2px;
+				}
+				ul li{list-style: none;}
+				table {page-break-inside:auto }
+				tr{ page-break-inside:avoid; page-break-after:auto; }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				table.content-data-main{
+					width:100%;
+					font-family:'Times New Roman','Khmer OS Battambang';
+					font-size:12px;
+					white-space: nowrap;
+					margin:0 auto;
+					color:#4839bd;
+					margin:0 auto;
+					border-collapse:collapse;
+					border: solid 1px #4839bd;
+				}
+				table.content-data{
+					border-collapse:collapse;
+					width:100%;
+					border:1px solid #4839bd; 
+					font-family:'Times New Roman','Khmer OS Battambang';
+					font-size:12px;
+					white-space: nowrap;
+					margin:0 auto;
+					color:#4839bd;
+					margin:0 auto;
+				}
+				table.content-data-main  tr.style-head,
+				table.content-data  tr.style-head {
+				   line-height: 20px; padding:1px 0px; white-space: nowrap; 
+					background: #ccd9ff;
+					text-align: center;
+				}
+				table.content-data tr.style-rowdata {
+					font-size:12px; 
+					height: 20px;
+				}
+				td.border,
+				table.content-data-main tr.style-head td {
+				    border: 1px solid #4839bd;
+				}
+				table.content-data-main tr.style-rowdata td {
+				    padding: 0 2px;
+				}							
+			</style>
+			<table style="background:#fff; margin: 0 auto; width: 100%; padding:0cm;font-family:'Times New Roman','Khmer OS Battambang'; " >
 				<tr>
-					<td width="15%" align="center">
-						<img style="width:60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+					<td colspan="3">
+						<?php echo $this->rsheader;?>
 					</td>
-					<td  align="center" width="70%">
-						<strong style=" font-weight:200; color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
-						<strong style="font-weight:200; color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_HISTORY_REPORT');?></strong><br />
-						<strong style="font-weight:200; color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>             
-					</td>
-					<td width="15%" align="center">
+				</tr>
+				<tr>
+					<td colspan="3" align="center" >
+						<strong style=" font-weight:200; color:inherit; font-size: 17px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+						<strong style="font-weight:200; color:inherit; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_HISTORY_REPORT');?></strong><br />
+						<strong style="font-weight:200; color:inherit; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>             
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<style>
-						table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
-						tr{ page-break-inside:avoid; page-break-after:auto }
-						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-						#header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
-						}
-						table tr th {
-							text-align: center;
-						}
-					.hover:hover{background:#eee;}										
-					</style>
 						<?php 
 							$total=0;
 							$total_balance = 0;
@@ -115,9 +156,9 @@
 							$deduct=0;
 							$net_amount=0;
 						?>	
-						<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
+						<table class="content-data-main" cellpadding="2"​ border="1" >
 							  <thead>
-								  <tr style="text-align:center;background-color:  #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+							  	<tr class="style-head" align="center" >
 								    <th><?php echo $tr->translate('N_O');?></th>
 									<th><?php echo $tr->translate('SERVICE_CATE');?></th>
 									<th><?php echo $tr->translate('SERVICE_NAME');?></th>
@@ -163,7 +204,7 @@
 									  	?></td>
 									  </tr>
 							  		<?php }?>
-								  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
+								 <tr class="style-rowdata hover" align="center" >
 								  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
 								    <?php 
 									 	if($rs['is_void']==0){
@@ -217,13 +258,14 @@
 					<?php if(!empty($this->row)){ ?>
 					<tr>
 						<td colspan="3">
-							<table width="29.2%" border="1" align="right" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
-								<tr>
-									<td style="font-size: 18px; font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200; font-size: 12px;"><?php echo $tr->translate('GRAND_TOTAL');?></td>
-									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200; font-size: 12px;"><?php echo $tr->translate('FINE');?></td>
-									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('CREDIT_MEMO');?></td>
-									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('DEDUCT');?></td>
-									<td style="font-family:'Times New Roman','Khmer OS Muol Light'; background-color: #ccc; width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('NET_AMOUNT');?></td>
+							<br />
+							<table width="29.2%" border="1" align="right" style="border:1px solid #4839bd;  border-collapse:collapse;white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
+								<tr style="background-color: #ccd9ff; font-size: 18px; font-family:'Times New Roman','Khmer OS Muol Light'; ">
+									<td style="width: 38%; font-weight:200; font-size: 12px;"><?php echo $tr->translate('GRAND_TOTAL');?></td>
+									<td style="width: 38%; font-weight:200; font-size: 12px;"><?php echo $tr->translate('FINE');?></td>
+									<td style="width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('CREDIT_MEMO');?></td>
+									<td style="width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('DEDUCT');?></td>
+									<td style=" width: 38%; font-weight:200;font-size: 12px;"><?php echo $tr->translate('NET_AMOUNT');?></td>
 								</tr>
 								<tr>
 									<td style="font-weight:bold;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 12px;"><span style="color: red;">$ <?php echo number_format($total,2);?></span></td>

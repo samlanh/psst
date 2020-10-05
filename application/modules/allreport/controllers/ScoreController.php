@@ -376,6 +376,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+    	
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
     }
     function rptSubjectScoredetailAction(){//for kentridge
     	

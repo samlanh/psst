@@ -798,7 +798,7 @@ function getAllgroupStudyNotPass($action=null){
    		$field = 'name_kh';
    	}
    	
-   	$sql="SELECT key_code as id ,$field AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY name_kh ASC ";
+   	$sql="SELECT key_code as id ,$field AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY key_code ASC ";//ORDER BY name_kh ASC
    	$rows = $db->fetchAll($sql);
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$options= array(-1=>$tr->translate("CHOOSE"));

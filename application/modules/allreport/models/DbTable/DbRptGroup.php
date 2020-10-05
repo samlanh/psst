@@ -125,7 +125,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			    	(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
 			    	(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province,
 			    	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = gr.teacher_id LIMIT 1) as teacher
-			    	
 				FROM 
 					`rms_group_detail_student` AS g,
 					 rms_student as s,
@@ -133,18 +132,18 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				WHERE 
 					gr.id = g.group_id
 					AND g.stu_id = s.stu_id
-		   			AND `g`.`status` = 1 
-		   			and g.is_pass = 0
-			";
-	   	//AND g.stop_type = 0
+		   			AND `g`.`status` = 1 ";
 			if (!empty($id)){
 				$sql.=' AND g.group_id='.$id;
 			}
-// 			if($type == 0){
-// 				$sql.=' and g.stop_type=0 ';
-// 			}  
+			if($search['study_type']>-1){
+				if($search['study_type']==1){
+					$sql.=' AND (g.stop_type=2 OR g.stop_type= '.$search['study_type'].")";
+				}else{
+					$sql.=' AND g.stop_type= '.$search['study_type'];
+				}
+			}  
 			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
-			
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$sql.=$dbp->getAccessPermission("gr.branch_id");
 			
@@ -168,19 +167,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   	if(!empty($search['group'])){
 		   		$sql.=' AND gr.id = '.$search['group'];
 		   	}
-		   	if(!empty($search['study_type'])){
-		   		$sql.=' AND g.stop_type = '.$search['study_type'];
-		   	}
-		   	if(!empty($search['study_type']) AND $search['study_type']==0){
-		   		$sql.=' AND g.stop_type = 0';
-		   	}
-// 		   	if(!empty($search['study_type']) AND $search['study_type']==1){
-// 		   		$sql.=' AND g.stop_type = 0';
-// 		   	}
-// 		   	if(!empty($search['study_type']) AND $search['study_type']!=1){
-// 		   		$sql.=' AND g.stop_type != 0 ';
-// 		   	}
-// echo $sql.$order;
 		 return $db->fetchAll($sql.$order);
 	}
 	public function getGroupDetail($search){

@@ -487,8 +487,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->rs = $row;
     	
     	$db = new Allreport_Model_DbTable_DbRptGroup();
-//     	$row = $db->getStudentGroup($id,$search,1);
-//     	$this->view->rs = $row;
     	$rs = $db->getGroupDetailByID($id);
     	$this->view->rr = $rs;
     	

@@ -436,7 +436,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search = array(
 				'txtsearch' => "",
-				'study_type'=>0);
+				'study_type'=>0
+				);
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
@@ -444,6 +445,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $row;
 		$rs = $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->study_type = $db->getViewByType(5,0);
 	}
 	function submitlistAction(){
 		if($this->getRequest()->isPost()){
@@ -494,6 +498,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->study_type = $db->getViewByType(5,0);
 	}
 	function certifyEnglishAction(){
 		$id=$this->getRequest()->getParam("id");

@@ -48,7 +48,6 @@ public function init()
 		$this->view->search=$search;
 	}
 	public function rptGroupAction(){
-	
 		if($this->getRequest()->isPost()){
 			$_data=$this->getRequest()->getPost();
 			$search = array(
@@ -65,7 +64,6 @@ public function init()
 		$group= new Allreport_Model_DbTable_DbRptGroup();
 		$this->view->rs = $rs_rows = $group->getAllGroup($search);
 		$this->view->search = $search;
-			
 	}
 	
 	public function rptStudentAction(){

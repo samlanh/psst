@@ -85,7 +85,7 @@ class Application_Form_FrmGlobal{
 		return $str;
 	}
 	function getLetterHeaderReport($branch_id){
-		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
+		
 		//$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
 		if (empty($branch_id)){
@@ -225,7 +225,7 @@ class Application_Form_FrmGlobal{
 	}
 	
 	function getLeftLogo($branch_id){
-		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
+		
 		//$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
 		if (empty($branch_id)){

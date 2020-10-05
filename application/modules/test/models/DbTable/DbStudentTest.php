@@ -297,14 +297,16 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			WHERE s.is_studenttest =1 ";
 		if (!empty($search['txtsearch'])){
 			$s_where = array();
-			$s_search = trim(addslashes($search['txtsearch']));
-			$s_where[] = " s.serial LIKE '%{$s_search}%'";
-			$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
-			$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
-			$s_where[] = " s.last_name LIKE '%{$s_search}%'";
-			$s_where[] = " s.tel LIKE '%{$s_search}%'";
-			$s_where[] = " s.guardian_khname LIKE '%{$s_search}%'";
-			$s_where[] = " s.guardian_tel LIKE '%{$s_search}%'";
+			$s_search = str_replace(' ', '', addslashes(trim($search['txtsearch'])));
+			$s_where[] = " REPLACE(s.serial,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_khname,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_enname,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.last_name,' ','')  LIKE '%{$s_search}%'";
+			$s_where[]=	 " REPLACE(CONCAT(s.last_name,s.stu_enname),' ','')  LIKE '%{$s_search}%'";
+			$s_where[]=	 " REPLACE(CONCAT(s.stu_enname,s.last_name),' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.tel,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.guardian_khname,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.guardian_tel,' ','')  LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}    
 		if(!empty($search['branch_search'])){

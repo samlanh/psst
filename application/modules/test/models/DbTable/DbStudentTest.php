@@ -654,7 +654,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$grade = "idd.title_en";
 			$degree = "i.title_en";
 		}
-		
+		$testCondiction = TEST_CONDICTION;
 		$sql="SELECT 
 			str.*,
 			CASE    
@@ -667,8 +667,16 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				WHEN  str.comment = 2 THEN '".$tr->translate("GOOD_FAIR")."'
 				WHEN  str.comment = 3 THEN '".$tr->translate("FAIR")."'
 				WHEN  str.comment = 4 THEN '".$tr->translate("WEAK")."'
-				END AS comment_title,
-			(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=study_term) AS study_term,
+				END AS comment_title,";
+		
+		if ($testCondiction==2){
+			$sql.="(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";
+		}else{
+			$sql.="(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=study_term) AS study_term,";
+		}
+		
+		$sql.="
+			
 			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 			(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,

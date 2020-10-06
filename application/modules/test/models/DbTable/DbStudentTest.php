@@ -514,13 +514,15 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					if (!empty($check)){
 						$result  = $this->getTestResultById($test,$type,$data['stu_test_id']);
 	// 					$where = "stu_id=".$data['stu_test_id']." AND degree = ".$result['degree_result']." AND grade=".$result['grade_result']." AND group_id=0";
-						$where = "stu_id=".$data['stu_test_id'];
-						$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
-						$where.=" AND degree = ".$degreeUp;
 						
-						$gradeUp = empty($result['grade_result'])?$data['grade_result']:$result['grade_result'];
-						$where.=" AND degree = ".$gradeUp;
-						$where." AND group_id=0 ";
+						$where = "stu_id=".$data['stu_test_id'];
+						$where.=" AND test_restult_id = $test ";
+						//Old Condiction Update not Clear
+// 						$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
+// 						$where.=" AND degree = ".$degreeUp;
+// 						$gradeUp = empty($result['grade_result'])?$data['grade_result']:$result['grade_result'];
+// 						$where.=" AND degree = ".$gradeUp;
+// 						$where." AND group_id=0 ";
 						
 						$this->_name="rms_group_detail_student";
 						$this->update($_arr, $where);
@@ -556,11 +558,25 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'create_date'		=>date("Y-m-d H:i:s"),
 						'modify_date'		=>date("Y-m-d H:i:s"),
 						'user_id'			=>$this->getUserId(),
+						'test_restult_id'		=>$id,
 				);
 				
+				$arrCheck=array(
+						'stu_test_id'			=>$data['stu_test_id'],
+						'degree_result'			=>empty($data['degree_result'])?$data['degree']:$data['degree_result'],
+						);
+				$check  = $this->checkStudentInGroupDetail($data);
+				if (!empty($check)){
+					$where = "stu_id=".$data['stu_test_id'];
+					$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
+					$where.=" AND degree = ".$degreeUp;
+					$this->_name="rms_group_detail_student";
+					$this->update($_arr, $where);
+				}else{
+					$this->_name="rms_group_detail_student";
+					$this->insert($_arr);
+				}
 				
-				$this->_name="rms_group_detail_student";
-				$this->insert($_arr);
 				
 			}
 			

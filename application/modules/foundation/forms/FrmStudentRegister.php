@@ -408,7 +408,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$commun_note->setValue($data['commune_name']);
 			$distric_note->setValue($data['district_name']);
 			$_student_province->setValue($data['province_id']);
-			$student_id->setValue($data['stu_code']);
+			$request=Zend_Controller_Front::getInstance()->getRequest();
+			if($request->getActionName()=='edit'){
+				$student_id->setValue($data['stu_code']);
+			}			
 // 			$_academic_year->setValue($data['academic_year']);
 // 			$session->setValue($data['session']);
 // 			$degree->setValue($data['degree']);

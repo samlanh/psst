@@ -72,7 +72,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.academic_year LIMIT 1) AS academic,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-				
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
 				(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room,
@@ -158,22 +157,13 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				$id = $this->insert($_arr);
 				
 				$this->_name='rms_group_detail_student';
-				// 			$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
+				//$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
 				$where = " gd_id=".$_data['studentid'];
 				$ar=array(
-						'stop_type'	=>	$_data['type'],
+					'stop_type'	=>	$_data['type'],
 				);
 				$this->update($ar, $where);
 			}
-			
-// 			$this->_name='rms_student';
-// 			$where=" stu_id=".$_data['studentid'];
-// 			$arr=array(
-// 				'is_subspend'	=>	$_data['type'],
-// 			);
-// 			$this->update($arr, $where);
-				
-			
 			$_db->commit();
 			return true;
 		}catch(Exception $e){

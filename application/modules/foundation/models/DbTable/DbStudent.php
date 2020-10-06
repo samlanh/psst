@@ -70,7 +70,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT $branch FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				s.stu_khname,
-				
 				CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				CASE
@@ -80,6 +79,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					ELSE s.guardian_tel
 				END as tel,
 				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(SELECT fee_id FROM `rms_student_fee_history` WHERE student_id=s.stu_id AND is_current=1 LIMIT 1) LIMIT 1) AS academic,
+				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
+					WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
 				(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
 				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";//AND s.is_subspend=0
 				
@@ -117,18 +118,22 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		
 
-// 		if(!empty($search['group'])){
-// 			$where.=" AND s.group_id=".$search['group'];
-// 		}
-// 		if(!empty($search['degree'])){
-// 			$where.=" AND s.degree=".$search['degree'];
-// 		}
-// 		if(!empty($search['grade_all'])){
-// 			$where.=" AND s.grade=".$search['grade_all'];
-// 		}
-// 		if(!empty($search['session'])){
-// 			$where.=" AND s.session=".$search['session'];
-// 		}
+		if(!empty($search['group'])){
+			$where.=" AND (SELECT ds.group_id FROM rms_group_detail_student AS ds
+				WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.group_id =".$search['group']." LIMIT 1) ";
+		}
+		if(!empty($search['degree'])){
+			$where.=" AND (SELECT ds.degree FROM rms_group_detail_student AS ds
+				WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.degree =".$search['degree']." LIMIT 1) ";
+		}
+		if(!empty($search['grade_all'])){
+			$where.=" AND (SELECT ds.grade FROM rms_group_detail_student AS ds
+				WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.grade =".$search['grade_all']." LIMIT 1) ";
+		}
+		if(!empty($search['session'])){
+			$where.=" AND (SELECT ds.session FROM rms_group_detail_student AS ds
+			WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.session =".$search['session']." LIMIT 1) ";
+		}
 		if($search['status']>-1){
 			$where.=" AND s.status=".$search['status'];
 		}

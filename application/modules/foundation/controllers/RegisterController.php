@@ -32,11 +32,12 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$rs_rows = $db_student->getAllStudent($search);
 			$list = new Application_Form_Frmtable();
 			
-				$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","SUSPEND_STATUS","USER","STATUS");
+				$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","GROUP","SUSPEND_STATUS","USER","STATUS");
 				$link=array(
 						'module'=>'foundation','controller'=>'register','action'=>'edit',
 				);
-				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'stu_enname'=>$link,'grade'=>$link));
+				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,
+						'stu_name'=>$link,'stu_khname'=>$link,'group_name'=>$link,'academic'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -2826,10 +2826,11 @@ function getAllgroupStudyNotPass($action=null){
   	$branch_id = $this->getAccessPermission();
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
   	$lang = $this->currentlang();
-  	$stuName = "COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
+//   	$stuName = "COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
+  	$stuName = "COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
   	$grade = "rms_itemsdetail.title_en";
   	if($lang==1){// khmer
-  		$stuName = "COALESCE(s.stu_khname,'')";
+//   		$stuName = "COALESCE(s.stu_khname,'')";
   		$grade = "rms_itemsdetail.title";
   	}
   	

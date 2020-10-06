@@ -652,7 +652,7 @@ function getAllgroupStudyNotPass($action=null){
    	if($branchid!=null){
    		$sql.=" AND branch_id=".$branchid;
    	}
-   	$sql.=" ORDER BY degree DESC,stu_khname ASC";
+   	$sql.=" ORDER BY stu_khname ASC";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));

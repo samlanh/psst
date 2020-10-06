@@ -94,30 +94,31 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}	
-			$db = new Foundation_Model_DbTable_DbStudentDrop();
-			$this->view->stu_id = $db->getAllStudentNameEdit();
 			
-			$db = new Application_Model_DbTable_DbGlobal();
-			$stu = $db->getAllStudentName();
-			$this->view->stuname=$stu;
-			
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$this->view->degree = $db_global->getAllDegreeMent();
-			$this->view->group = $db->getAllgroupStudy();
-			$this->view->session=$db_global->getSession();
-			
-			$d_row= $db_global->getAllGradeStudy();
-			$this->view->grade_name=$d_row;
-			
-			$tsub= new Global_Form_FrmAddClass();
-			$frm_student=$tsub->FrmAddDrup($row);
-			Application_Model_Decorator::removeAllDecorator($frm_student);
-			$this->view->frm = $frm_student;
 			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		$db = new Foundation_Model_DbTable_DbStudentDrop();
+		$this->view->stu_id = $db->getAllStudentNameEdit();
+			
+		$db = new Application_Model_DbTable_DbGlobal();
+		$stu = $db->getAllStudentName();
+		$this->view->stuname=$stu;
+			
+		$db_global = new Application_Model_DbTable_DbGlobal();
+		$this->view->degree = $db_global->getAllDegreeMent();
+		$this->view->group = $db->getAllgroupStudy();
+		$this->view->session=$db_global->getSession();
+			
+		$d_row= $db_global->getAllGradeStudy();
+		$this->view->grade_name=$d_row;
+			
+		$tsub= new Global_Form_FrmAddClass();
+		$frm_student=$tsub->FrmAddDrup($row);
+		Application_Model_Decorator::removeAllDecorator($frm_student);
+		$this->view->frm = $frm_student;
 	}
 
 	function getGradeAction(){//may not use

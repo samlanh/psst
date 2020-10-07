@@ -163,7 +163,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
  			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id  ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission();
+		$where.=$dbp->getAccessPermission("s.`branch_id`");
 		$where.=" LIMIT 1";
 		return $db->fetchRow($sql.$where);
 	}
@@ -193,7 +193,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
  			WHERE ds.stu_id = $stu_id AND ds.is_current=1 ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission();
+// 		$where.=$dbp->getAccessPermission();
 		return $db->fetchAll($sql.$where);
 	}
 	

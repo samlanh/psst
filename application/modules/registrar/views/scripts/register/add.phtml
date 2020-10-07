@@ -646,7 +646,7 @@ function getMonthByNumber(m){
 				<td align="center">
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 						type="button" onclick="hideDialog1();"><?php echo $tr->translate("NO");?></button>
-					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					<button id="comfirmSavePrint" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 						type="button" onclick="printSubmit()"><?php echo $tr->translate("YES");?></button>
 				</td>
 			</tr>
@@ -1362,6 +1362,7 @@ function printSave(){
 }
 function printSubmit(){	
 	checkSession();
+	dijit.byId('comfirmSavePrint').set('disabled',true);
 	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'addregistra')); ?>';
 	dojo.xhrPost({
 	    url: url_submit,	

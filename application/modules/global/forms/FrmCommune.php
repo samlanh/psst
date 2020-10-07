@@ -1,7 +1,7 @@
 <?php 
 Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 	protected $tr;
-	protected $tvalidate =null;//text validate
+	protected $tvalidate =null;
 	protected $filter=null;
 	protected $t_num=null;
 	protected $text=null;
@@ -73,7 +73,7 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$rows_district = $_db->getAllDistrict();
-		$opt_district = "";
+		$opt_district = array();
 		if(!empty($rows_district)) foreach($rows_district AS $row) $opt_district[$row['dis_id']]=$row['district_name'];
 		
 		$district_name = new Zend_Dojo_Form_Element_FilteringSelect('district_name');
@@ -102,14 +102,6 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 		));
 		$_province->setMultiOptions($opt_province);
-// 		$_province->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				'class'=>'fullside',));
-		//$rows_provicess = $_db->getAllProvince();
-		//$opt_provicess = array($this->tr->translate("SELECT_PROVINCE"));
-		
-		
 		
 		$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DACTIVE"));
 		$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -122,7 +114,6 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 		if(!empty($data)){
 			$commune->setValue($data['commune_name']);
 			$code->setValue($data['code']);
-// 			echo $data['commune_namekh'];exit();
 			$communekh->setValue($data['commune_namekh']);
 			$_display->setValue($data['displayby']);
 			$district_name->setValue($data['district_id']);
@@ -131,8 +122,5 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 		}
 		$this->addElements(array($code,$district_nameen,$commune_en,$_btn_search,$_status_search,$_title,$commune,$district_name,$communekh,$_province, $_status, $_display));
 		return $this;
-		
 	}
-	
-	
 }

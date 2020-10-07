@@ -172,23 +172,22 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptenglishprogramAction(){
-		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search=array(
-					'adv_search' 		=>'',
-					'academic_year' 	=>'',
-					'grade' 	=>'',
-					'session' 		=>'',
-					'branch_id'		=>0,
-					'group'			=>'',
-					'degree'=>0,
-					'study_type'=>'',
-					'pay_status'	=> 0,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
+				'adv_search' 	=>'',
+				'academic_year' =>'',
+				'grade' 	    =>'',
+				'session' 		=>'',
+				'branch_id'		=>0,
+				'group'			=>'',
+				'degree'=>0,
+				'study_type'=>'',
+				'pay_status'	=> 0,
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d'),
 			);
 		}
 		
@@ -462,8 +461,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbRptGroup();
 			$db->UpdateAmountStudent($data);
 			$this->_redirect("/allreport/allstudent/student-group");
-	
-			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/allstudent/student-group");
 		}
 	}
 	public function rptStudentListAction()
@@ -812,5 +809,42 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+	}
+	public function rptStudentAddressAction()
+	{
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+// 		$id=$this->getRequest()->getParam("id");
+// 		if(empty($id)){
+// 			$this->_redirect("/allreport/allstudent/student-group");
+// 		}
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+			$rs=null;
+		}
+		else{
+			$search = array(
+				'txtsearch' 	=> "",
+				'group' 		=> "",
+				'branch_id' 	=> "",
+				'academic_year'	=> "",
+				'study_type'	=>0
+			);
+		}
+		$row = $db->getStudentAddress($search,1);
+		$this->view->search = $search;
+	
+		$this->view->rs = $row;
+// 		$this->view->rr = $rs;
+	
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport(1,3);
+	
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->study_type = $db->getViewByType(5,0);
 	}
 }

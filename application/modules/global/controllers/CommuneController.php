@@ -26,7 +26,7 @@ class Global_CommuneController extends Zend_Controller_Action {
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 				
 			$list = new Application_Form_Frmtable();
-			$collumns = array("COMMUNE_CODE","COMMUNENAME_KH","COMMUNENAME_EN","DISTRICT_NAME","DATE","STATUS","BY_USER");
+			$collumns = array("COMMUNENAME_KH","COMMUNENAME_EN","DISTRICT_NAME","DATE","STATUS","BY_USER");
 			$link=array(
 					'module'=>'global','controller'=>'commune','action'=>'edit',
 			);

@@ -23,7 +23,7 @@ class Global_DistrictController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("DISTRICT_CODE","DISTRICT_KH","DISTRICT_ENG","PROVINCE","DATE","STATUS","BY_USER");
+			$collumns = array("DISTRICT_KH","DISTRICT_ENG","PROVINCE","DATE","STATUS","BY_USER");
 			$link=array(
 					'module'=>'global','controller'=>'district','action'=>'edit',
 			);

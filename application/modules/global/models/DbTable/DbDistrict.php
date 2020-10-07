@@ -48,32 +48,31 @@ class Global_Model_DbTable_DbDistrict extends Zend_Db_Table_Abstract
 	function getAllDistrict($search=null){
 		$db = $this->getAdapter();
 		$sql = "SELECT
-					dis_id,code,
+					dis_id,
 					district_namekh,district_name,
-					
 				    (SELECT province_kh_name FROM rms_province WHERE province_id=pro_id limit 1) As province_name
 					,modify_date,
 					status,
-				(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) As user_name
-		 FROM $this->_name ";
-		$where = ' WHERE 1 ';
+				    (SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) As user_name
+		 		FROM $this->_name ";
+			$where = ' WHERE 1 ';
 		
-		if($search['search_status']>-1){
-			$where.= " AND status = ".$search['search_status'];
-		}
-		if(!empty($search['province_name'])){
-			$where.=" AND pro_id=".$search['province_name'];
-		}
-		if(!empty($search['adv_search'])){
-			$s_where=array();
-			$s_search=addslashes(trim($search['adv_search']));
-			$s_where[]=" code LIKE '%{$s_search}%'";
-			$s_where[]=" district_name LIKE '%{$s_search}%'";
-			$s_where[]=" district_namekh LIKE '%{$s_search}%'";
-			$where.=' AND ('.implode('OR',$s_where).')';
-		}
-		$where.=" ORDER BY dis_id DESC ";
-		return $db->fetchAll($sql.$where);	
+			if($search['search_status']>-1){
+				$where.= " AND status = ".$search['search_status'];
+			}
+			if(!empty($search['province_name'])){
+				$where.=" AND pro_id=".$search['province_name'];
+			}
+			if(!empty($search['adv_search'])){
+				$s_where=array();
+				$s_search=addslashes(trim($search['adv_search']));
+				$s_where[]=" code LIKE '%{$s_search}%'";
+				$s_where[]=" district_name LIKE '%{$s_search}%'";
+				$s_where[]=" district_namekh LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode('OR',$s_where).')';
+			}
+			$where.=" ORDER BY dis_id DESC ";
+			return $db->fetchAll($sql.$where);	
 	}	
 	public function getDistrictByIdProvince($pro_id){
 		$db = $this->getAdapter();

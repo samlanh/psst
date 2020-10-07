@@ -17,7 +17,7 @@ Class Registrar_Form_Frmincome extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside'
 				));
-		$opt_month="";
+		$opt_month=array();
 		for($i=1;$i<=12;$i++){
 			$opt_month[$i]=$i;
 		}

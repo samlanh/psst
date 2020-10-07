@@ -15,12 +15,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($lang==1){// khmer
     		$label = "name_kh";
     		$branch = "branch_namekh";
-    		$grade = "rms_itemsdetail.title";
+    		$grade = "rms_itemsdetail.title ";
     		$degree = "rms_items.title";
     	}else{ // English
     		$label = "name_en";
     		$branch = "branch_nameen";
-    		$grade = "rms_itemsdetail.title_en";
+    		$grade = "rms_itemsdetail.title_en ";
     		$degree = "rms_items.title_en";
     	}
     	$sql = "SELECT 
@@ -49,7 +49,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			   sp.number,
     				(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_tuitionfee.academic_year LIMIT 1)
 					 FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
-					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
+					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 					(SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
 					(SELECT $label from rms_view where rms_view.type = 4 AND key_code=sp.session LIMIT 1) as session,
 					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT gds.grade FROM rms_group_detail_student AS gds WHERE gds.stu_id = s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle

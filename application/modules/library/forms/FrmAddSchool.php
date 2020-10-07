@@ -26,7 +26,7 @@ Class Global_Form_FrmAddSchool extends Zend_Dojo_Form {
 		$_province->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$rows_school = $_db->getGlobalDb("SELECT province_id,province_en_name FROM rms_province ");
-		$opt_school = "";
+		$opt_school = array();
 		if(!empty($rows_school))foreach($rows_school AS $row) $opt_school[$row['province_id']]=$row['province_en_name'];
 		
 		$_province->setMultiOptions($opt_school);

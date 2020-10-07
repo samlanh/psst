@@ -59,59 +59,12 @@ Class Global_Form_FrmVillage extends Zend_Dojo_Form {
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		
-// 		$rows_provice = $_db->getCommune();
-// 		$opt_commune = "";
-// 		if(!empty($rows_provice))foreach($rows_provice AS $row) $opt_commune[$row['com_id']]=$row['commune_name'];
-// 		$commune_name = new Zend_Dojo_Form_Element_FilteringSelect('commune_name');
-// 		$commune_name->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'
-// 		));
-		
-// 		$commune_name->setMultiOptions($opt_commune);
-// 		$commune_name->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				'class'=>'fullside',));
-		
-// 		$popup_commune_name = new Zend_Dojo_Form_Element_FilteringSelect('popup_commune_name');
-// 		$popup_commune_name->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'
-// 		));
-// 		$popup_commune_name->setMultiOptions($opt_commune);
-		
-// 		$rows_provice = $_db->getAllDistrict();
-// 		$opt_province = array($this->tr->translate("SELECT_DISTRICT"));
-// 		if(!empty($rows_provice))foreach($rows_provice AS $row) $opt_province[$row['dis_id']]=$row['district_name'];
-// 		$district_name = new Zend_Dojo_Form_Element_FilteringSelect('district_name');
-// 		$district_name->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'
-// 		));
-		
 		$_display =  new Zend_Dojo_Form_Element_FilteringSelect('display');
 		$_display->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
 		$_display_opt = array(
 				1=>$this->tr->translate("NAME_KHMER"),
 				2=>$this->tr->translate("NAME_EN"));
 		$_display->setMultiOptions($_display_opt);
-		
-// 		$district_name->setMultiOptions($opt_province);
-// 		$district_name->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				'class'=>'fullside',));
-		
-// 		$rows_provice = $_db->getAllDistrict();
-// 		$opt_province = array($this->tr->translate("SELECT_DISTRICT"));
-// 		if(!empty($rows_provice))foreach($rows_provice AS $row) $opt_province[$row['dis_id']]=$row['district_name'];
-// 		$district_name = new Zend_Dojo_Form_Element_FilteringSelect('district_name');
-// 		$district_name->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'
-// 		));
-		
-// 		$district_name->setMultiOptions($opt_province);
-// 		$district_name->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				'class'=>'fullside',));
-		
-		
-		
 		
 		$rows_provice = $_db->getAllProvince();
 		$opt_province = array($this->tr->translate("SELECT_PROVINCE"));

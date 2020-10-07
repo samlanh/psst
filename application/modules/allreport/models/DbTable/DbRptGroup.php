@@ -391,5 +391,99 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		LIMIT 1";
 		return $db->fetchRow($sql);
 	}
+	public function getStudentAddress($search,$type){
+		$session_lang=new Zend_Session_Namespace('lang');
+		$lang_id=$session_lang->lang_id;
+		$gender_str = 'name_en';
+		$str_village='village_name';
+		$str_commune='commune_name';
+		$str_district='district_name';
+		$str_province='province_en_name';
+		if($lang_id==1){//for kh
+			$gender_str = 'name_kh';
+			$str_village='village_namekh';
+			$str_commune='commune_namekh';
+			$str_district='district_namekh';
+			$str_province='province_kh_name';
+		}
+		$db = $this->getAdapter();
+		$sql="SELECT
+				g.gd_id,
+				(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle,
+				(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
+				`g`.`group_id` AS `group_id`,
+				`g`.`stu_id`   AS `stu_id`,
+				`s`.`stu_code` AS `stu_code`,
+				`s`.`stu_khname` AS `kh_name`,
+				`s`.`stu_enname` AS `en_name`,
+				`s`.`last_name` AS `last_name`,
+				`s`.`address` AS `address`,
+				s.pob,
+				`s`.`tel` AS `tel`,
+				`s`.`sex` AS `gender`,
+				`s`.`dob` AS `dob`,
+				s.father_enname AS father_name,
+				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
+				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation,
+				(SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
+				s.mother_enname AS mother_name,
+				(SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
+				(SELECT
+				`rms_view`.$gender_str
+				FROM `rms_view`
+				WHERE ((`rms_view`.`type` = 2)
+				AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
+				`g`.`status`   AS `status`,
+				s.home_num,
+				s.street_num,
+				(SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+				(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+				(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+				(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province,
+				
+				s.village_name  AS village_text,
+				s.commune_name  AS commune_text,
+				s.district_name  AS district_text,
+				s.province_id AS province_text,
+				
+				(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = gr.teacher_id LIMIT 1) as teacher
+				FROM
+					`rms_group_detail_student` AS g,
+					rms_student as s,
+					`rms_group` AS gr
+				WHERE
+				gr.id = g.group_id
+				AND g.stu_id = s.stu_id
+				AND `g`.`status` = 1 ";
+		
+		$sql.=' AND g.stop_type=0  AND g.is_current=1 AND is_maingrade=1 ';
+		
+		$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission("gr.branch_id");
+			
+		if(empty($search)){
+		return $db->fetchAll($sql.$order);
+	}
+		if(!empty($search['txtsearch'])){
+			$s_where = array();
+				$s_search = addslashes(trim($search['txtsearch']));
+				$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+				$s_where[] = " stu_khname LIKE '%{$s_search}%'";
+				$s_where[] = " stu_code LIKE '%{$s_search}%'";
+				$sql .=' AND ( '.implode(' OR ',$s_where).')';
+				}
+				if(!empty($search['branch_id'])){
+				$sql.=' AND gr.branch_id = '.$search['branch_id'];
+				}
+				if(!empty($search['academic_year'])){
+				$sql.=' AND gr.academic_year = '.$search['academic_year'];
+				}
+				if(!empty($search['group'])){
+				$sql.=' AND gr.id = '.$search['group'];
+		}
+		return $db->fetchAll($sql.$order);
+	}
        
 }

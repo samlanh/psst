@@ -189,6 +189,16 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
 		
+		
+		$_active_type=  new Zend_Dojo_Form_Element_FilteringSelect('active_type');
+		$_active_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$_active_type_opt = array(
+				-1=>$this->tr->translate("PLEASE_SELECT"),
+				0=>$this->tr->translate("ACTIVING"),
+				1=>$this->tr->translate("STOP"));
+		$_active_type->setMultiOptions($_active_type_opt);
+		$_active_type->setValue($request->getParam("active_type"));
+		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
 			$_branch_id->setValue($_data['branch_id']);
@@ -197,7 +207,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 			$_teacher->setValue($_data['teacher_type']);
 			$_nationality->setValue($_data['nationality']);
 		}
-		$this->addElements(array($_id,$_title,$_degree,$_teacher,$_staff,$_branch_id,$end_date,$_nationality,$_status,$_department,));
+		$this->addElements(array($_id,$_title,$_degree,$_teacher,$_staff,$_branch_id,$end_date,$_nationality,$_status,$_department,$_active_type));
 		
 		return $this;
 	}

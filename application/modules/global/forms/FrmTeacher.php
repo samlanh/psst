@@ -219,6 +219,15 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_submit->setLabel("save"); 
 		
 		$id=  new Zend_Form_Element_Hidden('id');
+		
+		
+		$_active_type=  new Zend_Dojo_Form_Element_FilteringSelect('active_type');
+		$_active_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$_active_type_opt = array(
+				0=>$this->tr->translate("ACTIVING"),
+				1=>$this->tr->translate("STOP"));
+		$_active_type->setMultiOptions($_active_type_opt);
+		
 		if(!empty($_data)){
  			$id->setValue($_data['id']);
 			$code->setValue($_data['teacher_code']);
@@ -251,9 +260,14 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_agreement->setValue($_data['agreement']);
 			$_schoolOption->setValue($_data['schoolOption']);
 			$_user->setValue($_data['user_name']);
+			
+			$_active_type->setValue($_data['active_type']);
 		}
 		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,
-				$pob,$_email,$start_date,$_degree,$_status,$_submit,$_schoolOption));
+				$pob,$_email,$start_date,$_degree,$_status,$_submit,$_schoolOption,
+				$_active_type
+				
+				));
 		
 		return $this;
 	}

@@ -18,7 +18,9 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 						'staff_type' => $_data['staff_type'],
 						'teacher_type' => $_data['teacher_type'],
 						'branch_id' => $_data['branch_id'],
-						'status' => $_data['status_search']);
+						'active_type' => $_data['active_type'],
+						'status' => $_data['status_search']
+						);
 			}else{
 				$search = array(
 						'title' => '',
@@ -27,12 +29,13 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 						'nationality' => '',
 						'teacher_type' => -1,
 						'branch_id' => '',
+						'active_type' => -1,
 						'status' => -1);
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","ID_CARD","TEACHER_NAME","SEX","TYPE",
-					"NATIONALITY","DEGREE","TEACHER_TYPE","POSITION","PHONE","EMAIL","NOTE","SCHOOL_OPTION","STATUS");
+					"NATIONALITY","DEGREE","TEACHER_TYPE","POSITION","PHONE","EMAIL","NOTE","SCHOOL_OPTION","WORKING_STATUS","STATUS");
 			$link=array('module'=>'foundation','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));
 		}catch (Exception $e){

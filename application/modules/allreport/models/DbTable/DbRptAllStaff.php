@@ -96,7 +96,11 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
 				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
 				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name
+				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name,
+				CASE
+				   	WHEN  g.active_type = 1 THEN '".$tr->translate("STOP")."'
+				   	WHEN  g.active_type = 0 THEN '".$tr->translate("ACTIVING")."'
+			   	END AS active_type 
 				FROM rms_teacher AS g WHERE 1
 		";
 		
@@ -127,6 +131,9 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['staff_type'])){
 			$where.=' AND staff_type='.$search['staff_type'];
+		}
+		if($search['active_type']>-1){
+			$where.=' AND active_type='.$search['active_type'];
 		}
 		$order_by=" ORDER BY id DESC";
 		

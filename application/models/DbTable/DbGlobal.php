@@ -568,8 +568,12 @@ function getAllgroupStudyNotPass($action=null){
    public function getAllTeacherSubject(){
    	$db = $this->getAdapter();
    	$branch_id = $this->getAccessPermission();
-   	$sql = "SELECT  id ,CONCAT(teacher_name_en) AS name FROM `rms_teacher`
-   	                        WHERE status = 1  $branch_id  Order BY id DESC";
+   	$sql = "SELECT  
+   			id ,
+   			CONCAT(teacher_name_en) AS name 
+   			FROM `rms_teacher`
+   	        WHERE status = 1 AND active_type=0
+   	$branch_id  Order BY id DESC";
    	return $db->fetchAll($sql);
    }
    function getRoom(){
@@ -1460,7 +1464,7 @@ function getAllgroupStudyNotPass($action=null){
   } 
   public function getAllTeahcerName($branch_id=null,$schooloption=null){
   	$db = $this->getAdapter();
-  	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != ''  ";
+  	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' AND active_type=0 ";
   	if (!empty($branch_id)){
   		$sql.=" AND branch_id = $branch_id";
   	}

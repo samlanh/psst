@@ -45,6 +45,9 @@ table.tb-footer tr.style-head {
 		</div>	
 		<div class="form-group">
 			<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("active_type");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
         		<?php echo $frm->getElement("staff_type");?>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
@@ -130,6 +133,7 @@ table.tb-footer tr.style-head {
 									<td>&nbsp;<?php echo $tr->translate("POSITION");?>&nbsp;</td>
 									<td><?php echo $tr->translate("PHONE");?></td>
 									<td><?php echo $tr->translate("EMAIL");?></td>
+									<td><?php echo $tr->translate("WORKING_STATUS");?></td>
 									<td><?php echo $tr->translate("NOTE");?><input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" /></td>
 								</tr>
 							</thead>
@@ -151,6 +155,7 @@ table.tb-footer tr.style-head {
 								<td ><?php echo $row['position_add'];?></td>
 								<td align="left">&nbsp;<?php echo $row['tel'];?></td>
 								<td><?php echo $row['email'];?></td>	
+								<td><?php echo $row['active_type'];?></td>	
 								<td><?php echo $row['note'];?></td>
 							</tr>
 						<?php }}?>	

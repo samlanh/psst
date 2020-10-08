@@ -8,7 +8,7 @@ if(!empty($this->rs['photo'])){
 	}
 }
 $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-
+$schoolDirector="នាយិកា";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -97,8 +97,8 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 											</td>
 										</tr>
 										<tr class="account-image">
-			  								<td colspan="2" valign="bottom">
-			  									<div style="margin-left: 25px;font-family: Khmer OS Muol Light;font-size:16px; ">នាយិកាសាលាបឋមសិក្សា និង មធ្យមសិក្សា អ៊ី.អិល.ធី </div>
+			  								<td colspan="2" valign="bottom"> 
+			  									<div style="margin-left: 25px;font-family: Khmer OS Muol Light;font-size:16px; "><?php echo $schoolDirector.$this->rs['school_namekh'];?> </div>
 											</td>
 											<td valign="top" width="20%" align="left" class="image-box" style="padding-left: 0px;">
 												<img style="margin-top: -85px" id="profile_wiew" src="<?php echo $image;?>" alt=""  />
@@ -212,7 +212,7 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
   													<tr>
   														<td style="line-height: 32px;">
   															<strong class="transfrom">Permanent Address:</strong> N<sup>o</sup> <span style="display: inline-block; white-space:nowrap; min-width: 20px;"><?php echo $this->rs['home_num'];?></span> &nbsp;Street &nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['street_num'];?>,</span>
-  														<?php echo $this->rs['commune_nameeg'];?>,&nbsp;<?php echo $this->rs['district_en'];?>&nbsp;,&nbsp;<?php echo $this->rs['province_enname'];?> 
+  														<?php echo $this->rs['commune_nameeg'];?> Commune,&nbsp;<?php echo $this->rs['district_en'];?> District&nbsp;,&nbsp;<?php echo $this->rs['province_enname'];?> 
   														Is currently a Student  of <?php echo $this->rs['grade_eng'];?> At <?php echo $this->rs['school_nameen'];?> in the school year <?php echo $this->rs['academic_year'];?>
   														</td>
   													</tr>

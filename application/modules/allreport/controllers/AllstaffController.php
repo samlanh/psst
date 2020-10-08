@@ -46,7 +46,8 @@ public function init()
 						'teacher_type' => -1,
 						'nationality' => '',
 						'branch_id' => '',
-						'status' => -1
+						'status' => -1,
+						'active_type' => -1,
 					);
 			}
 		

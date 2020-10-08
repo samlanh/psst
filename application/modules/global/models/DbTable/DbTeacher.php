@@ -54,6 +54,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'staff_type'  	 	 => $_data['staff_type'],
 					        'tel'  				 => $_data['phone'],
 							'note' 				 => $_data['note'],
+							'active_type' 				 => $_data['active_type'],
 							
 							'department' 		 => $_data['department'],
 							'village_name' 		 => $_data['village_name'],
@@ -117,10 +118,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						}
 						$_db->commit();
 			}catch(Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    		$_db->rollBack();
-	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    		
 	    	}
-	    	//print_r($_data); exit();
 	}
 	public function updateStaff($_data){
 		$_db= $this->getAdapter();		
@@ -146,6 +147,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'staff_type'  	 	 => $_data['staff_type'],
 				        'tel'  				 => $_data['phone'],
 						'note' 				 => $_data['note'],
+						'active_type' 		 => $_data['active_type'],
+						
 						'department' 		 => $_data['department'],
 						'village_name' 		 => $_data['village_name'],
 						'commune_name'  	 => $_data['commune_name'],
@@ -325,6 +328,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			$label = "name_en";
 			$branch = "branch_nameen";
 		}
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql = "SELECT g.id, 
 				(SELECT $branch FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 				g.teacher_code, 
@@ -338,7 +343,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				g.tel,
 				g.email,
 				g.note,
-				(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = g.schoolOption LIMIT 1) AS schoolOption
+				(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = g.schoolOption LIMIT 1) AS schoolOption,
+				CASE
+				   	WHEN  g.active_type = 1 THEN '".$tr->translate("STOP")."'
+				   	WHEN  g.active_type = 0 THEN '".$tr->translate("ACTIVING")."'
+			   	END AS active_type 
 			";
 		$sql.=$dbp->caseStatusShowImage("g.status");
 		$sql.=" FROM rms_teacher AS g WHERE 1 ";
@@ -371,11 +380,13 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}
+		if($search['active_type']>-1){
+			$where.=' AND active_type='.$search['active_type'];
+		}
 		$order_by=" ORDER BY id DESC";
 		
 		$where.= $dbp->getAccessPermission('g.branch_id');		
 		$where.= $dbp->getSchoolOptionAccess('g.schoolOption');
-		
 		return $db->fetchAll($sql.$where.$order_by);
 	}
 	

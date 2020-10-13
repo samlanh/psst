@@ -813,10 +813,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function rptStudentAddressAction()
 	{
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-// 		$id=$this->getRequest()->getParam("id");
-// 		if(empty($id)){
-// 			$this->_redirect("/allreport/allstudent/student-group");
-// 		}
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			$rs=null;
@@ -834,7 +830,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->search = $search;
 	
 		$this->view->rs = $row;
-// 		$this->view->rr = $rs;
 	
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport(1,3);

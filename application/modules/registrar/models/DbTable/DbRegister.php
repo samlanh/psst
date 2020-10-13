@@ -121,6 +121,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 				}
 			
+				$data['credit_memo'] = empty($data['credit_memo'])?0:$data['credit_memo'];
 				$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
 				if($cut_credit_memo<0){
 					$credit_after=abs($cut_credit_memo);

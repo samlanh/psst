@@ -992,9 +992,12 @@ function getAllgroupStudyNotPass($action=null){
 	   	$db=$this->getAdapter();
 	   	$currentLang = $this->currentlang();
 	   	$colunmname='title_en';
+	   	$field = 'name_en';
 	   	if ($currentLang==1){
 	   		$colunmname='title';
+	   		$field = 'name_kh';
 	   	}
+
 	   	$sql="SELECT s.*,
 	   			sgd.grade,
 	   			sgd.degree,
@@ -1004,7 +1007,7 @@ function getAllgroupStudyNotPass($action=null){
 		   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
 		   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
-		   		
+		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
 		   		(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) AS academic_year,
 		   		(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) ) ) AS academic_year_label,
 		   		(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id
@@ -2024,9 +2027,9 @@ function getAllgroupStudyNotPass($action=null){
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
   			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
-  			                            <span class="title-info">'.$tr->translate("CULTURE_LEVEL").'</span> : <span id="lbl_culturelevel" class="inf-value" >'.$rs['degree_culture'].'</span><br />
-  			                        	<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
-  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />';
+  			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
+  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
+  			                       	    <span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span><br />';
   			         	 		  $str.='</p>
   		          </div>
   		      <div style="clear: both;"></div>

@@ -262,9 +262,9 @@ tr.head-td th{padding: 5px 2px;}
   			                       		<span class="title-info"><?php echo $tr->translate("DOB"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
 			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
 			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate("CULTURE_LEVEL"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
 			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate("STATUS"); ?></span> : <span id="lbl_status" class="inf-value" ></span><br />
 			                        </p>
 		                        </div>
 		                         <div style="clear: both;"></div>
@@ -658,7 +658,7 @@ function confirmBeforePrint(){
 	dijit.byId('alertBeforePrint').show();
 }
 function displayNone(){
-	document.getElementById('PrintReceipt1').style.display="none";
+	//document.getElementById('PrintReceipt1').style.display="none";
 }
 function hideDialog(){
 	dijit.byId('terms').hide();

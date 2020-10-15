@@ -252,7 +252,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$rs = $db->getStudentProfileblog($data['student_id'],$data['data_from']);
+    		$rs = $db->getStudentProfileblog($data['student_id'],$data['data_from'],$data['customer_type']);
     		print_r(Zend_Json::encode($rs));
     		exit();
     	}

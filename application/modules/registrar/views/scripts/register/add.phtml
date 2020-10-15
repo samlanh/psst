@@ -728,8 +728,8 @@ function getPaymentHistory(student_id){
 				+'<th class="tdheader"><?php echo $tr->translate('PAID_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('RECEIPT_NO');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PAYMENT_TERM');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('PRICE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('QTY');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('PRICE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('SUBTOTAL');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT_TYPE');?></th>'
@@ -753,7 +753,7 @@ function getPaymentHistory(student_id){
 				if(respone[i].payment_term!=null){
 					payment_term=respone[i].payment_term;
 					}
-				tem += '<td>'+payment_term+'</td>';
+				tem += '<td style="text-align:left;">'+payment_term+'</td>';
 				tem += '<td>'+respone[i].qty+'</td>';
 				tem += '<td>'+respone[i].fee+'</td>';
 				tem += '<td>'+respone[i].subtotal+'</td>';
@@ -777,7 +777,7 @@ function getPaymentHistory(student_id){
 				tem += '<td>'+validate+'</td>';
 				tem += '<td>'+respone[i].note+'</td>';
 				tem += '<td>'+respone[i].void_status+'</td>';
-				tem += '<td>'+respone[i].user_name+'</td>';
+				tem += '<td style="text-align:left;">'+respone[i].user_name+'</td>';
 				tem+="</tr>";
 			}
 			tem+='</table>';
@@ -795,6 +795,8 @@ function getOldStudentInfo(){
 	}else if(student_type==3){//crm
 		data_from=3;
 	}
+	customer_type = dijit.byId("customer_type").attr("value");
+	
 	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 	student_id=dijit.byId('old_stu').get('value');
 	if(student_id==''){return false;}
@@ -803,7 +805,8 @@ function getOldStudentInfo(){
 		url:url_getdata,
 		content:{
 			'student_id':student_id,
-			'data_from':data_from
+			'data_from':data_from,
+			'customer_type':customer_type
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -833,15 +836,22 @@ function getStudentInformation(){
 			},
 		handleAs:"json",
 		load: function(data) {
-			var fee_id = data.fee_id;
+			fee_id = data.fee_id;
 			dijit.byId('study_year').set('value',fee_id);
-
-			dojo.byId("lb_grade").innerHTML = data.grade_label;
-			dojo.byId("lb_academic_year").innerHTML = data.academic_year_label;
-
+			grade_label = data.grade_label;
+			if(grade_label=='undefined'){
+				grade_label='';
+			}
+			dojo.byId("lb_grade").innerHTML = grade_label;
+			
+			academic_year_label = data.academic_year_label;
+			if(academic_year_label=='undefined'){
+				academic_year_label='';
+			}
+			
+			dojo.byId("lb_academic_year").innerHTML = academic_year_label;
 			//get New ID From Student Test
 			getStudentNo(data.degree);
-			
 			HideloadingBlock();
 		},
 		error: function(err) {

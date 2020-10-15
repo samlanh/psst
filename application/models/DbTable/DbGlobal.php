@@ -1036,6 +1036,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
 		(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
 		t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
+		'N/A' AS status_student,
 		t.id,
 	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=t.session_result LIMIT 1) as session_label,
 	   	'N/A' AS room_label
@@ -1045,6 +1046,33 @@ function getAllgroupStudyNotPass($action=null){
 	   	t.stu_test_id=$stu_id
 	   	AND t.is_current=1 AND updated_result=1
 	   	AND s.stu_id=$stu_id LIMIT 1 ";
+   	return $db->fetchRow($sql);
+   }
+   
+   function getCustomerinfoById($stu_id){//for student with result
+   	$db=$this->getAdapter();
+   	$currentLang = $this->currentlang();
+   	$colunmname='title_en';
+   	if ($currentLang==1){
+   		$colunmname='title';
+   	}
+   	$sql="SELECT s.*,
+   	'N/A' as group_name,
+   	'N/A' as degree_culture,
+   	 0 AS total_amountafter,
+   	 0 AS credit_memo_id,
+   	'N/A' as grade_label,
+   	'N/A' as degree_label,
+   	'N/A' AS degree,
+   	'N/A' AS grade,
+   	'N/A' AS session,
+   	'N/A' AS status_student,
+   	'N/A' as session_label,
+   	'N/A' AS room_label
+   	FROM rms_student as s
+   	WHERE
+    s.customer_type=2
+   	AND s.stu_id=$stu_id LIMIT 1 ";
    	return $db->fetchRow($sql);
    }
    /*tested student*/
@@ -1979,12 +2007,17 @@ function getAllgroupStudyNotPass($action=null){
 	  	}
 	  	return $pre.$new_acc_no."A";
   }
-  function getStudentProfileblog($student_id,$data_from=1){
+  function getStudentProfileblog($student_id,$data_from=1,$customer_type=1){
   	$db = $this->getAdapter();
-  	if($data_from==1 OR $data_from==3){//test ,student
-  		$rs = $this->getStudentinfoById($student_id);
-    }elseif($data_from==2){//crm
-  		$rs = $this->getStudentTestinfoById($student_id);
+  	
+  	if($customer_type==1){//student
+	  	if($data_from==1 OR $data_from==3){//test ,student
+	  		$rs = $this->getStudentinfoById($student_id);
+	    }elseif($data_from==2){//crm
+	  		$rs = $this->getStudentTestinfoById($student_id);
+	  	}
+  	}else{//customer//WHERE s.customer_type=2 
+  		$rs = $this->getCustomerinfoById($student_id);
   	}
   	$tr = $this->tr;
   	$str = '';

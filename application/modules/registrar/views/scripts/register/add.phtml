@@ -1271,7 +1271,14 @@ function printSave(){
 		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
-		dojo.byId("lb_name").innerHTML = dojo.byId("lbl_namekh").innerHTML+" - "+dojo.byId("lbl_nameen").innerHTML;
+
+		 var nameKhValue = dojo.byId("lbl_namekh").innerHTML; 
+		 lblNamekh=nameKhValue+" - ";
+		 if(nameKhValue==""){
+			 lblNamekh="";
+		 }
+		 
+		dojo.byId("lb_name").innerHTML = lblNamekh+dojo.byId("lbl_nameen").innerHTML;
 		
 		//dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 		//dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;

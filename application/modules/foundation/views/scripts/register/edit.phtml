@@ -79,6 +79,25 @@ table#table_row_study tr td {
 					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?>");
 					return false;
 				}
+				var identity_study = $('#identity_study').val();
+				if(identity_study==''){
+					alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION");?>");
+					dijit.byId("degree").focus();
+					return false;
+				}
+
+				var arrays = identity_study.split(',');
+				if(arrays.length>0){
+					var checkIsMain  = 0;
+					var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
+					if(selValueByClass !== undefined){
+						checkIsMain=1;
+					}
+					if(checkIsMain==0){
+						alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION_IS_MAIN_GRADE");?>");
+						return false;
+					}
+				}
 				loadingBlock();
 				return true;
 			}else {

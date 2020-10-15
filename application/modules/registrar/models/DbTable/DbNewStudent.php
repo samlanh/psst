@@ -100,7 +100,7 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 					
 				);
 				if(!empty($_data['id']) ){
-// 					$_arr['stu_code']=$_data['student_id'];
+					$_arr['stu_code']=$_data['student_id'];
 					$_arr['status']=$_data['status'];
 					$where=$this->getAdapter()->quoteInto("stu_id=?", $_data['id']);
 					$this->update($_arr, $where);
@@ -151,6 +151,7 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 					$grade_id = empty($_data['grade'])?0:$_data['grade'];
 					$stu_code = $dbg->getnewStudentId($_data['branch_id'],$degree_id);
 					
+					$stu_code = $_data['student_id'];
 					$_arr['stu_code']=$stu_code;
 					$_arr['status']=1;
 					$_arr['create_date']=date("Y-m-d H:i:s");

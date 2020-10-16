@@ -183,7 +183,7 @@
 								$unpaid = $unpaid+1;
 							}
 							
-							if($row['is_subspend']!=0){
+							if($row['is_subspend']==1 OR $row['is_subspend']==2){
 								$all_drop = $all_drop+1;
 							}else{
 								$all_total = $all_total+1;
@@ -197,17 +197,17 @@
 								<td ><?php echo $i;?></td>
 								<td align="left"><a style="color:inherit;text-decoration: none;" target="_blank" href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail','id'=>$row['stu_id']));?>"><?php echo $row['stu_khname'];?></a></td>
 								<td align="left" style="max-width: 140px;white-space: normal;"><a style="color:inherit;text-decoration: none;" target="_blank" href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail','id'=>$row['stu_id']));?>"><?php echo $row['name'];?></a></td>
-								<td ><?php echo $row['sex'];?></td>	
+								<td align="left"><?php echo $row['sex'];?></td>	
 								<td ><?php echo $row['stu_code'];?></td>
-								<td style="max-width: 80px;white-space: normal;"><?php echo $row['tel'];?></td>
-								<td align="left">&nbsp;<?php //echo $row['email'];?></td>
+								<td style="max-width: 80px;white-space: normal;text-align: left;"><?php echo $row['tel'];?></td>
+								<td align="left">&nbsp;<?php echo $row['email'];?></td>
 								<td ><?php echo $row['degree'];?></td>
 								<td align="left"><?php echo $row['grade'];?></td>
 								<td align="left"><?php echo $row['room_name'];?></td>
 								<td align="left"><?php echo ($row['is_stu_new']==1)?"New":"";?></td>
 								<td align="left"><?php echo (!empty($row['paid_date']))?"Paid":"Unpaid";?></td>
 								<td align="left"><?php echo (!empty($row['paid_date']))?date("d-M-Y",strtotime($row['paid_date'])):"";?></td>
-								<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>><?php echo $row['status'];?></td>
+								<td <?php if($row['is_subspend']==1 OR $row['is_subspend']==2){echo 'style="color: red;"';}?>><?php echo $row['status_student'];?></td>
 								<td align="left" style="font-size:9px;">&nbsp;<?php echo $row['remark']?></td>	
 							</tr>
 							<?php $degree=$row['degree'];?>

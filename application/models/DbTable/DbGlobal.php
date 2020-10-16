@@ -921,13 +921,13 @@ function getAllgroupStudyNotPass($action=null){
    	WHERE 
    	gds.stu_id = s.stu_id 
    	AND gds.is_current=1 AND gds.is_maingrade=1
-   	AND (gds.stop_type=0 OR gds.stop_type=3)
+   	AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
    	AND (stu_enname!='' OR s.stu_khname!='')
    	AND s.status=1  AND customer_type=1 ";
    	if($branchid!=null){
    		$sql.=" AND branch_id=".$branchid;
    	}
-   	$sql.=" GROUP BY s.stu_id ORDER BY stu_khname ASC";
+   	$sql.=" GROUP BY s.stu_id ORDER BY stu_code ASC, stu_khname ASC ";
    	$rows = $db->fetchAll($sql);
    	//OR gds.stop_type=3 retriv graduated student
    	if($opt!=null){

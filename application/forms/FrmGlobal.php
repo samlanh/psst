@@ -430,9 +430,9 @@ class Application_Form_FrmGlobal{
 									<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
 								</tr>
 								<tr>
-									<td><div>Paid Amount</div></td>
+									<td><div><strong>Paid Amount</strong></div></td>
 									<td>: $</td>
-									<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_paid_amount'></label></td>
+									<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp;<strong><label id='lb_paid_amount'></label></strong></td>
 								</tr>
 								<tr>
 									<td><div>Balance</div></td>
@@ -649,9 +649,9 @@ class Application_Form_FrmGlobal{
 							<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
 						</tr>
 						<tr>
-							<td><div>Paid Amount</div></td>
+							<td><div><strong>Paid Amount</strong></div></td>
 							<td>: $</td>
-							<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_paid_amount'></label></td>
+							<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
 						</tr>
 						<tr>
 							<td><div>Balance</div></td>
@@ -881,9 +881,9 @@ class Application_Form_FrmGlobal{
 									<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
 								</tr>
 								<tr>
-									<td><div>Paid Amount</div></td>
+									<td><div><strong>Paid Amount</strong></div></td>
 									<td>: $</td>
-									<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_paid_amount'></label></td>
+									<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
 								</tr>
 								<tr>
 									<td><div>Balance</div></td>

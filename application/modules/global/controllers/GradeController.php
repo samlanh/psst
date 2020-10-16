@@ -26,7 +26,7 @@ class Global_GradeController extends Zend_Controller_Action {
 	    	$type=1; //Degree
 	    	$rs_rows= $db->getAllItemsDetail($search,$type);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("MAJOR_KHNAME","MAJOR_ENNAME","SHORTCUT","ORDERING","DEGREE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("MAJOR_KHNAME","MAJOR_ENNAME","SHORTCUT","DEGREE","ONE_PAYMENT","ORDERING","NOTE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);

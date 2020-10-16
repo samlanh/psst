@@ -29,7 +29,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	    	$type=2; //Service
 	    	$rs_rows= $db->getAllItemsDetail($search,$type);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("SERVICE_NAME","SERVICE_NAME_EN","SHORTCUT","ORDERING","SERVICE_TYPE","NOTE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("SERVICE_NAME","SERVICE_NAME_EN","SHORTCUT","SERVICE_TYPE","ONE_PAYMENT","ORDERING","NOTE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'accounting','controller'=>'service','action'=>'edit',
 	    	);

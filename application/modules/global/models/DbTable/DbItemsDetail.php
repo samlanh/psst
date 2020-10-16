@@ -12,18 +12,26 @@
 		if ($currentLang==1){
 			$colunmname='title';
 		}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$one_payment = $tr->translate('ONE_PAYMENTONLY');
+		$validate = $tr->translate('IS_VALIDATE');
+
+		
 		$sql = " SELECT 
 					ide.id,
 					ide.title,
 					ide.title_en,
 					ide.shortcut,
-					ide.ordering,
 					(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+					CASE
+						WHEN is_onepayment = 1 THEN '$one_payment'
+						WHEN is_onepayment = 0 THEN '$validate'
+					END as is_onepayment,
+					ide.ordering,
 					ide.note,
 					ide.create_date,
 					ide.modify_date,
-					(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
-				";
+					(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name ";
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->caseStatusShowImage("ide.status");

@@ -46,16 +46,22 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$sql = "SELECT 
 					gscg.id,
 					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-					(select group_code from rms_group where rms_group.id=gscg.from_group) as group_code,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = (select academic_year from rms_group where rms_group.id=gscg.from_group LIMIT 1) LIMIT 1) AS academic,
+					(select group_code from rms_group where rms_group.id=gscg.from_group LIMIT 1) as group_code,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = (SELECT academic_year FROM rms_group WHERE rms_group.id=gscg.from_group LIMIT 1) LIMIT 1) AS academic,
 					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 				
 					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_group.id=gscg.from_group) limit 1 ) as session,
 				
-					g.group_code as to_group_code,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS to_academic,
-					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
-					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=g.session limit 1) as to_session,
+					(SELECT rms_group.group_code FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1) as to_group_code,
+					CASE
+		   				WHEN  change_type = 3 THEN (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gscg.academic_year LIMIT 1)
+		  				ELSE (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = (SELECT rms_group.academic_year FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1) LIMIT 1)
+		   			END  AS to_academic,
+		   			CASE
+		   				WHEN  change_type = 3 THEN (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=gscg.grade ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)
+		  				ELSE (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1) ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)
+		   			END  AS to_grade,
+					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1)  limit 1) as to_session,
 				
 					moving_date,
 					gscg.note
@@ -65,7 +71,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					`rms_group_student_change_group` as gscg,
 					rms_group as g
 				WHERE 
-					g.id=gscg.to_group ";
+					g.id=gscg.from_group ";
 		$order_by=" order by id DESC";
 		$where=" ";
 		if(!empty($search['adv_search'])){
@@ -97,7 +103,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	}
 	public function getAllGroupStudentChangeGroupById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_group_student_change_group WHERE id =".$id;
+		$sql = "SELECT gsc.*,
+		(SELECT g.degree FROM rms_group AS g WHERE g.id = gsc.from_group  LIMIT 1) AS from_degree 
+		FROM rms_group_student_change_group  AS gsc WHERE gsc.id =".$id;
 		return $db->fetchRow($sql);
 	}
 	
@@ -111,7 +119,19 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		try{	
-			$con = $this->getCondition($_data);
+			
+			$_dbFee = new Accounting_Model_DbTable_DbFee();
+			$feeId = empty($_data['academic_year'])?0:$_data['academic_year'];
+			$rowFeeInfo = $_dbFee->getFeeById($feeId);
+			$academicYear = empty($rowFeeInfo['academic_year'])?0:$rowFeeInfo['academic_year'];
+			$stopType = 0;
+			if ($_data['change_type']==3){
+				$stopType = $_data['change_type'];//ឆ្លងភូមិសិក្សា
+			}
+			$con='';
+			if ($stopType!=3){
+				$con = $this->getCondition($_data);
+			}
 			if($con!=''){
 				$identity = explode(',', $_data['identity']);
 				$array_checkbox=explode(',', $con['array_checkbox']);
@@ -123,6 +143,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where = ' from_group='.$_data['from_group'].' and to_group='.$_data['to_group'];
 				$this->update($arra, $where);
 			}else{
+				$_data['to_group'] = empty($_data['to_group'])?0:$_data['to_group'];
 				$_arr= array(
 					'user_id'		=>$this->getUserId(),
 					'branch_id'	=>$_data['branch_id'],
@@ -133,6 +154,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					'note'			=>$_data['note'],
 					'status'		=>1,
 					'array_checkbox'=>$_data['identity'],
+						
+					'fee_id'		=>$feeId,
+					'academic_year'	=>$academicYear,
+					'degree'		=>$_data['degree'],
+					'grade'			=>$_data['grade'],
 				);
 				$this->_name = "rms_group_student_change_group";
 				$id = $this->insert($_arr);
@@ -141,75 +167,115 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 			$this->_name='rms_group_detail_student';
 			$idsss=explode(',', $_data['identity']);
+			
 			foreach ($idsss as $k){
 				if (!empty($_data['stu_id_'.$k])){
 					$stu=array(
+							'stop_type'		=>$stopType,
 							'is_pass'		=>1,
 							'is_current'	=>0,
 							'modify_date'	=> date("Y-m-d H:i:s")
 					);
 					$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group'];
+					$this->_name='rms_group_detail_student';
 					$this->update($stu, $where);
-				}
-			}
-			$group_detail = $this->getGroupDetail($_data['to_group']);
-// 			$this->_name = 'rms_student';
-// 			$idss=explode(',', $_data['identity']);
-// 			foreach ($idss as $j){
-// 				if (!empty($_data['stu_id_'.$j])){
-// 					$array=array(
-// 							'group_id'		=>$_data['to_group'],
-// 							'session'		=>$group_detail['session'],
-// 							'degree'		=>$group_detail['degree'],
-// 							'grade'			=>$group_detail['grade'],
-// 							'academic_year'	=>$group_detail['academic_year'],
-// 							'room'			=>$group_detail['room_id'],
-// 						);
-// 						if($_data['change_type']==2){
-// 							$array['is_stu_new']=0;
-// 						}
-// 					$where = " stu_id=".$_data['stu_id_'.$j];
-// 					$this->update($array, $where);
-// 				}
-// 			}
 					
-			$dbg = new Application_Model_DbTable_DbGlobal();
-			$this->_name='rms_group_detail_student';
-			$ids=explode(',', $_data['identity']);
-			foreach ($ids as $i){
-				if (!empty($_data['stu_id_'.$i])){
-					$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['from_group']);
-					$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
-					
-					$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['to_group']);
-					if(empty($rsexist)){
+					if ($stopType==3){//ឆ្លងភូមិសិក្សា
+						$this->_name = 'rms_student_fee_history';
+						$data_gro = array(
+								'is_current'=> 0,
+						);
+						
+						$where = 'student_id = '.$_data['stu_id_'.$k]." AND is_current=1";
+						$this->update($data_gro, $where);
+						
+						$arr = array(
+								'user_id'			=>$this->getUserId(),
+								'branch_id'			=>$_data['branch_id'],
+								'student_id'		=>$_data['stu_id_'.$k],
+								'status'			=>1,
+								'academic_year'		=>$academicYear,
+								'fee_id'			=>$feeId,
+								'is_current'		=>1,
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+						);
+						$this->_name='rms_student_fee_history';
+						$feeHistortyId = $this->insert($arr);
+						
 						$arr=array(
-								'stu_id'		=>$_data['stu_id_'.$i],
-								'group_id'		=>$_data['to_group'],
-								'session'		=>$group_detail['session'],
-								'degree'		=>$group_detail['degree'],
-								'grade'			=>$group_detail['grade'],
-								'academic_year'	=>$group_detail['academic_year'],
-								
+								'stu_id'		=>$_data['stu_id_'.$k],
+								'group_id'		=>0,
+								'session'		=>0,
+								'degree'		=>$_data['degree'],
+								'grade'			=>$_data['grade'],
+								'academic_year'	=>$academicYear,
+						
 								'user_id'		=>$this->getUserId(),
 								'status'		=>1,
 								'date'			=>date('Y-m-d'),
-								'create_date'		=>date('Y-m-d H:i:s'),
-								'modify_date'		=>date('Y-m-d H:i:s'),
+								'create_date'	=>date('Y-m-d H:i:s'),
+								'modify_date'	=>date('Y-m-d H:i:s'),
 								'type'			=>1,
-								'old_group'	=>$_data['from_group'],
-								'is_setgroup'		=>1,
-								'is_current'		=>1,
-								'is_maingrade'		=>$is_maingrade,
+								'old_group'		=>$_data['from_group'],
+								'is_setgroup'	=>1,
+								'is_current'	=>1,
+								'is_maingrade'	=>1,
 						);
-						if($_data['change_type']==2){
-							$array['is_newstudent']=0;
-						}
+						$this->_name='rms_group_detail_student';
 						$this->insert($arr);
+						
 					}
 				}
 			}
-
+			
+			if ($stopType!=3){
+				$group_detail = $this->getGroupDetail($_data['to_group']);
+				$dbg = new Application_Model_DbTable_DbGlobal();
+				$this->_name='rms_group_detail_student';
+				$ids=explode(',', $_data['identity']);
+				foreach ($ids as $i){
+					if (!empty($_data['stu_id_'.$i])){
+						$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['from_group']);
+						$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
+							
+						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['to_group']);
+						if(empty($rsexist)){
+							$arr=array(
+									'stu_id'		=>$_data['stu_id_'.$i],
+									'group_id'		=>$_data['to_group'],
+									'session'		=>$group_detail['session'],
+									'degree'		=>$group_detail['degree'],
+									'grade'			=>$group_detail['grade'],
+									'academic_year'	=>$group_detail['academic_year'],
+				
+									'user_id'		=>$this->getUserId(),
+									'status'		=>1,
+									'date'			=>date('Y-m-d'),
+									'create_date'		=>date('Y-m-d H:i:s'),
+									'modify_date'		=>date('Y-m-d H:i:s'),
+									'type'			=>1,
+									'old_group'	=>$_data['from_group'],
+									'is_setgroup'		=>1,
+									'is_current'		=>1,
+									'is_maingrade'		=>$is_maingrade,
+							);
+							if($_data['change_type']==2){
+								$array['is_newstudent']=0;
+							}
+							$this->insert($arr);
+						}
+					}
+				}
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>1,
+						'is_pass'	=>2,
+				);
+				$where=" id=".$_data['to_group'];
+				$this->update($group, $where);
+			}
+			
 			$ident = explode(',', $_data['identity']);
 			$selected_student = count($ident);
 			$all_student = $_data['all_student'];
@@ -223,13 +289,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$this->update($group, $where);
 			}
 					
-			$this->_name = 'rms_group';
-			$group=array(
-					'is_use'	=>1,
-					'is_pass'	=>2,
-			);
-			$where=" id=".$_data['to_group'];
-			$this->update($group, $where);
+			
 			
 			return $_db->commit();
 		}catch(Exception $e){
@@ -257,6 +317,15 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$_db= $this->getAdapter();
  		$_db->beginTransaction();
 		try{	
+			$_dbFee = new Accounting_Model_DbTable_DbFee();
+			$feeId = empty($_data['academic_year'])?0:$_data['academic_year'];
+			$rowFeeInfo = $_dbFee->getFeeById($feeId);
+			$academicYear = empty($rowFeeInfo['academic_year'])?0:$rowFeeInfo['academic_year'];
+			$stopType = 0;
+			if ($_data['change_type']==3){
+				$stopType = $_data['change_type'];//ឆ្លងភូមិសិក្សា
+			}
+			
 			if($_data['status']==1){
 				$_arr=array(
 						'user_id'		=>$this->getUserId(),
@@ -266,7 +335,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						'moving_date'	=>$_data['moving_date'],
 						'note'			=>$_data['note'],
 						'array_checkbox'=>$_data['identity'],
-						'status'		=>$_data['status']
+						'status'		=>$_data['status'],
+						
+						'fee_id'		=>$feeId,
+						'academic_year'	=>$academicYear,
+						'degree'		=>$_data['degree'],
+						'grade'			=>$_data['grade'],
 				);
 				$where=" id = ".$id;
 				$this->update($_arr, $where);
@@ -276,70 +350,143 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				if(!empty($StudentOldGroup)){
 					foreach($StudentOldGroup as $result){
 						$arra=array(
-								'is_pass'=>0,
+								'stop_type'		=>0,
+								'is_pass'		=>0,
+								'is_current'	=>1,
 								);
 						$where=" gd_id=".$result['gd_id'];
-						
+						$this->_name='rms_group_detail_student';
 						$this->update($arra, $where);
+						
+						$this->_name = 'rms_student_fee_history';
+						$whereStudyFee = 'student_id = '.$result['stu_id']." AND is_current=1 AND academic_year=".$result['academic_year'];
+						$this->delete($whereStudyFee);
 					}
 				}
-				
 				$this->_name='rms_group_detail_student';
 				$where = "old_group = ".$_data['from_group']." and group_id = ".$_data['old_to_group'];
+				if ($stopType==3){
+					$where = "old_group = ".$_data['from_group'];
+				}
 				$this->delete($where);
 				
 				$group_detail = $this->getGroupDetail($_data['to_group']);
-				if($group_detail['degree']==1 || $group_detail['degree']==2){
-					$stu_type=1;    //  kid - 6
-				}else if($group_detail['degree']==3){
-					$stu_type=2;    // 7-12
-				}else{
-					$stu_type=3;	// eng and other subject
-				}
 				if(empty($_data['identity'])){
 					$_data['identity'] = $_data['old_array_checkbox'];
 				}
 				
+				
 				if(!empty($_data['identity'])){
 					$idsss=explode(',', $_data['identity']);
 					foreach ($idsss as $k){
-						if(!empty($_data['checkbox'.$k])){
-							
-							$this->_name='rms_group_detail_student';
-							$is_pass=array(
-									'is_pass'	=>1,
-							);
-							$where = " stu_id=".$_data['stu_id_'.$k];
-							$this->update($is_pass, $where);
-							
-							
-							$this->_name='rms_group_detail_student';
+						if (!empty($_data['stu_id_'.$k])){
 							$stu=array(
-								'group_id'	=>$_data['to_group'],
-								'stu_id'	=>$_data['stu_id_'.$k],
-								'user_id'	=>$this->getUserId(),
-								'status'	=>1,
-								'type'		=>1,
-								'old_group'	=>$_data['from_group'],
+									'stop_type'		=>$stopType,
+									'is_pass'		=>1,
+									'is_current'	=>0,
+									'modify_date'	=> date("Y-m-d H:i:s")
 							);
-							$this->insert($stu);
+							$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group'];
+							$this->_name='rms_group_detail_student';
+							$this->update($stu, $where);
 							
-							$this->_name = 'rms_student';
-							$array=array(
-									'group_id'		=>$group_detail['to_group'],
-									'session'		=>$group_detail['session'],
-									'degree'		=>$group_detail['degree'],
-									'grade'			=>$group_detail['grade'],
-									'academic_year'	=>$group_detail['academic_year'],
-									'room'			=>$group_detail['room_id'],
-									'stu_type'		=>$stu_type,
-									'group_id'		=>$_data['to_group'],
-							);
-							$where = " stu_id=".$_data['stu_id_'.$k];
-							$this->update($array, $where);
+							if ($stopType==3){//ឆ្លងភូមិសិក្សា
+								$this->_name = 'rms_student_fee_history';
+								$data_gro = array(
+										'is_current'=> 0,
+								);
+								
+								$where = 'student_id = '.$_data['stu_id_'.$k]." AND is_current=1";
+								$this->update($data_gro, $where);
+								
+								$arr = array(
+										'user_id'			=>$this->getUserId(),
+										'branch_id'			=>$_data['branch_id'],
+										'student_id'		=>$_data['stu_id_'.$k],
+										'status'			=>1,
+										'academic_year'		=>$academicYear,
+										'fee_id'			=>$feeId,
+										'is_current'		=>1,
+										'create_date'		=>date("Y-m-d H:i:s"),
+										'modify_date'		=>date("Y-m-d H:i:s"),
+								);
+								$this->_name='rms_student_fee_history';
+								$feeHistortyId = $this->insert($arr);
+								
+								$arr=array(
+										'stu_id'		=>$_data['stu_id_'.$k],
+										'group_id'		=>0,
+										'session'		=>0,
+										'degree'		=>$_data['degree'],
+										'grade'			=>$_data['grade'],
+										'academic_year'	=>$academicYear,
+								
+										'user_id'		=>$this->getUserId(),
+										'status'		=>1,
+										'date'			=>date('Y-m-d'),
+										'create_date'	=>date('Y-m-d H:i:s'),
+										'modify_date'	=>date('Y-m-d H:i:s'),
+										'type'			=>1,
+										'old_group'		=>$_data['from_group'],
+										'is_setgroup'	=>1,
+										'is_current'	=>1,
+										'is_maingrade'	=>1,
+								);
+								$this->_name='rms_group_detail_student';
+								$this->insert($arr);
+								
+							}
 						}
 					}
 				}
+				
+				if ($stopType!=3){
+					$group_detail = $this->getGroupDetail($_data['to_group']);
+					$dbg = new Application_Model_DbTable_DbGlobal();
+					$this->_name='rms_group_detail_student';
+					$ids=explode(',', $_data['identity']);
+					foreach ($ids as $i){
+						if (!empty($_data['stu_id_'.$i])){
+							$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['from_group']);
+							$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
+								
+							$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['to_group']);
+							if(empty($rsexist)){
+								$arr=array(
+										'stu_id'		=>$_data['stu_id_'.$i],
+										'group_id'		=>$_data['to_group'],
+										'session'		=>$group_detail['session'],
+										'degree'		=>$group_detail['degree'],
+										'grade'			=>$group_detail['grade'],
+										'academic_year'	=>$group_detail['academic_year'],
+				
+										'user_id'		=>$this->getUserId(),
+										'status'		=>1,
+										'date'			=>date('Y-m-d'),
+										'create_date'		=>date('Y-m-d H:i:s'),
+										'modify_date'		=>date('Y-m-d H:i:s'),
+										'type'			=>1,
+										'old_group'	=>$_data['from_group'],
+										'is_setgroup'		=>1,
+										'is_current'		=>1,
+										'is_maingrade'		=>$is_maingrade,
+								);
+								if($_data['change_type']==2){
+									$array['is_newstudent']=0;
+								}
+								$this->insert($arr);
+							}
+						}
+					}
+					$this->_name = 'rms_group';
+					$group=array(
+							'is_use'	=>1,
+							'is_pass'	=>2,
+					);
+					$where=" id=".$_data['to_group'];
+					$this->update($group, $where);
+				}
+				
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>0,
@@ -364,13 +511,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['from_group'];
 				$this->update($from_group, $where);
 				
-				$this->_name = 'rms_group';
-				$group=array(
-						'is_use'	=>1,
-						'is_pass'	=>0,
-						);
-				$where=" id=".$_data['to_group'];
-				$this->update($group, $where);
+				
 				
 			}else{  //////// status == 0 => deactive    ===> so update all student to old info
 				$_arr=array(
@@ -386,11 +527,29 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				if(!empty($StudentOldGroup)){
 					foreach($StudentOldGroup as $result){
 						$arra=array(
-								'is_pass'=>0,
+								'stop_type'		=>0,
+								'is_pass'		=>0,
+								'is_current'	=>1,
+								'modify_date'	=> date("Y-m-d H:i:s")
 						);
 						$where=" gd_id=".$result['gd_id'];
-				
+						$this->_name='rms_group_detail_student';
 						$this->update($arra, $where);
+						
+						$this->_name = 'rms_student_fee_history';
+						$whereStudyFee = 'student_id = '.$result['stu_id']." AND is_current=1 AND academic_year=".$result['academic_year'];
+						$this->delete($whereStudyFee);
+						
+						
+						$lasFeeHis=  $this->getLastFeeStudentHistory($result['stu_id']);
+						if (!empty($lasFeeHis)){
+							$this->_name = 'rms_student_fee_history';
+							$data_gro = array(
+									'is_current'=> 1,
+							);
+							$where = 'id = '.$lasFeeHis['id']." AND is_current=0 ";
+							$this->update($data_gro, $where);
+						}
 					}
 				}
 			//////////////////////// delete record student that added to new group //////////////////////////////////////	
@@ -400,32 +559,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 
 			//////////////////////// get group_detail_info to update student info back to old group /////////////////////	
 				$group_detail = $this->getGroupDetail($_data['from_group']);
-				if($group_detail['degree']==1 || $group_detail['degree']==2){
-					$stu_type=1;    //  kid - 6
-				}else if($group_detail['degree']==3){
-					$stu_type=2;    // 7-12
-				}else{
-					$stu_type=3;	// eng and other subject
-				}
-				
-				if($_data['old_iden']!=''){
-				
-					$idsss=explode(',', $_data['old_iden']); // old_identity all student that updated to new group 
-					foreach ($idsss as $k){
-						$this->_name = 'rms_student';
-						$array=array(
-								'session'		=>$group_detail['session'],
-								'degree'		=>$group_detail['degree'],
-								'grade'			=>$group_detail['grade'],
-								'academic_year'	=>$group_detail['academic_year'],
-								'room'			=>$group_detail['room_id'],
-								'stu_type'		=>$stu_type,
-								'group_id'		=>$_data['from_group'],
-						);
-						$where = " stu_id=".$_data['old_student'.$k];
-						$this->update($array, $where);
-					}
-				}
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>0,
@@ -448,7 +581,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
+	function getLastFeeStudentHistory($student_id){
+		$db=$this->getAdapter();
+		$sql="SELECT sh.* FROM rms_student_fee_history AS sh WHERE sh.student_id=$student_id  ORDER BY sh.id DESC LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	function getAllStudentFromGroup($from_group){
 		$db=$this->getAdapter();
 		$sql="SELECT 

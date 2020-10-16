@@ -460,7 +460,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			 	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) as sex
 			FROM rms_group_detail_student as gds,
 				rms_student as st 
-			WHERE gds.stop_type = 0 AND 
+			WHERE gds.stop_type = 0 
 				AND gds.stu_id=st.stu_id 
 				AND gds.group_id=$from_group
 				AND gds.is_pass=0 ";

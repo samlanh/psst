@@ -87,7 +87,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$_dbfee = new Accounting_Model_DbTable_DbFee();
 						$feeID = empty($data['study_year'])?0:$data['study_year'];
 						$rowfee = $_dbfee->getFeeById($feeID);
-						$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+						if(empty($rowfee)){
+							$academicYear=0;
+						}else{
+							$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+						}
+						
+						
 						$_arr= array(
 								'branch_id'		=>$data['branch_id'],
 								'user_id'		=>$this->getUserId(),

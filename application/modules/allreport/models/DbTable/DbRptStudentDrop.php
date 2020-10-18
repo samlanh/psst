@@ -4,11 +4,6 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'rms_student_drop';
-//     public function getUserId(){
-//     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-//     	return $session_user->user_id;
-    	 
-//     }
     public function getAllStudentDrop($search){
     	$db = $this->getAdapter();
     	$session_lang=new Zend_Session_Namespace('lang');
@@ -41,10 +36,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    		rms_student as st
 		    	 WHERE 
 		    		stdp.stu_id=st.stu_id 
-		    		and stdp.status=1 
-		    		AND type !=0 ";
+		    		and stdp.status=1 ";
     	$where="";
-    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("stdp.branch_id");
     	
@@ -80,6 +73,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 	   	}
     	if(!empty($search['session'])){
     		$where.=' AND stdp.session='.$search['session'];
+    	}
+    	if($search['type']!=''){
+    		$where.=" AND stdp.type=".$search['type'];
     	}
     	return $db->fetchAll($sql.$where.$order);
     }

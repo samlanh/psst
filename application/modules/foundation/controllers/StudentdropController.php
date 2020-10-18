@@ -20,6 +20,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 					'degree'=> '',
 					'grade'=> '',
 					'session'=> '',
+					'type'	=>'',
 					'start_date'=>date("Y-m-d"),
 					'end_date'=>date("Y-m-d")
 				);
@@ -60,10 +61,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}
-			$db = new Foundation_Model_DbTable_DbStudentDrop();
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			
-			$tsub= new Global_Form_FrmAddClass();
+			$tsub = new Global_Form_FrmAddClass();
 			$frm_student=$tsub->FrmAddGroup();
 			Application_Model_Decorator::removeAllDecorator($frm_student);
 			$this->view->frm = $frm_student;			

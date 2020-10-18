@@ -429,17 +429,29 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 		));
 		$_province_search->setValue($request->getParam("province_search"));
-		/* ENT
-		 *
-		* For Student Test
-		* */
 		
-		if(!empty($_data)){
+		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
+		$_type->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false,
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
 		
+		$db = new Foundation_Model_DbTable_DbStudentDrop();
+		$rows= $db->getAllDropType();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_TYPE")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)
+		{
+			$opt[$row['id']]=$row['name'];
 		}
+		$_type->setMultiOptions($opt);
+		$_type->setValue($request->getParam("type"));
 		
 		
 		$this->addElements(array(
+				$_type,
 				$adv_search,
 				$_branch_id,
 				$_degree,
@@ -457,19 +469,15 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$study_status,
 				$changegroup_id,
 				$change_type,
-				
 				$_exam_type,
 				$_for_semester,
 				$_for_month,
-				
 				$_language_type,
 				$_day,
-				
 				$type_study,
 				$generation,
 				$school_option,
 				$finished_status,
-				
 				$_type_exam,
 				$_student_option_search,
 				$_province_search

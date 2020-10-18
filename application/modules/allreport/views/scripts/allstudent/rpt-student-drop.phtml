@@ -39,10 +39,13 @@ table.tb-footer tr.style-head {
             	<input id="grade" />
             </div>
             <div class="col-md-2 col-sm-3 col-xs-12">
-            	<?php echo $frm->getElement("session");?>
-            </div>
+			  	<?php echo $frm->getElement("type");?>
+			 </div>
         </div>	
         <div class="form-group">
+        	 <div class="col-md-2 col-sm-3 col-xs-12">
+            	<?php echo $frm->getElement("session");?>
+            </div>
         	 <div class="col-md-2 col-sm-3 col-xs-12">
         	 	<?php echo $frm->getElement("start_date");?>
             </div>
@@ -106,7 +109,13 @@ table.tb-footer tr.style-head {
 			table.content-data tr.style-rowdata {
 				font-size:12px; 
 				height: 23px;
-			}		
+			}	
+			@media print 
+			{
+			    @page {
+			      margin:0.5cm;
+			    }
+			}	
 		</style>
 			<tr>
 				<td colspan="3">
@@ -141,14 +150,14 @@ table.tb-footer tr.style-head {
 							<td align="left"><?php echo $row['stu_khname'];?></td>
 							<td align="left"><?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
 							<td><?php echo $row['sex'];?></td>
-							<td><?php echo $row['tel'];?></td>
+							<td align="left"><?php echo $row['tel'];?></td>
 							<td><?php echo $row['academic_year'];?></td>
 							<td><?php echo $row['group_name'];?></td>
 							<td><?php echo $row['grade'];?></td>
 							<td><?php echo $row['session'];?></td>
 							<td><?php echo $row['type'];?></td>
 							<td><?php echo date("d-m-Y",strtotime($row['date_stop']));?></td>
-							<td style="padding: 5px; line-height:18px; text-align: center; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;" ><?php echo $row['reason'];?></td>
+							<td style="padding: 5px; line-height:18px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;" ><?php echo $row['reason'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	

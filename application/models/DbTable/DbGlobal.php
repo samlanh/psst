@@ -1043,10 +1043,11 @@ function getAllgroupStudyNotPass($action=null){
 	   	FROM rms_student as s,
 	   	rms_student_test_result As t
 	   	WHERE 
-	   	t.stu_test_id=$stu_id
-	   	AND t.is_current=1 AND updated_result=1
+	    t.is_current=1 AND updated_result=1
 	   	AND s.stu_id=$stu_id LIMIT 1 ";
    	return $db->fetchRow($sql);
+   	//	t.stu_test_id=$stu_id 	AND
+	   
    }
    
    function getCustomerinfoById($stu_id){//for student with result

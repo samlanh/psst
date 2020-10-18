@@ -918,14 +918,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.father_nation) AS father_nation,
 		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.mother_nation) AS mother_nation,
 		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.guardian_nation) AS guardian_nation, 
-				
-		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
-			   (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS start_year,
-			   (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS end_year,
-			   (SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=s.session LIMIT 1)AS session,
-			   (SELECT r.room_name FROM `rms_room` AS r WHERE r.room_id = s.`room` LIMIT 1 )AS room_name
+	   
+	   (SELECT r.room_name FROM `rms_room` AS r WHERE r.room_id = s.`room` LIMIT 1 )AS room_name
 		
 	 FROM rms_student AS s WHERE s.stu_id=$id";
+		//(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=s.session LIMIT 1)AS session,
+		//(SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS start_year,
+		//(SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS end_year,
+		//(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
 		return $db->fetchRow($sql);
 	}
 	

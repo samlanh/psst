@@ -69,7 +69,7 @@
 					<div style="margin: 10px 0px;">
 						<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
 						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
-						<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"   /><?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==2){echo "checked='checked'";}}?>/><?php echo $tr->translate("បង់ប្រាក់ធ្វើតេស");?>
+						<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"   /><?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==2){echo "checked='checked'";}}?><?php echo $tr->translate("បង់ប្រាក់ធ្វើតេស");?>
 						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
 						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
 					</div>
@@ -111,7 +111,13 @@
 				}
 				.bold {
 					font-weight: 600;				
-			}
+				}
+				@media print 
+				{
+				    @page {
+				      margin:0.5cm;
+				    }
+				}
 			</style>
 			<table style="background:#fff; margin: 0 auto; width:100%;white-space: nowrap;" >
 				<tr>
@@ -126,7 +132,7 @@
 						<?php if(!empty($this->search["start_date"])){?><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';line-height: 22px;"><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span><?php }?>
 					</td>
 					<td width="15%">&nbsp;
-						<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+						<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
 					</td>
 				</tr>
 				<tr>
@@ -139,7 +145,7 @@
 							<?php }?>
 							<tr>
 								<td colspan="2" valign="top">
-									<table class="content-data" align="center">
+									<table class="content-data" align="center" border="1">
 										 <?php 
 										 	$total_cash = 0;$total_bank = 0;$total_cheque = 0;
 										 	$total_cashexp = 0;$total_bankexp = 0;$total_chequeexp = 0;
@@ -156,20 +162,21 @@
 										 ?>
 										  <thead>
 											  <tr class="style-head" style="font-size:10px;" align="center">
-											    <td><?php echo $tr->translate("N_O"); ?></td>
-											    <td><?php echo $tr->translate("RECEIPT_NO"); ?></td>
-											    <td><?php echo $tr->translate("STUDENT"); ?></td>
-												<td><?php echo $tr->translate("STUDY_INFO"); ?></td>
-												<td><?php echo $tr->translate("FINE"); ?></td>
-												<td><?php echo $tr->translate("TOTAL_PAYMENT"); ?></td>
-												<td><?php echo $tr->translate("Credit Memo"); ?></td>
-												<td><?php echo $tr->translate("PAID_AMOUNT"); ?></td>
-												<td><?php echo $tr->translate("BALANCE"); ?></td>
-												<td><?php echo $tr->translate("CREATE_DATE"); ?></td>
-												<td><?php echo $tr->translate("NOTE"); ?></td>
-												<td><?php echo $tr->translate("USER"); ?></td>
-												<td><?php echo $tr->translate("STATUS"); ?></td>
-												<td><?php echo $tr->translate("VOID_BY"); ?></td>
+											    <td><?php echo $tr->translate("N_O");?></td>
+											    <td><?php echo $tr->translate("RECEIPT_NO");?></td>
+											    <td><?php echo $tr->translate("STUDENT");?></td>
+												<td><?php echo $tr->translate("STUDY_INFO");?></td>
+												<td><?php echo $tr->translate("FINE");?></td>
+												<td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+												<td><?php echo $tr->translate("Credit Memo");?></td>
+												<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
+												<td><?php echo $tr->translate("BALANCE");?></td>
+												<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+												<td><?php echo $tr->translate("PAID_DATE");?></td>
+												<td><?php echo $tr->translate("NOTE");?></td>
+												<td><?php echo $tr->translate("USER");?></td>
+												<td><?php echo $tr->translate("STATUS");?></td>
+												<td><?php echo $tr->translate("VOID_BY");?></td>
 											  </tr>
 										  </thead>
 										 <?php foreach($this->row as $rs){ $i++;?>
@@ -180,15 +187,15 @@
 										    &nbsp;
 										   	 <?php 
 										   	 	echo $rs['stu_code'];
-										   	 	echo !empty($rs['stu_khname'])?"/".$rs['stu_khname']:"/".$rs['stu_enname']; 
+										   	 	echo !empty($rs['stu_khname'])?"/".$rs['stu_khname']:"/".$rs['last_name'].$rs['stu_enname']; 
 										   	 ?>
 										   	 &nbsp;
 										    </td>
 											<td><?php 
 													echo $rs['year'];
-													echo empty($rs['degree'])?"":" , ".$rs['degree'];
-													echo empty($rs['grade'])?"":" , ".$rs['grade'];
-													echo empty($rs['session'])?"":" , ".$rs['session'];
+													echo empty($rs['degree'])?"":", ".$rs['degree'];
+													echo empty($rs['grade'])?"":", ".$rs['grade'];
+													echo empty($rs['session'])?"":", ".$rs['session'];
 												?>
 											</td>
 											<td><?php if($rs['penalty']!=0){echo number_format($rs['penalty'],2);} ?></td>
@@ -196,6 +203,7 @@
 										    <td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
 											<td><?php echo number_format($rs['paid_amount'],2); ?></td>
 											<td <?php if($rs['balance_due']>0){echo"style='background:#efb6b6;'";}?>><?php echo number_format($rs['balance_due'],2); ?></td>
+											<td><?php echo $rs['paymentMethod']; ?></td>
 										    <td><?php echo date('d-m-Y (H:i)', strtotime($rs['create_date'])); ?></td>
 										   	<td><?php echo $rs['note']; ?></td>
 										    <td align="center"><?php echo $rs['user_id'];?></td>
@@ -359,7 +367,7 @@
 								  		</tr>
 								  		<tr>
 								  			<td colspan="10">
-									  			<div style="width:33%;float: left;text-align: center;color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+									  			<div style="width:33%;float: left;text-align: center; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
 									  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
 									  			</div>
 									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">

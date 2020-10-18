@@ -112,6 +112,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=" AND s.session=".$search['session'];
 		}
+		if($search['type']!=''){
+			$where.=" AND s.type=".$search['type'];
+		}
+		
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		return $_db->fetchAll($sql.$where.$order_by);
 	}

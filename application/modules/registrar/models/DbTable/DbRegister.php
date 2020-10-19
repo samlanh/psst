@@ -67,7 +67,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 					
 					$dbg = new Application_Model_DbTable_DbGlobal();
-					$stu_code = $dbg->getnewStudentId($data['branch_id'],$rs_stu['degree']);
+					$degreeStudent = empty($rs_stu['degree'])?0:$rs_stu['degree'];
+					$stu_code = $dbg->getnewStudentId($data['branch_id'],$degreeStudent);
 					$settingNewStuID = NEW_STU_ID_FROM_TEST;
 					if ($settingNewStuID==1){
 						$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];

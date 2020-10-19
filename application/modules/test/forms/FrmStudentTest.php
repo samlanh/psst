@@ -1090,7 +1090,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'queryExpr'=>'*${0}*',));
     	
     	$_arr_opt_stu = array(""=>$this->tr->translate("PLEASE_SELECT"));
-    	$rows = $_dbgb->getAllstudentTest();
+    	$rows = $_dbgb->getAllstudentTestForFrmRestult();
     	if(!empty($rows))foreach($rows AS $row) $_arr_opt_stu[$row['id']]=$row['name'];
     	$_stu_test_id = new Zend_Dojo_Form_Element_FilteringSelect("stu_test_id");
     	$_stu_test_id->setMultiOptions($_arr_opt_stu);
@@ -1195,7 +1195,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     		));
     		
     		$_arr_opt_stu=array();
-    		$rows = $_dbgb->getAllstudentTest($data['branch_id']);
+    		$rows = $_dbgb->getAllstudentTestForFrmRestult($data['branch_id']);
     		if(!empty($rows))foreach($rows AS $row) $_arr_opt_stu[$row['id']]=$row['name'];
     		$_stu_test_id->setMultiOptions($_arr_opt_stu);
     		$_stu_test_id->setAttribs(array(

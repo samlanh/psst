@@ -1085,7 +1085,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
 	   		FROM rms_student
 	   		WHERE
-	   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id  "; //AND customer_type=4
+	   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id  AND customer_type=4 "; //AND customer_type=4
 	   		$sql.=" AND is_studenttest=1 ";
 	   		if (!empty($branch)){
 	   			$sql.=" AND branch_id = $branch";
@@ -1096,7 +1096,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		FROM rms_student,rms_student_test_result AS result
 	   		WHERE
 	   		stu_id = result.stu_test_id AND result.updated_result=1 AND
-	   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id  "; //AND customer_type=4
+	   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id AND customer_type=4 "; //AND customer_type=4
 	   		$sql.=" AND is_studenttest=1 ";
 	   		if (!empty($branch)){
 	   			$sql.=" AND branch_id = $branch";
@@ -1105,6 +1105,21 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
 	   
 	   	return $db->fetchAll($sql);
+   }
+   function getAllstudentTestForFrmRestult($branch=null,$result=0){//get all
+   	$db=$this->getAdapter();
+   	$branch_id = $this->getAccessPermission();
+   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
+   		FROM rms_student
+   		WHERE
+   		(stu_khname!='' OR stu_enname!='') AND status=1  $branch_id  "; //AND customer_type=4
+   		$sql.=" AND is_studenttest=1 ";
+   		if (!empty($branch)){
+   			$sql.=" AND branch_id = $branch";
+   		}
+   		$sql.=" GROUP BY stu_id ORDER BY stu_id DESC";
+   
+   	return $db->fetchAll($sql);
    }
    /*crm student*/
    function getAllCrmstudent($branch=null,$type){//get all

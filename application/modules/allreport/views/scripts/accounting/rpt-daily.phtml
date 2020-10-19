@@ -205,7 +205,7 @@
 											<td <?php if($rs['balance_due']>0){echo"style='background:#efb6b6;'";}?>><?php echo number_format($rs['balance_due'],2); ?></td>
 											<td><?php echo $rs['paymentMethod']; ?></td>
 										    <td><?php echo date('d-m-Y (H:i)', strtotime($rs['create_date'])); ?></td>
-										   	<td><?php echo $rs['note']; ?></td>
+										   	<td style="white-space: normal;max-width:150px;"><?php echo $rs['note']; ?></td>
 										    <td align="center"><?php echo $rs['user_id'];?></td>
 										    <td align="center" <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $rs['void_status'];?></td>
 										    <td align="center"><?php echo $rs['void_by'];?></td>

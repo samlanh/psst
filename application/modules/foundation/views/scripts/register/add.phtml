@@ -1366,10 +1366,18 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 function getStudentNo(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){return false;}
+
+	var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
+	dept_id = 0;
+	if(selValueByClass !== undefined){
+		dept_id = dijit.byId('degree_'+selValueByClass).get('value');
+		if(dept_id=='' || dept_id==-1){dept_id=0;}
+	}
+	
 	dojo.xhrPost({
 		url:url_getstuno,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,'dept_id':dept_id
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -2122,7 +2130,7 @@ date_format = '"dd/MM/yyyy"';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col_study+'" id="degree_'+col_study+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GROUP");?>" dojoType="dijit.form.TextBox" class="fullside" name="group_'+col_study+'" id="group_'+col_study+'" value="'+group+'" type="hidden">'+groupabel+'&nbsp;</td>';
-    		template_study+='<td>&nbsp;<input type="radio" name="is_main" id="is_main" value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
+    		template_study+='<td>&nbsp;<input onChange="getStudentNo();" type="radio" name="is_main" id="is_main" value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
         tmp_study='<tr id="row_study'+col_study+'">';
     	tmp_study+="</tr>";
     	dojo.query("#table_row_study").append(tmp_study);

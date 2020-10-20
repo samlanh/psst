@@ -135,6 +135,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>'true',
 				'style'=>'color: red;',
+				'readOnly'=>'readOnly',
 				));
 		
 		$db = new Global_Model_DbTable_DbGroup();

@@ -135,6 +135,7 @@ Class Registrar_Form_FrmNewStudent extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>'true',
 				'style'=>'color: red;',
+				'readOnly'=>'readOnly',
 		));
 		
 		if($data!=null){

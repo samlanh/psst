@@ -306,7 +306,7 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
+	var oldBranch = "<?php echo empty($this->adv_search['branch_id'])?0:$this->adv_search['branch_id'];?>";
 	
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({

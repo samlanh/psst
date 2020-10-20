@@ -2014,7 +2014,30 @@ function getAllgroupStudyNotPass($action=null){
 	  		$pre = $this->getPrefixCode($branch_id);//by branch
 	  	}else{
 	  		$pre = $this->getPrefixByDegree($degree);
-	  		$sql="SELECT id_start FROM `rms_items` WHERE id= $degree ";
+// 	  		$sql="SELECT id_start FROM `rms_items` WHERE id= $degree ";
+// 	  		$stu_num = $db->fetchOne($sql);
+			
+	  		//degree option for combine amount 5,6,7,8
+	  		$arrDegreeComine = array(
+	  				5=>5,//IEAP
+	  				6=>6,//GESL
+	  				7=>7,//EHSS
+	  				8=>8//Pre-English
+	  				);
+	  		
+	  		$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
+	  		if (!empty($arrDegreeComine[$degree])){
+	  			$pre = $this->getPrefixByDegree(5);
+	  			
+	  			$s_where = array();
+	  			foreach ($arrDegreeComine as $degree){
+	  				$s_where[] = " degree = $degree ";
+	  			}
+	  			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+	  		}else{
+	  			$sql.=" AND degree= $degree ";
+	  		}
+	  		
 	  		$stu_num = $db->fetchOne($sql);
 	  	}
 	  	$new_acc_no= (int)$stu_num+1;
@@ -2979,5 +3002,35 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	 
   }
+  
+  
+  function updateAmountStudetByDegree($data){//used global
+	  	$db = $this->getAdapter();
+	  	
+	  	$degree = empty($data['degreeStudent'])?0:$data['degreeStudent'];
+	  	$branchId = empty($data['branch_id'])?0:$data['branch_id'];
+	  	$sql="SELECT amount_student FROM `rms_student_id` WHERE branch_id = $branchId AND  degree = $degree ";
+	  	$num = $db->fetchOne($sql);
+	  	$stu_num = empty($num)?0:$num;
+	  	$newAmouunt = $stu_num+1;
+  		
+  		$_arr= array(
+			'branch_id'		=>$branchId,
+			'amount_student'	=>$newAmouunt,
+		);
+  		$this->_name="rms_student_id";
+  		if ($num!=''){
+			
+			$where="degree = $degree AND branch_id = $branchId ";
+			$this->update($_arr, $where);
+  		}else{
+  			if ($degree>0){
+	  			$_arr['degree'] = $degree;
+	  			$this->insert($_arr);
+  			}
+  		}
+  }
+  
+  
 }
 ?>

@@ -293,9 +293,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			
 			return $_db->commit();
 		}catch(Exception $e){
-			$_db->rollBack();
-			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			
 		}
 	}
 	

@@ -1001,6 +1001,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	$sql="SELECT s.*,
 	   			sgd.grade,
 	   			sgd.degree,
+	   			sgd.is_newstudent AS is_stu_new,
 			   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label,
 		   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,			   		
@@ -3080,7 +3081,8 @@ function getAllgroupStudyNotPass($action=null){
 	  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sb.academic_year LIMIT 1) AS academic_year_label,
 	  	(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id,
 	  	sb.group_detail_id AS groupDetailId,
-	  	sb.id AS studentBalanceId
+	  	sb.id AS studentBalanceId,
+	  	sgd.is_newstudent AS is_stu_new
 	  	
   	FROM
 	  	`rms_student_balance` AS sb ,

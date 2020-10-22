@@ -131,6 +131,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->_name='rms_student';
 					$where="stu_id = ".$stu_id;
 					$this->update($arr, $where);
+				}elseif($data['student_type']==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
+					$rs_stu = $gdb->getStudentBalanceInfoById($stu_id);
+					$arrStuBalance = array(
+							'is_balance' =>0,
+							'modify_date'=>date("Y-m-d H:i:s"),
+					);
+					$this->_name='rms_student_balance';
+					$whereStuBalance="id = ".$data['studentBalanceId'];
+					$this->update($arrStuBalance, $whereStuBalance);
 				}
 			
 				$data['credit_memo'] = empty($data['credit_memo'])?0:$data['credit_memo'];

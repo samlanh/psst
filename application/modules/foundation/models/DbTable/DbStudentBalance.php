@@ -206,4 +206,67 @@ class Foundation_Model_DbTable_DbStudentBalance extends Zend_Db_Table_Abstract
 		
 		}
 	}
+	
+	public function getStudentBalanceById($id)
+	{
+			$_db = $this->getAdapter();
+		
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			$dbp = new Application_Model_DbTable_DbGlobal();
+			$currentLang = $dbp->currentlang();
+			$colunmname='title_en';
+			$label="name_en";
+			$branch = "branch_nameen";
+			if ($currentLang==1){
+				$colunmname='title';
+				$label="name_kh";
+				$branch = "branch_namekh";
+			}
+			$sql = "
+				SELECT
+					sb.*,
+					(SELECT $branch FROM rms_branch WHERE br_id=sb.branch_id LIMIT 1) AS branch_name,
+					s.stu_code,
+					s.stu_khname,
+					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
+					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
+				
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=sb.academic_year LIMIT 1) AS academicTitle,
+					(SELECT group_code FROM `rms_group` WHERE rms_group.id=sb.group_id LIMIT 1) AS group_name,
+					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = sb.`degree` LIMIT 1) AS degreeTitle,
+					(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = sb.`grade` LIMIT 1) AS gradeTitle
+							
+				FROM
+						`rms_student_balance` AS sb ,
+						`rms_student` AS s
+				WHERE
+						s.stu_id = sb.stu_id 
+						AND is_balance =1
+						AND sb.id = $id
+						";
+		$sql.=$dbp->getAccessPermission('sb.branch_id');
+		$sql.=" LIMIT 1 ";
+		return $_db->fetchRow($sql);
+	}
+	
+	function updateStudentBalance($_data){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+			if (!empty($_data['id'])){
+				
+					$arr=array(
+							'status'			=>$_data['status'],
+					);
+					$this->_name='rms_student_balance';
+					$where = " id = ".$_data['id'];
+					$this->update($arr, $where);
+			}
+			return $_db->commit();
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+	
+		}
+	}
 }

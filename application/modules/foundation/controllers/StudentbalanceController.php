@@ -96,7 +96,26 @@ class Foundation_StudentbalanceController extends Zend_Controller_Action {
 		}
 	}
 	public function editAction(){
-		$this->_redirect("/foundation/studentbalance");
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$_add = new Foundation_Model_DbTable_DbStudentBalance();
+				$_add->updateStudentBalance($data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/studentbalance/index");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		
+		$_db = new Foundation_Model_DbTable_DbStudentBalance();
+		$rs = $_db->getStudentBalanceById($id);
+		$this->view->rs = $rs;
+		
+// 		$this->_redirect("/foundation/studentbalance");
 	}
 	
 }

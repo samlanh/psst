@@ -221,7 +221,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$db = new Application_Model_DbTable_DbGlobal();
     		$student_id = empty($data['student_id'])?null:$data['student_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
-    		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested);
+    		$groupDetailId = empty($data['groupDetailId'])?null:$data['groupDetailId'];
+    		
+    		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested,$groupDetailId);
     		$rsproduct = $db->getProductbyBranch($data['dept_id']);
     		if(!empty($rsproduct) OR !empty($rs)){
     			$rs = array_merge($rs,$rsproduct);
@@ -455,6 +457,27 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$stuId = empty($data['student_id'])?0:$data['student_id'];
 			$rs = $db->getStudentinfoById($stuId);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	
+	function getstudentbalanceAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
+			$rows = $db->getAllStudentBalance($branch_id);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	function getstudentbalanceinformationAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$stuId = empty($data['student_id'])?0:$data['student_id'];
+			$rs = $db->getStudentBalanceInfoById($stuId);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}

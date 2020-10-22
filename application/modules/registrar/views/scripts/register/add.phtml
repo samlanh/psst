@@ -184,6 +184,7 @@ tr.head-td th{padding: 5px 2px;}
 								<option value="1"><?php echo $tr->translate("Existing Student");?></option>
 								<option value="2"><?php echo $tr->translate("Tested Student");?></option>
 								<option value="3"><?php echo $tr->translate("CRM");?></option>
+								<option value="4"><?php echo $tr->translate("សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់");?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -230,6 +231,10 @@ tr.head-td th{padding: 5px 2px;}
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?></label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
+		                   
+		                   		<!-- For  សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់ -->
+		                   		<input type="hidden" name="studentBalanceId" id="studentBalanceId" class="fullside" dojoType="dijit.form.TextBox"/>
+		                   		<input type="hidden" name="groupDetailId" id="groupDetailId" class="fullside" dojoType="dijit.form.TextBox"/>
 		                   </div>
 	                  </div>
 	           </div>
@@ -576,16 +581,23 @@ var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>
 function getgradebyDegree(dept_id,a,type=1){
 	dept_id = dijit.byId("category").get("value");
 	student_id = dijit.byId("old_stu").get("value");
+
+	groupDetailId = 0;
+	student_type = dijit.byId("student_type").get("value");
 	is_stutested=0;
-	if(dijit.byId('student_type').get('value')==2){
+	if(student_type==2){
 		is_stutested  = 1;
+	}else if(student_type==4){
+		groupDetailId = dijit.byId("groupDetailId").get("value");
 	}
 	dojo.xhrPost({
 		url:url_dept,
 		content:{
 			'dept_id':dept_id,
 			'student_id':student_id,
-			'is_stutested':is_stutested
+			'is_stutested':is_stutested,
+			
+			'groupDetailId':groupDetailId
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -687,6 +699,8 @@ function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
+	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalance')); ?>';
 	}
 	dijit.byId("old_stu").reset();
 	customer_type = dijit.byId("customer_type").attr("value");
@@ -794,6 +808,8 @@ function getOldStudentInfo(){
 		data_from=2;
 	}else if(student_type==3){//crm
 		data_from=3;
+	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
+		data_from=4;
 	}
 	customer_type = dijit.byId("customer_type").attr("value");
 	
@@ -823,7 +839,18 @@ function getOldStudentInfo(){
 }
 
 function getStudentInformation(){
+
+	dijit.byId('studentBalanceId').set('value',0);
+	dijit.byId('groupDetailId').set('value',0);
+	
 	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinformation')); ?>';
+
+	student_type = dijit.byId("student_type").attr("value");
+	if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
+		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalanceinformation')); ?>';
+	}
+	
+	
 	student_id=dijit.byId('old_stu').get('value');
 	dojo.byId("lb_grade").innerHTML = "";
 	dojo.byId("lb_academic_year").innerHTML ="";
@@ -847,6 +874,12 @@ function getStudentInformation(){
 			academic_year_label = data.academic_year_label;
 			if(academic_year_label=='undefined'){
 				academic_year_label='';
+			}
+
+			
+			if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
+				dijit.byId('studentBalanceId').set('value',data.studentBalanceId);
+				dijit.byId('groupDetailId').set('value',data.groupDetailId);
 			}
 			
 			dojo.byId("lb_academic_year").innerHTML = academic_year_label;

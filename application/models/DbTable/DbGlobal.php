@@ -1852,7 +1852,7 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-  function getAllGradeStudyByDegree($category_id=null,$student_id=null,$is_stutested=null){
+  function getAllGradeStudyByDegree($category_id=null,$student_id=null,$is_stutested=null,$groupDetailId=null){
   	$db = $this->getAdapter();
   	$currentLang = $this->currentlang();
   	$colunmname='i.title_en';
@@ -1869,7 +1869,11 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if($student_id!=null AND !empty($student_id)){
   		if(empty($is_stutested)){//for normal student
-  			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
+  			if (empty($groupDetailId)){
+  				$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
+  			}else{
+  				$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND stop_type=0 AND gd_id=$groupDetailId  AND stu_id= $student_id )) ";
+  			}
   		}else{//will check expired of result test later //for tested student
   			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result ))";
   		}
@@ -2055,7 +2059,9 @@ function getAllgroupStudyNotPass($action=null){
 	  		$rs = $this->getStudentinfoById($student_id);
 	    }elseif($data_from==2){//crm
 	  		$rs = $this->getStudentTestinfoById($student_id);
-	  	}
+	  	}elseif($data_from==4){//crm
+	  		$rs = $this->getStudentBalanceInfoById($student_id);
+	    }
   	}else{//customer//WHERE s.customer_type=2 
   		$rs = $this->getCustomerinfoById($student_id);
   	}
@@ -3031,6 +3037,62 @@ function getAllgroupStudyNotPass($action=null){
   		}
   }
   
+  function getAllStudentBalance($branch=null){//get all
+  	$db=$this->getAdapter();
+  	$branch_id = $this->getAccessPermission();
+  	$sql="
+  		SELECT
+			s.stu_id AS id,
+			CONCAT(COALESCE(s.stu_code,'-'),COALESCE(s.stu_khname,''),' [',s.last_name,' ',s.stu_enname,']') AS name
+		FROM
+				`rms_student_balance` AS sb ,
+				`rms_student` AS s
+		WHERE
+				s.stu_id = sb.stu_id 
+				AND sb.is_balance =1 
+				AND sb.status=1
+  				$branch_id "; 
+  	
+  		$sql.=" GROUP BY s.stu_id ORDER BY s.stu_id DESC";
+  		return $db->fetchAll($sql);
+  }
+  function getStudentBalanceInfoById($stu_id){
+  	$db=$this->getAdapter();
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	$field = 'name_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  		$field = 'name_kh';
+  	}
   
+  	$sql="SELECT s.*,
+	  	sb.grade,
+	  	sb.degree,
+	  	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sb.grade LIMIT 1) as grade_label,
+	  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sb.degree LIMIT 1) as degree_label,
+	  	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
+	  	(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
+	  	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
+	  	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
+	  	(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
+	  	(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) AS academic_year,
+	  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sb.academic_year LIMIT 1) AS academic_year_label,
+	  	(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id,
+	  	sb.group_detail_id AS groupDetailId,
+	  	sb.id AS studentBalanceId
+	  	
+  	FROM
+	  	`rms_student_balance` AS sb ,
+	  	 rms_group_detail_student AS sgd,
+		`rms_student` AS s
+  	WHERE
+  		s.stu_id = sb.stu_id 
+  		AND sgd.gd_id = sb.group_detail_id 
+  		AND sb.status=1
+  		AND s.stu_id=$stu_id
+  	LIMIT 1 ";
+  	return $db->fetchRow($sql);
+  }
 }
 ?>

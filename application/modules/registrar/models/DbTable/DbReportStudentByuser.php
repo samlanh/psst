@@ -390,7 +390,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		";
 	
 	
-		$orderby = " ORDER BY s.stu_id DESC ";
+		$orderby = " ORDER BY gds.degree DESC,gds.grade DESC, s.stu_id DESC ";
 	
 			if(!empty($search['adv_search'])){
 				$s_where = array();

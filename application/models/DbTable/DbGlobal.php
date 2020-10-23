@@ -2119,7 +2119,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	return $str;
   }
-  function getCardBackground($branch,$card_type,$schoolOption=null){
+  function getCardBackground($branch,$card_type,$schoolOption=null,$degree=null){
 	  $db = $this->getAdapter();
 	  $sql="SELECT c.* FROM `rms_cardbackground` AS c WHERE c.branch_id=$branch 
 	  AND c.default=1  AND c.card_type=$card_type 
@@ -2127,7 +2127,33 @@ function getAllgroupStudyNotPass($action=null){
 	  if (!empty($schoolOption)){
 	  	$sql.=" AND c.schoolOption IN ($schoolOption) ";
 	  }
-	  $sql.=" ORDER BY c.id DESC LIMIT 1";
+	  
+	  if (!empty($degree)){
+	  	$row = $db->fetchAll($sql);
+	  	if (!empty($row)){
+	  		foreach ($row as $rs){
+	  			$dept='';
+	  			if(!empty($rs['degree'])){
+	  				$dept =  explode(",",$rs['degree']);
+	  			}
+	  			$array = array();
+	  			if (!empty($dept)) {
+	  				foreach ($dept as $ss) {
+	  					$array[$ss] = $ss;
+	  				}
+	  			}
+	  			if (in_array($degree, $array)) {
+	  				return $rs;
+	  				break;
+	  			}
+	  		}
+	  	}
+	  	return null;
+	  }else{
+	  	 $sql.=" ORDER BY c.id DESC LIMIT 1";
+	  }
+	  
+	 
 	  return $db->fetchRow($sql);
   }
   function getPickupCardBackground($branch,$schoolOption=null){

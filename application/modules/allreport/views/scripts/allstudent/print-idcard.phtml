@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
+	//print_r($this->groupByBranchAndSchool);exit();
 	$type=$this->rs[0]['card_type'];//CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
 ?>	
 <script type="text/javascript">
@@ -42,11 +43,14 @@ function getKHMonthByNumber(m){
 			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 				$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
 				$color = "000000";
-				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
+				$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption'],$dep);
 				if(!empty($bg['background'])){
+					
 					if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 						$image = $this->baseUrl().'/images/card/'.$bg['background'];
 					}
+					
 					if (!empty($bg['colorcode'])){
 						$color = str_replace("#", "", $bg['colorcode']);
 					}
@@ -98,7 +102,8 @@ function getKHMonthByNumber(m){
 				}
 				.name-card-block ul.list-data li.sdudent-id{
 					margin-top:10px;
-					color: #01731b;
+					/*color: #01731b;*/
+					color: #01049f;
 				}
 				.foot-left-block {
 				    position: relative;
@@ -106,14 +111,14 @@ function getKHMonthByNumber(m){
 				.qrimages {
 				    position: absolute;
 				    /*top: 255px;*/
-					 top: 262px;
+					 top: 255px;
 				    width: 100%;
 				    text-align: center;
 				}
 				.qrimages img {
 				    width: 80%;
 				    text-align: center;
-				height: 17px;}
+				height: 10px;}
 					.validdate {
 				    position: relative;
 				}
@@ -130,16 +135,17 @@ function getKHMonthByNumber(m){
 			
 			$con=4;
 			$i=0; $student= count($this->rs);
-		if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;$image = "";
+		if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;$imageProfile = "";
 			if(!empty($row['photo'])){
 				if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-					$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+					$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
 				}
 			}
 			$prefix="";
 			$validDate="";
-			$stu_name = $row['en_name']." ".$row['last_name'];
-			$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+			$stu_name = $row['last_name']." ".$row['en_name'];
+			$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+			$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption'],$dep);
 			if (!empty($bg)){
 				if ($bg['display_by']==2){
 					$stu_name = $row['stu_khname'];
@@ -159,7 +165,7 @@ function getKHMonthByNumber(m){
 				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang';border:1px solid #e2c7c7db; ">
 					<div class="profile-card-block">
 						<div class="photo">
-							<img <?php if(!empty($image)){echo 'src="'.$image.'"';}?> >
+							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
 						</div>
 					</div>
 					<div class="name-card-block">

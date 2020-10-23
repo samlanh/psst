@@ -69,6 +69,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			WHERE 
     				s.stu_id = gds.stu_id
     				AND s.status=1 
+    				AND gds.is_current =1
     				AND gds.is_maingrade =1
     				AND s.customer_type=1 ";
     	
@@ -220,13 +221,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){
     	$db = $this->getAdapter();
-    	$sql ='SELECT branch_id,    		   
+    	$sql ='SELECT branch_id,
+    				ds.degree as degree_id,    		   
 					(SELECT rms_items.title FROM rms_items WHERE rms_items.id=ds.degree AND rms_items.type=1 LIMIT 1) AS degree,
 					(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=ds.degree AND rms_items.type=1 LIMIT 1) AS schoolOption
 				FROM 
     				rms_student as s,
     				rms_group_detail_student as ds ';
-    	$where=' WHERE s.stu_id = ds.stu_id AND s.status=1 AND s.customer_type=1 ';
+    	$where=' WHERE s.stu_id = ds.stu_id AND s.status=1 AND s.customer_type=1 AND ds.is_current=1 AND ds.is_maingrade=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	   	
@@ -395,6 +397,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql ='SELECT 
     				s.branch_id,
+    				gds.degree as degree_id,   
 			    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
 			    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS schoolOption
     			FROM 
@@ -402,6 +405,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_group_detail_student AS gds 
     			WHERE 
     				gds.stu_id = s.stu_id
+    				AND gds.is_current =1 
     				AND gds.is_maingrade
     				AND s.stu_id IN '."($stu_id)";
     	$dbp = new Application_Model_DbTable_DbGlobal();
@@ -481,7 +485,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student as s,
     				rms_group_detail_student AS gds
     			WHERE
-    				s.stu_id = gds.stu_id
+    				s.stu_id = gds.stu_id 
+    				AND gds.is_current =1 
+    				AND gds.is_maingrade =1
     				AND s.stu_id IN ($stu_id) ";
     	//AND gds.is_maingrade
     	$dbp = new Application_Model_DbTable_DbGlobal();

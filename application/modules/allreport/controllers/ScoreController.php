@@ -926,6 +926,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
+    		$search['txtsearch']=empty($search['txtsearch'])?'':$search['txtsearch'];
+    		$search['study_type']=empty($search['study_type'])?0:$search['study_type'];
     	}
     	else{
     		$search = array(

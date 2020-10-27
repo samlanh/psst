@@ -40,6 +40,13 @@
 				</select>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
+            	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
+					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+				</select>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
             	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
             </div>
         </div>

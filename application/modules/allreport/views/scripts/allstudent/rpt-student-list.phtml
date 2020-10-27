@@ -29,22 +29,31 @@ table.tb-footer tr.style-head {
     </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<input class="fullside" dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search by student name....." value="" type="text">
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("branch_id");?>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("academic_year");?>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<input id="group" />
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+        </div>
+        <div class="form-group">
+        	 <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("study_type");?>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
+            	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
+            	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
+					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+				</select>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
             </div>
         </div>
@@ -268,6 +277,10 @@ dojo.ready(function(){
 		    
 	    }
 	}, "group");
+
+	<?php if (!empty($this->rr['branch_id'])){?>
+	dijit.byId('branch_id').set('value','<?php echo $this->rr['branch_id']?>');  
+	<?php }?>
 	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
@@ -304,6 +317,10 @@ function getAllGroupByBranch(){
 		    dijit.byId('group').set('store',group_store);   
 		    if(oldBranch==branch_id){
 		    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
+		    }else{
+		    	<?php if (!empty($this->rr['branch_id'])){?>
+		    	dijit.byId('group').set('value','<?php echo $this->rr['id']?>');  
+		    	<?php }?>
 		    }
 		},
 		error: function(err) {

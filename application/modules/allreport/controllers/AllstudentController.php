@@ -475,7 +475,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$search=$this->getRequest()->getPost();
 			$db->submitDateList($search);
 			$row = $db->getStudentGroup(null,$search,1);
-			$rs=null;
+			$rs=array();
 			if(!empty($row[0]['group_id'])){
 				$rs = $db->getGroupDetailByID($row[0]['group_id']);
 			}
@@ -804,6 +804,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 		$this->view->datasearch = $search;
+		$this->view->search = $search;
 		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
 	

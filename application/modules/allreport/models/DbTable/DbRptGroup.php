@@ -101,6 +101,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				     `s`.`stu_khname` AS `kh_name`,
 				     `s`.`stu_enname` AS `en_name`,
 				     `s`.`last_name` AS `last_name`,
+				     CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullName,
 				     `s`.`address` AS `address`,
 				     s.pob,
 				     `s`.`tel` AS `tel`,
@@ -145,7 +146,14 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 					$sql.=' AND g.stop_type= '.$search['study_type'];
 				}
 			}  
-			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
+			
+			$stuOrderBy = empty($search['stuOrderBy'])?0:$search['stuOrderBy'];
+			
+			$order= ' ORDER BY s.stu_khname ASC ';
+			if ($stuOrderBy==1){
+			$order= " ORDER BY CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ASC ";
+			}
+			
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$sql.=$dbp->getAccessPermission("gr.branch_id");
 			

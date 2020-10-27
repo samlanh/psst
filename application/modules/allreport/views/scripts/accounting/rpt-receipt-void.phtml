@@ -148,9 +148,9 @@ table.tb-footer tr.style-head {
 								<tr class="style-rowdata hover" align="center" style="font-size:10px; height: 20px;border-bottom: 1px solid #000;"​>
 										<td ><?php echo $i;?></td>
 										<td align="left">&nbsp;<?php echo $rs['branch_name']; ?>&nbsp;</td>
-										<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
-										<td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
-										<td class="receiptNo"><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_number']; ?></a></td>
+										<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
+										<td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
+										<td class="receiptNo"><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_number']; ?></a></td>
 										<td><?php if($rs['penalty']>0){echo number_format($rs['penalty'],2);} ?></td>
 										<td><strong><?php echo number_format($rs['grand_total'],2); ?></strong></td>
 										<td><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>

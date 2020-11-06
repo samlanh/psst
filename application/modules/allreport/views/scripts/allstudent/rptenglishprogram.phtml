@@ -58,7 +58,6 @@
 		        	<div class="col-md-2 col-sm-2 col-xs-12">
 		        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 		        	</div>
-		        	
 		        </div>
         </form>
     </div>
@@ -200,7 +199,7 @@
 								<td align="left"><?php echo $row['sex'];?></td>	
 								<td ><?php echo $row['stu_code'];?></td>
 								<td style="max-width: 80px;white-space: normal;text-align: left;"><?php echo $row['tel'];?></td>
-								<td align="left">&nbsp;<?php echo $row['email'];?></td>
+								<td align="left">&nbsp;<?php echo (!empty($row['test_date']))?date("d-M-Y",strtotime($row['test_date'])):"";?></td>
 								<td ><?php echo $row['degree'];?></td>
 								<td align="left"><?php echo $row['grade'];?></td>
 								<td align="left"><?php echo $row['room_name'];?></td>

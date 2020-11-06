@@ -289,16 +289,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'adv_search' =>'',
-						'branch_id' =>'',
-						'study_year'=>'',
-						'grade_all' =>'',
-						'degree' =>'',
-						'group'		=>-1,
-						'item'		=>-1,
-						'service_type'=>-1,
-						'end_date'	=>date('Y-m-d'),
-						'service'	=>''
+					'adv_search' =>'',
+					'branch_id' =>'',
+					'study_year'=>'',
+					'grade_all' =>'',
+					'degree' =>'',
+					'group'		=>-1,
+					'item'		=>-1,
+					'service_type'=>-1,
+					'end_date'	=>date('Y-m-d'),
+					'service'	=>''
 				);;
 			}
 			$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
@@ -317,7 +317,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}
@@ -736,8 +735,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     public function rptInvoicedetailAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
 		$id=$this->getRequest()->getParam('id');		
-		if($this->getRequest()->isPost()){
-		}		
 		$row = $db->getinvoiceByid($id);
 		$this->view->invoice = $row;
 		$rs=$this->view->invoice_service = $db->getinvoiceservice($id);

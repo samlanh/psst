@@ -13,20 +13,20 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-						'search'=>'',
-    					'branch_id'=>'',
-						'student_name' => '',
-						'group'=>'',
-						'degree'=>'',
-						'grade'=>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-					);
+					'search'=>'',
+    				'branch_id'=>'',
+					'student_name' => '',
+					'group'=>'',
+					'degree'=>'',
+					'grade'=>'',
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
+				);
     		}
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$rs_rows = $db->getinvoice($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","GROUP","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
+    		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
@@ -73,9 +73,6 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
 		$id=$this->getRequest()->getParam('id');
-		$this->view->invoice = $db->getinvoiceByid($id);
-		$rs=$this->view->invoice_service = $db->getinvoiceservice($id);
-		 
 		if($this->getRequest()->isPost()){
 	    	try{
 	    		$data = $this->getRequest()->getPost();
@@ -86,15 +83,27 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
     	}
+    	$rs = $db->getinvoiceByid($id);
+    	if(empty($rs)){
+    		Application_Form_FrmMessage::Sucessfull("NO_DATA","/accounting/invoice");
+    	}
+    	$this->view->invoice = $rs;
+    	$branch_id =  $rs['branch_id'];
+    	$rs=$this->view->invoice_service = $db->getinvoiceservice($id);
+    	
+    	$data['study_year'] = empty($data['study_year'])?null:$data['study_year'];
+    	
 		$db = new Registrar_Model_DbTable_DbRegister();
-// 		$this->view->all_service = $db->getAllService();
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
-		$this->view->branch = $model->getAllBranch();
+		$this->view->branch =  $model->getAllBranch();
+		
+		$db = new Global_Model_DbTable_DbTerm();
+		$this->view->rs_term = $db->getTermStudy($branch_id,$data['study_year'],1);
 	}
 	function getitemsdetailAction(){
 		if($this->getRequest()->isPost()){

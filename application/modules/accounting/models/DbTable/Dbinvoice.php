@@ -8,14 +8,12 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoice($search){
 		$db= $this->getAdapter();
 		$sql="SELECT v.id ,
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=v.branch_id)AS branch,
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=v.branch_id LIMIT 1) AS branch,
 					s.stu_code ,
 					s.stu_khname,
-					s.last_name,
-					s.stu_enname,
 					CONCAT(s.last_name,' ',s.stu_enname) as en_name,
-					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2) AS sex,
-					DATE_FORMAT(v.invoice_date,'%d-%b-%Y') AS invoice_date,
+					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2 LIMIT 1) AS sex,
+					DATE_FORMAT(v.invoice_date,'%d-%M-%Y') AS invoice_date,
 					v.invoice_num ,
 					v.input_date ,
 					v.remark ,
@@ -37,18 +35,16 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search=addslashes(trim($search['search']));
     		$s_where[]= " v.branch_id LIKE '%{$s_search}%'";
+    		$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
     		$s_where[]="  v.student_name LIKE '%{$s_search}%'";
+    		$s_where[]="  v.last_name LIKE '%{$s_search}%'";
     		$s_where[]= " v.invoice_num LIKE '%{$s_search}%'";
 			$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
-			$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['branch_id'])){
     		$where.=" AND v.branch_id=".$search['branch_id'];
     	}
-// 		if(!empty($search['group'])){
-//     		$where.= " AND s.group_id =".$search['group'];
-//     	}
     	if(!empty($search['student_name'])){
     		$where.=" AND v.student_name=".$search['student_name'];
     	}
@@ -60,7 +56,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoiceByid($id){
 		$db= $this->getAdapter();
 		$sql="SELECT v.* ,
-			s.stu_khname ,s.stu_enname,s.last_name,s.stu_code,s.sex
+			s.stu_khname ,s.stu_enname,s.last_name,s.stu_code,s.sex,s.tel
 			FROM rms_invoice_account  AS v ,
 			rms_student AS s WHERE stu_id = student_name and id=".$id." LIMIT 1";
 		return $db->fetchrow($sql);
@@ -102,7 +98,6 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 				$arr_s = array(
 					'vid'=>$_id,
 					'service_id'=>$data['service_'.$i],
-					'type'	=>$data['type_'.$i],
 					'month'=>$data['amount_'.$i],
 					'term'=>$data['term_'.$i],
 					'semester'=>$data['semester_'.$i],
@@ -110,6 +105,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					'start_date'=>$data['startdate_'.$i],
 					'end_date'=>$data['enddate_'.$i],
 					'remark'=>$data['remark_'.$i],
+					'is_onepayment'=>$data['onepayment_'.$i],
+					'period'=>$data['term_study'.$i],
 					);
 				$this->_name='rms_invoice_account_detail';	
 				$this->insert($arr_s);
@@ -148,13 +145,14 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 				$arr_s = array(
 					'vid'=>$id,
 					'service_id'=>$data['service_'.$i],
-					'type'	=>$data['type_'.$i],
 					'month'=>$data['amount_'.$i],
 					'term'=>$data['term_'.$i],
 					'semester'=>$data['semester_'.$i],
 					'year'=>$data['year_'.$i],
 					'start_date'=>$data['startdate_'.$i],
 					'end_date'=>$data['enddate_'.$i],
+					'is_onepayment'=>$data['onepayment_'.$i],
+					'period'=>$data['term_study'.$i],
 					'remark'=>$data['remark_'.$i],
 					);
 				$this->_name='rms_invoice_account_detail';	
@@ -179,7 +177,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
  		return $pre.$num;
 	}
 		 
-	function getAllGradeStudy($option=1,$student_id=null){
+	/*function getAllGradeStudy($option=1,$student_id=null){
 	 	$db = $this->getAdapter();
 	 	$sql="SELECT i.id,
 	 	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
@@ -206,5 +204,5 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	 	}
 	 	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
 	 	return $db->fetchAll($sql);
-	}
+	}*/
 }

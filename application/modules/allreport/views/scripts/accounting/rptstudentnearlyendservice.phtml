@@ -35,7 +35,6 @@
        		</div>
        	</div>
        	<div class="form-group">
-       		
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("service_type");?>
        		</div>
@@ -73,7 +72,7 @@
 					<td width="15%" align="center"></td>
 					<td align="center" width="70%">
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'khmer os muol light';"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></strong><br />
-						<span​​ style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
+						<span​​ style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 					</td>
 					<td width="15%" align="center">&nbsp;</td>					
 				</tr>
@@ -114,31 +113,31 @@
 								</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
-													
-							$end_dat=$row['end'];
-							$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
-							$day=(int)($total_day/(60*60*24));
 						?>
 							<tr class="hover" style="font-size:11px; height: 22px;border: 1px solid #000;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $i;?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
-								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name']." ".$row['last_name'];?></td>	
+								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['stu_khname']." ".$row['last_name']." ".$row['first_name'];?></td>	
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
 								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['tel'];?></td>
-								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['group_name'].'/'.$row['grade'].'/'.$row['session'];?></td>
+								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php //echo $row['group_name'].'/'.$row['grade'].'/'.$row['session'];?></td>
 								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['category_name'];?></td>
 								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php  echo $row['service_name'];?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['create_date']));?>&nbsp;</td>
-								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['start']));?>&nbsp;</td>
-								<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-m-Y",strtotime($row['end']));?>&nbsp;</td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['start_date']));?>&nbsp;</td>
+								<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-m-Y",strtotime($row['end_date']));?>&nbsp;</td>
 								<?php 
-								$daylate =$day;
-								if($day>=0){
-									$daylate ="Remain".abs($day);
-								}else{
-									$daylate ="Late".abs($day);
-								}?>
+									$end_dat=$row['end_date'];
+									$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
+									$day=(int)($total_day/(60*60*24));
+									$daylate =$day;
+									if($day>=0){
+										$daylate ="Remain ".abs($day);
+									}else{
+										$daylate ="Late ".abs($day);
+									}
+								?>
 								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo $daylate;?></td>
  							</tr>
 							<?php }}?>	 

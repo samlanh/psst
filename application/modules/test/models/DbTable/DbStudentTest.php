@@ -563,12 +563,13 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				
 				$arrCheck=array(
 						'stu_test_id'			=>$data['stu_test_id'],
-						'degree_result'			=>empty($data['degree_result'])?$data['degree']:$data['degree_result'],
+						//'degree_result'			=>empty($data['degree_result'])?$data['degree']:$data['degree_result'],
 						);
-				$check  = $this->checkStudentInGroupDetail($data);
+				$check  = $this->checkStudentInGroupDetail($arrCheck);
 				if (!empty($check)){
 					$where = "stu_id=".$data['stu_test_id'];
-					$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
+					//$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
+					$degreeUp = empty($check['degree'])?$data['degree']:$check['degree'];
 					$where.=" AND degree = ".$degreeUp;
 					$this->_name="rms_group_detail_student";
 					$this->update($_arr, $where);
@@ -650,8 +651,12 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function checkStudentInGroupDetail($_data){
 		$db = $this->getAdapter();
 		$stu_id = empty($_data['stu_test_id'])?0:$_data['stu_test_id'];
-		$degree = empty($_data['degree_result'])?0:$_data['degree_result'];
-		$sql=" SELECT sd.* FROM rms_group_detail_student AS sd WHERE sd.stu_id = $stu_id AND sd.degree=$degree ";
+		$sql=" SELECT sd.* FROM rms_group_detail_student AS sd WHERE sd.stu_id = $stu_id  ";
+		
+		if(!empty($_data['degree_result'])){
+			$degree = empty($_data['degree_result'])?0:$_data['degree_result'];
+			$sql.=" AND sd.degree=$degree ";
+		}
 		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);
 	}

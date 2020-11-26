@@ -825,9 +825,9 @@ class Application_Form_FrmGlobal{
 										</div>
 									</td>
 								</tr>
-								<tr>
-									<td>Student Name</td>
-									<td colspan='1'> : &nbsp;<label id='lb_name' class='one bold'></label></td>
+								<tr >
+									<td style='vertical-align: top;' >Student Name</td>
+									<td colspan='1'> : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top; line-height: 13px;' ></label></td>
 									<td><div style='font-size: 12px;font-weight: bold;font-family: Times New Roman'>Pay Date</div></td>
 									<td> : &nbsp;<label id='lb_date' class='one bold'></label></td>
 									

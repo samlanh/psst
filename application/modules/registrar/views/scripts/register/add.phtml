@@ -1306,12 +1306,12 @@ function printSave(){
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
 
 		 var nameKhValue = dojo.byId("lbl_namekh").innerHTML; 
-		 lblNamekh=nameKhValue+" - ";
+		 lblNamekh=nameKhValue+"";
 		 if(nameKhValue==""){
 			 lblNamekh="";
 		 }
 		 
-		dojo.byId("lb_name").innerHTML = lblNamekh+dojo.byId("lbl_nameen").innerHTML;
+		dojo.byId("lb_name").innerHTML = lblNamekh+'<br />'+dojo.byId("lbl_nameen").innerHTML;
 		
 		//dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 		//dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;

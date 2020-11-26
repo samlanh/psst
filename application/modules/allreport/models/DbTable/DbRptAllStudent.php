@@ -36,7 +36,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql ="SELECT 
     				*,
 	    	      (SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-	    	       CONCAT(s.stu_khname,' - ',s.stu_enname,' ',s.last_name) as name,
+	    	       CONCAT(COALESCE(s.stu_khname,''),' - ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) as name,
 	    	       s.stu_khname,
 	    	       s.last_name,
 	    	       s.stu_enname,
@@ -81,6 +81,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
     	$order=" ORDER BY s.stu_id,gds.degree,gds.grade,gds.academic_year DESC";
+		
 		$adv_search = empty($search['adv_search'])?"":$search['adv_search'];
 		$search['title'] = empty($search['title'])?$adv_search:$search['title'];
     	if(!empty($search['title'])){

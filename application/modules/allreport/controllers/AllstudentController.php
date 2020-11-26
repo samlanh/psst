@@ -75,6 +75,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 		$this->view->search=$search;
 		
+		$searchSS=array(
+				'branch_id'		=>1,
+			);
+		$this->view->stu_forOption = $group->getAllStudent($searchSS);
+		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);

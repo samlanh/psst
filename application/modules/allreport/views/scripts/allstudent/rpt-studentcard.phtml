@@ -10,6 +10,11 @@
 .hidden{visibility: visible !important;
 display: table-cell !important;
 }
+
+tbody#table_row tr {
+    line-height: 24px;
+    color: #000;
+}
 </style>
 <div class="reportblog" >	
 	<div class="card-box">
@@ -64,9 +69,20 @@ display: table-cell !important;
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    </div>
              </div>
+			 <div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+						<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStudent();">
+							<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
+							<option value="2"><?php echo $tr->translate("SELECTED_STUDENT_OPTION");?></option>
+						</select>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+						
+                   </div>
+             </div>
 	</form>
 	<div id="divPrint">
-		<table border="0" style="background:#fff; margin: 0 auto; width: 100%;height:auto; ">
+		<table class="NORMAL_OPTION" border="0" style="background:#fff; margin: 0 auto; width: 100%;height:auto; ">
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
@@ -139,6 +155,35 @@ display: table-cell !important;
 				</td>
 			</tr>
 		</table>
+		<div class="card-box SELECTED_STUDENT_OPTION">
+			<div class="col-md-12 col-sm-12 col-xs-12" style=" padding: 0;">
+				<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+					<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?> </label>
+					<div class="col-md-5 col-sm-5 col-xs-12">
+						<select name="studentID" id="studentID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
+							<option value="0"><?php echo $tr->translate("SELECT_STUDENT");?></option>
+							<?php if(!empty($this->stu_forOption)){ foreach ($this->stu_forOption AS $row) { ?>
+							<option value="<?php echo $row['stu_id']; ?>"><?php echo $row['stu_code']." ".$row['name']." ".$row['grade'];?></option>
+							<?php }} ?>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+						<thead>
+							<tr id="head-title" class="head-td" align="right" style="width: 100%;">
+								<th width="5%"><?php echo $tr->translate("DEL");?></th>
+								<th width="5%"><?php echo $tr->translate("N_O");?></th>
+								<th ><?php echo $tr->translate("STUDENT");?></th>
+							</tr>
+						</thead>
+						<tbody id="table_row">
+						</tbody>
+						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 	<table width="100%" style="margin-top:20px;">
 		<tr>
@@ -635,6 +680,7 @@ display: table-cell !important;
 
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
+ dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -676,6 +722,8 @@ dojo.ready(function(){
     });
 	 getAllGroupByBranch();
 	 getallGrade();
+	 
+	 getBlogStudent();
 });
 var oldBranch = '<?php echo $this->search['branch_id']?>'
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
@@ -817,4 +865,74 @@ function getallGrade(){
 			$('#id_selected').val(strings);
 		}
 	}
+	
+	function getBlogStudent(){
+		optionSelect=dijit.byId("optionSelect").get("value");
+		if(optionSelect==1){
+			$(".NORMAL_OPTION").css("display", "table");
+			$(".SELECTED_STUDENT_OPTION").css("display", "none");
+		}else{
+			$("#id_selected").val('');
+			dojo.query("#table_row").append("");
+			$(".NORMAL_OPTION").css("display", "none");
+			$(".SELECTED_STUDENT_OPTION").css("display", "block");
+		}
+		
+	}
+	var template = '';
+	var col = 0;
+	var no = 0;
+	var title = 0;
+	tmp = '';
+	temp='';
+function addRow(){ 
+	studentID=dijit.byId("studentID").get("value");
+	if(studentID=='' || studentID==0){return false;}
+	var iden = $("#id_selected").val();
+	var arrays = iden.split(',');
+	 if(arrays!=""){
+		 for(var i=0;i< arrays.length;i++) {
+			 readychoose = dijit.byId('class_'+arrays[i]).get('value');
+			 if(readychoose==studentID){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+				 	return false;
+			 }
+		}
+	}
+		col++;no++;
+		labelStudent = dijit.byId("studentID").attr('displayedValue');
+		template='';
+		if(title!=1){
+			$("#head-title").html("");    
+			temp+='<th with="5%"><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th with="5%"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th><?php echo $tr->translate("STUDENT");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+		}
+			template+='<td width="47px"align="center"><img onclick="deleteRecord('+studentID+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="10px" align="center">'+no+'</td>';
+			template+='<td>&nbsp;'+labelStudent+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="class_'+studentID+'" name="class_'+studentID+'" value="'+studentID+'" /></td>';
+		tmp='<tr id="row'+studentID+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+
+		if($("#id_selected").val()!="") {
+			var identity = $("#id_selected").val();
+			$("#id_selected").val(identity+','+studentID);
+		} else {$("#id_selected").val(studentID);}
+		dojo.html.set(dojo.byId("row"+studentID),template , {
+		     parseContent: true,
+		});
+ }
+  function deleteRecord(index){
+	var identity = $('#id_selected').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#id_selected').val(strings);
+	dojo.query("#row"+index).remove();
+}
 </script>

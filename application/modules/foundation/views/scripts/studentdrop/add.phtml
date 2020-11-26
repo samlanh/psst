@@ -228,7 +228,7 @@ function getAllGroup(){
 	dojo.xhrPost({
 		url: url_getallgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1
+			'branch_id':branch_id,'noaddnew':1,'forfilter':1
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -268,6 +268,7 @@ function getallstudentname(){//
 //var url_student = '<?php //echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'get-student')); ?>';
 var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getstudentstudyinfo')); ?>';
 function getStudentInfo(){
+	dijit.byId('group').reset();
 	studentid = dijit.byId('studentid').get('value');
 	if(studentid==''){
 		alert("Please Select Student");

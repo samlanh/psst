@@ -1126,7 +1126,7 @@ function getAllgroupStudyNotPass($action=null){
    function getAllCrmstudent($branch=null,$type){//get all
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
-   	$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+   	$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',COALESCE(stu_enname,''),' ',COALESCE(last_name,''),']') AS name
    	FROM rms_student
    	WHERE (stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=3 $branch_id  ";
    	if (!empty($branch)){

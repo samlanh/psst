@@ -153,11 +153,10 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 // 				'readonly'=>true
 				));
 		
-		$prefix_code = new Zend_Dojo_Form_Element_ValidationTextBox('prefix_code');
+		$prefix_code = new Zend_Dojo_Form_Element_TextBox('prefix_code');
 		$prefix_code->setAttribs(array(
-				'dojoType'=>'dijit.form.ValidationTextBox',
+				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
-				'required'=>true
 		));
 		
 		

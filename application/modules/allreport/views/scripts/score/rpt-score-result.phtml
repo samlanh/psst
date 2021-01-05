@@ -22,6 +22,23 @@
 		"11"=>"វិច្ឆិកា",
 		"12"=>"ធ្នូ"
 	);
+	$monthKH = array(
+		"1"=>"មករា",
+		"2"=>"កុម្ភៈ",
+		"3"=>"មីនា",
+		"4"=>"មេសា",
+		"5"=>"ឧសភា",
+		"6"=>"មិថុនា",
+		"7"=>"កក្កដា",
+		"8"=>"សីហា",
+		"9"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+	$monthENG = array("1"=>"January","2"=>"February","3"=>"March","4"=>"April","5"=>"May","6"=>"June","7"=>"July","8"=>"August","9"=>"September","10"=>"October","11"=>"November","12"=>"December"
+	);
+	$template = SCORE_RESULT_TEMPLATE;
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
@@ -96,36 +113,38 @@
         </div>
 	</form>
 	<div id="divPrint">
-		<style type="text/css">
-			.style{
-				line-height: 20px; font-size: 12px !important;
-				color:#4839bd;
-				font-family: 'Times New Roman','Khmer OS Battambang';
-			}
-			table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-			.header tr{ page-break-inside:avoid; page-break-after:auto }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			.cheader{height: 25px;background: #fffbcb; white-space: nowrap;
-			height:23px;color:#5a71b5;font-size: 14px;font-family: 'Times New Roman','Khmer OS Muol Light';
-}
-			.hover:hover{background: #ccc;}
-			.red {
-			    color: #ff1a02;
-			}
-			.border-right-none{
-    			border-right: #fff solid 1px;
-			}
-			.border-bottom-none{
-    			border-bottom: #fff solid 1px;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}	
-		</style>
+		<?php if($template==1){?>
+			<style type="text/css">
+				.style{
+					line-height: 20px; font-size: 12px !important;
+					color:#4839bd;
+					font-family: 'Times New Roman','Khmer OS Battambang';
+				}
+				table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+				.header tr{ page-break-inside:avoid; page-break-after:auto }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
+				.cheader{
+					height: 25px;background: #fffbcb; white-space: nowrap;
+					height:23px;color:#5a71b5;font-size: 14px;font-family: 'Times New Roman','Khmer OS Muol Light';
+				}
+				.hover:hover{background: #ccc;}
+				.red {
+					color: #ff1a02;
+				}
+				.border-right-none{
+					border-right: #fff solid 1px;
+				}
+				.border-bottom-none{
+					border-bottom: #fff solid 1px;
+				}
+				table.content-data tr.style-rowdata {
+					font-size:12px; 
+					height: 23px;
+				}	
+			</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
 					<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
@@ -295,8 +314,262 @@
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><br /><br /><?php echo $rs['teacher']?></td>
 					</tr>
 				</table>
-		<?php }?>
-		</div>
+			<?php }?>
+		<?php }else if($template==2){?>
+				<style type="text/css">
+					table tr td,table tr td span{
+						color:#002c7b;
+					}
+					.style{
+						line-height: 20px; font-size: 12px;
+						color:#002c7b;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+					.header tr{ page-break-inside:avoid; page-break-after:auto }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					}
+					.cheader{
+						height: 25px; white-space: nowrap;
+						height:23px;color:#002c7b;font-size: 11px;font-family: 'Times New Roman','Khmer OS Muol Light';
+					}
+					.hover:hover{background: #ccc;}
+					.red {
+						color: #ff1a02;
+					}
+					.border-right-none{
+						border-right: #fff solid 1px;
+					}
+					.border-bottom-none{
+						border-bottom: #fff solid 1px;
+					}
+					table.content-data tr.style-rowdata {
+						font-size:12px; 
+						height: 23px;
+					}	
+					span.khmerName,
+					span.englishName {
+						line-height: 20px;
+						margin: 0;
+						padding: 0;
+					 
+					}
+					tr.style span.khmerName {
+						font-size:10px;
+					}
+				</style>
+			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr style="border-bottom: 1px solid #000;">
+					<td colspan="3" align="center" >
+						<?php echo $this->headerScore;?>
+						
+					</td>
+				</tr>
+				<?php
+				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
+				 $duplicate=0;$count_pass=0;
+				 $default_col = 0;
+				 $m=0;$f=0;
+				 $pass_female=0;$fail_female=0;
+				 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
+				 if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");$m = $m+1;}
+				 else{$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;}
+				 	$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']);
+				?>
+				<?php if ($old_groupid!=$rs['group_id']){ ?>
+				<?php 
+				$i=0; 
+				$count_fail=0; 
+				$count = count($subj); 
+				if($rs['exam_type']==1){
+					$monthChar = empty($monthKH[$rs['for_month_id']])?"":$monthKH[$rs['for_month_id']];
+					$titleKh='លទ្ធផលប្រឡងប្រចាំខែ'.$monthChar;
+					$monthCharEn = empty($monthENG[$rs['for_month_id']])?"":$monthENG[$rs['for_month_id']];
+					$titleENG=$monthCharEn." TEST RESULT";
+				}else{
+					$arrRomanNum = array(1=>"I",2=>"II");
+					$romanNumber = empty($arrRomanNum[$rs['for_semester']])?"":$arrRomanNum[$rs['for_semester']];
+					$titleKh='លទ្ធផលប្រឡងប្រចាំឆមាសទី'.$dbgb->getNumberInkhmer($rs['for_semester']);
+					$titleENG="SEMESTER ".$romanNumber." TEST RESULT";
+				}
+				
+				?>
+				<tr>
+					<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+						<span style="color:#002c7b; font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+						<?php echo $titleKh;?>
+						</span><br />
+						<span style="color:#002c7b; font-size:14px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+						<?php echo $titleENG;?>
+						</span><br />
+						
+						<span style="color:#002c7b; font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+							ថ្នាក់ទី / GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span>
+						</span><br />
+						<span style="color:#002c7b; font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+							ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span>
+						</span>
+					</td>
+					<td align="center" valign="top"></td>
+				</tr>
+				<tr>
+				<?php 
+				$colspan=1;
+				if($this->data['scoreresulttye']==1){
+					$colspan=2;
+				}?>
+					<td colspan="3" id="exportExcel" valign="top">
+						<table class="header"  cellpadding="2"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1" >
+							<tr class="cheader" align="center" >
+								<td><?php echo $tr->translate("NUM");?>
+									<br />No
+								</td>
+								<td style="width:80px;"><?php echo $tr->translate("ID_NUMBER");?>
+									<br />ID
+								</td>
+								<td><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?>
+									<br />Family and Given Name
+								</td>
+								<td><?php echo $tr->translate("SEX");?>
+									<br />Sex
+								</td>
+								<td><?php echo $tr->translate("TOTAL_SCORE");?>
+									<br />Total Score
+								</td>
+								<td><?php echo $tr->translate("AVERAGE");?>
+									<br />Average
+								</td>
+								<td style="width:100px;"><?php echo $tr->translate("RANK");?>
+								  <br />Rank
+								</td>
+								<td colspan="3" >និទ្ទេស និង​ មូលវិចារ
+									<br />Letter Grade & Comment
+								</td>
+							</tr>
+							<?php } $i++;?>
+							<tr class="style style-rowdata hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id'];?>','<?php echo $rs['stu_id'];?>','<?php echo $i;?>','<?php echo $rs['group_id'];?>','<?php echo $rs['exam_type'];?>','<?php echo $rs['for_semester'];?>','<?php echo $rs['for_month_id'];?>');return false;" style="line-height: 20px;">
+								<td align="center"><?php echo $i;?></td>
+							    <td align="center" style="white-space:nowrap;">
+							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&group_id=".$rs['group_id']."&exam_type=".$rs['exam_type']."&for_semester=".$rs['for_semester']."&for_month=".$rs['for_month_id'];?>"><?php echo $rs['stu_code'];?></a>
+							    </td>
+								<td style="white-space:nowrap;">&nbsp;<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span><span class="englishName"><?php echo empty(trim($rs['stu_enname']))?"":" / ".trim($rs['stu_enname']);?></span>&nbsp;
+								</td>
+								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
+								<?php 
+									$amount_subject=0;
+									if($this->data['scoreresulttye']==1){
+										$total_score = 0; 
+										if (!empty($subj)) foreach ($subj as $subject){
+											$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
+											$tscore_subject = number_format($score['score'],2);
+											$total_score = $total_score + $tscore_subject;
+										 }
+								 	}
+									if($rs['total_avg']==$old_totalscore){
+										$duplicate=$duplicate+1;
+									}else{
+										$old_rank=$old_rank+1+$duplicate;
+										$duplicate=0;
+									}
+									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+								?>
+								<td align="center">
+									<?php
+										$total_score = number_format($total_score,2);
+										echo $total_score;
+										$average = number_format($rs['total_avg'],2);
+									?>
+								</td>
+								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
+								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
+								<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i;?>" id="rank<?php echo $i;?>" value="<?php echo $old_rank;?>" />
+								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
+								<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade']);?>
+								</td>
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd;';}?>">
+									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade']);?>
+									<?php 
+									if($average>=($rs['pass_avrage'])){
+										$count_pass++;
+										if($rs['sex']==2){
+											$pass_female=$pass_female+1;
+										}//femail
+									}else{
+										$count_fail++;
+										if($rs['sex']==2){
+											$fail_female = $fail_female+1;
+										}
+									}
+									?>
+								</td>
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd;"';}?>">
+									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],3,$rs['grade']);?>
+								</td>
+							</tr>
+							<?php 
+								$old_totalscore = $rs['total_avg'];
+								$old_groupid=$rs['group_id']; ?>
+							<?php }}?>
+							</table>
+					</td>
+				</tr>
+			</table>
+			<?php if (!empty($this->studentgroup)){?>
+				<table cellpadding="0" cellspacing="0" width="100%" style="line-height:22px;font-family:'Khmer OS Fasthand';font-size: 14px;color:#4839bd;">
+					<tr>
+						<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT");?> : </span><span style=" display: inline-block; text-align: right; width: 28%;"><?php if ($i>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));} echo " ".$tr->translate("STUDENT_UNIT");?></span></td>
+						<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+						<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top"><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> <span style=" display: inline-block; width: 10%; text-align: right;"><?php if ($i-$f>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$i-$f));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$i-$f));} echo " ".$tr->translate("STUDENT_UNIT");?></span><span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> <span style=" display: inline-block; width: 10%; text-align: right;"><?php if ($f>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$f));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$f));} echo " ".$tr->translate("STUDENT_UNIT");?></span> &nbsp;</td>
+					</tr>
+					<tr>
+						<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;">សិស្សជាប់មធ្យមភាគ  : </span><span style=" display: inline-block; text-align: right; width: 28%;"><?php if ($count_pass>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));} echo " ".$tr->translate("STUDENT_UNIT");?></span></td>
+						<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+						<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top"><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> <span style=" display: inline-block; width: 10%; text-align: right;"><?php if ($count_pass-$pass_female>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass-$pass_female));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass-$pass_female));} echo " ".$tr->translate("STUDENT_UNIT");?></span><span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> <span style=" display: inline-block; width: 10%; text-align: right;"><?php if ($pass_female>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$pass_female));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$pass_female));} echo " ".$tr->translate("STUDENT_UNIT");?></span>&nbsp;</td>
+					</tr>
+					<tr>
+						<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;">សិស្សក្រោមមធ្យមភាគ  : </span><span style=" display: inline-block; text-align: right; width: 28%;"><?php if ($count_fail>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));} echo " ".$tr->translate("STUDENT_UNIT");?></span></td>
+						<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+						<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap;" valign="top"><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> <span style=" display: inline-block; width: 10%; text-align: right;"> <?php if ($count_fail-$fail_female>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail-$fail_female));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail-$fail_female));} echo " ".$tr->translate("STUDENT_UNIT");?></span><span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> <span style="display: inline-block; width: 10%; text-align: right;"><?php if ($fail_female>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$fail_female));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$fail_female));} echo " ".$tr->translate("STUDENT_UNIT");?></span>&nbsp;</td>
+					</tr>
+					<tr>
+						<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+						</td>
+						<td width="33%" valign="top">&nbsp;</td>
+						<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'" valign="top"><br /><?php echo $tr->translate("CREATE_WORK_DATE");?></td>
+					</tr>
+					<tr>
+						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"></td>
+						<td valign="top">&nbsp;</td>
+						<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'"><?php echo $tr->translate("TEACHER_ROOM");?></td>
+					</tr>
+					<tr>
+						<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"></td>
+						<td valign="top" ></td>
+						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+							<br /><br />
+							<br /><br />
+							<?php echo $rs['teacher']?>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+							<br />
+							បានឃើញ និងឯកភាព<br />
+							<?php echo $tr->translate("PRINCIPAL_SIGNATURE");?>
+						</td>
+						<td width="33%" valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+							បានពិនិត្យត្រឹមត្រូវ<br />
+							ការិយាល័យសិក្សាធិការ
+						</td>
+						<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'" valign="top"></td>
+					</tr>
+				</table>
+			<?php }?>
+		<?php } ?>
+		
+	</div>
 </div>
 <?php 
 	$urlOutStanding = $this->baseUrl()."/allreport/score/certificate-letterofpraisenew/id/";

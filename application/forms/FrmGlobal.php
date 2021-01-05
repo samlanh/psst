@@ -33,6 +33,13 @@ class Application_Form_FrmGlobal{
 		$setting = $key->getKeyCodeMiniInv(TRUE);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str="";
+		$img = 'logo.png';
+		$school_khname = $tr->translate('SCHOOL_NAME');
+		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
+		$address = $tr->translate('CUSTOMER_ADDRESS');
+		$tel = $tr->translate('CUSTOMER_TEL');
+		$email =  $tr->translate('CUSTOMER_EMAIL');
+		$website = $tr->translate('CUSTOMER_WEBSITE');
 		if($branch_id==null){
 			$img = 'logo.png';
 			$school_khname = $tr->translate('SCHOOL_NAME');
@@ -220,6 +227,28 @@ class Application_Form_FrmGlobal{
 					</td>
 				</tr>
 			</table>";	
+		}else if ($type_header==4){	
+		$str='
+		<style>
+			tr.line td {
+				    display: none !important;
+			}
+		</style>
+		<table width="100%" style="white-space:nowrap;">
+			<tbody>
+				<tr>
+					<td width="25%" valign="top">
+						<img style="max-width: 98%;max-height:140px;  margin-top:25px;" src="'.$logo.'">
+					</td>
+					<td width="35%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+					</td>
+					<td width="40%" valign="top" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
+						
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		';
 		}
 		return $str;
 	}
@@ -958,5 +987,72 @@ class Application_Form_FrmGlobal{
 			}
 			return $str;
 		}
+	}
+	
+	public function getHeaderReportScore($branch_id=null,$forGenerate=0){
+		$key = new Application_Model_DbTable_DbKeycode();
+		$setting = $key->getKeyCodeMiniInv(TRUE);
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$str="";
+		$img = 'logo.png';
+		$school_khname = $tr->translate('SCHOOL_NAME');
+		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
+		$address = $tr->translate('CUSTOMER_ADDRESS');
+		$tel = $tr->translate('CUSTOMER_TEL');
+		$email =  $tr->translate('CUSTOMER_EMAIL');
+		$website = $tr->translate('CUSTOMER_WEBSITE');
+		if($branch_id==null){
+			$img = 'logo.png';
+			$school_khname = $tr->translate('SCHOOL_NAME');
+			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
+			$address = $tr->translate('CUSTOMER_ADDRESS');
+			$tel = $tr->translate('CUSTOMER_TEL');
+			$email =  $tr->translate('CUSTOMER_EMAIL');
+			$website = $tr->translate('CUSTOMER_WEBSITE');
+		}else{
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rs = $db->getBranchInfo($branch_id);
+			if(!empty($rs)){
+				$img = $rs['photo'];
+				$school_khname = $rs['school_namekh'];
+				$school_name = $rs['school_nameen'];
+				
+				$address = $rs['br_address'];
+				$tel = $rs['branch_tel'];
+				$email = $rs['email'];
+				$website = $rs['website'];
+			}
+		}
+		if ($forGenerate==1){
+			$baseUrl =PUBLIC_PATH;
+			$styleLogo = "width:120px;";
+		}else{
+			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+			$styleLogo = "max-width: 98%;max-height:90px;";
+		}
+	    $imgSing="agreementsign.jpg";
+		$str='
+		<table width="100%" style="white-space:nowrap;">
+			<tbody>
+				<tr>
+					<td width="25%" valign="top">
+						<img style="max-width: 98%;max-height:140px;  margin-top:25px;" src="'.$baseUrl.'/images/'.$img.'">
+					</td>
+					<td width="35%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+					</td>
+					<td width="40%" valign="top" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
+						<ul style="color:#002c7b; list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 12px;">
+							<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
+							<li><span style=" margin:0; padding:0; font-weight: 600; ">KINGDOM OF CAMBODIA</span></li>
+							<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+							<li><span style=" margin:0; padding:0; font-weight: 600; ">NATION RALIGION KING</span></li>
+							<li><img style=" height: 20px; " src="'.$baseUrl.'/images/'.$imgSing.'"></li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		';
+		return $str;
 	}
 }

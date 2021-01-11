@@ -541,10 +541,10 @@
 								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i;?>" id="rank<?php echo $i;?>" value="<?php echo $old_rank;?>" />
-								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
+								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;"';}?>>
 								<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade']);?>
 								</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd;';}?>">
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;';}?>">
 									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade']);?>
 									<?php 
 									if($average>=($rs['pass_avrage'])){
@@ -560,7 +560,7 @@
 									}
 									?>
 								</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd;"';}?>">
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;';}?>">
 									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],3,$rs['grade']);?>
 								</td>
 							</tr>

@@ -396,10 +396,19 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 	function getStudentByGroup($group_id){
 		$db=$this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		
+		if ($currentLang==1){
+			$studentName='s.stu_khname';
+		}
+		
 		$sql="SELECT
 					sgh.`stu_id`,
 					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-					(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
+					(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
 					(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
 				FROM 
 					`rms_group_detail_student` AS sgh

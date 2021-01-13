@@ -489,7 +489,7 @@
 									<br />
 									<span class="englishLabel">Average</span>
 								</td>
-								<td style="width:100px;">
+								<td >
 									<span class="khmerLabel"><?php echo $tr->translate("RANK");?>
 									<br />
 									<span class="englishLabel">Rank</span>
@@ -506,10 +506,10 @@
 							    <td align="center" style="white-space:nowrap;">
 							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&group_id=".$rs['group_id']."&exam_type=".$rs['exam_type']."&for_semester=".$rs['for_semester']."&for_month=".$rs['for_month_id'];?>"><?php echo $rs['stu_code'];?></a>
 							    </td>
-								<td style="min-width:110px;">
+								<td style="min-width:100px;">
 									<span class="khmerName"><?php echo trim($rs['stu_khname']);?></span>
 								</td>
-								<td style="min-width:110px;">
+								<td style="min-width:100px;">
 									<span class="englishName"><?php echo empty(trim($rs['stu_enname']))?"":trim($rs['stu_enname']);?></span>
 								</td>
 								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
@@ -573,9 +573,9 @@
 				</tr>
 			</table>
 			<?php if (!empty($this->studentgroup)){?>
-				<table cellpadding="0" cellspacing="0" width="100%" style="line-height:22px;font-family:'Khmer OS Fasthand';font-size: 14px;color:#4839bd;">
+				<table cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px;font-family:'Khmer OS Fasthand';font-size: 12px;color:#4839bd;">
 					<tr>
-						<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;">
+						<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
 							<span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT");?> : </span>
 							<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;"><?php if ($i>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));} echo " ".$tr->translate("STUDENT_UNIT");?></span>
 						</td>
@@ -589,7 +589,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;">
+						<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
 							<span style="display: inline-block; width: 70%;">សិស្សជាប់មធ្យមភាគ  : </span>
 							<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;"><?php if ($count_pass>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));} echo " ".$tr->translate("STUDENT_UNIT");?></span>
 						</td>
@@ -603,7 +603,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;">
+						<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
 							<span style="display: inline-block; width: 70%;">សិស្សក្រោមមធ្យមភាគ  : </span>
 							<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;"><?php if ($count_fail>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));} echo " ".$tr->translate("STUDENT_UNIT");?></span>
 						</td>

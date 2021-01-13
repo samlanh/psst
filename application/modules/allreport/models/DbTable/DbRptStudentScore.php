@@ -358,6 +358,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	st.`stu_code`,
 		   	st.stu_khname,
 		   	st.stu_enname,
+		   	CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,
 		   	st.`sex`,
 		   	st.photo,
 		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,

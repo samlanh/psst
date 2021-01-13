@@ -1038,15 +1038,15 @@ class Application_Form_FrmGlobal{
 					<td width="35%" valign="top">
 						<img style="max-width: 100%;max-height:160px;  margin-top:25px;" src="'.$baseUrl.'/images/'.$img.'">
 					</td>
-					<td width="25%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+					<td width="40%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 					</td>
-					<td width="40%" valign="top" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
-						<ul style="color:#002c7b; list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;">
+					<td width="25%" valign="top" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
+						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 70px;">
 							<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
 							<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 10px;">KINGDOM OF CAMBODIA</span></li>
 							<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
 							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RALIGION KING</span></li>
-							<li><img style=" height: 20px; " src="'.$baseUrl.'/images/'.$imgSing.'"></li>
+							<li><img style=" height: 12px; " src="'.$baseUrl.'/images/'.$imgSing.'"></li>
 						</ul>
 					</td>
 				</tr>

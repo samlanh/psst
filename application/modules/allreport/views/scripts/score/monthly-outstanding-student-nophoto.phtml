@@ -5,9 +5,320 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	
+	$monthKH = array(
+		"1"=>"មករា",
+		"2"=>"កុម្ភៈ",
+		"3"=>"មីនា",
+		"4"=>"មេសា",
+		"5"=>"ឧសភា",
+		"6"=>"មិថុនា",
+		"7"=>"កក្កដា",
+		"8"=>"សីហា",
+		"9"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+	$monthENG = array("1"=>"January","2"=>"February","3"=>"March","4"=>"April","5"=>"May","6"=>"June","7"=>"July","8"=>"August","9"=>"September","10"=>"October","11"=>"November","12"=>"December"
+	);
+	
+	$templateSchool=3; //3=AHS
+	$imgSing = $this->baseUrl().'/images/agreementsign.jpg';
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<?php 
+	if($templateSchool==3){ 
+		$backgroundImage = $this->baseUrl().'/images/photo/background/backgroundOutStandingStudent.jpg';
+	?>
+	<div id="divPrint" style="width: 21cm;height:32cm;text-align: center;margin: 0 auto;">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto }
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			.backgroundOutStanding{
+					background-image: url('<?php echo $backgroundImage;?>');
+					background-size: 100%;
+					background-repeat: no-repeat;
+					position: relative;
+					display:inline-block; 
+					line-height: 23px;   
+					top:2px;
+					width: 21cm; 
+					height:30cm;   
+					font-family: 'Times New Roman','Khmer OS Battambang';
+					margin: 0 auto;
+					text-align: center;
+					width: 100%;
+				}
+				div.blogRank{
+					text-align:center;
+				}
+				
+				.number{color: #2e3192;font-size: 20px;}
+					.number,
+					.studentname {
+						margin: 0 auto; font-family: 'Khmer OS Muol Light';
+					}
+					
+					.studentname {
+						color: #2e3192;
+						font-size: 16px;
+						background: #fdbdbd !important;
+						border-radius: 8px;
+						margin-top: 10px;
+						border: 3px solid #2e3192;
+						height: 50px;
+						white-space: nowrap;
+						max-width: 50%;
+						padding: 0 10px;
+					}
+					.studentname.number2_3 {
+						max-width: 108%;
+					}
+					.margin{margin-top:10px;}
+					.background-number {
+						width: 13% !important;
+					}
+		</style>
+	<?php if(!empty($this->studentgroup)){?>
+				<?php
+						 $show=1; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;$female=0;
+						 $duplicate=0;$count_pass=0;
+						 $rank="";
+						 $rank1="";
+						 $rank2="";
+						 $rank3="";
+						 $rank4="";
+						 $rank5="";
+						 if (!empty($this->all_student)){
+						 	foreach($this->all_student as $key=> $rs){
+						 		if($rs['sex']==1){
+						 			$sex = $tr->translate("MALE");
+						 		}else{
+						 			$sex = $tr->translate("FEMALE");
+						 			$female++;
+						 		}
+						 }}
+						 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){
+							if($rs['total_score']==$old_totalscore){
+								if($key==1){
+									$rank2=$old_rank;
+								}
+								if($key==2){
+									$rank3=$old_rank;
+								}
+								if($key==3){
+									$rank4=$old_rank;
+								}
+								if($key==4){
+									$rank5=$old_rank;
+								}
+							}else{
+								if($key==0){
+									$rank1="១";
+									$old_rank = "១";
+								}
+								if($key==1){
+									$rank2="២";
+									$old_rank = "២";
+								}
+								if($key==2){
+									$rank3="៣";
+									$old_rank = "៣";
+								}
+								if($key==3){
+									$rank4="៤";
+									$old_rank = "៤";
+								}
+								if($key==4){
+									$rank5="៥";
+									$old_rank = "៥";
+								}
+							}
+							$old_totalscore = $rs['total_score'];
+					?>
+					<?php }}?>
+		<div class="backgroundOutStanding" style="; margin: 0 auto;  ">	
+			<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto;margin-top: 84px;">
+				<tbody>
+					<tr>
+						<td width="45%" valign="top">
+							<?php $logo = $this->baseUrl().'/images/logo.png';
+							if (!empty($this->studentgroup[0]['branch_logo'])){
+								$logo = $this->baseUrl().'/images/'.$this->studentgroup[0]['branch_logo'];
+							}
+							?>
+							<img style="max-width: 100%;  margin-top:25px;" src="<?php echo $logo;?>">
+						</td>
+						<td width="30%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+						</td>
+						<td width="25%" valign="top" style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 70px;">
+								<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
+								<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 10px;">KINGDOM OF CAMBODIA</span></li>
+								<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+								<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RALIGION KING</span></li>
+								<li><img style=" height: 12px; " src="<?php echo $imgSing;?>"></li>
+							</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width="100%">
+				<tr>
+					<td>
+						<table border="0" style="margin: 0 auto;width: 70%;">
+							<tr>
+									<td width="40%">&nbsp;</td>
+									<td width="20%">&nbsp;</td>	
+									<td width="40%">&nbsp;</td>
+								</tr>
+							<tr>
+								<td colspan="3" align="center" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size: 18px;">
+										<?php 
+										$monthChar = empty($monthKH[$this->studentgroup[0]['for_month_id']])?"":$monthKH[$this->studentgroup[0]['for_month_id']];
+										$titleKh='តារាងកិត្តិយសប្រចាំខែ'.$monthChar;
+										$monthCharEn = empty($monthENG[$this->studentgroup[0]['for_month_id']])?"":$monthENG[$this->studentgroup[0]['for_month_id']];
+										$titleENG="Honorable Table For ".$monthCharEn;
+										?>
+										<span style="font-size: 20px;"><?php echo $titleKh;?></span><br />
+										<span style="font-size: 18px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;"><?php echo $titleENG;?></span><br />
+										ថ្នាក់ទី / GRADE: <?php echo $this->studentgroup[0]['group_code'];?><br />
+										ឆ្នាំសិក្សា / ACADEMIC YEAR:  <span id="academic_year"><?php echo $this->studentgroup[0]['start_year']."-".$this->studentgroup[0]['end_year'];?></span>
+									</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div class="blogRank" >
+										<div class="number" >
+												<?php echo $rank1;?>
+										</div>
+										<div class="studentname">
+											<div class="margin">
+													<?php 
+														  if(!empty($this->studentgroup[0])){
+															if(!empty($this->studentgroup[0]['stu_khname'])){
+																echo $this->studentgroup[0]['stu_khname'];
+															}else{
+																echo $this->studentgroup[0]['stu_enname'];
+															}
+														  }
+													?>
+												</div>	
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+							<tr>
+								<td>
+									<div class="blogRank" >
+										<div class="number" >
+												<?php echo $rank2;?>
+										</div>
+										<div class="studentname number2_3">
+											<div class="margin">
+													<?php 
+														  if(!empty($this->studentgroup[1])){
+															if(!empty($this->studentgroup[1]['stu_khname'])){
+																echo $this->studentgroup[1]['stu_khname'];
+															}else{
+																echo $this->studentgroup[1]['stu_enname'];
+															}
+														  }
+													?>
+												</div>	
+										</div>
+									</div>
+									
+								</td>
+								<td>
+									&nbsp;
+								</td>
+								<td>
+									<div class="blogRank" >
+										<div class="number" >
+												<?php echo $rank3;?>
+										</div>
+										<div class="studentname number2_3">
+											<div class="margin">
+													<?php 
+															  if(!empty($this->studentgroup[2])){
+																if(!empty($this->studentgroup[2]['stu_khname'])){
+																	echo $this->studentgroup[2]['stu_khname'];
+																}else{
+																	echo $this->studentgroup[2]['stu_enname'];
+																}
+															  }
+														?>
+												</div>	
+										</div>
+									</div>
+								</td>
+							</tr>
+							
+						</table>
+						<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto;margin-top: 200px;">
+						<tbody>
+							<tr>
+								<td width="35%" align="center">
+									<br />
+									<br />
+									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;"><?php echo $tr->translate("PRINCIPAL");?></span>
+								</td>
+								<td width="30%">&nbsp;</td>
+								<td width="35%" align="center">
+									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("TEACHER_ROOM");?></span>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3"  align="center" style="height: 35px;">
+								&nbsp;
+								</td>
+							</tr>	
+							<tr>	
+								<td colspan="2">
+									&nbsp;
+								</td>
+								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $this->studentgroup[0]['teacher'];?>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</td>
+				</tr>
+			</table>
+			</div>
+		<?php }else{echo "No Result !!!";}?>	
+	</div>
+	<?php }else{ ?>
 	<div id="divPrint">
 		<style type="text/css">
 			.style{
@@ -406,4 +717,5 @@
 			</table>
 		<?php }else{echo "No Result !!!";}?>	
 	</div>
+	<?php }?>
 </div>

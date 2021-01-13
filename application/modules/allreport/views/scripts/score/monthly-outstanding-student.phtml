@@ -103,7 +103,7 @@
 					<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto;margin-top: 84px;">
 						<tbody>
 							<tr>
-								<td width="45%" valign="top">
+								<td width="55%" valign="top">
 									<?php $logo = $this->baseUrl().'/images/logo.png';
 									if (!empty($this->studentgroup[0]['branch_logo'])){
 										$logo = $this->baseUrl().'/images/'.$this->studentgroup[0]['branch_logo'];
@@ -111,7 +111,7 @@
 									?>
 									<img style="max-width: 100%;  margin-top:25px;" src="<?php echo $logo;?>">
 								</td>
-								<td width="30%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+								<td width="20%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 								</td>
 								<td width="25%" valign="top" style="font-family: 'Times New Roman','Khmer OS Muol Light';">
 									<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 70px;">
@@ -190,8 +190,8 @@
 								<?php }}?>			
 					
 
-							<table border="0" style="margin: 0 auto;width: 80%;margin-left: 86px;">
-								<tr>
+							<table border="0" style="margin: 0 auto;width: 80%;margin-left: 86px;margin-top: -5px;">
+								<tr style="display:none;">
 									<td width="33%">&nbsp;</td>
 									<td width="34%">&nbsp;</td>	
 									<td width="33%">&nbsp;</td>
@@ -204,7 +204,7 @@
 										$monthCharEn = empty($monthENG[$this->studentgroup[0]['for_month_id']])?"":$monthENG[$this->studentgroup[0]['for_month_id']];
 										$titleENG="Honorable Table For ".$monthCharEn;
 										?>
-										<span style="font-size: 20px;"><?php echo $titleKh;?></span><br />
+										<span style="font-size: 24px;"><?php echo $titleKh;?></span><br />
 										<span style="font-size: 18px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;"><?php echo $titleENG;?></span><br />
 										ថ្នាក់ទី / GRADE: <?php echo $this->studentgroup[0]['group_code'];?><br />
 										ឆ្នាំសិក្សា / ACADEMIC YEAR:  <span id="academic_year"><?php echo $this->studentgroup[0]['start_year']."-".$this->studentgroup[0]['end_year'];?></span>
@@ -317,19 +317,19 @@
 						</td>
 					</tr>
 				</table>
-				<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto;">
+				<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto; color:#4839bd; margin-top:-20px;">
 						<tbody>
 							<tr>
 								<td width="35%" align="center">
 									<br />
 									<br />
-									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;"><?php echo $tr->translate("PRINCIPAL");?></span>
+									<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+									<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 								</td>
 								<td width="30%">&nbsp;</td>
 								<td width="35%" align="center">
-									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-									<span style="color:#000; font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("TEACHER_ROOM");?></span>
+									<span style=" font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+									<span style=" font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("TEACHER_ROOM");?></span>
 								</td>
 							</tr>
 							<tr>

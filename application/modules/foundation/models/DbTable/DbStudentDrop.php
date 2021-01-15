@@ -123,7 +123,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_student_drop WHERE id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql.=$dbp->getAccessPermission('s.branch_id');
+		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 	public function addStudentDrop($_data){

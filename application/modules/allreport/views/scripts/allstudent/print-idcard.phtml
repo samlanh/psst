@@ -312,7 +312,9 @@ function getKHMonthByNumber(m){
 					$con=4;
 					$i=0; $student= count($this->rs);
 					
-				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;$image = "";
+				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+					$image = "";
+					$image = $this->baseUrl().'/images/no-profile.png';
 					if(!empty($row['photo'])){
 						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
 							$image = $this->baseUrl().'/images/photo/'.$row['photo'];

@@ -31,6 +31,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 					s.`home_num`,
 					s.`street_num`,
 					s.`province_id`,
+					s.photo,
 					(select $province_name from rms_province as p where p.province_id = s.province_id) as province_name,
 					(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
@@ -61,6 +62,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission("s.branch_id");
 		return $db->fetchRow($sql);
+		
 	}
 	
 // 	public function getMistakeRecord($search,$group_id,$stu_id){

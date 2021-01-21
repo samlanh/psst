@@ -21,6 +21,14 @@
 	$db_mistack = new Allreport_Model_DbTable_DbMistakeCertificate();
 	$stu_id = $this->stu_id;
 	$group_id = $this->group_id;
+	
+	$image = $this->baseUrl().'/images/no-profile.png';
+	if(!empty($this->student_info['photo'])){
+		if (file_exists(PUBLIC_PATH."/images/photo/".$this->student_info['photo'])){
+			$image = $this->baseUrl().'/images/photo/'.$this->student_info['photo'];
+		}
+		
+	}
 ?>	
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div id="divPrint">
@@ -98,8 +106,10 @@
 												លេខទូរស័ព្ទផ្ទះ.......................................................................................................<br />
 												ប្រវត្តិសុខភាព ........................................................................................................
 											</div>
-											<div style="width: 28%;   display: inline-block;">
-												<div style="border:1px solid #000;height: 140px;width:100px;margin: 0 auto;"></div>
+											<div style="width: 28%;display: inline-block;vertical-align: bottom;">
+												<div style="border:1px solid #000;height: 130px;width:100px;margin: 0 auto;margin-bottom: 10px;">
+												<img style=" width: 100%;   height: 100%;" id="profile_wiew" src="<?php echo $image;?>" alt=""  />
+												</div>
 											</div>
 										</td>
 									</tr>

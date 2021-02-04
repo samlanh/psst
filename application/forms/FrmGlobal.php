@@ -845,7 +845,7 @@ class Application_Form_FrmGlobal{
 									<td width='25%'> : &nbsp;<label id='lb_receipt_no'></label></td>
 									
 									<td><div style='font-family: Times New Roman'>Grade	</div></td>
-									<td> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
+									<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
 									
 										<div class='no_display'>
 											<div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'>

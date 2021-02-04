@@ -866,14 +866,24 @@ function getStudentInformation(){
 			fee_id = data.fee_id;
 			dijit.byId('study_year').set('value',fee_id);
 			grade_label = data.grade_label;
-			if(grade_label=='undefined'){
-				grade_label='';
+			if(grade_label== undefined){
+				grade_label='&nbsp;';
+			}else if(grade_label== null){
+				grade_label='&nbsp;';
 			}
-			dojo.byId("lb_grade").innerHTML = grade_label;
+			grouplabel = data.group_name;
+			if(grouplabel== undefined){
+				grouplabel='&nbsp;';
+			}else if(grouplabel== null){
+				grouplabel='&nbsp;';
+			}else{
+				grouplabel = '('+grouplabel+')';
+			}
+			dojo.byId("lb_grade").innerHTML = grade_label+grouplabel;
 			
 			academic_year_label = data.academic_year_label;
-			if(academic_year_label=='undefined'){
-				academic_year_label='';
+			if(academic_year_label== undefined){
+				academic_year_label='&nbsp;';
 			}
 
 			

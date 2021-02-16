@@ -74,6 +74,31 @@
 		                	<?php echo $frm->getElement("for_type");?>
 		                </div>
 		             </div>
+					 <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TEACHER");?></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("teacherName");?>
+		                </div>
+		             </div>
+					 <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("POSITION");?></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("positionTeacher");?>
+		                </div>
+		             </div>
+					 <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRINCIPAL");?></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("principleName");?>
+		                </div>
+		             </div>
+					 <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("POSITION");?></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("positionPrinciple");?>
+		                </div>
+		             </div>
+					 
 		             <div class="form-group">
 		             	<label class="control-label bold col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
 		             </div>
@@ -92,6 +117,7 @@
 									<th><?php echo $tr->translate("N_O");?></th>
 									<th><?php echo $tr->translate("STUDENT");?></th>
 									<th><?php echo $tr->translate("RANK");?></th>
+									<th><?php echo $tr->translate("CODE_NUMBER");?></th>
 									<th><?php echo $tr->translate("NOTE");?></th>
 								</tr>
 							</thead>
@@ -186,6 +212,8 @@ function getGroupInfo(){
 		load: function(data) {
 		    dijit.byId('academic_year').set('value',data.year_only); 
 		    dijit.byId('grade').set('value',data.group_code);  
+		    dijit.byId('teacherName').set('value',data.teacherNameKh);  
+		    dijit.byId('positionTeacher').set('value','គ្រូបន្ទុកថ្នាក់');  
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -213,11 +241,12 @@ function getStudetnOptionByGroup(){
 			i = 0, size = data.length;
 			var l=0;
 			for(i; i < size; i++){ l++; col++;
-				template+='<tr>';
+				template+='<tr style="vertical-align: top;">';
 					template+='<td align="center"><input  OnChange="CheckAll('+col+')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox checkedrow" id="mfdid_'+col+'" value="'+col+'"  name="selector[]"/></td>';
 					template+='<td align="center">'+l+'<input dojoType="dijit.form.TextBox" class="fullside" name="stu_id'+col+'" id="stu_id'+col+'" value="'+data[i].stu_id+'" type="hidden"></td>';
-					template+='<td align="center">'+data[i].stu_name+' '+data[i].stu_code+' <?php echo $tr->translate("SEX");?> '+data[i].sex+'</td>';
+					template+='<td align="left">'+data[i].stu_name+' '+data[i].stu_code+' <?php echo $tr->translate("SEX");?> '+data[i].sex+'</td>';
 					template+='<td align="center"><input style="width:100%; text-align:center;" dojoType="dijit.form.NumberTextBox" class="fullside" name="rank_'+col+'" id="rank_'+col+'"  value="" type="text"></td>';	
+					template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="letterpraiseCode_'+col+'" id="letterpraiseCode_'+col+'" value="" type="text"></td>';
 					template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';
 				template+='</tr>';
 

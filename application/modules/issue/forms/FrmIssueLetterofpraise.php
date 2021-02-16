@@ -75,6 +75,38 @@ class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
     	$_for_type->setMultiOptions($_for_type_opt);
     	$_for_type->setValue($request->getParam("for_type"));
 		
+		$teacherName = new Zend_Dojo_Form_Element_TextBox('teacherName');
+    	$teacherName->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("TEACHER"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Teacher")
+    	));
+		
+		$positionTeacher = new Zend_Dojo_Form_Element_TextBox('positionTeacher');
+    	$positionTeacher->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("POSITION"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Position")
+    	));
+		
+		$principleName = new Zend_Dojo_Form_Element_TextBox('principleName');
+    	$principleName->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("PRINCIPAL"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Principal")
+    	));
+		
+		$positionPrinciple = new Zend_Dojo_Form_Element_TextBox('positionPrinciple');
+    	$positionPrinciple->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("POSITION"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Position")
+    	));
+		
     	$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
     	$_status->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
     	$_status_opt = array(
@@ -143,6 +175,11 @@ class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
 			$_for_type->setValue($data["for_type"]);
+			
+			$teacherName->setValue($data["teacherName"]);
+			$positionTeacher->setValue($data["positionTeacher"]);
+			$principleName->setValue($data["principleName"]);
+			$positionPrinciple->setValue($data["positionPrinciple"]);
     		
     	}
     	
@@ -158,7 +195,12 @@ class Issue_Form_FrmIssueLetterofpraise extends Zend_Dojo_Form
     			$start_date,
     			$end_date,
     			$_status_search,
-    			$_for_type
+    			$_for_type,
+				
+				$teacherName,
+				$positionTeacher,
+				$principleName,
+				$positionPrinciple
     			));
     	return $this;
     }

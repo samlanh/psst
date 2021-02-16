@@ -3,256 +3,527 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate('Letter of praise'));
 $_dbgb = new Application_Model_DbTable_DbGlobal();
 $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+$monthEng = array(
+	"01"=>"January",
+	"02"=>"February",
+	"03"=>"March",
+	"04"=>"April",
+	"05"=>"May",
+	"06"=>"June",
+	"07"=>"July",
+	"08"=>"August",
+	"09"=>"September",
+	"10"=>"October",
+	"11"=>"November",
+	"12"=>"December"
+	);
+$schoolType = 1;
+//1=Good will
 ?>
 <div style="margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
 		<div id="divPrint">
-			<?php  
+			<?php if($schoolType==1){?>
+					<?php  
 				if($this->rs['for_type']==1){
-				$image = $this->baseUrl().'/images/card/certificate/LetterOfPraiseKh.jpg';
-			?>
-			<style>
-				.certificate{
-					background-image: url('<?php echo $image;?>');
-					background-size: 100%;
-					background-repeat: no-repeat;
-					position: relative;
-					display:inline-block; 
-					line-height: 23px;   
-					top:13px;
-					width: 28cm; 
-					height:20cm;   
-					color: #6d542b; 
-					font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
-				}
-				.one-row-certif{
-					text-align:center; 
-					margin: 0 auto; 
-					padding: 0;
-		
-				}
-					
-				span.value{
-					 font-size: 22px;
-					 display: inline-block;
-					 color: #6d542b;
-					 font-family: 'Times New Roman', sans-serif,'Khmer Os Metal Chrieng';
-				}
-				span.student_name {
-				    position: absolute;
-					top: 374px;
-					left: 260px;
-					min-width: 550px;
-					text-align: center;
-					font-size: 38px;
-				}
-					
-				span.rank {
-				    position: absolute;
-					top: 442px;
-					right: 165px;
-					min-width: 70px;
-					text-align: center;
-				}	
-				
-				
-				
-				span.issue_month {
-					position: absolute;
-					top: 478px;
-					right: 286px;
-					min-width: 70px;
-					text-align: center;
-				}
-				span.issue_year {
-					 position: absolute;
-					top: 478px;
-					right: 184px;
-					min-width: 76px;
-					text-align: center;
-				}
-				span.teacher {
-					position: absolute;
-					top: 607px;
-					font-size: 18px;
-					left: 205px;
-					min-width: 230px;
-					text-align: center;
-				}
-				span.value.teacher-class {
-					position: absolute;
-					top: 627px;
-					left: 205px;
-					min-width: 230px;
-					text-align: center;
-					font-size: 18px;
-				}
-			</style>
-			<div class="one-row-certif" >
-				<div class="certificate">
-					<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
-					
-					<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rs['rank']);?></span>
+					$image = $this->baseUrl().'/images/card/certificate/LetterOfPraiseKh.jpg';
+				?>
+				<style>
+					.certificate{
+						background-image: url('<?php echo $image;?>');
+						background-size: 100%;
+						background-repeat: no-repeat;
+						position: relative;
+						display:inline-block; 
+						line-height: 23px;   
+						top:13px;
+						width: 28cm; 
+						height:20cm;   
+						color: #6d542b; 
+						font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
+					}
+					.one-row-certif{
+						text-align:center; 
+						margin: 0 auto; 
+						padding: 0;
+			
+					}
+						
+					span.value{
+						 font-size: 22px;
+						 display: inline-block;
+						 color: #6d542b;
+						 font-family: 'Times New Roman', sans-serif,'Khmer Os Metal Chrieng';
+					}
+					span.student_name {
+						position: absolute;
+						top: 374px;
+						left: 260px;
+						min-width: 550px;
+						text-align: center;
+						font-size: 38px;
+					}
+						
+					span.rank {
+						position: absolute;
+						top: 442px;
+						right: 165px;
+						min-width: 70px;
+						text-align: center;
+					}	
 					
 					
-					<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
-					<!-- <span class="value issue_day"><?php //echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span> -->
-					<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
-					<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
-					<?php }?>
-					<span class="teacher"><?php echo $this->rs['teacherNameKh'];?></span>
-					<span class="value teacher-class">គ្រូបន្ទុកថ្នាក់ <?php echo $this->rs['grade'];?></span>
+					
+					span.issue_month {
+						position: absolute;
+						top: 478px;
+						right: 286px;
+						min-width: 70px;
+						text-align: center;
+					}
+					span.issue_year {
+						 position: absolute;
+						top: 478px;
+						right: 184px;
+						min-width: 76px;
+						text-align: center;
+					}
+					span.teacher {
+						position: absolute;
+						top: 607px;
+						font-size: 18px;
+						left: 205px;
+						min-width: 230px;
+						text-align: center;
+						font-style:italic;
+					}
+					span.value.teacher-class {
+						position: absolute;
+						top: 627px;
+						left: 205px;
+						min-width: 230px;
+						text-align: center;
+						font-size: 18px;
+						
+					}
+					
+					span.principalName {
+						position: absolute;
+						top: 602px;
+						font-size: 18px;
+						right: 190px;
+						min-width: 230px;
+						text-align: center;
+						font-style:italic;
+					}
+					span.value.principle-position {
+						position: absolute;
+						top: 627px;
+						right: 209px;
+						min-width: 230px;
+						text-align: center;
+						font-size: 18px;
+					}
+					
+				</style>
+				<div class="one-row-certif" >
+					<div class="certificate">
+						<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
+						
+						<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rs['rank']);?></span>
+						
+						
+						<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
+						<!-- <span class="value issue_day"><?php //echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span> -->
+						<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
+						<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
+						<?php }?>
+						<span class="teacher"><?php echo $this->rs['teacherNames'];?></span>
+						<span class="value teacher-class"><?php echo $this->rs['positionTeacher']." ".$this->rs['grade'];?></span>
+						
+						<span class="principalName"><?php echo $this->rs['principleName'];?></span>
+						<span class="value principle-position"><?php echo $this->rs['positionPrinciple'];?></span>
+					</div>
 				</div>
-			</div>
-			<?php 
+				<?php 
 				}else if($this->rs['for_type']==2){
-				$image = $this->baseUrl().'/images/card/certificate/LetterOfPraise.jpg';
-			?>
-			<style>
-				.certificate{
-					background-image: url('<?php echo $image;?>');
-					background-size: 100%;
-					background-repeat: no-repeat;
-					position: relative;
-					display:inline-block; 
-					line-height: 23px;   
-					top:13px;
-					width: 28cm; 
-					height:20cm;   
-					color: #3f3f95; 
-					font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
-				}
-				.one-row-certif{
-					text-align:center; 
-					margin: 0 auto; 
-					padding: 0;
-		
-				}
+					$image = $this->baseUrl().'/images/card/certificate/LetterOfPraiseEng.jpg';
+				?>
+				<style>
+					.certificate{
+						background-image: url('<?php echo $image;?>');
+						background-size: 100%;
+						background-repeat: no-repeat;
+						position: relative;
+						display:inline-block; 
+						line-height: 23px;   
+						top:13px;
+						width: 28cm; 
+						height:20cm;   
+						color: #6d542b; 
+						font-family: 'Times New Roman','Khmer OS Muol Light';
+					}
+					.one-row-certif{
+						text-align:center; 
+						margin: 0 auto; 
+						padding: 0;
+			
+					}
+						
+					span.value{
+						 font-size: 22px;
+						 display: inline-block;
+						 color: #6d542b;
+						 font-family: 'Times New Roman';
+						 font-style: italic;
+						 font-weight: 600;
+					}
+					span.student_name {
+						position: absolute;
+						top: 374px;
+						left: 260px;
+						min-width: 550px;
+						text-align: center;
+						font-size: 38px;
+					}
+						
+					span.rank {
+						position: absolute;
+						top: 442px;
+						right: 165px;
+						min-width: 70px;
+						text-align: center;
+					}	
 					
-				span.value{
-					 font-size: 16px;
-					 display: inline-block;
-					     color: #283d84;
-				}
-				span.student_name {
-				    position: absolute;
-				    top: 364px;
-				    left: 260px;
-				    min-width: 150px;
-				    text-align: center;
-				}
-				
-				span.gender {
-				    position: absolute;
-				    top: 364px;
-				    left: 465px;
-				    min-width: 75px;
-				    text-align: center;
-				}
 					
-				span.dob {
-				    position: absolute;
-				    top: 364px;
-				    right: 310px;
-				    min-width: 145px;
-				    text-align: center;
-				}
-				span.stu_code {
-				    position: absolute;
-				    top: 364px;
-				    right: 110px;
-				    min-width: 145px;
-				    text-align: center;
-				}
 					
-				span.stu_code {
-					position: absolute;
-					top: 364px;
-					right: 140px;
-					min-width: 100px;
-					text-align: center;
-					font-weight: bold;
-				}	
-				span.rank {
-				    position: absolute;
-				    top: 421px;
-				    left: 293px;
-				    min-width: 70px;
-				    text-align: center;
-				    font-weight: bold;
-				}	
-				span.class {
-					position: absolute;
-					top: 421px;
-					right: 457px;
-					min-width: 70px;
-					text-align: center;
-					font-weight: bold;
-				}
-				span.academic_year {
-					position: absolute;
-					top: 423px;
-					right: 115px;
-					font-size: 17px;
-					min-width: 120px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
-				}
-				span.issue_day {
-					position: absolute;
-					top: 453px;
-					right: 115px;
-					font-size: 17px;
-					min-width: 120px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
-				}
-				
-				span.issue_day {
-					position: absolute;
-					top: 530px;
-					right: 263px;
-					font-size: 17px;
-					min-width: 40px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
-				}
-				span.issue_month {
-					position: absolute;
-					top: 530px;
-					right: 179px;
-					font-size: 17px;
-					min-width: 70px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
-				}
-				span.issue_year {
-					position: absolute;
-					top: 530px;
-					right: 110px;
-					font-size: 17px;
-					min-width: 40px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
-				}
-			</style>
-			<div class="one-row-certif" >
-				<div class="certificate">
-					<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
-					<span class="value gender"><?php echo $this->rs['sex'];?></span>
-					<span class="value dob"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))."-".$month[date("m",strtotime($this->rs['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></span>
-					<span class="value stu_code"><?php echo $this->rs['stu_code'];?></span>
-					<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rs['rank']);?></span>
-					<span class="value class"><?php echo $_dbgb->getNumberInkhmer($this->rs['grade']);?></span>
-					<span class="value academic_year"><?php echo $_dbgb->getNumberInkhmer($this->rs['academic_year']);?></span>
-					<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
-					<span class="value issue_day"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span>
-					<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
-					<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
-					<?php }?>
+					span.issue_month {
+						position: absolute;
+						top: 478px;
+						right: 286px;
+						min-width: 70px;
+						text-align: center;
+					}
+					span.issue_year {
+						 position: absolute;
+						top: 478px;
+						right: 184px;
+						min-width: 76px;
+						text-align: center;
+					}
+					span.teacher {
+						position: absolute;
+						top: 607px;
+						font-size: 24px;
+						left: 205px;
+						min-width: 230px;
+						font-weight: 600;
+						text-align: center;
+					}
+					span.value.teacher-class {
+						position: absolute;
+						top: 627px;
+						left: 205px;
+						min-width: 230px;
+						text-align: center;
+						font-size: 18px;
+						font-weight: normal;
+						font-style: normal;
+					}
+					
+					span.principalName {
+						position: absolute;
+						top: 607px;
+						font-size: 24px;
+						right: 190px;
+						min-width: 230px;
+						font-weight: 600;
+						text-align: center;
+					}
+					span.value.principle-position {
+						position: absolute;
+						top: 627px;
+						right: 209px;
+						min-width: 230px;
+						text-align: center;
+						font-size: 18px;
+						font-weight: normal;
+						font-style: normal;
+					}
+					
+				</style>
+				<div class="one-row-certif" >
+					<div class="certificate">
+						<span class="value student_name"><?php echo $this->rs['studentNameEng'];?></span>
+						
+						<span class="value rank"><?php echo $this->rs['rank'];?></span>
+						
+						<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
+						<span class="value issue_month"><?php echo $monthEng[date("m",strtotime($this->rs['issue_date']))];?></span>
+						<span class="value issue_year"><?php echo date("Y",strtotime($this->rs['issue_date']));?></span>
+						<?php }?>
+						
+						<span class="teacher"><?php echo $this->rs['teacherNames'];?></span>
+						<span class="value teacher-class"><?php echo $this->rs['grade']," ".$this->rs['positionTeacher'];?></span>
+						
+						<span class="principalName"><?php echo $this->rs['principleName'];?></span>
+						<span class="value principle-position"><?php echo $this->rs['positionPrinciple'];?></span>
+					</div>
 				</div>
-			</div>
+				<?php }?>
+			<?php }else{?>
+				<?php  
+				if($this->rs['for_type']==1){
+						$image = $this->baseUrl().'/images/card/certificate/LetterOfPraiseKh.jpg';
+					?>
+					<style>
+						.certificate{
+							background-image: url('<?php echo $image;?>');
+							background-size: 100%;
+							background-repeat: no-repeat;
+							position: relative;
+							display:inline-block; 
+							line-height: 23px;   
+							top:13px;
+							width: 28cm; 
+							height:20cm;   
+							color: #6d542b; 
+							font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
+						}
+						.one-row-certif{
+							text-align:center; 
+							margin: 0 auto; 
+							padding: 0;
+				
+						}
+							
+						span.value{
+							 font-size: 22px;
+							 display: inline-block;
+							 color: #6d542b;
+							 font-family: 'Times New Roman', sans-serif,'Khmer Os Metal Chrieng';
+						}
+						span.student_name {
+							position: absolute;
+							top: 374px;
+							left: 260px;
+							min-width: 550px;
+							text-align: center;
+							font-size: 38px;
+						}
+							
+						span.rank {
+							position: absolute;
+							top: 442px;
+							right: 165px;
+							min-width: 70px;
+							text-align: center;
+						}	
+						
+						
+						
+						span.issue_month {
+							position: absolute;
+							top: 478px;
+							right: 286px;
+							min-width: 70px;
+							text-align: center;
+						}
+						span.issue_year {
+							 position: absolute;
+							top: 478px;
+							right: 184px;
+							min-width: 76px;
+							text-align: center;
+						}
+						span.teacher {
+							position: absolute;
+							top: 607px;
+							font-size: 18px;
+							left: 205px;
+							min-width: 230px;
+							text-align: center;
+						}
+						span.value.teacher-class {
+							position: absolute;
+							top: 627px;
+							left: 205px;
+							min-width: 230px;
+							text-align: center;
+							font-size: 18px;
+						}
+						
+						
+					</style>
+					<div class="one-row-certif" >
+						<div class="certificate">
+							<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
+							
+							<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rs['rank']);?></span>
+							
+							<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
+							<!-- <span class="value issue_day"><?php //echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span> -->
+							<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
+							<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
+							<?php }?>
+
+							<span class="teacher"><?php echo $this->rs['teacherNameKh'];?></span>
+							<span class="value teacher-class"><?php echo $this->rs['positionTeacher']." ".$this->rs['grade'];?></span>
+							
+							
+						</div>
+					</div>
+					<?php 
+						}else if($this->rs['for_type']==2){
+						$image = $this->baseUrl().'/images/card/certificate/LetterOfPraise.jpg';
+					?>
+					<style>
+						.certificate{
+							background-image: url('<?php echo $image;?>');
+							background-size: 100%;
+							background-repeat: no-repeat;
+							position: relative;
+							display:inline-block; 
+							line-height: 23px;   
+							top:13px;
+							width: 28cm; 
+							height:20cm;   
+							color: #3f3f95; 
+							font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
+						}
+						.one-row-certif{
+							text-align:center; 
+							margin: 0 auto; 
+							padding: 0;
+				
+						}
+							
+						span.value{
+							 font-size: 16px;
+							 display: inline-block;
+								 color: #283d84;
+						}
+						span.student_name {
+							position: absolute;
+							top: 364px;
+							left: 260px;
+							min-width: 150px;
+							text-align: center;
+						}
+						
+						span.gender {
+							position: absolute;
+							top: 364px;
+							left: 465px;
+							min-width: 75px;
+							text-align: center;
+						}
+							
+						span.dob {
+							position: absolute;
+							top: 364px;
+							right: 310px;
+							min-width: 145px;
+							text-align: center;
+						}
+						span.stu_code {
+							position: absolute;
+							top: 364px;
+							right: 110px;
+							min-width: 145px;
+							text-align: center;
+						}
+							
+						span.stu_code {
+							position: absolute;
+							top: 364px;
+							right: 140px;
+							min-width: 100px;
+							text-align: center;
+							font-weight: bold;
+						}	
+						span.rank {
+							position: absolute;
+							top: 421px;
+							left: 293px;
+							min-width: 70px;
+							text-align: center;
+							font-weight: bold;
+						}	
+						span.class {
+							position: absolute;
+							top: 421px;
+							right: 457px;
+							min-width: 70px;
+							text-align: center;
+							font-weight: bold;
+						}
+						span.academic_year {
+							position: absolute;
+							top: 423px;
+							right: 115px;
+							font-size: 17px;
+							min-width: 120px;
+							text-align: center;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						span.issue_day {
+							position: absolute;
+							top: 453px;
+							right: 115px;
+							font-size: 17px;
+							min-width: 120px;
+							text-align: center;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						
+						span.issue_day {
+							position: absolute;
+							top: 530px;
+							right: 263px;
+							font-size: 17px;
+							min-width: 40px;
+							text-align: center;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						span.issue_month {
+							position: absolute;
+							top: 530px;
+							right: 179px;
+							font-size: 17px;
+							min-width: 70px;
+							text-align: center;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						span.issue_year {
+							position: absolute;
+							top: 530px;
+							right: 110px;
+							font-size: 17px;
+							min-width: 40px;
+							text-align: center;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+					</style>
+					<div class="one-row-certif" >
+						<div class="certificate">
+							<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
+							<span class="value gender"><?php echo $this->rs['sex'];?></span>
+							<span class="value dob"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))."-".$month[date("m",strtotime($this->rs['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></span>
+							<span class="value stu_code"><?php echo $this->rs['stu_code'];?></span>
+							<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rs['rank']);?></span>
+							<span class="value class"><?php echo $_dbgb->getNumberInkhmer($this->rs['grade']);?></span>
+							<span class="value academic_year"><?php echo $_dbgb->getNumberInkhmer($this->rs['academic_year']);?></span>
+							<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
+							<span class="value issue_day"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span>
+							<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
+							<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
+							<?php }?>
+						</div>
+					</div>
+					<?php }?>
 			<?php }?>
+			
 			
 		</div>
 	</div>

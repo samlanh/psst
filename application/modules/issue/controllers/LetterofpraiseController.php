@@ -50,9 +50,9 @@ class Issue_LetterofpraiseController extends Zend_Controller_Action {
 				$sms="INSERT_SUCCESS";
 				$checkExist = $_db->checkGroupIssueLetterpraise($_data);
 				if(!empty($checkExist)){
-					$sms = "RECORD_EXIST";
-					Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
-					exit();
+					//$sms = "RECORD_EXIST";
+					//Application_Form_FrmMessage::Sucessfull($sms,"/issue/letterofpraise");
+					///exit();
 				}
 				$_db->addIssueLetterpraise($_data);
 				if(isset($_data['save_close'])){

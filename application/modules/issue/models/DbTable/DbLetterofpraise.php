@@ -67,11 +67,17 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 			$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'group_id'		=>$_data['group'],
-					'academic_year'		=>$_data['academic_year'],
-					'grade'		=>$_data['grade'],
-					'issue_date'		=>$_data['issue_date'],
+					'academic_year'	=>$_data['academic_year'],
+					'grade'			=>$_data['grade'],
+					'issue_date'	=>$_data['issue_date'],
 					'for_type'		=>$_data['for_type'],
-					'note'		=>$_data['note'],
+					'note'			=>$_data['note'],
+					
+					'teacherName'			=>$_data['teacherName'],
+					'positionTeacher'		=>$_data['positionTeacher'],
+					'principleName'			=>$_data['principleName'],
+					'positionPrinciple'		=>$_data['positionPrinciple'],
+					
 					'create_date'		=>date("Y-m-d H:i:s"),
 					'modify_date'		=>date("Y-m-d H:i:s"),
 					'status'		=>1,
@@ -86,6 +92,7 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 						'group_id'	=>$_data['group'],
 						'stu_id'	=>$_data['stu_id'.$k],
 						'rank'	=>$_data['rank_'.$k],
+						'letterpraiseCode'	=>$_data['letterpraiseCode_'.$k],
 						'note'	=>$_data['note_'.$k],
 						'date'		=>date("Y-m-d H:i:s"),
 						'user_id'	=>$this->getUserId(),
@@ -106,16 +113,22 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 		$_db->beginTransaction();
 		try{
 			$_arr= array(
-					'branch_id'		=>$_data['branch_id'],
-					'group_id'		=>$_data['group'],
+					'branch_id'			=>$_data['branch_id'],
+					'group_id'			=>$_data['group'],
 					'academic_year'		=>$_data['academic_year'],
-					'grade'		=>$_data['grade'],
+					'grade'				=>$_data['grade'],
 					'issue_date'		=>$_data['issue_date'],
-					'for_type'		=>$_data['for_type'],
-					'note'		=>$_data['note'],
+					'for_type'			=>$_data['for_type'],
+					'note'				=>$_data['note'],
+					
+					'teacherName'			=>$_data['teacherName'],
+					'positionTeacher'		=>$_data['positionTeacher'],
+					'principleName'			=>$_data['principleName'],
+					'positionPrinciple'		=>$_data['positionPrinciple'],
+					
 					'modify_date'		=>date("Y-m-d H:i:s"),
-					'status'		=>$_data['status'],
-					'user_id'		=>$this->getUserId(),
+					'status'			=>$_data['status'],
+					'user_id'			=>$this->getUserId(),
 			);
 			$this->_name='rms_issue_letterpraise';
 			$id = $_data['id'];
@@ -132,6 +145,7 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
 						'group_id'	=>$_data['group'],
 						'stu_id'	=>$_data['stu_id'.$k],
 						'rank'	=>$_data['rank_'.$k],
+						'letterpraiseCode'	=>$_data['letterpraiseCode_'.$k],
 						'note'	=>$_data['note_'.$k],
 						'date'		=>date("Y-m-d H:i:s"),
 						'user_id'	=>$this->getUserId(),

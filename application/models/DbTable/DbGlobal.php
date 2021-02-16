@@ -2189,6 +2189,8 @@ function getAllgroupStudyNotPass($action=null){
   	grade AS grade_id,
   	SESSION AS session_id,
   	room_id,
+  	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id=rms_group.teacher_id LIMIT 1) AS teacherNameKh,
+  	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=rms_group.teacher_id LIMIT 1) AS teacherNameEng,
   	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_kh,
   	(SELECT rms_items.title_en FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_eng,
   	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_kh,

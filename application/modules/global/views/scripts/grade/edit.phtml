@@ -349,15 +349,16 @@
 		var total_subject=0;
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
-
-		for(var n = 0; n < rowIDArray.length; n++) {
-			score = dijit.byId('max_score'+rowIDArray[n]).get('value');
-			score = isNaN(score)?0:score;
-			max_score += score;
-			
-			score_cut = dijit.byId('score_cut_'+rowIDArray[n]).get('value');
-			score_cut = isNaN(score_cut)?0:score_cut;
-			cut_score += score_cut;
+		if($("#identity").val()!="") {
+			for(var n = 0; n < rowIDArray.length; n++) {
+				score = dijit.byId('max_score'+rowIDArray[n]).get('value');
+				score = isNaN(score)?0:score;
+				max_score += score;
+				
+				score_cut = dijit.byId('score_cut_'+rowIDArray[n]).get('value');
+				score_cut = isNaN(score_cut)?0:score_cut;
+				cut_score += score_cut;
+			}
 		}
 		
 		total_score = max_score - cut_score;

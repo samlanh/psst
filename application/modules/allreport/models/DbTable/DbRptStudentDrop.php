@@ -101,7 +101,10 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			    	
 			    	(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
 			    	(SELECT $label FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
-			    	gr.from_hour,gr.to_hour,
+			    	gr.from_hour,
+					gr.to_hour,
+					(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
+					(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
 			    	(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1 )AS session_id,
 			    	(SELECT $label FROM rms_view AS v WHERE v.key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AND v.type=4 LIMIT 1)AS `session`,
 			    	(SELECT $subject FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
@@ -158,6 +161,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
     		(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
     		gr.day_id,gr.from_hour,gr.to_hour,
+			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
+			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
     		gr.subject_id,gr.techer_id,
 	    	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
 	    	(SELECT CONCAT(m.title,' (',(SELECT d.title FROM rms_items AS d WHERE m.items_id=d.id ),')')
@@ -224,7 +229,11 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="
     		SELECT gr.from_hour,
-			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times
+			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
+			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
+			REPLACE(CONCAT((SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1),'-',(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1)),' ','') AS times
+
 			FROM rms_group_reschedule AS gr 
 			WHERE gr.year_id=$year AND gr.group_id=$group
 			GROUP BY REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','')

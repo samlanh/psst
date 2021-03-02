@@ -244,6 +244,17 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		}
 		
 		public function getHoursStudy(){
+			if(TIEM_IS_MANUAL==1){
+				$_dbTime = new Issue_Model_DbTable_DbTimeList();
+				$rs = $_dbTime->getAllTimeListActive();
+				$hours="";
+				if(!empty($rs)) {
+					foreach($rs AS $k){
+						$hours.='<option value="'.$k['id'].'">'.$k['name'].'</option>';
+					}
+				}
+				return  $hours;
+			}else{
 			$hours ='<option value="07.00">07:00 AM </option>'.
 					'<option value="07.15">07:15 AM </option>'.
 					'<option value="07.30">07:30 AM </option>'.
@@ -300,6 +311,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 					'<option value="21.00">09:00 PM </option>'.
 					'<option value="21.30">09:30 PM </option>';
 			return  $hours;
+			}
 	}
 }
 

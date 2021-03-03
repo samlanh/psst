@@ -157,7 +157,7 @@
 							<tr class="hover" style="font-size:11px; line-height: 15px;" align="center" >
 								<td width="10%" align="center" style=""><strong><?php echo $time['times'];?></strong></td>
 								<?php foreach ($day as $key => $days){
-									$subjecNteacher = $db_sub->getSubjectTeacherByScheduleAndGroup($rs['year_id'],$rs['group_id'],$time['times'], $days['id'])
+									$subjecNteacher = $db_sub->getSubjectTeacherByScheduleAndGroup($rs['year_id'],$rs['group_id'],$time['timeValueConcat'], $days['id'])
 								?>
 								<td width="<?php echo 90/$amt_day.'%';?>" align="center">
 									<?php 

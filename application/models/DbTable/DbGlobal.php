@@ -54,6 +54,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	if($all==0){
     		$sql.=" and key_code != 7 ";
     	}
+		if(STUDY_DAY_SETTING==1){
+			$sql.=" and key_code != 7 ";
+		}else if(STUDY_DAY_SETTING==2){
+			$sql.=" and key_code != 7 and key_code != 6 ";
+		}
     	return $db->fetchAll($sql);
     }
     public function getDaySchedule($branch,$year,$group){

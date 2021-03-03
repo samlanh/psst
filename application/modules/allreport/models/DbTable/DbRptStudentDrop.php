@@ -229,7 +229,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="
     		SELECT gr.from_hour,
-			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS timeValueConcat,
 			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
 			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
 			REPLACE(CONCAT((SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1),'-',(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1)),' ','') AS times

@@ -446,10 +446,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
     	$sql="
     	SELECT gr.from_hour,
-	    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+	    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS timeValueConcat,
 	    	(SELECT s.$subjecct FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
 	    	(SELECT t.$teacher FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
-	    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
+	    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone,
+			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
+			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
+			REPLACE(CONCAT((SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1),'-',(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1)),' ','') AS times
+
     	FROM 
     		rms_group_reschedule AS gr
     	WHERE 

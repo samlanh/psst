@@ -85,7 +85,10 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    }
    function getScheduleSettingDetail($id){
    	$db = $this->getAdapter();
-   	$sql="SELECT s.* FROM `rms_schedulesetting_detail` AS s WHERE s.setting_id=$id";
+   	$sql="SELECT s.*,
+		(SELECT t.title FROM rms_timeseting As t WHERE t.value =s.from_hour LIMIT 1) AS fromHourTitle,
+					(SELECT t.title FROM rms_timeseting As t WHERE t.value =s.to_hour LIMIT 1) AS toHourTitle
+	FROM `rms_schedulesetting_detail` AS s WHERE s.setting_id=$id";
    	return $db->fetchAll($sql);
    }
    public function editScheduleSetting($_data){
@@ -212,7 +215,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    		<tr class="record_schedule '.$classrow.'" id="row_'.($index).'">
 	   		<td align="center" class="nowrap">
 		   		<span>
-			   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['from_hour']." - ".$rs['to_hour'].'
+			   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['fromHourTitle']." - ".$rs['toHourTitle'].'
 			   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="settingdetail_'.$index.'" name="settingdetail_'.$index.'" value="'.$rs['id'].'" />
 		   			<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="from_hour_'.$index.'" name="from_hour_'.$index.'" value="'.$rs['from_hour'].'" />
 		   			<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="to_hour_'.$index.'" name="to_hour_'.$index.'" value="'.$rs['to_hour'].'" />
@@ -315,7 +318,7 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    		<tr class="record_schedule '.$classrow.'" id="row_'.($index).'">
    		<td align="center" class="nowrap">
 	   		<span>
-		   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['from_hour']." - ".$rs['to_hour'].'
+		   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['fromHourTitle']." - ".$rs['toHourTitle'].'
 		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="settingdetail_'.$index.'" name="settingdetail_'.$index.'" value="'.$rs['id'].'" />
 		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="from_hour_'.$index.'" name="from_hour_'.$index.'" value="'.$rs['from_hour'].'" />
 		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="to_hour_'.$index.'" name="to_hour_'.$index.'" value="'.$rs['to_hour'].'" />

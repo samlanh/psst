@@ -617,7 +617,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAllStudentgep($search){
-    	
     	$curr = new Application_Model_DbTable_DbGlobal();
     	$lang= $curr->currentlang();
     	
@@ -651,12 +650,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	(SELECT $field FROM rms_view where rms_view.type=4 and rms_view.key_code=gds.session LIMIT 1)AS session,
 	    	(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = gds.degree AND gds.is_current=1 AND i.type=1 LIMIT 1) AS degree,
 			(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = gds.grade AND gds.is_current=1 AND idd.items_type=1 LIMIT 1) AS grade,
-							    
 	    	(SELECT $field FROM rms_view WHERE type=5 and key_code=gds.stop_type LIMIT 1) as status,
 	    	(SELECT province_en_name FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1)AS province,
 	    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex,
+	    	(SELECT test_date FROM `rms_student_test_result` WHERE stu_test_id=s.stu_id ORDER BY id DESC LIMIT 1) AS test_date,
 	    	(SELECT r.room_name FROM `rms_room` AS r WHERE r.room_id=(SELECT room_id FROM `rms_group` WHERE rms_group.id=gds.gd_id LIMIT 1) LIMIT 1 ) AS room_name,
-    	
 	    	(SELECT sp.`create_date` FROM  
 		    	`rms_student_paymentdetail` AS spd,
 		    	`rms_student_payment` AS sp
@@ -692,6 +690,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['adv_search'])){
 	    	$s_where = array();
 	    	$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+	    	$s_where[]=" (SELECT g.group_code FROM `rms_group` AS g WHERE g.id = gds.group_id LIMIT 1) LIKE '%{$s_search}%'";
 	    	$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
 	    	$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
 	    	$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
@@ -721,6 +720,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	}else{
 	    	//$where.=' AND is_subspend!=0';
 	    	}
+    	}
+    	if(!empty($search['group'])){
+    		$where.=' AND gds.group_id='.$search['group'];
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -782,9 +784,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
     		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
     		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
-    		$s_where[] = " (SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] =" (SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] =" (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] =" (SELECT name_en FROM rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1) LIKE '%{$s_search}%'";
+    		
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['branch_id'])){

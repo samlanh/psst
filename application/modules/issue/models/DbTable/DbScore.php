@@ -132,6 +132,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			
+			//$_data['status']= empty($_data['status'])?1:$_data['status'];
 			$_arr = array(
 				'branch_id'=>$_data['branch_id'],
 				'title_score'=>$_data['title'],
@@ -145,6 +146,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'for_academic_year'=>$year_study,
 				'for_semester'=>$_data['for_semester'],
 				'for_month'=>$_data['for_month'],
+				'status'=>$_data['status'],
 			);
 		$where="id=".$_data['score_id'];
 		$this->update($_arr, $where);
@@ -289,7 +291,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		";
 		//s.max_score,
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 and s.score_option=1 ";
+		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id  and s.score_option=1 ";//AND s.status=1
 		
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";

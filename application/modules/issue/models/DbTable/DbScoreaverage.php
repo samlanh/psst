@@ -76,6 +76,7 @@ class Issue_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			
+			//$_data['status']= empty($_data['status'])?1:$_data['status'];
 				$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
@@ -86,6 +87,7 @@ class Issue_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 					'for_academic_year'=>$year_study,
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
+					'status'=>$_data['status'],
 				);
 			$where="id=".$_data['score_id'];
 			$this->update($_arr, $where);

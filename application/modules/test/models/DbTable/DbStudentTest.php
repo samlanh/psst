@@ -490,6 +490,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['result_by']=$this->getUserId();
 				
 			}
+			$data['test_restult_id']=$test;
 			if (!empty($data['id'])){
 				
 				if($test!=null){
@@ -509,7 +510,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'modify_date'		=>date("Y-m-d H:i:s"),
 						'user_id'			=>$this->getUserId(),
 					);
-					
 					$check  = $this->checkStudentInGroupDetail($data);
 					if (!empty($check)){
 						$result  = $this->getTestResultById($test,$type,$data['stu_test_id']);
@@ -652,11 +652,16 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$stu_id = empty($_data['stu_test_id'])?0:$_data['stu_test_id'];
 		$sql=" SELECT sd.* FROM rms_group_detail_student AS sd WHERE sd.stu_id = $stu_id  ";
-		
-		if(!empty($_data['degree_result'])){
-			$degree = empty($_data['degree_result'])?0:$_data['degree_result'];
-			$sql.=" AND sd.degree=$degree ";
+
+		if(!empty($_data['test_restult_id'])){
+			$sql.=" AND sd.test_restult_id= ".$_data['test_restult_id'];
+		}else{
+			if(!empty($_data['degree_result'])){
+				$degree = empty($_data['degree_result'])?0:$_data['degree_result'];
+				$sql.=" AND sd.degree=$degree ";
+			}
 		}
+		
 		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);
 	}

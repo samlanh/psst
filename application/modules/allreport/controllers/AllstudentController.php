@@ -849,4 +849,30 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->study_type = $db->getViewByType(5,0);
 	}
+	
+	public function rptStudentgroupAdjustAction()
+	{
+		$id=$this->getRequest()->getParam("id");
+		if(empty($id)){
+			$this->_redirect("/allreport/allstudent/student-group");
+		}
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+				'txtsearch' => "",
+				'study_type'=>0
+				);
+		}
+		$this->view->search = $search;
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$row = $db->getStudentGroup($id,$search,0);
+		$this->view->rs = $row;
+		$rs = $db->getGroupDetailByID($id);
+		$this->view->rr = $rs;
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->study_type = $db->getViewByType(5,0);
+	}
 }

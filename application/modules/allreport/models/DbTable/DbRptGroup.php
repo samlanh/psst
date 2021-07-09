@@ -119,6 +119,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				      WHERE ((`rms_view`.`type` = 2)
 				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
 				  `g`.`status`   AS `status`,
+				  `g`.`is_current`   AS `is_current`,
+				  `g`.`is_pass`   AS `is_pass`,
+				  `g`.`is_maingrade`   AS `is_maingrade`,
 				  s.home_num,
 				  s.street_num,
 				    (SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,

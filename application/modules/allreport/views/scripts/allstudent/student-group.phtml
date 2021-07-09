@@ -8,6 +8,8 @@
 	$urlTotalAtt = $this->baseUrl()."/allreport/score/rpt-totalattendance/id/";
 	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
 	$urlAssesment = $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/";
+	
+	$urlStudentGroupAdjust = $this->baseUrl()."/allreport/allstudent/rpt-studentgroup-adjust/id/";
 ?>
 <div class="reportblog">
 	<div class="card-box">
@@ -360,6 +362,8 @@ $(function(){
 				url='<?php echo $urlStudentList;?>';
 			}else if(key=="rpt-assessmentterm"){
 				url='<?php echo $urlAssesment;?>';
+			}else if(key=="rptAdjustStudent"){
+				url='<?php echo $urlStudentGroupAdjust;?>';
 			}  
 			gotoAction();
 		},
@@ -369,6 +373,11 @@ $(function(){
 			"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
 			"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
 			"rpt-assessmentterm": {name: "<?php echo $tr->translate("Assessment Term");?>", icon: "fa-file-text-o"},
+			<?php $dbacc = new Application_Model_DbTable_DbUsers();
+	 		$rs = $dbacc->getAccessUrl("allreport","allstudent",'rpt-studentgroup-adjust');
+	 		if(!empty($rs)){?>
+			"rptAdjustStudent": {name: "<?php echo $tr->translate("Adjust Stundent List");?>", icon: "fa-edit"},
+			<?php }?>
 		}
 	});
 });

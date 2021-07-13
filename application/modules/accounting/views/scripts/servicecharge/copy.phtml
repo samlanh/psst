@@ -19,6 +19,9 @@ table .set-style td, table .set-style th {
     padding: 0px;
     border: 1px solid #ccc;
 }
+.hover:hover{
+		background:#eee;
+	}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -198,7 +201,7 @@ function addRow() {
 			}
 			template+='<td width="25%"> <input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
 			
-		tmp='<tr id="row'+col+'">';
+		tmp='<tr id="row'+col+'" class="hover">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 
@@ -258,7 +261,7 @@ function initailize(){
 			template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 		}
 		template+='<td width="25%"> <input type="text" class="fullside" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /></td>';
-	tmp='<tr id="row'+col+'">';
+	tmp='<tr id="row'+col+'" class="hover">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 

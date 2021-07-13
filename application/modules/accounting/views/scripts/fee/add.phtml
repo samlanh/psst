@@ -26,6 +26,9 @@
 		height: 15px;
 	    display: initial;
 	}
+	.hover:hover{
+		background:#eee;
+	}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -405,7 +408,7 @@ function addRow(){
 				template+='<td width="60px"><input type="text" required="true" id="fee'+col+'_'+column+'" class="fullside" name="fee'+col+'_'+column+'" value="0" dojoType="dijit.form.NumberTextBox" /></td>';
 			}
 			template+='<td width="100px"> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
-		tmp='<tr id="row'+col+'">';
+		tmp='<tr id="row'+col+'" class="hover">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 

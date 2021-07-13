@@ -174,6 +174,11 @@ class Test_IndexController extends Zend_Controller_Action
     	}
     	$id = $this->getRequest()->getParam("id");//student id
     	$db = new Test_Model_DbTable_DbStudentTest();
+    	$schoolOption = $db->getSchoolOptionbyStudentId($id);
+    	if($type!=$schoolOption){
+    		Application_Form_FrmMessage::message('THIS CAN NOT TEST THIS OPTION');
+    		echo "<script>window.close();</script>";exit();
+    	}
     	$row  = $db->getStudentTestById($id);
     	$this->view->rs = $row;
     	if(empty($row)){

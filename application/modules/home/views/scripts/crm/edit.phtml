@@ -69,7 +69,7 @@ table.history-record tbody tr td {
 		                </div>
 		             </div>
 					<div class="form-group">
-		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?> </label>
+		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER").$tr->translate("IN_KHMER");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("kh_name");?>
 		                </div>
@@ -109,6 +109,11 @@ table.history-record tbody tr td {
 	                   		<?php echo $frm_items->getElement("current_address");?>
 	                   </div>
 	                </div>
+	                 <div class="form-group">
+	                	<label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold">
+	                	<i class="fa fa-hand-o-right" aria-hidden="true"></i><?php echo $tr->translate("COLLECTION_INFORMATION");?>
+				        </label>
+				     </div>
 		             <div class="form-group">
 		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ASK_FOR");?> </label>
 		               <div class="col-md-7 col-sm-7 col-xs-12">

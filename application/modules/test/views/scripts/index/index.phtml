@@ -104,8 +104,6 @@
 					url='<?php echo $urlEnterResult;?>';
 				}else if(key=="enterresultkh"){
 					url='<?php echo $urlCreateExamKh;?>';
-				}else if(key=="enterresultuniver"){
-					url='<?php echo $urlCreateExamUniver;?>';
 				}
 				else if(key=="profile"){
 					url='<?php echo $urlProfile;?>';
@@ -113,13 +111,16 @@
 				else if(key=="edit"){
 					url='<?php echo $urledit;?>';
 				}
+				/*else if(key=="enterresultuniver"){
+					url='<?php //echo $urlCreateExamUniver;?>';
+				}*/
 				gotoAction();
 			},
 			items: {
 				<?php if($userinfo['level']==1){ ?>
 				"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
 				"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
-				"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+				//"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
 				<?php }else{ 
 					if(!empty($userinfo['schoolOption'])){
 						$schoolOption = explode(",",$userinfo['schoolOption']);
@@ -130,7 +131,7 @@
 							<?php }else if($scp==2){ ?>
 							"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop"},
 							<?php }else if($scp==3){ ?>
-							"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+							//"enterresultuniver": {name: "<?php //echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
 							<?php }?>
 						
 						<?php }?>

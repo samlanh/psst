@@ -7,11 +7,11 @@
 .image-box {
     text-align: center;
     width: 200px;
-    height: 160px;
+    height: 80px;
 }
 .image-box img {
     width: 170px;
-    height: 130px;
+    height: 80px;
 }
 
 .button_browse {
@@ -40,7 +40,7 @@ input.btn_borwse_image {
 }
 .account-image {
     border: solid 1px #eee;
-    width: 200px;
+    width: 100%;
     margin: 0 auto;
 }
 ul.opt-school {
@@ -216,28 +216,95 @@ ul.opt-school {
 	                   		<?php echo $frm->getElement("branch_note");?>
 	                   </div>
 	                </div> 
+	                <div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("LOGO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
+	                	<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<div class="account-image">
+	                    		<div class="image-box">
+									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/noimage.jpg';?>" alt=""  />
+								</div>
+								<div class="button_browse">
+								<div id='preview'></div>	
+									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+									<input class="btn_borwse_image" type="file" id="photo" name="photo" >
+								</div>
+							</div>
+	                	</div>
+	                </div>
 	            </div>
 	          </div>
 	           <div class="col-md-4 col-sm-4 col-xs-12">
-				<div class="form-group">
-                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?> 
-                   </label>
-                </div>
-                <div class="form-group">
                    <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                    	<div class="account-image">
-                    		<div class="image-box">
-								<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/noimage.jpg';?>" alt=""  />
-							</div>
-							<div class="button_browse">
-							<div id='preview'></div>	
-								<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-								<input class="btn_borwse_image" type="file" id="photo" name="photo" >
-							</div>
-						</div>
+                    	<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
+		                   </label>
+		                </div>
                    </div>
+                   <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EYSCENTER");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("centereys");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EYSOFFICE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("officeeys");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("WORK_AT");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("workat");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRINCIPAL");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("principal");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRINCIPAL_SINATURE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<div class="account-image">
+	                    		<div class="image-box">
+									<img id="view_signature" src="<?php echo $this->baseUrl().'/images/noimage.jpg';?>" alt=""  />
+								</div>
+								<div class="button_browse">
+								<div id='preview'></div>	
+									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+									<input class="btn_borwse_image" type="file" id="principalsign" name="principalsign" >
+								</div>
+							</div>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRINCIPAL_STAMP");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<div class="account-image">
+	                    		<div class="image-box">
+									<img id="view_stamp" src="<?php echo $this->baseUrl().'/images/noimage.jpg';?>" alt=""  />
+								</div>
+								<div class="button_browse">
+								<div id='preview'></div>	
+									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+									<input class="btn_borwse_image" type="file" id="stamp" name="stamp" >
+								</div>
+							</div>
+	                   </div>
+	                </div>
                 </div>
-            </div>	
             <div class="card-box">
 	         	<div class="col-md-8 col-sm-8 col-xs-12">
 	         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
@@ -340,6 +407,37 @@ var maxSize = 0;
 $("#photo").change(function(){
     readURL(this);
 });
+
+function readURLStamp(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#view_stamp').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+var maxSize = 0;
+$("#stamp").change(function(){
+	readURLStamp(this);
+});
+
+function readURLSignature(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#view_signature').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+var maxSize = 0;
+$("#principalsign").change(function(){
+	readURLSignature(this);
+});
+
 
 function submitDataClose(){
 	if(dijit.byId('frm_branch').validate()) {

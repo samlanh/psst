@@ -87,10 +87,10 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			try{
 				$db->updateBranch($data,$id);
-				Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"),self::REDIRECT_URL."/branch/index");
+				//Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"),self::REDIRECT_URL."/branch/index");
 			}catch (Exception $e){
-				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
+// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();

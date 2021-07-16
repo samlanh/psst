@@ -208,6 +208,34 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		));
 		$color->setValue("2e3192");
 		
+		$centereys = new Zend_Dojo_Form_Element_TextBox('centereys');//Color Letter head
+		$centereys->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'required'=>false,
+		));
+		
+		$officeeys = new Zend_Dojo_Form_Element_TextBox('officeeys');//Color Letter head
+		$officeeys->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'required'=>false,
+		));
+		
+		$principal = new Zend_Dojo_Form_Element_TextBox('principal');
+		$principal->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'required'=>false,
+		));
+		
+		$workat = new Zend_Dojo_Form_Element_TextBox('workat');//Color Letter head
+		$workat->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'required'=>false,
+		));
+		
 		$id = new Zend_Form_Element_Hidden('id');
 		$id->setAttribs(
 				array('dojoType'=>'dijit.form.TextBox',)
@@ -237,15 +265,18 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			$color->setValue($data['color']);
 			$card_type->setValue($data['card_type']);
 			
+			$principal->setValue($data['principal']);
+			$workat->setValue($data['workat']);
+			$officeeys->setValue($data['officeeys']);
+			$centereys->setValue($data['centereys']);
+			
 			$id->setValue($data['br_id']);
 		}
 		
-		$this->addElements(array($branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
+		$this->addElements(array($principal,$workat,$officeeys,$centereys,$branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display,$card_type,
 				$color,$id));
 		
 		return $this;
-		
 	}
-	
 }

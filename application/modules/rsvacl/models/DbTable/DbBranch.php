@@ -30,6 +30,33 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			else
     				$string = "Image Upload failed";
     		}
+    		
+    		$principalsign = $_FILES['principalsign']['name'];
+    		$imgsignature='';
+    		if(!empty($principalsign)){
+    			$ss = 	explode(".", $principalsign);
+    			$image_name = "signature_".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['principalsign']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$image_name)){
+    				$imgsignature = $image_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
+    		}
+    		
+    		$stamp = $_FILES['stamp']['name'];
+    		$imgstamp='';
+    		if (!empty($stamp)){
+    			$ss = 	explode(".", $stamp);
+    			$image_name = "stamp".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['stamp']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$image_name)){
+    				$imgstamp = $image_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
+    		}
+    		
     		$sql="SELECT br_id FROM rms_branch WHERE 1 ";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
     		if (!empty($_data['main_branch_id'])){
@@ -71,6 +98,13 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'schooloptionlist'	=>$schooloption,
 	    			'color'			=>$_data['color'],
 	    			'card_type'		=>$_data['card_type'],
+	    			'centereys'		=>$_data['centereys'],
+	    			'officeeys'		=>$_data['officeeys'],
+	    			'workat'		=>$_data['workat'],
+	    			'principal'		=>$_data['principal'],
+	    			'signature'		=>$imgsignature,
+	    			'stamp'			=>$imgstamp,
+	    			
 	    		);
 // 	    	$check = $this->getCheckHasBranch();
 // 	    	if (empty($check)){
@@ -88,6 +122,8 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    	
 	    	$_db->commit();
     	}catch(Exception $e){
+    		Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$_db->rollBack();
     	}
     }
@@ -104,7 +140,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	try{
     		$part= PUBLIC_PATH.'/images/';
     		$name = $_FILES['photo']['name'];
-    		$size = $_FILES['photo']['size'];
     		if (!file_exists($part)) {
     			mkdir($part, 0777, true);
     		}
@@ -138,9 +173,14 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'other'			=>$_data['branch_note'],
     			'status'		=>$_data['branch_status'],
     			'displayby'		=>2,
-    			'schooloptionlist'		=>$schooloption,
+    			'schooloptionlist'=>$schooloption,
     			'color'			=>$_data['color'],
     			'card_type'		=>$_data['card_type'],
+    			'centereys'		=>$_data['centereys'],
+    			'officeeys'		=>$_data['officeeys'],
+    			'workat'		=>$_data['workat'],
+    			'principal'		=>$_data['principal'],
+    			
     		);
     	if (!empty($name)){
     		$ss = 	explode(".", $name);
@@ -148,7 +188,26 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		$tmp = $_FILES['photo']['tmp_name'];
     		if(move_uploaded_file($tmp, $part.$image_name)){
     			$_arr['photo']=$image_name;
-//     			$photo = $image_name;
+    		}
+    	}
+    	
+    	$name = $_FILES['principalsign']['name'];
+    	if (!empty($name)){
+    		$ss = 	explode(".", $name);
+    		$image_name = "signature_".date("Y").date("m").date("d").time().".".end($ss);
+    		$tmp = $_FILES['principalsign']['tmp_name'];
+    		if(move_uploaded_file($tmp, $part.$image_name)){
+    			$_arr['signature']=$image_name;
+    		}
+    	}
+    	
+    	$name = $_FILES['stamp']['name'];
+    	if (!empty($name)){
+    		$ss = 	explode(".", $name);
+    		$image_name = "stamp_".date("Y").date("m").date("d").time().".".end($ss);
+    		$tmp = $_FILES['stamp']['tmp_name'];
+    		if(move_uploaded_file($tmp, $part.$image_name)){
+    			$_arr['stamp']=$image_name;
     		}
     	}
     	
@@ -157,8 +216,10 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	
     	$_db->commit();
     	}catch(Exception $e){
+    		exit();
+    		Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$_db->rollBack();
-    		echo $e->getMessage(); exit();
     	}
     }
    	

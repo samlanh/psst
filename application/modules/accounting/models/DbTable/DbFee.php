@@ -47,7 +47,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['academic_year'])){
-    		$where.=" AND t.id=".$search['academic_year'];
+    		$where.=" AND t.academic_year=".$search['academic_year'];
     	}
     	if(!empty($search['branch_id'])){
     		$where.=" AND t.branch_id=".$search['branch_id'];

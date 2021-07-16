@@ -29,6 +29,19 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							$string = "Image Upload failed";
 					}
 					
+					$photoSignature = "";
+					$nameSignature = $_FILES['signature']['name'];
+					if (!empty($nameSignature)){
+						$ss = 	explode(".", $nameSignature);
+						$image_name = "signature_lecturer".date("Y").date("m").date("d").time().".".end($ss);
+						$tmp = $_FILES['signature']['tmp_name'];
+						if(move_uploaded_file($tmp, $part.$image_name)){
+							$photoSignature = $image_name;
+						}
+						else
+							$string = "Image Upload failed";
+					}
+					
 			////////////////////////////////////////////////////////////////////////	
 					$teacher_code = $this->getTeacherCode();
 					
@@ -81,6 +94,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'photo'  			 => $photo,
 					        'create_date' 		 => date("Y-m-d"),
 					        'user_id'	  		 => $this->getUserId(),
+							'signature'  			 => $photoSignature,
 						);
 					
 						$id = $this->insert($_arr);
@@ -185,6 +199,16 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							$_arr['photo']=$image_name;
 						}
 					}
+					$photoSignature = "";
+					$nameSignature = $_FILES['signature']['name'];
+					if (!empty($nameSignature)){
+						$ss = 	explode(".", $nameSignature);
+						$imageSignature= "signature_lecturer".date("Y").date("m").date("d").time().".".end($ss);
+						$tmp = $_FILES['signature']['tmp_name'];
+						if(move_uploaded_file($tmp, $part.$imageSignature)){
+							$_arr['signature']=$imageSignature;
+						}
+					}
 					$where=" id = ".$_data['id'];
 					$this->update($_arr,$where);	
 
@@ -269,8 +293,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					}
 			$_db->commit();
 		}catch(Exception $e){
-    		$_db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
     	}
     	//print_r($_data); exit();
 	}

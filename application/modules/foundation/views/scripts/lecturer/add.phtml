@@ -44,6 +44,12 @@ input.btn_borwse_image {
     width: 120px;
     margin: 0 auto;
 }
+.account-image.signatureClass {
+    width: 165px;
+}
+.image-box img#view_signature {
+    width: 160px;
+}
 </style>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
@@ -272,11 +278,9 @@ input.btn_borwse_image {
 								 class="fullside" id="confirm_password" name="confirm_password" value="" type="password">
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12"  style="line-height: 8.75;"><?php echo $tr->translate("SELECT_PICTURE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<div class="account-image">
+	                <div class="form-group" style="text-align: center;">
+	                   <div class="col-md-5 col-sm-5 col-xs-12"  >
+						<div class="account-image">
 								<div class="image-box">
 									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 								</div>
@@ -285,9 +289,24 @@ input.btn_borwse_image {
 										<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 										<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
 								</div>
-							</div>		
+							</div>
+					   <?php echo $tr->translate("SELECT_PICTURE");?>
+	                   </div>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<div class="account-image signatureClass">
+	                    		<div class="image-box">
+									<img id="view_signature" src="<?php echo $this->baseUrl().'/images/noimage.jpg';?>" alt=""  />
+								</div>
+								<div class="button_browse">
+								<div id='preview'></div>	
+									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+									<input class="btn_borwse_image" type="file" id="signature" name="signature" >
+								</div>
+							</div>	
+							<?php echo $tr->translate("SINATURE");?>
 	                   </div>
 	                </div>
+					
 	            </div>
 	         </div>
 	         <div class="card-box">
@@ -1068,4 +1087,19 @@ function bs_input_file() {
 	}
 	);
 }
+function readURLSignature(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#view_signature').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+var maxSize = 0;
+$("#signature").change(function(){
+	readURLSignature(this);
+});
+
 </script>

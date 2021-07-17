@@ -2894,18 +2894,15 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	
   	if (!empty($data['change_type'])){
-  		
   		if ($data['change_type']==2){//ឡើងថ្នាក់
-  			
   		}else{
-  			if (!empty($data['degree'])){
+  			if(!empty($data['degree'])){
   				$sql.=" AND g.degree = ".$data['degree'];
   			}
-  			if (!empty($data['grade'])){
+  			if(!empty($data['grade'])){
   				$sql.=" AND g.grade = ".$data['grade'];
   			}
   		}
-  		
   	}else{
   		if (!empty($data['degree'])){
   			$sql.=" AND g.degree = ".$data['degree'];
@@ -2914,7 +2911,6 @@ function getAllgroupStudyNotPass($action=null){
   			$sql.=" AND g.grade = ".$data['grade'];
   		}
   	}
-  	
   	if (!empty($data['academic_year'])){
   		$sql.=" AND g.academic_year = ".$data['academic_year'];
   	}

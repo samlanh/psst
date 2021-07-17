@@ -125,8 +125,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$rowFeeInfo = $_dbFee->getFeeById($feeId);
 			$academicYear = empty($rowFeeInfo['academic_year'])?0:$rowFeeInfo['academic_year'];
 			$stopType = 0;
+			$isCurrent=0;
 			if ($_data['change_type']==3){
 				$stopType = $_data['change_type'];//ឆ្លងភូមិសិក្សា
+				$isCurrent=1;
 			}
 			$con='';
 			if ($stopType!=3){
@@ -154,7 +156,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					'note'			=>$_data['note'],
 					'status'		=>1,
 					'array_checkbox'=>$_data['identity'],
-						
 					'fee_id'		=>$feeId,
 					'academic_year'	=>$academicYear,
 					'degree'		=>$_data['degree'],
@@ -171,10 +172,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			foreach ($idsss as $k){
 				if (!empty($_data['stu_id_'.$k])){
 					$stu=array(
-							'stop_type'		=>$stopType,
-							'is_pass'		=>1,
-							'is_current'	=>0,
-							'modify_date'	=> date("Y-m-d H:i:s")
+						'stop_type'	=>$stopType,
+						'is_pass'	=>$_data['change_type'],//corrected
+						'is_current'=>$isCurrent,
+						'modify_date'=> date("Y-m-d H:i:s")
 					);
 					$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group'];
 					$this->_name='rms_group_detail_student';
@@ -183,9 +184,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					if ($stopType==3){//ឆ្លងភូមិសិក្សា
 						$this->_name = 'rms_student_fee_history';
 						$data_gro = array(
-								'is_current'=> 0,
+							'is_current'=> 0,
 						);
-						
 						$where = 'student_id = '.$_data['stu_id_'.$k]." AND is_current=1";
 						$this->update($data_gro, $where);
 						
@@ -210,7 +210,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'degree'		=>$_data['degree'],
 								'grade'			=>$_data['grade'],
 								'academic_year'	=>$academicYear,
-						
 								'user_id'		=>$this->getUserId(),
 								'status'		=>1,
 								'date'			=>date('Y-m-d'),
@@ -218,13 +217,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'modify_date'	=>date('Y-m-d H:i:s'),
 								'type'			=>1,
 								'old_group'		=>$_data['from_group'],
-								'is_setgroup'	=>1,
+								'is_setgroup'	=>0,
 								'is_current'	=>1,
 								'is_maingrade'	=>1,
 						);
 						$this->_name='rms_group_detail_student';
 						$this->insert($arr);
-						
 					}
 				}
 			}
@@ -283,19 +281,15 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			if($all_student == $selected_student){
 				$this->_name = 'rms_group';
 				$group=array(
-						'is_pass'	=>1,
+						'is_pass'	=>$_data['change_type'],
 						);
 				$where=" id=".$_data['from_group'];
 				$this->update($group, $where);
 			}
-					
-			
-			
 			return $_db->commit();
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
-			
 		}
 	}
 	

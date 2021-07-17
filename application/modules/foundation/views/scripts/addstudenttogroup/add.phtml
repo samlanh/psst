@@ -29,7 +29,10 @@ table .set-style tr td a {
     font-size: 13px;
     white-space: nowrap;
     color: #000;
+    margin-top:10px;
 }
+a.btnstyle{background:#337ab7;padding:6px;border-radius:5px;color:#fff;border:1px solid #265074;}
+a.btnstyle:hover{color:#eee;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -54,12 +57,7 @@ table .set-style tr td a {
 									dijit.byId('branch_id').focus();
 									return false;
 								}
-								grade = dijit.byId('grade').get('value');
-								if(grade==''){
-									//alert('<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>');
-									//dijit.byId('grade').focus();
-									//return false;
-								}
+								
 								return true;
 	   						}else {
 								return false;
@@ -122,11 +120,14 @@ table .set-style tr td a {
 				                </div>
 							</div>
 						</div>
-						
 		                <div class="form-group">
-		                   <div class="col-md-12 col-sm-12 col-xs-12">
-		                   		 <input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
-								 	iconClass="dijitEditorIcon dijitEditorIconSearch"/>
+		                   <div class="col-md-6 col-sm-6 col-xs-12">
+		                   		 <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+				                 </label>
+				                 <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		 		<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
+								 		iconClass="dijitEditorIcon dijitEditorIconSearch"/>
+								 </div>
 		                   </div>
 		                </div>
 					</form>
@@ -148,7 +149,7 @@ table .set-style tr td a {
 							alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
 							return false;
 						}
-						loadingBlock();	
+						//loadingBlock();	
 						return true;
 	   				}else {
 						return false;
@@ -157,12 +158,13 @@ table .set-style tr td a {
 					<div class="col-md-8 col-sm-8 col-xs-12">
 		            	<div class="form-group">
 			         		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-								<a id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
-								<a id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
+								<a id="select-all" href="#" class='btnstyle'><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
+								<a id="deselect-all" href="#" class='btnstyle'><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
+								<div style="height: 10px;"></div>
 							</div>
-							 <div class="clearfix"></div>
+							 <div class="clearfix" style="margin-top:10px;"></div>
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<select multiple id="public-methods" name="public-methods[]">
+								<select multiple id="public-methods" name="public-methods[]" >
 									<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
 										<option value="<?php echo $row['gd_id'];?>">
 											<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
@@ -264,7 +266,7 @@ dojo.ready(function(){
 	    	group_id = dijit.byId('group').get('value');
 		    if(group_id==-1){
 		    	dojo.byId('lbldetail').innerHTML='';
-		    	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+		    	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
 			}else{
 				toStudentGroup();
 			}        
@@ -328,6 +330,7 @@ function loading(){
 
 url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroup(){
+	
 	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -340,6 +343,7 @@ function getAllGroup(){
 	if(degree=='' || degree==-1){
 		degree ="";
 	}
+	
 	grade = dijit.byId('grade').get('value');
 	if(grade=='' || grade==-1){
 		grade ="";
@@ -347,7 +351,7 @@ function getAllGroup(){
 	dojo.xhrPost({
 		url: url_getallgroup,
 		content:{
-			'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':1
+			'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':0
 		},
 		handleAs:"json",
 		load: function(data) {

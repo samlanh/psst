@@ -192,58 +192,39 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
 		try{
-			
 			if(!empty($_data['public-methods'])){
 				$dbGroup = new Foundation_Model_DbTable_DbGroup();
 				$group_info = $dbGroup->getGroupById($_data['group']);
 				$all_stu_id = $_data['public-methods'];
+				
 				foreach ($all_stu_id as $stu_id){
 					
 					$_arrcheck = array(
-							'gd_id'	=>$stu_id,
-							'degree'			=>$group_info['degree'],
-							'grade'				=>$group_info['grade'],
-							);
-					
+						'gd_id'	=>$stu_id,
+						'degree'=>$group_info['degree'],
+						'grade'	=>$group_info['grade'],
+					);
 					$checkRecord = $this->checkStudentGroupDetail($_arrcheck);
-					
 					if (!empty($checkRecord)){
 						$arr_up = array(
 								'user_id'	=>$this->getUserId(),
 								'group_id'	=>$_data['group'],
 								'stu_id'	=>$checkRecord['stu_id'],
 								'status'	=>1,
-								'degree'			=>$group_info['degree'],
-								'grade'				=>$group_info['grade'],
-								'session'				=>$group_info['session'],
-								'is_current'		=>1,
-								'is_setgroup'	=>1,
-								'date'				=>date('Y-m-d'),
-								'modify_date'		=>date("Y-m-d H:i:s"),
+								'degree'	=>$group_info['degree'],
+								'grade'		=>$group_info['grade'],
+								'session'	=>$group_info['session'],
+								'is_current'=>1,
+								'is_setgroup'=>1,
+								'is_maingrade'	=>1,
+								'date'		=>date('Y-m-d'),
+								'modify_date'=>date("Y-m-d H:i:s"),
 						);
 						
 						$where=  "stu_id = ".$checkRecord['stu_id']." AND gd_id=".$checkRecord['gd_id'];
 						$this->_name='rms_group_detail_student';
 						$this->update($arr_up, $where);
-					}else{
-						exit();
-						$arr = array(
-								'user_id'	=>$this->getUserId(),
-								'group_id'	=>$_data['group'],
-								'stu_id'	=>$stu_id,
-								'status'	=>1,
-								'is_setgroup'	=>1,
-								'degree'			=>$group_info['degree'],
-								'grade'				=>$group_info['grade'],
-								'is_current'		=>1,
-								'date'				=>date('Y-m-d'),
-								'create_date'		=>date("Y-m-d H:i:s"),
-								'modify_date'		=>date("Y-m-d H:i:s"),
-						);
-						$this->_name='rms_group_detail_student';
-						$this->insert($arr);
 					}
-						
 				}
 				$this->_name = 'rms_group';
 				$data_gro = array(
@@ -254,6 +235,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				$this->update($data_gro, $where);
 			}
 		}catch(Exception $e){
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}

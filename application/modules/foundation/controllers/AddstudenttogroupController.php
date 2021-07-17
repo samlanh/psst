@@ -75,7 +75,10 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
-				
+				if(empty($_data['public-methods'])){
+					Application_Form_FrmMessage::Sucessfull("PLEASE SELECT STUDENTS FIRST",'/foundation/addstudenttogroup/add');
+					exit();
+				}
 				$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 				$db->addStudentGroup($_data);
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");

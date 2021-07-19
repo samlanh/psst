@@ -5,6 +5,10 @@
 ?>	
 <head>
  <link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/multi-select.css" media="screen" rel="stylesheet" type="text/css" />
+<style>
+a.btnstyle{background:#337ab7;padding:6px;border-radius:5px;color:#fff;border:1px solid #265074;}
+a.btnstyle:hover{color:#eee;}
+</style>
 </head>
 <div class="card">
 	<div class="card-content collapse show">
@@ -50,32 +54,24 @@
 						<div class="form-group">
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_FEEID");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("academic_year");?>
+				                   		<input id="fromFeeid" />
 				                   </div>
 				                 </div>
 			                </div>
 		                </div>
-						
-						<div class="form-group">
-			                <div class="col-md-6 col-sm-6 col-xs-12">
-			                	<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("degree");?>
-				                   </div>
-				                </div>
-			                </div>
-		                </div>
-						
 		                <div class="form-group">
-		                   <div class="col-md-12 col-sm-12 col-xs-12">
-		                   		 <input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
-								 	iconClass="dijitEditorIcon dijitEditorIconSearch"/>
-		                   </div>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ></label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		 <input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
+										 	iconClass="dijitEditorIcon dijitEditorIconSearch"/>
+				                   </div>
+				                 </div>
+			                </div>
 		                </div>
 					</form>
 	            </div>
@@ -100,8 +96,9 @@
 					<div class="col-md-8 col-sm-8 col-xs-12">
 		            	<div class="form-group">
 			         		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-								<a id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
-								<a id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
+								<a class="btnstyle" id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
+								<a class="btnstyle" id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
+								<div style="height: 10px;"></div>
 							</div>
 							 <div class="clearfix"></div>
 							<div class="col-md-12 col-sm-12 col-xs-12">
@@ -121,22 +118,22 @@
 		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_FEE_INFORMATION");?> 
 		                   </label>
 		                </div>
-		                
 		                <div class="form-group">
-		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FEE");?> :
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NEW_FEEID");?> :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-			                   		 <input id="academic_year_fee" />
-			                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
+		                   		 <input id="academic_year_fee" />
+		                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
 		                   </div>
 		                </div>
 		                
 		                <div class="form-group">
-		                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-		                   		<input type="submit" id="save_close" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_CLOSE");?>"
-									iconClass="dijitEditorIcon dijitEditorIconSave"/>
-								<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
-									iconClass="dijitEditorIcon dijitEditorIconSave"/>
+		                   <div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
+										iconClass="dijitEditorIcon dijitEditorIconSave"/>
+								</div>
 		                   </div>
 		                </div>
 		            </div>
@@ -179,8 +176,6 @@ dojo.require("dojo.NodeList-manipulate");
 dojo.require('dijit.form.Textarea');
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
-dojo.require("dojo.data.ItemFileWriteStore"); 
-var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var academic_year_fee_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -197,14 +192,28 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "academic_year_fee");
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                     
+		id: "fromFeeid",
+		name: "fromFeeid",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+		}
+	}, "fromFeeid");
 	
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
   	});
+	 oldFeeId='<?php echo $this->search['fromFeeid'];?>';
 	 getAllAcademicByBranch();
 });
-
 
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicByBranch(){
@@ -225,11 +234,14 @@ function getAllAcademicByBranch(){
 		load: function(data){
 			academic_store  = getDataStorefromJSON('id','name', data);
 			dijit.byId('academic_year_fee').set('store',academic_store);  
+			dijit.byId('fromFeeid').set('store',academic_store);  
+			if(oldFeeId>0){
+				dijit.byId('fromFeeid').attr('value',oldFeeId);
+			}
 			dijit.byId('branch').set('value',branch_id);  
 		},
 		error: function(err) {
 		}
 	});
 }
-
 </script>

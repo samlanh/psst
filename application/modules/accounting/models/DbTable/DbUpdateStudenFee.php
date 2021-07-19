@@ -76,48 +76,44 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
 		try{
-			
 			if(!empty($_data['public-methods'])){
 				$_dbFee = new Accounting_Model_DbTable_DbFee();
 				$feeId = empty($_data['academic_year_fee'])?0:$_data['academic_year_fee'];
 				$row = $_dbFee->getFeeById($feeId);
-				
 				$all_stu_id = $_data['public-methods'];
 				
 				foreach ($all_stu_id as $stu_id){
 					
 					$this->_name = 'rms_student_fee_history';
 					$data_gro = array(
-							'is_current'=> 0,
+						'is_current'=> 0,
 					);
-				
 					$where = 'student_id = '.$stu_id." AND is_current=1";
 					$this->update($data_gro, $where);
 					
 					$arr = array(
-								'user_id'	=>$this->getUserId(),
-								'branch_id'	=>$_data['branch'],
-								'student_id'	=>$stu_id,
-								'status'	=>1,
-								'academic_year'			=>$row['academic_year'],
-								'fee_id'				=>$feeId,
-								'is_current'		=>1,
-								'create_date'		=>date("Y-m-d H:i:s"),
-								'modify_date'		=>date("Y-m-d H:i:s"),
-						);
+						'user_id'		=>$this->getUserId(),
+						'branch_id'		=>$_data['branch'],
+						'student_id'	=>$stu_id,
+						'status'		=>1,
+						'academic_year'	=>$row['academic_year'],
+						'fee_id'		=>$feeId,
+						'is_current'	=>1,
+						'create_date'	=>date("Y-m-d H:i:s"),
+						'modify_date'	=>date("Y-m-d H:i:s"),
+					);
 					
-						$this->_name='rms_student_fee_history';
-						$this->insert($arr);
-						
+					$this->_name='rms_student_fee_history';
+					$this->insert($arr);
 				}
-				
 			}
 		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	
-	function getSearchStudent($search){
+	function getSearchStudentbyFeeId($search){
 		$db=$this->getAdapter();
 		$sql="SELECT 
 				sd.gd_id,
@@ -135,18 +131,19 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
 			  FROM 
 			  	rms_student AS s,
-			  	`rms_group_detail_student` AS sd 
+			  	`rms_group_detail_student` AS sd,
+			  	rms_student_fee_history as sf
 		 	  WHERE 
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
 				AND sd.stop_type=0
-				AND sd.is_maingrade = 1 ";
-		if(!empty($search['academic_year'])){
-			$sql.=" AND (SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) =".$search['academic_year'];
-		}
-		if(!empty($search['degree'])){
-			$sql.=" AND sd.degree =".$search['degree'];
+				AND sd.is_maingrade = 1
+				AND sd.is_current=1
+				AND s.stu_id=sf.student_id
+				AND sf.is_current=1 ";
+		if(!empty($search['fromFeeid'])){
+			$sql.=" AND sf.fee_id =".$search['fromFeeid'];
 		}
 		if(!empty($search['branch_id'])){
 			$sql.=" AND s.branch_id =".$search['branch_id'];
@@ -155,6 +152,4 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY s.stu_id DESC ";
 		return $db->fetchAll($sql);
 	}
-
 }
-

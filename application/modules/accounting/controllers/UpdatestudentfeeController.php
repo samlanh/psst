@@ -7,7 +7,7 @@ class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
-public function indexAction()
+	public function indexAction()
     {
     	try{
     		if($this->getRequest()->isPost()){
@@ -57,16 +57,16 @@ public function indexAction()
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = $_data;
-				$rs =$db->getSearchStudent($search);
+				$rs =$db->getSearchStudentbyFeeId($search);
 				$this->view->rs = $rs;
 			}else{
 				$search = array(
-						'branch_id' => '',
-						'degree' => '',
-						'grade' => '',
-						'session' => '',
-						'academic_year'=> ''
-					);
+					'branch_id' => '',
+					'degree' => '',
+					'grade' => '',
+					'session' => '',
+					'fromFeeid'=> ''
+				);
 			}
 			$this->view->search=$search;
 		}catch(Exception $e){
@@ -82,7 +82,6 @@ public function indexAction()
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
-				
 				$db = new Accounting_Model_DbTable_DbUpdateStudenFee();
 				$db->addStudentGroup($_data);
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -97,5 +96,4 @@ public function indexAction()
 			}
 		}
 	}
-	
 }

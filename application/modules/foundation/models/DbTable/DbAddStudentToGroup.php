@@ -370,46 +370,5 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		$sql.=" ORDER BY s.stu_id DESC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-// 	function getSearchStudent($search){
-// 		$db=$this->getAdapter();
-// 		$sql="SELECT 
-// 				stu_id,
-// 				stu_code,
-// 				stu_enname,
-// 				stu_khname,
-// 				last_name,
-// 				sex,
-// 				degree,
-// 				grade,
-// 				academic_year ,
-// 				(SELECT `title` FROM `rms_items` WHERE `id`=degree AND type=1 LIMIT 1) AS degree_title,
-// 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=grade AND items_type=1 LIMIT 1) AS grade_title
-// 			  from 
-// 			  	rms_student 
-// 		 	  WHERE 
-// 				`status`=1 
-// 				AND is_setgroup = 0 
-// 				AND customer_type = 1 
-// 				and is_subspend=0 ";
-// 		if(!empty($search['academy'])){
-// 			$sql.=" AND academic_year =".$search['academy'];
-// 		}
-// 		if(!empty($search['degree'])){
-// 			$sql.=" AND degree =".$search['degree'];
-// 		}
-// 		if(!empty($search['grade'])){
-// 			$sql.=" AND grade =".$search['grade'];
-// 		}
-// 		if(!empty($search['session'])){
-// 			$sql.=" AND session =".$search['session'];
-// 		}
-// 		if(!empty($search['branch_id'])){
-// 			$sql.=" AND branch_id =".$search['branch_id'];
-// 		}
-		
-// 		$sql.=" ORDER BY stu_id ASC ";
-// // 		$sql.=" ORDER BY stu_enname ASC ";
-// 		return $db->fetchAll($sql);
-// 	}
 }
 

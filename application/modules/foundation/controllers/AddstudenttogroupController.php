@@ -116,8 +116,6 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$_db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 		$g_id = $_db->getGroupById($id);
 		
-		//print_r($g_id);exit();
-		
 		$this->view->id = $g_id;
 		$row = $_db->getStudentGroup($id);
 		$this->view->rr = $row;

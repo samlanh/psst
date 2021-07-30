@@ -170,7 +170,7 @@ class Api_IndexController extends Zend_Controller_Action
 	   	$Stuid=$GetData["id"];
 	   	$_dbAction = new Api_Model_DbTable_DbabaApi();
 	   	
-	   	if($_SERVER['REQUEST_METHOD'] == "GET"){
+	   	if($_SERVER['REQUEST_METHOD'] == "GET" AND !empty($Stuid)){
 	   		if(!empty($Stuid)){
 	   			$studentInfo = $_dbAction->getStudentbyStuID($Stuid);
 	   			print_r(json_encode($studentInfo,JSON_UNESCAPED_UNICODE ));
@@ -201,12 +201,13 @@ class Api_IndexController extends Zend_Controller_Action
    
    function confirmpaymentstatusAction(){
    		$bankTranid = $this->getRequest()->getParam('id');
+   		$tokendReq = $this->getRequest()->getParam('token');
    		$_dbAction = new Api_Model_DbTable_DbabaApi();
 
    		if($_SERVER['REQUEST_METHOD'] == "GET" AND !empty($bankTranid)){
    			
 	   		if(!empty($bankTranid)){
-	   			$confirm = $_dbAction->confirmPaymentStatus($bankTranid);
+	   			$confirm = $_dbAction->confirmPaymentStatus($bankTranid,$tokendReq);
 	   			print_r(json_encode($confirm));
 	   		}
 	   	}else{

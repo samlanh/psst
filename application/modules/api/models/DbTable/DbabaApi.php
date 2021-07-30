@@ -3,14 +3,18 @@
 class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'rms_banktransaction';
-	function getStudentbyStuID($Stuid){
+	function getStudentbyStuID($Stuid,$tokendReq){
 		$db = $this->getAdapter();
 		$stuID=trim($Stuid);
 		
 		try{
+			$TokenStr = $this->getStaticTokend(1);
+			if($tokendReq!=$TokenStr){
+				return $this->returnBadURL();
+			}
 			$sql =" SELECT
 				s.stu_id AS id,
-				CONCAT(COALESCE(s.stu_khname,''),COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS payer
+				CONCAT(COALESCE(s.stu_khname,''),COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS payer
 			FROM
 				rms_student AS s
 			WHERE s.status = 1 AND s.customer_type =1 ";
@@ -31,7 +35,7 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 			}else{
 				$result = array(
 						'status' =>404,
-						'message' =>'អត្តលេខសិស្សមិនត្រឹមត្រូវទេ',
+						'message' =>'Student record not found',
 				);
 			}
 			return $result;
@@ -41,6 +45,14 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 			return $this->returnServerError();
 		}
 	}
+	function getStaticTokend($tokenID){
+		$tokendStr = array(
+				1=>'DChcSEryAhUNr5eWDKsYABAAGgJ0bA',
+				2=>'Z3qBkFmrdvsOuMK_EQsdPE3aJGxoE3',
+				3=>'AINFCbYAAAAAYQPPR-vADRaZxg1N2'
+			);
+		return $tokendStr[$tokenID];
+	}
 	function confirmPayment($data){
 		$db = $this->getAdapter();
 		$stuID=$data['id'];
@@ -49,10 +61,13 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 		$bankTranID=$data['bank_transaction_id'];
 		$bankChannel=$data['channel'];
 		
-	
 		try{
-			
-			if(empty($bankTranID) OR empty($stuID) OR empty($amount)){
+			$TokenStr = $this->getStaticTokend(2);
+			$tokendReq = $data['token'];
+			if($tokendReq!=$TokenStr){
+				return $this->returnBadURL();
+			}
+			if(empty($bankTranID) OR empty($stuID) OR empty($amount) OR $amount<0){
 				return $this->returnBadURL();
 			}
 			
@@ -80,7 +95,6 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 						'date'=>date("Y-m-d H:i:s"),
 						'channel'=>'ABA',
 						'status'=>1,
-						
 						'fee_id'=>$feeID,
 						'academic_year'=>$academic,
 						'degree'=>$degree,
@@ -102,13 +116,18 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 	
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			return $this->returnBadURL();
+			return $this->returnServerError();
 		}
 	}
 	
-	function confirmPaymentStatus($bankTranID){
+	function confirmPaymentStatus($bankTranID,$tokendReq){
 		$db = $this->getAdapter();
 		try{
+			$TokenStr = $this->getStaticTokend(3);
+			if($tokendReq!=$TokenStr){
+				return $this->returnBadURL();
+			}
+			
 			$recordExist = $this->getBankTransactionByID($bankTranID);
 	
 			if($recordExist>0){
@@ -123,7 +142,7 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 				);
 			}else{
 				$result = array(
-						'status' =>400,
+						'status' =>404,
 						'message' =>'Fail reason',
 				);
 	
@@ -132,13 +151,14 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 	
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			return $this->returnBadURL();
+			return $this->returnServerError();
 		}
 	}
 	
 	function getStudentByStuCode($stuCode){
 		$db= $this->getAdapter();
-		$sql="SELECT 				s.stu_id,
+		$sql="SELECT 				
+				s.stu_id,
 	   			sgd.grade,
 	   			sgd.degree,
 	   			sgd.grade,

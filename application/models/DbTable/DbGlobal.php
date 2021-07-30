@@ -2056,7 +2056,8 @@ function getAllgroupStudyNotPass($action=null){
 	  	for($i = $length;$i<4;$i++){
 	  		$pre.='0';
 	  	}
-	  	return $pre.$new_acc_no."A";
+	  	return $pre.$new_acc_no;
+	  	៊៊return $pre.$new_acc_no."A";
   }
   function getStudentProfileblog($student_id,$data_from=1,$customer_type=1){
   	$db = $this->getAdapter();

@@ -125,6 +125,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];
     	$this->view->header = $frm->getHeaderReceipt($branch_id);
     	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branchInfo = $db->getBranchInfo($branch_id);
+    	
     }
     function monthlyOutstandingStudentAction(){
     	$id=$this->getRequest()->getParam("id");

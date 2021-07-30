@@ -351,7 +351,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
 			(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS start_year,
 			(SELECT ac.toYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS end_year,
-			
 		  
 			(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
@@ -359,7 +358,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	`g`.`semester` AS `semester`,
 		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 		   	(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-		   	(select teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+		   	(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+		   	(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
 		   	sm.`student_id`,
 		   	st.`stu_code`,
 		   	st.stu_khname,

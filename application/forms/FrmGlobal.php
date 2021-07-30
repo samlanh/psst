@@ -67,20 +67,20 @@ class Application_Form_FrmGlobal{
 			$styleLogo = "width:120px;";
 		}else{
 			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-			$styleLogo = "max-width: 98%;max-height:90px;";
+			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
 		}
 	    if($setting['show_header_receipt']==1){
 			$str="<table width='100%' style='white-space:nowrap;'>
 				<tr>
-					<td width='17%' valign='top'>
+					<td width='22%' valign='top'>
 						<img style='".$styleLogo."' src=".$baseUrl.'/images/'.$img.">
 					</td>
-					<td width='43%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
-						<div style='font-size:18px;margin-top: 10px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
+					<td width='48%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
+						<div style='font-size:18px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
 						<div style='font-size:18px;font-family:Times New Roman'>".$school_name."</div>
-						<div style='line-height: 16px;margin-top: 2px;'>".$address."</div>
+						<div style='font-size:10px;line-height: 16px;margin-top: 2px;max-width:100%;white-space:pre-line;'>".$address."</div>
 					</td>
-					<td width='40%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
+					<td width='30%' valign='top' style='font-size:10px;line-height: 18px;font-family: Khmer OS Battambang;' >
 						<div style='line-height: 16px;'>&nbsp;</div>
 						<div style='line-height: 16px;'>".$tel."</div>
 						<div style='line-height: 16px;'>".$email."</div>
@@ -846,7 +846,6 @@ class Application_Form_FrmGlobal{
 									
 									<td><div style='font-family: Times New Roman'>Grade	</div></td>
 									<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
-									
 										<div class='no_display'>
 											<div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'>
 											<label id='lb_photo'></label>
@@ -869,6 +868,8 @@ class Application_Form_FrmGlobal{
 									<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
 									<td>Print Date</td>
 									<td> : &nbsp;".date('d-m-Y g:i A')."</td>
+									<td><div style='font-family: Times New Roman'>Session Type</div></td>
+									<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
 								</tr>
 								<tr>
 									<td>Tel</td>
@@ -893,7 +894,7 @@ class Application_Form_FrmGlobal{
 							<div style='font-size:10px;min-height: 70px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
 						</td>
 						<td>
-							<table width='98%' style='margin-left:4px; font-size:inherit; white-space:nowrap;line-height:12px;border-collapse:collapse;'>
+							<table width='98%' style='margin-left:4px; font-size:inherit; white-space:nowrap;line-height:10px;border-collapse:collapse;'>
 								<tr>
 									<td>Penalty</td>
 									<td>: $</td>
@@ -909,10 +910,13 @@ class Application_Form_FrmGlobal{
 									<td>: $</td>
 									<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
 								</tr>
+								<tr style='height:4px;'>
+									<td colspan='3'></td>
+								</tr>
 								<tr>
-									<td><div><strong>Paid Amount</strong></div></td>
+									<td><div style='font-weight: bold;font-family:Times New Roman;font-size:14px;'><strong>Paid Amount</strong></div></td>
 									<td>: $</td>
-									<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
+									<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:14px;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
 								</tr>
 								<tr>
 									<td><div>Balance</div></td>

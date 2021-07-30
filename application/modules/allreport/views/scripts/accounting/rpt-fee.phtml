@@ -152,17 +152,14 @@
 		}, "grade");
 		getallGrade();
 		
-		
 		var branch_id = dijit.byId('branch_id');
-		branch_id.on('change', function(evt) {
+			branch_id.on('change', function(evt) {
 		});
-		
 	});
 
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
-		getAllGroupByBranch();  
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id=='' || dept_id==-1){return false;}
 			dojo.xhrPost({
@@ -182,5 +179,4 @@
 				}
 			});
 	}
-
 </script> 

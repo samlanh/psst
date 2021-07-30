@@ -279,7 +279,7 @@ input.btn_borwse_image {
 										}
 									}	
 									$imagesignature = $this->baseUrl().'/images/noimage.jpg';
-									if(!empty($this->rs['photo'])){
+									if(!empty($this->rs['signature'])){
 										if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['signature'])){
 										$imagesignature = $this->baseUrl().'/images/photo/'.$this->rs['signature'];
 										}

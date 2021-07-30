@@ -10,7 +10,6 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     }
     function getAllTuitionFee($search,$type=1){
     	$db=$this->getAdapter();
-    	
     	$_db=new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	$lang = $_db->currentlang();
@@ -42,26 +41,21 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}
-    	
     	if(!empty($search['academic_year'])){
     		$where.=" AND academic_year = ".$search['academic_year'] ;
     	}
-    	
     	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
     	}
-    	
     	if($search['finished_status']>-1){
     		$where.=" AND `rms_tuitionfee`.`is_finished` = ".$search['finished_status'] ;
     	}
     	if($search['type_study']>-1){
     		$where.=" AND `rms_tuitionfee`.`term_study` = ".$search['type_study'] ;
     	}
-    	
     	if(!empty($search['generation']) AND $search['generation']!=-1){
     		$where.=" AND generation = '".$search['generation']."'" ;
     	}
-    	
     	if(!empty($search['adv_search'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['adv_search']));

@@ -1520,7 +1520,7 @@ dojo.ready(function(){
 					</h3>
 					<table  cellpadding="0"​ border="0" style="width:100%;color: #4839bd; line-height: 20px;" >
 						<tr>
-							<td align="right" width="25%" style="font-family: 'Times New Roman','Khmer OS Muol Light';">សិស្សឈ្មោះ : </td>
+							<td align="right" width="25%">សិស្សឈ្មោះ : </td>
 							<td class="bold" align="left" width="23%"><?php echo $this->rs['stu_khname']?></td>
 							<td width="4%">&nbsp;</td>
 							<td align="right" width="30%">Ref No : </td>
@@ -1550,11 +1550,11 @@ dojo.ready(function(){
 				<td colspan="3" id="exportExcel" valign="top">
 					<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 3px #4839bd;" border="1" >
 						<tr class="cheader" align="center" style=" font-family:'Times New Roman','Khmer OS Battambang';" >
-							<td>ល.រ</td>
-							<td colspan="2">មុខវិជ្ជា Subject</td>
+							<td>ល.រ<br />No.</td>
+							<td colspan="2">មុខវិជ្ជា <br />Subject</td>
 							<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-							<td>ពិន្ទុ score</td>
-							<td >និទ្ទេស Grade</td>
+							<td>ពិន្ទុ<br />score</td>
+							<td >និទ្ទេស<br />Grade</td>
 						</tr>
 						<?php 
 						$totalscore=0; 
@@ -1627,7 +1627,6 @@ dojo.ready(function(){
 							<td colspan="3" align="center" class="">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
 						</tr>
 					</table>
-					
 				</td>
 			</tr>
 		</table>

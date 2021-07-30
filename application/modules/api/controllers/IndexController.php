@@ -161,14 +161,58 @@ class Api_IndexController extends Zend_Controller_Action
 	   	$frm = new Application_Form_FrmGlobal();
 	   	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];
 	   	$this->view->header = $frm->getHeaderReceipt($branch_id,1);
-	   	
    }
    
+   
+   function paymentinfoAction(){
+   	
+	   	$GetData = $this->getRequest()->getParams();
+	   	$Stuid=$GetData["id"];
+	   	$_dbAction = new Api_Model_DbTable_DbabaApi();
+	   	
+	   	if($_SERVER['REQUEST_METHOD'] == "GET"){
+	   		if(!empty($Stuid)){
+	   			$studentInfo = $_dbAction->getStudentbyStuID($Stuid);
+	   			print_r(json_encode($studentInfo,JSON_UNESCAPED_UNICODE ));
+	   		}
+	   	}else{
+	   		print_r(json_encode($_dbAction->returnBadURL()));
+	   	}
+	   	exit();
+   }
+   
+   
+   function confirmpaymentAction(){
+	   
+	   	$GetData = $this->getRequest()->getParams();
+	   	$Stuid=$GetData["id"];
+	   	$_dbAction = new Api_Model_DbTable_DbabaApi();
+	   
+		  if($this->getRequest()->isPost()){
+		  	$postData = $this->getRequest()->getPost();
+		  	$paymentInfo = $_dbAction->confirmPayment($postData);
+		  	print_r(json_encode($paymentInfo));
+		  	
+	   	}else{
+	   		print_r(json_encode($_dbAction->returnBadURL()));
+	   	}
+	   	exit();
+   }
+   
+   function confirmpaymentstatusAction(){
+   		$bankTranid = $this->getRequest()->getParam('id');
+   		$_dbAction = new Api_Model_DbTable_DbabaApi();
+
+   		if($_SERVER['REQUEST_METHOD'] == "GET" AND !empty($bankTranid)){
+   			
+	   		if(!empty($bankTranid)){
+	   			$confirm = $_dbAction->confirmPaymentStatus($bankTranid);
+	   			print_r(json_encode($confirm));
+	   		}
+	   	}else{
+	   		print_r(json_encode($_dbAction->returnBadURL()));
+	   	}
+	   	exit();
+   	
+   }
 }
-
-
-
-
-
-
-

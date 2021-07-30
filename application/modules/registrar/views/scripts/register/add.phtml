@@ -198,7 +198,7 @@ tr.head-td th{padding: 5px 2px;}
 		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("អត្តលេខសិស្សថ្មី");//$tr->translate("STUDENT_NEW_ID");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<input  type="text" style="color: red;" readonly="readonly"  dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
+		                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 		                   </div>
 		              </div>
 	                <div class="form-group">
@@ -527,7 +527,7 @@ dojo.ready(function(){
 function checkStudentType(){
 	dijit.byId('student_code').attr('value',""); 
 	student_type = dijit.byId("student_type").attr("value");
-	$( "#stuCodeControl" ).css("display", "none");
+	$("#stuCodeControl").css("display", "none");
 	if(student_type==2){
 		$( "#stuCodeControl" ).css("display", "flow-root");
 	}
@@ -839,7 +839,6 @@ function getOldStudentInfo(){
 }
 
 function getStudentInformation(){
-
 	dijit.byId('studentBalanceId').set('value',0);
 	dijit.byId('groupDetailId').set('value',0);
 	
@@ -849,7 +848,6 @@ function getStudentInformation(){
 	if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
 		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalanceinformation')); ?>';
 	}
-	
 	
 	student_id=dijit.byId('old_stu').get('value');
 	dojo.byId("lb_grade").innerHTML = "";
@@ -865,6 +863,7 @@ function getStudentInformation(){
 		load: function(data) {
 			fee_id = data.fee_id;
 			dijit.byId('study_year').set('value',fee_id);
+			
 			grade_label = data.grade_label;
 			if(grade_label== undefined){
 				grade_label='&nbsp;';
@@ -894,6 +893,7 @@ function getStudentInformation(){
 			
 			dojo.byId("lb_academic_year").innerHTML = academic_year_label;
 			//get New ID From Student Test
+			getStudyFeeId(fee_id);
 			getStudentNo(data.degree);
 			HideloadingBlock();
 		},
@@ -911,6 +911,7 @@ function getAllTermStudy(){
 		dijit.byId('study_year').focus();
 		return false;
 	}
+	getStudyFeeId(study_year);
 	dojo.xhrPost({
 		url: url_term_study,
 		content:{
@@ -923,6 +924,25 @@ function getAllTermStudy(){
 			if(data){
 				term_study_option = data;
 			}
+		},
+		error: function(err) {
+		}
+	});
+}
+
+url_study = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getfeestudyinfo'));?>';
+function getStudyFeeId(study_year){
+	if( study_year=='' || study_year==-1){
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_study,
+		content:{
+			'study_year':study_year,
+		},
+		handleAs:"json",
+		load: function(data){
+			dojo.byId("lb_sesiontype").innerHTML = data.session_type;
 		},
 		error: function(err) {
 		}
@@ -1338,6 +1358,7 @@ function printSave(){
 		dojo.byId("lb_paid_amount").innerHTML = dojo.number.format(dijit.byId("paid_amount").get('value'),{places:2});
 		dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'),{places:2});
 		dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+		
 		dojo.byId("lb_paymentnumber").innerHTML = dijit.byId("number").get('value');
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $username;?>';
 		

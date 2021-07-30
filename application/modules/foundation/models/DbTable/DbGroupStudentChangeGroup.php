@@ -190,36 +190,36 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$this->update($data_gro, $where);
 						
 						$arr = array(
-								'user_id'			=>$this->getUserId(),
-								'branch_id'			=>$_data['branch_id'],
-								'student_id'		=>$_data['stu_id_'.$k],
-								'status'			=>1,
-								'academic_year'		=>$academicYear,
-								'fee_id'			=>$feeId,
-								'is_current'		=>1,
-								'create_date'		=>date("Y-m-d H:i:s"),
-								'modify_date'		=>date("Y-m-d H:i:s"),
+							'user_id'			=>$this->getUserId(),
+							'branch_id'			=>$_data['branch_id'],
+							'student_id'		=>$_data['stu_id_'.$k],
+							'status'			=>1,
+							'academic_year'		=>$academicYear,
+							'fee_id'			=>$feeId,
+							'is_current'		=>1,
+							'create_date'		=>date("Y-m-d H:i:s"),
+							'modify_date'		=>date("Y-m-d H:i:s"),
 						);
 						$this->_name='rms_student_fee_history';
 						$feeHistortyId = $this->insert($arr);
 						
 						$arr=array(
-								'stu_id'		=>$_data['stu_id_'.$k],
-								'group_id'		=>0,
-								'session'		=>0,
-								'degree'		=>$_data['degree'],
-								'grade'			=>$_data['grade'],
-								'academic_year'	=>$academicYear,
-								'user_id'		=>$this->getUserId(),
-								'status'		=>1,
-								'date'			=>date('Y-m-d'),
-								'create_date'	=>date('Y-m-d H:i:s'),
-								'modify_date'	=>date('Y-m-d H:i:s'),
-								'type'			=>1,
-								'old_group'		=>$_data['from_group'],
-								'is_setgroup'	=>0,
-								'is_current'	=>1,
-								'is_maingrade'	=>1,
+							'stu_id'		=>$_data['stu_id_'.$k],
+							'group_id'		=>0,
+							'session'		=>0,
+							'degree'		=>$_data['degree'],
+							'grade'			=>$_data['grade'],
+							'academic_year'	=>$academicYear,
+							'user_id'		=>$this->getUserId(),
+							'status'		=>1,
+							'date'			=>date('Y-m-d'),
+							'create_date'	=>date('Y-m-d H:i:s'),
+							'modify_date'	=>date('Y-m-d H:i:s'),
+							'type'			=>1,
+							'old_group'		=>$_data['from_group'],
+							'is_setgroup'	=>0,
+							'is_current'	=>1,
+							'is_maingrade'	=>1,
 						);
 						$this->_name='rms_group_detail_student';
 						$this->insert($arr);
@@ -246,7 +246,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'degree'		=>$group_detail['degree'],
 									'grade'			=>$group_detail['grade'],
 									'academic_year'	=>$group_detail['academic_year'],
-				
 									'user_id'		=>$this->getUserId(),
 									'status'		=>1,
 									'date'			=>date('Y-m-d'),

@@ -259,6 +259,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
+    
     function getServiceTypeAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost(); 
@@ -457,6 +458,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$stuId = empty($data['student_id'])?0:$data['student_id'];
 			$rs = $db->getStudentinfoById($stuId);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	
+	function getfeestudyinfoAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rs = $db->getFeeStudyinfoById($data['study_year']);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}

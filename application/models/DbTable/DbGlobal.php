@@ -2374,6 +2374,18 @@ function getAllgroupStudyNotPass($action=null){
   					id DESC ";
   	return $db->fetchAll($sql);
   }
+  function getFeeStudyinfoById($fee_id){
+  	$db  = $this->getAdapter();
+  	$sql = " SELECT
+	  	t.academic_year AS id ,
+	  	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academic_year,
+	  	(SELECT title_kh FROM `rms_studytype` WHERE id=t.term_study LIMIT 1) AS session_type
+  	FROM
+	  	`rms_tuitionfee` as t
+	  	WHERE t.id=$fee_id LIMIT  1";
+  	return $db->fetchRow($sql);
+  }
+  
   function getExamTypeEngItems(){
   	
   	$currentLang = $this->currentlang();

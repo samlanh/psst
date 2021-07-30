@@ -72,7 +72,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$settingNewStuID = NEW_STU_ID_FROM_TEST;
 					if ($settingNewStuID==1){
-						//$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];
+						$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];
 					}
 					
 					$data['degreeStudent'] =$degreeStudent;//For Insert To Tale Count ID

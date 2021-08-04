@@ -57,7 +57,7 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$stuID=$data['id'];
 		$amount=$data['amount'];
-		$currency=$data['currency'];
+		$currency=@$data['currency'];
 		$bankTranID=$data['bank_transaction_id'];
 		$bankChannel=$data['channel'];
 		
@@ -67,7 +67,7 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 			if($tokendReq!=$TokenStr){
 				return $this->returnBadURL();
 			}
-			if(empty($bankTranID) OR empty($stuID) OR empty($amount) OR $amount<0){
+			if(empty($bankTranID) OR empty($stuID) OR empty($amount) OR empty($currency) OR $amount<0){
 				return $this->returnBadURL();
 			}
 			
@@ -75,8 +75,8 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 				
 			if($recordExist>0){
 				$result = array(
-						'status' =>404,
-						'message' =>'The bank transaction is existing',
+					'status' =>404,
+					'message' =>'The bank transaction is existing',
 				);
 			}else{
 				$rsStudent = $this->getStudentByStuCode($stuID);//get student study history

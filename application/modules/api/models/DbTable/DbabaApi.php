@@ -86,6 +86,7 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 					$academic = $rsStudent['academic_year'];
 					$degree = $rsStudent['degree'];
 					$grade = $rsStudent['grade'];
+					$stuID = $rsStudent['stu_id'];
 				}
 				$arr= array(
 						'stu_id'=>$stuID,

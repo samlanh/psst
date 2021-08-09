@@ -419,6 +419,78 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$where.=$dbp->getAccessPermission('s.branch_id');
 			return $_db->fetchAll($sql.$where.$orderby);
 	}
+	function getBankTranReport($search=null){
+		try{
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = $_db->getAccessPermission('bt.branch_id');
+				
+			$lang = $_db->currentlang();
+			if($lang==1){// khmer
+				$label = "name_kh";
+			}else{ // English
+				$label = "name_en";
+			}
+	
+			$db=$this->getAdapter();
+			$from_date =(empty($search['start_date']))? '1': "bt.date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "bt.date <= '".$search['end_date']." 23:59:59'";
+			
+			$sql=" SELECT
+					bt.id,
+					bt.bank_transaction_id,
+					s.stu_code,
+					s.stu_khname,
+					s.stu_enname,
+					s.last_name,
+					s.tel,
+					(SELECT name_en from rms_view where type=2 and key_code=s.sex) as sex,
+					(SELECT title FROM `rms_items` WHERE rms_items.id=bt.degree LIMIT 1 ) AS degree,
+					(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=bt.grade LIMIT 1) AS grade,
+					bt.amount,
+					bt.`date`,
+					bt.bank_transaction_id,
+					(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=bt.academic_year LIMIT 1) AS year
+			FROM
+				rms_student AS s,
+				rms_banktransaction AS bt
+			WHERE
+				s.stu_id = bt.stu_id
+			$branch_id  ";
+	
+			$where = " AND ".$from_date." AND ".$to_date;
+	
+			if(!empty($search['adv_search'])){
+				$s_where=array();
+				$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+				$s_where[] = " REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(last_name,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(bank_transaction_id,' ','') LIKE '%{$s_search}%'";
+				$s_where[]=	 " REPLACE(CONCAT(last_name,stu_enname),' ','') LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['branch_id'])){
+				//$where.= " AND bt.branch_id = ".$search['branch_id'];
+			}
+			
+			if(!empty($search['degree'])){
+				$where.= " AND bt.degree = ".$search['degree'];
+			}
+			if(!empty($search['grade_all'])){
+				$where.= " AND bt.grade = ".$search['grade_all'];
+			}
+			
+			if(!empty($search['stu_name'])){
+				$where.= " AND bt.stu_id = ".$search['stu_name'];
+			}
+			$order=" ORDER By bt.id DESC ";
+
+			return $db->fetchAll($sql.$where.$order);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 }
 
 

@@ -267,21 +267,22 @@
 				}
 			}
 			
-			$this->_name="rms_student";
-			$where="crm_id = ".$id;
-			if (!empty($detailId)){
-				$where.=" AND stu_id NOT IN ($detailId) ";
-			}
-			$this->delete($where);
 			
-			//delete crm student from group detail student
 			if (!empty($detailId)){
-				$this->_name="rms_group_detail_student";
-				$where=" AND stu_id NOT IN ($detailId) ";
+				$sql ="SELECT GROUP_CONCAT(stu_id) FROM rms_student WHERE stu_id NOT IN ($detailId) AND crm_id=".$id;
+				$stu_id = $_db->fetchOne($sql);
+				if(!empty($stu_id)){
+					$this->_name="rms_group_detail_student";
+					$where=" stu_id IN ($stu_id) ";
+					$this->delete($where);
+				}
+				
+				$this->_name="rms_student";
+				$where=" crm_id = ".$id;
+				$where.=" AND stu_id NOT IN ($detailId) ";
 				$this->delete($where);
 			}
-		
-				
+			
 			if (!empty($_data['identity'])){
 				$ids = explode(",", $_data['identity']);
 				foreach ($ids as $i){

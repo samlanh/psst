@@ -1,0 +1,213 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('TPT_BANKTRANSACTION'));
+	$form=new Registrar_Form_FrmSearchInfor();
+	$form->FrmSearchRegister();
+	Application_Model_Decorator::removeAllDecorator($form);
+	$frm=$form;
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('TPT_BANKTRANSACTION');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
+	<form action="" dojoType="dijit.form.Form" method="post">
+		<div class="form-group">
+       		<div class="col-md-3 col-sm-3 col-xs-12">
+       			<input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->adv_search['adv_search'];?>" type="text" >
+       		</div>
+       		<div class="col-md-3 col-sm-3 col-xs-12">
+       			<?php echo $frm->getElement("branch_id");?>
+       		</div>
+       		<div class="col-md-3 col-sm-3 col-xs-12">
+       			<?php echo $frm->getElement("degree");?>
+       		</div>
+			<div class="col-md-3 col-sm-3 col-xs-12">
+       			<input id="grade" />
+       		</div>
+       	</div>
+       	<div class="form-group">
+       		<div class="col-md-3 col-sm-3 col-xs-12">
+       			<?php echo $frm->getElement("start_date");?>
+       		</div>
+       		<div class="col-md-3 col-sm-3 col-xs-12">
+       			<?php echo $frm->getElement("end_date");?>
+       		</div>
+			<div class="col-md-3 col-sm-3 col-xs-12">
+       			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+						showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+       		</div>
+       	</div>
+	</form>
+<div id="divPrint">
+		<style>
+			a{text-decoration: none;color: 000;}
+			table {page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto; }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color:#000;
+				margin:0 auto;
+			}
+			table.content-data  tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #CCD9FF;
+				text-align: center;
+			}
+			table.content-data tr td{
+				padding: 2px;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}
+		</style>
+		<table width="100%">
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="15%" align="center">
+				</td>
+				<td align="center" width="70%">
+					<span style="padding-left: 0px; color:#000; font-size: 14px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('TPT_BANKTRANSACTION');?></span> 
+					<?php if(!empty($this->adv_search['start_date'])){?><div><?php echo date("d/m/Y",strtotime($this->adv_search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->adv_search['end_date']));?></div><?php }?>
+				</td>
+				<td width="15%" align="center"></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel">
+					<table class="content-data" align="center">
+						<thead>
+							<tr class="style-head" align="center">
+								<td><?php echo $tr->translate("N_O");?></td>
+								<td><?php echo $tr->translate("STUDENT_ID");?></td>
+								<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								<td><?php echo $tr->translate("EN_NAME");?></td>
+								<td><?php echo $tr->translate("SEX");?></td>
+								<td><?php echo $tr->translate("PHONE");?></td>
+								<td><?php echo $tr->translate("DEGREE");?></td>
+								<td><?php echo $tr->translate("GRADE");?></td>
+								<td><?php echo $tr->translate("TRAN_NO");?></td>
+								<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
+								<td><?php echo $tr->translate("DATE");?></td>
+							</tr>
+						</thead>
+						<?php 
+						$total=0;
+						$gender=array(1=>"Male",2=>"Female");
+						if(!empty($this->rsbank)){ 
+							foreach($this->rsbank as $key=>$rs){ $key=$key+1; 
+								$total = $total +$rs['amount'];
+							?>
+						<tr class="style-rowdata hover" style="border-bottom: 1px solid #000;" align="center" >
+							<td><?php echo $key; ?></td>
+							<td><?php echo $rs['stu_code']; ?></td>
+							<td><?php echo $rs['stu_khname']; ?></td>
+							<td><?php echo $rs['last_name'].' '.$rs['stu_enname']; ?></td>
+							<td align="left"><?php echo $rs['sex']; ?></td>
+							<td><?php echo $rs['tel']; ?></td>
+							<td><?php echo $rs['degree']; ?></td>
+							<td><?php echo $rs['grade']; ?></td>
+							<td><?php echo $rs['bank_transaction_id']; ?></td>
+							<td><strong>$ <?php echo number_format($rs['amount'],2); ?></strong></td>
+							<td><?php echo date("d/m/Y",strtotime($rs['date'])); ?></td>
+						</tr>
+						<?php
+							}
+						}
+						?>
+					</table>
+					<table align="right" style="font-family:'Times New Roman','Khmer OS Battambang';">
+						  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+							<td style="width:146px; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
+						  </tr>
+					 </table>
+				</td>
+			</tr>
+			<tr >
+				<td colspan="3" width="100%">
+					<?php echo $this->rsfooteracc;?>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</div>
+<script type="text/javascript">
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	
+	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dojo.ready(function(){
+
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "grade",
+			name: "grade",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			onChange: function() {  
+
+			}
+		}, "grade");
+		getallGrade();
+	});
+	var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
+	
+
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){return false;}
+	dojo.xhrPost({
+		url:url_dept,
+		content:{
+			'dept_id':dept_id,
+			'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);   
+			//dijit.byId('grade').attr('value','<?php //echo $this->adv_search['grade']?>');  
+		},
+		error: function(err) {
+		}
+	});
+}
+</script>

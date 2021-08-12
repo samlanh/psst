@@ -126,7 +126,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$academicYear = empty($rowFeeInfo['academic_year'])?0:$rowFeeInfo['academic_year'];
 			$stopType = 0;
 			$isCurrent=0;
-			if ($_data['change_type']==3){
+			if($_data['change_type']==3){
 				$stopType = $_data['change_type'];//ឆ្លងភូមិសិក្សា
 				$isCurrent=1;
 			}
@@ -182,6 +182,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					$this->update($stu, $where);
 					
 					if ($stopType==3){//ឆ្លងភូមិសិក្សា
+						$newStuId = '';
+						if(!empty($_data['stu_id_'.$k])){
+							$newStuId = $this->duplicateStudent($_data['stu_id_'.$k]);
+						}
+						
 						$this->_name = 'rms_student_fee_history';
 						$data_gro = array(
 							'is_current'=> 0,
@@ -189,22 +194,25 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$where = 'student_id = '.$_data['stu_id_'.$k]." AND is_current=1";
 						$this->update($data_gro, $where);
 						
-						$arr = array(
-							'user_id'			=>$this->getUserId(),
-							'branch_id'			=>$_data['branch_id'],
-							'student_id'		=>$_data['stu_id_'.$k],
-							'status'			=>1,
-							'academic_year'		=>$academicYear,
-							'fee_id'			=>$feeId,
-							'is_current'		=>1,
-							'create_date'		=>date("Y-m-d H:i:s"),
-							'modify_date'		=>date("Y-m-d H:i:s"),
-						);
-						$this->_name='rms_student_fee_history';
-						$feeHistortyId = $this->insert($arr);
+						if(!empty($feeId)){
+							$arr = array(
+								'user_id'			=>$this->getUserId(),
+								'branch_id'			=>$_data['branch_id'],
+								'student_id'		=>$newStuId,//$_data['stu_id_'.$k],
+								'status'			=>1,
+								'academic_year'		=>$academicYear,
+								'fee_id'			=>$feeId,
+								'is_current'		=>1,
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+							);
+							$this->_name='rms_student_fee_history';
+							$this->insert($arr);
+						}
+						
 						
 						$arr=array(
-							'stu_id'		=>$_data['stu_id_'.$k],
+							'stu_id'		=>$newStuId,//$_data['stu_id_'.$k],
 							'group_id'		=>0,
 							'session'		=>0,
 							'degree'		=>$_data['degree'],
@@ -290,6 +298,144 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
 		}
+	}
+	function duplicateStudent($stu_id){
+		$db = $this->getAdapter();
+		//user_id
+		//create_date
+		$userId = $this->getUserId();
+		$sql="INSERT INTO rms_student(
+							branch_id,
+							stu_code,
+							stu_khname,
+							last_name,
+							stu_enname,
+							sex,
+							is_stu_new,
+							nationality,
+							nation,
+							dob,
+							tel,
+							primary_phone,
+							pob,
+							home_num,
+							street_num,
+							village_name,
+							commune_name,
+							district_name,
+							province_id,
+							father_enname,
+							father_dob,
+							father_nation,
+							father_job,
+							father_phone,
+							mother_enname,
+							mother_dob,
+							mother_nation,
+							mother_job,
+							mother_phone,
+							guardian_enname,
+							guardian_dob,
+							guardian_nation,
+							guardian_job,
+							guardian_tel,
+							lang_level,
+							from_school,
+							know_by,
+							sponser,
+							sponser_phone,
+							status,
+							remark,
+							photo,
+							customer_type,
+							date_bacc,
+							province_bacc,
+							center_bacc,
+							room_bacc,
+							table_bacc,
+							grade_bacc,
+							score_bacc,
+							certificate_bacc,
+							scholarship_id,
+							scholarship_amt,
+							scholar_fromdate,
+							scholar_todate,
+							calture,
+							father_photo,
+							mother_photo,
+							guardian_photo,
+							create_date,
+							user_id,
+							is_setstudentid
+							)
+						SELECT	
+							branch_id,
+							stu_code,
+							stu_khname,
+							last_name,
+							stu_enname,
+							sex,
+							is_stu_new,
+							nationality,
+							nation,
+							dob,
+							tel,
+							primary_phone,
+							pob,
+							home_num,
+							street_num,
+							village_name,
+							commune_name,
+							district_name,
+							province_id,
+							father_enname,
+							father_dob,
+							father_nation,
+							father_job,
+							father_phone,
+							mother_enname,
+							mother_dob,
+							mother_nation,
+							mother_job,
+							mother_phone,
+							guardian_enname,
+							guardian_dob,
+							guardian_nation,
+							guardian_job,
+							guardian_tel,
+							lang_level,
+							from_school,
+							know_by,
+							sponser,
+							sponser_phone,
+							status,
+							remark,
+							photo,
+							customer_type,
+							date_bacc,
+							province_bacc,
+							center_bacc,
+							room_bacc,
+							table_bacc,
+							grade_bacc,
+							score_bacc,
+							certificate_bacc,
+							scholarship_id,
+							scholarship_amt,
+							scholar_fromdate,
+							scholar_todate,
+							calture,
+							father_photo,
+							mother_photo,
+							guardian_photo,
+							NOW(),
+							$userId,
+							0
+							
+					FROM rms_student WHERE stu_id=$stu_id LIMIT 1";
+		 $db->query($sql);
+		return $db->lastInsertId();
+		
 	}
 	
 	function getGroupDetail($group_id){

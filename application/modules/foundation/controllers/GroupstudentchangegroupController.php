@@ -31,7 +31,6 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'academic'=>$link,'grade'=>$link,'session'=>$link,'to_group_code'=>$link));
 			$this->view->adv_search = $search;
 			
-			
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

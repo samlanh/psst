@@ -442,7 +442,14 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					s.stu_khname,
 					s.stu_enname,
 					s.last_name,
-					s.tel,
+					
+					CASE
+								WHEN s.primary_phone = 1 THEN s.tel
+								WHEN s.primary_phone = 2 THEN s.father_phone
+								WHEN s.primary_phone = 3 THEN s.mother_phone
+								ELSE s.guardian_tel
+						END as tel,
+						
 					(SELECT name_en from rms_view where type=2 and key_code=s.sex) as sex,
 					(SELECT title FROM `rms_items` WHERE rms_items.id=bt.degree LIMIT 1 ) AS degree,
 					(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=bt.grade LIMIT 1) AS grade,

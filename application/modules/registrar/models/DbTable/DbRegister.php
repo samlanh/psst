@@ -57,6 +57,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$customer_type=1;
 				if($data['student_type']==1){//existing student
 					$rs_stu = $gdb->getStudentinfoById($stu_id);
+					
+					if($rs_stu['is_setstudentid']==0 AND !empty($data['student_code'])){
+						$arr = array(
+							'stu_code'=>$data['student_code'],
+							'is_setstudentid'=>1,
+						);
+						$this->_name='rms_student';
+						$where="stu_id = ".$stu_id;
+						$this->update($arr, $where);
+					}
+					
 				}elseif($data['student_type']==2){//testing student
 					$rs_stu = $gdb->getStudentTestinfoById($stu_id);
 					$arr = array(
@@ -99,7 +110,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
 						}
 						
-						
 						$_arr= array(
 								'branch_id'		=>$data['branch_id'],
 								'user_id'		=>$this->getUserId(),
@@ -134,8 +144,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}elseif($data['student_type']==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
 					$rs_stu = $gdb->getStudentBalanceInfoById($stu_id);
 					$arrStuBalance = array(
-							'is_balance' =>0,
-							'modify_date'=>date("Y-m-d H:i:s"),
+						'is_balance' =>0,
+						'modify_date'=>date("Y-m-d H:i:s"),
 					);
 					$this->_name='rms_student_balance';
 					$whereStuBalance="id = ".$data['studentBalanceId'];
@@ -181,9 +191,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'paystudent_type'=> $rs_stu['is_stu_new'],
 					'degree'		=> $rs_stu['degree'],
 					'grade'			=> $rs_stu['grade'],
-// 					'session'		=> $rs_stu['session'],
-// 					'room_id'		=> $rs_stu['room'],
-// 					'group_id'      => $rs_stu['group_id'],
 					'degree_culture'=> $rs_stu['calture'],
 				);
 				$paymentid = $this->insert($arr);

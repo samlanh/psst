@@ -138,7 +138,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	}
 	
 	public function editStudentGroup($_data,$id){
-		//print_r($_data);exit();
 		$db = $this->getAdapter();
 		$rr = $this->getStudentGroup($id);
 		$this->_name='rms_student';

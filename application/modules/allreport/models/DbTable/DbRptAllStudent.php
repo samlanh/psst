@@ -300,7 +300,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
-    public function getAmountStudent($acadmic_year=null){//count to dashboard
+/*
+	public function getAmountStudent($acadmic_year=null){//count to dashboard
     	$db = $this->getAdapter();
     	$sql="SELECT COUNT(sg.`stu_id`) 
 					FROM
@@ -342,12 +343,46 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission('s.branch_id');
     	return $db->fetchOne($sql.$where);
     }
+*/
+	public function getAmountStudent($acadmic_year=null){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql="SELECT COUNT(sg.`stu_id`) 
+					FROM
+						rms_student AS s,
+					   `rms_group_detail_student` AS sg 
+					WHERE 
+						s.status=1 
+						AND sg.stop_type=0
+						AND s.customer_type=1 
+						AND s.stu_id =sg.`stu_id` 
+						  ";
+    	$where='';
+    	if (!empty($acadmic_year)){
+    	$where.=" AND sg.academic_year = ".$acadmic_year;
+    	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
+    	return $db->fetchOne($sql.$where);
+    }
     public function getAmountNewStudent(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(stu_id) FROM rms_student';
-    	$where=' WHERE status=1 AND is_stu_new=1 AND customer_type=1 AND is_subspend=0';
+    	//$sql ='SELECT COUNT(stu_id) FROM rms_student';
+    	//$where=' WHERE status=1 AND is_stu_new=1 AND customer_type=1 AND is_subspend=0';
+		
+		$sql="SELECT COUNT(sg.`stu_id`) 
+					FROM
+						rms_student AS s,
+					   `rms_group_detail_student` AS sg 
+					WHERE 
+						s.status=1 
+						AND sg.stop_type=0
+						AND s.customer_type=1 
+						AND sg.is_newstudent=1 
+						AND s.stu_id =sg.`stu_id` 
+						  ";
+    	$where='';
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	return $db->fetchOne($sql.$where);
     }   
     public function getAmountDropStudent(){//count to dashboard

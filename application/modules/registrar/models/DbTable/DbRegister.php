@@ -295,6 +295,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 										and set.subpro_id = lo.pro_id
 										and set.pro_id = ".$rs_item['id']."
 										and lo.brand_id = ".$data['branch_id'];
+							$sql.=" GROUP BY set.subpro_id ORDER BY set.id ASC ";
 							$result = $db->fetchAll($sql);
 							if(!empty($result)){
 								foreach ($result as $row){

@@ -1,0 +1,374 @@
+body{
+	width:100%;
+	height:100%;
+	background:#fff;
+	overflow:hidden;
+	background: url('background/background-2.png') no-repeat;
+	background-size: 100%;
+	background-position: top center;
+	max-height: 1200px;
+}
+/*
+====
+Start Logo Content
+====
+*/
+.logo-content {
+	padding: 38px 0;
+	/* background: #ffffff; */
+	/* border-bottom: solid 5px #030b69; */
+}
+.logo-content ul {
+	margin: 0;
+	padding: 0;
+}
+.logo-content ul li {
+	display: inline-block;
+	color: #ffffff;
+	padding: 2px;
+	vertical-align: middle;
+}
+.logo-content .logo img {
+	height: 80px;
+}
+/*
+====
+End Logo Content
+====
+*/
+
+
+/*
+====
+Start Content Botton Home
+====
+*/
+.content-login, .content-button {
+		width: 100%;
+		padding: 20px 5px;
+}
+.content-button .row.row-button {
+	padding: 0 90px;
+}
+div.row-button a.btn.button-scan {
+	width: 100%;
+	background: #ccc;
+	padding: 30px 0;
+	color: #fff;
+	margin: 5px 0px;
+}
+div.row-button a.btn.button-scan.scan-receive {
+	background: #008554;
+}
+div.row-button a.btn.button-scan.scan-view {
+	background: #c59b02;
+}
+div.row-button a.btn.button-scan.scan-close {
+	background: #9c000f;
+}
+div.row-button a.btn.button-scan span.glyphicon {
+	font-size: 34px;
+}
+/*
+====
+End Content Botton Home
+====
+*/
+			
+/*
+====
+Start Content Scanning
+====
+*/		
+.main-content-scan {
+    padding: 0 15px;
+    padding: 0;
+}	
+.panel-info>.panel-heading {
+	background: none;
+	border: none;
+	    display: none;
+}
+.panel-body.text-center {
+    padding: 0;
+    margin: 0;
+}
+.panel.panel-info.panel-scan {
+    margin: 0;
+    padding: 0;
+}
+.navbar-form.navbar-right {
+width: 100%;
+}
+select#camera-select {
+	width: 100%;
+}
+.form-group.display-none {
+	display: none;
+}
+div.well {
+	background: #010127;
+	margin: 0;
+}
+			
+.thumbnail {
+    border: 0;
+}
+
+div#result {
+    display: none;
+}
+
+#webcodecam-canvas, #scanned-img {
+    background-color: #2d2d2d;
+}
+
+#camera-select {
+    display: inline-block;
+    width: auto;
+}
+
+.btn {
+    margin-bottom: 2px;
+}
+
+.form-control {
+    height: 32px;
+}
+
+.h4, h4 {
+    width: auto;
+    float: left;
+    font-size: 20px;
+    line-height: 1.1;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.controls {
+    float: right;
+    display: inline-block;
+}
+
+.well {
+    position: relative;
+    display: inline-block;
+    /* width: 100%; */
+}
+canvas#webcodecam-canvas {
+    width: 100%;
+}
+/*
+.panel-scan .panel-heading {
+    padding: 20px 0;
+    display: inline-block;
+    width: 100%;
+}
+*/
+.panel-scan .panel-heading .form-control {
+    width: 100% !important;
+    height: 40px;
+}
+.container {
+    width: 100%
+}
+
+pre {
+    border: 0;
+    border-radius: 0;
+    background-color: #333;
+    margin: 0;
+    line-height: 125%;
+    color: whitesmoke;
+}
+
+button {
+    outline: none !important;
+}
+
+.table-bordered {
+    color: #777;
+    cursor: default;
+}
+
+.table-bordered a:hover {
+    text-decoration: none;
+}
+
+.table-bordered th a {
+    float: right;
+    line-height: 3.49;
+}
+
+.table-bordered td a {
+    float: left;
+}
+
+.table-bordered th img {
+    float: left;
+}
+
+.table-bordered th, .table-bordered td {
+    vertical-align: middle !important;
+}
+
+.scanner-laser {
+    position: absolute;
+    margin: 40px;
+    height: 30px;
+    width: 30px;
+    opacity: 0.5;
+}
+
+.laser-leftTop {
+    top: 0;
+    left: 0;
+    border-top: solid red 5px;
+    border-left: solid red 5px;
+}
+
+.laser-leftBottom {
+    bottom: 0;
+    left: 0;
+    border-bottom: solid red 5px;
+    border-left: solid red 5px;
+}
+
+.laser-rightTop {
+    top: 0;
+    right: 0;
+    border-top: solid red 5px;
+    border-right: solid red 5px;
+}
+
+.laser-rightBottom {
+    bottom: 0;
+    right: 0;
+    border-bottom: solid red 5px;
+    border-right: solid red 5px;
+    JS
+}
+
+#webcodecam-canvas {
+    background-color: #272822;
+}
+#scanned-QR{
+    word-break: break-word;
+}
+
+/*
+====
+End Content Scanning
+====
+*/		
+
+/*
+====
+Start Content Profile Student
+====
+*/		
+.profile_details {
+    width: 100%;
+    height: 80%;
+    padding: 40px 10px;
+    position: relative;
+}
+.bg-style-drop {
+   /* height: 80%;
+    width: 35%;
+    position: absolute;
+    left: 30%;
+    opacity: 0.1;
+    top: 30px;
+	*/
+   height: 60%;
+   width: 100%;
+   position: absolute;
+   left: 0;
+   opacity: 0.3;
+   top: 0;
+   z-index: 1;
+   height: 100%;
+   width: 35%;
+   position: absolute;
+   left: 30%;
+   top: 0;
+}
+.resume-wrap {
+    background: #fff;
+    padding: 30px;
+    margin-bottom: 50px;
+    position: relative;
+    box-shadow: 3px 10px 5px 2px #02014a1c;
+    border: solid 1px #030b69;
+}
+.icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #030b69;
+    position: relative;
+    margin-top: -60px;
+    margin-bottom: 20px;
+}
+.icon i.fa {
+    position: absolute;
+    font-size: 40px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #fff;
+}
+.profile_details h2 {
+    font-size: 24px;
+    font-weight: 600;
+    /* margin: 10px 0; */
+    color: #030b69;
+}
+.profile_details p {
+    font-size: 26px;
+    color: #02014a;
+}
+.profile_details ul.list-unstyled {
+    font-size: 16px;
+    line-height: 28px;
+}
+.profile_details img.img-circle {
+    width: 70%;
+    padding: 0;
+    text-align: center;
+    display: initial;
+    border-radius: 5px;
+}
+
+.content-footer {
+    position: fixed;
+    bottom: 0;
+    background: #030959;
+    padding: 10px;
+    color: #ffffff;
+    border-top: solid 3px #310fea;
+    /* border-bottom: solid 3px #ea970f; */
+}
+
+.backImage {
+    border-radius: 5px;
+    width: 50%;
+    height: 70%;
+    padding: 0;
+    text-align: center;
+    display: block;
+    background: #030b69;
+    position: absolute;
+    top: -19px;
+    left: 50px;
+    z-index: -1;
+}
+/*
+====
+End Content Profile Student
+====
+*/		
+

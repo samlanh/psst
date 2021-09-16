@@ -255,6 +255,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				else
 					$string = "Image Upload failed";
 			}
+			
+			
+			
 			try{	
 				$_data['degreeStudent'] =$degree_id;//For Insert To Tale Count ID
 				$dbg->updateAmountStudetByDegree($_data);//For Insert To Tale Count ID
@@ -328,6 +331,20 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						);
 				if (EDUCATION_LEVEL==1){
 					$_arr['calture'] = $_data['calture'];
+				}
+				
+				$partAudio= PUBLIC_PATH.'/images/frontFile/audio/';
+				if (!file_exists($partAudio)) {
+					mkdir($partAudio, 0777, true);
+				}
+				$audiofileName = $_FILES['audiofile']['name'];
+				if (!empty($audiofileName)){
+					$tem =explode(".", $audiofileName);
+					$newFileName = "audio_".date("Y").date("m").date("d").time().".".end($tem);
+					$tmp = $_FILES['audiofile']['tmp_name'];
+					if(move_uploaded_file($tmp, $partAudio.$newFileName)){
+						$_arr['audioTitle']=$newFileName;
+					}
 				}
 				
 				$part= PUBLIC_PATH.'/images/photo/';
@@ -574,6 +591,20 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$tmp = $_FILES['photo']['tmp_name'];
 				if(move_uploaded_file($tmp, $part.$image_name)){
 					$_arr['photo']=$image_name;
+				}
+			}
+			
+			$partAudio= PUBLIC_PATH.'/images/frontFile/audio/';
+			if (!file_exists($partAudio)) {
+				mkdir($partAudio, 0777, true);
+			}
+			$audiofileName = $_FILES['audiofile']['name'];
+			if (!empty($audiofileName)){
+				$tem =explode(".", $audiofileName);
+				$newFileName = "audio_".date("Y").date("m").date("d").time().".".end($tem);
+				$tmp = $_FILES['audiofile']['tmp_name'];
+				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
+					$_arr['audioTitle']=$newFileName;
 				}
 			}
 			

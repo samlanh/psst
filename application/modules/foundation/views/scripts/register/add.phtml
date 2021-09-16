@@ -62,6 +62,13 @@ table#table_row_study tr td {
 table#table_row_study {
     width: 100%;
 }
+
+.form-group.audioBlog{
+	padding: 10px;
+    background: #02014a;
+    color: #fff;
+    border-radius: 10px;
+}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div class="card">
@@ -305,6 +312,15 @@ table#table_row_study {
 										
 				                   </div>
 				                </div>
+								<div class="form-group audioBlog">
+					                <label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("AUDIO");?>
+				                   </label>
+				                  <div class="col-md-9 col-sm-9 col-xs-12">
+										<input type='file' id="audiofile" name="audiofile" accept="audio/*" placeholder="" class="profile-aud">
+								   </div>
+				                
+									<div id="app"></div>
+								</div>
 				            </div>
 			            </div>
 			            
@@ -2156,3 +2172,119 @@ date_format = '"dd/MM/yyyy"';
 </script>
 <script src="<?php echo $this->baseUrl()."/webcam/scripttakephoto.js"?>"></script>
 <link href="<?php echo $this->baseUrl();?>/webcam/scripttakephoto.css" rel="stylesheet">
+
+<script>
+<?php 
+$successAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+?>
+var h = '<audio id="audioPlay" controls  src="<?php echo $successAudio;?>"></audio>'
+
+$('#app').html(h)
+$('audio').on('abort',function(){
+  console.log('abort')
+})
+
+$('audio').on('canplay',function(){
+  console.log('canplay')
+})
+
+$('audio').on('canplaythrough',function(){
+  console.log('canplaythrough')
+})
+
+$('audio').on('durationchange',function(){
+  console.log('durationchange')
+})
+
+$('audio').on('emptied',function(){
+  console.log('emptied')
+})
+
+$('audio').on('ended',function(){
+  console.log('ended')
+})
+
+$('audio').on('error',function(){
+  console.log('error')
+})
+
+$('audio').on('loadeddata',function(){
+  console.log('loadeddata')
+})
+
+$('audio').on('loadedmetadata',function(){
+  console.log('loadedmetadata')
+})
+
+$('audio').on('loadstart',function(){
+  console.log('loadstart')
+})
+
+$('audio').on('pause',function(){
+  console.log('pause')
+})
+
+$('audio').on('play',function(){
+  console.log('play')
+})
+
+$('audio').on('playing',function(){
+  console.log('playing')
+})
+
+$('audio').on('progress',function(){
+  console.log('progress')
+})
+
+$('audio').on('ratechange',function(){
+  console.log('ratechange')
+})
+
+$('audio').on('seeked',function(){
+  console.log('seeked')
+})
+
+$('audio').on('seeking',function(){
+  console.log('seeking')
+})
+
+$('audio').on('stalled',function(){
+  console.log('stalled')
+})
+
+$('audio').on('suspend',function(){
+  console.log('suspend')
+})
+
+$('audio').on('timeupdate',function(){
+  console.log('timeupdate')
+})
+
+$('audio').on('volumechange',function(){
+  console.log('volumechange')
+})
+
+$('audio').on('waiting',function(){
+  console.log('waiting')
+})
+
+
+function readURLAudio(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#audioPlay').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+var maxSize = 0;
+$("#audiofile").change(function(){
+	readURLAudio(this);
+});
+
+
+document.getElementById("audiofile").addEventListener("change", handleFiles, false);
+
+</script>

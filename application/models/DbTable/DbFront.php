@@ -19,7 +19,7 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 					$colunmname='title';
 				}
 				$sql ="SELECT  s.*,
-							CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS fullNameEng,
+							CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullNameEng,
 							CASE
 								WHEN primary_phone = 1 THEN s.tel
 								WHEN primary_phone = 2 THEN s.father_phone

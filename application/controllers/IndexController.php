@@ -625,6 +625,11 @@ class IndexController extends Zend_Controller_Action
     	
     	$this->_helper->layout()->disableLayout();
 	}
+	public function scanByscannerAction()
+    {
+    	
+    	$this->_helper->layout()->disableLayout();
+	}
 	public function scanningcodeAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();

@@ -1,0 +1,271 @@
+<?php
+	
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+	$school_khname = $tr->translate('SCHOOL_NAME');
+	$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
+		
+	$branch_id=1;
+	$db = new Application_Model_DbTable_DbGlobal();
+	$rs = $db->getBranchInfo($branch_id);
+	if(!empty($rs)){
+		$school_khname = $rs['school_namekh'];
+		$school_name = $rs['school_nameen'];
+	}
+	$this->headTitle($tr->translate("SCAN_SHOUT_OUT")." | ".$school_khname); 
+	echo $this->headTitle();
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- Meta, title, CSS, favicons, etc. -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>	
+		<!-- Bootstrap -->
+		<link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		
+		<!-- Font Awesome -->
+		<link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		
+		<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
+		
+		<link href="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->baseUrl()."/datatable/"?>responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+		<script src="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.js" type="text/javascript"></script>
+		<script src="<?php echo $this->baseUrl()."/datatable/"?>dataTables.responsive.min.js" type="text/javascript"></script>
+		
+		<!-- Custom Theme Style -->
+		<link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
+			
+		<script src="<?php echo $this->baseUrl()."/templates/";?>plugin/1.11.3/jquery.min.js"></script>
+		<style>
+		
+		.overlay-front { display:none; position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: 1;}
+		.overlay-load-front{
+				margin: auto;
+				top: 0px;
+				bottom: 0px;
+				position: absolute;
+				left: 0px;
+				right: 0px;
+				text-align: center;
+				   background: #fff url("<?php echo $this->baseUrl()?>/templates/plugin/webcodecamjs/css/gif/psisloading.gif");
+				      background-repeat: no-repeat;
+					width: 200px;
+					height: 200px;
+					background-size: 100%;
+		}
+		
+		.inputScanner {
+			position: absolute;
+			width: 100%;
+			z-index: 2;
+		}
+		.inputScanner input.inputScannerValue {
+			width: 100%;
+			background: none;
+			height: 100%;
+			border: none;
+			color: #eee0;
+			font-size: 20px;
+			
+		}
+
+		.inputScanner {
+			position: absolute;
+			width: 100%;
+			z-index: 7;
+			top: 0;
+			height: 100%;
+		}
+		
+
+		</style>
+	</head>
+	<body>
+		<div class="overlay-front">
+			<div class="overlay-load-front">
+				
+			</div>
+		</div>
+		<?php 
+			$youTubeLink="https://www.youtube.com/watch?v=1H_S_0IWsRc";
+			$step1=explode('v=', $youTubeLink);
+			$step2 =explode('&',$step1[1]);
+			$vedio_id = $step2[0];
+		?>
+		<div class="youTubeBlog" >
+			<iframe src="http://www.youtube.com/embed/<?php echo $vedio_id;?>?rel=0&amp;autoplay=1&mute=1&loop=1&playlist=<?php echo $vedio_id;?>" frameborder="0" style="position:absolute;width:100%;height:100%;left:0"  allowfullscreen></iframe>
+		</div>
+		<div class="container body-key mainCotentBlog">
+			<div class="main_container">
+				<?php 
+						echo $this->render('bloglogo.phtml');
+					?>
+				<div class="main-content-scan"  >
+					
+					<div class="row">
+							
+							
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="profile_details" >
+										<div class="col-md-4 col-sm-4 col-xs-12 text-center">
+											<?php 
+											$photo = $this->baseUrl()."/images/no-profile.png";
+											$photo = $this->baseUrl()."/images/profile_202012021606875720.jpg";
+												
+											?>
+										  <img id="stuImageProfile" src="<?php echo $photo;?>" alt="" class="img-circle img-responsive">
+										  <div class="backImage">&nbsp;</div>
+										</div>
+										<div class="col-md-8 col-sm-8 col-xs-12" style="position:relative;">
+											<div class="bg-style-drop" style="background: url(/camappgit/psst/public/images/logo.png);   background-repeat: no-repeat; background-size: 100%;"></div>
+											<div class="resume-wrap">
+												<div class="w-100">
+													<div class="icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
+												</div>
+												  <h2 id="stuNameKh">សម្បត្តិ លីវីណា</h2>
+												  <h2 id="stuNameEng">Livyna Sambath</h2>
+												  <p><strong><?php echo $tr->translate("STUDENT_CODE")?>: </strong> <span id="stuNameCode">P00457</span> </p>
+												  <ul class="list-unstyled">
+													<li><i class="fa fa-graduation-cap"></i> <?php echo $tr->translate("ACADEMIC_YEAR")?>: <span id="academicYear">2020-2021</span></li>
+													<li><i class="fa fa-magic"></i> <?php echo $tr->translate("DEGREE")?>: <span id="stuDegree">Primary</span></li>
+													<li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <span id="stuGrade">Grade 3C</span></li>
+													<li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <span id="primaryPhone">012 642 243</span></li>
+												  </ul>
+											</div>
+											
+										  
+										</div>
+								</div>
+							</div>
+								
+							<div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="content-footer">
+					<?php $successAudio = $this->baseUrl()."/images/frontFile/audio/GTA_San_Andreas_Mission_Failed_sound.mp3";?>
+					<audio id="successAudio" src="<?php echo $successAudio;?>" type="audio/ogg"></audio>    
+					<marquee>
+					សូមស្វាគមន៍ការមកកាន់សាលាបញ្ញាសាស្រ្តអន្តរជាតិ សាខាសែនសុខ :  📣 ប្អូនៗនឹងទទួលបានអាហារូបករណ៍ ១៥%​ លេីថ្លៃសិក្សា​ សម្រាប់ការចុះឈ្មោះ ចាប់ពីថ្ងៃនេះ រហូតដល់ថ្ងៃទី​ ២១​ ខែកញ្ញា​ ឆ្នាំ២០២១​ ខាងមុខនេះ​។ ⏰​ វគ្គសិក្សាថ្មី កម្មវិធីភាសាអង់គ្លេស (ក្រៅម៉ោង)​ ​​នឹងចូលរៀននៅថ្ងៃទី ២៧​ ខែកញ្ញា​ ឆ្នាំ២០២១។ បញ្ជាក់៖​ ការផ្តល់ជូនពិសេសនេះ សម្រាប់តែការចុះឈ្មោះចូលរៀននៅសាខាសែនសុខ តែប៉ុណ្ណោះ។
+					</marquee>
+				</div>
+				
+			</div>
+		</div>
+		
+		<div class="inputScanner">
+			<input type="text" class="inputScannerValue" id="SanningValue" name="SanningValue" value="">
+		</div>					
+		<script>
+	var urlpart = "<?php echo $this->baseUrl();?>";
+	var urlgo = '<?php echo $this->url(array('module'=>'','controller' => 'index','action' => 'scanningcode'));?>';
+	</script>
+	<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
+	<script>
+	$(document).ready(function() {
+		$('#SanningValue').focus();
+		
+		/*$("#SanningValue").blur(function(){
+				var sanningValue = $("#SanningValue").val();
+			   if( sanningValue !="" ) {
+					scanDo(sanningValue);
+					$("#SanningValue").val("");
+					$('#SanningValue').focus();
+					return false;
+			   }
+		});*/
+		$('#SanningValue').keypress(function (e) {
+		  if (e.which == 13) {
+			  var sanningValue = $("#SanningValue").val();
+			   if( sanningValue !="" ) {
+					scanDo(sanningValue);
+					$("#SanningValue").val("");
+					$('#SanningValue').focus();
+					return false;
+			   }
+		  }
+		});
+		$(".youTubeBlog").css("display", "block");
+		$(".mainCotentBlog").css("display", "none");
+	});
+
+	function scanDo(keyword){
+		//$( "#messagescan" ).html('');
+		loadingFront();
+		$.ajax({
+			url: urlgo,
+			data: {keyword: keyword,scantype: 1},
+			type: "POST",
+			dataType: "json",
+			success:function(data){
+				if(data.statusReturn==1){
+					
+					sourceUrl = urlpart+"/images/frontFile/audio/no_sound.mp3";
+					if( data.audioTitle !="" ) {
+						sourceUrl = urlpart+'/images/frontFile/audio/'+data.audioTitle;
+					}
+					$("#successAudio").attr("src", sourceUrl);
+					
+					sourceImgUrl = urlpart+'/images/no-profile.png';
+					if( data.photo !="" ) {
+						sourceImgUrl = urlpart+'/images/photo/'+data.photo;
+					}
+					$("#stuImageProfile").attr("src", sourceImgUrl);
+					
+					$( "#stuNameKh" ).html(data.stu_khname);
+					$( "#stuNameEng" ).html(data.fullNameEng);
+					$( "#stuNameCode" ).html(data.stu_code);
+					$( "#academicYear" ).html(data.academic_year);
+					$( "#stuDegree" ).html(data.degree);
+					$( "#stuGrade" ).html(data.grade);
+					$( "#primaryPhone" ).html(data.tel);
+					
+					$(".youTubeBlog").css("display", "none");
+					$(".mainCotentBlog").css("display", "block");
+					$('#successAudio').get(0).play();
+					
+					setTimeoutReload();
+				}else{
+					$(".youTubeBlog").css("display", "block");
+					$(".mainCotentBlog").css("display", "none");
+					
+					sourceUrl = urlpart+'/images/frontFile/audio/GTA_San_Andreas_Mission_Failed_sound.mp3';
+					$("#successAudio").attr("src", sourceUrl);
+					$('#successAudio').get(0).play();
+				}
+				hideloadingFront();
+			}
+
+		});
+	}
+	function loadingFront(){
+		$(".overlay-front").css("display", "block");
+	}
+	function hideloadingFront(){
+		setTimeout(function () {
+	        $(".overlay-front").css("display", "none");
+	    }, 5000);
+		
+		
+	}
+	function setTimeoutReload(){
+		setTimeout(function () {
+			loadingFront();
+	       $(".youTubeBlog").css("display", "block");
+			$(".mainCotentBlog").css("display", "none");
+			hideloadingFront();
+	    }, 35000);
+		
+	}
+	</script>
+	</body>
+</html>

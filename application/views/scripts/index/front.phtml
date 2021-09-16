@@ -1,0 +1,83 @@
+<?php
+	
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+	$school_khname = $tr->translate('SCHOOL_NAME');
+	$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
+		
+	$branch_id=1;
+	$db = new Application_Model_DbTable_DbGlobal();
+	$rs = $db->getBranchInfo($branch_id);
+	if(!empty($rs)){
+		$school_khname = $rs['school_namekh'];
+		$school_name = $rs['school_nameen'];
+	}
+	$this->headTitle($tr->translate("HOMEPAGE")." | ".$school_khname); 
+	echo $this->headTitle();
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- Meta, title, CSS, favicons, etc. -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>	
+		<!-- Bootstrap -->
+		<link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		
+		<!-- Font Awesome -->
+		<link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		
+		<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
+		
+		<link href="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->baseUrl()."/datatable/"?>responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+		<script src="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.js" type="text/javascript"></script>
+		<script src="<?php echo $this->baseUrl()."/datatable/"?>dataTables.responsive.min.js" type="text/javascript"></script>
+		
+		<!-- Custom Theme Style -->
+		<link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
+			
+		<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
+		
+	</head>
+	<body>
+		<div class="container body-key" >
+			<div class="main_container">
+				<?php 
+						echo $this->render('bloglogo.phtml');
+					?>
+				<div class="row">
+					<div class="content-button">
+						<div class="row row-button">
+							<div class="col-12 col-sm-4 col-md-4">
+								<a class="btn button-scan scan-receive" href="<?php echo $this->baseUrl()."/index/scan-shoutout"?>">
+									<span class="glyphicon glyphicon-qrcode"></span><br />
+									<?php echo $tr->translate("SCAN_SHOUT_OUT")?>
+								</a>
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								<a class="btn button-scan scan-view" href="<?php echo $this->baseUrl()."/index/scan-view"?>">
+									<span class="glyphicon glyphicon-qrcode"></span><br />
+									<?php echo $tr->translate("SCAN_VIEW_INFO")?>
+								</a>
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								<a class="btn button-scan scan-close" href="<?php echo $this->baseUrl()."/index/scan-close"?>">
+									<span class="glyphicon glyphicon-qrcode"></span><br />
+									<?php echo $tr->translate("SCAN_CLOSE")?>
+								</a>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

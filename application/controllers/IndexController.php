@@ -614,6 +614,46 @@ class IndexController extends Zend_Controller_Action
 			echo false; exit();
 		}
 	}
+	
+	public function frontAction()
+    {
+    	
+    	$this->_helper->layout()->disableLayout();
+	}
+	public function scanShoutoutAction()
+    {
+    	
+    	$this->_helper->layout()->disableLayout();
+	}
+	public function scanningcodeAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$document = empty($data['keyword'])?0:$data['keyword'];
+    		$scantype = empty($data['scantype'])?0:$data['scantype'];
+    		$dbdoc = new Application_Model_DbTable_DbFront();
+    		
+    		$check = $dbdoc->getStudentByScanning($document,1);
+    		if (!empty($check)){
+				//$return =1;
+	    		$arrReturn = $dbdoc->getStudentByScanning($document);
+	    		//$arr = array('document_id'=>$row['id'],'scan_type'=>$scantype,'doc_processing'=>$row['status']);
+	    		//if ($scantype==1 || $scantype==3){
+	    			//$dbdoc->isertScanDocument($arr);
+					//$return =1;
+	    		//}
+	    		
+    		}else{
+				$arrReturn=array(
+					'statusReturn'=>0
+				);
+    			//$return =0;
+    		}
+    		print_r(Zend_Json::encode($arrReturn));
+
+    		exit();
+    	}
+    }
+	
 }
 
 

@@ -1,0 +1,50 @@
+				<?php 
+				
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$str="";
+				$img = 'logo.png';
+				$school_khname = $tr->translate('SCHOOL_NAME');
+				$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
+				$address = $tr->translate('CUSTOMER_ADDRESS');
+				$tel = $tr->translate('CUSTOMER_TEL');
+				$email =  $tr->translate('CUSTOMER_EMAIL');
+				$website = $tr->translate('CUSTOMER_WEBSITE');
+				
+				$branch_id=1;
+				$db = new Application_Model_DbTable_DbGlobal();
+				$rs = $db->getBranchInfo($branch_id);
+				if(!empty($rs)){
+					$img = $rs['photo'];
+					$school_khname = $rs['school_namekh'];
+					$school_name = $rs['school_nameen'];
+					
+					$address = $rs['br_address'];
+					$tel = $rs['branch_tel'];
+					$email = $rs['email'];
+					$website = $rs['website'];
+				}
+		
+		            $key = new Application_Model_DbTable_DbKeycode();
+		            $datasetting =$key->getKeyCodeMiniInv(TRUE);
+		            $logo = $this->baseUrl()."/images/logo.png";
+		            if (!empty($datasetting['logo'])){
+		            	if (file_exists(PUBLIC_PATH."/images/photo/logo/".$datasetting['logo'])){
+		            		$logo = $this->baseUrl()."/images/photo/logo/".$datasetting['logo'];
+		            	}
+		            }
+		            
+		            ?>
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 logo-content">
+						<div class="logo text-center">
+							<ul>
+								<li><img class="logo-detail" src="<?php echo $logo;?>" /></li>
+								<li>
+									<span style="font-size:18px;margin-top: 10px;line-height:25px;font-family:'Khmer OS Muol Light'"><?php echo $school_khname;?></span></br />
+									<span style="font-size:18px;margin-top: 10px;line-height:25px;font-family:'Times New Roman';"><?php echo $school_name;?></span>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>

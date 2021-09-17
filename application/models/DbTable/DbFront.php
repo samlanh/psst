@@ -43,7 +43,7 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 						   AND s.stu_id=ds.stu_id 
 		                   AND s.status = 1 
 						AND s.customer_type = 1 ";
-		$sql.="  AND s.stu_code = ".$db->quote($qr);
+		$sql.="  AND s.studentToken = ".$db->quote($qr);
 		
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);

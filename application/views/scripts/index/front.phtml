@@ -76,6 +76,17 @@
 						</div>
 						<div class="clearfix"></div>
 					</div>
+					
+					
+					<?php  
+				$barcode = "00012912182281";
+				$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$barcode),null,true);?>
+					<div class="foot-left-block">
+						<div class="qrimages">
+							<img  src="<?php echo $url;?>" alt="profile-image" >
+						</div>
+					</div>
+					
 				</div>
 			</div>
 		</div>

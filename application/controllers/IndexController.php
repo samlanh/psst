@@ -659,6 +659,28 @@ class IndexController extends Zend_Controller_Action
     	}
     }
 	
+	public function generateQrAction()
+    {
+		
+		$codeReader = $this->getRequest()->getParam('codeReader');
+
+		
+		$this->_helper->layout()->disableLayout();
+		$phblicpart = PUBLIC_PATH;
+		$errorCorrectionLevel = 'L';
+		$matrixPointSize = 4;
+		include $phblicpart.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."phpqrcode".DIRECTORY_SEPARATOR."qrlib.php";
+
+		// QR Code generation using png()
+		// When this function has only the
+		// text parameter it directly
+		// outputs QR in the browser
+		header('Content-Type: image/png');
+		echo QRcode::png($codeReader,null,$errorCorrectionLevel, $matrixPointSize,2);exit();
+		//QRcode::png($studentToken, $imageName, $errorCorrectionLevel, $matrixPointSize, 2);
+        
+    }
+	
 }
 
 

@@ -28,22 +28,18 @@
 	
 		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>	
 		<!-- Bootstrap -->
-		<link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/css/bootstrap.css" rel="stylesheet">
 		
 		<!-- Font Awesome -->
 		<link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 		
-		<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
-		
-		<link href="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->baseUrl()."/datatable/"?>responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
-		<script src="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.js" type="text/javascript"></script>
-		<script src="<?php echo $this->baseUrl()."/datatable/"?>dataTables.responsive.min.js" type="text/javascript"></script>
-		
 		<!-- Custom Theme Style -->
 		<link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
 			
+		<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
 		<script src="<?php echo $this->baseUrl()."/templates/";?>plugin/1.11.3/jquery.min.js"></script>
+		
 		<style>
 		
 		.overlay-front { display:none; position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: 1;}
@@ -85,7 +81,22 @@
 			height: 100%;
 		}
 		
-
+		.entranceTitle {
+			position: absolute;
+			z-index: 3;
+			color: #ffd400;
+			width: 100%;
+			padding:15px;
+		}
+		span.titleEntrance {
+			display: block;
+			width: 100%;
+			font-size: 30px;
+			font-weight: 600;
+		}
+		span.titleEntrance.titleEntranceEn {
+			font-size: 18px;
+		}
 		</style>
 	</head>
 	<body>
@@ -152,8 +163,7 @@
 				</div>
 				
 				<div class="content-footer">
-					<?php $successAudio = $this->baseUrl()."/images/frontFile/audio/GTA_San_Andreas_Mission_Failed_sound.mp3";?>
-					<audio id="successAudio" src="<?php echo $successAudio;?>" type="audio/ogg"></audio>    
+					    
 					<marquee>
 					សូមស្វាគមន៍ការមកកាន់សាលាបញ្ញាសាស្រ្តអន្តរជាតិ សាខាសែនសុខ :  📣 ប្អូនៗនឹងទទួលបានអាហារូបករណ៍ ១៥%​ លេីថ្លៃសិក្សា​ សម្រាប់ការចុះឈ្មោះ ចាប់ពីថ្ងៃនេះ រហូតដល់ថ្ងៃទី​ ២១​ ខែកញ្ញា​ ឆ្នាំ២០២១​ ខាងមុខនេះ​។ ⏰​ វគ្គសិក្សាថ្មី កម្មវិធីភាសាអង់គ្លេស (ក្រៅម៉ោង)​ ​​នឹងចូលរៀននៅថ្ងៃទី ២៧​ ខែកញ្ញា​ ឆ្នាំ២០២១។ បញ្ជាក់៖​ ការផ្តល់ជូនពិសេសនេះ សម្រាប់តែការចុះឈ្មោះចូលរៀននៅសាខាសែនសុខ តែប៉ុណ្ណោះ។
 					</marquee>
@@ -161,7 +171,30 @@
 				
 			</div>
 		</div>
-		
+		<div class="entranceTitle">
+			<span class="titleEntrance titleEntrance"><?php echo $this->row['titleKh'];?></span>
+			<span class="titleEntrance titleEntranceEn"><?php echo $this->row['titleEn'];?></span>
+			<?php 
+				$welcomeAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+				$successAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+				$entranceAudioKh = $successAudio;
+				$entranceAudioEn = $successAudio;
+				if(!empty($this->row['soundFileKh'])){
+					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['soundFileKh'])){
+						$entranceAudioKh = $this->baseUrl().'/images/frontFile/audio/'.$this->row['soundFileKh'];
+					}
+				}
+				if(!empty($this->row['soundFile'])){
+					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['soundFile'])){
+						$entranceAudioEn = $this->baseUrl().'/images/frontFile/audio/'.$this->row['soundFile'];
+					}
+				}
+			?>
+			<audio id="welcomeAudio" src="<?php echo $welcomeAudio;?>" type="audio/ogg"></audio>
+			<audio id="successAudio" src="<?php echo $successAudio;?>" type="audio/ogg"></audio>
+			<audio id="entranceAudioKh" src="<?php echo $entranceAudioKh;?>" type="audio/ogg"></audio>
+			<audio id="entranceAudioEn" src="<?php echo $entranceAudioEn;?>" type="audio/ogg"></audio>
+		</div>
 		<div class="inputScanner">
 			<input type="text" class="inputScannerValue" id="SanningValue" name="SanningValue" value="">
 		</div>					
@@ -170,6 +203,8 @@
 	var urlgo = '<?php echo $this->url(array('module'=>'','controller' => 'index','action' => 'scanningcode'));?>';
 	</script>
 	<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
+	<script type="text/javascript" src="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/js/bootstrap.js"></script>
+	<script type="text/javascript" src="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/js/bootstrap.min.js"></script>
 	<script>
 	$(document).ready(function() {
 		$('#SanningValue').focus();
@@ -240,7 +275,18 @@
 					
 					$(".youTubeBlog").css("display", "none");
 					$(".mainCotentBlog").css("display", "block");
+					//$('#successAudio').get(0).play();
+					
+					$('#welcomeAudio').get(0).play();
+					$('#welcomeAudio').on('ended', function() {
+					   playing = false;
+					   $('#successAudio').get(0).play();
+					});
 					$('#successAudio').get(0).play();
+					$('#successAudio').on('ended', function() {
+					   playing = false;
+					   $('#entranceAudioKh').get(0).play();
+					});
 					
 					setTimeoutReload();
 				}else{

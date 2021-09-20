@@ -28,22 +28,17 @@
 	
 		<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>	
 		<!-- Bootstrap -->
-		<link href="<?php echo $base_url;?>admin/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/css/bootstrap.css" rel="stylesheet">
 		
 		<!-- Font Awesome -->
 		<link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-		
-		<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
-		
-		<link href="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->baseUrl()."/datatable/"?>responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
-		<script src="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.js" type="text/javascript"></script>
-		<script src="<?php echo $this->baseUrl()."/datatable/"?>dataTables.responsive.min.js" type="text/javascript"></script>
 		
 		<!-- Custom Theme Style -->
 		<link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
 			
 		<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
+		<script src="<?php echo $this->baseUrl()."/templates/";?>plugin/1.11.3/jquery.min.js"></script>
 		
 	</head>
 	<body>
@@ -53,6 +48,30 @@
 						echo $this->render('bloglogo.phtml');
 					?>
 				<div class="row">
+					
+					<div class="content-button">
+						<div class="row row-button">
+							<div class="col-12 col-sm-4 col-md-4">
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								<select class="form-group js-select2 fullsize" id="gatewayOption"  name="gatewayOption" data-placeholder="<?php echo $tr->translate("SELECT_ENTRANCE_AND_EXIT");?>">
+								  <?php if (!empty($this->rs)) foreach ($this->rs as $rs){?>
+								  <option value="<?php echo $rs['id']?>" ><?php echo $rs['titleKh']?></option>
+								  <?php }?>
+								</select>
+								<a class="btn button-scan scan-view" href="#" onClick="startScanNow();">
+									<span class="glyphicon glyphicon-qrcode"></span><br />
+									<?php echo $tr->translate("START_NOW")?>
+								</a>
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					
+					<!--
 					<div class="content-button">
 						<div class="row row-button">
 							<div class="col-12 col-sm-4 col-md-4">
@@ -76,19 +95,77 @@
 						</div>
 						<div class="clearfix"></div>
 					</div>
-					
-					
-					<?php  
-				$barcode = "00012912182281";
-				$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$barcode),null,true);?>
-					<div class="foot-left-block">
-						<div class="qrimages">
-							<img  src="<?php echo $url;?>" alt="profile-image" >
-						</div>
-					</div>
+					-->
 					
 				</div>
 			</div>
 		</div>
 	</body>
+	<link href="<?php echo $this->baseUrl()."/templates/plugin/select2/";?>css/select2.min.css" rel="stylesheet" />
+	
+	<script src="<?php echo $this->baseUrl()."/templates/plugin/"?>select2/js/select2.min.js"></script>
+	
+	<script type="text/javascript" src="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/js/bootstrap.js"></script>
+	<script type="text/javascript" src="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+	
+	<style>
+	.content-search {
+		padding: 10px;
+		margin-bottom: 10px;
+		background: #f9f9f9;
+		border: solid 1px #eeee;
+	}
+	.content-search .row.row-form-group {
+		margin: 0;
+	}
+	.row.row-form-group div {
+		padding: 0 2px;
+		margin: 2px 0;
+	}
+	span.input-group-addon.b-0 {
+		padding: 0px 10px;
+	}
+	.select2-container--default .select2-selection--single {
+		height: 40px;
+		border-radius: 0;
+		border: solid 1px #eee;
+	}	
+	.select2-container--default .select2-selection--single {
+		padding: 2px;
+		height: 40px;
+		position: relative;
+		border: 1px solid #ebebeb;
+		font-size: 14px;
+		border-radius: 5px;
+	}	
+	.select2-container--default .select2-selection--single .select2-selection__arrow {
+		height: 40px;
+		position: absolute;
+		top: -2px;
+		right: 1px;
+		width: 20px;
+	}
+	.select2-container--default .select2-results>.select2-results__options {
+	    white-space: nowrap;
+	    width: 100%;
+	    font-size: 14px;
+	}
+</style>
+<script>
+var urlRedirect = "<?php echo $this->baseUrl()."/index/scan-byscanner"?>";
+function startScanNow(){
+	 var gatewayOption = $("#gatewayOption").val();
+	   if( gatewayOption !="" ) {
+			window.location.replace(urlRedirect+"?gatewayOption="+gatewayOption);
+			return false;
+	   }
+}
+$(function () {
+	$(".js-select2").select2({
+	  placeholder: "",
+	  width: '100%'
+	 
+	});
+});
+</script>	
 </html>

@@ -619,16 +619,33 @@ class IndexController extends Zend_Controller_Action
     {
     	
     	$this->_helper->layout()->disableLayout();
+		
+		$dbFront = new Application_Model_DbTable_DbFront();
+		$rs = $dbFront->getAllEntrance();
+		$this->view->rs = $rs;
 	}
 	public function scanShoutoutAction()
     {
     	
     	$this->_helper->layout()->disableLayout();
+		$gatewayOption = $this->getRequest()->getParam('gatewayOption');
+		$gatewayOption = empty($gatewayOption)?0:$gatewayOption;
+		
+		$dbFront = new Application_Model_DbTable_DbFront();
+		$row = $dbFront->getEntranceById($gatewayOption);
+		$this->view->row = $row;
 	}
 	public function scanByscannerAction()
     {
     	
     	$this->_helper->layout()->disableLayout();
+		$gatewayOption = $this->getRequest()->getParam('gatewayOption');
+		$gatewayOption = empty($gatewayOption)?0:$gatewayOption;
+		
+		$dbFront = new Application_Model_DbTable_DbFront();
+		$row = $dbFront->getEntranceById($gatewayOption);
+		$this->view->row = $row;
+		
 	}
 	public function scanningcodeAction(){
     	if($this->getRequest()->isPost()){

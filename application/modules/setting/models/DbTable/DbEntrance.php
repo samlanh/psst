@@ -30,6 +30,7 @@ class Setting_Model_DbTable_DbEntrance extends Zend_Db_Table_Abstract
 				$tmp = $_FILES['audiofile']['tmp_name'];
 				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
 					$_arr['soundFile']=$newFileName;
+					$_arr['soundFileKh']=$newFileName;
 				}
 			}
 				

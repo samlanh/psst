@@ -209,16 +209,25 @@
 			success:function(data){
 				if(data.statusReturn==1){
 					
-					sourceUrl = urlpart+"/images/frontFile/audio/no_sound.mp3";
-					if( data.audioTitle !="" ) {
-						sourceUrl = urlpart+'/images/frontFile/audio/'+data.audioTitle;
-					}
-					$("#successAudio").attr("src", sourceUrl);
 					
+					
+					/*
 					sourceImgUrl = urlpart+'/images/no-profile.png';
 					if( data.photo !="" ) {
 						sourceImgUrl = urlpart+'/images/photo/'+data.photo;
 					}
+					
+					sourceUrl = urlpart+"/images/frontFile/audio/no_sound.mp3";
+					if( data.audioTitle !="" ) {
+						sourceUrl = urlpart+'/images/frontFile/audio/'+data.audioTitle;
+					}
+					*/
+					
+					sourceUrl = data.fullUrlAudio;
+					$("#successAudio").attr("src", sourceUrl);
+					
+					
+					sourceImgUrl = data.fullUrlProfile;
 					$("#stuImageProfile").attr("src", sourceImgUrl);
 					
 					$( "#stuNameKh" ).html(data.stu_khname);

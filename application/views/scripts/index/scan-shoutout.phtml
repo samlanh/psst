@@ -64,7 +64,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="overlay-front">
+		<div class="overlay-front" >
 			<div class="overlay-load-front">
 				
 			</div>
@@ -223,6 +223,7 @@
 			success:function(data){
 				if(data.statusReturn==1){
 					
+					/*
 					sourceUrl = urlpart+"/images/frontFile/audio/no_sound.mp3";
 					if( data.audioTitle !="" ) {
 						sourceUrl = urlpart+'/images/frontFile/audio/'+data.audioTitle;
@@ -233,6 +234,13 @@
 					if( data.photo !="" ) {
 						sourceImgUrl = urlpart+'/images/photo/'+data.photo;
 					}
+					$("#stuImageProfile").attr("src", sourceImgUrl);
+					*/
+					
+					sourceUrl = data.fullUrlAudio;
+					$("#successAudio").attr("src", sourceUrl);
+										
+					sourceImgUrl = data.fullUrlProfile;
 					$("#stuImageProfile").attr("src", sourceImgUrl);
 					
 					$( "#stuNameKh" ).html(data.stu_khname);

@@ -54,6 +54,22 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 				return false;
 			}
 		}else {
+			$phblicpart = PUBLIC_PATH;
+			$baseURl = Zend_Controller_Front::getInstance()->getBaseUrl();
+			$photo = $baseURl.'/images/no-profile.png';
+			if (!empty($row['photo'])){
+				if (file_exists($phblicpart."/images/photo/".$row['photo'])){
+					$photo = $baseURl.'/images/photo/'.$row['photo'];
+				}
+			}
+			$audio = $baseURl.'/images/frontFile/audio/no_sound.mp3';
+			if (!empty($row['audioTitle'])){
+				if (file_exists($phblicpart."/images/frontFile/audio/".$row['audioTitle'])){
+					$audio = $baseURl.'/images/frontFile/audio/'.$row['audioTitle'];
+				}
+			}
+			$row['fullUrlAudio']=$audio;
+			$row['fullUrlProfile']=$photo;
 			$row['statusReturn']=1;
 			return $row;
 		}

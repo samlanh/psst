@@ -3,16 +3,15 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $this->headTitle($tr->translate('GENERAL_SETTING')); 
 echo $this->headTitle();
 $frm = $this->frm_general;
+
+$featureScanCallOut=FEATURE_SCAN_CALLOUT;
 ?>
+
+<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <style>
 div.cke_contents.cke_reset {
     height: 200px !important;
 }
-</style>
-<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
-
-<style>
-
 img.image_view {
     width: 100%;
 	height: 100px;
@@ -33,6 +32,34 @@ tr.header {
 tr.header td {
     padding: 5px;
 }
+.disableFeature{
+	display:none;
+}
+.eableFeature{
+	display:block;
+}
+.form-group.audioBlog {
+    background: #02014a;
+    color: #fff;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+tr.rowAudiofile {
+    background: #cee1f7;
+    border-bottom: solid 2px #062b61;
+}
+tr.rowAudiofile td {
+    padding: 2px 0;
+}
+audio.audioControlRow {
+    height: 35px;
+    padding: 5px 0;
+}
+input[type=file] {
+    width: 100%;
+}
+
 </style>
 <form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" >
 	<script type="dojo/method" event="onSubmit">				
@@ -138,6 +165,54 @@ tr.header td {
 		    				</div>
 		    			</div>
 		    			<?php }?>
+		    			
+						
+						<div class="form-group <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-file-audio-o" aria-hidden="true"></i> &nbsp;<?php echo $tr->translate('AUDIO_SETTING');?> 
+		                   </label>
+		                </div>
+						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("INTRO_AUDIO");?>
+						   </label>
+						  <div class="col-md-9 col-sm-9 col-xs-12">
+								<input type='file' id="welcomeAudio" name="welcomeAudio" accept="audio/*" placeholder="" class="profile-aud">
+						   </div>
+							<div class="audioOption">
+							<?php 
+								$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+								$welcomeAudio = $defaultAudio;
+								if(!empty($this->row['welcomeAudio']['keyValue'])){
+									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['welcomeAudio']['keyValue'])){
+										$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['welcomeAudio']['keyValue'];
+									}
+								}
+								?>
+								<audio id="audioPlay" controls  src="<?php echo $welcomeAudio;?>"></audio>
+							</div>
+						</div>
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="bd-bg">
+					                <div class="form-group">
+					                    <div class="col-md-4 col-sm-4 col-xs-12">
+					                   		<input id="degree" />
+					                    </div>
+					                    <div class="col-md-4 col-sm-4 col-xs-12">
+					                   		<input id="grade" />
+					                    </div>
+					                    <div class="col-md-4 col-sm-4 col-xs-12">
+					                   		<input type="button" label="<?php echo $tr->translate('Add Study Record');?>" dojoType="dijit.form.Button" iconClass="dijitIconEditProperty" onclick="addRowStudy();" />
+					                    </div>
+					                </div>
+									<div class="form-group">
+						         	 	<table id="table_row_study" style="border-collapse: collapse; border:1px solid #ccc; width: 100%;">
+											<tr id="head-title_study" class="head-td" align="right" style="white-space:nowrap;"></tr>
+										</table>
+										<input type="hidden" name="identityAudio" id="identityAudio"  />
+						         	 </div>
+				                 </div>
+							</div>
+						</div>
 		    		</div>
 	    		</div>
 	    		<div class="card-box">
@@ -148,12 +223,232 @@ tr.header td {
 	  	 </div>
 	</div>
 </form>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.Textarea");
+
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ObjectStore");
+
+var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                        
+	    id: "group",
+	    name: "group",  
+	    class: 'fullside', 
+	    readonly:false,
+	    required:false,
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	    onChange: function() {  
+	    }
+	}, "group");
+	
+	new dijit.form.FilteringSelect({
+		store: degree_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,
+		id: "degree",
+		name: "degree",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+		onChange: function() {  
+			getallGrade();
+		}
+	}, "degree");
+	
+	new dijit.form.FilteringSelect({
+	    queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                   
+	    id: "grade",
+	    name: "grade",  
+	    tabindex: "16",  
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+	    onChange: function() {  
+	    	addRowStudy();
+	    }
+	}, "grade");
+	getallGrade();
+	getRefreshItems();
+	
+	initializeStudy();
+		
+}); 
+
+function getRefreshItems(){
+	dijit.byId('degree').reset();   
+	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
+	dojo.xhrPost({
+		url: url_getItems,
+		content:{
+			'items_type':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			degree_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('degree').set('store',degree_store);  
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store);   
+			},
+			error: function(err) {
+			}
+		});
+}
+
+var col_study = 0;
+var no_study = 0;
+var title_study = 0;
+tmp_study = '';
+temp_study='';
+function addRowStudy() {
+	degree = dijit.byId('degree').get('value');
+	if(degree==''){
+		dijit.byId('degree').focus();
+		return false;
+	}
+	degreelabel = dijit.byId("degree").attr('displayedValue');
+	gradelabel = dijit.byId("grade").attr('displayedValue');
+	grade = dijit.byId('grade').get('value');
+	if(grade==''){
+		grade = "";
+		gradelabel="";
+		dijit.byId('grade').focus();
+		return false;
+	}
+	
+	
+	var identity = $('#identityAudio').val();
+	var arrays = identity.split(',');
+	if(identity!=""){
+		currentGrade = dijit.byId('grade').get('value');
+		var continueTo=0;
+		for(var i=0;i<arrays.length;i++) {
+			oldGrade = dijit.byId('grade_'+arrays[i]).get('value');
+			if(currentGrade == oldGrade){
+				alert("ALREADY_SET");
+				continueTo=1;
+				break;
+				return false;
+			}
+		}
+		if(continueTo==1){
+			dijit.byId('grade').reset();
+			dijit.byId('grade').focus();
+			return false;
+		}
+	
+	}
+	
+	
+	col_study++;
+	no_study++;
+	
+	template_study='';
+	if(title_study!=1){
+		temp_study+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp_study+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
+		temp_study+='<th ><?php echo $tr->translate("AUDIO");?></th>';
+		dojo.query("#head-title_study").append(temp_study);
+		title_study=1;
+	}
+		template_study+='<td width="4%"align="center"><img onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template_study+='<td width="4%" align="center">'+no_study+'</td>';
+		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+		template_study+='<td><input type="file" onChange="readURLAudioRow('+col_study+');" id="autionFile'+col_study+'" name="autionFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $defaultAudio;?>"></audio></td>';
+	tmp_study='<tr id="row_study'+col_study+'" class="rowAudiofile">';
+	tmp_study+="</tr>";
+	dojo.query("#table_row_study").append(tmp_study);
+
+	if($("#identityAudio").val()!="") {
+		var identityAudio = $("#identityAudio").val();
+		$("#identityAudio").val(identityAudio+','+col_study);
+	} else {$("#identityAudio").val(col_study);}
+	dojo.html.set(dojo.byId("row_study"+col_study),template_study , {
+		 parseContent: true,
+	});
+	grade = dijit.byId('grade').reset();
+}
+function deleteRecord_study(index) {
+	var identity = $('#identityAudio').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identityAudio').val(strings);
+	dojo.query("#row_study"+index).remove();
+}
+function initializeStudy() {  
+	<?php if(!empty($this->allAudioGrade)){ 
+		foreach($this->allAudioGrade as $row){ 
+		$audioGrade=$defaultAudio;
+		if(!empty($row['autionFile'])){
+			if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$row['autionFile'])){
+				$audioGrade = $this->baseUrl().'/images/frontFile/audio/'.$row['autionFile'];
+			}
+		}
+	?>
+	col_study++;no_study++;
+	template_study='';
+	if(title_study!=1){
+		temp_study+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp_study+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
+		temp_study+='<th ><?php echo $tr->translate("AUDIO");?></th>';
+		dojo.query("#head-title_study").append(temp_study);
+		title_study=1;
+	}
+
+	template_study+='<td width="4%"align="center"><img onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+	template_study+='<td width="4%" align="center">'+no_study+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidAudio'+col_study+'" id="detailidAudio'+col_study+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
+	template_study+='<td>&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="<?php echo $row['gradeId'];?>" type="hidden"><?php echo $row['gradeTitle'];?>&nbsp;</td>';
+	template_study+='<td><input type="file" onChange="readURLAudioRow('+col_study+');" id="autionFile'+col_study+'" name="autionFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $audioGrade;?>"></audio></td>';
+	tmp_study='<tr id="row_study'+col_study+'" class="rowAudiofile">';
+	tmp_study+="</tr>";
+	dojo.query("#table_row_study").append(tmp_study);
+		
+	if($("#identityAudio").val()!="") {
+		var identityAudio = $("#identityAudio").val();
+		$("#identityAudio").val(identityAudio+','+col_study);
+	} else {$("#identityAudio").val(col_study);}
+	dojo.html.set(dojo.byId("row_study"+col_study),template_study , {
+		 parseContent: true,
+	});
+	<?php }}?>
+}
+		
+
 function loadImage(){
 	 var output = document.getElementById('image_view');
   output.src = URL.createObjectURL(event.target.files[0]);
@@ -170,4 +465,35 @@ function CheckPenalty(){
 		}
 	}
 }
+$('audio').on('abort',function(){
+  console.log('abort')
+})
+function readURLAudio(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#audioPlay').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+var maxSize = 0;
+$("#welcomeAudio").change(function(){
+	readURLAudio(this);
+});
+
+function readURLAudioRow(index){
+	var FileNameAd = $("#autionFile"+index).prop('files')[0];
+	if ($("#autionFile"+index).prop('files')[0]) {
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#audioPlay'+index).attr('src', e.target.result);
+		}
+		reader.readAsDataURL(FileNameAd);
+	}
+	
+	
+}
+
 </script>

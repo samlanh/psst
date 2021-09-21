@@ -34,9 +34,14 @@ public function init()
 		$row['trasfer_st_cut'] = $db_gs->geLabelByKeyName('trasfer_st_cut');
 		$row['sale_cut_stock'] = $db_gs->geLabelByKeyName('sale_cut_stock');
 		
+		$row['welcomeAudio'] = $db_gs->geLabelByKeyName('welcomeAudio');
+		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
+		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();
 		$fm = new Setting_Form_FrmGeneral();
 		$frm = $fm->FrmGeneral($row);
+		
+		$this->view->row = $row;
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_general = $frm;
 	}

@@ -14,7 +14,7 @@ Start Logo Content
 ====
 */
 .logo-content {
-	padding: 38px 0;
+	padding: 30px 0;
 	/* background: #ffffff; */
 	/* border-bottom: solid 5px #030b69; */
 }
@@ -322,7 +322,7 @@ Start Content Profile Student
     color: #fff;
 }
 .profile_details h2 {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 600;
     /* margin: 10px 0; */
     color: #030b69;
@@ -332,8 +332,8 @@ Start Content Profile Student
     color: #02014a;
 }
 .profile_details ul.list-unstyled {
-    font-size: 16px;
-    line-height: 28px;
+    font-size: 20px;
+    line-height: 32px;
 }
 .profile_details img.img-circle {
     width: 70%;

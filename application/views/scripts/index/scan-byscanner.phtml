@@ -291,17 +291,21 @@
 					$('#welcomeAudio').get(0).play();
 					$('#welcomeAudio').on('ended', function() {
 					   playing = false;
-					   setTimeout(function () {
+					   //setTimeout(function () {
 							 $('#successAudio').get(0).play();
-						}, 1000);
+						//}, 200);
 					  
 					});
 					
 					$('#successAudio').on('ended', function() {
 					   playing = false;
-					   setTimeout(function () {
 							 $('#gradeAudio').get(0).play();
-						}, 1000);
+					});
+					
+					
+					$('#gradeAudio').on('ended', function() {
+					   playing = false;
+							 $('#entranceAudioKh').get(0).play();
 					});
 					
 					setTimeoutReload();

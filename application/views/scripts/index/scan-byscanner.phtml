@@ -175,10 +175,19 @@
 			<span class="titleEntrance titleEntrance"><?php echo $this->row['titleKh'];?></span>
 			<span class="titleEntrance titleEntranceEn"><?php echo $this->row['titleEn'];?></span>
 			<?php 
-				$welcomeAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
-				$successAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
-				$entranceAudioKh = $successAudio;
-				$entranceAudioEn = $successAudio;
+				$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+				$welcomeAudio = $defaultAudio;
+				$successAudio = $defaultAudio;
+				$gradeAudio = $defaultAudio;
+				$entranceAudioKh = $defaultAudio;
+				$entranceAudioEn = $defaultAudio;
+				
+				
+				if(!empty($this->data['welcomeAudio'])){
+					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->data['welcomeAudio'])){
+						$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->data['welcomeAudio'];
+					}
+				}
 				if(!empty($this->row['soundFileKh'])){
 					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['soundFileKh'])){
 						$entranceAudioKh = $this->baseUrl().'/images/frontFile/audio/'.$this->row['soundFileKh'];
@@ -192,6 +201,7 @@
 			?>
 			<audio id="welcomeAudio" src="<?php echo $welcomeAudio;?>" type="audio/ogg"></audio>
 			<audio id="successAudio" src="<?php echo $successAudio;?>" type="audio/ogg"></audio>
+			<audio id="gradeAudio" src="<?php echo $gradeAudio;?>" type="audio/ogg"></audio>
 			<audio id="entranceAudioKh" src="<?php echo $entranceAudioKh;?>" type="audio/ogg"></audio>
 			<audio id="entranceAudioEn" src="<?php echo $entranceAudioEn;?>" type="audio/ogg"></audio>
 		</div>
@@ -261,6 +271,8 @@
 					sourceUrl = data.fullUrlAudio;
 					$("#successAudio").attr("src", sourceUrl);
 					
+					sourceGradeAudioUrl = data.fullUrlGradeAudio;
+					$("#gradeAudio").attr("src", sourceGradeAudioUrl);
 					
 					sourceImgUrl = data.fullUrlProfile;
 					$("#stuImageProfile").attr("src", sourceImgUrl);
@@ -275,17 +287,21 @@
 					
 					$(".youTubeBlog").css("display", "none");
 					$(".mainCotentBlog").css("display", "block");
-					//$('#successAudio').get(0).play();
 					
 					$('#welcomeAudio').get(0).play();
 					$('#welcomeAudio').on('ended', function() {
 					   playing = false;
-					   $('#successAudio').get(0).play();
+					   setTimeout(function () {
+							 $('#successAudio').get(0).play();
+						}, 1000);
+					  
 					});
-					$('#successAudio').get(0).play();
+					
 					$('#successAudio').on('ended', function() {
 					   playing = false;
-					   $('#entranceAudioKh').get(0).play();
+					   setTimeout(function () {
+							 $('#gradeAudio').get(0).play();
+						}, 1000);
 					});
 					
 					setTimeoutReload();
@@ -293,7 +309,7 @@
 					$(".youTubeBlog").css("display", "block");
 					$(".mainCotentBlog").css("display", "none");
 					
-					sourceUrl = urlpart+'/images/frontFile/audio/GTA_San_Andreas_Mission_Failed_sound.mp3';
+					sourceUrl = urlpart+'/images/frontFile/audio/no_sound.mp3';
 					$("#successAudio").attr("src", sourceUrl);
 					$('#successAudio').get(0).play();
 				}

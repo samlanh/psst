@@ -153,13 +153,13 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$dbg->getUserId(),
 						);
-						$audiofileRowName = $_FILES['autionFile'.$i]['name'];
+						$audiofileRowName = $_FILES['audioFile'.$i]['name'];
 						if (!empty($audiofileRowName)){
 							$tem =explode(".", $audiofileRowName);
 							$newAudiofileRowName = "grade".$gradeId."Audio_".date("Y").date("m").date("d").time().".".end($tem);
-							$tmp = $_FILES['autionFile'.$i]['tmp_name'];
+							$tmp = $_FILES['audioFile'.$i]['tmp_name'];
 							if(move_uploaded_file($tmp, $partAudio.$newAudiofileRowName)){
-								$_arr['autionFile']=$newAudiofileRowName;
+								$_arr['audioFile']=$newAudiofileRowName;
 							}
 						
 						}
@@ -174,13 +174,13 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$dbg->getUserId(),
 						);
-						$audiofileRowName = $_FILES['autionFile'.$i]['name'];
+						$audiofileRowName = $_FILES['audioFile'.$i]['name'];
 						if (!empty($audiofileRowName)){
 							$tem =explode(".", $audiofileRowName);
 							$newAudiofileRowName = "grade".$gradeId."Audio_".date("Y").date("m").date("d").time().".".end($tem);
-							$tmp = $_FILES['autionFile'.$i]['tmp_name'];
+							$tmp = $_FILES['audioFile'.$i]['tmp_name'];
 							if(move_uploaded_file($tmp, $partAudio.$newAudiofileRowName)){
-								$_arr['autionFile']=$newAudiofileRowName;
+								$_arr['audioFile']=$newAudiofileRowName;
 							}
 						
 						}

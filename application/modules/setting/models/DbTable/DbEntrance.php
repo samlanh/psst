@@ -26,11 +26,11 @@ class Setting_Model_DbTable_DbEntrance extends Zend_Db_Table_Abstract
 			$audiofileName = $_FILES['audiofile']['name'];
 			if (!empty($audiofileName)){
 				$tem =explode(".", $audiofileName);
-				$newFileName = "audioEntranceNExit_".date("Y").date("m").date("d").time().".".end($tem);
+				$newAudiofileName= "audioEntranceNExit_".date("Y").date("m").date("d").time().".".end($tem);
 				$tmp = $_FILES['audiofile']['tmp_name'];
-				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
-					$_arr['soundFile']=$newFileName;
-					$_arr['soundFileKh']=$newFileName;
+				if(move_uploaded_file($tmp, $partAudio.$newAudiofileName)){
+					$arr['soundFile']=$newAudiofileName;
+					$arr['soundFileKh']=$newAudiofileName;
 				}
 			}
 				

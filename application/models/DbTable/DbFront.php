@@ -30,6 +30,7 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 							s.sex as sexcode,
 							photo,
 							(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
+							(SELECT sga.audioFile FROM `rms_setting_grade_audio` AS sga WHERE sga.gradeId=ds.grade LIMIT 1) AS gradeAudioFile,
 							(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
 						    (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
@@ -62,13 +63,21 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 					$photo = $baseURl.'/images/photo/'.$row['photo'];
 				}
 			}
-			$audio = $baseURl.'/images/frontFile/audio/no_sound.mp3';
+			$defaultAudio = $baseURl.'/images/frontFile/audio/no_sound.mp3';
+			$audio = $defaultAudio;
 			if (!empty($row['audioTitle'])){
 				if (file_exists($phblicpart."/images/frontFile/audio/".$row['audioTitle'])){
 					$audio = $baseURl.'/images/frontFile/audio/'.$row['audioTitle'];
 				}
 			}
+			$gradeAudioFile = $defaultAudio;
+			if (!empty($row['gradeAudioFile'])){
+				if (file_exists($phblicpart."/images/frontFile/audio/".$row['gradeAudioFile'])){
+					$gradeAudioFile = $baseURl.'/images/frontFile/audio/'.$row['gradeAudioFile'];
+				}
+			}
 			$row['fullUrlAudio']=$audio;
+			$row['fullUrlGradeAudio']=$gradeAudioFile;
 			$row['fullUrlProfile']=$photo;
 			$row['statusReturn']=1;
 			return $row;

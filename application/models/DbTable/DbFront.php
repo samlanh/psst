@@ -97,6 +97,12 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
+	public function getAllPlaylistvideo(){
+		$db = $this->getAdapter();
+		$sql = " SELECT * FROM rms_setting_playlistvideo WHERE status = 1 ";
+		$row=$db->fetchAll($sql);
+		return $row;
+	}
 	
 }
 ?>

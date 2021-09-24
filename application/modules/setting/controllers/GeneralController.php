@@ -38,6 +38,7 @@ public function init()
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();
+		$this->view->allPlaylistvideo = $db_gs->getAllPlaylistvideo();
 		$fm = new Setting_Form_FrmGeneral();
 		$frm = $fm->FrmGeneral($row);
 		

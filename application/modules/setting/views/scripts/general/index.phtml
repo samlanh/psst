@@ -130,22 +130,25 @@ input[type=file] {
 		    				<div class="col-sm-4"></div>
 		    				<div class="col-sm-8"></div>
 		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"></div>
-		    				<div class="col-sm-8"></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"></div>
-		    				<div class="col-sm-8"></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"></div>
-		    				<div class="col-sm-8"></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"></div>
-		    				<div class="col-sm-8"></div>
-		    			</div>
+						
+						<div class="form-group <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-user" aria-hidden="true"></i> <?php echo $tr->translate('VIDEO_PLAYLIST');?> 
+		                   </label>
+		                </div>
+		    			<div class="card-box <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="bd-bg">
+									<div class="form-group">
+						         	 	<table id="tableRowPlaylist" style="border-collapse: collapse; border:1px solid #ccc; width: 100%;">
+											<tr id="headTitlePlaylist" class="head-td" align="right" style="white-space:nowrap;"></tr>
+										</table>
+										<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+												iconClass="dijitIconEditProperty" onclick="addPlaylist();" />
+										<input type="hidden" name="identityPlayList" id="identityPlayList"  />
+						         	 </div>
+				                 </div>
+							</div>
+						</div>
 		    		</div>
 		    		<div class="col-md-6 col-sm-6 col-xs-12">
 		    			<div class="form-group">
@@ -281,6 +284,7 @@ dojo.ready(function(){
 	getRefreshItems();
 	
 	initializeStudy();
+	oldRow();
 		
 }); 
 
@@ -381,7 +385,7 @@ function addRowStudy() {
 		dojo.query("#head-title_study").append(temp_study);
 		title_study=1;
 	}
-		template_study+='<td width="4%"align="center"><img onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template_study+='<td width="4%"align="center"><img style="cursor:pointer;" onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template_study+='<td width="4%" align="center">'+no_study+'</td>';
 		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
 		template_study+='<td><input type="file" onChange="readURLAudioRow('+col_study+');" id="audioFile'+col_study+'" name="audioFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $defaultAudio;?>"></audio></td>';
@@ -429,7 +433,7 @@ function initializeStudy() {
 		title_study=1;
 	}
 
-	template_study+='<td width="4%"align="center"><img onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+	template_study+='<td width="4%"align="center"><img style="cursor:pointer;" onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 	template_study+='<td width="4%" align="center">'+no_study+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidAudio'+col_study+'" id="detailidAudio'+col_study+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
 	template_study+='<td>&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="<?php echo $row['gradeId'];?>" type="hidden"><?php echo $row['gradeTitle'];?>&nbsp;</td>';
 	template_study+='<td><input type="file" onChange="readURLAudioRow('+col_study+');" id="audioFile'+col_study+'" name="audioFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $audioGrade;?>"></audio></td>';
@@ -493,6 +497,81 @@ function readURLAudioRow(index){
 	}
 	
 	
+}
+
+
+var template = '';
+var service = '';
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+function addPlaylist() {
+	col++;no++;
+	template='';
+	if(title!=1){
+		temp+='<th width="3%"><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th width="3%"><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th width="15%"><?php echo $tr->translate("YOUTUBE_LINK");?></th>';
+		dojo.query("#headTitlePlaylist").append(temp);
+		title=1;
+		}
+		template+='<td align="center"><img style="cursor:pointer;" onclick="deletePlayListRow('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td align="center">'+no+'</td>';
+		template+='<td><input type="text" class="fullside" name="youtubeLink'+col+'" id="youtubeLink'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("YOUTUBE_LINK");?>" /></td>';
+	tmp='<tr id="rowPlayList'+col+'" style="font-size:12px;">';
+	tmp+="</tr>";
+	dojo.query("#tableRowPlaylist").append(tmp);
+	if($("#identityPlayList").val()!="") {
+		var identityPlayList = $("#identityPlayList").val();
+		$("#identityPlayList").val(identityPlayList+','+col);
+	} else {$("#identityPlayList").val(col);}
+	dojo.html.set(dojo.byId("rowPlayList"+col),template , {
+		 parseContent: true,
+	});
+
+}
+function oldRow() {
+		<?php if(!empty($this->allPlaylistvideo)){ //echo '111111';exit();
+			foreach($this->allPlaylistvideo as $row){ 
+		?>
+		col++;no++;
+		template='';
+		if(title!=1){
+			temp+='<th width="3%"><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th width="3%"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th width="15%"><?php echo $tr->translate("YOUTUBE_LINK");?></th>';
+			dojo.query("#headTitlePlaylist").append(temp);
+			title=1;
+			}
+			template+='<td align="center"><img style="cursor:pointer;" onclick="deletePlayListRow('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td align="center">'+no+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidPlayList'+col+'" id="detailidPlayList'+col+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
+			template+='<td ><input type="text" class="fullside" value="<?php echo $row['youtubeLink']?>" name="youtubeLink'+col+'" id="youtubeLink'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("YOUTUBE_LINK");?>" /></td>';
+			
+			
+		tmp='<tr id="rowPlayList'+col+'" style="font-size:12px;">';
+		tmp+="</tr>";
+		dojo.query("#tableRowPlaylist").append(tmp);
+		if($("#identityPlayList").val()!="") {
+			var identityPlayList = $("#identityPlayList").val();
+			$("#identityPlayList").val(identityPlayList+','+col);
+		} else {$("#identityPlayList").val(col);}
+		dojo.html.set(dojo.byId("rowPlayList"+col),template , {
+			 parseContent: true,
+		});
+
+		<?php }}?>
+	}
+function deletePlayListRow(index) {
+	var identity = $('#identityPlayList').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identityPlayList').val(strings);
+	dojo.query("#rowPlayList"+index).remove();
 }
 
 </script>

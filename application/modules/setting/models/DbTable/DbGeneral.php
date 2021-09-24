@@ -189,6 +189,56 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			
+			
+			//identity PlayList
+			$detailidPlayList = '';
+			if(!empty($data['identityPlayList'])){
+				$ids = explode(',', $data['identityPlayList']);
+	    		foreach ($ids as $i){
+	    			if (empty($detailidPlayList)){
+	    				if (!empty($data['detailidPlayList'.$i])){
+	    					$detailidPlayList= $data['detailidPlayList'.$i];
+	    				}
+	    			}else{
+	    				if (!empty($data['detailidPlayList'.$i])){
+	    					$detailidPlayList = $detailidPlayList.",".$data['detailidPlayList'.$i];
+	    				}
+	    			}
+	    		}
+			}
+			$where="";
+			if (!empty($detailidPlayList)){ // check if has old detail id
+				$where.=" id NOT IN (".$detailidPlayList.")";
+			}
+			$this->_name = 'rms_setting_playlistvideo';
+			$this->delete($where);
+			
+			
+			if(!empty($data['identityPlayList'])){
+				$ids = explode(',', $data['identityPlayList']);
+				foreach ($ids as $i){
+					if (!empty($data['detailidPlayList'.$i])){
+						$_arr = array(
+								'youtubeLink'		=>$data['youtubeLink'.$i],
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$dbg->getUserId(),
+						);
+						$this->_name="rms_setting_playlistvideo";
+						$where=  " id=".$data['detailidPlayList'.$i];
+						$this->update($_arr, $where);
+					}else{
+						$_arr = array(
+								'youtubeLink'		=>$data['youtubeLink'.$i],
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$dbg->getUserId(),
+						);
+						$this->_name="rms_setting_playlistvideo";
+						$this->insert($_arr);
+					}
+				}
+			}
 					
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -210,6 +260,12 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 		}
 		
 		$sql="SELECT sga.*,(SELECT $grade FROM rms_itemsdetail AS ie WHERE ie.id=sga.gradeId AND ie.items_type=1 LIMIT 1) AS gradeTitle FROM `rms_setting_grade_audio` AS sga WHERE sga.status=1 ";
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllPlaylistvideo(){
+		$db = $this->getAdapter();
+		$sql="SELECT sga.* FROM `rms_setting_playlistvideo` AS sga WHERE sga.status=1 ";
 		return $db->fetchAll($sql);
 	}
 }

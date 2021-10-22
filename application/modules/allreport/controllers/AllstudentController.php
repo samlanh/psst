@@ -875,4 +875,31 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->study_type = $db->getViewByType(5,0);
 	}
+	
+	public function rptStudentvaccineAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+				'adv_search' 	=>'',
+				'branch_id' 	=>'',
+				'start_date'	=>date("Y-m-d"),
+				'end_date'		=>date("Y-m-d")
+			);
+		}
+		
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->rs = $group->getAllStudentSetCovidFeature($search);
+		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	}
 }

@@ -59,9 +59,25 @@
 								  <option value="<?php echo $rs['id']?>" ><?php echo $rs['titleKh']?></option>
 								  <?php }?>
 								</select>
-								<a class="btn button-scan scan-view" href="#" onClick="startScanNow();">
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+							</div>
+						</div>
+						<div class="row row-button">
+							<div class="col-12 col-sm-4 col-md-4">
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								
+								<a class="btn button-scan scan-view" href="#" onClick="startScanNow(1);">
 									<span class="glyphicon glyphicon-qrcode"></span><br />
 									<?php echo $tr->translate("START_NOW")?>
+								</a>
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								
+								<a class="btn button-scan scan-view" href="#" onClick="startScanNow(2);">
+									<span class="glyphicon glyphicon-qrcode"></span><br />
+									<?php echo $tr->translate("VACCINE_CHECK")?>
 								</a>
 							</div>
 							<div class="col-12 col-sm-4 col-md-4">
@@ -153,12 +169,22 @@
 </style>
 <script>
 var urlRedirect = "<?php echo $this->baseUrl()."/index/scan-byscanner"?>";
-function startScanNow(){
-	 var gatewayOption = $("#gatewayOption").val();
-	   if( gatewayOption !="" ) {
+var urlRedirectVaccinecheck = "<?php echo $this->baseUrl()."/index/scan-vaccinecheck"?>";
+function startScanNow(index){
+	var gatewayOption = $("#gatewayOption").val();
+	if(index==1){
+		if( gatewayOption !="" ) {
 			window.location.replace(urlRedirect+"?gatewayOption="+gatewayOption);
 			return false;
 	   }
+	}else if(index==2){
+		if( gatewayOption !="" ) {
+			window.location.replace(urlRedirectVaccinecheck+"?gatewayOption="+gatewayOption);
+			return false;
+	   }
+	}
+		
+	   
 }
 $(function () {
 	$(".js-select2").select2({

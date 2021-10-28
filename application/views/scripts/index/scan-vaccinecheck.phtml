@@ -98,6 +98,37 @@
 		span.titleEntrance.titleEntranceEn {
 			font-size: 18px;
 		}
+		
+		
+		ul.list-unstyled{
+			display:inline-block;
+			width:49%;
+			vertical-align: top;
+		}
+		ul.convidInfo li {
+			line-height: 45px;
+		}
+		ul.convidInfo li.status span.titleStatus{
+			display:inline-block;
+			 min-width: 195px;
+		}
+		span.cicleStatus i {
+			width: 45px;
+			height: 45px;
+			border-radius: 100%;
+			color: #fff;
+			padding: 12px;
+			font-size: 20px;
+			text-align: center;
+			vertical-align: middle;
+		}
+		span.cicleStatus i.checked {
+			background: #00950b;
+		}
+		span.cicleStatus i.unchecked {
+			background: #dd0c0c;
+		}
+
 		</style>
 	</head>
 	<body>
@@ -165,12 +196,18 @@
 												  <h2 id="stuNameKh">សម្បត្តិ លីវីណា</h2>
 												  <h2 id="stuNameEng">Livyna Sambath</h2>
 												  <p><strong><?php echo $tr->translate("STUDENT_CODE")?>: </strong> <span id="stuNameCode">P00457</span> </p>
-												  <ul class="list-unstyled">
+												  <ul class="list-unstyled ">
 													<li><i class="fa fa-graduation-cap"></i> <?php echo $tr->translate("ACADEMIC_YEAR")?>: <span id="academicYear">2020-2021</span></li>
 													<li><i class="fa fa-magic"></i> <?php echo $tr->translate("DEGREE")?>: <span id="stuDegree">Primary</span></li>
 													<li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <span id="stuGrade">Grade 3C</span></li>
 													<li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <span id="primaryPhone">012 642 243</span></li>
 												  </ul>
+												  <ul class="convidInfo list-unstyled ">
+													<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការចាក់វ៉ាក់សាំង")?></span>: <span id="vaccineStatus" class="cicleStatus"><i class="fa fa-check checked"></i></span></li>
+													<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការធ្វើតេស្ដ Covid-19")?></span>: <span id="covidTestStatus" class="cicleStatus"><i class="fa fa-times unchecked"></i></span></li>
+												  </ul>
+												  <div class="clearfix ">
+												  </div>
 											</div>
 											
 										  
@@ -181,47 +218,17 @@
 							<div>
 						</div>
 					</div>
-				</div>
-				
+				</div>				
 			</div>
 		</div>
 		<div class="entranceTitle">
 			<span class="titleEntrance titleEntrance"><?php echo $this->row['titleKh'];?></span>
 			<span class="titleEntrance titleEntranceEn"><?php echo $this->row['titleEn'];?></span>
-			<?php 
-				$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
-				$welcomeAudio = $defaultAudio;
-				$successAudio = $defaultAudio;
-				$gradeAudio = $defaultAudio;
-				$entranceAudioKh = $defaultAudio;
-				$entranceAudioEn = $defaultAudio;
-				
-				
-				if(!empty($this->data['welcomeAudio'])){
-					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->data['welcomeAudio'])){
-						$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->data['welcomeAudio'];
-					}
-				}
-				if(!empty($this->row['soundFileKh'])){
-					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['soundFileKh'])){
-						$entranceAudioKh = $this->baseUrl().'/images/frontFile/audio/'.$this->row['soundFileKh'];
-					}
-				}
-				if(!empty($this->row['soundFile'])){
-					if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['soundFile'])){
-						$entranceAudioEn = $this->baseUrl().'/images/frontFile/audio/'.$this->row['soundFile'];
-					}
-				}
-			?>
-			<audio id="welcomeAudio" src="<?php echo $welcomeAudio;?>" type="audio/ogg"></audio>
-			<audio id="successAudio" src="<?php echo $successAudio;?>" type="audio/ogg"></audio>
-			<audio id="gradeAudio" src="<?php echo $gradeAudio;?>" type="audio/ogg"></audio>
-			<audio id="entranceAudioKh" src="<?php echo $entranceAudioKh;?>" type="audio/ogg"></audio>
-			<audio id="entranceAudioEn" src="<?php echo $entranceAudioEn;?>" type="audio/ogg"></audio>
+			
 		</div>
 		<div class="inputScanner">
 			<input type="text" class="inputScannerValue" id="SanningValue" name="SanningValue" value="">
-		</div>					
+		</div>			
 		<script>
 	var urlpart = "<?php echo $this->baseUrl();?>";
 	var urlgo = '<?php echo $this->url(array('module'=>'','controller' => 'index','action' => 'scanningcode'));?>';
@@ -255,6 +262,8 @@
 		});
 		$(".youTubeBlog").css("display", "block");
 		$(".mainCotentBlog").css("display", "none");
+		//$(".youTubeBlog").css("display", "none");
+		//$(".mainCotentBlog").css("display", "block");
 	});
 
 	function scanDo(keyword){
@@ -268,19 +277,6 @@
 			success:function(data){
 				if(data.statusReturn==1){
 					
-					
-					
-					/*
-					sourceImgUrl = urlpart+'/images/no-profile.png';
-					if( data.photo !="" ) {
-						sourceImgUrl = urlpart+'/images/photo/'+data.photo;
-					}
-					
-					sourceUrl = urlpart+"/images/frontFile/audio/no_sound.mp3";
-					if( data.audioTitle !="" ) {
-						sourceUrl = urlpart+'/images/frontFile/audio/'+data.audioTitle;
-					}
-					*/
 					
 					sourceUrl = data.fullUrlAudio;
 					$("#successAudio").attr("src", sourceUrl);
@@ -299,28 +295,20 @@
 					$( "#stuGrade" ).html(data.grade);
 					$( "#primaryPhone" ).html(data.tel);
 					
+					var stringCheck='<i class="fa fa-check checked"></i>';
+					var stringUncheck='<i class="fa fa-times unchecked"></i>';
+					
+					$( "#vaccineStatus" ).html(stringUncheck);
+					$( "#covidTestStatus" ).html(stringUncheck);
+					if(data.is_vaccined==1){
+						$( "#vaccineStatus" ).html(stringCheck);
+					}
+					if(data.is_covidTested==1){
+						$( "#covidTestStatus" ).html(stringCheck);
+					}
+					
 					$(".youTubeBlog").css("display", "none");
 					$(".mainCotentBlog").css("display", "block");
-					
-					$('#welcomeAudio').get(0).play();
-					$('#welcomeAudio').on('ended', function() {
-					   playing = false;
-					   //setTimeout(function () {
-							 $('#successAudio').get(0).play();
-						//}, 200);
-					  
-					});
-					
-					$('#successAudio').on('ended', function() {
-					   playing = false;
-							 $('#gradeAudio').get(0).play();
-					});
-					
-					
-					$('#gradeAudio').on('ended', function() {
-					   playing = false;
-							 $('#entranceAudioKh').get(0).play();
-					});
 					
 					setTimeoutReload();
 				}else{

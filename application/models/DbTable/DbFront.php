@@ -28,6 +28,8 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 							END as tel,
 							ds.stop_type AS is_subspend,
 							s.sex as sexcode,
+							s.is_vaccined,
+							s.is_covidTested,
 							photo,
 							(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
 							(SELECT sga.audioFile FROM `rms_setting_grade_audio` AS sga WHERE sga.gradeId=ds.grade LIMIT 1) AS gradeAudioFile,

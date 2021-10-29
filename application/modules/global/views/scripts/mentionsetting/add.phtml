@@ -13,6 +13,9 @@
 	background: #cccccc;
 	border:1px solid #ddd;
 }
+.notShow{
+	display:none !important;
+}
 </style>
 <title><?php echo $this->tr->translate("ADD_METION_SETTING")?></title>
  <div class="card">
@@ -66,14 +69,14 @@
 		                	<input id="degree" />
 		                </div>
 		             </div>
-		             <div class="form-group">
+		             <div class="form-group notShow">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("setting_type");?>
 		                </div>
 		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+		             <div class="form-group notShow ">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input id="grade" />
 		                </div>

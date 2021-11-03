@@ -680,19 +680,22 @@ class IndexController extends Zend_Controller_Action
 	public function scanningcodeAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$document = empty($data['keyword'])?0:$data['keyword'];
+    		$dataForm = empty($data['keyword'])?0:$data['keyword'];
     		$scantype = empty($data['scantype'])?0:$data['scantype'];
+    		$entranceId = empty($data['entrance_id'])?0:$data['entrance_id'];
+			
     		$dbdoc = new Application_Model_DbTable_DbFront();
     		
-    		$check = $dbdoc->getStudentByScanning($document,1);
+    		$check = $dbdoc->getStudentByScanning($dataForm,1);
     		if (!empty($check)){
-				//$return =1;
-	    		$arrReturn = $dbdoc->getStudentByScanning($document);
-	    		//$arr = array('document_id'=>$row['id'],'scan_type'=>$scantype,'doc_processing'=>$row['status']);
-	    		//if ($scantype==1 || $scantype==3){
-	    			//$dbdoc->isertScanDocument($arr);
-					//$return =1;
-	    		//}
+				
+	    		$arrReturn = $dbdoc->getStudentByScanning($dataForm);
+				
+				$arr = $arrReturn;
+				$arr['scan_type']=$scantype;
+				$arr['entrance_id']=$entranceId;
+				
+	    		$dbdoc->isertScanning($arr);
 	    		
     		}else{
 				$arrReturn=array(

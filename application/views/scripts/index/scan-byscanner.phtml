@@ -188,6 +188,7 @@
 		<div class="entranceTitle">
 			<span class="titleEntrance titleEntrance"><?php echo $this->row['titleKh'];?></span>
 			<span class="titleEntrance titleEntranceEn"><?php echo $this->row['titleEn'];?></span>
+			<input type="hidden" id="entrance_id" name="entrance_id" value="<?php echo $this->row['id'];?>">
 			<?php 
 				$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
 				$welcomeAudio = $defaultAudio;
@@ -260,9 +261,10 @@
 	function scanDo(keyword){
 		//$( "#messagescan" ).html('');
 		loadingFront();
+		var entrance_id = $("#entrance_id").val();
 		$.ajax({
 			url: urlgo,
-			data: {keyword: keyword,scantype: 1},
+			data: {keyword: keyword,scantype: 1,entrance_id: entrance_id},
 			type: "POST",
 			dataType: "json",
 			success:function(data){

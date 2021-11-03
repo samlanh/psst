@@ -27,6 +27,7 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 								ELSE s.guardian_tel
 							END as tel,
 							ds.stop_type AS is_subspend,
+							ds.gd_id AS study_id,
 							s.sex as sexcode,
 							s.is_vaccined,
 							s.is_covidTested,
@@ -104,6 +105,34 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 		$sql = " SELECT * FROM rms_setting_playlistvideo WHERE status = 1 ";
 		$row=$db->fetchAll($sql);
 		return $row;
+	}
+	
+	
+	public function isertScanning($_data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+			
+			$_arr=array(
+					'study_id'	  		=> $_data['study_id'],
+					'stu_id'			=> $_data['stu_id'],
+					'scan_type'			=> $_data['scan_type'],
+					'create_date'	 	=> date('Y-m-d H:i:s'),
+					'modify_date' 		=> date('Y-m-d H:i:s'),
+					'entrance_id'	  	=> $_data['entrance_id'],
+					"audio_played"		=> 0
+			);
+			$this->_name = "rms_scan_transaction";
+			$id =  $this->insert($_arr);
+			$db->commit();
+			return $id;
+				
+		}catch (Exception $e){
+			
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error");
+			$db->rollBack();
+		}
 	}
 	
 }

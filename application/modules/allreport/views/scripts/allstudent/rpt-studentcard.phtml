@@ -194,6 +194,12 @@ tbody#table_row tr {
 		</tr>
 		<tr>
 			<td align="center">
+				<button dojoType="dijit.form.Button" id="printselectedTray" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					type="button" onclick="printSelectedTray('');"><?php echo $tr->translate("SINGLE_IDPRINT_TRAY");?></button>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
 				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
 					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
 			</td>
@@ -935,4 +941,27 @@ function addRow(){
 	$('#id_selected').val(strings);
 	dojo.query("#row"+index).remove();
 }
+
+
+function printSelectedTray(typecard){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-idcard-trayprint'));
+    	?>
+    	var urlink="";
+		if(typecard==1){
+			var urlink="?front_card=1";
+		}
+    	 id_selected = dijit.byId('id_selected').get('value');
+		 if(id_selected!=''){
+			window.open(
+					'<?php echo $url_copy;?>'+'/id/'+id_selected+urlink,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
+		 }else{
+			alert('Please select record you want to print');
+			return false;
+		 }
+	}
 </script>

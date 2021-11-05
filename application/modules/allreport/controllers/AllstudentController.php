@@ -902,4 +902,17 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
+	
+	public function printIdcardTrayprintAction(){
+		$id=$this->getRequest()->getParam('id');
+		$front_card=$this->getRequest()->getParam('front_card');
+		$this->view->front = empty($front_card)?"":$front_card;
+		$k = 0;
+
+		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->rs = $rs_rows = $db->getAllStudentSelected($id);
+		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($id);
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	}
 }

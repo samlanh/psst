@@ -65,16 +65,19 @@
 						</div>
 						<div class="row row-button">
 							<div class="col-12 col-sm-4 col-md-4">
-							</div>
-							<div class="col-12 col-sm-4 col-md-4">
-								
 								<a class="btn button-scan scan-view" href="#" onClick="startScanNow(1);">
 									<span class="glyphicon glyphicon-qrcode"></span><br />
-									<?php echo $tr->translate("START_NOW")?>
+									<?php echo $tr->translate("START_IN")?>
 								</a>
 							</div>
 							<div class="col-12 col-sm-4 col-md-4">
-								<a class="btn button-scan scan-vaccinecheck" href="#" onClick="startScanNow(2);">
+								<a class="btn button-scan scan-view" href="#" onClick="startScanNow(2);">
+									<span class="glyphicon glyphicon-qrcode"></span><br />
+									<?php echo $tr->translate("START_OUT")?>
+								</a>
+							</div>
+							<div class="col-12 col-sm-4 col-md-4">
+								<a class="btn button-scan scan-vaccinecheck" href="#" onClick="startScanNow(3);">
 									<span class="glyphicon glyphicon-qrcode"></span><br />
 									<?php echo $tr->translate("VACCINE_CHECK")?>
 								</a>
@@ -165,6 +168,7 @@
 </style>
 <script>
 var urlRedirect = "<?php echo $this->baseUrl()."/index/scan-byscanner"?>";
+var urlRedirectOut = "<?php echo $this->baseUrl()."/index/scan-byscannerout"?>";
 var urlRedirectVaccinecheck = "<?php echo $this->baseUrl()."/index/scan-vaccinecheck"?>";
 function startScanNow(index){
 	var gatewayOption = $("#gatewayOption").val();
@@ -175,9 +179,14 @@ function startScanNow(index){
 	   }
 	}else if(index==2){
 		if( gatewayOption !="" ) {
+			window.location.replace(urlRedirectOut+"?gatewayOption="+gatewayOption);
+			return false;
+		}
+	}else if(index==3){
+		if( gatewayOption !="" ) {
 			window.location.replace(urlRedirectVaccinecheck+"?gatewayOption="+gatewayOption);
 			return false;
-	   }
+		}
 	}
 		
 	   

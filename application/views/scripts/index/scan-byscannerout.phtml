@@ -13,7 +13,7 @@
 		$school_khname = $rs['school_namekh'];
 		$school_name = $rs['school_nameen'];
 	}
-	$this->headTitle($tr->translate("SCAN_SHOUT_OUT")." | ".$school_khname); 
+	$this->headTitle($tr->translate("SCAN_OUT")." | ".$school_khname); 
 	echo $this->headTitle();
 ?>
 <!DOCTYPE html>
@@ -98,36 +98,6 @@
 		span.titleEntrance.titleEntranceEn {
 			font-size: 18px;
 		}
-		
-		ul.list-unstyled{
-			display:inline-block;
-			width:49%;
-			vertical-align: top;
-		}
-		ul.convidInfo li {
-			line-height: 45px;
-		}
-		ul.convidInfo li.status span.titleStatus{
-			display:inline-block;
-			 min-width: 195px;
-		}
-		span.cicleStatus i {
-			width: 45px;
-			height: 45px;
-			border-radius: 100%;
-			color: #fff;
-			padding: 12px;
-			font-size: 20px;
-			text-align: center;
-			vertical-align: middle;
-		}
-		span.cicleStatus i.checked {
-			background: #00950b;
-		}
-		span.cicleStatus i.unchecked {
-			background: #dd0c0c;
-		}
-		
 		</style>
 	</head>
 	<body>
@@ -201,12 +171,6 @@
 													<li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <span id="stuGrade">Grade 3C</span></li>
 													<li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <span id="primaryPhone">012 642 243</span></li>
 												  </ul>
-												  <ul class="convidInfo list-unstyled ">
-													<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការចាក់វ៉ាក់សាំង")?></span>: <span id="vaccineStatus" class="cicleStatus"><i class="fa fa-check checked"></i></span></li>
-													<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការធ្វើតេស្ដ Covid-19")?></span>: <span id="covidTestStatus" class="cicleStatus"><i class="fa fa-times unchecked"></i></span></li>
-												  </ul>
-												  <div class="clearfix ">
-												  </div>
 											</div>
 											
 										  
@@ -269,16 +233,6 @@
 	<script>
 	$(document).ready(function() {
 		$('#SanningValue').focus();
-		
-		/*$("#SanningValue").blur(function(){
-				var sanningValue = $("#SanningValue").val();
-			   if( sanningValue !="" ) {
-					scanDo(sanningValue);
-					$("#SanningValue").val("");
-					$('#SanningValue').focus();
-					return false;
-			   }
-		});*/
 		$('#SanningValue').keypress(function (e) {
 		  if (e.which == 13) {
 			  var sanningValue = $("#SanningValue").val();
@@ -295,23 +249,16 @@
 	});
 
 	function scanDo(keyword){
-		//$( "#messagescan" ).html('');
 		loadingFront();
 		var entrance_id = $("#entrance_id").val();
 		$.ajax({
 			url: urlgo,
-			data: {keyword: keyword,scantype: 1,entrance_id: entrance_id},
+			data: {keyword: keyword,scantype: 2,entrance_id: entrance_id},
 			type: "POST",
 			dataType: "json",
 			success:function(data){
 				if(data.statusReturn==1){
-					
-					
-					
-					
-					
-					
-					
+									
 					sourceUrl = data.fullUrlAudio;
 					$("#successAudio").attr("src", sourceUrl);
 					
@@ -332,20 +279,6 @@
 					$(".youTubeBlog").css("display", "none");
 					$(".mainCotentBlog").css("display", "block");
 					
-					
-					var stringCheck='<i class="fa fa-check checked"></i>';
-					var stringUncheck='<i class="fa fa-times unchecked"></i>';
-					
-					$( "#vaccineStatus" ).html(stringUncheck);
-					$( "#covidTestStatus" ).html(stringUncheck);
-					if(data.is_vaccined==1){
-						$( "#vaccineStatus" ).html(stringCheck);
-					}
-					if(data.is_covidTested==1){
-						$( "#covidTestStatus" ).html(stringCheck);
-					}
-					
-					/*
 					$('#welcomeAudio').get(0).play();
 					$('#welcomeAudio').on('ended', function() {
 					   playing = false;
@@ -365,8 +298,6 @@
 					   playing = false;
 							 $('#entranceAudioKh').get(0).play();
 					});
-					
-					*/
 					
 					setTimeoutReload();
 				}else{

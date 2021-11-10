@@ -726,7 +726,7 @@ class IndexController extends Zend_Controller_Action
 		// text parameter it directly
 		// outputs QR in the browser
 		header('Content-Type: image/png');
-		echo QRcode::png($codeReader,null,$errorCorrectionLevel, $matrixPointSize,2);exit();
+		echo QRcode::png($codeReader,null,$errorCorrectionLevel, $matrixPointSize,1);exit();
 		//QRcode::png($studentToken, $imageName, $errorCorrectionLevel, $matrixPointSize, 2);
         
     }

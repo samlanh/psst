@@ -149,6 +149,7 @@
 			
 			if (!empty($_data['identity'])){
 				$ids = explode(",", $_data['identity']);
+				$stuToken = $_dbgb->getStudentToken();
 				foreach ($ids as $i){
 					$array = array(
 							'branch_id'	  => $_data['branch_id'],
@@ -169,6 +170,7 @@
 							'guardian_tel'=> $_data['tel'],
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
+							'studentToken'=>$stuToken
 							);
 					$this->_name="rms_student";
 					$student_i = $this->insert($array);

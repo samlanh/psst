@@ -73,7 +73,11 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	
     	
-    	$_arr = array(1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH_KNOWLEDGE"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("CHINESE_KNOWLEDGE"),5=>$this->tr->translate("OTHER"));
+    	$_arr = array(1=>$this->tr->translate("KHMER_KNOWLEDGE"),
+    			2=>$this->tr->translate("ENGLISH_KNOWLEDGE"),
+    			3=>$this->tr->translate("UNIVERSITY"),
+    			4=>$this->tr->translate("CHINESE_KNOWLEDGE"),
+    			5=>$this->tr->translate("OTHER"));
     	$_ask_for = new Zend_Dojo_Form_Element_FilteringSelect("ask_for");
     	$_ask_for->setMultiOptions($_arr);
     	$_ask_for->setAttribs(array(

@@ -1119,5 +1119,7 @@ class Application_Form_FrmGlobal{
 				</tr>
 			</table>';
 			return $str;
-	}
+	}//
+	
+	
 }

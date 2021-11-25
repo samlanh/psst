@@ -1,5 +1,5 @@
 @font-face{font-family:'NiDA Khmer Empire';src:url("../../../font/NiDAKhmerEmpire.ttf");}
-@font-face{font-family:'Khmer MEF2';src:url("../../../font/KHMERMEF2.ttf");}
+@font-face{font-family:'Khmer OS Muol Light';src:url("../../../font/KHMERMEF2.ttf");}
 
 table#table_parent table.table {
     margin-bottom: 0;
@@ -9,8 +9,8 @@ label.control-label {
     margin-bottom: 0;
     vertical-align: bottom;
     padding: 0;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 15px;
+    /*font-weight: 700;*/
 }
 .table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td{
      padding: 5px 2px;
@@ -343,7 +343,7 @@ ul.guide-info .info-squar.sold {
 }
 .login-page .system-title {
     font-size: 18px;
-    font-family: 'Khmer MEF2';
+    font-family: 'Khmer OS Muol Light';
     line-height: 30px;
 }
 

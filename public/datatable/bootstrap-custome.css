@@ -346,7 +346,7 @@ label.control-label {
     font-style: italic;
 }
 .bold{
-	font-weight: 700 !important;
+	/*font-weight: 700 !important;*/
 }
 .nav-tab {
     border-bottom: 2px solid #DDD;

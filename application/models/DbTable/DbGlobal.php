@@ -3139,5 +3139,9 @@ function getAllgroupStudyNotPass($action=null){
   	LIMIT 1 ";
   	return $db->fetchRow($sql);
   }
+  function getStudentToken(){
+  	return 'PSIS'.date('YmdHis');
+  	
+  }
 }
 ?>

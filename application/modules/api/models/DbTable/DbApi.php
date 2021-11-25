@@ -1638,6 +1638,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$sql="
     	SELECT
 	    	s.`id`,
+	    	s.branch_id,
 	    	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
 	    	(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_monthen,
 	    	s.exam_type,
@@ -1672,7 +1673,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	gds.degree AS degree_id,
 	    	gds.academic_year AS for_academic_year,
 	    	(SELECT br.school_namekh FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_namekh,
-	    	(SELECT br.school_nameen FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_nameen
+	    	(SELECT br.school_nameen FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS school_nameen,
+	    	(SELECT br.photo FROM rms_branch AS br WHERE br.br_id = s.branch_id LIMIT 1) AS photo_branch
     	FROM
     	`rms_score` AS s,
     	`rms_score_detail` AS sd,
@@ -1885,7 +1887,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							mc.`active` =1 
 							AND (( mc.`type_holiday` =1  AND DATE_FORMAT(mc.date, '%m')= ".$month.") 
     			 				OR  (mc.`type_holiday` =2  AND DATE_FORMAT(mc.date, '%Y-%m')='".$year_month."'))";
-    			 $sql.=" ORDER BY mc.date ASC ";
+    			 $sql.=" ORDER BY DATE_FORMAT(mc.date, '%d') ASC ";
     			 
     			 		$res = $db->fetchAll($sql);
 	    				$result = array(

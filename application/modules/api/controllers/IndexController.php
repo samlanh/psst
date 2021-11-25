@@ -121,9 +121,9 @@ class Api_IndexController extends Zend_Controller_Action
    				'for_month'=>$for_month,
    		);
    	}
-   $dbApi = new Api_Model_DbTable_DbApi();
-   	
+   	$dbApi = new Api_Model_DbTable_DbApi();
    	$rs = $dbApi->getExamByExamIdAndStudent($data);
+//    	print_r($rs);exit();
    	$this->view->rs = $rs;
    	if ($rs['exam_type']==2){
    		$monthlysemesterAverage = $dbApi->getAverageMonthlyForSemester($rs['group_id'], $rs['for_semester'], $rs['student_id']);
@@ -134,6 +134,11 @@ class Api_IndexController extends Zend_Controller_Action
    	$db = new Foundation_Model_DbTable_DbScore();
    	$subject =$db->getSubjectByGroup($data['group_id'],null,$data['exam_type']);
    	$this->view->subject = $subject;
+   	
+   	$frmgb = new Application_Form_FrmGlobal();
+   	$this->view->footterPrincipal = $frmgb->getFooterPrincipalSigned($rs['branch_id'],$group_id);
+//    	print_r($frmgb->getFooterPrincipalSigned($rs['branch_id'],$group_id));
+//    	exit();
    	
    }
    function downloadAction(){

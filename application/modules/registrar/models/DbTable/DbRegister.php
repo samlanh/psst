@@ -549,7 +549,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				Application_Form_FrmMessage::message("UPDATE_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				$db->rollBack();
-				exit();
 			}
 		}					
 	}

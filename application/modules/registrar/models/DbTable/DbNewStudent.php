@@ -72,7 +72,7 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 			
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			$_dbfee = new Accounting_Model_DbTable_DbFee();
-			
+			$stuToken = $dbg->getStudentToken();
 				$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
@@ -93,7 +93,7 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 					'commune_name'	=>$_data['commun_note'],
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
-					
+					'studentToken'  =>$stuToken,
 					
 					//////////////////////////////////////////////				
 					'remark'		=>$_data['remark'],

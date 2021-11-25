@@ -8,6 +8,7 @@ $duration = empty($this->exam['duration'])?1:number_format($this->exam['duration
 $endTiem = date("Y-m-d H:i:s",strtotime("+$duration min $startTime"));
 
 $placemnet_id = $this->exam_id; 
+
 $truefalseList=$_dbgb->getOptionTrueFalse(1,1);
 ?>
 

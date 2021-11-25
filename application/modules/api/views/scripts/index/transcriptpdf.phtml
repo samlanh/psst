@@ -1,9 +1,20 @@
 <?php
-
+//exit();
 require_once PUBLIC_PATH. '\mpdf\vendor\autoload.php';
 require_once PUBLIC_PATH. '\mpdf\vendor\mpdf\mpdf\mpdf.php';
 
 
+$sexkh="ប";
+$sexen="M";
+if ($this->rs['sex']==2){
+	$sexkh="ស";
+	$sexen="F";
+}
+$image = $this->baseUrl()."/images/logo.png";
+// echo $this->rs['photo_branch'];exit();
+if (!empty($this->rs['photo_branch'])){
+	$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+}
 
 $html='<html>
 		<head>
@@ -14,16 +25,15 @@ $html='<html>
 					line-height: 16px;
 				}
 				.style{
-					line-height: 20px; font-size: 12px !important;
+					line-height: 20px; 
+					font-size: 12px !important;
 					color:#4839bd;
-					font-family: "Times New Roman","KhmerOSBattambang";
-					
 				}
 				.padding{ padding: 0 1px !important;}
-				table .header{ font-family:Arial,"KhmerOSBattambang"; }
+				table .header{ font-family:khmeros; }
 				.cheader{height: 30px;background: #ffdbdb; white-space: nowrap;
 						height:50px;
-							color:#5a71b5;font-size: 16px;font-family: "Times New Roman","khmermoullight";
+						color:#5a71b5;font-size: 12px;
 				}
 				.hover:hover{background: #ccc;}
 				 td.rotate {
@@ -59,64 +69,67 @@ $html='<html>
 				.border-bottom-none{
 	    			border-bottom: #fff solid 1px;
 				}
+				@page {
+     margin: 0px;
+    }
+				.khmermoullight{font-family:khmermoullight;}
+				.khmeros{font-family:khmeros;}
 			</style>
 		</head>';
-	if ($this->rs['exam_type']==1){
+	//if ($this->rs['exam_type']==1){
 		$html.='<body>
 			<div style="min-height:10cm;">
-				<table style="width:100%;background:#fff; margin: 0 auto; font-family:khmermoullight ">
-					<tr >
-						<td width="20%" align="center" >
+				<table style="width:100%;background:#fff;margin: 0 auto;" class="khmeros">
+					<tr>
+						<td width="25%" align="center" >
 							<br />
-							<img style=" width:120px;" src="<?php echo $image;?>">
+							<img style=" width:120px;" src="'.$image.'">
 						</td>
-						<td width="60%" align="center" >
-							<h3 style="font-weight:bold; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: "Times New Roman,KhmerOSMuolLight">
+						<td width="50%" align="center" valign="top">
+							<h3 style="font-weight:bold; color:#4839bd; font-size: 16px; line-height:28px; margin: 0;">
 								KINGDOM OF CAMBODIA
 							</h3>
-							<h3 style=" font-weight:bold; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: "Times New Roman,Khmer OS Muol Light;">
+							<h3 style=" font-weight:bold; color:#4839bd; font-size: 14px; line-height:28px; margin: 0;">
 								NATION RELIGION KING
 							</h3>
-							<h3 style="font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: "Times New Roman,Khmer OS Muol Light">
+							<h3 style="font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; ">
 								 '.$this->rs["school_nameen"].'
 							</h3>
-							<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family: "Times New Roman,Khmer OS Muol Light">
+							<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0;">
 								&#9702; Disciplina &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#9702; Virtus &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#9702; Successus
 							</h3>
 						</td>
-						<td width="20%" align="center" >
-						&nbsp;
-						</td>
+						<td width="25%" align="center" >&nbsp;</td>
 					</tr>
 					<tr>
 						<td colspan="3" style=" border-top:#4839bd solid 3px;" align="center">
-							<h3 style="font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: "Times New Roman,Khmer OS Muol Light">
-								របាយការណ៍ចំពោះមាតាបិតា <strong>REPORT TO PARENTS</strong>
+							<h3 style="font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family:Times New Roman,Khmer OS Muol Light">
+								<br /><span class="khmermoullight">របាយការណ៍ចំពោះមាតាបិតា<span><strong>REPORT TO PARENTS</strong>
 							</h3>
-							<table cellpadding="0"​ border="0" style="width:100%font-weight:normal; color:#4839bd; font-size: 18px; line-height:20px; margin: 0; font-family: "Times New Roman,Khmer OS Muol Light">
+							<table cellpadding="0"​ border="0" style="width:100%font-weight:normal; color:#4839bd; font-size: 12px; line-height:20px; margin: 0; font-family:Times New Roman,Khmer OS Muol Light">
 								<tr>
-									<td align="right" width="25%" style="font-family: "Times New Roman,Khmer OS Muol Light">សិស្សឈ្មោះ : </td>
-									<td class="bold" align="left" width="23%">'.$this->rs['stu_khname'].'</td>
+									<td align="right" width="25%" class="khmeros">សិស្សឈ្មោះ : </td>
+									<td class="bold khmeros" align="left" width="23%">'.$this->rs['stu_khname'].'</td>
 									<td width="4%">&nbsp;</td>
 									<td align="right" width="30%">Ref No : </td>
 									<td class="bold" align="left" width="25%"></td>
 								</tr>
 								<tr>
-									<td align="right" width="25%">អត្តលេខ / ID : </td>
+									<td align="right" width="25%" class="khmeros">អត្តលេខ / ID : </td>
 									<td class="bold" align="left" width="23%">'.$this->rs['stu_code'].'</td>
 									<td >&nbsp;</td>
-									<td align="right" width="25%">ថ្នាក់ទី​ / Grade : </td>
-									<td class="bold" align="left" width="23%">'.$this->rs['group_code'].'</td>
+									<td align="right" width="25%" class="khmeros">ថ្នាក់ទី​ / Grade : </td>
+									<td class="bold" align="left" width="23%" class="khmeros">'.$this->rs['group_code'].'</td>
 								</tr>
 								<tr>
-									<td align="right" width="25%">ភេទ / Gender : </td>
+									<td align="right" width="25%" class="khmeros">ភេទ / Gender : </td>
 									<td class="bold" align="left" width="23%">'.$sexen.'</td>
 									<td >&nbsp;</td>
-									<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
+									<td align="right" width="25%" class="khmeros">ឆ្នាំសិក្សា / Academic Year : </td>
 									<td class="bold" align="left" width="23%">'.$this->rs['academic_year'].'</td>
 								</tr>
 							</table>
-							<h3 style=" font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family:"Times New Roman,Khmer OS Muol Light">
+							<h3 class="khmermoullight" style="font-weight:normal; color:#4839bd; font-size: 12px; line-height:28px; margin: 0;">
 								ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENTS PROGESS IN BASIC SKILLS</strong>
 							</h3>
 						</td>
@@ -124,7 +137,7 @@ $html='<html>
 					<tr>
 						<td colspan="3" id="exportExcel" valign="top" align="center">
 							<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd;" border="1" >
-								<tr class="cheader" align="center"  >
+								<tr class="cheader khmeros" align="center"  >
 									<td>ល.រ</td>
 									<td colspan="2">មុខវិជ្ជា Subject</td>
 									<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
@@ -205,15 +218,21 @@ $html='<html>
 							</table>
 						</td>
 					</tr>
+					<tr>
+						<td colspan="3">'.$this->footterPrincipal.'</td>
+					</tr>
 				</table>
 			</div>
 		</body>';
-		 }
+		// }
 $html.='</html>';
 $mpdf = new Mpdf();
-$mpdf->allow_charset_conversion=true;  // Set by default to TRUE
+$mpdf->allow_charset_conversion=true;
+$mpdf->SetMargins(1.0, 1, 1,1); // Set by default to TRUE
+$mpdf->SetDisplayMode('fullpage');
+
 $mpdf->AddPage('P'); 
-//echo $html;
+// echo $html;exit();
 $mpdf->WriteHTML($html);
 $mpdf->Output();
 ?>

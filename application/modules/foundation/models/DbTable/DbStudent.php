@@ -261,7 +261,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			try{	
 				$_data['degreeStudent'] =$degree_id;//For Insert To Tale Count ID
 				$dbg->updateAmountStudetByDegree($_data);//For Insert To Tale Count ID
-				
+				$stuToken = $dbg->getStudentToken();
 				$_arr= array(
 						'branch_id'		=>$_data['branch_id'],
 						'stu_code'		=>$stu_code,
@@ -328,6 +328,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'scholarship_amt'	=>$_data['scholarship_amount'],
 						'scholar_fromdate'	=>$_data['scholarship_fromdate'],
 						'scholar_todate'	=>$_data['scholarship_todate'],
+						'studentToken'=>$stuToken
 						);
 				if (EDUCATION_LEVEL==1){
 					$_arr['calture'] = $_data['calture'];

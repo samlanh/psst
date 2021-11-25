@@ -1119,5 +1119,70 @@ class Application_Form_FrmGlobal{
 				</tr>
 			</table>';
 			return $str;
-	}
+	}//
+	function getFooterPrincipalSigned($branch_id,$group_id){
+	
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$db = new Application_Model_DbTable_DbGlobal();
+		$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+		// 		$rs = $db->getBranchInfo($branch_id);
+		// 		print_r($rs);exit();
+	
+		$sql="SELECT
+		g.`branch_id`,
+		b.stamp,
+		b.signature,
+		b.principal,
+		b.workat,
+		g.`group_code`,
+		(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+		(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature
+	
+		FROM
+		`rms_branch` AS b,
+		`rms_group` AS g
+		WHERE
+		b.br_id=g.`branch_id`
+		AND b.br_id= $branch_id
+		AND g.`id` = ".$group_id;
+		$rs = $db->getGlobalDbRow($sql);
+	
+		$font = 'Khmer OS Muol Light';
+		$fontbtb = 'Khmer os battambang';
+	
+		$str='<table width="100%">
+		<tr>
+		<td valign="top" width="33%" style="font-family:'.$font.';font-size:14px;text-align: center;">
+		បានឃើញ និងឯកភាព<br />
+		</td>
+		<td width="33%" valign="top" style="font-family:'.$fontbtb.';font-size:14px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
+		<td width="33%" style="white-space: nowrap;font-family:'.$fontbtb.'" valign="top">'.$rs['workat'].$tr->translate("CREATE_WORK_DATE").'</td>
+		</tr>
+		<tr>
+		<td valign="top" style="font-family:'.$font.';font-size:14px;text-align: center;">'.$rs["principal"].'</td>
+		<td valign="top" style="font-family:'.$fontbtb.';font-size:14px;text-align: center;">ការិយាល័យសិក្សាធិការ</td>
+		<td valign="top" style=" text-align: center;font-family:'.$fontbtb.'">'.$tr->translate("TEACHER_ROOM").'</td>
+		</tr>
+		<tr>
+		<td valign="top"  style="font-family:'.$font.';font-size:14px;text-align: center;">
+		<div>
+		<img src="'.$baseUrl.'/images/'.$rs['stamp'].'" style="max-height:100px;position:relative;left:100px;" />
+		</div>
+		<img src="'.$baseUrl.'/images/'.$rs['signature'].'" style="left:100px;bottom:50px;width:200px;position:relative;margin-left:150px;" />
+		</td>
+		<td></td>
+		<td valign="top" style="font-family:'.$font.';font-size:14px;text-align: center;">';
+		if(!empty($rs['teacher_sigature'])){
+		$str.='<div><img src="'.$baseUrl.'/images/photo/'.$rs['teacher_sigature'].'" style="height:40px;position:relative;margin-bottom:20px;" /></div>';
+		}else{
+		$str.='<div style="height: 100px;"></div>';
+		}
+		$str.='<span style="font-family:'.$font.';font-size:14px;text-align: center;padding-left:20px;">'.$rs['teacher'].'</span>
+		</td>
+		</tr>
+		</table>';
+		return $str;
+		}
+	
+	
 }

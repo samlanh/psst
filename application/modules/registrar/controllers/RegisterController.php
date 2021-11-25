@@ -46,6 +46,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+//     	$db = new Api_Model_DbTable_DbsensokabaApi();
+//     	$db->sendMessagetoTeleagrame('419707100','hello from php');
     }
     public function addAction(){
       if($this->getRequest()->isPost()){

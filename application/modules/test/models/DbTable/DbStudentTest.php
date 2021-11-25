@@ -59,6 +59,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$newSerial = $data['serial'];
 			}
 			
+			$stuToken = $_dbgb->getStudentToken();
 			$array = array(
 						'branch_id'	=>$data['branch_id'],
 						'serial'	=>$newSerial,
@@ -97,6 +98,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'modify_date' => date("Y-m-d H:i:s"),
 						'test_type'=>$data['test_type'],
 						'test_setting_id'			=>$data['test_setting_id'],
+						'studentToken'=>$stuToken
 					);
 					$this->_name="rms_student";
 					$stutest_id=$this->insert($array);

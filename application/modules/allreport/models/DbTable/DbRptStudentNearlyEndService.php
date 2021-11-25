@@ -20,6 +20,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	//(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
     	//(SELECT title FROM `rms_items` WHERE rms_items.id=item.items_id LIMIT 1 ) AS category_name,
 //     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+// echo $search['end_date'];exit();
     	$lang = $_db->currentlang();
     	if($lang==1){// khmer
     		$label = "name_kh";

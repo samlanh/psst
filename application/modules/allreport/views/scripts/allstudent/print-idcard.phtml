@@ -34,7 +34,7 @@ function getKHMonthByNumber(m){
 		</style>
 		<div id="divPrint1" >
 
-			<?php if($type==1){// psis format ?>
+			<?php if($type==1){// psis old format ?>
 			<style>
 				@page {
 					margin: 0;
@@ -79,7 +79,7 @@ function getKHMonthByNumber(m){
 					text-align: center;
 					width: 100%;
 					position: absolute;
-					top: 60px;
+					top: 70px;
 					left: -0.58px;
 				}
 				.photo img {
@@ -92,7 +92,7 @@ function getKHMonthByNumber(m){
 		
 				span.stuNameValue {
 					position: absolute;
-					top: 170px;
+					top: 176px;
 					display: block;
 					width: 100%;
 					text-align: center;
@@ -106,7 +106,7 @@ function getKHMonthByNumber(m){
 					margin: 0;
 					position: absolute;
 					text-align: left;
-					top: 199.5px !important;
+					top: 217px !important;
 					left: 48px;
 					color: #01049f;
 					font-weight: bold;
@@ -126,7 +126,7 @@ function getKHMonthByNumber(m){
 				}
 				.qrimages {
 					position: absolute;
-					top: 237px;
+					top: 257px;
 					left: -30px;
 					width: 100%;
 					text-align: center;
@@ -275,7 +275,7 @@ function getKHMonthByNumber(m){
 					</div>
 				</div>
 				-->	
-				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
+				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 209px;height: 329px; color: #3f3f95; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
 					<div class="profile-card-block">
 						<div class="photo">
 							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
@@ -737,7 +737,10 @@ function getKHMonthByNumber(m){
 							</div>
 					<?php }}?>
 				</div>
-			<?php }?>
+			<?php }
+			elseif($type==4){// Good Will format 
+				
+			}?>
 		</div>
 		<table width="100%">
 			<tr>
@@ -780,7 +783,7 @@ function getKHMonthByNumber(m){
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
 			?>
-			window.location.href = '<?php echo $url_copy;?>';
+			//window.location.href = '<?php echo $url_copy;?>';
 	    }, 10000);
 	   return false;
 

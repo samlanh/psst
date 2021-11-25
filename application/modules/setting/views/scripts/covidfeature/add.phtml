@@ -229,13 +229,14 @@ function addRecord() {
 			
 			
 			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_vaccined'+col+'" name="is_vaccined'+col+'" >';
-			template+='<option value="0"><?php echo $tr->translate("VACCIN_UNCOMPLETED");?></option>';	
 			template+='<option value="1"><?php echo $tr->translate("VACCIN_COMPLETED");?></option>';	
+			template+='<option value="0"><?php echo $tr->translate("VACCIN_UNCOMPLETED");?></option>';	
+			
 			template+='</select></td>';
 			
 			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_covidTested'+col+'" name="is_covidTested'+col+'" >';
+			template+='<option value="1"><?php echo $tr->translate("TESTED_COVID");?></option>';
 			template+='<option value="0"><?php echo $tr->translate("NOT_YET_TEST_COVID");?></option>';	
-			template+='<option value="1"><?php echo $tr->translate("TESTED_COVID");?></option>';	
 			template+='</select></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";

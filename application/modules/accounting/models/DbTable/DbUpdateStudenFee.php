@@ -148,8 +148,22 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}
-		$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-		$sql.=" ORDER BY s.stu_id DESC ";
-		return $db->fetchAll($sql);
+		$where="";
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			
+			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(s.last_name,s.stu_enname) LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.tel,' ','')  			LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		
+		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
+		$where.=" ORDER BY s.stu_id DESC ";
+		return $db->fetchAll($sql.$where);
 	}
 }

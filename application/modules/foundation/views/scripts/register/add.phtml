@@ -2143,7 +2143,7 @@ date_format = '"dd/MM/yyyy"';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col_study+'" id="degree_'+col_study+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
     		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GROUP");?>" dojoType="dijit.form.TextBox" class="fullside" name="group_'+col_study+'" id="group_'+col_study+'" value="'+group+'" type="hidden">'+groupabel+'&nbsp;</td>';
-    		template_study+='<td>&nbsp;<input onChange="getStudentNo();" type="radio" name="is_main" id="is_main" value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
+    		template_study+='<td>&nbsp;<input onChange="getStudentNo();" checked="checked" type="radio" name="is_main" id="is_main" value="'+col_study+'" />&nbsp;<?php echo $tr->translate("IS_MAIN_GRADE");?>&nbsp;</td>';
         tmp_study='<tr id="row_study'+col_study+'">';
     	tmp_study+="</tr>";
     	dojo.query("#table_row_study").append(tmp_study);
@@ -2155,6 +2155,7 @@ date_format = '"dd/MM/yyyy"';
     	dojo.html.set(dojo.byId("row_study"+col_study),template_study , {
     	     parseContent: true,
     	});
+    	getStudentNo();
     	grade = dijit.byId('degree').reset();
     	grade = dijit.byId('grade').reset();
     	grade = dijit.byId('group').reset();

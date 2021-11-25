@@ -65,6 +65,17 @@ a.btnstyle:hover{color:#eee;}
 		                <div class="form-group">
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEARCH_STUDENT_NAME").', '.$tr->translate("STUDENT_CODE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("adv_search");?>
+				                   </div>
+				                 </div>
+			                </div>
+		                </div>
+		                <div class="form-group">
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
 				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ></label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		 <input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"

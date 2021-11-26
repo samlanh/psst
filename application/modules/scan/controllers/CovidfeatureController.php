@@ -1,5 +1,5 @@
 <?php
-class Setting_CovidfeatureController extends Zend_Controller_Action {
+class Scan_CovidfeatureController extends Zend_Controller_Action {
     public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
@@ -17,13 +17,13 @@ class Setting_CovidfeatureController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'),
 						'status' => -1);
 			}
- 			$db = new Setting_Model_DbTable_DbCovidFeature();
+ 			$db = new Scan_Model_DbTable_DbCovidFeature();
  			$rs_rows= $db->getAllStudentSetCovidFeature($search);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","GROUP","USER","VACCIN_STATUS","COVID_TESTED_STATUS");
 			$link=array(
-					'module'=>'setting','controller'=>'covidfeature','action'=>'edit',
+					'module'=>'scan','controller'=>'covidfeature','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('titleKh'=>$link,'titleEn'=>$link));
 		}catch (Exception $e){
@@ -41,9 +41,9 @@ class Setting_CovidfeatureController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="INSERT_SUCCESS";
-				$_dbmodel = new Setting_Model_DbTable_DbCovidFeature();
+				$_dbmodel = new Scan_Model_DbTable_DbCovidFeature();
 				$_discount = $_dbmodel->addSetCovidFeature($_data);
-				Application_Form_FrmMessage::Sucessfull($sms,"/setting/covidfeature");
+				Application_Form_FrmMessage::Sucessfull($sms,"/scan/covidfeature");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

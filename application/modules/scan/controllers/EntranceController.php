@@ -1,5 +1,5 @@
 <?php
-class Setting_EntranceController extends Zend_Controller_Action {
+class Scan_EntranceController extends Zend_Controller_Action {
     public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
@@ -15,13 +15,13 @@ class Setting_EntranceController extends Zend_Controller_Action {
 						'adv_search' => '',
 						'status' => -1);
 			}
- 			$db = new Setting_Model_DbTable_DbEntrance();
+ 			$db = new Scan_Model_DbTable_DbEntrance();
  			$rs_rows= $db->getAllEntrance($search);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("TITLE_KH","TITLE_EN","CREATE_DATE","USER","STATUS");
 			$link=array(
-					'module'=>'setting','controller'=>'entrance','action'=>'edit',
+					'module'=>'scan','controller'=>'entrance','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('titleKh'=>$link,'titleEn'=>$link));
 		}catch (Exception $e){
@@ -39,13 +39,13 @@ class Setting_EntranceController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="INSERT_SUCCESS";
-				$_dbmodel = new Setting_Model_DbTable_DbEntrance();
+				$_dbmodel = new Scan_Model_DbTable_DbEntrance();
 				$_discount = $_dbmodel->addEntrance($_data);
 				
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/setting/entrance");
+					Application_Form_FrmMessage::Sucessfull($sms,"/scan/entrance");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,"/setting/entrance/add");
+					Application_Form_FrmMessage::Sucessfull($sms,"/scan/entrance/add");
 				}
 				Application_Form_FrmMessage::message($sms);				
 			}catch(Exception $e){
@@ -59,9 +59,9 @@ class Setting_EntranceController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
-				$db = new Setting_Model_DbTable_DbEntrance();
+				$db = new Scan_Model_DbTable_DbEntrance();
 				$db->addEntrance($data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/setting/entrance/index");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/scan/entrance/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -69,7 +69,7 @@ class Setting_EntranceController extends Zend_Controller_Action {
 		}
 		$id=$this->getRequest()->getParam("id");
 		$id=empty($id)?0:$id;
-		$db = new Setting_Model_DbTable_DbEntrance();
+		$db = new Scan_Model_DbTable_DbEntrance();
 		$this->view->rs=$db->getEntranceById($id);
 	}
 	

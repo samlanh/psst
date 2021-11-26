@@ -1,6 +1,6 @@
 <?php
 
-class Setting_Model_DbTable_DbCovidFeature extends Zend_Db_Table_Abstract
+class Scan_Model_DbTable_DbCovidFeature extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_student';
     public function getUserId(){

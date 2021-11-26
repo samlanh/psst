@@ -1,5 +1,4 @@
 <?php
-	
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 
@@ -168,57 +167,48 @@
 		<div class="container body-key mainCotentBlog">
 			<div class="main_container">
 				<?php 
-						echo $this->render('bloglogo.phtml');
-					?>
+					echo $this->render('bloglogo.phtml');
+				?>
 				<div class="main-content-scan"  >
-					
 					<div class="row">
-							
-							
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="profile_details" >
-										<div class="col-md-4 col-sm-4 col-xs-12 text-center">
-											<?php 
+									<div class="col-md-4 col-sm-4 col-xs-12 text-center">
+										<?php 
 											$photo = $this->baseUrl()."/images/no-profile.png";
 											$photo = $this->baseUrl()."/images/profile_202012021606875720.jpg";
-												
-											?>
-										  <img id="stuImageProfile" src="<?php echo $photo;?>" alt="" class="img-circle img-responsive">
-										  <div class="backImage">&nbsp;</div>
-										</div>
-										<div class="col-md-8 col-sm-8 col-xs-12" style="position:relative;">
-											<div class="bg-style-drop" style="background: url(/camappgit/psst/public/images/logo.png);   background-repeat: no-repeat; background-size: 100%;"></div>
-											<div class="resume-wrap">
-												<div class="w-100">
-													<div class="icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
-												</div>
-												  <h2 id="stuNameKh">សម្បត្តិ លីវីណា</h2>
-												  <h2 id="stuNameEng">Livyna Sambath</h2>
-												  <p><strong><?php echo $tr->translate("STUDENT_CODE")?>: </strong> <span id="stuNameCode">P00457</span> </p>
-												  <ul class="list-unstyled">
-													<li><i class="fa fa-graduation-cap"></i> <?php echo $tr->translate("ACADEMIC_YEAR")?>: <span id="academicYear">2020-2021</span></li>
-													<li><i class="fa fa-magic"></i> <?php echo $tr->translate("DEGREE")?>: <span id="stuDegree">Primary</span></li>
-													<li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <span id="stuGrade">Grade 3C</span></li>
-													<li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <span id="primaryPhone">012 642 243</span></li>
-												  </ul>
-												  <ul class="convidInfo list-unstyled ">
-													<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការចាក់វ៉ាក់សាំង")?></span>: <span id="vaccineStatus" class="cicleStatus"><i class="fa fa-check checked"></i></span></li>
-													<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការធ្វើតេស្ដ Covid-19")?></span>: <span id="covidTestStatus" class="cicleStatus"><i class="fa fa-times unchecked"></i></span></li>
-												  </ul>
-												  <div class="clearfix ">
-												  </div>
+										?>
+									  <img id="stuImageProfile" src="<?php echo $photo;?>" alt="" class="img-circle img-responsive">
+									  <div class="backImage">&nbsp;</div>
+									</div>
+									<div class="col-md-8 col-sm-8 col-xs-12" style="position:relative;">
+										<div class="bg-style-drop" style="background: url(/camappgit/psst/public/images/logo.png);   background-repeat: no-repeat; background-size: 100%;"></div>
+										<div class="resume-wrap">
+											<div class="w-100">
+												<div class="icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
 											</div>
-											
-										  
+											  <h2 id="stuNameKh">សម្បត្តិ លីវីណា</h2>
+											  <h2 id="stuNameEng">Livyna Sambath</h2>
+											  <p><strong><?php echo $tr->translate("STUDENT_CODE")?>: </strong> <span id="stuNameCode">P00457</span> </p>
+											  <ul class="list-unstyled">
+												<li><i class="fa fa-graduation-cap"></i> <?php echo $tr->translate("ACADEMIC_YEAR")?>: <span id="academicYear">2020-2021</span></li>
+												<li><i class="fa fa-magic"></i> <?php echo $tr->translate("DEGREE")?>: <span id="stuDegree">Primary</span></li>
+												<li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <span id="stuGrade">Grade 3C</span></li>
+												<li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <span id="primaryPhone">012 642 243</span></li>
+											  </ul>
+											  <ul class="convidInfo list-unstyled ">
+												<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការចាក់វ៉ាក់សាំង")?></span>: <span id="vaccineStatus" class="cicleStatus"><i class="fa fa-check checked"></i></span></li>
+												<li class="status"><span class="titleStatus"><?php echo $tr->translate("ការធ្វើតេស្ដ Covid-19")?></span>: <span id="covidTestStatus" class="cicleStatus"><i class="fa fa-times unchecked"></i></span></li>
+											  </ul>
+											  <div class="clearfix"></div>
 										</div>
+									</div>
 								</div>
 							</div>
-								
-							<div>
+						   <div>
 						</div>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 		<div class="entranceTitle">
@@ -269,7 +259,6 @@
 	<script>
 	$(document).ready(function() {
 		$('#SanningValue').focus();
-		
 		/*$("#SanningValue").blur(function(){
 				var sanningValue = $("#SanningValue").val();
 			   if( sanningValue !="" ) {
@@ -305,13 +294,6 @@
 			dataType: "json",
 			success:function(data){
 				if(data.statusReturn==1){
-					
-					
-					
-					
-					
-					
-					
 					sourceUrl = data.fullUrlAudio;
 					$("#successAudio").attr("src", sourceUrl);
 					

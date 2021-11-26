@@ -41,8 +41,8 @@ tr.header td {
 .form-group.audioBlog {
     background: #02014a;
     color: #fff;
-    border-radius: 10px;
-    padding: 5px 10px;
+    border-radius: 3px;
+    padding: 0px 10px;
 }
 
 tr.rowAudiofile {
@@ -59,7 +59,10 @@ audio.audioControlRow {
 input[type=file] {
     width: 100%;
 }
-
+.audioOption audio {
+    height: 35px;
+    padding: 5px 0;
+}
 </style>
 <form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" >
 	<script type="dojo/method" event="onSubmit">				
@@ -113,9 +116,9 @@ input[type=file] {
 		                   </label>
 		                </div>
 						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							<label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("INTRO_AUDIO");?>
-						   </label>
-						  <div class="col-md-9 col-sm-9 col-xs-12">
+							
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold "><?php echo $tr->translate("INTRO_AUDIO");?></label>
 								<input type='file' id="welcomeAudio" name="welcomeAudio" accept="audio/*" placeholder="" class="profile-aud">
 						   </div>
 							<div class="audioOption">
@@ -131,6 +134,80 @@ input[type=file] {
 								<audio id="audioPlay" controls  src="<?php echo $welcomeAudio;?>"></audio>
 							</div>
 						</div>
+						
+						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							
+						  <div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETIN_AUDIO");?></label>
+								<input type='file' id="confirmGetInAudio" name="confirmGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
+						   </div>
+							<div class="audioOption">
+							<?php 
+								$confirmGetInAudio = $defaultAudio;
+								if(!empty($this->row['confirmGetInAudio']['keyValue'])){
+									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetInAudio']['keyValue'])){
+										$confirmGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetInAudio']['keyValue'];
+									}
+								}
+								?>
+								<audio id="confirmGetInAudioPlay" controls  src="<?php echo $confirmGetInAudio;?>"></audio>
+							</div>
+						</div>
+						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold"><?php echo $tr->translate("DENY_GETIN_AUDIO");?></label>
+								<input type='file' id="denyGetInAudio" name="denyGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
+						   </div>
+							<div class="audioOption">
+							<?php 
+								$denyGetInAudio = $defaultAudio;
+								if(!empty($this->row['denyGetInAudio']['keyValue'])){
+									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetInAudio']['keyValue'])){
+										$denyGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetInAudio']['keyValue'];
+									}
+								}
+								?>
+								<audio id="denyGetInAudioPlay" controls  src="<?php echo $denyGetInAudio;?>"></audio>
+							</div>
+						</div>
+						
+						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETOUT_AUDIO");?></label>
+								<input type='file' id="confirmGetOutAudio" name="confirmGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
+						   </div>
+							<div class="audioOption">
+							<?php 
+								$confirmGetOutAudio = $defaultAudio;
+								if(!empty($this->row['confirmGetOutAudio']['keyValue'])){
+									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetOutAudio']['keyValue'])){
+										$confirmGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetOutAudio']['keyValue'];
+									}
+								}
+								?>
+								<audio id="confirmGetOutAudioPlay" controls  src="<?php echo $confirmGetOutAudio;?>"></audio>
+							</div>
+						</div>
+						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold"><?php echo $tr->translate("DENY_GETOUT_AUDIO");?></label>
+								<input type='file' id="denyGetOutAudio" name="denyGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
+						   </div>
+							<div class="audioOption">
+							<?php 
+								$denyGetOutAudio = $defaultAudio;
+								if(!empty($this->row['denyGetOutAudio']['keyValue'])){
+									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetOutAudio']['keyValue'])){
+										$denyGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetOutAudio']['keyValue'];
+									}
+								}
+								?>
+								<audio id="denyGetOutAudioPlay" controls  src="<?php echo $denyGetOutAudio;?>"></audio>
+							</div>
+						</div>
+						
+						
 						<div class="card-box <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="bd-bg">
@@ -512,4 +589,62 @@ function deletePlayListRow(index) {
 	dojo.query("#rowPlayList"+index).remove();
 }
 
+
+
+function readURLconfirmGetInAudio(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#confirmGetInAudioPlay').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+$("#confirmGetInAudio").change(function(){
+	readURLconfirmGetInAudio(this);
+});
+
+function readURLdenyGetInAudio(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#denyGetInAudioPlay').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+$("#denyGetInAudio").change(function(){
+	readURLdenyGetInAudio(this);
+});
+
+
+function readURLconfirmGetOutAudio(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#confirmGetOutAudioPlay').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+$("#confirmGetOutAudio").change(function(){
+	readURLconfirmGetOutAudio(this);
+});
+
+function readURLdenyOutInAudio(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#denyGetOutAudioPlay').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+$("#denyGetOutAudio").change(function(){
+	readURLdenyOutInAudio(this);
+});
 </script>

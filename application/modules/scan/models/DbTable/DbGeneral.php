@@ -47,6 +47,99 @@ class Scan_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			
 			}
 			
+			$confirmGetInAudioName = $_FILES['confirmGetInAudio']['name'];
+			if (!empty($confirmGetInAudioName)){
+				$tem =explode(".", $confirmGetInAudioName);
+				$newFileName = "confirmGetInAudio".date("Y").date("m").date("d").time().".".end($tem);
+				$tmp = $_FILES['confirmGetInAudio']['tmp_name'];
+				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
+					
+				
+					$rows = $this->geLabelByKeyName('confirmGetInAudio');
+					if (empty($rows)){
+						$arr = array('keyValue'=>$newFileName,'keyName'=>'confirmGetInAudio','note'=>"confirm GetIn Audio",'user_id'=>$dbg->getUserId());
+						$this->_name ="rms_setting";
+						$this->insert($arr);
+					}else{
+						$arr = array('keyValue'=>$newFileName);
+						$where=" keyName= 'confirmGetInAudio'";
+						$this->_name ="rms_setting";
+						$this->update($arr, $where);
+					}
+				}
+			
+			}
+			
+			$denyGetInAudioName = $_FILES['denyGetInAudio']['name'];
+			if (!empty($denyGetInAudioName)){
+				$tem =explode(".", $denyGetInAudioName);
+				$newFileName = "denyGetInAudio".date("Y").date("m").date("d").time().".".end($tem);
+				$tmp = $_FILES['denyGetInAudio']['tmp_name'];
+				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
+					
+				
+					$rows = $this->geLabelByKeyName('denyGetInAudio');
+					if (empty($rows)){
+						$arr = array('keyValue'=>$newFileName,'keyName'=>'denyGetInAudio','note'=>"Deny GetIn Audio",'user_id'=>$dbg->getUserId());
+						$this->_name ="rms_setting";
+						$this->insert($arr);
+					}else{
+						$arr = array('keyValue'=>$newFileName);
+						$where=" keyName= 'denyGetInAudio'";
+						$this->_name ="rms_setting";
+						$this->update($arr, $where);
+					}
+				}
+			
+			}
+			
+			
+			$confirmGetInAudioName = $_FILES['confirmGetOutAudio']['name'];
+			if (!empty($confirmGetInAudioName)){
+				$tem =explode(".", $confirmGetInAudioName);
+				$newFileName = "confirmGetOutAudio".date("Y").date("m").date("d").time().".".end($tem);
+				$tmp = $_FILES['confirmGetOutAudio']['tmp_name'];
+				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
+					
+				
+					$rows = $this->geLabelByKeyName('confirmGetOutAudio');
+					if (empty($rows)){
+						$arr = array('keyValue'=>$newFileName,'keyName'=>'confirmGetOutAudio','note'=>"confirm GetOut Audio",'user_id'=>$dbg->getUserId());
+						$this->_name ="rms_setting";
+						$this->insert($arr);
+					}else{
+						$arr = array('keyValue'=>$newFileName);
+						$where=" keyName= 'confirmGetOutAudio'";
+						$this->_name ="rms_setting";
+						$this->update($arr, $where);
+					}
+				}
+			
+			}
+			
+			$denyGetOutAudioName = $_FILES['denyGetOutAudio']['name'];
+			if (!empty($denyGetOutAudioName)){
+				$tem =explode(".", $denyGetOutAudioName);
+				$newFileName = "denyGetOutAudio".date("Y").date("m").date("d").time().".".end($tem);
+				$tmp = $_FILES['denyGetOutAudio']['tmp_name'];
+				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
+					
+				
+					$rows = $this->geLabelByKeyName('denyGetOutAudio');
+					if (empty($rows)){
+						$arr = array('keyValue'=>$newFileName,'keyName'=>'denyGetOutAudio','note'=>"Deny GetOut Audio",'user_id'=>$dbg->getUserId());
+						$this->_name ="rms_setting";
+						$this->insert($arr);
+					}else{
+						$arr = array('keyValue'=>$newFileName);
+						$where=" keyName= 'denyGetOutAudio'";
+						$this->_name ="rms_setting";
+						$this->update($arr, $where);
+					}
+				}
+			
+			}
+			
 			
 			//identity Audio
 			$detailidlistAudio = '';

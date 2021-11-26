@@ -25,6 +25,11 @@ public function init()
 		$row =array();
 		$row['welcomeAudio'] = $db_gs->geLabelByKeyName('welcomeAudio');
 		
+		$row['confirmGetInAudio'] 	= $db_gs->geLabelByKeyName('confirmGetInAudio');
+		$row['denyGetInAudio'] 		= $db_gs->geLabelByKeyName('denyGetInAudio');
+		$row['confirmGetOutAudio'] 	= $db_gs->geLabelByKeyName('confirmGetOutAudio');
+		$row['denyGetOutAudio'] 	= $db_gs->geLabelByKeyName('denyGetOutAudio');
+		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();
 		$this->view->allPlaylistvideo = $db_gs->getAllPlaylistvideo();

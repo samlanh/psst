@@ -14,6 +14,10 @@ public function init()
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
+				if (empty($data)){
+					Application_Form_FrmMessage::Sucessfull("File Attachment to large can't upload and Save data !","/scan/setting");
+					exit();
+				}
 				$db_gs->updateWebsitesetting($data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/scan/setting");
 			}catch (Exception $e){

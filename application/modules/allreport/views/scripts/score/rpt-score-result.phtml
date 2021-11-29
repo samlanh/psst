@@ -166,7 +166,7 @@
 					</td>
 				</tr>
 				<?php
-				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
+				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0;  $old_avg = 0; $old_rank=0;
 				 $duplicate=0;$count_pass=0;
 				 $default_col = 0;
 				 $m=0;$f=0;
@@ -261,13 +261,16 @@
 											$total_score = $total_score + $tscore_subject;
 										 }
 								 	}
-									if($rs['total_avg']==$old_totalscore){
+									
+									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+									
+									if($rs['total_avg']==$old_avg AND $total_score==$old_totalscore){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}
-									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+									
 								?>
 								<td align="center">
 									<?php
@@ -303,8 +306,10 @@
 								</td>
 							</tr>
 							<?php 
-								$old_totalscore = $rs['total_avg'];
-								$old_groupid=$rs['group_id']; ?>
+								$old_avg = $rs['total_avg'];
+								$old_totalscore = $total_score;
+								$old_groupid=$rs['group_id']; 
+							?>
 							<?php }}?>
 							</table>
 					</td>
@@ -440,7 +445,7 @@
 					</td>
 				</tr>
 				<?php
-				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
+				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_avg = 0;$old_totalscore = 0; $old_rank=0;
 				 $duplicate=0;$count_pass=0;
 				 $default_col = 0;
 				 $m=0;$f=0;
@@ -547,7 +552,7 @@
 									<span class="khmerName"><?php echo trim($rs['stu_khname']);?></span>
 								</td>
 								<td style="min-width:100px;">
-									<span class="englishName"><?php echo empty(trim($rs['stu_enname']))?"":trim($rs['stu_enname']);?></span>
+									<span class="englishName"><?php echo empty(trim($rs['stu_enname']))?"":trim($rs['last_name']." ".$rs['stu_enname']);?></span>
 								</td>
 								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
@@ -560,13 +565,16 @@
 											$total_score = $total_score + $tscore_subject;
 										 }
 								 	}
-									if($rs['total_avg']==$old_totalscore){
+								 	
+								 	$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+								 	if($rs['total_avg']==$old_avg AND $total_score==$old_totalscore){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}
-									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+									
+									
 								?>
 								<td align="center">
 									<?php
@@ -602,7 +610,8 @@
 								</td>
 							</tr>
 							<?php 
-								$old_totalscore = $rs['total_avg'];
+								$old_avg = $rs['total_avg'];
+								$old_totalscore = $total_score;
 								$old_groupid=$rs['group_id']; ?>
 							<?php }}?>
 							</table>

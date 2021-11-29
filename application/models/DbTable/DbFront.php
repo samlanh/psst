@@ -9,9 +9,9 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 		$curr = new Application_Model_DbTable_DbGlobal();
 		$lang= $curr->currentlang();
 		$db = $this->getAdapter();
-		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;
+// 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+// 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
+// 		$where = " AND ".$from_date." AND ".$to_date;
 				$field = 'name_en';
 				$colunmname='title_en';
 				if ($lang==1){
@@ -35,6 +35,7 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 							(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
 							(SELECT sga.audioFile FROM `rms_setting_grade_audio` AS sga WHERE sga.gradeId=ds.grade LIMIT 1) AS gradeAudioFile,
 							(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
+							ds.group_id,
 						    (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
 						    ds.group_id,
@@ -79,10 +80,27 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 					$gradeAudioFile = $baseURl.'/images/frontFile/audio/'.$row['gradeAudioFile'];
 				}
 			}
+			
+			$allowAudio = $defaultAudio;
+			if (!empty($row['welcomeAudio'])){
+				if (file_exists($phblicpart."/images/frontFile/audio/".$row['welcomeAudio'])){
+					$denyAudio = $baseURl.'/images/frontFile/audio/'.$row['welcomeAudio'];
+				}
+			}
+			
+			$denyAudio = $defaultAudio;
+			if (!empty($row['denyGetInAudio'])){
+				if (file_exists($phblicpart."/images/frontFile/audio/".$row['denyGetInAudio'])){
+					$denyAudio = $baseURl.'/images/frontFile/audio/'.$row['denyGetInAudio'];
+				}
+			}
+			
 			$row['fullUrlAudio']=$audio;
 			$row['fullUrlGradeAudio']=$gradeAudioFile;
 			$row['fullUrlProfile']=$photo;
 			$row['statusReturn']=1;
+			$row['fullUrlAllowAudio']=$allowAudio;
+			$row['fullUrlDenyAudio']=$denyAudio;
 			return $row;
 		}
 	}
@@ -112,15 +130,15 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			
 			$_arr=array(
-					'study_id'	  		=> $_data['study_id'],
-					'stu_id'			=> $_data['stu_id'],
-					'scan_type'			=> $_data['scan_type'],
-					'create_date'	 	=> date('Y-m-d H:i:s'),
-					'modify_date' 		=> date('Y-m-d H:i:s'),
-					'entrance_id'	  	=> $_data['entrance_id'],
-					"audio_played"		=> 0
+				'study_id'	  		=> $_data['study_id'],
+				'stu_id'			=> $_data['stu_id'],
+				'group_id'			=> $_data['group_id'],
+				'scan_type'			=> $_data['scan_type'],
+				'create_date'	 	=> date('Y-m-d H:i:s'),
+				'modify_date' 		=> date('Y-m-d H:i:s'),
+				'entrance_id'	  	=> $_data['entrance_id'],
+				"audio_played"		=> 0
 			);
 			$this->_name = "rms_scan_transaction";
 			$id =  $this->insert($_arr);
@@ -128,12 +146,10 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 			return $id;
 				
 		}catch (Exception $e){
-			
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error");
 			$db->rollBack();
 		}
-	}
-	
+	}	
 }
 ?>

@@ -363,6 +363,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	sm.`student_id`,
 		   	st.`stu_code`,
 		   	st.stu_khname,
+		   	st.last_name,
 		   	st.stu_enname,
 		   	CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,
 		   	st.`sex`,
@@ -390,8 +391,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND g.`id` = s.`group_id`
 		   	AND s.`id`=sm.`score_id`
 		   	AND s.status = 1
-		   	AND s.type_score=1  
-   	";
+		   	AND s.type_score=1 ";
    	
 	
 	// 	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,

@@ -312,6 +312,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    	gr.year_id=$year
 		    	AND gr.group_id=$group
 		    GROUP BY 
+		    	gr.group_id,
 		    	gr.subject_id
 		    ORDER BY 
 		    	subject_name,gr.subject_id DESC 
@@ -343,12 +344,11 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			    	AND gr.group_id=$group_id
 			    	AND gr.subject_id =$subject_id
     			ORDER BY 
-    				subject_name,gr.subject_id DESC 
-    		";
+    				subject_name,gr.subject_id DESC ";
     	
     	$row = $db->fetchAll($sql);
-    	$hour="";
-    	$min="";
+    	$hour=0;
+    	$min=0;
     	if (!empty($row)){
 	    	foreach ($row as $rs){
 	    		$fromHour = explode(".", $rs['from_hour']);

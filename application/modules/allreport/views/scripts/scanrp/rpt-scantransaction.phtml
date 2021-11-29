@@ -1,0 +1,169 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('REPORT_SCANTRANSACTION')); 
+	echo $this->headTitle(''); 
+	$frm =  $this->form_search;
+?>
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>	
+<div class="reportblog">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REPORT_SCANTRANSACTION');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<div class="form-group">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+            	<?php echo $frm->getElement("adv_search");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("branch_id");?>
+            </div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+        	 	<?php echo $frm->getElement("start_date");?>
+            </div>
+             <div class="col-md-2 col-sm-2 col-xs-12">
+             	<?php echo $frm->getElement("end_date");?>
+            </div>
+             <div class="col-md-2 col-sm-2 col-xs-12">
+             	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+            </div>
+        </div>	
+	</form>		
+	<div id="divPrint">
+		<table style="background:#fff; margin: 0 auto;width: 100%">
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td width="25%" align="left">
+				</td>
+				<td align="center">
+					<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_SCANTRANSACTION");?></span><br />
+					<span​​ style="font-family: 'Times New Roman','Khmer OS Battambang';color:#4839bd; font-size: 13px;"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
+				</td>
+				<td width="25%" align="right">
+				</td>
+			</tr>
+		<style>
+			table tr th{
+				border: 1px solid #000;	
+				text-align: center;
+				padding:1px;
+			}
+			.hover:hover{background: #ccc;}
+			table {page-break-inside:auto }
+			tr{ page-break-inside:avoid; page-break-after:auto; }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}	
+			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				border:1px solid #4839bd; 
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color: #4839bd;
+			}
+			table.content-data thead tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #d0e5ff;
+				text-align: center;;
+			}
+			table.content-data tr td {
+				padding: 0 2px;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}	
+			@media print 
+			{
+			    @page {
+			      margin:0.5cm;
+			    }
+			}	
+		</style>
+			<tr>
+				<td colspan="3">
+					<table class="content-data" border="1" cellpadding="1"​ >
+						<thead>
+						<tr class="style-head">
+							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+							<td rowspan="2"><?php echo $tr->translate("BRANCH");?></td>
+							<td colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></td>
+							<td colspan="2"><?php echo $tr->translate("STUDY_INFO");?></td>
+							<td rowspan="2"><?php echo $tr->translate("SCAN_TYPE");?></td>
+							<td rowspan="2"><?php echo $tr->translate("SCAN_DATE");?></td>
+						</tr>
+						<tr class="style-head">
+							<td><?php echo $tr->translate("STUDENT_ID")?></td>
+							<td><?php echo $tr->translate("STUDENT_NAMEKHMER")?></td>
+							<td><?php echo $tr->translate("NAME_ENGLISH")?></td>
+							<td><?php echo $tr->translate("GENDER")?></td>
+							<td><?php echo $tr->translate("STU_PHONE")?></td>							
+							<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+							<td><?php echo $tr->translate("GROUP")?></td>
+						</tr>
+						</thead>
+					<?php $i=0;foreach ($this->rs AS $row) { $i++;?>
+						<tr class="style-rowdata hover" align="center" >
+							<td><?php echo $i;?></td>
+							<td><?php echo $row['branch_name'];?></td>
+							<td><?php echo $row['stu_code'];?></td>
+							<td align="left"><?php echo $row['stu_khname'];?></td>
+							<td align="left"><?php echo $row['stu_name'];?></td>
+							<td><?php echo $row['sex'];?></td>
+							<td align="left"><?php echo $row['tel'];?></td>
+							<td><?php echo $row['academic'];?></td>
+							<td><?php echo $row['group_name'];?></td>
+							
+							<td><?php echo $row['scanTypeTitle'];?></td>
+							<td><?php echo date("d-m-Y",strtotime($row['create_date']));?></td>
+						</tr>
+					<?php }?>	
+					</table>	
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="border:1px solid #fff;">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
+						<tr>
+							<td width="35%" align="center">
+								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
+							</td>
+							<td width="30%">&nbsp;</td>
+							<td width="35%" align="center">
+								<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>		
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore"); 
+
+
+</script>

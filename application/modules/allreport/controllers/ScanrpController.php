@@ -18,7 +18,9 @@ class Allreport_ScanrpController extends Zend_Controller_Action {
 				'adv_search' 	=>'',
 				'branch_id' 	=>'',
 				'start_date'	=>date("Y-m-d"),
-				'end_date'		=>date("Y-m-d")
+				'end_date'		=>date("Y-m-d"),
+				'is_vaccined' => -1,
+				'is_covidTested' => -1,
 			);
 		}
 		

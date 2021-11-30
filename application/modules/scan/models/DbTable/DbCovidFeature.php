@@ -99,6 +99,12 @@ class Scan_Model_DbTable_DbCovidFeature extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(tel,' ','') LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
+		if($search['is_vaccined']>-1){
+			$where.=" AND s.is_vaccined=".$search['is_vaccined'];
+		}
+		if($search['is_covidTested']>-1){
+			$where.=" AND s.is_covidTested=".$search['is_covidTested'];
+		}
 		
 		return $db->fetchAll($sql.$where.$order);
 	}	

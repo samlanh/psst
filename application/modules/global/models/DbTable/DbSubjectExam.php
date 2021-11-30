@@ -64,6 +64,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'type_subject'		=> $_data['type_subject'],
 				'user_id'	  		=> $this->getUserId()
 		);
+		$id = empty($_data['id'])?$id:$_data['id'];
 		$where=$this->getAdapter()->quoteInto("id=?", $id);
 		$this->update($_arr, $where);
    }
@@ -142,5 +143,23 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'access_type'=>1,
 		);
 		return $this->insert($_arr);
+	}
+	
+	function checkuDuplicate($data){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT 
+				* FROM rms_subject AS i
+			WHERE i.subject_titlekh='".$data['title']."'
+		 ";
+		if (!empty($data['id'])){
+			$sql.=" AND i.id != ".$data['id'];
+		}
+		$sql.=" LIMIT 1 ";
+		$row = $db->fetchRow($sql);
+		if (!empty($row)){
+			return 1;
+		}
+		return 0;
 	}
 }

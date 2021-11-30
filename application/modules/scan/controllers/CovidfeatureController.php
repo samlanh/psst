@@ -15,7 +15,10 @@ class Scan_CovidfeatureController extends Zend_Controller_Action {
 						'adv_search' => '',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
-						'status' => -1);
+						'status' => -1,
+						'is_vaccined' => -1,
+						'is_covidTested' => -1,
+						);
 			}
  			$db = new Scan_Model_DbTable_DbCovidFeature();
  			$rs_rows= $db->getAllStudentSetCovidFeature($search);
@@ -26,6 +29,7 @@ class Scan_CovidfeatureController extends Zend_Controller_Action {
 					'module'=>'scan','controller'=>'covidfeature','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('titleKh'=>$link,'titleEn'=>$link));
+			$this->view->search=$search;
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

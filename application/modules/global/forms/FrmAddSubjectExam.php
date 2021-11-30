@@ -67,6 +67,12 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
+		
+		$id = new Zend_Form_Element_Hidden('id');
+    	$id->setAttribs(
+    			array('dojoType'=>'dijit.form.TextBox',)
+    			);
+				
 		if(!empty($data)){
 			$_score_percent->setValue($data['shortcut']);
 			$_subject_exam->setValue($data['subject_titlekh']);
@@ -75,8 +81,10 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 			$_schoolOption->setValue($data['schoolOption']);
 			$_type_subject->setValue($data['type_subject']);
 			//$_parent->setValue($data['parent']);
+			
+			$id->setValue($data["id"]);
 		}
-		$this->addElements(array($_type_subject,$_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption));
+		$this->addElements(array($id,$_type_subject,$_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption));
 		
 		return $this;
 		

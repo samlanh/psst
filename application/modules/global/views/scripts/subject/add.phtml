@@ -3,24 +3,36 @@
 	echo $this->headTitle($tr->translate('ADD_NEW_SUBJECT'));  
 	$subject_exam= $this->frm_subject_exam;
 ?>
+<style>
+span#message {
+    color: #fb0101;
+    font-style: italic;
+}
+</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
 	    			<h4 class="m-b-0"><i class="fa fa-folder-open-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_NEW_SUBJECT');?></h4>
-    			</div>
+					<span id="message"></span>
+				</div>
     			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
     	<form  id='add_subject_exam' action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<script type="dojo/method" event="onSubmit">			
+			<script type="dojo/method" event="onSubmit">				
 				if(this.validate()) {
 					schoolOption=dijit.byId("schoolOption").get("value");
                		if(schoolOption==-1 || schoolOption==''){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
 						dijit.byId('schoolOption').focus();
                     	return false;
+					}
+					if(isDuplicate==1){
+						alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+						dijit.byId("subject_kh").focus();
+						return false;
 					}
 					loadingBlock();
 					return true;
@@ -96,14 +108,21 @@
 <script type="text/javascript">
 dojo.require("dijit.form.CheckBox"); 
 dojo.require("dojo.data.ItemFileWriteStore");
-var degree_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree_store));?> );
 
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		getValue();
 		dijit.byId("parent").set('readOnly',true);
+		
+		var subject_kh = dijit.byId('subject_kh');
+		subject_kh.on('keyUp', function(evt) {
+			checkDuplicateRecord();
+		});
+	
 	});
 });
+
+
 function getValue(){
 	var par='';
 	if(dojo.byId('is_parent').checked){
@@ -117,5 +136,38 @@ function getValue(){
 		dijit.byId('parent').set('required',true);  
 	}
 	$('#par').val(par);
+}
+
+
+var isDuplicate = 0;
+var url_duplicate = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"checkduplicate"));?>';										
+function checkDuplicateRecord(){
+	subjectKhTitle = dijit.byId('subject_kh').get('value');
+	if(subjectKhTitle=='' || subjectKhTitle==-1){
+		dijit.byId('subject_kh').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_duplicate,
+		content:{
+			'subjectKhTitle':subjectKhTitle
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
+			}else{
+				isDuplicate=0;
+				$("#message").html('');
+			}
+			HideloadingBlock();
+		},
+		error: function(err) {
+			alert(err);
+			HideloadingBlock();
+		}
+	});
 }
 </script>

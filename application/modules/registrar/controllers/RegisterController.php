@@ -133,6 +133,23 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if(empty($rspayment)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
     	}
+		if(!empty($rspayment)){
+			if ($rspayment['is_closed']==1){
+  				Application_Form_FrmMessage::Sucessfull("Can Not Void Closed Student Payment Receipt",self::REDIRECT_URL . '/register');
+				exit();
+  			}
+			if ($rspayment['is_void']==1){
+  				Application_Form_FrmMessage::Sucessfull("Student Payment Receipt Already Void",self::REDIRECT_URL . '/register');
+				exit();
+  			}
+			$stu_id = empty($rspayment['stu_id'])?0:$rspayment['stu_id'];
+  			$lastPaymentRecord = $db->getLastStudentPaymentRecord($stu_id);
+  			$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
+  			if ($lastPayId!=$id){
+  				Application_Form_FrmMessage::Sucessfull("Only Last Student Payment Receipt Can to be Void",self::REDIRECT_URL . '/register');
+				exit();
+  			}
+		}
     	$this->view->payment = $rspayment;
     	
     	$db = new Allreport_Model_DbTable_DbRptPayment();

@@ -1313,4 +1313,30 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}
 		}
 	}
+	
+	function getLastStudentPaymentRecord($stuId){
+    	$db=$this->getAdapter();
+    	$sql="SELECT 
+    			sp.*,
+	    		s.stu_enname,
+	    		s.stu_khname,
+	    		s.sex,
+	    		s.stu_code,
+	    		s.stu_id,
+	    		s.is_stu_new,
+				sp.degree as degree_id,
+	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+	    		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
+	    		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name
+    		FROM
+    		  	rms_student_payment as sp,
+    		  	rms_student as s
+    		WHERE 
+    			s.stu_id = sp.student_id
+    			AND sp.student_id=$stuId AND sp.is_closed=0 AND sp.is_void=0 ";
+		$sql.=" ORDER BY sp.id DESC ";
+		$sql.=" LIMIT 1 ";
+    	return $db->fetchRow($sql);
+    }
 }

@@ -84,7 +84,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				$data["id"]=$id;
+				//$data["id"]=$id;
 				$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
 				$_dbmodel->updateSubjectExam($_data,$id);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/subject/index");
@@ -164,4 +164,21 @@ class Global_SubjectController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
+	function checkduplicateAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$title = empty($data['subjectKhTitle'])?"":$data['subjectKhTitle'];
+    		$id = empty($data['id'])?"":$data['id'];
+    		$arr  = array(
+    				'title'=>$title,
+    				'id'=>$id,
+    				);
+    		
+    		$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
+    		$result=$_dbmodel->checkuDuplicate($arr);
+    		print_r(Zend_Json::encode($result));
+    		exit();
+    	}
+    }
 }

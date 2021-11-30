@@ -38,7 +38,23 @@ table.tb-footer tr.style-head {
              <div class="col-md-2 col-sm-2 col-xs-12">
              	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
             </div>
-        </div>	
+        </div>
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_vaccined" name="is_vaccined" >
+					<option value="-1"><?php echo $tr->translate("ALL");?></option>
+					<option value="1" <?php if($this->search['is_vaccined']==1){ echo "selected";}?> ><?php echo $tr->translate("VACCIN_COMPLETED");?></option>
+					<option value="0" <?php if($this->search['is_vaccined']==0){ echo "selected";}?> ><?php echo $tr->translate("VACCIN_UNCOMPLETED");?></option>
+				</select>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_covidTested" name="is_covidTested" >
+					<option value="-1"><?php echo $tr->translate("ALL");?></option>
+					<option value="1" <?php if($this->search['is_covidTested']==1){ echo "selected";}?> ><?php echo $tr->translate("TESTED_COVID");?></option>
+					<option value="0" <?php if($this->search['is_covidTested']==0){ echo "selected";}?> ><?php echo $tr->translate("NOT_YET_TEST_COVID");?></option>
+				</select>
+			</div>
+		</div>		
 	</form>		
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto;width: 100%">

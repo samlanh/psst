@@ -177,8 +177,8 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    	$index = empty($_data['keyrow'])?1:$_data['keyrow'];
    	
    	$_db = new Accounting_Model_DbTable_DbFee();
-   	$row = $_db->getFeeById($academic_year);
-   	$schoolOption = empty($row['school_option'])?null:$row['school_option'];
+   	//$row = $_db->getFeeById($academic_year);
+   	$schoolOption = '1,2,3';//empty($row['school_option'])?null:$row['school_option'];
    	
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$model = new Application_Model_DbTable_DbGlobal();
@@ -280,8 +280,8 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    	$mainId = empty($_data['id'])?1:$_data['id'];
    
    	$_db = new Accounting_Model_DbTable_DbFee();
-   	$row = $_db->getFeeById($academic_year);
-   	$schoolOption = empty($row['school_option'])?null:$row['school_option'];
+   	//$row = $_db->getFeeById($academic_year);
+   	$schoolOption = '1,2,3';empty($row['school_option'])?null:$row['school_option'];
    
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$model = new Application_Model_DbTable_DbGlobal();

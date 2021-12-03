@@ -375,7 +375,7 @@ class Application_Form_FrmGlobal{
 					}
 					   
 				</style>
-				<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
+				<table  width='100%'  class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
 					<tr>
 						<td align='center' valign='top' colspan='3'>
 							<label id='lbl_header'></label>
@@ -397,29 +397,37 @@ class Application_Form_FrmGlobal{
 					</tr>
 					<tr>
 						<td align='center' valign='bottom' colspan='3'>
-							<table  width='100%' style='font-size: 11px;line-height:9px !important;'>
+							<table  width='100%' style='font-size: 11px;line-height:12px !important;margin-bottom:10px;'>
 								<tr>
-									<td width='15%'>Student ID/Test ID </td>
-									<td width='25%'> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+									<td width='12%'>Student ID/Test ID </td>
+									<td width='18%'> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+									<td><div style='font-family: Times New Roman'>Academic Year	</div></td>
+									<td> : &nbsp;<label id='lb_academic_year' class='one'>&nbsp;</label>
 									<td width='15%'><div style='font-size: 12px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
-									<td width='25%'> : &nbsp;<label id='lb_receipt_no'></label></td>
-									<td rowspan='4' width='25%'><div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'><label id='lb_photo'></label></div></td>
+									<td width='15%'> : &nbsp;<label id='lb_receipt_no'></label></td>
+									<td  width='15%'><div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'><label id='lb_photo'></label></div></td>
 								</tr>
 								<tr>
 									<td>Student Name</td>
 									<td colspan='1'> : &nbsp;<label id='lb_name' class='one bold'></label></td>
+									<td><div style='font-family: Times New Roman'>Session Type</div></td>
+									<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
 									<td><div style='font-size: 12px;font-weight: bold;font-family: Times New Roman'>Pay Date</div></td>
 									<td> : &nbsp;<label id='lb_date' class='one bold'></label></td>
 								</tr>
 								<tr>
 									<td>Gender </td>
 									<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
+									<td><div style='font-family: Times New Roman'>Grade	</div></td>
+									<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
 									<td>Print Date</td>
 									<td> : &nbsp;".date('d-m-Y g:i A')."</td>
 								</tr>
 								<tr>
 									<td>Tel</td>
 									<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
+									<td></td>
+									<td></td>
 									<td>Print By :</td>
 									<td> : &nbsp;".$username."</td>
 								</tr>

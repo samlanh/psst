@@ -127,6 +127,8 @@ table.tb-footer tr.style-head {
 										<td><?php echo $tr->translate("Amount Contacted");?></td>
 										<td><?php echo $tr->translate("STATUS");?></td>
 										<td>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate("CREATE_DATE");?>&nbsp;</td>
 									</tr>
 								</thead>
 								<?php $i=0;$degree=0; if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
@@ -145,7 +147,9 @@ table.tb-footer tr.style-head {
 										<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/allstudent/rpt-crm-detail/id/<?php echo $row['id'];?>">
 										<?php echo $tr->translate("DETAIL");?>
 										</a>
-									</td>	
+									</td>
+									<td><?php echo $row['userby'];?></td>	
+									<td><?php echo date('d-m-Y h:i',strtotime($row['create_date']));?></td>		
 								</tr>
 							<?php }}?>	
 							</table>	

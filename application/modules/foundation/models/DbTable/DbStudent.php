@@ -729,6 +729,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
 			
 			$currentFee =  $this->getCurentFeeStudentHistory($stu_id);
+			
 			$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
@@ -749,13 +750,16 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$_arr['create_date']=date("Y-m-d H:i:s");
 				$this->insert($_arr);
 			}
+			
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			if(!empty($_data['identity_study'])){
 				$ids = explode(',', $_data['identity_study']);
 				foreach ($ids as $i){
 					if (!empty($_data['detailid_study'.$i])){
+						
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
+						
 						$group_info = $dbGroup->getGroupById($group_id);
 						
 						$isMain = 0;
@@ -777,18 +781,22 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
 						);
+						
 						if (!empty($group_info)){
 							$_arr['session'] = $group_info['session'];
 							$academic_year = $group_info['academic_year'];
 								
 						}else{
-							$_dbf = new Accounting_Model_DbTable_DbFee();
-							$rowfee = $_dbf->getFeeById($_data['academic_year']);
 							$academic_year=0;
-							if(!empty($rowfee)){
-								$academic_year = $rowfee['academic_year'];
+							if(!empty($_data['academic_year'])){
+								$_dbf = new Accounting_Model_DbTable_DbFee();
+								$rowfee = $_dbf->getFeeById($_data['academic_year']);
+								if(!empty($rowfee)){
+									$academic_year = $rowfee['academic_year'];
+								}
 							}
 						}
+						
 						$_arr['academic_year'] = $academic_year;
 						
 						$this->_name="rms_group_detail_student";
@@ -806,12 +814,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						}
 						
 					}else{
+						
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+						
 						$group_info = $dbGroup->getGroupById($group_id);
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
 						$isMain = 0;
 						if($i==$_data['is_main']){ $isMain =1;}
-						
 						$_arr = array(
 								'stu_id'			=>$stu_id,
 								'is_newstudent'		=>$_data['stu_denttype'],
@@ -827,16 +836,19 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
 						);
+						
 						if (!empty($group_info)){
 							$_arr['session'] = $group_info['session'];
 							$academic_year = $group_info['academic_year'];
 								
 						}else{
-							$_dbf = new Accounting_Model_DbTable_DbFee();
-							$rowfee = $_dbf->getFeeById($_data['academic_year']);
 							$academic_year=0;
-							if(!empty($rowfee)){
-								$academic_year = $rowfee['academic_year'];
+							if(!empty($_data['academic_year'])){
+								$_dbf = new Accounting_Model_DbTable_DbFee();
+								$rowfee = $_dbf->getFeeById($_data['academic_year']);
+								if(!empty($rowfee)){
+									$academic_year = $rowfee['academic_year'];
+								}
 							}
 						}
 						$_arr['academic_year'] = $academic_year;
@@ -859,6 +871,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){
+			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}

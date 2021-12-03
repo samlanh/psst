@@ -5,6 +5,7 @@
 	$username=$session_user->last_name.$session_user->first_name;
 	
 	$settingNewStuID = NEW_STU_ID_FROM_TEST;
+	$rsStudent = $this->rsStudent;
 ?>
 <style>
 	select{ width:100%;}
@@ -118,11 +119,11 @@ table.collape tbody td{padding: 0px !important;}
 .hover:hover{background: #ddd;}
 #lbl_header {display: initial !important;}
 tr.head-td th{padding: 5px 2px;}
-#lbl_blog span{line-height: 30px;font-size: 14px;}
+#lbl_blog span{line-height: 22px;font-size: 14px;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
-		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
     				year = dijit.byId('study_year').get('value');
@@ -153,48 +154,40 @@ tr.head-td th{padding: 5px 2px;}
 	    	</div>
 	    	<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
-	                   </label>
-	                </div>
+					
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicByBranch();">
-				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
-				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
-				    			<?php }?>
-				    		</select>
-	                   </div>
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+							<?php 
+							$customerType=1;
+							$studentType = $rsStudent['customer_type']; //ប្រភេទសិស្ស  : 1=Existing Student , 2=Tested Student, 3=CRM, ( មិនទាន់ច្បាស់ប្រើ 4=សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់ )
+							if($rsStudent['customer_type']==2){
+								$customerType=2;
+								$studentType=1;
+							}else if($rsStudent['customer_type']==4){
+								$studentType=2;
+							}
+							$groupLabel="";
+							if(!empty($rsStudent['group_name'])){
+								$groupLabel=" (".$rsStudent['group_name'].")";
+							}
+							?>
+							<input type="hidden" name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['branch_id'];?>"/>
+							<input type="hidden" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $studentType;?>"/>
+							<input type="hidden" name="customer_type" id="customer_type" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $customerType;?>"/>
+							<input type="hidden" name="old_stu" id="old_stu" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['stu_id'];?>"/>
+							<input type="hidden" name="currentFeeId" id="currentFeeId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['currentFeeId'];?>"/>
+							
+							<input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['group_name'];?>"/>
+							<input type="hidden" name="degree_id" id="degree_id" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['degree_id'];?>"/>
+							<input type="hidden" name="grade_id" id="grade_id" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['grade_id'];?>"/>
+							
+							<input type="hidden" name="sexTitle" id="sexTitle" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['sexTitle'];?>"/>
+					   
+					   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect">
-				    			<option value="1">Student Payment</option>
-				    			<option value="2">Customer Payment</option>
-				    		</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();" >
-								<option value="1"><?php echo $tr->translate("Existing Student");?></option>
-								<option value="2"><?php echo $tr->translate("Tested Student");?></option>
-								<option value="3"><?php echo $tr->translate("CRM");?></option>
-								<option value="4"><?php echo $tr->translate("សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់");?></option>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" id="lblNameControl" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-							<input id="old_stu" />
-	                   </div>
-	                </div>
+	               
+	                
+	                
 	                <div class="form-group" id="stuCodeControl" <?php if ($settingNewStuID==0){?>style="display: none;"<?php }?>>
 		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><strong><?php echo $tr->translate("STUDENT_NEW_ID");?></strong> :
 		                   </label>
@@ -202,15 +195,7 @@ tr.head-td th{padding: 5px 2px;}
 		                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 		                   </div>
 		              </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> :
-	                   		<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
-							<input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-							<input id="study_year" />
-	                   </div>
-		             </div>
+	               
 		             <div class="form-group">
 		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
 		                   </label>
@@ -225,7 +210,7 @@ tr.head-td th{padding: 5px 2px;}
 		              <div class="form-group">
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?></label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-								<input style="color:red;" type="text" readonly="readonly"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
+								<input style="color:red;" value="<?php echo $rsStudent['studentBalancePayment']; ?>" type="text" readonly="readonly"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
 		                   </div>
 		              </div>
 		              <div class="form-group">
@@ -234,8 +219,8 @@ tr.head-td th{padding: 5px 2px;}
 		                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
 		                   
 		                   		<!-- For  សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់ -->
-		                   		<input type="hidden" name="studentBalanceId" id="studentBalanceId" class="fullside" dojoType="dijit.form.TextBox"/>
-		                   		<input type="hidden" name="groupDetailId" id="groupDetailId" class="fullside" dojoType="dijit.form.TextBox"/>
+		                   		<input type="hidden" name="studentBalanceId" id="studentBalanceId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['studentBalanceId']; ?>" />
+		                   		<input type="hidden" name="groupDetailId" id="groupDetailId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['groupDetailId']; ?>" />
 		                   </div>
 	                  </div>
 	           </div>
@@ -247,30 +232,39 @@ tr.head-td th{padding: 5px 2px;}
 		           		<div class="text-center card-box-border">
 		                   	<div class="member-card card-display-reg">
 		                   		<div class="img-back"></div>
-		                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>>Old Student</span>
+		                      	<span class="user-badge bg-warning" ><?php echo $rsStudent['typeStudent'];?></span>
 		                       	<div class="col-md-4 col-sm-4 col-xs-12">
 			                       	<div class="thumb-xl member-thumb m-b-10 center-block">
 			                       		<?php 
 			                       			$photo = $this->baseUrl()."/images/no-profile.png";
+											if (!empty($rsStudent['photo'])){
+												if (file_exists(PUBLIC_PATH."/images/photo/".$rsStudent['photo'])){
+													$photo = $this->baseUrl().'/images/photo/'.$rsStudent['photo'];
+												}
+											}
+											$classGender="fa-male member-star text-active";
+											if($rsStudent['sex']==2){
+												$classGender="fa-female member-star text-deactive";
+											}
 			                       		?>
 			                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image" >
 			                           	<input id="lbl_photoname" id="lbl_photoname" value="abc"  type="hidden" />
-			                            <i class="fa fa-male member-star text-active" title="verified user"></i>
+			                            <i class="fa <?php echo $classGender;?>" title="verified user"></i>
 			                        </div>
 			                        <div class="center">
 			                       </div>
 		                        </div>
 		                        <div class="col-md-8 col-sm-8 col-xs-12">
 			                       	<p class="text-muted info-list font-13">
-			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_CODE");?></span> : <span id="lbl_stucode" class="inf-value" ></span><br />
-  			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> : <span id="lbl_namekh" class="inf-value" ></span><br />
-  			                       		<span class="title-info"><?php echo $tr->translate("NAME_ENGLISH");?></span> : <span id="lbl_nameen" class="inf-value" ></span><br />
-  			                       		<span class="title-info"><?php echo $tr->translate("DOB"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate("STATUS"); ?></span> : <span id="lbl_status" class="inf-value" ></span><br />
+			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_CODE");?></span> : <span id="lbl_stucode" class="inf-value" ><?php echo $rsStudent['stuCodeInfo'];?></span><br />
+  			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> : <span id="lbl_namekh" class="inf-value" ><?php echo $rsStudent['stu_khname'];?></span><br />
+  			                       		<span class="title-info"><?php echo $tr->translate("NAME_ENGLISH");?></span> : <span id="lbl_nameen" class="inf-value" ><?php echo $rsStudent['stu_name'];?></span><br />
+  			                       		<span class="title-info"><?php echo $tr->translate("DOB"); ?></span> : <span id="lbl_dob" class="inf-value" ><?php echo date("Y-m-d",strtotime($rsStudent['dob']));?></span><br />
+			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value" ><?php echo $rsStudent['tel'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" ><?php echo $rsStudent['parentTel'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lblDegree" class="inf-value" ><?php echo $rsStudent['degree'];?></span>
+			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lblGrade" class="inf-value" ><?php echo $rsStudent['grade'].$groupLabel;?></span>
+			                        	<span class="title-info"><?php echo $tr->translate("STATUS"); ?></span> : <span id="lblStatus" class="inf-value" ><?php echo $rsStudent['status_student'];?></span><br />
 			                        </p>
 		                        </div>
 		                         <div style="clear: both;"></div>
@@ -279,8 +273,18 @@ tr.head-td th{padding: 5px 2px;}
                		</div>
 	           </div>
 	       </div>
-	           <div class="card-box" >
-		           <div class="form-group" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+	           <div class="card-box" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+		           <div class="form-group" >
+			           <div class="col-md-3 col-sm-3 col-xs-12">
+			           		 <div class="form-group">
+			                   <label class="control-label  col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?></label>
+			                   <div class="col-md-9 col-sm-9 col-xs-12">
+			                   		<input id="study_year" />
+			                   </div>
+			                </div>
+			           </div>
+				   </div>
+				   <div class="form-group" >
 			           <div class="col-md-3 col-sm-3 col-xs-12">
 			           		 <div class="form-group">
 			                   <label class="control-label  col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("CATEGORY");?></label>
@@ -391,8 +395,9 @@ tr.head-td th{padding: 5px 2px;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" class="fullside" />
-	                   </div>
+	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo"  value="<?php echo $rsStudent['totalAmountAfter']; ?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
+							<input type="hidden" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" value="<?php echo $rsStudent['creditMemoId']; ?>" />
+					   </div>
 	                </div>
 					<div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_AMOUNT");?>  :</label>
@@ -412,7 +417,7 @@ tr.head-td th{padding: 5px 2px;}
 	        	<input type="hidden" id="identity" name="identity" />
 				<input type="hidden" id="identitystock" name="identitystock" />
 				<input type="hidden" dojoType="dijit.form.TextBox" value="<?php echo $this->exchange_rate;?>" name="ex_rate" id="ex_rate" />
-				<input type="hidden" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" />
+				
 	        </div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
@@ -425,6 +430,44 @@ tr.head-td th{padding: 5px 2px;}
 	    		</div>
 	    	</div>
 		</form>
+	</div>
+</div>
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 13.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+		<style>
+			table{ border-collapse:collapse; margin:0 auto;
+				border-color:#000;font-size:12px !important; }
+		</style>
+		<div id="divPrint">
+		<?php 
+			echo $this->officailreceipt;
+		?>
+		</div>
+		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+				type="button" onclick="hideDialog();">Cancel</button>
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+	</div>
+</div>
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:10cm;height: 5cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពបង្កាន់ដៃ");?>'"  >
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;color:red; font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+			<tr>
+				<td align="center" >
+					តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ មែនទេ? <br />
+					Do you want to print ?
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+						type="button" onclick="hideDialog1();"><?php echo $tr->translate("NO");?></button>
+					<button id="comfirmSavePrint" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="printSubmit()"><?php echo $tr->translate("YES");?></button>
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>
 <style>
@@ -464,21 +507,7 @@ require(["dojo/ready"], function(ready){
 
 	});
 
-	new dijit.form.FilteringSelect({
-		autoComplete: false,
-		queryExpr: "*${0}*",                     
-		id: "old_stu",
-		name: "old_stu",   
-		required:true,        
-		class: 'fullside', 
-		placeHolder:"<?php echo $tr->translate("CHOOSE");//$tr->translate("SELECT_STUDENT_NAME");?>",          
-		onChange: function() {  
-			getOldStudentInfo();
-			getCreditMemo();
-			stu_id = dijit.byId('old_stu').get('value');
-			getPaymentHistory(stu_id);
-		}
-	}, "old_stu");
+	
 
 	new dijit.form.FilteringSelect({
 		autoComplete: false,
@@ -510,12 +539,6 @@ require(["dojo/ready"], function(ready){
 	
 });	
 dojo.ready(function(){
-	var customer_type = dijit.byId('customer_type');
-	customer_type.on('change', function(evt) {
-		checkCustomerType();
-	});
-	checkCustomerType();
-
 	<?php if ($settingNewStuID==1){?>
 	var student_type = dijit.byId('student_type');
 	student_type.on('change', function(evt) {
@@ -523,9 +546,11 @@ dojo.ready(function(){
 	});
 	checkStudentType();
 	<?php }?>
+	getReceipt();
 });
 
 function checkStudentType(){
+	
 	dijit.byId('student_code').attr('value',""); 
 	student_type = dijit.byId("student_type").attr("value");
 	$("#stuCodeControl").css("display", "none");
@@ -572,6 +597,9 @@ function getAllAcademicByBranch(){
 		load: function(data){
 			academic_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('study_year').set('store',academic_store);  
+			<?php if(!empty($rsStudent['currentFeeId'])){ ?>
+			dijit.byId('study_year').set('value','<?php echo $rsStudent['currentFeeId']; ?>');  
+			<?php }?>
 		},
 		error: function(err) {
 		}
@@ -628,44 +656,7 @@ function getMonthByNumber(m){
 	return (monthName[m-1]);
 }
 </script>
-<div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 13.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
-		<style>
-			table{ border-collapse:collapse; margin:0 auto;
-				border-color:#000;font-size:12px !important; }
-		</style>
-		<div id="divPrint">
-		<?php 
-			echo $this->officailreceipt;
-		?>
-		</div>
-		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
-			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-				type="button" onclick="hideDialog();">Cancel</button>
-			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
-	</div>
-</div>
-<div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:10cm;height: 5cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពបង្កាន់ដៃ");?>'"  >
-		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;color:red; font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
-			<tr>
-				<td align="center" >
-					តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ មែនទេ? <br />
-					Do you want to print ?
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-						type="button" onclick="hideDialog1();"><?php echo $tr->translate("NO");?></button>
-					<button id="comfirmSavePrint" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printSubmit()"><?php echo $tr->translate("YES");?></button>
-				</td>
-			</tr>
-		</table>
-	</div>
-</div>
+
 <script>
 function confirmBeforePrint(){
 	dijit.byId('alertBeforePrint').show();
@@ -679,51 +670,9 @@ function hideDialog(){
 function hideDialog1(){
 	dijit.byId('alertBeforePrint').hide();
 }
-function checkCustomerType(){
-	customer_type = dijit.byId("customer_type").attr("value");
-	dijit.byId("student_type").set('readOnly',false);
-	$( "#lblNameControl" ).html("<?php echo $tr->translate("STUDENT_NAME");?>");
-	if(customer_type==2){
-		$( "#lblNameControl" ).html("<?php echo $tr->translate("CUSTOMER_NAME");?>");
-		dijit.byId("student_type").attr("value",1);
-		dijit.byId("student_type").set('readOnly',true);
-		
-	}
-	getallstudentname();
-}
 
 function getallstudentname(){//
-	student_type = dijit.byId("student_type").attr("value");
-	if(student_type==1){//old
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
-	}else if(student_type==2){//tested student
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
-	}else if(student_type==3){//crm
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
-	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalance')); ?>';
-	}
-	dijit.byId("old_stu").reset();
-	customer_type = dijit.byId("customer_type").attr("value");
-	branch_id = dijit.byId("branch_id").attr("value");
-	if(branch_id==''){
-		dijit.byId("branch_id").focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url:url_data,
-		content:{
-			'student_name':1,
-			'branch_id':branch_id,
-			'customer_type':customer_type
-		},
-		handleAs:"json",
-		load: function(data) {
-		    dijit.byId('old_stu').set('store',getDataStorefromJSON('id','name', data));  
-		},
-		error: function(err) {
-		}
-	});
+	
 }
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
 function getPaymentHistory(student_id){
@@ -803,112 +752,14 @@ function getPaymentHistory(student_id){
 	});
 }
 function getOldStudentInfo(){
-	student_type = dijit.byId("student_type").attr("value");
-	data_from= 1;
-	if(student_type==2){//tested student
-		data_from=2;
-	}else if(student_type==3){//crm
-		data_from=3;
-	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-		data_from=4;
-	}
-	customer_type = dijit.byId("customer_type").attr("value");
 	
-	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
-	student_id=dijit.byId('old_stu').get('value');
-	if(student_id==''){return false;}
-	dijit.byId('old_stu').attr('value',student_id);	
-	dojo.xhrPost({
-		url:url_getdata,
-		content:{
-			'student_id':student_id,
-			'data_from':data_from,
-			'customer_type':customer_type
-			},
-		handleAs:"json",
-		load: function(data) {
-			   if(data){
-				   dojo.byId("lbl_blog").innerHTML = data;
-			   }
-			   getStudentInformation();
-			   getgradebyDegree(-1,1,2);
-			   
-		},
-		error: function(err) {
-		}
-	});
 }
 
 function getStudentInformation(){
-	dijit.byId('studentBalanceId').set('value',0);
-	dijit.byId('groupDetailId').set('value',0);
-	
-	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinformation')); ?>';
-
-	student_type = dijit.byId("student_type").attr("value");
-	if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalanceinformation')); ?>';
-	}
-	
-	student_id=dijit.byId('old_stu').get('value');
-	dojo.byId("lb_grade").innerHTML = "";
-	dojo.byId("lb_academic_year").innerHTML ="";
-	$("#stuCodeControl").css("display", "none");
-	if(student_id==''){return false;}
-	loadingBlock();
-	dojo.xhrPost({
-		url:url_getdata,
-		content:{
-			'student_id':student_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			fee_id = data.fee_id;
-			
-			if(data.is_setstudentid==0){
-				$("#stuCodeControl").css("display", "flow-root");
-				
-				dijit.byId('student_code').focus();
-			}
-			dijit.byId('study_year').set('value',fee_id);
-			
-			grade_label = data.grade_label;
-			if(grade_label== undefined){
-				grade_label='&nbsp;';
-			}else if(grade_label== null){
-				grade_label='&nbsp;';
-			}
-			grouplabel = data.group_name;
-			if(grouplabel== undefined){
-				grouplabel='&nbsp;';
-			}else if(grouplabel== null){
-				grouplabel='&nbsp;';
-			}else{
-				grouplabel = '('+grouplabel+')';
-			}
-			dojo.byId("lb_grade").innerHTML = grade_label+grouplabel;
-			
-			academic_year_label = data.academic_year_label;
-			if(academic_year_label== undefined){
-				academic_year_label='&nbsp;';
-			}
-
-			
-			if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-				dijit.byId('studentBalanceId').set('value',data.studentBalanceId);
-				dijit.byId('groupDetailId').set('value',data.groupDetailId);
-			}
-			
-			dojo.byId("lb_academic_year").innerHTML = academic_year_label;
-			//get New ID From Student Test
-			getStudyFeeId(fee_id);
-			getStudentNo(data.degree);
-			HideloadingBlock();
-		},
-		error: function(err) {
-			HideloadingBlock();
-		}
-	});
+	fee_id = dijit.byId('currentFeeId').get('value')
+	degree = dijit.byId('degree_id').get('value')
+	getStudyFeeId(fee_id);
+	getStudentNo(degree);
 }
 var term_study_option = '';
 url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
@@ -1338,8 +1189,8 @@ function printSave(){
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
-		//dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
-		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
+		
+		dojo.byId("lb_sex").innerHTML = $("#sexTitle").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
 
@@ -1351,14 +1202,10 @@ function printSave(){
 		 
 		dojo.byId("lb_name").innerHTML = lblNamekh+'<br />'+dojo.byId("lbl_nameen").innerHTML;
 		
-		//dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
-		//dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;
-		//dojo.byId("lb_grade").innerHTML = dojo.byId("lbl_grade").innerHTML+"("+dojo.byId("lbl_group").innerHTML+")";
-		//dojo.byId("lb_session").innerHTML = dojo.byId("lbl_session").innerHTML;
-		//var customer_type = dijit.byId("customer_type").get("value");
-		//var student_type = dijit.byId("student_type").get("value");
+		
 		
 		dojo.byId("lb_phone").innerHTML = dojo.byId("lbl_phone").innerHTML;
+		dojo.byId("lb_grade").innerHTML = dojo.byId("lblGrade").innerHTML;
 		dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
 		dojo.byId("lb_total_payment").innerHTML = dojo.number.format(dijit.byId("grand_total").get('value'),{places:2});
 		dojo.byId("lb_fine").innerHTML = dojo.number.format(dijit.byId("penalty").get('value'),{places:2});			
@@ -1370,10 +1217,7 @@ function printSave(){
 		dojo.byId("lb_paymentnumber").innerHTML = dijit.byId("number").get('value');
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $username;?>';
 		
-		lbl_photoname = $("#lbl_photoname").val();
-		if(lbl_photoname!=''){
-			dojo.byId("lb_photo").innerHTML = '<img style="height:100%;width:100%;" src="<?php echo $this->baseUrl();?>/images/photo/'+lbl_photoname+'" />' ;;
-		}
+		dojo.byId("lb_photo").innerHTML = '<img style="height:100%;width:100%;" src="<?php echo $photo;?>" />';
 					var rowId = $('#identity').val();
 					var rowIDArray = rowId.split(',');
 					template="";
@@ -1452,7 +1296,7 @@ function printSave(){
 function printSubmit(){	
 	checkSession();
 	dijit.byId('comfirmSavePrint').set('disabled',true);
-	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'addregistra')); ?>';
+	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'payment','action'=>'addregistra')); ?>';
 	dojo.xhrPost({
 	    url: url_submit,	
 		form: dojo.byId("office_receipt"),
@@ -1489,7 +1333,7 @@ function printSubmit(){
 		    hideDialog1();
 			hideDialog();
 		    alert('<?php echo $tr->translate('INSERT_SUCCESS');?>!');
-			window.location.href ="<?php echo $this->baseUrl();?>/registrar/register/add";
+			window.location.href ="<?php echo $this->baseUrl();?>/registrar/payment/";
 		},
 		error: function(e){
 			alert('<?php echo $tr->translate('INSERT_FAIL');?>!');
@@ -1511,32 +1355,7 @@ function submitAction(){
 	loadingBlock();
 	$('#office_receipt').submit();
 }
-var url_creditmemo = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
-function getCreditMemo(){
-	stu_id = dijit.byId('old_stu').get('value');
-	if(stu_id != ""){
-		dojo.xhrPost({
-			url:url_creditmemo,
-			content:{
-				'stu_id':stu_id,
-				},
-			handleAs:"json",
-			load: function(data){
-				if(data){
-					dijit.byId("credit_memo").attr("value",data.total_amountafter);
-					dijit.byId("credit_memo_id").attr("value",data.id);
-					//dijit.byId("study_year").attr("value",data.academic_year);
-					dijit.byId("balance").attr("value",data.balance);
-				}else{
-					dijit.byId("credit_memo").attr("value",0);
-					dijit.byId("credit_memo_id").attr("value",'');
-				}
-			},
-			error: function(err) {
-			}
-		});	
-	} 
-}
+
 var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfodetail')); ?>";
 function getbranchinfo(){
 	branch_id = dijit.byId('branch_id').get('value');
@@ -1561,19 +1380,22 @@ function getbranchinfo(){
 		});	
 	} 
 }
-</script>
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>	
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
+var urlGetReceipt = "<?php echo $this->url(array('module'=>'registrar','controller'=>'payment','action'=>'get-receipt-no')); ?>";
+function getReceipt(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id != ""){
+		dojo.xhrPost({
+			url:urlGetReceipt,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data){
+				dijit.byId("receipt_no").attr("value",data);
+			},
+			error: function(err) {
+			}
+		});	
+	} 
 }
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>
+</script>

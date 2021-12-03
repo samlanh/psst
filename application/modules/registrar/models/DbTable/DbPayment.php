@@ -42,9 +42,9 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					ds.stop_type AS is_subspend,
 					CASE
 						WHEN s.customer_type = 1 THEN '".$tr->translate("Existing Student")."'
-						WHEN s.customer_type = 2 THEN '".$tr->translate("Tested Student")."'
+						WHEN s.customer_type = 2 THEN '".$tr->translate("Cutomer")."'
 						WHEN s.customer_type = 3 THEN '".$tr->translate("CRM")."'
-						WHEN s.customer_type = 4 THEN '".$tr->translate("សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់")."'
+						WHEN s.customer_type = 4 THEN '".$tr->translate("Student Test")."'
 					END as typeStudent,
 		
 					(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
@@ -114,6 +114,80 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 		
 	}
 	
+	public function getStudentForPaymentById($stuId){
+		$_db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label="name_en";
+		$branch = "branch_nameen";
+		$field = 'name_en';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label="name_kh";
+			$field = 'name_kh';
+			$branch = "branch_namekh";
+		}
+		$sql ="SELECT  
+					s.*,
+					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
+					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
+					CASE
+						WHEN primary_phone = 1 THEN s.tel
+						WHEN primary_phone = 2 THEN s.father_phone
+						WHEN primary_phone = 3 THEN s.mother_phone
+						ELSE s.guardian_tel
+					END as parentTel,
+					ds.stop_type AS is_subspend,
+					CASE
+						WHEN s.customer_type = 1 THEN s.stu_code
+						WHEN s.customer_type = 2 THEN s.serial
+						WHEN s.customer_type = 3 THEN s.serial
+						WHEN s.customer_type = 4 THEN s.serial
+					END as stuCodeInfo,
+					CASE
+						WHEN s.customer_type = 1 THEN '".$tr->translate("Existing Student")."'
+						WHEN s.customer_type = 2 THEN '".$tr->translate("Cutomer")."'
+						WHEN s.customer_type = 3 THEN '".$tr->translate("CRM")."'
+						WHEN s.customer_type = 4 THEN '".$tr->translate("Student Test")."'
+					END as typeStudent,
+		
+					(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 ORDER BY sf.id DESC LIMIT 1) AS currentFeeId,
+					(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
+					(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
+					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
+					(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
+					
+					ds.group_id,
+					ds.degree AS degree_id,
+					ds.grade AS grade_id,
+					
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year,
+					(SELECT sb.id FROM `rms_student_balance` AS sb WHERE ds.gd_id = sb.group_detail_id AND s.stu_id = sb.stu_id AND sb.status=1 AND sb.is_balance=1 LIMIT 1  ) AS studentBalanceId,
+					(SELECT sb.group_detail_id FROM `rms_student_balance` AS sb WHERE ds.gd_id = sb.group_detail_id AND s.stu_id = sb.stu_id AND  sb.status=1 AND sb.is_balance=1 LIMIT 1  ) AS groupDetailId,
+					
+					COALESCE((SELECT id FROM rms_creditmemo WHERE student_id = s.stu_id AND total_amountafter>0 LIMIT 1),0) AS creditMemoId,
+					COALESCE((SELECT total_amountafter FROM rms_creditmemo WHERE student_id = s.stu_id AND total_amountafter>0 LIMIT 1),0) AS totalAmountAfter,
+					COALESCE((SELECT SUM(sp.balance_due) FROM rms_student_payment AS sp WHERE sp.student_id=s.stu_id LIMIT 1 ),0) AS studentBalancePayment
+				  
+					
+				FROM rms_student AS s,
+					rms_group_detail_student AS ds
+				  WHERE  
+				   ds.is_maingrade=1 
+				   AND ds.is_current=1 
+				   AND s.stu_id=ds.stu_id 
+				   AND s.status = 1 
+				   AND s.stu_id = $stuId
+				 ";
+		$where = " LIMIT 1";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission("s.branch_id");
+		return $_db->fetchRow($sql.$where);
+		
+	}
+	
     
     function getStudentPaymentStart($studentid,$service_id,$type=1){
     	$db = $this->getAdapter();
@@ -131,11 +205,16 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 	function addRegister($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		//$paid_date = $data['paid_date'];
 		$paid_date = date("Y-m-d H:i:s");
-				
-		$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
-		$receipt_number = $this->getRecieptNo($data['branch_id']);
+		
+		
+		//$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
+		//$receipt_number = $this->getRecieptNo($data['branch_id']);
+		
+		$DbRegister = new Registrar_Model_DbTable_DbRegister();
+		$stu_id = $data['old_stu'];
+		$receipt_number = $DbRegister->getRecieptNo($data['branch_id']);
+		
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				$customer_type=1;
@@ -226,6 +305,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					$where="stu_id = ".$stu_id;
 					$this->update($arr, $where);
 				}elseif($data['student_type']==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
+					/* Not Yet Use
 					$rs_stu = $gdb->getStudentBalanceInfoById($stu_id);
 					$arrStuBalance = array(
 						'is_balance' =>0,
@@ -234,6 +314,8 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					$this->_name='rms_student_balance';
 					$whereStuBalance="id = ".$data['studentBalanceId'];
 					$this->update($arrStuBalance, $whereStuBalance);
+					
+					*/
 				}
 			
 				$data['credit_memo'] = empty($data['credit_memo'])?0:$data['credit_memo'];
@@ -479,5 +561,8 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 			
 		}
 	}
+	
+	
+	
 	
 }

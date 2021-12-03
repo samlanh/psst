@@ -816,6 +816,64 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		    	$this->update($_arr, $where);
              }
     }
+	
+	
+	function getPaymentHistory($stuId){
+		try{
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = $_db->getAccessPermission('sp.branch_id');
+			
+			$lang = $_db->currentlang();
+			if($lang==1){// khmer
+				$label = "name_kh";
+			}else{ // English
+				$label = "name_en";
+			}
+	
+			$db=$this->getAdapter();
+			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
+			$sql=" SELECT
+			            sp.id,
+						sp.branch_id,
+						sp.receipt_number,
+						s.stu_code,
+						s.stu_khname,
+						s.stu_enname,
+						s.last_name,
+						(SELECT title FROM `rms_items` WHERE rms_items.id=sp.degree LIMIT 1 ) AS degree,
+						(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS grade,
+						(SELECT name_en FROM rms_view WHERE rms_view.type = 4 AND key_code=sp.session LIMIT 1) AS session,
+						sp.create_date,
+						sp.is_void,
+						(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
+						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_id,
+						(SELECT name_en FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
+						(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = sp.payment_method LIMIT 1) AS paymentMethod,
+						sp.grand_total AS total_payment,
+						sp.credit_memo,
+						sp.grand_total,
+						sp.penalty,
+						sp.paid_amount,
+						sp.balance_due,
+						sp.note,
+						sp.is_closed,
+						sp.payment_method,
+						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
+				  FROM
+						rms_student AS s,
+						rms_student_payment AS sp
+				  WHERE 
+						s.stu_id = sp.student_id  
+						$branch_id  ";
+	
+			$where = " AND s.stu_id = $stuId ";
+			$order=" ORDER By sp.id DESC ";
+			return $db->fetchAll($sql.$where.$order);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
     
     
     

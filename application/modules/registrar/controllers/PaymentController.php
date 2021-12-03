@@ -55,9 +55,6 @@ class Registrar_PaymentController extends Zend_Controller_Action {
 			} else{
 				
 			}
-			
-			
-			
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -70,25 +67,33 @@ class Registrar_PaymentController extends Zend_Controller_Action {
 
     }
     public function addAction(){
-      if($this->getRequest()->isPost()){
-      	$_data = $this->getRequest()->getPost();
-      	try{
-      		$db = new Registrar_Model_DbTable_DbPayment();
-      		$db->addRegister($_data);
-      		if(!empty($_data['save_close'])){
-      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
-      		}else{
-      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
-      		}
-      		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-      	}catch (Exception $e) {
-      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-      	}
-      }
+		
+		$db = new Registrar_Model_DbTable_DbPayment();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try{
+				$db->addRegister($_data);
+				if(!empty($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/payment");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/payment/add");
+				}
+				//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
+			}catch (Exception $e) {
+				Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$stuId=$this->getRequest()->getParam("id");
+		$stuId = empty($stuId)?0:$stuId;
+		$rsStudent = $db->getStudentForPaymentById($stuId);
+		$this->view->rsStudent = $rsStudent;
+		if(empty($rsStudent)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA_ON_THIS","/registrar/payment");
+			exit();
+		}
+		
        $_db = new Application_Model_DbTable_DbGlobal();
-      
-       $this->view->rsbranch = $_db->getAllBranch();
        $this->view->exchange_rate = $_db->getExchangeRate();
       
        $this->view->rs_type = $_db->getAllItems();
@@ -97,28 +102,38 @@ class Registrar_PaymentController extends Zend_Controller_Action {
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
-	   
-	   $db = new Application_Model_DbTable_DbGlobal();
-	   $rs = $db->getStudentProfileblog(1);
+	  
 	   
 	   $frmreceipt = new Application_Form_FrmGlobal();
 	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();
 	   
 	   $dbclass = new Application_Model_GlobalClass();
-// 	   print_r($dbclass->getAllPayMentTermOption());
-	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
-	   
-   //  print_r($dbclass->getAllPayMentTermOption());	   
-// 	   print_r($frmreceipt->getFormatReceipt());exit();
-// 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $grade = $db->getAllGradeStudyByDegree(null,8);
-// 	   $prodcut = $db->getProductbyBranch(10);
-	   
-// 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $student_id = 1;
-// 	   $is_stutested = 0;
-// 	   $rs = $db->getAllGradeStudyByDegree(-1,$student_id,$is_stutested);
-// 	   print_r($rs);exit();
+	   $this->view->term_option = $dbclass->getAllPayMentTermOption();	   
     }
+	public function addregistraAction(){
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		try {
+    			$db = new Registrar_Model_DbTable_DbPayment();
+    			$receipt_no = $db->addRegister($_data);
+    			print_r(Zend_Json::encode($receipt_no));
+    			exit();
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
+	function getReceiptNoAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
+			$receipt = $db->getRecieptNo($branch_id);
+			print_r(Zend_Json::encode($receipt));
+			exit();
+		}
+	}
+	
+	
     
 }

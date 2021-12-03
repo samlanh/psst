@@ -50,9 +50,9 @@
                    		<select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="customer_type" name="customer_type" >
 							<option value="-1"><?php echo $tr->translate("ALL");?></option>
 							<option value="1" <?php if($this->adv_search['customer_type']==1){ echo "selected";}?> ><?php echo $tr->translate("Existing Student");?></option>
-							<option value="2" <?php if($this->adv_search['customer_type']==2){ echo "selected";}?> ><?php echo $tr->translate("Tested Student");?></option>
+							<option value="2" <?php if($this->adv_search['customer_type']==2){ echo "selected";}?> ><?php echo $tr->translate("Cutomer");?></option>
 							<option value="3" <?php if($this->adv_search['customer_type']==3){ echo "selected";}?> ><?php echo $tr->translate("CRM");?></option>
-							<option value="4" <?php if($this->adv_search['customer_type']==4){ echo "selected";}?> ><?php echo $tr->translate("សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់");?></option>
+							<option value="4" <?php if($this->adv_search['customer_type']==4){ echo "selected";}?> ><?php echo $tr->translate("Tested Student");?></option>
 						</select>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -73,7 +73,10 @@
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-									<a target="_blank" href="<?php echo $this->baseUrl()."/registrar/payment/add/id/";?>"><?php echo $tr->translate('CREATE_PAYMENT');?></a>
+										<a target="_blank" href="<?php echo $this->baseUrl()."/registrar/payment/add/id/".$rs['stu_id'];?>"><?php echo $tr->translate('CREATE_PAYMENT');?></a>
+									</li>
+									<li>
+										<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/accounting/paymenthistory/id/".$rs['stu_id'];?>"><?php echo $tr->translate('PAYMENT_HISTORY');?></a>
 									</li>
 								</ul>
 							</li>

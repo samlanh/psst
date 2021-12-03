@@ -216,7 +216,9 @@ require(["dojo/ready"], function(ready){
 
 			}
 		}, "grade");
-
+		<?php if(!empty($this->search['degree'])){?>
+		dijit.byId('degree').attr('value','<?php echo $this->search['degree']?>'); 
+		<?php }?>
 		getAllGrade();
 		
 	});

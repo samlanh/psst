@@ -113,6 +113,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->student_attendance = $db->getStudentAttendence($id);
 			
 			$this->view->study_history = $db->getStudyHistoryByStudent($id);
+			$this->view->studentTestInfo = $db->getStudentAllTestInfo($id);
 			
 			$droplink= $this->getRequest()->getParam('droplink');
 			$drid= $this->getRequest()->getParam('drid');

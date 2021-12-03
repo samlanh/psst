@@ -1716,7 +1716,7 @@ function addJob(){
 								<td><?php echo $tr->translate('TITLE');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="occu_name" name="occu_name" value="" type="text"></td>
 							</tr>
-							<tr>
+							<tr style="display: none;">
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
 	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
@@ -1758,7 +1758,7 @@ function addJob(){
 								<td><?php echo $tr->translate('EN_NAME');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_en" name="title_en" value="" type="text"></td>
 							</tr>
-							<tr>
+							<tr style="display: none;">
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_na" id="status_na" dojoType="dijit.form.FilteringSelect"   class="fullside">
 	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>

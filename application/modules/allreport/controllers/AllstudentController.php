@@ -568,6 +568,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'ask_for_search' => "",
 						'know_by_search' => "",
 						'prev_concern' => "",
+						'degree' => "",
+						'grade' => "",
 						'status_search' => -1,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),

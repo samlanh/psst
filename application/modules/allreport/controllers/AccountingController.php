@@ -1375,4 +1375,34 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	
+	
+	public function paymenthistoryAction()
+	{
+		try{
+			
+			$stuId=$this->getRequest()->getParam("id");
+			$stuId = empty($stuId)?0:$stuId;
+		
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$row = $db->getPaymentHistory($stuId);
+			$this->view->row = $row;
+		
+			if(empty($row)){
+				Application_Form_FrmMessage::Sucessfull("NO_DATA_ON_THIS","/registrar/payment");
+				exit();
+			}
+	
+			$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
+			
+			
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		
+	}
 }

@@ -31,7 +31,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		return $_db->fetchAll($sql);
 	}
-	function getAllCRM($search = ''){
+	function getAllCRM($search=array()){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -41,18 +41,26 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$grade = "rms_itemsdetail.title";
 			$degree = "rms_items.title";
 			$branch = "b.branch_namekh";
+			$colunmname='title';
 		}else{ // English
 			$label = "name_en";
 			$grade = "rms_itemsdetail.title_en";
 			$degree = "rms_items.title_en";
 			$branch = "b.branch_nameen";
+			$colunmname='title_en';
+			
 		}
 		$sql="SELECT c.*,
 			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-			CASE
-			WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
-			WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
-			END AS sexTitle,
+			s.stu_khname AS stuNameKh,
+			CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stuNameEn,
+			(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS stuSex,
+			
+			(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
+			(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
+			
+			(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = c.sex LIMIT 1) AS sexTitle,			
+			
 			CASE
 			WHEN  c.ask_for = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
 			WHEN  c.ask_for = 2 THEN '".$tr->translate("ENGLISH")."'
@@ -66,10 +74,14 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			WHEN  c.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
 			END AS crm_status_title,
 			(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = c.know_by LIMIT 1 ) AS know_by_title,
+			c.know_by,
 			(SELECT COUNT(cr.id) FROM `rms_crm_history_contact` AS cr WHERE cr.crm_id = c.id LIMIT 1) AS amountContact,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby
-			FROM `rms_crm` AS c
-			WHERE 1
+			FROM 
+				rms_student AS s,
+				rms_group_detail_student AS ds,
+				`rms_crm` AS c
+			WHERE s.crm_id = c.id AND ds.stu_id = s.stu_id
 		";
 		$where = ' ';
 		$from_date =(empty($search['start_date']))? '1': " c.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
@@ -94,6 +106,12 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['know_by_search'])){
 			$where.= " AND c.know_by = ".$db->quote($search['know_by_search']);
+		}
+		if(!empty($search['degree'])){
+			$where.= " AND ds.degree = ".$db->quote($search['degree']);
+		}
+		if(!empty($search['grade'])){
+			$where.= " AND ds.grade = ".$db->quote($search['grade']);
 		}
 		if($search['status_search']>-1){
 			$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
@@ -169,6 +187,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_COMPLETED")."'
 				WHEN  cc.proccess = 3 THEN '".$tr->translate("COMPLETED")."'
 				END AS crm_status_title,
+				cc.proccess,
 				c.kh_name,
 				c.first_name,
 				c.last_name,
@@ -205,7 +224,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.= " AND cc.crm_id = ".$db->quote($search['crm_list']);
 		}
 		
-		if($search['status_search']>-1){
+		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND cc.proccess = ".$db->quote($search['status_search']);
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();

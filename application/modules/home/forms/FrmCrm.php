@@ -275,11 +275,13 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_know_by_search->setValue($request->getParam("know_by_search"));
     	
-    	$_arr = array(-1=>$this->tr->translate("ALL"),1=>
-    			$this->tr->translate("PROGRESSING"),
-    			2=>$this->tr->translate("WAITING_COMPLETED"),
-    			3=>$this->tr->translate("COMPLETED"),
-    			0=>$this->tr->translate("CANCEL"));
+//     	$_arr = array(-1=>$this->tr->translate("ALL"),1=>
+//     			$this->tr->translate("PROGRESSING"),
+//     			2=>$this->tr->translate("WAITING_COMPLETED"),
+//     			3=>$this->tr->translate("COMPLETED"),
+//     			0=>$this->tr->translate("CANCEL"));
+    	
+    	$_arr= $_dbgb->getcrmFollowupStatus();
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
     	$_status_search->setAttribs(array(

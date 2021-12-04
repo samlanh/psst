@@ -67,8 +67,8 @@ table.content-data thead tr.style-head {
 						<td width="20%" align="right">
 						</td>
 						<td width="60%" align="center">
-							<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("CRM Daily Contact");?></span><br/>
-							<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
+							<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("CRM Daily Contact");?></span><br/>
+							<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 						</td>
 						<td width="20%" align="right">
 						</td>
@@ -94,7 +94,7 @@ table.content-data thead tr.style-head {
 						width:100%;
 						border:1px solid #000; 
 						font-family:'Times New Roman','Khmer OS Battambang';
-						font-size:13px;
+						font-size:12px;
 						white-space: nowrap;
 						margin:0 auto;
 					}
@@ -106,6 +106,9 @@ table.content-data thead tr.style-head {
 						font-size:12px; 
 						height: 23px;
 					}
+				.know_byitem{display: inline-table;width:20%;}
+				.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
+				.know_by li{line-height: 15px;}
 				</style>
 					<tr>
 						<td colspan="3">
@@ -127,7 +130,8 @@ table.content-data thead tr.style-head {
 											<td>&nbsp;</td>
 										</tr>
 									</thead>
-									<?php $i=0;$degree=0; if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
+									<?php $i=0;$followup=array(); $total_student = 0;
+									if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
 									<tr class="style-rowdata hover" align="center"  >
 										<td ><?php echo $i;?></td>
 										<td align="left">&nbsp;<?php echo $row['branch_name'];?></td>
@@ -138,7 +142,10 @@ table.content-data thead tr.style-head {
 										<td align="center" >&nbsp;<?php echo date("d/M/Y",strtotime($row['contact_date']));?>&nbsp;</td>
 										
 										<td>
-										<?php $pre = explode(",", $row['feedback_type']);
+										<?php 
+										$total_student = $total_student+1;
+										
+										$pre = explode(",", $row['feedback_type']);
 													$prevCon="";
 													if (!empty($pre)) foreach ($pre as $a){
 														if(empty($a)){continue;}
@@ -155,8 +162,10 @@ table.content-data thead tr.style-head {
 											?>
 													
 										</td>
-										<td ><?php echo $row['feedback'];?></td>
-										<td><?php echo $row['crm_status_title'];?></td>	
+										<td align="left"><?php echo $row['feedback'];?></td>
+										<td ><?php echo $row['crm_status_title'];
+										$followup[$row['proccess']]=@$followup[$row['proccess']]+1;
+										?></td>	
 										<td>&nbsp;<?php echo $row['user_contact_name'];?>&nbsp;</td>
 										<td>
 											<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/allstudent/rpt-crm-detail/id/<?php echo $row['crm_id'];?>">
@@ -169,6 +178,17 @@ table.content-data thead tr.style-head {
 							</div>	
 						</td>
 					</tr>
+					<tr>
+					<td colspan="3">
+						<div class='know_by'>&nbsp;</div>
+						<ul class='know_by'>
+						<?php if(!empty($this->followup))foreach($this->followup as $key=> $rs){?>
+							<li class='know_byitem'><?php echo $rs."&nbsp;";echo empty($followup[$key])?'0':$followup[$key];echo " ".$tr->translate('STUDENT_UNIT');?></li>
+						<?php }?>
+							<li style="border-top:1.5px #000 dashed;;list-style-type: none;padding-top:5px;"><strong><?php echo $tr->translate("TOTAL_STUDENT").'&nbsp;'.$total_student." ".$tr->translate('STUDENT_UNIT');?></strong></li>
+						</ul>
+					</td>
+				</tr>
 					<tr >
 						<td colspan="3" width="100%">
 							<?php echo $this->rsfooteracc;?>

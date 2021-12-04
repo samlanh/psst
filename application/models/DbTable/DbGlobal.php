@@ -3143,5 +3143,14 @@ function getAllgroupStudyNotPass($action=null){
   	return 'PSIS'.date('YmdHis');
   	
   }
+  function getcrmFollowupStatus(){
+  	$_arr = array(
+  			-1=>$this->tr->translate("ALL"),
+  			1=>$this->tr->translate("PROGRESSING"),
+  			2=>$this->tr->translate("WAITING_COMPLETED"),
+  			3=>$this->tr->translate("COMPLETED"),
+  			0=>$this->tr->translate("CANCEL"));
+  	return $_arr;
+  }
 }
 ?>

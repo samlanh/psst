@@ -39,20 +39,27 @@ table.tb-footer tr.style-head {
 				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement('status_search');?>
 				 	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+				 		<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+				 	</div>
 				 </div>
 				 <div class="form-group">
 				 	<div class="col-md-4 col-sm-4 col-xs-12">
 	                	<input value="<?php echo $this->search['prev_concern'];?>" type="text" id="e15" name="prev_concern" style="width: 100%">
 	                </div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+				 		<?php echo $frm_items->getElement("degree");?>
+				 	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+				 		<input id="grade" />
+				 	</div>
 				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("start_date");?>
 				 	</div>
 				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("end_date");?>
 				 	</div>
-				 	<div class="col-md-2 col-sm-2 col-xs-12">
-				 		<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-				 	</div>
+				 	
 				 </div>
 			</form>
 		</div>
@@ -72,7 +79,7 @@ table.tb-footer tr.style-head {
 						<span style="color:#000; font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("CRM_REPORT");?></span><br/>
 						<span style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 					</td>
-					<td width="20%" align="right"></td>
+					<td width="20%" align="right"><label id='lbl_branch'></label></td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -109,6 +116,9 @@ table.tb-footer tr.style-head {
 					font-size:12px; 
 					height: 23px;
 				}
+				.know_byitem{display: inline-table;width:33%;}
+				.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
+				.know_by li{line-height: 15px;}
 			</style>
 				<tr>
 					<td colspan="3">
@@ -116,44 +126,58 @@ table.tb-footer tr.style-head {
 							<table class="content-data" cellpadding="4"​   border="1" >
 								<thead>
 									<tr  class="style-head">
-										<td><?php echo $tr->translate("NUM");?></td>
-										<td><?php echo $tr->translate("BRANCH");?></td>
-										<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-										<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
+										<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+										<td colspan="3"><?php echo $tr->translate("CUSTOMER_INFO");?></td>
+										<td rowspan="2"><?php echo $tr->translate("ASK_FOR");?></td>
+										<td rowspan="2">&nbsp;<?php echo $tr->translate("KNOW_BY");?>&nbsp;</td>
+										<td rowspan="2"><?php echo $tr->translate("Amount Contacted");?></td>
+										<td colspan="3"><?php echo $tr->translate("STUDENT_INFO");?></td>
+										<td rowspan="2"><?php echo $tr->translate("STATUS");?></td>
+									</tr>
+									<tr  class="style-head">
+										<td><?php echo $tr->translate("NAME");?></td>
 										<td><?php echo $tr->translate("GENDER");?></td>
 										<td><?php echo $tr->translate("PHONE");?></td>
-										<td><?php echo $tr->translate("ASK_FOR");?></td>
-										<td>&nbsp;<?php echo $tr->translate("KNOW_BY");?>&nbsp;</td>
-										<td><?php echo $tr->translate("Amount Contacted");?></td>
-										<td><?php echo $tr->translate("STATUS");?></td>
-										<td>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("CREATE_DATE");?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
 									</tr>
 								</thead>
-								<?php $i=0;$degree=0; if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
-								<tr class="style-rowdata hover" align="center" >
+								<?php $i=0;
+								$total_student=0; 
+								$know_by = array();
+								if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
+								<tr class="style-rowdata hover context-menu-one" align="center" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;" >
 									<td ><?php echo $i;?></td>
-									<td align="left">&nbsp;<?php echo $row['branch_name'];?></td>
-									<td align="left" >&nbsp;<?php echo $row['kh_name'];?>&nbsp;</td>
-									<td align="left">&nbsp;<?php echo $row['last_name']." ".$row['first_name'];?>&nbsp;</td>
+									<td align="left" style="padding: 1px"><?php echo $row['kh_name'];?><div><?php echo $row['last_name']." ".$row['first_name'];?></div></td>
 									<td align="center">&nbsp;<?php echo $row['sexTitle']; ?>&nbsp;</td>
-									<td ><?php echo $row['tel'];?></td>
-									<td ><?php echo $row['ask_for_title'];?></td>
-									<td ><?php echo $row['know_by_title'];?></td>
+									<td style="line-height: 16px;white-space: normal !important;max-width: 65px;width: 65px;padding: 2px;overflow-wrap: break-word;"><?php echo $row['tel'];?></td>
+									<td >&nbsp;<?php echo $row['ask_for_title'];?>&nbsp;</td>
+									<td >&nbsp;<?php echo $row['know_by_title'];?>&nbsp;</td>
+									<?php 
+									$total_student = $total_student+1;
+									$know_by[$row['know_by']]=@$know_by[$row['know_by']]+1;
+									?>
 									<td align="center">&nbsp;<?php echo $row['amountContact'];?> <?php echo $tr->translate("Times");?></td>
-									<td><?php echo $row['crm_status_title'];?></td>	
-									<td>
-										<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/allstudent/rpt-crm-detail/id/<?php echo $row['id'];?>">
-										<?php echo $tr->translate("DETAIL");?>
-										</a>
-									</td>
-									<td><?php echo $row['userby'];?></td>	
-									<td><?php echo date('d-m-Y h:i',strtotime($row['create_date']));?></td>		
+									<td align="left" style="padding: 2px 5px;"><?php echo $row['stuNameKh'];?><div><?php echo $row['stuNameEn'];?></div></td>	
+									<td>&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
+									<td>&nbsp;<?php echo $row['grade'];?>&nbsp;</td>	
+									<td>&nbsp;<?php echo $row['crm_status_title'];?>&nbsp;</td>	
 								</tr>
 							<?php }}?>	
 							</table>	
 						</div>	
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div class='know_by'><strong><?php echo $tr->translate("KNOW_BY");?></strong></div>
+						<ul class='know_by'>
+						<?php foreach($this->rsknowBy as $rsknow){?>
+							<li class='know_byitem'><?php echo $rsknow['name']."&nbsp;";echo empty($know_by[$rsknow['id']])?'0':$know_by[$rsknow['id']];echo " ".$tr->translate('STUDENT_UNIT');?></li>
+						<?php }?>
+							<li style="border-top:1.5px #000 dashed;;list-style-type: none;padding-top:5px;"><strong><?php echo $tr->translate("TOTAL_STUDENT").'&nbsp;'.$total_student." ".$tr->translate('STUDENT_UNIT');?></strong></li>
+						</ul>
 					</td>
 				</tr>
 				<tr>
@@ -164,10 +188,11 @@ table.tb-footer tr.style-head {
 			</table>
 		</div>
 	</div>
+	
  <link href="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.css" /> 
  <script src="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.js"></script>
- <style>
-</style>
+ <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<?php $crmDetail = $this->baseUrl()."/allreport/allstudent/rpt-crm-detail/id/";?>
   <?php 
  $tags="";
  if (!empty($this->prev_concern)) foreach ($this->prev_concern as $rs){
@@ -181,9 +206,86 @@ table.tb-footer tr.style-head {
  }
 ?>
 <script type="text/javascript">
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.store.Memory");
+	dojo.require("dojo.data.ObjectStore");
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("Previous Concern");?>",allowClear: true});
+	
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "grade",
+			name: "grade",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			onChange: function() {  
+
+			}
+		}, "grade");
+		<?php if(!empty($this->search['degree'])){?>
+		dijit.byId('degree').attr('value','<?php echo $this->search['degree']?>'); 
+		<?php }?>
+		getAllGrade();
+		branch_id = dijit.byId("branch_search").attr('value');
+		if(branch_id!=''){
+			branch_label = dijit.byId("branch_search").attr('displayedValue');
+			$( "#lbl_branch" ).html(branch_label);
+		}
 	});
 });
+
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+function getAllGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){return false;}
+	dojo.xhrPost({
+		url:url_dept,
+		content:{
+			'dept_id':dept_id,
+			'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);   
+			dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="detail"){
+				url='<?php echo $crmDetail;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"detail": {name: "<?php echo $tr->translate("DETAIL");?>", icon: "fa-file-text", accesskey: "c"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+
+
 </script>

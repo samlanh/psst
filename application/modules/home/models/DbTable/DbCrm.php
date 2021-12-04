@@ -59,7 +59,7 @@
     	if(!empty($search['know_by_search'])){
     		$where.= " AND c.know_by = ".$db->quote($search['know_by_search']);
     	}
-    	if($search['status_search']>-1){
+    	if($search['status_search']>-1 AND $search['status_search']!=''){
     		$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
     	}
     	

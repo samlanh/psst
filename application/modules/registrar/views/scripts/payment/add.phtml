@@ -169,16 +169,19 @@ tr.head-td th{padding: 5px 2px;}
 							<?php 
 							$customerType=1;
 							$studentType = $rsStudent['customer_type']; //ប្រភេទសិស្ស  : 1=Existing Student , 2=Tested Student, 3=CRM, ( មិនទាន់ច្បាស់ប្រើ 4=សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់ )
-							if($rsStudent['customer_type']==2){
-								$customerType=2;
-								$studentType=1;
-							}else if($rsStudent['customer_type']==4){
-								$studentType=2;
-							}
+							
 							$groupLabel="";
 							if(!empty($rsStudent['group_name'])){
 								$groupLabel=" (".$rsStudent['group_name'].")";
 							}
+							if($rsStudent['customer_type']==2){
+								$customerType=2;
+								$studentType=1;
+								$groupLabel="";
+							}else if($rsStudent['customer_type']==4){
+								$studentType=2;
+							}
+							
 							?>
 							<?php if($rsStudent['customer_type']!=2){ ?>
 							<input type="hidden" name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['branch_id'];?>"/>

@@ -597,6 +597,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm->FrmAddCRM(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_crm = $frm;
+		
+		$this->view->rsknowBy = $_dbgb->getAllKnowBy();
 	}
 	public function rptCrmDetailAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -669,6 +671,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$pevconcer = $_dbgb->getViewByType(34);
 		$this->view->feedback_type = $pevconcer;
+		$followup = $_dbgb->getcrmFollowupStatus();
+		unset($followup[-1]);
+		$this->view->followup = $followup;
 	}
 	function rptStudenttestAction(){
 		try{

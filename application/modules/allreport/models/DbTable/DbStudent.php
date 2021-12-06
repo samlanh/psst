@@ -74,6 +74,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			WHEN  c.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
 			END AS crm_status_title,
 			(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = c.know_by LIMIT 1 ) AS know_by_title,
+			c.know_by,
 			(SELECT COUNT(cr.id) FROM `rms_crm_history_contact` AS cr WHERE cr.crm_id = c.id LIMIT 1) AS amountContact,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby
 			FROM 
@@ -186,6 +187,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_COMPLETED")."'
 				WHEN  cc.proccess = 3 THEN '".$tr->translate("COMPLETED")."'
 				END AS crm_status_title,
+				cc.proccess,
 				c.kh_name,
 				c.first_name,
 				c.last_name,
@@ -222,7 +224,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.= " AND cc.crm_id = ".$db->quote($search['crm_list']);
 		}
 		
-		if($search['status_search']>-1){
+		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND cc.proccess = ".$db->quote($search['status_search']);
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();

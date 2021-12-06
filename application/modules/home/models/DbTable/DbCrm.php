@@ -454,8 +454,8 @@
 			if (!empty($_data['feedback_type'])){
 				$epl = explode(",", $_data['feedback_type']);
 				foreach ($epl as $ss){
-					$key = $this->checkFeedBackConcer($ss);
-					if (empty($key)){
+					$key_code = $this->checkFeedBackConcer($ss);
+					if (empty($key_code)){
 						$key_code = $_dbgb->getLastKeycodeByType(34);
 						$_arrview=array(
 								'name_en'	  => $ss,

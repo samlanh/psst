@@ -89,11 +89,17 @@ class Registrar_PaymentController extends Zend_Controller_Action {
 		$rsStudent = $db->getStudentForPaymentById($stuId);
 		$this->view->rsStudent = $rsStudent;
 		if(empty($rsStudent)){
-			Application_Form_FrmMessage::Sucessfull("NO_DATA_ON_THIS","/registrar/payment");
-			exit();
+			$rsStudent = $db->getCustomerForPaymentById($stuId);
+			$this->view->rsStudent = $rsStudent;
+			if(empty($rsStudent)){
+				Application_Form_FrmMessage::Sucessfull("NO_DATA_ON_THIS","/registrar/payment");
+				exit();
+			}
 		}
 		
        $_db = new Application_Model_DbTable_DbGlobal();
+	   
+	   $this->view->rsbranch = $_db->getAllBranch();
        $this->view->exchange_rate = $_db->getExchangeRate();
       
        $this->view->rs_type = $_db->getAllItems();

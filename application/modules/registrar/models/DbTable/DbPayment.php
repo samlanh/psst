@@ -108,10 +108,70 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("s.branch_id");
+		$row = $_db->fetchAll($sql.$where.$orderby);
+		
+		$rsCus = $this->getListCustomerForPayment($search);
+		if(!empty($rsCus)){
+			$row = array_merge($row, $rsCus);
+			//array_unshift($row, $row);
+		}
+		
+		return $row;
+	}
+	
+	public function getListCustomerForPayment($search){
+		$_db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label="name_en";
+		$branch = "branch_nameen";
+		$field = 'name_en';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label="name_kh";
+			$field = 'name_kh';
+			$branch = "branch_namekh";
+		}
+		$sql ="SELECT  
+					s.*,
+					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
+					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
+					s.tel,
+					CASE
+						WHEN s.customer_type = 1 THEN '".$tr->translate("Existing Student")."'
+						WHEN s.customer_type = 2 THEN '".$tr->translate("Cutomer")."'
+						WHEN s.customer_type = 3 THEN '".$tr->translate("CRM")."'
+						WHEN s.customer_type = 4 THEN '".$tr->translate("Student Test")."'
+					END as typeStudent
+				FROM rms_student AS s
+				WHERE  
+				    s.status = 1 
+				   AND s.customer_type=2
+				 ";
+		$where = " ";
+		$orderby = " ORDER BY s.stu_khname ASC ";
+		
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if($search['customer_type']>-1){
+			$where.=" AND s.customer_type=".$search['customer_type'];
+		}
 		return $_db->fetchAll($sql.$where.$orderby);
-		
-		
-		
 	}
 	
 	public function getStudentForPaymentById($stuId){
@@ -184,6 +244,74 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 		$where = " LIMIT 1";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("s.branch_id");
+		return $_db->fetchRow($sql.$where);
+		
+	}
+	public function getCustomerForPaymentById($stuId){
+		$_db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label="name_en";
+		$branch = "branch_nameen";
+		$field = 'name_en';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label="name_kh";
+			$field = 'name_kh';
+			$branch = "branch_namekh";
+		}
+		$sql ="SELECT  
+					s.*,
+					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
+					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
+					CASE
+						WHEN primary_phone = 1 THEN s.tel
+						WHEN primary_phone = 2 THEN s.father_phone
+						WHEN primary_phone = 3 THEN s.mother_phone
+						ELSE s.guardian_tel
+					END as parentTel,
+					'0' AS is_subspend,
+					CASE
+						WHEN s.customer_type = 1 THEN s.stu_code
+						WHEN s.customer_type = 2 THEN s.serial
+						WHEN s.customer_type = 3 THEN s.serial
+						WHEN s.customer_type = 4 THEN s.serial
+					END as stuCodeInfo,
+					CASE
+						WHEN s.customer_type = 1 THEN '".$tr->translate("Existing Student")."'
+						WHEN s.customer_type = 2 THEN '".$tr->translate("Cutomer")."'
+						WHEN s.customer_type = 3 THEN '".$tr->translate("CRM")."'
+						WHEN s.customer_type = 4 THEN '".$tr->translate("Student Test")."'
+					END as typeStudent,
+		
+					'0' AS currentFeeId,
+					'N/A' as status_student,
+					'N/A' AS group_name,
+					'N/A' AS degree,
+					'N/A' AS grade,
+					
+					'0' AS group_id,
+					'0' AS degree_id,
+					'0' AS grade_id,
+					
+					'N/A' AS academic_year,
+					'0' AS studentBalanceId,
+					'0' AS groupDetailId,
+					
+					COALESCE((SELECT id FROM rms_creditmemo WHERE student_id = s.stu_id AND total_amountafter>0 LIMIT 1),0) AS creditMemoId,
+					COALESCE((SELECT total_amountafter FROM rms_creditmemo WHERE student_id = s.stu_id AND total_amountafter>0 LIMIT 1),0) AS totalAmountAfter,
+					COALESCE((SELECT SUM(sp.balance_due) FROM rms_student_payment AS sp WHERE sp.student_id=s.stu_id LIMIT 1 ),0) AS studentBalancePayment
+				  
+					
+				FROM rms_student AS s
+				  WHERE  
+				    s.customer_type = 2
+				   AND s.status = 1 
+				   AND s.stu_id = $stuId
+				 ";
+		$where = " LIMIT 1";
 		return $_db->fetchRow($sql.$where);
 		
 	}

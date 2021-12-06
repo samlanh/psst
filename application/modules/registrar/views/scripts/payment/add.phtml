@@ -46,6 +46,15 @@ span.user-badge.bg-warning{
 .bg-warning {
     background: #009bcc !important;
 }
+.bg-warning.studentType-2 {
+    background: #c9a700 !important;
+}
+.bg-warning.studentType-3 {
+    background: #c90000 !important;
+}
+.bg-warning.studentType-4 {
+    background: #01857e !important;
+}
 .thumb-xl.member-thumb {
     position: relative;
 }
@@ -171,7 +180,9 @@ tr.head-td th{padding: 5px 2px;}
 								$groupLabel=" (".$rsStudent['group_name'].")";
 							}
 							?>
+							<?php if($rsStudent['customer_type']!=2){ ?>
 							<input type="hidden" name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['branch_id'];?>"/>
+							<?php }?>
 							<input type="hidden" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $studentType;?>"/>
 							<input type="hidden" name="customer_type" id="customer_type" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $customerType;?>"/>
 							<input type="hidden" name="old_stu" id="old_stu" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rsStudent['stu_id'];?>"/>
@@ -232,7 +243,7 @@ tr.head-td th{padding: 5px 2px;}
 		           		<div class="text-center card-box-border">
 		                   	<div class="member-card card-display-reg">
 		                   		<div class="img-back"></div>
-		                      	<span class="user-badge bg-warning" ><?php echo $rsStudent['typeStudent'];?></span>
+		                      	<span class="user-badge bg-warning <?php echo "studentType-".$rsStudent['customer_type'];?>" ><?php echo $rsStudent['typeStudent'];?></span>
 		                       	<div class="col-md-4 col-sm-4 col-xs-12">
 			                       	<div class="thumb-xl member-thumb m-b-10 center-block">
 			                       		<?php 
@@ -275,7 +286,21 @@ tr.head-td th{padding: 5px 2px;}
 	       </div>
 	           <div class="card-box" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 		           <div class="form-group" >
-			           <div class="col-md-3 col-sm-3 col-xs-12">
+						<?php if($rsStudent['customer_type']==2){ ?>
+						<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="form-group">
+							   <label class="control-label col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
+							   <div class="col-md-9 col-sm-9 col-xs-12">
+									<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicByBranch();">
+										<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
+										<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+										<?php }?>
+									</select>
+							   </div>
+							</div>
+						</div>
+						<?php } ?>
+						<div class="col-md-3 col-sm-3 col-xs-12">
 			           		 <div class="form-group">
 			                   <label class="control-label  col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?></label>
 			                   <div class="col-md-9 col-sm-9 col-xs-12">

@@ -63,11 +63,12 @@
 			</form>
 		</div>
 		<div class="card-box search-list">
-			<?php if(!empty($this->row)) foreach($this->row AS $key=>$rs){?>
+			<?php 
+			if(!empty($this->row)) foreach($this->row AS $key=>$rs){?>
 			<div class="col-md-3">
                 <div class="text-center card-box-border">
 					<div class="member-card">
-						<span class="user-badge bg-warning" ><?php echo ($key+1).".) "; echo $rs['typeStudent'];?></span>
+						<span class="user-badge bg-warning <?php echo "studentType-".$rs['customer_type'];?>" ><?php echo ($key+1).".) "; echo $rs['typeStudent'];?></span>
 						<ul class="nav navbar-right panel_toolbox stusearch">
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -100,18 +101,30 @@
                         </div>
 						
 						<div class="">
+							<?php if($rs['customer_type']!=2){?>
                        		<h4 class="blue m-b-5"><?php echo $rs['stu_code'];?></h4>
+							<?php }else{?>
+							<h4 class="blue m-b-5">&nbsp;</h4>
+							<?php }?>
+							
                        		<h4 class="m-b-5"><?php echo $rs['stu_khname'];?></h4>
                        		<h4 class="m-b-5"><?php echo $rs['stu_name'];?></h4>
+							<?php if($rs['customer_type']!=2){?>
                             <p class="text-muted"><span><?php echo $rs['academic_year'];?></span></p>
-                       </div>
-					   
+							<?php }else{?>
+							<p class="text-muted"><span>&nbsp;</span></p>
+							<?php }?>
+					   </div>
+					   <?php if($rs['customer_type']!=2){?>
 					   <p class="text-muted info-list font-13">
                        		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" ><?php echo $rs['group_name'];?></span><br />
                             <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" ><?php echo $rs['degree'];?></span> <br />
                             <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" ><?php echo $rs['grade'];?></span><br />
                         </p>
-					   
+					   <?php }else {?>
+                           <span class="title-info"><?php echo $tr->translate('TEL');?></span> : <span class="inf-value" ><?php echo $rs['tel'];?></span><br />
+                            <span class="title-info"><?php echo $tr->translate('EMAIL');?></span> : <span class="inf-value" ><?php echo $rs['email'];?></span> <br />
+                      <?php }?>
 				   </div>
 				</div>
 			</div>
@@ -160,8 +173,9 @@
     border: 1px solid rgba(98, 103, 115, 0.2);
     padding: 10px;
     margin-bottom: 20px;
-        color: #000;
-        box-shadow: 1px 1px 2px #ccc;
+	color: #000;
+	box-shadow: 1px 1px 2px #ccc;
+	min-height:251px;
 }
 span.user-badge.bg-warning {
     position: absolute;
@@ -177,6 +191,15 @@ span.user-badge.bg-warning {
 }
 .bg-warning {
     background: #009bcc !important;
+}
+.bg-warning.studentType-2 {
+    background: #c9a700 !important;
+}
+.bg-warning.studentType-3 {
+    background: #c90000 !important;
+}
+.bg-warning.studentType-4 {
+    background: #01857e !important;
 }
 .thumb-xl.member-thumb {
     position: relative;

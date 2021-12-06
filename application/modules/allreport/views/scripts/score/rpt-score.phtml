@@ -90,7 +90,7 @@ table.tb-footer tr.style-head {
 			.padding td{padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto }
-			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 12px;}
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
@@ -102,7 +102,7 @@ table.tb-footer tr.style-head {
 				width:100%;
 				border:1px solid #000; 
 				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
+				font-size:12px;
 				white-space: nowrap;
 				margin:0 auto;
 				color: #000;
@@ -151,6 +151,8 @@ table.tb-footer tr.style-head {
 									<td><?php echo $tr->translate("RESULT_FOR");?></td>
 									<td><?php echo $tr->translate("FOR_MONTH");?></td>
 									<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
+									<td><?php echo $tr->translate("CREATE_DATE");?></td>
+									<td><?php echo $tr->translate("BY_USER");?></td>
 									<td><?php echo $tr->translate("NOTE");?></td>
 								  </tr>
 							  </thead>
@@ -169,6 +171,8 @@ table.tb-footer tr.style-head {
 							    <td align="left"><?php echo $rs['title_score']; ?></td>
 							    <td><?php echo $rs['for_month']; ?></td>
 							    <td><?php echo $rs['for_semester']; ?></td>
+							    <td align="left"><?php echo date("d-m-Y",strtotime($rs['date_input'])); ?></td>
+							    <td align="left"><?php echo $rs['user_name']; ?></td>
 							    <td align="left"><?php echo $rs['note']; ?></td>
 							  </tr>
 							<?php 

@@ -46,6 +46,15 @@ span.user-badge.bg-warning{
 .bg-warning {
     background: #009bcc !important;
 }
+.bg-warning.studentType-2 {
+    background: #c9a700 !important;
+}
+.bg-warning.studentType-3 {
+    background: #c90000 !important;
+}
+.bg-warning.studentType-4 {
+    background: #01857e !important;
+}
 .thumb-xl.member-thumb {
     position: relative;
 }
@@ -234,7 +243,7 @@ tr.head-td th{padding: 5px 2px;}
 		           		<div class="text-center card-box-border">
 		                   	<div class="member-card card-display-reg">
 		                   		<div class="img-back"></div>
-		                      	<span class="user-badge bg-warning" ><?php echo $rsStudent['typeStudent'];?></span>
+		                      	<span class="user-badge bg-warning <?php echo "studentType-".$rsStudent['customer_type'];?>" ><?php echo $rsStudent['typeStudent'];?></span>
 		                       	<div class="col-md-4 col-sm-4 col-xs-12">
 			                       	<div class="thumb-xl member-thumb m-b-10 center-block">
 			                       		<?php 

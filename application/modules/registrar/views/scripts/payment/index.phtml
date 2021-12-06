@@ -68,7 +68,7 @@
 			<div class="col-md-3">
                 <div class="text-center card-box-border">
 					<div class="member-card">
-						<span class="user-badge bg-warning" ><?php echo ($key+1).".) "; echo $rs['typeStudent'];?></span>
+						<span class="user-badge bg-warning <?php echo "studentType-".$rs['customer_type'];?>" ><?php echo ($key+1).".) "; echo $rs['typeStudent'];?></span>
 						<ul class="nav navbar-right panel_toolbox stusearch">
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -191,6 +191,15 @@ span.user-badge.bg-warning {
 }
 .bg-warning {
     background: #009bcc !important;
+}
+.bg-warning.studentType-2 {
+    background: #c9a700 !important;
+}
+.bg-warning.studentType-3 {
+    background: #c90000 !important;
+}
+.bg-warning.studentType-4 {
+    background: #01857e !important;
 }
 .thumb-xl.member-thumb {
     position: relative;

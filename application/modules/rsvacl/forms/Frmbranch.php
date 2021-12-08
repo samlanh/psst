@@ -101,7 +101,7 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$card_type->setMultiOptions($opt);
 		
-		$branch_code = new Zend_Dojo_Form_Element_NumberTextBox('branch_code');
+		$branch_code = new Zend_Dojo_Form_Element_TextBox('branch_code');
 		$branch_code->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
@@ -112,26 +112,26 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		$db_code=Global_Model_DbTable_DbBranch::getBranchCode();
 		$branch_code->setValue($db_code);
 		
-		$branch_tel = new Zend_Dojo_Form_Element_NumberTextBox('branch_tel');
+		$branch_tel = new Zend_Dojo_Form_Element_TextBox('branch_tel');
 		$branch_tel->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				));
 		
-		$branch_tel1 = new Zend_Dojo_Form_Element_NumberTextBox('branch_tel1');
+		$branch_tel1 = new Zend_Dojo_Form_Element_TextBox('branch_tel1');
 		$branch_tel1->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 		));
 		
-		$email = new Zend_Dojo_Form_Element_NumberTextBox('email');
+		$email = new Zend_Dojo_Form_Element_TextBox('email');
 		$email->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'onkeyup'=>'Calfive()'
 		));
 		
-		$website = new Zend_Dojo_Form_Element_NumberTextBox('website');
+		$website = new Zend_Dojo_Form_Element_TextBox('website');
 		$website->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
@@ -203,37 +203,32 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		$color = new Zend_Dojo_Form_Element_TextBox('color');//Color Letter head
 		$color->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
-				'required'=>false,
+    			'class'=>'fullside height-text',
 		));
 		$color->setValue("2e3192");
 		
 		$centereys = new Zend_Dojo_Form_Element_TextBox('centereys');//Color Letter head
 		$centereys->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
-				'required'=>false,
+    			'class'=>'fullside height-text',
 		));
 		
 		$officeeys = new Zend_Dojo_Form_Element_TextBox('officeeys');//Color Letter head
 		$officeeys->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
-				'required'=>false,
+    			'class'=>'fullside height-text',
 		));
 		
 		$principal = new Zend_Dojo_Form_Element_TextBox('principal');
 		$principal->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
-				'required'=>false,
+    			'class'=>'fullside height-text',
 		));
 		
 		$workat = new Zend_Dojo_Form_Element_TextBox('workat');//Color Letter head
 		$workat->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
-				'required'=>false,
+    			'class'=>'fullside height-text',
 		));
 		
 		$id = new Zend_Form_Element_Hidden('id');

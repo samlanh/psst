@@ -12,7 +12,7 @@ Class Global_Form_FrmProvince extends Zend_Dojo_Form {
 				'required'=>'true','missingMessage'=>'Invalid Module!','class'=>'fullside'
 				));
 		$_kh_province = new Zend_Dojo_Form_Element_TextBox('kh_province');
-		$_kh_province->setAttribs(array('dojoType'=>'dijit.form.TextBox','class'=>'fullside'
+		$_kh_province->setAttribs(array('dojoType'=>'dijit.form.ValidationTextBox','required'=>'true','class'=>'fullside'
 		));
 		$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DACTIVE"));
 		$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");

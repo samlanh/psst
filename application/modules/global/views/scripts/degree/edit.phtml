@@ -52,14 +52,14 @@ span#message {
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_KHNAME");?></label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_KHNAME");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("title");?>
 		                	<?php echo $frm_degree->getElement("id");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_ENNAME");?></label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_ENNAME");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("title_en");?>
 		                </div>
@@ -72,7 +72,7 @@ span#message {
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ORDERING");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ORDERING");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("ordering");?>
 		                </div>
@@ -122,7 +122,7 @@ span#message {
 											<tr id="head-title" class="head-td" align="right">
 												<th><?php echo $tr->translate("DEL");?></th>
 												<th><?php echo $tr->translate("N_O");?></th>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+												<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?> <span class="required">*</span></th>
 												<?php if($show==1){?>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
 												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
@@ -319,7 +319,7 @@ function addRow() {
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
+		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SUBJECT_STUDY");?> <span class="required">*</span></th>';
 		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_IN_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';

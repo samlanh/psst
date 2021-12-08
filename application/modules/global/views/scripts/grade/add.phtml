@@ -52,14 +52,14 @@
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAJOR_KHNAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAJOR_KHNAME");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("title");?>
 		                	<input type="hidden" id="items_type" name="items_type" value="1" />
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAJOR_ENNAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAJOR_ENNAME");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("title_en");?>
 		                </div>
@@ -83,20 +83,20 @@
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input id="items_id" />
 		                	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
 		                </div>
 		             </div>
 					 <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> </label>
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("total_score");?>
 		                </div>
 		             </div>
 					 <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_SUBJECT");?> </label>
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_SUBJECT");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("amount_subject");?>
 		                </div>

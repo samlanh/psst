@@ -71,6 +71,19 @@ span.red {
 ul.blogscoresubject li{list-style: none;width:10%;float: left; }
 ol.blogscoresubject li{list-style: none;width:10%;float: left; }
 ol{margin: 10px;}
+
+tr.OddRow {
+    background: #fff;
+}
+tr.EvenRow {
+    background: #e6ecf5;
+}
+td.stuNameCol {
+    font-size: 12px;
+    white-space: nowrap;
+    width: 30%;
+    line-height: 22px;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -338,6 +351,11 @@ function filterStudentBygroup(type = null){
 				str='';
 				for(i=0;i<data.length;i++){ 
 					inx = i+1;
+					var classRow="OddRow";
+					if((i%2)==0){
+						classRow="EvenRow";
+					}
+					
 					num++;
 					var gender='';
 					if(data[i].sex==1){
@@ -356,7 +374,7 @@ function filterStudentBygroup(type = null){
 						str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
 						str+='</tr>';
 					}
-					str+='<tr style=" background: #fff;">';
+					str+='<tr class="'+classRow+'">';
 						str+='<td>'+inx+'</td>';
 						str+='<td>'+data[i].stu_code+'</td>';
 						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
@@ -430,7 +448,11 @@ function initailize(){
 				str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
 			str+='</tr>';
 			<?php }?>
-				str+='<tr style=" background: #fff;">';
+				var classRow="OddRow";
+				if((inx%2)==0){
+					classRow="EvenRow";
+				}
+				str+='<tr class="'+classRow+'">';
 				str+='<td>'+inx+'</td>';
 				str+='<td><?php echo $row['stu_code'];?></td>';
 				str+='<td style="text-align: left;">&nbsp;<?php echo $row['stu_name'];?></td>';

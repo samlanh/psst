@@ -65,6 +65,21 @@ span.red {
 }
 
 ol{margin: 10px;}
+
+
+tr.OddRow {
+    background: #fff;
+}
+tr.EvenRow {
+    background: #e6ecf5;
+}
+td.stuNameCol {
+    font-size: 12px;
+    white-space: nowrap;
+    width: 30%;
+    line-height: 22px;
+}
+
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -300,6 +315,12 @@ function filterStudentBygroup(){
 				column = 0;
 				str='';
 				for(i=0;i<data.length;i++){
+					
+					var classRow="OddRow";
+					if((i%2)==0){
+						classRow="EvenRow";
+					}
+				
 					inx = i+1;
 					num++;
 					var gender='';
@@ -319,7 +340,7 @@ function filterStudentBygroup(){
 						str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
 					str+='</tr>';
 					}
-					str+='<tr style=" background: #fff;">';
+					str+='<tr class="'+classRow+'">';
 						str+='<td>'+inx+'</td>';
 						str+='<td>'+data[i].stu_code+'</td>';
 						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';

@@ -578,11 +578,13 @@ dojo.ready(function(){
 });
 
 function checkStudentType(){
-	
+	var isSetstudentid = '<?php echo $rsStudent['is_setstudentid']?>';
 	dijit.byId('student_code').attr('value',""); 
 	student_type = dijit.byId("student_type").attr("value");
 	$("#stuCodeControl").css("display", "none");
 	if(student_type==2){
+		$( "#stuCodeControl" ).css("display", "flow-root");
+	}else if(isSetstudentid==0){
 		$( "#stuCodeControl" ).css("display", "flow-root");
 	}
 }

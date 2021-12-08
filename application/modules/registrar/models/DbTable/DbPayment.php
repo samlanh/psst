@@ -105,7 +105,9 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 		if($search['customer_type']>-1){
 			$where.=" AND s.customer_type=".$search['customer_type'];
 		}
-		
+		if($search['study_status']>=0){
+			$where.=' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) ='.$search['study_status'];
+		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("s.branch_id");
 		$row = $_db->fetchAll($sql.$where.$orderby);
@@ -139,6 +141,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
 					s.tel,
+					'' AS status_student,
 					CASE
 						WHEN s.customer_type = 1 THEN '".$tr->translate("Existing Student")."'
 						WHEN s.customer_type = 2 THEN '".$tr->translate("Cutomer")."'

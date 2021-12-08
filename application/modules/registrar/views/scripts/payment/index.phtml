@@ -55,6 +55,9 @@
 							<option value="4" <?php if($this->adv_search['customer_type']==4){ echo "selected";}?> ><?php echo $tr->translate("Tested Student");?></option>
 						</select>
                    </div>
+				    <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("study_status");?>
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    		<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
@@ -68,7 +71,7 @@
 			<div class="col-md-3">
                 <div class="text-center card-box-border">
 					<div class="member-card">
-						<span class="user-badge bg-warning <?php echo "studentType-".$rs['customer_type'];?>" ><?php echo ($key+1).".) "; echo $rs['typeStudent'];?></span>
+			<span class="user-badge bg-warning <?php echo "studentType-".$rs['customer_type'];?>" ><?php echo ($key+1).".) "; echo $rs['typeStudent'];?><?php if(!empty($rs['status_student'])){?><br /><small><?php echo $rs['status_student'];?></small><?php }?></span>
 						<ul class="nav navbar-right panel_toolbox stusearch">
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -181,13 +184,14 @@ span.user-badge.bg-warning {
     position: absolute;
     top: 5px;
     left: 0;
-    padding: 5px 15px;
+    padding: 3px 10px;
     border-radius: 20px;
     color: #ffffff;
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
     font-weight: bold;
     z-index: 1 !important;
+    text-align: -webkit-auto;
 }
 .bg-warning {
     background: #009bcc !important;

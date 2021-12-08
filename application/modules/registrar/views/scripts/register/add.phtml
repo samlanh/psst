@@ -395,7 +395,7 @@ tr.head-td th{padding: 5px 2px;}
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_AMOUNT");?>  :</label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_AMOUNT");?> <span class="required">*</span> :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="paid_amount" id="paid_amount" value="0" onkeyup="onPaidAmount();" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
@@ -682,9 +682,9 @@ function hideDialog1(){
 function checkCustomerType(){
 	customer_type = dijit.byId("customer_type").attr("value");
 	dijit.byId("student_type").set('readOnly',false);
-	$( "#lblNameControl" ).html("<?php echo $tr->translate("STUDENT_NAME");?>");
+	$( "#lblNameControl" ).html("<?php echo $tr->translate("STUDENT_NAME");?>"+' <span class="required">*</span>');
 	if(customer_type==2){
-		$( "#lblNameControl" ).html("<?php echo $tr->translate("CUSTOMER_NAME");?>");
+		$( "#lblNameControl" ).html("<?php echo $tr->translate("CUSTOMER_NAME");?>"+' <span class="required">*</span>');
 		dijit.byId("student_type").attr("value",1);
 		dijit.byId("student_type").set('readOnly',true);
 		

@@ -38,14 +38,14 @@
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("branch_id");?>
 	                   		<?php echo $frm->getElement("id");?>
 	                   </div>
 		             </div>
 		    		<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 							<input id="studentid" />
 		                </div>
@@ -63,19 +63,19 @@
 		                </div>
 		            </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("academic_year");?>
 		                </div>
 		            </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 							<input id="grade" />
 		                </div>
 		            </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("degree");?>
 		                </div>
@@ -95,19 +95,19 @@
 		                </div>
 		            </div>
 		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 							<input id="group" />
 		                </div>
 		            </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("type");?>
 		                </div>
 		            </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STOP_DATE");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STOP_DATE");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="datestop" name="datestop" value="now" type="text">
 		                </div>

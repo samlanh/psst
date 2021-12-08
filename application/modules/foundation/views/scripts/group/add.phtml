@@ -93,13 +93,13 @@
              </div>
              <?php }?>
              <div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> <span class="required">*</span></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                  <input id="degree" name="degree" />
                 </div>
              </div>
              <div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> <span class="required">*</span></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                   <input id="grade" name="grade" />
                 </div>
@@ -148,13 +148,13 @@
     	</div>
     	<div class="col-md-4 col-sm-4 col-xs-12">
     		<div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
                 <div class="col-md-7 col-sm-7 col-xs-12" >
                 	<?php echo $frm->getElement("total_max_score");?>
                 </div>
              </div>
     		<div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?> <span class="required">*</span></label>
                 <div class="col-md-7 col-sm-7 col-xs-12" >
                 	<?php echo $frm->getElement("divide_subject");?>
                 </div>

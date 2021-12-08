@@ -62,14 +62,14 @@ table.history-record tbody tr td {
 	                   </label>
 	                </div>
 					<div class="form-group">
-		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> </label>
+		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("branch_id");?>
 		                	<?php echo $frm_items->getElement("id");?>
 		                </div>
 		             </div>
 					<div class="form-group">
-		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER").$tr->translate("IN_KHMER");?> </label>
+		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER").$tr->translate("IN_KHMER");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("kh_name");?>
 		                </div>
@@ -96,7 +96,7 @@ table.history-record tbody tr td {
 		                </div>
 		             </div>
 		             <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("tel");?>

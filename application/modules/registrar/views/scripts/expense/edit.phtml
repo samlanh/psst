@@ -47,7 +47,7 @@ table.collape tbody td {
 	    	<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                  	 <?php echo $frm->getElement('branch_id');?>
@@ -68,7 +68,7 @@ table.collape tbody td {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EXPENSE_TITLE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EXPENSE_TITLE");?> <span class="required">*</span>:
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement('title');?>
@@ -91,14 +91,14 @@ table.collape tbody td {
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREATED_DATE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREATED_DATE");?> <span class="required">*</span>:
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement('Date');?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_EXPENSE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_EXPENSE");?> <span class="required">*</span>:
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement('total_amount');?>
@@ -356,8 +356,8 @@ table.collape tbody td {
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?><span class="required">*</span></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
 			temp+='<th id="lbl_titlemetion" width="150px"><?php echo $tr->translate("TOTAL");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -406,8 +406,8 @@ table.collape tbody td {
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?><span class="required">*</span></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?><span class="required">*</span></th>';
 			temp+='<th id="lbl_titlemetion" width="150px"><?php echo $tr->translate("TOTAL");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);

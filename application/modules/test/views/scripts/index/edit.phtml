@@ -131,7 +131,7 @@ a.btn.btn-primary.btn-xs {
 				                </div>
 				               
 				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> :
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("branch_id");?>
@@ -146,14 +146,14 @@ a.btn.btn-primary.btn-xs {
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SERIAL");?> :
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SERIAL");?> <span class="required">*</span>:
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("serial");?>
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?> :
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?> <span class="required">*</span>:
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("kh_name");?>
@@ -308,14 +308,14 @@ a.btn.btn-primary.btn-xs {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_NAME");?> <strong class="red">*</strong> :
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_NAME");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("parent_name");?>
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_TEL");?> <strong class="red">*</strong> :
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_TEL");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("parent_tel");?>

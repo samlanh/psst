@@ -152,7 +152,8 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     	}
     }
     function getProBylocationAction(){
-    	if($this->getRequest()->isPost()){
+    	/***
+		if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRequestProduct();
     		$gty= $db->getAllProductBybranch($data['branch_id']);
@@ -160,6 +161,20 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		array_unshift($gty, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
     		print_r(Zend_Json::encode($gty));
     		exit();
+    	}
+		*/
+		
+		if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbItemsDetail();
+    			$d_row= $db->getAllProductsNormalByAnyOption($data);
+    			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+    			print_r(Zend_Json::encode($d_row));
+    			exit();
+    		}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
     	}
     }
     function addRequestForAction(){

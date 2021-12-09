@@ -37,7 +37,7 @@ label{font-weight: normal ;}
 			<div class="card-box">
 	             <div class="col-md-5 col-sm-5 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?></label>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); getbranchinfo();">								
 								<?php if(!empty($this->branchopt)) foreach($this->branchopt As $key=>$branch){?>
@@ -47,7 +47,7 @@ label{font-weight: normal ;}
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_DATE");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_DATE");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/>
@@ -70,7 +70,7 @@ label{font-weight: normal ;}
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_FOR");?>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_FOR");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input id="request_for"/>
@@ -86,7 +86,7 @@ label{font-weight: normal ;}
 	             </div>
 	         </div>
 	         <div class="card-box">
-	         	<div class="col-md-10 col-sm-10 col-xs-12">
+	         	<div class="col-md-12 col-sm-12 col-xs-12">
 	         		<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
 	                   <label class="control-label bold col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("SELECT_PRODUCT");?> 
 	                   </label>
@@ -99,7 +99,7 @@ label{font-weight: normal ;}
                   		 <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
-		         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+		         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc; width: 100%;">
 								<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
 						<input type="hidden" id="identity" name="identity" />
@@ -473,8 +473,8 @@ function addRow() {
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CURR_QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("REQUEST_QTY");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("RECEIVE_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("REQUEST_QTY");?><span class="required">*</span></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("RECEIVE_QTY");?><span class="required">*</span></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;

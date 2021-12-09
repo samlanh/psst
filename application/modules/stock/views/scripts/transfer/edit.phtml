@@ -52,7 +52,7 @@
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_LOCATION");?> 
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_LOCATION");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select autoComplete='false' queryExpr="*${0}*"  name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
@@ -65,7 +65,7 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_LOCATION");?> 
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_LOCATION");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select autoComplete='false' queryExpr="*${0}*" name="to_location" id="to_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
@@ -168,7 +168,7 @@ function initailize(){
 		temp+='<td><?php echo $tr->translate("NUM");?></td>';
 		temp+='<td><?php echo $tr->translate("PRODUCT_NAME");?></td>';
 		temp+='<td ><?php echo $tr->translate("CURR_QTY");?></td>';
-		temp+='<td><?php echo $tr->translate("QTY_TRANSFER");?></td>';
+		temp+='<td><?php echo $tr->translate("QTY_TRANSFER");?><span class="required">*</span></td>';
 		temp+='<td><?php echo $tr->translate("OTHER");?></td>';
 		temp+='<td><?php echo $tr->translate("DELETE");?></td>';
 		dojo.query("#head-title").append(temp);
@@ -237,7 +237,7 @@ function getProductName() {
 				temp+='<td ><?php echo $tr->translate("NUM");?></td>';
 				temp+='<td ><?php echo $tr->translate("PRODUCT_NAME");?></td>';
 				temp+='<td ><?php echo $tr->translate("CURR_QTY");?></td>';
-				temp+='<td ><?php echo $tr->translate("QTY_TRANSFER");?></td>';
+				temp+='<td ><?php echo $tr->translate("QTY_TRANSFER");?><span class="required">*</span></td>';
 				temp+='<td ><?php echo $tr->translate("OTHER");?></td>';
 				temp+='<td ><?php echo $tr->translate("DELETE");?></td>';
 				dojo.query("#head-title").append(temp);

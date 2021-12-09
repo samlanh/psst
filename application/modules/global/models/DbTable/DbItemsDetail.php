@@ -793,4 +793,51 @@
 			return 2;
 		}
 	}
+	function getAllProductsNormalByAnyOption($data=array()){
+		$db = $this->getAdapter();
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$grade = "i.title";
+			$degree = "it.title";
+		}else{ // English
+			$grade = "i.title_en";
+			$degree = "it.title_en";
+		}
+		$sql="SELECT i.id,
+		CONCAT($grade,' (',(SELECT $degree FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+		FROM `rms_itemsdetail` AS i,
+		rms_product_location AS pl
+		WHERE i.id=pl.pro_id 
+			AND i.status =1 
+			AND i.items_type=3 
+			AND i.is_productseat=0  ";
+		$product_type = empty($data['product_type'])?0:$data['product_type'];
+		if(!empty($product_type)){//check type product sale or office
+			$sql.= " AND i.product_type = ".$db->quote($product_type);
+		}
+		$product_type = empty($data['product_type'])?0:$data['product_type'];
+		if(!empty($product_type)){//check type product sale or office
+			$sql.= " AND i.product_type = ".$db->quote($product_type);
+		}
+		if(!empty($data['branch_id'])){//check type product sale or office
+			$sql.= " AND pl.brand_id = ".$data['branch_id'];
+		}
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$branchlist = $dbgb->getAllSchoolOption();
+		if (!empty($branchlist)){
+			foreach ($branchlist as $i){
+				$s_where[] = $i['id']." IN (i.schoolOption)";
+			}
+			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		$user = $dbgb->getUserInfo();
+		$level = $user['level'];
+		if ($level!=1){
+			//$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+			$sql .=' AND i.schoolOption IN ( '.$user['schoolOption'].')';
+		}
+		$sql.=" GROUP BY pl.pro_id ORDER BY i.items_id ASC, i.ordering ASC";
+		return $db->fetchAll($sql);
+	}
 }

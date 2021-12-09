@@ -94,7 +94,7 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_NAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_NAME");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("title");?>
 		                	<?php echo $frm_items->getElement("id");?>
@@ -109,7 +109,7 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 					<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_CATEGORY");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_CATEGORY");?> <span class="required">*</span></label>
 		                <div class="col-md-4 col-sm-4 col-xs-12">
 		                	<?php echo $frm_items->getElement("items_id");?>
 		                </div>
@@ -125,7 +125,7 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("UNIT_COST");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("UNIT_COST");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("cost");?>
@@ -171,9 +171,9 @@ input.btn_borwse_image {
 								<th><?php echo $tr->translate("DEL");?></th>
 								<th><?php echo $tr->translate("N_O");?></th>
 								<th><?php echo $tr->translate("BRANCH");?></th>
-								<th><?php echo $tr->translate("QTY");?></th>
-								<th><?php echo $tr->translate("SELL_PRICE");?></th>
-								<th><?php echo $tr->translate("QTY_WARNING");?></th>
+								<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>
+								<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>
+								<th><?php echo $tr->translate("QTY_WARNING");?><span class="required">*</span></th>
 								<th><?php echo $tr->translate("OTHER");?></th>
 							</tr>
 						</table>
@@ -262,9 +262,9 @@ input.btn_borwse_image {
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
 				temp+='<th><?php echo $tr->translate("BRANCH");?></th>';
-				temp+='<th><?php echo $tr->translate("QTY");?></th>';
-				temp+='<th><?php echo $tr->translate("SELL_PRICE");?></th>';
-				temp+='<th><?php echo $tr->translate("QTY_WARNING");?></th>';
+				temp+='<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
+				temp+='<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>';
+				temp+='<th><?php echo $tr->translate("QTY_WARNING");?><span class="required">*</span></th>';
 				temp+='<th><?php echo $tr->translate("OTHER");?></th>';
 				dojo.query("#head-title").append(temp);
 				title=1;
@@ -297,9 +297,9 @@ input.btn_borwse_image {
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th><?php echo $tr->translate("BRANCH");?></th>';
-			temp+='<th><?php echo $tr->translate("QTY");?></th>';
-			temp+='<th><?php echo $tr->translate("SELL_PRICE");?></th>';
-			temp+='<th><?php echo $tr->translate("QTY_WARNING");?></th>';
+			temp+='<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
+			temp+='<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>';
+			temp+='<th><?php echo $tr->translate("QTY_WARNING");?><span class="required">*</span></th>';
 			temp+='<th><?php echo $tr->translate("OTHER");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;

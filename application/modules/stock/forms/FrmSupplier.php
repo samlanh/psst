@@ -35,21 +35,21 @@ Class Stock_Form_FrmSupplier extends Zend_Dojo_Form {
 		$_sex->setMultiOptions($_sexopt);
 		
 		
-		$tel = new Zend_Dojo_Form_Element_NumberTextBox('tel');
+		$tel = new Zend_Dojo_Form_Element_TextBox('tel');
 		$tel->setAttribs(array(
-				'dojoType'=>'dijit.form.TextBox',
+				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
 				'required'=>'true',
 				));
 		
-		$email = new Zend_Dojo_Form_Element_NumberTextBox('email');
+		$email = new Zend_Dojo_Form_Element_TextBox('email');
 		$email->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'onkeyup'=>'Calfive()'
 		));
 		
-		$website = new Zend_Dojo_Form_Element_NumberTextBox('website');
+		$website = new Zend_Dojo_Form_Element_TextBox('website');
 		$website->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',

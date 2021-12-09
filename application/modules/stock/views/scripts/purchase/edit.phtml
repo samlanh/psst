@@ -61,7 +61,7 @@ span.oldsup input[type=checkbox] {
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SUPPLIER_NAME");?> 
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SUPPLIER_NAME");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<span id="new_cu"><input type="text" dojoType="dijit.form.ValidationTextBox" name="supplier_name"  id="supplier_name" value="<?php echo $this->row_sup['sup_name'];?>" class="fullside" required="required">
@@ -124,7 +124,7 @@ span.oldsup input[type=checkbox] {
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> 
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select dojoType='dijit.form.FilteringSelect'  id="branch_id" name="branch_id"  class="fullside" required="false"​​  placeholder="">
@@ -149,7 +149,7 @@ span.oldsup input[type=checkbox] {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURCHASE_DATE");?></label>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURCHASE_DATE");?> <span class="required">*</span></label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d",strtotime($this->row_sup['date']))?>" name="purchase_date"  id="purchase_date" class="fullside" >
 	                   </div>
@@ -274,8 +274,8 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?><span class="required">*</span></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SUBTOTAL");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -309,8 +309,8 @@ function oldRow() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?><span class="required">*</span></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SUBTOTAL");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);

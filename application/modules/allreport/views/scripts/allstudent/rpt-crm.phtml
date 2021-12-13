@@ -44,9 +44,12 @@ table.tb-footer tr.style-head {
 				 	</div>
 				 </div>
 				 <div class="form-group">
-				 	<div class="col-md-4 col-sm-4 col-xs-12">
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 	                	<input value="<?php echo $this->search['prev_concern'];?>" type="text" id="e15" name="prev_concern" style="width: 100%">
 	                </div>
+	                <div class="col-md-2 col-sm-2 col-xs-12">
+				 		<?php echo $frm_items->getElement("crm_process");?>
+				 	</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("degree");?>
 				 	</div>
@@ -119,6 +122,10 @@ table.tb-footer tr.style-head {
 				.know_byitem{display: inline-table;width:33%;}
 				.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
 				.know_by li{line-height: 15px;}
+				@page {
+				page:A4;
+				size: landscape;
+				}
 			</style>
 				<tr>
 					<td colspan="3">
@@ -132,6 +139,9 @@ table.tb-footer tr.style-head {
 										<td rowspan="2">&nbsp;<?php echo $tr->translate("KNOW_BY");?>&nbsp;</td>
 										<td rowspan="2"><?php echo $tr->translate("Amount Contacted");?></td>
 										<td colspan="3"><?php echo $tr->translate("STUDENT_INFO");?></td>
+										<td rowspan="2"><?php echo $tr->translate("TYPE");?></td>
+										<td rowspan="2"><?php echo $tr->translate("CREATE_DATE");?></td>
+										<td rowspan="2"><?php echo $tr->translate("BY_USER");?></td>
 										<td rowspan="2"><?php echo $tr->translate("STATUS");?></td>
 									</tr>
 									<tr  class="style-head">
@@ -162,6 +172,9 @@ table.tb-footer tr.style-head {
 									<td align="left" style="padding: 2px 5px;"><?php echo $row['stuNameKh'];?><div><?php echo $row['stuNameEn'];?></div></td>	
 									<td>&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
 									<td>&nbsp;<?php echo $row['grade'];?>&nbsp;</td>	
+									<td>&nbsp;<?php echo $row['customer_type'];?>&nbsp;</td>	
+									<td>&nbsp;<?php echo $row['create_date'];?>&nbsp;</td>	
+									<td>&nbsp;<?php echo $row['userby'];?>&nbsp;</td>	
 									<td>&nbsp;<?php echo $row['crm_status_title'];?>&nbsp;</td>	
 								</tr>
 							<?php }}?>	
@@ -173,9 +186,9 @@ table.tb-footer tr.style-head {
 					<td colspan="3">
 						<div class='know_by'><strong><?php echo $tr->translate("KNOW_BY");?></strong></div>
 						<ul class='know_by'>
-						<?php foreach($this->rsknowBy as $rsknow){?>
+						<?php if(!empty($this->rsknowBy)){ foreach($this->rsknowBy as $rsknow){?>
 							<li class='know_byitem'><?php echo $rsknow['name']."&nbsp;";echo empty($know_by[$rsknow['id']])?'0':$know_by[$rsknow['id']];echo " ".$tr->translate('STUDENT_UNIT');?></li>
-						<?php }?>
+						<?php }}?>
 							<li style="border-top:1.5px #000 dashed;;list-style-type: none;padding-top:5px;"><strong><?php echo $tr->translate("TOTAL_STUDENT").'&nbsp;'.$total_student." ".$tr->translate('STUDENT_UNIT');?></strong></li>
 						</ul>
 					</td>

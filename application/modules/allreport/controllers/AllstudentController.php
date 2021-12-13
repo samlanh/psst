@@ -568,6 +568,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'ask_for_search' => "",
 						'know_by_search' => "",
 						'prev_concern' => "",
+						'crm_process'=>-1,
 						'degree' => "",
 						'grade' => "",
 						'status_search' => -1,

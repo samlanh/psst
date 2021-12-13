@@ -328,6 +328,18 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_crm_list->setValue($request->getParam("crm_list"));
     	
+    	$_arr = $_dbgb->crmStatusprocess();
+    	$_crmprocess  = new Zend_Dojo_Form_Element_FilteringSelect("crm_process");
+    	$_crmprocess->setMultiOptions($_arr);
+    	$_crmprocess->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'false',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside height-text',));
+    	$_crmprocess->setValue($request->getParam('crm_process'));
+    	
+    	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["kh_name"]);
@@ -346,6 +358,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	}
     	
     	$this->addElements(array(
+    			$_crmprocess,
     			$_tel_stu,
     			$current_address,
     			$_branch_id,
@@ -451,6 +464,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     		$crm_id->setValue($data["id"]);
     		$_proccess->setValue($data["crm_status"]);
     	}
+    	
     	
     	$this->addElements(array(
     			$contact_date,

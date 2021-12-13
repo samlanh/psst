@@ -140,27 +140,24 @@ table.content-data thead tr.style-head {
 										<td align="center">&nbsp;<?php echo $row['sexTitle']; ?>&nbsp;</td>
 										<td ><?php echo $row['tel'];?></td>
 										<td align="center" >&nbsp;<?php echo date("d/M/Y",strtotime($row['contact_date']));?>&nbsp;</td>
-										
 										<td>
 										<?php 
-										$total_student = $total_student+1;
-										
-										$pre = explode(",", $row['feedback_type']);
-													$prevCon="";
-													if (!empty($pre)) foreach ($pre as $a){
-														if(empty($a)){continue;}
-														$title = $dbCrm->getTitleViewKeyCode($a,34);
-														if (empty($prevCon)){
-															$prevCon = $title;
-														}else {
-															if (!empty($title)){
-																$prevCon = $prevCon." , ".$title;
-															}
+											$total_student = $total_student+1;
+											$pre = explode(",", $row['feedback_type']);
+												$prevCon="";
+												if (!empty($pre)) foreach ($pre as $a){
+													if(empty($a)){continue;}
+													$title = $dbCrm->getTitleViewKeyCode($a,34);
+													if (empty($prevCon)){
+														$prevCon = $title;
+													}else {
+														if (!empty($title)){
+															$prevCon = $prevCon." , ".$title;
 														}
 													}
-											echo $prevCon;
-											?>
-													
+												}
+												echo $prevCon;
+										?>
 										</td>
 										<td align="left"><?php echo $row['feedback'];?></td>
 										<td ><?php echo $row['crm_status_title'];

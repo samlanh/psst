@@ -3126,7 +3126,6 @@ function getAllgroupStudyNotPass($action=null){
 	  	sb.group_detail_id AS groupDetailId,
 	  	sb.id AS studentBalanceId,
 	  	sgd.is_newstudent AS is_stu_new
-	  	
   	FROM
 	  	`rms_student_balance` AS sb ,
 	  	 rms_group_detail_student AS sgd,
@@ -3150,6 +3149,15 @@ function getAllgroupStudyNotPass($action=null){
   			2=>$this->tr->translate("WAITING_COMPLETED"),
   			3=>$this->tr->translate("COMPLETED"),
   			0=>$this->tr->translate("CANCEL"));
+  	return $_arr;
+  }
+  function crmStatusprocess(){
+  	$_arr = array(
+  			-1=>$this->tr->translate("SELECT_STUDENT_CRMPROCESS"),
+  			1=>$this->tr->translate("STUDENT"),
+  			3=>$this->tr->translate("CRM"),
+  			4=>$this->tr->translate("TESTED"),
+  			);
   	return $_arr;
   }
 }

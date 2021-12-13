@@ -76,6 +76,13 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = c.know_by LIMIT 1 ) AS know_by_title,
 			c.know_by,
 			(SELECT COUNT(cr.id) FROM `rms_crm_history_contact` AS cr WHERE cr.crm_id = c.id LIMIT 1) AS amountContact,
+			CASE
+			WHEN  s.customer_type = 1 THEN '".$tr->translate("STUDENT")."'
+			WHEN  s.customer_type = 3 THEN '".$tr->translate("CRM")."'
+			WHEN  s.customer_type = 4 THEN '".$tr->translate("TESTED")."'
+			END AS customer_type,
+			
+			DATE_FORMAT(c.create_date, '%Y-%m-%d') AS create_date,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby
 			FROM 
 				rms_student AS s,
@@ -116,6 +123,10 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if($search['status_search']>-1){
 			$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
 		}
+		if($search['crm_process']>-1){
+			$where.= " AND s.customer_type = ".$db->quote($search['crm_process']);
+		}
+		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('c.branch_id');
 		$where.=" ORDER BY c.id DESC";

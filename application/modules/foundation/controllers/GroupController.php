@@ -14,16 +14,16 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search' 	=> '',
-						'branch_id' => '',
-						'academic_year'=> '',
-						'degree'	=>'',
-						'grade' 	=> '',
-						'time' 		=> '',
-						'session' 	=>'',
-						'status'	=>-1,
-						'teacher' 	=> '',
-					);
+					'adv_search' 	=> '',
+					'branch_id' => '',
+					'academic_year'=> '',
+					'degree'	=>'',
+					'grade' 	=> '',
+					'time' 		=> '',
+					'session' 	=>'',
+					'status'	=>-1,
+					'teacher' 	=> '',
+				);
 			}
 			$this->view->adv_search = $search;
 			$db = new Foundation_Model_DbTable_DbGroup();

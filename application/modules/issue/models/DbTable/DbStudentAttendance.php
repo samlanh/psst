@@ -231,24 +231,48 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$order=" ORDER BY stu_code DESC";
 		return $db->fetchAll($sql.$order);
 	}
-	function getStudentByGroup($group_id){
+	function getStudentByGroup($group_id,$data=null){
 		$db=$this->getAdapter();
-		$sql="SELECT 
-				sgh.`stu_id`,
-				 s.stu_code AS stu_code,
-				CONCAT(s.stu_enname,' - ',s.stu_khname) AS stu_name,
-				s.sex AS sex
-			 FROM 
-			 	`rms_group_detail_student` AS sgh,
-			 	rms_student as s
-			WHERE 
-				sgh.`stu_id`=s.stu_id
-				AND s.status=1
-				AND sgh.status = 1
-				AND sgh.type = 1
-				and sgh.stop_type=0
-				AND sgh.`group_id`=".$group_id;
-		$order=" ORDER BY s.stu_khname ASC";
+		if(!empty($data['checkescan'])){
+			$sql="SELECT
+					sgh.`stu_id`,
+					s.stu_code AS stu_code,
+					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
+					s.sex AS sex,
+					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 LIMIT 1) AS isCome,
+					(SELECT create_date FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 LIMIT 1) AS scanDate,
+					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 LIMIT 1) AS transcan_id
+					
+						FROM
+					`rms_group_detail_student` AS sgh,
+					rms_student as s
+						WHERE
+							sgh.`stu_id`=s.stu_id
+							AND s.status=1
+							AND sgh.status = 1
+							AND sgh.type = 1
+							and sgh.stop_type=0
+							AND sgh.`group_id`=".$group_id;
+			$order=" ORDER BY s.stu_khname ASC";
+		}else{
+			$sql="SELECT 
+					sgh.`stu_id`,
+					 s.stu_code AS stu_code,
+					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
+					s.sex AS sex
+				 FROM 
+				 	`rms_group_detail_student` AS sgh,
+				 	rms_student as s
+				WHERE 
+					sgh.`stu_id`=s.stu_id
+					AND s.status=1
+					AND sgh.status = 1
+					AND sgh.type = 1
+					and sgh.stop_type=0
+					AND sgh.`group_id`=".$group_id;
+			$order=" ORDER BY s.stu_khname ASC";
+			
+		}
 		return $db->fetchAll($sql.$order);
 	}
 	function getSubjectBygroup($group_id){

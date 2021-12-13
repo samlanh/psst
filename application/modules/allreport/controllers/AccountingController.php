@@ -549,7 +549,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'finished_status'=>-1,
 					'type_study'=>-1,
 					'txtsearch' =>'',
-					'study_year' =>'',
+					'academic_year' =>'',
 					'grade_all' =>'',
 					'branch_id' =>'',
 					'degree_bac'=>0,);

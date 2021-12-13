@@ -89,7 +89,7 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     					i.id=tf.class_id 
     					AND tf.fee_id = $fee_id ";
     	$where = ' ';
-    	$order = ' ORDER BY tf.id ASC';
+    	$order = ' ORDER BY i.items_id ASC, tf.id ASC';
     	
     	if($degree_id>0){
     		$where.=" AND i.items_id = ".$degree_id;

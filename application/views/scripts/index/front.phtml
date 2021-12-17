@@ -39,6 +39,12 @@
 			
 		<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
 		<script src="<?php echo $this->baseUrl()."/templates/";?>plugin/1.11.3/jquery.min.js"></script>
+		<style>
+			.button-scan{
+			font-family:'Khmer OS Muol Light';
+			font-size:22px;
+			}
+		</style>
 		
 	</head>
 	<body>
@@ -67,19 +73,23 @@
 							<div class="col-12 col-sm-4 col-md-4">
 								<a class="btn button-scan scan-view" href="#" onClick="startScanNow(1);">
 									<span class="glyphicon glyphicon-qrcode"></span><br />
-									<?php echo $tr->translate("START_IN")?>
+									<?php echo $tr->translate("SCAN_IN")?><br>
+									SCAN IN
 								</a>
 							</div>
 							<div class="col-12 col-sm-4 col-md-4">
 								<a class="btn button-scan scan-view" href="#" onClick="startScanNow(2);">
 									<span class="glyphicon glyphicon-qrcode"></span><br />
-									<?php echo $tr->translate("START_OUT")?>
+									<?php echo $tr->translate("SCAN_OUT")?><br>
+									SCAN OUT
 								</a>
 							</div>
 							<div class="col-12 col-sm-4 col-md-4">
 								<a class="btn button-scan scan-vaccinecheck" href="#" onClick="startScanNow(3);">
 									<span class="glyphicon glyphicon-qrcode"></span><br />
 									<?php echo $tr->translate("VACCINE_CHECK")?>
+									<br>
+									CHECK COVID VACCINE
 								</a>
 							</div>
 						</div>

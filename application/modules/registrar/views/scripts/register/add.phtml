@@ -195,7 +195,7 @@ tr.head-td th{padding: 5px 2px;}
 							<input id="old_stu" />
 	                   </div>
 	                </div>
-	                <div class="form-group" id="stuCodeControl" <?php if ($settingNewStuID==0){?>style="display: none;"<?php }?>>
+	                <div class="form-group stuCodeControl" <?php if ($settingNewStuID==0){?>style="display: none;"<?php }?>>
 		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><strong><?php echo $tr->translate("STUDENT_NEW_ID");?></strong> :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -211,6 +211,15 @@ tr.head-td th{padding: 5px 2px;}
 							<input id="study_year" />
 	                   </div>
 		             </div>
+		             <div class="form-group stuCodeControl">
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input id="group_id" />
+								<input type="hidden" id="degree" name="degree" dojoType="dijit.form.TextBox" />
+		                   		<input type="hidden" id="grade"  name="grade" dojoType="dijit.form.TextBox" />
+		                   </div>
+		              </div>
 		             <div class="form-group">
 		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
 		                   </label>
@@ -458,6 +467,7 @@ div.img-back {
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		getbranchinfo();
+		getallgroupby();
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
 		getAllAcademicByBranch();
@@ -507,6 +517,18 @@ require(["dojo/ready"], function(ready){
 		}
 	}, "study_year");
 
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                   
+		required: false,               
+		id: "group_id",
+		name: "group_id",   
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>",
+		onChange: function() {  
+		}
+	}, "group_id");
+
 	
 });	
 dojo.ready(function(){
@@ -520,17 +542,69 @@ dojo.ready(function(){
 	var student_type = dijit.byId('student_type');
 	student_type.on('change', function(evt) {
 		checkStudentType();
+		dijit.byId('group_id').attr('value','')
+		getallgroupby();
 	});
 	checkStudentType();
 	<?php }?>
 });
 
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var url_data = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-allstubygroup')); ?>';
+
+function getallgroupby(){// 
+		branch_id = dijit.byId("branch_id").attr("value");
+	
+		student_type = dijit.byId("student_type").attr("value");
+		if(branch_id==''){  
+			dijit.byId("branch_id").focus();
+			return false;
+		}
+		if(student_type!=2){
+			group_store  = getDataStorefromJSON('id','name');
+		    dijit.byId('group_id').set('store',group_store);
+		    return false;
+		}
+		
+		url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+		dijit.byId('group_id').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('group_id').set('store',group_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		degree = dijit.byId('degree').get('value');
+		if(degree=='' || degree==-1){
+			degree ="";
+		}
+		grade = dijit.byId('grade').get('value');
+		if(grade=='' || grade==-1){
+			grade ="";
+		}
+		dojo.xhrPost({
+			url: url_getallgroup,
+			content:{
+				'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':1
+			},
+			handleAs:"json",
+			load: function(data) {
+			    group_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('group_id').set('store',group_store);   
+			},
+			error: function(err) {
+			}
+		});
+		
+}
+
 function checkStudentType(){
 	dijit.byId('student_code').attr('value',""); 
 	student_type = dijit.byId("student_type").attr("value");
-	$("#stuCodeControl").css("display", "none");
+	$(".stuCodeControl").css("display", "none");
 	if(student_type==2){
-		$( "#stuCodeControl" ).css("display", "flow-root");
+		$( ".stuCodeControl" ).css("display", "flow-root");
 	}
 }
 
@@ -853,7 +927,7 @@ function getStudentInformation(){
 	student_id=dijit.byId('old_stu').get('value');
 	dojo.byId("lb_grade").innerHTML = "";
 	dojo.byId("lb_academic_year").innerHTML ="";
-	$("#stuCodeControl").css("display", "none");
+	//$(".stuCodeControl").css("display", "none");
 	if(student_id==''){return false;}
 	loadingBlock();
 	dojo.xhrPost({
@@ -866,11 +940,12 @@ function getStudentInformation(){
 			fee_id = data.fee_id;
 			
 			if(data.is_setstudentid==0){
-				$("#stuCodeControl").css("display", "flow-root");
-				
+				$(".stuCodeControl").css("display", "flow-root");
 				dijit.byId('student_code').focus();
 			}
 			dijit.byId('study_year').set('value',fee_id);
+			dijit.byId("degree").set('value',data.degree);
+			dijit.byId("grade").set('value',data.grade);
 			
 			grade_label = data.grade_label;
 			if(grade_label== undefined){
@@ -903,6 +978,7 @@ function getStudentInformation(){
 			//get New ID From Student Test
 			getStudyFeeId(fee_id);
 			getStudentNo(data.degree);
+			getallgroupby();
 			HideloadingBlock();
 		},
 		error: function(err) {
@@ -911,7 +987,7 @@ function getStudentInformation(){
 	});
 }
 var term_study_option = '';
-url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+url_term_study = '<?php echo $this->url(array('module'=>'accounting','controller'=>'ac','action'=>'gettermstudy'));?>';
 function getAllTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
 	study_year = dijit.byId('study_year').get('value');
@@ -1350,6 +1426,7 @@ function printSave(){
 		 }
 		 
 		dojo.byId("lb_name").innerHTML = lblNamekh+'<br />'+dojo.byId("lbl_nameen").innerHTML;
+		dojo.byId("lb_group").innerHTML = dijit.byId("group_id").attr('displayedValue');
 		
 		//dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 		//dojo.byId("lb_dept").innerHTML = dojo.byId('lbl_degree').innerHTML;

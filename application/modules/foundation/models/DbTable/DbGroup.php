@@ -211,7 +211,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
 		}
 	}
 	
@@ -362,8 +361,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$row=$db->fetchAll($sql);
 		return $row;
 	}
-	
-	
 	
 	function getAllTeacher($schoolOptin=null,$branch_id=null){
 		$db = $this->getAdapter();

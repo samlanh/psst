@@ -1,6 +1,6 @@
 <?php
 
-class Issue_Model_DbTable_DbConvertAttendance extends Zend_Db_Table_Abstract
+class Scan_Model_DbTable_DbConvertAttendance extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_student_attendence';
     public function getUserId(){
@@ -129,20 +129,29 @@ class Issue_Model_DbTable_DbConvertAttendance extends Zend_Db_Table_Abstract
 						'stu_id'		=>$_data['student_id'.$i],
 						'attendence_status'=>$_data['attedence'.$i],
 						'description'	=>$_data['comment'.$i],
-						'tran_scanid'	=>$_data['comment'.$i],
+						'tran_scanid'	=>$_data['transacan_id'.$i],
 							
 					);
 					$this->_name ='rms_student_attendence_detail';
 					$this->insert($arr);
 					
-					if ($_data['attedence'.$i]!=1){//ក្រៅពីមក sent all
-						
+					if(!empty($_data['transacan_id'.$i])){
+						$this->_name ='rms_scan_transaction';
+						$where = 'id='.$_data['transacan_id'.$i];
+						$data = array(
+								'is_converted'=>1,
+								'conver_userid'=>$this->getUserId()
+								);
+						$this->update($data, $where);
+					}
+					
+					
+					if($_data['attedence'.$i]!=1){//ក្រៅពីមក sent all
 						if(empty($stu_absent)){
 							$stu_absent=$_data['student_id'.$i];
 						}else{
 							$stu_absent=$stu_absent.','.$_data['student_id'.$i];
 						}
-						
 					}
 					else{
 						if(empty($stu_come)){
@@ -154,8 +163,8 @@ class Issue_Model_DbTable_DbConvertAttendance extends Zend_Db_Table_Abstract
 					}
 				}
 				
-				$dbpush->pushNotification($stu_absent,null,3,2);//absent
-				$dbpush->pushNotification($stu_come,null,3,2);//come
+// 				$dbpush->pushNotification($stu_absent,null,3,2);//absent
+// 				$dbpush->pushNotification($stu_come,null,3,2);//come
 			}
 		  $db->commit();
 		}catch (Exception $e){

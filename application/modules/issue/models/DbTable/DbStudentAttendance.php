@@ -239,9 +239,9 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					s.stu_code AS stu_code,
 					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
 					s.sex AS sex,
-					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 LIMIT 1) AS isCome,
-					(SELECT create_date FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 LIMIT 1) AS scanDate,
-					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 LIMIT 1) AS transcan_id
+					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS isCome,
+					(SELECT create_date FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS scanDate,
+					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS transcan_id
 					
 						FROM
 					`rms_group_detail_student` AS sgh,

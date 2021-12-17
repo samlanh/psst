@@ -256,10 +256,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$string = "Image Upload failed";
 			}
 			
-			
-			
 			try{	
-				$_data['degreeStudent'] =$degree_id;//For Insert To Tale Count ID
+				$_data['degreeStudent'] = $degree_id;//For Insert To Tale Count ID
 				$dbg->updateAmountStudetByDegree($_data);//For Insert To Tale Count ID
 				$stuToken = $dbg->getStudentToken();
 				$_arr= array(

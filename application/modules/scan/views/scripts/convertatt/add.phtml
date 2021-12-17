@@ -403,7 +403,7 @@ function initailize(){
 					str+='<input type="radio" <?php //if ($student_att['attendence_status']==3){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
 					str+='<input type="radio" <?php //if ($student_att['attendence_status']==4){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
 				str+='</td>';
-				str+='<td><?php if (!empty($row['isCome'])){echo date("d-m-Y h:i:s",strtotime($row['scanDate']));}?><input type="text" name="transacan_id'+inx+'" id="transacan_id'+inx+'"  value="<?php echo $row['transcan_id'];?>" ></td>';
+				str+='<td><?php if (!empty($row['isCome'])){echo date("d-m-Y h:i:s",strtotime($row['scanDate']));}?><input type="hidden" name="transacan_id'+inx+'" id="transacan_id'+inx+'"  value="<?php echo $row['transcan_id'];?>" ></td>';
 				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php //echo str_replace("'", '', $student_att['description']); ?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';
 		    if(inx!=1) {

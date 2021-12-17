@@ -111,20 +111,56 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						}
 						
 						$_arr= array(
-								'branch_id'		=>$data['branch_id'],
-								'user_id'		=>$this->getUserId(),
-								'student_id'	=>$data['old_stu'],
-								'fee_id'		=>$feeID,
-								'academic_year'	=>$academicYear,
-								'note'			=>'',
-								'is_current'	=>1,
-								'is_new'		=>1,
-								'status'		=>1,
-								'create_date'	=>date("Y-m-d H:i:s"),
-								'modify_date'	=>date("Y-m-d H:i:s"),
+							'branch_id'		=>$data['branch_id'],
+							'user_id'		=>$this->getUserId(),
+							'student_id'	=>$data['old_stu'],
+							'fee_id'		=>$feeID,
+							'academic_year'	=>$academicYear,
+							'note'			=>'',
+							'is_current'	=>1,
+							'is_new'		=>1,
+							'status'		=>1,
+							'create_date'	=>date("Y-m-d H:i:s"),
+							'modify_date'	=>date("Y-m-d H:i:s"),
 						);
 						$this->_name="rms_student_fee_history";
 						$this->insert($_arr);
+					}
+					if(!empty($data['group_id'])){
+						
+						$group_id = $data['group_id'];
+						$is_setgroup = 1;
+						$dbGroup = new Foundation_Model_DbTable_DbGroup();
+						$group_info = $dbGroup->getGroupById($group_id);
+						if($group_info['degree_id']==$data['degree_id'] AND $group_info['grade']==$data['grade']){
+							$array = array(
+								'group_id'=>$group_id
+							);
+							$where =" group_id=0 AND stu_id=".$data['old_stu'];
+							$this->_name="rms_group_detail_student";
+							$this->update($array, $where);
+						}else{
+							$_arr = array(
+									'stu_id'			=>$data['old_stu'],
+									'is_newstudent'		=>1,
+									'status'			=>1,
+									'group_id'			=>$group_id,
+									'degree'			=>$data['degree_id'],
+									'grade'				=>$data['grade_id'],
+									'is_current'		=>1,
+									'is_setgroup'		=>$is_setgroup,
+									'is_maingrade'		=>1,
+									'date'				=>date("Y-m-d"),
+									'create_date'		=>date("Y-m-d H:i:s"),
+									'modify_date'		=>date("Y-m-d H:i:s"),
+									'user_id'			=>$this->getUserId(),
+							);
+							$this->_name="rms_group_detail_student";
+							$this->insert($_arr);
+							
+						}
+						
+						
 					}
 					
 				}elseif($data['student_type']==3){//from crm

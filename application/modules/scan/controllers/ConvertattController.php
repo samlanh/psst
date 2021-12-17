@@ -1,5 +1,5 @@
 <?php
-class Issue_ConvertattController extends Zend_Controller_Action {
+class Scan_ConvertattController extends Zend_Controller_Action {
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -8,7 +8,7 @@ class Issue_ConvertattController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Issue_Model_DbTable_DbConvertAttendance();
+			$db = new Scan_Model_DbTable_DbConvertAttendance();
 			
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -29,7 +29,7 @@ class Issue_ConvertattController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","ROOM","SESSION","ATTENDANCE_DATE","STATUS","USER");
 			$link=array(
-					'module'=>'issue','controller'=>'convertatt','action'=>'add',
+					'module'=>'scan','controller'=>'convertatt','action'=>'add',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
 	
@@ -50,12 +50,12 @@ class Issue_ConvertattController extends Zend_Controller_Action {
 	public	function addAction(){
 		$id=$this->getRequest()->getParam('id');
 		$id = empty($id)?0:$id;
-		$dbConvert = new Issue_Model_DbTable_DbConvertAttendance();
+		$dbConvert = new Scan_Model_DbTable_DbConvertAttendance();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
 				$rs =  $dbConvert->ConvertScantoAttendece($_data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/convertatt");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/scan/convertatt");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -75,7 +75,6 @@ class Issue_ConvertattController extends Zend_Controller_Action {
 		$data['checkescan']=1;
 		$this->view->allstudentBygroup = $db->getStudentByGroup($id,$data);
 		$this->view->row = $dbConvert->getScanAttendencebyGroup($id);
-		
 	}
 	
 // 	public	function editAction(){
@@ -115,24 +114,24 @@ class Issue_ConvertattController extends Zend_Controller_Action {
 // // 		$data=$db->getStudentByGroup($data['branch_id']);
 
 // 	}
-	function getSubjectAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$_dbmodel = new Issue_Model_DbTable_DbStudentAttendance();
-			$data=$_dbmodel->getSujectById($data['parent_id']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
-	function getStudentAction(){//May not use
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendance();
-			$data=$db->getStudent($data['year'],$data['grade'],$data['session']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+// 	function getSubjectAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$_dbmodel = new Issue_Model_DbTable_DbStudentAttendance();
+// 			$data=$_dbmodel->getSujectById($data['parent_id']);
+// 			print_r(Zend_Json::encode($data));
+// 			exit();
+// 		}
+// 	}
+// 	function getStudentAction(){//May not use
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Issue_Model_DbTable_DbStudentAttendance();
+// 			$data=$db->getStudent($data['year'],$data['grade'],$data['session']);
+// 			print_r(Zend_Json::encode($data));
+// 			exit();
+// 		}
+// 	}
 	function getAllstubygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -143,25 +142,25 @@ class Issue_ConvertattController extends Zend_Controller_Action {
 		}
 	}
 	
-	function getStudentBygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendance();
-			$data=$db->getStudentByGroup($data['group'],$data);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+// 	function getStudentBygroupAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Issue_Model_DbTable_DbStudentAttendance();
+// 			$data=$db->getStudentByGroup($data['group'],$data);
+// 			print_r(Zend_Json::encode($data));
+// 			exit();
+// 		}
+// 	}
 	
-	function getsubjectbygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendance();
-			$result =$db->getSubjectBygroup($data['group']);
-			print_r(Zend_Json::encode($result));
-			exit();
-		}
-	}
+// 	function getsubjectbygroupAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Issue_Model_DbTable_DbStudentAttendance();
+// 			$result =$db->getSubjectBygroup($data['group']);
+// 			print_r(Zend_Json::encode($result));
+// 			exit();
+// 		}
+// 	}
 	
 }
 

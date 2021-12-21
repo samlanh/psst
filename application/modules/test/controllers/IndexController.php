@@ -205,6 +205,10 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->form = $frm;
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rs_subjecttestkhmer = $db->getViewById(31);
+		
+		
+		$db= new Foundation_Model_DbTable_DbStudent();
+		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
     }
     function getstudenttestbybranchAction(){
     	if($this->getRequest()->isPost()){

@@ -177,7 +177,7 @@ class Test_IndexController extends Zend_Controller_Action
     	$schoolOption = $db->getSchoolOptionbyStudentId($id);
 		if(!empty($schoolOption)){
 			if($type!=$schoolOption){
-				Application_Form_FrmMessage::message('THIS CAN NOT TEST THIS OPTION');
+				Application_Form_FrmMessage::message('YOU CAN NOT TEST THIS OPTION');
 				echo "<script>window.close();</script>";exit();
 			}
 		}
@@ -205,6 +205,10 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->form = $frm;
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rs_subjecttestkhmer = $db->getViewById(31);
+		
+		
+		$db= new Foundation_Model_DbTable_DbStudent();
+		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
     }
     function getstudenttestbybranchAction(){
     	if($this->getRequest()->isPost()){

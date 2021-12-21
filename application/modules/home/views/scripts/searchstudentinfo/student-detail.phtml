@@ -205,7 +205,7 @@ table.content-data{
 															  }
 														  	?>
 										  				</label> 
-										  				<label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label>
+										  				<label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo $this->rs['dob'];?></label>
 										    			</p>
 										    			<p class="padding-left">
 										    			<label class="title">ទីកន្លែងកំណើត</label> : <label class="value"><?php echo $this->rs['pob'];?></label> 

@@ -175,6 +175,7 @@
 					$this->_name="rms_student";
 					$student_i = $this->insert($array);
 					
+					$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
 					$_arr = array(
 							'stu_id'			=>$student_i,
 							'is_newstudent'		=>1,
@@ -182,6 +183,7 @@
 							'group_id'			=>0,
 							'degree'			=>$_data['degree_'.$i],
 							'grade'				=>$_data['grade_'.$i],
+							'school_option'		=>$school_option,
 							'is_current'		=>1,
 							'is_setgroup'		=>0,
 							'is_maingrade'		=>1,
@@ -269,7 +271,6 @@
 				}
 			}
 			
-			
 			if (!empty($detailId)){
 				$sql ="SELECT GROUP_CONCAT(stu_id) FROM rms_student WHERE stu_id NOT IN ($detailId) AND crm_id=".$id;
 				$stu_id = $_db->fetchOne($sql);
@@ -313,10 +314,12 @@
 						$where = " stu_id =".$_data['detailid'.$i];
 						$this->update($array, $where);
 						
+						$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
 						$_arr = array(
 								'is_newstudent'		=>1,
 								'status'			=>1,
 								'group_id'			=>0,
+								'school_option'		=>$school_option,
 								'degree'			=>$_data['degree_'.$i],
 								'grade'				=>$_data['grade_'.$i],
 								'is_current'		=>1,
@@ -354,11 +357,14 @@
 						$this->_name="rms_student";
 						$student_i = $this->insert($array);
 						
+						$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
+						
 						$_arr = array(
 								'stu_id'			=>$student_i,
 								'is_newstudent'		=>1,
 								'status'			=>1,
 								'group_id'			=>0,
+								'school_option'		=>$school_option,
 								'degree'			=>$_data['degree_'.$i],
 								'grade'				=>$_data['grade_'.$i],
 								'is_current'		=>1,

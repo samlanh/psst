@@ -56,9 +56,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
       		if(!empty($_data['save_close'])){
-      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
+      			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
       		}else{
-      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
+      			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
       		}
       		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	}catch (Exception $e) {

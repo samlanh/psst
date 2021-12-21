@@ -115,7 +115,6 @@
 						$arr = array(
 								'dept_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
-								
 								'status'    	=> 1,
 								'note'   		=> $_data['note_'.$i],
 								'date' 			=> date("Y-m-d"),

@@ -79,8 +79,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'data-dojo-Type'=>"dijit.form.DateTextBox",
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',
-				'required'=>true));
-		$date_of_birth->setValue($date);
+				//'required'=>true
+				));
+		//$date_of_birth->setValue($date);
 	
 		$pob = new Zend_Dojo_Form_Element_Textarea('pob');
 		$pob->setAttribs(array('dojoType'=>$this->textarea,
@@ -377,8 +378,13 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		if($data!=null){
 			$discount_type->setValue($data['scholarship_id']);
 			$scholarship_amount->setValue($data['scholarship_amt']);
-			$scholarship_fromdate->setValue($data['scholar_fromdate']);
-			$scholarship_todate->setValue($data['scholar_todate']);
+			
+			if (!empty($data['scholar_fromdate']) AND $data['scholar_fromdate']!='0000-00-00'){
+				$scholarship_fromdate->setValue($data['scholar_fromdate']);
+			}
+			if (!empty($data['scholar_todate']) AND $data['scholar_todate']!='0000-00-00'){
+				$scholarship_todate->setValue($data['scholar_todate']);
+			}
 			
 			$school_province->setValue($data['province_bacc']);
 			$certificate_baccexam->setValue($data['certificate_bacc']);
@@ -396,8 +402,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			
 			$_sex->setValue($data['sex']);
 			
-			if (!empty($data['dob'])){
-			$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
+			if (!empty($data['dob']) AND $data['dob']!='0000-00-00'){
+				$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
 			}
 			$pob->setValue($data['pob']);
 			$phone->setValue($data['tel']);
@@ -421,17 +427,17 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$status->setValue($data['status']);
 			$remark->setValue($data['remark']);
 			$fa_name_en->setValue($data['father_enname']);
-			if (!empty($data['father_dob'])){
-			$fa_dob->setValue(date("Y-m-d",strtotime($data['father_dob'])));
+			if (!empty($data['father_dob']) AND $data['father_dob']!='0000-00-00'){
+				$fa_dob->setValue(date("Y-m-d",strtotime($data['father_dob'])));
 			}
 			$fa_phone->setValue($data['father_phone']);
 			$mom_name_en->setValue($data['mother_enname']);
-			if (!empty($data['mother_dob'])){
+			if (!empty($data['mother_dob']) AND $data['mother_dob']!='0000-00-00'){
 			$mo_dob->setValue(date("Y-m-d",strtotime($data['mother_dob'])));
 			}
 			$mon_phone->setValue($data['mother_phone']);
 			$guardian_name_en->setValue($data['guardian_enname']);
-			if (!empty($data['guardian_dob'])){
+			if (!empty($data['guardian_dob']) AND $data['guardian_dob']!='0000-00-00'){
 			$guardian_dob->setValue(date("Y-m-d",strtotime($data['guardian_dob'])));
 			}
 			$guardian_phone->setValue($data['guardian_tel']);

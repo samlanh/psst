@@ -106,7 +106,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				     s.pob,
 				     `s`.`tel` AS `tel`,
 				     `s`.`sex` AS `gender`,
-				     `s`.`dob` AS `dob`,
+				     DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
 				     s.father_enname AS father_name,
 				     (SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
     				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation,

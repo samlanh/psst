@@ -35,6 +35,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.tel,
     				s.dob,
     				(SELECT $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
+    				sp.data_from,
     				sp.receipt_number,
     				sp.create_date,
     				(SELECT CONCAT(last_name,' ',first_name) FROM rms_users where id=sp.user_id LIMIT 1) as user,

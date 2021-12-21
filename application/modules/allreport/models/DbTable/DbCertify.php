@@ -5,8 +5,10 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     
     function getStudentCertify($id){
     	$db = $this->getAdapter();
-    	$sql ="select
+    	$sql ="SELECT
     				s.*,
+    				 DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
+    				 DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob_en`,
     				(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
 					(SELECT b.branch_tel FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_tel,

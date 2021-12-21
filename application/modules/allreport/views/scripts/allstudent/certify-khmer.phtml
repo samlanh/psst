@@ -138,7 +138,7 @@ $schoolDirector="នាយិកា";
 														</td>
 													</tr>
 													<tr>
-														<td>ថ្ងៃខែឆ្នាំកំណើត: &nbsp;<?php echo $db_global->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))." ".$month[date("m",strtotime($this->rs['dob']))]." ".$db_global->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></td>
+														<td>ថ្ងៃខែឆ្នាំកំណើត: &nbsp;<?php if(!empty($this->rs['dob_en'])){echo $db_global->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))." ".$month[date("m",strtotime($this->rs['dob']))]." ".$db_global->getNumberInkhmer(date("Y",strtotime($this->rs['dob']))); }?></td>
 													</tr>
 													<tr>
 														<td>
@@ -184,13 +184,13 @@ $schoolDirector="នាយិកា";
   													</tr>
   													<tr>
   														<td >
-  															<strong class="transfrom">Date Of Brith:</strong> &nbsp;<?php echo date("d",strtotime($this->rs['dob']))." ".date("F",strtotime($this->rs['dob']))." ".date("Y",strtotime($this->rs['dob']));?>
+  															<strong class="transfrom">Date Of Birth:</strong> &nbsp;<?php echo $this->rs['dob_en'];?>
 															<span style="font-weight: bold;" class="transfrom">Gender</span>: <?php echo $this->rs['sex'];?>
 														</td>
   													</tr>
   													<tr>
   														<td >
-  															<strong class="transfrom">Place Of Brith:</strong> <?php echo $this->rs['pob'];?>
+  															<strong class="transfrom">Place Of Birth:</strong> <?php echo $this->rs['pob'];?>
   														</td>
   													</tr>
   													<tr>

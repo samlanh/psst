@@ -113,9 +113,9 @@ if(!empty($this->rs['photo'])){
   							</tr>
   							<tr>
   								<td valign="top">
-  									<strong class="transfrom">Date Of Brith</strong> 
+  									<strong class="transfrom">Date Of Birth</strong> 
 								</td>
-								<td valign="top">:&nbsp;<?php echo date("d",strtotime($this->rs['dob']))." ".date("F",strtotime($this->rs['dob']))." ".date("Y",strtotime($this->rs['dob']));?></td>
+								<td valign="top">:&nbsp;<?php echo $this->rs['dob_en'];?></td>
   							</tr>
   							<tr>
   								<td valign="top" >
@@ -125,7 +125,7 @@ if(!empty($this->rs['photo'])){
   							</tr>
   							<tr>
   								<td valign="top">
-  									<strong class="transfrom">Place Of Brith</strong>
+  									<strong class="transfrom">Place Of Birth</strong>
   								</td>
   								<td valign="top">:&nbsp;<?php echo $this->rs['pob'];?></td>
   							</tr>

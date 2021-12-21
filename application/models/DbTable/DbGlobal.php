@@ -3160,5 +3160,10 @@ function getAllgroupStudyNotPass($action=null){
   			);
   	return $_arr;
   }
+  function getSchoolOptionbyDegree($degree_id){
+  	$db = $this->getAdapter();
+  	$sql="SELECT schoolOption FROM rms_items WHERE id=".$degree_id;
+  	return $db->fetchOne($sql);
+  }
 }
 ?>

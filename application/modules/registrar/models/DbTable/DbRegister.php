@@ -124,7 +124,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'modify_date'	=>date("Y-m-d H:i:s"),
 						);
 						$this->_name="rms_student_fee_history";
-						$this->insert($_arr);
+						$this->insert($_arr);//check more.
 					}
 					if(!empty($data['group_id'])){
 						
@@ -224,7 +224,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'create_date'	=> $paid_date,
 					'user_id'		=> $this->getUserId(),
 					'academic_year'	=> $data['study_year'],
-					'paystudent_type'=> $rs_stu['is_stu_new'],
+					'paystudent_type'=> $rs_stu['is_stu_new'],//
+					'group_id'		=> $data['group_id'],
 					'degree'		=> $rs_stu['degree'],
 					'grade'			=> $rs_stu['grade'],
 					'degree_culture'=> $rs_stu['calture'],
@@ -613,7 +614,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				sp.id,
     				(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
     				sp.receipt_number,
-	    			s.stu_code,
+	    			(CASE WHEN sp.data_from=3 THEN s.serial ELSE s.stu_code END) AS stu_code,
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stu_khname,
 	    			(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 	    			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
@@ -641,6 +642,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
 	    		
 	    		$s_where[]= " REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]= " REPLACE(serial,' ','') LIKE '%{$s_search}%'";
 	    		$s_where[]= " REPLACE(receipt_number,' ','') LIKE '%{$s_search}%'";
 	    		$s_where[]= " REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
 	    		$s_where[]= " REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";

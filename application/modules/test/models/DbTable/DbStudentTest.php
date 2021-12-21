@@ -581,12 +581,58 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$this->_name="rms_group_detail_student";
 					$this->update($_arr, $where);
 				}else{
+					
+					$schoolOption = empty($data['schoolOption'])?1:$check['schoolOption'];
+					$_arr['school_option']=$schoolOption;
 					$this->_name="rms_group_detail_student";
 					$this->insert($_arr);
 				}
 				
 				
 			}
+			
+			$_dbfee = new Accounting_Model_DbTable_DbFee();
+			$feeID = empty($data['fee_id'])?0:$data['fee_id'];
+			if(!empty($data['fee_id'])){
+				$rowfee = $_dbfee->getFeeById($feeID);
+				$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+					
+				if(!empty($data['studentStudyFee'])){
+					$_arrFee= array(
+							'branch_id'		=>$data['branch_id'],
+							'user_id'		=>$this->getUserId(),
+							'student_id'	=>$data['stu_test_id'],
+							'fee_id'		=>$data['fee_id'],
+							'academic_year'	=>$academicYear,
+							'note'			=>"Update From Test Result",
+							'is_current'	=>1,
+							'status'		=>1,
+							'modify_date'	=>date("Y-m-d H:i:s"),
+					);
+					$this->_name="rms_student_fee_history";
+					$whereFee=" id = ".$data['studentStudyFee'];
+					$this->update($_arrFee, $whereFee);
+				}else{				
+					$_arrFee= array(
+							'branch_id'		=>$data['branch_id'],
+							'user_id'		=>$this->getUserId(),
+							'student_id'	=>$data['stu_test_id'],
+							'fee_id'		=>$data['fee_id'],
+							'academic_year'	=>$academicYear,
+							'note'			=>"Set From Test Result",
+							'is_current'	=>1,
+							'is_new'		=>1,
+							'status'		=>1,
+							'create_date'	=>date("Y-m-d H:i:s"),
+							'modify_date'	=>date("Y-m-d H:i:s"),
+					);
+					$this->_name="rms_student_fee_history";
+					$this->insert($_arrFee);
+				}
+			}
+			
+			
+				
 			
 			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
 			

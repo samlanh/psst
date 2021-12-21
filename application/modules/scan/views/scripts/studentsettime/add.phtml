@@ -1,0 +1,262 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('SET_STUDENT_LOCK_TIME')); 
+?>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SET_STUDENT_LOCK_TIME');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">   
+  				 if(this.validate()) {
+					 
+					 branch_id = dijit.byId('branch_id').get('value');
+   					if(branch_id==-1 || branch_id==""){
+         				dijit.byId("branch_id").focus();
+        				return false;
+    				}
+					var identity = $('#identity').val();
+					if(identity==''){
+						alert("There is no record to save");
+						dijit.byId("old_stu").focus();
+						return false;
+					}
+					 loadingBlock();
+    				dijit.byId("save_close").attr("disabled",true);
+					dijit.byId("save_new").attr("disabled",true);
+   					 return true;
+   				}else {
+    				return false;
+   				}
+			</script>
+			
+			<div class="card-box" >
+				<div class="form-group">
+				   
+				</div>
+			   <div class="form-group" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+					<label class="control-label col-md-2 col-sm-2 col-xs-12 title-blog bold" ><?php echo $tr->translate("STUDENT_INFO");?>&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i> 
+				   </label>
+					<div class="col-md-3 col-sm-3 col-xs-12">
+						 <div class="form-group">
+						   <label class="control-label  col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("BRANCH");?></label>
+						   <div class="col-md-9 col-sm-9 col-xs-12">
+								<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicByBranch();">
+									<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
+									<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+									<?php }?>
+								</select>
+								<?php //echo $tr->translate("Existing Student");?>
+								<input value="1" dojoType="dijit.form.TextBox" class="fullside" id="student_type" name="student_type" type="hidden">
+								<?php //echo $tr->translate("Student");?>
+								<input value="1" dojoType="dijit.form.TextBox" class="fullside" id="customer_type" name="customer_type" type="hidden">
+						   </div>
+						</div>
+				   </div>
+				   <div class="col-md-6 col-sm-6 col-xs-12">
+						<div class="form-group">
+						   <label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?></label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<input id="old_stu" />
+						   </div>
+						</div>
+				   </div>
+				   <div style="clear: both;"></div>
+			   </div>
+			   <div class="form-group">
+				   <div class="col-md-12 col-sm-12 col-xs-12">
+						<table class="tableShowData" border="1" >
+							<thead>
+								<tr id="head-title" class="head-td" >
+									<th class="tdheader"><?php echo $tr->translate('DELETE');?></th>
+									<th class="tdheader"><?php echo $tr->translate('N_O');?></th>
+									<th class="tdheader"><?php echo $tr->translate('STUDENT_NAME');?></th>
+									<th class="tdheader"><?php echo $tr->translate('FROM_TIME');?></th>
+									<th class="tdheader"><?php echo $tr->translate('TO_TIME');?></th>
+								</tr>
+							</thead>
+							<tbody id="table_row" >
+							</tbody>
+						</table>
+				   </div>
+			   </div>
+			   <input type="hidden" id="identity" name="identity" />
+			</div>
+			
+			<div class="card-box">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+	                
+	                 <div class="clearfix"></div>
+			         <div class="card-box mt-20">
+		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+		               		<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+							
+		               	</div>
+		             </div>
+	            </div>
+				
+	         </div>
+		</form>
+	</div>
+</div>
+<style>
+table.tableShowData {
+    margin-top: 2px;
+	width:100%; border-collapse: 
+	collapse; border:1px solid #ccc;
+	white-space: nowrap;
+}
+table.tableShowData tr#head-title {
+    background: #02014a !important;
+    color: #fff !important;
+}
+</style>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+	dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dojo.number");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.TimeTextBox");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		
+		getallstudentname();
+	
+
+	});
+
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "old_stu",
+		name: "old_stu",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() {  
+			addRecord();
+		}
+	}, "old_stu");
+	
+});
+
+function getallstudentname(){//
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	dijit.byId("old_stu").reset();
+	customer_type = dijit.byId("customer_type").attr("value");
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){
+		dijit.byId("branch_id").focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'student_name':1,
+			'branch_id':branch_id,
+			'customer_type':customer_type
+		},
+		handleAs:"json",
+		load: function(data) {
+		    dijit.byId('old_stu').set('store',getDataStorefromJSON('id','name', data));  
+		},
+		error: function(err) {
+		}
+	});
+}
+
+var template = '';
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+function addRecord() {
+	
+		branch_id = dijit.byId("branch_id").attr("value");
+		if(branch_id==''){
+			alert("<?php echo $tr->translate("SELECT_BRANCH");?>");
+			dijit.byId("branch_id").focus();
+			return false;
+		}
+	
+		studentName = dijit.byId('old_stu').get('value');
+		if(studentName==''){
+			alert("<?php echo $tr->translate("SELECT_STUDENT_NAME");?>");
+			dijit.byId('old_stu').focus();
+			return false;
+		}
+	
+		var duplicateRecord = 0;
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		if(identity!=""){
+			currentStudent = dijit.byId('old_stu').get('value');
+			for(var i=0;i<arrays.length;i++) {
+				oldStudent = dijit.byId('studentId'+arrays[i]).get('value');
+				if(currentStudent == oldStudent){
+					duplicateRecord=1;
+					alert("Can not add the same student");
+					break;
+				}
+			}
+		}
+		
+		if(duplicateRecord==1){
+			return false;
+		}
+	
+		labelStudent = dijit.byId("old_stu").attr('displayedValue');
+		studentId = dijit.byId("old_stu").get("value");
+		
+		col++;no++;
+		template='';
+		
+			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="30px" align="center">'+no+'</td>';
+			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+labelStudent+'<label><input type="hidden" value="'+studentId+'" dojoType="dijit.form.TextBox" name="studentId'+col+'" id="studentId'+col+'"/>';
+			
+			
+			template+='<td style="width:100px">';
+			template+='<input onChange="timeOnchageValue('+col+')" type="text" class="fullside" name="fromTime'+col+'" id="fromTime'+col+'" value="T08:00:00"  dojoType="dijit.form.TimeTextBox"  required="true" />';	
+			template+='</td>';
+			
+			template+='<td style="width:100px">';
+			template+='<input type="text" class="fullside" name="toTime'+col+'" id="toTime'+col+'" value="T11:00:00"  dojoType="dijit.form.TimeTextBox"  required="true" />';	
+			template+='</td>';
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+ 
+}
+
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
+</script>

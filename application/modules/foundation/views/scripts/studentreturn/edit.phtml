@@ -1,0 +1,350 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('EDIT_ISSUE_STUDENT_RETURN')); 
+	$frm = $this->frm;
+	$row = $this->row;
+?>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_ISSUE_STUDENT_RETURN');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<form id="add_studentdrop" action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit" >			
+				if(this.validate()) {
+					drop_id=dijit.byId('drop_id').get('value');
+      				if(drop_id==0 || drop_id=='' || drop_id ==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT");?>");
+						dijit.byId('drop_id').focus();
+						return false;
+					}
+					loadingBlock();
+					dijit.byId('save_close').set('disabled',true);
+					dijit.byId('save_new').set('disabled',true);
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_DROP_INFO");?> 
+	                   </label>
+	                </div>
+					<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("branch_id");?>
+	                   		<?php echo $frm->getElement("id");?>
+	                   		<?php echo $frm->getElement("stu_id");?>
+	                   		<?php echo $frm->getElement("groupId");?>
+	                   		<?php echo $frm->getElement("degreeId");?>
+	                   		<?php echo $frm->getElement("gradeId");?>
+	                   </div>
+		             </div>
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+							<input id="drop_id" />
+		                </div>
+		            </div>
+					
+		            <div id="DropInfo">
+					
+					</div>
+		           
+		            
+		            
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("NEW_STUDY_INFO");?> 
+	                   </label>
+	                </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> <span class="required">*</span></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("degree");?>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> <span class="required">*</span></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+							<input id="grade" />
+		                </div>
+		            </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+							<input id="group" />
+		                </div>
+		            </div>
+		           
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("RETURN_STUDY_DATE");?> <span class="required">*</span></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("return_date");?>
+		                </div>
+		            </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("note");?>
+		                </div>
+		            </div>
+					<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("status");?>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12"></div>
+			</div>
+			<div class="clearfix"></div>
+	       	<div class="card-box mt-20 ">
+	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+              		 <input iconClass="dijitIconClear" type="reset" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="submit"  value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+            	 </div>
+            </div>
+		</form>
+	</div>
+</div>
+<style>
+	div#DropInfo .form-group {
+		display: block;
+		font-size: 12px;
+		background: #fdfbbd;
+		border: solid 2px #dc0303;
+		border-radius: 5px;
+	}
+	div#DropInfo .form-group ul{
+		padding:0;
+		margin:0;
+	}
+	div#DropInfo ul li span.lbl-tt {
+		color: #02014a;
+	}
+	div#DropInfo .form-group ul li {
+		display: inline-block;
+		width: 50%;
+	}
+	span.titleLabelInfo {
+		color: #ff0000;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	span.red {
+		color: #f00;
+		font-weight: bold;
+	}
+</style>
+
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+
+var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+	    store: group_store,
+	    queryExpr: "*${0}*",
+		autoComplete: false,                       
+		readOnly: true,                       
+	    id: "group",
+	    name: "group",   
+	    class: 'fullside',  
+	    required:'false',
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP")?>",          
+	    onChange: function(){  
+		    
+	    }
+	}, "group");
+
+	new dijit.form.FilteringSelect({
+		store: grade_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,
+		readOnly: true,   		
+		id: "grade",
+		name: "grade",           
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() { 
+			 getAllGroup();
+		}
+	}, "grade");
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		readOnly: true,   
+		queryExpr: "*${0}*",                     
+		id: "drop_id",
+		name: "drop_id",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() { 
+			getStudentDropInfo();
+		}
+	}, "drop_id");
+	
+	getAllDropStudent();
+	getallGrade();
+	getAllGroup();
+	 var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt){
+	 		getAllDropStudent();
+	 		getAllGroup();
+	    });
+});
+var oldGrade="<?php echo $row['grade_id_return']?>";
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
+	dojo.xhrPost({
+		url:url_dept,
+		content:{
+			'dept_id':dept_id,
+			'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('grade').attr('value','');
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store); 
+			
+			setTimeout(function () {
+			dijit.byId('grade').set('value',oldGrade); 
+			}, 500);
+			
+			
+			getAllGroup();
+		},
+		error: function(err) {
+		}
+	});
+}
+function getStudentNo(){
+	
+}
+
+var oldReturnGroup="<?php echo $row['group_id_return']?>";
+url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroup(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){
+		degree ="";
+	}
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){
+		grade ="";
+	}
+	dojo.xhrPost({
+		url: url_getallgroup,
+		content:{
+			'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':1,'forfilter':1
+		},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store); 
+			dijit.byId('group').set('value',oldReturnGroup); 			
+		},
+		error: function(err) {
+		}
+	});
+}
+var dropIdSelected="<?php echo $row['drop_id']?>";
+var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentreturn','action'=>'getalldropstudent')); ?>';
+function getAllDropStudent(){
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id,
+			'dropIdSelected':dropIdSelected
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('drop_id').set('store',student_store);  
+		    dijit.byId('drop_id').set('value',dropIdSelected);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+
+var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentreturn','action'=>'getdropinfo')); ?>';
+function getStudentDropInfo(){
+	drop_id = dijit.byId('drop_id').get('value');
+	if(drop_id==''){
+		dojo.byId("DropInfo").innerHTML = '';
+		alert("Please Select Student");
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_student,
+		content:{
+			'drop_id':drop_id
+			},
+		handleAs:"json",
+		load: function(data) { 
+			var string='';
+			if(data!=''){
+				
+				var DateStop = data.date_stop;
+				string+='<div class="form-group" style=" padding: 10px; ">';
+					string+='<span class="titleLabelInfo"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_DROP_INFO");?></span>';
+					string+='<ul>';
+						string+='<li><span class="lbl-tt"><?php echo $tr->translate("GROUP");?></span>: <span class="red">'+data.groupCode+'</span></li>';
+						string+='<li><span class="lbl-tt"><?php echo $tr->translate("DEGREE");?></span>: <span class="red">'+data.degreeTitle+'</span></li>';
+						string+='<li><span class="lbl-tt"><?php echo $tr->translate("GRADE");?></span>: <span class="red">'+data.gradeTitle+'</span></li>';
+						string+='<li><span class="lbl-tt"><?php echo $tr->translate("TYPE");?></span>: <span class="red">'+data.typeTitle+'</span></li>';
+						string+='<li><span class="lbl-tt"><?php echo $tr->translate("ACADEMIC_YEAR");?></span>: <span class="red">'+data.academicYearTitle+'</span></li>';
+						string+='<li><span class="lbl-tt"><?php echo $tr->translate("STOP_DATE");?></span>: <span class="red">'+DateStop+'</span></li>';
+					string+='</ul>';
+				string+='</div>';
+				
+				oldGrade = data.grade;
+				dijit.byId('stu_id').set('value',data.stu_id); 
+				dijit.byId('groupId').set('value',data.group); 
+				dijit.byId('degreeId').set('value',data.degree); 
+				dijit.byId('gradeId').set('value',data.grade); 
+				dijit.byId('degree').set('value',data.degree); 
+				
+			}
+			dojo.byId("DropInfo").innerHTML = string;
+		},
+		error: function(err) {
+		}
+	});
+}
+</script>

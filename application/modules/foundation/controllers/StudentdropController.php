@@ -75,23 +75,29 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$id=$this->getRequest()->getParam("id");
 			$id = empty($id)?0:$id;
 			$db= new Foundation_Model_DbTable_DbStudentDrop();
-			$row = $this->view->row = $db->getStudentDropById($id);
-			if (empty($row)){
-				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentdrop/index");
-				exit();
-			}
+			
+			
 			if($this->getRequest()->isPost())
 			{
 				try{
 					$data = $this->getRequest()->getPost();
-					$db = new Foundation_Model_DbTable_DbStudentDrop();
-					$row=$db->updateStudentDrop($data);
+					$db->updateStudentDrop($data);
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/studentdrop/index");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("EDIT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}	
+			$row =  $db->getStudentDropById($id);
+			$this->view->row = $row;
+			if (empty($row)){
+				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentdrop/index");
+				exit();
+			}
+			if ($row['isReturn']==1){
+				Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_STUDENT_ALREADY_RETUN_SCHOOL","/foundation/studentdrop/index");
+				exit();
+			}
 			
 			
 		}catch(Exception $e){

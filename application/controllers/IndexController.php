@@ -678,6 +678,25 @@ class IndexController extends Zend_Controller_Action
 		
 		
 	}
+	public function scanByscannercallAction()
+	{
+		 
+		$this->_helper->layout()->disableLayout();
+		$gatewayOption = $this->getRequest()->getParam('gatewayOption');
+		$gatewayOption = empty($gatewayOption)?0:$gatewayOption;
+	
+		$dbFront = new Application_Model_DbTable_DbFront();
+		$row = $dbFront->getEntranceById($gatewayOption);
+		$this->view->row = $row;
+	
+		$playListRs = $dbFront->getAllPlaylistvideo();
+		$this->view->playListRs = $playListRs;
+	
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	
+	
+	}
 	public function scanVaccinecheckAction()
     {
     	

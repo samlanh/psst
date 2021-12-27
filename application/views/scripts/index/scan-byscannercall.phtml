@@ -13,7 +13,7 @@
 		$school_khname = $rs['school_namekh'];
 		$school_name = $rs['school_nameen'];
 	}
-	$this->headTitle($tr->translate("SCAN_SHOUT_OUT")." | ".$school_khname); 
+	$this->headTitle($tr->translate("SCAN_OUT")." | ".$school_khname); 
 	echo $this->headTitle();
 ?>
 <!DOCTYPE html>
@@ -39,6 +39,7 @@
 			
 		<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
 		<script src="<?php echo $this->baseUrl()."/templates/";?>plugin/1.11.3/jquery.min.js"></script>
+		
 		<style>
 		
 		.overlay-front { display:none; position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: 1;}
@@ -55,6 +56,29 @@
 					width: 200px;
 					height: 200px;
 					background-size: 100%;
+		}
+		
+		.inputScanner {
+			position: absolute;
+			width: 100%;
+			z-index: 2;
+		}
+		.inputScanner input.inputScannerValue {
+			width: 100%;
+			background: none;
+			height: 100%;
+			border: none;
+			color: #eee0;
+			font-size: 20px;
+			
+		}
+
+		.inputScanner {
+			position: absolute;
+			width: 100%;
+			z-index: 7;
+			top: 0;
+			height: 100%;
 		}
 		
 		.entranceTitle {
@@ -77,7 +101,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="overlay-front" >
+		<div class="overlay-front">
 			<div class="overlay-load-front">
 				
 			</div>
@@ -159,71 +183,8 @@
 					</div>
 				</div>
 				
-				
-				
 			</div>
 		</div>
-		<div class="cameraScanning">
-			<div class="container" id="QR-Code">
-				<div class="panel panel-info panel-scan">
-					<div class="panel-heading">
-						<div class="navbar-form navbar-right">
-							<select class="form-control" id="camera-select"></select>
-							<div class="form-group display-none">
-								<input id="image-url" type="text" class="form-control display-none" placeholder="Image url">
-								<button title="Decode Image" class="btn btn-default btn-sm" id="decode-img" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-upload"></span></button>
-								<button title="Image shoot" class="btn btn-info btn-sm disabled" id="grab-img" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-picture"></span></button>
-								<button title="Play" class="btn btn-success btn-sm" id="play" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-play"></span></button>
-								<button title="Pause" class="btn btn-warning btn-sm" id="pause" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-pause"></span></button>
-								<button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-stop"></span></button>
-							 </div>
-						</div>
-					</div>
-					<div class="panel-body text-center">
-						<div class="mainScan" style="position: absolute;bottom: 2px;left: 0;border: solid 5px #ffffff;">
-							<div class="well" style="position: relative;display: inline-block;">
-								<canvas width="320" height="240" id="webcodecam-canvas"></canvas>
-								<div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
-								<div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
-								<div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
-								<div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
-							</div>
-							<div class="well" style="width: 100%; display:none">
-								<label id="zoom-value" width="100">Zoom: 2</label>
-								<input id="zoom" onchange="Page.changeZoom();" type="range" min="10" max="30" value="20">
-								<label id="brightness-value" width="100">Brightness: 0</label>
-								<input id="brightness" onchange="Page.changeBrightness();" type="range" min="0" max="128" value="0">
-								<label id="contrast-value" width="100">Contrast: 0</label>
-								<input id="contrast" onchange="Page.changeContrast();" type="range" min="0" max="64" value="0">
-								<label id="threshold-value" width="100">Threshold: 0</label>
-								<input id="threshold" onchange="Page.changeThreshold();" type="range" min="0" max="512" value="0">
-								<label id="sharpness-value" width="100">Sharpness: off</label>
-								<input id="sharpness" onchange="Page.changeSharpness();" type="checkbox">
-								<label id="grayscale-value" width="100">grayscale: off</label>
-								<input id="grayscale" onchange="Page.changeGrayscale();" type="checkbox">
-								<br>
-								<label id="flipVertical-value" width="100">Flip Vertical: off</label>
-								<input id="flipVertical" onchange="Page.changeVertical();" type="checkbox">
-								<label id="flipHorizontal-value" width="100">Flip Horizontal: off</label>
-								<input id="flipHorizontal" onchange="Page.changeHorizontal();" type="checkbox">
-							</div>
-						</div>
-						<div class="col-12 col-sm-12 col-md-12">
-							<div class="thumbnail" id="result">
-								<div class="well" style="overflow: hidden; display:none;">
-									<img style="width: 100%;" height="240" id="scanned-img" src="">
-								</div>
-								<div class="caption display-none">
-									<h3>Scanned result</h3>
-									<p id="scanned-QR"></p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		
 		<div class="entranceTitle">
 			<span class="titleEntrance titleEntrance"><?php echo $this->row['titleKh'];?></span>
 			<span class="titleEntrance titleEntranceEn"><?php echo $this->row['titleEn'];?></span>
@@ -259,49 +220,45 @@
 			<audio id="entranceAudioKh" src="<?php echo $entranceAudioKh;?>" type="audio/ogg"></audio>
 			<audio id="entranceAudioEn" src="<?php echo $entranceAudioEn;?>" type="audio/ogg"></audio>
 		</div>
-		
+		<div class="inputScanner">
+			<input type="text" class="inputScannerValue" id="SanningValue" name="SanningValue" value="">
+		</div>					
 		<script>
 	var urlpart = "<?php echo $this->baseUrl();?>";
 	var urlgo = '<?php echo $this->url(array('module'=>'','controller' => 'index','action' => 'scanningcode'));?>';
 	</script>
+	<link href="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/css/style.css" rel="stylesheet">
 	<script type="text/javascript" src="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/js/bootstrap.js"></script>
 	<script type="text/javascript" src="<?php echo $base_url."/templates/";?>plugin/bootstrap-4.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/js/qrcodelib.js"></script>
-	<script type="text/javascript" src="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/js/webcodecamjs.js"></script>
-	<script type="text/javascript" src="<?php echo $this->baseUrl()."/templates/";?>plugin/webcodecamjs/js/main.js"></script>
 	<script>
 	$(document).ready(function() {
-		$('#play').click();
+		$('#SanningValue').focus();
+		$('#SanningValue').keypress(function (e) {
+		  if (e.which == 13) {
+			  var sanningValue = $("#SanningValue").val();
+			   if( sanningValue !="" ) {
+					scanDo(sanningValue);
+					$("#SanningValue").val("");
+					$('#SanningValue').focus();
+					return false;
+			   }
+		  }
+		});
 		$(".youTubeBlog").css("display", "block");
 		$(".mainCotentBlog").css("display", "none");
 	});
 
 	function scanDo(keyword){
-		//$( "#messagescan" ).html('');
-		var entrance_id = $("#entrance_id").val();
 		loadingFront();
+		var entrance_id = $("#entrance_id").val();
 		$.ajax({
 			url: urlgo,
-			data: {keyword: keyword,scantype: 3,entrance_id: entrance_id},
+			data: {keyword: keyword,scantype: 2,entrance_id: entrance_id},
 			type: "POST",
 			dataType: "json",
 			success:function(data){
 				if(data.statusReturn==1){
-					
-					/*
-					sourceUrl = urlpart+"/images/frontFile/audio/no_sound.mp3";
-					if( data.audioTitle !="" ) {
-						sourceUrl = urlpart+'/images/frontFile/audio/'+data.audioTitle;
-					}
-					$("#successAudio").attr("src", sourceUrl);
-					
-					sourceImgUrl = urlpart+'/images/no-profile.png';
-					if( data.photo !="" ) {
-						sourceImgUrl = urlpart+'/images/photo/'+data.photo;
-					}
-					$("#stuImageProfile").attr("src", sourceImgUrl);
-					*/
-					
+									
 					sourceUrl = data.fullUrlAudio;
 					$("#successAudio").attr("src", sourceUrl);
 					
@@ -342,7 +299,6 @@
 							 $('#entranceAudioKh').get(0).play();
 					});
 					
-	
 					setTimeoutReload();
 				}else{
 					$(".youTubeBlog").css("display", "block");
@@ -351,8 +307,6 @@
 					sourceUrl = urlpart+'/images/frontFile/audio/no_sound.mp3';
 					$("#successAudio").attr("src", sourceUrl);
 					$('#successAudio').get(0).play();
-					
-					
 				}
 				hideloadingFront();
 			}
@@ -365,7 +319,7 @@
 	function hideloadingFront(){
 		setTimeout(function () {
 	        $(".overlay-front").css("display", "none");
-	    }, 5000);
+	    }, 700);
 		
 		
 	}

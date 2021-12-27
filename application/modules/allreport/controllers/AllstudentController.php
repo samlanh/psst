@@ -896,4 +896,38 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
+	
+	
+	
+	public function rptStudentDropreturnAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+				'adv_search' 	=>'',
+				'branch_id' =>'',
+				'academic_year'=>'',
+				'degree' 	=>'',
+				'grade' 	=>'',
+				'session' 	=>'',
+				'type'		=>'',
+				'start_date'=>date("Y-m-d"),
+				'end_date'	=>date("Y-m-d")
+			);
+		}
+		
+		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
+		$this->view->rs = $group->getAllStudentDropReturn($search);
+		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	}
 }

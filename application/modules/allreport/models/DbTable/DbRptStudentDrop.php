@@ -401,4 +401,79 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	}
     	return $hourStudy.$minStudy;
     }
+	
+	
+	public function getAllStudentDropReturn($search){
+    	$db = $this->getAdapter();
+    	$session_lang=new Zend_Session_Namespace('lang');
+    	$lang_id=$session_lang->lang_id;
+    	$str='name_en';
+    	$colunmname="title_en";
+    	$branch = "branch_nameen";
+    	if($lang_id==1){//for kh
+    		$str = 'name_kh';
+    		$colunmname="title";
+    		$branch = "branch_namekh";
+    	}
+    	
+    	$sql = "SELECT  sdr.*,
+				(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = sdr.branch_id LIMIT 1) AS branch_name,			
+				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS stu_code,
+				(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS tel,
+				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS stu_khname,
+				(SELECT CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS student_name,
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = sdr.academic_year LIMIT 1) AS academic,
+				
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sdr.degree AND type=1 LIMIT 1) AS degree,
+				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=sdr.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=sdr.group LIMIT 1 ) AS group_name,
+				
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sdr.degree_id_return AND type=1 LIMIT 1) AS degreeReturn,
+				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=sdr.grade_id_return AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeReturn,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=sdr.group_id_return LIMIT 1 ) AS groupReturn,
+				sdr.return_date,
+				
+				(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=(SELECT stdp.`type` FROM rms_student_drop AS stdp WHERE stdp.id =sdr.drop_id LIMIT 1  ) LIMIT 1 ) as typeStopTitle,
+				(SELECT first_name FROM `rms_users` WHERE id=sdr.user_id LIMIT 1) AS user_name
+			";
+			$sql.=" FROM `rms_student_drop_return` AS sdr WHERE sdr.status=1 ";
+    	$where="";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("sdr.branch_id");
+    	
+    	$order=" ORDER BY sdr.id DESC";
+    	
+    	$from_date =(empty($search['start_date']))? '1': " sdr.return_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " sdr.return_date <= '".$search['end_date']." 23:59:59'";
+    	$where.= " AND ".$from_date." AND ".$to_date;
+    	
+    	if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+			$s_where[] = " REPLACE((SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','')LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE((SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE((SELECT CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g WHERE g.id=sdr.group LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g WHERE g.id=sdr.group_id_return LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND sdr.branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['academic_year'])){
+    		$where.=' AND sdr.academic_year='.$search['academic_year'];
+    	}
+    	if(!empty($search['grade'])){
+	   		$where.=' AND sdr.grade_id_return='.$search['grade'];
+	   	}
+	   	if($search['degree']>0){
+	   		$where.=' AND `sdr`.`degree_id_return`='.$search['degree'];
+	   	}
+		
+		if($search['type']!=''){
+    		$where.=" AND (SELECT stdp.`type` FROM rms_student_drop AS stdp WHERE stdp.id =sdr.drop_id LIMIT 1)=".$search['type'];
+    	}
+		
+    	return $db->fetchAll($sql.$where.$order);
+    }
 }

@@ -1,0 +1,133 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('STUDENTRETURN')); 
+	$frm =  $this->form_search;
+	$urlEdit = $this->baseUrl()."/foundation/studentreturn/edit/id/";
+?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+           <div class="col-sm-12 border-botom">
+		   		<div class="col-sm-8 pd-0">
+		   			<h4 class="m-b-0"><i class="fa fa-server" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENTRETURN');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<div class="form-group">
+					 <div class="col-md-2 col-sm-3 col-xs-12">
+					 	<?php echo $frm->getElement("adv_search");?>
+					 </div>
+					 <div class="col-md-2 col-sm-3 col-xs-12">
+					  	<?php echo $frm->getElement("branch_id");?>
+					 </div>
+					  <div class="col-md-2 col-sm-3 col-xs-12">
+					  	<?php echo $frm->getElement("academic_year");?>
+					 </div>
+					 <div class="col-md-2 col-sm-3 col-xs-12">
+					  	<?php echo $frm->getElement("degree");?>
+					 </div>
+					 <div class="col-md-2 col-sm-3 col-xs-12">
+					  	<input id="grade" />
+					 </div>
+					 
+				</div>
+				<div class="form-group">
+					 
+					 <div class="col-md-2 col-sm-3 col-xs-12">
+					 	<?php echo $frm->getElement("start_date");?>
+					 </div>
+					  <div class="col-md-2 col-sm-3 col-xs-12">
+					  <?php echo $frm->getElement("end_date");?>
+					 </div>
+					  <div class="col-md-2 col-sm-2 col-xs-12">
+					  	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					 </div>
+					  <div class="col-md-2 col-sm-2 col-xs-12">
+					 </div>
+				</div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.DateTextBox");	
+dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+		id: "grade",
+		name: "grade",  
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
+
+		}
+	}, "grade");
+	getallGrade();
+	
+	 var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+	});
+});
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id=='' || dept_id==-1){return false;}
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id,
+					'noaddnew':1
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('grade').attr('value','');
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store); 
+				    <?php if (!empty($this->search['grade'])){?>
+					dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+					<?php }?> 
+				},
+				error: function(err) {
+				}
+			});
+	}
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+			
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}
+				gotoAction();
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+	}
+</script>

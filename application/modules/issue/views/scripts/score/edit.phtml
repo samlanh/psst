@@ -191,6 +191,12 @@
 		</form>
 	</div>
 </div>
+<style>
+tr.odd {
+    background: #daeef5;
+}
+
+</style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
@@ -260,16 +266,16 @@ function filterStudentOld(){
 			  <?php 
 			  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
 			  ?>
-		      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>'; 
+		      temp+='<td class="tdheader verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>'; 
 		<?php }?>
 		 temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
-		  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
+		 temp+='<td class=" tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
 		  temp+='<tr style="border:1px solid #000;">';
-			  temp+='<td>&nbsp;</td>';
-			  temp+='<td>&nbsp;</td>';
-			  temp+='<td>&nbsp;</td>';
-			  temp+='<td>&nbsp;</td>';
-			  temp+='<td>&nbsp;</td>';
+			  temp+='<td class="tdheader">&nbsp;</td>';
+			  temp+='<td class="tdheader">&nbsp;</td>';
+			  temp+='<td class="tdheader">&nbsp;</td>';
+			  temp+='<td class="tdheader">&nbsp;</td>';
+			  temp+='<td class="tdheader">&nbsp;</td>';
 			  no=0;
 				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ ?>
 					  no++;
@@ -277,27 +283,31 @@ function filterStudentOld(){
 					  <?php 
 					  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
 					  ?>
-				      temp+='<td title="'+stringsname+'"><input <?php if (!empty($result_score)){?>checked="checked"<?php }?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/></td>';
+				      temp+='<td class="tdheader" title="'+stringsname+'"><input <?php if (!empty($result_score)){?>checked="checked"<?php }?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/></td>';
 			             
 				<?php }?>
-			  temp+='<td>&nbsp;</td>';
-		  	  temp+='<td>&nbsp;</td>';
+			  temp+='<td class="tdheader">&nbsp;</td>';
+		  	  temp+='<td class="tdheader">&nbsp;</td>';
 		  temp+='</tr>';
 		  temp+='</thead>';
 		 <?php $old_stu = null;$i=0;
 			if(!empty($student))foreach ($student as $key=>$rs){
 				$i = $i+1;
+				$classs= "odd";
+				if(($i%2)==0){
+					$classs= "regurlar";
+				}
 			?>
 				inx = inx+1;
 				num++;
 				var no=0;
 	        	<?php 
 	        	?>
-	        	temp+= '<tr class="hover normal" id="row'+inx+'">';
+	        	temp+= '<tr class="hover normal <?php echo $classs; ?>" id="row'+inx+'">';
 				temp+='<td width="4%"align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				temp +='<td align="center">&nbsp;<?php echo $i; ?></td>';
 				temp +='<td>&nbsp;<?php echo $rs["stu_code"]; ?></td>';
-				temp +='<td style="min-width:100px;">'+'&nbsp;<?php echo $rs["student_name"]; ?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/></td>';
+				temp +='<td style="min-width:100px; text-align:left; padding:0 1px;">'+'<?php echo $rs["stuKhName"]."<br />".$rs["stuEnName"]; ?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/></td>';
 				temp +='<td>&nbsp;'+gender(<?php echo $rs["sex"];?>)+'&nbsp;</td>';
 				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ 
 					$result_score = $db_score->getStudentScoreBySubjectID($this->score_id, $rs["student_id"],$subj['subject_id']);

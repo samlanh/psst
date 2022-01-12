@@ -152,7 +152,8 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbScore();
-			$data=$db->getStudentByGroup($data['group']);
+			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
+			$data=$db->getStudentByGroup($data['group'],$data);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

@@ -312,7 +312,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
    	$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` 
-   		ORDER BY average DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
+   		ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
    	if($limit==2){
    		$limit = " LIMIT 5 ";
    	}else{
@@ -435,7 +435,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
    	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
-   	ORDER BY sm.total_avg DESC ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
+   	ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
    	if($limit==2){
    		$limit = " limit 5";
    	}else{

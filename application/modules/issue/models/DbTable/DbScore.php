@@ -396,12 +396,13 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$order=" ORDER BY stu_code DESC";
 		return $db->fetchAll($sql.$order);
 	}
-	function getStudentByGroup($group_id){
+	function getStudentByGroup($group_id,$data=array()){
 		$db=$this->getAdapter();
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		$studentEnName=$studentName;
 		
 		if ($currentLang==1){
 			$studentName='s.stu_khname';
@@ -411,6 +412,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					sgh.`stu_id`,
 					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
 					(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
+					(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName,
+					(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName,
 					(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
 				FROM 
 					`rms_group_detail_student` AS sgh
@@ -419,6 +422,15 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					and sgh.stop_type=0
 					and sgh.`group_id` = ".$group_id;
 		$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		if(!empty($data['sortStundent'])){
+			if($data['sortStundent']==1){
+				$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}else if($data['sortStundent']==2){
+				$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}else if($data['sortStundent']==3){
+				$order=" ORDER BY (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}
+		}	
 		return $db->fetchAll($sql.$order);
 	}
 	function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
@@ -479,9 +491,22 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getStudentSccoreforEdit($score_id){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		$studentEnName=$studentName;
+		
+		if ($currentLang==1){
+			$studentName='s.stu_khname';
+		}
+		
 		$sql="SELECT 
 			sd.student_id,
-		  (SELECT (CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) FROM `rms_student` s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
+					(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS student_name,
+					(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuKhName,
+					(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuEnName,
+					
+					
 		  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
 		  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
 		  total_score,score,note,sd.amount_subject				
@@ -489,7 +514,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	 	 rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 
 		GROUP BY sd.`student_id` order by 
-		(SELECT s.`stu_code` FROM `rms_student`AS s 
+		(SELECT ".$studentEnName." FROM `rms_student`AS s 
 		WHERE s.`stu_id`=sd.`student_id`) ASC ";
 		return $db->fetchAll($sql);
 	}

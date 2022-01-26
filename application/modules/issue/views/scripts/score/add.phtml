@@ -134,6 +134,17 @@
 							</select>
 		                </div>
 		             </div>
+					  <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select id="sortStundent" name="sortStundent" class="fullside" onchange="getSubjectByGroup()"  dojoType="dijit.form.FilteringSelect" >
+							   	<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+							   	<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+							   	<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+							   	<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+							</select>
+		                </div>
+		             </div>
 		             <!-- 
 			             <div class="form-group">
 			                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("SCORE_LEVEL");?> </label>
@@ -205,7 +216,11 @@
 		</form>
 	</div>
 </div>
-
+<style>
+tr.odd {
+    background: #daeef5;
+}
+</style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
@@ -238,6 +253,7 @@ function filterStudent(){
 	loadingBlock();
 	
 	group = dijit.byId('group').get('value');
+	sortStundent = dijit.byId('sortStundent').get('value');
 	amtsubject = 0;
 	exam_type = dijit.byId('exam_type').get('value');
 	if(group==''){
@@ -247,6 +263,7 @@ function filterStudent(){
 	    url: url_getStudent,
 	    content : { 
 			'group':group,
+			'sortStundent':sortStundent,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
@@ -263,7 +280,7 @@ function filterStudent(){
 					+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
 					+'<td class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
 					+'<td class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
-					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
+					+'<td class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
 				
 				  for(j=0;j<subject.length;j++){
@@ -276,36 +293,40 @@ function filterStudent(){
 		      		  amtsubject = subject[j].amount_subjectdivide;
 	      			  //stringsname = subject[j].name.replace(' ','');
 		      		  stringsname = subject[j].name;
-		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
+		      	      temp+='<td class="tdheader verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
 				  temp+='<td  class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
-				  temp+='<td  class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
+				  temp+='<td  class="tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
 				  temp+='<tr style="border:1px solid #000;">';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
-				  temp+='<td>&nbsp;</td>';
+				  temp+='<td class="tdheader">&nbsp;</td>';
+				  temp+='<td class="tdheader">&nbsp;</td>';
+				  temp+='<td class="tdheader">&nbsp;</td>';
+				  temp+='<td class="tdheader">&nbsp;</td>';
+				  temp+='<td class="tdheader">&nbsp;</td>';
 					  no=0;
 					  for(j=0;j<subject.length;j++){
 		      			  no++;
 		      			  //stringsname = subject[j].subject_titleen.replace(' ','');
 			      		  stringsname = subject[j].subject_titleen;
-			      	      temp+='<td title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/></td>';
+			      	      temp+='<td class="tdheader" title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/></td>';
 		              }
-				  temp+='<td>&nbsp;</td>';
-			  	  temp+='<td>&nbsp;</td>';
+				  temp+='<td class="tdheader">&nbsp;</td>';
+			  	  temp+='<td class="tdheader">&nbsp;</td>';
 				  temp+='</tr>';
 				  temp+='</thead>';
-				  
+				var rowClasss="";
 				for(i=0;i<data.length;i++){
 					inx = inx+1;
 					record_num ++;
-					temp += '<tr class="hover normal" id="row'+inx+'">';
+					rowClasss="odd"
+					if((i%2)==0){
+						rowClasss= "regurlar";
+					}
+					temp += '<tr class="hover normal '+rowClasss+'" id="row'+inx+'">';
 					temp +='<td width="10px" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td width="10px" align="center">&nbsp;'+record_num+'</td>';
 					temp += '<td style="text-align:left;">&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'" value="'+data[i].stu_id+'" type="hidden" ></td>';
-					temp += '<td style="min-width:100px;text-align:left;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
+					temp += '<td style="min-width:100px; text-align:left; padding:0 1px;">'+data[i].stuKhName+'<br />'+data[i].stuEnName+'</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
 						maxValue = "'The value maximumn "+subject[j].max_subjectscore+"'";

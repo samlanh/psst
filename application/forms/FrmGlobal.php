@@ -540,6 +540,9 @@ class Application_Form_FrmGlobal{
 				<div class='no_display'>
 					<span id='lb_grade'></span>
 					<span id='lb_academic_year'></span>
+					
+					<span id='lbParentName' >&nbsp;</span>
+					<span id='lbParentPhone' >&nbsp;</span>
 				</div>
 			</div>
 			";
@@ -754,7 +757,12 @@ class Application_Form_FrmGlobal{
 				<div class='no_display'>
 					<span id='lb_grade'></span>
 					<span id='lb_academic_year'></span>
+					
+					<span id='lbParentName' >&nbsp;</span>
+					<span id='lbParentPhone' >&nbsp;</span>
 				</div>
+				
+				
 			</div>
 			
 			";
@@ -980,6 +988,374 @@ class Application_Form_FrmGlobal{
 						<table style='width:100%;margin-top:10px;background: #fff;border-top: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'>
 							<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
 								<td >&#9742; <label id='lbl_branchphone' style='width:20%;display:in-line;'></label> &#9993; <label id='lbl_email' style='width:20%;display:in-line;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
+							</tr>
+						</table>
+						<span id='lbParentName' >&nbsp;</span>
+						<span id='lbParentPhone' >&nbsp;</span>
+					</div>
+				</div>
+			</div>";
+			$key = new Application_Model_DbTable_DbKeycode();
+			$result=$key->getKeyCodeMiniInv(TRUE);
+			if($result['receipt_print']>1){
+				$str.="<div id='divPrint1'>
+				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
+				<div id='printblog2'></div>
+				</div>";
+			}
+			return $str;
+		}elseif($receipt_type==4){//A4 Receipt
+			$str="<style>
+					.hearder_table{height:20px !important;}
+					.defaulheight{line-height:10px !important;}
+					.bold{
+						font-weight:bold;
+					}
+					.blogbranchlogo{
+						margin:0 auto;position:absolute;top:10px !important;left:100px;
+					}
+				</style>
+				<div id='PrintReceipt' style='width:100%cm !important; padding: 0px;'>
+					<style>
+						.noted{
+							white-space: pre-wrap;
+							word-wrap: break-word;
+							word-break: break-all;
+							white-space: pre;
+							font:12px 'Times New Roman','Khmer OS Battambang';
+							border: 1px solid #000;
+							line-height:20px;
+							font-weight: normal !important;
+							padding:2px;
+							white-space: normal;
+						}
+						table{ border-collapse:collapse; margin:0 auto;
+								border-color:#000;font-size:10px;font-family:'Times New Roman','Khmer OS Battambang'; }
+						.blogbranchlogo{
+							margin:0 auto;position:absolute;top:10px;left:100px;
+						}
+						.boxnorefund{
+							color: #fff;
+							background: #d42727;
+							border: 2px solid fff;
+							font-size: 11px;
+							padding:10px 2px;
+							border-radius: 2px;
+							border: 6px double #fff;
+							font-weight:bold !important;
+							font-family:'Times New Roman','Khmer OS Battambang';
+						}
+						@page {
+							/* Chrome sets own margins, we change these printer settings */
+							margin:0.5cm 1cm 0.3cm 1cm; '
+							page-break-before: avoid;
+							/*size: 21cm 14.8cm; */
+						}
+						.no_display{
+							display: none;
+						}
+						div#lbl_branchlogo img {
+							max-width: 265px !important;
+							max-height: initial !important;
+						}
+						table.headTable{
+							border: solid 1px #000; 
+							font-size: 11px;
+							line-height:10px !important;
+							width:100%;
+							border-collapse: collapse;
+						}
+						
+						table.headTable td{
+							padding: 2px 4px;
+							line-height: 16px;
+						}
+						table.headTable td.bgHead {
+							background: #519fe2;
+							line-height: 16px;
+							font-weight: 600;
+							padding: 6px 4px;
+							vertical-align: top;
+						}
+						
+						tr.hearder_table {
+							background: #acd8fe;
+							font-weight: bold;
+							border-top: none;
+						}
+						tr.hearder_table td {
+							padding: 6px 4px;
+							text-align: center;
+							border-top: none;
+							font-size: inherit !important;
+						}
+						
+						table.tableDetail {
+							margin-top: -1px !important;
+						}
+						ul.termCondition {
+							padding: 0;
+							margin: 0;
+							list-style: none;
+							font-family:'Times New Roman','Khmer OS Battambang';
+							margin-top: 5px;
+						}
+						li.headUl {
+							font-weight: 600;
+							text-decoration: underline;
+							font-size: 11px;
+						}
+						
+						table.totalFooter {
+							margin-left: 4px;
+							font-size: inherit;
+							white-space: nowrap;
+							line-height: 10px;
+							border-collapse: collapse;
+							    margin-top: -1px;
+						}
+						table.totalFooter td {
+							padding: 2px;
+						}
+						table.totalFooter td.titleLb {
+							background: #519fe2;
+							padding: 4px 2px;
+							font-weight: 600;
+							line-height: 13px;
+							
+						}
+						
+						.footerAddress {
+							display: block;
+							width: 100%;
+							text-align: center;
+							background: #519fe2;
+							padding: 10px;
+							position: absolute;
+							bottom: 0;
+						}
+					</style>
+					<table  width='100%'  class='print' cellspacing='0'  cellpadding='0' style='height:13.97cm; font-family:'Times New Roman','Khmer OS Battambang' !important;  white-space:nowrap;'>
+						<tr>
+							<td colspan='3' style='position:relative'>
+								<div id='lbl_branchlogo'></div>
+							</td>
+							
+						</tr>
+						<tr>
+							<td width='30%' style='position:relative'>
+								
+								<div class='no_display'>
+									<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
+									<label id='lb_branchname'></label>
+									<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
+									</div>
+								</div>
+							</td>
+							<td align='center' valign='bottom' width='40%'>
+								<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:12px;position:relative'>វិក្ក័យបត្រ</div>
+								<div style='font-family:Times New Roman;font-size:12px;font-weight:bold'>INVOICE</div>
+							</td>
+							<td width='30%'>&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan='3' style='position:relative'>
+								&nbsp:
+							</td>
+							
+						</tr>
+						<tr>
+						<td align='center' valign='bottom' colspan='3'>
+							<table class='headTable' border='1' >
+								<tr>
+									<td class='bgHead'>អតិថិជន / Customer</td>
+									<td class='bgHead'>Students ID</td>
+									<td rowspan='2' class='bgHead'>
+										កាលបរិច្ឆេទៈ <br />
+										Date:
+									</td>
+									<td rowspan='2'><label id='lb_date' class='one bold'></label></td>
+								</tr>
+								<tr>
+									<td style='border-bottom: none; border-right: none;'><span id='lb_name' class='one bold' style='display: inline-block; vertical-align: top; line-height: 16px;' ></span></td>
+									<td style='border-bottom: none; border-left: none; text-align: center;'><span id='lb_stu_id' class='one bold'></span></td>
+								</tr>
+								<tr>
+									<td style='border-top: none; ' colspan='2'><span id='lb_phone' class='one bold' style='display: inline-block; vertical-align: top; line-height: 13px;' ></span></td>
+									<td rowspan='2' class='bgHead'>
+										លេខវិក្ក័យបត្រ: <br />
+										Invoice No.
+									</td>
+									<td rowspan='2'><span id='lb_receipt_no' class='one bold'></span></td>
+								</tr>
+								<tr>
+									<td class='bgHead' colspan='2'>អ្នកជាអាណាព្យាបាល / Parent's Name</td>
+									
+									
+								</tr>
+								<tr>
+									<td style='border-bottom: none;' colspan='2'><span id='lbParentName' style='display: inline-block; vertical-align: top; line-height: 16px;'></span></td>
+									<td rowspan='2' class='bgHead'>
+										កាលបរិច្ឆេទៈបោះពុម្ភ:<br />
+										Print Date:
+									</td>
+									<td rowspan='2'>
+									".date('d-m-Y g:i A')."<br />
+									ដោយ / By: <span class='bold'>".$username."</span>
+									</td>
+								</tr>
+								<tr>
+									<td style='border-top: none;' colspan='2'><span id='lbParentPhone' style='display: inline-block; vertical-align: top; line-height: 16px;'></span></td>
+								</tr>
+							</table>
+							<div class='no_display'>
+								<span id='lb_academic_year' class='one'>&nbsp;</span>
+								<span id='lb_grade' class='one'>&nbsp;</span>
+								<span id='lb_sesiontype' class='one'>&nbsp;</span>
+								<div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'>
+									<span id='lb_photo'></span>
+								</div>
+								
+								<span id='lb_sex' class='one bold'></span>
+								<span id='lb_session' class='one bold'></span>
+								<span id='lb_study_year' class='one bold'></span>
+								<span id='lb_group' class='one'></span>
+								
+								Note
+								<div style='width:99%;float: left;'>
+									<div style='font-size:10px;min-height:70px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
+								</div>
+								
+								Say in US Dollars
+								<div style='font-size:10px;min-height: 70px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
+						
+							</div>
+							
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'><div id='t_amountmoneytype'></div></td>
+					</tr>
+					<tr>
+						<td colspan='2' valign='top' style='font-size:10px;'>
+							<ul class='termCondition'>
+								<li class='headUl'>
+									គោលការណ៍ និងលក្ខខណ្ឌ / Term of Condition:
+								</li>
+								<li>
+									1). ទឹកប្រាក់ដែលបានបង់ហើយមិនអាចផ្ទេរ ឬដកវិញបានទេ<br />
+									All fees are not transferable or refundable.
+								</li>
+								<li>
+									2). ទឹកប្រាក់ដែលបានបង់ហើយមិនអាចផ្ទេរ ឬដកវិញបានទេ<br />
+									All fees are not transferable or refundable.
+								</li>
+							</ul>
+						</td>
+						
+						<td>
+							<table class='totalFooter' border='1' width='99%' >
+								<tr>
+									<td class='titleLb'>
+									ពិន័យ:<br />
+									Penalty:
+									</td>
+									<td style='border-right: none;'>$</td>
+									<td align='right' style='border-left: none;'>&nbsp;&nbsp; <label id='lb_fine'></label></td>
+								</tr>
+								<tr>
+									<td class='titleLb'>
+									តម្លៃសរុប:<br />
+									Total Payment:</td>
+									<td style='border-right: none;'>$</td>
+									<td align='right' style='border-left: none;font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_total_payment'></label></td>
+								</tr>
+								<tr>
+									<td class='titleLb'>Credit Memo:</td>
+									<td style='border-right: none;'>$</td>
+									<td align='right' style='border-left: none;'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
+								</tr>
+								<tr>
+									<td class='titleLb'>
+										ប្រាក់បានបង់:<br />
+										Paid Amount:
+									</td>
+									<td style='border-right: none;'>$</td>
+									<td align='right' style='border-left: none; '>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
+								</tr>
+								<tr>
+									<td class='titleLb'>
+									នៅខ្វះ:<br />
+									Balance:</td>
+									<td style='border-right: none;'>$</td>
+									<td align='right' style='border-left: none;'>&nbsp;&nbsp;<label id='lb_balance_due'></label></td>
+								</tr>
+								<tr>
+									<td class='titleLb'>
+										វិធី​សា​ស្រ្ត​ទូទាត់:<br />
+										Payment Method:
+									</td>
+									<td colspan='2' align='right'>&nbsp;&nbsp;<label id='lb_paymentmethod'></label></td>
+								</tr>
+								<tr>
+									<td class='titleLb'>
+										លេខសម្គាល់ / លេខគណនី:<br />
+										Number/Bank No.
+									</td>
+									<td colspan='2' align='right'>&nbsp;&nbsp;<label id='lb_paymentnumber'></label></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td valign='top' colspan='3'>
+							<br />
+							<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:125px;line-height: 11px;'>
+								<tr>
+									<td colspan='5'>
+										<table width='100%' style='marin-top:5px;font-size:12px; white-space:nowrap;line-height:15px;border-collapse:collapse;'>
+											<tr>
+												<td style='width:30%' align='center'></td>
+												<td style='width:30%' align='center'></td>
+												<td style='width:30%' align='center'></td>
+											</tr>
+											
+											
+											<tr>
+												<td align='center'>
+													<div style='border-bottom: 1px solid #000;margin-top:30px;'>
+														<span style='font-size:12x;' >&nbsp;</span>
+													</div>
+													<span style='line-height: 18px;font-size: 14px;font-weight: 600;margin-top: 5px;display: block;'>ហត្ថលេខាអតិថិជន / Customer's Signature</span>
+												</td>
+												<td align='center' valign='bottom'>
+													
+												</td>
+												<td align='center' valign='bottom'>
+													<div style='border-bottom: 1px solid #000;margin-top:30px;'>
+														<span style='font-size:12x; font-weight: 600;'  id='lb_byuser'></span>
+													</div>
+													<span style='line-height: 18px;font-size: 14px;font-weight: 600;margin-top: 5px;display: block;'>Authorized Signature</span>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td valign='top'>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+			</table>
+			<div class='footerAddress'>
+				<span id='lbl_address' ></span><br />
+				&#9742; <span id='lbl_branchphone' ></span>
+			</div>
+				<div class='no_display'>
+					<div id='printfooter' style='display:block;font-family:khmer os battambang;position: absolute; bottom:0px;width:100%'>
+						<table style='width:100%;margin-top:10px;background: #fff;border-top: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'>
+							<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
+								<td > &#9993; <label id='lbl_email' style='width:20%;display:in-line;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;'></label> &#127963  </td>
 							</tr>
 						</table>
 					</div>

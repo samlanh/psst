@@ -452,7 +452,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('s.branch_id');
     	$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = gds.degree )');
-    	return $db->fetchAll($sql);
+    	$sql.=" GROUP BY s.branch_id,gds.degree ";
+		return $db->fetchAll($sql);
     }
     public function getAllStudentSelected($stu_id){
     	$db = $this->getAdapter();
@@ -501,6 +502,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	
 			    	
 			    	gds.degree as dept,
+			    	gds.degree as degree_id,
 			    	(SELECT $degree FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
 			    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degreeKh,
 			    	(SELECT rms_items.title_en FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degreeEng,

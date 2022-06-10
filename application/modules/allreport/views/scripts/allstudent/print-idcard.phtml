@@ -61,7 +61,7 @@ function getKHMonthByNumber(m){
 				}
 			?>
 				
-				.card-content-student-print{
+				.card-content-student-print<?php echo $dep;?>{
 					background-image: url('<?php echo $image;?>');
 					 background-size: 100%;background-repeat: no-repeat;
 					 page-break-after:always;					
@@ -162,7 +162,7 @@ function getKHMonthByNumber(m){
 			$prefix="";
 			$validDate="";
 			$stu_name = $row['last_name']." ".$row['en_name'];
-			$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+			$dep = empty($row['degree_id'])?0:$row['degree_id'];
 			$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption'],$dep);
 			$issueDate="";
 			if (!empty($bg)){
@@ -275,7 +275,7 @@ function getKHMonthByNumber(m){
 					</div>
 				</div>
 				-->	
-				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 209px;height: 329px; color: #3f3f95; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
+				<div class="card-content-student-print card-content-student-print<?php echo $dep;?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 209px;height: 329px; color: #3f3f95; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
 					<div class="profile-card-block">
 						<div class="photo">
 							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
@@ -737,10 +737,184 @@ function getKHMonthByNumber(m){
 							</div>
 					<?php }}?>
 				</div>
-			<?php }
-			elseif($type==4){// Good Will format 
+			<?php }elseif($type==4){// AHS NEW ?>
+				<style>
+				@page {
+					margin: 0;
+				 }
+				.card-content-student-print{
+					background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+					background-size: 100%;background-repeat: no-repeat;
+					page-break-after:always					
+				}
+			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+				$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+				$color = "000000";
+				$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption'],$dep);
+				if(!empty($bg['background'])){
+					
+					if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+						$image = $this->baseUrl().'/images/card/'.$bg['background'];
+					}
+					
+					if (!empty($bg['colorcode'])){
+						$color = str_replace("#", "", $bg['colorcode']);
+					}
+				}
+			?>
 				
-			}?>
+				.card-content-student-print<?php echo $dep;?>{
+					background-image: url('<?php echo $image;?>');
+					 background-size: 100%;background-repeat: no-repeat;
+					 page-break-after:always;					
+				}
+				
+				.name-card-block ul.list-data li.sdudent-id.color-{
+					color:#<?php echo $color;?>;
+				}
+			<?php }?>
+					
+				.profile-card-block {
+					position: relative;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 90px;
+					left: 0;
+				}
+				.photo img {
+					width: 70px;
+					/* height: 98px; */
+				}
+				.name-card-block {
+					position: relative;
+				}
+		
+				span.stuInfo {
+					position: absolute;
+					top: 195px;
+					display: block;
+					width: 100%;
+					text-align: center;
+					font-weight: 600;
+					font-size: 11px;
+				}	
+				span.stuInfo.stuNameKhValue {
+					top: 185px;
+					font-family: Times New Roman,'Khmer OS Muol Light';
+					font-weight: normal;
+				}
+				span.stuInfo.stuNameEngValue {
+					top: 199px;
+				}
+				span.stuInfo.stuGrade {
+					top: 215px;
+				}
+				span.stuInfo.stuAcademic {
+					top: 230px;
+				}
+				span.titleKhLb {
+					font-family: Times New Roman,'Khmer OS Muol Light';
+					font-weight: normal;
+				}
+				.foot-left-block {
+					position: relative;
+					width: 100%;
+				}
+				.qrimages {
+					position: absolute;
+					top: 235px;
+					left: -65px;
+					width: 100%;
+					text-align: center;
+				}
+				.qrimages img {
+					width: 20%;
+					text-align: center;
+				}
+				.qrimages span.stuCode {
+					display: block;
+					text-align: center;
+					font-size: 9px;
+					font-weight: 600;
+					line-height: 10px;
+				}
+				.validdate {
+				    position: relative;
+				}
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 243px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
+				}
+			</style>
+		<?php 
+			
+			$con=4;
+			$i=0; $student= count($this->rs);
+			if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+			$imageProfile = "";
+			$imageProfile = $this->baseUrl().'/images/no-profile.png';
+			if(!empty($row['photo'])){
+				if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+					$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
+				}
+			}
+			$prefix="";
+			$validDate="";
+			$stu_name = $row['last_name']." ".$row['en_name'];
+			$dep = empty($row['degree_id'])?0:$row['degree_id'];
+			$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption'],$dep);
+			$issueDate="";
+			if (!empty($bg)){
+				if ($bg['display_by']==2){
+					$stu_name = $row['stu_khname'];
+				}
+				$prefix = $bg['card_prefix'];
+				$validDate = $bg['valid'];
+				$issueDate = $bg['issue'];
+			}
+			?>
+			
+				<div class="card-content-student-print card-content-student-print<?php echo $dep;?>" style=" display:inline-block; margin-right:10px; line-height: 16.285px;  width: 209px;height: 320px; color: #000000; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
+					<div class="profile-card-block">
+						<div class="photo">
+							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
+						</div>
+					</div>
+					<div class="name-card-block">
+						<span class="stuInfo stuNameKhValue"><?php echo $row['stu_khname'];?></span>
+						<span class="stuInfo stuNameEngValue"><?php echo $row['last_name']." ".$row['en_name'];?></span>
+						<span class="stuInfo stuGrade"><span class="titleKhLb">ថ្នាក់ទី</span> / GRADE : <?php echo str_replace("Grade","",$row['group_name']);?></span>
+						<span class="stuInfo stuAcademic"><?php echo $row['academic_year'];?></span>
+					</div>
+					<!--
+					<div class="validdate">
+                    		<span class="exp_date"><?php echo date("F j, Y",strtotime($validDate))?></span>
+					</div>
+					-->
+				<?php  
+				$QrCodeValue = $row['studentToken'];
+				$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$QrCodeValue),null,true);?>
+					<div class="foot-left-block">
+						<div class="qrimages">
+							<img  src="<?php echo $url;?>" alt="profile-image" >
+							<span class=" stuCode">ID: <?php echo $row['stu_code'];?></span>
+						
+						</div>
+					</div>
+					<div class="foot-right-block">
+					</div>
+				</div>				
+				
+				<?php }}?>
+			<?php }?>
 		</div>
 		<table width="100%">
 			<tr>
@@ -757,6 +931,7 @@ function getKHMonthByNumber(m){
 
 <script type="text/javascript">
 	dojo.ready(function(){
+		loadingBlock();
 		print();
 	});
 	function print(){
@@ -774,17 +949,20 @@ function getKHMonthByNumber(m){
 	    frameDoc.document.write('</body></html>');
 	    frameDoc.document.close();
 	    setTimeout(function () {
+			HideloadingBlock();
 	        window.frames["frame1"].focus();
 	        window.frames["frame1"].print();
 	        document.body.removeChild(frame1);
-	        HideloadingBlock();
+	        
 			<?php 
 				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
 			?>
+			
 			//window.location.href = '<?php echo $url_copy;?>';
 	    }, 10000);
+		
 	   return false;
 
 	    

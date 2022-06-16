@@ -24,29 +24,27 @@ function getKHMonthByNumber(m){
 	return (monthName[m-1]);
 }	
 </script>
-<div style="width:22cm !important;height:11cm;padding: 0px;margin:0px;">
-	<div align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
-		<style>
-			.name-card-block ul.list-data {
-				top: 145.5px !important;
-			}	
-		</style>
+<div style="width:21cm !important;height:29.7cm;padding: 0px;margin:0px;">
+	
 		<div id="divPrint1" >
 			<div class='bgcard'>
 			<?php if($type==1){// psis format ?>
 				<style>
 					#divPrint1{
-						width:21cm;
-						height:29.7cm;
-						background: red;
+						width: 21cm;
+						height: 29.7cm;
+						background: none;
 						position: relative;
+						border: 0;
 					}
 					.bgcard{
 						background-image: url('<?php echo $this->baseUrl()."/images/card/bgsizepvccard.jpg";?>');background-size: 100%;
 						background-repeat: no-repeat;
 						width: 100%;
-							height: 100%;
+						height: 100%;
 						position: relative;	
+						margin: 0;
+						padding: 0;
 					}	
 					
 					@page {
@@ -55,8 +53,6 @@ function getKHMonthByNumber(m){
 					.card-content-student-print{
 						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
 						background-size: 100%;background-repeat: no-repeat;
-						/*page-break-after: always;	
-						margin-left: -212px;*/	
 						transform: rotateZ(-90deg);	
 						
 						position: absolute;
@@ -82,7 +78,6 @@ function getKHMonthByNumber(m){
 					.card-content-student-print<?php echo $dep;?>{
 						background-image: url('<?php echo $image;?>');
 						 background-size: 100%;background-repeat: no-repeat;
-						 /*page-break-after: always;	*/	
 											
 					}
 					
@@ -236,17 +231,18 @@ function getKHMonthByNumber(m){
 			<?php }else if($type==4){ //AHS NEW ?>
 				<style>
 					#divPrint1{
-						width:21cm;
-						height:29.7cm;
-						background: red;
+						width: 210mm;
+						height: 297mm;
+						background: none;
 						position: relative;
+						border: 0;
 					}
 					.bgcard{
-						background-image: url('<?php echo $this->baseUrl()."/images/card/ahs-bgsizepvccard.jpg";?>');background-size: 100%;
 						background-repeat: no-repeat;
 						width: 100%;
-							height: 100%;
+						height: 100%;
 						position: relative;	
+						margin: 0;
 					}	
 					
 					@page {
@@ -260,7 +256,8 @@ function getKHMonthByNumber(m){
 						transform: rotateZ(-90deg);	
 						
 						position: absolute;
-						left: 70px;		
+						left: 68.5px;		
+						
 					}
 				<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 					$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
@@ -297,7 +294,7 @@ function getKHMonthByNumber(m){
 						text-align: center;
 						width: 100%;
 						position: absolute;
-						top: 90px;
+						top: 100px;
 						left: 0;
 					}
 					.photo img {
@@ -314,22 +311,32 @@ function getKHMonthByNumber(m){
 						display: block;
 						width: 100%;
 						text-align: center;
-						font-weight: 600;
-						font-size: 11px;
+						font-weight: 200;
+						font-size: 9px;
 					}	
 					span.stuInfo.stuNameKhValue {
-						top: 185px;
+						top: 195px;
+						font-size: 11px;
 						font-family: Times New Roman,'Khmer OS Muol Light';
-						font-weight: normal;
+						font-weight: 200;
 					}
 					span.stuInfo.stuNameEngValue {
-						top: 199px;
+						top: 213px;
+						text-transform: uppercase;
+						font-weight: 600;
+					}
+					span.stuInfo.stuDob {
+						top: 225px;
+						font-weight: 600;
 					}
 					span.stuInfo.stuGrade {
-						top: 215px;
+						top: 238px;
 					}
 					span.stuInfo.stuAcademic {
-						top: 230px;
+						top: 298px;
+						color: #fff;
+						font-size: 12px;
+						font-weight: 600;
 					}
 					span.titleKhLb {
 						font-family: Times New Roman,'Khmer OS Muol Light';
@@ -341,8 +348,8 @@ function getKHMonthByNumber(m){
 					}
 					.qrimages {
 						position: absolute;
-						top: 235px;
-						left: -65px;
+						top: 245px;
+						right: -65px;
 						width: 100%;
 						text-align: center;
 					}
@@ -370,18 +377,18 @@ function getKHMonthByNumber(m){
 					}
 					
 					.card-content-student-print.blogCard1 {
-						top: -11px;
+						top: -14px;
 					}
 					.card-content-student-print.blogCard2 {
-						top: -11px;
-						left: 390px;
+						top: -14px;
+						left: 395px;
 					}
 					.card-content-student-print.blogCard3 {
-						top: 200px;
+						top: 195px;
 					}
 					.card-content-student-print.blogCard4 {
-						top: 200px;
-						left: 390px;
+						top: 195px;
+						left: 395px;
 					}
 				</style>
 			<?php 
@@ -418,7 +425,7 @@ function getKHMonthByNumber(m){
 				
 				?>
 				<!-- <div class="pageBreak">	 -->
-					<div class="card-content-student-print card-content-student-print<?php echo $dep;?> <?php echo $classPartBlock;?>" style=" display:block;line-height: 16.285px;width: 209px;height: 320px;color: #000000;font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db;">
+					<div class="card-content-student-print card-content-student-print<?php echo $dep;?> <?php echo $classPartBlock;?>" style=" display:block;line-height: 16.285px; width: 202px;height: 317px; color: #000000;font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db;">
 						<div class="profile-card-block">
 							<div class="photo">
 								<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
@@ -427,7 +434,8 @@ function getKHMonthByNumber(m){
 						<div class="name-card-block">
 							<span class="stuInfo stuNameKhValue"><?php echo $row['stu_khname'];?></span>
 							<span class="stuInfo stuNameEngValue"><?php echo $row['last_name']." ".$row['en_name'];?></span>
-							<span class="stuInfo stuGrade"><span class="titleKhLb">ថ្នាក់ទី</span> / GRADE : <?php echo str_replace("Grade","",$row['group_name']);?></span>
+							<span class="stuInfo stuDob"><?php echo date("d-M-Y",strtotime($row['dob']));?></span>
+							<span class="stuInfo stuGrade">G : <?php echo str_replace("Grade","",$row['group_name']);?></span>
 							<span class="stuInfo stuAcademic"><?php echo $row['academic_year'];?></span>
 						</div>
 						<!--
@@ -452,7 +460,8 @@ function getKHMonthByNumber(m){
 			
 			<?php }?>
 		</div>
-		</div>
+	</div>
+</div>
 		<table width="100%">
 			<tr>
 				<td align="center">
@@ -468,7 +477,7 @@ function getKHMonthByNumber(m){
 
 <script type="text/javascript">
 	dojo.ready(function(){
-		//print();
+		print();
 	});
 	function print(){
 		loadingBlock();

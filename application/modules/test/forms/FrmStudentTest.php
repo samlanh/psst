@@ -1119,7 +1119,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
     			'onChange'=>'getAllGrade();',
-    			
     			'class'=>'fullside height-text',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',));

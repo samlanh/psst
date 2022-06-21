@@ -194,7 +194,6 @@
 					);
 					$this->_name="rms_group_detail_student";
 					$this->insert($_arr);
-					//rms_group_detail_student
 				}
 			}
 			$_db->commit();

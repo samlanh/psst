@@ -2019,14 +2019,12 @@ function getAllgroupStudyNotPass($action=null){
 	  	$option_type=STU_ID_TYPE;
 	  	$length = '';
 	  	$pre = '';
-	  	if($option_type==1){
+	  	if($option_type==1){//auto by branch
 	  		$sql="SELECT COUNT(stu_id) FROM `rms_student` WHERE customer_type=1 AND branch_id=".$branch_id;
 	  		$stu_num = $db->fetchOne($sql);
 	  		$pre = $this->getPrefixCode($branch_id);//by branch
-	  	}else{
+	  	}elseif($option_type==2){
 	  		$pre = $this->getPrefixByDegree($degree);
-// 	  		$sql="SELECT id_start FROM `rms_items` WHERE id= $degree ";
-// 	  		$stu_num = $db->fetchOne($sql);
 			
 	  		//degree option for combine amount 5,6,7,8
 	  		$arrDegreeComine = array(
@@ -2050,6 +2048,20 @@ function getAllgroupStudyNotPass($action=null){
 	  		}
 	  		
 	  		$stu_num = $db->fetchOne($sql);
+	  	}elseif($option_type==3){
+	  		$pre = $this->getPrefixCode($branch_id);//by branch
+	  		if($degree==5 OR $degree==6){
+	  			$degree='(6,8)';
+	  			$pre="GE";
+	  		}elseif($degree<=4){
+	  			$degree='(1,2,3,4)';
+	  		}
+	  		 
+	  		$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
+	  		$sql.=" AND degree IN $degree ";
+	  		 
+	  		$stu_num = $db->fetchOne($sql);
+	  		
 	  	}
 	  	$new_acc_no= (int)$stu_num+1;
 	  	$length = strlen((int)$new_acc_no);
@@ -3140,7 +3152,6 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getStudentToken(){
   	return 'PSIS'.date('YmdHis');
-  	
   }
   function getcrmFollowupStatus(){
   	$_arr = array(
@@ -3148,7 +3159,8 @@ function getAllgroupStudyNotPass($action=null){
   			1=>$this->tr->translate("PROGRESSING"),
   			2=>$this->tr->translate("WAITING_COMPLETED"),
   			3=>$this->tr->translate("COMPLETED"),
-  			0=>$this->tr->translate("CANCEL"));
+  			0=>$this->tr->translate("CANCEL")
+  		);
   	return $_arr;
   }
   function crmStatusprocess(){
@@ -3165,5 +3177,32 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT schoolOption FROM rms_items WHERE id=".$degree_id;
   	return $db->fetchOne($sql);
   }
+//   function GenerateNewId(){
+//   	$db = $this->getAdapter();
+//   	$sql="SELECT stu_id FROM  `rms_student` WHERE customer_type=1 AND degree_old IN (2) ORDER BY stu_id ASC";
+//   	$rs =  $db->fetchAll($sql);
+//   	if(!empty($rs)){
+//   		$key=0;
+//   		$pretext = 'GPP';
+//   		$key_in = 0;
+//   		foreach($rs as $r){
+//   			$pre="";
+//   			$key++;
+  			
+//   			$length = strlen((int)$key);
+//   			for($i = $length;$i<4;$i++){
+//   				$pre.='0';
+//   			}
+//   			$newId =  $pretext.$pre.$key;
+  			
+//   			$this->_name = 'rms_student';
+//   			$data_gro = array(
+//   					'stu_code'=> $newId,//ប្រើប្រាស់
+//   			);
+//   			$whereGroup = 'stu_id = '.$r['stu_id'];
+//   			$this->update($data_gro, $whereGroup);
+//   		}
+//   	}
+//   }
 }
 ?>

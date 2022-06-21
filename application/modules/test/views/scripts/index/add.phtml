@@ -62,11 +62,14 @@ tr#head-title {
 		<form id='frm_teststudent' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 			if(this.validate()) {
+				
+
 				if(dijit.byId("branch_id").get("value")==''){
                     alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
 					dijit.byId("branch_id").focus();
 					return false;
 				}
+
 				loadingBlock();
 				return true;
 			}else {

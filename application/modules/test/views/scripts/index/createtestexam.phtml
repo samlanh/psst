@@ -36,6 +36,14 @@
 					dijit.byId("degree").focus();
 					return false;
 				}
+				degree_test = dijit.byId("degree").get("value");
+				degree_result = dijit.byId("degree_result").get("value");
+				if(isNaN(degree_result)){degree_result=0;}
+				if(degree_result>0 && degree_test!=degree_result){
+					dijit.byId("degree_result").focus();
+					return false;
+				}
+
 
 				var totalScore = dijit.byId('score').get('value'); 
 				if(isNaN(totalScore)){

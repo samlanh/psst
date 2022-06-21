@@ -435,7 +435,7 @@ function getKHMonthByNumber(m){
 							<span class="stuInfo stuNameKhValue"><?php echo $row['stu_khname'];?></span>
 							<span class="stuInfo stuNameEngValue"><?php echo $row['last_name']." ".$row['en_name'];?></span>
 							<span class="stuInfo stuDob"><?php echo date("d-M-Y",strtotime($row['dob']));?></span>
-							<span class="stuInfo stuGrade">G : <?php echo str_replace("Grade","",$row['group_name']);?></span>
+							<span class="stuInfo stuGrade">Grade : <?php echo str_replace("Grade","",$row['group_name']);?></span>
 							<span class="stuInfo stuAcademic"><?php echo $row['academic_year'];?></span>
 						</div>
 						<!--

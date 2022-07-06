@@ -517,7 +517,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 			$_arr=array(
  					'branch_id'		=>$_data['branch_id'],
-// 					'stu_code'		=>$_data['student_id'],
+ 					'stu_code'		=>$_data['student_id'],
 					'user_id'		=>$this->getUserId(),
 					'stu_khname'	=>$_data['name_kh'],
 					'last_name'		=>ucfirst($_data['last_name']),

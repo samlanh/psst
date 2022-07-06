@@ -138,6 +138,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'style'=>'color: red;',
 				'readOnly'=>'readOnly',
 				));
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$level = $session_user->level;
+		if($level==1){
+			$student_id->setAttrib('readOnly', 'false');
+		}
+			
 		
 		$db = new Global_Model_DbTable_DbGroup();
 		$rs_year = $db->getAllYears();

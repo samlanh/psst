@@ -1107,7 +1107,6 @@ class Application_Form_FrmGlobal{
 						}
 						
 						table.totalFooter {
-							margin-left: 4px;
 							font-size: inherit;
 							white-space: nowrap;
 							line-height: 10px;
@@ -1135,17 +1134,16 @@ class Application_Form_FrmGlobal{
 							bottom: 0;
 						}
 					</style>
-					<table  width='100%'  class='print' cellspacing='0'  cellpadding='0' style='height:13.97cm; font-family:'Times New Roman','Khmer OS Battambang' !important;  white-space:nowrap;'>
+					<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='height:13.97cm; font-family:'Times New Roman','Khmer OS Battambang' !important;  white-space:nowrap;'>
 						<tr>
 							<td colspan='3' style='position:relative'>
-								<div id='lbl_branchlogo'></div>
+								<div style='height:100px;'></div>
 							</td>
-							
 						</tr>
 						<tr>
 							<td width='30%' style='position:relative'>
-								
 								<div class='no_display'>
+								<div id='lbl_branchlogo'></div>
 									<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
 									<label id='lb_branchname'></label>
 									<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
@@ -1160,9 +1158,7 @@ class Application_Form_FrmGlobal{
 						</tr>
 						<tr>
 							<td colspan='3' style='position:relative'>
-								&nbsp:
 							</td>
-							
 						</tr>
 						<tr>
 						<td align='center' valign='bottom' colspan='3'>
@@ -1171,7 +1167,7 @@ class Application_Form_FrmGlobal{
 									<td class='bgHead'>អតិថិជន / Customer</td>
 									<td class='bgHead'>Students ID</td>
 									<td rowspan='2' class='bgHead'>
-										កាលបរិច្ឆេទៈ <br />
+										កាលបរិច្ឆេទ <br />
 										Date:
 									</td>
 									<td rowspan='2'><label id='lb_date' class='one bold'></label></td>
@@ -1183,20 +1179,25 @@ class Application_Form_FrmGlobal{
 								<tr>
 									<td style='border-top: none; ' colspan='2'><span id='lb_phone' class='one bold' style='display: inline-block; vertical-align: top; line-height: 13px;' ></span></td>
 									<td rowspan='2' class='bgHead'>
-										លេខវិក្ក័យបត្រ: <br />
+										លេខវិក្ក័យបត្រ <br />
 										Invoice No.
 									</td>
 									<td rowspan='2'><span id='lb_receipt_no' class='one bold'></span></td>
 								</tr>
 								<tr>
 									<td class='bgHead' colspan='2'>អ្នកជាអាណាព្យាបាល / Parent's Name</td>
-									
-									
 								</tr>
 								<tr>
-									<td style='border-bottom: none;' colspan='2'><span id='lbParentName' style='display: inline-block; vertical-align: top; line-height: 16px;'></span></td>
+									<td style='border-bottom: none;border-right:none;'>
+											<span id='lbFather' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
+											<span id='lbFatherTel'></span>
+									</td>
+									<td style='border-bottom: none;border-left:none;'>
+											<span id='lbMother' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
+											<span id='lbMotherTel'></span>
+									</td>
 									<td rowspan='2' class='bgHead'>
-										កាលបរិច្ឆេទៈបោះពុម្ភ:<br />
+										កាលបរិច្ឆេទបោះពុម្ភ<br />
 										Print Date:
 									</td>
 									<td rowspan='2'>
@@ -1254,7 +1255,7 @@ class Application_Form_FrmGlobal{
 						</td>
 						
 						<td>
-							<table class='totalFooter' border='1' width='99%' >
+							<table class='totalFooter' border='1' width='100%' >
 								<tr>
 									<td class='titleLb'>
 									ពិន័យ:<br />
@@ -1310,7 +1311,7 @@ class Application_Form_FrmGlobal{
 					<tr>
 						<td valign='top' colspan='3'>
 							<br />
-							<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:125px;line-height: 11px;'>
+							<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:50px;line-height: 11px;'>
 								<tr>
 									<td colspan='5'>
 										<table width='100%' style='marin-top:5px;font-size:12px; white-space:nowrap;line-height:15px;border-collapse:collapse;'>
@@ -1347,11 +1348,12 @@ class Application_Form_FrmGlobal{
 						</td>
 					</tr>
 			</table>
-			<div class='footerAddress'>
+			
+				<div class='no_display'>
+				<div class='footerAddress'>
 				<span id='lbl_address' ></span><br />
 				&#9742; <span id='lbl_branchphone' ></span>
 			</div>
-				<div class='no_display'>
 					<div id='printfooter' style='display:block;font-family:khmer os battambang;position: absolute; bottom:0px;width:100%'>
 						<table style='width:100%;margin-top:10px;background: #fff;border-top: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'>
 							<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>

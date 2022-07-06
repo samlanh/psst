@@ -281,13 +281,13 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 	
 	function getAllStuCode(){
 		$db = $this->getAdapter();
-		$sql=" select stu_id as id,stu_code from rms_student where status=1 and is_subspend=0";
+		$sql=" select stu_id as id,stu_code from rms_student where status=1 ";
 		return $db->fetchAll($sql);
 	}
 	
 	function getAllStuName(){
 		$db = $this->getAdapter();
-		$sql=" select stu_id as id,CONCAT(stu_enname,'-',stu_khname) as name from rms_student where status=1 and is_subspend=0";
+		$sql=" select stu_id as id,CONCAT(stu_enname,'-',stu_khname) as name from rms_student where status=1 ";
 		return $db->fetchAll($sql);
 	}
 

@@ -107,9 +107,11 @@
 									<td><?php echo $tr->translate("SERVICE_TYPE"); ?></td>
 									<td><?php echo $tr->translate("SERVICE_NAME"); ?></td>
 								    <td><?php echo $tr->translate("PAID_DATE"); ?></td>
+								    <td><?php echo $tr->translate("RECEIPT_NO"); ?></td>
 									<td><?php echo $tr->translate("START_DATE"); ?></td>
 									<td><?php echo $tr->translate("VALIDATE"); ?></td>
 									<td><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
+									<td><?php echo $tr->translate("DETAIL"); ?></td>
 								</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
@@ -125,6 +127,7 @@
 								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php echo $row['category_name'];?></td>
 								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<?php  echo $row['service_name'];?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['create_date']));?>&nbsp;</td>
+								<td align="left" style="border: 1px solid #000;max-width:180px;white-space: normal;">&nbsp;<a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$row['payment_id']))?>"><?php echo $row['receipt'];?></a></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($row['start_date']));?>&nbsp;</td>
 								<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-m-Y",strtotime($row['end_date']));?>&nbsp;</td>
 								<?php 
@@ -139,6 +142,7 @@
 									}
 								?>
 								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo $daylate;?></td>
+								<td><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$row['payment_id']))?>"><?php echo $tr->translate('DETAIL');?></a></td>
  							</tr>
 							<?php }}?>	 
 						</table>

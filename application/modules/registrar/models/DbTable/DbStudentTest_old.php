@@ -159,8 +159,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'parent_tel'		=>$data['parent_tel'],
 						'photo'				=>$photo,
 
-						'old_school'=>$data['old_school'],
-						'old_grade'	=>$data['old_grade'],
+						
 					
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],

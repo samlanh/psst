@@ -339,6 +339,23 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_crmprocess->setValue($request->getParam('crm_process'));
     	
+    	$followup = new Zend_Dojo_Form_Element_FilteringSelect("followup_status");
+    	$followup->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'false',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside height-text',));
+    	 
+    	$_arr =array(
+    			-1=>$this->tr->translate("FOLLOWU_STATUS"),
+    			1=>$this->tr->translate("FOLLOW_UP"),
+    			0=>$this->tr->translate("STOP_FOLLOW_UP"),
+    	);
+    	$followup->setMultiOptions($_arr);
+    	
+    	$followup->setValue($request->getParam('followup_status'));
+    	
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
@@ -358,6 +375,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	}
     	
     	$this->addElements(array(
+    			$followup,
     			$_crmprocess,
     			$_tel_stu,
     			$current_address,
@@ -414,7 +432,12 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'required'=>'true',
     			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
     	
-    	$_arr = array(0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"));
+    	$_arr = array(0=>$this->tr->translate("DROPPED"),
+    			1=>$this->tr->translate("PROCCESSING"),
+    			2=>$this->tr->translate("WAITING_TEST"),
+    			3=>$this->tr->translate("COMPLETED")
+    			);
+    	
     	$_proccess = new Zend_Dojo_Form_Element_FilteringSelect("proccess");
     	$_proccess->setMultiOptions($_arr);
     	$_proccess->setAttribs(array(
@@ -423,6 +446,22 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
+    	
+    	$followup = new Zend_Dojo_Form_Element_FilteringSelect("followup_status");
+    	$followup->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'onchange'=>'Followup();',
+    			'class'=>'fullside height-text',));
+    	
+    	$_arr =array(
+    			1=>$this->tr->translate("FOLLOW_UP"),
+    			0=>$this->tr->translate("STOP_FOLLOW_UP"),
+    			);
+    	$followup->setMultiOptions($_arr);
+    	
     	
     	$next_contact= new Zend_Dojo_Form_Element_DateTextBox('next_contact');
     	$next_contact->setAttribs(array(
@@ -463,10 +502,15 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	if(!empty($data)){
     		$crm_id->setValue($data["id"]);
     		$_proccess->setValue($data["crm_status"]);
+    		if($data["followup_statusId"]==0){
+    			$next_contact->setAttrib('readOnly', true);
+    		}
+    		$followup->setValue($data["followup_status"]);
     	}
     	
     	
     	$this->addElements(array(
+    			$followup,
     			$contact_date,
     			$feedback,
     			$_proccess,

@@ -8,7 +8,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 	}	
 	public function getAllStudentID(){
 		$_db = $this->getAdapter();
-		$sql = "SELECT st.stu_id as id,st.stu_code FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 group by gds.stu_id";
+		$sql = "SELECT st.stu_id as id,st.stu_code FROM `rms_student` as st,rms_group_detail_student as gds where gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 group by gds.stu_id";
 		return $_db->fetchAll($sql);		
 	}
 	
@@ -19,11 +19,10 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		FROM 
 			`rms_student` as st,
 			rms_group_detail_student as gds
-		 WHERE gds.type=1 
-		and gds.is_pass=0 
+		 WHERE  gds.is_pass=0 
 		and gds.stu_id=st.stu_id 
 		and is_setgroup=1 
-		and st.is_subspend=0 
+		
 		and st.status=1 
 		group by gds.stu_id";
 		return $_db->fetchAll($sql);

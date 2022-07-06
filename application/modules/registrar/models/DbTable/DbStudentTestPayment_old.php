@@ -124,7 +124,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
    
     public function getNewStudent($newid,$stu_type){
     	$db = $this->getAdapter();
-    	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE stu_type IN (1,3)";
+    	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE 1 ";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$new_acc_no=100+$new_acc_no;

@@ -21,12 +21,8 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$_db = $this->getAdapter();
 		$db=new Application_Model_DbTable_DbGlobal();
 		return $db->getAllStudent();
-// 		$branch_id = $db->getAccessPermission();
 		
-// 		$sql = "SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` 
-// 			WHERE (stu_khname!='' OR stu_enname!='') AND status = 1 and is_subspend=0  $branch_id ";
-// 		$orderby = " ORDER BY stu_enname ";
-// 		return $_db->fetchAll($sql.$orderby);
+
 	}
 	
 	public function getAllStudentIDEdit(){
@@ -216,23 +212,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				$this->update($ar, $where);
 			}
 			
-			
-// 			$this->_name='rms_student';
-// 			$where=" stu_id=".$_data['studentid'];
-			
-// 			$arr=array(
-// 				'is_subspend'	=>	$_data['type'],
-// 			);
-// 			$this->update($arr, $where);
-			
-			
-// 			$this->_name='rms_student_payment';
-// 			$where=" student_id=".$_data['studentid'];
-// 			$arr=array(
-// 				'is_suspend'	=>	$_data['type'],
-// 			);			
-// 			$this->update($arr, $where);
-			
+	
 
 			$db->commit();
 		}catch(Exception $e){

@@ -15,12 +15,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		$alert = $data['payment_day_alert'];
     		$search['end_date'] = date('Y-m-d',strtotime($search['end_date']."+$alert day"));
     	}
-    	//(SELECT name_en from rms_view where type=4 and key_code =s.session LIMIT 1) as session,
-    	//(SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.id = s.grade LIMIT 1) as grade,
-    	//(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-    	//(SELECT title FROM `rms_items` WHERE rms_items.id=item.items_id LIMIT 1 ) AS category_name,
-//     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-// echo $search['end_date'];exit();
+
     	$lang = $_db->currentlang();
     	if($lang==1){// khmer
     		$label = "name_kh";
@@ -43,6 +38,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				 s.tel,
 				 (SELECT $label from rms_view where rms_view.type=2 and key_code=s.sex LIMIT 1) AS sex,
 				 sp.`receipt_number` AS receipt,
+				 spd.`payment_id` AS payment_id,
 				 spd.`start_date` AS start_date,
 				 spd.`validate` AS end_date,
 				 sp.create_date ,

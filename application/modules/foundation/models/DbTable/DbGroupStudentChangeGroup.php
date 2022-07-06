@@ -15,7 +15,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			  FROM
 			    `rms_group_detail_student` AS gds,
 			    `rms_group` AS g 
-			  WHERE  gds.type=1 AND gds.group_id = g.id AND group_code!=''";
+			  WHERE  gds.group_id = g.id AND group_code!=''";
 			$request=Zend_Controller_Front::getInstance()->getRequest();
 			if($request->getActionName()=='add'){
 				$sql.=" AND gds.is_pass=2 ";
@@ -355,10 +355,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					grade_bacc,
 					score_bacc,
 					certificate_bacc,
-					scholarship_id,
-					scholarship_amt,
-					scholar_fromdate,
-					scholar_todate,
+					
+					
 					calture,
 					father_photo,
 					mother_photo,
@@ -388,13 +386,13 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					guardian_first_name,
 					guardian_khname,
 					is_studenttest,
-					is_subspend,
+					
 					modify_date,
 					mother_khname,
 					password,
 					relationship_to_student,
 					serial,
-					stu_type,
+					
 					student_option,
 					student_status,
 					test_id,
@@ -454,10 +452,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						grade_bacc,
 						score_bacc,
 						certificate_bacc,
-						scholarship_id,
-						scholarship_amt,
-						scholar_fromdate,
-						scholar_todate,
+						
+						
 						calture,
 						father_photo,
 						mother_photo,
@@ -485,13 +481,13 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						guardian_first_name,
 						guardian_khname,
 						is_studenttest,
-						is_subspend,
+						
 						modify_date,
 						mother_khname,
 						PASSWORD,
 						relationship_to_student,
 						SERIAL,
-						stu_type,
+						
 						student_option,
 						student_status,
 						test_id,
@@ -822,9 +818,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					rms_group_detail_student as gds,
 					rms_student as st 
 				where 
-					st.is_subspend=0 
-					and gds.type=1 
-					and gds.stu_id=st.stu_id 
+					gds.stu_id=st.stu_id 
 					and gds.group_id=$from_group
 			";
 		return $db->fetchAll($sql);

@@ -28,7 +28,6 @@ if (empty($session_user->isnot_cutstock_acl)){
 	$stuproduct = $dbNotification->getStuProductAlert();
 	$stuproductNew = $dbNotification->getStuProductAlert(1);
 }
-$crmNotif = array();
 $stu_doc = array();
 if (empty($session_user->isnot_student_acl)){
 	$stu_doc = $dbNotification->getStuDocumentAlert();

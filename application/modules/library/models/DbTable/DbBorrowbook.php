@@ -52,8 +52,8 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     		$s_where[]="  b.card_id LIKE '%{$s_search}%'";
     		$s_where[]="  b.name LIKE '%{$s_search}%'";
     		$s_where[]="  b.phone LIKE '%{$s_search}%'";
-    		$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]= "(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]= "(SELECT stu_code FROM rms_student WHERE  rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]= "(SELECT stu_enname FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	
@@ -235,11 +235,11 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		if($type==1){
 			$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code FROM rms_student AS s
 			WHERE s.status=1 AND s.stu_enname!=''
-			and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+			  $branch_id  ORDER BY stu_code DESC ";
 		}else {
 			$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_khname) as name FROM rms_student AS s
 			WHERE s.status=1 AND s.stu_enname!=''
-			and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+			 $branch_id  ORDER BY stu_enname ASC ";
 		}
 		return $db->fetchAll($sql);
 	}

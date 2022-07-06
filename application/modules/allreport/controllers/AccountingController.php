@@ -1042,7 +1042,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

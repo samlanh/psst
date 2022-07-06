@@ -563,17 +563,18 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'advance_search' => "",
-						'branch_search' => "",
-						'ask_for_search' => "",
-						'know_by_search' => "",
-						'prev_concern' => "",
-						'crm_process'=>-1,
-						'degree' => "",
-						'grade' => "",
-						'status_search' => -1,
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
+					'advance_search' => "",
+					'branch_search' => "",
+					'ask_for_search' => "",
+					'know_by_search' => "",
+					'prev_concern' => "",
+					'crm_process'=>-1,
+					'followup_status'=>-1,
+					'degree' => "",
+					'grade' => "",
+					'status_search' => -1,
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
 				);
 			}
 			

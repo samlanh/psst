@@ -240,10 +240,10 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 		$sql="SELECT s.stu_id AS stu_id,CONCAT(s.stu_enname) AS name 
 				FROM rms_student AS s,rms_borrow AS b,rms_borrowdetails AS bd
 					WHERE s.status=1 
-					AND s.is_subspend=0 
+					
 					AND b.stu_id=s.stu_id
 					AND b.id=bd.borr_id ";
-		$order=" GROUP BY b.stu_id ORDER BY stu_type DESC ";
+		$order=" GROUP BY b.stu_id  ";
 		$sqlconver=utf8_decode($sql);
 		return $db->fetchAll($sqlconver.$order);
 	}

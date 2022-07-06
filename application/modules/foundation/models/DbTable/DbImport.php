@@ -100,7 +100,6 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     				'guardian_khname'=>$data[$i]['P'],
     				'guardian_document'=>$data[$i]['M'],
     				'guardian_tel'=>$data[$i]['N'],
-    				//     				'stu_type'=>1,
     		//     				'guardian_dob'=>$data[$i]['D'],
     		//     				'street'=>$data[$i]['D'],
     		//     				'vill_id'=>$data[$i]['D'],
@@ -120,7 +119,7 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     				'remark'=>$data[$i]['D'],
     				'create_date'=>$data[$i]['T'],
     				'is_stu_new'=>0,
-    				'is_subspend'=>0,
+    				
     				'modify_date'=>date("Y-m-d"),
     				'is_setgroup'=>0,
     				'password'=>12345,

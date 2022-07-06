@@ -820,7 +820,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getAllGepOldStudent(){
     	$db=$this->getAdapter();
     	$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code FROM rms_student AS s
-    	      WHERE s.stu_type=2 AND s.is_subspend=0 and s.status=1 ORDER BY stu_id DESC  ";
+    	      WHERE  s.status=1 ORDER BY stu_id DESC  ";
     	return $db->fetchAll($sql);
     }
     //select Gep old student by id 
@@ -829,14 +829,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql="SELECT s.stu_id As stu_id,			
 			(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name	
 		 FROM rms_student AS s
-    	WHERE s.stu_type=2 AND s.is_subspend=0 and s.status=1 ORDER BY stu_id DESC ";
+    	WHERE  s.status=1 ORDER BY stu_id DESC ";
     	return $db->fetchAll($sql);
     }
     //select Gep old student by name
     function getGepOldStudent($stu_id){
     	$db=$this->getAdapter();
     	$sql="SELECT stu_id,stu_enname,stu_khname,sex,`session` As ses,degree,grade FROM rms_student 
-    	       WHERE  stu_type=2 AND stu_id=$stu_id LIMIT 1";
+    	       WHERE  stu_id=$stu_id LIMIT 1";
     	return $db->fetchRow($sql);
     }
     //select all Gerneral old student
@@ -844,13 +844,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	return $_db->getAllStuCode();
-//     	$branch_id = $_db->getAccessPermission();
-//     	$sql="SELECT s.stu_id As id,s.stu_id As stu_id,s.stu_code As stu_code,
-//     		s.stu_code AS name,
-// 	    	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
-// 	    	FROM rms_student AS s
-// 	    	WHERE s.status=1 and s.is_subspend=0 AND customer_type=1 $branch_id  ORDER BY stu_type DESC ";
-//     	return $db->fetchAll($sql);
+
     }
     //select general  old student by id
     
@@ -949,7 +943,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getNewStudent($newid,$stu_type){
     	$db = $this->getAdapter();
-    	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE stu_type IN (1,3)";
+    	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE 1 ";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$new_acc_no=100+$new_acc_no;
@@ -1166,7 +1160,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$_db= new Application_Model_DbTable_DbGlobal();
     	$branch_id=$_db->getAccessPermission();
     	$sql = " SELECT t.id,CONCAT(t.teacher_name_en) as name FROM `rms_teacher` AS t,`rms_teacher_subject` AS ts
-              WHERE t.id = ts.teacher_id AND ts.subject_id = $grade_id and ts.session=$session $branch_id";
+              WHERE ts.subject_id = $grade_id and ts.session=$session $branch_id";
 		return $db->fetchAll($sql);
     }
 	
@@ -1238,12 +1232,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}
 		$sql="SELECT 
     			  spd.id,
+    			  spd.payment_id,
 				  spd.fee,
 				  spd.qty,
 				  spd.subtotal,
 				  spd.extra_fee,
 				  spd.discount_percent,
 				  spd.discount_amount,
+				  spd.paidamount,	
+				  sp.balance_due as balance,	
 				  (SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
 				  spd.paidamount,
 				  spd.note,

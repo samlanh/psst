@@ -831,19 +831,7 @@ function getAllgroupStudyNotPass($action=null){
    function getAllYear($type=1,$is_completed=0){
 	   	$db = $this->getAdapter();
 	   	return $this->getAllAcademicYear();
-// 	   	$branch_id = $this->getAccessPermission();
-// 	   	$sql = "SELECT tf.id,
-// 		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS name,
-// 		   			CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=tf.academic_year LIMIT 1),'(',tf.generation,')') AS years
-// 	   			FROM rms_tuitionfee AS tf WHERE `status`=1
-// 	   				AND tf.type=1
-// 	   	$branch_id ";
-// 	   	if($is_completed==0){
-// 	   		$sql.=' AND tf.is_finished=0 ';
-// 	   	}
-// 	   	$sql.=' GROUP BY tf.branch_id,tf.academic_year,tf.generation ';
-// 	   	$order=' ORDER BY id DESC';
-// 	   	return $db->fetchAll($sql.$order);
+
    }
    function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){//for fee id only
 	   	$db = $this->getAdapter();
@@ -911,13 +899,7 @@ function getAllgroupStudyNotPass($action=null){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-//    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
-//    			stu_code,
-// 		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
-// 		   	FROM rms_student AS s
-// 		   	WHERE
-// 		   	(stu_enname!='' OR s.stu_khname!='')
-// 		   	AND s.status=1 AND s.is_subspend=0 AND customer_type=1 ";
+
    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
    	stu_code,
    	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
@@ -986,7 +968,7 @@ function getAllgroupStudyNotPass($action=null){
 			   	s.stu_code AS name,
 			   	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
 			   	FROM rms_student AS s
-   			WHERE s.status=1 and s.is_subspend=0 AND customer_type=1 $branch_id  ORDER BY stu_type DESC ";
+   			WHERE s.status=1 AND customer_type=1 $branch_id  ORDER BY stu_code DESC ";
    	return $db->fetchAll($sql);
    }
    function getAllStuName(){
@@ -1209,7 +1191,7 @@ function getAllgroupStudyNotPass($action=null){
 		        			WHERE sd.`degree` = ".$degreeId."
 		        		AND sd.`stu_id` = mb.`stu_id`
 		        		AND stop_type=0
-		        		AND is_subspend=0
+		        		AND sd.is_subspend=0
 		        		AND mb.device_type=1 ";
 		return  $db->fetchCol($sql_android);
 	}
@@ -2077,7 +2059,7 @@ function getAllgroupStudyNotPass($action=null){
   	if($customer_type==1){//student
 	  	if($data_from==1 OR $data_from==3){//test ,student
 	  		$rs = $this->getStudentinfoById($student_id);
-	    }elseif($data_from==2){//crm
+	    }elseif($data_from==2){//test
 	  		$rs = $this->getStudentTestinfoById($student_id);
 	  	}elseif($data_from==4){//crm
 	  		$rs = $this->getStudentBalanceInfoById($student_id);
@@ -2125,10 +2107,16 @@ function getAllgroupStudyNotPass($action=null){
   			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
-  			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
+  			                        	<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
   			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
-  			                       	    <span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span><br />';
+  			                       	    <span class="title-info">'.$tr->translate("FATHER_NAME").'</span> : <span id="lbl_father" class="inf-value">'.$rs['father_enname'].'</span>
+  			                       	    
+  			                       	    <span id="lbl_fathertel" class="inf-value" style="display:none;">'.$rs['father_phone'].'</span>
+  			                       	    <span id="lbl_mothertel" class="inf-value" style="display:none;">'.$rs['mother_phone'].'</span>
+  			                            
+  			                            <span class="title-info">'.$tr->translate("MOTHER_NAME").'</span> : <span id="lbl_mother" class="inf-value">'.$rs['mother_enname'].'</span>
+  			                       	    <span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
+  			                        	<span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span><br />';
   			         	 		  $str.='</p>
   		          </div>
   		      <div style="clear: both;"></div>
@@ -2449,9 +2437,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
   		FROM rms_group_detail_student as gds,
   			rms_student as st
-  		WHERE st.is_subspend = 0 AND
-		  	gds.type=1
-		  	and gds.stu_id=st.stu_id
+  		WHERE gds.stu_id=st.stu_id
 		  	and gds.group_id=$group
 		  	and gds.is_pass=1
   	";
@@ -2464,41 +2450,6 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-  /*function getAllStudentList($branchid=null,$data=array()){
-  	$db=$this->getAdapter();
-  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-  	
-  	$currentLang = $this->currentlang();
-  	$orderyby=",CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ASC";
-  	if ($currentLang==1){
-  		$orderyby=",s.stu_khname ASC";
-  	}
-  	
-  	$sql=" SELECT s.stu_id AS id,
-	  	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
-	  	FROM rms_student AS s
-	  	WHERE
-	  	(stu_enname!='' OR s.stu_khname!='')
-	  	AND s.status=1 AND s.is_subspend=0 AND s.customer_type=1 ";
-  	
-  		$sql.= $this->getAccessPermission("s.branch_id");
-	  	if(!empty($branchid)){
-	  		$sql.=" AND s.branch_id=".$branchid;
-	  	}
-	  	if(!empty($data['study_year'])){
-	  		$sql.=" AND s.academic_year=".$data['study_year'];
-	  	}
-	  	if(!empty($data['group'])){
-	  		$sql.=" AND s.group_id=".$data['group'];
-	  	}
-	  	
-	  	if(!empty($data['grade_all'])){
-	  		$sql.=" AND s.grade=".$data['grade_all'];
-	  	}
-	  	$sql.=" ORDER BY s.degree DESC".$orderyby;
-  		$rows = $db->fetchAll($sql);
-  		return $rows;
-  }*/
   
   function getAllStudentByGroup($group_id){
   	$db=$this->getAdapter();
@@ -2522,9 +2473,8 @@ function getAllgroupStudyNotPass($action=null){
 		  	rms_student as st
 	  	WHERE
 		  	gds.stu_id=st.stu_id
-		  	and st.is_subspend = 0
-		  	and gds.type=1
-		  	and is_pass=0
+		  	
+			and is_pass=0
 		  	and gds.group_id=$group_id ";
   	return $db->fetchAll($sql);
   }

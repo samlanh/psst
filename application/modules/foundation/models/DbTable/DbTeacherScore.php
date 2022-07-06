@@ -490,9 +490,7 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 		s.status
 		FROM rms_teacherscore AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1";
-		if (!empty($teacher_id)){
-			$sql.=" AND s.teacher_id=$teacher_id";
-		}
+		
 		//before add more =>AND g.degree IN(1,2)
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";

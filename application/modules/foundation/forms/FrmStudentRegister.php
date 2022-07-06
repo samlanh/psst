@@ -138,6 +138,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'style'=>'color: red;',
 				'readOnly'=>'readOnly',
 				));
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$level = $session_user->level;
+		if($level==1){
+			$student_id->setAttrib('readOnly', 'false');
+		}
+			
 		
 		$db = new Global_Model_DbTable_DbGroup();
 		$rs_year = $db->getAllYears();
@@ -376,15 +382,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside'));
 		
 		if($data!=null){
-			$discount_type->setValue($data['scholarship_id']);
-			$scholarship_amount->setValue($data['scholarship_amt']);
 			
-			if (!empty($data['scholar_fromdate']) AND $data['scholar_fromdate']!='0000-00-00'){
-				$scholarship_fromdate->setValue($data['scholar_fromdate']);
-			}
-			if (!empty($data['scholar_todate']) AND $data['scholar_todate']!='0000-00-00'){
-				$scholarship_todate->setValue($data['scholar_todate']);
-			}
+			
+			
 			
 			$school_province->setValue($data['province_bacc']);
 			$certificate_baccexam->setValue($data['certificate_bacc']);

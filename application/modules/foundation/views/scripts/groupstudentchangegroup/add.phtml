@@ -158,7 +158,13 @@
 		                   		<input id="grade" />
 		                   </div>
 		                </div>  
-		                
+		                <div class="form-group otherCondiction">
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		 <input id="study_year" />
+		                   </div>
+		                </div>
 			            <div class="form-group otherCondiction">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_GROUP");?> <span class="required">*</span> :
 		                   </label>
@@ -246,6 +252,7 @@ dojo.require("dijit.form.DateTextBox");
 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+study_yearStore = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
@@ -288,7 +295,6 @@ dojo.ready(function(){
 	}, "grade");
 	
 	
-	
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -322,6 +328,22 @@ dojo.ready(function(){
 	    	popupAddGroup();
 	    }
 	}, "to_group");
+
+	new dijit.form.FilteringSelect({
+		store: study_yearStore,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "study_year",
+		name: "study_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			getAllGroupByBranch();
+		}
+	}, "study_year");
+
+	getStudyYear();
 	getAllGroupByBranch();
 
 	var branch_id = dijit.byId('branch_id');
@@ -376,6 +398,29 @@ function getAllAcademicByBranch(){
 	});
 }
 
+url_getstudyYear= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+function getStudyYear(){
+	dijit.byId('study_year').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		dijit.byId('study_year').set('store',study_yearStore);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getstudyYear,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			study_yearStore  = getDataStorefromJSON('id','name', data);
+			dijit.byId('study_year').set('store',study_yearStore);  
+		},
+		error: function(err) {
+		}
+	});
+}
 function getRefreshItems(){
 	dijit.byId('degree').reset();   
 	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
@@ -426,11 +471,13 @@ function getallGrade(){
 var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
 function getRefreshGroup(){
 	branch_id = dijit.byId('branch_id').get('value');
+	study_year = dijit.byId('study_year').get('value');
 	loadingBlock();	
 	dojo.xhrPost({
 		url:url_getgroup1,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,
+			'academic_year':study_year
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -583,6 +630,7 @@ url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=
 function getAllGroupByBranch(typeFrom=0){
 	dijit.byId('to_group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
+	study_year = dijit.byId('study_year').get('value');
 	if(branch_id=='' || branch_id==-1){
 		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		dijit.byId('from_group').set('store',group_store);  
@@ -601,6 +649,7 @@ function getAllGroupByBranch(typeFrom=0){
 		url: url_getgroup,
 		content:{
 			'branch_id':branch_id,
+			'academic_year':study_year,
 			'degree':fromDegree,
 			'group_id':fromGroup,
 			'noaddnew':0,

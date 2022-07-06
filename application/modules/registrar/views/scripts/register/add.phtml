@@ -118,7 +118,7 @@ table.collape tbody td{padding: 0px !important;}
 .hover:hover{background: #ddd;}
 #lbl_header {display: initial !important;}
 tr.head-td th{padding: 5px 2px;}
-#lbl_blog span{line-height: 30px;font-size: 14px;}
+#lbl_blog span{line-height: 25px;font-size: 14px;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -256,7 +256,7 @@ tr.head-td th{padding: 5px 2px;}
 		           		<div class="text-center card-box-border">
 		                   	<div class="member-card card-display-reg">
 		                   		<div class="img-back"></div>
-		                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>>Old Student</span>
+		                      	<span class="user-badge bg-warning" >Old Student</span>
 		                       	<div class="col-md-4 col-sm-4 col-xs-12">
 			                       	<div class="thumb-xl member-thumb m-b-10 center-block">
 			                       		<?php 
@@ -275,10 +275,12 @@ tr.head-td th{padding: 5px 2px;}
   			                       		<span class="title-info"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> : <span id="lbl_namekh" class="inf-value" ></span><br />
   			                       		<span class="title-info"><?php echo $tr->translate("NAME_ENGLISH");?></span> : <span id="lbl_nameen" class="inf-value" ></span><br />
   			                       		<span class="title-info"><?php echo $tr->translate("DOB"); ?></span> : <span id="lbl_dob" class="inf-value" ></span><br />
-			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_phone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_parentphone" class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+			                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span id="lbl_phone" class="inf-value"></span>
+			                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_degree" class="inf-value" ></span>
+			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_grade" class="inf-value" ></span>
+			                        	<span class="title-info"><?php echo $tr->translate('FATHER_NAME');?></span> : <span id="lbl_father" class="inf-value" ></span>
+			                        	<span class="title-info"><?php echo $tr->translate('MOTHER_NAME');?></span> : <span id="lbl_mother" class="inf-value" ></span>
+			                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span id="lbl_parentphone" class="inf-value" ></span>
 			                        	<span class="title-info"><?php echo $tr->translate("STATUS"); ?></span> : <span id="lbl_status" class="inf-value" ></span><br />
 			                        </p>
 		                        </div>
@@ -823,11 +825,14 @@ function getPaymentHistory(student_id){
 				+'<th class="tdheader"><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT_TYPE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('PAID');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('BALANCE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('START_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('END_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('NOTE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('STATUS');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('USER');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('DETAIL');?></th>'
 			+'</thead>';
 			number_record=0;
 			for(i=0;i<respone.length;i++){
@@ -858,6 +863,8 @@ function getPaymentHistory(student_id){
 					discount_percent=respone[i].discount_percent+'/';
 				}
 				tem += '<td>'+discount_percent+'/'+respone[i].discount_amount+'</td>';
+				tem += '<td>'+respone[i].paidamount+'</td>';
+				tem += '<td>'+respone[i].balance+'</td>';
 				start_date='';
 				validate='';
 				if(respone[i].is_onepayment==0){start_date=respone[i].start_date;}
@@ -867,6 +874,7 @@ function getPaymentHistory(student_id){
 				tem += '<td>'+respone[i].note+'</td>';
 				tem += '<td>'+respone[i].void_status+'</td>';
 				tem += '<td style="text-align:left;">'+respone[i].user_name+'</td>';
+				tem += '<td style="text-align:left;"><a target="_blank" href="<?php echo $this->baseUrl().'/allreport/accounting/rptreceiptdetail/id/';?>'+respone[i].payment_id+'"><?php echo $tr->translate('DETAIL');?></a></td>';
 				tem+="</tr>";
 			}
 			tem+='</table>';
@@ -1396,6 +1404,7 @@ function getservicefee(key){
  }
 function printSave(){	
 	checkSession();
+	var receipt_type =<?php echo RECEIPT_TYPE; ?>;
 	if(dijit.byId('office_receipt').validate()){
 		study_year = dijit.byId("study_year").get("value");
 		if(study_year==1){dijit.byId("study_year").focus();}
@@ -1414,7 +1423,7 @@ function printSave(){
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
-		//dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
+		dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
 		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
@@ -1454,6 +1463,9 @@ function printSave(){
 					var rowId = $('#identity').val();
 					var rowIDArray = rowId.split(',');
 					template="";
+					
+					if(receipt_type==1 || receipt_type==2 || receipt_type==3){
+					
 						 temp='<table class="collape tablesorter" width="100%" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
 							  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
 								  temp+='<td style="border:1px solid #000;">No</td>';
@@ -1468,50 +1480,120 @@ function printSave(){
 								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
 								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Code</strong></td>';
 							  temp+='</tr>';
-							i=1;  
-							for(var n = 0; n < rowIDArray.length; n++) {
-								var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
-								var term_label = "-";
-								if(items_type!=3){
-									term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
+
+							  i=1;  
+								for(var n = 0; n < rowIDArray.length; n++) {
+									
+									var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
+									var term_label = "-";
+									if(items_type!=3){
+										term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
+									}
+								  temp+='<tr style="font-size:inherit;height: 18px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+								  
+								  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
+								  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
+									  item_label='School Fee '+item_label;
+								  }
+								  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 
+								  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
+								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
+								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+								  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
+								  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
+								  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
+								  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
+								  percent = isNaN(percents)?'':percents+'%';
+		
+								  sign='';					  
+								  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
+									  sign=' & ';
+								  }
+								  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
+								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
+		
+								  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
+								  if(service_type==1){//one payment only
+									  start_date = '';
+									  epx_date='';
+								  }else{//period
+									  var start_date = dijit.byId("date_start_"+rowIDArray[n]).attr('displayedValue');
+									  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
+								  }
+								  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+								  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+								  temp+='</tr>';
+								  
+								  i++;
 								}
-							  temp+='<tr style="font-size:inherit;height: 18px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-							  
-							  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
-							  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
-								  item_label='School Fee '+item_label;
-							  }
-							  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 
-							  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
-							  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-							  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-							  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-							  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
-							  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
-							  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
-							  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
-							  percent = isNaN(percents)?'':percents+'%';
-	
-							  sign='';					  
-							  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
-								  sign=' & ';
-							  }
-							  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
-							  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
-	
-							  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
-							  if(service_type==1){//one payment only
-								  start_date = '';
-								  epx_date='';
-							  }else{//period
-								  var start_date = dijit.byId("date_start_"+rowIDArray[n]).attr('displayedValue');
-								  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
-							  }
-							  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-							  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+					}else{
+						
+						dojo.byId("lbFather").innerHTML = dojo.byId("lbl_father").innerHTML;
+						dojo.byId("lbFatherTel").innerHTML = dojo.byId("lbl_fathertel").innerHTML;
+						dojo.byId("lbMother").innerHTML = dojo.byId("lbl_mother").innerHTML;
+						dojo.byId("lbMotherTel").innerHTML = dojo.byId("lbl_mothertel").innerHTML;
+						
+						temp='<table border="1" class="collape tablesorter" width="100%" align="center" style="border-collapse: collapse; border: solid 1px #000;line-height:20px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
+							  temp+='<tr class="hearder_table" style="border-collapse: collapse;border: solid 1px #000;font-size:inherit !important;text-align:center;font-weight:bold;">';
+								  temp+='<td>លេខរៀង<br />No.</td>';
+								  temp+='<td><strong style="color:#000;">បរិយាយ<br />Description</strong></td>';
+								  temp+='<td><strong style="color:#000;">សម្គាល់<br />Remark</strong></td>';
+								  temp+='<td><strong style="color:#000;">បរិមាណ<br />Qty</strong></td>';
+								  temp+='<td><strong style="color:#000;">តម្លៃ<br />Price</strong></td>';
+								  temp+='<td><strong style="color:#000;">សរុប<br />Total Amount($)</strong></td>';
+								  temp+='<td><strong style="color:#000;">សុពលភាព<br />Validation</strong></td>';
 							  temp+='</tr>';
-							  i++;
-							}
+
+							  i=1;  
+								for(var n = 0; n < rowIDArray.length; n++) {
+									
+									var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
+									var term_label = "-";
+									if(items_type!=3){
+										term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
+									}
+								  temp+='<tr style="font-size:inherit;height:25px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+								  
+								  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
+								  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
+									  item_label='School Fee '+item_label;
+								  }
+								  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">'+item_label+'<br >'+term_label+'</td>'; 
+								  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
+								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+
+								  //temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+								  //temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
+								  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
+								  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
+								  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
+								  percent = isNaN(percents)?'':percents+'%';
+		
+								  sign='';					  
+								  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
+									  sign=' & ';
+								  }
+								  //temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
+								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
+		
+								  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
+								  if(service_type==1){//one payment only
+									  start_date = '';
+									  epx_date='';
+								  }else{//period
+									  var start_date = dijit.byId("date_start_"+rowIDArray[n]).attr('displayedValue');
+									  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
+								  }
+								  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+								  temp+='</tr>';
+
+								  
+								  i++;
+								}
+					}
+							
 		temp+='</table>';
 
 		<?php if ($settingNewStuID==1){?>
@@ -1631,7 +1713,9 @@ function getbranchinfo(){
 				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
 				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
 				dojo.byId("lbl_branchphone").innerHTML = data.branch_tel+', '+data.branch_tel1;
-				dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
+				if(data.photo!='' && data.photo!=null){
+					dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
+				}
 			},
 			error: function(err) {
 			}

@@ -20,7 +20,7 @@ class Allreport_Model_DbTable_DbRptStudent extends Zend_Db_Table_Abstract
     		  CONCAT(mother_enname," - ",mother_khname)AS mother_name,mother_nation,mother_phone,
     		  CONCAT(guardian_enname," - ",guardian_khname)AS guardian_name,guardian_nation,guardian_document,guardian_tel,guardian_email,
     		  
-    		  (select name_en from rms_view where type=5 and key_code=is_subspend) as status,
+    		  
     		  
     		  (select occu_enname from rms_occupation where rms_occupation.occupation_id=rms_student.father_job limit 1)AS father_job,
     		  (select occu_enname from rms_occupation where rms_occupation.occupation_id=rms_student.mother_job limit 1)AS mother_job,

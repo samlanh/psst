@@ -163,10 +163,14 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			crm.last_name,
 			crm.tel,
 			crm.reason,
-			crh.* FROM `rms_crm_history_contact` AS crh,`rms_crm` AS crm
-			WHERE crm.id = crh.crm_id
-			AND crh.proccess = 1
-			";
+			crh.* 
+				FROM `rms_crm_history_contact` AS crh,
+					`rms_crm` AS crm
+				WHERE crm.id = crh.crm_id
+				AND crh.proccess = 1
+				AND crm.followup_status=1
+			
+		";
 		$to_date = (empty($end_date))? '1': " crh.next_contact <= '".$end_date." 23:59:59'";
 		$sql.= " AND ".$to_date;
 		

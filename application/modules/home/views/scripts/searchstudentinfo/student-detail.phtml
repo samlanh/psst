@@ -389,11 +389,13 @@ table.content-data{
 												<td><?php echo $tr->translate('Disc Type');?></td>
 												<td><?php echo $tr->translate('DISCOUNT');?></td>
 												<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
+												<td><?php echo $tr->translate('BALANCE');?></td>
 												<td><?php echo $tr->translate('START_DATE');?></td>
 												<td><?php echo $tr->translate('END_DATE');?></td>
 												<td><?php echo $tr->translate('REMARK');?></td>
 												<td><?php echo $tr->translate('STATUS');?></td>
 												<td><?php echo $tr->translate('USER');?></td>
+												<td><?php echo $tr->translate('DETAIL');?></td>
 											  </tr>
 										 </thead>
 										<style> 
@@ -406,7 +408,11 @@ table.content-data{
 										    <td style="text-align:left"><?php echo $rs['category']; ?></td>
 										    <td style="text-align:left"><?php echo $rs['title']; ?></td>
 										    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
-										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
+										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>
+										    	<a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$rs['payment_id']))?>">
+										    		<?php echo $rs['receipt_number']; ?>
+										    	</a>
+										    </td>
 										    <td align="center"><?php echo $rs['payment_term']; ?></td>
 										    <td><?php echo $rs['qty'];?></td>
 										    <td><?php echo number_format($rs['fee'],2); ?></td>
@@ -419,11 +425,13 @@ table.content-data{
 										    	?>
 										    </td>
 										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo number_format($rs['paidamount'],2);?></td>
+										    <td ><?php echo number_format($rs['balance'],2);?></td>
 										    <td><?php if($rs['is_onepayment']==0){ echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); }?></td>
 										    <td><?php if($rs['is_onepayment']==0){ echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); } ?></td>
 										    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
 										   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
-										  	 <td><?php echo $rs['user']; ?></td>
+										  	<td><?php echo $rs['user']; ?></td>
+										  	<td><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$rs['payment_id']))?>"><?php echo $tr->translate('DETAIL');?></a></td>
 										  </tr>
 										  <?php 
 										 	if($rs['is_void']==0){

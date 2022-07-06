@@ -23,6 +23,7 @@ class Home_CrmController extends Zend_Controller_Action
 	    			'know_by_search' => "",
 	    			'prev_concern'	 => "",
 	    			'status_search'  => -1,
+	    			'followup_status'=>-1,
 	    			'start_date'     => date('Y-m-d'),
 	    			'end_date'       => date('Y-m-d'),
 	    		);
@@ -31,12 +32,15 @@ class Home_CrmController extends Zend_Controller_Action
 	    	$db = new Home_Model_DbTable_DbCRM();
 	    	$rs_rows = $db->getAllCRM($search);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","STUDENT_NAMEKHMER","Last Name","First Name","GENDER","PHONE","ASK_FOR","DATE",
+	    	$collumns = array("BRANCH","STUDENT_NAMEKHMER","Last Name","First Name","GENDER","PHONE","ASK_FOR",
+	    			"FOLLOWU_STATUS","AMOUNT_STUDENT","IS_STUDENT","DATE",
 	    			"STATUS","Amount Contacted","BY_USER");
 	    	$link=array(
 	    			'module'=>'home','controller'=>'crm','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'kh_name'=>$link,));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'kh_name'=>$link,
+	    			'first_name'=>$link,'last_name'=>$link,'tel'=>$link
+	    			));
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		Application_Form_FrmMessage::message("Application Error");

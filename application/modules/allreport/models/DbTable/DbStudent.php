@@ -77,12 +77,17 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			c.know_by,
 			(SELECT COUNT(cr.id) FROM `rms_crm_history_contact` AS cr WHERE cr.crm_id = c.id LIMIT 1) AS amountContact,
 			CASE
-			WHEN  s.customer_type = 1 THEN '".$tr->translate("STUDENT")."'
-			WHEN  s.customer_type = 3 THEN '".$tr->translate("CRM")."'
-			WHEN  s.customer_type = 4 THEN '".$tr->translate("TESTED")."'
+				WHEN  s.customer_type = 1 THEN '".$tr->translate("STUDENT")."'
+				WHEN  s.customer_type = 3 THEN '".$tr->translate("CRM")."'
+				WHEN  s.customer_type = 4 THEN '".$tr->translate("TESTED")."'
 			END AS customer_type,
 			
 			DATE_FORMAT(c.create_date, '%Y-%m-%d') AS create_date,
+			CASE
+			WHEN  c.followup_status = 1 THEN '".$tr->translate("FOLLOW_UP")."'
+			WHEN  c.followup_status = 0 THEN '".$tr->translate("STOP_FOLLOW_UP")."'
+			END AS followup_status,
+			c.prev_concern,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby
 			FROM 
 				rms_student AS s,
@@ -114,6 +119,10 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['know_by_search'])){
 			$where.= " AND c.know_by = ".$db->quote($search['know_by_search']);
 		}
+		if($search['followup_status']>-1){
+			$where.= " AND c.followup_status = ".$db->quote($search['followup_status']);
+		}
+		
 		if(!empty($search['degree'])){
 			$where.= " AND ds.degree = ".$db->quote($search['degree']);
 		}

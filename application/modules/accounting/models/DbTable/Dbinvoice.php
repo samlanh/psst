@@ -56,15 +56,22 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoiceByid($id){
 		$db= $this->getAdapter();
 		$sql="SELECT v.* ,
-			s.stu_khname ,s.stu_enname,s.last_name,s.stu_code,s.sex,s.tel
+				(SELECT title FROM rms_itemsdetail WHERE rms_itemsdetail.id=v.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				(SELECT title FROM rms_items WHERE rms_items.id=v.degree AND rms_items.type=1 LIMIT 1)AS degree,
+				s.stu_khname ,
+				s.stu_enname,
+				s.last_name,
+				s.stu_code,
+				s.sex,
+				s.tel
 			FROM rms_invoice_account  AS v ,
-			rms_student AS s WHERE stu_id = student_name and id=".$id." LIMIT 1";
+				rms_student AS s WHERE stu_id = student_name and id=".$id." LIMIT 1";
 		return $db->fetchrow($sql);
 	}
 	public function getinvoiceservice($id){
 		$db= $this->getAdapter();
 		$sql="SELECT v.* ,
-		(SELECT p.title FROM rms_itemsdetail AS p WHERE v.service_id = p.id AND p.items_type = v.type LIMIT 1) as title
+			(SELECT p.title FROM rms_itemsdetail AS p WHERE v.service_id = p.id  LIMIT 1) as title
 		FROM 
 		rms_invoice_account_detail AS v 
 		WHERE vid='".$id."' ";
@@ -79,6 +86,14 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	$db= $this->getAdapter();
     	$db->beginTransaction();
     	try{
+    		$dbg = new Application_Model_DbTable_DbGlobal();
+    		$rs_stu = $dbg->getStudentinfoById($data['student_name']);
+    		$degree_id = 0;
+    		$grade_id = 0;
+    		if(!empty($rs_stu)){
+    			$degree_id=$rs_stu['degree'];
+    			$grade_id=$rs_stu['grade'];
+    		}
     		$invoice_num= $this->getvCode($data['branch_id']);
 	    	$arr = array(
 	    			'branch_id'=>$data['branch_id'],
@@ -90,6 +105,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	    			'remark'=>$data['remark'],
 					'totale_amount'=>$data['totle_amount'],
 	    			'user_id'=>$this->getUserId(),
+	    			'degree'=>$degree_id,
+	    			'grade'=>$grade_id,
 	    		);
 			$this->_name='rms_invoice_account';		
 	    	$_id = $this->insert($arr);

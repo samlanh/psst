@@ -8,7 +8,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
 	}
-	public function getAllStudentFronDesk($search){//getAllStudent($search){
+	public function getAllStudentFronDesk($search){
 		$curr = new Application_Model_DbTable_DbGlobal();
 		$lang= $curr->currentlang();
 		$_db = $this->getAdapter();
@@ -217,7 +217,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		
 		$sql=" SELECT
-					spd.id,		 
+					spd.id,	
+					spd.payment_id, 
 					spd.fee,
 					spd.qty,
 					spd.subtotal,
@@ -235,6 +236,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					sp.receipt_number,
 					sp.create_date,
 					sp.is_void,
+					sp.balance_due as balance,
 					s.stu_code,
 					s.stu_khname,
 					s.stu_enname,
@@ -397,7 +399,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND sd.group_id = g.id 
 					AND sd.status=1
 					AND st.`stu_id` = sdd.`stu_id` 
-					AND st.is_subspend = 0
 					and sdd.stu_id = $stu_id
 			";
 		//AND g.is_pass!=1
@@ -569,7 +570,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher,
 					(SELECT $view FROM `rms_view` WHERE TYPE=12 AND key_code = gds.is_pass LIMIT 1) as is_pass_label,
 					gds.is_pass,
-					gds.type,
+					
 					gds.stop_type
 				FROM
 					rms_group_detail_student AS gds,

@@ -128,13 +128,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					$where=" stu_id=".$rs." AND group_id=".$_data['group'];
 					$this->_name='rms_group_detail_student';
 					$this->update($stu, $where);
-					
-// 					$array=array(
-// 						'is_subspend'=>3,
-// 					);
-// 					$where = " stu_id=".$rs;
-// 					$this->_name = 'rms_student';
-// 					$this->update($array, $where);
+
 				}
 			}
 			
@@ -178,16 +172,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					$this->update($arra, $where);
 				}
 			}
-// 			$this->_name='rms_student';
-// 			if(!empty($StudentOldGroup)){
-// 				foreach($StudentOldGroup as $result){
-// 					$arra=array(
-// 							'is_subspend'=>0,
-// 					);
-// 					$where=" stu_id = ".$result['stu_id'];
-// 					$this->update($arra, $where);
-// 				}
-// 			}
+
 			$this->_name = 'rms_group';
 			$group=array(
 					'is_use'	=>1, // true
@@ -223,12 +208,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 						$this->_name='rms_group_detail_student';
 						$this->update($stu, $where);
 				
-// 						$array=array(
-// 								'is_subspend'=>3,
-// 						);
-// 						$where = " stu_id=".$rs;
-// 						$this->_name = 'rms_student';
-// 						$this->update($array, $where);
 					}
 				}
 				$this->_name = 'rms_group';
@@ -270,8 +249,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					rms_student as st 
 			 WHERE 
 					gds.stu_id=st.stu_id 
-					and st.is_subspend = 0 
-					and gds.type=1 
+					
 					and is_pass=0
 					and gds.group_id=$from_group ";
 		return $db->fetchAll($sql);
@@ -306,7 +284,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	
 	function selectStudentPass($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.group_id=$id and gds.is_pass=0 and gds.type=1 and gds.stop_type=3";
+		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.group_id=$id and gds.is_pass=0 and gds.stop_type=3";
 		return $db->fetchAll($sql);
 	}
 	

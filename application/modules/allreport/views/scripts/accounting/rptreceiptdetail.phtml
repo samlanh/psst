@@ -186,13 +186,13 @@ function setDatatoReceipt(){
 			readMoneyInKhmer('<?php echo $result['grand_total'];?>');
 			
 			<?php 
-			$guardianName = $result['guardianNameKh'];
+			/*$father_enname = $result['father_enname'];
 			if(!empty($result['guardianNameEng'])){
-				$guardianName = $guardianName."<br />".$result['guardianNameEng'];
-			}
+				$guardianName = $father_enname."<br />".$result['guardianNameEng'];
+			}*/
 			?>
-			dojo.byId("lbParentName").innerHTML = '<?php echo $guardianName;?>';	
-			dojo.byId("lbParentPhone").innerHTML = '<?php echo $result['guardian_tel'];?>';	
+			dojo.byId("lbFather").innerHTML = '<?php echo $result['father_enname'].'<br />'.$result['father_phone'];?>';	
+			dojo.byId("lbMother").innerHTML = '<?php echo $result['mother_enname'].'<br />'.$result['mother_phone'];?>';	
 		
 			
 }

@@ -300,50 +300,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
-/*
-	public function getAmountStudent($acadmic_year=null){//count to dashboard
-    	$db = $this->getAdapter();
-    	$sql="SELECT COUNT(sg.`stu_id`) 
-					FROM
-						rms_student AS s,
-					   `rms_group` AS `g`,
-					   `rms_group_detail_student` AS sg 
-					WHERE 
-						s.status=1 
-						AND sg.stop_type=0
-						AND s.customer_type=1 
-						AND g.group_code != ''
-						AND s.stu_id =sg.`stu_id` 
-						AND g.id = sg.group_id 
-						  ";
-    	//AND g.is_pass=2
-    	$where='';
-    	if (!empty($acadmic_year)){
-    	$where.=" AND sg.academic_year = ".$acadmic_year;
-    	}
-//     	if (!empty($year)){
-//     		$acad = explode("-", $year);
-//     		if (!empty($acad)){
-//     			$from_year=$acad[0];
-//     			$to_year=$acad[1];
-//     			if (!empty($from_year)){
-//     				$where.=" AND (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$from_year'";
-//     			}
-//     			if (!empty($from_year)){
-//     				$where.=" AND (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year ) = '$to_year'";
-//     			}
-//     		}
-//     	}
-//     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-//     	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
-//     	if (!empty($year)){
-//     		$where.=" AND DATE_FORMAT(create_date, '%Y') <='$year'";
-//     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('s.branch_id');
-    	return $db->fetchOne($sql.$where);
-    }
-*/
+
 	public function getAmountStudent($acadmic_year=null){//count to dashboard
     	$db = $this->getAdapter();
     	$sql="SELECT COUNT(sg.`stu_id`) 
@@ -367,7 +324,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountNewStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	//$sql ='SELECT COUNT(stu_id) FROM rms_student';
-    	//$where=' WHERE status=1 AND is_stu_new=1 AND customer_type=1 AND is_subspend=0';
+    	
 		
 		$sql="SELECT COUNT(sg.`stu_id`) 
 					FROM
@@ -388,7 +345,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountDropStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 AND is_subspend!=0 AND customer_type=1';
+    	$where=' WHERE status=1  AND customer_type=1';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
@@ -409,8 +366,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			WHERE str.is_registered=1
 			AND st.is_studenttest =1
 			AND str.stu_test_id = st.stu_id
-			AND
-			st.status=1
+			AND st.status=1
 		";
     	$where=" AND (st.stu_khname!='' OR st.stu_enname!='')";
     	$dbp = new Application_Model_DbTable_DbGlobal();
@@ -558,7 +514,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
     	}
-//     	s.is_subspend,
+
     	$sql ="SELECT s.stu_id,
 			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 			    	CONCAT(s.last_name,' ',s.stu_enname) AS name,
@@ -576,7 +532,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	s.dob,
 			    	gds.stop_type AS is_subspend,
 			    	
-			    	(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status,
+			    	
 			    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
@@ -752,9 +708,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	if($search['study_type']!=''){
     		if($search['study_type']==0){
-    		//$where.=' AND is_subspend='.$search['study_type'];
+    		
 	    	}else{
-	    	//$where.=' AND is_subspend!=0';
+	    	
 	    	}
     	}
     	if(!empty($search['group'])){
@@ -783,7 +739,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	CONCAT(father_enname," - ",father_khname)AS father_name,father_nation,father_phone,
     	CONCAT(mother_enname," - ",mother_khname)AS mother_name,mother_nation,mother_phone,
     	CONCAT(guardian_enname," - ",guardian_khname)AS guardian_name,guardian_nation,guardian_document,guardian_tel,guardian_email,
-    	(SELECT name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
+    	
     	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.father_job LIMIT 1)AS father_job,
     	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.mother_job LIMIT 1)AS mother_job,
     	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.guardian_job LIMIT 1)AS guardian_job,
@@ -935,7 +891,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				WHERE 
 					sta.type=1
 					AND gsd.status=1
-					AND gsd.type=1
 	    			AND g.`id` = gsd.`group_id`
 				 	AND sta.group_id = g.id 
 				 	AND st.`stu_id` = gsd.`stu_id` 

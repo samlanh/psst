@@ -122,7 +122,6 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		s.status=1 
 		AND sgd.stop_type=0
 		  $branch_id  ORDER BY s.degree DESC ";
-// 		and s.is_subspend=0
 		$rows=$db->fetchAll($sql);
 		//array_unshift($rows,array('id' => '-1',"name"=>"Add New"));
 		array_unshift($rows,array('id' => '',"name"=>$tr->translate("CHOOSE")));
@@ -145,7 +144,6 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 			AND s.status=1 
 			AND sgd.stop_type=0
 			$branch_id  ORDER BY sgd.degree DESC ";
-// 		s.is_subspend=0
 		return $db->fetchAll($sql);
 	}
 }

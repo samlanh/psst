@@ -23,6 +23,12 @@
 				WHEN  c.ask_for = 4 THEN '".$tr->translate("CHINESE_KNOWLEDGE")."'
 				WHEN  c.ask_for = 5 THEN '".$tr->translate("OTHER")."'
 				END AS ask_for,
+			CASE
+				WHEN  c.followup_status = 1 THEN '".$tr->translate("FOLLOW_UP")."'
+				WHEN  c.followup_status = 0 THEN '".$tr->translate("STOP_FOLLOW_UP")."'
+			END AS followup_status,
+			(SELECT COUNT(s.stu_id) FROM rms_student s WHERE s.crm_id=c.id LIMIT 1) AS totalStudent,
+			(SELECT COUNT(s.stu_id) FROM rms_student s WHERE s.crm_id=c.id AND customer_type=1 LIMIT 1) AS isStudent,
 			c.create_date,
 			CASE    
 				WHEN  c.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
@@ -61,6 +67,9 @@
     	}
     	if($search['status_search']>-1 AND $search['status_search']!=''){
     		$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
+    	}
+    	if($search['followup_status']>-1 AND $search['followup_status']!=''){
+    		$where.= " AND c.followup_status = ".$db->quote($search['followup_status']);
     	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
@@ -164,10 +173,6 @@
 							'crm_grade'=> $_data['grade_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
-							'guardian_khname' => $_data['kh_name'],
-							'guardian_first_name'=> $_data['first_name'],
-							'guardian_enname'=> $_data['last_name'],
-							'guardian_tel'=> $_data['tel'],
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
 							'studentToken'=>$stuToken
@@ -302,10 +307,6 @@
 							'crm_grade'=> $_data['grade_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
-							'guardian_khname' => $_data['kh_name'],
-							'guardian_first_name'=> $_data['first_name'],
-							'guardian_enname'=> $_data['last_name'],
-							'guardian_tel'=> $_data['tel'],
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
 							);
@@ -346,10 +347,6 @@
 							'crm_grade'=> $_data['grade_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
-							'guardian_khname' => $_data['kh_name'],
-							'guardian_first_name'=> $_data['first_name'],
-							'guardian_enname'=> $_data['last_name'],
-							'guardian_tel'=> $_data['tel'],
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
 						);
@@ -396,17 +393,23 @@
 					WHEN  st.sex = 2 THEN '".$tr->translate("FEMALE")."'
 					END AS sexTitle,
 				CASE
-				WHEN  st.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
-				WHEN  st.crm_status = 1 THEN '".$tr->translate("PROCCESSING")."'
-				WHEN  st.crm_status = 2 THEN '".$tr->translate("WAITING_TEST")."'
-				WHEN  st.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
+					WHEN  st.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
+					WHEN  st.crm_status = 1 THEN '".$tr->translate("PROCCESSING")."'
+					WHEN  st.crm_status = 2 THEN '".$tr->translate("WAITING_TEST")."'
+					WHEN  st.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
 				END AS crm_status_title,
 				CASE    
-				WHEN  st.ask_for = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
-				WHEN  st.ask_for = 2 THEN '".$tr->translate("ENGLISH")."'
-				WHEN  st.ask_for = 3 THEN '".$tr->translate("UNIVERSITY")."'
-				WHEN  st.ask_for = 4 THEN '".$tr->translate("OTHER")."'
+					WHEN  st.ask_for = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
+					WHEN  st.ask_for = 2 THEN '".$tr->translate("ENGLISH")."'
+					WHEN  st.ask_for = 3 THEN '".$tr->translate("UNIVERSITY")."'
+					WHEN  st.ask_for = 4 THEN '".$tr->translate("OTHER")."'
 				END AS ask_for_title,
+				followup_status AS followup_statusId,
+				CASE
+					WHEN  st.followup_status = 1 THEN '".$tr->translate("FOLLOW_UP")."'
+					WHEN  st.followup_status = 0 THEN '".$tr->translate("STOP_FOLLOW_UP")."'
+					END AS followup_status,
+				
 				(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = st.know_by LIMIT 1 ) AS know_by_title
 		FROM `rms_crm` AS st WHERE st.id = $id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -497,7 +500,8 @@
 
 			//update CRM
 			$_arr=array(
-					'crm_status'=> $_data['proccess']
+					'crm_status'=> $_data['proccess'],
+					'followup_status'=>$_data['followup_status'],
 			);
 			$this->_name = "rms_crm";
 			$where="id=".$_data['id'];

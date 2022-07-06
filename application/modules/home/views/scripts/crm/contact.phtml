@@ -74,6 +74,12 @@ table.history-record tbody tr td {
 		                	<?php echo $frm_items->getElement("proccess");?>
 		                </div>
 		             </div>
+		             <div class="form-group">
+		               <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FOLLOWU_STATUS");?> </label>
+		               <div class="col-md-9 col-sm-9 col-xs-12">
+		                	<?php echo $frm_items->getElement("followup_status");?>
+		                </div>
+		             </div>
 					<div class="form-group">
 		                <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("NEXT_DATE_CONTACT");?> </label>
 		                <div class="col-md-9 col-sm-9 col-xs-12">
@@ -156,6 +162,13 @@ table.history-record tbody tr td {
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("FEEDBACK_OPTION");?>",allowClear: true});
-	});
+		});
 });
+function Followup(){
+	follupStatus = dijit.byId('followup_status').get('value');
+	dijit.byId('next_contact').set('readOnly',false);
+	if(follupStatus==0){
+		dijit.byId('next_contact').set('readOnly',true);
+	}
+}
 </script>

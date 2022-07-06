@@ -81,8 +81,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(SELECT fee_id FROM `rms_student_fee_history` WHERE student_id=s.stu_id AND is_current=1 LIMIT 1) LIMIT 1) AS academic,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
-				(SELECT $label from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
-				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";//AND s.is_subspend=0
+			
+				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
 				
 		$sql.=$dbp->caseStatusShowImage("s.status");
 		
@@ -322,10 +322,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'score_bacc'	=>$_data['score_baccexam'],
 						'certificate_bacc'	=>$_data['certificate_baccexam'],
 						
-						'scholarship_id'	=>$_data['discount_type'],
-						'scholarship_amt'	=>$_data['scholarship_amount'],
-						'scholar_fromdate'	=>$_data['scholarship_fromdate'],
-						'scholar_todate'	=>$_data['scholarship_todate'],
+						
+						
+						
 						'studentToken'=>$stuToken
 						);
 				if (EDUCATION_LEVEL==1){
@@ -517,7 +516,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 			$_arr=array(
  					'branch_id'		=>$_data['branch_id'],
-// 					'stu_code'		=>$_data['student_id'],
+ 					'stu_code'		=>$_data['student_id'],
 					'user_id'		=>$this->getUserId(),
 					'stu_khname'	=>$_data['name_kh'],
 					'last_name'		=>ucfirst($_data['last_name']),
@@ -574,10 +573,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'score_bacc'	=>$_data['score_baccexam'],
 					'certificate_bacc'	=>$_data['certificate_baccexam'],
 					
-					'scholarship_id'	=>$_data['discount_type'],
-					'scholarship_amt'	=>$_data['scholarship_amount'],
-					'scholar_fromdate'	=>$_data['scholarship_fromdate'],
-					'scholar_todate'	=>$_data['scholarship_todate'],
+					
+					
+					
 					);
 			if (EDUCATION_LEVEL==1){
 				$_arr['calture'] = $_data['calture'];
@@ -891,7 +889,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	function getSearchStudent($search){
 		$db=$this->getAdapter();
 		$sql="SELECT stu_id ,stu_code,stu_enname,stu_khname,sex,degree,grade,academic_year from rms_student 
-			WHERE `status`=1 AND is_setgroup = 0 and is_subspend=0 ";
+			WHERE `status`=1 AND is_setgroup = 0 ";
 		
 		 if(!empty($search['grade'])){
 		 	$sql.=" AND grade =".$search['grade'];
@@ -907,7 +905,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 
 	public function getNewAccountNumber($newid,$stu_type){
 		$db = $this->getAdapter();
-		$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE stu_type IN (1,3)";
+		$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE status=1 ";
 		$acc_no = $db->fetchOne($sql);
 		$new_acc_no= (int)$acc_no+1;
 		$new_acc_no=100+$new_acc_no;

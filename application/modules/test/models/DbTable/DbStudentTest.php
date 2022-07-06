@@ -486,7 +486,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				'modify_date'   => date("Y-m-d H:i:s"),
 				'user_id'	    => $this->getUserId(),
 			);
-			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
+			if (!empty($data['degree_result']) AND !empty($data['grade_result'])){
 				$array['score']=$data['score'];
 				$array['comment']=$data['comment'];
 				$array['degree_result']=$data['degree_result'];

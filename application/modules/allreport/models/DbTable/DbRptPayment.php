@@ -34,8 +34,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.photo,
     				s.tel,
     				s.dob,
-    				s.guardian_enname AS guardianNameEng,
-    				s.guardian_khname AS guardianNameKh,
+    				s.father_enname AS father_enname,
+    				s.mother_enname AS mother_enname,
+    				s.father_phone,
+    				s.mother_phone,
     				s.guardian_tel,
     				(SELECT $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				sp.data_from,
@@ -428,7 +430,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.tel,
 			    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex LIMIT 1)AS sex,
 			    	s.stu_code,
-			    	s.is_subspend,
+			    	
 			    	s.create_date as date_start_study,
 			    	
 			    	sp.create_date,
@@ -454,7 +456,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				and spd.is_start=1
     				and spd.is_onepayment = 0
 			    	and s.status=1
-			    	AND s.is_subspend=0
+			    	
     		';
     	
     	$where = ' ';

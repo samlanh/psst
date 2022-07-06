@@ -127,7 +127,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    public function getAllGerneralOldStudent(){
 	   	$db=$this->getAdapter();
 	   	$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code FROM rms_student AS s,rms_student_payment AS sp
-	   	WHERE s.stu_id=sp.student_id  AND s.stu_type=1 AND sp.payfor_type=1";
+	   	WHERE s.stu_id=sp.student_id AND sp.payfor_type=1";
 	   	return $db->fetchAll($sql);
    }
    public function getStudentSuspendService($search){

@@ -54,7 +54,6 @@
 //     	`rms_group_detail_student` AS sg
 //     	WHERE
 //     	s.status=1
-//     	AND s.is_subspend=0
 //     	AND s.customer_type=1
 //     	AND g.group_code != ''
 //     	AND s.stu_id =sg.`stu_id`

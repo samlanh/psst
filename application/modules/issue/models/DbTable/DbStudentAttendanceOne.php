@@ -242,21 +242,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description` FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		return $db->fetchRow($sql);
 	}
-	function getAllgroupStudy(){
-		$db = $this->getAdapter();
-		$sql ="SELECT 
-					`g`.`id`,
-					CONCAT(`g`.`group_code`,' ',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name 
-				FROM 
-					`rms_group` AS `g` 
-				WHERE 
-					g.status=1 
-					AND g.is_pass!=1
-				ORDER BY 
-					group_code ASC,
-					g.degree ASC ";
-		return $db->fetchAll($sql);
-	}
+	
 	function getAttendeceStatus($att_id , $stu_id){
 		$db = $this->getAdapter();
 		$sql = "select 

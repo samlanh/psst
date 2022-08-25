@@ -43,7 +43,7 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
+		$result= $db_global->getAllGroupName();
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 	}

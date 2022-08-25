@@ -241,7 +241,7 @@ span.red {
 		initailize();
 });
 	function getallgroupby(){// 
-		var url_data = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-allstubygroup')); ?>';
+		var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup')); ?>';
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id==''){  
 			dijit.byId("branch_id").focus();

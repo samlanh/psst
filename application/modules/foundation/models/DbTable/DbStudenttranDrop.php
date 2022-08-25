@@ -41,10 +41,8 @@ class Foundation_Model_DbTable_DbStudenttranDrop extends Zend_Db_Table_Abstract
 					'user_id'		=>$this->getUserId(),
 					);
 			$id = $this->insert($_arr);
-			//$_db->commit();
 		}catch(Exception $e){
 			$_db->rollBack();
-			echo $e->getMessage();exit();
 		}
 	} 
 	

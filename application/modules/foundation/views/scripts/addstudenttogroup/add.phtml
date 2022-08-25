@@ -351,7 +351,10 @@ function getAllGroup(){
 	dojo.xhrPost({
 		url: url_getallgroup,
 		content:{
-			'branch_id':branch_id,'degree':degree,'grade':grade,'noaddnew':0
+			'branch_id':branch_id,
+			'degree':degree,
+			'grade':grade,
+			'noaddnew':0
 		},
 		handleAs:"json",
 		load: function(data) {

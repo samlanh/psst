@@ -93,7 +93,9 @@
 		dojo.xhrPost({
 			url: url_getallgroup,
 			content:{
-				'branch_id':branch_id,'academic_year':academic_year,'noaddnew':1
+				'branch_id':branch_id,
+				'academic_year':academic_year,
+				'noaddnew':1
 			},
 			handleAs:"json",
 			load: function(data) {

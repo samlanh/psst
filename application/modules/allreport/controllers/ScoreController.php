@@ -674,7 +674,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
     
     	$db_global=new Application_Model_DbTable_DbGlobal();
-    	$result= $db_global->getAllgroupStudy();
+    	$result= $db_global->getAllGroupName();
     	array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
     	$this->view->group = $result;
     }

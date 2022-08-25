@@ -337,7 +337,11 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'degree':degree,'grade':grade,'academic_year':academic_year,'noaddnew':1,'forfilter':1
+			'branch_id':branch_id,
+			'degree':degree,
+			'grade':grade,
+			'academic_year':academic_year,
+			'noaddnew':1,'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {

@@ -239,6 +239,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					s.stu_code AS stu_code,
 					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
 					s.sex AS sex,
+					(SELECT name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS gender,
 					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS isCome,
 					(SELECT create_date FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS scanDate,
 					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS transcan_id
@@ -259,7 +260,8 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					sgh.`stu_id`,
 					 s.stu_code AS stu_code,
 					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
-					s.sex AS sex
+					s.sex AS sex,
+					(SELECT name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS gender
 				 FROM 
 				 	`rms_group_detail_student` AS sgh,
 				 	rms_student as s
@@ -296,10 +298,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		return $db->fetchRow($sql);
 	}
-	function getAllgroupStudy(){
-		$db = new Issue_Model_DbTable_DbStudentAttendanceOne();
-		return $db->getAllgroupStudy();
-	}
+	
 	function getAttendeceStatus($att_id , $stu_id){
 		$db = $this->getAdapter();
 		$sql = "select 

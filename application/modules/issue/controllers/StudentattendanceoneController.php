@@ -46,7 +46,7 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
+		$result= $db_global->getAllGroupName();
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 	}
@@ -67,7 +67,7 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->group = $db->getAllgroupStudy();
+		$this->view->group = $db_global->getAllGroupName();
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->branch_name = $db_global->getAllBranch();
@@ -92,9 +92,11 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 			}
 		}
 		$this->view->row = $db->getAttendencetByID($id);
-		$this->view->group = $db->getAllgroupStudy();
+		
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->group = $db->getAllGroupName();
+		
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->branch_name = $db_global->getAllBranch();
 		$this->view->row_year = $db_global->getAllYear();

@@ -290,19 +290,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getgroupbyacademicAction(){//may not use
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllGroupByAcademic($data['academic_year']);
-    		if (empty($data['noaddnew'])){
-    			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    		}
-    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
-    		print_r(Zend_Json::encode($group));
-    		exit();
-    	}
-    }
+    
     function getacademicAction(){//year for study only
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -314,13 +302,19 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		$db = new Application_Model_DbTable_DbGlobal();
     		$group = $db->getAllAcademicYear();
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
+			//
+			/*if (empty($data['noaddnew'])){
+    			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		}
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));*/
+			
     		print_r(Zend_Json::encode($group));
     		exit();
     	}
     }
    
     
-    function getallgroupAction(){
+    function getallgroupAction(){//all get group use this function
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();

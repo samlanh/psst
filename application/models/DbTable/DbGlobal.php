@@ -268,35 +268,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $this->getAllItems(1,null);
 } 
   
-function getAllgroupStudy($teacher_id=null){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
-   		FROM `rms_group` AS `g` ";
-   	if($teacher_id!=null){
-   		$sql.=" ,rms_group_subject_detail AS gsd WHERE g.id =gsd.group_id AND gsd.teacher= ".$teacher_id;
-   	}else{
-   		$sql.=" WHERE 1";
-   	}
-   	$sql.=" AND g.status =1 AND group_code!=''";
-   	$sql.=" group by g.id ";
-   	return $db->fetchAll($sql);
-}
 
-function getAllgroupStu($branch_id=null){
-	$db = $this->getAdapter();
-	$sql ="SELECT 
-				g.id,
-				CONCAT(g.group_code,' ',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
-			FROM 
-				rms_group AS g 
-			WHERE 
-				branch_id=$branch_id 
-				AND g.status =1 
-				AND group_code!=''
-				and g.is_pass!=1";
-	return $db->fetchAll($sql);
-}
 
 function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
@@ -1008,7 +980,8 @@ function getAllgroupStudyNotPass($action=null){
    			WHERE 
 				sgd.mainType=1
    				AND s.stu_id=$stu_id 
-	   			AND sgd.is_current=1 AND sgd.is_maingrade=1
+	   			AND sgd.is_current=1 
+				AND sgd.is_maingrade=1
 	   	LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
@@ -2256,17 +2229,19 @@ function getAllgroupStudyNotPass($action=null){
   		return $db->fetchAll($sql);
   }
   
-  function getAllGroupByAcademic($academic=null){
-  	$db = $this->getAdapter();
-  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-  	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-  	FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ";
-  	if (!empty($academic)){
-  		$sql.=" AND g.academic_year = $academic";
-  	}
-  	$sql.=" ORDER BY `g`.`id` DESC ";
-  	return $db->fetchAll($sql);
-  }
+//   function getAllGroupByAcademic($academic=null){
+//   	$db = $this->getAdapter();
+//   	$sql ="SELECT `g`.`id`,
+//   		 CONCAT(`g`.`group_code`,' ',(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+//   	FROM `rms_group` AS `g` 
+//   		where (g.is_pass=0 OR g.is_pass=2) 
+//   		and status=1 ";
+//   	if (!empty($academic)){
+//   		$sql.=" AND g.academic_year = $academic";
+//   	}
+//   	$sql.=" ORDER BY `g`.`id` DESC ";
+//   	return $db->fetchAll($sql);
+//   }
   function getNumberInkhmer($number){
   	$khmernumber = array("០","១","២","៣","៤","៥","៦","៧","៨","៩");
   	$spp = str_split($number);
@@ -2858,54 +2833,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	}
 	  	return $result;
   }
-  function getAllGroupName($data=null){
-  	$db = $this->getAdapter();
-  	$lang = $this->currentlang();
-  	$grade = "rms_itemsdetail.title_en";
-  	if($lang==1){// khmer
-  		$grade = "rms_itemsdetail.title";
-  	}
-  	$sql ="SELECT `g`.`id`, CONCAT(COALESCE(`g`.`group_code`,''),' (',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1),''),')') AS name
-  	FROM `rms_group` AS `g` WHERE g.status=1 ";
-  	 
-  	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
-  	if (!empty($forfilterreport)){
-  		$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
-  	}else{
-  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
-  	}
-  	if (!empty($data['branch_id'])){
-  		$sql.=" AND g.branch_id = ".$data['branch_id'];
-  	}
-  	
-  	if (!empty($data['change_type'])){
-  		if ($data['change_type']==2){//ឡើងថ្នាក់
-  		}else{
-  			if(!empty($data['degree'])){
-  				$sql.=" AND g.degree = ".$data['degree'];
-  			}
-  			if(!empty($data['grade'])){
-  				$sql.=" AND g.grade = ".$data['grade'];
-  			}
-  		}
-  	}else{
-  		if (!empty($data['degree'])){
-  			$sql.=" AND g.degree = ".$data['degree'];
-  		}
-  		if (!empty($data['grade'])){
-  			$sql.=" AND g.grade = ".$data['grade'];
-  		}
-  	}
-  	if (!empty($data['academic_year'])){
-  		$sql.=" AND g.academic_year = ".$data['academic_year'];
-  	}
-  	if (!empty($data['group_id'])){
-  		$sql.=" AND g.id != ".$data['group_id'];
-  	}
-  	$sql.= $this->getAccessPermission('g.branch_id');
-  	$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
-  	return $db->fetchAll($sql);
-  }
+  
   public function getAllChangeGroup($type){//1=ប្តូរក្រុម , 2=ឡើងថ្នាក់
   	$db=$this->getAdapter();
   	$sql="SELECT
@@ -3139,6 +3067,136 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT schoolOption FROM rms_items WHERE id=".$degree_id;
   	return $db->fetchOne($sql);
   }
+  function getStudentByGroup($data){
+  	$db=$this->getAdapter();
+  	$sql="SELECT
+			  	sgh.`stu_id`,
+			  	(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
+			  	(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
+			  	(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
+		  	FROM
+		  		`rms_group_detail_student` AS sgh
+		  	WHERE
+		  		sgh.mainType=1 ";
+  			
+  		if(!empty($data['group_id'])){
+  			$sql.=" AND sgh.`group_id` = ".$data['group_id'];
+  		}
+  		if(!empty($data['studentId'])){
+  			$sql.=" AND sgh.`stu_id` = ".$data['studentId'];
+  		}
+  		if(isset($data['isMaingrade'])){
+  			$sql.=" AND sgh.`is_maingrade` = ".$data['isMaingrade'];
+  		}
+  		if(isset($data['isCurrent'])){
+  			$sql.=" AND sgh.`is_current` = ".$data['isCurrent'];
+  		}
+  		if(isset($data['isCurrent'])){
+  			$sql.=" AND sgh.`is_current` = ".$data['isCurrent'];
+  		}
+  		if(!empty($data['degree'])){
+  			$sql.=" AND sgh.`degree` = ".$data['degree'];
+  		}
+  		if(!empty($data['grade'])){
+  			$sql.=" AND sgh.`degree` = ".$data['grade'];
+  		}
+  		if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
+  			$sql.=" AND sgh.`stop_type` = ".$data['stopType'];
+  		}
+  		
+  		if(!empty($data['group_id'])){
+  			$sql.=" AND sgh.`group_id` = ".$data['group_id'];
+  		}
+  		
+  		$order="";
+  		if(!empty($data['orderStucode'])){//
+  			$order.=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+  		}
+  		if(!empty($data['orderKhmerName'])){
+  			$order.=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+  		}
+  		if(!empty($data['orderEnglishName'])){
+  			$order.=" ORDER BY (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+  		}
+  	
+  		return $db->fetchAll($sql.$order);
+  }
+  function getAllGroupName($data=null){
+  	$db = $this->getAdapter();
+  	$lang = $this->currentlang();
+  	$grade = "rms_itemsdetail.title_en";
+  	if($lang==1){// khmer
+  		$grade = "rms_itemsdetail.title";
+  	}
+  	$sql ="SELECT `g`.`id`,
+				  	CONCAT(g.group_code,' ',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
+				  	
+				  	FROM `rms_group` AS `g` 
+  					
+  					WHERE g.status=1 
+  						AND group_code!=''
+  		";
+	//CONCAT(COALESCE(`g`.`group_code`,''),' (',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1),''),')') AS name		  
+	  	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
+	  	if (!empty($forfilterreport)){
+	  			$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+	  	}else{
+	  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
+	  	}
+	  	
+	  	if (!empty($data['branch_id'])){
+	  		$sql.=" AND g.branch_id = ".$data['branch_id'];
+	  	}
+	  	
+	  	if (!empty($data['academic_year'])){
+	  		$sql.=" AND g.academic_year = ".$data['academic_year'];
+	    }
+	    if(!empty($data['teacherId'])){
+	    	$sql.=" AND g.teacher_id=".$data['teacherId'];
+	    }
+	    
+	    if (!empty($data['group_id'])){
+		 	 $sql.=" AND g.id != ".$data['group_id'];
+	  	}
+	  	
+	  	if (!empty($data['change_type'])){
+	  		if ($data['change_type']==2){//ឡើងថ្នាក់
+	  		}else{
+	  			if(!empty($data['degree'])){
+	  				$sql.=" AND g.degree = ".$data['degree'];
+	  			}
+	  			if(!empty($data['grade'])){
+	  				$sql.=" AND g.grade = ".$data['grade'];
+	  			}
+	  		}
+	  	}else{
+	  		if (!empty($data['degree'])){
+	  			$sql.=" AND g.degree = ".$data['degree'];
+	  		}
+	  		if (!empty($data['grade'])){
+	  			$sql.=" AND g.grade = ".$data['grade'];
+	  		}
+	  	}
+	  	
+	  	$sql.= $this->getAccessPermission('g.branch_id');
+  		$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
+  		return $db->fetchAll($sql);
+  }
+  
+//   function getSubjectByGroup($data){
+  
+//   }
+//   function getStudentInfo($data){
+  
+//   }
+//   function getGroupInfo($data){
+  
+//   }
+//   function getStudentbyBranch($data){
+//   }
+//   function getGroupBranch($data){
+//   }
+
 //   function GenerateNewId(){
 //   	$db = $this->getAdapter();
 //   	$sql="SELECT stu_id FROM  `rms_student` WHERE customer_type=1 AND degree_old IN (2) ORDER BY stu_id ASC";

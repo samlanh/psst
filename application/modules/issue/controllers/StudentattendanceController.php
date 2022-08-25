@@ -43,7 +43,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
+		$result= $db_global->getAllGroupName();
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 	}
@@ -62,8 +62,9 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->group = $db->getAllgroupStudy();
+		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->group = $db_global->getAllGroupName();
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->branch_name = $db_global->getAllBranch();
 		$this->view->row_year = $db_global->getAllYear();
@@ -94,7 +95,6 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			exit();
 		}
 		$this->view->row=$result;
-// 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->row_year=$db_global->getAllYear();
@@ -125,15 +125,7 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getAllstubygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$data=$db->getAllgroupStu($data['branch_id']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+
 	
 	function getStudentBygroupAction(){
 		if($this->getRequest()->isPost()){

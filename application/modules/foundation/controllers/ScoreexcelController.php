@@ -77,7 +77,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
+		$result= $db_global->getAllGroupName();
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
@@ -115,7 +115,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result = $db_global->getAllgroupStudy();
+		$result = $db_global->getAllGroupName();
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		

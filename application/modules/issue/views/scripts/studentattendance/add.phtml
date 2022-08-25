@@ -120,10 +120,28 @@ span.red {
 							</select>
 		                </div>
 		             </div>
+		             <div class="form-group otherCondiction">
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		 <input id="study_year" />
+		                   </div>
+		                </div>
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 							<input id="group" />
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select id="sortStundent" name="sortStundent" class="fullside" onchange="getSubjectByGroup()"  dojoType="dijit.form.FilteringSelect" >
+							   	<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+							   	<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+							   	<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+							   	<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+							</select>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -150,7 +168,7 @@ span.red {
 							</select>
 		                </div>
 		             </div>
-		             <div class="form-group hidden">
+		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input id="subject">
@@ -200,6 +218,7 @@ span.red {
     </div>
  </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -208,7 +227,6 @@ span.red {
 	var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
-		    store:subject_store,
 		    queryExpr: "*${0}*",
 			autoComplete: false,                
 		    required: false,
@@ -219,6 +237,20 @@ span.red {
 		    onChange: function() {  
 		    }
 		}, "subject");
+
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                     
+			id: "study_year",
+			name: "study_year",
+			class: "fullside", 		
+			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+			onChange: function() {  
+				getAllGroup();
+			}
+		}, "study_year");
+		
 		
 		new dijit.form.FilteringSelect({
 			store:group_store,
@@ -230,28 +262,42 @@ span.red {
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>",
 			onChange: function() {  
-			 getInfoBygroup();    
+			 getInfoBygroup();
+			 getSubjectByGroup();    
 			}
 		}, "group");
-		getallgroupby();
+		
+		getAllGroup();
 		var branch_id = dijit.byId('branch_id');
 	 	branch_id.on('change', function(evt) {
-	 		getallgroupby();
+	 		getAllGroup();
+	 		getStudyYear();
 	    });
 	});
 
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	function getallgroupby(){// 
-		var url_data = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-allstubygroup')); ?>';
+	function getAllGroup(){
+		var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup')); ?>';
+
+		dijit.byId('group').attr('value','');
+
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id==''){  
 			dijit.byId("branch_id").focus();
-			return false;}
+			return false;
+		}
+		academic_year = dijit.byId("study_year").attr("value");
+		if(academic_year==''){  
+			academic_year='';
+		}
+		
 		loadingBlock();
 		dojo.xhrPost({
 			url:url_data,
 			content:{
 				'branch_id':branch_id,
+				'academic_year':academic_year,
+				'noaddnew':1,
 			},
 			handleAs:"json",
 			load: function(data) {
@@ -373,7 +419,6 @@ function getSubjectByGroup(){
 	   }
 	});
 }
-//var url_getStudentbygroup= '<?php //echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(){
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
@@ -419,7 +464,7 @@ function filterStudentBygroup(){
 						str+='<td>'+inx+'</td>';
 						str+='<td>'+data[i].stu_code+'</td>';
 						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
-						str+='<td>'+data[i].sex+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
+						str+='<td>'+data[i].gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
 						str+='<td>';
 							str+='<input type="radio" checked="checked" name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
 							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
@@ -444,6 +489,29 @@ function filterStudentBygroup(){
 	   },		
 	    error: function(err) {
 	    }
+	});
+}
+url_getstudyYear= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+function getStudyYear(){
+	dijit.byId('study_year').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		dijit.byId('study_year').set('store',study_yearStore);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getstudyYear,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			study_yearStore  = getDataStorefromJSON('id','name', data);
+			dijit.byId('study_year').set('store',study_yearStore);  
+		},
+		error: function(err) {
+		}
 	});
 }
 

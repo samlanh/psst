@@ -598,8 +598,7 @@ function getInfoBygroup(){
 	});
 	}
 var oldAcdemic = '<?php echo $this->score['academic_year']?>';
-//url_getgroup = '<?php // echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
-url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 
 function getAllGroupByBranch(){
 	dijit.byId('group').reset();
@@ -634,7 +633,7 @@ function getAllGroupByBranch(){
 		}
 	});
 }
-url_getgroupbyAca = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbyacademic'));?>';
+url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 
 function getAllGroupByAcademic(){
 	getAllGroupByBranch();

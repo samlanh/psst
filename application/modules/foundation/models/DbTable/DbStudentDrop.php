@@ -12,10 +12,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		return $db->getAllStuCode();
 	}
 	
-	function getAllgroupStudy(){
-		$db=new Application_Model_DbTable_DbGlobal();
-		return $db->getAllgroupStudy();
-	}
 	
 	function getAllStudentName(){
 		$_db = $this->getAdapter();

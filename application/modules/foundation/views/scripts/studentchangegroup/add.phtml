@@ -244,7 +244,9 @@
 		dojo.xhrPost({
 			url: url_getgroup,
 			content:{
-				'branch_id':branch_id,'group_id':fromGroup,'grade':fromGrade
+				'branch_id':branch_id,
+				'group_id':fromGroup,
+				'grade':fromGrade
 				},
 			handleAs:"json",
 			load: function(data) {

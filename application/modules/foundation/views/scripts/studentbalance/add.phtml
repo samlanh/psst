@@ -280,7 +280,7 @@ table#table tr td {
 		});
 	}
 	var oldstudy_year = '<?php echo $this->search['study_year'];?>';
-	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbyacademic'));?>';
+	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByAcademic(){
 		dijit.byId('group').reset();
 		study_year = dijit.byId('study_year').get('value');
@@ -293,7 +293,8 @@ table#table tr td {
 		dojo.xhrPost({
 			url: url_getgroupbyAca,
 			content:{
-				'academic_year':study_year,'noaddnew':1
+				'academic_year':study_year,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

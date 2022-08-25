@@ -333,7 +333,7 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 	    });
 	});
 
-	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbyacademic'));?>';
+	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByAcademic(){
 		dijit.byId('group').reset();
 		study_year = dijit.byId('study_year').get('value');
@@ -346,7 +346,8 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		dojo.xhrPost({
 			url: url_getgroupbyAca,
 			content:{
-				'academic_year':study_year,'noaddnew':1
+				'academic_year':study_year,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

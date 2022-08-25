@@ -228,7 +228,9 @@ function getAllGroup(){
 	dojo.xhrPost({
 		url: url_getallgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1,'forfilter':1
+			'branch_id':branch_id,
+			'noaddnew':1,
+			'forfilter':1
 		},
 		handleAs:"json",
 		load: function(data) {

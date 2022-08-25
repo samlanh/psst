@@ -1154,60 +1154,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		";
     	return $db->fetchRow($sql);
     }
-    function getStudentAttendenceHighschool($search){
-    	$db = $this->getAdapter();
-    	$sql="
-	    	SELECT
-	    	g.id AS group_id,
-	    	g.`group_code`,
-	    	gsj.`subject_id`,
-			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsj.`subject_id` LIMIT 1) AS subject_name,
-	    	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-	    	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-	    	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-		
-	    	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-	    	`g`.`semester` AS `semester`,
-	    	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-	    	AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-	    	gsd.`stu_id`,
-	    	st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
-			
-	    	FROM 
-			`rms_group_detail_student` AS gsd,
-	    	`rms_group` AS g,
-	    	`rms_student` AS st,
-			`rms_group_subject_detail` AS gsj
-			
-	    	WHERE 
-				gsd.mainType=1 
-				AND g.`id` = gsd.`group_id` 
-				AND st.`stu_id` = gsd.`stu_id`
-				AND gsj.`group_id` = g.`id`    	
-				AND `g`.`degree` =2 ";
-    	$where='';
-    	
-    	if(!empty($search['group'])){
-    		$where.= " AND g.id =".$search['group'];
-    	}
-    	if(!empty($search['study_year'])){
-    		$where.=" AND g.academic_year =".$search['study_year'];
-    	}
-    	if(!empty($search['grade_highschool'])){
-    		$where.=" AND `g`.`grade`=".$search['grade_highschool'];
-    	}
-    	if(!empty($search['session'])){
-    		$where.=" AND `g`.`session`=".$search['session'];
-    	}
-    	$order ="  ORDER BY `g`.`degree`,g.id,gsj.`subject_id` DESC";
-    	return $db->fetchAll($sql.$where.$order);
-    }
-    function getGroupHighschoolSearch(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT g.`id` as id,g.`group_code` AS `name` 
-    	FROM `rms_group` AS g WHERE g.`status`=1 AND g.`degree`=2";
-    	return $db->fetchAll($sql);
-    }
+    
+   
     function getSubjectByGroup($group_id){
     	$db=$this->getAdapter();
     	$sql="SELECT 	

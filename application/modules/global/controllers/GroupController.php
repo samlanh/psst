@@ -124,7 +124,7 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getgroupbyacademicAction(){
+    /*function getgroupbyacademicAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
@@ -136,7 +136,7 @@ class Global_GroupController extends Zend_Controller_Action {
     		print_r(Zend_Json::encode($group));
     		exit();
     	}
-    }
+    }*/
     function getacademicAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

@@ -67,6 +67,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student AS s,
     				rms_group_detail_student AS gds
     			WHERE 
+					gds.mainType=1 AND
     				s.stu_id = gds.stu_id
     				AND s.status=1 
     				AND gds.is_current =1
@@ -174,7 +175,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	FROM rms_student AS s,
     	rms_group_detail_student AS gds
     	 ';
-    	$where=' WHERE gds.stu_id = s.stu_id AND s.status=1 AND s.customer_type=1 AND gds.stop_type=0 AND gds.is_maingrade=1';
+    	$where=' WHERE 
+			gds.mainType=1 
+			AND gds.stu_id = s.stu_id 
+			AND s.status=1 
+			AND s.customer_type=1 
+			AND gds.stop_type=0 
+			AND gds.is_maingrade=1';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
@@ -234,7 +241,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				FROM 
     				rms_student as s,
     				rms_group_detail_student as ds ';
-    	$where=' WHERE s.stu_id = ds.stu_id AND s.status=1 AND s.customer_type=1 AND ds.is_current=1 AND ds.is_maingrade=1 ';
+    	$where=' WHERE 
+			ds.mainType=1 
+			AND s.stu_id = ds.stu_id 
+			AND s.status=1 AND s.customer_type=1 AND ds.is_current=1 AND ds.is_maingrade=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	   	
@@ -308,7 +318,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 						rms_student AS s,
 					   `rms_group_detail_student` AS sg 
 					WHERE 
-						s.status=1 
+						sg.mainType=1 
+						AND s.status=1 
 						AND sg.stop_type=0
 						AND s.customer_type=1 
 						AND s.stu_id =sg.`stu_id` 
@@ -323,7 +334,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAmountNewStudent(){//count to dashboard
     	$db = $this->getAdapter();
-    	//$sql ='SELECT COUNT(stu_id) FROM rms_student';
+    	
     	
 		
 		$sql="SELECT COUNT(sg.`stu_id`) 
@@ -331,7 +342,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 						rms_student AS s,
 					   `rms_group_detail_student` AS sg 
 					WHERE 
-						s.status=1 
+						sg.mainType=1 
+						AND s.status=1 
 						AND sg.stop_type=0
 						AND s.customer_type=1 
 						AND sg.is_newstudent=1 
@@ -401,7 +413,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student AS s,
     				rms_group_detail_student AS gds 
     			WHERE 
-    				gds.stu_id = s.stu_id
+					gds.mainType=1 
+    				AND gds.stu_id = s.stu_id
     				AND gds.is_current =1 
     				AND gds.is_maingrade
     				AND s.stu_id IN '."($stu_id)";
@@ -490,7 +503,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student as s,
     				rms_group_detail_student AS gds
     			WHERE
-    				s.stu_id = gds.stu_id 
+					gds.mainType=1 
+    				AND s.stu_id = gds.stu_id 
     				AND gds.is_current =1 
     				AND gds.is_maingrade =1
     				AND s.stu_id IN ($stu_id) ";
@@ -549,7 +563,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student AS s,
     				rms_group_detail_student AS gds
     			WHERE 
-    				s.stu_id = gds.stu_id
+					gds.mainType=1 
+    				AND s.stu_id = gds.stu_id
     				AND s.status=1 
     				AND s.customer_type=1
     		";
@@ -661,7 +676,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	FROM 
     		rms_student AS s,
     		rms_group_detail_student AS gds 
-    	WHERE gds.stu_id = s.stu_id
+    	WHERE 
+			gds.mainType=1 
+			AND gds.stu_id = s.stu_id
 		  	AND (last_name!='' OR stu_enname!='' OR s.stu_khname!='')
 		  	AND s.status=1
 		  	AND s.customer_type=1
@@ -810,8 +827,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	s.`stu_khname`,
 			    	s.`stu_enname`,
 			    	s.`sex`,
-			    	(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) LIMIT 1) AS group_code, 
+			    	(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) LIMIT 1) AS group_code, 
 			    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 			    	s.`degree` as degree_id,
 					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
@@ -889,7 +906,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`rms_student` AS st,
 					rms_student_attendence AS sta
 				WHERE 
-					sta.type=1
+					gsd.mainType=1 
+					AND sta.type=1
 					AND gsd.status=1
 	    			AND g.`id` = gsd.`group_id`
 				 	AND sta.group_id = g.id 
@@ -1154,17 +1172,21 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 	    	gsd.`stu_id`,
 	    	st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
-	    	FROM `rms_group_detail_student` AS gsd,
+			
+	    	FROM 
+			`rms_group_detail_student` AS gsd,
 	    	`rms_group` AS g,
-	    	`rms_student` AS st,`rms_group_subject_detail` AS gsj
-	    	WHERE g.`id` = gsd.`group_id` AND st.`stu_id` = gsd.`stu_id`
-			AND gsj.`group_id` = g.`id`    	
-	    	 AND `g`.`degree` =2
-    	";
-    	//     	$from_date =" (SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1) >=  '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
-    	//     	$to_date = "(SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1)  <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+	    	`rms_student` AS st,
+			`rms_group_subject_detail` AS gsj
+			
+	    	WHERE 
+				gsd.mainType=1 
+				AND g.`id` = gsd.`group_id` 
+				AND st.`stu_id` = gsd.`stu_id`
+				AND gsj.`group_id` = g.`id`    	
+				AND `g`.`degree` =2 ";
     	$where='';
-    	//     	$where.= " AND ".$from_date." AND ".$to_date;
+    	
     	if(!empty($search['group'])){
     		$where.= " AND g.id =".$search['group'];
     	}
@@ -1235,7 +1257,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				`rms_student` AS s,
 					 rms_group_detail_student AS gds
     			WHERE 
-					s.stu_id = gds.stu_id
+					gds.mainType=1 
+					AND s.stu_id = gds.stu_id
     				AND s.stu_id = sd.stu_id
     				AND sd.is_receive=0
 					AND gds.is_maingrade
@@ -1355,7 +1378,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			rms_student as s ,
     			rms_group_detail_student AS g ";
     	
-    	$where=' WHERE g.is_setgroup = 0 AND s.stu_id=g.stu_id AND s.status=1 AND s.customer_type=1 ';
+    	$where=' WHERE 
+			g.mainType=1 
+			AND g.is_setgroup = 0 
+			AND s.stu_id=g.stu_id 
+			AND s.status=1 
+			AND s.customer_type=1 ';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
@@ -1438,7 +1466,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				`rms_group` AS g,
 				rms_student as s
 			WHERE 
-    			g.id = gds.group_id 
+				gds.mainType=1 
+    			AND g.id = gds.group_id 
     			and gds.stu_id = s.stu_id
     			and s.status = 1 
     	";
@@ -1479,7 +1508,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				`rms_group` AS g,
 				rms_student as s
 			WHERE 
-				g.id = gds.group_id
+				gds.mainType=1 
+				AND g.id = gds.group_id
 				AND gds.stu_id = s.stu_id
     		    AND s.status = 1
 				AND g.branch_id =$branch_id

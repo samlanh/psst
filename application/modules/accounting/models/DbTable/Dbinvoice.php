@@ -194,32 +194,5 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
  		return $pre.$num;
 	}
 		 
-	/*function getAllGradeStudy($option=1,$student_id=null){
-	 	$db = $this->getAdapter();
-	 	$sql="SELECT i.id,
-	 	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
-	 	FROM `rms_itemsdetail` AS i
-	 	WHERE i.status =1 ";
-	 	if($option!=null){
-	 		$sql.=" AND i.items_type=".$option;
-	 	}
-	 	if($student_id!=null){//new parameter for invoice09-1-019
-	 		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
-	 	}
-	 	$dbbg = new Application_Model_DbTable_DbGlobal();
-	 	$branchlist = $dbbg->getAllSchoolOption();
-	 	if (!empty($branchlist)){
-	 		foreach ($branchlist as $i){
-	 			$s_where[] = $i['id']." IN (i.schoolOption)";
-	 		}
-	 		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-	 	}
-	 	$user = $dbbg->getUserInfo();
-	 	$level = $user['level'];
-	 	if ($level!=1){
-	 		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
-	 	}
-	 	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
-	 	return $db->fetchAll($sql);
-	}*/
+	
 }

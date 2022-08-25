@@ -157,7 +157,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				$id = $this->insert($_arr);
 				
 				$this->_name='rms_group_detail_student';
-				//$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
+				
 				$where = " gd_id=".$_data['studentid'];
 				$ar=array(
 					'stop_type'	=>	$_data['type'],
@@ -204,7 +204,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				$this->update($_arr, $where);
 				
 				$this->_name='rms_group_detail_student';
-// 				$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
 				$where = " gd_id=".$_data['studentid'];
 				$ar=array(
 						'stop_type'	=>	$_data['type'],

@@ -153,7 +153,9 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	}
 	function getAllStudentOldGroup($from_group){
 		$db = $this->getAdapter();
-		$sql="select gd_id,stu_id from rms_group_detail_student where group_id=$from_group and is_pass=0  ";
+		$sql="select gd_id,stu_id from rms_group_detail_student where 
+			mainType=1 
+			AND group_id=$from_group and is_pass=0  ";
 		return $db->fetchAll($sql);
 	}	
 	public function updateGraduateStudent($_data){
@@ -248,8 +250,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					rms_group_detail_student as gds,
 					rms_student as st 
 			 WHERE 
-					gds.stu_id=st.stu_id 
-					
+					gds.mainType=1 
+					AND gds.stu_id=st.stu_id 
 					and is_pass=0
 					and gds.group_id=$from_group ";
 		return $db->fetchAll($sql);
@@ -266,7 +268,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					rms_group_detail_student as gds,
 					rms_student as st 
 			 where 
-					gds.stu_id=st.stu_id 
+					gds.mainType=1 
+					AND gds.stu_id=st.stu_id 
 					and gds.is_pass=0
 					and gds.group_id=$from_group
 			";
@@ -284,7 +287,11 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	
 	function selectStudentPass($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.group_id=$id and gds.is_pass=0 and gds.stop_type=3";
+		$sql = "SELECT stu_id  
+			FROM rms_group_detail_student as gds 
+				WHERE 
+				gds.mainType=1 
+				AND gds.group_id=$id and gds.is_pass=0 and gds.stop_type=3";
 		return $db->fetchAll($sql);
 	}
 	

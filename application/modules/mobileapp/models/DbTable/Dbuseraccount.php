@@ -46,8 +46,9 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 		(SELECT COUNT(t.`token`) FROM `mobile_mobile_token` AS t WHERE t.`stu_id` = s.`stu_id` LIMIT 1 ) AS number_mobile
 		FROM rms_student AS s,
 			rms_group_detail_student AS gds
-		WHERE  
-			s.stu_id = gds.stu_id
+		WHERE 
+			gds.mainType=1
+			AND s.stu_id = gds.stu_id
     		AND s.status=1 
     		AND gds.is_maingrade =1
     		AND s.customer_type=1
@@ -108,7 +109,7 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 	}
 	public function getStudentById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT *,(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id;
+		$sql = "SELECT *,(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql);

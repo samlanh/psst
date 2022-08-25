@@ -904,13 +904,14 @@ function getAllgroupStudyNotPass($action=null){
    	stu_code,
    	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
    	FROM rms_student AS s,
-   	rms_group_detail_student as gds
+		rms_group_detail_student as gds
    	WHERE 
-   	gds.stu_id = s.stu_id 
-   	AND gds.is_current=1 AND gds.is_maingrade=1
-   	AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
-   	AND (stu_enname!='' OR s.stu_khname!='')
-   	AND s.status=1  AND customer_type=1 ";
+		gds.mainType=1
+		AND gds.stu_id = s.stu_id 
+		AND gds.is_current=1 AND gds.is_maingrade=1
+		AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
+		AND (stu_enname!='' OR s.stu_khname!='')
+		AND s.status=1  AND customer_type=1 ";
    	if($branchid!=null){
    		$sql.=" AND branch_id=".$branchid;
    	}
@@ -1005,7 +1006,8 @@ function getAllgroupStudyNotPass($action=null){
 	   			LEFT JOIN rms_group_detail_student AS sgd
 	   			ON s.stu_id=sgd.stu_id
    			WHERE 
-   				s.stu_id=$stu_id 
+				sgd.mainType=1
+   				AND s.stu_id=$stu_id 
 	   			AND sgd.is_current=1 AND sgd.is_maingrade=1
 	   	LIMIT 1 ";
 	   	return $db->fetchRow($sql);
@@ -1170,7 +1172,9 @@ function getAllgroupStudyNotPass($action=null){
 		$sql_android="SELECT mb.`token`
 				FROM `rms_group_detail_student` AS sd
 					,`mobile_mobile_token` AS mb
-				WHERE sd.`group_id` = ".$groupId."
+				WHERE 
+					sd.mainType=1 AND
+					sd.`group_id` = ".$groupId."
 					AND sd.`stu_id` = mb.`stu_id`
 					AND stop_type=0
 					AND mb.device_type=1 ";
@@ -1188,7 +1192,9 @@ function getAllgroupStudyNotPass($action=null){
 					  FROM 
 		        		`rms_group_detail_student` AS sd
 		        		,`mobile_mobile_token` AS mb
-		        			WHERE sd.`degree` = ".$degreeId."
+		        			WHERE 
+							sd.mainType=1 AND
+							sd.`degree` = ".$degreeId."
 		        		AND sd.`stu_id` = mb.`stu_id`
 		        		AND stop_type=0
 		        		AND sd.is_subspend=0
@@ -1859,9 +1865,9 @@ function getAllgroupStudyNotPass($action=null){
   	if($student_id!=null AND !empty($student_id)){
   		if(empty($is_stutested)){//for normal student
   			if (empty($groupDetailId)){
-  				$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
+  				$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE mainType=1 AND status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
   			}else{
-  				$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE status=1 AND stop_type=0 AND gd_id=$groupDetailId  AND stu_id= $student_id )) ";
+  				$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE mainType=1 AND status=1 AND stop_type=0 AND gd_id=$groupDetailId  AND stu_id= $student_id )) ";
   			}
   		}else{//will check expired of result test later //for tested student
   			$sql.=" AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result ))";
@@ -2224,7 +2230,7 @@ function getAllgroupStudyNotPass($action=null){
   }
   function ifStudentinGroupReady($student_id,$group_id){
   	$db = $this->getAdapter();
-  	$sql="SELECT * FROM rms_group_detail_student WHERE stu_id=$student_id AND group_id=$group_id";
+  	$sql="SELECT * FROM rms_group_detail_student WHERE mainType=1 AND stu_id=$student_id AND group_id=$group_id";
   	return $db->fetchRow($sql);
   }
   function getAllGroupByBranch($branch_id=null,$forfilterreport=null,$data=array()){
@@ -2437,7 +2443,9 @@ function getAllgroupStudyNotPass($action=null){
 	  		(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
   		FROM rms_group_detail_student as gds,
   			rms_student as st
-  		WHERE gds.stu_id=st.stu_id
+  		WHERE 
+			gds.mainType=1 AND
+			gds.stu_id=st.stu_id
 		  	and gds.group_id=$group
 		  	and gds.is_pass=1
   	";
@@ -2472,6 +2480,7 @@ function getAllgroupStudyNotPass($action=null){
 		  	rms_group_detail_student as gds,
 		  	rms_student as st
 	  	WHERE
+			gds.mainType=1 AND
 		  	gds.stu_id=st.stu_id
 		  	
 			and is_pass=0
@@ -2500,6 +2509,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	rms_group_detail_student as gds,
 	  	rms_student as st
   	WHERE
+		gds.mainType=1 AND
 	  	gds.stu_id=st.stu_id
 	  	AND gds.group_id=$group_id 
   		AND gds.stop_type=0 
@@ -2943,6 +2953,7 @@ function getAllgroupStudyNotPass($action=null){
 		  	rms_student AS s,
 		  	rms_group_detail_student AS gds
 	  	WHERE
+			gds.mainType=1 AND
 		  	gds.stu_id = s.stu_id
 		  	AND (stu_enname!='' OR s.stu_khname!='')
 		  	AND s.status=1
@@ -3093,6 +3104,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	 rms_group_detail_student AS sgd,
 		`rms_student` AS s
   	WHERE
+		sgd.mainType=1 AND
   		s.stu_id = sb.stu_id 
   		AND sgd.gd_id = sb.group_detail_id 
   		AND sb.status=1

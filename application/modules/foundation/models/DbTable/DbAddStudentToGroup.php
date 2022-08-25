@@ -52,7 +52,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				FROM 
 					`rms_group_detail_student` as gds 
 				WHERE 
-					`status`=1 AND`group_id`=".$id;
+					sgd.mainType=1 
+					AND `status`=1 AND`group_id`=".$id;
 			
 		return $db->fetchAll($sql);
 		
@@ -86,8 +87,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 					`g`.`semester` AS `semester`,
 					`g`.`note`,
 					(select $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id LIMIT 1)AS remain_Student
+					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.mainType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student,
+					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.mainType=1 AND gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id LIMIT 1)AS remain_Student
 				FROM
 					rms_group g
 				where
@@ -308,7 +309,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			  	rms_student AS s,
 			  	`rms_group_detail_student` AS sd 
 		 	  WHERE 
-				s.stu_id = sd.stu_id
+				sd.mainType=1 
+				AND s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
 				AND sd.stop_type=0
@@ -350,7 +352,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			  	rms_student AS s,
 			  	`rms_group_detail_student` AS sd 
 		 	  WHERE 
-				s.stu_id = sd.stu_id
+				sd.mainType=1 
+				AND s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
 				AND sd.stop_type=0

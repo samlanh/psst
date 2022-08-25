@@ -187,8 +187,8 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 				FROM 
 					`rms_group_detail_student` AS sgh
 				WHERE 
-					sgh.type = 1
-					and sgh.`group_id` = ".$group_id;
+					sgh.mainType=1 
+					AND sgh.`group_id` = ".$group_id;
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
 		return $db->fetchAll($sql.$order);
 	}

@@ -218,7 +218,9 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
 			(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
 			FROM `rms_group_detail_student` AS sgh
-			WHERE sgh.`group_id`=".$group_id;
+			WHERE 
+				sgh.mainType=1 
+				AND sgh.`group_id`=".$group_id;
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
 		return $db->fetchAll($sql.$order);
 	}

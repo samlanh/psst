@@ -155,7 +155,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				rms_group as g,
 				rms_group_detail_student as gds
 			WHERE
-				s.stu_id = gds.stu_id
+				gds.mainType=1 
+				AND s.stu_id = gds.stu_id
 				AND s.stu_id=$stu_id ";
 			$row = $_db->fetchAll($sql);
 			$result = array(
@@ -1682,7 +1683,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     
     	rms_student AS vst,
     	rms_group_detail_student AS gds
-    	WHERE s.`id`=sd.`score_id`
+    	WHERE 
+		gds.mainType=1 
+		AND s.`id`=sd.`score_id`
     	AND vst.stu_id = sm.`student_id`
     	AND vst.stu_id = sd.`student_id`
     	AND vst.stu_id = gds.`stu_id`

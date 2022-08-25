@@ -100,7 +100,8 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
 				   rms_group as g,
 				   rms_student as st
 				WHERE 
-					gds.`group_id` = gscg.`to_group` 
+					gds.mainType=1 
+					AND gds.`group_id` = gscg.`to_group` 
 					and gscg.change_type=1
 				  	AND gds.`old_group` = gscg.`from_group`
 				  	and gscg.to_group=g.id
@@ -155,7 +156,9 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
 				  `rms_tuitionfee` AS tf,
 				  `rms_student` AS s,
 				  `rms_group_detail_student` AS gds 
-				WHERE s.`stu_id` = gds.`stu_id` 
+				WHERE 
+					gds.mainType=1 
+					AND s.`stu_id` = gds.`stu_id` 
 				  AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
     	$row = $db->fetchAll($sql);
     	if($row){

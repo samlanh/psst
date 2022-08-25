@@ -15,7 +15,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			  FROM
 			    `rms_group_detail_student` AS gds,
 			    `rms_group` AS g 
-			  WHERE  gds.group_id = g.id AND group_code!=''";
+			  WHERE  
+				gds.mainType=1 
+				AND gds.group_id = g.id AND group_code!=''";
 			$request=Zend_Controller_Front::getInstance()->getRequest();
 			if($request->getActionName()=='add'){
 				$sql.=" AND gds.is_pass=2 ";
@@ -509,7 +511,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	}
 	function getAllStudentOldGroup($from_group){
 		$db = $this->getAdapter();
-		$sql="select gd_id from rms_group_detail_student where rms_group_detail_student.group_id=".$from_group;
+		$sql="select gd_id from 
+		
+			rms_group_detail_student 
+			where mainType=1  AND rms_group_detail_student.group_id=".$from_group;
 		return $db->fetchAll($sql);
 	}
 	
@@ -798,7 +803,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			 	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) as sex
 			FROM rms_group_detail_student as gds,
 				rms_student as st 
-			WHERE gds.stop_type = 0 
+			WHERE 
+				gds.mainType=1 
+				AND gds.stop_type = 0 
 				AND gds.stu_id=st.stu_id 
 				AND gds.group_id=$from_group
 				AND gds.is_pass=0 ";
@@ -818,7 +825,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					rms_group_detail_student as gds,
 					rms_student as st 
 				where 
-					gds.stu_id=st.stu_id 
+					gds.mainType=1 
+					AND gds.stu_id=st.stu_id 
 					and gds.group_id=$from_group
 			";
 		return $db->fetchAll($sql);
@@ -838,7 +846,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	
 	function selectStudentPass($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.old_group=$id";
+		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE 
+			gds.mainType=1 
+			AND gds.old_group=$id";
 		return $db->fetchAll($sql);
 	}
 

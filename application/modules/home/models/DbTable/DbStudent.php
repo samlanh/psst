@@ -48,7 +48,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						FROM rms_student AS s,
 							rms_group_detail_student AS ds
 						  WHERE  
-						   ds.is_maingrade=1 
+						   ds.mainType=1 
+						   AND ds.is_maingrade=1 
 						   AND ds.is_current=1 
 						   AND s.stu_id=ds.stu_id 
 		                   AND s.status = 1 
@@ -168,7 +169,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student as s,
 					rms_group_detail_student AS ds
- 			WHERE s.stu_id = ds.stu_id AND ds.is_maingrade=1 AND s.stu_id=$stu_id  ";
+				WHERE 
+					ds.mainType=1 
+					AND s.stu_id = ds.stu_id 
+					AND ds.is_maingrade=1 
+					AND s.stu_id=$stu_id  ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("s.`branch_id`");
@@ -198,7 +203,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					 (SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(SELECT g.session FROM rms_group AS g WHERE g.id = ds.group_id LIMIT 1) LIMIT 1)AS session
 				FROM 
 					rms_group_detail_student AS ds
- 			WHERE ds.stu_id = $stu_id AND ds.is_current=1 ";
+ 			WHERE 
+				ds.mainType=1 
+				AND ds.stu_id = $stu_id AND ds.is_current=1 ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 // 		$where.=$dbp->getAccessPermission();
@@ -347,7 +354,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
     				rms_group_reschedule AS gr,
     				rms_group_detail_student AS gd
     			WHERE 
-    				gr.group_id=gd.group_id
+					gd.mainType=1 
+    				AND gr.group_id=gd.group_id
     				and gd.is_pass = 0
     	 			AND gd.stu_id=$id
 		    	GROUP BY 
@@ -577,7 +585,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					rms_group AS g,
 					rms_student as s
 				WHERE 
-					gds.group_id = g.id
+					gds.mainType=1 
+					AND gds.group_id = g.id
 					AND gds.stu_id = s.stu_id
 					and gds.stu_id = $stu_id
 					and gds.status=1

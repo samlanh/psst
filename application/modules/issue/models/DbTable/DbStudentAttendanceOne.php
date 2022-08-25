@@ -282,8 +282,8 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 					`rms_group_detail_student` AS sgh,
 					rms_student as s
 				WHERE
-					s.stu_id = sgh.stu_id
-					and sgh.type = 1
+					sgh.mainType=1 
+					AND s.stu_id = sgh.stu_id
 					and sgh.is_pass = 0
 					and sgh.group_id = $group_id
 			";
@@ -297,8 +297,9 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 					`rms_group_detail_student` AS sgh,
 					rms_student as s
 				WHERE
-					s.stu_id = sgh.stu_id
-					and sgh.type = 1
+					sgh.mainType=1 
+					AND s.stu_id = sgh.stu_id
+					
 					and sgh.is_pass = 0
 					and sgh.group_id = $group_id
 			";

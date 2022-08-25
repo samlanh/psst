@@ -140,6 +140,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 				`rms_student` AS s,
 				rms_group_detail_student AS gd
 			WHERE 
+				gd.mainType=1 AND
 				s.customer_type =1
 				AND s.status=1
 				AND gd.stop_type=0

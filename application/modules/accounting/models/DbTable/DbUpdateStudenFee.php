@@ -134,6 +134,7 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 			  	`rms_group_detail_student` AS sd,
 			  	rms_student_fee_history as sf
 		 	  WHERE 
+				sd.mainType=1 AND
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 

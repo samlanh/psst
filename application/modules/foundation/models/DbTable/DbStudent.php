@@ -35,10 +35,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 		s.`stu_id`,
 		s.group_id,
-		(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1 )
+		(SELECT `group_id` FROM `rms_group_detail_student` WHERE mainType=1 AND rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1 )
 		 AS current_groupid
 		 FROM `rms_student` AS s  WHERE s.group_id>0
-		 AND s.group_id !=(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1)";
+		 AND s.group_id !=(SELECT `group_id` FROM `rms_group_detail_student` WHERE mainType=1 AND rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1)";
 			$result = $db->fetchAll($sql);
 			
 			foreach($result as $rs){
@@ -80,7 +80,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				END as tel,
 				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(SELECT fee_id FROM `rms_student_fee_history` WHERE student_id=s.stu_id AND is_current=1 LIMIT 1) LIMIT 1) AS academic,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
-					WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
+					WHERE ds.mainType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
 			
 				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
 				
@@ -120,15 +120,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 
 		if(!empty($search['group'])){
 			$where.=" AND (SELECT ds.group_id FROM rms_group_detail_student AS ds
-				WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.group_id =".$search['group']." LIMIT 1) ";
+				WHERE ds.mainType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.group_id =".$search['group']." LIMIT 1) ";
 		}
 		if(!empty($search['degree'])){
 			$where.=" AND (SELECT ds.degree FROM rms_group_detail_student AS ds
-				WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.degree =".$search['degree']." LIMIT 1) ";
+				WHERE ds.mainType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.degree =".$search['degree']." LIMIT 1) ";
 		}
 		if(!empty($search['grade_all'])){
 			$where.=" AND (SELECT ds.grade FROM rms_group_detail_student AS ds
-				WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.grade =".$search['grade_all']." LIMIT 1) ";
+				WHERE ds.mainType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.grade =".$search['grade_all']." LIMIT 1) ";
 		}
 		if(!empty($search['session'])){
 			$where.=" AND (SELECT ds.session FROM rms_group_detail_student AS ds
@@ -962,9 +962,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS gu_job,
 		
-		(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT gds.grade FROM rms_group_detail_student AS gds WHERE gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
-		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=(SELECT gds.degree FROM rms_group_detail_student AS gds WHERE gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC  LIMIT 1) AND rms_items.type=1 LIMIT 1) AS degree_name,
-		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=(SELECT gds.degree FROM rms_group_detail_student AS gds WHERE gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC LIMIT 1) AND rms_items.type=1 LIMIT 1) AS degreeTitle,
+		(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT gds.grade FROM rms_group_detail_student AS gds WHERE gds.mainType=1 AND gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=(SELECT gds.degree FROM rms_group_detail_student AS gds WHERE gds.mainType=1 AND  gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC  LIMIT 1) AND rms_items.type=1 LIMIT 1) AS degree_name,
+		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=(SELECT gds.degree FROM rms_group_detail_student AS gds WHERE gds.mainType=1 AND  gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC LIMIT 1) AND rms_items.type=1 LIMIT 1) AS degreeTitle,
 		
 		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality,
 		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.father_nation) AS father_nation,
@@ -999,7 +999,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=sh.grade AND items_type=1 LIMIT 1) AS gradeTitle,
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sh.group_id LIMIT 1) AS groupCode
 			FROM rms_group_detail_student AS sh 
-			WHERE sh.stu_id=$student_id 
+			WHERE 
+				sh.mainType=1 
+				AND sh.stu_id=$student_id 
 				AND sh.is_current=1 AND sh.is_pass=0";
 		$sql.=" ORDER BY sh.gd_id ASC ";
 		return $db->fetchAll($sql);
@@ -1020,7 +1022,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				rms_student AS s,
 				rms_group_detail_student AS gds
 			WHERE
-				gds.stu_id = s.stu_id
+				gds.mainType=1 
+				AND gds.stu_id = s.stu_id
 				AND (stu_enname!='' OR s.stu_khname!='')
 				AND s.status=1
 				AND s.customer_type=1
@@ -1047,12 +1050,12 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			FROM
 				rms_group_detail_student AS gds
 			WHERE
-				gds.is_current =1
+				gds.mainType=1 
+				AND gds.is_current =1
 				AND gds.stu_id = $stu_id
 				AND (SELECT g.branch_id FROM `rms_group` AS g WHERE g.id = gds.group_id LIMIT 1) = $branch_id
 		";
-		//AND gds.stop_type=0
-		//AND gds.stop_type=0
+		
 		return $db->fetchAll($sql);
 	}
 }

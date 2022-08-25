@@ -28,11 +28,13 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 	    	(SELECT name_en FROM rms_view WHERE `type` = 4 AND key_code = g.`session`) AS `session`,
 	    	(SELECT group_code FROM `rms_group` WHERE id=gds.group_id LIMIT 1) as group_name
 	    	FROM
-	    	rms_student AS s,
-	    	`rms_group_detail_student` AS gds,
-	    	`rms_group` AS g
+				rms_student AS s,
+				`rms_group_detail_student` AS gds,
+				`rms_group` AS g
 	    	WHERE
-	    	s.status=1
+			
+			gds.mainType=1 
+			AND s.status=1
 	    	AND gds.`stu_id`=s.stu_id
 	    	AND g.id = gds.`group_id`
 	    	AND gds.`is_pass`=0

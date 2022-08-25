@@ -313,7 +313,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				  `rms_student` AS s,
 				  rms_group_detail_student AS gds
 			WHERE 
-				s.stu_id = gds.stu_id
+				gds.mainType=1 
+				AND	s.stu_id = gds.stu_id
 				AND s.stu_id = pp.student_id
 				AND gds.is_maingrade =1
     		";
@@ -384,7 +385,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 		    		`rms_student` AS s,
 		    		rms_group_detail_student AS gds 
 	    		WHERE 
-	    		s.stu_id = pp.student_id
+				gds.mainType=1 
+	    		AND s.stu_id = pp.student_id
 	    		AND s.stu_id = gds.stu_id
 	    		AND pp.is_closed = 0
 	    		AND pp.status = 1

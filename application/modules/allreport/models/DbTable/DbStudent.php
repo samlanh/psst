@@ -93,7 +93,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				rms_student AS s,
 				rms_group_detail_student AS ds,
 				`rms_crm` AS c
-			WHERE s.crm_id = c.id AND ds.stu_id = s.stu_id
+			WHERE 
+				ds.mainType=1 
+				AND s.crm_id = c.id AND ds.stu_id = s.stu_id
 		";
 		$where = ' ';
 		$from_date =(empty($search['start_date']))? '1': " c.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";

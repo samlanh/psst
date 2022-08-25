@@ -70,7 +70,12 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
 			  `rms_group_detail_student` AS gds,
 			  `rms_group` AS g ,
 			  rms_student as st
-			 WHERE st.stu_id=gds.stu_id and  g.id = gds.`group_id` and gds.is_pass=0
+			 
+			 WHERE 
+				gds.mainType=1 
+				AND st.stu_id=gds.stu_id 
+				AND g.id = gds.`group_id` 
+				AND gds.is_pass=0
 			  ";
     	$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
     	$where  = ' ';
@@ -109,8 +114,10 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
 				  `rms_tuitionfee` AS tf,
 				  `rms_student` AS s,
 				  `rms_group_detail_student` AS gds 
-				WHERE s.`stu_id` = gds.`stu_id` 
-				  AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
+				WHERE 
+					gds.mainType=1 
+					AND s.`stu_id` = gds.`stu_id` 
+				    AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
     	$row = $db->fetchAll($sql);
     	if($row){
     		return $row;

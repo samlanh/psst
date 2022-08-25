@@ -61,7 +61,7 @@ class Scan_Model_DbTable_DbStudentSetTime extends Zend_Db_Table_Abstract
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
-					WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
+					WHERE ds.mainType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
 				(SELECT first_name FROM rms_users WHERE s.setLockBy=rms_users.id LIMIT 1 ) AS userName,
 			s.lockFromTime,
 			s.lockToTime	

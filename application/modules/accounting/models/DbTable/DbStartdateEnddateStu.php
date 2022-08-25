@@ -117,6 +117,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		FROM rms_student AS s,
 			rms_group_detail_student AS sgd
 		WHERE 
+		sgd.mainType=1 AND
 		s.stu_id=sgd.stu_id
 		AND 
 		s.status=1 
@@ -140,6 +141,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		FROM rms_student AS s,
 			rms_group_detail_student AS sgd
 		WHERE 
+			sgd.mainType=1 AND
 			s.stu_id=sgd.stu_id
 			AND s.status=1 
 			AND sgd.stop_type=0

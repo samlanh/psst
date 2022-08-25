@@ -43,7 +43,8 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 						FROM rms_student AS s,
 							rms_group_detail_student AS ds
 						  WHERE  
-						   ds.is_maingrade=1 
+						   ds.mainType=1
+						   AND ds.is_maingrade=1 
 						   AND ds.is_current=1 
 						   AND s.stu_id=ds.stu_id 
 		                   AND s.status = 1 

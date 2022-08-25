@@ -244,14 +244,14 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					(SELECT id FROM `rms_scan_transaction` st WHERE st.stu_id=s.stu_id  AND st.group_id=$group_id AND st.scan_type=1 AND st.is_converted=0 LIMIT 1) AS transcan_id
 					
 						FROM
-					`rms_group_detail_student` AS sgh,
-					rms_student as s
+							`rms_group_detail_student` AS sgh,
+							rms_student as s
 						WHERE
-							sgh.`stu_id`=s.stu_id
+							sgh.mainType=1 
+							AND sgh.`stu_id`=s.stu_id
 							AND s.status=1
 							AND sgh.status = 1
-							AND sgh.type = 1
-							and sgh.stop_type=0
+							AND sgh.stop_type=0
 							AND sgh.`group_id`=".$group_id;
 			$order=" ORDER BY s.stu_khname ASC";
 		}else{
@@ -264,10 +264,11 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 				 	`rms_group_detail_student` AS sgh,
 				 	rms_student as s
 				WHERE 
-					sgh.`stu_id`=s.stu_id
+					sgh.mainType=1 
+					AND sgh.`stu_id`=s.stu_id
 					AND s.status=1
 					AND sgh.status = 1
-					AND sgh.type = 1
+					
 					and sgh.stop_type=0
 					AND sgh.`group_id`=".$group_id;
 			$order=" ORDER BY s.stu_khname ASC";

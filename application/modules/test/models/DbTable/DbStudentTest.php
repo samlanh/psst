@@ -239,7 +239,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	}
 	function getSchoolOptionbyStudentId($stuId){
 		$db = $this->getAdapter();
-		$sql="SELECT school_option FROM `rms_group_detail_student` WHERE stu_id=$stuId LIMIT 1";
+		$sql="SELECT school_option FROM `rms_group_detail_student` WHERE mainType=1 AND stu_id=$stuId LIMIT 1";
 		return $db->fetchOne($sql);
 	}	
 	

@@ -55,6 +55,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 					`rms_student` AS s,
 					 `rms_group_detail_student` AS gsd
 				WHERE 
+					gsd.mainType=1 AND
 					s.`stu_id` =gsd.stu_id
 					AND s.`stu_id` = $stu_id
 					AND gsd.`group_id` = $group_id

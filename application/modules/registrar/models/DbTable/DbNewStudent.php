@@ -39,7 +39,8 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 		$sql.="	FROM $this->_name AS s ,
 				rms_group_detail_student as gds
 			WHERE 
-				s.stu_id = gds.stu_id
+				gds.mainType=1
+				AND s.stu_id = gds.stu_id
 				AND gds.is_newstudent=1
 				AND gds.group_id=0
 				AND gds.is_current=1
@@ -223,10 +224,12 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 					gds.academic_year,
 					gds.degree,
 					gds.grade
-				FROM rms_student as s,
-				rms_group_detail_student as gds
+				FROM 
+					rms_student as s,
+					rms_group_detail_student as gds
 				WHERE 
-				s.stu_id = gds.stu_id
+				gds.mainType=1
+				AND s.stu_id = gds.stu_id
 				AND gds.is_newstudent=1
 				AND gds.group_id=0
 				AND gds.is_current=1

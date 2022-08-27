@@ -111,7 +111,10 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		}
 		public function getAllFacultyOption(){
 			$_db = new Application_Model_DbTable_DbGlobal();
-			$rows = $_db->getAllMajor();
+			$param =array(
+				'itemsType'=>1
+			);
+			$rows = $_db->getAllItemDetail($param);
 			array_unshift($rows, array('id'=>-1,'name'=>"select grade"));
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){

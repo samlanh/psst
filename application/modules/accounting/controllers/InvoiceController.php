@@ -110,7 +110,13 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$student_id = empty($data['student_id'])?null:$data['student_id'];
-			$grade = $db->getAllGradeStudy($data['items_type'],$student_id);
+			
+			$param= array(
+				'itemsType'=>$data['items_type'],
+				'studentId'=>$student_id,
+			);
+			
+			$grade = $db->getAllItemDetail($param);
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

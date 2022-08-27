@@ -206,8 +206,10 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->degree = $dept;
 		$this->view->dept = $dept;
-		
-		$d_row= $_dbgb->getAllGradeStudy();
+		$param = array(
+			'itemsType'=>1
+		);
+		$d_row= $_dbgb->getAllItemDetail($param);
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();

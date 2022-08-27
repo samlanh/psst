@@ -108,7 +108,7 @@
     	}
     	$sql="SELECT 
 			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id)AS branch,
-			(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.disname_id )AS disc_name,
+			(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.discountType )AS disc_name,
 			g.*,
 			(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id )AS user_name,
 			(SELECT $title FROM rms_view as v WHERE v.type=1 AND v.key_code =g.status) AS `status` 

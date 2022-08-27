@@ -37,7 +37,10 @@ class Allreport_Model_DbTable_DbRptLecturer extends Zend_Db_Table_Abstract
    }
     public function getAllGrade(){
 	   $_dbgb = new Application_Model_DbTable_DbGlobal();
-	   return $_dbgb->getAllGradeStudy(1);
+	   $param = array(
+			'itemsType'=>2
+		);
+	   return $_dbgb->getAllItemDetail($param);
    }
    public function getAcademicyear(){
 	   $dbglobal = new Application_Model_DbTable_DbGlobal();

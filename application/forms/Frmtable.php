@@ -188,8 +188,6 @@ class Application_Form_Frmtable
 		return $stat;
     }
     public function checkValue($value){
-    	//Sophen comment for number format
-    	
     	if($this->is_date($value)) return date_format(date_create($value), 'd-M-Y');  	
     	return $value;
     }

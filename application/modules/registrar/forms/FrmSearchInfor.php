@@ -253,7 +253,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				));
 		$_grade->setValue($request->getParam('grade'));
 		$opt_g = array(''=>$this->tr->translate("GRADE"));
-		$opt_grade= $_dbgb->getAllGradeStudy($type);
+		
+		$param = array(
+			'itemsType'=>$type
+		);
+		$opt_grade= $_dbgb->getAllItemDetail($param);
 		if(!empty($opt_grade))foreach ($opt_grade As $rows)$opt_g[$rows['id']]=$rows['name'];
 		$_grade->setMultiOptions($opt_g);
 		
@@ -314,7 +318,12 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		));
 		$service->setValue($request->getParam("service"));
 		$opt_ser = array(''=>$this->tr->translate("SERVICE_NAME"));
-		$ser_rows = $db->getAllGradeStudy(2);
+		
+		$param = array(
+			'itemsType'=>2
+		);
+		
+		$ser_rows = $db->getAllItemDetail($param);
 		if(!empty($ser_rows))foreach($ser_rows As $row)$opt_ser[$row['id']]=$row['name'];
 		$service->setMultiOptions($opt_ser);
 		

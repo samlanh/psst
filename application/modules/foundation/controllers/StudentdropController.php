@@ -115,8 +115,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 		$this->view->degree = $db_global->getAllDegreeMent();
 		$this->view->group = $db_global->getAllGroupName();
 		$this->view->session=$db_global->getSession();
-			
-		$d_row= $db_global->getAllGradeStudy();
+		$param = array(
+			'itemsType'=>1
+		);
+		$d_row= $db_global->getAllItemDetail($param);
 		$this->view->grade_name=$d_row;
 			
 		$tsub= new Global_Form_FrmAddClass();

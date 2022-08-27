@@ -71,7 +71,11 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		$this->view->payment_term = $model->getAllPaymentTerm();
 		 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $dbgb->getAllGradeStudy(2);
+		
+		$param = array(
+			'itemsType'=>2
+		);
+		$d_row= $dbgb->getAllItemDetail($param);
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 		
@@ -104,7 +108,10 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		$this->view->frm_fee = $frm;
 			
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $dbgb->getAllGradeStudy(2);
+		$param = array(
+			'itemsType'=>2
+		);
+		$d_row= $dbgb->getAllItemDetail($param);
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 		$this->view->service_name=$d_row;
 		$this->view->all_service = $dbgb ->getAllGradeStudyOption(2);
@@ -166,7 +173,10 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		$this->view->frm_fee = $frm;
 			
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $dbgb->getAllGradeStudy(2);
+		$param = array(
+			'itemsType'=>2
+		);
+		$d_row= $dbgb->getAllItemDetail($param);
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 		$this->view->service_name=$d_row;
 		$this->view->all_service = $dbgb ->getAllGradeStudyOption(2);
@@ -246,7 +256,10 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				$dbgb = new Application_Model_DbTable_DbGlobal();
-					$d_row= $dbgb->getAllGradeStudy(2);
+				$param = array(
+					'itemsType'=>2
+				);
+					$d_row= $dbgb->getAllItemDetail($param);
 					array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 					array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 					print_r(Zend_Json::encode($d_row));

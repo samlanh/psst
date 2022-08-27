@@ -201,4 +201,19 @@ class Global_GradeController extends Zend_Controller_Action {
     		exit();
     	}
     }
+    function getAllitemidAction(){
+   	 	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$rs = $db->getAllItemDetail($data);
+    		
+//     		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested,$groupDetailId);
+//     		$rsproduct = $db->getProductbyBranch($data['dept_id']);
+//     		if(!empty($rsproduct) OR !empty($rs)){
+//     			$rs = array_merge($rs,$rsproduct);
+//     		}
+    		print_r(Zend_Json::encode($rs));
+    		exit();
+    	}
+    }
 }

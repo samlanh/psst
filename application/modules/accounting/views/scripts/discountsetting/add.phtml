@@ -4,54 +4,6 @@
 	$frm= $this->frm_discount;
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");
-	dojo.require('dijit.form.TextBox');  
-	dojo.require('dijit.form.NumberTextBox');
-	dojo.require("dijit.form.DateTextBox");
-</script>
-<script>
-var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
-dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: disname_store,
-		required: true,   
-		autoComplete: false,
-		queryExpr: "*${0}*",  
-		id: "disname_id",
-		name: "disname_id",           
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
-		onChange: function() {  
-			discount_id = dijit.byId('disname_id').get('value');
-			if(discount_id==-1){
-				dijit.byId("popup_add_discount").show();
-				dijit.byId("s_save").set("disabled",false);
-			}
-		}
-	}, "disname_id");
-
-	new dijit.form.FilteringSelect({
-		store: service_store,
-		required: true,  
-		autoComplete: false,
-		queryExpr: "*${0}*",                      
-	    id: "title",
-	    name: "title",  
-	    tabindex: "1",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
-	    onChange: function() {          
-		   	service_id = dijit.byId('title').get('value');
-		    if(service_id==-1){
-		   		dijit.byId("popup_dept").show();
-		   		dijit.byId("s_save").set("disabled",false);
-		    }
-	   }
-	}, "title");
-});
-</script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -71,7 +23,7 @@ dojo.ready(function(){
 						dijit.byId('branch_id').focus()
 						return false;
 					}
-				dis_max=dijit.byId('dis_max').get('value');
+				dis_max=dijit.byId('discountValue').get('value');
 					if(dis_max>100){
 					alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
 					return false;
@@ -98,6 +50,34 @@ dojo.ready(function(){
 		                	<?php echo $frm->getElement("branch_id");?>
 		                </div>
 		             </div>
+		             <div class="form-group">
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISCOUNT_OPTION");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("discountOption");?>
+						</div>
+		             </div>
+		             <div class="form-group">
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+			                <input id="studentId" />
+						</div>
+		             </div>
+		             <div class="form-group">
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+			                <input id="itemType" />
+						</div>
+		             </div>
+		              <div class="form-group">
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("itemId");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+			                <input id="itemId" />
+						</div>
+		             </div>
 					<div class="form-group">
 	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISCOUNT_TYPE");?>
 	                   </label>
@@ -105,11 +85,18 @@ dojo.ready(function(){
 		                	<input id="disname_id" />
 						</div>
 		             </div>
+		             <div class="form-group">
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DisValueType");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+			                	<?php echo $frm->getElement("DisValueType");?>
+			                </div>
+		             </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DIS_MAX");?>%
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("dis_max");?>
+	                   		<?php echo $frm->getElement("discountValue");?>
 	                   </div>
 	                </div>
 	              	 <div class="form-group">
@@ -160,7 +147,7 @@ dojo.ready(function(){
 								<td><?php echo $tr->translate('DISCOUNT_TYPE');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="dis_name" name="dis_name" value="" type="text"></td>
 							</tr>
-							<tr>
+							<tr style="display: none;">
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
 	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
@@ -184,7 +171,130 @@ dojo.ready(function(){
 		</form>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script>
+	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require('dijit.form.TextBox');  
+	dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dijit.form.DateTextBox");
+	var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
+	var ItemTypestore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->itemType));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: disname_store,
+		required: true,   
+		autoComplete: false,
+		queryExpr: "*${0}*",  
+		id: "disname_id",
+		name: "disname_id",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		onChange: function() {  
+			discount_id = dijit.byId('disname_id').get('value');
+			if(discount_id==-1){
+				dijit.byId("popup_add_discount").show();
+				dijit.byId("s_save").set("disabled",false);
+			}
+		}
+	}, "disname_id");
+
+	new dijit.form.FilteringSelect({
+		store:ItemTypestore,
+		required: false,  
+		autoComplete: false,
+		queryExpr: "*${0}*",                      
+	    id: "itemType",
+	    name: "itemType",  
+	    tabindex: "1",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
+	    onChange: function() {          
+	    	itemId = dijit.byId('itemType').get('value');
+	    	dijit.byId("itemId").reset();
+		    if(itemId>0){
+		    	getAllItemId(itemId);
+		    }
+	   }
+	}, "itemType");
+
+	new dijit.form.FilteringSelect({
+		required: false,  
+		autoComplete: false,
+		queryExpr: "*${0}*",                      
+	    id: "itemId",
+	    name: "itemId",  
+	    tabindex: "1",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_ITEM")?>", 
+	    onChange: function() {          
+	   }
+	}, "itemId");
+
+	new dijit.form.FilteringSelect({
+		required: false,  
+		autoComplete: false,
+		queryExpr: "*${0}*",                      
+	    id: "studentId",
+	    name: "studentId",  
+	    tabindex: "1",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>", 
+	    
+	}, "studentId");
+
+	branchId = dijit.byId('branch_id');
+	branchId.on('change',function(evt){
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			dijit.byId("branch_id").focus();
+			return false;
+		}
+		getAllstudentBranch();
+		
+	});
+
+	discountOption = dijit.byId('discountOption');
+	discountOption.on('change',function(evt){
+		getAllstudentBranch();
+	});
+	getAllstudentBranch();
+});
+
+function getAllstudentBranch(){
+	dijit.byId("studentId").reset();
+	branchId = dijit.byId('branch_id').get('value');
+	if(branchId==''){
+		 dijit.byId('branch_id').focus();
+	}
+	discountOption = dijit.byId('discountOption').get('value');
+	
+	if(discountOption==1){
+		return false;
+	}
+	var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	
+	contentData = {
+			'branch_id':branchId,
+			'customer_type':1
+			}
+	getAllStudentByBranch(urlGet,contentData);
+}
+function getAllItemId(itemId){
+	dijit.byId("itemId").reset();
+	branchId = dijit.byId('branch_id').get('value');
+
+	studentId = dijit.byId('studentId').get('value');
+	
+	var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
+	
+	contentData = {
+		'itemId':itemId,
+		'studentId':studentId,
+	}
+	getAllItemIdByType(urlGet,contentData);
+}
+
 function submitDataClose(){
 	dranch=dijit.byId('branch_id').get('value');
 	if(dranch==''){
@@ -192,7 +302,7 @@ function submitDataClose(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dis_max=dijit.byId('dis_max').get('value');
+	dis_max=dijit.byId('discountValue').get('value');
 	if(dis_max>100){
 		alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
 		return false;
@@ -203,7 +313,7 @@ function submitDataClose(){
 		alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ!');
 		return false;
 	} 
-	if(dijit.byId('add_discount').validate()) {
+	if(dijit.byId('add_discount').validate()){
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'add')); ?>';

@@ -6,13 +6,34 @@ class Application_Model_DbTable_DbUserLog extends Zend_Db_Table_Abstract
     protected $_name = 'rms_user_log';
 
 	public function insertLogin($user_id){
+		$ipaddress = $this->getUserIP();
     	$data=array(
-    					'log_date'=>date("Y/m/d , H:i:s"),
-    					'log_type'=>'in',
-    					'user_id'=>$user_id	
+    				'log_date'=>date("Y/m/d , H:i:s"),
+    				'log_type'=>'in',
+    				'user_id'=>$user_id	,
+    				'ipaddress'=>empty($ipaddress)?"":$ipaddress,
     	           );
     	 $this->insert($data);
     }
+    function getUserIP(){ // get current ip
+    	$client  = @$_SERVER['HTTP_CLIENT_IP'];
+    	$forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    	$remote  = $_SERVER['REMOTE_ADDR'];
+    	if(filter_var($client, FILTER_VALIDATE_IP))
+    	{
+    		$ip = $client;
+    	}
+    	elseif(filter_var($forward, FILTER_VALIDATE_IP))
+    	{
+    		$ip = $forward;
+    	}
+    	else
+    	{
+    		$ip = $remote;
+    	}
+    	return $ip;
+    }
+    
     public function insertLogout($user_id)
     {
     	$data=array(

@@ -26,11 +26,11 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
   			$rs_rows= $db->getAllDiscountset($search);
         	
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","DISCOUNT_TYPE","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","DISCOUNT_OPTION","TYPE","itemId","STUDENT_NAME","DISCOUNT_TYPE","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discountsetting','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('disc_name'=>$link,'dis_max'=>$link,'branch'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('disc_name'=>$link,'discountValue'=>$link,'branch'=>$link));
 			}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -67,6 +67,8 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 		array_unshift($disc, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->discount = $disc;
 		
+		$this->view->itemType = $model->getAllItems();
+		
 		$tsub=new Accounting_Form_FrmDiscount();
 		$frm_discount=$tsub->FrmDiscountsetting();
 		Application_Model_Decorator::removeAllDecorator($frm_discount);
@@ -100,6 +102,8 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 		$model = new Application_Model_DbTable_DbGlobal();		
 		$dis = $model->getAllDiscount();
 		$this->view->discount = $dis;
+		
+		$this->view->itemType = $model->getAllItems();
 		
 		$tsub=new Accounting_Form_FrmDiscount();
 		$frm_discount=$tsub->FrmDiscountsetting($rows);

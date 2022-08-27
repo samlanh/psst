@@ -913,7 +913,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getGradeAllDept($type){
     	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllGradeStudy($type);
+		
+		$param = array(
+			'itemsType'=>2
+		);
+    	return $db->getAllGradeStudy($param);
     }  
     
     function getAllDegree(){

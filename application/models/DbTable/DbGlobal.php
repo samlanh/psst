@@ -532,9 +532,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
 	   	return $db->fetchAll($sql);
    }
-   function getAllMajor(){
-   		return $this->getAllGradeStudy();
-   }
+  
    
    public function getAllGroup(){
 	   	$db = $this->getAdapter();
@@ -857,7 +855,10 @@ function getAllgroupStudyNotPass($action=null){
 	   	return $db->fetchAll($sql.$order);
    }
    function getAllGrade(){
-	  return $this->getAllGradeStudy();
+	   $param = array(
+		'itemsType'=>1,
+	   );
+	  return $this->getAllItemDetail($param);
    }
    public function getExpenseIncome($type){
    	$db = $this->getAdapter();
@@ -1767,6 +1768,41 @@ function getAllgroupStudyNotPass($action=null){
   	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';	
   	return $db->fetchAll($sql);
   }
+  function getAllItemDetail($data=null){
+  	$db = $this->getAdapter();
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
+  	$sql="SELECT i.id,
+			  	CONCAT(i.$colunmname,' (',(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+			  	FROM 
+			  		`rms_itemsdetail` AS i
+			  	WHERE i.status =1 ";
+  	if(!empty($data['itemsType'])){//
+  		$sql.=" AND i.items_type=".$data['itemsType'];
+  	}
+  	if(!empty($data['itemId'])){//
+  		$sql.=" AND i.items_id=".$data['itemId'];
+  	}
+  	
+  	 
+  	$branchlist = $this->getAllSchoolOption();
+  	if (!empty($branchlist)){
+  	foreach ($branchlist as $i){
+  		$s_where[] = $i['id']." IN (i.schoolOption)";
+  	}
+  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  	}
+  		$user = $this->getUserInfo();
+  		$level = $user['level'];
+  	if ($level!=1){
+  		$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
+  	}
+  		$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+  		return $db->fetchAll($sql);
+  }
   
   function getItemType($type){
   	$db = $this->getAdapter();
@@ -1789,36 +1825,7 @@ function getAllgroupStudyNotPass($action=null){
   	return $pre.$new_acc_no;
   }
   
-  function getAllGradeStudy($option=1){
-  	$db = $this->getAdapter();
-  	$currentLang = $this->currentlang();
-  	$colunmname='title_en';
-  	if ($currentLang==1){
-  		$colunmname='title';
-  	}
-  	$sql="SELECT i.id,
-			CONCAT(i.$colunmname,' (',(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
-		FROM `rms_itemsdetail` AS i 
-		WHERE i.status =1 ";
-  	if($option!=null){
-  		$sql.=" AND i.items_type=".$option;
-  	}
-  	
-  	$branchlist = $this->getAllSchoolOption();
-  	if (!empty($branchlist)){
-  		foreach ($branchlist as $i){
-  			$s_where[] = $i['id']." IN (i.schoolOption)";
-  		}
-  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-  	}
-  	$user = $this->getUserInfo();
-  	$level = $user['level'];
-  	if ($level!=1){
-  		$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
-  	}
-  	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
-  	return $db->fetchAll($sql);
-  }
+ 
   
   function getAllGradeStudyByDegree($category_id=null,$student_id=null,$is_stutested=null,$groupDetailId=null){
   	$db = $this->getAdapter();
@@ -1887,7 +1894,10 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   public function getAllGradeStudyOption($type=1){
-  	$rows = $this->getAllGradeStudy($type);
+	 $param = array(
+		'itemsType'=>$type
+	 );
+  	$rows = $this->getAllItemDetail($param);
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
   	array_unshift($rows, array('id'=>-1,'name'=>$tr->translate("PLEASE_SELECT")));
   	$options = '';

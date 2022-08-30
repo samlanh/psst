@@ -917,7 +917,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$param = array(
 			'itemsType'=>2
 		);
-    	return $db->getAllGradeStudy($param);
+    	return $db->getAllItemDetail($param);
     }  
     
     function getAllDegree(){

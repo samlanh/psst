@@ -118,8 +118,11 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.=' AND g.branch_id='.$search['branch_id'];
 		}
-		if($search['status']>-1){
-			$where.=' AND status='.$search['status'];
+		if(!empty($search['studentId'])){
+			$where.=' AND g.studentId='.$search['studentId'];
+		}
+		if($search['status_search']>-1){
+			$where.=' AND status='.$search['status_search'];
 		}
 		
 		$where.=$dbp->getAccessPermission('g.branch_id');

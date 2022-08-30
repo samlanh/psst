@@ -10,17 +10,15 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 	public function indexAction(){
 		try{
 			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = array(
-						'title' => $_data['title'],
-						'branch_id' => $_data['branch_id'],
-						'status' => $_data['status_search']);
+				$search=$this->getRequest()->getPost();
 			}
 			else{
 				$search = array(
 						'title' => '',
 						'branch' => '',
-						'status' => -1);
+						'studentId'=>'',
+						'status_search' =>-1
+						);
 			}
 			$db = new Accounting_Model_DbTable_DbDiscountSetting();
   			$rs_rows= $db->getAllDiscountset($search);
@@ -32,13 +30,15 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('disc_name'=>$link,'discountValue'=>$link,'branch'=>$link));
 			}catch (Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$frm = new Global_Form_FrmSearchMajor();
-		$frms =$frm->FrmsearchDiscount();
-		Application_Model_Decorator::removeAllDecorator($frms);
-		$this->view->form_search = $frms;
+				Application_Form_FrmMessage::message("Application Error");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+			
+			$this->view->adv_search = $search;
+			$frm = new Global_Form_FrmSearchMajor();
+			$frms =$frm->FrmsearchDiscount();
+			Application_Model_Decorator::removeAllDecorator($frms);
+			$this->view->form_search = $frms;
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){

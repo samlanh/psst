@@ -617,34 +617,6 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    
-   function getAllStudentName($opt=null,$type=2,$branchid=null){
-   	$db=$this->getAdapter();
-   	$branch_id = $this->getAccessPermission();
-   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
-   			stu_code,
-		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
-		   	FROM rms_student AS s
-		   	WHERE
-		   	(stu_enname!='' OR s.stu_khname!='')
-		   ";
-   	if($branchid!=null){
-   		$sql.=" AND branch_id=".$branchid;
-   	}
-   	$sql.=" ORDER BY stu_khname ASC";
-   	$rows = $db->fetchAll($sql);
-   	if($opt!=null){
-   		$options=array(0=>$tr->translate("CHOOSE"));
-   		if(!empty($rows))foreach($rows AS $row){
-   			$lable = $row['stu_code'];
-   			if($type==2){$lable = $row['name'];}
-   			$options[$row['id']]=$lable;
-   		}
-   		return $options;
-   	}else{
-   		return $rows;
-   	}
-   }
    
    function getallProductName(){
    	$db = $this->getAdapter();
@@ -890,7 +862,6 @@ function getAllgroupStudyNotPass($action=null){
    	}
    	$sql.=" GROUP BY s.stu_id ORDER BY stu_code ASC, stu_khname ASC ";
    	$rows = $db->fetchAll($sql);
-   	//OR gds.stop_type=3 retriv graduated student
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));
    		if(!empty($rows))foreach($rows AS $row){
@@ -902,6 +873,36 @@ function getAllgroupStudyNotPass($action=null){
    	}else{
    		return $rows;
    	}
+   }
+   function getAllStudentName($opt=null,$type=2,$branchid=null){
+	   	$db=$this->getAdapter();
+	   	$branch_id = $this->getAccessPermission();
+	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   		$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
+					   	stu_code,
+					   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
+					   	FROM rms_student AS s
+					   	WHERE
+					   	(stu_enname!='' OR s.stu_khname!='')
+	   				";
+			   	if($branchid!=null){
+			   		$sql.=" AND branch_id=".$branchid;
+	   			}
+	  	 	$sql.=" ORDER BY stu_khname ASC";
+	   		$rows = $db->fetchAll($sql);
+		   	if($opt!=null){
+		   		$options=array(0=>$tr->translate("CHOOSE"));
+		   		if(!empty($rows))foreach($rows AS $row){
+		   			$lable = $row['stu_code'];
+		   			if($type==2){
+		   				$lable = $row['name'];
+		   			}
+		   			$options[$row['id']]=$lable;
+		   		}
+		   		return $options;
+		   	}else{
+		   		return $rows;
+		   	}
    }
    
    function getAllCustomer($opt=null,$branchid=null){
@@ -916,9 +917,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	WHERE
 	   	s.stu_khname!=''
 	   	AND s.status=1  AND customer_type=2 ";
-//    	if($branchid!=null){
-//    		$sql.=" AND branch_id=".$branchid;
-//    	}
+
    	$sql.=" ORDER BY stu_khname ASC";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
@@ -945,10 +944,7 @@ function getAllgroupStudyNotPass($action=null){
    			WHERE s.status=1 AND customer_type=1 $branch_id  ORDER BY stu_code DESC ";
    	return $db->fetchAll($sql);
    }
-   function getAllStuName(){
-   	$db = $this->getAdapter();
-	return $this->getAllStudent();
-   }
+  
    function getStudentinfoById($stu_id){
 	   	$db=$this->getAdapter();
 	   	$currentLang = $this->currentlang();

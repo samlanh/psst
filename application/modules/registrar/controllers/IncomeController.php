@@ -19,8 +19,9 @@ class Registrar_IncomeController extends Zend_Controller_Action
     			$search = array(
     					"adv_search"=>'',
     					"cate_income"=>'',
-    					"currency_type"=>-1,
+    					'studentId'=>'',
     					"branch_id"=>'',
+    					'option_type'=>0,
     					"status"=>-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),

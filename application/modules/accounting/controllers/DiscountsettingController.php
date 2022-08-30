@@ -17,6 +17,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 						'title' => '',
 						'branch' => '',
 						'studentId'=>'',
+						'discountId'=>'',
 						'status_search' =>-1
 						);
 			}
@@ -24,11 +25,12 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
   			$rs_rows= $db->getAllDiscountset($search);
         	
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","DISCOUNT_OPTION","TYPE","itemId","STUDENT_NAME","DISCOUNT_TYPE","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","DISCOUNT_OPTION","STUDENT_NAME","TYPE","COURSE_SERVICE_PRODUCT","DISCOUNT_TYPE","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discountsetting','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('disc_name'=>$link,'discountValue'=>$link,'branch'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch'=>$link,'disc_name'=>$link,'discountValue'=>$link,
+					'discountOption'=>$link,'studentName'=>$link,'itemType'=>$link));
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Application Error");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -39,6 +41,10 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 			$frms =$frm->FrmsearchDiscount();
 			Application_Model_Decorator::removeAllDecorator($frms);
 			$this->view->form_search = $frms;
+			
+			$model = new Application_Model_DbTable_DbGlobal();
+			$disc = $model->getAllDiscount();
+			$this->view->discount = $disc;
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){

@@ -75,7 +75,7 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     		foreach ($rsbranch as $row){
     			    $_arr_prolocation =array(
     			    	'pro_id'		=> $pro_id,
-    			    	'brand_id'		=>$row['id'],
+    			    	'branch_id'		=>$row['id'],
     					'pro_qty'		=>0,
     					'price'			=>0,
     					'stock_alert'	=>0,
@@ -83,17 +83,7 @@ class Stock_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     			    $this->_name = "rms_product_location";
     			    $this->insert($_arr_prolocation);
     		}
-//     		if(!empty($data[$i]['H'])){
-//     			$_arr_prolocation =array(
-//     				'pro_id'		=> $pro_id,
-//     				'brand_id'		=>$branch_id,
-// 					'pro_qty'		=>$data[$i]['H'],
-// 					'price'			=>$data[$i]['i'],
-// 					'stock_alert'	=>$data[$i]['j'],
-//     			);
-//     			$this->_name = "rms_product_location";
-//     			$this->insert($_arr_prolocation);
-//     		}
+
     	}
     }
 }   

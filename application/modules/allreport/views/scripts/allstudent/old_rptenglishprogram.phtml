@@ -107,7 +107,7 @@
 								<td ><?php echo $row['degree'];?></td>
 								<td align="left"><?php echo $row['grade'];?></td>
 								<td align="left"><?php echo $row['room_name'];?></td>
-								<td align="left"><?php echo ($row['is_stu_new']==1)?"New":"";?></td>
+								<td align="left"><?php //echo ($row['is_stu_new']==1)?"New":"";?></td>
 								<td align="left"><?php echo (!empty($row['paid_date']))?"Paid":"Unpaid";?></td>
 								<td align="left"><?php echo (!empty($row['paid_date']))?date("d-M-Y",strtotime($row['paid_date'])):"";?></td>
 								<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>><?php echo $row['status'];?></td>

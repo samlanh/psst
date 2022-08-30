@@ -122,7 +122,7 @@ class Stock_Model_DbTable_DbReceivedNote extends Zend_Db_Table_Abstract
     					}else{
     						$data = array(
     								'pro_id'=>$_data['pro_id_'.$i],
-    								'brand_id'=>$_data['branch'],
+    								'branch_id'=>$_data['branch'],
     								'pro_qty'=>$_data['qty_'.$i],
     								'note'=>'ពីផ្ទេរទំនិញចូល',
     								'date' =>date("Y-m-d"),
@@ -157,7 +157,7 @@ class Stock_Model_DbTable_DbReceivedNote extends Zend_Db_Table_Abstract
     							}else{
     								$data = array(
     										'pro_id'=>$_data['pro_id_'.$i],
-    										'brand_id'=>$_data['branch'],
+    										'branch_id'=>$_data['branch'],
     										'pro_qty'=>$_data['qty_'.$i],
     										'note'=>'ពីផ្ទេរទំនិញចូល',
     										'date' =>date("Y-m-d"),
@@ -187,7 +187,7 @@ class Stock_Model_DbTable_DbReceivedNote extends Zend_Db_Table_Abstract
     }
     function getProductLocation($pro_id,$location_id){
     	$db = $this->getAdapter();
-    	$sql="select * from rms_product_location where pro_id=".$pro_id." AND brand_id = ".$location_id;
+    	$sql="select * from rms_product_location where pro_id=".$pro_id." AND branch_id = ".$location_id;
     	$row = $db->fetchRow($sql);
     	return $row;
     }
@@ -373,7 +373,7 @@ class Stock_Model_DbTable_DbReceivedNote extends Zend_Db_Table_Abstract
     					}else{
     						$data = array(
     								'pro_id'=>$_data['pro_id_'.$i],
-    								'brand_id'=>$_data['branch'],
+    								'branch_id'=>$_data['branch'],
     								'pro_qty'=>$_data['qty_'.$i],
     								'note'=>'ពីផ្ទេរទំនិញចូល',
     								'date' =>date("Y-m-d"),
@@ -408,7 +408,7 @@ class Stock_Model_DbTable_DbReceivedNote extends Zend_Db_Table_Abstract
     							}else{
     								$data = array(
     										'pro_id'=>$_data['pro_id_'.$i],
-    										'brand_id'=>$_data['branch'],
+    										'branch_id'=>$_data['branch'],
     										'pro_qty'=>$_data['qty_'.$i],
     										'note'=>'ពីផ្ទេរទំនិញចូល',
     										'date' =>date("Y-m-d"),

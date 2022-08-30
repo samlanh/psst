@@ -966,7 +966,7 @@ function getAllgroupStudyNotPass($action=null){
 			   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label,
 		   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,			   		
-		   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
+		   		
 		   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
 		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
@@ -1882,7 +1882,7 @@ function getAllgroupStudyNotPass($action=null){
 		      `rms_product_location`
 			   WHERE t.items_type=3 AND t.status=1 
   					 AND ( t.is_productseat=1 OR (t.id=rms_product_location.pro_id)) ";
-  	$sql.=$this->getAccessPermission("brand_id");
+  	$sql.=$this->getAccessPermission("branch_id");
   	
   	if($category_id!=null AND $category_id>0 ){
   		$sql.=' AND t.items_id='.$category_id;

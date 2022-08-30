@@ -43,7 +43,7 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     }
     function getProLocationById($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT id,pro_id,brand_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
+    	$sql="SELECT id,pro_id,branch_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
     	return $db->fetchAll($sql);
     }
     function getProductCategory(){ //if type=1 category , if type=2 measure 
@@ -75,43 +75,7 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }
-//     public function addCategory($_data){
-//     	//print_r($_data);exit();
-//     	$db = $this->getAdapter();
-//     	$db->beginTransaction();
-//     	try{
-//     		$_arr = array(
-//     				'name_kh'=>$_data['name_kh'],
-//     				'date'=>date("Y-m-d"),
-//     				'status'=>$_data['status'],
-//     				'user_id'=>$this->getUserId()
-//     		);
-//     		$this->_name='rms_pro_category';
-//     		if(!empty($_data['id'])){
-//     			$where=" id=".$_data['id'];
-//     			$this->update($_arr, $where);
-//     		}else{
-//     			$this->insert($_arr);
-//     		}
-//     		$db->commit();
-//     	}catch (Exception $e){
-//     		$db->rollBack();
-//     		echo $e->getMessage();
-//     	}
-//     }
-//     function getGategoryById($id){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT id,name_kh,name_en,type_id,`date`,`status` FROM rms_pro_category WHERE id=$id limit 1";
-//     	return $db->fetchRow($sql);
-//     }
-//     function getProductName(){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT p.id As id,CONCAT(p.pro_name) AS name FROM rms_product AS p,rms_product_location AS pl 
-//      			  WHERE p.id=pl.pro_id AND p.status=1 ";
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$sql.=$dbp->getAccessPermission('brand_id');
-//     	$sql.="  ORDER BY id DESC";
-//     	return $db->fetchAll($sql);
+
 //     }
     function getLocation(){
     	$db=$this->getAdapter();
@@ -149,7 +113,7 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     		$where.=" AND p.status=".$search['status_search'];
     	}
 //     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$where.=$dbp->getAccessPermission('brand_id');
+//     	$where.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
 //     	echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);

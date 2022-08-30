@@ -54,10 +54,10 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     function updateStock($pro_id,$location_id,$qty_order){
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission('brand_id');
+    	$branch_id = $_db->getAccessPermission('branch_id');
     	
     	$db=$this->getAdapter();
-    	$sql="select * from rms_product_location where pro_id=$pro_id AND brand_id=$location_id  $branch_id";
+    	$sql="select * from rms_product_location where pro_id=$pro_id AND branch_id=$location_id  $branch_id";
     	$qty_stock = $db->fetchRow($sql);
     	
     	$this->_name="rms_product_location";
@@ -73,7 +73,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$this->_name="rms_product_location";
     		$_arrs = array(
     				'pro_id'=>$pro_id,
-    				'brand_id'=>$location_id,
+    				'branch_id'=>$location_id,
     				'pro_qty'=>$qty_order,
     		);
     		$this->insert($_arrs);
@@ -168,7 +168,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	
     	if(!empty($result)){
     		foreach ($result as $row){
-				$sql1 = "select id,pro_qty from rms_product_location where pro_id =".$row['pro_id']." and brand_id = ".$row['branch_id'] ;
+				$sql1 = "select id,pro_qty from rms_product_location where pro_id =".$row['pro_id']." and branch_id = ".$row['branch_id'] ;
 				$result1 = $db->fetchRow($sql1);
 				$qty = $result1['pro_qty'] - $row['qty']; 
 				$this->_name = "rms_product_location";
@@ -250,10 +250,10 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getProductNames(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	$sql="SELECT p.id,pl.branch_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
  				WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
+    	$sql.=$dbp->getAccessPermission('branch_id');
     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
         $rows=$db->fetchAll($sql);
         
@@ -267,10 +267,10 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     
     function getProductName(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	$sql="SELECT p.id,pl.branch_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
     	WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
+    	$sql.=$dbp->getAccessPermission('branch_id');
     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
     	return $db->fetchAll($sql);
     }

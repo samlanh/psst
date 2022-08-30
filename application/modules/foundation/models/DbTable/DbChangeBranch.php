@@ -46,14 +46,14 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		
 		and st.status=1 
 		group by gds.stu_id";
-		//$orderby = " ORDER BY stu_code ";
+		
 		return $_db->fetchAll($sql);
 	}
 	
 	public function getAllGroup(){
 		$db = $this->getAdapter();
 		$sql = "SELECT group_code,id FROM `rms_group` where status = 1 and is_pass IN (0,2) ";
-// 		$orderby = " ORDER BY stu_code ";
+
 		return $db->fetchAll($sql);
 	}
 	

@@ -152,7 +152,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     	}
     }
     function getProBylocationAction(){
-    	/***
+    
 		if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRequestProduct();
@@ -162,7 +162,6 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		print_r(Zend_Json::encode($gty));
     		exit();
     	}
-		*/
 		
 		if($this->getRequest()->isPost()){
     		try{

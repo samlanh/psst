@@ -52,7 +52,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	if (!empty($frombranch)){
     		$sql = "
     			SELECT trd.*,
-				(SELECT pl.pro_qty FROM rms_product_location AS pl WHERE pl.brand_id = $frombranch AND pl.pro_id = trd.pro_id LIMIT 1 ) AS curr_qty,
+				(SELECT pl.pro_qty FROM rms_product_location AS pl WHERE pl.branch_id = $frombranch AND pl.pro_id = trd.pro_id LIMIT 1 ) AS curr_qty,
 				(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = trd.pro_id LIMIT 1) AS pro_name
 		    	FROM rms_transferdetail  AS trd WHERE trd.transferid=$id";
     	}else{
@@ -127,7 +127,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     						}else{
     							$data = array(
     									'pro_id'=>$_data['pro_id_'.$i],
-    									'brand_id'=>$_data['branch'],
+    									'branch_id'=>$_data['branch'],
     									'pro_qty'=>$_data['qty_'.$i],
     									'note'=>'ពីផ្ទេរទំនិញចូល',
     									'date' =>date("Y-m-d"),
@@ -162,7 +162,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     								}else{
     									$data = array(
     											'pro_id'=>$_data['pro_id_'.$i],
-    											'brand_id'=>$_data['branch'],
+    											'branch_id'=>$_data['branch'],
     											'pro_qty'=>$_data['qty_'.$i],
     											'note'=>'ពីផ្ទេរទំនិញចូល',
     											'date' =>date("Y-m-d"),
@@ -209,7 +209,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     }
     function getProductLocation($pro_id,$location_id){
     	$db = $this->getAdapter();
-    	$sql="select * from rms_product_location where pro_id=".$pro_id." AND brand_id = ".$location_id;
+    	$sql="select * from rms_product_location where pro_id=".$pro_id." AND branch_id = ".$location_id;
     	$row = $db->fetchRow($sql);
     	return $row;
     }
@@ -310,7 +310,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     							}else{
     								$data = array(
     										'pro_id'=>$_data['pro_id_'.$i],
-    										'brand_id'=>$_data['to_location'],
+    										'branch_id'=>$_data['to_location'],
     										'pro_qty'=>$_data['qty_'.$i],
     										'note'=>'ពីផ្ទេរទំនិញចូល',
     										'date' =>date("Y-m-d"),
@@ -345,7 +345,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     									}else{
     										$data = array(
     												'pro_id'=>$_data['pro_id_'.$i],
-    												'brand_id'=>$_data['to_location'],
+    												'branch_id'=>$_data['to_location'],
     												'pro_qty'=>$_data['qty_'.$i],
     												'note'=>'ពីផ្ទេរទំនិញចូល',
     												'date' =>date("Y-m-d"),

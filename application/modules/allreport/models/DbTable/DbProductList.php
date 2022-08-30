@@ -59,7 +59,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     		$degree = "it.title_en";
     	}
     	if($level==4){
-    		$branch_id = $_db->getAccessPermission("brand_id");
+    		$branch_id = $_db->getAccessPermission("branch_id");
     	}else{
     		$branch_id = "";
     	}
@@ -69,8 +69,8 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     				p.images,
     				$grade AS pro_name ,
     				(SELECT $degree FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
-    	            (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
-    	            pl.brand_id,
+    	            (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=pl.branch_id LIMIT 1) AS brand_name,
+    	            pl.branch_id,
     				pl.pro_qty,
     				pl.note,
     				p.price,
@@ -99,7 +99,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['location'])){
-    		$where.=" AND pl.brand_id=".$search['location'];
+    		$where.=" AND pl.branch_id=".$search['location'];
     	}
     	if(!empty($search['product'])){
     		$where.=" AND p.id=".$search['product'];
@@ -114,8 +114,8 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     		$where.=" AND p.product_type=".$search['product_type'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$order = " ORDER BY pl.brand_id ASC ";
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$order = " ORDER BY pl.branch_id ASC ";
     	if($search['sort_by']==1){
     		$order.=" , p.items_id ASC ";
     	}else if($search['sort_by']==2){

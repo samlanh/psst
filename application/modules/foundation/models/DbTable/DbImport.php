@@ -52,7 +52,7 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     				
     				'remark'		=>$remark, // old stu_code and remark
     				
-    				'is_stu_new'	=>0,
+    				
     				'customer_type'	=>1,
     				'status'		=>1,
     				'modify_date'	=>date("Y-m-d H:i:s"),
@@ -118,10 +118,10 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     		
     				'remark'=>$data[$i]['D'],
     				'create_date'=>$data[$i]['T'],
-    				'is_stu_new'=>0,
+    				
     				
     				'modify_date'=>date("Y-m-d"),
-    				'is_setgroup'=>0,
+    				
     				'password'=>12345,
     		);
     		$this->_name='rms_student';

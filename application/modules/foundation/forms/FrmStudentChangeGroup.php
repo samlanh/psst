@@ -75,11 +75,9 @@ class Foundation_Form_FrmStudentChangeGroup extends Zend_Dojo_Form
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data['branch_id']);
-//     		$_sex->setValue($data['is_stu_new']);
     		$moving_date->setValue($data['moving_date']);
     		$note->setValue($data['note']);
     		$id->setValue($data['id']);
-//     		$from_grade->setValue($data['is_stu_new']);
     		$status->setValue($data['status']);
     	}
     	$this->addElements(array(

@@ -68,7 +68,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     				rms_itemsdetail AS p
 				WHERE 
 					pl.pro_id=$pro_id 
-					AND pl.brand_id=$branch_id
+					AND pl.branch_id=$branch_id
 				 	AND p.id=pl.pro_id 
     			LIMIT 1	
     		";
@@ -275,7 +275,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 		  		WHERE 
 		  			p.id=pl.pro_id
 				  	AND pl.pro_id=$pro_id 
-				  	AND pl.brand_id=$location
+				  	AND pl.branch_id=$location
     		";
     	return $db->fetchRow($sql);
     }
@@ -291,7 +291,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	}
     	$sql = "SELECT 
 			  p.id,
-			  pl.brand_id,
+			  pl.branch_id,
 			  $grade AS `name` 
 			FROM
 			  `rms_itemsdetail` AS p,
@@ -299,7 +299,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 			WHERE 
 			  p.id = pl.pro_id 
 			  AND p.status = 1 
-			  AND pl.brand_id = $branch_id
+			  AND pl.branch_id = $branch_id
     		";
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);

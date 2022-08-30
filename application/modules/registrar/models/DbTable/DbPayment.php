@@ -593,7 +593,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 										idt.id = set.subpro_id
 										and set.subpro_id = lo.pro_id
 										and set.pro_id = ".$rs_item['id']."
-										and lo.brand_id = ".$data['branch_id'];
+										and lo.branch_id = ".$data['branch_id'];
 							$sql.=" GROUP BY set.subpro_id ORDER BY set.id ASC ";
 							$result = $db->fetchAll($sql);
 							if(!empty($result)){

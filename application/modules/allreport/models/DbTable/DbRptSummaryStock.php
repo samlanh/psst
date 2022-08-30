@@ -107,7 +107,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    		$degree = "it.title_en";
 	    	}
 	    	if($level==4){
-	    		$branch_id = $_db->getAccessPermission("brand_id");
+	    		$branch_id = $_db->getAccessPermission("branch_id");
 	    	}else{
 	    		$branch_id = "";
 	    	}
@@ -116,7 +116,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	$sql="SELECT 
 	    			d.*,
 	    			$grade as pro_name,
-					(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_name,
+					(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = pl.branch_id LIMIT 1) AS branch_name,
 					(SELECT $degree FROM `rms_items` AS it WHERE it.id = d.items_id LIMIT 1) AS category,
 					(SELECT  
 							SUM(pd.qty) 
@@ -126,14 +126,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 						WHERE 
 							pu.id = pd.supproduct_id 
 						    AND pd.pro_id = d.id 
-						    AND pu.branch_id = pl.`brand_id`
+						    AND pu.branch_id = pl.`branch_id`
 						    AND pu.date >= '$from_date' 
 						    AND pu.date <= '$to_date' 
 						    AND pu.status = 1 
 						GROUP BY pd.pro_id
 					  	LIMIT 1
 					) AS purchaseQty,
-					(SELECT SUM(ctd.qty_receive) FROM `rms_cutstock` AS ct,`rms_cutstock_detail` AS ctd WHERE ct.id = ctd.cutstock_id AND ctd.product_id = d.id AND ct.branch_id = pl.brand_id AND ct.received_date >= '$from_date' AND ct.received_date <= '$to_date' AND ct.status=1 LIMIT 1) AS saleqty,
+					(SELECT SUM(ctd.qty_receive) FROM `rms_cutstock` AS ct,`rms_cutstock_detail` AS ctd WHERE ct.id = ctd.cutstock_id AND ctd.product_id = d.id AND ct.branch_id = pl.branch_id AND ct.received_date >= '$from_date' AND ct.received_date <= '$to_date' AND ct.status=1 LIMIT 1) AS saleqty,
 					(SELECT 
 					    	SUM(qty_receive) 
 					  	FROM
@@ -142,14 +142,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 					  	WHERE 
 					  		req.id = req_d.request_id 
 					  		and req_d.pro_id = d.id
-					  		and req_d.branch_id = pl.brand_id
+					  		and req_d.branch_id = pl.branch_id
 					  		AND req.request_date >= '$from_date' 
 						    AND req.request_date <= '$to_date'
 						    and req.status=1
 					  	LIMIT 1) AS request,
-				  	(SELECT SUM(difference) FROM rms_adjuststock AS adj, rms_adjuststock_detail AS adj_d WHERE adj.id = adj_d.adjuststock_id AND adj_d.pro_id = d.id AND adj_d.branch_id = pl.brand_id AND adj.request_date >= '$from_date' AND adj.request_date <= '$to_date' AND adj.status=1 LIMIT 1) AS adjustQty, 
-				  	(SELECT SUM(qty) FROM `rms_transferstock` AS tra, rms_transferdetail AS tra_d WHERE tra.id = tra_d.transferid AND tra_d.pro_id = d.id AND tra.from_location = pl.brand_id AND tra.transfer_date >= '$from_date' AND tra.transfer_date <= '$to_date' AND tra.status=1 LIMIT 1) AS tran_out, 
-					(SELECT SUM(qty) FROM `rms_transferstock` AS tra, rms_transferdetail AS tra_d WHERE tra.id = tra_d.transferid AND tra_d.pro_id = d.id AND tra.to_location = pl.brand_id AND tra.transfer_date >= '$from_date' AND tra.transfer_date <= '$to_date' AND tra.status=1 LIMIT 1) AS tran_in, 
+				  	(SELECT SUM(difference) FROM rms_adjuststock AS adj, rms_adjuststock_detail AS adj_d WHERE adj.id = adj_d.adjuststock_id AND adj_d.pro_id = d.id AND adj_d.branch_id = pl.branch_id AND adj.request_date >= '$from_date' AND adj.request_date <= '$to_date' AND adj.status=1 LIMIT 1) AS adjustQty, 
+				  	(SELECT SUM(qty) FROM `rms_transferstock` AS tra, rms_transferdetail AS tra_d WHERE tra.id = tra_d.transferid AND tra_d.pro_id = d.id AND tra.from_location = pl.branch_id AND tra.transfer_date >= '$from_date' AND tra.transfer_date <= '$to_date' AND tra.status=1 LIMIT 1) AS tran_out, 
+					(SELECT SUM(qty) FROM `rms_transferstock` AS tra, rms_transferdetail AS tra_d WHERE tra.id = tra_d.transferid AND tra_d.pro_id = d.id AND tra.to_location = pl.branch_id AND tra.transfer_date >= '$from_date' AND tra.transfer_date <= '$to_date' AND tra.status=1 LIMIT 1) AS tran_in, 
 					pl.pro_qty
 				FROM 
 					`rms_itemsdetail` AS d,
@@ -161,7 +161,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	";
 	    	$where=' ';
 	    	$group_by = " ";
-	    	$order=" ORDER BY pl.brand_id ASC ";
+	    	$order=" ORDER BY pl.branch_id ASC ";
 	    	
 	    	if($search['sort_by']==1){
 	    		$order.=" , d.items_id ASC ";
@@ -178,7 +178,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	}
 	    	
 	    	if(!empty($search['branch_id'])){
-	    		$where .=' AND pl.brand_id = '.$search['branch_id'];
+	    		$where .=' AND pl.branch_id = '.$search['branch_id'];
 	    	}
 	    	if(!empty($search['category_id'])){
 	    		$where .=' AND d.items_id = '.$search['category_id'];
@@ -190,7 +190,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    		$where .=' AND d.product_type = '.$search['product_type'];
 	    	}
 	    	$dbp = new Application_Model_DbTable_DbGlobal();
-	    	$where.=$dbp->getAccessPermission("pl.brand_id");
+	    	$where.=$dbp->getAccessPermission("pl.branch_id");
 	    	//echo  $sql.$where.$order;
 	    	return $db->fetchAll($sql.$where.$group_by.$order);
     	}catch (Exception $e){

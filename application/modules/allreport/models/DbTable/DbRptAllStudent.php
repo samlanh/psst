@@ -533,7 +533,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 			    	CONCAT(s.last_name,' ',s.stu_enname) AS name,
 			    	s.stu_khname,
-			    	s.is_stu_new,
+			    	
 			    	s.sex as sex_key,
 			    	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex limit 1)AS sex,
 			    	(SELECT $label FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
@@ -642,7 +642,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 	    	CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name,
 	    	s.stu_khname,
-	    	s.is_stu_new,
+	    	
 	    	s.remark,
 	    	nationality,tel,
 	    	email,

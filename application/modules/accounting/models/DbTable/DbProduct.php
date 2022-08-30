@@ -12,7 +12,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     function getAllProduct($search=null){
     	$db = $this->getAdapter();
     	$sql=" SELECT p.id,p.pro_code,
-			 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE rms_branch.br_id=pl.brand_id) AS branch_name,
+			 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE rms_branch.br_id=pl.branch_id) AS branch_name,
 				p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_name,
 				(select name_en from rms_view where type=11 and key_code=pro_type) as pro_type,
 			    p.cost, 
@@ -38,7 +38,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['location'])){
-    		$where.=" AND pl.brand_id=".$search['location'];
+    		$where.=" AND pl.branch_id=".$search['location'];
     	}
     	if(!empty($search['category_id'])){
     		$where.=" AND p.cat_id=".$search['category_id'];
@@ -47,7 +47,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     		$where.=" AND p.status=".$search['status_search'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('brand_id');
+    	$where.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -97,7 +97,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     }
     function getProLocationById($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT id,pro_id,brand_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
+    	$sql="SELECT id,pro_id,branch_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
     	return $db->fetchAll($sql);
     }
     function getProductCategory(){ //if type=1 category , if type=2 measure 
@@ -163,7 +163,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$sql="SELECT p.id As id,CONCAT(p.pro_name) AS name FROM rms_product AS p,rms_product_location AS pl 
      			  WHERE p.id=pl.pro_id AND p.status=1 ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
+    	$sql.=$dbp->getAccessPermission('branch_id');
     	$sql.="  ORDER BY id DESC";
     	return $db->fetchAll($sql);
     }
@@ -210,10 +210,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND p.status=".$search['status_search'];
     	}
-//     	$dbp = new Application_Model_DbTable_DbGlobal();
-//     	$where.=$dbp->getAccessPermission('brand_id');
-    	$order=" ORDER BY id DESC";
-//     	echo $sql.$where.$order;exit();
+
     	return $db->fetchAll($sql.$where.$order);
     }
     

@@ -331,7 +331,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 										idt.id = set.subpro_id
 										and set.subpro_id = lo.pro_id
 										and set.pro_id = ".$rs_item['id']."
-										and lo.brand_id = ".$data['branch_id'];
+										and lo.branch_id = ".$data['branch_id'];
 							$sql.=" GROUP BY set.subpro_id ORDER BY set.id ASC ";
 							$result = $db->fetchAll($sql);
 							if(!empty($result)){
@@ -1042,7 +1042,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     						`rms_product_location` 
     					WHERE 
     						pro_id=$item_id 
-    						AND brand_id = $branch_id LIMIT 1 ";
+    						AND branch_id = $branch_id LIMIT 1 ";
     		}
     		return $db->fetchRow($sql);
     	}
@@ -1105,7 +1105,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		s.sex,
 	    		s.stu_code,
 	    		s.stu_id,
-	    		s.is_stu_new,
+	    		
 				sp.degree as degree_id,
 	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
@@ -1362,7 +1362,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		s.sex,
 	    		s.stu_code,
 	    		s.stu_id,
-	    		s.is_stu_new,
+	    		
 				sp.degree as degree_id,
 	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,

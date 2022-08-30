@@ -304,7 +304,6 @@ function getQtyById(index){
 		});
 }
 var pro_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-//var url_pro_branch= '<?php echo $this->url(array('module'=>'stock','controller'=>'adjuststock','action'=>'get-pro-bylocation')); ?>';
 var url_pro_branch= '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'get-pro-bylocation')); ?>';
 function getProByBranch(){
 	    branch_id=dijit.byId("branch").get("value");

@@ -312,7 +312,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					last_name,
 					stu_enname,
 					sex,
-					is_stu_new,
+					
 					nationality,
 					nation,
 					dob,
@@ -409,7 +409,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					last_name,
 					stu_enname,
 					sex,
-					is_stu_new,
+					
 					nationality,
 					nation,
 					dob,

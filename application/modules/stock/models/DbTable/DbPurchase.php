@@ -77,7 +77,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$this->_name="rms_product_location";
     		if(!empty($rs_set)){
     			foreach($rs_set AS $rs){
-    				$sql="SELECT * FROM rms_product_location WHERE pro_id=".$rs['subpro_id']." AND brand_id=$location_id ";
+    				$sql="SELECT * FROM rms_product_location WHERE pro_id=".$rs['subpro_id']." AND branch_id=$location_id ";
     				$qty_stock = $db->fetchRow($sql);
     				$qty = $qty_stock['pro_qty'] + ($qty_order*$rs['qty']);
 
@@ -91,7 +91,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     					$this->_name="rms_product_location";
     					$_arrs = array(
     							'pro_id'=>$rs['subpro_id'],
-    							'brand_id'=>$location_id,
+    							'branch_id'=>$location_id,
     							'pro_qty'=>$qty,
     							'price'=>0,
     					);
@@ -100,7 +100,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			}
     		}
     	}else{//for normal product
-    		$sql="SELECT * FROM rms_product_location WHERE pro_id=$pro_id AND brand_id=$location_id ";
+    		$sql="SELECT * FROM rms_product_location WHERE pro_id=$pro_id AND branch_id=$location_id ";
     		$qty_stock = $db->fetchRow($sql);
     		 
     		$this->_name="rms_product_location";
@@ -116,7 +116,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			$this->_name="rms_product_location";
     			$_arrs = array(
     					'pro_id'=>$pro_id,
-    					'brand_id'=>$location_id,
+    					'branch_id'=>$location_id,
     					'pro_qty'=>$qty_order,
     					'price'=>0,
     			);
@@ -241,7 +241,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		foreach ($result as $row){
     			$this->updateProductCost($row['pro_id'],$row['branch_id'],-$row['qty'],-$row['amount']);
     			
-				$sql1 = "SELECT id,pro_qty FROM rms_product_location where pro_id =".$row['pro_id']." and brand_id = ".$row['branch_id'] ;
+				$sql1 = "SELECT id,pro_qty FROM rms_product_location where pro_id =".$row['pro_id']." and branch_id = ".$row['branch_id'] ;
 				$result1 = $db->fetchRow($sql1);
 				$qty = $result1['pro_qty'] - $row['qty']; 
 				$this->_name = "rms_product_location";
@@ -330,10 +330,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getProductNames(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	$sql="SELECT p.id,pl.branch_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
  				WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
+    	$sql.=$dbp->getAccessPermission('branch_id');
     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
         $rows=$db->fetchAll($sql);
         
@@ -347,10 +347,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     
     function getProductName(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	$sql="SELECT p.id,pl.branch_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
     	WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
+    	$sql.=$dbp->getAccessPermission('branch_id');
     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
     	return $db->fetchAll($sql);
     }

@@ -20,7 +20,7 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
 		$level = $_db->getUserType();
 		
 		if($level==4){
-			$branch_id = $_db->getAccessPermission("brand_id");
+			$branch_id = $_db->getAccessPermission("branch_id");
 		}else{
 			$branch_id = "";
 		}
@@ -30,8 +30,8 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
 				p.code AS pro_code,
 				CONCAT(p.title) AS pro_name ,
 				(SELECT it.title FROM `rms_items` AS it WHERE it.id = p.items_id AND it.type=3 LIMIT 1) AS category_name,
-				(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
-				pl.brand_id,
+				(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.branch_id LIMIT 1) AS brand_name,
+				pl.branch_id,
 				pl.pro_qty,
 				pl.price AS pro_price,
 				p.price,
@@ -57,7 +57,7 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['location'])){
-    		$where.=" AND pl.brand_id=".$search['location'];
+    		$where.=" AND pl.branch_id=".$search['location'];
     	}
 //     	if($search['status_search']==1 OR $search['status_search']==0){
 //     		$where.=" AND p.status=".$search['status_search'];
@@ -73,8 +73,8 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$where.=" ORDER BY pl.brand_id DESC";
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$where.=" ORDER BY pl.branch_id DESC";
     	return $db->fetchAll($sql.$where);
     }
 	    

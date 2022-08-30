@@ -306,7 +306,7 @@ input.btn_borwse_image {
 		}
 			template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="35px" align="center">'+no+'</td>';
-			template+='<td>'+'<?php echo $pr_locat['branch_name'];?>'+'<input class="fullside" type="hidden" required="true" name="brand_name_'+col+'" id="brand_name_'+col+'" value="<?php echo $pr_locat['brand_id'];?>" dojoType="dijit.form.TextBox" /></td>';			
+			template+='<td>'+'<?php echo $pr_locat['branch_name'];?>'+'<input class="fullside" type="hidden" required="true" name="brand_name_'+col+'" id="brand_name_'+col+'" value="<?php echo $pr_locat['branch_id'];?>" dojoType="dijit.form.TextBox" /></td>';			
 			template+='<td> <input class="fullside" type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" value="<?php echo $pr_locat['pro_qty'];?>" dojoType="dijit.form.NumberTextBox" /></td>';
 			template+='<td> <input class="fullside" type="text" required="true" name="price_'+col+'" id="price_'+col+'" value="<?php echo $pr_locat['price'];?>" dojoType="dijit.form.NumberTextBox" /></td>';
 			template+='<td> <input class="fullside" type="text" required="true" name="qty_alert_'+col+'" id="qty_alert_'+col+'" value="<?php echo $pr_locat['stock_alert'];?>" dojoType="dijit.form.NumberTextBox" /></td>';

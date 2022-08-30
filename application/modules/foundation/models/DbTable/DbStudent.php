@@ -268,7 +268,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'last_name'		=>ucfirst($_data['last_name']),
 						'stu_enname'	=>ucfirst($_data['name_en']),
 						'sex'			=>$_data['sex'],
-						'is_stu_new'	=>$_data['stu_denttype'],
+						
 						'nationality'	=>$_data['studen_national'],
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
@@ -522,7 +522,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'last_name'		=>ucfirst($_data['last_name']),
 					'stu_enname'	=>ucfirst($_data['name_en']),
 					'sex'			=>$_data['sex'],
-					'is_stu_new'	=>$_data['stu_denttype'],
+					
 					'nationality'	=>$_data['studen_national'],
 					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
@@ -889,7 +889,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	function getSearchStudent($search){
 		$db=$this->getAdapter();
 		$sql="SELECT stu_id ,stu_code,stu_enname,stu_khname,sex,degree,grade,academic_year from rms_student 
-			WHERE `status`=1 AND is_setgroup = 0 ";
+			WHERE `status`=1 ";
 		
 		 if(!empty($search['grade'])){
 		 	$sql.=" AND grade =".$search['grade'];

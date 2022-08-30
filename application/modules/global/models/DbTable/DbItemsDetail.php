@@ -275,7 +275,7 @@
 			foreach ($ids as $i){
 				$_arr = array(
 						'pro_id'=>$id,
-						'brand_id'=>$_data['brand_name_'.$i],
+						'branch_id'=>$_data['brand_name_'.$i],
 						'pro_qty'=>$_data['qty_'.$i],
 						'price'=>$_data['price_'.$i],
 						'stock_alert'=>$_data['qty_alert_'.$i],
@@ -309,9 +309,9 @@
 		$string="";
 		$location="";
 		if ($level!=1){
-			$string = $dbgb->getAccessPermission('pl.brand_id');
-			//$location = $dbgb->getAccessPermission('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id LIMIT 1 )');
-			$location = $dbgb->getAccessBranchForProduct('(SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  )');
+			$string = $dbgb->getAccessPermission('pl.branch_id');
+			//$location = $dbgb->getAccessPermission('(SELECT pl.branch_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id LIMIT 1 )');
+			$location = $dbgb->getAccessBranchForProduct('(SELECT pl.branch_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  )');
 		}
 		
 		$sql = " SELECT ide.id,ide.code,$grade,
@@ -364,10 +364,10 @@
 		$db = $this->getAdapter();
 		$sql = "
 		SELECT pl.*,
-		(SELECT s.`branch_namekh` FROM `rms_branch` AS s WHERE pl.`brand_id` = s.`br_id` LIMIT 1  ) AS branch_name
+		(SELECT s.`branch_namekh` FROM `rms_branch` AS s WHERE pl.`branch_id` = s.`br_id` LIMIT 1  ) AS branch_name
 		FROM `rms_product_location` AS pl WHERE pl.pro_id = $id";
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$location = $dbgb->getAccessPermission('pl.`brand_id`');
+		$location = $dbgb->getAccessPermission('pl.`branch_id`');
 		return $db->fetchAll($sql.$location);
 	}
 	public function updateProduct($_data){
@@ -454,7 +454,7 @@
 					if (!empty($_data['detailid'.$i])){
 						$_arr = array(
 								'pro_id'=>$id,
-								'brand_id'=>$_data['brand_name_'.$i],
+								'branch_id'=>$_data['brand_name_'.$i],
 								'pro_qty'=>$_data['qty_'.$i],
 								'price'=>$_data['price_'.$i],
 								'stock_alert'=>$_data['qty_alert_'.$i],
@@ -465,7 +465,7 @@
 					}else{
 						$_arr = array(
 								'pro_id'=>$id,
-								'brand_id'=>$_data['brand_name_'.$i],
+								'branch_id'=>$_data['brand_name_'.$i],
 								'pro_qty'=>$_data['qty_'.$i],
 								'price'=>$_data['price_'.$i],
 								'stock_alert'=>$_data['qty_alert_'.$i],
@@ -821,7 +821,7 @@
 			$sql.= " AND i.product_type = ".$db->quote($product_type);
 		}
 		if(!empty($data['branch_id'])){//check type product sale or office
-			$sql.= " AND pl.brand_id = ".$data['branch_id'];
+			$sql.= " AND pl.branch_id = ".$data['branch_id'];
 		}
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$branchlist = $dbgb->getAllSchoolOption();

@@ -4,6 +4,12 @@ $this->headTitle($tr->translate('GENERAL_SETTING'));
 echo $this->headTitle();
 $frm = $this->frm_general;
 
+$defaultLogo = $this->baseUrl()."/images/Logo/Logo.png";
+if(!empty($this->row['logo']['keyValue'])){
+	if (file_exists(PUBLIC_PATH."/images/logo/".$this->row['logo']['keyValue'])){
+		$defaultLogo = $this->baseUrl().'/images/logo/'.$this->row['logo']['keyValue'];
+	}
+}
 $featureScanCallOut=FEATURE_SCAN_CALLOUT;
 ?>
 
@@ -13,7 +19,6 @@ div.cke_contents.cke_reset {
     height: 200px !important;
 }
 img.image_view {
-    width: 100%;
 	height: 100px;
 }
 img#image_viewbg {
@@ -72,98 +77,228 @@ input[type=file] {
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
-	               	<div class="col-sm-12 border-botom">
-			    		<div class="col-sm-8 pd-0">
-			    			<h4 class="m-b-0"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('GENERAL_SETTING');?></h4>
-		    			</div>
-		    			<div class="col-sm-4 text-right">
-		    			</div>
-		    		</div>
-		    	</div>
-		    	<div class="card-box">
-		    		<div class="col-md-6 col-sm-6 col-xs-12">
-		    			<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-home" aria-hidden="true"></i> <?php echo $tr->translate('Company Info');?> 
-		                   </label>
-		                </div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Company Tel')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('branch_tel')?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Email')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('branch_email')?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Address')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('branch_add')?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Label Animation')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('label_animation')?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('RECEIPT_PRINT')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('receipt_print')?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('SHOW_HEADER_RECEIPT')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('show_header_receipt')?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Payment Amount Day Alert')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('payment_day_alert');?></div>
-		    			</div>
-		    			<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-cubes" aria-hidden="true"></i> <?php echo $tr->translate('Stock Option')?> 
-		                   </label>
-		                </div>
-		                <div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Sale Stock Setting')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('sale_stock');?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $tr->translate('Transfer Stock')?></div>
-		    				<div class="col-sm-8"><?php echo $frm->getElement('trasfer_st_cut');?></div>
-		    			</div>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"></div>
-		    				<div class="col-sm-8"></div>
-		    			</div>
-						
-						
-		    		</div>
-		    		<div class="col-md-6 col-sm-6 col-xs-12">
-		    			<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-user" aria-hidden="true"></i> <?php echo $tr->translate('Other Info');?> 
-		                   </label>
-		                </div>
-		    			<?php if (!empty($this->allSchoolOption)) foreach ($this->allSchoolOption as $rs){?>
-		    			<div class="form-group">
-		    				<div class="col-sm-4"><?php echo $rs['title']?></div>
-		    				<div class="col-sm-8">
-		    					<div class="col-md-6 col-sm-6 col-xs-12">
-		    						<input type="radio" name="school_<?php echo $rs['id']?>" <?php if ($rs['status']==1){?> checked="checked" <?php }?> value="1"> <?php echo $tr->translate('ACTIVE')?><br>
+			<div class="col-sm-12 border-botom">
+				<div class="col-sm-8 pd-0">
+					<h4 class="m-b-0"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('GENERAL_SETTING');?></h4>
+				</div>
+				<div class="col-sm-4 text-right">
+				</div>
+			</div>
+		</div>
+		<div class="card-box">
+			<div class="col-md-3 col-sm-3 col-xs-12">
+				<ul class="nav verticle-tab md-pills pills-primary nav-tab" role="tablist">
+					<li class="nav-item active">
+						<a class="nav-link " data-toggle="tab" href="#panelSetting1" role="tab"><i class="fa fa-university"></i> <?php echo $tr->translate("Company Info");?></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panelSetting2" role="tab">
+						<i class="fa fa-book ml-2"></i> <?php echo $tr->translate("DOCUMENT_SETTING");?>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panelSetting3" role="tab">
+						<i class="fa fa-cog ml-2"></i> <?php echo $tr->translate("SYSTEM_SETTING");?>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-9 col-sm-9 col-xs-12">
+				 <!-- Tab panels -->
+				<div class="tab-content vertical">
+					<!--Panel 1-->
+					<div class="tab-pane fade in active" id="panelSetting1" role="tabpanel">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-university" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Company Info");?></p>
+												</div> 
+											</div>
+											<div class="form-group">
+												<div class="col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate('Logo')?></div>
+												<div class="col-md-4 col-sm-4 col-xs-12 alignCenter">
+													<img class="image_view" id="image_view" src="<?php echo $defaultLogo;?>" alt=""  />
+													<div class="button_browse">
+														<span><?php echo $tr->translate('Change Logo')?><span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+														<input class="btn_borwse_image"  type="file" id="photo" name="photo" onchange="loadImage()">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-4"><?php echo $tr->translate('Company Tel')?></div>
+												<div class="col-sm-8"><?php echo $frm->getElement('branch_tel')?></div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-4"><?php echo $tr->translate('Email')?></div>
+												<div class="col-sm-8"><?php echo $frm->getElement('branch_email')?></div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-4"><?php echo $tr->translate('Address')?></div>
+												<div class="col-sm-8"><?php echo $frm->getElement('branch_add')?></div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<input type="radio" name="school_<?php echo $rs['id']?>" <?php if ($rs['status']==0){?> checked="checked" <?php }?> value="2"> <?php echo $tr->translate('DEACTIVE')?><br>
-		    					</div>
-		    				</div>
-		    			</div>
-		    			<?php }?>
-		    			
-						
-						
-						
-		    		</div>
-	    		</div>
-	    		<div class="card-box">
-	    			<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-						<input class="button_success" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
-	    			</div>
-	    		</div>
-	  	 </div>
-	</div>
+							</div>
+						</div>
+					</div>
+					<!--End Panel 1-->
+					<!--Panel 2-->
+					<div class="tab-pane fade in " id="panelSetting2" role="tabpanel">
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-transfer" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Label Animation");?></p>
+													</div> 
+												</div> 
+												<br />
+												<div class="form-group">
+													<div class="col-sm-12"><?php echo $frm->getElement('label_animation')?></div>
+												</div>
+												
+											</div> 
+										</div> 
+									</div> 
+								</div>
+
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-file-text" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("RECEIPT_SETTING");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<div class="col-sm-4"><?php echo $tr->translate('RECEIPT_PRINT')?></div>
+													<div class="col-sm-8"><?php echo $frm->getElement('receipt_print')?></div>
+												</div>
+												<div class="form-group">
+													<div class="col-sm-4"><?php echo $tr->translate('SHOW_HEADER_RECEIPT')?></div>
+													<div class="col-sm-8"><?php echo $frm->getElement('show_header_receipt')?></div>
+												</div>
+											</div> 
+										</div> 
+									</div> 
+								</div> 
+								
+							</div> 
+						</div> 
+					</div>
+					<!--End Panel 2-->	
+					<!--Panel 3-->
+					<div class="tab-pane fade in " id="panelSetting3" role="tabpanel">
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-money" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PAYMENT_SETTING");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<div class="col-sm-4"><?php echo $tr->translate('Payment Amount Day Alert')?></div>
+													<div class="col-sm-8"><?php echo $frm->getElement('payment_day_alert');?></div>
+												</div>
+											</div> 
+										</div> 
+									</div> 
+								</div>
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-cubes" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Stock Option");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<div class="col-sm-4"><?php echo $tr->translate('Sale Stock Setting')?></div>
+													<div class="col-sm-8"><?php echo $frm->getElement('sale_stock');?></div>
+												</div>
+												<div class="form-group">
+													<div class="col-sm-4"><?php echo $tr->translate('Transfer Stock')?></div>
+													<div class="col-sm-8"><?php echo $frm->getElement('trasfer_st_cut');?></div>
+												</div>
+												
+											</div> 
+										</div> 
+									</div> 
+								</div>
+
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Other Info");?></p>
+													</div> 
+												</div> 
+												<?php if (!empty($this->allSchoolOption)) foreach ($this->allSchoolOption as $rs){?>
+												<div class="form-group">
+													<div class="col-sm-4"><?php echo $rs['title']?></div>
+													<div class="col-sm-8">
+														<div class="col-md-6 col-sm-6 col-xs-12">
+															<input type="radio" name="school_<?php echo $rs['id']?>" <?php if ($rs['status']==1){?> checked="checked" <?php }?> value="1"> <?php echo $tr->translate('ACTIVE')?><br>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-12">
+															<input type="radio" name="school_<?php echo $rs['id']?>" <?php if ($rs['status']==0){?> checked="checked" <?php }?> value="2"> <?php echo $tr->translate('DEACTIVE')?><br>
+														</div>
+													</div>
+												</div>
+												<?php }?>
+											</div> 
+										</div> 
+									</div> 
+								</div> 
+								
+							</div> 
+						</div> 
+					</div>
+					<!--End Panel 3-->							
+				</div>
+			</div>
+		</div>
+		<div class="card-box">
+			<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+				<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" dojoType="dijit.form.Button"  /> 	
+			</div>
+		</div>
+	 </div>
+</div>
 </form>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>

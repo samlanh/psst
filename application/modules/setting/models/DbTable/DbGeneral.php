@@ -17,6 +17,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 		try{
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			
+			$this->_name='rms_setting';
 			$arr = array('keyValue'=>$data['branch_tel'],);
 			$where=" keyName= 'branch_tel'";
 			$this->update($arr, $where);
@@ -84,6 +85,56 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 						$where=" id= ".$rs['id'];
 						$this->update($arr, $where);
 					}
+				}
+			}
+			
+			$valid_formats = array("jpg", "png", "gif", "bmp","jpeg","ico");
+			$part= PUBLIC_PATH.'/images/logo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$name = $_FILES['photo']['name'];
+			$size = $_FILES['photo']['size'];
+			$photo='';
+			
+			$rows = $this->geLabelByKeyName('logo');
+			if (empty($rows)){
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$image_name = "logo-gn".time().".".end($tem);
+					$tmp = $_FILES['photo']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo = $image_name;
+					}
+					else
+						$string = "Image Upload failed";
+					
+					$arr = array(
+							'keyName'=>'logo',
+							'keyValue'=>$photo,
+							'note'=>"",
+							'user_id'=>$dbg->getUserId()
+					);
+					$this->_name='rms_setting';
+					$this->insert($arr);
+				}
+			}else{
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$image_name = time()."logo-gn.".end($tem);
+					$tmp = $_FILES['photo']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo = $image_name;
+					}
+					else
+						$string = "Image Upload failed";
+					
+					$arr = array(
+							'keyValue'=>$photo,
+					);
+					$where=" keyName= 'logo'";
+					$this->_name='rms_setting';
+					$this->update($arr, $where);
 				}
 			}
 

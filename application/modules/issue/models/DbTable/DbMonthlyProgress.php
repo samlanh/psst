@@ -150,7 +150,7 @@ class Issue_Model_DbTable_DbMonthlyProgress extends Zend_Db_Table_Abstract
     	}
     	$sql="SELECT seng.id AS id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=seng.branch_id LIMIT 1) AS branch_name,
-				CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name,
+				CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name,
 				(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =seng.exam_type LIMIT 1) as exam_type,
 				seng.for_semester,
 				CASE

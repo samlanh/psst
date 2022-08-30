@@ -421,7 +421,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS stu_code,
 				(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS tel,
 				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS stu_khname,
-				(SELECT CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS student_name,
+				(SELECT CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name.s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS student_name,
 				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = sdr.academic_year LIMIT 1) AS academic,
 				
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sdr.degree AND type=1 LIMIT 1) AS degree,

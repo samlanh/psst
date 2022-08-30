@@ -91,7 +91,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 					(SELECT name_en FROM `rms_view` WHERE type=35 AND key_code=g.discountOption LIMIT 1)AS discountOption,
 					(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.itemType LIMIT 1) AS itemType,
 					(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`g`.`itemId` LIMIT 1) AS itemDetail,
-					(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) 
+					(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
 						FROM rms_student AS s
 					   		WHERE s.stu_id=g.studentId LIMIT 1) AS studentName,
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.discountType LIMIT 1) AS disc_name,

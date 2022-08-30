@@ -18,14 +18,14 @@ class Allreport_Model_DbTable_DbPlacementest extends Zend_Db_Table_Abstract
     	$stu_name ="s.stu_khname";
     	if($lang==2){// English
     		$branch = "b.branch_nameen";
-    		$stu_name = " CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ";
+    		$stu_name = " CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ";
     	}
     	$sql = "SELECT 
     		(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = pt.branch_id LIMIT 1) AS branch_name,
     		s.stu_khname,
 			s.stu_enname,
 			s.last_name,
-			CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS stu_name_en,
+			CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name_en,
 			$stu_name AS stu_name,
 			s.sex,
 			CASE
@@ -79,7 +79,7 @@ class Allreport_Model_DbTable_DbPlacementest extends Zend_Db_Table_Abstract
     	$stu_name ="s.stu_khname";
     	if($lang==2){// English
     		$branch = "b.branch_nameen";
-    		$stu_name = " CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) ";
+    		$stu_name = " CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ";
     		$v_name ="v.name_en";
     	}
     	$sql = "SELECT
@@ -87,7 +87,7 @@ class Allreport_Model_DbTable_DbPlacementest extends Zend_Db_Table_Abstract
     	(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = pt.branch_id LIMIT 1) AS branch_name,
     	s.stu_khname,
     	s.photo,
-    	CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS stu_name_en,
+    	CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name_en,
     	CASE
     	WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
     	WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'

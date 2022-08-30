@@ -16,6 +16,9 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	    $receipt_no = $db->getRecieptNo($data['branch_id']);
 		$array = array(
 				'branch_id'		=>$data['branch_id'],
+				'student_id'	=>$data['studentId'],
+				'optionType'	=>$data['option_type'],
+				'bank_id'		=>$data['bank_name'],
 				'title'			=>$data['title'],
 				'cate_income'	=>$data['cate_income'],
 				'total_amount'	=>$data['total_income'],
@@ -32,6 +35,9 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	function updateIncome($data){
 		$arr = array(
 				'branch_id'		=>$data['branch_id'],
+				'student_id'	=>$data['studentId'],
+				'optionType'	=>$data['option_type'],
+				'bank_id'		=>$data['bank_name'],
 				'title'			=>$data['title'],
 				'cate_income'	=>$data['cate_income'],
 				'total_amount'	=>$data['total_income'],
@@ -49,7 +55,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	
 	function getIncomeById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM ln_income where id=$id ";
+		$sql=" SELECT * FROM ln_income WHERE id=$id ";
 		return $db->fetchRow($sql);
 	}
 	function getAllIncome($search=null){
@@ -64,16 +70,28 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 			$label = "name_en";
 			$branch = "branch_nameen";
 		}
-		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$Option1 = $tr->translate('OTHER_INCOME');
+		$Option2 = $tr->translate('CREDIT_MEMO');
 		
 		$sql=" SELECT id,
 				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
-				(select cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
+				(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
+						FROM rms_student AS s
+					   		WHERE s.stu_id=student_id LIMIT 1) AS studentName,
+					   		
+				(SELECT cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
 				title,
 				invoice,
 				(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
-				total_amount,
+				(SELECT bank_name FROM `rms_bank` b WHERE bank_id = b.id=bank_id LIMIT 1) AS bank_name,
 				cheqe_no,
+				CASE
+					WHEN optionType=1 THEN '$Option1'
+					WHEN optionType=2 THEN '$Option2'
+				END
+				AS optionType,
+				total_amount,
 				description,
 				date
 		";
@@ -88,7 +106,6 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
-			//$s_where[] = " account_id LIKE '%{$s_search}%'";
 			$s_where[] = " title LIKE '%{$s_search}%'";
 			$s_where[] = " total_amount LIKE '%{$s_search}%'";
 			$s_where[] = " invoice LIKE '%{$s_search}%'";
@@ -116,8 +133,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$sql=" SELECT id,
 		(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
 		account_id,
-		(SELECT symbol FROM `ln_currency` WHERE ln_currency.id =curr_type) AS currency_type,invoice,
-		curr_type,
+		invoice,
 		total_amount,disc,date,status FROM $this->_name ";
 	
 		if (!empty($search['adv_search'])){
@@ -133,9 +149,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}
-		if($search['currency_type']>-1){
-			$where.= " AND curr_type = ".$search['currency_type'];
-		}
+		
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}

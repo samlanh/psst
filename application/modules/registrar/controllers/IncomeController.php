@@ -31,7 +31,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$_db = new Application_Model_DbTable_DbGlobal();
 			$rs_rows= $db->getAllIncome($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQUE_NO","NOTE","PAID_DATE","STATUS");
+    		$collumns = array("BRANCH","STUDENT_NAME","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","BANK_NAME","CHEQUE_NO","INCOME_OPTION","TOTAL_INCOME","NOTE","PAID_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
@@ -77,6 +77,8 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$db = new Application_Model_DbTable_DbGlobal();
     	$branch_income= $db->getAllBranch();
     	$this->view->branch_name = $branch_income;
+    	
+    	$this->view->rs_bank = $db->getAllBank();
     	
     	$frmpopup = new Application_Form_FrmPopupGlobal();
     	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
@@ -131,6 +133,8 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$db = new Application_Model_DbTable_DbGlobal();
     	$branch_income= $db->getAllBranch();
     	$this->view->branch_name = $branch_income;
+    	
+    	$this->view->rs_bank = $db->getAllBank();
     	
     	$frmpopup = new Application_Form_FrmPopupGlobal();
     	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();

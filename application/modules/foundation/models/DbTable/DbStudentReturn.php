@@ -23,7 +23,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sdr.branch_id LIMIT 1) AS branch_name,			
 				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS stu_code,
 				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS student_kh,
-				(SELECT CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS student_name,
+				(SELECT CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1) AS student_name,
 				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = sdr.academic_year LIMIT 1) AS academic,
 				
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sdr.degree AND type=1 LIMIT 1) AS degree,
@@ -49,7 +49,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
 			$s_where[] = " REPLACE((SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','')LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE((SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE((SELECT CONCAT(COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE((SELECT CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stu_id LIMIT 1),' ','') LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g WHERE g.id=sdr.group LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g WHERE g.id=sdr.group_id_return LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
@@ -277,7 +277,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 		$sql="
 		SELECT 
 			dr.id,
-			(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=dr.stu_id LIMIT 1) AS `name` 
+			(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=dr.stu_id LIMIT 1) AS `name` 
 		FROM `rms_student_drop` AS dr 
 		WHERE dr.status=1
 			AND dr.isReturn=0
@@ -310,7 +310,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = dr.group LIMIT 1) AS groupCode,
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = dr.academic_year LIMIT 1) AS academicYearTitle,
 			(SELECT v.$label FROM `rms_view` AS v WHERE v.type=5 AND key_code = dr.type LIMIT 1) AS typeTitle,
-			(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) FROM `rms_student` AS s WHERE s.stu_id=dr.stu_id LIMIT 1) AS `name` 
+			(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=dr.stu_id LIMIT 1) AS `name` 
 		FROM `rms_student_drop` AS dr 
 		WHERE dr.status=1
 			AND dr.isReturn=0

@@ -623,7 +623,7 @@ function getAllgroupStudyNotPass($action=null){
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
    			stu_code,
-		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
+		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
 		   	FROM rms_student AS s
 		   	WHERE
 		   	(stu_enname!='' OR s.stu_khname!='')
@@ -2866,7 +2866,6 @@ function getAllgroupStudyNotPass($action=null){
   	$branch_id = $this->getAccessPermission();
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
   	$lang = $this->currentlang();
-//   	$stuName = "COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
   	$stuName = "COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
   	$grade = "rms_itemsdetail.title_en";
   	if($lang==1){// khmer
@@ -3191,6 +3190,20 @@ function getAllgroupStudyNotPass($action=null){
 	  	$sql.= $this->getAccessPermission('g.branch_id');
   		$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
   		return $db->fetchAll($sql);
+  }
+  function getAllBank($data=array()){
+  	$sql="
+	  	SELECT
+	  	ba.id,
+	  	CONCAT(COALESCE(ba.bank_name,'')) AS name
+  	";
+  	$sql.=" FROM `rms_bank` AS ba
+	  		WHERE ba.bank_name!='' AND ba.status=1 ";
+	  	$sql.=" ORDER BY ba.bank_name ASC ";
+	  	
+	$db=$this->getAdapter();
+  	$row = $db->fetchAll($sql);
+  	return $row;
   }
   
 //   function getSubjectByGroup($data){

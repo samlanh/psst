@@ -159,21 +159,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));
-		
-// 		$opt_year = array() ;
-// 		$rs_year = $_dbgb->getAllYearByBranch();
-// 		if(!empty($rs_year))foreach($rs_year AS $row) $opt_year[$row['id']]=$row['years'];
-// 		$_academic_year = new Zend_Dojo_Form_Element_FilteringSelect("fee_id");
-// 		$_academic_year->setMultiOptions($opt_year);
-// 		$_academic_year->setAttribs(array(
-// 				'dojoType'=>$this->filter,
-// 				'required'=>'true',
-// 				'class'=>'fullside',
-// 				'placeholder'=>$tr->translate("SELECT_YEAR"),
-// 				'autoComplete'=>'false',
-// 				'queryExpr'=>'*${0}*',
-// 		));
-		
+
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
 		$opt_session = array(
 				1=>$tr->translate('MORNING'),

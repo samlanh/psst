@@ -491,7 +491,7 @@ function filterStudentBygroup(){
 	    }
 	});
 }
-url_getstudyYear= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getstudyYear= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 function getStudyYear(){
 	dijit.byId('study_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -500,19 +500,10 @@ function getStudyYear(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dojo.xhrPost({
-		url: url_getstudyYear,
-		content:{
-			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			study_yearStore  = getDataStorefromJSON('id','name', data);
-			dijit.byId('study_year').set('store',study_yearStore);  
-		},
-		error: function(err) {
-		}
-	});
+	contentData = {
+		'branch_id':branch_id
+	}
+	getAllYear(url_getacademic,contentData);
 }
 
 function CheckAll(){

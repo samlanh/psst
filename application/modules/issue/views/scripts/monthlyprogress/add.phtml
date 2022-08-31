@@ -353,7 +353,7 @@ function getSubjectByGroup(){
 	});
 }
 
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic= "<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>";
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -363,19 +363,10 @@ function getAllAcademicByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
+		contentData = {
 			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		},
-		error: function(err) {
 		}
-	});
+		getAllYear(url_getacademic,contentData);
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

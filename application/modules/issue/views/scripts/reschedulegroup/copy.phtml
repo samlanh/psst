@@ -375,7 +375,7 @@ function getAllGroupByBranch(group_id=''){
 	});
 }
 
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 function getAllAcademicByBranch(year_id=''){
 	dijit.byId('academic_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -385,22 +385,14 @@ function getAllAcademicByBranch(year_id=''){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
+		contentData = {
 			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('academic_year').set('store',academic_store);  
-			if(year_id!=''){
-				dijit.byId('academic_year').attr('value',year_id);
-			}			
-		},
-		error: function(err) {
 		}
-	});
+		selectedId = '';
+		if(year_id!=''){
+			selectedId=year_id;
+		}	
+		getAllYear(url_getacademic,contentData,selectedId);
 }
 
 var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getteacher"));?>';										

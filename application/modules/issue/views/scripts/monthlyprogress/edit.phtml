@@ -365,7 +365,7 @@ function getSubjectByGroup(){
 	});
 }
 
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic= "<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>";
 var oldBranchID = '<?php echo $this->score['branch_id']?>';
 function getAllAcademicByBranch(){
 	dijit.byId('study_year').reset();
@@ -376,22 +376,14 @@ function getAllAcademicByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
+		contentData = {
 			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store); 
-		    if(oldBranchID==branch_id){
-		    	dijit.byId('study_year').set('value','<?php echo $this->score['academic_year']?>'); 
-		    } 
-		},
-		error: function(err) {
 		}
-	});
+		selectedId = '';
+		if(oldBranch==branch_id){
+			selectedId = '<?php echo $this->score['academic_year']?>';
+		}
+		getAllYear(url_getacademic,contentData,selectedId);
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

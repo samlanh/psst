@@ -141,7 +141,7 @@ class Global_GroupController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllYearByBranch($data['branch_id']);
+    		$group = $db->getAllYearByBranch($data);
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
     		print_r(Zend_Json::encode($group));
     		exit();

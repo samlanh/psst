@@ -775,7 +775,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	return $this->getAllAcademicYear();
 
    }
-   function getAllYearByBranch($branch=1,$degree=null,$showall=null,$school_option=null){//for fee id only
+   function getAllYearByBranch($data){//for fee id only
 	   	$db = $this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
 	   	
@@ -796,30 +796,30 @@ function getAllgroupStudyNotPass($action=null){
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
 	   	$branch_id ";
-	   	$sql.=" AND branch_id=$branch ";
 	   	
-	   	if (!empty($showall)){
-	   		$sql.="";
-	   	}else{
-	   		$sql.=" AND is_finished=0   ";
+	   	if(!empty($data['branch_id'])){
+	   		$sql.=" AND branch_id=".$data['branch_id'];
+	   	}
+	   	if(isset($data['isFinished'])){
+	   		$sql.=" AND is_finished=".$data['isFinished'];
 	   	}
 	   	
-	   	if (!empty($degree)){
+	   	if(!empty($data['schoolOption'])){
+	   		$sql.=" AND school_option = ".$data['schoolOption'];
+	   	}
+	   	if(!empty($data['degree'])){
 	   		$dbdeg = new Global_Model_DbTable_DbItems();
-	   		$type=1; //Degree
-	   		$row =$dbdeg->getDegreeById($degree,$type);
+	   		$type=1; 
+	   		$row =$dbdeg->getDegreeById($data['degree'],$type);
 	   		if (!empty($row['schoolOption'])){
 	   			$sql.=" AND school_option IN (".$row['schoolOption'].") ";
 	   		}
 	   	}
+	   
 	   	$user = $this->getUserInfo();
 	  	$level = $user['level'];
 	  	if ($level!=1){
 	  		$sql .=' AND school_option IN ('.$user['schoolOption'].')';
-	  	}
-	  	
-	  	if(!empty($school_option)){//Extra Condiciton From Create Test Exam : /test/index/createtestexam?type=3&id=31
-	  		$sql.=" AND school_option = $school_option ";
 	  	}
 	  	
 	   	$sql.=" GROUP BY academic_year, term_study, generation";
@@ -1781,6 +1781,12 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if(!empty($data['itemId'])){//
   		$sql.=" AND i.items_id=".$data['itemId'];
+  	}
+  	if(isset($data['isOnepayment'])){
+  		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
+  	}
+  	if(!empty($data['proLocation'])){//want to get product in this location
+  		//$sql.=" AND ( OR i.id IN (SELECT pro_id FROM `rms_product_location` WHERE branch_id=".$data['proLocation']."))";
   	}
   	
   	 

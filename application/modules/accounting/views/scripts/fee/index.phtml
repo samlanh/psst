@@ -64,6 +64,7 @@
 	</div>
 </div>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 	dojo.require("dijit.form.NumberTextBox");
@@ -87,7 +88,7 @@ dojo.ready(function(){
 	getAllAcademicByBranch();
 });
 
-url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 function getAllAcademicByBranch(){
 	dijit.byId('academic_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -97,21 +98,12 @@ function getAllAcademicByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id,'showall':1
-			},
-		handleAs:"json",
-		load: function(data){
-			academic_store  = getDataStorefromJSON('id','name', data);
-			dijit.byId('academic_year').set('store',academic_store);  
-			
-			dijit.byId('academic_year').attr("value","<?php echo $this->adv_search['academic_year']?>");
-		},
-		error: function(err) {
-		}
-	});
+	
+	contentData = {
+		'branch_id':branch_id
+	}
+	selectedId = '<?php echo $this->adv_search['academic_year']?>';
+	getAllYear(url_getacademic,contentData,selectedId);
 }
 function copyRecord(url){
 	 id = dijit.byId('recordcopy').get('value');

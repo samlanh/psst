@@ -160,7 +160,7 @@ tr.head-td th{padding: 5px 2px;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicByBranch();">
+	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicBy();">
 				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
 				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
 				    			<?php }?>
@@ -458,6 +458,7 @@ div.img-back {
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dojo.number");
@@ -472,7 +473,7 @@ require(["dojo/ready"], function(ready){
 		getallgroupby();
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
-		getAllAcademicByBranch();
+		getAllAcademicBy();
 
 	});
 
@@ -632,8 +633,8 @@ function getStudentNo(degree_id=0){
 	});
 }
 
-url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
-function getAllAcademicByBranch(){
+
+function getAllAcademicBy(){
 	dijit.byId('study_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -642,19 +643,12 @@ function getAllAcademicByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
-			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data){
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('study_year').set('store',academic_store);  
-		},
-		error: function(err) {
-		}
-	});
+	url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
+	contentData = {
+		'branch_id':branch_id,
+		'isFinished':0
+	}
+	getAllAcademicByBranch(url_getacademic,contentData);
 }
 
 var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-gradeproduct')); ?>';

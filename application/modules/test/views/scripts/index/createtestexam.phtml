@@ -391,7 +391,7 @@ url_getFeee = '<?php echo $this->url(array('module'=>'accounting','controller'=>
 		});
 	}
 
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getacademic'));?>';
+url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 function getAllAcademicByBranch(){
 	dijit.byId('academic_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -401,27 +401,17 @@ function getAllAcademicByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	degree = "";//dijit.byId('degree').get('value'); 
-	school_option="<?php echo $this->type ?>";
-	dojo.xhrPost({
-		url: url_getacademic,
-		content:{
+		school_option="<?php echo $this->type ?>";
+		contentData = {
 			'branch_id':branch_id,
-			'degree':degree,
 			'school_option':school_option,
-		},
-		handleAs:"json",
-		load: function(data) {
-			academic_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('academic_year').set('store',academic_store);   
-		    
-			<?php if (!empty($this->detailscore['academic_year'])){?>
-				dijit.byId('academic_year').set('value',<?php echo $this->detailscore['academic_year'];?>);
-			<?php }?>
-		},
-		error: function(err) {
 		}
-	});
+		selectedId = '';
+		
+			<?php if (!empty($this->detailscore['academic_year'])){?>
+				selectedId = '<?php echo $this->detailscore['academic_year'];?>';
+			<?php }?>
+		getAllYear(url_getacademic,contentData,selectedId);
 }
 
 var url_get_stu = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'getstudenttestbybranch')); ?>';

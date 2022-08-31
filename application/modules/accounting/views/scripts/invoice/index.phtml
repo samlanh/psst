@@ -62,6 +62,7 @@ $urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
 	</div>
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require("dijit.form.CheckBox"); 
 dojo.require("dijit.form.NumberTextBox");
@@ -126,7 +127,6 @@ dojo.ready(function(){
 	 getallstudentname();
 });
 
-url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
 
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';

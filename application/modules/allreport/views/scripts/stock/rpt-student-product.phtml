@@ -186,6 +186,7 @@
 	</div>
 </div>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
@@ -247,7 +248,7 @@ function getAllAcademicByBranch(){
 		if(oldBranch==branch_id){
 			selectedId = '<?php echo $this->search['study_year']?>';
 		}
-		getAllYear(url_getacademic,contentData,selectedId);
+		getAllYear(url_getacademic,contentData,selectedId,'study_year');
 
 }
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';

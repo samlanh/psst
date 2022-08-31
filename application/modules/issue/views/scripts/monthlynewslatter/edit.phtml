@@ -205,6 +205,7 @@ thead tr td {
 		</form>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require('dijit.form.Textarea');
 dojo.require('dijit.form.DateTextBox');
@@ -367,7 +368,7 @@ function getAllAcademicByBranch(){
 		if(oldBranch==branch_id){
 			selectedId = '<?php echo $this->score['academic_year']?>';
 		}
-		getAllYear(url_getacademic,contentData,selectedId);
+		getAllYear(url_getacademic,contentData,selectedId,'study_year');
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

@@ -199,6 +199,7 @@ thead tr td {
 	</div>
 </div>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require('dijit.form.Textarea');
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -208,6 +209,7 @@ thead tr td {
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var scoreSetting_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+
 dojo.ready(function(){
 	var subject = [];
 	new dijit.form.FilteringSelect({
@@ -346,7 +348,7 @@ function getAllAcademicByBranch(){
 		contentData = {
 			'branch_id':branch_id
 		}
-		getAllYear(url_getacademic,contentData);
+		getAllYear(url_getacademic,contentData,null,'study_year');
 }
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

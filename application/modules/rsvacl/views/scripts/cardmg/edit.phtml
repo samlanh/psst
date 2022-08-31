@@ -11,8 +11,279 @@
 			$array[$ss] = $ss;
 		}
 	}
-?>
-<?php  $frm = $this->frm_branch;?>
+  $frm = $this->frm_branch;
+ ?>
+
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+				</div>
+    		</div>
+    	</div>
+		<form id="frm_branch" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			 <script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					
+					branch_id=dijit.byId("branch_id").get('value');
+					if(branch_id=='' || branch_id==null){
+						dijit.byId("branch_id").focus();
+						return false;
+					}
+					schoolOption=dijit.byId("schoolOption").get('value');
+					if(schoolOption=='' || schoolOption==null){
+						dijit.byId("schoolOption").focus();
+						return false;
+					}
+					loadingBlock();
+					return true;
+				} else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-university" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">	
+											<?php echo $frm->getElement("branch_id");?>
+											<?php echo $frm->getElement("id");?>
+									   </div>
+									</div>
+									 <div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("title");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Card Prefix");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("card_prefix");?>
+									   </div>
+									</div>
+									 <div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Card Type");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("card_type");?>
+									   </div>
+									</div>
+									 <div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("School Option");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("schoolOption");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Issue Date");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("issue");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Valid Date");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("valid");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COLOR");?> (ID Card)
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("colorcode");?>
+									   </div>
+									</div>
+									 <div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("note");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISPLAY_BY");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("display_by");?>
+									   </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	            <div id="degreee" class="col-md-3 col-sm-3 col-xs-12">
+	            	<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL');?>
+										</label>
+									</div>
+									 <div class="form-group">
+										<ul class="optListRow">
+											<?php 
+												if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+												?>
+												<li class="opt-items"> 
+													<div class="custom-control custom-checkbox">
+														<input <?php if (in_array($rs['id'], $array)) { echo "checked";}?> type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"  >
+														<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
+															<?php echo $rs['name'];?>
+														</label>
+													</div>
+												</li>
+												
+											<?php } ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	           <div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PHOTO");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="custom-control-input" <?php if($this->rs['default']==1){ echo 'checked="checked"';} ?>  name="setdefault" id="setdefault" OnChange="CheckAllTotal(0);"  >
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('Is Default');?>
+										</label>
+									</div>
+									<div class="form-group">
+									   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+											<div class="account-image">
+												<div class="image-box">
+													<?php 
+													$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+													if(!empty($this->rs['background'])){
+														if (file_exists(PUBLIC_PATH."/images/card/".$this->rs['background'])){
+														$image = $this->baseUrl().'/images/card/'.$this->rs['background'];
+														}
+														
+													}?>
+													<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
+												</div>
+												<div class="button_browse">
+												<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="photo" name="photo" >
+												</div>
+											</div>
+									   </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+				<div class="card-blogform">
+					<div class="card-body"> 
+						<div class="row"> 
+							<div class="col-md-12 col-sm-12 col-xs-12"> 
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("FRONT_CARD");?></p>
+									</div> 
+								</div>
+								<br />
+								<div class="form-group">
+								   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+										<div class="account-image">
+											<div class="image-box">
+												<?php 
+												$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+												if(!empty($this->rs['background'])){
+													if (file_exists(PUBLIC_PATH."/images/card/".$this->rs['front_background'])){
+													$image = $this->baseUrl().'/images/card/'.$this->rs['front_background'];
+													}
+													
+												}?>
+												<img id="profile_wiew_front" src="<?php echo $image;?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+												<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+												<input class="btn_borwse_image" type="file" id="front_background" name="front_background" >
+											</div>
+										</div>
+								   </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>	
+            <div class="card-box">
+	         	<div class="col-md-8 col-sm-8 col-xs-12">
+	         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+							<tr id="head-title" class="head-td" align="right"></tr>
+					</table>
+					<input type="hidden" id="identity" name="identity" />
+	         	</div>
+	         </div>          
+            <div class="clearfix"></div>
+	         <div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input type="reset" class="button-class button-danger"  iconClass="glyphicon glyphicon-repeat" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" iconClass="dijitIconClear" />
+					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" dojoType="dijit.form.Button"  />
+               	</div>
+             </div>
+		</form>
+	</div>
+</div>
 <style>
 .image-box {
     text-align: center;
@@ -48,231 +319,22 @@ input.btn_borwse_image {
     opacity: 0;
     cursor: pointer;
 }
-.account-image {
+.form-group div.account-image {
     border: solid 1px #eee;
     width: 5.15cm;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
-ul.opt-school {
+ul.optListRow {
     list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 35px;
 }
  input[type=checkbox],  input[type=radio]{
 	height: 15px;
     display: initial;
 }
 </style>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-<div class="card">
-	<div class="card-content collapse show">
-		<div class="card-box">
-               	<div class="col-sm-12 border-botom">
-		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-				</div>
-    		</div>
-    	</div>
-		<form id="frm_branch" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-			 <script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
-					
-					branch_id=dijit.byId("branch_id").get('value');
-					if(branch_id=='' || branch_id==null){
-						dijit.byId("branch_id").focus();
-						return false;
-					}
-					schoolOption=dijit.byId("schoolOption").get('value');
-					if(schoolOption=='' || schoolOption==null){
-						dijit.byId("schoolOption").focus();
-						return false;
-					}
-					loadingBlock();
-               	 	
-					return true;
-				} else {
-					return false;
-				}
-			</script>
-			<div class="card-box">
-				<div class="col-md-3 col-sm-3 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BRANCH_INFO");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">	
-	                   		<?php echo $frm->getElement("branch_id");?>
-							<?php echo $frm->getElement("id");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("title");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Card Prefix");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("card_prefix");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Card Type");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("card_type");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("School Option");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("schoolOption");?>
-	                   </div>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Issue Date");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("issue");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Valid Date");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("valid");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COLOR");?> (ID Card)
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("colorcode");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("note");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISPLAY_BY");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("display_by");?>
-	                   </div>
-	                </div>
-	            </div>
-	            <div id="degreee" class="col-md-3 col-sm-3 col-xs-12">
-	            	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><?php echo $tr->translate("DEGREE");?> :
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                	<div class="col-md-12 col-sm-12 col-xs-12">
-	                	<input style=" display: inline-block; height: 15px; margin-right: 10px;" onchange="checkall();" type="checkbox"  class="checkbox" id="check_all"  name="check_all"/>
-	                		<span><?php echo $tr->translate("CHECK_ALL")?></span>
-	                	</div>
-	                </div>
-	                 <div class="form-group">
-	                	<div class="col-md-12 col-sm-12 col-xs-12">
-	                		<?php 
-								if (!empty($this->faculty)) foreach ($this->faculty as $rs){
-								?>
-								<input <?php if (in_array($rs['id'], $array)) { echo "checked";}?> style=" display: inline-block;  height: 15px; margin-right: 10px;" type="checkbox"  class="checkbox" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"/>
-								<span><?php echo $rs['name'];?></span>
-								<br />
-							<?php } ?>
-	                	</div>
-	                </div>
-	            </div>
-	           <div class="col-md-3 col-sm-3 col-xs-12">
-				<div class="form-group">
-                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?> 
-				   &nbsp;<span><input type="checkbox" class="" <?php if($this->rs['default']==1){ echo 'checked="checked"';} ?>  name="setdefault" id="setdefault" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('Is Default');?></span></span>
-				   </label>
-                </div>
-                <div class="form-group">
-                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                    	<div class="account-image">
-                    		<div class="image-box">
-								<?php 
-								$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-								if(!empty($this->rs['background'])){
-									if (file_exists(PUBLIC_PATH."/images/card/".$this->rs['background'])){
-									$image = $this->baseUrl().'/images/card/'.$this->rs['background'];
-									}
-									
-								}?>
-								<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
-							</div>
-							<div class="button_browse">
-							<div id='preview'></div>	
-								<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-								<input class="btn_borwse_image" type="file" id="photo" name="photo" >
-							</div>
-						</div>
-                   </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-3 col-xs-12">
-            	<div class="form-group">
-                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
-                   <i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("FRONT_CARD");?> 
-				   </label>
-                </div>
-            	<div class="form-group">
-                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                    	<div class="account-image">
-                    		<div class="image-box">
-								<?php 
-								$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-								if(!empty($this->rs['background'])){
-									if (file_exists(PUBLIC_PATH."/images/card/".$this->rs['front_background'])){
-									$image = $this->baseUrl().'/images/card/'.$this->rs['front_background'];
-									}
-									
-								}?>
-								<img id="profile_wiew_front" src="<?php echo $image;?>" alt=""  />
-							</div>
-							<div class="button_browse">
-							<div id='preview'></div>	
-								<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-								<input class="btn_borwse_image" type="file" id="front_background" name="front_background" >
-							</div>
-						</div>
-                   </div>
-                </div>
-            </div>	
-            <div class="card-box">
-	         	<div class="col-md-8 col-sm-8 col-xs-12">
-	         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
-					</table>
-					<input type="hidden" id="identity" name="identity" />
-	         	</div>
-	         </div>          
-            <div class="clearfix"></div>
-	         <div class="card-box mt-20">
-               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" iconClass="dijitIconClear" />
-					<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					
-               	</div>
-             </div>
-		</form>
-	</div>
-</div>
 <script>
 dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');

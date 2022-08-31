@@ -913,7 +913,15 @@ span.revomveService:hover {
 label {
     font-weight: 200;
 }
-
+label.control-label small {
+    display: block;
+    font-size: 65%;
+    font-style: italic;
+    color: #797979;
+    margin: 0;
+    padding: 0;
+    line-height: 14px;
+}
 /*==============================
 	START CHECKBOK CUSTOM
 ==============================*/

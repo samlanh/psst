@@ -428,7 +428,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		));
 		$_stu_name->setValue($request->getParam("stu_name"));
 		$db = new Application_Model_DbTable_DbGlobal();
-		$result = $db->getAllStuName();
+		$result = $db->getAllStudent();
 		$opt_stu_name = array(''=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
 		$_stu_name->setMultiOptions($opt_stu_name);
@@ -672,17 +672,21 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',));
 		$_test_type->setValue($request->getParam("test_type"));
 		
-// 		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
-// 		$type_study->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required' =>'true',
-// 				'class'=>'fullside',
-// 				'onchange'=>'filterClient();',
-// 				'queryExpr'=>'*${0}*',
-// 				'autoComplete'=>"false"
-// 		));
-// 		$typestudy_opt = $db->getAllTermStudyTitle(1);
-// 		$type_study->setMultiOptions($typestudy_opt);
+		$option_type = new Zend_Dojo_Form_Element_FilteringSelect('option_type');
+		$option_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required' =>'true',
+				'class'=>'fullside',
+				'onchange'=>'filterClient();',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>"false"
+		));
+		$opt = array(
+				'0'=>$this->tr->translate('SELECT_TYPE'),
+				'1'=>$this->tr->translate('OTHER_INCOME'),
+				'2'=>$this->tr->translate('CREDIT_MEMO'),
+				);
+		$option_type->setMultiOptions($opt);
 
 		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
 		$type_study->setAttribs(array(
@@ -699,7 +703,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		
 		$this->addElements(array(
-				   $type_study,
+				    $option_type,
+				    $type_study,
 					$school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,

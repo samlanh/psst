@@ -300,6 +300,62 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$orderby);
     }
+    function getDiscountSetting($search = '',$type=null){
+    	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    
+    	$currentLang = $dbp->currentlang();
+    	$colunmname='title_en';
+    	if ($currentLang==1){
+    		$colunmname='title';
+    	}
+    	$sql = "SELECT
+			    	 g.discount_id AS id,
+			    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch,
+			    	(SELECT name_en FROM `rms_view` WHERE type=35 AND key_code=g.discountOption LIMIT 1)AS discountOption,
+			    	(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))
+		    		FROM rms_student AS s
+		    			WHERE s.stu_id=g.studentId LIMIT 1) AS studentName,
+			    	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.itemType LIMIT 1) AS itemType,
+			    	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`g`.`itemId` LIMIT 1) AS itemDetail,
+			    	(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.discountType LIMIT 1) AS disc_name,
+			    	CONCAT(g.discountValue,
+			    	(CASE
+				    	WHEN DisValueType=1 THEN '%'
+				    	WHEN DisValueType=2 THEN '$'
+			    	END )) AS DisValueType,
+			    	DATE_FORMAT(g.start_date,'%d-%m-%Y') start_date,
+			    	DATE_FORMAT(g.end_date,'%d-%m-%Y') end_date,
+			    	(SELECT CONCAT(first_name) FROM rms_users WHERE id=g.user_id LIMIT 1 ) AS user_name
+    			";
+    	$sql.=$dbp->caseStatusShowImage("g.status");
+    	$sql.=" FROM rms_dis_setting AS g ";
+    
+    	$order = ' ORDER BY id DESC ';
+    	$where = ' WHERE discountType!="" ';
+    
+     if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " (SELECT dis_name AS name FROM `rms_discount` WHERE disco_id=discountType LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " discountValue LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+     }
+     if(!empty($search['branch_id'])){
+    		$where.=' AND g.branch_id='.$search['branch_id'];
+     }
+     if(!empty($search['studentId'])){
+    		$where.=' AND g.studentId='.$search['studentId'];
+     }
+     if(!empty($search['discountId'])){
+     	$where.=' AND g.discountType='.$search['discountId'];
+     }
+   	 if($search['status_search']>-1){
+    		$where.=' AND status='.$search['status_search'];
+     }
+    	$where.=$dbp->getAccessPermission('g.branch_id');
+    	return $db->fetchAll($sql.$where.$order);
+    }
     
     public function getStudentPayment($search){
     	    	$db = $this->getAdapter();

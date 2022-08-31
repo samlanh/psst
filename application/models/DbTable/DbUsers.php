@@ -301,6 +301,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		}
 		
 		$schooloption= implode(',', $data['schooloptoncheck']);
+		$status = empty($data['active'])?0:1;
 		$_user_data=array(
 	    	'last_name'=>$data['last_name'],
 			'first_name'=>$data['first_name'],
@@ -310,7 +311,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 // 			'branch_id'=>$data['branch_id'],
 			'branch_list'=>$branchList,
 			'schoolOption'=>$schooloption,
-			'active'=> $data['active']			
+			'active'=> $status		
 	    );    	   
 		if (!empty($data['check_change'])){
 			$_user_data['password']= md5($data['password']);

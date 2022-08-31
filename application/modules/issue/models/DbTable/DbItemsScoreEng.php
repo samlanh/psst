@@ -49,7 +49,8 @@ class Issue_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
 	    	);
     		$this->_name='rms_exametypeeng';
     		if (!empty($_data['id'])){
-    			$_arr['status']=$_data['status'];
+				$status = empty($_data['status'])?0:1;
+    			$_arr['status']=$status;
     			$where = "id=".$_data['id'];
     			$this->update($_arr, $where);
     		}else{

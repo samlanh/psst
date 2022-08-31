@@ -59,8 +59,9 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
 	}
     public function editAction()
     {	
+		$db = new RsvAcl_Model_DbTable_DbUserType();
     	if($this->getRequest()->getParam('id')){
-    		$db = new RsvAcl_Model_DbTable_DbUserType();
+    		
     		$user_type_id = $this->getRequest()->getParam('id');
     		$rs=$db->getUserType($user_type_id);
     		$this->view->usertype=$rs;

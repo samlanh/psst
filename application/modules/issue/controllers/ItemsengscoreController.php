@@ -84,6 +84,7 @@ class Issue_ItemsengscoreController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issue/itemsengscore");
 			exit();
 		}
+		$this->view->row = $row;
 		$subject_exam=new Issue_Form_FrmItemsScoreEngExam();
 		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam($row);
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);

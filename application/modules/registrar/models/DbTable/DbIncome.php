@@ -117,6 +117,10 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.= " AND branch_id = ".$search['branch_id'];
 		}
+		if($search['option_type']>0){
+			$where.= " AND optionType = ".$search['option_type'];
+		}
+		
 		if($search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}

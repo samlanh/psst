@@ -536,6 +536,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside height-text',));
+		$_branch_id->setValue($request->getParam('branch_id'));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));

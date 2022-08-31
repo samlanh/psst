@@ -122,7 +122,7 @@ input[type=file] {
 												</div> 
 											</div>
 											<div class="form-group">
-												<div class="col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate('Logo')?></div>
+												<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Logo')?></label>
 												<div class="col-md-4 col-sm-4 col-xs-12 alignCenter">
 													<img class="image_view" id="image_view" src="<?php echo $defaultLogo;?>" alt=""  />
 													<div class="button_browse">
@@ -132,16 +132,16 @@ input[type=file] {
 												</div>
 											</div>
 											<div class="form-group">
-												<div class="col-sm-4"><?php echo $tr->translate('Company Tel')?></div>
-												<div class="col-sm-8"><?php echo $frm->getElement('branch_tel')?></div>
+												<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Company Tel')?></label>
+												<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('branch_tel')?></div>
 											</div>
 											<div class="form-group">
-												<div class="col-sm-4"><?php echo $tr->translate('Email')?></div>
-												<div class="col-sm-8"><?php echo $frm->getElement('branch_email')?></div>
+												<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Email')?></label>
+												<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('branch_email')?></div>
 											</div>
 											<div class="form-group">
-												<div class="col-sm-4"><?php echo $tr->translate('Address')?></div>
-												<div class="col-sm-8"><?php echo $frm->getElement('branch_add')?></div>
+												<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Address')?></label>
+												<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('branch_add')?></div>
 											</div>
 										</div>
 									</div>
@@ -189,12 +189,12 @@ input[type=file] {
 													</div> 
 												</div> 
 												<div class="form-group">
-													<div class="col-sm-4"><?php echo $tr->translate('RECEIPT_PRINT')?></div>
-													<div class="col-sm-8"><?php echo $frm->getElement('receipt_print')?></div>
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('RECEIPT_PRINT')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('receipt_print')?></div>
 												</div>
 												<div class="form-group">
-													<div class="col-sm-4"><?php echo $tr->translate('SHOW_HEADER_RECEIPT')?></div>
-													<div class="col-sm-8"><?php echo $frm->getElement('show_header_receipt')?></div>
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('SHOW_HEADER_RECEIPT')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('show_header_receipt')?></div>
 												</div>
 											</div> 
 										</div> 
@@ -222,8 +222,8 @@ input[type=file] {
 													</div> 
 												</div> 
 												<div class="form-group">
-													<div class="col-sm-4"><?php echo $tr->translate('Payment Amount Day Alert')?></div>
-													<div class="col-sm-8"><?php echo $frm->getElement('payment_day_alert');?></div>
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Payment Amount Day Alert')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('payment_day_alert');?></div>
 												</div>
 											</div> 
 										</div> 
@@ -242,12 +242,12 @@ input[type=file] {
 													</div> 
 												</div> 
 												<div class="form-group">
-													<div class="col-sm-4"><?php echo $tr->translate('Sale Stock Setting')?></div>
-													<div class="col-sm-8"><?php echo $frm->getElement('sale_stock');?></div>
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Sale Stock Setting')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('sale_stock');?></div>
 												</div>
 												<div class="form-group">
-													<div class="col-sm-4"><?php echo $tr->translate('Transfer Stock')?></div>
-													<div class="col-sm-8"><?php echo $frm->getElement('trasfer_st_cut');?></div>
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Transfer Stock')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('trasfer_st_cut');?></div>
 												</div>
 												
 											</div> 
@@ -267,17 +267,20 @@ input[type=file] {
 														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Other Info");?></p>
 													</div> 
 												</div> 
+												<div class="form-group">
+													 <label class="control-label col-md-4 col-sm-4 col-xs-12">
+														<?php echo $tr->translate('STU_ID_COUNTING')?>
+														<small><?php echo $tr->translate('COUNTING_STUDENT_CODE')?></small>
+													</label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('settingStuID')?></div>
+												</div>
 												<?php if (!empty($this->allSchoolOption)) foreach ($this->allSchoolOption as $rs){?>
 												<div class="form-group">
-													<div class="col-sm-4"><?php echo $rs['title']?></div>
-													<div class="col-sm-8">
-														<div class="col-md-6 col-sm-6 col-xs-12">
-															<input type="radio" name="school_<?php echo $rs['id']?>" <?php if ($rs['status']==1){?> checked="checked" <?php }?> value="1"> <?php echo $tr->translate('ACTIVE')?><br>
-														</div>
-														<div class="col-md-6 col-sm-6 col-xs-12">
-															<input type="radio" name="school_<?php echo $rs['id']?>" <?php if ($rs['status']==0){?> checked="checked" <?php }?> value="2"> <?php echo $tr->translate('DEACTIVE')?><br>
-														</div>
-													</div>
+													<label class="custom-switch  "> 
+														<input type="checkbox" <?php if ($rs['status']==1){?> checked="checked" <?php }?> id="school_<?php echo $rs['id']?>" name="school_<?php echo $rs['id']?>" class="custom-switch-input" > 
+														<span class="custom-switch-indicator custom-radius"></span> 
+														<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $rs['title'];?></a> 
+													</label>
 												</div>
 												<?php }?>
 											</div> 

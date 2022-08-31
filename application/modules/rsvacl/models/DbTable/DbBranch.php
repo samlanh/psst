@@ -12,13 +12,14 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$_db= $this->getAdapter();
     	$_db->beginTransaction();
     	try{
-    		$part= PUBLIC_PATH.'/images/';
+    		$part= PUBLIC_PATH.'/images/logo/';
     		$name = $_FILES['photo']['name'];
     		$size = $_FILES['photo']['size'];
     		if (!file_exists($part)) {
     			mkdir($part, 0777, true);
     		}
     		$photo='';
+			$photo= empty($_data['oldLogo'])?'':$_data['oldLogo'];
     		$dbg = new Application_Model_DbTable_DbGlobal();
     		if (!empty($name)){
     			$ss = 	explode(".", $name);
@@ -33,6 +34,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		
     		$principalsign = $_FILES['principalsign']['name'];
     		$imgsignature='';
+			$imgsignature= empty($_data['oldSignature'])?'':$_data['oldSignature'];
     		if(!empty($principalsign)){
     			$ss = 	explode(".", $principalsign);
     			$image_name = "signature_".date("Y").date("m").date("d").time().".".end($ss);
@@ -46,6 +48,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		
     		$stamp = $_FILES['stamp']['name'];
     		$imgstamp='';
+			$imgstamp= empty($_data['oldStamp'])?'':$_data['oldStamp'];
     		if (!empty($stamp)){
     			$ss = 	explode(".", $stamp);
     			$image_name = "stamp".date("Y").date("m").date("d").time().".".end($ss);
@@ -138,7 +141,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$_db->beginTransaction();
     	//print_r($_data); exit();
     	try{
-    		$part= PUBLIC_PATH.'/images/';
+    		$part= PUBLIC_PATH.'/images/logo/';
     		$name = $_FILES['photo']['name'];
     		if (!file_exists($part)) {
     			mkdir($part, 0777, true);

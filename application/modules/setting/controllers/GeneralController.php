@@ -35,6 +35,7 @@ public function init()
 		$row['sale_cut_stock'] = $db_gs->geLabelByKeyName('sale_cut_stock');
 		
 		$row['welcomeAudio'] = $db_gs->geLabelByKeyName('welcomeAudio');
+		$row['logo'] = $db_gs->geLabelByKeyName('logo');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

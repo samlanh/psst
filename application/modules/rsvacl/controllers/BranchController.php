@@ -65,8 +65,9 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/branch/add");
 				}
 			}catch (Exception $e) {
-				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
+				
 			}
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -87,10 +88,11 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			try{
 				$db->updateBranch($data,$id);
-				//Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"),self::REDIRECT_URL."/branch/index");
+				$sms = "EDIT_SUCCESS";
+				Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/branch/index");
 			}catch (Exception $e){
-// 				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
 			}
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();

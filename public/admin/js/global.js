@@ -112,17 +112,24 @@
 			}
 		});
 	}
-	function getAllYear(urlGet,contentData,SelectedId=null){//done
+	function getAllYear(urlGet,contentData,SelectedId=null,strControl=null){//done
 		dojo.xhrPost({
 			url: urlGet,
 			content:contentData,
 			handleAs:"json",
 			load: function(data){
 				year_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('academic_year').set('store',year_store);  
-			    if(SelectedId!=null){
-			    	 dijit.byId('academic_year').attr('value',SelectedId);
-			    }
+				if(strControl!=null){
+					 dijit.byId(strControl).set('store',year_store);  
+						if(SelectedId!=null){
+							dijit.byId(strControl).attr('value',SelectedId);
+						}
+				}else{
+					  dijit.byId('academic_year').set('store',year_store);  
+					  if(SelectedId!=null){
+						 dijit.byId('academic_year').attr('value',SelectedId);
+					  }
+				}
 			},
 			error: function(err) {
 			}

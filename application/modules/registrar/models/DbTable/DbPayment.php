@@ -56,7 +56,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 				FROM rms_student AS s,
 					rms_group_detail_student AS ds
 				  WHERE  
-				   ds.mainType=1
+				   ds.itemType=1
 				   AND ds.is_maingrade=1 
 				   AND ds.is_current=1 
 				   AND s.stu_id=ds.stu_id 
@@ -239,7 +239,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 				FROM rms_student AS s,
 					rms_group_detail_student AS ds
 				  WHERE  
-				   ds.mainType=1
+				   ds.itemType=1
 				   AND ds.is_maingrade=1 
 				   AND ds.is_current=1 
 				   AND s.stu_id=ds.stu_id 

@@ -50,7 +50,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp
 			WHERE
-					gd.mainType=1 
+					gd.itemType=1 
 					AND s.stu_id=gd.stu_id
 					AND gd.is_current=1
 					AND gd.is_maingrade=1

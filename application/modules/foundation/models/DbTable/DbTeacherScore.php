@@ -360,7 +360,7 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
 		FROM `rms_group_detail_student` AS sgh
 		WHERE 
-			sgh.mainType=1 
+			sgh.itemType=1 
 			AND sgh.`group_id`=".$group_id;
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
 		return $db->fetchAll($sql.$order);

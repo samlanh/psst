@@ -154,7 +154,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	function getAllStudentOldGroup($from_group){
 		$db = $this->getAdapter();
 		$sql="select gd_id,stu_id from rms_group_detail_student where 
-			mainType=1 
+			itemType=1 
 			AND group_id=$from_group and is_pass=0  ";
 		return $db->fetchAll($sql);
 	}	
@@ -250,7 +250,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					rms_group_detail_student as gds,
 					rms_student as st 
 			 WHERE 
-					gds.mainType=1 
+					gds.itemType=1 
 					AND gds.stu_id=st.stu_id 
 					and is_pass=0
 					and gds.group_id=$from_group ";
@@ -268,7 +268,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					rms_group_detail_student as gds,
 					rms_student as st 
 			 where 
-					gds.mainType=1 
+					gds.itemType=1 
 					AND gds.stu_id=st.stu_id 
 					and gds.is_pass=0
 					and gds.group_id=$from_group
@@ -290,7 +290,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		$sql = "SELECT stu_id  
 			FROM rms_group_detail_student as gds 
 				WHERE 
-				gds.mainType=1 
+				gds.itemType=1 
 				AND gds.group_id=$id and gds.is_pass=0 and gds.stop_type=3";
 		return $db->fetchAll($sql);
 	}

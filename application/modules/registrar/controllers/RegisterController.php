@@ -85,20 +85,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();
 	   
 	   $dbclass = new Application_Model_GlobalClass();
-// 	   print_r($dbclass->getAllPayMentTermOption());
 	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
-	   
-   //  print_r($dbclass->getAllPayMentTermOption());	   
-// 	   print_r($frmreceipt->getFormatReceipt());exit();
-// 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $grade = $db->getAllGradeStudyByDegree(null,8);
-// 	   $prodcut = $db->getProductbyBranch(10);
-	   
-// 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $student_id = 1;
-// 	   $is_stutested = 0;
-// 	   $rs = $db->getAllGradeStudyByDegree(-1,$student_id,$is_stutested);
-// 	   print_r($rs);exit();
+
     }
     public function addregistraAction(){
     	if($this->getRequest()->isPost()){

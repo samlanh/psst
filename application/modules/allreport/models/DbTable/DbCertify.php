@@ -40,7 +40,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				rms_group_detail_student as gds,
     				rms_tuitionfee as t
     			where 
-					gds.mainType=1 AND
+					gds.itemType=1 AND
     				s.stu_id = gds.stu_id
     				and g.id=gds.group_id
     				and g.academic_year=t.id

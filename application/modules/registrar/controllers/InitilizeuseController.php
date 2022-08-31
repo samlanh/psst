@@ -50,19 +50,9 @@ class Registrar_InitilizeuseController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				$sms="INSERT_SUCCESS";
-// 				$_dbmodel = new Accounting_Model_DbTable_DbDiscountSetting();
-// 				$_discount = $_dbmodel->addNewDiscountset($_data);
-				if($_discount==-1){
-					$sms = "RECORD_EXIST";
-				}
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/discountsetting");
-				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/discountsetting/add");
-				}
-				Application_Form_FrmMessage::message($sms);				
-					
+				$_dbmodel = new Registrar_Model_DbTable_DbInitilizeservice();
+				$_discount = $_dbmodel->addInitilizeService($_data);
+				//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/add");
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

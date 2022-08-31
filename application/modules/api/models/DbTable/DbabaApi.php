@@ -174,7 +174,7 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 	   			LEFT JOIN rms_group_detail_student AS sgd
 	   			ON s.stu_id=sgd.stu_id
    			WHERE 
-				sgd.mainType=1 
+				sgd.itemType=1 
 	   			AND sgd.is_current=1 AND sgd.is_maingrade=1  ";
 		$sql.= " AND ".$db->quoteInto('s.stu_code=?', $stuCode);
 		$sql.=" LIMIT 1";

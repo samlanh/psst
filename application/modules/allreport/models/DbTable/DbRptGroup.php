@@ -134,7 +134,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 					 rms_student as s,
 					`rms_group` AS gr
 				WHERE 
-					g.mainType=1 
+					g.itemType=1 
 					AND gr.id = g.group_id
 					AND g.stu_id = s.stu_id
 		   			AND `g`.`status` = 1 ";
@@ -211,9 +211,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 				   	(SELECT $label FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
 				   	(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student AS s  
-	   					WHERE sg.mainType=1 AND sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status=1  LIMIT 1) AS Num_Student,
+	   					WHERE sg.itemType=1 AND sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status=1  LIMIT 1) AS Num_Student,
 	   				(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student as s 
-	   					WHERE sg.mainType=1 AND sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status =1 AND sg.stop_type!=0 LIMIT 1) AS student_drop
+	   					WHERE sg.itemType=1 AND sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status =1 AND sg.stop_type!=0 LIMIT 1) AS student_drop
 				FROM 
 	   				`rms_group` `g`
 	   			WHERE 
@@ -301,7 +301,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_en,
 					(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_kh,
 				   	(SELECT `rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 1) AND (`rms_view`.`key_code` = `g`.`status`)) LIMIT 1) AS `status`,
-				   	(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE mainType=1 AND `group_id`=`g`.`id`)AS Num_Student
+				   	(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE itemType=1 AND `group_id`=`g`.`id`)AS Num_Student
 			   	FROM 
 		   			`rms_group` `g` 
 		   		WHERE 
@@ -465,7 +465,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 					rms_student as s,
 					`rms_group` AS gr
 				WHERE
-				g.mainType=1 
+				g.itemType=1 
 				AND gr.id = g.group_id
 				AND g.stu_id = s.stu_id
 				AND `g`.`status` = 1 ";

@@ -33,7 +33,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 				`rms_group` AS g
 	    	WHERE
 			
-			gds.mainType=1 
+			gds.itemType=1 
 			AND s.status=1
 	    	AND gds.`stu_id`=s.stu_id
 	    	AND g.id = gds.`group_id`

@@ -33,7 +33,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				  `rms_student` AS s,
 				  `rms_group_detail_student` AS gds 
 				WHERE 
-					gds.mainType=1 
+					gds.itemType=1 
 					AND s.`stu_id` = gds.`stu_id` 
 				  AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
     	$row = $db->fetchAll($sql);
@@ -103,7 +103,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		   (SELECT subject_titleen FROM rms_subject AS sj WHERE sj.id=gsd.subject_id LIMIT 1) AS subject_name,
    		    gsd.subject_id 
 	 		FROM rms_student AS s,rms_group AS g,rms_group_detail_student AS gd,rms_group_subject_detail AS gsd
-	 		WHERE gd.mainType=1 AND s.stu_id=gd.stu_id AND  g.id=gd.group_id AND gsd.group_id=g.id  ORDER BY g.id,gsd.subject_id,s.stu_id";
+	 		WHERE gd.itemType=1 AND s.stu_id=gd.stu_id AND  g.id=gd.group_id AND gsd.group_id=g.id  ORDER BY g.id,gsd.subject_id,s.stu_id";
    		return $db->fetchAll($sql);
    }
    function getScoreByGroupId($student_id,$subject_id,$group_id){
@@ -504,7 +504,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	`rms_group` AS g,
 				   	`rms_group_detail_student` AS gs
 			   	WHERE
-					gs.mainType=1 
+					gs.itemType=1 
 					AND st.`stu_id` = gs.`stu_id`
 				   	AND g.`id`= gs.`group_id`
 				   	AND g.id = $group_id ";//only month
@@ -594,7 +594,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	`rms_group` AS g,
 				   	`rms_group_detail_student` AS gs
 			   	WHERE
-					gs.mainType=1 
+					gs.itemType=1 
 					AND st.`stu_id` = gs.`stu_id`
 				   	AND g.`id`= gs.`group_id`
 				   	AND g.id = $group_id ";
@@ -616,7 +616,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	st.`stu_khname`,
 	   	st.`sex`,
 	   	st.dob,
-		(SELECT COUNT(stu_id) FROM `rms_group_detail_student` WHERE mainType=1 AND group_id=s.group_id LIMIT 1) AS amount_student,
+		(SELECT COUNT(stu_id) FROM `rms_group_detail_student` WHERE itemType=1 AND group_id=s.group_id LIMIT 1) AS amount_student,
 	   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
 	   	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 	   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
@@ -1212,7 +1212,7 @@ function getExamByExamIdAndStudent($data){
     	rms_student AS vst,
     	rms_group_detail_student AS gds
     	WHERE 
-		gds.mainType=1 
+		gds.itemType=1 
 		AND s.`id`=sd.`score_id`
     	AND vst.stu_id = sm.`student_id`
     	AND vst.stu_id = sd.`student_id`
@@ -1355,7 +1355,7 @@ function getExamByExamIdAndStudent($data){
 				`rms_group_detail_student`  AS gds,
 				`rms_group` AS g
 				WHERE 
-				gds.mainType=1 
+				gds.itemType=1 
 				AND g.id = gds.group_id
 				AND g.status=1
 				AND gds.stu_id =$stu_id
@@ -1418,7 +1418,7 @@ function getExamByExamIdAndStudent($data){
 				   	rms_group as g,
 				   	rms_student as st
 				WHERE
-					gds.mainType=1 
+					gds.itemType=1 
 				   	AND gds.`group_id` = gscg.`to_group`
 				   	AND gds.`old_group` = gscg.`from_group`
 				   	and gscg.to_group=g.id
@@ -1494,7 +1494,7 @@ function getExamByExamIdAndStudent($data){
 			   		rms_group as g,
 			   		rms_student as st
 			   	WHERE
-					gds.mainType=1 
+					gds.itemType=1 
 			   		and gds.`group_id` = gscg.`from_group`
 			   		and gds.`group_id` = $from_group
 			   		and gscg.from_group=g.id

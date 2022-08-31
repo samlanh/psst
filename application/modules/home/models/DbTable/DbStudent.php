@@ -48,7 +48,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						FROM rms_student AS s,
 							rms_group_detail_student AS ds
 						  WHERE  
-						   ds.mainType=1 
+						   ds.itemType=1 
 						   AND ds.is_maingrade=1 
 						   AND ds.is_current=1 
 						   AND s.stu_id=ds.stu_id 
@@ -170,7 +170,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					rms_student as s,
 					rms_group_detail_student AS ds
 				WHERE 
-					ds.mainType=1 
+					ds.itemType=1 
 					AND s.stu_id = ds.stu_id 
 					AND ds.is_maingrade=1 
 					AND s.stu_id=$stu_id  ";
@@ -204,7 +204,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				FROM 
 					rms_group_detail_student AS ds
  			WHERE 
-				ds.mainType=1 
+				ds.itemType=1 
 				AND ds.stu_id = $stu_id AND ds.is_current=1 ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -354,7 +354,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
     				rms_group_reschedule AS gr,
     				rms_group_detail_student AS gd
     			WHERE 
-					gd.mainType=1 
+					gd.itemType=1 
     				AND gr.group_id=gd.group_id
     				and gd.is_pass = 0
     	 			AND gd.stu_id=$id
@@ -585,7 +585,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					rms_group AS g,
 					rms_student as s
 				WHERE 
-					gds.mainType=1 
+					gds.itemType=1 
 					AND gds.group_id = g.id
 					AND gds.stu_id = s.stu_id
 					and gds.stu_id = $stu_id

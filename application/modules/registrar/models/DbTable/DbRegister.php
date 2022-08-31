@@ -1108,7 +1108,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		
 				sp.degree as degree_id,
 	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
-	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 	    		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
 	    		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name
     		FROM
@@ -1365,7 +1365,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		
 				sp.degree as degree_id,
 	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
-	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.mainType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 	    		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
 	    		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name
     		FROM

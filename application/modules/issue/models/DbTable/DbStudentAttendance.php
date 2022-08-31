@@ -248,7 +248,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 							`rms_group_detail_student` AS sgh,
 							rms_student as s
 						WHERE
-							sgh.mainType=1 
+							sgh.itemType=1 
 							AND sgh.`stu_id`=s.stu_id
 							AND s.status=1
 							AND sgh.status = 1
@@ -266,7 +266,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 				 	`rms_group_detail_student` AS sgh,
 				 	rms_student as s
 				WHERE 
-					sgh.mainType=1 
+					sgh.itemType=1 
 					AND sgh.`stu_id`=s.stu_id
 					AND s.status=1
 					AND sgh.status = 1

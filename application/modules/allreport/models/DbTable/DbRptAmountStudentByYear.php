@@ -72,7 +72,7 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
 			  rms_student as st
 			 
 			 WHERE 
-				gds.mainType=1 
+				gds.itemType=1 
 				AND st.stu_id=gds.stu_id 
 				AND g.id = gds.`group_id` 
 				AND gds.is_pass=0
@@ -115,7 +115,7 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
 				  `rms_student` AS s,
 				  `rms_group_detail_student` AS gds 
 				WHERE 
-					gds.mainType=1 
+					gds.itemType=1 
 					AND s.`stu_id` = gds.`stu_id` 
 				    AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
     	$row = $db->fetchAll($sql);

@@ -94,7 +94,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				rms_group_detail_student AS ds,
 				`rms_crm` AS c
 			WHERE 
-				ds.mainType=1 
+				ds.itemType=1 
 				AND s.crm_id = c.id AND ds.stu_id = s.stu_id
 		";
 		$where = ' ';

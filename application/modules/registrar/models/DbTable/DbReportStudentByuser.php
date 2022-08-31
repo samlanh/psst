@@ -373,7 +373,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		FROM `rms_student` AS s,
 			`rms_group_detail_student` AS gds
 		WHERE 	
-				gds.mainType=1 
+				gds.itemType=1 
 				AND gds.stu_id = s.stu_id
 				AND gds.is_current=1
 				AND gds.is_maingrade=1

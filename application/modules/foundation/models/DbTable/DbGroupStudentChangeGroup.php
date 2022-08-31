@@ -16,7 +16,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			    `rms_group_detail_student` AS gds,
 			    `rms_group` AS g 
 			  WHERE  
-				gds.mainType=1 
+				gds.itemType=1 
 				AND gds.group_id = g.id AND group_code!=''";
 			$request=Zend_Controller_Front::getInstance()->getRequest();
 			if($request->getActionName()=='add'){
@@ -514,7 +514,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$sql="select gd_id from 
 		
 			rms_group_detail_student 
-			where mainType=1  AND rms_group_detail_student.group_id=".$from_group;
+			where itemType=1  AND rms_group_detail_student.group_id=".$from_group;
 		return $db->fetchAll($sql);
 	}
 	
@@ -804,7 +804,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			FROM rms_group_detail_student as gds,
 				rms_student as st 
 			WHERE 
-				gds.mainType=1 
+				gds.itemType=1 
 				AND gds.stop_type = 0 
 				AND gds.stu_id=st.stu_id 
 				AND gds.group_id=$from_group
@@ -825,7 +825,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					rms_group_detail_student as gds,
 					rms_student as st 
 				where 
-					gds.mainType=1 
+					gds.itemType=1 
 					AND gds.stu_id=st.stu_id 
 					and gds.group_id=$from_group
 			";
@@ -847,7 +847,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	function selectStudentPass($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE 
-			gds.mainType=1 
+			gds.itemType=1 
 			AND gds.old_group=$id";
 		return $db->fetchAll($sql);
 	}

@@ -36,6 +36,7 @@ public function init()
 		
 		$row['welcomeAudio'] = $db_gs->geLabelByKeyName('welcomeAudio');
 		$row['logo'] = $db_gs->geLabelByKeyName('logo');
+		$row['settingStuID'] = $db_gs->geLabelByKeyName('settingStuID');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

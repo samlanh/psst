@@ -82,6 +82,15 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				1=>$this->tr->translate("CUTSTOCK_WITH_STORE"));
 		$_sale_stock->setMultiOptions($_salestock_opt);
 		
+		$settingStuID=  new Zend_Dojo_Form_Element_FilteringSelect('settingStuID');
+		$settingStuID->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$settingStuIDOpt = array(
+				1=>$this->tr->translate("COUNT_BY_STUDENT"),
+				2=>$this->tr->translate("COUNT_BY_SCHOOL_OPT"),
+				3=>$this->tr->translate("COUNT_BY_DEGREE"),
+				);
+		$settingStuID->setMultiOptions($settingStuIDOpt);
+		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
 			$_branch_add->setValue($data['branch_add']['keyValue']);
@@ -92,18 +101,20 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$_show_header_receipt->setValue($data['show_header_receipt']['keyValue']);
 			$_payment_day_alert->setValue($data['payment_day_alert']['keyValue']);
 			$_trasfer_st_cut->setValue($data['trasfer_st_cut']['keyValue']);
+			$settingStuID->setValue($data['settingStuID']['keyValue']);
 			
 		}
 		$this->addElements(array(
-				$_sale_stock,
-				$_label_animation,
-				$_branch_tel,
-				$_branch_email,
-				$_branch_add,
-				$_receipt_print,
-				$_show_header_receipt,
-				$_payment_day_alert,
-				$_trasfer_st_cut
+				$_sale_stock
+				,$_label_animation
+				,$_branch_tel
+				,$_branch_email
+				,$_branch_add
+				,$_receipt_print
+				,$_show_header_receipt
+				,$_payment_day_alert
+				,$_trasfer_st_cut
+				,$settingStuID
 				));
 		
 		return $this;

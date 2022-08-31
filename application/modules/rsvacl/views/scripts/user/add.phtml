@@ -8,8 +8,11 @@ $user_id = $session_user->user_id;
 $branch_id = $session_user->branch_id;
 ?>
 <style>
-ul.opt-school {
+ul.optListRow {
     list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 35px;
 }
  input[type=checkbox],  input[type=radio]{
 	height: 15px;
@@ -21,7 +24,7 @@ ul.opt-school {
 		<div class="card-box">
              <div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-		    		<h4 class="m-b-0"><i class="fa fa-user-plus " aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('INFORMATION_RELETIONSHIP_USER');?></h4>
+		    		<h4 class="m-b-0"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('CREATE_USER');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -63,98 +66,162 @@ ul.opt-school {
 			</script>
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-	        		<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("ACCOUNT_INFO");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_NAME");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" required="true" name="user_name" id="user_name" placeholder="<?php echo $tr->translate("USER_NAME");?>" 
-											dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-	                   </div>
-	                </div>
-	                
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="password" required="true" name="password" id="password" placeholder="<?php echo $tr->translate("PASSWORD");?>" 
-											regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
-											dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="password" required="true" name="con_password" id="con_password" placeholder="<?php echo $tr->translate("CONFIRM_PASSWORD");?>" 
-											regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
-											dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-log-in" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ACCOUNT_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="user_name" id="user_name" placeholder="<?php echo $tr->translate("USER_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="password" required="true" name="password" id="password" placeholder="<?php echo $tr->translate("PASSWORD");?>" 
+															regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="password" required="true" name="con_password" id="con_password" placeholder="<?php echo $tr->translate("CONFIRM_PASSWORD");?>" 
+															regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 	             </div>
 	             <div class="col-md-4 col-sm-4 col-xs-12">
-	             	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("USER_INFO");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LAST_NAME");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
-											dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-	                   </div>
-	                </div>
-	                
-	             	<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FIRST_NAME");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
-											dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-	                   </div>
-	                </div>
-	                
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="user_type" />
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("School Option");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                	<ul class="opt-school" id="lbl_checkoption">
-	                	</ul>
-	                </div>
+	             	
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("USER_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LAST_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FIRST_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="user_type" />
+									   </div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
 	             </div>
 	             <div class="col-md-4 col-sm-4 col-xs-12">
-	             	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("Assign Branch Access");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                	<span><input type="checkbox" class="" checked="checked"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
-	                	<ul class="opt-school">
-	                		<?php $identityCheck = ""; if (!empty($this->rs_branch)) foreach ($this->rs_branch as $rs){?>
-	                		<li class="opt-items"> <input  type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
-	                			<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
-	                		<?php }?>
-	                	</ul>
-	                </div>
+	             	<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("School Option");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="form-group">
+										<ul class="optListRow" id="lbl_checkoption">
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Assign Branch Access");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input" checked="checked"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);"  >
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL');?>
+										</label>
+									</div>
+									<div class="form-group">
+										<ul class="optListRow">
+											<?php $identityCheck = ""; if (!empty($this->rs_branch)) foreach ($this->rs_branch as $rs){?>
+											<li class="opt-items"> 
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="checkbox custom-control-input" id="branch<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" >
+													<label class="custom-control-label" for="branch<?php echo $rs['id'];?>">
+														<?php echo $rs['name'];?>
+													</label>
+												</div>
+													
+											</li>
+												<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
+											<?php }?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 	             </div>
 	             <div class="clearfix"></div>
 				    <div class="card-box">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               		<input type="button" value="GO_BACK" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>"user",'action'=>'index'),null,true); ?>';" />
-						<input type="submit" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE');?>" id="submitButton" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
+	               		<input type="button" class="button-class button-danger"  iconClass="glyphicon glyphicon-repeat" value="GO_BACK" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button"  onclick="window.location = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>"user",'action'=>'index'),null,true); ?>';" />
+						<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE');?>" id="submitButton" dojoType="dijit.form.Button" />
 			    		</div>
 			    	</div>
 	         </div>
@@ -259,7 +326,16 @@ function getSchoolOption(){
 			load: function(data) {
 				temp='';
 				for(var i=0;i<data.length;i++) {
-					temp+='<li class="opt-items"><input class="schoptcheck" checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" /> <span style="vertical-align: top;">'+data[i].name+'</span></li>';
+					temp+='<li class="opt-items">';
+					
+								temp+='<div class="custom-control custom-checkbox">';
+										temp+='<input type="checkbox" class="schoptcheck custom-control-input" id="schoolOption'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" >';
+										temp+='<label class="custom-control-label" for="schoolOption'+data[i].id+'">';
+											temp+=data[i].name;
+										temp+='</label>';
+									temp+='</div>';
+						
+						temp+='</li>';
 				}
 				dojo.query("#lbl_checkoption").append(temp);
 			},

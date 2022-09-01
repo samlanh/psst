@@ -3,69 +3,7 @@
 	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_SCOREENG"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>	
-<style>
-	select{ width:100%;}
-		tr.hover td.verites-col,
-		td.verites-col {
-		    text-align: center;
-		    white-space: nowrap;
-		    g-origin: 50% 50%;
-		    -webkit-transform: rotate(270deg);
-		    -moz-transform: rotate(270deg);
-		    -ms-transform: rotate(270deg);
-		    -o-transform: rotate(270deg);
-		    transform: rotate(270deg);
-		}
-		tr.hover td.verites-col span.verites,
-		td.verites-col span.verites {
-		     margin: 0 -85%;
-		    display: inline-block;
-		}
-		tr.hover td.verites-col span.verites:before,
-		td.verites-col span.verites:before {
-		    content: '';
-		    width: 0;
-		    padding-top: 110%;
-		    display: inline-block;
-		    vertical-align: middle;
-		}
-		.form-group ul {
-		    list-style-type: none;
-		    padding: 0;
-		    margin: 0;
-		}
-		.form-group ul li {
-		    line-height: 28px;
-		}
-		.form-group ul li span.lbl-tt {
-		    min-width: 100px;
-		    display: inline-block;
-			font-weight: bold;
-		}
-		div#score-info .form-group {
-		    display: block;
-		    font-size: 12px;
-		    background: #fdfbbd;
-		    border: solid 2px #dc0303;
-		    border-radius: 5px;
-		}
-		div#score-info .form-group ul li span.lbl-tt {
-		    color: #02014a;
-		}
-		span.red {
-		    color: #f00;
-		    font-weight: bold;
-		}
-		div#score-info .form-group ul li {
-		    display: inline-block;
-		    width: 50%;
-		}
-span.note_score {
-    color: #ff0000;
-    font-weight: bold;
-    text-decoration: underline;
-}
-</style>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -100,56 +38,72 @@ span.note_score {
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-		    		 <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllAcademicByBranch(); getAllGroupByBranch(); getScoreSetting();">
-								<?php if(!empty($this->row_branch))foreach ($this->row_branch as $row){?>
-								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
-								<?php }?>
-							</select>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ITEMS_SCORE_ENG");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input id="scoreSetting" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDY_YEAR");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input id="study_year" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-							<input id="group">
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_DATE");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="for_date" id="for_date" class="fullside" value="now" required="1" dojoType="dijit.form.DateTextBox" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-			                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-			                <div class="col-md-7 col-sm-7 col-xs-12">
-			                	<textarea dojoType="dijit.form.Textarea" class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
-			                </div>
-			         </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-file-text-o" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_SCORE_ENG");?></p>
+										</div> 
+									</div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<select class="fullside" tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllAcademicByBranch(); getAllGroupByBranch(); getScoreSetting();">
+												<?php if(!empty($this->row_branch))foreach ($this->row_branch as $row){?>
+												<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+												<?php }?>
+											</select>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ITEMS_SCORE_ENG");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="scoreSetting" />
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDY_YEAR");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="study_year" />
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="group">
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_DATE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="for_date" id="for_date" class="fullside" value="now" required="1" dojoType="dijit.form.DateTextBox" />
+										</div>
+									 </div>
+									 <div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<textarea dojoType="dijit.form.Textarea" class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
+											</div>
+									 </div>
+								 </div>
+							 </div>
+						 </div>
+					 </div>
 		          </div>
 		          <div class="col-md-6 col-sm-6 col-xs-12">
-		          		<div id="gr-info"></div>
-		          		<div id="score-info"></div>
+						<div id="gr-info"></div>
+						<div id="score-info"></div>
 		          </div>
 		     </div>
 		     <div class="card-box">
@@ -164,13 +118,39 @@ span.note_score {
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-					iconClass="dijitEditorIcon dijitEditorIconSave" />
+               		<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button"  />
                	</div>
              </div>
 		</form>
 	</div>
 </div>
+<style>
+	select{ width:100%;}
+	tr.hover td.verites-col,
+	td.verites-col {
+	    text-align: center;
+	    white-space: nowrap;
+	    g-origin: 50% 50%;
+	    -webkit-transform: rotate(270deg);
+	    -moz-transform: rotate(270deg);
+	    -ms-transform: rotate(270deg);
+	    -o-transform: rotate(270deg);
+	    transform: rotate(270deg);
+	}
+	tr.hover td.verites-col span.verites,
+	td.verites-col span.verites {
+	     margin: 0 -85%;
+	    display: inline-block;
+	}
+	tr.hover td.verites-col span.verites:before,
+	td.verites-col span.verites:before {
+	    content: '';
+	    width: 0;
+	    padding-top: 110%;
+	    display: inline-block;
+	    vertical-align: middle;
+	}
+</style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
@@ -226,6 +206,7 @@ dojo.ready(function(){
 		}, "group");
 		getAllGroupByBranch();
 		getAllAcademicByBranch();
+		getScoreSetting();
 });
 
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
@@ -283,15 +264,29 @@ function getDetailScoreSetting(){
 			subject = data;
 			var string='';
 			if(data!=''){
-			string+='<div class="form-group" style=" padding: 10px; ">';
-				string+='<span class="note_score"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <?php echo $tr->translate("SCORE_POLICY");?></span>';
-				string+='<ul>';
-				for(j=0;j<subject.length;j++){
-					stringsname = subject[j].name;
-					string+='<li><span class="lbl-tt">'+stringsname+'</span>: <span class="red">'+subject[j].pecentage_score+'%</span></li>';
-				}
-				string+='</ul>';
-			string+='</div>';
+				
+				string+='<div class="card-info bg-gradient-directional-warning">';
+					string+='<div class="card-content">';
+						string+='<div class="card-body">';
+							string+='<div class="media d-flex">';
+								string+='<div class="media-body text-white text-left align-self-bottom mt-3">';
+									string+='<span class="d-block mb-1 font-medium-1"></span>';
+									string+='<h3 class="text-white mb-10"><?php echo $tr->translate("SCORE_POLICY");?></h3>';
+											string+='<ul class="optListRow">';
+											for(j=0;j<subject.length;j++){
+												stringsname = subject[j].name;
+												string+='<li class="opt-items two-column"><span class="lbl-tt">'+stringsname+'</span>: <span class="text-value">'+subject[j].pecentage_score+'%</span></li>';
+											}
+											string+='</ul>';
+								string+='</div>';
+								string+='<div class="align-self-top">';
+									string+='<i class="glyphicon glyphicon-folder-open icon-opacity text-white font-large-4 float-end"></i>';
+								string+='</div>';
+							string+='</div>';
+						string+='</div>';
+					string+='</div>';
+				string+='</div>';
+
 			}
 			dojo.byId("score-info").innerHTML = string;
 			filterStudent();
@@ -354,19 +349,20 @@ function filterStudent(){
 				temp='';
 				str='';
 				column = 0;
-				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
-					+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;"><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
-					+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
-					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
-					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
-					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
+				temp='<table class="collape responsiveTable" style="table-layout: fixed;" id="table" >'
+					+'<thead><tr class="head-td" align="center">'
+					+'<td scope="col" width="4%" class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
+					+'<td scope="col" class="tdheader" ><?php echo $tr->translate('NO');?></td>'
+					+'<td scope="col" class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
+					+'<td scope="col" class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
+					+'<td scope="col" class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
 				  for(j=0;j<subject.length;j++){
 	      			  no++;
 	      			  stringsname = subject[j].name.replace(' ','');
-		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
+		      	      temp+='<td scope="col" class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
-				  temp+='<td  class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
+				  temp+='<td  scope="col" class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
 				  temp+='<tr style="border: 1px #4839bd solid;background: #fdbdbd;display:none;">';
 					  temp+='<td>&nbsp;</td>';
 					  temp+='<td>&nbsp;</td>';
@@ -386,16 +382,17 @@ function filterStudent(){
 				for(i=0;i<data.length;i++){
 					num++;
 					inx = inx+1;
-					temp += '<tr class="hover normal" id="row'+inx+'">';
-					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-					temp += '<td align="center">&nbsp;'+inx+'</td>';
-					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
-					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
-					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
+					temp +='<tr class="rowData " id="row'+inx+'">';
+					temp +='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+inx+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+					temp +='<td data-label="<?php echo $tr->translate("NO");?>" align="center">'+inx+'</td>';
+					temp +='<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
+					temp +='<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
+					temp +='<td data-label="<?php echo $tr->translate("SEX");?>">&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input required="1" class="fullside" onKeyUp="checkScore('+inx+','+subject[j].id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].id+'"  name="score_'+inx+'_'+subject[j].id+'" /><input dojoType="dijit.form.TextBox" value="'+subject[j].pecentage_score+'" name="max_score_'+inx+'_'+subject[j].id+'" id="max_score_'+inx+'_'+subject[j].id+'" type="hidden" ></td>';
+						stringsname = subject[j].name.replace(' ','');
+						temp += '<td data-label="'+stringsname+'" id="score_'+j+'"><input required="1" class="fullside" onKeyUp="checkScore('+inx+','+subject[j].id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].id+'"  name="score_'+inx+'_'+subject[j].id+'" /><input dojoType="dijit.form.TextBox" value="'+subject[j].pecentage_score+'" name="max_score_'+inx+'_'+subject[j].id+'" id="max_score_'+inx+'_'+subject[j].id+'" type="hidden" ></td>';
 					}
-					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
+					temp += '<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';
 					
 					var no=0;
@@ -485,7 +482,24 @@ function getInfoBygroup(){
 			},
 			handleAs:"json",
 			load: function(data) {
-				dojo.byId("gr-info").innerHTML = data;
+				string='';
+				string+='<div class="card-info bg-gradient-directional-warning">';
+					string+='<div class="card-content">';
+						string+='<div class="card-body">';
+							string+='<div class="media d-flex">';
+								string+='<div class="media-body text-white text-left align-self-bottom mt-3">';
+									string+='<span class="d-block mb-1 font-medium-1"></span>';
+									string+='<h3 class="text-white mb-10"><?php echo $tr->translate("GROUP_STUDENT_INFO");?></h3>';
+										string+=data;
+								string+='</div>';
+								string+='<div class="align-self-top">';
+									string+='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+								string+='</div>';
+							string+='</div>';
+						string+='</div>';
+					string+='</div>';
+				string+='</div>';
+				dojo.byId("gr-info").innerHTML = string;
 			},
 			error: function(err) {
 			}

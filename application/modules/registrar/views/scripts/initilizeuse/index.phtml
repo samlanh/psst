@@ -17,26 +17,186 @@
     	</div>
 		<div class="card-box">
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-				<div class="form-group">
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("title");?>
+				<div class="col-md-8 col-sm-8 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-2 col-sm-2 col-xs-12"> 
+								</div>
+								<div class="col-md-10 col-sm-10 col-xs-12"> 
+									<div class="row"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
+											</div> 
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-12"> 
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("នាមត្រកូល-ខ្លួន");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ជាអក្សរឡាតាំង");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("អត្តលេខ");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ថ្ងៃ-ខែ-ឆ្នាំកំណើត");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-12"> 
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("លេខទូរសព្ទ");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ទីកន្លែងកំណើត");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("អាសយដ្ឋានបច្ចុប្បន្ន");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+										   </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("branch_id");?>
+					<div class="card-blogform">
+						<div class="card-body"> 
+								<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="row"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CLASS_STUDYING");?></p>
+											</div> 
+										</div>
+									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<ul class="optListRow">
+											<li class="opt-items"><i class="glyphicon glyphicon-hand-right" aria-hidden="true"></i>&nbsp;<span class="lbl-tt">កម្រិត/វគ្គ</span>: <span class="text-value">2021-2022</span></li>
+											<li class="opt-items"><span class="lbl-tt">ថ្នាក់/កម្រិត</span>: <span class="text-value">Primary School</span></li>
+										</ul>
+										<div></div>
+										<ul class="optListRow">
+											<li class="opt-items"><i class="glyphicon glyphicon-hand-right" aria-hidden="true"></i>&nbsp; <span class="lbl-tt">កម្រិត/វគ្គ</span>: <span class="text-value">2021-2022</span></li>
+											<li class="opt-items"><span class="lbl-tt">ថ្នាក់/កម្រិត</span>: <span class="text-value">Primary School</span></li>
+										</ul>
+									</div> 
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="row"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-bed" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SERVICE_USING");?></p>
+											</div> 
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-12"> 
+									<div class="row"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-book" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRODUCT_USING");?></p>
+											</div> 
+										</div>
+									</div>
+								</div>
+						</div>
 					</div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<input id="studentId" />
-	            	</div>
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<input id="discountId" />
-	            	</div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement('status_search');?>
+					
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("UNPAID_SERVICE_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_NAME");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+									   </div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon">
+											<i class="glyphicon glyphicon-usd" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PAYMENT_HISTORY");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+									   	
+									   	<a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="glyphicon glyphicon-paperclip" aria-hidden="true"></i> ទាញយក</a>
+									   </div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
+	             </div>
 			</form>
 		</div>
 		<div class="card-box">

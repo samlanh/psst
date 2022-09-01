@@ -290,13 +290,13 @@ class Issue_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 			$string="";
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			if (!empty($row)){
-				$string='<div class="form-group" style=" padding: 10px; border: solid 2px #02014a;   border-radius: 1px;">
-				<ul>
-				<li><span class="lbl-tt">'.$tr->translate("STUDY_YEAR").'</span>: '.$row['academic'].'</li>
-				<li><span class="lbl-tt">'.$tr->translate("DEGREE").'</span>: '.$row['degreetitle'].'</li>
-				<li><span class="lbl-tt">'.$tr->translate("DEGREE").'</span>: '.$row['gradetitle'].'</li>
-				</ul>
-				</div>';
+				$string='
+					<ul class="optListRow">
+						<li class="opt-items"><span class="lbl-tt">'.$tr->translate("STUDY_YEAR").'</span>: <span class="text-value">'.$row['academic'].'</span></li>
+						<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DEGREE").'</span>: <span class="text-value">'.$row['degreetitle'].'</span></li>
+						<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DEGREE").'</span>: <span class="text-value">'.$row['gradetitle'].'</span></li>
+					</ul>
+				';
 			}
 			return $string;
 		}

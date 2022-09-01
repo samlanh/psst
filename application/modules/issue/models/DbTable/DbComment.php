@@ -33,9 +33,10 @@ class Issue_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	public function updateComment($data,$id){
+		$status = empty($data['status'])?0:1;
 		$_arr=array(
 			'comment'	  	=> $data['comment'],
-			'status'   		=> $data['status'],
+			'status'   		=> $status,
 			'user_id'	  	=> $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("id=?", $id);

@@ -65,25 +65,30 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 						'Id'=>$data['itemId_'.$i]
 					);
 					$resultRow = $dbg->getItemDetailRow($param);
+					
+					$result = $dbg->getFeeStudyinfoById($data['study_year']);
+					$year = empty($result)?'':$result['id'];
+					
 					$_arr= array(
 							'branch_id'		=> $data['branch_id'],
 							'stu_id'		=> $data['studentId'],
-							'itemType'		=> 2,
+							'itemType'		=> $resultRow['items_type'],
+							
 							'feeId'			=> $data['study_year'],
 							'balance'		=> $data['balance_'.$i],
 							
-							'itemType'		=> $resultRow['items_type'],
-							'itemId'		=> $resultRow['items_id'],
-							'itemDetailId'	=> $data['itemId_'.$i],
-							'degree'		=> $resultRow['items_type'],
+							'degree'		=> $resultRow['items_id'],
 							'grade'			=> $data['itemId_'.$i],
 							
 							'startDate'		=> empty($data['balance_'.$i])?'':$data['date_start_'.$i],
 							'endDate'		=> empty($data['balance_'.$i])?'':$data['end_date_'.$i],
-							
+							'is_maingrade'	=> ($resultRow['items_type']==1)?1:'',
+							'school_option'	=> $resultRow['schoolOption'],
 							'is_current'	=> 1,
 							'stop_type'		=> 0,
 							'status'		=> 1,
+							'is_newstudent'	=> 1,
+							'academic_year'	=> $year,
 							'note'			=> $data['remark'.$i],
 							'create_date'	=> date("Y-m-d H:i:s"),
 							'date'			=> date("Y-m-d"),

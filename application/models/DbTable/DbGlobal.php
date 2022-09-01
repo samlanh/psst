@@ -3205,6 +3205,40 @@ function getAllgroupStudyNotPass($action=null){
   	$row = $db->fetchAll($sql);
   	return $row;
   }
+  function getItemDetailRow($data){
+  	$sql="SELECT 
+  				i.id,
+  				i.items_id,
+  				i.items_type,
+		  		i.code, i.title,i.title_en,
+		  	 	i.ordering,i.shortcut,
+		  	  	i.product_type,
+		  		i.is_productseat,
+  	 			i.schoolOption,
+  	 			i.is_autopayment
+  			FROM `rms_itemsdetail` i WHERE 
+  		i.status=1 ";
+  	
+  	if(!empty($data['Id'])){
+  		$sql.=" AND i.id=".$data['Id'];
+  	}
+  	if(!empty($data['itemsId'])){
+  		$sql.=" AND i.items_id=".$data['itemsId'];
+  	}
+  	if(!empty($data['itemsType'])){
+  		$sql.=" AND i.items_type=".$data['itemsType'];
+  	}
+  	if(!empty($data['productType'])){
+  		$sql.=" AND i.product_type=".$data['productType'];
+  	}
+  	if(isset($data['isProductseat'])){
+  		$sql.=" AND i.is_productseat=".$data['isProductseat'];
+  	}
+  	if(isset($data['isOnepayment'])){
+  		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
+  	}
+  	return $this->getAdapter()->fetchRow($sql);
+  }
   
 //   function getSubjectByGroup($data){
   

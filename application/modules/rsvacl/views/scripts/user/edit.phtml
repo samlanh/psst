@@ -98,8 +98,13 @@ ul.optListRow {
 									   </div>
 									</div>
 									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?> 
-									   <input dojoType='dijit.form.CheckBox' id="check_change" name="check_change" onChange="Checkchange();" />
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+											<div class="custom-control custom-checkbox ">
+												<input type="checkbox" class=" custom-control-input"  id="check_change" name="check_change" onChange="Checkchange();"  >
+												<label class="custom-control-label custom-right-side" for="check_change">
+													<?php echo $tr->translate('PASSWORD');?>
+												</label>
+											</div>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
 											<input type="password" required="true" name="password" id="password" placeholder="<?php echo $tr->translate("PASSWORD");?>" 
@@ -117,14 +122,11 @@ ul.optListRow {
 									   </div>
 									</div>
 									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<select name="active" required="true" id="active" class='fullside' dojoType="dijit.form.FilteringSelect" > 
-												<option value="1" <?php if($this->user_edit['active'] == 1) echo 'selected';?> ><?php echo $tr->translate("ACTIVE");?></option>
-												<option value="0" <?php if($this->user_edit['active'] == 0) echo 'selected';?> ><?php echo $tr->translate("DEACTIVE");?></option>																					
-											</select> 
-									   </div>
+										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
+											<input type="checkbox" id="active" name="active" class="custom-switch-input"  <?php if(!empty($this->user_edit['active'])){ echo "checked";} ?> > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
 									</div>
 								</div>
 							</div>
@@ -375,16 +377,16 @@ dojo.ready(function(){
 function Checkchange(){
 	  if (dojo.byId("check_change").checked){
 		  dijit.byId('password').set('required',true); 
-		  dijit.byId('password').set('readonly',false); 
+		  dijit.byId('password').set('readOnly',false); 
 		  dijit.byId('con_password').set('required',true); 
-		  dijit.byId('con_password').set('readonly',false); 
+		  dijit.byId('con_password').set('readOnly',false); 
 		 
 	  }else{
 		  $('#password').val('');
 		  dijit.byId('password').set('required',false); 
-		  dijit.byId('password').set('readonly',true); 
+		  dijit.byId('password').set('readOnly',true); 
 		  dijit.byId('con_password').set('required',false); 
-		  dijit.byId('con_password').set('readonly',true); 
+		  dijit.byId('con_password').set('readOnly',true); 
 	  }
 }
 var oldschoolOption = '<?php echo $this->user_edit['schoolOption'];?>';

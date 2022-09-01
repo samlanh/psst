@@ -84,6 +84,7 @@ class Issue_TimelistController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issue/timelist");
 			exit();
 		}
+		$this->view->row = $row;
 		$subject_exam=new Issue_Form_FrmItemsTimeList();
 		$frm_subject_exam=$subject_exam->FrmAddTimeList($row);
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);

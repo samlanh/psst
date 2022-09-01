@@ -51,7 +51,7 @@ class Issue_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$note->setAttribs(array(
     			'dojoType'=>'dijit.form.Textarea',
     			'class'=>'fullside',
-    			'style'=>'font-family: inherit;  min-height:100px !important;'));
+    			'style'=>'font-family: inherit;  min-height:100px !important; max-width:100%;'));
     	
     	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");

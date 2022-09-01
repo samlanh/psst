@@ -90,6 +90,7 @@ class Issue_ScoreengsettingController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     		exit();
     	}
+		$this->view->row = $row;
     	$this->view->detail = $db->getScoreSettingDetail($id);
     	$frm = new Issue_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);

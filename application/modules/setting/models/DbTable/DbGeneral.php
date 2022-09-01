@@ -86,15 +86,15 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			if (!empty($schoolOption)){
 				$this->_name="rms_schooloption";
 				foreach ($schoolOption as $rs){
-					if (!empty($data['school_'.$rs['id']])){
+					//if (!empty($data['school_'.$rs['id']])){
 						$status=1;
-						if ($data['school_'.$rs['id']]==2){
+						if (empty($data['school_'.$rs['id']])){
 							$status=0;
 						}
 						$arr = array('status'=>$status,);
 						$where=" id= ".$rs['id'];
 						$this->update($arr, $where);
-					}
+					//}
 				}
 			}
 			

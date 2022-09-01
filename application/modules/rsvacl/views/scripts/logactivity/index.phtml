@@ -1,12 +1,21 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("BRANCH_LIST"));
+	echo $this->headTitle($tr->translate("USER_LOG"));
 	$urledit = $this->baseUrl()."/rsvacl/branch/edit/id/";
 	$urlcopy = $this->baseUrl()."/rsvacl/branch/copy/id/";
 ?>	
 <?php $frm =  $this->form_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="glyphicon glyphicon-transfer" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('USER_LOG');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
 		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
@@ -20,7 +29,7 @@
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
                </div>
 			</form>

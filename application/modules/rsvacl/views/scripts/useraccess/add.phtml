@@ -37,27 +37,29 @@
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="glyphicon glyphicon-tasks" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('USER_ACCESS_EDIT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+    		<div class="col-md-6 col-sm-6 col-xs-12">
+    			<div class="form-group">
+                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> :
+                   </label>
+                   <div class="col-md-7 col-sm-7 col-xs-12">
+                    	<input type="text" required="true" name="user_type" id="user_type" placeholder="User Type" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_type;?>" missingMessage="Invalid User type!" class='fullside' disabled/>
+                   </div>
+                </div>
+               
+	   		 </div>
+    	</div>
+		<div class="card-box">
 			<table style="margin: 0 auto; width: 100%">
-				<tr>
-					<td>
-						<fieldset>
-							<legend><?php echo $tr->translate("USER_ACCESS_EDIT");?></legend>
-							<table cellspacing="20" align="center" width="40%">
-								<tr>
-									<td width="40%" align="center"><?php echo $tr->translate("USER_TYPE");?></td>
-									<td width="60%" class="add-edit">
-										<input type="text" required="true" name="user_type" id="user_type" placeholder="User Type" 
-											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_type;?>"
-											missingMessage="Invalid User type!" class='fullside' disabled/>
-									</td>				
-								</tr>			
-							</table>
-						</fieldset>	
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-				</tr>
+				
 				<tr>
 					<td>
 						<?php 

@@ -967,6 +967,16 @@ label.control-label small {
     background: no-repeat 50%/50% 50%;
     cursor: pointer;
 }
+.custom-control-label.custom-right-side:before {
+    left: 105%;
+    display: block;
+    content: "";
+}
+
+.custom-control-label.custom-right-side:after {
+    left: 105%;
+    content: "";
+}
 .custom-checkbox .custom-control-label::before{border-radius:.35rem}
 .custom-checkbox .custom-control-input:checked~.custom-control-label::after{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3e%3c/svg%3e")}
 .custom-checkbox .custom-control-input:indeterminate~.custom-control-label::before{border-color:#009efb;background-color:#009efb}
@@ -1072,44 +1082,7 @@ label.custom-label-info {
     font-style: italic;
     font-weight: 600;
 }
-ul.nav.verticle-tab {
-    border-bottom: none;
-   
-    padding: 10px;
-}
-ul.nav.verticle-tab li.nav-item {
-    display: block;
-    text-align: left;
-    margin-bottom: 1px;
-    border-bottom: solid 1px #fdfafa;
-}
 
-ul.nav.verticle-tab li.nav-item a::after {
-    content: "";
-    background: none;
-}
-
-ul.nav.verticle-tab li.nav-item.active a.nav-link {
-    transition: all 250ms ease 0s;
-    background: #cdf9e5;
-    color: #02014a !important;
-    border-radius: 9px;
-    font-weight: 200;
-}
-
-ul.nav.verticle-tab li.nav-item a.nav-link {
-    padding: 10px 10px !important;
-    color: #02014a;
-}
-
-ul.nav.verticle-tab li.nav-item a.nav-link i {
-    display: inline-block;
-    width: 30px;
-}
-ul.nav.verticle-tab li.nav-item:hover a.nav-link {
-    color: #8a6d3b !important;
-    font-weight: 200;
-}
 
 .card-blogform {
     position: relative;
@@ -1128,6 +1101,42 @@ ul.nav.verticle-tab li.nav-item:hover a.nav-link {
 .card-body {
     flex: 1 1 auto;
     padding: 1.25rem;
+}
+
+.card-info {
+    position: relative;
+    display: -webkit-box;
+    display: -moz-box;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    border: 1px solid transparent;
+    border-radius: 0.35rem;
+    background-clip: border-box;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+}
+.card-info {
+    margin-bottom: 1.875rem;
+    border: none;
+    -webkit-box-shadow: 0 1px 15px 1px rgb(62 57 107 / 7%);
+    box-shadow: 0 1px 15px 1px rgb(62 57 107 / 7%);
+}
+.bg-gradient-directional-warning {
+    background-image: -webkit-linear-gradient(45deg,#fcaa01,#fece4d);
+    background-image: -moz-linear-gradient(45deg,#fcaa01,#fece4d);
+    background-image: -o-linear-gradient(45deg,#fcaa01,#fece4d);
+    background-image: linear-gradient(45deg,#fcaa01,#fece4d);
+    background-repeat: repeat-x;
+}
+.media-body {
+	    width: inherit;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
 }
 .d-flex {
     display: flex !important;
@@ -1182,6 +1191,19 @@ p.tx-20 {
     float: right !important;
 }
 
+.d-block {
+    display: block!important;
+}
+.text-white {
+    color: #fff!important;
+}
+.icon-opacity {
+    opacity: .5;
+}
+
+.font-large-4 {
+    font-size: 5rem!important;
+}
 
 .rounded-5 {
     border-radius: 2rem !important;
@@ -1228,4 +1250,54 @@ ul.nav.nav-pills.nav-fill.nav-tab {
     border: 0;
     transition: none;
     transform: scale(0);
+}
+
+ul.nav.verticle-tab {
+    border-bottom: none;
+   
+    padding: 10px;
+}
+ul.nav.verticle-tab li.nav-item {
+    display: block;
+    text-align: left;
+    margin-bottom: 1px;
+    border-bottom: solid 1px #fdfafa;
+}
+
+ul.nav.verticle-tab li.nav-item a::after {
+    content: "";
+    background: none;
+}
+
+ul.nav.verticle-tab li.nav-item.active a.nav-link {
+    transition: all 250ms ease 0s;
+    background: #cdf9e5;
+    color: #02014a !important;
+    border-radius: 9px;
+    font-weight: 200;
+}
+
+ul.nav.verticle-tab li.nav-item a.nav-link {
+    padding: 10px 10px !important;
+    color: #02014a;
+}
+
+ul.nav.verticle-tab li.nav-item a.nav-link i {
+    display: inline-block;
+    width: 30px;
+}
+ul.nav.verticle-tab li.nav-item:hover a.nav-link {
+    color: #8a6d3b !important;
+    font-weight: 200;
+}
+
+ul.optListRow {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+ul.optListRow  li.opt-items.titleEx {padding-left: 0;font-weight: 600;text-decoration: underline;}
+
+ul.optListRow li.opt-items {
+    padding-left: 10px;
 }

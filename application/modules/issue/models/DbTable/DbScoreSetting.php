@@ -92,11 +92,12 @@ class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	$db->beginTransaction();
    	try{
+		$status = empty($_data['status'])?0:1;
    		$_arr = array(
    				'branch_id'=>$_data['branch_id'],
    				'title'=>$_data['title'],
    				'note'=>$_data['note'],
-   				'status'=>$_data['status'],
+   				'status'=>$status,
    				'modify_date'=>date("Y-m-d H:i:s"),
    				'user_id'=>$this->getUserId(),
    		);

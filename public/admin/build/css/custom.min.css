@@ -152,9 +152,14 @@ a.btn.btn-app.small {
     height: auto;
     margin: 0;
 }
+/*
 .form-group div {
     margin: 0 !important;
     padding: 0 !important;
+}
+*/
+.form-group div {
+    margin-bottom: 2px !important;
 }
 div.forms_padding {
     padding-left: 5px !important;
@@ -426,7 +431,7 @@ ul.guide-info .info-squar.sold {
 }
 .form-group div .dijitReset.dijitRight.dijitButtonNode.dijitArrowButton.dijitDownArrowButton.dijitArrowButtonContainer {
     padding: 0.1em 0.2em 0.2em 0.2em!important;
-    margin: initial !important;
+    /* margin: initial !important; */
 }
 
 .card-box.report-list .tile-stats.report-list {

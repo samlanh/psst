@@ -1202,6 +1202,9 @@ span.custom-switch-indicator.custom-radius.switch-status {
 /*==============================
 	DOJO CONTROL CUSTOME
 ==============================*/
+.dijitTextArea[cols].dijitTextArea[cols]{
+	width: 99%;
+}
 .soria .dijitSelect, .soria .dijitTextBox, .soria .dijitTextArea {
     border-radius: 2px;
 }
@@ -1342,13 +1345,14 @@ span .dijitIcon.glyphicon.glyphicon-search {
 /*==============================
 	END DOJO CONTROL CUSTOME
 ==============================*/
+.marginAdjust div {
+    margin: 0 !important;
+}
 label.custom-label-info {
     color: #02014a;
     font-style: italic;
     font-weight: 600;
 }
-
-
 .card-blogform {
     position: relative;
     display: flex;
@@ -1469,7 +1473,9 @@ p.tx-20 {
 .font-large-4 {
     font-size: 5rem!important;
 }
-
+.darkBlue {
+    color: #04007c;
+}
 .rounded-5 {
     border-radius: 2rem !important;
 }

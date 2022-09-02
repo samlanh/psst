@@ -87,14 +87,16 @@
 	                   <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
-	             		<table id="table_row" border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc;     white-space: nowrap;">
-							<tr id="head-title" class="head-td" align="right">
-								<th><?php echo $tr->translate("DEL");?></th>
-								<th><?php echo $tr->translate("N_O");?></th>
-								<th><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
-								<th><?php echo $tr->translate("PERCENTAGE");?></th>
-								<th><?php echo $tr->translate("OTHER");?></th>
-							</tr>
+	             		<table id="table_row" class="collape responsiveTable" >
+							<thead>
+								<tr id="head-title" class="head-td" align="center">
+									<th scope="col"><?php echo $tr->translate("DEL");?></th>
+									<th scope="col"><?php echo $tr->translate("N_O");?></th>
+									<th scope="col"><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
+									<th scope="col"><?php echo $tr->translate("PERCENTAGE");?></th>
+									<th scope="col"><?php echo $tr->translate("OTHER");?></th>
+								</tr>
+							</thead>
 						</table>
 						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
 						
@@ -152,20 +154,20 @@
 			template='';
 			if(title!=1){
 				$("#head-title").html("");
-				temp+='<th><?php echo $tr->translate("DEL");?></th>';
-				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>';
-				temp+='<th><?php echo $tr->translate("PERCENTAGE");?></th>';
-				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+				temp+='<th scope="col" width="35px"><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th scope="col" width="35px"><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th scope="col"><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>';
+				temp+='<th scope="col"><?php echo $tr->translate("PERCENTAGE");?></th>';
+				temp+='<th scope="col"><?php echo $tr->translate("NOTE");?></th>';
 				dojo.query("#head-title").append(temp);
 				title=1;
 			}
-				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-				template+='<td width="35px" align="center">'+no+'</td>';
-				template+='<td>'+examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
-				template+='<td> <input class="fullside" type="text" onKeyup="totalPercent()" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
-				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
-			tmp='<tr id="row'+col+'">';
+				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>" >'+examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
+				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>" > <input class="fullside" type="text" onKeyup="totalPercent()" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
+			tmp='<tr class="rowData" id="row'+col+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
 	

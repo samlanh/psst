@@ -191,10 +191,10 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    	 
    	$str='
 	   	<thead  id="head-title">
-		   	<tr class="head-td">
-		   		<th >'.$tr->translate("TIME").'</th>';
+		   	<tr class="head-td" align="center">
+		   		<th scope="col" >'.$tr->translate("TIME").'</th>';
 			   	if (!empty($allDay)) foreach ($allDay as $day){
-			   		$str.='<th >'. $day['name'].'</th>';
+			   		$str.='<th scope="col" >'. $day['name'].'</th>';
 			   	}
 		   	$str.='</tr>
 	   	</thead>
@@ -212,8 +212,8 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    			$classrow = "odd";
    		}
    		$str.='
-   		<tr class="record_schedule '.$classrow.'" id="row_'.($index).'">
-	   		<td align="center" class="nowrap">
+   		<tr class="rowData record_schedule '.$classrow.'" id="row_'.($index).'">
+	   		<td data-label="'.$tr->translate("TIME").'" align="center" class="nowrap">
 		   		<span>
 			   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['fromHourTitle']." - ".$rs['toHourTitle'].'
 			   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="settingdetail_'.$index.'" name="settingdetail_'.$index.'" value="'.$rs['id'].'" />
@@ -231,31 +231,43 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    				$readOnly = 'readOnly="readOnly"';
    			}
    			$keyindex = $index."_".$day['id'];
-   			$str.='<td align="center">
+   			$str.='<td data-label="'.$day['name'].'" align="center">
 			   			<div class="dayColunm">';
 			   			$str.='
+					<div class="form-group marginAdjust">
+						<div class="col-md-12 col-sm-12 col-xs-12">
 				   			<select onChange="disableColume('."'".$keyindex."'".')" dojoType="dijit.form.FilteringSelect" class="fullside" name="type_'.$keyindex.'" id="type_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">
 					   			<option value="1">'.$tr->translate("STUDY").'</option>
 					   			<option value="2" '.$selected.'>'.$tr->translate("NO_STUDY").'</option>
 				   			</select>
-			   			';
+						</div>
+					</div>
+			   		';
 			   				
 			   			$str.='
-			   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" placeHolder="'.$tr->translate("SELECT_SUBJECT").'" id="subject_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
-			   			$str.='<option value=""></option>';
-			   			if (!empty($allSubject)) foreach ($allSubject as $subject){
-			   				$str.='<option value="'.$subject['id'].'">'.$subject['name'].'</option>';
-			   			}
-			   			$str.='</select>
+							<div class="form-group marginAdjust">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+								<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="subject_'.$keyindex.'" placeHolder="'.$tr->translate("SELECT_SUBJECT").'" id="subject_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
+								$str.='<option value=""></option>';
+								if (!empty($allSubject)) foreach ($allSubject as $subject){
+									$str.='<option value="'.$subject['id'].'">'.$subject['name'].'</option>';
+								}
+								$str.='</select>
+								</div>
+							</div>
 			   			';
 			   				
 		   			$str.='
-		   				<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" placeHolder="'.$tr->translate("SELECT_TEACHER").'" id="teacher_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
-		   			$str.='<option value=""></option>';
-		   			if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
-		   				$str.='<option value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
-		   			}
-		   			$str.='</select>
+					<div class="form-group marginAdjust">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" name="teacher_'.$keyindex.'" placeHolder="'.$tr->translate("SELECT_TEACHER").'" id="teacher_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
+							$str.='<option value=""></option>';
+							if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
+								$str.='<option value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
+							}
+							$str.='</select>
+						</div>
+					</div>
 		   			';
    			$str.='</div>
    			</td>';
@@ -294,10 +306,10 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    	 
    	$str='
    	<thead  id="head-title">
-   	<tr class="head-td">
-   		<th >'.$tr->translate("TIME").'</th>';
+	<tr class="head-td" align="center">
+   		<th scope="col" >'.$tr->translate("TIME").'</th>';
    	if (!empty($allDay)) foreach ($allDay as $day){
-   		$str.='<th >'. $day['name'].'</th>';
+   		$str.='<th scope="col" >'. $day['name'].'</th>';
    	}
    	$str.='</tr>
    	</thead>
@@ -315,8 +327,8 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
    			$classrow = "odd";
    		}
    		$str.='
-   		<tr class="record_schedule '.$classrow.'" id="row_'.($index).'">
-   		<td align="center" class="nowrap">
+   		<tr class="rowData record_schedule '.$classrow.'" id="row_'.($index).'">
+   		<td data-label="'.$tr->translate("TIME").'" align="center" class="nowrap">
 	   		<span>
 		   		<i class="fa fa-clock-o" aria-hidden="true"></i> '.$rs['fromHourTitle']." - ".$rs['toHourTitle'].'
 		   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="settingdetail_'.$index.'" name="settingdetail_'.$index.'" value="'.$rs['id'].'" />
@@ -349,36 +361,48 @@ class Issue_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstract
 	   			//}
    			}
    			$keyindex = $index."_".$day['id'];
-   			$str.='<td align="center">
+   			$str.='<td data-label="'.$day['name'].'" align="center">
 			   			<div class="dayColunm">';
 			   			$str.='
-			   			<select onChange="disableColume('."'".$keyindex."'".')" dojoType="dijit.form.FilteringSelect" class="fullside" name="type_'.$keyindex.'" id="type_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">
-			   			<option value="1">'.$tr->translate("STUDY").'</option>
-			   			<option value="2" '.$selected.'>'.$tr->translate("NO_STUDY").'</option>
-			   			</select>
-			   			<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="schedule_detail'.$keyindex.'" name="schedule_detail'.$keyindex.'" value="'.$idScheduleDetail.'" />
+						<div class="form-group marginAdjust">
+							 <div class="col-md-12 col-sm-12 col-xs-12">
+								<select onChange="disableColume('."'".$keyindex."'".')" dojoType="dijit.form.FilteringSelect" class="fullside" name="type_'.$keyindex.'" id="type_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">
+									<option value="1">'.$tr->translate("STUDY").'</option>
+									<option value="2" '.$selected.'>'.$tr->translate("NO_STUDY").'</option>
+								</select>
+								<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="schedule_detail'.$keyindex.'" name="schedule_detail'.$keyindex.'" value="'.$idScheduleDetail.'" />
+							</div>
+						</div>
 			   			';
    
    			$str.='
-   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" placeHolder="'.$tr->translate("SELECT_SUBJECT").'" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
-   			$str.='<option value=""></option>';
-   			if (!empty($allSubject)) foreach ($allSubject as $subject){
-   				$selected="";
-   				if($subjectSchedule==$subject['id']){ $selected = 'selected="selected"'; }
-   				$str.='<option '.$selected.' value="'.$subject['id'].'">'.$subject['name'].'</option>';
-   			}
-   			$str.='</select>
+			<div class="form-group marginAdjust">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" placeHolder="'.$tr->translate("SELECT_SUBJECT").'" name="subject_'.$keyindex.'" id="subject_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
+						$str.='<option value=""></option>';
+						if (!empty($allSubject)) foreach ($allSubject as $subject){
+							$selected="";
+							if($subjectSchedule==$subject['id']){ $selected = 'selected="selected"'; }
+							$str.='<option '.$selected.' value="'.$subject['id'].'">'.$subject['name'].'</option>';
+						}
+				$str.='</select>
+				</div>
+			</div>
    			';
    
    			$str.='
-   			<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" placeHolder="'.$tr->translate("SELECT_TEACHER").'" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
-   			$str.='<option value=""></option>';
-   			if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
-   				$selected="";
-   				if($teacherSchedule==$teacher['id']){ $selected = 'selected="selected"';}
-   				$str.='<option '.$selected.' value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
-   			}
-   			$str.='</select>
+			<div class="form-group marginAdjust">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<select '.$readOnly.' dojoType="dijit.form.FilteringSelect" class="fullside" placeHolder="'.$tr->translate("SELECT_TEACHER").'" name="teacher_'.$keyindex.'" id="teacher_'.$keyindex.'" autoComplete="false" queryExpr="*${0}*">';
+					$str.='<option value=""></option>';
+					if (!empty($allTeacher)) foreach ($allTeacher as $teacher){
+						$selected="";
+						if($teacherSchedule==$teacher['id']){ $selected = 'selected="selected"';}
+						$str.='<option '.$selected.' value="'.$teacher['id'].'">'.$teacher['name'].'</option>';
+					}
+					$str.='</select>
+				</div>
+			</div>
    			';
    			$str.='</div>
    			</td>';

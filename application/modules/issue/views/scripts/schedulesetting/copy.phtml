@@ -4,56 +4,12 @@
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_items;
 ?>
-<style>
-.dijitTextArea[cols].dijitTextArea[cols]{
-	width: 99%;
-}
-.image-box {
-    text-align: center;
-    width: 215px;
-    height: 110px;
-}
-.image-box img {
-        width: 170px;
-    height: 110px;
-}
-
-.button_browse {
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    width: 101%;
-    height: 42px;
-    background: #fbf9f9;
-    border: 1px solid #e8e8e8;
-}
-.button_browse span {
-    line-height: 33px;
-    font-weight: 600;
-    cursor: pointer;
-}
-input.btn_borwse_image {
-    position: absolute;
-    width: 100%;
-    height: 38px;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    opacity: 0;
-    cursor: pointer;
-}
-.account-image {
-    border: solid 1px #eee;
-    width: 200px;
-    margin: 0 auto;
-}
-</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-calendar " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_SCHEDULE_SETTING');?> <small id="msg_deplicate" class="red italic"></small></h4>
+	    			<h4 class="m-b-0"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_SCHEDULE_SETTING');?> <small id="msg_deplicate" class="red italic"></small></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -81,54 +37,86 @@ input.btn_borwse_image {
 			</script>
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("branch_id");?>
-	                   		<?php echo $frm_items->getElement("id");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_items->getElement("title");?>
-		                </div>
-		             </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("note");?>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCHEDULE_SETTING");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("branch_id");?>
+											<?php echo $frm_items->getElement("id");?>
+									   </div>
+									</div>
+									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("title");?>
+										</div>
+									 </div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("note");?>
+									   </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 		         </div>
 		         <div class="col-md-8 col-sm-8 col-xs-12">
-		         	<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-		         	  <label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_TYPE");?> </label>
-	                   <div class="col-md-5 col-sm-5 col-xs-12">
-	                   		<?php echo $frm_items->getElement("examtype_items");?>
-	                   </div>
-	                   <div class="clearfix"></div>
-	                </div>
-	                <div class="form-group">
-	             		<table id="table_row" border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc;     white-space: nowrap;">
-							<tr id="head-title" class="head-td" align="right">
-								<th><?php echo $tr->translate("DEL");?></th>
-								<th><?php echo $tr->translate("N_O");?></th>
-								<th><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
-								<th><?php echo $tr->translate("PERCENTAGE");?></th>
-								<th><?php echo $tr->translate("NOTE");?></th>
-							</tr>
-						</table>
-						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
-	             	</div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">alarm</i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TIME_LIST");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+									  <label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_TYPE");?> </label>
+									   <div class="col-md-5 col-sm-5 col-xs-12">
+											<?php echo $frm_items->getElement("examtype_items");?>
+									   </div>
+									   <div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<table id="table_row" class="collape responsiveTable">
+											<tr id="head-title" class="head-td" align="center">
+												<th scope="col" ><?php echo $tr->translate("DEL");?></th>
+												<th scope="col" ><?php echo $tr->translate("N_O");?></th>
+												<th scope="col" ><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
+												<th scope="col" ><?php echo $tr->translate("PERCENTAGE");?></th>
+												<th scope="col" ><?php echo $tr->translate("NOTE");?></th>
+											</tr>
+										</table>
+										<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 		         </div>
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-							<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" />
 		               	</div>
 		             </div>
 			</div>
@@ -162,20 +150,20 @@ input.btn_borwse_image {
 			template='';
 			if(title!=1){
 				$("#head-title").html("");
-				temp+='<th><?php echo $tr->translate("DEL");?></th>';
-				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("FROM_TIME");?></th>';
-				temp+='<th><?php echo $tr->translate("TO_TIME");?></th>';
-				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+				temp+='<th scope="col" width="35px" ><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th scope="col" width="35px" ><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th scope="col" ><?php echo $tr->translate("FROM_TIME");?></th>';
+				temp+='<th scope="col" ><?php echo $tr->translate("TO_TIME");?></th>';
+				temp+='<th scope="col" ><?php echo $tr->translate("NOTE");?></th>';
 				dojo.query("#head-title").append(temp);
 				title=1;
 			}
-				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-				template+='<td width="35px" align="center">'+no+'</td>';
-				template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour'+col+'" id="from_hour'+col+'" >'+timeOpt+'</select></td>';			
-				template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour'+col+'" id="to_hour'+col+'" >'+timeOpt+'</select></td>';
-				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
-			tmp='<tr id="row'+col+'">';
+				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+				template+='<td data-label="<?php echo $tr->translate("FROM_TIME");?>" ><select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour'+col+'" id="from_hour'+col+'" >'+timeOpt+'</select></td>';			
+				template+='<td data-label="<?php echo $tr->translate("TO_TIME");?>" ><select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour'+col+'" id="to_hour'+col+'" >'+timeOpt+'</select></td>';
+				template+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
+			tmp='<tr id="row'+col+'" class="rowData">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
 	
@@ -193,20 +181,20 @@ input.btn_borwse_image {
 			template='';
 			if(title!=1){
 				$("#head-title").html("");
-				temp+='<th><?php echo $tr->translate("DEL");?></th>';
-				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("FROM_TIME");?></th>';
-				temp+='<th><?php echo $tr->translate("TO_TIME");?></th>';
-				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+				temp+='<th scope="col" width="35px"  ><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th scope="col" width="35px"><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th scope="col" ><?php echo $tr->translate("FROM_TIME");?></th>';
+				temp+='<th scope="col" ><?php echo $tr->translate("TO_TIME");?></th>';
+				temp+='<th scope="col" ><?php echo $tr->translate("NOTE");?></th>';
 				dojo.query("#head-title").append(temp);
 				title=1;
 			}
-				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-				template+='<td width="35px" align="center">'+no+'</td>';
-				template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour'+col+'" id="from_hour'+col+'" >'+timeOpt+'</select></td>';			
-				template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour'+col+'" id="to_hour'+col+'" >'+timeOpt+'</select></td>';
-				template+='<td> <input class="fullside" type="text" value="<?php echo $rs['note'];?>" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/><input class="fullside" type="hidden" value="<?php echo $rs['id'];?>" required="true" name="detailid'+col+'" id="detailid'+col+'" dojoType="dijit.form.TextBox" /></td>';
-			tmp='<tr id="row'+col+'">';
+				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+				template+='<td data-label="<?php echo $tr->translate("FROM_TIME");?>"><select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour'+col+'" id="from_hour'+col+'" >'+timeOpt+'</select></td>';			
+				template+='<td data-label="<?php echo $tr->translate("TO_TIME");?>"><select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour'+col+'" id="to_hour'+col+'" >'+timeOpt+'</select></td>';
+				template+='<td data-label="<?php echo $tr->translate("NOTE");?>"> <input class="fullside" type="text" value="<?php echo $rs['note'];?>" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/><input class="fullside" type="hidden" value="<?php echo $rs['id'];?>" required="true" name="detailid'+col+'" id="detailid'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			tmp='<tr id="row'+col+'" class="rowData">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
 	

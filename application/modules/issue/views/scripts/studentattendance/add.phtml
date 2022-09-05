@@ -499,7 +499,7 @@ function filterStudentBygroup(){
 	    }
 	});
 }
-url_getstudyYear= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
+url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 function getStudyYear(){
 	dijit.byId('study_year').reset();
 	branch_id = dijit.byId('branch_id').get('value');

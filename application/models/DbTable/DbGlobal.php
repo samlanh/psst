@@ -824,8 +824,17 @@ function getAllgroupStudyNotPass($action=null){
 	  	
 	   	$sql.=" GROUP BY academic_year, term_study, generation ";
 	   	$order=' ORDER BY id DESC';
-	   	return $db->fetchAll($sql.$order);
+	   	$result = $db->fetchAll($sql.$order);
+	   	if(!empty($data['option'])){
+	   		$options ='';
+	   		if(!empty($result))foreach($result as $value){
+	   			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
+	   		}
+	   		return $options;
+	   	}
+	   	return $result;
    }
+  
    function getAllGrade(){
 	   $param = array(
 		'itemsType'=>1,
@@ -3088,8 +3097,21 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getStudentByGroup($data){
   	$db=$this->getAdapter();
+  	
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	$field = 'name_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  		$field = 'name_kh';
+  	}
+  	
   	$sql="SELECT
-  			
+  				
+				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_code,
+			  	(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_name,
+			  	(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS sex,
+			  	
 			  	gs.`stu_id`,
 			  	gs.mainType,
 				gs.is_maingrade,
@@ -3102,9 +3124,9 @@ function getAllgroupStudyNotPass($action=null){
 				gs.academic_year,
 				gs.degree,
 				gs.grade,
-				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_code,
-			  	(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_name,
-			  	(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS sex
+				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel
+				
 		  	FROM
 		  		`rms_group_detail_student` AS gs
 		  	WHERE
@@ -3134,8 +3156,8 @@ function getAllgroupStudyNotPass($action=null){
   			$sql.=" AND gs.`stop_type` = ".$data['stopType'];
   		}
   		
-  		if(!empty($data['group_id'])){
-  			$sql.=" AND gs.`group_id` = ".$data['group_id'];
+  		if(!empty($data['groupId'])){
+  			$sql.=" AND gs.`group_id` = ".$data['groupId'];
   		}
   		
   		$order="";
@@ -3147,6 +3169,9 @@ function getAllgroupStudyNotPass($action=null){
   		}
   		if(!empty($data['orderEnglishName'])){
   			$order.=" ORDER BY (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
+  		}
+  		if(!empty($data['orderitemType'])){
+  			$order.=" ORDER BY gs.`itemType` ASC ";
   		}
   	
   		return $db->fetchAll($sql.$order);

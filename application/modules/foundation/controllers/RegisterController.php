@@ -485,15 +485,14 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
 			if (!empty($data['edit'])){//for all page edit 
-				$data=$db->getAllStudentByGroupForEdit($data['group']);
+				$data=$db->getAllStudentByGroupForEdit($data['groupId']);
 			}else{
-				$data=$db->getStudentByGroup(data);
+				$data=$db->getStudentByGroup($data);
 			}
 			print_r(Zend_Json::encode($data));
 			exit();
 		}
 	}
-	
 	
 	function checkstudentcodeAction(){
 		if($this->getRequest()->isPost()){

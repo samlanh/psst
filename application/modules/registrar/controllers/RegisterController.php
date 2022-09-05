@@ -490,7 +490,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getstudentbalanceinformationAction(){
+	/*function getstudentbalanceinformationAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
@@ -499,5 +499,5 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}
-	}
+	}*/
 }

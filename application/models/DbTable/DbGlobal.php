@@ -858,7 +858,7 @@ function getAllgroupStudyNotPass($action=null){
 		AND (stu_enname!='' OR s.stu_khname!='')
 		AND s.status=1  AND customer_type=1 ";
    	if($branchid!=null){
-   		$sql.=" AND branch_id=".$branchid;
+   		$sql.=" AND s.branch_id=".$branchid;
    	}
    	$sql.=" GROUP BY s.stu_id ORDER BY stu_code ASC, stu_khname ASC ";
    	$rows = $db->fetchAll($sql);
@@ -1001,12 +1001,13 @@ function getAllgroupStudyNotPass($action=null){
 		t.id,
 	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=t.session_result LIMIT 1) as session_label,
 	   	'N/A' AS room_label
+	   	
 	   	FROM rms_student as s,
-	   	rms_student_test_result As t
+	   		rms_student_test_result As t
 	   	WHERE 
-	   	t.stu_test_id=s.stu_id  
-	    AND t.is_current=1 AND updated_result=1
-	   	AND s.stu_id=$stu_id LIMIT 1 ";
+		   	t.stu_test_id=s.stu_id  
+		    AND t.is_current=1 AND updated_result=1
+		   	AND s.stu_id=$stu_id LIMIT 1 ";
    	return $db->fetchRow($sql);
    	//	t.stu_test_id=s.stu_id 	AND
 	   
@@ -2051,26 +2052,24 @@ function getAllgroupStudyNotPass($action=null){
 	    }elseif($data_from==2){//test
 	  		$rs = $this->getStudentTestinfoById($student_id);
 	  	}elseif($data_from==4){//crm
-	  		$rs = $this->getStudentBalanceInfoById($student_id);
+	  		//$rs = $this->getStudentBalanceInfoById($student_id);
 	    }
   	}else{//customer//WHERE s.customer_type=2 
   		$rs = $this->getCustomerinfoById($student_id);
   	}
   	$tr = $this->tr;
   	$str = '';
-  	$student_type=$tr->translate("Old Student");
+  	$style='';
+  	/*$student_type=$tr->translate("Old Student");
   	$style="style='color:white'";
   	if($rs["is_stu_new"]==1){
   		$student_type=$tr->translate("New Student");
   		$style="style='color:#99e5fd'";
-  	}
+  	}*/
   	if(!empty($rs)){
-  		$str='<div class="text-center card-box-border">
-  			<div class="member-card card-display-reg">
-  				<div class="img-back"></div>
-  				<span class="user-badge bg-warning" '.$style.'>'.$student_type.'</span>
-  		   	 		<div class="col-md-4 col-sm-4 col-xs-12">
-  			                       	<div class="thumb-xl member-thumb m-b-10 center-block">';
+  		$str='<div class="col-md-2 col-sm-2 col-xs-12">
+  				<div class="form-group">
+  					<div class="thumb-xl member-thumb m-b-10 center-block">';
   			                       		$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/no-profile.png";
   			                       		if (!empty($rs["photo"])){
   			                       				if (file_exists(PUBLIC_PATH."/images/photo/".$rs["photo"])){
@@ -2078,39 +2077,51 @@ function getAllgroupStudyNotPass($action=null){
   			                       			}
   			                       		}
   			                       		
-  			                           	$str.='<img src='.$photo.' class=" img-thumbnail" alt="profile-image" id="student_photo">';
+  			                           	$str.='<img src='.$photo.' class=" img-thumbnail" alt="profile-image" >';
   			                            if ($rs["sex"]==1){
   			                            	$str.='<input type="hidden" id="lbl_gender" value="Male"><i class="fa fa-male member-star text-active" title="verified user"></i>';
   			                            }else{
   			                           	 	$str.='<input type="hidden" id="lbl_gender" value="Female"><i class="fa fa-female member-star text-deactive" title="verified user"></i>';
   			                            }
   			                           $photo =  $rs["photo"];
+		  			                           
   			                        $str.='<input type="hidden" id="lbl_photoname" value="'.$photo.'" /></div>
-  			                        <div class="center">
-  			                       </div>
-  		                        </div>
-  		                        <div class="col-md-8 col-sm-8 col-xs-12">
-  			                       <p class="text-muted info-list font-13">
-  			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" >'.$rs["stu_code"].'</span><br />
-  			                       		<span class="title-info">'.$tr->translate("STUDENT_NAMEKHMER").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
-  			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
-  			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
-  			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
-  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
-  			                       	    <span class="title-info">'.$tr->translate("FATHER_NAME").'</span> : <span id="lbl_father" class="inf-value">'.$rs['father_enname'].'</span>
-  			                       	    
-  			                       	    <span id="lbl_fathertel" class="inf-value" style="display:none;">'.$rs['father_phone'].'</span>
-  			                       	    <span id="lbl_mothertel" class="inf-value" style="display:none;">'.$rs['mother_phone'].'</span>
-  			                            
-  			                            <span class="title-info">'.$tr->translate("MOTHER_NAME").'</span> : <span id="lbl_mother" class="inf-value">'.$rs['mother_enname'].'</span>
-  			                       	    <span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span><br />';
-  			         	 		  $str.='</p>
-  		          </div>
-  		      <div style="clear: both;"></div>
-  		 </div>
-  	</div>';
+  			                        		<i class="fa fa-male member-star text-active" title="verified user"></i>
+  			                        		</div>
+										</div>
+									</div>
+	  		                        <div class="col-md-5 col-sm-5 col-xs-12">
+										<div class="form-group">
+							           		<div class="text-center">
+							                   	<div class="member-card card-display-reg">
+							                       	<p class="text-muted info-list font-13">
+				  			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" >'.$rs["stu_code"].'</span><br />
+				  			                       		<span class="title-info">'.$tr->translate("STUDENT_NAMEKHMER").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
+				  			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
+				  			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
+				  			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
+				  			                        </p>
+				  			                      </div>
+									            </div>
+											</div>
+										</div>
+										<div class="col-md-5 col-sm-5 col-xs-12">
+								             <div class="member-card card-display-reg">
+									              <p class="text-muted info-list font-13">
+				  			                        	<span class="title-info">'.$tr->translate("FATHER_NAME").'</span> : <span id="lbl_father" class="inf-value">'.$rs['father_enname'].'</span>
+				  			                       	    <span id="lbl_fathertel" class="inf-value" style="display:none;">'.$rs['father_phone'].'</span>
+				  			                       	    <span id="lbl_mothertel" class="inf-value" style="display:none;">'.$rs['mother_phone'].'</span>
+				  			                            <span class="title-info">'.$tr->translate("MOTHER_NAME").'</span> : <span id="lbl_mother" class="inf-value">'.$rs['mother_enname'].'</span>
+				  			                       	    <span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
+				  			                        	<span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span>
+  			                        					<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
+				  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
+				  			                       	    ';
+  			         	 		 			$str.='</p>
+  		          						</div>
+								</div>
+			<div class="clear"></div>
+  		</div>';
   			         	 		  
   	}
   	return $str;
@@ -2467,7 +2478,6 @@ function getAllgroupStudyNotPass($action=null){
 	  	WHERE
 			gds.itemType=1 AND
 		  	gds.stu_id=st.stu_id
-		  	
 			and is_pass=0
 		  	and gds.group_id=$group_id ";
   	return $db->fetchAll($sql);
@@ -2869,7 +2879,7 @@ function getAllgroupStudyNotPass($action=null){
   	$stuName = "COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
   	$grade = "rms_itemsdetail.title_en";
   	if($lang==1){// khmer
-//   		$stuName = "COALESCE(s.stu_khname,'')";
+//   	$stuName = "COALESCE(s.stu_khname,'')";
   		$grade = "rms_itemsdetail.title";
   	}
   	
@@ -3010,7 +3020,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" GROUP BY s.stu_id ORDER BY s.stu_id DESC";
   		return $db->fetchAll($sql);
   }
-  function getStudentBalanceInfoById($stu_id){
+  /*function getStudentBalanceInfoById($stu_id){//stop use
   	$db=$this->getAdapter();
   	$currentLang = $this->currentlang();
   	$colunmname='title_en';
@@ -3048,7 +3058,7 @@ function getAllgroupStudyNotPass($action=null){
   		AND s.stu_id=$stu_id
   	LIMIT 1 ";
   	return $db->fetchRow($sql);
-  }
+  }*/
   function getStudentToken(){
   	return 'PSIS'.date('YmdHis');
   }
@@ -3079,53 +3089,64 @@ function getAllgroupStudyNotPass($action=null){
   function getStudentByGroup($data){
   	$db=$this->getAdapter();
   	$sql="SELECT
-			  	sgh.`stu_id`,
-			  	(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-			  	(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
-			  	(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-		  	FROM
-		  		`rms_group_detail_student` AS sgh
-		  	WHERE
-		  		sgh.itemType=1 ";
   			
+			  	gs.`stu_id`,
+			  	gs.mainType,
+				gs.is_maingrade,
+				gs.itemType,
+				gs.startDate,
+				gs.endDate,
+				gs.feeId,
+				gs.balance,
+				gs.group_id,
+				gs.academic_year,
+				gs.degree,
+				gs.grade,
+				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_code,
+			  	(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_name,
+			  	(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS sex
+		  	FROM
+		  		`rms_group_detail_student` AS gs
+		  	WHERE
+		  		1 ";
+	  	if(!empty($data['item_type'])){
+	  		$sql.=" AND gs.`itemType` = ".$data['item_type'];
+	  	}	
   		if(!empty($data['group_id'])){
-  			$sql.=" AND sgh.`group_id` = ".$data['group_id'];
+  			$sql.=" AND gs.`group_id` = ".$data['group_id'];
   		}
   		if(!empty($data['studentId'])){
-  			$sql.=" AND sgh.`stu_id` = ".$data['studentId'];
+  			$sql.=" AND gs.`stu_id` = ".$data['studentId'];
   		}
   		if(isset($data['isMaingrade'])){
-  			$sql.=" AND sgh.`is_maingrade` = ".$data['isMaingrade'];
+  			$sql.=" AND gs.`is_maingrade` = ".$data['isMaingrade'];
   		}
   		if(isset($data['isCurrent'])){
-  			$sql.=" AND sgh.`is_current` = ".$data['isCurrent'];
-  		}
-  		if(isset($data['isCurrent'])){
-  			$sql.=" AND sgh.`is_current` = ".$data['isCurrent'];
+  			$sql.=" AND gs.`is_current` = ".$data['isCurrent'];
   		}
   		if(!empty($data['degree'])){
-  			$sql.=" AND sgh.`degree` = ".$data['degree'];
+  			$sql.=" AND gs.`degree` = ".$data['degree'];
   		}
   		if(!empty($data['grade'])){
-  			$sql.=" AND sgh.`degree` = ".$data['grade'];
+  			$sql.=" AND gs.`degree` = ".$data['grade'];
   		}
   		if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
-  			$sql.=" AND sgh.`stop_type` = ".$data['stopType'];
+  			$sql.=" AND gs.`stop_type` = ".$data['stopType'];
   		}
   		
   		if(!empty($data['group_id'])){
-  			$sql.=" AND sgh.`group_id` = ".$data['group_id'];
+  			$sql.=" AND gs.`group_id` = ".$data['group_id'];
   		}
   		
   		$order="";
   		if(!empty($data['orderStucode'])){//
-  			$order.=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+  			$order.=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
   		}
   		if(!empty($data['orderKhmerName'])){
-  			$order.=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+  			$order.=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
   		}
   		if(!empty($data['orderEnglishName'])){
-  			$order.=" ORDER BY (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+  			$order.=" ORDER BY (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
   		}
   	
   		return $db->fetchAll($sql.$order);

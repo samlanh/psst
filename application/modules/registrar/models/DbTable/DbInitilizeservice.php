@@ -69,6 +69,7 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 					$result = $dbg->getFeeStudyinfoById($data['study_year']);
 					$year = empty($result)?'':$result['id'];
 					
+					//if grade and have existing dont's add 
 					$_arr= array(
 							'branch_id'		=> $data['branch_id'],
 							'stu_id'		=> $data['studentId'],

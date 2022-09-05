@@ -98,29 +98,7 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-// 	function getAllStudentAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data=$this->getRequest()->getPost();
-// // 			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-// // 			$student = $db->getAllStudentFromGroup($data['from_group']);
-// 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$student = $db->getAllStudentByGroup($data['from_group']);
-			
-// 			print_r(Zend_Json::encode($student));
-// 			exit();
-// 		}
-// 	}
-// 	function getAllStudentUpdateAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data=$this->getRequest()->getPost();
-// // 			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-// // 			$student = $db->getAllStudentFromGroupUpdate($data['from_group']);
-// 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$student = $db->getAllStudentByGroupForEdit($data['from_group']);
-// 			print_r(Zend_Json::encode($student));
-// 			exit();
-// 		}
-// 	}	
+
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();

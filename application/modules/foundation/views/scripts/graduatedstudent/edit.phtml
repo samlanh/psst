@@ -232,7 +232,10 @@ function getStudentFromGroup(){
 		dojo.xhrPost({
 			url:url_get_all_student_group_update,
 			content:{
-				'group':group,'edit':1
+				'group_id':group,
+				'isCurrent':1,
+				'itemType':1,
+				'edit':1
 				},
 			handleAs:"json",
 			load: function(respone) {

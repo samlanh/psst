@@ -338,6 +338,7 @@ function filterStudentBygroup(type = null){
 	    url: url_getStudentbygroup,
 	    content : { 
 		    'group':group,
+			'item_type':1,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {

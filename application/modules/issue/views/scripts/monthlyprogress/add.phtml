@@ -599,7 +599,9 @@ function getAllStudentByGroup(){
 	dojo.xhrPost({
 		url: url_getStudentByGroup,
 		content:{
-			'group':group
+			'group_id':group,
+			'isCurrent':1,
+			'itemType':1,
 			},
 		handleAs:"json",
 		load: function(data) {

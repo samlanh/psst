@@ -110,16 +110,16 @@ table.tb-footer tr.style-head {
 						<td colspan="3" id="exportExcel">
 							<table class="content-data" cellpadding="5"​  border="1" >
 								<tr class="style-head" align="center">
-									<td><?php echo $tr->translate('N_O')?></td>
-									<td><?php echo $tr->translate('BRANCH')?></td>
-									<td><?php echo $tr->translate('INCOME_CATEGORY')?></td>
-									<td><?php echo $tr->translate('INCOME_TITLE')?></td>
-									<td><?php echo $tr->translate('RECEIPT_NO')?></td>
-									<td><?php echo $tr->translate('PAYMENT_METHOD')?></td>
-									<td><?php echo $tr->translate('CHEQUE_NO')?></td>
-									<td><?php echo $tr->translate('TOTAL')?></td>
-									<td><?php echo $tr->translate('DATE')?></td>
-									<td><?php echo $tr->translate('USER')?></td>
+									<td scope="col"><?php echo $tr->translate('N_O')?></td>
+									<td scope="col"><?php echo $tr->translate('BRANCH')?></td>
+									<td scope="col"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
+									<td scope="col"><?php echo $tr->translate('INCOME_TITLE')?></td>
+									<td scope="col"><?php echo $tr->translate('RECEIPT_NO')?></td>
+									<td scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
+									<td scope="col"><?php echo $tr->translate('CHEQUE_NO')?></td>
+									<td scope="col"><?php echo $tr->translate('TOTAL')?></td>
+									<td scope="col"><?php echo $tr->translate('DATE')?></td>
+									<td scope="col"><?php echo $tr->translate('USER')?></td>
 								</tr>
 							<?php $i=0; 
 								  $total_income = 0;
@@ -129,16 +129,16 @@ table.tb-footer tr.style-head {
 								}
 							?>
 								<tr <?php if ($row['status']==0){?>style="background: #ffd9d9;"<?php }?> class="context-menu-one style-rowdata hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;">
-									<td align="center"><?php echo $i;?></td>
-									<td><?php echo $row['branch_name'];?></td>
-									<td><?php echo $row['cate_income'];?></td>
-									<td><?php echo $row['title'];?></td>
-									<td align="center"><?php echo $row['invoice'];?></td>
-									<td align="center"><?php echo $row['payment_method'];?></td>	
-									<td><?php echo $row['cheqe_no'];?></td>
-									<td class="bold" align="right"><?php echo "$ ".number_format($row['total_amount'],2);?></td>
-									<td align="center"><?php echo date('d-m-Y',strtotime($row['date']));?></td>
-									<td align="center"><?php echo $row['name'];?></td>
+									<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $row['branch_name'];?></td>
+									<td data-label="<?php echo $tr->translate("INCOME_CATEGORY");?>"><?php echo $row['cate_income'];?></td>
+									<td data-label="<?php echo $tr->translate("INCOME_TITLE");?>"><?php echo $row['title'];?></td>
+									<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" align="center"><?php echo $row['invoice'];?></td>
+									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $row['payment_method'];?></td>	
+									<td data-label="<?php echo $tr->translate("CHEQUE_NO");?>"><?php echo $row['cheqe_no'];?></td>
+									<td data-label="<?php echo $tr->translate("TOTAL");?>" class="bold" align="right"><?php echo "$ ".number_format($row['total_amount'],2);?></td>
+									<td data-label="<?php echo $tr->translate("DATE");?>" align="center"><?php echo date('d-m-Y',strtotime($row['date']));?></td>
+									<td data-label="<?php echo $tr->translate("USER");?>" align="center"><?php echo $row['name'];?></td>
 								</tr>
 							<?php }?>
 							<tr>

@@ -169,6 +169,8 @@
 		$_db= $this->getAdapter();
 		$show = SHOW_IN_DEGREE;
 		try{
+			
+			$status = empty($_data['status'])?0:1;
 			$_arr=array(
 					'title'	  		=> $_data['title'],
 					'title_en'	  	=> $_data['title_en'],
@@ -176,7 +178,7 @@
 					'type'			=> $_data['type'],
 					'ordering'		=> $_data['ordering'],
 					'modify_date' 	=> date("Y-m-d H:i:s"),
-					'status'		=> $_data['status'],
+					'status'		=> $status,
 					'user_id'	  	=> $this->getUserId()
 			);
 			if ($_data['type']==1){

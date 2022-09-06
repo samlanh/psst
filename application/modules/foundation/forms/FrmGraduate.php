@@ -9,6 +9,7 @@ class Foundation_Form_FrmGraduate extends Zend_Dojo_Form
     {
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();	
     	$this->filter = 'dijit.form.FilteringSelect';
+    	
     }
     function FrmAddGraduate($data=null){
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -58,8 +59,9 @@ class Foundation_Form_FrmGraduate extends Zend_Dojo_Form
     	
     	$note = new Zend_Dojo_Form_Element_Textarea('note');
     	$note->setAttribs(array(
-    			'dojoType'=>$this->textarea,'class'=>'fullside',
-    			'style'=>'min-height: 65px !important;',
+    			'dojoType'=>'dijit.form.Textarea',
+				'class'=>'fullside',
+    			'style'=>'width:100%;min-height:60px; font-size:13px; font-family:inherit',
     	));
     	
     	$status = new Zend_Dojo_Form_Element_FilteringSelect("status");

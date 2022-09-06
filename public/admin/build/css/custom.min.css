@@ -66,6 +66,8 @@
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+  line-height: inherit;
+  font-size: inherit;
 }
 
 .material-icons-round {
@@ -857,6 +859,9 @@ span.revomveService:hover {
     color: #f70000;
 }
 @media screen and (max-width: 991px) {
+	
+	
+
   table.content-data,
   table.responsiveTable {
     border: 0 !important;
@@ -893,6 +898,7 @@ span.revomveService:hover {
     text-align: right;
     background: #f3f3f326;
     border-bottom: 1px solid #f5f5f5 !important;
+	white-space: normal;
   }
   table.content-data td {
     border: solid 0px #f3f3f326;
@@ -906,13 +912,17 @@ span.revomveService:hover {
 		min-width: initial !important;
 		font-size: inherit !important;
 	}
+	table.tableTop table tr td {
+		width: 100% !important;
+		display: block;
+	}
 	table.tableTop img {
 		height: inherit !important;
 	}
 	table.tableTop ul.headReport li span,
 	table.tableTop ul.headReport li {
 		line-height: 14px;
-		text-align: center;
+		text-align: left;
 		font-size: 10px !important;
 		font-family: "Times New Roman","Khmer OS Muol Light";
 	}
@@ -1017,7 +1027,7 @@ span.revomveService:hover {
 		display: inline-block;
 		vertical-align: top;
 		white-space: nowrap;
-			text-align: right;
+		text-align: right;
 	}
 }
 
@@ -1284,7 +1294,11 @@ span .dijitIcon.glyphicon.glyphicon-search {
         background-color: #6c757d;
     border-color: #6c757d;
 }
-
+.button-warning .dijitButtonNode {
+	color: #fff;
+	background-color: #d99e00;
+    border-color: #a78a05;
+}
 .dijitToggleButton, .dijitButton, .dijitDropDownButton, .dijitComboButton {
     margin: 0;
     vertical-align: middle;

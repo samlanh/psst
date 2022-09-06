@@ -162,6 +162,7 @@
 				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
 				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
+			$status = empty($_data['status'])?0:1;
 			$_arr=array(
 					'items_id'		=> $_data['items_id'],
 					'items_type'	=> $_data['items_type'],
@@ -174,7 +175,7 @@
 					'is_autopayment'=> $_data['auto_payment'],
 					'schoolOption'  => $schooloption,
 					'modify_date' 	=> date("Y-m-d H:i:s"),
-					'status'		=> $_data['status'],
+					'status'		=> $status,
 					'user_id'	  	=> $this->getUserId()
 			);
 			

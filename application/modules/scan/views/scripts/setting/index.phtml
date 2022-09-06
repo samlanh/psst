@@ -39,19 +39,19 @@ tr.header td {
 	display:block;
 }
 .form-group.audioBlog {
-    background: #02014a;
-    color: #fff;
+    margin: 2px 0px;
+    background: #e3e3e3;
+    color: #000;
     border-radius: 3px;
     padding: 0px 10px;
+    border: solid 1px #ccc;
 }
 
 tr.rowAudiofile {
-    background: #cee1f7;
-    border-bottom: solid 2px #062b61;
+    background: #e3e3e3;
+    
 }
-tr.rowAudiofile td {
-    padding: 2px 0;
-}
+
 audio.audioControlRow {
     height: 35px;
     padding: 5px 0;
@@ -77,7 +77,7 @@ input[type=file] {
 		<div class="card-box">
 	               	<div class="col-sm-12 border-botom">
 			    		<div class="col-sm-8 pd-0">
-			    			<h4 class="m-b-0"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SETTING');?></h4>
+			    			<h4 class="m-b-0"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SETTING');?></h4>
 		    			</div>
 		    			<div class="col-sm-4 text-right">
 		    			</div>
@@ -85,156 +85,181 @@ input[type=file] {
 		    	</div>
 		    	<div class="card-box">
 		    		<div class="col-md-6 col-sm-6 col-xs-12">
-		    			
-		    			
-						
-						<div class="form-group <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-youtube-square" aria-hidden="true"></i> <?php echo $tr->translate('VIDEO_PLAYLIST');?> 
-		                   </label>
-		                </div>
-		    			<div class="card-box <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="bd-bg">
-									<div class="form-group">
-						         	 	<table id="tableRowPlaylist" style="border-collapse: collapse; border:1px solid #ccc; width: 100%;">
-											<tr id="headTitlePlaylist" class="head-td" align="right" style="white-space:nowrap;"></tr>
-										</table>
-										<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-												iconClass="dijitIconEditProperty" onclick="addPlaylist();" />
-										<input type="hidden" name="identityPlayList" id="identityPlayList"  />
-						         	 </div>
-				                 </div>
+						<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="fa fa-youtube-square"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("VIDEO_PLAYLIST");?></p>
+											</div> 
+										</div>
+										<br />
+										<div class="form-group">
+											<table id="tableRowPlaylist" class="collape responsiveTable">
+												<thead>
+												<tr id="headTitlePlaylist" class="head-td" align="center"></tr>
+												</thead>
+											</table>
+											<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" onclick="addPlaylist();" />
+											<input type="hidden" name="identityPlayList" id="identityPlayList"  />
+										 </div>
+									</div>
+								</div>
 							</div>
 						</div>
 		    		</div>
 		    		<div class="col-md-6 col-sm-6 col-xs-12">
-		    			
-		    			
-						
-						<div class="form-group <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-file-audio-o" aria-hidden="true"></i> &nbsp;<?php echo $tr->translate('AUDIO_SETTING');?> 
-		                   </label>
-		                </div>
-						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="control-label bold "><?php echo $tr->translate("INTRO_AUDIO");?></label>
-								<input type='file' id="welcomeAudio" name="welcomeAudio" accept="audio/*" placeholder="" class="profile-aud">
-						   </div>
-							<div class="audioOption">
-							<?php 
-								$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
-								$welcomeAudio = $defaultAudio;
-								if(!empty($this->row['welcomeAudio']['keyValue'])){
-									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['welcomeAudio']['keyValue'])){
-										$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['welcomeAudio']['keyValue'];
-									}
-								}
-								?>
-								<audio id="audioPlay" controls  src="<?php echo $welcomeAudio;?>"></audio>
+		    			<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-volume-up"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("AUDIO_SETTING");?></p>
+											</div> 
+										</div>
+										<br />
+										<div class="form-group audioBlog">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<label class="control-label bold "><?php echo $tr->translate("INTRO_AUDIO");?></label>
+												<input type='file' id="welcomeAudio" name="welcomeAudio" accept="audio/*" placeholder="" class="profile-aud">
+										   </div>
+											<div class="audioOption">
+											<?php 
+												$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+												$welcomeAudio = $defaultAudio;
+												if(!empty($this->row['welcomeAudio']['keyValue'])){
+													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['welcomeAudio']['keyValue'])){
+														$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['welcomeAudio']['keyValue'];
+													}
+												}
+												?>
+												<audio id="audioPlay" controls  src="<?php echo $welcomeAudio;?>"></audio>
+											</div>
+										</div>
+										
+										<div class="form-group audioBlog">
+										  <div class="col-md-12 col-sm-12 col-xs-12">
+												<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETIN_AUDIO");?></label>
+												<input type='file' id="confirmGetInAudio" name="confirmGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
+										   </div>
+											<div class="audioOption">
+											<?php 
+												$confirmGetInAudio = $defaultAudio;
+												if(!empty($this->row['confirmGetInAudio']['keyValue'])){
+													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetInAudio']['keyValue'])){
+														$confirmGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetInAudio']['keyValue'];
+													}
+												}
+												?>
+												<audio id="confirmGetInAudioPlay" controls  src="<?php echo $confirmGetInAudio;?>"></audio>
+											</div>
+										</div>
+										<div class="form-group audioBlog">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<label class="control-label bold"><?php echo $tr->translate("DENY_GETIN_AUDIO");?></label>
+												<input type='file' id="denyGetInAudio" name="denyGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
+										   </div>
+											<div class="audioOption">
+											<?php 
+												$denyGetInAudio = $defaultAudio;
+												if(!empty($this->row['denyGetInAudio']['keyValue'])){
+													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetInAudio']['keyValue'])){
+														$denyGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetInAudio']['keyValue'];
+													}
+												}
+												?>
+												<audio id="denyGetInAudioPlay" controls  src="<?php echo $denyGetInAudio;?>"></audio>
+											</div>
+										</div>
+										
+										<div class="form-group audioBlog">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETOUT_AUDIO");?></label>
+												<input type='file' id="confirmGetOutAudio" name="confirmGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
+										   </div>
+											<div class="audioOption">
+											<?php 
+												$confirmGetOutAudio = $defaultAudio;
+												if(!empty($this->row['confirmGetOutAudio']['keyValue'])){
+													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetOutAudio']['keyValue'])){
+														$confirmGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetOutAudio']['keyValue'];
+													}
+												}
+												?>
+												<audio id="confirmGetOutAudioPlay" controls  src="<?php echo $confirmGetOutAudio;?>"></audio>
+											</div>
+										</div>
+										<div class="form-group audioBlog">
+											
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<label class="control-label bold"><?php echo $tr->translate("DENY_GETOUT_AUDIO");?></label>
+												<input type='file' id="denyGetOutAudio" name="denyGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
+										   </div>
+											<div class="audioOption">
+											<?php 
+												$denyGetOutAudio = $defaultAudio;
+												if(!empty($this->row['denyGetOutAudio']['keyValue'])){
+													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetOutAudio']['keyValue'])){
+														$denyGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetOutAudio']['keyValue'];
+													}
+												}
+												?>
+												<audio id="denyGetOutAudioPlay" controls  src="<?php echo $denyGetOutAudio;?>"></audio>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 						
-						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							
-						  <div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETIN_AUDIO");?></label>
-								<input type='file' id="confirmGetInAudio" name="confirmGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
-						   </div>
-							<div class="audioOption">
-							<?php 
-								$confirmGetInAudio = $defaultAudio;
-								if(!empty($this->row['confirmGetInAudio']['keyValue'])){
-									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetInAudio']['keyValue'])){
-										$confirmGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetInAudio']['keyValue'];
-									}
-								}
-								?>
-								<audio id="confirmGetInAudioPlay" controls  src="<?php echo $confirmGetInAudio;?>"></audio>
-							</div>
-						</div>
-						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="control-label bold"><?php echo $tr->translate("DENY_GETIN_AUDIO");?></label>
-								<input type='file' id="denyGetInAudio" name="denyGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
-						   </div>
-							<div class="audioOption">
-							<?php 
-								$denyGetInAudio = $defaultAudio;
-								if(!empty($this->row['denyGetInAudio']['keyValue'])){
-									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetInAudio']['keyValue'])){
-										$denyGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetInAudio']['keyValue'];
-									}
-								}
-								?>
-								<audio id="denyGetInAudioPlay" controls  src="<?php echo $denyGetInAudio;?>"></audio>
-							</div>
-						</div>
-						
-						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETOUT_AUDIO");?></label>
-								<input type='file' id="confirmGetOutAudio" name="confirmGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
-						   </div>
-							<div class="audioOption">
-							<?php 
-								$confirmGetOutAudio = $defaultAudio;
-								if(!empty($this->row['confirmGetOutAudio']['keyValue'])){
-									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetOutAudio']['keyValue'])){
-										$confirmGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetOutAudio']['keyValue'];
-									}
-								}
-								?>
-								<audio id="confirmGetOutAudioPlay" controls  src="<?php echo $confirmGetOutAudio;?>"></audio>
-							</div>
-						</div>
-						<div class="form-group audioBlog <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="control-label bold"><?php echo $tr->translate("DENY_GETOUT_AUDIO");?></label>
-								<input type='file' id="denyGetOutAudio" name="denyGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
-						   </div>
-							<div class="audioOption">
-							<?php 
-								$denyGetOutAudio = $defaultAudio;
-								if(!empty($this->row['denyGetOutAudio']['keyValue'])){
-									if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetOutAudio']['keyValue'])){
-										$denyGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetOutAudio']['keyValue'];
-									}
-								}
-								?>
-								<audio id="denyGetOutAudioPlay" controls  src="<?php echo $denyGetOutAudio;?>"></audio>
-							</div>
-						</div>
-						
-						
-						<div class="card-box <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="bd-bg">
-					                <div class="form-group">
-					                    <div class="col-md-4 col-sm-4 col-xs-12">
-					                   		<input id="degree" />
-					                    </div>
-					                    <div class="col-md-4 col-sm-4 col-xs-12">
-					                   		<input id="grade" />
-					                    </div>
-					                    <div class="col-md-4 col-sm-4 col-xs-12">
-					                    </div>
-					                </div>
-									<div class="form-group">
-						         	 	<table id="table_row_study" style="border-collapse: collapse; border:1px solid #ccc; width: 100%;">
-											<tr id="head-title_study" class="head-td" align="right" style="white-space:nowrap;"></tr>
-										</table>
-										<input type="hidden" name="identityAudio" id="identityAudio"  />
-						         	 </div>
-				                 </div>
-							</div>
-						</div>
+						<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-volume-up"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GRADE_AUDIO");?></p>
+											</div> 
+										</div>
+										<br />
+										<div class="form-group">
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<input id="degree" />
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<input id="grade" />
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+											</div>
+										</div>
+										<div class="form-group">
+											<table id="table_row_study"  class="collape responsiveTable">
+												<thead>
+													<tr id="head-title_study" class="head-td" align="center"></tr>
+												</thead>
+											</table>
+											<input type="hidden" name="identityAudio" id="identityAudio"  />
+										 </div>
+									 </div>
+								 </div>
+							 </div>
+						 </div>
 		    		</div>
 	    		</div>
 	    		<div class="card-box">
-	    			<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-						<input class="button_success" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
+	    			<div class="col-md-12 col-sm-1s2 col-xs-12 border-top mt-20 ptb-10 text-center">
+						<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
 	    			</div>
 	    		</div>
 	  	 </div>
@@ -393,18 +418,20 @@ function addRowStudy() {
 	
 	template_study='';
 	if(title_study!=1){
-		temp_study+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp_study+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
-		temp_study+='<th ><?php echo $tr->translate("AUDIO");?></th>';
+		temp_study+='<th scope="col" width="4%"><?php echo $tr->translate("DEL");?></th>';
+		temp_study+='<th scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>';
+		temp_study+='<th scope="col" ><?php echo $tr->translate("GRADE");?></th>';
+		temp_study+='<th scope="col" ><?php echo $tr->translate("AUDIO");?></th>';
 		dojo.query("#head-title_study").append(temp_study);
 		title_study=1;
 	}
-		template_study+='<td width="4%"align="center"><img style="cursor:pointer;" onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template_study+='<td width="4%" align="center">'+no_study+'</td>';
-		template_study+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
-		template_study+='<td><input type="file" onChange="readURLAudioRow('+col_study+');" id="audioFile'+col_study+'" name="audioFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $defaultAudio;?>"></audio></td>';
-	tmp_study='<tr id="row_study'+col_study+'" class="rowAudiofile">';
+		template_study+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center">';
+			template_study+='<span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord_study('+col_study+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span>';
+		template_study+='</td>';
+		template_study+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no_study+'</td>';
+		template_study+='<td data-label="<?php echo $tr->translate("GRADE");?>">&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+		template_study+='<td data-label="<?php echo $tr->translate("AUDIO");?>"><input type="file" onChange="readURLAudioRow('+col_study+');" id="audioFile'+col_study+'" name="audioFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $defaultAudio;?>"></audio></td>';
+	tmp_study='<tr id="row_study'+col_study+'" class="rowData rowAudiofile">';
 	tmp_study+="</tr>";
 	dojo.query("#table_row_study").append(tmp_study);
 
@@ -440,19 +467,21 @@ function initializeStudy() {
 	col_study++;no_study++;
 	template_study='';
 	if(title_study!=1){
-		temp_study+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp_study+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp_study+='<th ><?php echo $tr->translate("GRADE");?></th>';
-		temp_study+='<th ><?php echo $tr->translate("AUDIO");?></th>';
+		temp_study+='<th scope="col" width="4%"><?php echo $tr->translate("DEL");?></th>';
+		temp_study+='<th scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>';
+		temp_study+='<th scope="col" ><?php echo $tr->translate("GRADE");?></th>';
+		temp_study+='<th scope="col" ><?php echo $tr->translate("AUDIO");?></th>';
 		dojo.query("#head-title_study").append(temp_study);
 		title_study=1;
 	}
 
-	template_study+='<td width="4%"align="center"><img style="cursor:pointer;" onclick="deleteRecord_study('+col_study+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-	template_study+='<td width="4%" align="center">'+no_study+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidAudio'+col_study+'" id="detailidAudio'+col_study+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
-	template_study+='<td>&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="<?php echo $row['gradeId'];?>" type="hidden"><?php echo $row['gradeTitle'];?>&nbsp;</td>';
-	template_study+='<td><input type="file" onChange="readURLAudioRow('+col_study+');" id="audioFile'+col_study+'" name="audioFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $audioGrade;?>"></audio></td>';
-	tmp_study='<tr id="row_study'+col_study+'" class="rowAudiofile">';
+	template_study+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center">';
+	template_study+='<span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord_study('+col_study+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span> ';
+	template_study+='</td>';
+	template_study+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no_study+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidAudio'+col_study+'" id="detailidAudio'+col_study+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
+	template_study+='<td data-label="<?php echo $tr->translate("GRADE");?>">&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col_study+'" id="grade_'+col_study+'" value="<?php echo $row['gradeId'];?>" type="hidden"><?php echo $row['gradeTitle'];?>&nbsp;</td>';
+	template_study+='<td data-label="<?php echo $tr->translate("AUDIO");?>"><input type="file" onChange="readURLAudioRow('+col_study+');" id="audioFile'+col_study+'" name="audioFile'+col_study+'" accept="audio/*" placeholder="" class="profile-aud"><audio class="audioControlRow" id="audioPlay'+col_study+'" controls  src="<?php echo $audioGrade;?>"></audio></td>';
+	tmp_study='<tr id="row_study'+col_study+'" class="rowData rowAudiofile">';
 	tmp_study+="</tr>";
 	dojo.query("#table_row_study").append(tmp_study);
 		
@@ -526,15 +555,17 @@ function addPlaylist() {
 	col++;no++;
 	template='';
 	if(title!=1){
-		temp+='<th width="3%"><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th width="3%"><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th width="15%"><?php echo $tr->translate("YOUTUBE_LINK");?></th>';
+		temp+='<th scope="col" width="3%"><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th scope="col" width="3%"><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th scope="col" width="15%"><?php echo $tr->translate("YOUTUBE_LINK");?></th>';
 		dojo.query("#headTitlePlaylist").append(temp);
 		title=1;
 		}
-		template+='<td align="center"><img style="cursor:pointer;" onclick="deletePlayListRow('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td align="center">'+no+'</td>';
-		template+='<td><input type="text" class="fullside" name="youtubeLink'+col+'" id="youtubeLink'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("YOUTUBE_LINK");?>" /></td>';
+		template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center">';
+			template+='<span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deletePlayListRow('+col+');" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span>';
+		template+='</td>';
+		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+		template+='<td data-label="<?php echo $tr->translate("YOUTUBE_LINK");?>"><input type="text" class="fullside" name="youtubeLink'+col+'" id="youtubeLink'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("YOUTUBE_LINK");?>" /></td>';
 	tmp='<tr id="rowPlayList'+col+'" style="font-size:12px;">';
 	tmp+="</tr>";
 	dojo.query("#tableRowPlaylist").append(tmp);
@@ -554,15 +585,18 @@ function oldRow() {
 		col++;no++;
 		template='';
 		if(title!=1){
-			temp+='<th width="3%"><?php echo $tr->translate("DEL");?></th>';
-			temp+='<th width="3%"><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th width="15%"><?php echo $tr->translate("YOUTUBE_LINK");?></th>';
+			temp+='<th scope="col" width="3%"><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th scope="col" width="3%"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th scope="col" width="15%"><?php echo $tr->translate("YOUTUBE_LINK");?></th>';
 			dojo.query("#headTitlePlaylist").append(temp);
 			title=1;
 			}
-			template+='<td align="center"><img style="cursor:pointer;" onclick="deletePlayListRow('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td align="center">'+no+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidPlayList'+col+'" id="detailidPlayList'+col+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
-			template+='<td ><input type="text" class="fullside" value="<?php echo $row['youtubeLink']?>" name="youtubeLink'+col+'" id="youtubeLink'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("YOUTUBE_LINK");?>" /></td>';
+			template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center">';
+				template+='<span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deletePlayListRow('+col+');"  ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span>';
+			template+='</td>';
+			
+			template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'<input dojoType="dijit.form.TextBox" class="fullside" name="detailidPlayList'+col+'" id="detailidPlayList'+col+'" value="<?php echo $row['id'];?>" type="hidden"></td>';
+			template+='<td data-label="<?php echo $tr->translate("YOUTUBE_LINK");?>" ><input type="text" class="fullside" value="<?php echo $row['youtubeLink']?>" name="youtubeLink'+col+'" id="youtubeLink'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("YOUTUBE_LINK");?>" /></td>';
 			
 			
 		tmp='<tr id="rowPlayList'+col+'" style="font-size:12px;">';

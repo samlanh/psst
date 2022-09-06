@@ -110,17 +110,17 @@ table.tb-footer tr.style-head {
 					<table class="content-data" align="center">
 						<thead>
 							<tr class="style-head" align="center">
-								<td><?php echo $tr->translate("N_O");?></td>
-								<td><?php echo $tr->translate("STUDENT_ID");?></td>
-								<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-								<td><?php echo $tr->translate("EN_NAME");?></td>
-								<td><?php echo $tr->translate("SEX");?></td>
-								<td><?php echo $tr->translate("PHONE");?></td>
-								<td><?php echo $tr->translate("DEGREE");?></td>
-								<td><?php echo $tr->translate("GRADE");?></td>
-								<td><?php echo $tr->translate("TRAN_NO");?></td>
-								<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
-								<td><?php echo $tr->translate("DATE");?></td>
+								<td scope="col" ><?php echo $tr->translate("N_O");?></td>
+								<td scope="col" > <?php echo $tr->translate("STUDENT_ID");?></td>
+								<td scope="col" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								<td scope="col" ><?php echo $tr->translate("EN_NAME");?></td>
+								<td scope="col" ><?php echo $tr->translate("SEX");?></td>
+								<td scope="col" ><?php echo $tr->translate("PHONE");?></td>
+								<td scope="col" ><?php echo $tr->translate("DEGREE");?></td>
+								<td scope="col" ><?php echo $tr->translate("GRADE");?></td>
+								<td scope="col" ><?php echo $tr->translate("TRAN_NO");?></td>
+								<td scope="col" ><?php echo $tr->translate("PAID_AMOUNT");?></td>
+								<td scope="col" ><?php echo $tr->translate("DATE");?></td>
 							</tr>
 						</thead>
 						<?php 
@@ -131,17 +131,17 @@ table.tb-footer tr.style-head {
 								$total = $total +$rs['amount'];
 							?>
 						<tr class="style-rowdata hover" style="border-bottom: 1px solid #000;" align="center" >
-							<td><?php echo $key; ?></td>
-							<td><?php echo $rs['stu_code']; ?></td>
-							<td><?php echo $rs['stu_khname']; ?></td>
-							<td><?php echo $rs['last_name'].' '.$rs['stu_enname']; ?></td>
-							<td align="left"><?php echo $rs['sex']; ?></td>
-							<td><?php echo $rs['tel']; ?></td>
-							<td><?php echo $rs['degree']; ?></td>
-							<td><?php echo $rs['grade']; ?></td>
-							<td><?php echo $rs['bank_transaction_id']; ?></td>
-							<td><strong>$ <?php echo number_format($rs['amount'],2); ?></strong></td>
-							<td><?php echo date("d/m/Y",strtotime($rs['date'])); ?></td>
+							<td data-label="<?php echo $tr->translate("N_O");?>" ><?php echo $key; ?></td>
+							<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stu_code']; ?></td>
+							<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" ><?php echo $rs['stu_khname']; ?></td>
+							<td data-label="<?php echo $tr->translate("EN_NAME");?>" ><?php echo $rs['last_name'].' '.$rs['stu_enname']; ?></td>
+							<td data-label="<?php echo $tr->translate("SEX");?>"  align="left"><?php echo $rs['sex']; ?></td>
+							<td data-label="<?php echo $tr->translate("PHONE");?>" ><?php echo $rs['tel']; ?></td>
+							<td data-label="<?php echo $tr->translate("DEGREE");?>" ><?php echo $rs['degree']; ?></td>
+							<td data-label="<?php echo $tr->translate("GRADE");?>" ><?php echo $rs['grade']; ?></td>
+							<td data-label="<?php echo $tr->translate("TRAN_NO");?>" ><?php echo $rs['bank_transaction_id']; ?></td>
+							<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" ><strong>$ <?php echo number_format($rs['amount'],2); ?></strong></td>
+							<td data-label="<?php echo $tr->translate("DATE");?>" ><?php echo date("d/m/Y",strtotime($rs['date'])); ?></td>
 						</tr>
 						<?php
 							}

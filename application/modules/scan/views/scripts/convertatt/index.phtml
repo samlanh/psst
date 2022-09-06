@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("STUDENT_ATTENDANCE"));
+	echo $this->headTitle($tr->translate("CONVERT_ATT"));
 	$frm =  $this->form_search;
 ?>	
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -8,7 +8,7 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    		<h4 class="m-b-0"><i class="fa fa-gavel " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_ATTENDANCE');?></h4>
+		    		<h4 class="m-b-0"><i class="glyphicon glyphicon-import" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CONVERT_ATT');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -44,7 +44,7 @@
 					 	<?php echo $frm->getElement("end_date");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					 	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 </div>

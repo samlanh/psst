@@ -54,13 +54,14 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	public function updateRoom($data){		
+		$status = empty($data['status'])?0:1;
 		$_arr=array(
 				'branch_id'	  => $data['branch_id'],
 				'floor'	  	  => $data['floor'],
 				'room_name'	  => $data['classname'],
 				'max_std'	  => $data['max_student'],
 				'modify_date' => Zend_Date::now(),
-				'is_active'   => $data['status'],
+				'is_active'   => $status,
 				'user_id'	  => $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("room_id=?", $data["id"]);

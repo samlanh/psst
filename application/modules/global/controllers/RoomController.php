@@ -84,6 +84,7 @@ class Global_RoomController extends Zend_Controller_Action {
 	   	}
 	   	$db = new Global_Model_DbTable_DbRoom();
 	   	$row = $db->getRoomById($id);
+		$this->view->row = $row;
 	   	if (empty($row)){
 	   		Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/global/room/");
 	   		exit();

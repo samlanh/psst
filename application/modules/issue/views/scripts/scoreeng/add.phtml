@@ -382,7 +382,7 @@ function filterStudent(){
 				for(i=0;i<data.length;i++){
 					num++;
 					inx = inx+1;
-					temp +='<tr class="rowData " id="row'+inx+'">';
+					temp +='<tr class="rowData" id="row'+inx+'">';
 					temp +='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+inx+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 					temp +='<td data-label="<?php echo $tr->translate("NO");?>" align="center">'+inx+'</td>';
 					temp +='<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';

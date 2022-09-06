@@ -74,9 +74,10 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     		}
     		$dbglobal = new Application_Model_DbTable_DbGlobal();
     		$lang = $dbglobal->getLaguage();
+			$status = empty($data['status'])?0:1;
     		$arr = array(
     				'branch_id'		=>$data['branch_id'],
-    				'status'		=>$data['status'],
+    				'status'		=>$status,
     				'publish_date'	=>$data['public_date'],
     				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),

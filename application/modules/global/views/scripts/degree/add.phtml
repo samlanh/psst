@@ -7,21 +7,12 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script>dojo.require("dijit.form.Textarea");</script>
-<style>
-.dijitTextArea[cols].dijitTextArea[cols]{
-	width: 99%;
-}
-span#message {
-    color: #fb0101;
-    font-style: italic;
-}
-</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DEGREE');?></h4>
+	    			<h4 class="m-b-0"><i class="glyphicon glyphicon-tower" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DEGREE');?></h4>
     				<span id="message"></span>
     			</div>
     			<div class="col-sm-4 text-right">
@@ -61,134 +52,179 @@ span#message {
 			</script>
 	    	<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_KHNAME");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("title");?>
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label class=" control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_ENNAME");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("title_en");?>
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("shortcut");?>
-		                	<input type="hidden" dojoType="dijit.form.TextBox" id="type" name="type" value="1" />
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ORDERING");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("ordering");?>
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("schoolOption");?>
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("note");?>
-		                </div>
-		            </div>
-		        </div>
-		        <div class="col-md-8 col-sm-8 col-xs-12">
-					<div class="card-box">
-						<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
-							<li class="nav-item active">
-								<a class="nav-link " data-toggle="tab" href="#panel21" role="tab">
-									<i class="fa fa-user ml-2"></i> <?php echo $tr->translate("SUBJECT_STUDY");?>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-									<i class="fa fa-users ml-2"></i> <?php echo $tr->translate("COMMENT");?>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="tab-content vertical">
-						<!--Panel 1-->
-						<div class="tab-pane fade in active" id="panel21" role="tabpanel">
-							 <div class="card-box">
-								<div class="col-md-12 col-sm-12 col-xs-12">
-									<table  style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
-										<thead>
-											<tr id="head-title" class="head-td" align="right">
-												<th><?php echo $tr->translate("DEL");?></th>
-												<th><?php echo $tr->translate("N_O");?></th>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?> <span class="required">*</span></th>
-												
-												<?php if($show==1){?>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>
-												<?php }?>
-												<th id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>
-											</tr>
-										</thead>
-										<tbody id="table_row">
-										
-										</tbody>
-									</table>
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-													iconClass="dijitIconEditProperty" onclick="addRow();" />
-									<input type="hidden" name="identity" id="identity"  />
-								</div>
-							 </div>
-						</div>
-						<!--/.Panel 1-->
-						<!--Panel 2-->
-						<div class="tab-pane fade in " id="panel22" role="tabpanel">
-							<div class="card-box">
-								<div class="form-group">
-									<label class="control-label bold col-md-1 col-sm-5 col-xs-12 ">
-										<?php echo $tr->translate("COMMENT");?>
-									</label>
-									<div class="col-md-11 col-sm-12 col-xs-12">
-										<select queryExpr="*${0}*" autoComplete="false" name="comment" id="comment" class="fullside" onchange="addRowComment();" dojoType="dijit.form.FilteringSelect" >
-											<option value="-1">Select Comment</option>
-											<?php if(!empty($this->comment)){foreach($this->comment as $comment){?>
-												<option value="<?php echo $comment['id']?>"><?php echo $comment['comment']?></option>
-											<?php }}?>
-										</select>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-tower"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+										</div> 
 									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<table border="1" id="table_paymenthistory" style="width:100%;border-collapse: collapse; border:1px solid #ccc;white-space: normal;">
-											<thead>
-												<tr id="head-title" class="head-td" align="right">
-													<th width="5%"><?php echo $tr->translate("DEL");?></th>
-													<th width="5%"><?php echo $tr->translate("N_O");?></th>
-													<th width="65%" id="lbl_titlemetion"><?php echo $tr->translate("COMMENT");?></th>
-													<th width="25%" id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>
-												</tr>
-											</thead>
-											<tbody id="table_row_comment">
-											</tbody>
-											<input type="hidden" name="identity1" id="identity1"  />
-										</table>
+									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_KHNAME");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_degree->getElement("title");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class=" control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FACULTY_ENNAME");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_degree->getElement("title_en");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_degree->getElement("shortcut");?>
+											<input type="hidden" dojoType="dijit.form.TextBox" id="type" name="type" value="1" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ORDERING");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_degree->getElement("ordering");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_degree->getElement("schoolOption");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_degree->getElement("note");?>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 		        </div>
+		        <div class="col-md-8 col-sm-8 col-xs-12">
+					<div class="card-box">
+						<ul class="nav  nav-pills nav-fill gap-2 p-1 small bg-white border rounded-5 shadow-sm pills-primary nav-tab" role="tablist">
+							<li class="nav-item active">
+								<a class="nav-link rounded-5" data-toggle="tab" href="#panel21" role="tab">
+									<i class="glyphicon glyphicon-folder-open ml-2"></i> <?php echo $tr->translate("SUBJECT_STUDY");?>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link rounded-5" data-toggle="tab" href="#panel22" role="tab">
+									<i class="glyphicon glyphicon-comment ml-2"></i> <?php echo $tr->translate("COMMENT");?>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="tab-content ">
+						<!--Panel 1-->
+						<div class="tab-pane fade in active" id="panel21" role="tabpanel">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-folder-open"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SUBJECT_STUDY");?></p>
+												</div> 
+											</div>
+											<br />
+											<div class="form-group">
+												<table class="collape responsiveTable">
+													<thead>
+														<tr id="head-title" class="head-td" align="center">
+															<th scope="col" ><?php echo $tr->translate("DEL");?></th>
+															<th scope="col" ><?php echo $tr->translate("N_O");?></th>
+															<th scope="col" ><?php echo $tr->translate("SUBJECT_STUDY");?> <span class="required">*</span></th>
+															
+															<?php if($show==1){?>
+															<th scope="col" ><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
+															<th scope="col" ><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
+															<th scope="col" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
+															<th scope="col" ><?php echo $tr->translate("SCORE_SHORT");?></th>
+															<?php }?>
+															<th scope="col" ><?php echo $tr->translate("NOTE");?></th>
+														</tr>
+													</thead>
+													<tbody id="table_row">
+													
+													</tbody>
+												</table>
+												<input type="hidden" name="identity" id="identity"  />
+											</div>
+											<div class="form-group mt-10">
+												<input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-sort-by-attributes" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" onclick="addRow();" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<!--/.Panel 1-->
+						<!--Panel 2-->
+						<div class="tab-pane fade in " id="panel22" role="tabpanel">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-comment"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("COMMENT");?></p>
+												</div> 
+											</div>
+											<br />
+											<div class="form-group">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<select queryExpr="*${0}*" autoComplete="false" name="comment" id="comment" class="fullside" onchange="addRowComment();" dojoType="dijit.form.FilteringSelect" >
+														<option value="-1"><?php echo $tr->translate("SELECT_COMMENT");?></option>
+														<?php if(!empty($this->comment)){foreach($this->comment as $comment){?>
+															<option value="<?php echo $comment['id']?>"><?php echo $comment['comment']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<table id="table_paymenthistory" class="collape responsiveTable" >
+													<thead>
+														<tr id="head-title" class="head-td" align="center">
+															<th scope="col" width="5%"><?php echo $tr->translate("DEL");?></th>
+															<th scope="col" width="5%"><?php echo $tr->translate("N_O");?></th>
+															<th scope="col" width="65%" ><?php echo $tr->translate("COMMENT");?></th>
+															<th scope="col" width="25%" ><?php echo $tr->translate("NOTE");?></th>
+														</tr>
+													</thead>
+													<tbody id="table_row_comment">
+													</tbody>
+												</table>
+												<input type="hidden" name="identity1" id="identity1"  />
+											</div>
+											<div class="form-group">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+		        </div>
 		        <div class="clearfix"></div>
 		        <div class="card-box mt-20">
 	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               		 <input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
-						<input type="submit" id="save_new" value="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+	               		 <input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" id="save_new" value="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button"  />
 	               	</div>
 	            </div>
 	    	</div>
@@ -307,27 +343,29 @@ function addRow(){
 	col++;no++;
 	template='';
 	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?> <span class="required">*</span></th>';
-		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>';
-		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>';
-		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
-		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>';
-		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>';
+		temp+='<th scope="col" width="4%"><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th scope="col" ><?php echo $tr->translate("SUBJECT_STUDY");?> <span class="required">*</span></th>';
+		<?php if($show==1){?>
+		temp+='<th scope="col" ><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>';
+		temp+='<th scope="col" ><?php echo $tr->translate("SCORE_IN_CLASS");?></th>';
+		temp+='<th scope="col" ><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
+		temp+='<th scope="col" ><?php echo $tr->translate("SCORE_SHORT");?></th>';
+		<?php }?>
+		temp+='<th scope="col" ><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
-		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');" >'+subject+'</select></td>';
+		template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select  dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');" >'+subject+'</select></td>';
 		<?php if($show==1){?>
-		template+='<td><input type="<?php if($show==1){echo "text";}else{echo "hidden";}?>" style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  value="0" ></td>';	
-		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'"  value="0" ></td>';	
-		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="0" ></td>';
-		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" ></td>';
+		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input type="<?php if($show==1){echo "text";}else{echo "hidden";}?>" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  value="0" ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("SCORE_IN_CLASS");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'"  value="0" ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("SCORE_OUT_CLASS");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="0" ></td>';
+		template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" ></td>';
 		<?php }?>
-		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
+		template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -387,11 +425,11 @@ function addRowComment(){
 		template1='';
 		col1++;no1++;
 		label_comment = dijit.byId("comment").attr('displayedValue');
-		template1+='<td align="center"><img onclick="deleteRecordComment('+col1+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template1+='<td align="center">'+no1+'</td>';
-		template1+='<td >&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_'+col1+'" name="comment_'+col1+'" value="'+comment+'" /></td>';
-		template1+='<td > <input type="text"  name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
-		tmp1='<tr id="row1'+col1+'">';
+		template1+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecordComment('+col1+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+		template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'</td>';
+		template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" >&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_'+col1+'" name="comment_'+col1+'" value="'+comment+'" /></td>';
+		template1+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input type="text"  name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("OTHER");?>"/></td>';
+		tmp1='<tr id="row1'+col1+'" class="rowData">';
 		tmp1+="</tr>";
 		dojo.query("#table_row_comment").append(tmp1);
 

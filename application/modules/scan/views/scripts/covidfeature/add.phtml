@@ -7,7 +7,7 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SET_STUDENT_VACCINE');?></h4>
+		    			<h4 class="m-b-0"><i class="material-icons-outlined">vaccines</i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SET_STUDENT_VACCINE');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -72,14 +72,14 @@
 			   </div>
 			   <div class="form-group">
 				   <div class="col-md-12 col-sm-12 col-xs-12">
-						<table class="tableShowData" border="1" >
+						<table class="collape responsiveTable" >
 							<thead>
-								<tr id="head-title" class="head-td" >
-									<th class="tdheader"><?php echo $tr->translate('DELETE');?></th>
-									<th class="tdheader"><?php echo $tr->translate('N_O');?></th>
-									<th class="tdheader"><?php echo $tr->translate('STUDENT_NAME');?></th>
-									<th class="tdheader"><?php echo $tr->translate('VACCIN_STATUS');?></th>
-									<th class="tdheader"><?php echo $tr->translate('COVID_TESTED_STATUS');?></th>
+								<tr id="head-title" class="head-td" align="center" >
+									<th scope="col" width="30px" ><?php echo $tr->translate('DELETE');?></th>
+									<th scope="col" width="30px" ><?php echo $tr->translate('N_O');?></th>
+									<th scope="col" style="width:150px;" ><?php echo $tr->translate('STUDENT_NAME');?></th>
+									<th scope="col" style="width:100px"><?php echo $tr->translate('VACCIN_STATUS');?></th>
+									<th scope="col" style="width:100px"><?php echo $tr->translate('COVID_TESTED_STATUS');?></th>
 								</tr>
 							</thead>
 							<tbody id="table_row" >
@@ -96,8 +96,7 @@
 	                 <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
+		               		<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" />
 							
 		               	</div>
 		             </div>
@@ -223,22 +222,22 @@ function addRecord() {
 		col++;no++;
 		template='';
 		
-			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="30px" align="center">'+no+'</td>';
-			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+labelStudent+'<label><input type="hidden" value="'+studentId+'" dojoType="dijit.form.TextBox" name="studentId'+col+'" id="studentId'+col+'"/>';
+			template+='<td data-label="<?php echo $tr->translate("DELETE");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+');" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span> </td>';
+			template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+			template+='<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"><label id="item_label_'+col+'">'+labelStudent+'<label><input type="hidden" value="'+studentId+'" dojoType="dijit.form.TextBox" name="studentId'+col+'" id="studentId'+col+'"/>';
 			
 			
-			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_vaccined'+col+'" name="is_vaccined'+col+'" >';
+			template+='<td data-label="<?php echo $tr->translate("VACCIN_STATUS");?>"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_vaccined'+col+'" name="is_vaccined'+col+'" >';
 			template+='<option value="1"><?php echo $tr->translate("VACCIN_COMPLETED");?></option>';	
 			template+='<option value="0"><?php echo $tr->translate("VACCIN_UNCOMPLETED");?></option>';	
 			
 			template+='</select></td>';
 			
-			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_covidTested'+col+'" name="is_covidTested'+col+'" >';
+			template+='<td data-label="<?php echo $tr->translate("COVID_TESTED_STATUS");?>"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="is_covidTested'+col+'" name="is_covidTested'+col+'" >';
 			template+='<option value="1"><?php echo $tr->translate("TESTED_COVID");?></option>';
 			template+='<option value="0"><?php echo $tr->translate("NOT_YET_TEST_COVID");?></option>';	
 			template+='</select></td>';
-		tmp='<tr id="row'+col+'">';
+		tmp='<tr id="row'+col+'" class="rowData" >';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 		if($("#identity").val()!="") {

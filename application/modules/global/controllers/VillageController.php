@@ -18,7 +18,7 @@ class Global_VillageController extends Zend_Controller_Action {
 				$search = array(
 						'adv_search' => '',
 						'search_status' => -1,
-						'province_name'=>0,
+						'province_name'=>12,
 						'district_name'=>'',
 						'commune_name'=>'');
 			}

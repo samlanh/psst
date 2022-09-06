@@ -276,15 +276,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getservicefeeAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
-    		print_r(Zend_Json::encode($service_fee));
-    		exit();
-    	}
-    }
 //     function getProductFeeAction(){
 //     	if($this->getRequest()->isPost()){
 //     		$data=$this->getRequest()->getPost();
@@ -486,6 +477,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
 			$rows = $db->getAllStudentBalance($branch_id);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	function getserviceitemAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rows = $db->getItemAllDetail($data);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

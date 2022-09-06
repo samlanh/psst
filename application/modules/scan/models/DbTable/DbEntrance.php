@@ -35,7 +35,8 @@ class Scan_Model_DbTable_DbEntrance extends Zend_Db_Table_Abstract
 			}
 				
 			if(!empty($_data['id'])){
-				$arr['status']=$_data['status'];
+				$status = empty($_data['status'])?0:1;
+				$arr['status']=$status;
 				$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
 				$this->update($arr,$where);
 			}else{

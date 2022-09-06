@@ -156,23 +156,50 @@ class Application_Form_FrmGlobal{
 				</tr>
 		</table>";
 		}else if ($type_header==2){
-			$str="
-			<style>
-				table{
-				color:".$color."
-				}
-				span.space {
-					padding:0;
-				    padding-right: 10px;
-				    margin:0;
-				        line-height: inherit;
-				}
-				img.icon-head {
-				    width: 12px;
-				    filter: sepia(100%) hue-rotate(190deg) saturate(500%);
-				}
-			</style>
-			<table width='100%'>
+			$str='
+				<style>
+					table{
+					color:".$color."
+					}
+					span.space {
+						padding:0;
+						padding-right: 10px;
+						margin:0;
+							line-height: inherit;
+					}
+					img.icon-head {
+						width: 12px;
+						filter: sepia(100%) hue-rotate(190deg) saturate(500%);
+					}
+					ul.headReport,
+					ul.reportTitle{
+						margin: 0;
+						padding: 0;
+						list-style: none;
+					}
+					ul.headReport li span,
+					ul.headReport li{
+						line-height: 18px;
+						text-align:left; 
+						font-size:14px;
+						font-family:'.'"Times New Roman"'.','.'"Khmer OS Muol Light"'.';
+						
+					}
+					ul.headReport li.small-text,
+					ul.headReport li.small-text span{
+						line-height: 14px;
+						text-align:center; 
+						font-size:11px;
+						font-family:'.'"Times New Roman"'.','.'"Khmer OS Battambang"'.';
+						
+					}
+					</style>
+			';
+			$str.="
+			
+				
+			
+			<table class='tableTop' width='100%'>
 					<tr>
 						<td width='20%' align='center'>
 							<img style='max-height:100px;' src=".$logo."><br>
@@ -185,7 +212,7 @@ class Application_Form_FrmGlobal{
 										<h2 style='white-space:nowrap; font-weight:bold; font-size:14px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
 									</td>
 									<td width='40%' align='left' valign='top'>
-										<ul style='font-size:12px; color:inherit; list-style-type: none; padding: 0; margin: 0; line-height: initial;'>
+										<ul class='headReport'>
 											<li><span class='space'>&#9742;</span> ".$rs['branch_tel']."</li>";
 											if (!empty($rs['email'])){
 												$str.="<li><span class='space'>&#128386;</span> ".$rs['email']."</li>";
@@ -214,7 +241,7 @@ class Application_Form_FrmGlobal{
 					color:".$color."
 					}
 			</style>
-			<table width='100%'>
+			<table width='100%' class='tableTop'>
 				<tr>
 					<td width='20%' align='center'>
 						<img style='width:100%' src=".$logo."><br>

@@ -25,58 +25,87 @@
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_KH");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="titleKh" name="titleKh" value="<?php echo $rs["titleKh"]?>" type="text">
-	                   		<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="id" name="id" value="<?php echo $rs["id"]?>" type="hidden">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_EN");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="titleEn" name="titleEn" value="<?php echo $rs["titleEn"]?>" type="text">
-	                   </div>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input style="min-height: 70px;" dojoType="dijit.form.Textarea" class="fullside" id="note" value="<?php echo $rs["note"]?>" name="note" type="text">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
-    								<option value="1" <?php if ($rs["status"]==1){echo "selected='selected'";}?> label="<?php echo $tr->translate('ACTIVE');?>" ><?php echo $tr->translate('ACTIVE');?></option>
-    								<option value="0" <?php if ($rs["status"]==0){echo "selected='selected'";}?> label="<?php echo $tr->translate('DEACTIVE');?>" ><?php echo $tr->translate('DEACTIVE');?></option>
-							</select>
-	                   </div>
-	                </div>
-	                 <div class="clearfix"></div>
-			         <div class="card-box mt-20">
-		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-						 	 <input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('EDIT');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-		               	</div>
-		             </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ENTRANCE_AND_EXIT");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_KH");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="titleKh" name="titleKh" value="<?php echo $rs["titleKh"]?>" type="text">
+											<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="id" name="id" value="<?php echo $rs["id"]?>" type="hidden">
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE_EN");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="titleEn" name="titleEn" value="<?php echo $rs["titleEn"]?>" type="text">
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input style="min-height: 70px;" dojoType="dijit.form.Textarea" class="fullside" id="note" value="<?php echo $rs["note"]?>" name="note" type="text">
+									   </div>
+									</div>
+									<div class="form-group">
+										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
+											<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($rs["status"])){ echo "checked";} ?> > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
 	            </div>
 				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group audioBlog">
-						<label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("AUDIO");?>
-					   </label>
-					  <div class="col-md-9 col-sm-9 col-xs-12">
-							<input type='file' id="audiofile" name="audiofile" accept="audio/*" placeholder="" class="profile-aud">
-					   </div>
-					
-						<div id="app"></div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-volume-up"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("AUDIO");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="form-group audioBlog">
+										<label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("AUDIO");?>
+									   </label>
+									  <div class="col-md-9 col-sm-9 col-xs-12">
+											<input type='file' id="audiofile" name="audiofile" accept="audio/*" placeholder="" class="profile-aud">
+									   </div>
+										<div id="app"></div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 	         </div>
+			<div class="clearfix"></div>
+			 <div class="card-box mt-20">
+				<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					 <input type="submit" value="save_close" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" name="save_close" id="save_close" label="<?php echo $tr->translate('EDIT');?>" dojoType="dijit.form.Button" />
+				</div>
+			 </div>
 		</form>
 	</div>
 </div>

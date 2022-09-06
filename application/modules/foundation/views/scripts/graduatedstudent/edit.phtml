@@ -45,68 +45,104 @@
 			</script>
 			<div class="card-box">
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
-	    			<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("branch_id");?>
-		                	<?php echo $frm->getElement("id");?>
-		                </div>
-		             </div>
-		    		<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input id="group" />
-							<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" />
-							<input dojoType="dijit.form.TextBox"  type="hidden" name="old_array_checkbox" id="old_array_checkbox" value="<?php echo $this->rs['array_checkbox'];?>" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADUATE_DATE");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("graduate_date");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("type");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("note");?>
-		                	<input dojoType="dijit.form.TextBox" class="fullside" id="identity " name="identity " type="hidden" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("status");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("DETAIL");?> </label>
-		             </div>
-		             <div class="form-group">
-		                <div class="col-md-12 col-sm-12 col-xs-12">	
-		                	<div id="lblfromgroup">
-		                	</div>
-		                </div>
-		             </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-graduation-cap"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_STUDENT_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("branch_id");?>
+											<?php echo $frm->getElement("id");?>
+										</div>
+									 </div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="group" />
+											<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" />
+											<input dojoType="dijit.form.TextBox"  type="hidden" name="old_array_checkbox" id="old_array_checkbox" value="<?php echo $this->rs['array_checkbox'];?>" />
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADUATE_DATE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("graduate_date");?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("type");?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("note");?>
+											<input dojoType="dijit.form.TextBox" class="fullside" id="identity " name="identity " type="hidden" />
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("status");?>
+										</div>
+									 </div>
+									<div class="form-group">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div id="gr-info">
+											</div>
+										</div>
+									 </div>
+								 </div>
+							 </div>
+						 </div>
+					 </div>
 		         </div>
 		         <div class="col-md-8 col-sm-8 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label text-center bold col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("STUDENT_LIST_REPORT");?> </label>
-		             </div>
-		             <div class="form-group">
-		             	<div id="data_table"> </div>
-		             	<?php $old_iden=""; foreach ($this->studentpass as $id => $rs){?>
-								<input type="hidden" name="old_student<?php echo $id?>" id="old_student<?php echo $id?>" value="<?php echo $rs['stu_id']?>"/>
-							<?php if($id==0){$old_iden.=$id;}else{$old_iden.=','.$id;}?>
-						<?php }?>	
-						<input type="hidden" name="old_iden" id="old_iden" value="<?php echo $old_iden;?>"/>
-		             </div>
+		    		<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST_REPORT");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="form-group">
+										<div class="custom-control custom-checkbox ">
+											<input type="checkbox" class="checkbox custom-control-input" value="0"  name="check_all" onclick=" CheckAll(0);;" id="check_all" />
+											<label class="custom-control-label" for="check_all">
+												<?php echo $tr->translate('CHECK_ALL');?>
+											</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<div id="data_table"> </div>
+										<?php $old_iden=""; foreach ($this->studentpass as $id => $rs){?>
+												<input type="hidden" name="old_student<?php echo $id?>" id="old_student<?php echo $id?>" value="<?php echo $rs['stu_id']?>"/>
+											<?php if($id==0){$old_iden.=$id;}else{$old_iden.=','.$id;}?>
+										<?php }?>	
+										<input type="hidden" name="old_iden" id="old_iden" value="<?php echo $old_iden;?>"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+		             
 		         </div>
 		     </div>
 		     <div class="card-box">
@@ -116,57 +152,13 @@
 	    	<div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-              		 <input type="submit" value="close" name="close" label="<?php echo $tr->translate("GO_EDIT");?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconClose" />
+              		 <input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove"  value="close" name="close" label="<?php echo $tr->translate("GO_EDIT");?>" dojoType="dijit.form.Button" />
             	 </div>
             </div>
 		</form>
 	</div>
 </div>
-<style>
-.fixed_header{
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
 
-.fixed_header tbody{
-  display:block;
-  width: 100%;
-  overflow: auto;
-  height: 300px;
-}
-
-.fixed_header thead tr {
-   display: block;
-}
-.fixed_header thead tr td{
-	text-align: center;
-}
-.fixed_header thead {
-  background: #02014a;
-  color:#fff;
-}
-
-.fixed_header th, .fixed_header td {
-  padding: 5px;
-  text-align: left;
-  width: 200px;
-}
-.fixed_header td.center {
-    text-align: center;
-}
-div#lblfromgroup div.info{
-	    background: #fdfbbd;
-    border: solid 1px #02014a;
-    white-space: normal;
-    display: block;
-    font-size: 14px;
-    border-radius: 5px;
-    padding: 10px !important;
-    color: #02014a;
-}
-</style>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -239,27 +231,36 @@ function getStudentFromGroup(){
 				},
 			handleAs:"json",
 			load: function(respone) {
-				tem='<table border="1" id="table"  class="fixed_header">'
-					+'<thead><tr ><td style="width: 20px;"><?php echo $tr->translate('NUM');?></td>'
-					+'<td ><?php echo $tr->translate('STUDENT_ID');?></td>'
-					+'<td><?php echo $tr->translate('STUDENT_NAMEKHMER');?></td>'
-					+'<td><?php echo $tr->translate('NAME_EN');?></td>'
-					+'<td ><?php echo $tr->translate('SEX');?></td>'
-					+'<td style="width: 20px;"><input style=" height: initial;"  type="checkBox" value="0"  name="check_all" onclick=" CheckAll(0);;" id="check_all"/> </td> '
-					+'</tr>'
-					+'</thead>'
-					+'<tbody>';
+				tem='<table id="table"  class="collape responsiveTable">'
+						+'<thead>'
+						+'<tr class="head-td" align="center" >'
+							+'<th scope="col" style="width: 20px;">&nbsp;</th>'
+							+'<th scope="col" style="width: 20px;"><?php echo $tr->translate('NUM');?></th>'
+							+'<th scope="col" ><?php echo $tr->translate('STUDENT_ID');?></th>'
+							+'<th scope="col" ><?php echo $tr->translate('STUDENT_NAMEKHMER');?></th>'
+							+'<th scope="col" ><?php echo $tr->translate('NAME_EN');?></th>'
+							+'<th scope="col" ><?php echo $tr->translate('SEX');?></th>'
+						+'</tr>'
+						+'</thead>'
+						+'<tbody>';
 				if(respone!=""){
 					num=0;
 					for(var i=0;i<respone.length;i++){
 						inx = i+1;
-							tem += '<tr >';
-						    tem += '<td style="width: 20px;" class="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
-							tem += '<td>'+respone[i].stu_code+'</td>';
-							tem += '<td>'+respone[i].stu_khname+'</td>';
-							tem += '<td>'+respone[i].stu_enname+' '+respone[i].last_name+'</td>';
-							tem += '<td class="center">'+respone[i].sex+'</td>';
-							tem += '<td class="center" style="width: 20px;"><input class="checkbox" style="height: initial;" type="checkBox" value="'+respone[i].stu_id+'"  name="selector[]" id="checkbox'+inx+'"/></td>';
+							tem += '<tr class="rowData" >';
+								tem += '<td data-label="<?php echo $tr->translate("CHECKING");?>" align="center" style="width: 20px;">
+									tem += '<div class="custom-control custom-checkbox ">';
+										tem += '<input type="checkbox" class="checkbox custom-control-input" id="checkbox'+inx+'" value="'+respone[i].stu_id+'"  name="selector[]" >';
+										tem += '<label class="custom-control-label" for="checkbox'+inx+'">';
+										tem += '</label>';
+									tem += '</div>';
+								
+								tem += '</td>';
+								tem += '<td data-label="<?php echo $tr->translate("NUM");?>" align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
+								tem += '<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+respone[i].stu_code+'</td>';
+								tem += '<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>">'+respone[i].stu_khname+'</td>';
+								tem += '<td data-label="<?php echo $tr->translate("NAME_EN");?>">'+respone[i].stu_enname+' '+respone[i].last_name+'</td>';
+								tem += '<td data-label="<?php echo $tr->translate("SEX");?>" align="center">'+respone[i].sex+'</td>';
 						    tem += '</tr>';
 						    if($("#identity").val()!="") {
 								var identity = $("#identity").val();
@@ -295,18 +296,36 @@ function CheckAll(index){
 	     });
 	}
 }
-var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
+//var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
+var url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
 function toStudentGroup(type){
 	togroup = dijit.byId('group').get('value');
 	dojo.xhrPost({
-		url:url_to_group,
+		url:url_group,
 		content:{
-			'to_group':togroup,
-			'type'	  :type,
+			'group_id':togroup,
+			'string':1
 			},
 		handleAs:"json",
 		load: function(data) {
-			dojo.byId('lblfromgroup').innerHTML='<div class="info"><span class="bold"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<br /><span class="bold">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<br /><span class="bold">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span class="bold"><?php echo $tr->translate("SESSION")?> :  </span>'+data.session;
+			string='';
+				string+='<div class="card-info bg-gradient-directional-warning">';
+					string+='<div class="card-content">';
+						string+='<div class="card-body">';
+							string+='<div class="media d-flex">';
+								string+='<div class="media-body text-white text-left align-self-bottom mt-3">';
+									string+='<span class="d-block mb-1 font-medium-1"></span>';
+									string+='<h3 class="text-white mb-10"><?php echo $tr->translate("GROUP_STUDENT_INFO");?></h3>';
+										string+=data;
+								string+='</div>';
+								string+='<div class="align-self-top">';
+									string+='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+								string+='</div>';
+							string+='</div>';
+						string+='</div>';
+					string+='</div>';
+				string+='</div>';
+			dojo.byId('gr-info').innerHTML=string;
 		},
 		error: function(err) {
 		}

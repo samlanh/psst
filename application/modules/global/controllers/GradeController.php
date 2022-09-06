@@ -93,7 +93,7 @@ class Global_GradeController extends Zend_Controller_Action {
     	if (empty($row)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     	}
-    	
+    	$this->view->rowData = $row; 
     	$frm = new Global_Form_FrmItemsDetail();
     	$frm->FrmAddItemsDetail($row,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);

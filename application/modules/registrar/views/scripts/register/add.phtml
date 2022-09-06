@@ -125,7 +125,8 @@ tr.head-td th{padding: 5px 2px;}
 	border-radius: 10px
 }
 .ItemPayment td{padding-top:20px;}
-.ItemPayment .bgBox{}
+label.control-td{font-size: 13px;display:block;margin-bottom:0;}
+label.control-td small{font-size: 70%;color:#fff;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -204,6 +205,17 @@ tr.head-td th{padding: 5px 2px;}
 										</select>
 				                   </div>
 				                </div>
+				                <div class="form-group">
+				                	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AUTO_TO_TEST");?>
+				                    </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"></a> 
+											<input type="checkbox" id="auto_test" name="auto_test" class="custom-switch-input"  > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
+									</div>
+								</div>
 				                <div class="form-group">
 				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" id="lblNameControl" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -431,16 +443,60 @@ tr.head-td th{padding: 5px 2px;}
 			        	 		<table class="responsiveTable ItemPayment" style="border-collapse: collapse; width:100%;">
 									<thead>
 										<tr id="head-title" class="head-td" align="right" style="width: 100%;">
-											<th><?php echo $tr->translate("N_O");?></th>
-											<th width="200px"><?php echo $tr->translate("SERVICES");?></th>
-											<th width="120px"><?php echo $tr->translate("PAYMENT_TERM");?></th>
-											<th><?php echo $tr->translate("PRICE");?><?php echo $tr->translate("AMOUNT");?></th>
-											<th width="120px"><?php echo $tr->translate("DISCOUNT");?></th>
-											<th width="120px"><?php echo $tr->translate("TOTAL_DISCOUNT");?>/<?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>
-											<!-- <th width="120px"><?php //echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th> -->
-											<th><?php echo $tr->translate("TOTAL_PAYMENT").' / '.$tr->translate("PAID");?></th>
-											<th><?php echo $tr->translate("PERIOD");?></th>
-											<th><?php echo $tr->translate("REMARK");?></th>
+											<th>
+												<label class="control-td">
+													ល.រ
+												</label>
+												<small>No.</small>
+											</th>
+											<th width="200px">
+												<label class="control-td">
+													ពណ៍នា
+												</label>
+												<small>Description</small>
+											</th>
+											<th width="120px">
+												<label class="control-td">
+													ឆ្នាំសិក្សា/បង់ជា
+												</label>
+												<small>Academic Year/Pay As</small>
+											</th>
+											<th>
+												<label class="control-td">
+													ចំនួន/តម្លៃ
+												</label>
+												<small>Qty/Unit Price</small>
+											</th>
+											<th width="120px">
+												<label class="control-td">
+													ការបញ្ចុះតម្លៃ
+												</label>
+												<small>Discount</small>
+											</th>
+											<th width="120px">
+												<label class="control-td">
+													បញ្ចុះតម្លៃសរុប/សេវាផ្សេងៗ
+												</label>
+												<small>Total Discount/ Other Fee</small>
+											</th>
+											<th>
+												<label class="control-td">
+													ប្រាក់ត្រូវបង់ / បានបង់
+												</label>
+												<small>Total Pay/Paid</small>
+											</th>
+											<th>
+												<label class="control-td">
+													សុពលភាព
+												</label>
+												<small>Valid Date</small>
+											</th>
+											<th>
+												<label class="control-td">
+													សម្គាល់
+												</label>
+												<small>Remark</small>
+											</th>
 										</tr>
 									</thead>
 									<tbody id="table_row">
@@ -1198,19 +1254,19 @@ function addRow(serviceId,dataLabel,dataRow) {
 			}
 		}
 		if(serviceId ==''){return false;}
-		dijit.byId("item").attr('value','');
+		//dijit.byId("item").reset();
 
 		col++;no++;
 		template='';
 		
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
-			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label><input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
+			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label>';
 
-			template+='<td ><div class="form-group"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
-			template+='<div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="academic_year_'+col+'" name="academic_year_'+col+'" >'+term_option+'</select></div></td>';
+			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
+			template+='<div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
 
-			template+='<td><div class="form-group"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" /></div>';
-			template+='<div class="form-group"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  />';
+			template+='<td><div class="form-group"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
+			template+='<div class="form-group"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
 			template+='<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  /></div></td>';	
 
 			template+='<td class="bgBox"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
@@ -1232,7 +1288,8 @@ function addRow(serviceId,dataLabel,dataRow) {
 			template+=strCol6+'<input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';
 			template+=strCol6+'<input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></label></td>';
 
-			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" /><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" />';
+			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" />';
+			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
 			classOddRow='listBox evenRow';
 			if(col%2==0){
 				classOddRow='listBox oddRow';
@@ -1247,28 +1304,46 @@ function addRow(serviceId,dataLabel,dataRow) {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		//getservicefee(col);
+		getservicefee(col);
 		getValidate(col);
 }
 
-var urlget = "<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>";
+
 function getExistingService(){
+	var urlget = "<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>";
 	studentId = dijit.byId('old_stu').get('value');
 	if(studentId==''){
 		dijit.byId('studentId').focus();return false;
+	}
+
+	student_type = dijit.byId('student_type').get('value');
+	isAutopayment = '';
+	if(student_type==1){//student
+		var urlget = "<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>";
+		
+	}else{//2 crm/3
+		if(student_type==2){//test
+			isAutopayment = 2;
+		}else if(student_type==3){
+			isAutopayment = 1;
+		}
+		var urlget = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getserviceitem')); ?>";
 	}
 	
 	dojo.xhrPost({
 		url:urlget,
 		content:{
 			'studentId':studentId,
+			'studentType':student_type,
 			'isCurrent':1,
 			'stopType':0,
+			'isAutopayment':isAutopayment
 		},
 		handleAs:"json",
 		load: function(data){
+			//alert(data.length);
 			for(i=0;i<data.length;i++){
-				serviceId = data[i].grade;
+				serviceId = data[i].itemDetailId;
 				dataLabel = data[i].itemDetaillabel;
 				addRow(serviceId,dataLabel,data[i]);
 			}
@@ -1280,18 +1355,11 @@ function getExistingService(){
 
 var urlget_removeoption = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'gettermbyservice')); ?>";
 function removeOption(){
-	academic_year = dijit.byId('study_year').get('value');
-	
-	if(academic_year==''){
-		alert("Select Year");
-		dijit.byId('study_year').focus();return false;
-	}
 	
 	serviceId = dijit.byId("item").get("value");
 	if(serviceId ==''){return false;}
 	
 	serviceLabel = dijit.byId("item").attr("displayedValue");
-
 	
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id==''){dijit.byId('branch_id').focus();return false;}
@@ -1300,7 +1368,7 @@ function removeOption(){
 		url:urlget_removeoption,
 		content:{
 			'branch_id':branch_id,
-			'year':academic_year,
+			'year':'',
 			'items_id':serviceId,
 		},
 		handleAs:"json",
@@ -1504,7 +1572,7 @@ function readMoneyInKhmer(netTotal){
 	if(netTotal==0){khmer_amount='';}
 	dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng);
 }
-var url_service_fee = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getservicefee')); ?>";
+var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');
@@ -1524,7 +1592,9 @@ function getservicefee(key){
 		}else{
 			dijit.byId("price_"+key).set('readOnly',true);
 		}
-		study_year = dijit.byId('study_year').get('value');
+
+		study_year = dijit.byId('academic_year_'+key).get('value');
+		
  		dojo.xhrPost({
  			url:url_service_fee,
  			content:{

@@ -6,64 +6,6 @@ $frm = $this->frm_general;
 
 $featureScanCallOut=FEATURE_SCAN_CALLOUT;
 ?>
-
-<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
-<style>
-div.cke_contents.cke_reset {
-    height: 200px !important;
-}
-img.image_view {
-    width: 100%;
-	height: 100px;
-}
-img#image_viewbg {
-    height: 50px;
-}
-.button_browse{
-	margin-top:0 !important;
-}
-.button_browse span {
-    padding: 0 5px;
-}
-tr.header {
-    background: #008;
-    color: #fff;
-}
-tr.header td {
-    padding: 5px;
-}
-.disableFeature{
-	display:none;
-}
-.eableFeature{
-	display:block;
-}
-.form-group.audioBlog {
-    margin: 2px 0px;
-    background: #e3e3e3;
-    color: #000;
-    border-radius: 3px;
-    padding: 0px 10px;
-    border: solid 1px #ccc;
-}
-
-tr.rowAudiofile {
-    background: #e3e3e3;
-    
-}
-
-audio.audioControlRow {
-    height: 35px;
-    padding: 5px 0;
-}
-input[type=file] {
-    width: 100%;
-}
-.audioOption audio {
-    height: 35px;
-    padding: 5px 0;
-}
-</style>
 <form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" >
 	<script type="dojo/method" event="onSubmit">				
 			if(this.validate()) {
@@ -265,6 +207,62 @@ input[type=file] {
 	  	 </div>
 	</div>
 </form>
+<style>
+div.cke_contents.cke_reset {
+    height: 200px !important;
+}
+img.image_view {
+    width: 100%;
+	height: 100px;
+}
+img#image_viewbg {
+    height: 50px;
+}
+.button_browse{
+	margin-top:0 !important;
+}
+.button_browse span {
+    padding: 0 5px;
+}
+tr.header {
+    background: #008;
+    color: #fff;
+}
+tr.header td {
+    padding: 5px;
+}
+.disableFeature{
+	display:none;
+}
+.eableFeature{
+	display:block;
+}
+.form-group.audioBlog {
+    margin: 2px 0px;
+    background: #e3e3e3;
+    color: #000;
+    border-radius: 3px;
+    padding: 0px 10px;
+    border: solid 1px #ccc;
+}
+
+tr.rowAudiofile {
+    background: #e3e3e3;
+    
+}
+
+audio.audioControlRow {
+    height: 35px;
+    padding: 5px 0;
+}
+input[type=file] {
+    width: 100%;
+}
+.audioOption audio {
+    height: 35px;
+    padding: 5px 0;
+}
+</style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
 dojo.require("dojo.data.ItemFileWriteStore");  

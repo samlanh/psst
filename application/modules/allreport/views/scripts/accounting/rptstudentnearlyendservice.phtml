@@ -60,7 +60,7 @@
        	</div>
 	</form>	
 	<div id="divPrint">
-			<table style="background:#fff;width:100%; margin: 0 auto;width: 100%;">
+			<table width="100%">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
@@ -119,6 +119,7 @@
 						background: #c1d0f3;
 						font-weight:600;
 					}
+					
 					table.tb-footer{
 						border-collapse:collapse;
 						border:1px solid #000; 
@@ -144,25 +145,14 @@
 					table.content-data tr td{
 						padding: 2px;
 					}
-					/*
-					table{ page-break-inside:auto;font-family:Times New Roman,'Khmer OS Battambang'; }
-					tr{ page-break-inside:avoid; page-break-after:auto }
-					.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-					#header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
-					}
-					.hover:hover{background: #ccc;}
-					#exportExcel th{text-align: center;}
-					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-					*/
+					
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel" >
 				
 						<table cellpadding="5"​ class="content-data" cellpadding="5"​ border="1" width="100%" >
 							<thead>
-								<tr style="font-weight:bold;font-size:12px; height: 25px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
+								<tr class="style" align="center"  >
 									<td scope="col">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
 									<td scope="col"><?php echo $tr->translate("STUDENT_ID"); ?></td>
@@ -182,7 +172,7 @@
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
 						?>
-							<tr  class="style hover" align="center" >
+							<tr  class="style hover" align="center" style="white-space: nowrap;">
 								<td data-label="<?php echo $tr->translate("N_O");?>"  ><?php echo $i;?></td>
 								<td data-label="<?php echo $tr->translate("BRANCH");?>"  >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" >&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>

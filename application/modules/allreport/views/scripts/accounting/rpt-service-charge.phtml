@@ -59,45 +59,102 @@
 				</td>
 			</tr>
 			<style>
-				table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-				tr{ page-break-inside:avoid; page-break-after:auto }
-				.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-				#header {
-				  display: table-header-group;
-				  page-break-inside:avoid; page-break-after:auto;
-				}
-				.hover:hover{background:#ccc;}
-				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				.style{
+									line-height: 20px;font-size: 11px !important;
+									font-family: 'Times New Roman','Khmer OS Battambang';
+								}
+								.hideblog{display: none;}
+								.hiddenblog{display: block !important;}
+								.style1:hover{ background: #ccc; }
+								table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+								table { page-break-inside:auto }
+								tr{ page-break-inside:avoid; page-break-after:auto; }
+								#header {
+								display: table-header-group;
+								page-break-inside:avoid; page-break-after:auto;
+								margin-top: 100px;
+								}
+								.hide{visibility: hidden;}
+								@media print {
+								div.divFooter {
+									position: fixed;
+									top: 0;
+									width: 100%;
+									height: 100px;
+									bottom:0px;
+									margin:0;
+								}
+									.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+									
+								}
+								.center{text-align: center !important;}
+								table.content-data{
+									border-collapse:collapse;
+									border:1px solid #000; 
+									font-size:8px;
+								}
+								table.content-data thead tr.style {
+								line-height: 26px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 25px; 
+									background: #c1d0f3;
+									font-weight:600;
+								}
+								table.content-data tr.style {
+								 white-space: nowrap;
+								
+								}
+								table.tb-footer{
+									border-collapse:collapse;
+									border:1px solid #000; 
+									font-size:11px;
+									font-family: 'Times New Roman','Khmer OS Battambang';
+								}
+								table.tb-footer tr{
+								line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+								}
+								table tr td{
+									padding:0 2px;
+								}
+								tr.voidclass {
+									background: #fff7f7;
+								}
+								td.centerText{
+									text-align: center;
+								}
+								.redBold {
+									font-weight: 600;
+									color: #f80000;
+								}
+				
 			</style>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table cellpadding="2"​ style=" font-family:'Khmer OS Battambang';margin:0 auto;width:100%;border: 1px solid #000; border-collapse: collapse;border: 1px solid #000;white-space: nowrap;"  border="1" >
+					<table cellpadding="2"​  class="content-data" width="100%" border="1" align="center"  >
 						<thead>
-							<tr style="background: #ccd9ff;" class="cheader" align="center" >
-								<td><?php echo $tr->translate('N_O')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
-								<td><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
-								<td><?php echo $tr->translate('SERVICE_CATE')?></td>
-								<td><?php echo $tr->translate('SERVICE_NAME')?></td>
-								<td><?php echo $tr->translate('MONTHLY')?></td>
-								<td><?php echo $tr->translate('TERM')?></td>
-								<td><?php echo $tr->translate('SEMESTER')?></td>
-								<td><?php echo $tr->translate('YEAR')?></td>
-								<td><?php echo $tr->translate('NOTE')?></td>
+							<tr class="style" align="center">
+								<td scope="col"><?php echo $tr->translate('N_O')?></td>
+								<td scope="col" ><?php echo $tr->translate('BRANCH')?></td>
+								<td scope="col"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
+								<td scope="col"><?php echo $tr->translate('SERVICE_CATE')?></td>
+								<td scope="col"><?php echo $tr->translate('SERVICE_NAME')?></td>
+								<td scope="col"><?php echo $tr->translate('MONTHLY')?></td>
+								<td scope="col"><?php echo $tr->translate('TERM')?></td>
+								<td scope="col"><?php echo $tr->translate('SEMESTER')?></td>
+								<td scope="col"><?php echo $tr->translate('YEAR')?></td>
+								<td scope="col"><?php echo $tr->translate('NOTE')?></td>
 							</tr>
 						</thead>
 					<?php $i=0;if(!empty($this->rs))foreach ($this->rs AS $row) { $i++;?>
-							<tr class="hover" style="font-size:12px;border: 1px solid #000;" align="center" >
-								<td style="border: 1px solid #000;"><?php echo $i;?></td>
-								<td style="border: 1px solid #000;"><?php echo @$row['branch_id'];?></td>
-								<td style="border: 1px solid #000;"><?php echo @$row['academic'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['degree'];?></td>	
-								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['class'];?></td>	
-								<td style="border: 1px solid #000;"><?php echo number_format(@$row['monthly'],2);?> $</td>
-								<td style="border: 1px solid #000;"><?php echo number_format(@$row['quarter'],2);?> $</td>
-								<td style="border: 1px solid #000;"><?php echo number_format(@$row['semester'],2);?> $</td>
-								<td style="border: 1px solid #000;"><?php echo number_format(@$row['year'],2);?> $</td>
-								<td style="border: 1px solid #000;"><?php echo @$row['remark'];?></td>
+							<tr class="hover style"  align="center" >
+								<td data-label="<?php echo $tr->translate("N_O");?>" ><?php echo $i;?></td>
+								<td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo @$row['branch_id'];?></td>
+								<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" ><?php echo @$row['academic'];?></td>
+								<td data-label="<?php echo $tr->translate("SERVICE_CATE");?>" align="left" >&nbsp;&nbsp;<?php echo @$row['degree'];?></td>	
+								<td data-label="<?php echo $tr->translate("SERVICE_NAME");?>" align="left" >&nbsp;&nbsp;<?php echo @$row['class'];?></td>	
+								<td data-label="<?php echo $tr->translate("MONTHLY");?>" ><?php echo number_format(@$row['monthly'],2);?> $</td>
+								<td data-label="<?php echo $tr->translate("TERM");?>" ><?php echo number_format(@$row['quarter'],2);?> $</td>
+								<td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo number_format(@$row['semester'],2);?> $</td>
+								<td data-label="<?php echo $tr->translate("YEAR");?>" ><?php echo number_format(@$row['year'],2);?> $</td>
+								<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo @$row['remark'];?></td>
 							</tr>
 					<?php }?>	
 					</table>	

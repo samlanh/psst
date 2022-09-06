@@ -15,54 +15,82 @@
     		</div>
     	</div>
 		<form  id='update_room' action="<?php echo $this->url(array('module'=>'global','controller'=>'room','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					branch_id=dijit.byId("branch_id").get('value');
+					if(branch_id=='' || branch_id==null){
+						dijit.byId("branch_id").focus();
+						return false;
+					}
+					loadingBlock();	
+					dijit.byId("save_new").attr("disabled",true);
+					return true;
+				}else {
+					return false;
+				}
+			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					
-					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php  echo $update_room->getElement('branch_id');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ROOM_NAME");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php  echo $update_room->getElement('classname');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FLOOR");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php  echo $update_room->getElement('floor');?>
-	                   </div>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MAX_STUDENT");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php  echo $update_room->getElement('max_student');?>
-	                   </div>
-	                </div>
-	                
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php  echo $update_room->getElement('status');?>
-	                   </div>
-	                </div>
-	                 <div class="clearfix"></div>
-				         <div class="card-box mt-20">
-			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-			               		<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-			               	</div>
-			             </div>
-		            </div>
-		         </div>	        
-			</form>
-		</div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-blackboard"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ROOM");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php  echo $update_room->getElement('branch_id');?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ROOM_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php  echo $update_room->getElement('classname');?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FLOOR");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php  echo $update_room->getElement('floor');?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MAX_STUDENT");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php  echo $update_room->getElement('max_student');?>
+									   </div>
+									</div>
+									<div class="form-group">
+										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
+											<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($this->row['is_active'])){ echo "checked";} ?> > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
+									</div>
+									
+									 <div class="clearfix"></div>
+									 <div class="card-box mt-20">
+										<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+											<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" name="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" />
+										</div>
+									 </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	        
+			 </div>	        
+		</form>
+	</div>
 </div>

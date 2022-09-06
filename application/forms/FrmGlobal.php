@@ -241,7 +241,7 @@ class Application_Form_FrmGlobal{
 					color:".$color."
 					}
 			</style>
-			<table width='100%'>
+			<table width='100%' class='tableTop'>
 				<tr>
 					<td width='20%' align='center'>
 						<img style='width:100%' src=".$logo."><br>

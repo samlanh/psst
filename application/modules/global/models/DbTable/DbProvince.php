@@ -27,12 +27,13 @@ class Global_Model_DbTable_DbProvince extends Zend_Db_Table_Abstract
 		return $row;
 	}
     public function updateProvince($_data,$id){
+		$status = empty($_data['status'])?0:1;
     	$_arr=array(
     			'province_en_name'	  => $_data['en_province'],
     			'province_kh_name'	  => $_data['kh_province'],
-    			'modify_date' => Zend_Date::now(),
-    			'status'   => $_data['status'],
-    			'user_id'	  => $this->getUserId()
+    			'modify_date' 		=> Zend_Date::now(),
+    			'status'   			=> $status,
+    			'user_id'	  	=> $this->getUserId()
     	);
     	$where=$this->getAdapter()->quoteInto("province_id=?", $id);
     	$this->update($_arr, $where);

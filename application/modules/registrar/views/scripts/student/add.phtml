@@ -425,7 +425,8 @@ table.collape tbody td {
 		dojo.xhrPost({
 			url: url_getacademic,
 			content:{
-				'branch_id':branch_id
+				'branch_id':branch_id,
+				'selectOption':1
 				},
 			handleAs:"json",
 			load: function(data){

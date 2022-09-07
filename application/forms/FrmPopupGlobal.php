@@ -97,29 +97,61 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		$frm = $frm->FrmAddDistrict();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$str='<div class="dijitHidden">
-				<div data-dojo-type="dijit.Dialog"  id="frm_district" >
-				<form id="form_district" >';
-		$str.='<table style="margin: 0 auto; width: 100%;" cellspacing="7">
-				<tr>
-				<td>District Name English</td>
-				<td>'.$frm->getElement('pop_district_name').'</td>
-				</tr>
-				<tr>
-					<td>Province Name English</td>
-					<td>'.$frm->getElement('pop_district_namekh').'</td>
-				</tr>
-				<tr>
-					<td>District Name Khmer</td>
-					<td>'.$frm->getElement('province_names').'</td>
-				</tr>
-						
-				<tr>
-					<td colspan="2" align="center">
-					<input type="button" value="Save" label="Save" dojoType="dijit.form.Button"
-					iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNewDistrict();"/>
-					</td>
-				</tr>
-			</table>';
+				<div style="width:500px;" data-dojo-type="dijit.Dialog" id="frm_district" data-dojo-props="title:'."'".$tr->translate("ADD_DISTRICT")."'".'" >
+					<form id="form_district" >';
+						$str.='
+						<div class="card-box">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-map-marker"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex ">'.$tr->translate("DISTRICT").'</p>
+												</div> 
+											</div>
+						';
+						$str.='
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("PROVINCE_NAME").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										'.$frm->getElement('province_names').'
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("DISTRICT_KH").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										'.$frm->getElement('pop_district_namekh').'
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("DISTRICT_EN").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										'.$frm->getElement('pop_district_name').'
+								   </div>
+								</div>
+						';
+						$str.='
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="card-box">
+				<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="Save" label="'.$tr->translate("SAVE").'" dojoType="dijit.form.Button" onclick="addNewDistrict();"/>
+				</div>
+			</div>	
+						';
+				
+		
 		$str.='</form></div>
 		</div>';
 		return $str;
@@ -127,28 +159,55 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 	public function frmPopupCommune(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str='<div class="dijitHidden">
-		<div data-dojo-type="dijit.Dialog"  id="frm_commune" >
-		<form id="form_commune" >';
-		$str.='<table style="margin: 0 auto; width: 100%;" cellspacing="7">
-		<tr>
-		<td>Commune Name EN</td>
-		<td>'.'<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_nameen" name="commune_nameen" value="" type="text">'.'</td>
-		</tr>
-		<tr>
-		<td>Commune KH</td>
-		<td>'.'<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_namekh" name="commune_namekh" value="" type="text">'.'</td>
-		</tr>
-		<tr>
-		<td></td>
-		<td>'.'<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="district_nameen" name="district_nameen" value="" type="hidden">'.'</td>
-		</tr>
-		<tr>
-		<td colspan="2" align="center">
-		<input type="button" value="Save" label="Save" dojoType="dijit.form.Button"
-		iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNewCommune();"/>
-		</td>
-		</tr>
-		</table>';
+				<div style="width:500px;" data-dojo-type="dijit.Dialog" id="frm_commune" data-dojo-props="title:'."'".$tr->translate("ADD_COMMUNE")."'".'">
+					<form id="form_commune" >';
+					$str.='
+						<div class="card-box">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-map-marker"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex ">'.$tr->translate("COMMUNE").'</p>
+												</div> 
+											</div>
+					';
+					$str.='
+								
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("COMMUNE_NAME_KH").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="district_nameen" name="district_nameen" value="" type="hidden">
+										<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_namekh" name="commune_namekh" value="" type="text">
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("COMMUNE_NAME").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_nameen" name="commune_nameen" value="" type="text">
+								   </div>
+								</div>
+						';
+					$str.='
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="card-box">
+				<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="Save" label="'.$tr->translate("SAVE").'" dojoType="dijit.form.Button" onclick="addNewCommune();"/>
+				</div>
+			</div>	
+			';
+		
 		$str.='</form></div>
 		</div>';
 		return $str;

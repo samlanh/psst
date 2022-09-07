@@ -75,6 +75,7 @@ class Global_DistrictController extends Zend_Controller_Action {
 		}
 		$id = $this->getRequest()->getParam("id");
 		$row = $db_district->getDistrictById($id);
+		$this->view->row = $row;
 		if(empty($row)){
 			$this->_redirect('global/district');
 		}

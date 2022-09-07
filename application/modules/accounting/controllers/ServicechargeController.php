@@ -212,21 +212,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		}
 		$this->view->rows =$rs_rows;
 	}	
-	public function addServiceAction(){
-		if($this->getRequest()->isPost()){
-			try{
-				$_data = $this->getRequest()->getPost();
-				$_model = new Accounting_Model_DbTable_DbService();
-				$rs = $_model->addServicePopup($_data);
-				print_r(Zend_Json::encode($rs));
-				exit();
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-	}
+	
 	public function getallfacAction(){
 		$db = new Application_Model_GlobalClass();
 		if($this->getRequest()->isPost()){

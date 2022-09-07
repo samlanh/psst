@@ -57,8 +57,6 @@ public function init()
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 		
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
 		$frm = new Global_Form_FrmSearchMajor();
 		$this->view->frm_search = $frm->frmSearchTeacher();
 		Application_Model_Decorator::removeAllDecorator($frm);
@@ -85,8 +83,7 @@ public function init()
 			);
 		}
 		$this->view->rs= $db->getTeachDocumentAlert($search);
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
+		
 		$frm = new Global_Form_FrmSearchMajor();
 		$this->view->frm_search = $frm->frmSearchTeacher();
 		Application_Model_Decorator::removeAllDecorator($frm);

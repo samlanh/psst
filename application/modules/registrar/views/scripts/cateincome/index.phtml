@@ -9,6 +9,13 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 </script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
+		<div class="col-sm-12 border-botom m-0">
+	    	<div class="col-sm-8 pd-0">
+    			<h4 class="m-b-0"><i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CATE_INCOME');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
 		<div class="card-box">
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'cateincome','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
@@ -19,7 +26,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			         	<?php echo $frm->getElement('status');?>
 			         </div>
 			          <div class="col-md-2 col-sm-2 col-xs-12">
-			          	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			          	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			         </div>
 			     </div>
 		    </form>      
@@ -27,7 +34,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		<div class="card-box">
 			 <?php //echo $this->list;?>
 			<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
-    			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
+    			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="responsiveTable display nowrap dataTable dtr-inline collapsed " cellspacing="0" width="100%" >
     				<thead>
     					<tr>
     						<th class="tdheader text-center"><?php echo $tr->translate("NUM");?></th>

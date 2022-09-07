@@ -29,21 +29,14 @@ class Application_Model_Decorator
 	}
 	public function getMenuLeft($arr_menu,$controller,$module=null){
 		
-// 		print_r($arr_menu);exit();
-		
 		$menu='';
 		$i=0;
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$arr_actin=$session_user->arr_actin;
-// 				print_r($arr_actin);exit();
 	
 		//if(is_array($arr_menu)){
 		foreach($arr_menu as $param=>$url){
 			
-// 			echo $param.'<br />';
-// 			echo 'url='.$url.'<br />';
-			
-			//$access = array_search($module.'/'.$param,$arr_actin);
 			//if($access!=''){
 			if($param==$controller){
 				$uri=$this->baseUrl().'/'.$module.'/'.$param;

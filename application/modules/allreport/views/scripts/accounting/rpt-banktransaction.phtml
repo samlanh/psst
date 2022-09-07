@@ -54,6 +54,72 @@ table.tb-footer tr.style-head {
 	</form>
 <div id="divPrint">
 		<style>
+
+				.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
+					}
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 2px;
+					}
+			/*
 			a{text-decoration: none;color: 000;}
 			table {page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto; }
@@ -84,6 +150,7 @@ table.tb-footer tr.style-head {
 				font-size:12px; 
 				height: 23px;
 			}
+			*/
 		</style>
 		<table width="100%">
 			<tr>
@@ -107,9 +174,9 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table class="content-data" align="center">
+					<table class="content-data" align="center" width="100%" border="1">
 						<thead>
-							<tr class="style-head" align="center">
+							<tr class="style" align="center">
 								<td scope="col" ><?php echo $tr->translate("N_O");?></td>
 								<td scope="col" > <?php echo $tr->translate("STUDENT_ID");?></td>
 								<td scope="col" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
@@ -130,7 +197,7 @@ table.tb-footer tr.style-head {
 							foreach($this->rsbank as $key=>$rs){ $key=$key+1; 
 								$total = $total +$rs['amount'];
 							?>
-						<tr class="style-rowdata hover" style="border-bottom: 1px solid #000;" align="center" >
+						<tr class="style hover" style="border-bottom: 1px solid #000;" align="center" >
 							<td data-label="<?php echo $tr->translate("N_O");?>" ><?php echo $key; ?></td>
 							<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stu_code']; ?></td>
 							<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" ><?php echo $rs['stu_khname']; ?></td>

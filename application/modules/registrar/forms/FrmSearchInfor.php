@@ -485,7 +485,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
-		$db = new Accounting_Model_DbTable_DbService();
+		
 		$opt = array(''=>$this->tr->translate("PLEASE_SELECT"),
 				'1'=>$this->tr->translate("TUITION_FEE"),
 				'2'=>$this->tr->translate("SERVICE"),

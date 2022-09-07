@@ -386,7 +386,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
     }
-    function rptSubjectScoredetailAction(){//for kentridge
+    /*function rptSubjectScoredetailAction(){//for kentridge
     	
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
@@ -412,7 +412,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->scoreByStudent = $db->getStundetScoreDetail($stu_id,$group_id);
     	$this->view->studentinfo = $db->getStundetInfo($stu_id,$group_id);
     	
-    }
+    }*/
     
     function rptMonthlyScoreStudentAction(){
     	

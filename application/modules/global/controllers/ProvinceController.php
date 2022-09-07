@@ -71,6 +71,7 @@ class Global_ProvinceController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$db=new Global_Model_DbTable_DbProvince();
 		$row=$db->getProvinceById($id);
+		
 		if($this->getRequest()->isPost())
 		{
 			$data = $this->getRequest()->getPost();
@@ -78,6 +79,10 @@ class Global_ProvinceController extends Zend_Controller_Action {
 			$db->updateProvince($data,$id);
 			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/province/index");
 		}
+		if(empty($row)){
+			$this->_redirect('global/province');
+		}
+		$this->view->row=$row;
 		$frm= new Global_Form_FrmProvince();
 		$update=$frm->FrmProvince($row);
 		$this->view->frm_province=$update;

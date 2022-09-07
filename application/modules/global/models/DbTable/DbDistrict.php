@@ -5,8 +5,8 @@ class Global_Model_DbTable_DbDistrict extends Zend_Db_Table_Abstract
 
     protected $_name = 'ln_district';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authinstall');
-    	return $session_user->user_id;
+    	$dbg = new Application_Model_DbTable_DbGlobal();
+    	return $dbg->getUserId();
     }
     
 	public function addDistrict($_data){
@@ -20,7 +20,8 @@ class Global_Model_DbTable_DbDistrict extends Zend_Db_Table_Abstract
 				'user_id'	  => $this->getUserId()
 		);
 		if(!empty($_data['id'])){
-			$_arr['status']=$_data['status'];
+			$status = empty($_data['status'])?0:1;
+			$_arr['status']=$status;
 			$where = 'dis_id = '.$_data['id'];
 			return  $this->update($_arr, $where);
 		}else{

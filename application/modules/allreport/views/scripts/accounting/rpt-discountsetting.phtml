@@ -39,10 +39,103 @@
 	</form>
 <style>
 	#footer{display: none;}
+	
+	.hideblog{display: block !important;;border: 1px solid #fff; border-bottom: 1px solid #000;}
+	.hiddenblog{display: block !important;}
+			
 </style>	
 	<div id="divPrint">
+		<style type="text/css">
+
+			.style{
+				line-height: 20px;font-size: 11px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+			.hideblog{display: none;}
+			.hiddenblog{display: block !important;}
+			.style1:hover{ background: #ccc; }
+			table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+			table { page-break-inside:auto }
+			tr{ page-break-inside:avoid; page-break-after:auto; }
+			#header {
+			display: table-header-group;
+			page-break-inside:avoid; page-break-after:auto;
+			margin-top: 100px;
+			}
+			.hide{visibility: hidden;}
+			@media print {
+			div.divFooter {
+				position: fixed;
+				top: 0;
+				width: 100%;
+				height: 100px;
+				bottom:0px;
+				margin:0;
+			}
+				.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+				
+			}
+			.center{text-align: center !important;}
+			table.content-data{
+				border-collapse:collapse;
+				border:1px solid #000; 
+				font-size:8px;
+			}
+			table.content-data thead tr.style {
+			line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #c1d0f3;
+				font-weight:600;
+			}
+			  tr.style {
+			 white-space: nowrap;
+			}
+		
+			table.tb-footer{
+				border-collapse:collapse;
+				border:1px solid #000; 
+				font-size:11px;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+			table.tb-footer tr{
+			line-height: 14px; font-size:11px; padding:2px 0px; height: 20px;
+			}
+			table tr td{
+				padding:0 2px;
+			}
+			tr.voidclass {
+				background: #fff7f7;
+			}
+			td.centerText{
+				text-align: center;
+			}
+			.redBold {
+				font-weight: 600;
+			}
+/*
+			.styleth{
+				font-size:12px; 
+				height: 20px;
+				background-color: #ccd9ff;
+				line-height: 30px;
+				font-weight: bold;
+
+			}
+			.styletr{
+				font-size:12px;
+				height: 20px;
+
+			}
+			
+
+			th,td{ padding:0 1px;}
+			table{ border-collapse:collapse; margin:0 auto;
+			border-color:#000; }
+			.padd tr td{ text-align:left}
+			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			*/
+			</style>
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; font-family:'Khmer OS Battambang';">
+			<table width="100%">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
@@ -64,46 +157,40 @@
 				</tr>
 				<tr> 
 					<td colspan="3" id="exportExcel" >
-						<style type="text/css">
-							th,td{ padding:0 1px;}
-							table{ border-collapse:collapse; margin:0 auto;
-							border-color:#000; }
-							.padd tr td{ text-align:left}
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-						</style>
-						<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';">
+						
+						<table class="content-data" width="100%" border="1" align="center" >
 							  <thead>
-								  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
-								    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('DISCOUNT_OPTION');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('COURSE_SERVICE_PRODUCT');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('DIS_MAX');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('START_DATE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('END_DATE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('BY_USER');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								  <tr class="style" align="center">
+								    <td scope="col">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+								    <td scope="col">&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_OPTION');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('COURSE_SERVICE_PRODUCT');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DIS_MAX');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('START_DATE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('END_DATE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('BY_USER');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 								  </tr>
 							  </thead>
 							 <?php 
 							 	if(!empty($this->row)){foreach($this->row as $key=>$rs){
 							 ?>
-							  <tr class="hover" style="font-size:12px; height: 20px;"​ align="left">
-								    <td style="text-align: center;"><?php echo $key+1;?></td>
-								    <td><?php echo $rs['branch']; ?></td>
-								    <td><?php echo $rs['discountOption']; ?></td>
-								    <td><?php echo $rs['studentName']; ?></td>
-								    <td><?php echo $rs['itemType']; ?></td>
-								    <td><?php echo $rs['itemDetail']; ?></td>
-								    <td><?php echo $rs['disc_name']; ?></td>
-								    <td><?php echo $rs['DisValueType']; ?></td>
-								    <td><?php echo $rs['start_date']; ?></td>
-								    <td><?php echo $rs['end_date']; ?></td>
-								    <td><?php echo $rs['user_name']; ?></td>
-								    <td><?php echo $rs['status']; ?></td>
+							  <tr class="hover style" align="left" >
+								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
+								    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DISCOUNT_OPTION");?>" > <?php echo $rs['discountOption']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" ><?php echo $rs['studentName']; ?></td>
+								    <td data-label="<?php echo $tr->translate("TYPE");?>" ><?php echo $rs['itemType']; ?></td>
+								    <td data-label="<?php echo $tr->translate("COURSE_SERVICE_PRODUCT");?>" ><?php echo $rs['itemDetail']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DISCOUNT_TYPE");?>" ><?php echo $rs['disc_name']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DIS_MAX");?>" ><?php echo $rs['DisValueType']; ?></td>
+								    <td data-label="<?php echo $tr->translate("START_DATE");?>" ><?php echo $rs['start_date']; ?></td>
+								    <td data-label="<?php echo $tr->translate("END_DATE");?>" ><?php echo $rs['end_date']; ?></td>
+								    <td data-label="<?php echo $tr->translate("BY_USER");?>" ><?php echo $rs['user_name']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STATUS");?>" ><?php echo $rs['status']; ?></td>
 							  </tr>
 							  <?php }} ?>
 						</table>

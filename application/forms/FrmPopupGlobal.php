@@ -16,110 +16,68 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		$this->text = 'dijit.form.TextBox';
 		$this->tarea = 'dijit.form.SimpleTextarea';
 	}
-	public function addProgramName($data=null,$type=null){
-		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		if(!empty($type)){
-			$rows = $_db->getServiceType(2);
-		}else{
-			$rows = $_db->getServiceType(1);
-		}
-		
-		//array_unshift($rows,array('id' => '-1',"title"=>$this->tr->translate("ADD")) );
-		$opt = "";
-		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['title'];
-		$_service_name = new Zend_Dojo_Form_Element_FilteringSelect("type");
-		$_service_name->setMultiOptions($opt);
-		$_service_name->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',));
-		
-		$_desc = new Zend_Dojo_Form_Element_Textarea('desc');
-		$_desc->setAttribs(array('dojoType'=>$this->tarea,'class'=>'fullside','style'=>'width:96%;min-height:50px;'	));
-		
-		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_program');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		$_status_opt = array(
-				1=>$this->tr->translate("ACTIVE"),
-				2=>$this->tr->translate("DACTIVE"));
-		$_status->setMultiOptions($_status_opt);
-		if (!empty($data)){
-			$_title->setValue($data['title']);
-			$_desc->setValue($data['desc']);
-		}
-		$this->addElements(array($_service_name,$_title,$_desc,$_status));
-		return $this;
-	}
-	public function addProServiceCategory($data=null){
-		$_title = new Zend_Dojo_Form_Element_ValidationTextBox('servicetype_title');
-		$_title->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
-		
-		$_tem_desc = new Zend_Dojo_Form_Element_TextBox('item_desc');
-		$_tem_desc->setAttribs(array('dojoType'=>$this->text,'required'=>'true','class'=>'fullside',));
 	
-		$_status = new Zend_Dojo_Form_Element_FilteringSelect('sertype_status');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		$_status_opt = array(
-				1=>$this->tr->translate("ACTIVE"),
-				0=>$this->tr->translate("DACTIVE"));
-		$_status->setMultiOptions($_status_opt);
-		
-		$_type = new Zend_Dojo_Form_Element_FilteringSelect('ser_type');
-		$_status_type = array(
-				1=>$this->tr->translate("SERVICE"),
-				2=>$this->tr->translate("PROGRAM"));
-		$_type->setMultiOptions($_status_type);
-		
-		$_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		
-		$_id = new Zend_Form_Element_Hidden('id');
-		$_id->setAttribs(array('dojoType'=>$this->text));
-		
-		if($data !=null){
-			$_id->setValue($data['id']);
-			$_title->setValue($data['title']);
-			$_tem_desc->setValue($data['item_desc']);
-			$_status->setValue($data['status']);
-			$_type->setValue($data['type']);
-			
-		}
-		$this->addElements(array($_title,$_tem_desc,$_status,$_type,$_id));
-	
-		return $this;
-	
-	}
 	public function frmPopupDistrict(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$frm = new Global_Form_FrmDistrict();
 		$frm = $frm->FrmAddDistrict();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$str='<div class="dijitHidden">
-				<div data-dojo-type="dijit.Dialog"  id="frm_district" >
-				<form id="form_district" >';
-		$str.='<table style="margin: 0 auto; width: 100%;" cellspacing="7">
-				<tr>
-				<td>District Name English</td>
-				<td>'.$frm->getElement('pop_district_name').'</td>
-				</tr>
-				<tr>
-					<td>Province Name English</td>
-					<td>'.$frm->getElement('pop_district_namekh').'</td>
-				</tr>
-				<tr>
-					<td>District Name Khmer</td>
-					<td>'.$frm->getElement('province_names').'</td>
-				</tr>
-						
-				<tr>
-					<td colspan="2" align="center">
-					<input type="button" value="Save" label="Save" dojoType="dijit.form.Button"
-					iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNewDistrict();"/>
-					</td>
-				</tr>
-			</table>';
+				<div style="width:500px;" data-dojo-type="dijit.Dialog" id="frm_district" data-dojo-props="title:'."'".$tr->translate("ADD_DISTRICT")."'".'" >
+					<form id="form_district" >';
+						$str.='
+						<div class="card-box">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-map-marker"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex ">'.$tr->translate("DISTRICT").'</p>
+												</div> 
+											</div>
+						';
+						$str.='
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("PROVINCE_NAME").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										'.$frm->getElement('province_names').'
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("DISTRICT_KH").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										'.$frm->getElement('pop_district_namekh').'
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("DISTRICT_EN").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										'.$frm->getElement('pop_district_name').'
+								   </div>
+								</div>
+						';
+						$str.='
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="card-box">
+				<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="Save" label="'.$tr->translate("SAVE").'" dojoType="dijit.form.Button" onclick="addNewDistrict();"/>
+				</div>
+			</div>	
+						';
+				
+		
 		$str.='</form></div>
 		</div>';
 		return $str;
@@ -127,28 +85,55 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 	public function frmPopupCommune(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str='<div class="dijitHidden">
-		<div data-dojo-type="dijit.Dialog"  id="frm_commune" >
-		<form id="form_commune" >';
-		$str.='<table style="margin: 0 auto; width: 100%;" cellspacing="7">
-		<tr>
-		<td>Commune Name EN</td>
-		<td>'.'<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_nameen" name="commune_nameen" value="" type="text">'.'</td>
-		</tr>
-		<tr>
-		<td>Commune KH</td>
-		<td>'.'<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_namekh" name="commune_namekh" value="" type="text">'.'</td>
-		</tr>
-		<tr>
-		<td></td>
-		<td>'.'<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="district_nameen" name="district_nameen" value="" type="hidden">'.'</td>
-		</tr>
-		<tr>
-		<td colspan="2" align="center">
-		<input type="button" value="Save" label="Save" dojoType="dijit.form.Button"
-		iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNewCommune();"/>
-		</td>
-		</tr>
-		</table>';
+				<div style="width:500px;" data-dojo-type="dijit.Dialog" id="frm_commune" data-dojo-props="title:'."'".$tr->translate("ADD_COMMUNE")."'".'">
+					<form id="form_commune" >';
+					$str.='
+						<div class="card-box">
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-map-marker"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex ">'.$tr->translate("COMMUNE").'</p>
+												</div> 
+											</div>
+					';
+					$str.='
+								
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("COMMUNE_NAME_KH").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="district_nameen" name="district_nameen" value="" type="hidden">
+										<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_namekh" name="commune_namekh" value="" type="text">
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label col-md-5 col-sm-5 col-xs-12" >'.$tr->translate("COMMUNE_NAME").' :
+								   </label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="commune_nameen" name="commune_nameen" value="" type="text">
+								   </div>
+								</div>
+						';
+					$str.='
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="card-box">
+				<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="Save" label="'.$tr->translate("SAVE").'" dojoType="dijit.form.Button" onclick="addNewCommune();"/>
+				</div>
+			</div>	
+			';
+		
 		$str.='</form></div>
 		</div>';
 		return $str;

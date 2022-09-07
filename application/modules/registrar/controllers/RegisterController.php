@@ -175,7 +175,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->all_dept = $_db->getAllDegreeName();
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->teacher = $db->getTeacherEdit($id);
+    	$this->view->teacher = $db->getPaymentEdit($id);
     	 
     	$rspayment =  $db->getCustomerPaymentByID($id);
     	$this->view->payment =$rspayment;
@@ -285,16 +285,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //     		exit();
 //     	}
 //     }
-	function getTeacherAction(){
-		if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$teacher = $db->getAllTeacherByGrade($data['grade'],$data['session']);
-    		array_unshift($teacher, array ( 'id' => -1, 'name' => $this->tr->translate('SELECT_TEACHER')) );
-    		print_r(Zend_Json::encode($teacher));
-    		exit();
-    	}
-	}
+	
 	function getReceiptNoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();

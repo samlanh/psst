@@ -1234,7 +1234,7 @@ var title = 0;
 tmp = '';
 temp='';
 term_option = '<?php echo $this->term_option;?>';
-function addRow(serviceId,dataLabel,dataRow) {
+function addRow(serviceId,dataLabel,dataRow=null) {
 		col++;
 		strCol6='<label class="control-label col-md-6 col-sm-6 col-xs-12">';
 		study_year = dijit.byId('study_year').get('value');
@@ -1304,8 +1304,20 @@ function addRow(serviceId,dataLabel,dataRow) {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		getservicefee(col);
-		getValidate(col);
+		if(dataRow!=null){
+			balance = dataRow.balance;
+			if(balance>0){
+				dijit.byId('price_'+col).attr('value',balance);
+				dijit.byId('total_amount'+col).attr('value',balance);
+				dijit.byId('paid_amount'+col).attr('value',balance);
+				
+				dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
+				
+				dojo.style('paid_amount'+col, "color", "red");
+			}
+		}
+		//getservicefee(col);
+		//getValidate(col);
 }
 
 

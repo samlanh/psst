@@ -1085,16 +1085,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
 	
-	function getAllTeacherByGrade($grade_id,$session){
-    	$db = $this->getAdapter();
-    	$_db= new Application_Model_DbTable_DbGlobal();
-    	$branch_id=$_db->getAccessPermission();
-    	$sql = " SELECT t.id,CONCAT(t.teacher_name_en) as name FROM `rms_teacher` AS t,`rms_teacher_subject` AS ts
-              WHERE ts.subject_id = $grade_id and ts.session=$session $branch_id";
-		return $db->fetchAll($sql);
-    }
 	
-    function getTeacherEdit($payment_id){
+    function getPaymentEdit($payment_id){
     	$db = $this->getAdapter();
     	$sql = " select student_id from rms_student_payment where id = $payment_id ";
     	$stu_id = $db->fetchOne($sql);

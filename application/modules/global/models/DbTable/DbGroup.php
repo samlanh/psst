@@ -152,61 +152,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	}
 	
 	
-	public function getallSubjectTeacherById($teacher_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT * FROM `rms_teacher_subject` WHERE teacher_id= ".$db->quote($teacher_id);
-		return $db->fetchAll($sql);;
-	}
-	public function updateTeacher($_data){
-		$db = $this->getAdapter();
-		$db->beginTransaction();
-		try{
-		$_arr=array(
-					'teacher_code' => $_data['code'],
-					'teacher_name_en' => $_data['en_name'],
-					'teacher_name_kh' => $_data['kh_name'],
-					'sex' => $_data['sex'],
-					'phone' => $_data['phone'],
-					'dob' => $_data['dob'],
-					'pob' => $_data['pob'],
-					'address' => $_data['address'],
-					'email' => $_data['email'],
-					'degree' => $_data['degree'],
-					//'photo' => $_data['kh_subject'],
-					'note'=>$_data['note'],
-					'date' => Zend_Date::now(),
-					'status'   => $_data['status'],
-					'user_id'	  => $this->getUserId()
-		);
-		$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
-		$this->update($_arr, $where);
-		
-		$this->_name='rms_teacher_subject';
-		$ids = explode(',', $_data['record_row']);
-		foreach ($ids as $i){
-			$arr = array(
-					'subject_id'=>$_data['subject_id'.$i],
-					'teacher_id'=>$_data["id"],
-					'status'   => $_data['status'.$i],
-					'date' => Zend_Date::now(),
-					'user_id'	  => $this->getUserId()
-		
-			);
-			if(!empty($_data['subexist_id'.$i])){
-				$where=$this->getAdapter()->quoteInto("id=?", $_data['subexist_id'.$i]);
-				$this->update($arr, $where);
-			}else{
-				$this->insert($arr);
-			}
-		}
-		return $db->commit();
-		}catch (Exception $e){
-			$db->rollBack();
-			echo $e->getMessage();exit();
-		}
-	}
-	
-	
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		

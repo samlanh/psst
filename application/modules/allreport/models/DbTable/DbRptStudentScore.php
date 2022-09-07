@@ -1095,7 +1095,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	return $db->fetchAll($sql.$where.$order);
    }
    
-   public function getStundetScoreDetail($id,$group_id){ // fro student score by teacher input
+   /*public function getStundetScoreDetail($id,$group_id){ // fro student score by teacher input
    	$db = $this->getAdapter();
    	$sql="SELECT tsd.*,
 		ts.`academic_id`,
@@ -1126,7 +1126,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 //    		$limit = " ";
 //    	}
    	return $db->fetchAll($sql.$where.$order);
-   }
+   }*/
    function getSubjectScorebystudentandgroup($group_id,$student_id){//certificate of foundation year
    	$db = $this->getAdapter();
    	$sql ="SELECT

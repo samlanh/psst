@@ -43,69 +43,88 @@ span#message {
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12">
-			                <input type="checkBox" checked="checked" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" />
-			                <?php echo $tr->translate("IS_PARENT");?> 
-			                <input type="hidden" id="par" name="par" />
-		                </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12"></div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
-								<option value="0" <?php if($this->row['parent']==0  ) echo 'selected="selected"';?>></option>
-								<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-											<option value="<?php echo $row['id']?>" <?php echo 'selected="selected"';?>><?php echo $row['subject_titleen']?></option>
-								<?php }?>
-							</select>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_KH");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php  echo $subject_exam->getElement('subject_kh');?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_EN");?> <span class="required">*</span></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php  echo $subject_exam->getElement('subject_en');?>
-		                	<?php  echo $subject_exam->getElement('id');?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $subject_exam->getElement('score_percent');?>
-		                </div>
-		             </div>
-					 <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $subject_exam->getElement('type_subject');?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHOOL_OPTION");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $subject_exam->getElement('schoolOption');?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		              		 <?php  echo $subject_exam->getElement('status');?>
-		                </div>
-		             </div>
-		             <div class="clearfix"></div>
-				     <div class="card-box mt-20">
-			             <div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-			               	<input type="submit" value="<?php echo $tr->translate("GO_EDIT");?>" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
-			             </div>
-			         </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-folder-open"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SUBJECT");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="form-group">
+										<div class="custom-control custom-checkbox ">
+											<input type="checkbox" class="checkbox custom-control-input" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> value="1" id="is_parent" onChange="getValue();" name="is_parent" >
+											<label class="custom-control-label" for="is_parent">
+												<?php echo $tr->translate('IS_PARENT');?>
+											</label>
+											<input type="hidden" id="par" name="par" />
+										</div>
+									 </div>
+									
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+												<option value="0" <?php if($this->row['parent']==0  ) echo 'selected="selected"';?>></option>
+												<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
+															<option value="<?php echo $row['id']?>" <?php echo 'selected="selected"';?>><?php echo $row['subject_titleen']?></option>
+												<?php }?>
+											</select>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_KH");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php  echo $subject_exam->getElement('subject_kh');?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_EN");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php  echo $subject_exam->getElement('subject_en');?>
+											<?php  echo $subject_exam->getElement('id');?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $subject_exam->getElement('score_percent');?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $subject_exam->getElement('type_subject');?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHOOL_OPTION");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $subject_exam->getElement('schoolOption');?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
+											<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($this->rsRow['status'])){ echo "checked";} ?> > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
+									</div>
+									 <div class="clearfix"></div>
+									 <div class="card-box mt-20">
+										 <div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+											<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="<?php echo $tr->translate("GO_EDIT");?>" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"  />
+										 </div>
+									 </div>
+								 </div>
+							 </div>
+						 </div>
+					 </div>
 		         </div>
 			</div>
 		</form>

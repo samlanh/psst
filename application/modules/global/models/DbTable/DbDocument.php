@@ -47,12 +47,13 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	public function updateDocument($_data){
+		$status = empty($_data['status'])?0:1;
 		$_arr=array(
-				'name' => $_data['name'],
-				'create_date' => date("Y-m-d"),
-				'status'   => $_data['status'],
-				'types'		  => $_data['types'],
-				'user_id'	  => $this->getUserId()
+				'name' 			=> $_data['name'],
+				'create_date' 	=> date("Y-m-d"),
+				'status'		=> $status,
+				'types'		  	=> $_data['types'],
+				'user_id'	  	=> $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
 		$this->update($_arr, $where);

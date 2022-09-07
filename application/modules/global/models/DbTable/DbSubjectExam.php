@@ -51,20 +51,21 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
 	}
-	public function updateSubjectExam($_data,$id){
+	public function updateSubjectExam($_data){
+		$status = empty($_data['status'])?0:1;
 		$_arr=array(
 				'parent' 			=> $_data['parent'],
 				'subject_titlekh' 	=> $_data['subject_kh'],
 				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
-				'status'   			=> $_data['status'],
+				'status'   			=> $status,
 				'is_parent'   		=> $_data['par'],
 				'schoolOption'   	=> $_data['schoolOption'],
 				'shortcut'			=> $_data['score_percent'],
 				'type_subject'		=> $_data['type_subject'],
 				'user_id'	  		=> $this->getUserId()
 		);
-		$id = empty($_data['id'])?$id:$_data['id'];
+		$id = empty($_data['id'])?0:$_data['id'];
 		$where=$this->getAdapter()->quoteInto("id=?", $id);
 		$this->update($_arr, $where);
    }

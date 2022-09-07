@@ -15,19 +15,24 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 	
 	function getAllCateIncome($search=null,$parent = 0, $spacing = '', $cate_tree_array = ''){
 		$db = $this->getAdapter();
-		$sql="select
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$sql="SELECT
 					id,
 					category_name as name,
 					parent,
 					account_code,
 					create_date,
-					(select name_en from rms_view where type=1 and key_code = rms_cate_income_expense.status) as status,
+					status,
 					(select first_name from rms_users where rms_users.id = user_id) as user
-				from
+				
+			";
+		$sql.=$dbgb->caseStatusShowImage("status");
+		$sql.="
+			FROM
 					rms_cate_income_expense
 				where
 					parent = $parent
-			";
+		";
 		$order = " ORDER BY id desc ";
 		$where = '';
 	
@@ -77,11 +82,12 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
  	 
 	 function updateCateIncome($data){
 	 	try{
+			$status = empty($data['status'])?0:1;
 			$arr = array(
 					'category_name'	=>$data['title'],
 					'parent'		=>$data['parent'],
 					'account_code'	=>$data['acc_code'],
-					'status'		=>$data['status'],
+					'status'		=>$status,
 					'user_id'		=>$this->getUserId(),
 				);
 			$where=" id = ".$data['id'];

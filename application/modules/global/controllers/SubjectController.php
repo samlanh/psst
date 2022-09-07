@@ -84,9 +84,8 @@ class Global_SubjectController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				//$data["id"]=$id;
 				$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
-				$_dbmodel->updateSubjectExam($_data,$id);
+				$_dbmodel->updateSubjectExam($_data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/subject/index");
 			}catch(Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
@@ -96,6 +95,8 @@ class Global_SubjectController extends Zend_Controller_Action {
 		}
 		$_dbmoddel = new Global_Model_DbTable_DbSubjectExam();
 		$row = $_dbmoddel->getSubexamById($id);
+		$this->view->rsRow = $row;
+		
 		$subject_exam = new Global_Form_FrmAddSubjectExam();
 		$frm_subject_exam = $subject_exam->FrmAddSubjectExam($row);
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);

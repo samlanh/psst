@@ -47,11 +47,12 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	public function updateOccupation($_data){
+		$status = empty($_data['status'])?0:1;
 		$_arr=array(
-			'occu_name'	  => $_data['occu_name'],
-			'create_date' => Zend_Date::now(),
-			'status'   => $_data['status'],
-			'user_id'	  => $this->getUserId()
+			'occu_name'	  	=> $_data['occu_name'],
+			'create_date' 	=> Zend_Date::now(),
+			'status'   		=> $status,
+			'user_id'	  	=> $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("occupation_id=?", $_data["id"]);
 		$this->update($_arr, $where);

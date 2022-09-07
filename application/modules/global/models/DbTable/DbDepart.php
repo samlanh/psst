@@ -38,11 +38,12 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 	}
 	public function updateDepartment($_data){
 		$db = $this->getAdapter();
+		$status = empty($_data['status'])?0:1;
 		$_arr=array(
 				'depart_namekh'	=> $_data['depart_namekh'],
   				'depart_nameen'	=> $_data['depart_nameen'],
 				'create_date'   => Zend_Date::now(),
-  				'status'	    => $_data['status'],
+  				'status'	    => $status,
 				'user_id'	    => $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("depart_id=?", $_data["id"]);

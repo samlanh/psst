@@ -5,8 +5,8 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 
     protected $_name = 'ln_commune';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('authinstall');
-    	return $session_user->user_id;
+    	$dbg = new Application_Model_DbTable_DbGlobal();
+    	return $dbg->getUserId();
     	 
     }
 	public function addCommune($_data,$id=null){
@@ -15,14 +15,16 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 			'district_id' => $_data['district_name'],
 			'commune_namekh'=> $_data['commune_namekh'],
 			'commune_name'=> $_data['commune_name'],
-			'status'	  => 1,
 			'modify_date' => Zend_Date::now(),
 			'user_id'	  => $this->getUserId()
 		);
 		if(!empty($id)){
+			$status = empty($_data['status'])?0:1;
+			$_arr['status']=$status;
 			$where = 'com_id = '.$id;
 			return  $this->update($_arr, $where);
 		}else{
+			$_arr['status']=1;
 			return  $this->insert($_arr);
 		}
 	}

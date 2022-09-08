@@ -74,73 +74,121 @@ table.content-data thead tr.style-head {
 						</td>
 					</tr>
 				<style>
-					table tr th{
-						border: 1px solid #000;	
+					
+					.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
-					table {page-break-inside:auto }
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
 					tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
 					}
-					table thead tr td{
-						text-align: center;
-						padding: 5px;
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
 					}
-					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-					
+					.center{text-align: center !important;}
 					table.content-data{
 						border-collapse:collapse;
-						width:100%;
 						border:1px solid #000; 
-						font-family:'Times New Roman','Khmer OS Battambang';
-						font-size:12px;
-						white-space: nowrap;
-						margin:0 auto;
+						font-size:8px;
+						width:100%;
+				
 					}
-					table.content-data thead tr.style-head {
-					   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-						background: #ccd9ff;
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
 					}
-					table.content-data tr.style-rowdata {
-						font-size:12px; 
-						height: 23px;
+					table.content-data  tr.style {
+					  
+					   white-space: nowrap;
+						
 					}
-				.know_byitem{display: inline-table;width:20%;}
-				.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
-				.know_by li{line-height: 15px;}
+					
+					
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 1px;
+					}
+
+					.know_byitem{display: inline-table;width:33%;}
+					.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
+					.know_by li{line-height: 15px;}
+						@page {
+					page:A4;
+					size: landscape;
+					}
+					.oddRecord{background:#ecf1ff;}
 				</style>
 					<tr>
 						<td colspan="3">
 							<div id="exportExcel">
 								<table class="content-data" cellpadding="4"​ border="1" >
 									<thead>
-										<tr class="style-head" align="center" >
-											<td><?php echo $tr->translate("NUM");?></td>
-											<td><?php echo $tr->translate("BRANCH");?></td>
-											<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-											<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
-											<td><?php echo $tr->translate("GENDER");?></td>
-											<td><?php echo $tr->translate("PHONE");?></td>
-											<td><?php echo $tr->translate("CONTACT_DATE");?></td>
-											<td><?php echo $tr->translate("FEEDBACK_OPTION");?></td>
-											<td><?php echo $tr->translate("FEEDBACK");?></td>
-											<td><?php echo $tr->translate("STATUS");?></td>
-											<td><?php echo $tr->translate("CONTACT_BY");?></td>
-											<td>&nbsp;</td>
+										<tr class="style" align="center" >
+											<td scope="col"><?php echo $tr->translate("NUM");?></td>
+											<td scope="col"><?php echo $tr->translate("BRANCH");?></td>
+											<td scope="col"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+											<td scope="col"><?php echo $tr->translate("NAME_ENGLISH");?></td>
+											<td scope="col"><?php echo $tr->translate("GENDER");?></td>
+											<td scope="col"><?php echo $tr->translate("PHONE");?></td>
+											<td scope="col"><?php echo $tr->translate("CONTACT_DATE");?></td>
+											<td scope="col"><?php echo $tr->translate("FEEDBACK_OPTION");?></td>
+											<td scope="col"><?php echo $tr->translate("FEEDBACK");?></td>
+											<td scope="col"><?php echo $tr->translate("STATUS");?></td>
+											<td scope="col"><?php echo $tr->translate("CONTACT_BY");?></td>
+											<td scope="col">&nbsp;</td>
 										</tr>
 									</thead>
 									<?php $i=0;$followup=array(); $total_student = 0;
 									if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
-									<tr class="style-rowdata hover" align="center"  >
-										<td ><?php echo $i;?></td>
-										<td align="left">&nbsp;<?php echo $row['branch_name'];?></td>
-										<td align="left" >&nbsp;<?php echo $row['kh_name'];?>&nbsp;</td>
-										<td align="left">&nbsp;<?php echo $row['last_name']." ".$row['first_name'];?>&nbsp;</td>
-										<td align="center">&nbsp;<?php echo $row['sexTitle']; ?>&nbsp;</td>
-										<td ><?php echo $row['tel'];?></td>
-										<td align="center" >&nbsp;<?php echo date("d/M/Y",strtotime($row['contact_date']));?>&nbsp;</td>
-										<td>
+									<tr class="style hover" align="center"  >
+										<td data-label="<?php echo $tr->translate("NUM");?>"><?php echo $i;?></td>
+										<td data-label="<?php echo $tr->translate("BRANCH");?>" align="left">&nbsp;<?php echo $row['branch_name'];?></td>
+										<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left" >&nbsp;<?php echo $row['kh_name'];?>&nbsp;</td>
+										<td data-label="<?php echo $tr->translate("NAME_ENGLISH");?>" align="left">&nbsp;<?php echo $row['last_name']." ".$row['first_name'];?>&nbsp;</td>
+										<td data-label="<?php echo $tr->translate("GENDER");?>" align="center">&nbsp;<?php echo $row['sexTitle']; ?>&nbsp;</td>
+										<td data-label="<?php echo $tr->translate("PHONE");?>" ><?php echo $row['tel'];?></td>
+										<td data-label="<?php echo $tr->translate("CONTACT_DATE");?>" align="center" >&nbsp;<?php echo date("d/M/Y",strtotime($row['contact_date']));?>&nbsp;</td>
+										<td data-label="<?php echo $tr->translate("FEEDBACK_OPTION");?>">
 										<?php 
 											$total_student = $total_student+1;
 											$pre = explode(",", $row['feedback_type']);
@@ -159,12 +207,12 @@ table.content-data thead tr.style-head {
 												echo $prevCon;
 										?>
 										</td>
-										<td align="left"><?php echo $row['feedback'];?></td>
-										<td ><?php echo $row['crm_status_title'];
+										<td data-label="<?php echo $tr->translate("FEEDBACK");?>" align="left"><?php echo $row['feedback'];?></td>
+										<td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $row['crm_status_title'];
 										$followup[$row['proccess']]=@$followup[$row['proccess']]+1;
 										?></td>	
-										<td>&nbsp;<?php echo $row['user_contact_name'];?>&nbsp;</td>
-										<td>
+										<td data-label="<?php echo $tr->translate("STATUS");?>">&nbsp;<?php echo $row['user_contact_name'];?>&nbsp;</td>
+										<td data-label="<?php echo $tr->translate("CONTACT_BY");?>">
 											<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/allstudent/rpt-crm-detail/id/<?php echo $row['crm_id'];?>">
 											<?php echo $tr->translate("DETAIL");?>
 											</a>

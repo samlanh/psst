@@ -77,86 +77,122 @@ table.tb-footer tr.style-head {
 				<td>&nbsp;</td>
 			</tr>
 		<style>
-			table tr th{
-				border: 1px solid #000;	
-				text-align: center;
-			}
-			table {page-break-inside:auto; font-family:'Times New Roman','Khmer OS Battambang'; }
-			tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			thead tr td {
-				text-align: center;
-			}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			table.content-data{
-				border-collapse:collapse;
-				width:100%;
-				border:1px solid #000; 
-				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
-				white-space: nowrap;
-				margin:0 auto;
-				color:#000;
-				margin:0 auto;
-			}
-			table.content-data  tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-				background: #CCD9FF;
-				text-align: center;
-			}
-			table.content-data tr td{
-				padding: 2px;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}
+			.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
+					}
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+						width:100%;
+				
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:2px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.content-data  tr.style {
+					 white-space: nowrap;
+					
+					}
+					
+					
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 1px;
+					}
+			
 		</style>
 			<tr>
 				<td colspan="3" id="exportExcel">
 						<table class="content-data" cellpadding="5"​ border="1" >
 							<thead>
-								<tr class="style-head" align="center">
-									<td><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
-									<td><?php echo $tr->translate("NUM");?></td>
-									<td><?php echo $tr->translate("BRANCH");?></td>
-									<td><?php echo $tr->translate("ID_CARD");?></td>
-									<td><?php echo $tr->translate("TEACHER_NAME");?></td>
-									<td><?php echo $tr->translate("SEX");?></td>
-									<td><?php echo $tr->translate("NATIONALITY");?></td>
-									<td><?php echo $tr->translate("TYPE");?></td>
-									<td><?php echo $tr->translate("DEGREE");?></td>
-									<td><?php echo $tr->translate("TEACHER_TYPE");?></td>
-									<td>&nbsp;<?php echo $tr->translate("POSITION");?>&nbsp;</td>
-									<td><?php echo $tr->translate("PHONE");?></td>
-									<td><?php echo $tr->translate("EMAIL");?></td>
-									<td><?php echo $tr->translate("WORKING_STATUS");?></td>
-									<td><?php echo $tr->translate("NOTE");?><input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" /></td>
+								<tr class="style" align="center">
+									<td scope="col"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
+									<td scope="col"><?php echo $tr->translate("NUM");?></td>
+									<td scope="col"><?php echo $tr->translate("BRANCH");?></td>
+									<td scope="col"><?php echo $tr->translate("ID_CARD");?></td>
+									<td scope="col"><?php echo $tr->translate("TEACHER_NAME");?></td>
+									<td scope="col"><?php echo $tr->translate("SEX");?></td>
+									<td scope="col"><?php echo $tr->translate("NATIONALITY");?></td>
+									<td scope="col"><?php echo $tr->translate("TYPE");?></td>
+									<td scope="col"><?php echo $tr->translate("DEGREE");?></td>
+									<td scope="col"><?php echo $tr->translate("TEACHER_TYPE");?></td>
+									<td scope="col">&nbsp;<?php echo $tr->translate("POSITION");?>&nbsp;</td>
+									<td scope="col"><?php echo $tr->translate("PHONE");?></td>
+									<td scope="col"><?php echo $tr->translate("EMAIL");?></td>
+									<td scope="col"><?php echo $tr->translate("WORKING_STATUS");?></td>
+									<td scope="col"><?php echo $tr->translate("NOTE");?><input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" /></td>
 								</tr>
 							</thead>
 							<?php $i=0;$degree=0; if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
-							<tr class="style-rowdata hover" >
-								<td align="center">
+							<tr class="style  hover" >
+								<td  align="center">
 									<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 									<input type="hidden" name="staff_id<?php echo $i;?>" id="staff_id<?php echo $i;?>" value="<?php echo $row['id'];?>" dojoType="dijit.form.TextBox" />
 								</td>
-								<td align="center"><?php echo $i;?></td>
-								<td ><?php echo $row['branch_name'];?></td>
-								<td ><?php echo $row['teacher_code'];?></td>
-								<td align="left">&nbsp;<?php echo $row['teacher_name_kh'];?>&nbsp;</td>
-								<td align="left">&nbsp;<?php echo $row['sex'];?>&nbsp;</td>
-								<td ><?php echo $row['nationality'];?></td>
-								<td ><?php echo $row['staff_type_title'];?></td>
-								<td ><?php echo $row['degree'];?></td>
-								<td ><?php if($row['staff_type']==1){ echo $row['teacher_type'];}else{ echo "-";}?></td>
-								<td ><?php echo $row['position_add'];?></td>
-								<td align="left">&nbsp;<?php echo $row['tel'];?></td>
-								<td><?php echo $row['email'];?></td>	
-								<td><?php echo $row['active_type'];?></td>	
-								<td><?php echo $row['note'];?></td>
+								<td data-label="<?php echo $tr->translate("NUM");?>"  align="center"><?php echo $i;?></td>
+								<td data-label="<?php echo $tr->translate("BRANCH");?>"  ><?php echo $row['branch_name'];?></td>
+								<td data-label="<?php echo $tr->translate("ID_CARD");?>"  ><?php echo $row['teacher_code'];?></td>
+								<td data-label="<?php echo $tr->translate("TEACHER_NAME");?>"  align="left">&nbsp;<?php echo $row['teacher_name_kh'];?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("SEX");?>"  align="left">&nbsp;<?php echo $row['sex'];?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("NATIONALITY");?>"  ><?php echo $row['nationality'];?></td>
+								<td data-label="<?php echo $tr->translate("TYPE");?>"  ><?php echo $row['staff_type_title'];?></td>
+								<td data-label="<?php echo $tr->translate("DEGREE");?>"  ><?php echo $row['degree'];?></td>
+								<td data-label="<?php echo $tr->translate("TEACHER_TYPE");?>"  ><?php if($row['staff_type']==1){ echo $row['teacher_type'];}else{ echo "-";}?></td>
+								<td data-label="<?php echo $tr->translate("POSITION");?>"  ><?php echo $row['position_add'];?></td>
+								<td data-label="<?php echo $tr->translate("PHONE");?>"  align="left">&nbsp;<?php echo $row['tel'];?></td>
+								<td data-label="<?php echo $tr->translate("EMAIL");?>" ><?php echo $row['email'];?></td>	
+								<td data-label="<?php echo $tr->translate("WORKING_STATUS");?>" ><?php echo $row['active_type'];?></td>	
+								<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo $row['note'];?></td>
 							</tr>
 						<?php }}?>	
 						</table>	

@@ -74,42 +74,36 @@ table.tb-footer tr.style-head {
 				</td>
 			</tr>
 		<style>
-			table tr th{
-				border: 1px solid #000;	
-				text-align: center;
-				padding:1px;
-			}
-			.hover:hover{background: #ccc;}
-			table {page-break-inside:auto }
-			tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}	
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			
-			table.content-data{
-				border-collapse:collapse;
-				width:100%;
-				border:1px solid #4839bd; 
-				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
-				white-space: nowrap;
-				margin:0 auto;
-				color: #4839bd;
-			}
-			table.content-data thead tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-				background: #d0e5ff;
-				text-align: center;;
-			}
-			table.content-data tr td {
-				padding: 0 2px;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}	
+			th,td{ padding:0 1px;}
+							table{ border-collapse:collapse; margin:0 auto;border-color:#4839bd; }
+							.padding{ padding: 0 1px !important;}
+							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
+							.hover:hover{background: #ccc;}
+							.hidden{display: none;}
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+							
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:13px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+							}
+							table.content-data thead tr.style-head {
+							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+								background: #ccd9ff;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
+							#BrowserPrintDefaults{display:none} 
 			@media print 
 			{
 			    @page {
@@ -122,42 +116,42 @@ table.tb-footer tr.style-head {
 					<table class="content-data" border="1" cellpadding="1"​ >
 						<thead>
 						<tr class="style-head">
-							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-							<td rowspan="2"><?php echo $tr->translate("BRANCH");?></td>
-							<td colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></td>
-							<td colspan="4"><?php echo $tr->translate("STUDY_INFO");?></td>
-							<td rowspan="2" ><?php echo $tr->translate("TYPE")?></td>
-							<td rowspan="2"><?php echo $tr->translate("STOP_DATE")?></td>
-							<td rowspan="2"><?php echo $tr->translate("REASON")?></td>
+							<td scope="col" rowspan="2"><?php echo $tr->translate("NUM");?></td>
+							<td scope="col" rowspan="2"><?php echo $tr->translate("BRANCH");?></td>
+							<td scope="col" colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></td>
+							<td scope="col" colspan="4"><?php echo $tr->translate("STUDY_INFO");?></td>
+							<td scope="col" rowspan="2" ><?php echo $tr->translate("TYPE")?></td>
+							<td scope="col" rowspan="2"><?php echo $tr->translate("STOP_DATE")?></td>
+							<td scope="col" rowspan="2"><?php echo $tr->translate("REASON")?></td>
 						</tr>
 						<tr class="style-head">
-							<td><?php echo $tr->translate("STUDENT_ID")?></td>
-							<td><?php echo $tr->translate("STUDENT_NAMEKHMER")?></td>
-							<td><?php echo $tr->translate("NAME_ENGLISH")?></td>
-							<td><?php echo $tr->translate("GENDER")?></td>
-							<td><?php echo $tr->translate("STU_PHONE")?></td>							
-							<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-							<td><?php echo $tr->translate("GROUP")?></td>
-							<td><?php echo $tr->translate("GRADE")?></td>
-							<td><?php echo $tr->translate("SESSION")?></td>
+							<td scope="col"><?php echo $tr->translate("STUDENT_ID")?></td>
+							<td scope="col"><?php echo $tr->translate("STUDENT_NAMEKHMER")?></td>
+							<td scope="col"><?php echo $tr->translate("NAME_ENGLISH")?></td>
+							<td scope="col"><?php echo $tr->translate("GENDER")?></td>
+							<td scope="col"><?php echo $tr->translate("STU_PHONE")?></td>							
+							<td scope="col"><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+							<td scope="col"><?php echo $tr->translate("GROUP")?></td>
+							<td scope="col"><?php echo $tr->translate("GRADE")?></td>
+							<td scope="col"><?php echo $tr->translate("SESSION")?></td>
 						</tr>
 						</thead>
 					<?php $i=0;foreach ($this->rs AS $row) { $i++;?>
-						<tr class="style-rowdata hover" align="center" >
-							<td><?php echo $i;?></td>
-							<td><?php echo $row['branch_name'];?></td>
-							<td><?php echo $row['stu_id'];?></td>
-							<td align="left"><?php echo $row['stu_khname'];?></td>
-							<td align="left"><?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
-							<td><?php echo $row['sex'];?></td>
-							<td align="left"><?php echo $row['tel'];?></td>
-							<td><?php echo $row['academic_year'];?></td>
-							<td><?php echo $row['group_name'];?></td>
-							<td><?php echo $row['grade'];?></td>
-							<td><?php echo $row['session'];?></td>
-							<td><?php echo $row['type'];?></td>
-							<td><?php echo date("d-m-Y",strtotime($row['date_stop']));?></td>
-							<td style="padding: 5px; line-height:18px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;" ><?php echo $row['reason'];?></td>
+						<tr align="center" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding ' >
+							<td data-label="<?php echo $tr->translate("NUM");?>"><?php echo $i;?></td>
+							<td data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $row['branch_name'];?></td>
+							<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $row['stu_id'];?></td>
+							<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left"><?php echo $row['stu_khname'];?></td>
+							<td data-label="<?php echo $tr->translate("NAME_ENGLISH");?>" align="left"><?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
+							<td data-label="<?php echo $tr->translate("GENDER");?>"><?php echo $row['sex'];?></td>
+							<td data-label="<?php echo $tr->translate("STU_PHONE");?>" align="left"><?php echo $row['tel'];?></td>
+							<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"><?php echo $row['academic_year'];?></td>
+							<td data-label="<?php echo $tr->translate("GROUP");?>"><?php echo $row['group_name'];?></td>
+							<td data-label="<?php echo $tr->translate("GRADE");?>"><?php echo $row['grade'];?></td>
+							<td data-label="<?php echo $tr->translate("SESSION");?>"><?php echo $row['session'];?></td>
+							<td data-label="<?php echo $tr->translate("TYPE");?>"><?php echo $row['type'];?></td>
+							<td data-label="<?php echo $tr->translate("STOP_DATE");?>"><?php echo date("d-m-Y",strtotime($row['date_stop']));?></td>
+							<td data-label="<?php echo $tr->translate("REASON");?>" style="padding: 5px; line-height:18px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;" ><?php echo $row['reason'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	

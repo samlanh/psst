@@ -82,6 +82,27 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 			
+			$rows = $this->geLabelByKeyName('schooolNameKh');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['schooolNameKh'],'keyName'=>'schooolNameKh','note'=>"ឈ្មោះគ្រឹះស្ថានជាខ្មែរ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['schooolNameKh']);
+				$where=" keyName= 'schooolNameKh'";
+				$this->update($arr, $where);
+			}
+			
+			$rows = $this->geLabelByKeyName('schooolNameEng');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['schooolNameEng'],'keyName'=>'schooolNameEng','note'=>"ឈ្មោះគ្រឹះស្ថានជាខ្មែរ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['schooolNameEng']);
+				$where=" keyName= 'schooolNameEng'";
+				$this->update($arr, $where);
+			}
+			
+			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){
 				$this->_name="rms_schooloption";

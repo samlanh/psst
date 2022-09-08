@@ -60,21 +60,21 @@
        	</div>
 	</form>	
 	<div id="divPrint">
-			<table width="100%">
+			<table style="width:100%; white-space: nowrap;">
 				<tr>
-					<td colspan="3"><?php echo $this->rsheader;?></td>
+					<td colspan="2"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
+				<tr class="line"><td colspan="2"></td></tr>
 				<tr>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="15%" align="center"></td>
-					<td align="center" width="70%">
+					
+					<td align="center" width="100%" colspan="2">
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'khmer os muol light';"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></strong><br />
 						<span​​ style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 					</td>
-					<td width="15%" align="center">&nbsp;</td>					
+									
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -113,12 +113,15 @@
 						border-collapse:collapse;
 						border:1px solid #000; 
 						font-size:8px;
+						width:100%;
+				
 					}
 					table.content-data thead tr.style {
 					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
+					
 					
 					table.tb-footer{
 						border-collapse:collapse;
@@ -143,16 +146,16 @@
 						color: #f80000;
 					}
 					table.content-data tr td{
-						padding: 2px;
+						padding: 1px;
 					}
 					
 				</style>
 				<tr>
-					<td colspan="3" id="exportExcel" >
+					<td colspan="2" id="exportExcel" >
 				
-						<table cellpadding="5"​ class="content-data" cellpadding="5"​ border="1" width="100%" >
+						<table cellpadding="2" class="content-data" border="1"  >
 							<thead>
-								<tr class="style" align="center"  >
+								<tr class="style" align="center" >
 									<td scope="col">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
 									<td scope="col"><?php echo $tr->translate("STUDENT_ID"); ?></td>
@@ -172,7 +175,7 @@
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
 						?>
-							<tr  class="style hover" align="center" style="white-space: nowrap;">
+							<tr  class="style hover"  style="white-space:nowrap;">
 								<td data-label="<?php echo $tr->translate("N_O");?>"  ><?php echo $i;?></td>
 								<td data-label="<?php echo $tr->translate("BRANCH");?>"  >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" >&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
@@ -206,7 +209,7 @@
 					</td>
 				</tr>
 				<tr >
-					<td colspan="3">
+					<td colspan="2">
 						<?php echo $this->rsfooteracc;?>
 					</td>
 				</tr>

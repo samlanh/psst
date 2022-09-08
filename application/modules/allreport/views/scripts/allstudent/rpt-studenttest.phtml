@@ -96,81 +96,124 @@ table.tb-footer tr.style-head {
 					<td>&nbsp;</td>
 				</tr>
 			<style>
-				table tr th{
-					border: 1px solid #000;	
-				}
-				table {page-break-inside:auto }
-				tr{ page-break-inside:avoid; page-break-after:auto; }
-				#header {
-				  display: table-header-group;
-				  page-break-inside:avoid; page-break-after:auto;
-				}
-				table thead tr td{
-					text-align: center;
-					padding: 5px;
-				}
-				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
+					}
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+						width:100%;
 				
-				table.content-data{
-					border-collapse:collapse;
-					width:100%;
-					border:1px solid #000; 
-					font-family:'Times New Roman','Khmer OS Battambang';
-					font-size:13px;
-					white-space: nowrap;
-				}
-				table.content-data thead tr.style-head {
-				   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-					background: #ccd9ff;
-				}
-				table.content-data tr.style-rowdata {
-					font-size:12px; 
-					height: 23px;
-				}
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.content-data tr.style {
+					   
+					   white-space: nowrap;
+						
+					}
+					
+					
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 1px;
+					}
+			
 			</style>
 				<tr>
 					<td colspan="3">
 						<div id="exportExcel">
 							<table class="content-data" cellpadding="4"​   border="1" >
 								<thead>
-									<tr class="style-head" style="height: 20px;background:#ccd9ff; white-space: nowrap;" align="center">
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-										<td style="padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;
+									<tr class="style"  align="center">
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+										<td scope="col" style="padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;
 										<?php echo $tr->translate("SERIAL"); ?>/<br /><?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?><br /><?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>/<?php echo $tr->translate("TEST_TERM");?>&nbsp;</td>
-										<td colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?><br /><?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>/<?php echo $tr->translate("TEST_TERM");?>&nbsp;</td>
+										<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate(""); ?>&nbsp;</td>
 									  </tr>
-									 <tr class="style-head" style="background:#ccd9ff; white-space: nowrap;" align="center">
-										<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?><br /><?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("RESULT_DATE"); ?>&nbsp;</td>
-										<td style="line-height: 18px; padding: 2px;">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
+									 <tr class="style"  align="center">
+										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE"); ?><br /><?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("RESULT_DATE"); ?>&nbsp;</td>
+										<td scope="col" style="line-height: 18px; padding: 2px;">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
 									 </tr>
 									
 								</thead>
 								<?php $updated_result=0; $i=0; if(!empty($this->row)){ foreach($this->row as $rs){ $i++;?>
-									  <tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="left" style="height: 20px;"​ >
-											<td  align="center"><?php echo $i;?></td>
-											<td style="line-height: 18px; white-space: normal !important;max-width: 50px;width: 100px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['serial']; ?><br /><?php echo $rs['stu_code']; ?></td>
-											<td align="left" style="padding: 2px;" ><?php echo $rs['stu_khname']; ?><br /><?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
-											<td align="center" valign="center"><?php echo $rs['sex']; ?></td>
-											<td style="line-height: 16px;white-space: normal !important;max-width: 65px;width: 65px;padding: 2px;overflow-wrap: break-word;"><?php echo $rs['tel']; ?></td>
-											<td valign="top" style="line-height:18px;white-space: nowrap; !important;width: 120px;padding: 2px;"><?php echo $rs['academic']; ?></td>
-											<td valign="top" style="padding: 2px;"><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?><br /><?php echo $rs['study_term'];?></td>
-											<td valign="top" style="padding: 2px;"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?><?php if ($rs['updated_result_de']==1){ echo "<br />".$rs['grade_result_title']; }?></td>
-											<td valign="top" style="padding: 2px;"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
-											<td valign="top">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
-											<td valign="top" style="padding: 2px; max-width:150px;white-space:normal !important; overflow-wrap: break-word;"><?php echo $rs['note_result']; ?></td>
-											<td valign="center" style="padding: 2px;"><?php echo $rs['user_id'];?></td>								    
-											<td valign="top" style="line-height: 18px; padding: 2px; <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
-											<td valign="top" style="line-height: 18px; padding: 2px; <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?></td>							    
+									  <tr class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center"  >
+											<td data-label="<?php echo $tr->translate("N_O");?>"   align="center"><?php echo $i;?></td>
+											<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"  ><?php echo $rs['serial']; ?><br /><?php echo $rs['stu_code']; ?></td>
+											<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>"  align="left"  ><?php echo $rs['stu_khname']; ?><br /><?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
+											<td data-label="<?php echo $tr->translate("SEX");?>"  align="center" valign="center"><?php echo $rs['sex']; ?></td>
+											<td data-label="<?php echo $tr->translate("PHONE");?>" ><?php echo $rs['tel']; ?></td>
+											<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"  valign="top" ><?php echo $rs['academic']; ?></td>
+											<td data-label="<?php echo $tr->translate("TEST_DATE");?>"  valign="top" style="padding: 2px;"><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?><br /><?php echo $rs['study_term'];?></td>
+											<td data-label="<?php echo $tr->translate("DEGREE");?>"  valign="top"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?><?php if ($rs['updated_result_de']==1){ echo "<br />".$rs['grade_result_title']; }?></td>
+											<td data-label="<?php echo $tr->translate("RESULT_DATE");?>"  valign="top" style="padding: 2px;"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
+											<td data-label="<?php echo $tr->translate("RESULT_BY");?>"  valign="top">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
+											<td data-label="<?php echo $tr->translate("NOTE");?>"  valign="top"><?php echo $rs['note_result']; ?></td>
+											<td data-label="<?php echo $tr->translate("USER");?>"  valign="center"><?php echo $rs['user_id'];?></td>								    
+											<td data-label="<?php echo $tr->translate("RESULT");?>"  valign="top" style=" <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
+											<td data-label="<?php echo $tr->translate("STATUS");?>"  valign="top" style=" <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?></td>							    
 									  </tr>
 									 
 									  

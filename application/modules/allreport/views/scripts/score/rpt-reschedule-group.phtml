@@ -146,56 +146,53 @@ table.tb-footer tr.style-head {
 				</td>
 			</tr>
 		<style>
-			table tr th{
-				border: 1px solid #000;	
-				text-align: center;
-				padding: 3px 2px;
-			}
-			.hover:hover{background: #ccc;}
-			table { page-break-inside:auto }
-			  tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			
-			table.content-data{
-				border-collapse:collapse;
-				width:100%;
-				border:1px solid #4839bd; 
-				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
-				white-space: nowrap;
-				margin:0 auto;
-				color:#4839bd;
-			}
-			table.content-data thead tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-				background: #ccd9ff;
-				text-align: center;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}
+			th,td{ padding:0 1px;}
+							table{ border-collapse:collapse; margin:0 auto;border-color:#4839bd; }
+							.padding{ padding: 0 1px !important;}
+							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
+							.hover:hover{background: #ccc;}
+							.hidden{display: none;}
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+							
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:13px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+							}
+							table.content-data thead tr.style-head {
+							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+								background: #ccd9ff;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
+							#BrowserPrintDefaults{display:none} 
 		</style>
 			<tr>
 				<td colspan="3">
 					<table class="content-data" border="1" cellpadding="5"​>
 						<thead>
 							<tr class="style-head" >
-								<td><?php echo $tr->translate("NUM");?></td>
-								<td><?php echo $tr->translate("BRANCH");?></td>
-								<td><?php echo $tr->translate("STUDY_YEAR");?></td>
-								<td><?php echo $tr->translate("GROUP");?></td>
-								<td><?php echo $tr->translate("SESSION");?></td>
-								<td><?php echo $tr->translate("DAY");?></td>
-								<td><?php echo $tr->translate("TIME");?></td>
-								<td><?php echo $tr->translate("SUBJECT");?></td>
-								<td><?php echo $tr->translate("TEACHER");?></td>
-								<td><?php echo $tr->translate("DATE");?></td>
-								<td><?php echo $tr->translate("USER");?></td>
+								<td scope="col"><?php echo $tr->translate("NUM");?></td>
+								<td scope="col"><?php echo $tr->translate("BRANCH");?></td>
+								<td scope="col"><?php echo $tr->translate("STUDY_YEAR");?></td>
+								<td scope="col"><?php echo $tr->translate("GROUP");?></td>
+								<td scope="col"><?php echo $tr->translate("SESSION");?></td>
+								<td scope="col"><?php echo $tr->translate("DAY");?></td>
+								<td scope="col"><?php echo $tr->translate("TIME");?></td>
+								<td scope="col"><?php echo $tr->translate("SUBJECT");?></td>
+								<td scope="col"><?php echo $tr->translate("TEACHER");?></td>
+								<td scope="col"><?php echo $tr->translate("DATE");?></td>
+								<td scope="col"><?php echo $tr->translate("USER");?></td>
 							</tr>
 						</thead>
 					<?php  $i=0;  foreach ($this->rs AS $row) { $i++;
@@ -205,18 +202,18 @@ table.tb-footer tr.style-head {
 					          	$session=$tr->translate("AFTERNOON");
 					          }
 					?>
-						<tr class="style-rowdata hover hover" align="center" >
-							<td ><?php echo $i;?></td>
-							<td ><?php echo $row['branch_name'];?></td>
-							<td ><?php echo $row['years'];?></td>
-							<td align="left">&nbsp;&nbsp;<?php echo $row['group_code'];?></td>
-							<td ><?php echo $session;?></td>
-							<td ><?php echo $row['days'];?></td>
-							<td ><?php   echo $row['fromHourTitle']."&nbsp;-&nbsp;".$row['toHourTitle'];//if (!empty($arr[$row['from_hour']])) {echo $arr[$row['from_hour']];} echo "&nbsp;-&nbsp;"; //if (!empty($arr[$row['from_hour']])) {echo $arr[$row['to_hour']];}?></td>
-							<td align="left">&nbsp;<?php echo $row['subject_name'];?></td>
-							<td ><?php echo $row['teacher_name'];?></td>
-							<td ><?php echo $row['create_date'];?></td>
-							<td ><?php echo $row['USER'];?></td>
+						<tr style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding ' align="center" >
+							<td  data-label="<?php echo $tr->translate("NUM");?>"><?php echo $i;?></td>
+							<td  data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $row['branch_name'];?></td>
+							<td  data-label="<?php echo $tr->translate("STUDY_YEAR");?>"><?php echo $row['years'];?></td>
+							<td data-label="<?php echo $tr->translate("GROUP");?>" align="left">&nbsp;&nbsp;<?php echo $row['group_code'];?></td>
+							<td data-label="<?php echo $tr->translate("SESSION");?>"><?php echo $session;?></td>
+							<td data-label="<?php echo $tr->translate("DAY");?>"><?php echo $row['days'];?></td>
+							<td data-label="<?php echo $tr->translate("TIME");?>"><?php   echo $row['fromHourTitle']."&nbsp;-&nbsp;".$row['toHourTitle'];//if (!empty($arr[$row['from_hour']])) {echo $arr[$row['from_hour']];} echo "&nbsp;-&nbsp;"; //if (!empty($arr[$row['from_hour']])) {echo $arr[$row['to_hour']];}?></td>
+							<td data-label="<?php echo $tr->translate("SUBJECT");?>" align="left">&nbsp;<?php echo $row['subject_name'];?></td>
+							<td data-label="<?php echo $tr->translate("TEACHER");?>"><?php echo $row['teacher_name'];?></td>
+							<td data-label="<?php echo $tr->translate("DATE");?>"><?php echo $row['create_date'];?></td>
+							<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['USER'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	

@@ -91,6 +91,20 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				);
 		$settingStuID->setMultiOptions($settingStuIDOpt);
 		
+		$schooolNameKh = new Zend_Dojo_Form_Element_TextBox('schooolNameKh');
+		$schooolNameKh->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SCHOOL_NAMEKH")
+		));
+		
+		$schooolNameEng = new Zend_Dojo_Form_Element_TextBox('schooolNameEng');
+		$schooolNameEng->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SCHOOL_NAMEEN")
+		));
+		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
 			$_branch_add->setValue($data['branch_add']['keyValue']);
@@ -103,6 +117,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$_trasfer_st_cut->setValue($data['trasfer_st_cut']['keyValue']);
 			$settingStuID->setValue($data['settingStuID']['keyValue']);
 			
+			$schooolNameKh->setValue($data['schooolNameKh']['keyValue']);
+			$schooolNameEng->setValue($data['schooolNameEng']['keyValue']);
 		}
 		$this->addElements(array(
 				$_sale_stock
@@ -115,6 +131,9 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$_payment_day_alert
 				,$_trasfer_st_cut
 				,$settingStuID
+				
+				,$schooolNameKh
+				,$schooolNameEng
 				));
 		
 		return $this;

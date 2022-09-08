@@ -37,15 +37,15 @@ class Foundation_StudentreturnController extends Zend_Controller_Action {
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'student_kh'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
 	
 			$this->view->search = $search;
-			$form=new Application_Form_FrmSearchGlobal();
-			$forms=$form->FrmSearch();
-			Application_Model_Decorator::removeAllDecorator($forms);
-			$this->view->form_search=$form;
 		}catch(Exception $e){
 			
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 		
 	}
 	function addAction(){

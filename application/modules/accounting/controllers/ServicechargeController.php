@@ -222,21 +222,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function addAjaxserviceAction(){
-		if($this->getRequest()->isPost()){
-			try{
-				$data = $this->getRequest()->getPost();
-				$db = new Accounting_Model_DbTable_DbService();
-				$row = $db->ajaxgetservice($data);
-				$result = array("id"=>$row);
-				print_r(Zend_Json::encode($row));
-				exit();
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-	}	
+	
 	function refreshserviceAction(){
 		if($this->getRequest()->isPost()){
 			try{

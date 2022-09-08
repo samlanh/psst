@@ -141,19 +141,19 @@ table.tb-footer tr.style-head {
 						<table class="content-data" cellpadding="5"​ border="1" width="100%">
 							 <thead>
 								  <tr class="style-head" align="center">
-								    <td><?php echo $tr->translate("NUM");?></td>
-								    <td><?php echo $tr->translate("BRANCH");?></td>
-								    <td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
-									<td><?php echo $tr->translate("STUDY_GROUP");?></td>
-									<td><?php echo $tr->translate("SESSION");?></td>
-									<td><?php echo $tr->translate("CLASSES");?></td>
-									<td><?php echo $tr->translate("EXAM_TYPE");?></td>
-									<td><?php echo $tr->translate("RESULT_FOR");?></td>
-									<td><?php echo $tr->translate("FOR_MONTH");?></td>
-									<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
-									<td><?php echo $tr->translate("CREATE_DATE");?></td>
-									<td><?php echo $tr->translate("BY_USER");?></td>
-									<td><?php echo $tr->translate("NOTE");?></td>
+								    <td scope="col"><?php echo $tr->translate("NUM");?></td>
+								    <td scope="col"><?php echo $tr->translate("BRANCH");?></td>
+								    <td scope="col"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+									<td scope="col"><?php echo $tr->translate("STUDY_GROUP");?></td>
+									<td scope="col"><?php echo $tr->translate("SESSION");?></td>
+									<td scope="col"><?php echo $tr->translate("CLASSES");?></td>
+									<td scope="col"><?php echo $tr->translate("EXAM_TYPE");?></td>
+									<td scope="col"><?php echo $tr->translate("RESULT_FOR");?></td>
+									<td scope="col"><?php echo $tr->translate("FOR_MONTH");?></td>
+									<td scope="col"><?php echo $tr->translate("FOR_SEMESTER");?></td>
+									<td scope="col"><?php echo $tr->translate("CREATE_DATE");?></td>
+									<td scope="col"><?php echo $tr->translate("BY_USER");?></td>
+									<td scope="col"><?php echo $tr->translate("NOTE");?></td>
 								  </tr>
 							  </thead>
 							<?php
@@ -161,19 +161,19 @@ table.tb-footer tr.style-head {
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 							?>
 							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" align="center" >
-							    <td><?php echo $key+1;?></td>
-							    <td><?php echo $rs['branch_name']; ?></td>
-							    <td><?php echo $rs['academic_year']; ?></td>
-							    <td align="left"><?php echo $rs['group_code']; ?></td>
-								<td><?php echo $rs['session']; ?></td>
-							    <td align="left"><?php echo $rs['room_name']; ?></td>
-							    <td align="left"><?php echo $rs['examtype']; ?></td>
-							    <td align="left"><?php echo $rs['title_score']; ?></td>
-							    <td><?php echo $rs['for_month']; ?></td>
-							    <td><?php echo $rs['for_semester']; ?></td>
-							    <td align="left"><?php echo date("d-m-Y",strtotime($rs['date_input'])); ?></td>
-							    <td align="left"><?php echo $rs['user_name']; ?></td>
-							    <td align="left"><?php echo $rs['note']; ?></td>
+							    <td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
+							    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
+							    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" ><?php echo $rs['academic_year']; ?></td>
+							    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left"><?php echo $rs['group_code']; ?></td>
+								<td data-label="<?php echo $tr->translate("SESSION");?>" ><?php echo $rs['session']; ?></td>
+							    <td data-label="<?php echo $tr->translate("CLASSES");?>"  align="left"><?php echo $rs['room_name']; ?></td>
+							    <td data-label="<?php echo $tr->translate("EXAM_TYPE");?>"  align="left"><?php echo $rs['examtype']; ?></td>
+							    <td data-label="<?php echo $tr->translate("RESULT_FOR");?>"  align="left"><?php echo $rs['title_score']; ?></td>
+							    <td data-label="<?php echo $tr->translate("FOR_MONTH");?>" ><?php echo $rs['for_month']; ?></td>
+							    <td data-label="<?php echo $tr->translate("FOR_SEMESTER");?>" ><?php echo $rs['for_semester']; ?></td>
+							    <td data-label="<?php echo $tr->translate("CREATE_DATE");?>"  align="left"><?php echo date("d-m-Y",strtotime($rs['date_input'])); ?></td>
+							    <td data-label="<?php echo $tr->translate("BY_USER");?>"  align="left"><?php echo $rs['user_name']; ?></td>
+							    <td data-label="<?php echo $tr->translate("NOTE");?>"  align="left"><?php echo $rs['note']; ?></td>
 							  </tr>
 							<?php 
 							 }

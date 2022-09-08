@@ -122,7 +122,7 @@ table.tb-footer tr.style-head {
 								font-size:12px; 
 								height: 23px;
 							}
-#BrowserPrintDefaults{display:none} 
+							#BrowserPrintDefaults{display:none} 
 						</style>
 						<?php 
 						$all_student = 0;
@@ -131,19 +131,19 @@ table.tb-footer tr.style-head {
 						<table class="content-data" cellpadding="3"  border="1" >
 						  <thead>
 							  <tr class="style-head">
-							    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("ROOM");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+							    <td scope="col" >&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+							    <td scope="col" >&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
+							    <td scope="col" >&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
+							    <td scope="col" >&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("ROOM");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 							  </tr>
 						  </thead>
 						  <?php $i=0; 
@@ -152,19 +152,19 @@ table.tb-footer tr.style-head {
 							  $drop_student = $drop_student+$rs['student_drop'];
 						  ?>
 						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
-						   	<td><?php echo $i;?></td>
-						   	<td align="left">&nbsp;<?php echo $rs['branch_name']; ?></td>
-						    <td align="left">&nbsp;<?php echo $rs['group_code']; ?></td>
-						    <td align="left">&nbsp;<?php echo $rs['academic']; ?></td>
-						    <td><?php echo $rs['semester']; ?></td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
-						    <td align="left">&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td align="left">&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+						   	<td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $i;?></td>
+						   	<td data-label="<?php echo $tr->translate("BRANCH");?>"  align="left">&nbsp;<?php echo $rs['branch_name']; ?></td>
+						    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left">&nbsp;<?php echo $rs['group_code']; ?></td>
+						    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"  align="left">&nbsp;<?php echo $rs['academic']; ?></td>
+						    <td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo $rs['semester']; ?></td>
+						    <td data-label="<?php echo $tr->translate("DEGREE");?>"  align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
+						    <td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
+						    <td data-label="<?php echo $tr->translate("SESSION");?>" >&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
+						    <td data-label="<?php echo $tr->translate("ROOM");?>"  align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
+						    <td data-label="<?php echo $tr->translate("TOTAL_STUDENT");?>" >&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td data-label="<?php echo $tr->translate("STUDENT_DROP");?>" >&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td data-label="<?php echo $tr->translate("STUDENT_STUDY");?>" >&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td data-label="<?php echo $tr->translate("STATUS");?>"  align="left">&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
 						  </tr>
 						  <?php 
 						  	

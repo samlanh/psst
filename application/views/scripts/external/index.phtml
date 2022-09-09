@@ -46,18 +46,22 @@
 
     <!-- Custom Theme Style -->
     <link href="<?php echo $baseUrl;?>admin/build/css/custom.min.css" rel="stylesheet">
+    <link href="<?php echo $baseUrl;?>admin/build/css/external-template.css" rel="stylesheet">
   </head>
 
   <body class="soria login">
     <div class="login-page">
+		<div class="main-title">
+			<p class="titlepage">ប្រព័ន្ធដាក់ពិន្ទុសិស្ស / <strong>Student Score System</strong></p>
+		</div>
 		<div class="login-content">
-			
 			<div class="loginBlog">
 				<div class="login-box">
 					<div class="content">
-						<p  class="login-title">សូមស្វាគមន៍</p>
+						<p  class="login-title">សូមស្វាគមន៍ /  <strong>Welcome</strong></p>
 						<div  class="instruction-box">
-							<h3 > ការណែនាំ៖</h3>
+							<h3 > ការណែនាំ ៖<small>Instruction :</small></h3>
+							
 							<p class="instruction-note">
 								១.ទាញយកកម្មវិធី CamDigiKey៖ Android ឬ iOS។
 								២.ស្កែន QR Code ក្នុងកម្មវិធី CamDigiKey របស់លោកអ្នក។
@@ -65,6 +69,7 @@
 								៤.អ្នកនឹងត្រូវបានអនុញ្ញាតឱ្យចូលក្នុង Portal ដោយស្វ័យប្រវត្តិ។
 							</p>
 						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -80,23 +85,24 @@
 					<div class="login-right">
 						<div class="login-right-wrapper">
 							<div class="loginTitle">
-							  <h3><i class="fa fa-lock" aria-hidden="true"></i> <?php echo $tr->translate("SECURITY_SYSTEM");?>​</h3>
-							  <p>សូមបញ្ចូលឈ្មោះគណនី និងពាក្យសម្ងាត់<?php //echo $tr->translate("SECURITY_SYSTEM_DESCRIPTION");?>​</p>
+							  <h4><i class="fa fa-lock" aria-hidden="true"></i> ប្រព័ន្ធសុវត្ថិភាព / <strong>Security System</strong></h4>
+							  <small>សូមបញ្ចូលឈ្មោះគណនី និងពាក្យសម្ងាត់​</small>
+							  <small>Please Enter Username And Password Below</small>
 							</div>
 							<div class="animate form login_form">
 								
 							  <section class="login_content">
 
 								<form dojoType="dijit.form.Form" method="post" action="">
-								  <h1>Login Form</h1>
+								  <h1>ចូលទៅកាន់ប្រព័ន្ធ / <strong>Log Into System</strong></h1>
 								  <div class="formControl-login">
 									<input class="fullside" type="text" required="true" name="userName" id="userName" placeholder="<?php echo $tr->translate("USER_NAME");?>​" data-dojo-type="dijit/form/ValidationTextBox" missingMessage="<?php echo $tr->translate("PLEASE_ENTER_USERNAME");?>" />
 								  </div>
 								  <div class="formControl-login">
-									<input class="fullside" type="password" required="true" name="txt_password" id="txt_password" placeholder="<?php echo $tr->translate("PASSWORD");?>" data-dojo-type="dijit/form/ValidationTextBox" missingMessage="<?php echo $tr->translate("PLEASE_ENTER_PASSWORD");?>!" />
+									<input class="fullside" type="password" required="true" name="passwordKey" id="passwordKey" placeholder="<?php echo $tr->translate("PASSWORD");?>" data-dojo-type="dijit/form/ValidationTextBox" missingMessage="<?php echo $tr->translate("PLEASE_ENTER_PASSWORD");?>!" />
 								  </div>
 								  <div class="formControl-login">
-									<input class="fullside button-class button-primary" iconClass="glyphicon glyphicon-log-in" type="submit" value="<?php echo $tr->translate("LOGIN");?>" label="<?php echo $tr->translate("LOGIN");?>" data-dojo-type="dijit/form/Button" />
+									<input class="fullside button-class button-primary" iconClass="glyphicon glyphicon-log-in" type="submit" value="<?php echo $tr->translate("LOGIN");?>" label="ចូលប្រើប្រាស់ / LOG IN" data-dojo-type="dijit/form/Button" />
 								  </div>
 
 								  <div class="clearfix"></div>
@@ -112,153 +118,39 @@
 		</div>
 		 
 					
-		<div class="row"> 
-			<div class="col-md-6 col-sm-6 col-xs-12"> 
+		<div  class="developing-box">
+			<p>
+				&copy បាន​បង្កើត​ឡើង​ដោយ
+				<a title="ខេម អ៊ែប តិចណូឡូជី" class="copyright" href="http://www.cam-app.com/" target="_blank">
+					<strong>ខេម អ៊ែប តិចណូឡូជី</strong>
+				</a> / Developed By
+				<a title="Cam App Technology" class="copyright" href="http://www.cam-app.com/" target="_blank">
+					<strong>Cam App Technology</strong>
+				</a>
+			</p>
+			</p>
+			<p>
 				
-			 </div>
-			 <div class="col-md-6 col-sm-6 col-xs-12"> 
-				 
-			  </div>
 		</div>
     </div>
   </body>
   
   <style>
+	.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
+		    height: 30px;
+		}
+	.dijitInputInner {
+		color: #000;
+	}
 	.login-page {
 		    width: 99.0%;
 			height: 100vh;
-			background-image: url('https://obr.registrationservices.gov.kh/Update_bg_login.0f3a94ee4b080240b44d.png');
+			background-image: url('<?php echo $baseUrl;?>/images/slide/Update_bg_login.jpg');
 			background-position: 50%;
 			background-repeat: no-repeat;
 			background-size: cover;
 			position: relative;
 	}
 	
-	.login-page .login-content {
-    width: 100%;
-    height: calc(100% - 130px);
-}
-
-
-.loginBlog {
-    width: 50%;
-	height: 100%;
-    float: left;
-    position: relative;
-}
-.login-box {
-    width: 430px;
-    height: 85%;
-    max-width: 430px;
-    background-color: #8e73f2;
-    border-radius: 20px;
-    margin-top: 100px;
-	margin-left: 100px;
-    position: relative;
-    display: table;
-	
-}
-.login-page .loginBlog .login-box .content {
-    width: 100%;
-    display: table-cell;
-    vertical-align: middle;
-}
-p.login-title {
-    color: #fff;
-    font-size: 25px;
-    text-align: center;
-}
-.instruction-box {
-    margin: 0 auto;
-    width: 80%;
-    display: block;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 10px;
-    color: #0e4f88;
-}
-p.instruction-note {
-    white-space: pre-line;
-}
-
-.loginFormBlog {
-    width: 50%;
-    height: 100%;
-    display: inline-block;
-    margin: auto 0;
-}
-	.login_wrapper.login-wrapper {
-		height: 350px;
-		width: 700px;
-		margin: 0px auto;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		max-width: inherit;
-		right: auto;
-		 margin-top: 100px;
-	}
-	  .login-left {
-		width: 230px;
-		height: 100%;
-		/* background-color: #0a3359; */
-		background: linear-gradient(to top, #3f88e3 0%,#0f4e87 100%);
-		border-radius: 5px;
-		z-index: 10;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-	}
-	.login-left .logo img {
-		width: 110px;
-	}
-	.login-left .gdt-name-kh {
-		font-family: 'Times New Roman' , 'Khmer OS Muol Light';
-		color: #ffffff;
-		margin-top: 14px;
-	}
-	.login-left .gdt-name-en {
-		color: #ffffff;
-	}
-	.login-right {
-		width: calc(100% - 235px);
-		height: 300px;
-		background-color: rgba(255,255,255, 0.8);
-		border-radius: 5px;
-		z-index: 5;
-		margin-left: -5px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-	}
-	.login-right-wrapper {
-		height: 100%;
-		width: 70%;
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-		text-align: left;
-		padding: 15px 0;
-	}
-	.loginTitle h3 {
-		font-family: 'Times New Roman' , 'Khmer OS Muol Light';
-		margin: 5px 0;
-		padding: 0;
-	}
-	.login_wrapper.login-wrapper .login_form {
-		position: relative;
-		width: 100%;
-	}
-	.login-right-wrapper section.login_content {
-		padding: 0;
-		margin: 0;
-	}
-	.formControl-login {
-		margin: 10px 0;
-	}
-
   </style>
 </html>

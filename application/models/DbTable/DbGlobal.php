@@ -3336,7 +3336,9 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
   	}
   	if(!empty($data['studentId'])){
-  		$sql.=" OR ( i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE stu_id=".$data['studentId']."))";
+  		if(!empty($data['studentType']) AND ($data['studentType']==1 OR $data['studentType']==2)){
+  			$sql.=" OR ( i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE stu_id=".$data['studentId']."))";
+  		}
   	}
   	$sql.=" ORDER BY i.items_type ASC ";
   	

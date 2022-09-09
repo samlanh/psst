@@ -1,0 +1,375 @@
+<?php 
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$baseUrl = $this->baseUrl()."/";
+	echo $this->headTitle($tr->translate("DASHBOARD"));
+	$key = new Application_Model_DbTable_DbKeycode();
+	$dataInfo=$key->getKeyCodeMiniInv(TRUE);
+		
+	$clientTitle= $tr->translate("CUSTOMER_BRANCH");
+	if(!empty($dataInfo['schooolNameKh'])){
+		$clientTitle= $dataInfo['schooolNameKh'];
+	}
+	$clientTitleEn="";
+	if(!empty($dataInfo['schooolNameEng'])){
+		$clientTitleEn= $dataInfo['schooolNameEng'];
+	}
+	$defaultLogo = $this->baseUrl()."/images/Logo/Logo.png";
+	if(!empty($dataInfo['logo'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$dataInfo['logo'])){
+			$defaultLogo = $this->baseUrl().'/images/logo/'.$dataInfo['logo'];
+		}
+	}
+?>
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<div class="main-container container-fluid">
+	<div class="breadcrumb-header justify-content-between"> 
+		<div class="left-content"> 
+			<span class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span> 
+		</div> 
+		<div class="justify-content-center mt-2"> 
+			<ol class="breadcrumb"> 
+				<li class="breadcrumb-item tx-15"><a href="javascript:void(0);">Dashboard</a></li> 
+				<li class="breadcrumb-item active" aria-current="page">Sales</li> 
+			</ol> 
+		</div> 
+	</div>
+	<div class="row"> 
+		<div class="col-md-6 col-sm-6 col-xs-12"> 
+			<div class="card primary-custom-card1"> 
+				<div class="card-body"> 
+					<div class="row"> 
+						<div class="col-md-9 col-sm-9 col-xs-12"> 
+							<div class="text-justified align-items-center"> 
+								<h2 class="text-dark font-weight-semibold mb-3 mt-2">Hi, Welcome Back <span class="text-primary">Nick!</span></h2> 
+								<p class="text-dark tx-17 mb-2 lh-3"> You have used the 100% of free plan storage. Please upgrade your plan to get unlimited storage.</p>
+								<p class="font-weight-semibold tx-12 mb-4">For billing related queries, contact us through support chat or mail us at team@spruko.com </p>
+								<button class="btn btn-primary mb-3 shadow">Upgrade to new Plan</button> 
+							</div> 
+						</div> 
+						<div class="col-md-3 col-sm-3 col-xs-12"> 
+						
+						</div> 
+					</div> 
+				</div> 
+			</div> 
+			<div class="row"> 
+				<div class="col-md-12 col-sm-12 col-xs-12"> 
+					<div class="card circle-image1"> 
+						<div class="row"> 
+							<div class="col-xs-8"> 
+								<div class="ps-4 pt-4 pe-3 pb-4"> 
+									<div class=""> <h4 class="mb-2 tx-12 ">ថ្នាក់សិក្សា / Class Study</h4> </div> 
+									<div class="pb-0 mt-0"> 
+										<div class="d-flex"> <h4 class="tx-20 font-weight-semibold mb-2">17</h4> </div> 
+										
+									</div> 
+								</div> 
+							</div> 
+							<div class="col-xs-4"> 
+								<div class="circle-icon bg-primary-transparent text-center align-self-center overflow-hidden"> 
+									<i class="fa fa-shopping-bag tx-16 text-primary"></i> 
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+				 
+				<div class="col-md-6 col-sm-6 col-xs-12"> 
+					<div class="card circle-image2"> 
+						<div class="row"> 
+							<div class="col-xs-8"> 
+								<div class="ps-4 pt-4 pe-3 pb-4"> 
+									<div class=""> <h4 class="mb-2 tx-12">ថ្នាក់កំពុងសិក្សា / Active Class</h4> </div> 
+									<div class="pb-0 mt-0"> 
+										<div class="d-flex"> <h4 class="tx-20 font-weight-semibold mb-2">5</h4> </div>
+										
+									</div> 
+								</div> 
+							</div> 
+							<div class="col-xs-4"> 
+								<div class="circle-icon bg-warning-transparent text-center align-self-center overflow-hidden"> 
+									<i class="glyphicon glyphicon-briefcase tx-16 text-warning"></i> 
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+				<div class="col-md-6 col-sm-6 col-xs-12"> 
+					<div class="card circle-image3"> 
+						<div class="row"> 
+							<div class="col-xs-8"> 
+								<div class="ps-4 pt-4 pe-3 pb-4"> 
+									<div class=""> 
+										<h4 class="mb-2 tx-12">ថ្នាក់រៀនចប់ / Completed Class</h4> 
+									</div> 
+									<div class="pb-0 mt-0"> 
+										<div class="d-flex"> <h4 class="tx-20 font-weight-semibold mb-2">12</h4> </div> 
+										
+									</div> 
+								</div> 
+							</div> 
+							<div class="col-xs-4"> 
+								<div class="circle-icon bg-primary-transparent text-center align-self-center overflow-hidden"> 
+									<i class="glyphicon glyphicon-ok-circle tx-16 text-primary"></i> 
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+				
+			</div> 
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-12"> 
+			<div class="card overflow-hidden"> 
+				<div class="card-header pb-1"> 
+					<h3 class="card-title mb-2 ">បញ្ចីសិស្សឆ្នើម / Out Standing Student</h3> 
+				</div> 
+				<div class="card-body p-0 customers mt-1"> 
+					<div class="list-group list-lg-group list-group-flush"> 
+						<a href="javascript:void(0);" class="border-0"> 
+							<div class="list-group-item list-group-item-action border-0"> 
+								<div class="media mt-0"> 
+									<img class="avatar-lg rounded-circle me-3 my-auto shadow" src="https://spruko.com/demo/nowa/Nowa/assets/img/faces/2.jpg" alt="Image description"> 
+									<div class="media-body"> 
+										<div class="d-flex align-items-center"> 
+											<div class="mt-0"> 
+												<h5 class="mb-1 mt-1 tx-13 font-weight-sembold text-dark">Samantha Melon</h5> 
+												<p class="mb-0 tx-12 text-muted">User ID: #1234</p>
+											</div> 
+											<span class="ms-auto wd-45p tx-14"> 
+												<span class="float-end badge badge-success-transparent"> 
+													<span class="op-7 text-success font-weight-semibold">paid </span> 
+												</span> 
+											</span> 
+										</div> 
+									</div> 
+								</div> 
+							</div> 
+						</a> 
+						<a href="javascript:void(0);" class="border-0"> 
+							<div class="list-group-item list-group-item-action border-0"> 
+								<div class="media mt-0"> 
+									<img class="avatar-lg rounded-circle me-3 my-auto shadow" src="https://spruko.com/demo/nowa/Nowa/assets/img/faces/11.jpg" alt="Image description"> 
+									<div class="media-body"> 
+										<div class="d-flex align-items-center"> 
+											<div class="mt-1"> 
+												<h5 class="mb-1 mt-1 tx-13 font-weight-sembold text-dark">Allie Grater</h5> 
+												<p class="mb-0 tx-12 text-muted">User ID: #1234</p>
+											</div> 
+											<span class="ms-auto wd-45p tx-14"> 
+												<span class="float-end badge badge-danger-transparent "> 
+													<span class="op-7 text-danger font-weight-semibold">Pending</span> 
+												</span> 
+											</span> 
+										</div> 
+									</div> 
+								</div> 
+							</div> 
+						</a>  
+					</div> 
+				</div> 
+			</div> 
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col-md-7 col-sm-7 col-xs-12"> 
+			<div class="card primary-custom-card1"> 
+				<div class="card-body"> 
+					<div class="row"> 
+						<div class="col-md-6 col-sm-6 col-xs-12"> 
+							<div class="prime-card"><img class="img-fluid" src="../assets/img/png/dashboard8.png" alt=""></div> 
+						</div> 
+						<div class="col-md-6 col-sm-6 col-xs-12"> 
+							<div class="text-justified align-items-center"> 
+								<h2 class="text-dark font-weight-semibold mb-3 mt-2">Hi, Welcome Back <span class="text-primary">Nick!</span></h2> 
+								<p class="text-dark tx-17 mb-2 lh-3"> You have used the 100% of free plan storage. Please upgrade your plan to get unlimited storage.</p>
+								<p class="font-weight-semibold tx-12 mb-4">For billing related queries, contact us through support chat or mail us at team@spruko.com </p>
+								<button class="btn btn-primary mb-3 shadow">Upgrade to new Plan</button> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+			</div> 
+		</div> 
+		<div class="col-md-5 col-sm-5 col-xs-12">
+		<!-- <div class="container"> --> 
+			<div class="row"> 
+				<div class="col-md-12 col-sm-12 col-xs-12"> 
+					<div class="card circle-image1"> 
+						<div class="row"> 
+							<div class="col-xs-8"> 
+								<div class="ps-4 pt-4 pe-3 pb-4"> 
+									<div class=""> <h4 class="mb-2 tx-12 ">ថ្នាក់សិក្សា / Class Study</h4> </div> 
+									<div class="pb-0 mt-0"> 
+										<div class="d-flex"> <h4 class="tx-20 font-weight-semibold mb-2">17</h4> </div> 
+										
+									</div> 
+								</div> 
+							</div> 
+							<div class="col-xs-4"> 
+								<div class="circle-icon bg-primary-transparent text-center align-self-center overflow-hidden"> 
+									<i class="fa fa-shopping-bag tx-16 text-primary"></i> 
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+				 
+				<div class="col-md-6 col-sm-6 col-xs-12"> 
+					<div class="card circle-image2"> 
+						<div class="row"> 
+							<div class="col-xs-8"> 
+								<div class="ps-4 pt-4 pe-3 pb-4"> 
+									<div class=""> <h4 class="mb-2 tx-12">ថ្នាក់កំពុងសិក្សា / Active Class</h4> </div> 
+									<div class="pb-0 mt-0"> 
+										<div class="d-flex"> <h4 class="tx-20 font-weight-semibold mb-2">5</h4> </div>
+										
+									</div> 
+								</div> 
+							</div> 
+							<div class="col-xs-4"> 
+								<div class="circle-icon bg-warning-transparent text-center align-self-center overflow-hidden"> 
+									<i class="glyphicon glyphicon-briefcase tx-16 text-warning"></i> 
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+				<div class="col-md-6 col-sm-6 col-xs-12"> 
+					<div class="card circle-image3"> 
+						<div class="row"> 
+							<div class="col-xs-8"> 
+								<div class="ps-4 pt-4 pe-3 pb-4"> 
+									<div class=""> 
+										<h4 class="mb-2 tx-12">ថ្នាក់រៀនចប់ / Completed Class</h4> 
+									</div> 
+									<div class="pb-0 mt-0"> 
+										<div class="d-flex"> <h4 class="tx-20 font-weight-semibold mb-2">12</h4> </div> 
+										
+									</div> 
+								</div> 
+							</div> 
+							<div class="col-xs-4"> 
+								<div class="circle-icon bg-primary-transparent text-center align-self-center overflow-hidden"> 
+									<i class="glyphicon glyphicon-ok-circle tx-16 text-primary"></i> 
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+				</div> 
+				
+			</div> 
+			
+			<!-- </div> --> 
+		</div> 
+	</div>
+	<div class="row"> 
+		<div class="col-md-6 col-sm-6 col-xs-12"> 
+			<div class="card overflow-hidden"> 
+				<div class="card-header pb-1"> 
+					<h3 class="card-title mb-2 ">បញ្ចីសិស្សឆ្នើម / Out Standing Student</h3> 
+				</div> 
+				<div class="card-body p-0 customers mt-1"> 
+					<div class="list-group list-lg-group list-group-flush"> 
+						<a href="javascript:void(0);" class="border-0"> 
+							<div class="list-group-item list-group-item-action border-0"> 
+								<div class="media mt-0"> 
+									<img class="avatar-lg rounded-circle me-3 my-auto shadow" src="https://spruko.com/demo/nowa/Nowa/assets/img/faces/2.jpg" alt="Image description"> 
+									<div class="media-body"> 
+										<div class="d-flex align-items-center"> 
+											<div class="mt-0"> 
+												<h5 class="mb-1 mt-1 tx-13 font-weight-sembold text-dark">Samantha Melon</h5> 
+												<p class="mb-0 tx-12 text-muted">User ID: #1234</p>
+											</div> 
+											<span class="ms-auto wd-45p tx-14"> 
+												<span class="float-end badge badge-success-transparent"> 
+													<span class="op-7 text-success font-weight-semibold">paid </span> 
+												</span> 
+											</span> 
+										</div> 
+									</div> 
+								</div> 
+							</div> 
+						</a> 
+						<a href="javascript:void(0);" class="border-0"> 
+							<div class="list-group-item list-group-item-action border-0"> 
+								<div class="media mt-0"> 
+									<img class="avatar-lg rounded-circle me-3 my-auto shadow" src="https://spruko.com/demo/nowa/Nowa/assets/img/faces/11.jpg" alt="Image description"> 
+									<div class="media-body"> 
+										<div class="d-flex align-items-center"> 
+											<div class="mt-1"> 
+												<h5 class="mb-1 mt-1 tx-13 font-weight-sembold text-dark">Allie Grater</h5> 
+												<p class="mb-0 tx-12 text-muted">User ID: #1234</p>
+											</div> 
+											<span class="ms-auto wd-45p tx-14"> 
+												<span class="float-end badge badge-danger-transparent "> 
+													<span class="op-7 text-danger font-weight-semibold">Pending</span> 
+												</span> 
+											</span> 
+										</div> 
+									</div> 
+								</div> 
+							</div> 
+						</a>  
+					</div> 
+				</div> 
+			</div> 
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-12"> 
+			<div class="card overflow-hidden"> 
+				<div class="card-header pb-1"> 
+					<h3 class="card-title mb-2 ">បញ្ចីសិស្សឆ្នើម / Out Standing Student</h3> 
+				</div> 
+				<div class="card-body p-0 customers mt-1"> 
+					<div class="list-group list-lg-group list-group-flush"> 
+						<a href="javascript:void(0);" class="border-0"> 
+							<div class="list-group-item list-group-item-action border-0"> 
+								<div class="media mt-0"> 
+									<img class="avatar-lg rounded-circle me-3 my-auto shadow" src="https://spruko.com/demo/nowa/Nowa/assets/img/faces/2.jpg" alt="Image description"> 
+									<div class="media-body"> 
+										<div class="d-flex align-items-center"> 
+											<div class="mt-0"> 
+												<h5 class="mb-1 mt-1 tx-13 font-weight-sembold text-dark">Samantha Melon</h5> 
+												<p class="mb-0 tx-12 text-muted">User ID: #1234</p>
+											</div> 
+											<span class="ms-auto wd-45p tx-14"> 
+												<span class="float-end badge badge-success-transparent"> 
+													<span class="op-7 text-success font-weight-semibold">paid </span> 
+												</span> 
+											</span> 
+										</div> 
+									</div> 
+								</div> 
+							</div> 
+						</a> 
+						<a href="javascript:void(0);" class="border-0"> 
+							<div class="list-group-item list-group-item-action border-0"> 
+								<div class="media mt-0"> 
+									<img class="avatar-lg rounded-circle me-3 my-auto shadow" src="https://spruko.com/demo/nowa/Nowa/assets/img/faces/11.jpg" alt="Image description"> 
+									<div class="media-body"> 
+										<div class="d-flex align-items-center"> 
+											<div class="mt-1"> 
+												<h5 class="mb-1 mt-1 tx-13 font-weight-sembold text-dark">Allie Grater</h5> 
+												<p class="mb-0 tx-12 text-muted">User ID: #1234</p>
+											</div> 
+											<span class="ms-auto wd-45p tx-14"> 
+												<span class="float-end badge badge-danger-transparent "> 
+													<span class="op-7 text-danger font-weight-semibold">Pending</span> 
+												</span> 
+											</span> 
+										</div> 
+									</div> 
+								</div> 
+							</div> 
+						</a>  
+					</div> 
+				</div> 
+			</div> 
+		</div>
+	</div>
+</div>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

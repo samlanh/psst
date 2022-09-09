@@ -822,10 +822,23 @@ class Application_Form_FrmGlobal{
 							white-space: pre;
 							font:12px 'Khmer OS Battambang';
 							border: 1px solid #000;
-							line-height:20px;
+							line-height:15px;
 							font-weight: normal !important;
 							padding:2px;
 							white-space: normal;
+							width:95%;
+						}
+						.notedDescription{
+							white-space: pre-wrap;
+							word-wrap: break-word;
+							word-break: break-all;
+							white-space: pre;
+							font:12px 'Khmer OS Battambang';
+							font-size:10px;
+							line-height:15px;
+							font-weight: normal !important;
+							white-space: normal;
+							width:200px;
 						}
 						table{ border-collapse:collapse; margin:0 auto;
 								border-color:#000;font-size:10px; }
@@ -836,178 +849,158 @@ class Application_Form_FrmGlobal{
 							color: #fff;
 							background: #d42727;
 							border: 2px solid fff;
-							font-size: 11px;
+							font-size: 10px;
 							padding:10px 2px;
 							border-radius: 2px;
 							border: 6px double #fff;
 							font-weight:bold !important;
 							font-family:Times New Roman;
 						}
+						.hearder_table small{
+							display:block;
+							line-height:15px;
+						}
+						.spanBlog{
+							display:block !important;
+							line-height:12px;
+							font-size:10px;
+						}
+						.print label{
+							margin-bottom: 0px !important;
+						}
 						@page {
-							/* Chrome sets own margins, we change these printer settings */
-							margin:0.5cm 1cm 0.3cm 1cm; '
+							margin:0cm 0.7cm 0cm 0.7cm;
 							page-break-before: avoid;
-							/*size: 21cm 14.8cm; */
+							/*size: A4 landscape;*/
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+						}
+						#page {
+						   border-collapse: collapse;
+						}
+						#page td {
+						   padding: 0; 
+						   margin: 0;
 						}
 						.no_display{
 							display: none;
 						}
 					</style>
-					<table  width='100%'  class='print' cellspacing='0'  cellpadding='0' style='height:13.97cm; font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
+					<table width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
 						<tr height='90px'>
-							<td align='center' valign='top' colspan='3'>
+							<td align='center' valign='top' colspan='5'>
 								<label id='lbl_header'></label>
 							</td>
 						</tr>
 						<tr>
-							<td width='30%' style='position:relative'>
-								<div class='no_display'>
-									<div id='lbl_branchlogo'></div>
-									<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
-									<label id='lb_branchname'></label>
-									<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
-									</div>
-								</div>
+							<td width='20%'></td>
+							<td width='20%'>&nbsp;</td>
+							<td width='20%' align='center' valign='bottom'>
+								<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:11px;position:relative'>បង្កាន់ដៃបង់ប្រាក់</div>
 							</td>
-							<td align='center' valign='bottom' width='40%'>
-								<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:12px;position:relative'>បង្កាន់ដៃបង់ប្រាក់</div>
-								<div style='font-family:Times New Roman;font-size:12px;font-weight:bold'>Official Receipt</div>
+							<td width='20%'>លេខបង្កាន់ដៃ/Receipt No
 							</td>
-							<td width='30%'>&nbsp;</td>
+							<td width='20%'><label id='lb_receipt_no'></label>
+							</td>
 						</tr>
 						<tr>
-						<td align='center' valign='bottom' colspan='3'>
-							<table width='100%' style='font-size: 11px;line-height:10px !important;'>
-								<tr>
-									<td width='11%'>Student ID/Test ID </td>
-									<td > : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
-									<td width='11%'><div style='font-family: Times New Roman'>Academic Year	</div></td>
-									<td width='20%'> : &nbsp;<label id='lb_academic_year' class='one'>&nbsp;</label></td>
-									<td width='11%'><div style='font-size: 12px;font-family:Times New Roman;font-weight:bold;'><u>Receipt N<sup>o</sup></u></div></td>
-									<td width='20%'> : &nbsp;<label id='lb_receipt_no'></label></td>
-								</tr>
-								<tr>
-									<td style='vertical-align: top;' >Student Name</td>
-									<td colspan='1'> : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top; line-height: 13px;' ></label></td>
-									<td><div style='font-family: Times New Roman'>Grade	</div></td>
-									<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
-										<div class='no_display'>
-											<div style='border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'>
-											<label id='lb_photo'></label>
-											</div>
-										</div>
-									</td>
-									<td><div style='font-size: 12px;font-weight: bold;font-family: Times New Roman'>Pay Date</div></td>
-									<td> : &nbsp;<label id='lb_date' class='one bold'></label></td>
-								</tr>
-								<tr>
-									<td>Gender </td>
-									<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
-									<td><div style='font-family: Times New Roman'>Session Type</div></td>
-									<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
-									<td>Print Date</td>
-									<td> : &nbsp;".date('d-m-Y g:i A')."</td>
-								</tr>
-								<tr>
-									<td>Tel</td>
-									<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
-									<td>Class</td>
-									<td> : &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
-									<td>Print By :</td>
-									<td> : &nbsp;".$username."</td>
-								</tr>
-							</table>
-						</td>
+							<td width='20%'><span class='spanBlog'>Print Date:".date('d-m-Y g:iA')."</span></td>
+							<td width='20%'><span class='spanBlog'>Print By : ".$username."</span></td>
+							<td width='20%' align='center' valign='bottom'>
+								<div style='font-family:Times New Roman;font-size:11px;font-weight:bold'>Official Receipt</div>
+							</td>
+							<td width='20%'>&nbsp;ថ្ងៃបង់ប្រាក់/Pay Date</td>
+							<td width='20%'><label id='lb_date' class='one bold'></label></td>
+						</tr>
+						<tr>
+							<td>អត្តលេខ/Student ID,Test ID </td>
+							<td> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+							<td>ឆ្នាំសិក្សា/Academic Year</td>
+							<td> : &nbsp;<label id='lb_academic_year' class='one'>&nbsp;</label></td>
+							<td rowspan='5' valign='top'>
+								<div style='float:right;border:1px solid #000;width:70px;height:85px;text-align:right'>
+									<label id='lb_photo'></label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td style='vertical-align: top;'>គោត្តនាម-នាម</td>
+							<td > : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top;' ></label></td>
+							<td>ប្រភេទ/Type </td>
+							<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
+						</tr>
+						<tr>
+							<td>surname-Name</td>
+							<td> : &nbsp;<label id='lb_namelatin' class='one bold' style='display: inline-block; vertical-align: top;'></label></td>
+							<td>ថ្នាក់/Class</td>
+							<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
+							</td>
+						</tr>
+						<tr>
+							<td>ភេទ/Gender </td>
+							<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
+							<td>ថ្នាកទី/Grade/Level​​​</td>
+							<td rowspan='2'> : &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>លេខទូរសព្ទ/Tel</td>
+							<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
+						</tr>
+					<tr>
+						<td colspan='5'><div id='t_amountmoneytype'></div></td>
 					</tr>
 					<tr>
-						<td colspan='3'><div id='t_amountmoneytype'></div></td>
-					</tr>
-					<tr>
-						<td valign='top' style='font-size:10px;'>Note
+						<td rowspan='3' valign='top' style='font-size:10px;'>Note
 							<div style='width:99%;float: left;'>
-								<div style='font-size:10px;min-height:70px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
+								<div style='font-size:10px;min-height:40px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
 							</div>
 						</td>
-						<td valign='top' style='font-size:10px;'>
+						<td rowspan='3' colspan='2' valign='top' style='font-size:10px;' >
 							Say in US Dollars
-							<div style='font-size:10px;min-height: 70px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
+							<div style='font-size:10px;min-height:40px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
 						</td>
-						<td>
-							<table width='98%' style='margin-left:4px; font-size:inherit; white-space:nowrap;line-height:10px;border-collapse:collapse;'>
-								<tr>
-									<td>Penalty</td>
-									<td>: $</td>
-									<td align='right'>&nbsp;&nbsp; <label id='lb_fine'></label></td>
-								</tr>
-								<tr>
-									<td>Total Payment</td>
-									<td>: $</td>
-									<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_total_payment'></label></td>
-								</tr>
-								<tr>
-									<td><div>Credit Memo</div></td>
-									<td>: $</td>
-									<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
-								</tr>
-								<tr style='height:4px;'>
-									<td colspan='3'></td>
-								</tr>
-								<tr>
-									<td><div style='font-weight: bold;font-family:Times New Roman;font-size:14px;'><strong>Paid Amount</strong></div></td>
-									<td>: $</td>
-									<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:14px;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
-								</tr>
-								<tr>
-									<td><div>Balance</div></td>
-									<td>: $</td>
-									<td align='right'>&nbsp;&nbsp;<label id='lb_balance_due'></label></td>
-								</tr>
-								<tr>
-									<td><div>Payment Method</div></td>
-									<td></td>
-									<td align='right'>&nbsp;&nbsp;<label id='lb_paymentmethod'></label></td>
-								</tr>
-								<tr>
-									<td><div>Number/Bank</div></td>
-									<td></td>
-									<td align='right'>&nbsp;&nbsp;<label id='lb_paymentnumber'></label></td>
-								</tr>
-							</table>
-						</td>
+						<td>ត្រូវបង់/Total Payment<label id='lb_fine'></label></td>
+						<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_total_payment'></label></td>
 					</tr>
 					<tr>
-						<td valign='top' colspan='3'>
-							<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;'>
-								<tr>
-									<td colspan='5'>
-										<table width='100%' style='marin-top:5px;font-size:12px; white-space:nowrap;line-height:15px;border-collapse:collapse;'>
-											<tr>
-												<td align='center'>Cashier</td>
-												<td align='center'>Head of Cashier</td>
-												<td align='center'>Customer</td>
-											</tr>
-											<tr>
-												<td align='center'>
-													<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:30px;'><label id='lb_byuser'></label>";
-													$str.="</div>
-													Signature/Name/Date
-												</td>
-												<td align='center' valign='bottom'>
-													<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;'></div>
-													Signature/Name/Date
-												</td>
-												<td align='center' valign='bottom'>
-													<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;'></div>
-													Signature/Name/Date
-												</td>
-											</tr>
-										</table>
-									</td>
-									<td valign='top'>
-									</td>
-								</tr>
-							</table>
+						<td>ប្រាក់សល់មុន/Credit Memo</td>
+						<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
+					</tr>
+					<tr>
+						<td><div style='font-weight: bold;font-size:11px;'><strong>បានបង់ Paid Amount</strong>: $</div></td>
+						<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:12px;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
+					</tr>
+					<tr>
+						<td align='center'>បេឡាករ/Cashier</td>
+						<td align='center'>ប្រធានបេឡា/Head of Cashier</td>
+						<td align='center'>អតិថិជន/Customer</td>
+						<td><div>ជំពាក់/Balance</div></td>
+						<td align='right'>&nbsp;&nbsp;<label id='lb_balance_due'></label></td>
+					</tr>
+					<tr>
+						<td colspan='3'></td>
+						<td><div>បង់ជា/Payment by</div></td>
+						<td align='right'>&nbsp;&nbsp;<label id='lb_paymentmethod'></label></td>
+					</tr>
+					<tr>
+						<td align='center'>
+							<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:15px;'><label id='lb_byuser'></label>";
+							$str.="</div>
+							Signature/Name/Date
 						</td>
+						<td align='center' valign='bottom'>
+							<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;'></div>
+							Signature/Name/Date
+						</td>
+						<td align='center' valign='bottom'>
+							<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;'></div>
+							Signature/Name/Date
+						</td>
+						<td valign='top'><div>Cheque No./Bank Name</div></td>
+						<td align='right' valign='top'>&nbsp;&nbsp;<label id='lb_paymentnumber'></label></td>
 					</tr>
 			</table>
 				<div class='no_display'>
@@ -1019,6 +1012,11 @@ class Application_Form_FrmGlobal{
 						</table>
 						<span id='lbParentName' >&nbsp;</span>
 						<span id='lbParentPhone' >&nbsp;</span>
+						<div id='lbl_branchlogo'></div>
+						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
+						<label id='lb_branchname'></label>
+						<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
+						</div>
 					</div>
 				</div>
 			</div>";
@@ -1177,7 +1175,7 @@ class Application_Form_FrmGlobal{
 									</div>
 								</div>
 							</td>
-							<td align='center' valign='bottom' width='40%'>
+							<td align='center' valign='top' width='40%' >
 								<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:12px;position:relative'>វិក្ក័យបត្រ</div>
 								<div style='font-family:Times New Roman;font-size:12px;font-weight:bold'>INVOICE</div>
 							</td>

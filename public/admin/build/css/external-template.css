@@ -262,6 +262,45 @@ body.externalTemplate .nav.child_menu li li a:hover {
     padding-left: 0.5rem;
 }
 
+.bg-gradient-directional-primary {
+    background-image: -webkit-linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-image: -moz-linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-image: -o-linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-image: linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-repeat: repeat-x;
+}
+
+.bg-gradient-directional-success {
+    background-image: -webkit-linear-gradient(90deg,#17a139,#72dd30);
+    background-image: -moz-linear-gradient(90deg,#17a139,#72dd30);
+    background-image: -o-linear-gradient(90deg,#17a139,#72dd30);
+    background-image: linear-gradient(90deg,#17a139,#72dd30);
+    background-repeat: repeat-x;
+}
+
+.bg-gradient-directional-danger {
+    background-image: -webkit-linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-image: -moz-linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-image: -o-linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-image: linear-gradient(90deg,#2f61ab,#4da1fe);
+    background-repeat: repeat-x;
+}
+
+.bg-gradient-directional-info {
+    background-image: -webkit-linear-gradient(90deg,#2fab77,#4dfec0);
+    background-image: -moz-linear-gradient(90deg,#2fab77,#4dfec0);
+    background-image: -o-linear-gradient(90deg,#2fab77,#4dfec0);
+    background-image: linear-gradient(90deg,#2fab77,#4dfec0);
+    background-repeat: repeat-x;
+}
+
+.bg-gradient-directional-warnings {
+    background-image: -webkit-linear-gradient(90deg,#ab982f,#fee84d);
+    background-image: -moz-linear-gradient(90deg,#ab982f,#fee84d);
+    background-image: -o-linear-gradient(90deg,#ab982f,#fee84d);
+    background-image: linear-gradient(90deg,#ab982f,#fee84d);
+    background-repeat: repeat-x;
+}
 
 .primary-custom-card1 {
     position: relative;
@@ -504,8 +543,65 @@ body.externalTemplate .nav.child_menu li li a:hover {
 .align-items-center {
     align-items: center !important;
 }
+.wd-5p {
+    width: 5%;
+}
+.wd-10p {
+    width: 10%;
+}
+.wd-15p {
+    width: 15%;
+}
+.wd-20p {
+    width: 20%;
+}
+.wd-25p {
+    width: 25%;
+}
+.wd-30p {
+    width: 30%;
+}
+.wd-35p {
+    width: 35%;
+}
+.wd-40p {
+    width: 40%;
+}
 .wd-45p {
     width: 45%;
+}
+.wd-50p {
+    width: 50%;
+}
+.wd-55p {
+    width: 55%;
+}
+.wd-60p {
+    width: 60%;
+}
+.wd-65p {
+    width: 65%;
+}
+.wd-75p {
+    width: 75%;
+}
+.wd-70p {
+    width: 70%;
+}
+.wd-80p {
+    width: 80%;
+}
+.wd-85p {
+    width: 85%;
+}
+.wd-90p {
+    width: 90%;
+}
+.wd-95p {
+    width: 95%;
+}
+.wd-100p {
+    width: 100%;
 }
 .badge {
     display: inline-block;

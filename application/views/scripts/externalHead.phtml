@@ -265,6 +265,32 @@
        		<div class="right_col" role="main" >
        		 	<div class="" >
 					<div style="clear:both;"></div>
+					<div class="main-container container-fluid">
+						<div class="breadcrumb-header justify-content-between"> 
+							<div class="left-content"> 
+								<span id="breadcrumbTitle" class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span> 
+							</div> 
+							<div class="justify-content-center mt-2"> 
+								<?php if($controller!='dashboard' ){?>
+								<?php if($action=='index' AND $controller!='dashboard' ){?>
+								<ol class="breadcrumb"> 
+									<li class="breadcrumb-item tx-15"><a id="breadcrumbSubTitle" href="javascript:void(0);">Dashboard</a></li> 
+									<li class="breadcrumb-item active" aria-current="page">
+										
+										<a  href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
+											<?php echo $tr->translate("ADD_NEW");?>
+										</a>
+										<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' ){?>
+										<a  href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
+											<?php echo $tr->translate("GO_BACK");?>
+										</a>
+									</li> 
+								</ol> 
+								<?php }?>
+								<?php }?>
+							</div> 
+						</div>
+					
 					<?php if($module!='allreport' AND ($module!='home' OR $controller=="crm") AND $module!='default' ){?>
              		<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
 						<?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' ){?>

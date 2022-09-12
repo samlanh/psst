@@ -1,7 +1,8 @@
 <?php 
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 	$baseUrl = $this->baseUrl()."/";
-	echo $this->headTitle($tr->translate("DASHBOARD"));
+	$pageTitle = $tr->translate("DASHBOARD");
+	echo $this->headTitle($pageTitle);
 	$key = new Application_Model_DbTable_DbKeycode();
 	$dataInfo=$key->getKeyCodeMiniInv(TRUE);
 		
@@ -23,18 +24,8 @@
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
-<div class="main-container container-fluid">
-	<div class="breadcrumb-header justify-content-between"> 
-		<div class="left-content"> 
-			<span class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span> 
-		</div> 
-		<div class="justify-content-center mt-2"> 
-			<ol class="breadcrumb"> 
-				<li class="breadcrumb-item tx-15"><a href="javascript:void(0);">Dashboard</a></li> 
-				<li class="breadcrumb-item active" aria-current="page">Sales</li> 
-			</ol> 
-		</div> 
-	</div>
+
+	
 	<div class="row"> 
 		<div class="col-md-6 col-sm-6 col-xs-12"> 
 		
@@ -421,7 +412,11 @@
 		</div>
 	</div>
 	
-</div>
+<script type="text/javascript">
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+</script>
 <?php 
 	echo $this->render('externalFoot.phtml');
 ?>

@@ -83,6 +83,14 @@ class ExternalController extends Zend_Controller_Action
 		$arrFilter['classTypeFilter']=2;
 		$this->view->activeClass = $dbExternal->coutingClassByUser($arrFilter);
     }
+	public function groupAction()
+    {
+		$this->_helper->layout()->disableLayout();
+		$arrFilter = array();
+		$dbExternal=new Application_Model_DbTable_DbExternal();
+		$this->view->allClass = $dbExternal->getAllClassByUser($arrFilter);
+		
+    }
 }
 
 

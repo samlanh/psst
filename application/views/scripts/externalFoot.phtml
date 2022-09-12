@@ -12,6 +12,7 @@
 		            
 ?>
 				</div>
+			</div>
 		</div>
 	 </div>
 	</div>
@@ -43,6 +44,10 @@ function loadingBlock(){
 }
 function HideloadingBlock(){
   document.getElementsByClassName("overlay")[0].style.display="none";
+}
+function setPageTitle(pagetTitle){
+   $("#breadcrumbTitle").html(pagetTitle);
+   $("#breadcrumbSubTitle").html(pagetTitle);
 }
 jQuery(function () {
 	'use strict';

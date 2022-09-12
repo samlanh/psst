@@ -64,9 +64,9 @@
 											 <div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE");?></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SCORE_FOR_JANUARY");?>..." />
-													<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branch_id']?>" />
-													<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
+													<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SCORE_FOR_JANUARY");?>..." value="<?php echo $this->rs['title_score']?>" />
+													<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['branch_id']?>" />
+													<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['group_id']?>"/>
 												</div>
 											 </div>
 											 <div class="form-group">
@@ -74,20 +74,20 @@
 												<div class="col-md-7 col-sm-7 col-xs-12">
 													<div class="col-md-4 col-sm-4 col-xs-12">
 														<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();getSubjectByGroup();"  dojoType="dijit.form.FilteringSelect" >
-															<option value="1"><?php echo $tr->translate("MONTHLY");?></option>
-															<option value="2"><?php echo $tr->translate("SEMESTER");?></option>
+															<option value="1" <?php if(1==$this->rs['exam_type']){echo "selected='selected'";}?>><?php echo $tr->translate("MONTHLY");?></option>
+															<option value="2" <?php if(2==$this->rs['exam_type']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER");?></option>
 														</select>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
 														<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" queryExpr="*${0}*" autoComplete="false">								
-															<option value="1"><?php echo $tr->translate("SEMESTER1");?></option>
-															<option value="2"><?php echo $tr->translate("SEMESTER2");?></option>
+															<option value="1" <?php if(1==$this->rs['for_semester']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
+															<option value="2" <?php if(1==$this->rs['for_semester']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
 														</select>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
 														<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-																<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rs['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
 															<?php }}?>
 														</select>
 													</div>
@@ -107,7 +107,7 @@
 											 <div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="" type="text" style=" height: 120px !important;"  >
+													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->rs['note'];?>" type="text" style=" height: 120px !important;"  >
 												</div>
 											 </div>
 											 

@@ -3,24 +3,8 @@
 	$baseUrl = $this->baseUrl()."/";
 	$pageTitle = $tr->translate("GROUP_LIST");
 	echo $this->headTitle($pageTitle);
-	$key = new Application_Model_DbTable_DbKeycode();
-	$dataInfo=$key->getKeyCodeMiniInv(TRUE);
-		
-	$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
-	$userName = $sessionUserExternal->userName;
-	$teacherNameKh = $sessionUserExternal->teacher_name_kh;
-	$teacherNameEn = $sessionUserExternal->teacher_name_en;
-	$userId = $sessionUserExternal->userId;
-	
-	$teachName = $teacherNameKh;
-	if(empty($teachName)){
-		$teachName = $teacherNameEn;
-	}else{
-		if(!empty($teacherNameEn)){
-			$teachName = $teachName." / ".$teacherNameEn;
-		}
-	}
-	 $frm =  $this->form_search;
+
+	$frm =  $this->form_search;
 	 
 ?>
 <?php 
@@ -32,7 +16,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="card mb-1 ">
 				<div class="card-header pb-1"> 
-					<h3 class="card-title mb-2 "><?php echo $tr->translate("SEARCH"); ?></h3> 
+					<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
 				</div>
 				<div class="card-content">
 					<div class="card-body">

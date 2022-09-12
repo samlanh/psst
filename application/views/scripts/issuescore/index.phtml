@@ -1,269 +1,159 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("STUDENT_LIST_REPORT");
+	$pageTitle = $tr->translate("ISSUE_SCORE_LIST");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
-	$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
-	$urlCertifyKhmer = $this->baseUrl()."/allreport/allstudent/certify-khmer/id/";
-	$urlCertifyEnglish = $this->baseUrl()."/allreport/allstudent/certify-english/id/";
+	//$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
+$frm =  $this->form_search;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
-<div class="row"> 
-	<div class="col-md-12 col-sm-12 col-xs-12">
-		<div class="card mb-1 ">
-			<div class="reportblog">
-	
-				<form style="display:none;" id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-					<div class="form-group">
-						<div class="col-md-2 col-sm-2 col-xs-12">
-							<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12">
-							<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
-								<option value="-1"><?php echo $tr->translate("STUDENT_TYPE");?></option>
-								<?php if(!empty($this->study_type)){foreach($this->study_type as $rs){?>
-								<option value="<?php echo $rs['id'];?>" <?php if($this->search['study_type']==$rs['id']){echo "selected";}?>><?php echo $rs['name'];?></option>
-								<?php }}?>
-							</select>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12">
-							<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
-							<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
-								<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
-								<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
-							</select>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12">
-							<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-						</div>
-					</div>
-				</form>
-				<div id="divPrint">
-				<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-					<table style="margin: 0 auto; width: 100%;color:#000;"  >
-							<tr>
-								<td style="width:30%;" rowspan="2">
-									<?php 
-										$logo = $this->baseUrl().'/images/Logo/logo.png';
-										if (file_exists(PUBLIC_PATH."/images/Logo/".$this->rr['branch_logo'])){
-											$logo = $this->baseUrl().'/images/Logo/'.$this->rr['branch_logo'];
-										}
-									?>
-									<img style="max-height:90px;" src="<?php echo $logo;?>">
-								</td>
-								<td align="center">
-									<span style="font-weight:200;font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("NATIONALITY_OFKINGDOM");?></span><br />
-									<span style="font-weight:200;font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("NATION_RELIGION_KING");?></span>
-									<div><img style="height: 12px;" src="<?php echo $this->baseUrl()."/images/style.png";?>" /></div>
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td style="width:40%;font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';text-align: center;" valign="top">
-									<?php echo $tr->translate("STUDENT_LIST_REPORT");?>
-									<div>
-										<?php echo $tr->translate("ACADEMIC_YEAR");?>
-										<?php echo $this->rr['academic'];?>
-									</div>
-								</td>
-								<td style="width:30%;">
-									<table style="width: 100%;white-space: nowrap;line-height: 18px;color:#000;font-size:12px; font-family:'Times New Roman','Khmer OS Battambang';" >
-										<tr>
-											<td width="35%"><?php echo $tr->translate("DEGREE");?></td>
-											<td width="65%">: <?php echo $this->rr['degree'];?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("STUDY_GROUP");?></td>
-											<td>: <?php echo $this->rr['group_code'];?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("CLASSES");?></td>
-											<td>: <?php echo $this->rr['room_name'];?></td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" id="exportExcel">
-									<style> 
-										table{
-											font-family: 'Times New Roman','Khmer OS Battambang';
-										}
-										table.content-data{
-											border-collapse:collapse;
-											border:1px solid #000; 
-											font-size:13px;
-										}
-										table.content-data thead tr.style {
-										   line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
-											background: #c1d0f3;
-											font-weight:600;
-										}
-										table.content-data thead tr th {
-										  text-align:center;
-										}
-										table tr td{
-											padding:0 2px;
-										}
-										tr.voidclass {
-											background: #fff7f7;
-										}
-										td.centerText{
-											text-align: center;
-										}
-										td.rightText {
-											text-align: right;
-										}
-									</style>
-									<table class="content-data " width="100%" border="1"  cellspacing="0" cellpadding="0">
-										<thead>
-											<tr class="style" align="center" >
-												<th scope="col"><?php echo $tr->translate("NUM");?></th>
-												<th scope="col"><?php echo $tr->translate("STUDENT_ID");?></th>
-												<th scope="col"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>
-												<th scope="col"><?php echo $tr->translate("NAME_ENGLISH");?></th>
-												<th scope="col"><?php echo $tr->translate("SEX");?></th>
-												<th scope="col"><?php echo $tr->translate("DATE_OF_BIRTH");?></th>	
-												<th scope="col"><?php echo $tr->translate("OTHER");?></th>	
-											</tr>
-										</thead>
-										<?php  $i=0;
-										$male=0;$femle=0; 
-										$teacher_name="";
-										$str='';
-										if (!empty($this->row)){ foreach ($this->row as  $key=> $row){ 
-											if($key==0){
-												$str=$key+1;
-											}else{
-												$str.=",".($key+1);
-											}
-											
-											$i++; $teacher_name=$row['teacher'];?>
-										<tr class="rowData hover context-menu-one"  id="<?php echo "row".$i?>" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" >
-											<td data-label="<?php echo $tr->translate("NUM");?>" align="center"><?php echo $i;?>
-												<input type="hidden" name="gd_id<?php echo $i?>" id="gd_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['gd_id']?>" />
-												<input type="hidden" name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_id']?>" />
-											</td>
-											<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $row['stu_code'];?></td>
-											<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left"><?php echo $row['kh_name'];?></td>
-											<td data-label="<?php echo $tr->translate("NAME_ENGLISH");?>" align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
-											<td data-label="<?php echo $tr->translate("SEX");?>" align="center">
-											<?php echo $row['sex'];
-												if($row['gender']==1){
-													$male=$male+1;
-												}else{
-													$femle=$femle+1;
-												}
-											?>
-											</td>
-											<td data-label="<?php echo $tr->translate("DATE_OF_BIRTH");?>" align="center"><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
-											<td data-label="<?php echo $tr->translate("OTHER");?>" align="center">&nbsp;</td>
-											
-										</tr>
-										<?php }}?>	
-										<tr>
-											<td colspan="7" valign="top" style="padding-top:2px;border:1px solid #fff; border-top:1px solid #000;">
-												<span style="font-weight:200;color:#000; font-size: 12px;;">
-												<input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
-												<input type="hidden" name="group_id" id="group_id" value="<?php echo $this->rr['id'];?>" />
-													<?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?>
-													<?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT");?>
-													<?php echo $tr->translate("MALE")." ".$male;?> <?php echo $tr->translate("STUDENT_UNIT");?>
-												</span>
-											</td>
-										</tr>
-										<tr style="border: 1px solid #fff;">
-											<td colspan="7" style="border:0px solid #fff !important;">
-												<table cellpadding="0" cellspacing="0" width="100%" style="margin-top:-5px;color:#000; font-family:'Times New Roman','Khmer OS Battambang'; font-size: 12px">
-													<tr>
-														<td width="35%" align="center">
-															<div><?php echo $tr->translate("CHECKANDAPPROVED");?></div>
-															<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
-														</td>
-														<td width="30%">&nbsp;</td>
-														<td width="35%" align="center">
-															<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span>
-															<span style="font-family:'Times New Roman','Khmer OS Muol Light';">
-																<div><?php echo $tr->translate("TEACHER_ROOM");?></div>
-															</span>
-														</td>
-													</tr>
-													<tr>
-														<td valign="top" style="font-family:'Khmer MEF2';font-size:14px;text-align: center;"></td>
-														<td valign="top" ></td>
-														<td valign="top" style="font-family:'Khmer MEF2';font-size:14px;text-align: center;"><br /><br /><?php echo $teacher_name;?></td>
-													</tr>
-													<!-- <tr style="text-align:center; border:1px solid #fff;"><td colspan="3" align="center"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit">
-													<?php //echo $tr->translate("SAVE_CLOSE");?></button>
-													 -->
-												</table>
-											</td>
-										</tr>
-									</table>	
-								</td>
-							</tr>
-					  </table>
-					</form>
+	<div class="row"> 
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="card mb-1 ">
+				<div class="card-header pb-1"> 
+					<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
 				</div>
+				<div class="card-content">
+					<div class="card-body">
+						<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+							<div class="form-group">
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("adv_search");?>
+								</div>
+								
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("academic_year");?>
+							   </div>
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("degree");?>
+							   </div>
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<input id="grade" />
+							   </div>
+							   <div class="col-md-2 col-sm-3 col-xs-12">
+									<?php echo $frm->getElement("exam_type");?>
+								</div>
+						   </div>
+							<div class="form-group"> 
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("for_semester");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("for_month");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
+								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+								</div>
+							</div>
+					   </form>
+				   </div>
+			   </div>
 			</div>
 		</div>
 	</div>
-</div>
+	<div class="row"> 
+		<?php if(!empty($this->row)) foreach($this->row as $row){ 
+			$cardClass = "border-top-primary border-top-darken-1";
+			$bgClass = "border-primary bg-gradient-directional-primary";
+			if($row['exam_type']==2){
+				$cardClass = "border-top-warnings border-top-darken-1";
+				$bgClass = "border-warnings bg-gradient-directional-warnings";
+			}
+		?>
+		<div class="col-md-3 col-sm-3 col-xs-12"> 
+			<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
+                <div class="card-content">
+                    <div class="row d-flex">
+                        <div class="col-xs-4 pr-0">
+                            <div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
+								<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-2"><?php echo $row['groupCode']; ?></span>
+							</div>
+                        </div>
+                        <div class="col-xs-8 pl-0">
+							<ul class="nav navbar-right panel_toolbox stusearch">
+							  <li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+								<ul class="dropdown-menu" role="menu">
+									<li>
+										<a target="_blank" href="<?php echo $this->baseUrl()."/issuescore/edit/id/".$row['id'];?>"><?php echo $tr->translate('EDIT');?></a>
+									</li>
+									<li>
+										<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$row['id'];?>"><?php echo $tr->translate('SCORE_LIST_REPORT');?></a>
+									</li>
+								</ul>
+							  </li>
+							</ul>
+                            <div class="p-1">
+                                <p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
+                                <div class="text-left">
+                                    <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
+                                    <p class="mb-0"><?php echo $row['academicYear']; ?></p>
+									<h3 class="mb-0 mt-0 p-relative">
+										<i class="glyphicon glyphicon-blackboard"></i>  <span class="counting-num ml-1"><?php echo $row['roomName']; ?></span>
+										
+									</h3>
+                                    <p class="mb-0"><?php echo $row['roomName']; ?></p>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<?php } ?>
+	</div>
 <script type="text/javascript">
 
 $( document ).ready(function() {
    setPageTitle('<?php echo $pageTitle; ?>');
 });
 
-dojo.require("dojo.NodeList-manipulate");
-var row=0;
-var url="";
-$(function(){
-	$.contextMenu({
-		selector: '.context-menu-one', 
-		callback: function(key, options) {
-			var m = "clicked: " + key;
-			if(key=="certifykhmer"){
-				url='<?php echo $urlCertifyKhmer;?>';
-			}else if(key=="certifyenglish"){
-				url='<?php echo $urlCertifyEnglish;?>';
-			} 
-			gotoAction();
-		},
-		items: {
-			"certifykhmer": {name: "<?php echo $tr->translate("CERTIFY_KHMER");?>", icon: "fa-file-text-o",},
-			"certifyenglish": {name: "<?php echo $tr->translate("CERTIFY_ENGLIISH");?>", icon: "fa-file-text-o"},
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.ready(function(){
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false, 
+		required: false,
+		id: "grade",
+		name: "grade",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
 		}
-	});
-});
-function setrowdata(index){
-	row = index;
-}
-var recordid ='';
-function gotoAction(){
-	window.open(url+row);
-}
-function deleteRecord(index) {
-	var txt;
-	var r = confirm("<?php echo $tr->translate("Do you want to remove this student");?>?");
-	if (r == true) {
-		var identity = $('#identity').val();
-		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
-		}
-		var strings = arrays.join(',');
-		$('#identity').val(strings);
-		dojo.query("#row"+index).remove();
-	} else {
-	    return false;
-	}
+	}, "grade");
 	
-	}
+	getallGrade();
+});
+
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('grade').attr('value','');
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store); 
+			    dijit.byId('grade').attr('value','<?php echo $this->adv_search['grade']?>');    
+			},
+			error: function(err) {
+			}
+		});
+}
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

@@ -71,71 +71,125 @@
 				<td>&nbsp;</td>
 			</tr>
 		<style>
-			table tr th{
-				border: 1px solid #000;	
-				text-align: center;
-				padding: 5px 2px;
-			}
-			ul li{list-style: none;}
-			table {page-break-inside:auto }
-			tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			thead tr td {
-				font-weight: bold;
-				padding: 6px 2px;
-			}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
+					}
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+						width:100%;
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.content-data  tr.style {
+					 
+					   white-space: nowrap;
+						
+					}
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 2px;
+					}	
+		
 		</style>
 			<tr>
 				<td colspan="3">
 					<form id="list" name="list" action="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'closingstuproduct')); ?>" dojoType="dijit.form.Form" method="post">
 						<div id="exportExcel">
-							<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+							<table  cellpadding="4"​ class="content-data"  border="1">
 								<thead>
-									<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-										<td rowspan="2">
+									<tr class="style" align="center">
+										<td scope="col" rowspan="2">
 											<input  onchange="checkall();" type="checkbox"  class="checkbox" id="check_all"  name="check_all"/>
 										</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-										<td colspan="4">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
-										<td colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
-										<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
+										<td scope="col" colspan="4">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
+										<td scope="col" colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
 									</tr>
-									<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-										<td>&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("Total Received");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("Total Remain");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
+									<tr  class="style" align="center">
+										<td scope="col">&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("Total Received");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("Total Remain");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("STUDENT_NAME");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
 										
 									</tr>
 								</thead>
 								<?php $i=0; if (!empty($this->rs)) foreach ($this->rs as $key=> $row){$i++;?>
-								<tr style="font-size:11px; height: 20px;" class="hover" >
-									<td align="center">
+								<tr class="hover style" >
+									<td data-label="<?php echo $tr->translate("CHECK");?>" align="center">
 										<input  style="height: 15px;margin-top: 5px;"  type="checkbox"  class="checkbox" id="close_<?php echo $row['id'];?>" value="<?php echo $row['id'];?>"  name="selector[]"/>
 									</td>
-									<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-									<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
-									<td align="center"><a style="text-decoration: none; color: #000;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td>
-									<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['received_date']))?>&nbsp;</td>
-									<td align="center">&nbsp;<?php echo $row['total_received'];?>&nbsp;</td>
-									<td align="center">&nbsp;<?php echo $row['total_qty_due'];?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("NUM");?>" align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("BRANCH");?>" >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("Ref Receipt No");?>" align="center"><a style="text-decoration: none; color: #000;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td>
+									<td data-label="<?php echo $tr->translate("Received Date");?>" align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['received_date']))?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("Total Received");?>" align="center">&nbsp;<?php echo $row['total_received'];?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("Total Remain");?>" align="center">&nbsp;<?php echo $row['total_qty_due'];?>&nbsp;</td>
 									
-									<td align="center">&nbsp;<?php echo $row['stu_code'];?></td>
-									<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
-									<td >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
-									<td >&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
-									<td >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
-									<td align="center">&nbsp;<?php echo $row['user_enter']; ?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("STUDENT_CODE");?>"  align="center">&nbsp;<?php echo $row['stu_code'];?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("DEGREE");?>" >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
+									<td data-label="<?php echo $tr->translate("GRADE");?>" >&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("PHONE");?>" >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
+									<td data-label="<?php echo $tr->translate("USER");?>" align="center">&nbsp;<?php echo $row['user_enter']; ?>&nbsp;</td>
 								</tr>
 								<?php }?>
 							</table>	

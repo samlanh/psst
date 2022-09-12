@@ -86,6 +86,41 @@ table.tb-footer tr.style-head {
 				<td width="15%" align="center"></td>
 			</tr>
 		<style>
+			th,td{ padding:0 1px;}
+							table{ border-collapse:collapse; margin:0 auto;border-color:#4839bd; }
+							.padding{ padding: 0 1px !important;}
+							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
+							.hover:hover{background: #ccc;}
+							.hidden{display: none;}
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+							
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:13px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+							}
+							table.content-data thead tr.style-head {
+							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+								background: #ccd9ff;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
+							#BrowserPrintDefaults{display:none} 
+
+			
+
+
+			/*
 			table tr th{
 				border: 1px solid #000;	
 				text-align: center;
@@ -134,6 +169,7 @@ table.tb-footer tr.style-head {
 			table.content-data-main tr.style-head td {
 			    border: 1px solid #4839bd;
 			}
+			*/
 		</style>
 			<tr>
 				<td colspan="3" valign="top">
@@ -206,26 +242,36 @@ table.tb-footer tr.style-head {
 										</table>
 									</td>
 								</tr>
-								<tr class="style-head" align="center" >
-									<td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("NAME_ENGLISH");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("DOB");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
-								</tr>
-						<?php }?>
-						<?php $i++;$count++; if ($row['sex_key']==2){ $female++;}?>
-						<tr class="style-rowdata hover" align="center" >
-							<td class="border">&nbsp;<?php echo $i;?>&nbsp;</td>
-							<td class="border" >&nbsp;<?php echo $row['stu_code'];?></td>
-							<td class="border" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
-							<td class="border" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
-							<td class="border" >&nbsp;<?php echo $row['sex'];?>&nbsp;</td>	
-							<td class="border" >&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
-							<td class="border" <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>>&nbsp;<?php echo $row['status'];?>&nbsp;</td>	
-						</tr>
+							<tr>
+								<td colspan="14">
+									<table class="content-data" border="1">
+										<thead>
+												<tr class="style-head" align="center" >
+													<td scope="col">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+													<td  scope="col">&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
+													<td  scope="col">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER");?>&nbsp;</td>
+													<td  scope="col">&nbsp;<?php echo $tr->translate("NAME_ENGLISH");?>&nbsp;</td>
+													<td  scope="col">&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</td>
+													<td  scope="col">&nbsp;<?php echo $tr->translate("DOB");?>&nbsp;</td>
+													<td  scope="col">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+												</tr>
+										</thead>
+								
+								<?php }?>
+									<?php $i++;$count++; if ($row['sex_key']==2){ $female++;}?>
+										<tr style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding ' >
+											<td data-label="<?php echo $tr->translate("NUM");?>" >&nbsp;<?php echo $i;?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("STUDENT_CODE");?>"  >&nbsp;<?php echo $row['stu_code'];?></td>
+											<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("NAME_ENGLISH");?>"  align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("SEX");?>" >&nbsp;<?php echo $row['sex'];?>&nbsp;</td>	
+											<td data-label="<?php echo $tr->translate("DOB");?>"  >&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("STATUS");?>"  <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>>&nbsp;<?php echo $row['status'];?>&nbsp;</td>	
+										</tr>
+									</table>
+
+								</td>
+							</tr>
 						<?php $grade=$row['grade'];?>
 					<?php }?>	
 						<tr>

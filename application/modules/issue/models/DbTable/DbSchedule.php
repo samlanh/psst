@@ -69,6 +69,7 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     				'user_id'=>$this->getUserId(),
     		);
     		$this->_name='rms_group_schedule';
+    		
     		$id = $this->insert($_arr);
     		
     		if(!empty($_data['identity1'])){
@@ -203,6 +204,11 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		return 1;
     	}
     	return 0;
+    }
+    function getAllTeacher(){
+    	$db = $this->getAdapter();
+    	$sql = "SELECT id,teacher_name_kh as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
+    	return $db->fetchAll($sql);
     }
 }
 

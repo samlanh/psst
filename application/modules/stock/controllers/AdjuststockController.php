@@ -20,7 +20,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
     				'status_search'=>-1,
     			);
     		}
-			$db =  new Accounting_Model_DbTable_DbAdjustStock();
+			$db =  new Stock_Model_DbTable_DbAdjustStock();
 			$rows = $db->getAllAdjustStock($search);
 			
 			$list = new Application_Form_Frmtable();
@@ -42,7 +42,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-					$db = new Accounting_Model_DbTable_DbAdjustStock();
+					$db = new Stock_Model_DbTable_DbAdjustStock();
 					$row = $db->addAdjustStock($_data);
 					if(isset($_data['save_close'])){
 						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/adjuststock");
@@ -55,7 +55,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}
-			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
+			$_pur = new Stock_Model_DbTable_DbAdjustStock();
 			
 			$this->view->rq_code=$_pur->getAjustCode();
 			$this->view->bran_name=$_pur->getAllBranch();
@@ -77,7 +77,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try{
-					$db = new Accounting_Model_DbTable_DbAdjustStock();
+					$db = new Stock_Model_DbTable_DbAdjustStock();
 					$row = $db->updateAdjustStock($_data);
 					if(isset($_data['save_close'])){
 						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
@@ -90,7 +90,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}
-			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
+			$_pur = new Stock_Model_DbTable_DbAdjustStock();
 			$row =$_pur->getAdjustStockById($id);
 			if (empty($row)){
 				Application_Form_FrmMessage::Sucessfull("No Record","/stock/adjuststock");
@@ -136,7 +136,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     		$branch_id = $data['branch_id'];
-    		$_dbcht = new Accounting_Model_DbTable_DbAdjustStock();
+    		$_dbcht = new Stock_Model_DbTable_DbAdjustStock();
     		$itemsCode = $_dbcht->getAjustCode($branch_id);
     		print_r(Zend_Json::encode($itemsCode));
     		exit();

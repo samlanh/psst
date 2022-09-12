@@ -175,7 +175,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->all_dept = $_db->getAllDegreeName();
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->teacher = $db->getTeacherEdit($id);
+    	$this->view->teacher = $db->getPaymentEdit($id);
     	 
     	$rspayment =  $db->getCustomerPaymentByID($id);
     	$this->view->payment =$rspayment;
@@ -276,15 +276,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getservicefeeAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
-    		print_r(Zend_Json::encode($service_fee));
-    		exit();
-    	}
-    }
 //     function getProductFeeAction(){
 //     	if($this->getRequest()->isPost()){
 //     		$data=$this->getRequest()->getPost();
@@ -294,16 +285,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //     		exit();
 //     	}
 //     }
-	function getTeacherAction(){
-		if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$teacher = $db->getAllTeacherByGrade($data['grade'],$data['session']);
-    		array_unshift($teacher, array ( 'id' => -1, 'name' => $this->tr->translate('SELECT_TEACHER')) );
-    		print_r(Zend_Json::encode($teacher));
-    		exit();
-    	}
-	}
+	
 	function getReceiptNoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -486,6 +468,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
 			$rows = $db->getAllStudentBalance($branch_id);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	function getserviceitemAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rows = $db->getItemAllDetail($data);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

@@ -80,67 +80,124 @@
 					<td>&nbsp;</td>
 				</tr>
 				<style>
-					table tr th{
-						border: 1px solid #000;	
+					.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
-					table {page-break-inside:auto }
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
 					tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
-					}		
-					thead tr td {
-						font-weight: bold;
-						padding: 6px 2px;
+					  margin-top: 100px;
 					}
-					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }					
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+						width:100%;
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.content-data  tr.style {
+					 
+					   white-space: nowrap;
+						
+					}
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 2px;
+					}	
+									
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+						<table cellpadding="4"​ class="content-data"  border="1" >
 							<thead>
-								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-									<td colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-									<td colspan="7">&nbsp;<?php echo $tr->translate("ADJUST_INFO");?>&nbsp;</td>
-									<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
-									<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+								<tr class="style" align="center" >
+									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
+									<td scope="col" colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+									<td scope="col" colspan="7">&nbsp;<?php echo $tr->translate("ADJUST_INFO");?>&nbsp;</td>
+									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 								</tr>
 								
-								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-									<td><?php echo $tr->translate("CATEGORY");?></td>
-									<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<tr class="style"  align="center" >
+									<td scope="col"><?php echo $tr->translate("CATEGORY");?></td>
+									<td scope="col"><?php echo $tr->translate("PRODUCT_NAME");?></td>
 									
-									<td><?php echo $tr->translate("ADJUST_NO");?></td>
-									<td><?php echo $tr->translate("TITLE");?></td>
-									<td><?php echo $tr->translate("QTY_BEFOR");?></td>
-									<td><?php echo $tr->translate("QUANTITY_NEW");?></td>
-									<td><?php echo $tr->translate("STOCK_SPACING");?></td>
-									<td><?php echo $tr->translate("NOTE");?></td>
-									<td><?php echo $tr->translate("ADJUST_DATE");?></td>
+									<td scope="col"><?php echo $tr->translate("ADJUST_NO");?></td>
+									<td scope="col"><?php echo $tr->translate("TITLE");?></td>
+									<td scope="col"><?php echo $tr->translate("QTY_BEFOR");?></td>
+									<td scope="col"><?php echo $tr->translate("QUANTITY_NEW");?></td>
+									<td scope="col"><?php echo $tr->translate("STOCK_SPACING");?></td>
+									<td scope="col"><?php echo $tr->translate("NOTE");?></td>
+									<td scope="col"><?php echo $tr->translate("ADJUST_DATE");?></td>
 								</tr>
 							</thead>
 							<?php 
 							$gender=array(1=>"Male",2=>"Female");
 							if(!empty($rows))foreach($rows As $key=> $rs_row){
 							?>
-							<tr style="font-size:12px; height: 23px;" class="hover" >
-								<td >&nbsp;<?php echo $key+1; ?>&nbsp;</td>
-								<td >&nbsp;<?php echo $rs_row['branch_name']; ?>&nbsp;</td>
-								<td >&nbsp;<?php echo $rs_row['category']; ?>&nbsp;</td>
-								<td >&nbsp;<?php echo $rs_row['pro_name']; ?>&nbsp;</td>
+							<tr class="style hover"  class="hover" >
+								<td data-label="<?php echo $tr->translate("NUM");?>">&nbsp;<?php echo $key+1; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("BRANCH");?>">&nbsp;<?php echo $rs_row['branch_name']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("CATEGORY");?>">&nbsp;<?php echo $rs_row['category']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>">&nbsp;<?php echo $rs_row['pro_name']; ?>&nbsp;</td>
 								
-								<td align="center">&nbsp;<strong><?php echo $rs_row['adjust_no']; ?></strong>&nbsp;</td>
-								<td >&nbsp;<?php echo $rs_row['request_name']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("ADJUST_NO");?>" align="center">&nbsp;<strong><?php echo $rs_row['adjust_no']; ?></strong>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("TITLE");?>" >&nbsp;<?php echo $rs_row['request_name']; ?>&nbsp;</td>
 								
-								<td align="center">&nbsp;<?php if($rs_row['qty_befor']!=0) echo $rs_row['qty_befor']; ?>&nbsp;</td>
-								<td align="center">&nbsp;<?php if($rs_row['qty_after']!=0) echo $rs_row['qty_after']; ?>&nbsp;</td>
-								<td align="center">&nbsp;<?php if($rs_row['difference']!=0) echo $rs_row['difference']; ?>&nbsp;</td>
-								<td >&nbsp;<?php echo $rs_row['note']; ?></td>
-								<td align="center">&nbsp;<?php echo date("d/m/Y",strtotime($rs_row['request_date'])); ?>&nbsp;</td>
-								<td align="center">&nbsp;<?php echo $rs_row['user_name']; ?>&nbsp;</td>
-								<td align="center">&nbsp;<?php if ($rs_row['status']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DEACTIVE");} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("QTY_BEFOR");?>" align="center">&nbsp;<?php if($rs_row['qty_befor']!=0) echo $rs_row['qty_befor']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("QUANTITY_NEW");?>" align="center">&nbsp;<?php if($rs_row['qty_after']!=0) echo $rs_row['qty_after']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("STOCK_SPACING");?>" align="center">&nbsp;<?php if($rs_row['difference']!=0) echo $rs_row['difference']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("NOTE");?>" >&nbsp;<?php echo $rs_row['note']; ?></td>
+								<td data-label="<?php echo $tr->translate("ADJUST_DATE");?>" align="center">&nbsp;<?php echo date("d/m/Y",strtotime($rs_row['request_date'])); ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("USER");?>" align="center">&nbsp;<?php echo $rs_row['user_name']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("STATUS");?>" align="center">&nbsp;<?php if ($rs_row['status']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DEACTIVE");} ?>&nbsp;</td>
 							</tr>
 							<?php
 							}

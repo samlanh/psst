@@ -746,24 +746,7 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	function getStudentSccoreforEditTeacherScore($score_id){
-		$db = $this->getAdapter();
-		$sql="SELECT
-					sd.student_id,
-					(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-					(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-					(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex
-				FROM
-					rms_teacherscore_detail AS sd
-				WHERE 
-					sd.score_id =$score_id 
-				GROUP BY 
-					sd.`student_id` 
-				order by 
-					(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) DESC
-			";
-		return $db->fetchAll($sql);
-	}
+	
 	function getScoreTeacherById($score_id){
 		$db=$this->getAdapter();
 		$sql="SELECT 
@@ -776,41 +759,5 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchRow($sql);
 	}
-	function getScoreStudentsTeacherscore($id){
-		$db=$this->getAdapter();
-		$sql="SELECT id,score_id,student_id,subject_id,score FROM rms_teacherscore_detail WHERE score_id=".$id;
-		return $db->fetchAll($sql);
-	}
-	
-	function getSubjectByIdTeacherScore($id){
-		$db = $this->getAdapter();
-		$sql =" SELECT
-					sd.*,
-					(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-					(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-					(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-					sd.subject_id,
-					(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
-					(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-					(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-					(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-					sd.score ,
-					sd.`is_parent`
-				FROM
-					rms_teacherscore_detail AS sd
-				WHERE 
-					sd.score_id =$id 
-			";
-		return $db->fetchAll($sql);
-	}
-	
-	function getGroupStudentTeacherScore($id){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_id,status FROM rms_teacherscore WHERE id=$id LIMIT 1";
-		return $db->fetchRow($sql);
-	}
-	
-	
-	
 }
 

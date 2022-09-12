@@ -201,11 +201,7 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql="SELECT id,name_kh AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!='' and status=1";
 		return $db->fetchAll($sql);
 	}
-	public function getallSubjectTeacherById($teacher_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT * FROM `rms_teacher_subject` WHERE id= ".$db->quote($teacher_id);
-		return $db->fetchAll($sql);;
-	}
+	
 	public function getTeacherDocumentById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_teacher_document as s WHERE s.stu_id =".$id;

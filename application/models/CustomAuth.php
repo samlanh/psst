@@ -6,21 +6,13 @@ class Application_Model_CustomAuth extends Zend_Controller_Plugin_Abstract
 	 * @var Zend_Auth
 	 */
 	protected $_auth;	
-	protected $_rewrite_url = array(
-									/* "rsvAcl/user/index"=>"/rsvAcl#ui-tabs-1",
-									"rsvAcl/user-type/index"=>"/rsvAcl#ui-tabs-2",
-									"rsvAcl/acl/index"=>"/rsvAcl#ui-tabs-3",
-									"rsvAcl/user-access/index"=>"/rsvAcl#ui-tabs-4",
-									"idt/cso/index"=>"/idt#ui-tabs-1"  */
-								);
 	
 	protected $_exception_url = array(
-										"default/index/index",
-										"default/error/error",
-										"default/index/changepassword",
-										"default/index/logout",
-										"exchange/index/check-rate" 
-								);
+					"default/index/index",
+					"default/error/error",
+					"default/index/changepassword",
+					"default/index/logout",
+			);
  	
 	public function __construct(Zend_Auth $auth)
 	{		

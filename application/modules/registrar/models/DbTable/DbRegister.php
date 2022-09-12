@@ -292,6 +292,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
 					$_arr = array(
 							'payment_id'	=>$paymentid,
+							'feeId'	=>$rs_item['academic_year_'.$i],
 							'service_type'	=>$rs_item['items_type'],
 							'itemdetail_id'	=>$data['item_id'.$i],
 							'payment_term'	=>$data['term_'.$i],
@@ -303,7 +304,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'discount_type'	=>$data['discount_type'.$i],
 							'discount_percent'=>$data['discount_'.$i],
 							'discount_amount'=>$data['discount_amount'.$i],
-							'paidamount'	=>$data['total_amount'.$i],
+							'totalpayment'	=>$data['total_amount'.$i],
+							'paidamount'	=>$data['paid_amount'.$i],
 							'is_onepayment'	=>$data['onepayment_'.$i],
 							'start_date'	=>$data['date_start_'.$i],
 							'validate'		=>$data['validate_'.$i],
@@ -970,83 +972,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     } 
     
-    public function getServiceFee($year,$item_id,$termid,$student_id,$branch_id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT items_type,is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
-    	$rs_pro=$db->fetchRow($sql);
-    	$item_type = $rs_pro['items_type'];
-    	$is_set = $rs_pro['is_productseat'];
-    	if($item_type==1 OR $item_type==2){//grade or service
-    		$sql="SELECT 
-    					tfd.id,
-    					tfd.tuition_fee AS price,
-						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
-						(SELECT is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as is_set,
-    					(SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as items_type,
-						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-							WHERE sp.student_id = $student_id 
-								AND spd.itemdetail_id = $item_id 
-							 	AND spd.is_start=1 
-							 	AND sp.`id`=spd.`payment_id` 
-							 	AND sp.is_void=0 
-						 	ORDER BY 
-						 		spd.validate DESC LIMIT 1) AS validate 
-    		 		FROM 
-    		 			rms_tuitionfee AS tf,
-    		 			rms_tuitionfee_detail AS tfd 
-    		  		WHERE 
-    		  			tf.id = tfd.fee_id
-    		  			AND tf.status=1
-    					AND tfd.class_id = $item_id 
-    					AND tfd.payment_term = $termid ";
-    		if($item_type==1){// grade
-    			$sql.=" AND tf.type =1 AND tf.id = $year ";
-    		}
-    		if($item_type==2){//service
-    			$sql.=" AND tf.type = 2 ";
-    		}
-    		$sql.=" AND branch_id = $branch_id LIMIT 1";
-    		return $db->fetchRow($sql);
-    	}elseif ($item_type==3){//product
-    		if($is_set==1){//for set
-    			$sql="SELECT
-    			 			price,
-    						is_onepayment as onepayment,
-    						is_productseat as is_set,
-    						items_type,
-    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    							WHERE sp.student_id = $student_id 
-    								AND spd.itemdetail_id = $item_id
-    				  				ANd spd.is_start=1 
-    				  				AND sp.`id`=spd.`payment_id` 
-    				  				AND sp.is_void=0 
-    				  			ORDER BY spd.validate DESC LIMIT 1) AS validate
-    					FROM 
-    						`rms_itemsdetail` 
-    					WHERE 
-    						id=$item_id LIMIT 1 ";
-    		}else{
-    			$sql="SELECT
-    		 				price,
-    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as onepayment,
-    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
-    						(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
-    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-				    			WHERE sp.student_id = $student_id 
-					    			AND spd.itemdetail_id = $item_id
-					    			ANd spd.is_start=1 
-					    			AND sp.`id`=spd.`payment_id` 
-					    			AND sp.is_void=0 
-				    			ORDER BY spd.validate DESC LIMIT 1) AS validate
-    					FROM 
-    						`rms_product_location` 
-    					WHERE 
-    						pro_id=$item_id 
-    						AND branch_id = $branch_id LIMIT 1 ";
-    		}
-    		return $db->fetchRow($sql);
-    	}
-    }
+    
     public function getAllTermbyItemdetail($branch_id,$year,$item_id){
     		$db=$this->getAdapter();
     		$sql="SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
@@ -1159,16 +1085,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
 	
-	function getAllTeacherByGrade($grade_id,$session){
-    	$db = $this->getAdapter();
-    	$_db= new Application_Model_DbTable_DbGlobal();
-    	$branch_id=$_db->getAccessPermission();
-    	$sql = " SELECT t.id,CONCAT(t.teacher_name_en) as name FROM `rms_teacher` AS t,`rms_teacher_subject` AS ts
-              WHERE ts.subject_id = $grade_id and ts.session=$session $branch_id";
-		return $db->fetchAll($sql);
-    }
 	
-    function getTeacherEdit($payment_id){
+    function getPaymentEdit($payment_id){
     	$db = $this->getAdapter();
     	$sql = " select student_id from rms_student_payment where id = $payment_id ";
     	$stu_id = $db->fetchOne($sql);

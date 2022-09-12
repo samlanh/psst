@@ -3108,10 +3108,9 @@ function getAllgroupStudyNotPass($action=null){
   	
   	$sql="SELECT
   				
-				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_code,
-			  	(SELECT (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS stu_name,
-			  	(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) AS sex,
-			  	
+				st.stu_code AS stu_code,
+			  	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE stu_khname END) AS stu_name,
+			  	st.sex, 
 			  	gs.`stu_id`,
 			  	gs.mainType,
 				gs.is_maingrade,
@@ -3123,14 +3122,17 @@ function getAllgroupStudyNotPass($action=null){
 				gs.group_id,
 				gs.academic_year,
 				gs.degree,
+				gs.degree AS itemId,
 				gs.grade,
+				gs.grade AS itemDetailId,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel
 				
 		  	FROM
-		  		`rms_group_detail_student` AS gs
+		  		`rms_group_detail_student` AS gs,
+		  		rms_student as st
 		  	WHERE
-		  		1 ";
+		  		st.stu_id=gs.stu_id ";
 	  	if(!empty($data['item_type'])){
 	  		$sql.=" AND gs.`itemType` = ".$data['item_type'];
 	  	}	
@@ -3138,7 +3140,7 @@ function getAllgroupStudyNotPass($action=null){
   			$sql.=" AND gs.`group_id` = ".$data['group_id'];
   		}
   		if(!empty($data['studentId'])){
-  			$sql.=" AND gs.`stu_id` = ".$data['studentId'];
+  			$sql.=" AND gs.`stu_id` = ".$data['studentId']; 
   		}
   		if(isset($data['isMaingrade'])){
   			$sql.=" AND gs.`is_maingrade` = ".$data['isMaingrade'];
@@ -3155,9 +3157,11 @@ function getAllgroupStudyNotPass($action=null){
   		if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
   			$sql.=" AND gs.`stop_type` = ".$data['stopType'];
   		}
-  		
   		if(!empty($data['groupId'])){
   			$sql.=" AND gs.`group_id` = ".$data['groupId'];
+  		}
+  		if(!empty($data['studentType'])){
+  			//$sql.=" AND gs.`group_id` = ".$data['groupId'];
   		}
   		
   		$order="";
@@ -3173,7 +3177,6 @@ function getAllgroupStudyNotPass($action=null){
   		if(!empty($data['orderitemType'])){
   			$order.=" ORDER BY gs.`itemType` ASC ";
   		}
-  	
   		return $db->fetchAll($sql.$order);
   }
   function getAllGroupName($data=null){
@@ -3284,6 +3287,60 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
   	}
   	return $this->getAdapter()->fetchRow($sql);
+  }
+  function getItemAllDetail($data){
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
+  	
+  	$sql="SELECT
+		  	i.id AS itemDetailId,
+		  	i.items_id as itemId,
+		  	i.items_type,
+		  	i.code,
+		  	$colunmname  AS itemDetaillabel,
+			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=items_id LIMIT 1) as itemLabel,
+		  	i.ordering,
+		  	i.shortcut,
+		  	i.product_type,
+		  	i.is_productseat,
+		  	i.schoolOption,
+		  	i.is_autopayment
+  		FROM `rms_itemsdetail` i WHERE
+  			i.status=1 ";
+  	 
+  	if(!empty($data['Id'])){
+  		$sql.=" AND i.id=".$data['Id'];
+  	}
+  	if(!empty($data['itemsId'])){
+  		$sql.=" AND i.items_id=".$data['itemsId'];
+  	}
+  	if(!empty($data['itemsType'])){
+  		$sql.=" AND i.items_type=".$data['itemsType'];
+  	}
+  	if(!empty($data['productType'])){
+  		$sql.=" AND i.product_type=".$data['productType'];
+  	}
+  	
+  	if(isset($data['isProductseat'])){
+  		$sql.=" AND i.is_productseat=".$data['isProductseat'];
+  	}if(isset($data['isProductseat'])){
+  		$sql.=" AND i.is_productseat=".$data['isProductseat'];
+  	}
+  	if(isset($data['isOnepayment'])){
+  		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
+  	}
+  	if(isset($data['isAutopayment'])){
+  		$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
+  	}
+  	if(!empty($data['studentId'])){
+  		$sql.=" OR ( i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE stu_id=".$data['studentId']."))";
+  	}
+  	$sql.=" ORDER BY i.items_type ASC ";
+  	
+  	return $this->getAdapter()->fetchAll($sql);
   }
   
 //   function getSubjectByGroup($data){

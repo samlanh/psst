@@ -212,21 +212,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		}
 		$this->view->rows =$rs_rows;
 	}	
-	public function addServiceAction(){
-		if($this->getRequest()->isPost()){
-			try{
-				$_data = $this->getRequest()->getPost();
-				$_model = new Accounting_Model_DbTable_DbService();
-				$rs = $_model->addServicePopup($_data);
-				print_r(Zend_Json::encode($rs));
-				exit();
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-	}
+	
 	public function getallfacAction(){
 		$db = new Application_Model_GlobalClass();
 		if($this->getRequest()->isPost()){
@@ -236,21 +222,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function addAjaxserviceAction(){
-		if($this->getRequest()->isPost()){
-			try{
-				$data = $this->getRequest()->getPost();
-				$db = new Accounting_Model_DbTable_DbService();
-				$row = $db->ajaxgetservice($data);
-				$result = array("id"=>$row);
-				print_r(Zend_Json::encode($row));
-				exit();
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-	}	
+	
 	function refreshserviceAction(){
 		if($this->getRequest()->isPost()){
 			try{
@@ -277,6 +249,15 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$rs = $db->getAllYearServiceFeeByBranch($_data["branch_id"]);
 			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	function getservicefeeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbServiceCharge();
+			$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
+			print_r(Zend_Json::encode($service_fee));
 			exit();
 		}
 	}

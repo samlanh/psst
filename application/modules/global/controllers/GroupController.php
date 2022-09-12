@@ -21,15 +21,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			}
 		}
 	}
-// 	function getsubjectbydegreeAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data=$this->getRequest()->getPost();
-// 			$db = new Global_Model_DbTable_DbGroup();
-// 			$group = $db->getDeptSubjectById($data['dept_id']);
-// 			print_r(Zend_Json::encode($group));
-// 			exit();
-// 		}
-// 	}
+
     function getgroupAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -47,20 +39,6 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-//     function addTeacherPopupAction(){
-//     	if($this->getRequest()->isPost()){
-//     		try{
-//     			$data = $this->getRequest()->getPost();
-//     			$db = new Global_Model_DbTable_DbGroup();
-//     			$teacher = $db->addTeacherAjax($data);
-//     			print_r(Zend_Json::encode($teacher));
-//     			exit();
-//     		}catch(Exception $e){
-//     			Application_Form_FrmMessage::message("INSERT_FAIL");
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     		}
-//     	}
-//     }
     function getteacherAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -124,19 +102,7 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    /*function getgroupbyacademicAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllGroupByAcademic($data['academic_year']);
-    		if (empty($data['noaddnew'])){
-    			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    		}
-    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
-    		print_r(Zend_Json::encode($group));
-    		exit();
-    	}
-    }*/
+   
     function getacademicAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

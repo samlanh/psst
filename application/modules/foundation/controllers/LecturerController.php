@@ -42,8 +42,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
+		
 		$frm = new Global_Form_FrmSearchMajor();
 		$this->view->frm_search = $frm->frmSearchTeacher($search);
 		Application_Model_Decorator::removeAllDecorator($frm);

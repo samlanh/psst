@@ -12,28 +12,8 @@ class Application_Form_Frmtable
     /* @ Desc: show add button
      * @param $url_new
      * */
-    public function showAddBuntton($url_new) {
-    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$addButton = '<a href="'.$url_new.'">'
-					.'<img alt="" src="'.BASE_URL.'/images/icon/add.png">'
-					.$tr->translate("ADD")
-					.'</a>';
-		return $addButton;
-    }
-    /* @ Desc: show delete button
-     * @param $url_new
-     * */
-	public function showDeleteBuntton($url_delete) {
-    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	
-    	$deleteButton = '&nbsp;<a href="#" onClick="deleteRecord(\''.$url_delete.'\')">'
-						.'<img alt="" src="'.BASE_URL.'/images/icon/delete-row.png">'
-						.$tr->translate("DELETE")
-						.'</a>';
-		return $deleteButton;
-    }
+   
+	
     /*
      * Recomment usage
      * @Desc: get full list(legend, table list, check for delete, edit, pagebrowser)
@@ -45,17 +25,7 @@ class Application_Form_Frmtable
      */
     
     
-    public function showCopyBuntton($url_copy) {
-    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    
-    	$copyButton = '&nbsp;<a href="#" class="btn btn-primary btn-copy" onClick="copyRecord(\''.$url_copy.'\')">'
-    	.'<i class="fa fa-files-o" aria-hidden="true"></i> '
-    	.$tr->translate("COPY")
-    	.'</a>';
-    	return $copyButton;
-    }
-    
+   
     
     public function getCheckList($delete=0, $columns,$rows,$link=null,$editLink="", $class='items', $textalign= "left", $report=false, $id = "table")
     {

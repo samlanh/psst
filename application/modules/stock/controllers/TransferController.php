@@ -58,11 +58,6 @@ class Stock_TransferController extends Zend_Controller_Action {
 		$branch = $db->getAllBranch();
     	$this->view->branchopt = $branch;
 		
-		$fm = new Global_Form_Frmbranch();
-		$frm = $fm->Frmbranch();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_branch = $frm;
-		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();
 		$this->view->rsproduct =$d_row;

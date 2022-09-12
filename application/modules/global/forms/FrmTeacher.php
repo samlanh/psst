@@ -17,7 +17,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$this->t_num = 'dijit.form.NumberTextBox';
 		$this->text = 'dijit.form.TextBox';
 		$this->textarea = 'dijit.form.Textarea';
-		//$this->check='dijit.form.CheckBox';
 	}
 	public function FrmTecher($_data=null){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();

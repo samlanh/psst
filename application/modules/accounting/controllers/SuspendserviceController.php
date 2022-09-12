@@ -24,7 +24,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 					'end_date' 		=>date("Y-m-d"),
 				);
 			}
-			$db =  new Foundation_Model_DbTable_DbSuspendservice();
+			$db =  new Accounting_Model_DbTable_DbSuspendservice();
 			$rs = $db->getStudentSuspendService($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","CREATED_DATE","USER","STATUS");
@@ -51,7 +51,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				$db = new Foundation_Model_DbTable_DbSuspendservice();
+				$db = new Accounting_Model_DbTable_DbSuspendservice();
 				$row = $db->addSuspendservice($_data);
 				if(!empty($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/suspendservice/add");
@@ -74,7 +74,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 		{
 			$_data = $this->getRequest()->getPost();
 			try{
-				$_db = new Foundation_Model_DbTable_DbSuspendservice();
+				$_db = new Accounting_Model_DbTable_DbSuspendservice();
 				$row = $_db->editSuspendService($_data,$id);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/suspendservice/index");
 			}catch(Exception $e){
@@ -86,7 +86,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->branch = $_db->getAllBranch();
 		
-		$_db = new Foundation_Model_DbTable_DbSuspendservice();
+		$_db = new Accounting_Model_DbTable_DbSuspendservice();
 		$this->view->row = $_db->getSuspendServiceByID($id);
 		$this->view->row_detail = $_db->getSuspendServiceDetailByID($id);
 	}
@@ -94,7 +94,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 	function getStudentAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbSuspendservice();
+			$db = new Accounting_Model_DbTable_DbSuspendservice();
 			$studentinfo = $db->getAllStudentInfo($data['studentid']);
 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($studentinfo));
@@ -105,7 +105,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 	function getStudentIdAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbSuspendservice();
+			$db = new Accounting_Model_DbTable_DbSuspendservice();
 			$stu_id = $db->getStudentID($data['study_year']);
 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($stu_id));
@@ -116,7 +116,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 	function getStudentNameAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbSuspendservice();
+			$db = new Accounting_Model_DbTable_DbSuspendservice();
 			$stu_name = $db->getStudentName($data['study_year']);
 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($stu_name));
@@ -127,7 +127,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 	function getserviceAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbSuspendservice();
+			$db = new Accounting_Model_DbTable_DbSuspendservice();
 			$studentinfo = $db->getAllSerivesById($data['student']);
 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($studentinfo));

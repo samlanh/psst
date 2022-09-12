@@ -219,7 +219,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_arr = array(
     			-1=>$this->tr->translate("SELECT_TYPE"),
     			0=>$this->tr->translate("NORMAL"),
-    			1=>$this->tr->translate("AUTO_PAYMENT"));
+    			1=>$this->tr->translate("AUTO_IN_CRM"),
+    			2=>$this->tr->translate("AUTO_IN_TESTED")
+    			);
     	if($request->getActionName()!='index'){
     		unset($_arr[-1]);
     	}

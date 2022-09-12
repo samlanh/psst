@@ -86,9 +86,28 @@ class ExternalController extends Zend_Controller_Action
 	public function groupAction()
     {
 		$this->_helper->layout()->disableLayout();
-		$arrFilter = array();
+		
+		
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+				'adv_search'		=> '',
+				'branch_id'			=> '',
+				'academic_year'		=> '',
+				'degree'			=>'',
+				'grade' 			=> '',
+				'session' 			=>'',
+			);
+		}
 		$dbExternal=new Application_Model_DbTable_DbExternal();
-		$this->view->allClass = $dbExternal->getAllClassByUser($arrFilter);
+		$this->view->allClass = $dbExternal->getAllClassByUser($search);
+			
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 		
     }
 }

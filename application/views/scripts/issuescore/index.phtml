@@ -95,11 +95,15 @@ $frm =  $this->form_search;
                                     <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
                                     <p class="mb-0"><?php echo $row['academicYear']; ?></p>
 									<h3 class="mb-0 mt-0 p-relative">
-										<i class="glyphicon glyphicon-blackboard"></i>  <span class="counting-num ml-1"><?php echo $row['roomName']; ?></span>
-										
+										<span class="counting-num mr-1"><?php echo $row['gradeTitle']; ?></span>
+										<i class="glyphicon glyphicon-education"></i>  
 									</h3>
                                     <p class="mb-0"><?php echo $row['roomName']; ?></p>
-                                    
+									<?php if($row['status']==1){?>
+                                    <p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class=" text-primary glyphicon glyphicon-ok-sign"></i></p>
+                                    <?php }else{?>
+									<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class="text-danger glyphicon glyphicon-remove-sign"></i></p>
+                                    <?php }?>
                                 </div>
                             </div>
                         </div>

@@ -33,7 +33,23 @@ class Application_Form_FrmGlobal{
 		$setting = $key->getKeyCodeMiniInv(TRUE);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str="";
+		
+		if ($forGenerate==1){
+			$baseUrl =PUBLIC_PATH;
+			$styleLogo = "width:120px;";
+		}else{
+			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
+		}
 		$img = 'logo.png';
+		
+		$logo = $baseUrl.'/images/Logo/Logo.png';
+		if(!empty($setting['logo'])){
+			if (file_exists(PUBLIC_PATH."/images/logo/".$setting['logo'])){
+				$logo = $baseUrl.'/images/logo/'.$setting['logo'];
+			}
+		}
+		
 		$school_khname = $tr->translate('SCHOOL_NAME');
 		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 		$address = $tr->translate('CUSTOMER_ADDRESS');
@@ -41,7 +57,7 @@ class Application_Form_FrmGlobal{
 		$email =  $tr->translate('CUSTOMER_EMAIL');
 		$website = $tr->translate('CUSTOMER_WEBSITE');
 		if($branch_id==null){
-			$img = 'logo.png';
+			
 			$school_khname = $tr->translate('SCHOOL_NAME');
 			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 			$address = $tr->translate('CUSTOMER_ADDRESS');
@@ -52,7 +68,12 @@ class Application_Form_FrmGlobal{
 			$db = new Application_Model_DbTable_DbGlobal();
 			$rs = $db->getBranchInfo($branch_id);
 			if(!empty($rs)){
-				$img = $rs['photo'];
+				
+				 if (!empty($rs['photo'])){
+					if (file_exists(PUBLIC_PATH."/images/logo/".$rs['photo'])){
+						$logo = $baseUrl.'/images/logo/'.$rs['photo'];
+					}
+				}	
 				$school_khname = $rs['school_namekh'];
 				$school_name = $rs['school_nameen'];
 				
@@ -62,18 +83,12 @@ class Application_Form_FrmGlobal{
 				$website = $rs['website'];
 			}
 		}
-		if ($forGenerate==1){
-			$baseUrl =PUBLIC_PATH;
-			$styleLogo = "width:120px;";
-		}else{
-			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
-		}
+		
 	    if($setting['show_header_receipt']==1){
 			$str="<table width='100%' style='white-space:nowrap;'>
 				<tr>
 					<td width='22%' valign='top'>
-						<img style='".$styleLogo."' src=".$baseUrl.'/images/'.$img.">
+						<img style='".$styleLogo."' src=".$logo.">
 					</td>
 					<td width='48%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
 						<div style='font-size:18px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
@@ -1405,7 +1420,22 @@ class Application_Form_FrmGlobal{
 		$setting = $key->getKeyCodeMiniInv(TRUE);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str="";
-		$img = 'logo.png';
+		
+		if ($forGenerate==1){
+			$baseUrl =PUBLIC_PATH;
+			$styleLogo = "width:120px;";
+		}else{
+			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
+		}
+		
+		$logo = $baseUrl.'/images/Logo/Logo.png';
+		if(!empty($setting['logo'])){
+			if (file_exists(PUBLIC_PATH."/images/logo/".$setting['logo'])){
+				$logo = $baseUrl.'/images/logo/'.$setting['logo'];
+			}
+		}
+		
 		$school_khname = $tr->translate('SCHOOL_NAME');
 		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 		$address = $tr->translate('CUSTOMER_ADDRESS');
@@ -1413,7 +1443,7 @@ class Application_Form_FrmGlobal{
 		$email =  $tr->translate('CUSTOMER_EMAIL');
 		$website = $tr->translate('CUSTOMER_WEBSITE');
 		if($branch_id==null){
-			$img = 'logo.png';
+			
 			$school_khname = $tr->translate('SCHOOL_NAME');
 			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 			$address = $tr->translate('CUSTOMER_ADDRESS');
@@ -1424,7 +1454,13 @@ class Application_Form_FrmGlobal{
 			$db = new Application_Model_DbTable_DbGlobal();
 			$rs = $db->getBranchInfo($branch_id);
 			if(!empty($rs)){
-				$img = $rs['photo'];
+				
+				if (!empty($rs['photo'])){
+					if (file_exists(PUBLIC_PATH."/images/logo/".$rs['photo'])){
+						$logo = $baseUrl.'/images/logo/'.$rs['photo'];
+					}
+				}
+				
 				$school_khname = $rs['school_namekh'];
 				$school_name = $rs['school_nameen'];
 				
@@ -1434,20 +1470,14 @@ class Application_Form_FrmGlobal{
 				$website = $rs['website'];
 			}
 		}
-		if ($forGenerate==1){
-			$baseUrl =PUBLIC_PATH;
-			$styleLogo = "width:120px;";
-		}else{
-			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-			$styleLogo = "max-width: 98%;max-height:90px;";
-		}
+		
 	    $imgSing="agreementsign.jpg";
 		$str='
 		<table width="100%" style="white-space:nowrap;">
 			<tbody>
 				<tr>
 					<td width="35%" valign="top">
-						<img style="max-width: 100%;max-height:160px;  margin-top:25px;" src="'.$baseUrl.'/images/'.$img.'">
+						<img style="'.$styleLogo.'" src="'.$logo.'">
 					</td>
 					<td width="40%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 					</td>

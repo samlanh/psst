@@ -34,7 +34,7 @@ class IssuescoreController extends Zend_Controller_Action
 		$this->view->search = $search;
 		
 		$db = new Application_Model_DbTable_DbIssueScore();
-		$row = $db->getAllScoreByUser($search);
+		$row = $db->getAllSubjectScoreByClass($search);
 		$this->view->row = $row;
 
 		$form=new Application_Form_FrmSearchGlobal();
@@ -48,11 +48,12 @@ class IssuescoreController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
+		$db = new Application_Model_DbTable_DbIssueScore();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbIssueScore();//by subject
+			
 			try {
-				$rs =  $db->addStudentScore($_data);
+				$rs = $db->addSubjectScoreByClass($_data);
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/add");
 				}else {
@@ -69,11 +70,16 @@ class IssuescoreController extends Zend_Controller_Action
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getGroupDetailByID($id);
 		$this->view->row = $row;
+		
 		if(empty($row)){
 			$this->_redirect("/external/group");
 		}
 		
-		$db_global=new Application_Model_DbTable_DbGlobal();
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
+		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
+		
+	
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
@@ -90,12 +96,9 @@ class IssuescoreController extends Zend_Controller_Action
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				$rs =  $db->addStudentScore($_data);
-				if(isset($_data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/add");
-				}else {
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/index");
-				}
+				$rs =  $db->updateSubjectScoreByClass($_data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/index");
+				
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -104,26 +107,34 @@ class IssuescoreController extends Zend_Controller_Action
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		
-		$rs = $db->getScoreByID($id);
-		$this->view->rs = $rs;	
-		if(empty($rs)){
+		$row = $db->getSubjectScoreByID($id);
+		$this->view->rs = $row;	
+		
+		if(empty($row)){
 			$this->_redirect("/issuescore/index");
 		}
-
-		$groupID = empty($rs['group_id'])?0:$rs['group_id'];
-		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getGroupDetailByID($groupID);
-		$this->view->row = $row;
-		if(empty($row)){
-			$this->_redirect("/external/group");
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");
 		}
+		if ($row['is_pass']==1){
+			Application_Form_FrmMessage::Sucessfull("CLASS_COMPLETED_CAN_NOT_EDIT","/issuescore/index");
+		}
+		if ($row['status']==0){
+			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_EDIT","/issuescore/index");
+		}
+		$this->view->student= $db->getStudentSubjectSccoreforEdit($id);
 		
-		$db_global=new Application_Model_DbTable_DbGlobal();
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
+		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
+		
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
 		
 	}
+	
+	
 }
 
 

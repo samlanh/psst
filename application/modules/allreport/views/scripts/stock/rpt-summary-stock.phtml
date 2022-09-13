@@ -62,31 +62,77 @@ table.tb-footer tr.style-head {
 	</style>	
 	<div id="divPrint">
 		<style>
-			a{text-decoration: none;color: 000;}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			table.content-data{
-				border-collapse:collapse;
-				width:100%;
-				border:1px solid #000; 
-				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
-				white-space: nowrap;
-				margin:0 auto;
-				color:#000;
-				margin:0 auto;
-			}
-			table.content-data  tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-				background: #CCD9FF;
-				text-align: center;
-			}
-			table.content-data tr td{
-				padding: 2px;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}
+				.style{
+						line-height: 20px;font-size: 11px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table { page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
+					}
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+						width:100%;
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.content-data  tr.style {
+					 
+					   white-space: nowrap;
+						
+					}
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 2px;
+					}	
+		
 		</style>
 		<table width="100%" style="font-family: 'Times New Roman','Khmer OS Battambang';">
 			<tr>
@@ -113,23 +159,23 @@ table.tb-footer tr.style-head {
 				<td colspan="3">
 					<table class="content-data" cellpadding="5"​ border="1" >
 						<thead>
-							<tr class="style-head" align="center">
-								<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-								<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-								<td colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-								<td colspan="7">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
+							<tr class="style" align="center">
+								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
+								<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+								<td scope="col" colspan="7">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
 							</tr>
-							<tr class="style-head"  align="center">
-								<td><?php echo $tr->translate("CATEGORY");?></td>
-								<td><?php echo $tr->translate("PRODUCT_CODE");?></td>
-								<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
-								<td><?php echo $tr->translate("PURCHASE_IN");?></td>
-								<td><?php echo $tr->translate("SELL_OUT");?></td>
-								<td><?php echo $tr->translate("REQUEST_QTY");?></td>
-								<td><?php echo $tr->translate("TRANSFER_IN");?></td>
-								<td><?php echo $tr->translate("TRANSFER_OUT");?></td>
-								<td><?php echo $tr->translate("ADJUST_STOCK");?></td>
-								<td><?php echo $tr->translate("CURR_QTY");?></td>
+							<tr class="style"  align="center">
+								<td scope="col"><?php echo $tr->translate("CATEGORY");?></td>
+								<td scope="col"><?php echo $tr->translate("PRODUCT_CODE");?></td>
+								<td scope="col"><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<td scope="col"><?php echo $tr->translate("PURCHASE_IN");?></td>
+								<td scope="col"><?php echo $tr->translate("SELL_OUT");?></td>
+								<td scope="col"><?php echo $tr->translate("REQUEST_QTY");?></td>
+								<td scope="col"><?php echo $tr->translate("TRANSFER_IN");?></td>
+								<td scope="col"><?php echo $tr->translate("TRANSFER_OUT");?></td>
+								<td scope="col"><?php echo $tr->translate("ADJUST_STOCK");?></td>
+								<td scope="col"><?php echo $tr->translate("CURR_QTY");?></td>
 							</tr>
 						</thead>
 						
@@ -139,19 +185,19 @@ table.tb-footer tr.style-head {
 						if(!empty($this->rows)) foreach($this->rows As $key=> $rs_row){	$i++;
 						$transfer = $rs_row['tran_in'] - $rs_row['tran_out'];
 						?>
-							<tr class="style-rowdata hover" align="center">
-								<td>&nbsp;<?php echo $i; ?>&nbsp;</td>
-								<td align="left">&nbsp;<?php echo $rs_row['branch_name']; ?>&nbsp;</td>
-								<td align="left">&nbsp;<?php echo $rs_row['category']; ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $rs_row['code']; ?>&nbsp;</td>
-								<td align="left">&nbsp;<?php echo $rs_row['pro_name']; ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['saleqty']>0){echo number_format($rs_row['saleqty']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['request']>0){echo number_format($rs_row['request']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if(!empty($rs_row['tran_in'])){echo number_format($rs_row['tran_in']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if(!empty($rs_row['tran_out'])){echo number_format(-1*$rs_row['tran_out']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if(!empty($rs_row['adjustQty'])){echo number_format(-1*$rs_row['adjustQty']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);}else{ echo "-";} ?>&nbsp;</td>
+							<tr class="style hover" align="center">
+								<td data-label="<?php echo $tr->translate("NUM");?>">&nbsp;<?php echo $i; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("BRANCH");?>" align="left">&nbsp;<?php echo $rs_row['branch_name']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("CATEGORY");?>" align="left">&nbsp;<?php echo $rs_row['category']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("PRODUCT_CODE");?>">&nbsp;<?php echo $rs_row['code']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left">&nbsp;<?php echo $rs_row['pro_name']; ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("PURCHASE_IN");?>">&nbsp;<?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("SELL_OUT");?>">&nbsp;<?php if($rs_row['saleqty']>0){echo number_format($rs_row['saleqty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("REQUEST_QTY");?>">&nbsp;<?php if($rs_row['request']>0){echo number_format($rs_row['request']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("TRANSFER_IN");?>">&nbsp;<?php if(!empty($rs_row['tran_in'])){echo number_format($rs_row['tran_in']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("TRANSFER_OUT");?>">&nbsp;<?php if(!empty($rs_row['tran_out'])){echo number_format(-1*$rs_row['tran_out']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("ADJUST_STOCK");?>">&nbsp;<?php if(!empty($rs_row['adjustQty'])){echo number_format(-1*$rs_row['adjustQty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("CURR_QTY");?>">&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);}else{ echo "-";} ?>&nbsp;</td>
 								
 							</tr>
 						<?php

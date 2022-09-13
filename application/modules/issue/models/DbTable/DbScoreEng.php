@@ -249,7 +249,7 @@ class Issue_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 	function getScoreSettingByBranch($branch_id){
 		$db = $this->getAdapter();
 		$sql="SELECT sc.id,sc.title AS `name` FROM `rms_scoreengsetting` AS sc
-			WHERE sc.status=1 AND sc.branch_id = $branch_id";
+			WHERE sc.status=1 AND sc.type=1 AND sc.branch_id = $branch_id";
 		return $db->fetchAll($sql);
 	}
 	function getScoreSettingDetail($id){

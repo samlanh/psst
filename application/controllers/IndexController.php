@@ -771,6 +771,10 @@ class IndexController extends Zend_Controller_Action
     function studentinfoAction(){
     	$this->_helper->layout()->disableLayout();
     }
+
+	function staffinfoAction(){
+    	$this->_helper->layout()->disableLayout();
+    }
 	
 }
 

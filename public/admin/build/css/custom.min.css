@@ -1501,10 +1501,19 @@ p.tx-20 {
 .icon-opacity {
     opacity: .5;
 }
+.font-small-1{font-size:.7rem!important}
+.font-small-2{font-size:.8rem!important}
+.font-small-3{font-size:.9rem!important}
+.font-medium-1{font-size:1.1rem!important}
+.font-medium-2{font-size:1.2rem!important}
+.font-medium-3{font-size:1.3rem!important}
+.font-medium-4{font-size:1.4rem!important}
+.font-medium-5{font-size:1.5rem!important}
+.font-large-1{font-size:2rem!important}
+.font-large-2{font-size:3rem!important}
+.font-large-3{font-size:4rem!important}
+.font-large-4{font-size:5rem!important}
 
-.font-large-4 {
-    font-size: 5rem!important;
-}
 .darkBlue {
     color: #04007c;
 }

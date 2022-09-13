@@ -17,7 +17,7 @@ class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
     		";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_scoreengsetting` AS s
-				WHERE 1 ";
+				WHERE 1 AND s.type=1 ";
     	$orderby = " ORDER BY s.id DESC";
     	$where = ' ';
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
@@ -77,7 +77,7 @@ class Issue_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    }
    function getScoreSettingById($id){
    		$db = $this->getAdapter();
-   		$sql="SELECT s.* FROM `rms_scoreengsetting` AS s WHERE s.id=$id";
+   		$sql="SELECT s.* FROM `rms_scoreengsetting` AS s WHERE s.id=$id AND s.type=1 ";
    		
    		$dbp = new Application_Model_DbTable_DbGlobal();
    		$sql.=$dbp->getAccessPermission('s.branch_id');

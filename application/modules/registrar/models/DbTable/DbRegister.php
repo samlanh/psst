@@ -292,7 +292,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
 					$_arr = array(
 							'payment_id'	=>$paymentid,
-							'feeId'	=>$rs_item['academic_year_'.$i],
+							'feeId'			=>$data['academic_year_'.$i],
 							'service_type'	=>$rs_item['items_type'],
 							'itemdetail_id'	=>$data['item_id'.$i],
 							'payment_term'	=>$data['term_'.$i],

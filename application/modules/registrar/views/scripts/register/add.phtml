@@ -205,9 +205,8 @@ label.control-td small{font-size: 70%;color:#fff;}
 										</select>
 				                   </div>
 				                </div>
-				                <div class="form-group">
-				                	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AUTO_TO_TEST");?>
-				                    </label>
+				                <div class="form-group" id="displayControl" >
+				                	<label class="control-label col-md-5 col-sm-5 col-xs-12 displayLabel" ><?php echo $tr->translate("AUTO_TO_TEST");?></label>
 				                    <div class="col-md-7 col-sm-7 col-xs-12">
 										<label class="control-label custom-switch float-end "> 
 											<a href="javascript:void(0);" class="switchButton status"></a> 
@@ -944,6 +943,7 @@ function getallstudentname(){//
 	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalance')); ?>';
 	}
+	checkAutoControl(student_type);
 	dijit.byId("old_stu").reset();
 	customer_type = dijit.byId("customer_type").attr("value");
 	branch_id = dijit.byId("branch_id").attr("value");
@@ -965,6 +965,18 @@ function getallstudentname(){//
 		error: function(err) {
 		}
 	});
+}
+function checkAutoControl(studentType){
+	$(".displayLabel").html('AUTO_TO_TEST');
+	$("#displayControl").css("display", "block");
+	if(studentType==1){//existing
+		$("#displayControl").css("display", "none");
+	}
+	else if(studentType==2){//from
+		$(".displayLabel").html('AUTO_TO_STUDENT');
+	}
+	
+	
 }
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
 function getPaymentHistory(student_id){
@@ -1230,7 +1242,6 @@ function getStudyFeeId(study_year){
 var template = '';
 var col = 0;
 var no = 0;
-var title = 0;
 tmp = '';
 temp='';
 term_option = '<?php echo $this->term_option;?>';
@@ -1322,6 +1333,12 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 
 
 function getExistingService(){
+	var col = 0;
+	var no = 0;
+	
+	dojo.query("#table_row").append("");
+	$("#identity").val("");
+	
 	var urlget = "<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>";
 	studentId = dijit.byId('old_stu').get('value');
 	if(studentId==''){
@@ -1336,7 +1353,7 @@ function getExistingService(){
 	}else{//2 crm/3
 		if(student_type==2){//test
 			isAutopayment = 2;
-		}else if(student_type==3){
+		}else if(student_type==3){//crm
 			isAutopayment = 1;
 		}
 		var urlget = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getserviceitem')); ?>";
@@ -1353,7 +1370,6 @@ function getExistingService(){
 		},
 		handleAs:"json",
 		load: function(data){
-			//alert(data.length);
 			for(i=0;i<data.length;i++){
 				serviceId = data[i].itemDetailId;
 				dataLabel = data[i].itemDetaillabel;
@@ -1652,6 +1668,7 @@ function printSave(){
 		
 		today = dijit.byId("paid_date").get("value");
 		var dd = today.getDate();
+		//var mon = today.toDateString().substr(4,3); //January is 0!
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
 		dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
@@ -1665,7 +1682,9 @@ function printSave(){
 			 lblNamekh="";
 		 }
 		 
-		dojo.byId("lb_name").innerHTML = lblNamekh+'<br />'+dojo.byId("lbl_nameen").innerHTML;
+		dojo.byId("lb_name").innerHTML = lblNamekh;
+		dojo.byId("lb_namelatin").innerHTML = dojo.byId("lbl_nameen").innerHTML;
+		
 		dojo.byId("lb_group").innerHTML = dijit.byId("group_id").attr('displayedValue');
 		
 		//dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
@@ -1697,19 +1716,18 @@ function printSave(){
 					
 					if(receipt_type==1 || receipt_type==2 || receipt_type==3){
 					
-						 temp='<table class="collape tablesorter" width="100%" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
+						 temp='<table class="collape tablesorter" width="100%" align="center" style="white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
 							  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
-								  temp+='<td style="border:1px solid #000;">No</td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Deduct/Extra</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Type</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Disc Amt</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
-								  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Code</strong></td>';
+								  temp+='<td style="border:1px solid #000;">លរ  <small>No. </small></td>';
+								  temp+='<td style="border:1px solid #000;width:200px;"><strong style="color:#000;">ពណ៍នា <small>Description<small></strong></td>';
+								  temp+='<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Term</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណ,តម្លៃរាយ<small>Qty,Unit Price</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បញ្ចុះតម្លៃ<small>Discount</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Fee</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Validate</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
 							  temp+='</tr>';
 
 							  i=1;  
@@ -1720,30 +1738,30 @@ function printSave(){
 									if(items_type!=3){
 										term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 									}
-								  temp+='<tr style="font-size:inherit;height: 18px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+								  temp+='<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 								  
 								  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
 								  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
 									  item_label='School Fee '+item_label;
 								  }
-								  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 
+								  temp+='<td align="left" style="border:1px solid #000;line-height:10px" class="notedDescription"><label class="notedDescription">&nbsp;'+item_label+'<label></td>'; 
 								  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
-								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-								  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
-								  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
+								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+' x '+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
+
+									  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
 								  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
 								  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
 								  percent = isNaN(percents)?'':percents+'%';
 		
 								  sign='';					  
 								  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
-									  sign=' & ';
+									  sign=',';
 								  }
-								  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
+								  
+								  temp+='<td style="border:1px solid #000;"><span class="spanBlog">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+'</span><span class="spanBlog">'+disc_amount+sign+percent+'</span></td>';
+								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
-		
+								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 								  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
 								  if(service_type==1){//one payment only
 									  start_date = '';
@@ -1752,7 +1770,7 @@ function printSave(){
 									  var start_date = dijit.byId("date_start_"+rowIDArray[n]).attr('displayedValue');
 									  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
 								  }
-								  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+								  temp+='<td align="center" style="border:1px solid #000;"><span class="spanBlog">'+start_date+'</span><span class="spanBlog">'+ epx_date+'</span></td>';
 								  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 								  temp+='</tr>';
 								  

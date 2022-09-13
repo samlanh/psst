@@ -45,6 +45,9 @@
     <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
    
    
+	<link href="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.css" rel="stylesheet" type="text/css" />
+	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
+	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
 	
     <!-- Custom Theme Style -->
     <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
@@ -61,7 +64,16 @@
 	 
 	<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
 	<link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
-	 
+	 <style>
+	 div.reportblog {
+		overflow-x: auto;
+		overflow-y: hidden;
+		min-height: 26cm;
+		margin: 0 auto;
+		padding: 0.5cm 0.5cm 0cm 0.5cm;
+		    width: 100%;
+	}
+	 </style>
 </head>
 <?php //oncontextmenu="return false;" ?>
 <body class="nav-md soria footer_fixed externalTemplate">
@@ -76,142 +88,34 @@
         	<div class="col-md-3 left_col ">
           		<div class="left_col scroll-view">
 		            <div class="navbar nav_title">
-		              <a href="<?php echo $this->baseUrl()."/home";?>" class="site_title"><span><img src="<?php echo $this->baseUrl()?>/images/cam-app-logo.png" alt="CAM APP TECHNOLOGY"></span></a>
+		              <a href="<?php echo $this->baseUrl()."/external/dashboard";?>" class="site_title"><span><img src="<?php echo $this->baseUrl()?>/images/cam-app-logo.png" alt="CAM APP TECHNOLOGY"></span></a>
 		            </div>
             		<div class="clearfix"></div>
             		<!-- sidebar menu -->
 					<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 					  <div class="menu_section">
-							
 							<ul class="nav side-menu" style="">
-                	                	<li>
-                		                					                    				                    <a href="/camappgit/installment/public/home">
-	                			<i class="fa fa-home" aria-hidden="true"></i> ទំព័រដើម&ZeroWidthSpace; 
-		                		</a>
-		                				                    	                                     	 </li>
-                	                	<li class="active">
-                		                					                		<a><i class="fa fa-map-marker" aria-hidden="true"></i> តារាងគម្រោង 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu" style="display: block;">
-			                       			                      <li class="current-page"><a href="/camappgit/installment/public/project">តារាងគម្រោង</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/project/land">អចលនទ្រព្យ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/project/propertiestype">ប្រភេទឡូតិ៍/ផ្ទះ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/project/updateprice">គ្រប់គ្រងតម្លៃឡូតិ៍/ផ្ទះ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/project/issuer">អ្នកចេញកិច្ចសន្យា</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-users" aria-hidden="true"></i> ព័ត៌មានអតិថិជន 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/group">ព័ត៌មានអតិថិជន</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/group/customer">តម្រូវការអតិថិជន</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/group/supplier">ព័ត៌មានអ្នកផ្គត់ផ្គង់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/group/co">ភ្នាក់ងារលក់</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-money" aria-hidden="true"></i> គ្រប់គ្រងផ្នែកលក់ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/loan">គ្រប់គ្រងផ្នែកលក់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/deposit">គ្រប់គ្រង ការកក់និងផ្តាច់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/ilpayment">គ្រប់គ្រងការបង់ប្រាក់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/newschedule">ចេញតារាងប្រាក់នៅសល់ថ្មី</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/repaymentschedule">រៀបតារាងបង់ប្រាក់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/changproperty">គ្រប់គ្រងការប្តូរឡូតិ៍/ផ្ទះ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/changeowner">ផ្លាស់ប្តូរម្ចាស់កម្មសិទ្ធ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/cancel">បោះបង់ការលក់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/transfercash">ផ្ទេរសាច់ប្រាក់ទៅឡូតិ៍/ផ្ទះថ្មី</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/setcommission">ការកំណត់កម្រៃជើងសារភ្នាក់ងារ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/itemsmeterial">ឈ្មោះសម្ភារថែមជូន</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/loan/materialinc">សម្ភារថែមជូនអតិថិជន</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-magic" aria-hidden="true"></i> កិច្ចការប្រគល់ផ្ទះ&amp;ប្លង់ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/issue">គ្រប់គ្រង ការប្រគល់ផ្ទះ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/issue/plongstep">គ្រប់គ្រង ដំណើរការរត់ប្លង់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/issue/issueplong">គ្រប់គ្រង ប្លង់រត់ការរួច</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/issue/receivplong">គ្រប់គ្រងចេញប្លង់ឱ្យអតិថិជន</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/issue/stepoption">ដំណាក់កាលនៃរត់ប្លង់</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-money" aria-hidden="true"></i> ចំណូល/ចំណាយ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/incexp/income">គ្រប់គ្រងចំណូលផ្សេងៗ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/incomeother">គ្រប់គ្រង ចំណូលកែផ្ទះ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/incomeotherpayment">ទូទាត់ចំណូល-ចំណាយកែផ្ទះ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/expense">គ្រប់គ្រងចំណាយ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp">ប្រភេទចំណូល /ចំណាយ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/comissionpayment">ការទូរទាត់កម្រៃជើងសារ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/expensepayment">ការទូរទាត់ចំណាយ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/productcate">ប្រភេទទំនិញ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/incexp/product">ទំនិញ</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-money" aria-hidden="true"></i> គ្រប់គ្រងការជួល 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/rent/deposit">កក់ប្រាក់ជួល</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/rent/payment">បង់ប្រាក់ជួល</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-paper-plane-o" aria-hidden="true"></i> គ្រប់គ្រងការវិនិយោគ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/invest">អ្នកវិនិយោគ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/invest/broker">ភ្នាក់ងារ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/invest/investment">ការវិនិយោគ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/invest/withdraw">ទូទាត់ប្រាក់ វិនិយោគ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/invest/withdrawbroker">ទូទាត់ប្រាក់ ភ្នាក់ងារ</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa fa-book" aria-hidden="true"></i> ផ្សេងៗ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/other/province">រាជធានី/ខេត្ត</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/other/district">ស្រុក/ខណ្ឌ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/other/commune">ឃុំ/សង្កាត់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/other/village">ឈ្មោះភូមិ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/other/term">គោលការណ៍លក្ខខណ្ឌ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/other/news">ព័ត៌មាន</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/other/loantype">ផ្សេងៗ</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa  fa-file-text" aria-hidden="true"></i> របាយការណ៍ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/report/loan">គ្រប់គ្រងផ្នែកលក់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/report/invest">គ្រប់គ្រងការវិនិយោគ</a></li>
-			                       			                    </ul>
-			                    		                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa  fa-cog" aria-hidden="true"></i> សិទ្ធ និង អ្នកប្រើប្រាស់ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/rsvacl/user">អ្នកប្រើប្រាស់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/rsvacl/useraccess">កំណត់សិទ្ធអ្នកប្រើប្រាស់</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/rsvacl/usertype">ប្រភេទអ្នកប្រើប្រាស់</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                	<li>
-                		                					                		<a><i class="fa  fa-cogs" aria-hidden="true"></i> ការកំណត់ 
-		                		<span class="fa fa-chevron-down"></span>		                		</a>
-		                					                    <ul class="nav child_menu">
-			                       			                      <li><a href="/camappgit/installment/public/setting/backupdatabase">Backup ទិ&ZeroWidthSpace;ន្នន័យ</a></li>
-			                       			                      <li><a href="/camappgit/installment/public/setting/general">ទូរទៅ</a></li>
-			                       			                    </ul>
-			                    		                    	                                     	 </li>
-                	                </ul>
+								<li >
+									<a href="<?php echo $this->baseUrl()."/external/dashboard";?>">
+										<i class="fa fa-home" aria-hidden="true"></i> <?php echo $tr->translate('DASHBOARD');?> 
+									</a>
+								 </li>
+								 <li>
+									<a href="<?php echo $this->baseUrl()."/external/group";?>">
+										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('GROUP_LIST');?> 
+									</a>
+								 </li>
+								  <li>
+									<a href="<?php echo $this->baseUrl()."/issuescore/";?>">
+										<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_SCORE');?> 
+									</a>
+								 </li>
+								<li>
+									<a href="<?php echo $this->baseUrl()."/extreport/";?>">
+										<i class="fa fa-file-text" aria-hidden="true"></i> <?php echo $tr->translate('REPORT');?> 
+									</a>
+								 </li>
+							</ul>
 					  </div>
 					</div>
 					<!-- sidebar menu -->
@@ -250,7 +154,7 @@
 					                 </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
 					                    <li><a href="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
-					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">
+					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'external','action'=>'logout','value'=>'1')); ?>">
 					                    <i class="fa fa-sign-out pull-right"></i> <?php echo $tr->translate("SIGN_OUT");?></a>
 					                    </li>
 				                  </ul>
@@ -263,36 +167,50 @@
        		 <!-- /top navigation -->
             <!-- page content -->
        		<div class="right_col" role="main" >
-       		 	<div class="right-conten" style="min-height: 570px;">
+       		 	<div class="" >
 					<div style="clear:both;"></div>
-					<?php if($module!='allreport' AND ($module!='home' OR $controller=="crm") AND $module!='default' ){?>
-             		<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
-						<?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' ){?>
-							<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
-							<a title="<?php echo $tr->translate('ADD_NEW');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
-								<i class="fa fa-plus-circle" aria-hidden="true"></i>
-							</a>
-							</div>
-							<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport' OR $action=='createtestexam'){?>
-							<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
-							<a title="<?php echo $tr->translate('GO_BACK');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
-								<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
-							</a>
-							</div>
-						<?php }?>
-					 <?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
-						<div class="ptss__header add-edit-action">
-						<a  class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
-							<i class="fa fa-plus-circle" aria-hidden="true"></i>
-						</a>
+					<div class="main-container container-fluid">
+						<div class="breadcrumb-header justify-content-between"> 
+							<div class="left-content"> 
+								<span id="breadcrumbTitle" class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span> 
+							</div> 
+							<div class="justify-content-center mt-2"> 
+								<?php if($controller!='dashboard' ){?>
+									<?php if($controller!='dashboard' ){?>
+									<ol class="breadcrumb"> 
+										<?php if($action=='index' AND $controller!='dashboard' ){?>
+										<li class="breadcrumb-item tx-15"><a id="breadcrumbSubTitle" href="javascript:void(0);"></a></li> 
+										<li class="breadcrumb-item active" aria-current="page">
+											<a title="<?php echo $tr->translate("ADD_NEW");?>" href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
+												<?php echo $tr->translate("ADD_NEW");?> <i class="fa fa-angle-double-right"></i>
+											</a>
+										</li> 
+										<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' ){?>
+										<li class="breadcrumb-item tx-15"><a id="breadcrumbSubTitle" href="javascript:void(0);"></a></li> 
+										<li class="breadcrumb-item active" aria-current="page">
+										
+											<a title="<?php echo $tr->translate("GO_BACK");?>" href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
+												<?php echo $tr->translate("GO_BACK");?> <i class="fa fa-undo"></i>
+											</a>
+										</li> 
+										<?php }?>
+									</ol> 
+									<?php }?>
+								<?php }?>
+								<?php if($controller=='extreport' AND $action!='index'){?>
+									<ol class="breadcrumb"> 
+										<li class="breadcrumb-item tx-15"><a href="javascript:void(0);"><?php echo $tr->translate("REPORT");?></a></li> 
+										<li class="breadcrumb-item active" aria-current="page">
+											<a  onclick="doPrint();" href="javascript:void(0);" >
+												<i class="fa fa-print"></i> <?php echo $tr->translate('PRINT');?> 
+											</a>
+										</li> 
+									</ol> 
+								<?php }?>
+							</div> 
 						</div>
-					<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport'){?>
-						<div class="ptss__header add-edit-action">
-						<a class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
-						<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> <?php echo $tr->translate('GO_BACK');?>
-						</a>
-						</div>
-						<?php }?>
-							
-					</div>
-				<?php }?>
+						
+						
+					
+					
+					

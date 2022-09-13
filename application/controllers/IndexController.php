@@ -768,6 +768,9 @@ class IndexController extends Zend_Controller_Action
 		//QRcode::png($studentToken, $imageName, $errorCorrectionLevel, $matrixPointSize, 2);
         
     }
+    function studentinfoAction(){
+    	$this->_helper->layout()->disableLayout();
+    }
 	
 }
 

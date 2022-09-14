@@ -110,6 +110,30 @@ class ExternalController extends Zend_Controller_Action
 		$this->view->form_search=$form;
 		
     }
+	
+	function getsubjectlistAction(){
+		$this->_helper->layout()->disableLayout();
+		if($this->getRequest()->isPost()){
+			$dbExternal = new Application_Model_DbTable_DbExternal();
+			$data = $this->getRequest()->getPost();
+			$row=$dbExternal->getAllSubjectByGroup($data);
+			print_r(Zend_Json::encode($row));
+			exit();
+		}
+	}
+	function getsubjectinfoAction(){
+		$this->_helper->layout()->disableLayout();
+		if($this->getRequest()->isPost()){
+			$dbExternal = new Application_Model_DbTable_DbExternal();
+			$data = $this->getRequest()->getPost();
+			$row=$dbExternal->getSubjectGroupInfo($data);
+			
+			print_r(Zend_Json::encode($row));
+			exit();
+		}
+	}
+	
+	
 }
 
 

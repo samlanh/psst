@@ -133,6 +133,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
+	
+	
 	public function getGroupDetailByID($id){
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();
@@ -163,6 +165,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				   	,(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_en
 					,(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_kh
 				   	,(SELECT `rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 1) AND (`rms_view`.`key_code` = `g`.`status`)) LIMIT 1) AS `status`
+				   	,(SELECT grading.title FROM `rms_scoreengsetting` AS grading WHERE grading.type=2 AND grading.id=g.gradingId LIMIT 1)AS gradingSystem
 				   	,(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE itemType=1 AND `group_id`=`g`.`id`)AS Num_Student
 			   	FROM 
 		   			`rms_group` `g` 
@@ -175,6 +178,80 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	   	
 	   	return $db->fetchRow($sql);
 	}
+	
+	function getAllSubjectByGroup($data){
+		$db=$this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='subject_titleen';
+		if ($currentLang==1){
+			$colunmname='subject_titlekh';
+		}
+		
+		$groupId = empty($data['groupId'])?0:$data['groupId'];
+		$examType = empty($data['examType'])?0:$data['examType'];
+		
+		$sql="
+		SELECT 
+			gsjd.subject_id AS id
+			,(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
+		FROM 
+			rms_group_subject_detail AS gsjd ,
+			rms_group as g
+		WHERE 
+			g.id = gsjd.group_id
+			and gsjd.group_id = ".$groupId;
+		$sql.=' AND gsjd.teacher='.$this->getUserExternalId();
+		if($examType==1){//for month
+			$sql.=" AND gsjd.amount_subject >0 ";
+		}else{//for semester
+			$sql.=" AND gsjd.amount_subject_sem >0 ";
+		}
+		
+		$sql.=" ORDER BY (SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) ASC";
+		return $db->fetchAll($sql);
+	}
+	function getSubjectGroupInfo($data){
+		$db=$this->getAdapter();
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='subject_titleen';
+		if ($currentLang==1){
+			$colunmname='subject_titlekh';
+		}
+		
+		$groupId = empty($data['groupId'])?0:$data['groupId'];
+		$examType = empty($data['examType'])?0:$data['examType'];
+		$subjectId = empty($data['subjectId'])?0:$data['subjectId'];
+		$sql="
+			SELECT 
+				gsjd.*
+				,g.amount_subject AS amountSubjectDivide
+				,gsjd.max_score AS maxSubjectscore
+				,(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent
+				
+				,(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS isParent
+				,(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut
+				
+				,(gsjd.amount_subject) amtsubjectMonth
+				,(gsjd.amount_subject_sem) amtsubjectSemester
+				,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitleKh
+				,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitleEn
+				,(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
+			FROM 
+		 		rms_group_subject_detail AS gsjd ,
+		 		rms_group as g
+			WHERE 
+				g.id = gsjd.group_id
+				and gsjd.group_id = ".$groupId;
+			$sql.=" AND gsjd.subject_id =".$subjectId;
+			
+			$sql.=' ORDER BY gsjd.id ASC LIMIT 1';
+			return $db->fetchRow($sql);
+	 	    
+	}
+	
 	public function getStudentListByGroup($search){
 	   	$session_lang=new Zend_Session_Namespace('lang');
 		$lang_id=$session_lang->lang_id;
@@ -252,5 +329,108 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				$order= " ORDER BY CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ASC ";
 			}
 			return $db->fetchAll($sql.$order);
+	}
+	
+	
+	function getGradingSystemDetail($gradindId){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT 
+				s.*
+				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitle 
+				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitleEng 
+			FROM `rms_scoreengsettingdetail` AS s 
+			WHERE s.score_setting_id=$gradindId
+		";
+   	
+		return $db->fetchAll($sql);
+	}
+	
+	function getClassSubjectScoreById($gradingId){
+		$db=$this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
+		$subjectTitle='subject_titleen';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
+			$subjectTitle='subject_titlekh';
+		}
+		$sql="SELECT 
+				grd.*
+				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
+				,CASE
+					WHEN grd.examType = 2 THEN grd.forSemester
+				ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
+				END AS forMonthTitle
+				,g.group_code AS  groupCode
+				,g.gradingId AS  gradingId
+				,(SELECT sj.$subjectTitle FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitle
+				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
+				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
+				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
+				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+		";
+		
+		$sql.=" FROM rms_grading AS grd,
+					rms_group AS g 
+			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
+		
+		$where ='';
+		$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		$where.=' AND grd.id='.$gradingId;
+		$where.=' LIMIT 1 ';
+
+		
+		return $db->fetchRow($sql.$where);
+	}
+	
+	
+	function getStudentByGroup($data=array()){
+		$db=$this->getAdapter();
+		
+		$groupId = empty($data['groupId'])?0:$data['groupId'];
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		$studentEnName=$studentName;
+		
+		if ($currentLang==1){
+			$studentName='s.stu_khname';
+		}
+		
+		$sql="
+				SELECT
+					sgh.`stu_id`
+					,(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuCode
+					,(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name
+					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName
+					,(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName
+					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
+				FROM 
+					`rms_group_detail_student` AS sgh
+				WHERE 
+					sgh.itemType=1 
+					and sgh.`group_id` = ".$groupId; //AND sgh.stop_type=0
+		$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		if(!empty($data['sortStundent'])){
+			if($data['sortStundent']==1){
+				$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}else if($data['sortStundent']==2){
+				$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}else if($data['sortStundent']==3){
+				$order=" ORDER BY (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}
+		}	
+		return $db->fetchAll($sql.$order);
 	}
 }

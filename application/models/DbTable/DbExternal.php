@@ -373,7 +373,24 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				END AS forMonthTitle
 				,g.group_code AS  groupCode
 				,g.gradingId AS  gradingId
+				,g.academic_year AS  academicYearId
+				,g.grade AS  gradeId
+				,g.degree AS  degreeId
+				
+				,(SELECT te.signature from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeacherSigature
+				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameKh
+				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameEng
+				
+				,(SELECT gsjd.max_score FROM rms_group_subject_detail AS gsjd WHERE g.id = gsjd.group_id AND gsjd.subject_id =grd.subjectId LIMIT 1 ) AS maxSubjectscore
+				
+				,(SELECT te.signature from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teacherSigature
+				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameKh
+				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameEng
+				
 				,(SELECT sj.$subjectTitle FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitle
+				,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitleKh
+				,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitleEng
+				,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitleEng
 				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
 				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
 				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
@@ -411,6 +428,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 				SELECT
 					sgh.`stu_id`
+					,sgh.`stu_id` AS studentId
 					,(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuCode
 					,(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name
 					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName
@@ -432,5 +450,45 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			}
 		}	
 		return $db->fetchAll($sql.$order);
+	}
+	
+	function getScoreByCriterial($gradingId,$studentId,$criteriaId){
+		$db=$this->getAdapter();
+		$sql="
+			SELECT 
+				grd.*
+			FROM 
+				`rms_grading_detail` AS grd
+			WHERE 
+				grd.gradingId =$gradingId
+				AND grd.studentId =$studentId
+				AND grd.criteriaId =$criteriaId
+		";
+		$sql.=" LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
+	function getAverageAndRankBySubjectOfCriterial($gradingId,$studentId){
+		$db=$this->getAdapter();
+		$sql="
+			SELECT 
+				grt.*,
+				FIND_IN_SET( 
+					grt.totalAverage, 
+						(    
+							SELECT 
+								GROUP_CONCAT( dd.totalAverage ORDER BY dd.totalAverage DESC ) 
+							FROM rms_grading_total AS dd 
+							WHERE  dd.`gradingId`=$gradingId
+						)
+					) AS rank
+			FROM 
+				`rms_grading_total` AS grt
+			WHERE 
+				grt.gradingId =$gradingId
+				AND grt.studentId =$studentId
+		";
+		$sql.=" LIMIT 1 ";
+		
+		return $db->fetchRow($sql);
 	}
 }

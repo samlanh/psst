@@ -139,8 +139,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$dbGroup = new Application_Model_DbTable_DbExternal();
-			$group_info = $dbGroup->getGroupDetailByID($_data['group']);
+			$dbExternal = new Application_Model_DbTable_DbExternal();
+			$group_info = $dbExternal->getGroupDetailByID($_data['group']);
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];
@@ -169,7 +169,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$id=$this->insert($_arr);
 			
 			$gradingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
-			$criterial = $this->getGradingSystemDetail($gradingId);
+			$criterial = $dbExternal->getGradingSystemDetail($gradingId);
 			
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
@@ -299,8 +299,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			
 			
 			$status = empty($_data['status'])?0:1;
-			$dbGroup = new Application_Model_DbTable_DbExternal();
-			$group_info = $dbGroup->getGroupDetailByID($_data['group']);
+			$dbExternal = new Application_Model_DbTable_DbExternal();
+			$group_info = $dbExternal->getGroupDetailByID($_data['group']);
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];
@@ -336,7 +336,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$this->delete("gradingId=".$id);
 			
 			$gradingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
-			$criterial = $this->getGradingSystemDetail($gradingId);
+			$criterial = $dbExternal->getGradingSystemDetail($gradingId);
 			
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
@@ -349,13 +349,12 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					foreach ($criterial as $rrw){
 						
 						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
-							
 							$arr=array(
 								'gradingId'		=>$id,
-								'studentId'		=>$_data['student_id'.$i],
+								'studentId'		=>$old_studentid,
 								
 								'subjectId'		=> $subjectId,
-								'totalGrading'			=> $total_score,
+								'totalGrading'	=> $total_score,
 								'totalAverage'	=> number_format(($total_score)/$criteriaAmount,2),
 								'criteriaAmount'=> $criteriaAmount,
 								'remark'		=>$_data['note_'.$i],
@@ -395,14 +394,13 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							'studentId'		=>$_data['student_id'.$i],
 							
 							'subjectId'		=> $subjectId,
-							'totalGrading'			=> $total_score,
+							'totalGrading'	=> $total_score,
 							'totalAverage'	=> number_format(($total_score)/$criteriaAmount,2),
 							'criteriaAmount'=> $criteriaAmount,
 							'remark'		=>$_data['note_'.$i],
 							
 						);
 						$this->_name='rms_grading_total';
-						$this->insert($arr);
 						$this->insert($arr);
 					}
 				}

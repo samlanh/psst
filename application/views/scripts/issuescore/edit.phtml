@@ -65,34 +65,42 @@
 											 <div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE");?></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SCORE_FOR_JANUARY");?>..." value="<?php echo $this->rs['title_score']?>" />
-													<input type="hidden" name="score_id" id="score_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['id']?>" />
-													<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['branch_id']?>" />
-													<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['group_id']?>"/>
+													<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SCORE_FOR_JANUARY");?>..." value="<?php echo $this->rs['titleScore']?>" />
+													<input type="hidden" name="gradingId" id="gradingId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['id']?>" />
+													<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['branchId']?>" />
+													<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['groupId']?>"/>
 												</div>
 											 </div>
 											 <div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCORE_FOR");?></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select id="exam_type" readOnly name="exam_type" class="fullside" onchange="checkExamType();getSubjectByGroup();"  dojoType="dijit.form.FilteringSelect" >
-															<option value="1" <?php if(1==$this->rs['exam_type']){echo "selected='selected'";}?>><?php echo $tr->translate("MONTHLY");?></option>
-															<option value="2" <?php if(2==$this->rs['exam_type']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER");?></option>
+														<select id="examType" readOnly name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
+															<option value="1" <?php if(1==$this->rs['examType']){echo "selected='selected'";}?>><?php echo $tr->translate("MONTHLY");?></option>
+															<option value="2" <?php if(2==$this->rs['examType']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER");?></option>
 														</select>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" queryExpr="*${0}*" autoComplete="false">								
-															<option value="1" <?php if(1==$this->rs['for_semester']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
-															<option value="2" <?php if(1==$this->rs['for_semester']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
+														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								
+															<option value="1" <?php if(1==$this->rs['forSemester']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
+															<option value="2" <?php if(1==$this->rs['forSemester']){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
 														</select>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
+														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rs['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rs['forMonth']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
 															<?php }}?>
 														</select>
 													</div>
+												</div>
+											 </div>
+											 <div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT");?></label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													
+													<input id="subjectId" />
+													<input type="hidden" name="maxSubjectScore" id="maxSubjectScore" class="fullside" dojoType="dijit.form.TextBox" value="0"/>
 												</div>
 											 </div>
 											 <div class="form-group">
@@ -117,6 +125,8 @@
 								
 								  
 						  </div>
+						  
+						  
 						  <div class="col-md-6 col-sm-6 col-xs-12">
 								<div class="card-info bg-gradient-directional-primary">
 									<div class="card-content">
@@ -130,6 +140,10 @@
 														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $tr->translate("DEGREE");?></span>: <span class="text-value"><?php echo $this->rs['degreeTitle']?></span></li>
 														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $tr->translate("ROOM");?></span>: <span class="text-value"><?php echo $this->rs['roomName']?></span></li>
 														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $tr->translate("GRADE");?></span>: <span class="text-value"><?php echo $this->rs['gradeTitle']?></span></li>
+														<li class="opt-items titleEx"><span class="lbl-tt"><?php echo $tr->translate("GRADING");?></span>: <span class="text-value"><?php echo $this->rs['gradingSystem']?></span></li>
+														<?php if(!empty($this->criterial)) foreach($this->criterial AS $criterial){?>
+														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $criterial['criterialTitle'];?></span>: <span class="text-value"><?php echo $criterial['pecentage_score'];?> %</span></li>
+														<?php } ?>
 													</ul>
 												</div>
 												<div class="align-self-top">
@@ -161,6 +175,7 @@
 		</div>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 
 $( document ).ready(function() {
@@ -170,34 +185,171 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.ready(function(){
-	filterStudentOld();
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,             
+		id: "subjectId",
+		name: "subjectId",           
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_SUBJECT");?>",          
+		onChange: function() {
+			getSubjectInfo();
+		}
+	}, "subjectId");
+	
+	getAllSubject();
+	getSubjectInfo();
 });
-
-
-function CheckSubjectExam(subject_id){
-	var rowId = $('#identity').val();
-	var amountsub = $(".checkbox:checked").length;
-	if ($('#subject'+subject_id).is(':checked')) {
-		if(rowId!=''){ 
-			var rowIDArray = rowId.split(',');
-			for(var b = 0; b < rowIDArray.length; b++){
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
-			}
+urlGetSubjectStore = '<?php echo $this->url(array('module'=>'default','controller'=>'external','action'=>'getsubjectlist'));?>';
+function getAllSubject(){
+	dijit.byId('subjectId').reset();
+	var subjectStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dijit.byId('subjectId').set('store',subjectStore); 
+	
+	group = dijit.byId('group').get('value');
+	examType = dijit.byId('examType').get('value');
+	
+	dojo.xhrPost({
+		url: urlGetSubjectStore,
+		content:{
+			'groupId':group,
+			'examType':examType,
+			},
+		handleAs:"json",
+		load: function(data) {
+		    subjectStore  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('subjectId').set('store',subjectStore);   
+		    dijit.byId('subjectId').set('value','<?php echo $this->rs['subjectId'];?>');   
+			dijit.byId('subjectId').set("readOnly",true);
+		},
+		error: function(err) {
 		}
-	}else{
-		if(rowId!=''){ 
-			var rowIDArray = rowId.split(',');
-			for(var b = 0; b < rowIDArray.length; b++){
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
-			}
-		}
-	}
+	});
 }
+
+
+var subject = <?php print_r(Zend_Json::encode($this->criterial));?>;
+var urlGetSubjectInfo= '<?php echo $this->url(array('module'=>'default','controller'=>'external','action'=>'getsubjectinfo')); ?>';
+function getSubjectInfo(){
+	group = dijit.byId('group').get('value');
+	subjectId = dijit.byId('subjectId').get('value');
+	if(subjectId=='' || subjectId==0){
+		$('#identity').val('');
+		dojo.query("#table_row").append("");
+		return false;
+	}
+	dojo.xhrPost({
+	    url: urlGetSubjectInfo,
+	    content : { 
+			'groupId':group,
+			'subjectId':subjectId,
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		   dijit.byId('maxSubjectScore').attr('value',data.maxSubjectscore);
+		   filterStudent();
+	   },		
+	    error: function(err) {
+	    }
+	});
+}
+
+var inx=0;
+var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
+function filterStudent(){
+	$('#identity').val('');
+	dojo.query("#table_row").append("");
+	loadingBlock();
+	
+	tem="";
+   temp='';
+   maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
+num =0;
+	title=0;
+	temp='';
+	str='';
+	column = 0;
+	record_num = 0;
+	temp='<table class="collape responsiveTable" id="table" >'
+		+'<thead>'
+		+'<tr class="head-td" align="center">'
+		+'<th scope="col" width="10px"  ><?php echo $tr->translate('DEL');?></th>'
+		+'<th scope="col" width="10px"  ><?php echo $tr->translate('NUM');?></th>'
+		+'<th scope="col"  style="width:150px;"><?php echo $tr->translate('STUDENT');?></th>'
+		+'<th scope="col" ><?php echo $tr->translate('SEX');?></td>'
+		no=0;
+	<?php if(!empty($this->criterial)) foreach($this->criterial AS $criterial){?>
+		  no++;
+		  stringsname = '<?php echo $criterial['criterialTitle'];?>';
+		  temp+='<th scope="col" title="'+stringsname+'">';
+		   temp+=no+'-'+stringsname;
+		  temp+='</th>';
+	<?php }?>
+	  temp+='<th scope="col"><?php echo $tr->translate('NOTE');?></th>'+'</tr>';
+	  
+	  temp+='</thead>';
+	<?php $old_stu = null;$i=0;
+		if(!empty($student))foreach ($student as $key=>$rs){
+			
+			$classs= "odd";
+			if(($i%2)==0){
+				$classs= "regurlar";
+			}
+			$i = $i+1;
+		?>
+		inx = inx+1;
+		num++;
+		var no=0;
+		<?php 
+		?>
+		temp+='<tr class="rowData <?php echo $classs; ?>" id="row'+inx+'">';
+		temp+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+inx+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span> </td>';
+		temp+='<td data-label="<?php echo $tr->translate("NUM");?>" align="center"><?php echo $i; ?></td>';
+		
+		temp +='<td data-label="<?php echo $tr->translate("STUDENT");?>"  align="left">';
+				temp +='<strong class="text-dark"><?php echo $rs["stu_code"]; ?></strong><br />';
+				temp +='<strong class="text-dark"><?php echo $rs["stuKhName"]; ?></strong><br />';
+				temp +='<strong class="text-dark"><?php echo $rs["stuEnName"]; ?></strong>';
+				temp +='<input type="hidden" dojoType="dijit.form.TextBox" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["studentId"] ?>"/>';
+			temp +='</td>';
+			
+		
+		temp +='<td data-label="<?php echo $tr->translate("SEX");?>">'+gender(<?php echo $rs["sex"];?>)+'</td>';
+		
+		<?php if(!empty($this->criterial)) foreach($this->criterial as $index => $criterial){ 
+			$resultScore = $db_score->getSubjectScoreByCaterialID($this->rs['id'], $rs["studentId"],$criterial['exam_typeid']);
+		?>
+			maxValue = "'The value maximumn "+maxSubjectScore+"'";
+			invalidesms = "rangeMessage:"+maxValue;
+			stringsname = '<?php echo $criterial['criterialTitle'];?>';
+			
+			temp += '<td data-label="'+stringsname+'" id="score_<?php echo $index;?>">';
+			temp += '<input value="<?php echo $resultScore['totalGrading'];?>" data-dojo-props="constraints:{min:0,max:'+maxSubjectScore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_<?php echo $criterial["exam_typeid"]; ?>"  name="score_'+inx+'_<?php echo $criterial["exam_typeid"]; ?>" />';
+			temp += '<input value="<?php echo $criterial["pecentage_score"]; ?>" class="fullside" dojoType="dijit.form.TextBox" type="hidden" id="pecentage_score'+inx+'_<?php echo $criterial["exam_typeid"]; ?>"  name="pecentage_score'+inx+'_<?php echo $criterial["exam_typeid"]; ?>" />';
+			temp += '</td>';
+		<?php }?>
+		temp += '<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php //echo $rs["remark"]; ?>" type="text" ></td>';
+		temp+= '</tr>';
+		var no=0;
+		if($("#identity").val()!=""){
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+inx);
+		} else {$("#identity").val(inx);}
+	
+	<?php } ?>
+	temp+='</table>';
+	tmp='<tr id="rowindex'+inx+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+	dojo.html.set(dojo.byId("rowindex"+inx),temp , {
+		 parseContent: true,
+	});
+	
+}
+
 function deleteRecord(index){
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -215,111 +367,13 @@ function gender(sex){
 	return sex;
 }
 function checkExamType(){
-	exam_type = dijit.byId("exam_type").get("value");
-	dijit.byId('for_month').set("readOnly",false);
-	if(exam_type==2){
-		dijit.byId('for_month').set("readOnly",true);
+	examType = dijit.byId("examType").get("value");
+	dijit.byId('forMonth').set("readOnly",false);
+	if(examType==2){
+		dijit.byId('forMonth').set("readOnly",true);
 	}
 }
 
-
-
-inx=0;
-function filterStudentOld(){
-	dojo.query("#table_row").append("");
-	$('#identity').val("");
-	loadingBlock();
-	num =0;
-	title=0;
-	temp='';
-	str='';
-	column = 0;
-	temp='<table class="collape responsiveTable" id="table" >'
-			+'<thead>'
-			+'<tr class="head-td" align="center">'
-			+'<th scope="col" width="10px"  ><?php echo $tr->translate('DEL');?></th>'
-			+'<th scope="col" width="10px"  ><?php echo $tr->translate('NUM');?></th>'
-			+'<th scope="col"  style="width:150px;"><?php echo $tr->translate('STUDENT');?></th>'
-			+'<th scope="col" ><?php echo $tr->translate('SEX');?></td>';
-					
-	
-		no=0;
-		<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ ?>
-			  no++;
-			  stringsname = '<?php echo str_replace(" ", "", $subj['name'])?>';
-			  <?php 
-			  $result_score = $db_score->checkSubjectScore($this->rs['id'], $subj["subject_id"],null);
-			  ?>
-			  
-					  
-		      temp+='<th scope="col" title="'+stringsname+'">';
-		      	      temp+='<div class="custom-control custom-checkbox ">';
-						 temp+='<input type="checkbox" class="checkbox custom-control-input" <?php if (!empty($result_score)){?>checked="checked"<?php }?> onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]">';
-						 temp+='<label class="custom-control-label" for="subject<?php echo $subj["subject_id"]; ?>">';
-							 temp+=no+'-'+stringsname;
-						 temp+='</label>';
-					 temp+='</div>';
-			  temp+='</th>';
-		<?php }?>
-		 temp+='<th scope="col"><?php echo $tr->translate('AMOUNT_SUBJECT');?></th>';
-		 temp+='<th scope="col"><?php echo $tr->translate('NOTE');?></th>'+'</tr>';
-		  
-		  temp+='</thead>';
-		 <?php $old_stu = null;$i=0;
-			if(!empty($student))foreach ($student as $key=>$rs){
-				
-				$classs= "odd";
-				if(($i%2)==0){
-					$classs= "regurlar";
-				}
-				$i = $i+1;
-			?>
-				inx = inx+1;
-				num++;
-				var no=0;
-	        	<?php 
-	        	?>
-	        	temp+='<tr class="rowData <?php echo $classs; ?>" id="row'+inx+'">';
-				temp+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+inx+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span> </td>';
-				temp+='<td data-label="<?php echo $tr->translate("NUM");?>" align="center"><?php echo $i; ?></td>';
-				
-				temp +='<td data-label="<?php echo $tr->translate("STUDENT");?>"  align="left">';
-						temp +='<strong class="text-dark"><?php echo $rs["stu_code"]; ?></strong><br />';
-						temp +='<strong class="text-dark"><?php echo $rs["stuKhName"]; ?></strong><br />';
-						temp +='<strong class="text-dark"><?php echo $rs["stuEnName"]; ?></strong>';
-						temp +='<input type="hidden" dojoType="dijit.form.TextBox" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/>';
-					temp +='</td>';
-					
-				
-				temp +='<td data-label="<?php echo $tr->translate("SEX");?>">'+gender(<?php echo $rs["sex"];?>)+'</td>';
-				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ 
-					$result_score = $db_score->getStudentScoreBySubjectID($this->rs['id'], $rs["student_id"],$subj['subject_id']);
-					?> 
-					stringsname = '<?php echo str_replace(" ", "", $subj['name'])?>';
-						maxValue = "'The value maximumn <?php echo $subj["max_subjectscore"]; ?>'";
-						invalidesms = "rangeMessage:"+maxValue;
-					temp += '<td data-label="'+stringsname+'" id="score_<?php echo $index;?>"><input required="1" <?php if (empty($result_score)){?>disabled="disabled"<?php }?> data-dojo-props="constraints:{min:0,max:<?php echo $subj["max_subjectscore"]; ?>},'+invalidesms+'"   class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['score'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
-				<?php }?>
-				temp += '<td data-label="<?php echo $tr->translate("AMOUNT_SUBJECT");?>"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php echo $rs["amount_subject"]; ?>" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
-				temp += '<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php echo $rs["note"]; ?>" type="text" ></td>';
-				temp+= '</tr>';
-				if($("#identity").val()!="") {
-					var identity = $('#identity').val();
-					$('#identity').val(identity+','+inx);
-				} else {
-						$('#identity').val(inx);
-				}
-
-			<?php } ?>
-			temp+='</table>';
-			tmp='<tr id="rowindex'+inx+'">';
-			tmp+="</tr>";
-			dojo.query("#table_row").append(tmp);
-			dojo.html.set(dojo.byId("rowindex"+inx),temp , {
-			     parseContent: true,
-			});
-			HideloadingBlock();
-}
 
 </script>
 <?php 

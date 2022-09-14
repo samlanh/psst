@@ -39,43 +39,25 @@ class ExtreportController extends Zend_Controller_Action
 		
 	}
 	
-	function rptScoreListAction(){ //ពិន្ទុសរុបតាមមុខ
+	function rptScoreListAction(){ 
 		$this->_helper->layout()->disableLayout();
-    	$id=$this->getRequest()->getParam("id");
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	if($this->getRequest()->isPost()){
-    		$search=$this->getRequest()->getPost();
-    		$result = $db->getStundetScoreResult($search,null,1);
-    		$this->view->studentgroup = $result;
-    	}
-    	else{
-    		$row = $db->getScoreExamByID($id);
-    		$search = array(
-    				'group' => $row['group_id'],
-    				'study_year'=> $row['for_academic_year'],
-    				'exam_type'=> $row['exam_type'],
-    				'branch_id'=>$row['branch_id'],
-    				'for_month'=>$row['for_month'],
-    				'for_semester'=>$row['for_semester'],
-    				'grade'=> '',
-    				'degree'=>'',
-    				'session'=> '',
-    		);
-    		$result = $db->getStundetScoreResult($search,$id,1);
-    		$this->view->studentgroup = $result;
-    	}
-    	$this->view->search=$search;
-    	
-    	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	$this->view->month = $db->getAllMonth();
-    	
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
+    	$gradingID=$this->getRequest()->getParam("id");
+    	$gradingID =empty($gradingID)?0:$gradingID;
+
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$row = $dbExternal->getClassSubjectScoreById($gradingID);
+		$this->view->rs = $row;
+		
+		$groupId = empty($row['groupId'])?0:$row['groupId'];
+		
+		$arrFilter = array(
+			'groupId'=>$groupId,
+		);
+		$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
+		
+    	$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
+		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
+		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];
     	$this->view->header = $frm->getHeaderReceipt($branch_id);
@@ -86,42 +68,7 @@ class ExtreportController extends Zend_Controller_Action
     	
     }
 	
-	function rptScoreDetailAction(){//តាមមុខវិជ្ជាលម្អិត
 	
-		$this->_helper->layout()->disableLayout();
-    	$id=$this->getRequest()->getParam("id");
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	if($this->getRequest()->isPost()){
-    		$search=$this->getRequest()->getPost();
-    		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,null,1);
-    	}
-    	else{
-    		$row = $db->getScoreExamByID($id);
-    		$search = array(
-    				'group' => $row['group_id'],
-    				'study_year'=> $row['for_academic_year'],
-    				'exam_type'=> $row['exam_type'],
-    				'branch_id'=>$row['branch_id'],
-    				'for_month'=>$row['for_month'],
-    				'for_semester'=>$row['for_semester'],
-    				'grade'=> '',
-    				'degree'=>'',
-    				'session'=> '',
-    		);
-    		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
-    	}
-    	
-    	$this->view->search=$search;
-//     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	
-    	$this->view->month = $db->getAllMonth();
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    }
 }
 
 

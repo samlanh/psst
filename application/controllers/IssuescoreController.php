@@ -116,6 +116,9 @@ class IssuescoreController extends Zend_Controller_Action
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");
 		}
+		if ($row['isLock']==1){
+			Application_Form_FrmMessage::Sucessfull("RECORD_LOCKED_CAN_NOT_EDIT","/issuescore/index");
+		}
 		if ($row['is_pass']==1){
 			Application_Form_FrmMessage::Sucessfull("CLASS_COMPLETED_CAN_NOT_EDIT","/issuescore/index");
 		}

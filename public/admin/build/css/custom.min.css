@@ -961,6 +961,9 @@ span.revomveService:hover {
 		font-weight: 600;
 		font-size: 10px;
 	}
+	table.reportTotalStudent {
+		width: 100% !important;
+	}
 	table.reportTotalStudent tr td,table.reportTotalStudent tr td span {
 		padding: 0 !important;
 		font-size: 7px !important;

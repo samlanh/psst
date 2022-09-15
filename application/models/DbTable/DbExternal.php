@@ -286,44 +286,49 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 	   	$db = $this->getAdapter();
 		$sql="SELECT
-					 g.gd_id,
-					 (SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
-					 (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle,
-					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
-					 `g`.`group_id` AS `group_id`,
-					 `g`.`stu_id`   AS `stu_id`,
-				  	 `s`.`stu_code` AS `stu_code`,
-				     `s`.`stu_khname` AS `kh_name`,
-				     `s`.`stu_enname` AS `en_name`,
-				     `s`.`last_name` AS `last_name`,
-				     CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullName,
-				     `s`.`address` AS `address`,
-				     s.pob,
-				     `s`.`tel` AS `tel`,
-				     `s`.`sex` AS `gender`,
-				     DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
-				     s.father_enname AS father_name,
-				     (SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
-    				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation,
-					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
-					 s.mother_enname AS mother_name,
-					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
-				    (SELECT
+					 g.gd_id
+					,gr.branch_id AS branchId
+					,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle
+					,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo
+					,g.`group_id` AS `group_id`
+					,g.`stu_id`   AS `stu_id`
+				  	,s.`stu_code` AS `stu_code`
+				    ,s.`stu_khname` AS `kh_name`
+				    ,s.`stu_enname` AS `en_name`
+				    ,s.`last_name` AS `last_name`
+				    ,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullName
+				    ,`s`.`address` AS `address`
+				    ,s.pob
+				    ,`s`.`tel` AS `tel`
+				    ,`s`.`sex` AS `gender`
+				    ,DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`
+				    ,s.father_enname AS father_name
+				    ,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality
+    				,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation
+					,(SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job
+					,s.mother_enname AS mother_name
+					,(SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job
+				    ,(SELECT
 				        `rms_view`.$gender_str
 				      FROM `rms_view`
 				      WHERE ((`rms_view`.`type` = 2)
-				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
-				  `g`.`status`   AS `status`,
-				  `g`.`is_current`   AS `is_current`,
-				  `g`.`is_pass`   AS `is_pass`,
-				  `g`.`is_maingrade`   AS `is_maingrade`,
-				  s.home_num,
-				  s.street_num,
-				    (SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
-			    	(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
-			    	(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
-			    	(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province,
-			    	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = gr.teacher_id LIMIT 1) as teacher
+				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`
+				  ,g.`status`   AS `status`
+				  ,g.`is_current`   AS `is_current`
+				  ,g.`is_pass`   AS `is_pass`
+				  ,g.`is_maingrade`   AS `is_maingrade`
+				  ,s.home_num
+				  ,s.street_num
+				    ,(SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name
+			    	,(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name
+			    	,(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name
+			    	,(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province
+					
+				,(SELECT te.signature from rms_teacher AS te WHERE te.id = gr.teacher_id LIMIT 1 ) AS mainTeacherSigature
+				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = gr.teacher_id LIMIT 1 ) AS mainTeaccherNameKh
+				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = gr.teacher_id LIMIT 1 ) AS mainTeaccherNameEng
+				
 			FROM 
 				`rms_group_detail_student` AS g,
 				 rms_student as s,

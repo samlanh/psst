@@ -37,6 +37,14 @@ class ExtreportController extends Zend_Controller_Action
 		$rs = $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 		
+		$frm = new Application_Form_FrmGlobal();
+    	$branch_id = empty($row['branchId'])?1:$row['branchId'];
+    	$this->view->header = $frm->getHeaderReceipt($branch_id);
+    	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branchInfo = $db->getBranchInfo($branch_id);
+		
 	}
 	
 	function rptScoreListAction(){ 
@@ -59,7 +67,7 @@ class ExtreportController extends Zend_Controller_Action
 		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
 		
     	$frm = new Application_Form_FrmGlobal();
-    	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];
+    	$branch_id = empty($row['branchId'])?1:$row['branchId'];
     	$this->view->header = $frm->getHeaderReceipt($branch_id);
     	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
     	

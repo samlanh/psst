@@ -52,20 +52,28 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	function coutingClassByUser($arrCondiction=array()){
 		$db = $this->getAdapter();
 		$sql="
-			SELECT COUNT(g.id) 
+			SELECT COUNT(DISTINCT(gsjb.group_id))  
 			";
-		$sql.=" FROM `rms_group` AS g  ";
-		$sql.=" WHERE g.status=1 AND g.is_use=1 AND g.teacher_id=".$this->getUserExternalId();
+		$sql.=" FROM `rms_group_subject_detail` AS gsjb,
+					`rms_group` AS g 
+				WHERE 
+					g.id = gsjb.group_id 
+					AND g.is_use=1
+					  ";//
+		
+		$sql.=' AND gsjb.teacher='.$this->getUserExternalId();
+		
 		
 		if(!empty($arrCondiction['classTypeFilter'])){
 			if($arrCondiction['classTypeFilter']==1){
 				//Completed Class
-				$sql.=" AND g.is_pass !=2 ";
+				$sql.=" AND g.is_pass =4 ";
 			}elseif($arrCondiction['classTypeFilter']==2){
 				//Active Class
 				$sql.=" AND g.is_pass=2 ";
 			}
 		}
+		
 		return $db->fetchOne($sql);
 	}
 	
@@ -81,23 +89,30 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$label="name_kh";
 			$branch = "branch_namekh";
 		}
+		$sql="
+			SELECT 
+				g.*
+				,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchName
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
+				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree
+				,(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade
+				,(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
+				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `roomName`
+				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) as mainTeaccher
+				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = gsjb.teacher LIMIT 1 ) as subjectTeaccher
+				,(SELECT $label from rms_view where type=9 and key_code=g.is_pass) as groupStatus
+				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+			
+		";
+		$sql.=" FROM 
+					`rms_group_subject_detail` AS gsjb,
+					`rms_group` AS g ";
+		$where =' WHERE 
+					g.id = gsjb.group_id AND g.is_use=1
+					 ';
+		$where.=' AND gsjb.teacher='.$this->getUserExternalId();
 		
-		$sql = "SELECT `g`.*
-			,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchName
-			,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
-			,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree
-			,(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade
-			,(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
-			,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `roomName`
-			,(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher
-			,(select $label from rms_view where type=9 and key_code=g.is_pass) as groupStatus
-			,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent ";
 		
-		$sql.=$dbp->caseStatusShowImage("g.status");
-		$sql.=" FROM `rms_group` AS `g` ";
-		
-		$where =' WHERE 1 ';
-		$where.=' AND g.teacher_id='.$this->getUserExternalId();
 		
 		if(!empty($search['adv_search'])){
 			$s_where = array();
@@ -129,7 +144,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($search['is_pass']) AND $search['is_pass']>-1){
 			$where.=' AND g.is_pass='.$search['is_pass'];
 		}
+		$where.=' GROUP BY gsjb.group_id ';
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
+		
 		return $db->fetchAll($sql.$where.$order);
 	}
 	

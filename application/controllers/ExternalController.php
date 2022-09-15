@@ -133,6 +133,18 @@ class ExternalController extends Zend_Controller_Action
 		}
 	}
 	
+	function printbyAction(){
+		$this->_helper->layout()->disableLayout();
+		if($this->getRequest()->isPost()){
+			$frmGb = new Application_Form_FrmPopupGlobal();
+			$data = $this->getRequest()->getPost();
+			$row=$frmGb->printByFormatForTeacher();
+			
+			echo $row;
+			exit();
+		}
+	}
+	
 	
 }
 

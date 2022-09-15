@@ -286,4 +286,29 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		';
 		return $str;
 	}
+	
+	
+	function printByFormatForTeacher(){
+		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+		$userName = $sessionUserExternal->userName;
+		$teacherNameKh = $sessionUserExternal->teacher_name_kh;
+		$teacherNameEn = $sessionUserExternal->teacher_name_en;
+	
+		$teachName = $teacherNameKh;
+		if(empty($teachName)){
+			$teachName = $teacherNameEn;
+		}else{
+			if(!empty($teacherNameEn)){
+				$teachName = $teachName." / ".$teacherNameEn;
+			}
+		}
+	
+		$string='
+				<ul class="printInfo">
+					<li>Print Date / Time : '.date("d/m/Y"." H:i:s").'</li>
+					<li>Print By : '.$teachName.'</li>
+				<ul>
+		';
+		return $string;
+	}
 }

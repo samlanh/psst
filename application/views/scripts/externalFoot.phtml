@@ -95,9 +95,13 @@ jQuery(function () {
 <?php if($controller=='extreport' AND $action!='index'){?>
 
 function doPrint() {
-	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
-    window.frames["print_frame"].window.focus();
-    window.frames["print_frame"].window.print();
+	getPrintBy();
+	setTimeout(function () {
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+		window.frames["print_frame"].window.focus();
+		window.frames["print_frame"].window.print();
+	}, 500);
+
     //hideDialog();
 }
 
@@ -117,6 +121,22 @@ function preview()
 }
 function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+
+var urlPrintBy = '<?php echo $this->url(array('module'=>'default','controller'=>'external','action'=>'printby'));?> ';
+function getPrintBy(){
+	jQuery.ajax({
+		url: urlPrintBy,
+		type: "post",
+		data:{'data':1 },
+		success: function(data){
+			
+			$(".footPrintDate").html(data);
+		},
+		error:function(err){
+			
+		}
+	});
 }
 <?php }?>
 </script>

@@ -1,0 +1,262 @@
+<?php
+$base_url = $this->baseUrl()."/";
+?>
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+     <link rel="shortcut icon" href="" type="image/x-icon">
+     <link rel="shortcut icon" href="<?php echo $this->baseUrl();?>/images/icon.ico" type="image/x-icon"/>
+    <title>Student Information</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<?php echo $base_url;?>stuinfo/bootstrap.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="<?php echo $base_url;?>stuinfo/css" rel="stylesheet">
+    <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="<?php echo $base_url;?>stuinfo/freelancer.css" rel="stylesheet">
+    <style>
+	@font-face {
+				font-family: 'khmer os battambang';
+				font-style: normal;
+				font-weight: 700;
+				font-display: swap;
+				src: url('<?php echo $this->baseUrl();?>/font/KhmerOS_battambang.ttf');
+			}
+			@font-face {
+				font-family: 'khmer os muol light';
+				font-style: normal;
+				font-weight: 700;
+				font-display: swap;
+				src: url('<?php echo $this->baseUrl();?>/font/Khmer_OS_Muol_Light_Regular.ttf');
+			}
+      .pd{
+        padding-left:30px !important;
+      }
+      .padding-10{padding-top: 10px;}
+	  small{display:block;width: 100%;}
+	  
+    </style>
+  </head>
+  <body id="page-top">
+    <nav class="navbar navbar-expand-lg fixed-top text-uppercase navbar-shrink" id="mainNav" style="background-color:#004e92;">
+      <div class="container">
+         <div class="container">
+        	<a class="navbar-brand js-scroll-trigger" href="" style="font-weight: normal;">
+            <img src="<?php echo $this->baseUrl()?>/images/logo1.png" width="350px">
+          </a>
+      	</div>
+      </div>
+    </nav>
+    <section id="contact">
+    	<?php 
+        	$result = $this->rsStudent;
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		?>
+    	<?php if(!empty($result)){?>
+	      <div class="container">
+	         <h2 class="text-center text-uppercase " style="font-family: 'khmer os muol light'; font-size:25px; ">ព័ត៌មានរបស់សិស្ស
+	        	<small><strong>STUDENT PROFILE</strong></small>
+	        </h2>
+	        <div class="row flex">
+	            <div class="center-block">
+	            	<?php 
+                		$photo = $this->baseUrl().'/images/no-profile.png';
+                		if (!empty($result['photo'])){
+                			if (file_exists(PUBLIC_PATH."/images/photo/".$result['photo'])){
+                				$photo = $this->baseUrl().'/images/photo/'.$result['photo'];
+                			}
+                		}
+                		?>
+										                		
+	                <img width="150px" src="<?php echo $photo?>" class="center-block rounded" alt="profile">
+	            </div>
+	        </div>
+	        <div class="row flex">
+	          <div class="col-lg-10 mx-auto">
+	              <div class="table-responsive padding-10">
+	              	
+		                  <table class="table datavalue" >
+		                  	<tbody>
+		                          <tr>
+		                                <td class="pd" style="width:40%;">  អត្តលេខ
+		                                <small>Student ID</small></td>
+		                                <td><?php echo $result['stu_code'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">  គោត្តនាម-នាម
+		                                	<small>Name in Khmer</small>
+		                                </td>
+		                                <td style="font-family:khmer os muol light"><?php echo $result['stu_khname'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd"> ជាអក្សរឡាតាំង
+		                                	<small>Latin Script</small>
+		                                </td>
+		                                <td><?php echo $result['last_name'].' '.$result['stu_enname'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">   ភេទ
+		                                	<small>Gender</small>
+		                                </td>
+		                                <td><?php if($result['sex']==1){
+										  	echo $tr->translate("MALE");
+										  }else{
+										  	echo $tr->translate("FEMALE");
+										  }
+									  	?>
+										</td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd"> ថ្ងៃ ខែ ឆ្នាំកំណើត
+		                                <small>Date of Birth</small>
+		                               	</td>
+		                                <td><?php echo $result['dob'];?></td>
+		                            </tr>
+		                             <tr>
+		                                <td class="pd"> ជនជាតិ
+		                                	<small>Origin</small></td>
+		                                <td><?php echo $result['nation'];?></td>
+		                            </tr>
+		                             <tr>
+		                                <td class="pd"> សញ្ជាតិ
+		                                	<small>Nationality</small>
+		                                </td>
+		                                <td><?php echo $result['nationality'];?></td>
+		                            </tr>
+									<tr>
+		                                <td class="pd"> ទីកន្លែងកំណើត
+		                                	<small>Place of Birth</small>
+		                                </td>
+		                                <td><?php echo $result['pob'];?></td>
+		                            </tr>
+		                             <tr>
+		                                <td class="pd"> អាសយដ្ឋានបច្ចុប្បន្ន
+		                                	<small>Current Address</small></td>
+		                                <td>ផ្ទះលេខ <?php echo $result['home_num'];?> ផ្លូវលេខ  <?php echo $result['street_num'];?> ភូមិ <?php echo $result['village_name'];?> ឃុំ/សង្កាត់ <?php echo $result['commune_name'];?> ស្រុក/ខណ្ឌ <?php echo $result['district_name'];?> រាជធានី/ខេត្ត <?php echo $result['province_name'];?></td>
+		                            </tr>
+		                              <tr class="p-2  " style="font-family: 'Khmer OS Muol Light'; font-size:14px; ">
+		                                <td colspan="2"> <i class='fa fa-group'></i> ព័ត៌ឳពុកម្តាយ /Parents Information  </td>
+		                              </tr>
+		
+		                             <tr>
+		                                <td class="pd">  ឳពុកឈ្មោះ
+		                                	<small>Father's Name</small>
+		                                </td>
+		                                <td><?php echo $result['father_enname'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">  លេខទូរស័ព្ទ
+		                                	<small>Tel</small></td>
+		                                <td><?php echo $result['father_phone'];?></td>
+		                            </tr>
+		                            <tr>
+		                              <td class="pd"> ម្តាយឈ្មោះ
+		                              	<small>Mother's Name</small>
+		                              </td>
+		                                <td><?php echo $result['mother_enname'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">   លេខទូរស័ព្ទ
+		                                	<small>Tel</small>
+		                                </td>
+		                                <td><?php echo $result['mother_phone'];?></td>
+		                            </tr>
+		                            <tr>
+		                              <td class="pd"> អាណាព្យាបាល
+		                              	<small>Guardian's Name</small>
+		                              </td>
+		                                <td><?php echo $result['guardian_enname'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">   លេខទូរស័ព្ទ
+		                                	<small>Tel</small>
+		                                </td>
+		                                <td><?php echo $result['guardian_tel'];?></td>
+		                            </tr>
+		                           
+		                            <tr class="p-2  " style="font-family: 'Khmer OS Muol Light'; font-size:14px; ">
+		                              <td colspan="2"> <i class='fa fa-mortar-board'></i> ព័ត៌មាននៃការសិក្សា /Study Information  </td>
+		                            </tr>
+		
+		                            <tr>
+		                                <td class="pd">ជាសិស្សរៀននៅសាលារៀន
+		                                	<small>School</small></td>
+		                                <td style="font-family:khmer os muol light"><strong>អាស៊ានរៀន ហ៊ែរីថេជ</strong></td>
+		                            </tr>
+		                            <?php 
+		                            if(!empty($this->rsStudy))foreach($this->rsStudy as $study){
+		                            ?>
+		                            <tr>
+		                                <td class="pd"> ឆ្នាំសិក្សា
+		                                	<small>Academic Year</small>
+		                                </td>
+		                                <td><?php echo $study['academic_year'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">  កម្រិត
+		                                	<small>Degree</small>
+		                                </td>
+		                                <td><?php echo $study['degree_name'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">  ថ្នាក់ទី
+		                                	<small>Grade</small>
+		                                </td>
+		                                <td><?php echo $study['grade_name'];?></td>
+		                            </tr>
+		                            <?php }?>
+		                  </tbody>
+		                 </table>
+	            </div>
+	          </div>
+	        </div>
+      </div>
+       <?php }else{?>
+              <div class="container">
+			        <div class="col-lg-10 mx-auto ">
+			        	<h2 class="text-uppercase text-dark" style=" font-family: 'Khmer OS Muol Light'; font-size:25px; ">មិនមានទិន្នន័យទេ</h2>
+			        </div>
+			   </div>
+       <?php }?>
+    </section>
+    <!-- Footer -->
+    <footer class="footer text-left" style="background-color:#005c97;">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-5 mb-lg-0">
+            <h4 class="text-uppercase mb-4"><i class="fa fa-bank"></i> អំពីសាលា </h4>
+            <p class=" mb-0">សាលារៀន អាស៊ាន ហ៊ែរីថេជ ជាសាលារៀនឯកជន ដែលមានកម្មវិធីសិក្សាចំណេះទូទៅខ្មែរ និងភាសាបរទេស (អង់គ្លេស និងចិន) ចាប់ពីថ្នាក់ មត្តេយ្យ ដល់ថ្នាក់ទី12។ សាលារៀន អាស៊ាន ហ៊ែរីថេជ មានដៃគូសហការណ៍កម្មវិធីសិក្សាទាំងក្នុង និងក្រៅប្រទេស ហើយត្រូវបានទទួលស្គាល់ ជាផ្លូវការដោយក្រសួងអប់រំ យុវជន និងកីឡា លិខិតអនុញ្ញាតលេខៈ992 ចុះថ្ងៃទី30 ខែមេសា ឆ្នាំ2014 ។
+               	<br />សាលារៀន អាស៊ាន ហ៊ែរីថេជ ទទួលចុះឈ្មោះកុមារចូលរៀនចាប់ពីអាយុ 2ឆ្នាំឡើងទៅ។
+			</p>
+			<p>
+				<div><i class="fa fa-volume-control-phone" aria-hidden="true"></i> សម្រាប់ព័ត៌មានបន្ថែម </div> សូមទំនាក់ទំនងមកកាន់ការិយាល័យផ្តល់ព័ត៌មានដែលមានទីតាំងស្ថិតនៅអគារលេខ268 (ជាប់របងផ្ទះឯកឧត្តមជាសុផា រ៉ា) ផ្លូវ1800 សង្កាត់ទួលសង្កែ2 ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ ឬតាមរយៈទូរស័ព្ទលេខៈ 012 692 985 / 093 768 685 ។
+			</p>
+          </div>
+          
+          <div class="col-md-6">
+            <h4 class="text-uppercase mb-4">About School</h4>
+            <p class=" mb-0">Asean Heritage School (AHS) is a private school that has Khmer national curriculum and foreign language (English and Chinese), from Kindergarten to Grade 12. The school has both domestic and international curriculum partners. It has been officially recognized by the Ministry of Education, Youth and Sport of the Kingdom of Cambodia registered No 992 dated on 30 April, 2014.
+            <br />Asean Heritage School accepts enrollment of children from 2 years old!</p>
+            <p><div><i class="fa fa-volume-control-phone" aria-hidden="true"></i> For more information</div> please come to the registration office at #268, St 1800, Sangkat Toul Sangke II, Khan Russey Keo, Phnom Penh or via phone number: Call 012 692 985 / 093 768 685</p>
+            
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div class="copyright py-4 text-center text-white">
+      <div class="container">
+        <small>Copyright © Asean Heritage School (AHS)</small>
+      </div>
+    </div>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-to-top d-lg-none position-fixed " style="display: none;">
+      <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+        <i class="fa fa-chevron-up"></i>
+      </a>
+    </div>
+</body></html>

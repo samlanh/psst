@@ -10,7 +10,10 @@ class ExtreportController extends Zend_Controller_Action
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');  
     }
-
+	public function indexAction()
+	{
+		$this->_helper->layout()->disableLayout();
+	}
     public function rptStudentListAction()
 	{
 		$this->_helper->layout()->disableLayout();

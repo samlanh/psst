@@ -141,7 +141,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT branch_tel FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_tel,
 				(SELECT email FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS email_branch,
 				(SELECT website FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS website,
-				(SELECT $view from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
+				(SELECT $view from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
 			
  				(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
     			(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
@@ -180,6 +180,75 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$where.=" LIMIT 1";
 		return $db->fetchRow($sql.$where);
 	}
+	public function getStudentByIdToken($stToken){//will combine with above
+		$db = $this->getAdapter();
+	
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		$vill = 'village_name';
+		$comm = 'commune_name';
+		$dist = 'district_name';
+		$prov = 'province_en_name';
+		$view = 'name_en';
+		if ($currentLang==1){
+			$colunmname='title';
+			$vill = 'village_namekh';
+			$comm = 'commune_namekh';
+			$dist = 'district_namekh';
+			$prov = 'province_kh_name';
+			$view = 'name_kh';
+		}
+	
+		$sql = "SELECT s.*,
+		DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
+		(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
+		(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
+		(SELECT school_nameen FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_nameen,
+		(SELECT photo FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS photo_branch,
+		(SELECT br_address FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS br_address,
+		(SELECT branch_tel FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_tel,
+		(SELECT email FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS email_branch,
+		(SELECT website FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS website,
+		(SELECT $view from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
+			
+		(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+		(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+		(SELECT $view FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
+		(SELECT $view FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
+		(SELECT $view FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
+		 
+		(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+		(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+		(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+		(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
+		ds.group_id,
+		(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
+		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS year_name,
+		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
+		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+			
+	
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+		(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
+		(SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
+	
+		FROM
+		rms_student as s,
+		rms_group_detail_student AS ds
+		WHERE
+		ds.itemType=1
+		AND s.stu_id = ds.stu_id
+		AND ds.is_maingrade=1
+		AND s.studentToken='".addslashes($stToken)."'";
+		$where='';
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission("s.`branch_id`");
+		$where.=" LIMIT 1";
+		return $db->fetchRow($sql.$where);
+	}
 	function getAllStudentStudyRecord($stu_id){
 		$db = $this->getAdapter();
 
@@ -211,6 +280,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 // 		$where.=$dbp->getAccessPermission();
 		return $db->fetchAll($sql.$where);
 	}
+	
 	
 	public function getStudentPaymentDetail($stu_id){
 		$db = $this->getAdapter();

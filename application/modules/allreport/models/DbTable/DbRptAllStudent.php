@@ -8,6 +8,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
+    	$field = 'name_en';
+    	
+    	
     	if($lang==1){// khmer
     		$label = "name_kh";
     		$grade = "rms_itemsdetail.title";
@@ -20,6 +23,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$province = "province_kh_name";
 			
 			$stu_name = "s.stu_khname";
+			$field = 'name_kh';
     	}else{ // English
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
@@ -35,6 +39,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	$sql ="SELECT 
     				*,
+    				s.branch_id,
 	    	      (SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 	    	       CONCAT(COALESCE(s.stu_khname,''),' - ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) as name,
 	    	       s.stu_khname,
@@ -77,7 +82,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where=' ';
 
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
@@ -234,7 +239,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){
     	$db = $this->getAdapter();
-    	$sql ='SELECT branch_id,
+    	$sql ='SELECT s.branch_id,
     				ds.degree as degree_id,    		   
 					(SELECT rms_items.title FROM rms_items WHERE rms_items.id=ds.degree AND rms_items.type=1 LIMIT 1) AS degree,
 					(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=ds.degree AND rms_items.type=1 LIMIT 1) AS schoolOption
@@ -246,13 +251,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			AND s.stu_id = ds.stu_id 
 			AND s.status=1 AND s.customer_type=1 AND ds.is_current=1 AND ds.is_maingrade=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	   	
     	$order=" GROUP BY s.branch_id,(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=ds.degree AND rms_items.type=1 LIMIT 1)  
 			ORDER BY s.stu_id,ds.degree,ds.grade,ds.academic_year DESC ";
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	if(empty($search)){
     		return $db->fetchAll($sql.$where.$order);
     	}
@@ -297,7 +302,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=' AND ds.degree='.$search['degree'];
     	}
     	if(!empty($search['branch_id'])){
-    		$where.=' AND branch_id='.$search['branch_id'];
+    		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
     	if(!empty($search['grade_all'])){
     		$where.=' AND ds.grade='.$search['grade_all'];
@@ -454,6 +459,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$sql ="SELECT
 			    	*,
+			    	s.branch_id,
 			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 			    	(SELECT card_type FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS card_type,
 			    	CONCAT(s.stu_khname,' - ',s.stu_enname,' ',s.last_name) as name,

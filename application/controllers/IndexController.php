@@ -770,6 +770,14 @@ class IndexController extends Zend_Controller_Action
     }
     function studentinfoAction(){
     	$this->_helper->layout()->disableLayout();
+    	$db= new Home_Model_DbTable_DbStudent();
+    	$dbgb= new Application_Model_DbTable_DbGlobal();
+    		
+    	$id = $this->getRequest()->getParam('id');
+    	$student = $db->getStudentById($id);
+    		
+    	$this->view->rsStudent =$student;
+    	$this->view->rsStudy = $db->getAllStudentStudyRecord($id);
     }
 
 	function staffinfoAction(){

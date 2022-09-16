@@ -167,7 +167,8 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
 				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
 				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name
+				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name,
+				(SELECT depart_namekh FROM rms_department WHERE rms_department.depart_id=g.department) AS depart_namekh
 				FROM rms_teacher AS g WHERE status = 1 and id = $staff_id
 		";
     	return $db->fetchAll($sql);

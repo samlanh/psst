@@ -151,6 +151,7 @@
 							margin: 0;
 							list-style: none;
 							font-size: inherit;
+							margin-top: -15px;
 						}
 						ul.scoreTitle li {
 							line-height: 18px;
@@ -177,7 +178,7 @@
 						}
 					</style>
 						<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
-							<tr style="border-bottom: 1px solid #000;">
+							<tr >
 								<td colspan="3" align="center" >
 									<?php echo $this->headerScore;?>
 									
@@ -477,7 +478,13 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
 
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+
+</script>
 <?php 
 	echo $this->render('externalFoot.phtml');
 ?>

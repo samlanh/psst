@@ -759,8 +759,49 @@ body.externalTemplate tr.odd {
     background-color: rgba(243, 67, 67, 0.15);
 }
 
+small.timeSchedule {
+    font-size: 12px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    line-height: 10px;
+    margin: 0;
+    padding: 0;
+}
+.alert {
+    position: relative;
+}
+.alert[class*=alert-icon-] .alert-icon {
+    font-family: LineAwesome;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    left: -4rem;
+    width: 4rem;
+    margin-top: -8px;
+    content: '\f2b2';
+    text-align: center;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.alert.alert-icon-left {
+    border-left-width: 4rem;
+}
+.alert-secondary {
+    color: #383a43;
+    border-color: #e5f2b6;
+    background-color: #f7ffda;
+}
+.alert-dismissible {
+    padding-right: 4rem;
+}
 
-
+.round {
+    border-radius: 1.5rem;
+}
 
 
 

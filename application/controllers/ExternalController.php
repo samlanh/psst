@@ -82,6 +82,23 @@ class ExternalController extends Zend_Controller_Action
 		$this->view->completedClass = $dbExternal->coutingClassByUser($arrFilter);
 		$arrFilter['classTypeFilter']=2;
 		$this->view->activeClass = $dbExternal->coutingClassByUser($arrFilter);
+		
+		$arrFilterI = array();
+		$date=date("Y-m-d"); 
+		//$date=date("Y-m-d",strtotime("2022-09-20")); 
+		$dayofweek = date('w', strtotime($date));
+		$currentDay=$dayofweek;
+		$nextDay=$dayofweek+1;
+		if($dayofweek==0){
+			$currentDay=7;
+		}
+		$arrFilterI['day']=$currentDay;
+		$this->view->todaySchedule = $dbExternal->getTeachingSchedule($arrFilterI);
+		
+		$arrFilterI['day']=$nextDay;
+		$this->view->tomorrowSchedule = $dbExternal->getTeachingSchedule($arrFilterI);
+		
+		
     }
 	public function groupAction()
     {

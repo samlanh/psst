@@ -28,8 +28,9 @@ public function init()
 		}
 		//echo $condition;
 		$db = new Allreport_Model_DbTable_DbRptAllStaff();
-		$this->view->rs = $rs_rows = $db->getAllStaffSelected($condition);
-		$this->view->groupByType = $rs_rows = $db->getAllStaffSelectedGroupBy($condition);
+		$this->view->rs = $db->getAllStaffSelected($condition);
+		$this->view->groupByType = $db->getAllStaffSelectedGroupBy($condition);
+// 		print_r($db->getAllStaffSelectedGroupBy($condition));exit();
 		
 	}
 	

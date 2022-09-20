@@ -1,6 +1,6 @@
 <?php
 
-class IssuescoreController extends Zend_Controller_Action
+class AssessmentController extends Zend_Controller_Action
 {
 
 	const REDIRECT_URL = '/home';
@@ -33,8 +33,8 @@ class IssuescoreController extends Zend_Controller_Action
 		}
 		$this->view->search = $search;
 		
-		$db = new Application_Model_DbTable_DbIssueScore();
-		$row = $db->getAllSubjectScoreByClass($search);
+		$db = new Application_Model_DbTable_DbAssessment();
+		$row = $db->getAllIssueAssessmentByClass($search);
 		$this->view->row = $row;
 
 		$form=new Application_Form_FrmSearchGlobal();
@@ -46,18 +46,20 @@ class IssuescoreController extends Zend_Controller_Action
     public function addAction()
 	{
 		$this->_helper->layout()->disableLayout();
+		
+			
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
-		$db = new Application_Model_DbTable_DbIssueScore();
+		$db = new Application_Model_DbTable_DbAssessment();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			
 			try {
-				$rs = $db->addSubjectScoreByClass($_data);
+				$rs = $db->addStudentAssessment($_data);
 				if(isset($_data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/add");
 				}else {
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/index");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/index");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -86,12 +88,12 @@ class IssuescoreController extends Zend_Controller_Action
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 
-		$db = new Application_Model_DbTable_DbIssueScore();
+		$db = new Application_Model_DbTable_DbAssessment();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				$rs =  $db->updateSubjectScoreByClass($_data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/index");
+				$rs =  $db->updateAssessmentByClass($_data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/index");
 				
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -101,25 +103,25 @@ class IssuescoreController extends Zend_Controller_Action
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		
-		$row = $db->getSubjectScoreByID($id);
-		$this->view->rs = $row;	
+		$row = $db->getAssessmentByID($id);
+		$this->view->row = $row;	
 		
 		if(empty($row)){
-			$this->_redirect("/issuescore/index");
+			$this->_redirect("/assessment/index");
 		}
 		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment/index");
 		}
 		if ($row['isLock']==1){
-			Application_Form_FrmMessage::Sucessfull("RECORD_LOCKED_CAN_NOT_EDIT","/issuescore/index");
+			Application_Form_FrmMessage::Sucessfull("RECORD_LOCKED_CAN_NOT_EDIT","/assessment/index");
 		}
 		if ($row['is_pass']==1){
-			Application_Form_FrmMessage::Sucessfull("CLASS_COMPLETED_CAN_NOT_EDIT","/issuescore/index");
+			Application_Form_FrmMessage::Sucessfull("CLASS_COMPLETED_CAN_NOT_EDIT","/assessment/index");
 		}
 		if ($row['status']==0){
-			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_EDIT","/issuescore/index");
+			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_EDIT","/assessment/index");
 		}
-		$this->view->student= $db->getStudentSubjectSccoreforEdit($id);
+		//$this->view->student= $db->getStudentSubjectSccoreforEdit($id);
 		
 		
 	
@@ -129,29 +131,34 @@ class IssuescoreController extends Zend_Controller_Action
 	}
 	
 	
-	function getStudentAction(){
+	function getStudentassessmentAction(){
 		
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbIssueScore();
+			$db = new Application_Model_DbTable_DbAssessment();
 			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
-			$rs=$db->getStudentForIssueScore($data);
+			
+			
+			$rs=$db->getStudentForAssessment($data);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}
 	}
 	
-	function getStudenteditAction(){
+	function getStudentassessmenteditAction(){
 		
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbIssueScore();
+			$db = new Application_Model_DbTable_DbAssessment();
 			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
-			$rs=$db->getStudentForIssueScoreEdit($data);
+			
+			$rs=$db->getStudentForAssessmentEdit($data);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}
 	}
+	
+	
 	
 	
 }

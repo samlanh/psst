@@ -67,7 +67,14 @@ class ExtreportController extends Zend_Controller_Action
 		$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
 		
     	$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
+    	$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
+		
+		$arrSearch  = array(
+			'gradingId'=>$gradingId
+			,'subjectId'=>$subjectId
+		);
+		$this->view->criterial = $dbExternal->getGradingSystemDetail($arrSearch);
+			
 		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];

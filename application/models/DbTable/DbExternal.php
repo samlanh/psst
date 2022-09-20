@@ -89,6 +89,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$label="name_kh";
 			$branch = "branch_namekh";
 		}
+		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		$currentTeacher = $this->getUserExternalId();
 		$sql="
 			SELECT 
 				g.*
@@ -98,6 +100,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade
 				,(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
 				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `roomName`
+				,CASE
+					WHEN g.teacher_id = $currentTeacher THEN '".$tr->translate("MAINTEACHER")."' 
+				END AS mainTeacher
 				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) as mainTeaccher
 				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = gsjb.teacher LIMIT 1 ) as subjectTeaccher
 				,(SELECT $label from rms_view where type=9 and key_code=g.is_pass) as groupStatus
@@ -110,7 +115,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$where =' WHERE 
 					g.id = gsjb.group_id AND g.is_use=1
 					 ';
-		$where.=' AND gsjb.teacher='.$this->getUserExternalId();
+		$where.=' AND gsjb.teacher='.$currentTeacher;
 		
 		
 		
@@ -510,8 +515,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				AND grd.studentId =$studentId
 				AND grd.criteriaId =$criteriaId
 		";
-		$sql.=" LIMIT 1 ";
-		return $db->fetchRow($sql);
+		//$sql.=" LIMIT 1 ";
+		return $db->fetchAll($sql);
 	}
 	function getAverageAndRankBySubjectOfCriterial($gradingId,$studentId){
 		$db=$this->getAdapter();

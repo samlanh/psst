@@ -751,7 +751,7 @@ class IndexController extends Zend_Controller_Action
     {
 		
 		$codeReader = $this->getRequest()->getParam('codeReader');
-
+		$codeReader = urldecode($codeReader);
 		
 		$this->_helper->layout()->disableLayout();
 		$phblicpart = PUBLIC_PATH;

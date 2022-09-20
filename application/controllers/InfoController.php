@@ -19,15 +19,26 @@ class InfoController extends Zend_Controller_Action
     	$db= new Home_Model_DbTable_DbStudent();
     	$dbgb= new Application_Model_DbTable_DbGlobal();
     		
-    	$id = $this->getRequest()->getParam('id');
-    	$student = $db->getStudentById($id);
+    	$token = $this->getRequest()->getParam('token');
+    	$student = $db->getStudentByIdToken($token);
     		
     	$this->view->rsStudent =$student;
+    	$id = empty($student['stu_id'])?0:$student['stu_id'];
     	$this->view->rsStudy = $db->getAllStudentStudyRecord($id);
     }
 
 	function staffinfoAction(){
     	$this->_helper->layout()->disableLayout();
+    	
+    	$token=$this->getRequest()->getParam("token");
+    	$db= new Foundation_Model_DbTable_DbTeacher();
+    	$param = array
+    		(
+    		'token'=>$token
+    		);
+    	
+    	$this->view->result = $db->getTeacherinfoById($param);
+    	
     }
 	
 }

@@ -44,7 +44,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'branch_id' 		 => $_data['branch_id'],
 							'teacher_code'		 => $_data['code'],
 							'teacher_name_kh'	 => $_data['kh_name'],
-							'teacher_name_en'	 => $_data['kh_name'],
+							'teacher_name_en'	 => $_data['en_name'],
 							'sex'				 => $_data['sex'],
 							'dob'				 => $_data['dob'],
 							'nationality'  		 => $_data['nationality'],
@@ -135,7 +135,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'branch_id' 		 => $_data['branch_id'],
 						'teacher_code'		 => $_data['code'],
 						'teacher_name_kh'	 => $_data['kh_name'],
-						'teacher_name_en'	 => $_data['kh_name'],
+						'teacher_name_en'	 => $_data['en_name'],
 						'sex'				 => $_data['sex'],
 						'dob'				 => $_data['dob'],
 						'nationality'  		 => $_data['nationality'],
@@ -399,23 +399,44 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
-	public function getViewById($id){
+	public function getTeacherinfoById($data){
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		
+		$colunmname='title_en';
+		$vill = 'village_name';
+		$comm = 'commune_name';
+		$dist = 'district_name';
+		$prov = 'province_en_name';
+		$view = 'name_en';
+		if ($currentLang==1){
+			$colunmname='title';
+			$vill = 'village_namekh';
+			$comm = 'commune_namekh';
+			$dist = 'district_namekh';
+			$prov = 'province_kh_name';
+			$view = 'name_kh';
+		}
+		
 		$db = $this->getAdapter();
 		$sql = "SELECT id, 
-				(SELECT p.province_kh_name FROM rms_province AS p WHERE p.code=g.province_id LIMIT 1) AS province_name,	
-				(SELECT d.district_namekh FROM ln_district AS d WHERE d.dis_id=g.district_name LIMIT 1) AS dis_name,	
-				(SELECT c.commune_namekh FROM ln_commune AS c WHERE c.com_id=g.commune_name LIMIT 1) AS com_name,	
-				(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=g.village_name LIMIT 1) AS Village_name,			
+				(SELECT p.$prov FROM rms_province AS p WHERE p.code=g.province_id LIMIT 1) AS province_name,	
+				(SELECT d.$dist FROM ln_district AS d WHERE d.dis_id=g.district_name LIMIT 1) AS dis_name,	
+				(SELECT c.$comm FROM ln_commune AS c WHERE c.com_id=g.commune_name LIMIT 1) AS com_name,	
+				(SELECT v.$vill FROM ln_village AS v WHERE v.vill_id=g.village_name LIMIT 1) AS Village_name,			
 				g.teacher_code, 
 				g.teacher_name_kh,
+				g.teacher_name_en,
 				g.home_num,
+				g.branch_id,
 				g.street_num,
 				g.passport_no,
-				g.dob,
+				DATE_FORMAT(g.dob,'%d-%m-%Y') aS dob,
+				g.pob,
 				g.card_no,
 				g.photo,
-				g.start_date,
-				g.end_date,
+				DATE_FORMAT(g.start_date,'%d-%m-%Y') aS start_date,
+				DATE_FORMAT(g.end_date,'%d-%m-%Y') aS end_date,
 				g.agreement,
 				g.experiences,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
@@ -428,8 +449,13 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				g.email,
 				g.note				
 				FROM rms_teacher AS g 
-				
-				WHERE  id=$id";
+				WHERE  1 ";
+		if(!empty($data['id'])){
+			$sql.=" AND id=".$data['id'];
+		}
+		if(!empty($data['token'])){
+			$sql.=" AND teacher_code='".addslashes($data['token'])."'";
+		}
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;

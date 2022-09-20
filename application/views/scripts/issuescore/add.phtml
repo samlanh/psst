@@ -67,6 +67,7 @@
 													<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SCORE_FOR_JANUARY");?>..." />
 													<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branch_id']?>" />
 													<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
+													<input type="hidden" name="gradingId" id="gradingId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['gradingId']?>"/>
 												</div>
 											</div>
 											 
@@ -162,8 +163,11 @@
 					 </div>
 					 <div class="card-box">
 						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div id="studentList">
+							</div>
+							<input type="hidden" name="identity" id="identity"  value="" >
 							<div class="form-group">
-								<input type="hidden" name="identity" id="identity"  value="" >
+								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 								</table>
 							</div>
@@ -181,6 +185,11 @@
 		</div>
 	</div>
 </div>
+<style>
+tr.rowData {
+    vertical-align: top;
+}
+</style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 
@@ -261,7 +270,9 @@ function getSubjectInfo(){
 }
 
 var inx=0;
+
 var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
+var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'get-student')); ?>';
 function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
@@ -271,20 +282,82 @@ function filterStudent(){
 	sortStundent = dijit.byId('sortStundent').get('value');
 	amtsubject = 0;
 	examType = dijit.byId('examType').get('value');
+	subjectId = dijit.byId('subjectId').get('value');
+	gradingId = dijit.byId('gradingId').get('value');
+	maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
+	
 	if(group==''){
 		return false;
 	}
 	dojo.xhrPost({
-	    url: url_getStudent,
+	    url: urlGetStudent,
 	    content : { 
-			'group':group,
-			'sortStundent':sortStundent,
+			'groupId':group
+			,'sortStundent':sortStundent
+			,'maxSubjectScore':maxSubjectScore
+			,'subjectId':subjectId
+			,'gradingId':gradingId
+			,'keyIndex':inx
+			
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		 
+	       if(data!=""){
+				
+				inx=data.keyIndex;
+				$("#identity").val(data.identity);
+				
+				dojo.html.set(dojo.byId("studentList"),data.contentHtml , {
+					parseContent: true,
+				});
+				
+				
+	       }else{
+		    	$('#identity').val('');
+	       }
+		   HideloadingBlock();	
+	   },		
+	    error: function(err) {
+			HideloadingBlock();
+	    }
+	});
+	
+}
+
+
+function filterStudentAAAAA(){
+	$('#identity').val('');
+	dojo.query("#table_row").append("");
+	loadingBlock();
+	
+	group = dijit.byId('group').get('value');
+	sortStundent = dijit.byId('sortStundent').get('value');
+	amtsubject = 0;
+	examType = dijit.byId('examType').get('value');
+	subjectId = dijit.byId('subjectId').get('value');
+	gradingId = dijit.byId('gradingId').get('value');
+	maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
+	
+	if(group==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: urlGetStudent,
+	    content : { 
+			'group':group
+			,'sortStundent':sortStundent
+			,'maxSubjectScore':maxSubjectScore
+			,'subjectId':subjectId
+			,'gradingId':gradingId
+			,'keyIndex':inx
+			
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
 		   tem="";
 		   temp='';
-		   maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
+		   
 	       if(data!=""){
 				title=0;
 				temp='';

@@ -182,7 +182,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				   	,(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_en
 					,(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_kh
 				   	,(SELECT `rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 1) AND (`rms_view`.`key_code` = `g`.`status`)) LIMIT 1) AS `status`
-				   	,(SELECT grading.title FROM `rms_scoreengsetting` AS grading WHERE grading.type=2 AND grading.id=g.gradingId LIMIT 1)AS gradingSystem
+				   	,(SELECT grading.title FROM `rms_scoreengsetting` AS grading WHERE grading.schoolOption=1 AND grading.id=g.gradingId LIMIT 1)AS gradingSystem
 				   	,(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE itemType=1 AND `group_id`=`g`.`id`)AS Num_Student
 			   	FROM 
 		   			`rms_group` `g` 
@@ -354,18 +354,42 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	
 	
-	function getGradingSystemDetail($gradindId){
+	function getGradingSystemDetail($data){
 		$db = $this->getAdapter();
+		$gradingId = empty($data['gradingId'])?0:$data['gradingId'];
+		$subjectId = empty($data['subjectId'])?0:$data['subjectId'];
+		
 		$sql="
 			SELECT 
 				s.*
 				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitle 
 				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitleEng 
 			FROM `rms_scoreengsettingdetail` AS s 
-			WHERE s.score_setting_id=$gradindId
+			WHERE s.score_setting_id=$gradingId 
+			AND s.subjectId =$subjectId
 		";
+		$row = $db->fetchRow($sql);
+		
+		$sql="
+			SELECT 
+				s.*
+				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitle 
+				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitleEng 
+			FROM `rms_scoreengsettingdetail` AS s 
+			WHERE s.score_setting_id=$gradingId 
+			AND s.subjectId =0
+		";
+		if(!empty($row)){
+			$sql.=" AND s.exam_typeid !=".$row['exam_typeid'];
+		}
+		$db = $this->getAdapter();
+		$rRow = $db->fetchAll($sql);
    	
-		return $db->fetchAll($sql);
+		if(!empty($row)){
+			array_unshift($rRow, $row);
+		}
+		asort($rRow);
+		return $rRow;
 	}
 	
 	function getClassSubjectScoreById($gradingId){

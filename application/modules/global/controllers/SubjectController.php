@@ -132,7 +132,12 @@ class Global_SubjectController extends Zend_Controller_Action {
 				$data['schoolOption'] = $db->getSchoolOptionListByBranch($data['branch_id']);
 			}
 			$subject = $db->getAllSubjectName($data['schoolOption'],1); // 1=select only study subject
-			array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+			
+			$blankTitle=$this->tr->translate("PLEASE_SELECT");
+			if(!empty($data['blankTitle'])){
+				$blankTitle=$data['blankTitle'];
+			}
+			array_unshift($subject, array ('id' => 0, 'name' => $blankTitle));
 			print_r(Zend_Json::encode($subject));
 			exit();
 		}

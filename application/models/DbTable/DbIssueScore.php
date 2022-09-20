@@ -417,4 +417,99 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    }
    
    
+   
+   function getStudentForIssueScore($data){
+	   $dbExternal = new Application_Model_DbTable_DbExternal();
+	   $students = $dbExternal->getStudentByGroup($data);
+	 
+	   $criterial = $dbExternal->getGradingSystemDetail($data);
+	   
+	   $tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	   $db=$this->getAdapter();
+	   
+	   $keyIndex = $data['keyIndex'];
+	   $maxSubjectScore = $data['maxSubjectScore'];
+	   $invalidesms = "rangeMessage:".$maxSubjectScore;
+	   
+	   $string='';
+		$string.='<table class="collape responsiveTable" id="table" >';
+			$string.='<thead>';
+				$string.='<tr class="head-td" align="center">';
+					$string.='<th scope="col" width="10px"  >'.$tr->translate('DEL').'</th>';
+					$string.='<th scope="col" width="10px"  >'.$tr->translate('NUM').'</th>';
+					$string.='<th scope="col"  style="width:150px;">'.$tr->translate('STUDENT').'</th>';
+					$string.='<th scope="col" >'.$tr->translate('SEX').'</td>';
+					
+					if(!empty($criterial)) foreach($criterial AS $rowCri){
+						$colspan=1;
+						if($rowCri['timeInput']>1){
+							$colspan=$rowCri['timeInput'];
+						}
+						
+					$string.='<th  scope="col" >'.$rowCri['criterialTitle'].'</td>';
+					}
+					$string.='<th scope="col">'.$tr->translate('NOTE').'</th>';
+					$string.='';
+			$string.='</tr>';
+		$string.='<thead>';
+		
+		if(!empty($students)) foreach($students AS $key => $stu){
+			$key++;
+			$keyIndex=$keyIndex+1;
+			
+			$rowClasss="odd";
+			if(($keyIndex%2)==0){
+				$rowClasss= "regurlar";
+			}
+			$gender = $tr->translate('MALE');
+			if($stu['sex']==2){
+				$gender = $tr->translate('FEMALE');
+			}
+					
+			$string.='<tr class="rowData '.$rowClasss.'" id="row'.$keyIndex.'">';
+				$string.='<td data-label="'.$tr->translate("REMOVE_RECORD").'"  align="center"><span title="'.$tr->translate("REMOVE_RECORD").'" class="removeRow" onclick="deleteRecord('.$keyIndex.')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
+				$string.='<td data-label="'.$tr->translate("STUDENT").'"  align="left">';
+					$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
+					$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
+					$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
+				$string.='</td>';
+				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
+				
+				if(!empty($criterial)) foreach($criterial AS $rowCri){
+					$criterialId=$rowCri['exam_typeid'];
+					$string.='<td data-label="'."'".$rowCri['criterialTitle']."'".'" >';
+					$string.='<div class="form-group">';
+						for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+							$string.='<div class="col-md-12 col-sm-12 col-xs-12">';
+							$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+							$string.='</div>';
+						}
+					$string.='</div>';
+					$string.='</td>';
+				}
+					
+				
+				
+				$string.='<td data-label="'.$tr->translate("NOTE").'"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
+				$string.='';
+			$string.='</tr>';
+			
+		}
+		
+		
+		
+		$string.='';
+		$string.='</table>';
+	   
+	   $arrContent = array(
+		'contentHtml'=>$string
+		,'identity'=>""
+		,'keyIndex'=>$keyIndex
+	   );
+	   
+	   return $arrContent;
+   }
+   
+   
 }

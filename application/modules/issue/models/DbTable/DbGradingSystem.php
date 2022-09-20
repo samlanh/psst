@@ -17,7 +17,7 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
     		";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_scoreengsetting` AS s
-				WHERE 1 AND s.type=2 ";
+				WHERE 1 AND s.schoolOption=1 ";
     	$orderby = " ORDER BY s.id DESC";
     	$where = ' ';
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
@@ -44,14 +44,15 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$_arr = array(
-					'branch_id'		=>$_data['branch_id'],
-					'title'			=>$_data['title'],
-					'note'			=>$_data['note'],
-					'status'		=>1,
-					'type'			=>2,
-					'create_date'	=>date("Y-m-d H:i:s"),
-					'modify_date'	=>date("Y-m-d H:i:s"),
-					'user_id'		=>$this->getUserId(),
+					'branch_id'				=>$_data['branch_id'],
+					'title'					=>$_data['title'],
+					'note'					=>$_data['note'],
+					'status'				=>1,
+					
+					'create_date'			=>date("Y-m-d H:i:s"),
+					'modify_date'			=>date("Y-m-d H:i:s"),
+					'user_id'				=>$this->getUserId(),
+					'schoolOption'			=>$_data['schoolOption'],
 			);
 			$this->_name='rms_scoreengsetting';
 			$id = $this->insert($_arr);
@@ -60,10 +61,16 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
 					$arr=array(
-							'score_setting_id'=>$id,
-							'exam_typeid'=>$_data['examtype_name_'.$i],
-							'pecentage_score'=>$_data['percentage'.$i],
-							'note'=>$_data['note_'.$i],
+							'score_setting_id'		=>$id,
+							'exam_typeid'			=>$_data['examtype_name_'.$i],
+							'pecentage_score'		=>$_data['percentage'.$i],
+							
+							'timeInput'				=>$_data['timeInput'.$i],
+							'subjectId'				=>$_data['subjectId'.$i],
+							'subCriterialTitleKh'	=>$_data['subCriterialTitleKh'.$i],
+							'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
+							
+							'note'					=>$_data['note_'.$i],
 					);
 					$this->_name='rms_scoreengsettingdetail';
 					$this->insert($arr);
@@ -78,7 +85,7 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    }
    function getGradingSystemById($id){
    		$db = $this->getAdapter();
-   		$sql="SELECT s.* FROM `rms_scoreengsetting` AS s WHERE s.id=$id AND s.type=2 ";
+   		$sql="SELECT s.* FROM `rms_scoreengsetting` AS s WHERE s.id=$id AND s.schoolOption=1 ";
    		
    		$dbp = new Application_Model_DbTable_DbGlobal();
    		$sql.=$dbp->getAccessPermission('s.branch_id');
@@ -95,13 +102,14 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    	try{
 		$status = empty($_data['status'])?0:1;
    		$_arr = array(
-   				'branch_id'			=>$_data['branch_id'],
-   				'title'				=>$_data['title'],
-   				'note'				=>$_data['note'],
-   				'status'			=>$status,
-				'type'				=>2,
-   				'modify_date'		=>date("Y-m-d H:i:s"),
-   				'user_id'			=>$this->getUserId(),
+   				'branch_id'				=>$_data['branch_id'],
+   				'title'					=>$_data['title'],
+   				'note'					=>$_data['note'],
+   				'status'				=>$status,
+   				'modify_date'			=>date("Y-m-d H:i:s"),
+   				'user_id'				=>$this->getUserId(),
+				
+				'schoolOption'			=>$_data['schoolOption'],
    		);
    		$this->_name='rms_scoreengsetting';
    		$where=' id='.$_data['id'];
@@ -135,21 +143,33 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    			if(!empty($ids))foreach ($ids as $i){
    				if (!empty($_data['detailid'.$i])){
    					$arr=array(
-   							'score_setting_id'=>$id,
-   							'exam_typeid'=>$_data['examtype_name_'.$i],
-   							'pecentage_score'=>$_data['percentage'.$i],
-   							'note'=>$_data['note_'.$i],
-   					);
+							'score_setting_id'		=>$id,
+							'exam_typeid'			=>$_data['examtype_name_'.$i],
+							'pecentage_score'		=>$_data['percentage'.$i],
+							
+							'timeInput'				=>$_data['timeInput'.$i],
+							'subjectId'				=>$_data['subjectId'.$i],
+							'subCriterialTitleKh'	=>$_data['subCriterialTitleKh'.$i],
+							'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
+							
+							'note'					=>$_data['note_'.$i],
+					);
    					$this->_name='rms_scoreengsettingdetail';
    					$where = " id =".$_data['detailid'.$i];
 					$this->update($arr, $where);
    				}else{
 	   				$arr=array(
-	   						'score_setting_id'=>$id,
-	   						'exam_typeid'=>$_data['examtype_name_'.$i],
-	   						'pecentage_score'=>$_data['percentage'.$i],
-	   						'note'=>$_data['note_'.$i],
-	   				);
+							'score_setting_id'		=>$id,
+							'exam_typeid'			=>$_data['examtype_name_'.$i],
+							'pecentage_score'		=>$_data['percentage'.$i],
+							
+							'timeInput'				=>$_data['timeInput'.$i],
+							'subjectId'				=>$_data['subjectId'.$i],
+							'subCriterialTitleKh'	=>$_data['subCriterialTitleKh'.$i],
+							'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
+							
+							'note'					=>$_data['note_'.$i],
+					);
 	   				$this->_name='rms_scoreengsettingdetail';
 	   				$this->insert($arr);
    				}

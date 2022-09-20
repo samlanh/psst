@@ -136,7 +136,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     function getSupplierInfoAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Accounting_Model_DbTable_DbPurchase();
+    		$db = new Stock_Model_DbTable_DbPurchase();
     		$row = $db->getSuplierInfo($data['sup_id']);
     		print_r(Zend_Json::encode($row));
     		exit();

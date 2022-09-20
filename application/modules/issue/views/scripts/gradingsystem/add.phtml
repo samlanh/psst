@@ -55,6 +55,7 @@
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm_items->getElement("branch_id");?>
+											<?php echo $frm_items->getElement("schoolOption");?>
 									   </div>
 									</div>
 									<div class="form-group">
@@ -87,16 +88,24 @@
 	                   <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
-	             		<table id="table_row" class="collape responsiveTable" >
+	             		<table  class="collape responsiveTable" >
 							<thead>
 								<tr id="head-title" class="head-td" align="center">
-									<th scope="col"><?php echo $tr->translate("DEL");?></th>
-									<th scope="col"><?php echo $tr->translate("N_O");?></th>
+									<th scope="col" width="35px"><?php echo $tr->translate("DEL");?></th>
+									<th scope="col" width="35px"><?php echo $tr->translate("N_O");?></th>
 									<th scope="col"><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
 									<th scope="col"><?php echo $tr->translate("PERCENTAGE");?></th>
-									<th scope="col"><?php echo $tr->translate("OTHER");?></th>
+									<th scope="col"><?php echo $tr->translate("TIME_INPUT");?></th>
+									<th scope="col">
+										<?php echo $tr->translate("SUBJECT");?>
+										<br />
+										<?php echo $tr->translate("Sub_MajorKH")."/".$tr->translate("Sub_MajorEng");?>
+									</th>
+									<th scope="col"><?php echo $tr->translate("NOTE");?></th>
 								</tr>
 							</thead>
+							<tbody id="table_row">
+							</tbody>
 						</table>
 						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
 						
@@ -113,6 +122,11 @@
 		</form>
     </div>
 </div>
+<style>
+tr.rowData {
+    vertical-align: top;
+}
+</style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
@@ -120,11 +134,56 @@
     dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	
+	
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
-	dojo.ready(function(){ 
-		$("#title").keyup(function(){
+	require(["dojo/ready"], function(ready){
+		ready(function(){
+		
+			dijit.byId('schoolOption').set('value',1);
+			getSubjectOpt();
+			$("#title").keyup(function(){
+			});
+		
 		});
-	});	
+	});
+
+	
+var subject = '';
+var urlGetSubject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"getsubject"));?>';										
+function getSubjectOpt(){
+	subject='';
+	schoolOption = dijit.byId('schoolOption').get('value');
+	if(schoolOption=='' || schoolOption==-1){
+		dijit.byId('schoolOption').focus();
+		subject="";
+		return false;
+	}
+	dojo.xhrPost({
+		url:urlGetSubject,
+		content:{
+			'schoolOption':schoolOption
+			,'blankTitle':'<?php echo $tr->translate("FOR_GENERAL_SUBJECT");?>'
+			
+			},
+		handleAs:"json",
+		load: function(data) {
+		    for(var i = 0; i < data.length; i++) {
+			    if(data[i].id==-1){
+			    }else{
+			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
+			    }
+		    }
+		  //  dojo.query("#table_row").append("");
+		   // $("#identity").val("");
+		    //addRow();
+		   HideloadingBlock();
+		},
+		error: function(err) {
+			HideloadingBlock();
+		}
+	});
+}
+
 	var template = '';
 	var branch_name = '<?php echo $this->branch_name; ?>';
 	var col = 0;
@@ -140,32 +199,42 @@
 			alert("<?php echo $tr->translate("Please Select Items")?>");
 			 return false;
 		}
-		 if(arrays!=""){
-			 for(var i=0;i< arrays.length;i++) {
-				 readychoose = dijit.byId('examtype_name_'+arrays[i]).get('value');
-				 if(readychoose==examtype_items){
-						alert("<?php echo $tr->translate("Choosen ready")?>");
-					 return false;
-				 }
-			}
-		}			
+		// if(arrays!=""){
+		//	 for(var i=0;i< arrays.length;i++) {
+		//		 readychoose = dijit.byId('examtype_name_'+arrays[i]).get('value');
+		//		 if(readychoose==examtype_items){
+		//				alert("<?php echo $tr->translate("Choosen ready")?>");
+		//			 return false;
+		//		 }
+		//	}
+		//}			
 			examtype_label = dijit.byId("examtype_items").attr('displayedValue');
 			col++;no++;
 			template='';
 			if(title!=1){
-				$("#head-title").html("");
-				temp+='<th scope="col" width="35px"><?php echo $tr->translate("DEL");?></th>';
-				temp+='<th scope="col" width="35px"><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th scope="col"><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>';
-				temp+='<th scope="col"><?php echo $tr->translate("PERCENTAGE");?></th>';
-				temp+='<th scope="col"><?php echo $tr->translate("NOTE");?></th>';
-				dojo.query("#head-title").append(temp);
+				
 				title=1;
 			}
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>" >'+examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
 				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>" > <input class="fullside" type="text" onKeyup="totalPercent()" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="1" /></td>';
+				template+='<td data-label="<?php echo $tr->translate("SUBJECT");?>" >';
+				template+='<div class="form-group">';
+					template+='<div class="col-md-12 col-sm-12 col-xs-12"';
+						template+='<select onChange="forSubject('+col+');" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subjectId'+col+'" name="subjectId'+col+'"  >'+subject+'</select>';
+					template+='</div>';
+				template+='</div>';
+				template+='<div class="form-group">';
+					template+='<div class="col-md-6 col-sm-6 col-xs-12"';
+						template+='<input class="fullside" readOnly type="text"  name="subCriterialTitleKh'+col+'" id="subCriterialTitleKh'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorKH");?>" />';
+					template+='</div>';
+					template+='<div class="col-md-6 col-sm-6 col-xs-12"';
+						template+='<input class="fullside" readOnly type="text"  name="subCriterialTitleEng'+col+'" id="subCriterialTitleEng'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>"/>';
+					template+='</div>';
+				template+='</div>';
+				template+='</td>';
 				template+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr class="rowData" id="row'+col+'">';
 			tmp+="</tr>";
@@ -178,6 +247,32 @@
 			dojo.html.set(dojo.byId("row"+col),template , {
 			     parseContent: true,
 			});
+	 }
+	 
+	 function forSubject(rowIndex){
+		 subjectId = dijit.byId('subjectId'+rowIndex).get('value');
+		 if(subjectId>0){
+			dijit.byId('timeInput'+rowIndex).set('value',1);
+			dijit.byId('timeInput'+rowIndex).set('readOnly',true); 
+			
+			dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',false); 
+			dijit.byId('subCriterialTitleKh'+rowIndex).set('required',true);
+			
+			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',false); 
+			dijit.byId('subCriterialTitleEng'+rowIndex).set('required',true);
+		 }else{
+			 
+			dijit.byId('timeInput'+rowIndex).set('value',1);
+			dijit.byId('timeInput'+rowIndex).set('readOnly',false); 
+
+			dijit.byId('subCriterialTitleKh'+rowIndex).set('value',"");
+			dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',true); 
+			dijit.byId('subCriterialTitleKh'+rowIndex).set('required',false);
+			
+			dijit.byId('subCriterialTitleEng'+rowIndex).set('value',"");
+			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',true); 
+			dijit.byId('subCriterialTitleEng'+rowIndex).set('required',false);
+		 }
 	 }
 	 function totalPercent(){
 		 var total_percent =0;

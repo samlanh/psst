@@ -13,20 +13,20 @@ public function init()
 	}
 	function rptStudycertificationAction(){
 // 		$id=$this->getRequest()->getParam("id");
-// 		$db= new Global_Model_DbTable_DbTeacher();
-// 		$this->view->rs = $db->getViewById($id);
+// 		$db= new Foundation_Model_DbTable_DbTeacher();
+// 		$this->view->rs = $db->getTeacherinfoById($id);
 	}
  	
 	function rptTemporarycertificationAction(){
 		// 		$id=$this->getRequest()->getParam("id");
-		// 		$db= new Global_Model_DbTable_DbTeacher();
-		// 		$this->view->rs = $db->getViewById($id);
+		// 		$db= new Foundation_Model_DbTable_DbTeacher();
+		// 		$this->view->rs = $db->getTeacherinfoById($id);
 	}
 	
 	function rptListofscoreAction(){
 		// 		$id=$this->getRequest()->getParam("id");
-		// 		$db= new Global_Model_DbTable_DbTeacher();
-		// 		$this->view->rs = $db->getViewById($id);
+		// 		$db= new Foundation_Model_DbTable_DbTeacher();
+		// 		$this->view->rs = $db->getTeacherinfoById($id);
 	}
 	
     function monthlyOutstandingStudentAction(){

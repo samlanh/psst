@@ -18,11 +18,26 @@ $base_url = $this->baseUrl()."/";
     <link href="<?php echo $base_url;?>admin/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="<?php echo $base_url;?>stuinfo/freelancer.css" rel="stylesheet">
     <style>
+	@font-face {
+				font-family: 'khmer os battambang';
+				font-style: normal;
+				font-weight: 700;
+				font-display: swap;
+				src: url('<?php echo $this->baseUrl();?>/font/KhmerOS_battambang.ttf');
+			}
+			@font-face {
+				font-family: 'khmer os muol light';
+				font-style: normal;
+				font-weight: 700;
+				font-display: swap;
+				src: url('<?php echo $this->baseUrl();?>/font/Khmer_OS_Muol_Light_Regular.ttf');
+			}
       .pd{
         padding-left:30px !important;
       }
       .padding-10{padding-top: 10px;}
 	  small{display:block;width: 100%;}
+	  
     </style>
   </head>
   <body id="page-top">
@@ -42,19 +57,19 @@ $base_url = $this->baseUrl()."/";
 		?>
     	<?php if(!empty($result)){?>
 	      <div class="container">
-	        <div class="col-lg-10 mx-auto ">
-	        	<h2 class="text-uppercase text-dark" style="font-family: 'Khmer OS Muol Light'; font-size:25px; ">ព័ត៌មានរបស់សិស្ស</h2>
-	        </div>
+	         <h2 class="text-center text-uppercase " style="font-family: 'khmer os muol light'; font-size:25px; ">ព័ត៌មានរបស់សិស្ស
+	        	<small><strong>STUDENT PROFILE</strong></small>
+	        </h2>
 	        <div class="row flex">
 	            <div class="center-block">
-	            <?php 
-	                		$photo = $this->baseUrl().'/images/no-profile.png';
-	                		if (!empty($result['photo'])){
-	                			if (file_exists(PUBLIC_PATH."/images/photo/".$result['photo'])){
-	                				$photo = $this->baseUrl().'/images/photo/'.$result['photo'];
-	                			}
-	                		}
-	                		?>
+	            	<?php 
+                		$photo = $this->baseUrl().'/images/no-profile.png';
+                		if (!empty($result['photo'])){
+                			if (file_exists(PUBLIC_PATH."/images/photo/".$result['photo'])){
+                				$photo = $this->baseUrl().'/images/photo/'.$result['photo'];
+                			}
+                		}
+                		?>
 										                		
 	                <img width="150px" src="<?php echo $photo?>" class="center-block rounded" alt="profile">
 	            </div>
@@ -74,13 +89,13 @@ $base_url = $this->baseUrl()."/";
 		                                <td class="pd">  គោត្តនាម-នាម
 		                                	<small>Name in Khmer</small>
 		                                </td>
-		                                <td><?php echo $result['stu_khname'];?></td>
+		                                <td style="font-family:khmer os muol light"><?php echo $result['stu_khname'];?></td>
 		                            </tr>
 		                            <tr>
 		                                <td class="pd"> ជាអក្សរឡាតាំង
-		                                	<small>SureName-Name</small>
+		                                	<small>Latin Script</small>
 		                                </td>
-		                                <td><?php echo $result['last_name'].'-'.$result['stu_enname'];?></td>
+		                                <td><?php echo $result['last_name'].' '.$result['stu_enname'];?></td>
 		                            </tr>
 		                            <tr>
 		                                <td class="pd">   ភេទ
@@ -102,7 +117,7 @@ $base_url = $this->baseUrl()."/";
 		                            </tr>
 		                             <tr>
 		                                <td class="pd"> ជនជាតិ
-		                                	<small>Region</small></td>
+		                                	<small>Origin</small></td>
 		                                <td><?php echo $result['nation'];?></td>
 		                            </tr>
 		                             <tr>
@@ -133,7 +148,7 @@ $base_url = $this->baseUrl()."/";
 		                                <td><?php echo $result['father_enname'];?></td>
 		                            </tr>
 		                            <tr>
-		                                <td class="pd">  លេខទូរសព្ទ
+		                                <td class="pd">  លេខទូរស័ព្ទ
 		                                	<small>Tel</small></td>
 		                                <td><?php echo $result['father_phone'];?></td>
 		                            </tr>
@@ -144,10 +159,22 @@ $base_url = $this->baseUrl()."/";
 		                                <td><?php echo $result['mother_enname'];?></td>
 		                            </tr>
 		                            <tr>
-		                                <td class="pd">   លេខទូរសព្ទ
+		                                <td class="pd">   លេខទូរស័ព្ទ
 		                                	<small>Tel</small>
 		                                </td>
 		                                <td><?php echo $result['mother_phone'];?></td>
+		                            </tr>
+		                            <tr>
+		                              <td class="pd"> អាណាព្យាបាល
+		                              	<small>Guardian's Name</small>
+		                              </td>
+		                                <td><?php echo $result['guardian_enname'];?></td>
+		                            </tr>
+		                            <tr>
+		                                <td class="pd">   លេខទូរស័ព្ទ
+		                                	<small>Tel</small>
+		                                </td>
+		                                <td><?php echo $result['guardian_tel'];?></td>
 		                            </tr>
 		                           
 		                            <tr class="p-2  " style="font-family: 'Khmer OS Muol Light'; font-size:14px; ">
@@ -157,7 +184,7 @@ $base_url = $this->baseUrl()."/";
 		                            <tr>
 		                                <td class="pd">ជាសិស្សរៀននៅសាលារៀន
 		                                	<small>School</small></td>
-		                                <td><strong>អាស៊ាន ហ៊ែរីថេជ</strong></td>
+		                                <td style="font-family:khmer os muol light"><strong>អាស៊ានរៀន ហ៊ែរីថេជ</strong></td>
 		                            </tr>
 		                            <?php 
 		                            if(!empty($this->rsStudy))foreach($this->rsStudy as $study){
@@ -202,7 +229,7 @@ $base_url = $this->baseUrl()."/";
           <div class="col-md-6 mb-5 mb-lg-0">
             <h4 class="text-uppercase mb-4"><i class="fa fa-bank"></i> អំពីសាលា </h4>
             <p class=" mb-0">សាលារៀន អាស៊ាន ហ៊ែរីថេជ ជាសាលារៀនឯកជន ដែលមានកម្មវិធីសិក្សាចំណេះទូទៅខ្មែរ និងភាសាបរទេស (អង់គ្លេស និងចិន) ចាប់ពីថ្នាក់ មត្តេយ្យ ដល់ថ្នាក់ទី12។ សាលារៀន អាស៊ាន ហ៊ែរីថេជ មានដៃគូសហការណ៍កម្មវិធីសិក្សាទាំងក្នុង និងក្រៅប្រទេស ហើយត្រូវបានទទួលស្គាល់ ជាផ្លូវការដោយក្រសួងអប់រំ យុវជន និងកីឡា លិខិតអនុញ្ញាតលេខៈ992 ចុះថ្ងៃទី30 ខែមេសា ឆ្នាំ2014 ។
-               -សាលារៀន អាស៊ាន ហ៊ែរីថេជ ទទួលចុះឈ្មោះកុមារចូលរៀនចាប់ពីអាយុ 2ឆ្នាំឡើងទៅ។
+               	<br />សាលារៀន អាស៊ាន ហ៊ែរីថេជ ទទួលចុះឈ្មោះកុមារចូលរៀនចាប់ពីអាយុ 2ឆ្នាំឡើងទៅ។
 			</p>
 			<p>
 				<div><i class="fa fa-volume-control-phone" aria-hidden="true"></i> សម្រាប់ព័ត៌មានបន្ថែម </div> សូមទំនាក់ទំនងមកកាន់ការិយាល័យផ្តល់ព័ត៌មានដែលមានទីតាំងស្ថិតនៅអគារលេខ268 (ជាប់របងផ្ទះឯកឧត្តមជាសុផា រ៉ា) ផ្លូវ1800 សង្កាត់ទួលសង្កែ2 ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ ឬតាមរយៈទូរស័ព្ទលេខៈ 012 692 985 / 093 768 685 ។
@@ -211,7 +238,8 @@ $base_url = $this->baseUrl()."/";
           
           <div class="col-md-6">
             <h4 class="text-uppercase mb-4">About School</h4>
-            <p class=" mb-0">Asean Heritage School (AHS) is a private school that has Khmer national curriculum and foreign language (English and Chinese), from Kindergarten to Grade 12. The school has both domestic and international curriculum partners. It has been officially recognized by the Ministry of Education, Youth and Sport of the Kingdom of Cambodia registered No 992 dated on 30 April, 2014. -Asean Heritage School accepts enrollment of children from 2 years old!</p>
+            <p class=" mb-0">Asean Heritage School (AHS) is a private school that has Khmer national curriculum and foreign language (English and Chinese), from Kindergarten to Grade 12. The school has both domestic and international curriculum partners. It has been officially recognized by the Ministry of Education, Youth and Sport of the Kingdom of Cambodia registered No 992 dated on 30 April, 2014.
+            <br />Asean Heritage School accepts enrollment of children from 2 years old!</p>
             <p><div><i class="fa fa-volume-control-phone" aria-hidden="true"></i> For more information</div> please come to the registration office at #268, St 1800, Sangkat Toul Sangke II, Khan Russey Keo, Phnom Penh or via phone number: Call 012 692 985 / 093 768 685</p>
             
           </div>

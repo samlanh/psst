@@ -75,10 +75,14 @@ class IssuescoreController extends Zend_Controller_Action
 			$this->_redirect("/external/group");
 		}
 		
+
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
-		
+		$arrSearch  = array(
+		'gradingId'=>$gradingId
+		,'subjectId'=>74
+			);
+		$sssss= $dbExternal->getGradingSystemDetail($arrSearch);
 	
 	
 		$db = new Issue_Model_DbTable_DbScore();
@@ -129,12 +133,30 @@ class IssuescoreController extends Zend_Controller_Action
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-		$this->view->criterial = $dbExternal->getGradingSystemDetail($gradingId);
-		
+		$arrSearch  = array(
+		'gradingId'=>$gradingId
+		,'subjectId'=>74
+			);
+		$sssss= $dbExternal->getGradingSystemDetail($arrSearch);
+		print_r($sssss);exit();
+		$this->view->criterial =$sssss;
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
 		
+	}
+	
+	
+	function getStudentAction(){
+		
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbIssueScore();
+			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
+			$rs=$db->getStudentForIssueScore($data);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
 	}
 	
 	

@@ -510,8 +510,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				AND grd.studentId =$studentId
 				AND grd.criteriaId =$criteriaId
 		";
-		$sql.=" LIMIT 1 ";
-		return $db->fetchRow($sql);
+		//$sql.=" LIMIT 1 ";
+		return $db->fetchAll($sql);
 	}
 	function getAverageAndRankBySubjectOfCriterial($gradingId,$studentId){
 		$db=$this->getAdapter();

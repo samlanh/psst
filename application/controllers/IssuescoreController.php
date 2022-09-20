@@ -74,16 +74,6 @@ class IssuescoreController extends Zend_Controller_Action
 		if(empty($row)){
 			$this->_redirect("/external/group");
 		}
-		
-
-		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-		$arrSearch  = array(
-		'gradingId'=>$gradingId
-		,'subjectId'=>74
-			);
-		$sssss= $dbExternal->getGradingSystemDetail($arrSearch);
-	
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
@@ -131,15 +121,7 @@ class IssuescoreController extends Zend_Controller_Action
 		}
 		$this->view->student= $db->getStudentSubjectSccoreforEdit($id);
 		
-		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-		$arrSearch  = array(
-		'gradingId'=>$gradingId
-		,'subjectId'=>74
-			);
-		$sssss= $dbExternal->getGradingSystemDetail($arrSearch);
-		print_r($sssss);exit();
-		$this->view->criterial =$sssss;
+		
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
@@ -154,6 +136,18 @@ class IssuescoreController extends Zend_Controller_Action
 			$db = new Application_Model_DbTable_DbIssueScore();
 			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
 			$rs=$db->getStudentForIssueScore($data);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	
+	function getStudenteditAction(){
+		
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbIssueScore();
+			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
+			$rs=$db->getStudentForIssueScoreEdit($data);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}

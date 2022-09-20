@@ -143,10 +143,6 @@
 														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $tr->translate("ROOM");?></span>: <span class="text-value"><?php echo $this->row['room_name']?></span></li>
 														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $tr->translate("GRADE");?></span>: <span class="text-value"><?php echo $this->row['grade']?></span></li>
 														
-														<li class="opt-items titleEx"><span class="lbl-tt"><?php echo $tr->translate("GRADING");?></span>: <span class="text-value"><?php echo $this->row['gradingSystem']?></span></li>
-														<?php if(!empty($this->criterial)) foreach($this->criterial AS $criterial){?>
-														<li class="opt-items two-column"><span class="lbl-tt"><?php echo $criterial['criterialTitle'];?></span>: <span class="text-value"><?php echo $criterial['pecentage_score'];?> %</span></li>
-														<?php } ?>
 													</ul>
 												</div>
 												<div class="align-self-top">
@@ -155,6 +151,8 @@
 											</div>
 										</div>
 									</div>
+								</div>
+								<div id="gradingInfo">
 								</div>
 								
 							 
@@ -186,8 +184,31 @@
 	</div>
 </div>
 <style>
-tr.rowData {
+ul.optListRow.gradingInfo li {
+    font-size: 11px;
+    padding: 0;
+}
+th.criterialTitle {
+    background: #c4d4eb;
+}
+tr.head-td th {
     vertical-align: top;
+}
+.lableEng {
+    display: block;
+    line-height: 12px;
+}
+small.small-label {
+    font-size: 9px;
+    line-height: 11px;
+    margin-top: 2px;
+    display: block;
+}
+span.titleSubCriterial {
+    font-size: 9px;
+    display: block;
+    line-height: 12px;
+    font-weight: 600;
 }
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
@@ -312,120 +333,11 @@ function filterStudent(){
 					parseContent: true,
 				});
 				
-				
-	       }else{
-		    	$('#identity').val('');
-	       }
-		   HideloadingBlock();	
-	   },		
-	    error: function(err) {
-			HideloadingBlock();
-	    }
-	});
-	
-}
-
-
-function filterStudentAAAAA(){
-	$('#identity').val('');
-	dojo.query("#table_row").append("");
-	loadingBlock();
-	
-	group = dijit.byId('group').get('value');
-	sortStundent = dijit.byId('sortStundent').get('value');
-	amtsubject = 0;
-	examType = dijit.byId('examType').get('value');
-	subjectId = dijit.byId('subjectId').get('value');
-	gradingId = dijit.byId('gradingId').get('value');
-	maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
-	
-	if(group==''){
-		return false;
-	}
-	dojo.xhrPost({
-	    url: urlGetStudent,
-	    content : { 
-			'group':group
-			,'sortStundent':sortStundent
-			,'maxSubjectScore':maxSubjectScore
-			,'subjectId':subjectId
-			,'gradingId':gradingId
-			,'keyIndex':inx
-			
-		},				    
-	   handleAs:"json", 
-	   load: function(data) {
-		   tem="";
-		   temp='';
-		   
-	       if(data!=""){
-				title=0;
-				temp='';
-				str='';
-				column = 0;
-				record_num = 0;
-				temp='<table class="collape responsiveTable" id="table" >'
-					+'<thead>'
-					+'<tr class="head-td" align="center">'
-					+'<th scope="col" width="10px"  ><?php echo $tr->translate('DEL');?></th>'
-					+'<th scope="col" width="10px"  ><?php echo $tr->translate('NUM');?></th>'
-					+'<th scope="col"  style="width:150px;"><?php echo $tr->translate('STUDENT');?></th>'
-					+'<th scope="col" ><?php echo $tr->translate('SEX');?></td>'
-					no=0;
-				
-				  for(j=0;j<subject.length;j++){
-	      			  no++;
-		      		  stringsname = subject[j].criterialTitle;
-		      	      temp+='<th scope="col" title="'+stringsname+'">';
-		      	       temp+=no+'-'+stringsname;
-		      	      temp+='</th>';
-	              }
-				  temp+='<th scope="col"><?php echo $tr->translate('NOTE');?></th>'+'</tr>';
-				  
-				  temp+='</thead>';
-				var rowClasss="";
-				for(i=0;i<data.length;i++){
-					inx = inx+1;
-					record_num ++;
-					rowClasss="odd"
-					if((i%2)==0){
-						rowClasss= "regurlar";
-					}
-					temp += '<tr class="rowData '+rowClasss+'" id="row'+inx+'">';
-					temp +='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>"  align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+inx+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
-					temp +='<td data-label="<?php echo $tr->translate("NUM");?>"  align="center">&nbsp;'+record_num+'</td>';
-					temp +='<td data-label="<?php echo $tr->translate("STUDENT");?>"  align="left">';
-						temp +='<strong class="text-dark">'+data[i].stu_code+'</strong><br />';
-						temp +='<strong class="text-dark">'+data[i].stuKhName+'</strong><br />';
-						temp +='<strong class="text-dark">'+data[i].stuEnName+'</strong>';
-						temp +='<input dojoType="dijit.form.TextBox" name="student_id'+inx+'" value="'+data[i].stu_id+'" type="hidden" >';
-					temp +='</td>';
-					temp +='<td data-label="<?php echo $tr->translate("SEX");?>" >'+gender(data[i].sex)+'</td>';
-					for(j=0;j<subject.length;j++){
-						maxValue = "'The value maximumn "+maxSubjectScore+"'";
-						invalidesms = "rangeMessage:"+maxValue;
-						stringsname = subject[j].criterialTitle;
-						
-						temp += '<td data-label="'+stringsname+'" id="score_'+j+'">';
-						temp += '<input value="0" data-dojo-props="constraints:{min:0,max:'+maxSubjectScore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].exam_typeid+'"  name="score_'+inx+'_'+subject[j].exam_typeid+'" />';
-						temp += '<input value="'+subject[j].pecentage_score+'" class="fullside" dojoType="dijit.form.TextBox" type="hidden" id="pecentage_score'+inx+'_'+subject[j].exam_typeid+'"  name="pecentage_score'+inx+'_'+subject[j].exam_typeid+'" />';
-						temp += '</td>';
-					}
-					temp += '<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
-					temp+= '</tr>';
-					var no=0;
-				    if($("#identity").val()!=""){
-						var identity = $("#identity").val();
-						$("#identity").val(identity+','+inx);
-					} else {$("#identity").val(inx);}
-				}
-				temp+='</table>';
-				tmp='<tr id="rowindex'+inx+'">';
-				tmp+="</tr>";
-				dojo.query("#table_row").append(tmp);
-				dojo.html.set(dojo.byId("rowindex"+inx),temp , {
-				     parseContent: true,
+				dojo.html.set(dojo.byId("gradingInfo"),data.htmlGradingInfo , {
+					parseContent: true,
 				});
+				
+				
 	       }else{
 		    	$('#identity').val('');
 	       }
@@ -462,6 +374,21 @@ function checkExamType(){
 	}
 }
 
+
+function checkAllCaterial(index){
+	
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+		if($('#checkAll'+index).is(":checked")){
+			dijit.byId('score_'+arrays[i]+'_'+index).attr('value',0);
+			dijit.byId('score_'+arrays[i]+'_'+index).set("readOnly",true);
+		}else{
+			dijit.byId('score_'+arrays[i]+'_'+index).attr('value',0);
+			dijit.byId('score_'+arrays[i]+'_'+index).set("readOnly",false);
+		}
+	}
+}
 
 </script>
 <?php 

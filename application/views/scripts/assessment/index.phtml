@@ -1,17 +1,16 @@
-<?php 
-	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-	$baseUrl = $this->baseUrl()."/";
-	$pageTitle = $tr->translate("GROUP_LIST");
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("ASSESSMENT_LIST");
 	echo $this->headTitle($pageTitle);
-
-	$frm =  $this->form_search;
-	 
-?>
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	
+	//$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
+$frm =  $this->form_search;
+?>	
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
-
-	
 	<div class="row"> 
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="card mb-1 ">
@@ -25,11 +24,7 @@
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("adv_search");?>
 								</div>
-								<!--
-								<div class="col-md-2 col-sm-3 col-xs-12">
-									<?php //echo $frm->getElement("branch_id");?>
-							   </div>
-								-->
+								
 							   <div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("academic_year");?>
 							   </div>
@@ -40,12 +35,22 @@
 									<input id="grade" />
 							   </div>
 							   <div class="col-md-2 col-sm-3 col-xs-12">
-									<?php echo $frm->getElement("is_pass");?>
+									<?php echo $frm->getElement("exam_type");?>
 								</div>
+						   </div>
+							<div class="form-group"> 
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("for_semester");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("for_month");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
+								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div>
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 								</div>
-						   </div>
+							</div>
 					   </form>
 				   </div>
 			   </div>
@@ -53,24 +58,21 @@
 		</div>
 	</div>
 	<div class="row"> 
-		<?php if(!empty($this->allClass)) foreach($this->allClass as $row){ 
+		<?php if(!empty($this->row)) foreach($this->row as $row){ 
 			$cardClass = "border-top-primary border-top-darken-1";
 			$bgClass = "border-primary bg-gradient-directional-primary";
-			if($row['is_pass']==4){
-				$cardClass = "border-top-success border-top-darken-1";
-				$bgClass = "border-success bg-gradient-directional-success";
-			}else if($row['is_pass']==0){
+			if($row['forType']==2){
 				$cardClass = "border-top-warnings border-top-darken-1";
 				$bgClass = "border-warnings bg-gradient-directional-warnings";
 			}
 		?>
 		<div class="col-md-3 col-sm-3 col-xs-12"> 
-			<div class="card mb-0 <?php echo $cardClass; ?> border-top-5">
+			<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
                 <div class="card-content">
                     <div class="row d-flex">
                         <div class="col-xs-4 pr-0">
                             <div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
-								<i class="mt-0 mb-0 mr-auto ml-auto glyphicon glyphicon-education icon-opacity text-white font-large-4"></i>
+								<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-2"><?php echo $row['groupCode']; ?></span>
 							</div>
                         </div>
                         <div class="col-xs-8 pl-0">
@@ -79,30 +81,29 @@
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-student-list/id/".$row['id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
+										<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/edit/id/".$row['id'];?>"><?php echo $tr->translate('EDIT');?></a>
 									</li>
 									<li>
-										<a target="_blank" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
+										<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$row['id'];?>"><?php echo $tr->translate('SCORE_LIST_REPORT');?></a>
 									</li>
-									<?php if(!empty($row['mainTeacher'])){ ?>
-									<li>
-										<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?></a>
-									</li>
-									<?php } ?>
 								</ul>
 							  </li>
 							</ul>
                             <div class="p-1">
                                 <p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
                                 <div class="text-left">
-                                    <strong><?php echo $row['group_code']; ?></strong> <?php if(!empty($row['mainTeacher'])){ echo "(".$row['mainTeacher'].")";} ?>
+                                   <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
                                     <p class="mb-0"><?php echo $row['academicYear']; ?></p>
 									<h3 class="mb-0 mt-0 p-relative">
-										<span class="counting-num mr-1"><?php echo sprintf('%02d',$row['amountStudent']); ?></span>
-										<span class="adjustLineHeight material-icons-outlined">groups</span> 
+										<span class="counting-num mr-1"><?php echo $row['gradeTitle']; ?></span>
+										<i class="glyphicon glyphicon-education"></i>  
 									</h3>
-                                    <p class="mb-0"><?php echo $row['groupStatus']; ?></p>
-                                    
+                                    <p class="mb-0"><?php echo $row['roomName']; ?></p>
+									<?php if($row['status']==1){?>
+                                    <p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class=" text-primary glyphicon glyphicon-ok-sign"></i></p>
+                                    <?php }else{?>
+									<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class="text-danger glyphicon glyphicon-remove-sign"></i></p>
+                                    <?php }?>
                                 </div>
                             </div>
                         </div>
@@ -111,11 +112,9 @@
             </div>
 		</div>
 		<?php } ?>
-		
-		
-	</div> 
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>	
+	</div>
 <script type="text/javascript">
+
 $( document ).ready(function() {
    setPageTitle('<?php echo $pageTitle; ?>');
 });

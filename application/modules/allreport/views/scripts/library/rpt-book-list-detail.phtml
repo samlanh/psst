@@ -3,37 +3,48 @@
 	$frm =  $this->frm_search;
 ?>	
 <title><?php echo $tr->translate('BOOK_LIST_DETAIL_REPORT');?></title>
-<div style="width: 28cm;margin: 0 auto;">
-<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table width="100%">
-		<tr>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement("cood_book");?></td>
-			<td><?php echo $frm->getElement('parent');?></td>
-			<td><?php echo $frm->getElement('block_id');?></td>
-			<td>
-				<select name="is_borrow" id="is_borrow" class="fullside" dojoType="dijit.form.FilteringSelect" >
-					<option value="-1"><?php echo $tr->translate('STATUS');?></option>
-					<option value="1" <?php if($this->search['is_borrow']==1){echo "selected";}?>><?php echo $tr->translate('BORROW');?></option>
-					<option value="0" <?php if($this->search['is_borrow']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BORROW');?></option>
-				</select>
-			</td>
-			<td>
-				<select name="is_broken" id="is_broken" class="fullside" dojoType="dijit.form.FilteringSelect" >
-					<option value="-1"><?php echo $tr->translate('STATUS');?></option>
-					<option value="1" <?php if($this->search['is_broken']==1){echo "selected";}?>><?php echo $tr->translate('BROKEN');?></option>
-					<option value="0" <?php if($this->search['is_broken']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BROKEN');?></option>
-				</select>
-			</td>
-			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>	
-</div>
-<style>
-.hover:hover{background: #ddd;}
-</style>
-<div style="background: #fff;margin: 0 auto;min-height: 10cm; padding:0.2cm;">
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+
+			<div class="card-box">
+				<div class="col-sm-12 border-botom">
+					<div class="col-sm-8 pd-0">
+						<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('BOOK_LIST_REPORT');?></h4>
+					</div>
+					<div class="col-sm-4 text-right">
+					</div>
+				</div>
+			</div>
+
+			<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<table width="100%">
+					<tr>
+						<td><?php echo $frm->getElement("title");?></td>
+						<td><?php echo $frm->getElement("cood_book");?></td>
+						<td><?php echo $frm->getElement('parent');?></td>
+						<td><?php echo $frm->getElement('block_id');?></td>
+						<td>
+							<select name="is_borrow" id="is_borrow" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="-1"><?php echo $tr->translate('STATUS');?></option>
+								<option value="1" <?php if($this->search['is_borrow']==1){echo "selected";}?>><?php echo $tr->translate('BORROW');?></option>
+								<option value="0" <?php if($this->search['is_borrow']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BORROW');?></option>
+							</select>
+						</td>
+						<td>
+							<select name="is_broken" id="is_broken" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="-1"><?php echo $tr->translate('STATUS');?></option>
+								<option value="1" <?php if($this->search['is_broken']==1){echo "selected";}?>><?php echo $tr->translate('BROKEN');?></option>
+								<option value="0" <?php if($this->search['is_broken']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BROKEN');?></option>
+							</select>
+						</td>
+						<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+					</tr>
+				</table>
+			</form>	
+
+		<style>
+		.hover:hover{background: #ddd;}
+		</style>
+
 	<div id="divPrint">
 		<style>
 				table { page-break-inside:auto }
@@ -100,6 +111,7 @@
 			</tr>			
 		</table>						
 	</div>		
+
 </div>
 <script type="text/javascript">
 function doPrint() {

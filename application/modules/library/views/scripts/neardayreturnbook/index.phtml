@@ -13,7 +13,18 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 </style>
 <div class="card">
 	<div class="card-content collapse show">
+	
 		<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+
+			<div class="card-box">
+				<div class="col-sm-12 border-botom">
+					<div class="col-sm-8 pd-0">
+						<h4 class="m-b-0"><i class="fa fa-book " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_NEARLY_RETURN_BOOK_REPORT');?></h4>
+					</div>
+					<div class="col-sm-4 text-right">
+					</div>
+				</div>
+			</div>
 			<div class="card-box">
 				<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'library','controller'=>'neardayreturnbook','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<div class="form-group">
@@ -48,44 +59,103 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 			<div class="card-box">
 				<div id="divPrint">
 					<style>
+						.style{
+					line-height: 20px;font-size: 11px !important;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						.hideblog{display: none;}
+						.hiddenblog{display: block !important;}
+						.style1:hover{ background: #ccc; }
+						table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
 						table { page-break-inside:auto }
-		                tr{ page-break-inside:avoid; page-break-after:auto }
-					   #header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
+						tr{ page-break-inside:avoid; page-break-after:auto; }
+						#header {
+						display: table-header-group;
+						page-break-inside:avoid; page-break-after:auto;
+						margin-top: 100px;
+						}
+						.hide{visibility: hidden;}
+						@media print {
+						div.divFooter {
+							position: fixed;
+							top: 0;
+							width: 100%;
+							height: 100px;
+							bottom:0px;
+							margin:0;
+						}
+							.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+							
+						}
+						.center{text-align: center !important;}
+						table.content-data{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:8px;
+						}
+						table.content-data thead tr.style {
+						line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+							background: #c1d0f3;
+							font-weight:600;
+						}
+						table.content-data tr.style {
+						white-space: nowrap;
+						
+						}
+						table.tb-footer{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:11px;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						table.tb-footer tr{
+						line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+						}
+						table tr td{
+							padding:0 2px;
+						}
+						tr.voidclass {
+							background: #fff7f7;
+						}
+						td.centerText{
+							text-align: center;
+						}
+						.redBold {
+							font-weight: 600;
+							color: #f80000;
 						}
 					</style>
 						<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
 							<tr>
-								<td width="15%" align="center">
-									<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+								<td width="20%" align="center">
+									<img style="width:70%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 								</td>
-								<td align="center" width="70%">
+								<td align="center" width="60%">
 									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​"><?php echo $tr->translate(" "); ?></strong><br />
 									<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​"><?php echo $tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"); ?></strong><br />
 									<span style="font-weight: bold;font-size: 12px;font-family:'Khmer OS Battambang';​">&nbsp;<?php echo $tr->translate("DATE"); ?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
 								</td>
-								<td width="15%" >
+								<td width="20%" >
 									&nbsp;
 								</td>
 								
 							</tr>
 							<tr>
 								<td colspan="3" id="exportExcel">
-									<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+									<table cellpadding="5"​ class="content-data" width="100%"  border="1" >
 									<thead>
-										<tr align="center" style="font-size:12px; height: 20px;border: 1px solid #000; background: #bdccf9; line-height: 30px; font-weight: bold;" align="center" >
-											<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("BORROW_NO"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("TYPE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("CODE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("NAME"); ?>&nbsp;</td>
-											<td> <?php echo $tr->translate("PHONE"); ?> </td>
-											<td>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</td>
-											<td style="border: 1px solid #000;"><?php echo $tr->translate("BORROW_DATE"); ?></td>
-											<td style="border: 1px solid #000;"><?php echo $tr->translate("RETURN_DATE"); ?></td>
-											<td style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY"); ?></td>
+										<tr class="style" align="center" >
+											<td scope="col">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+											<td scope="col">&nbsp;<?php echo $tr->translate("BORROW_NO"); ?>&nbsp;</td>
+											<td scope="col">&nbsp;<?php echo $tr->translate("TYPE"); ?>&nbsp;</td>
+											<td scope="col">&nbsp;<?php echo $tr->translate("CODE"); ?>&nbsp;</td>
+											<td scope="col">&nbsp;<?php echo $tr->translate("NAME"); ?>&nbsp;</td>
+											<td scope="col"> <?php echo $tr->translate("PHONE"); ?> </td>
+											<td scope="col">&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</td>
+											<td scope="col">&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</td>
+											<td scope="col" style="border: 1px solid #000;"><?php echo $tr->translate("BORROW_DATE"); ?></td>
+											<td scope="col" style="border: 1px solid #000;"><?php echo $tr->translate("RETURN_DATE"); ?></td>
+											<td scope="col" style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY"); ?></td>
 										</tr>
 									</thead>
 									<?php $total=0;?>
@@ -105,24 +175,24 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 										}
 										
 									?>
-										<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
-											<td style="border: 1px solid #000;"><?php echo $i;?></td>
-											<td>&nbsp;<?php echo $row['borrow_no'];?></td>
-											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['type'];?></td>
-											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $code;?></td>
-											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $name;?></td>
-											<td align="left" style="border: 1px solid #000;">&nbsp; <?php echo $row['phone'];?></td>
-											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['bookname'];?></td>
-											<td style="border: 1px solid #000;">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?>&nbsp;</td>
-											<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['borrow_date']));?>&nbsp;</td>
-											<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['return_date']));?>&nbsp;</td>
+										<tr class="style hover"  align="center" >
+											<td data-label="<?php echo $tr->translate("N_O"); ?>" style="border: 1px solid #000;"><?php echo $i;?></td>
+											<td data-label="<?php echo $tr->translate("BORROW_NO"); ?>" >&nbsp;<?php echo $row['borrow_no'];?></td>
+											<td data-label="<?php echo $tr->translate("TYPE"); ?>"  align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['type'];?></td>
+											<td data-label="<?php echo $tr->translate("CODE"); ?>"  align="left" style="border: 1px solid #000;">&nbsp;<?php echo $code;?></td>
+											<td data-label="<?php echo $tr->translate("NAME"); ?>"  align="left" style="border: 1px solid #000;">&nbsp;<?php echo $name;?></td>
+											<td data-label="<?php echo $tr->translate("PHONE"); ?>"  align="left" style="border: 1px solid #000;">&nbsp; <?php echo $row['phone'];?></td>
+											<td data-label="<?php echo $tr->translate("BOOK_NAME"); ?>"  align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['bookname'];?></td>
+											<td data-label="<?php echo $tr->translate("BOOK_NO"); ?>"  style="border: 1px solid #000;">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("BORROW_DATE"); ?>"  style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['borrow_date']));?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("REMAIN_DAY"); ?>"  style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['return_date']));?>&nbsp;</td>
 											
 											<?php if($day>=0){
 												$daylate ="Late ".abs($day);
 											}else{
 												$daylate ="Remain ".abs($day);
 											}?>
-											<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo ($daylate);?> days</td>
+											<td data-label="<?php echo $tr->translate("RETURN_DATE"); ?>"  align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo ($daylate);?> days</td>
  													</tr>
 												<?php }}?>	 
 									</table>

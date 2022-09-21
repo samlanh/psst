@@ -72,8 +72,12 @@ $frm =  $this->form_search;
                     <div class="row d-flex">
                         <div class="col-xs-4 pr-0">
                             <div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
-								<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-2"><?php echo $row['groupCode']; ?></span>
+								<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-2 text-center">
+									<?php echo $row['groupCode']; ?>
+									<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php echo $row['roomName']; ?></small>
+								</span>
 							</div>
+							
                         </div>
                         <div class="col-xs-8 pl-0">
 							<ul class="nav navbar-right panel_toolbox stusearch">
@@ -98,7 +102,7 @@ $frm =  $this->form_search;
 										<span class="counting-num mr-1"><?php echo $row['gradeTitle']; ?></span>
 										<i class="glyphicon glyphicon-education"></i>  
 									</h3>
-                                    <p class="mb-0"><?php echo $row['roomName']; ?></p>
+									 <p class="mb-0"><i class="glyphicon glyphicon-calendar"></i> <?php echo date("d-M-Y",strtotime($row['dateInput'])); ?></p>
 									<?php if($row['status']==1){?>
                                     <p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class=" text-primary glyphicon glyphicon-ok-sign"></i></p>
                                     <?php }else{?>

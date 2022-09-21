@@ -1,0 +1,466 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("STUDENT_ASSESSMENT_REPORT");
+	echo $this->headTitle($pageTitle);
+	
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;	
+
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$month = array(
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+	$monthKH = array(
+		"1"=>"មករា",
+		"2"=>"កុម្ភៈ",
+		"3"=>"មីនា",
+		"4"=>"មេសា",
+		"5"=>"ឧសភា",
+		"6"=>"មិថុនា",
+		"7"=>"កក្កដា",
+		"8"=>"សីហា",
+		"9"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+	$monthENG = array("1"=>"January","2"=>"February","3"=>"March","4"=>"April","5"=>"May","6"=>"June","7"=>"July","8"=>"August","9"=>"September","10"=>"October","11"=>"November","12"=>"December"
+	);
+	$template = SCORE_RESULT_TEMPLATE;
+	$branchInfo = $this->branchInfo;
+	
+	$signature="";
+	$stamp="";
+	if (!empty($branchInfo['signature'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$branchInfo['signature'])){
+			$signature = $this->baseUrl().'/images/logo/'.$branchInfo['signature'];
+		}
+	}
+	if (!empty($branchInfo['stamp'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$branchInfo['stamp'])){
+			$stamp = $this->baseUrl().'/images/logo/'.$branchInfo['stamp'];
+		}
+	}
+	
+	
+	$dbExternal = new Application_Model_DbTable_DbExternal();
+	$dbAsse = new Application_Model_DbTable_DbAssessment();
+	$rs = $this->rs;
+	$assessmentId = $rs['id'];
+	$mainTeacherSigature="";
+	if (!empty($rs['mainTeacherSigature'])){
+		if (file_exists(PUBLIC_PATH."/images/photo/".$rs['mainTeacherSigature'])){
+			$mainTeacherSigature = $this->baseUrl().'/images/photo/'.$rs['mainTeacherSigature'];
+		}
+	}
+?>	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="card mb-1 ">
+			<div class="reportblog">
+				<div id="divPrint">
+					<style type="text/css">
+						.headReportRespone{
+							display:none;
+						}
+						table ,
+						table tr td,
+						table tr td span{
+							color: #002c7b;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+							    font-size: 10px;
+							line-height: 16px;
+						}
+						table tr td small {
+							font-size: 9px;
+							white-space: normal;
+						}
+						table.content-data{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							width: 100%;
+						}
+						table.content-data thead tr.style {
+							line-height: 16px; 
+							padding:1px 0px; 
+							white-space: nowrap;height: 22px; 
+							background: #3c4b76;
+							font-weight:600;
+						}
+						table.content-data thead tr.style td,
+						table.content-data thead tr.style td span{
+							line-height: 16px; 
+							font-weight:600;
+							color: #ffffff;
+						}
+						table.content-data thead tr.style td {
+							padding:2px 0;
+						}
+						table.tb-footer{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						table.tb-footer tr{
+						 line-height: 14px; font-size:10px; padding:2px 0px; height: 25px;
+						}
+						table tr td{
+							padding:0 2px;
+						}
+						span.khmerLabel,
+						span.englishLabel{
+							display:block;
+						}
+						span.khmerName, span.englishName {
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							white-space: nowrap;
+							padding: 0 3px;
+						}
+						tr.style span.khmerName {
+							font-size:12px;
+						}
+						tr.style span.englishName {
+							font-size:11px;
+						}
+						span.valueAmount {
+							font-weight: 600;
+							color: #002c7b;
+						}
+						ul.scoreTitle {
+							padding: 0;
+							margin: 0;
+							list-style: none;
+							font-size: inherit;
+							margin-top: -15px;
+						}
+						ul.scoreTitle li {
+							line-height: 18px;
+							color:#002c7b;
+							list-style-type:none !important;
+						}
+						@media print {
+							ul.printInfo {
+								position: absolute;
+								left: 0;
+								bottom: 5px;
+								list-style: none;
+								margin: 0;
+								padding: 0;
+								visibility: visible;
+							}
+							ul.printInfo li {
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size: 8px;
+								text-align: left;
+								line-height:12px;
+								color: #002c7b;
+							}
+						}
+						
+						td.titleComment {
+							min-width:80px;
+							white-space:normal;
+							
+						}
+						tr.rowValue td {
+							padding:2px;
+						}
+						tr.rowValue td, tr.rowValue td span {
+							line-height: 12px;
+						}
+						ul.commentNote {
+							margin: 0;
+							padding: 0;
+							padding-left: 20px;
+							list-style: circle;
+						}
+					</style>
+						<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+							<tr >
+								<td colspan="3" align="center" >
+									<?php echo $this->headerScore;?>
+									
+								</td>
+							</tr>
+							
+							<?php 
+							$i=0; 
+							
+							$countPass=0;
+							$countFail=0; 
+							$passFemale=0;
+							$failFemale=0;
+							
+							
+							if($rs['forType']==1){
+								$monthChar = empty($monthKH[$rs['forMonth']])?"":$monthKH[$rs['forMonth']];
+								$titleKh='ការវាយតម្លៃការសិក្សាប្រចាំខែ'.$monthChar;
+								$monthCharEn = empty($monthENG[$rs['forMonth']])?"":$monthENG[$rs['forMonth']];
+								$titleENG=$monthCharEn." STUDENT ASSESSMENT";
+							}else{
+								$arrRomanNum = array(1=>"I",2=>"II");
+								$romanNumber = empty($arrRomanNum[$rs['forSemester']])?"":$arrRomanNum[$rs['forSemester']];
+								$titleKh='ការវាយតម្លៃការសិក្សាប្រចាំឆមាសទី'.$dbgb->getNumberInkhmer($rs['forSemester']);
+								$titleENG="SEMESTER ".$romanNumber." STUDENT ASSESSMENT";
+							}
+							?>
+							<tr>
+								<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<ul class="scoreTitle">
+										<li style="font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+										<?php echo $titleKh;?>
+										</li>
+										<li style="font-size:12px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+											<?php echo $titleENG;?>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											ថ្នាក់ទី / GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['groupCode'];?></span>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academicYear'];?></span>
+										</li>
+									</ul>
+								</td>
+								<td align="center" valign="top"></td>
+							</tr>
+							<tr>
+								<td colspan="3" id="exportExcel" valign="top">
+									
+									<table class="content-data"  cellpadding="2"​  border="1" >
+										<thead>
+											
+											<tr class="style" align="center" >
+												<td	scope="col" >
+													<span class="khmerLabel">ល.រ</span>
+													<span class="englishLabel">N<sup>o</sup></span>
+												</td>
+												<td scope="col" >
+													<span class="khmerLabel">អត្តលេខ</span>
+													<span class="englishLabel">ID</span>
+												</td>
+												<td scope="col" colspan="2">
+													<span class="khmerLabel">គោត្តនាម-នាម</span>
+													<span class="englishLabel">Student Name</span>
+												</td>
+												<td scope="col" >
+													<span class="khmerLabel">ភេទ</span>
+													<span class="englishLabel">Sex</span>
+												</td>
+												<?php if(!empty($this->comments)) foreach($this->comments AS $key => $comment){ 
+													$splitComment = explode('/', $comment['name']);
+													$commentKh="";
+													$commentEng="";
+													if(count($splitComment)==2){
+														$commentKh=$splitComment[0];
+														$commentEng=$splitComment[1];
+													}
+													$sectionNo = $key+1;
+												?>
+												<td scope="col" class="titleComment"  >
+													<span class="khmerLabel"><?php echo "ចំនុចទី ".$dbgb->getNumberInkhmer($sectionNo);?></span>
+													<span class="englishLabel"><?php echo "Section ".$sectionNo;?></span>
+												</td>
+												<?php } ?>
+												
+											</tr>
+											
+										</thead>
+										
+										<?php 
+										$i=0; 
+										$m=0;$f=0;
+										if(!empty($this->students)) foreach($this->students as $student){ 
+										$i++;
+										if($student['sex']==1){ 
+											$sex = $tr->translate("MALE_SHORT");$m = $m+1;
+										}else{
+											$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;
+										}
+										?>
+										<tr  class="rowValue">
+											<td data-label="ល.រ/No" align="center"><?php echo $i;?></td>
+											<td data-label="អត្តលេខ/ID" align="center" style="white-space:nowrap;">
+												<?php echo $student['stuCode'];?>
+											</td>
+											<td data-label="គោត្តនាម-នាម" style="min-width:100px;">
+												<span class="khmerName"><?php echo trim($student['stuKhName']);?></span>
+											</td>
+											<td data-label="Student Name" style="min-width:100px;">
+												<span class="englishName"><?php echo empty(trim($student['stuEnName']))?"":trim($student['stuEnName']);?></span>
+											</td>
+											<td data-label="ភេទ/Sex" align="center" class="bg_<?php echo $student['sex'];?>"><?php echo $sex;?></td>
+											<?php 
+											$teacherComment="";
+											$allComment=count($this->comments);
+											if(!empty($this->comments)) foreach($this->comments AS $key => $comment){ 
+													
+													$parameter = array(
+															'assessmentId'=>$assessmentId
+															,'studentId'=>$student['stu_id']
+															,'commentId'=>$comment['id']
+														);
+													$rowDetail = $dbAsse->getAssessmentDetail($parameter);
+													$ratingTitle = empty($rowDetail['ratingTitle'])?"":$rowDetail['ratingTitle'];
+													$teacherComment = empty($rowDetail['teacherComment'])?"":$rowDetail['teacherComment'];
+													
+													$splitRatingTitle = explode('/', $ratingTitle);
+													$ratingTitleKh="";
+													$ratingTitleEng="";
+													if(count($splitRatingTitle)==2){
+														$ratingTitleKh=$splitRatingTitle[0];
+														$ratingTitleEng=$splitRatingTitle[1];
+													}
+												?>
+											<td data-label="<?php echo $comment['name'];?>" align="center" >
+												<span class="khmerLabel"><?php echo $ratingTitleKh;?></span>
+												<span class="englishLabel"><?php echo $ratingTitleEng;?></span>
+											</td>
+											<?php } ?>
+											
+											
+										</tr>
+										<tr class="rowValue">
+											<td colspan="5" align="right" style="border-right:none; vertical-align: top;" >
+												<span class="khmerLabel"><strong>មតិយោបល់របស់គ្រូ</strong> : </span>
+												<span class="englishLabel"><strong>Teacher Comment</strong> : </span>
+											</td>
+											<td colspan="<?php echo $allComment;?>" style="border-left:none;  vertical-align: top;" >
+												<small>
+												<?php echo $teacherComment;?>
+												</small>
+											</td>
+										</tr>
+										<?php } ?>
+									</table>
+									<?php 
+									$totalStudent = count($this->students);
+									?>
+									<table class="reportTotalStudent" cellpadding="0" cellspacing="0" width="50%" style="margin-top: 10px; line-height:20px; color:#4839bd;float: left;">
+										<tr>
+											<td valign="top" >
+												<strong style="text-decoration: underline;">កំណត់ចំណាំ/ Notice</strong> :
+												<ul class="commentNote">
+													<?php if(!empty($this->comments)) foreach($this->comments AS $key => $comment){ 
+															$splitComment = explode('/', $comment['name']);
+															$commentKh="";
+															$commentEng="";
+															if(count($splitComment)==2){
+																$commentKh=$splitComment[0];
+																$commentEng=$splitComment[1];
+															}
+															$sectionNo = $key+1;
+														?>
+													<li class="commentItem">
+														<span>
+														<strong>ចំនុចទី <?php echo $dbgb->getNumberInkhmer($sectionNo);?></strong>.) <?php echo $commentKh;?> 
+														 / <strong>Section <?php echo $sectionNo;?></strong>.) <?php echo $commentEng;?>
+														</span>
+													</li>
+													<?php } ?>
+												</ul>
+											</td>
+											
+										</tr>
+									</table>
+									<table class="reportTotalStudent" cellpadding="0" cellspacing="0" width="40%" style="margin-top: 10px; line-height:20px; color:#4839bd;">
+										<tr>
+											<td valign="top" width="50%" style="text-align: left; ">
+												<span style="display: inline-block; "><?php echo $tr->translate("TOTAL_STUDENT");?> : </span>
+												<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;"><?php if ($i>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$totalStudent));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$totalStudent));} echo " ".$tr->translate("STUDENT_UNIT");?></span>
+											</td>
+											<td width="33%" style="white-space: nowrap; " valign="top">
+												<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> 
+												<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;"><?php if ($i-$f>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$i-$f));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$i-$f));} echo " ".$tr->translate("STUDENT_UNIT");?></span>
+												<span style="display: inline-block; width: 15%;"></span>
+												<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> 
+												<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;"><?php if ($f>0) {echo $dbgb->getNumberInkhmer(sprintf("%02d",$f));}else{ echo $dbgb->getNumberInkhmer(sprintf("%02d",$f));} echo " ".$tr->translate("STUDENT_UNIT");?></span> &nbsp;
+											</td>
+										</tr>
+									</table>
+									<table class="reportTotalStudent" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px; color:#4839bd;">
+										
+										<tr>
+											<td colspan="3">&nbsp;</td>
+										</tr>
+										<tr>
+											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light'; text-align: center;">
+												បានឃើញ និងឯកភាព<br />
+											</td>
+											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang'; text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
+											<td width="33%" style="white-space: nowrap; font-family:'Khmer OS Battambang';" valign="top"><?php echo $branchInfo['workat'].$tr->translate("CREATE_WORK_DATE");?></td>
+										</tr>
+										<tr>
+											<td valign="top" style="font-family:'Khmer OS Muol Light'; text-align: center;"><?php echo $branchInfo['principal'];?></td>
+											<td valign="top" style="font-family:'Khmer OS Battambang'; text-align: center;">ការិយាល័យសិក្សាធិការ</td>
+											<td valign="top" style=" text-align: center; font-family:'Khmer OS Battambang'; "><?php echo $tr->translate("TEACHER_ROOM");?></td>
+										</tr>
+										<tr>
+											<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+												<div>
+													<?php if(!empty($stamp)){?>
+													<img src="<?php echo $stamp;?>" style="max-height:100px;position:relative;" />
+													<?php } ?>
+												</div>
+												<?php if(!empty($signature)){?>
+													<img src="<?php echo $signature;?>" style="left:100px;bottom:50px;width:200px;position:relative;" />
+												<?php } ?>
+											</td>
+											<td></td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+												<?php if(!empty($mainTeacherSigature)){?>
+												<div><img src="<?php echo $mainTeacherSigature;?>" style="height:70px;position:relative;margin-bottom:20px;" /></div>
+												<?php }else{?>
+													<div style="height: 100px;"></div>
+												<?php } ?>
+												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['mainTeaccherNameKh']?></span>
+											</td>
+										</tr>
+										<tr>
+											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+											</td>
+											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:14px;text-align: center;">
+											</td>
+											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'" valign="top"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							
+						</table>
+						
+					<div class="footPrintDate"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+
+</script>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

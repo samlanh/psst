@@ -89,6 +89,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$label="name_kh";
 			$branch = "branch_namekh";
 		}
+		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		$currentTeacher = $this->getUserExternalId();
 		$sql="
 			SELECT 
 				g.*
@@ -98,6 +100,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade
 				,(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
 				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `roomName`
+				,CASE
+					WHEN g.teacher_id = $currentTeacher THEN '".$tr->translate("MAINTEACHER")."' 
+				END AS mainTeacher
 				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) as mainTeaccher
 				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = gsjb.teacher LIMIT 1 ) as subjectTeaccher
 				,(SELECT $label from rms_view where type=9 and key_code=g.is_pass) as groupStatus
@@ -110,7 +115,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$where =' WHERE 
 					g.id = gsjb.group_id AND g.is_use=1
 					 ';
-		$where.=' AND gsjb.teacher='.$this->getUserExternalId();
+		$where.=' AND gsjb.teacher='.$currentTeacher;
 		
 		
 		
@@ -594,6 +599,79 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		
 		$sql.=" ORDER BY schDetail.day_id ASC ,schDetail.from_hour ASC ";
 		return $db->fetchAll($sql);
+	}
+	
+	 function getCommentByDegree($degree){
+		$db=$this->getAdapter();
+		$sql="SELECT
+					dc.comment_id AS id,
+					c.comment AS name
+				FROM
+					rms_degree_comment as dc,
+					rms_comment as c
+				WHERE
+					dc.comment_id = c.id
+					and dc.degree_id = $degree
+			";
+		return $db->fetchAll($sql);
+	}
+	function getClassAssessmentById($assessmentID){
+		$db=$this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
+		$subjectTitle='subject_titleen';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
+			$subjectTitle='subject_titlekh';
+		}
+		$sql="SELECT 
+				grd.*
+				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.forType LIMIT 1) as forTypeTitle
+				,CASE
+					WHEN grd.forType = 2 THEN grd.forSemester
+				ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
+				END AS forMonthTitle
+				,g.group_code AS  groupCode
+				,g.academic_year AS  academicYearId
+				,g.grade AS  gradeId
+				,g.degree AS  degreeId
+				
+				,(SELECT te.signature from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeacherSigature
+				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameKh
+				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameEng
+				
+				,(SELECT te.signature from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teacherSigature
+				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameKh
+				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameEng
+				
+				
+				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
+				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
+				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
+				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+		";
+		
+		$sql.=" FROM rms_studentassessment AS grd,
+					rms_group AS g 
+			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
+		
+		$where ='';
+		$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		$where.=' AND grd.id='.$assessmentID;
+		$where.=' LIMIT 1 ';
+
+		
+		return $db->fetchRow($sql.$where);
 	}
 	
 }

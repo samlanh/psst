@@ -190,28 +190,29 @@ body.externalTemplate .main_menu span.fa {
     color: #333;
 }
 body.externalTemplate .left_col.scroll-view .navbar.nav_title {
-    background: #009074;
+    /* background: #009074; */
 }
 
 body.externalTemplate .nav_menu {
-    background: #009074;
+    /* background: #009074; */
 }
 body.externalTemplate .top_nav .nav .open>a, 
 body.externalTemplate .top_nav .nav .open>a:focus, 
 body.externalTemplate .top_nav .nav .open>a:hover, 
 body.externalTemplate .top_nav .nav>li>a:focus, 
 body.externalTemplate .top_nav .nav>li>a:hover {
-    background: #1abb9c;
+    /* background: #1abb9c; */
 }
 body.externalTemplate .nav.child_menu>li>a, .nav.side-menu>li>a {
     color: #333;
 }
 
 body.externalTemplate .nav.side-menu>li.active, .nav.side-menu>li.current-page {
-    border-right: 5px solid #1abb9c;
+    /* border-right: 5px solid #1abb9c; */
 }
 body.externalTemplate .nav.side-menu>li>a:hover {
-    color: #009175 !important;
+    /* color: #009175 !important; */
+    color: #07068b !important;
 }
 body.externalTemplate .nav.side-menu>li.active>a {
     text-shadow: rgb(0 0 0 / 25%) 0 -1px 0;

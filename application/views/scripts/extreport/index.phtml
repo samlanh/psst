@@ -1,0 +1,38 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("REPORT");
+	echo $this->headTitle($pageTitle);
+	
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;	
+
+	
+?>	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="card mb-1 ">
+			<div class="reportblog">
+				<div id="divPrint">
+					
+						
+					<div class="footPrintDate"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+
+</script>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

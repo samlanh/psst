@@ -180,12 +180,14 @@
 									<?php if($controller!='dashboard' ){?>
 									<ol class="breadcrumb"> 
 										<?php if($action=='index' AND $controller!='dashboard' ){?>
+										<!--
 										<li class="breadcrumb-item tx-15"><a id="breadcrumbSubTitle" href="javascript:void(0);"></a></li> 
 										<li class="breadcrumb-item active" aria-current="page">
 											<a title="<?php echo $tr->translate("ADD_NEW");?>" href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
 												<?php echo $tr->translate("ADD_NEW");?> <i class="fa fa-angle-double-right"></i>
 											</a>
-										</li> 
+										</li>
+										-->
 										<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' ){?>
 										<li class="breadcrumb-item tx-15"><a id="breadcrumbSubTitle" href="javascript:void(0);"></a></li> 
 										<li class="breadcrumb-item active" aria-current="page">

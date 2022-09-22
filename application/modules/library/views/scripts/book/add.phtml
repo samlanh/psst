@@ -38,6 +38,7 @@
 	    		</div>
 	    	</div>
 	    	<div class="card-box">
+				<!--
 				<div class="form-group">
 				   <label class="control-label col-md-6 col-sm-12 col-xs-12 title-blog bold" >
 						<i class="fa fa-hand-o-right" aria-hidden="true"></i>
@@ -49,89 +50,142 @@
 						<?php echo $tr->translate("DETAIL_INFORMATION");?> 
 				   </label>
 				</div>
+				-->
 				<div class="col-md-6 col-sm-12 col-xs-12">
-					<div class="col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BOOK_NAME");?> <span class="required">*</span> :
-						   </label>
-						   <div class="col-md-7 col-sm-7 col-xs-12">
-								<?php echo $frm->getElement("book_name");?>
-						   </div>
-						</div>
-						<div class="form-group">
-						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AUTHOR_NAME");?> :
-						   </label>
-						   <div class="col-md-7 col-sm-7 col-xs-12">
-								<?php echo $frm->getElement("author_name");?>
-						   </div>
-						</div>
-						<div class="form-group">
-						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PUBLISHER");?> :
-						   </label>
-						   <div class="col-md-7 col-sm-7 col-xs-12">
-								<?php echo $frm->getElement("publisher");?>
-						   </div>
-						</div>
-				   </div>
-				   <div class="col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CATEGORY");?> :
-						   </label>
-						   <div class="col-md-7 col-sm-7 col-xs-12">
-								<?php echo $frm->getElement("cat_id");?>
-						   </div>
-						</div>
-						<div class="form-group">
-						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BOOK_BLOCK");?> :
-						   </label>
-						   <div class="col-md-7 col-sm-7 col-xs-12">
-								<?php echo $frm->getElement("block_id");?>
-						   </div>
-						</div>
-				   </div>
-					<div class="form-group">
-					   <label class="control-label bold col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("DESCRIPTION");?> :
-					   </label>
+					<div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+
+										<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-book" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BOOK_INFORMATION");?></p>
+											</div> 
+										</div>
+
+										<div class="col-md-6 col-sm-12 col-xs-12">
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BOOK_NAME");?> <span class="required">*</span> :
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("book_name");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AUTHOR_NAME");?> :
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("author_name");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PUBLISHER");?> :
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("publisher");?>
+													</div>
+												</div>
+											</div>
+
+
+											<div class="col-md-6 col-sm-12 col-xs-12">
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CATEGORY");?> :
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("cat_id");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BOOK_BLOCK");?> :
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("block_id");?>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("DESCRIPTION");?> :
+													</label>
+												</div>
+												<div class="form-group">
+														<div class="col-md-12 col-sm-12 col-xs-12">
+														<textarea rows="6" id="remark" name="remark" style="width:100%"><?php echo $this->row['note']?></textarea>
+												</div>
+												</div>
+										</div>
+									</div>
+								</div>
+							</div>
 					</div>
-					<div class="form-group">
-					   <div class="col-md-12 col-sm-12 col-xs-12">
-							<textarea rows="6" id="remark" name="remark" style="width:100%"><?php echo $this->row['note']?></textarea>
-					   </div>
-					</div>
-			   </div>
+			
+
+
+					
 			   <div class="col-md-6 col-sm-12 col-xs-12">
-					<div class="form-group">
-	                   <div class="col-md-3 col-sm-12 col-xs-12">
-	                   		<?php echo $frm->getElement("serial_no");?>
-	                   </div>
-					   <div class="col-md-3 col-sm-12 col-xs-12">
-	                   		<?php echo $frm->getElement("barcode");?>
-	                   </div>
-					   <div class="col-md-4 col-sm-12 col-xs-12">
-	                   		<?php echo $frm->getElement("note");?>
-	                   </div>
-					   <div class="col-md-2 col-sm-3 col-xs-12">
-							<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitIconEditProperty" onclick="addRow();" />
-					   </div>
-	                </div>
-					<div class="form-group">
-		         	 	<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
-						</table>
-						
-						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" />
-		         	</div>
+
+				<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DETAIL_INFORMATION");?></p>
+											</div> 
+									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										&nbsp;
+									</div>
+
+									<div class="form-group">
+										<div class="col-md-3 col-sm-12 col-xs-12">
+												<?php echo $frm->getElement("serial_no");?>
+										</div>
+										<div class="col-md-3 col-sm-12 col-xs-12">
+												<?php echo $frm->getElement("barcode");?>
+										</div>
+										<div class="col-md-4 col-sm-12 col-xs-12">
+												<?php echo $frm->getElement("note");?>
+										</div>
+										<div class="col-md-2 col-sm-3 col-xs-12">
+												<input class="button-class button-primary" 
+												iconClass="glyphicon glyphicon-plus-sign" type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
+													 onclick="addRow();" />
+										</div>
+									</div>
+									<div class="form-group">
+										<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+												<tr id="head-title" class="head-td" align="right"></tr>
+										</table>
+										
+										<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" />
+									</div>
+
+								</div>
+							</div>
+						</div>
+				</div>
+			
+
+					
+
+
 	           </div>
 	        </div>
 	       <div class="clearfix"></div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-						 iconClass="dijitEditorIcon dijitEditorIconSave" />
+               		<input class="button-class button-danger" iconClass="glyphicon glyphicon-erase"  type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						 />
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+						  />
 	    		</div>
 	    	</div>
 		</form>

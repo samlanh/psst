@@ -52,178 +52,221 @@ $baseurl = $this->baseUrl();
 	    	<div class="card-box">
 				<div class="col-md-6 col-sm-12 col-xs-12">
 					<div class="col-md-6 col-sm-12 col-xs-12">
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group">
-							   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
-							   </label>
-							</div>
-							<div class="form-group">
-							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHOOSE_ONE");?> <span class="required">*</span> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<select name="type" id="type" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="hideControll()" >
-										 <option value="1" <?php if($this->row['borrow_type']==1){echo "selected";}?>><?php echo $tr->translate("Student")?></option>
-										 <option value="2" <?php if($this->row['borrow_type']==2){echo "selected";}?>><?php echo $tr->translate("Teacher")?> </option>
-										 <option value="3" <?php if($this->row['borrow_type']==3){echo "selected";}?>> <?php echo $tr->translate("Parents of student")?></option>
-										 <option value="4" <?php if($this->row['borrow_type']==4){echo "selected";}?>> <?php echo $tr->translate("Other")?></option>
-									</select>
-							   </div>
-							</div>
-							<div class="form-group">
-							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_ID");?> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<span id="span_stu_id">
-										<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect"  class="fullside" onchange="setNameStudent(1);" queryExpr="*${0}*" autoComplete="false" >
-											   <option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
-										 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
-												<option value="<?php echo $rs_id['stu_id']?>" <?php if($this->row['stu_id']==$rs_id['stu_id']){echo "selected";}?>><?php echo $rs_id['stu_code'];?></option>
-										 <?php }?>
-										</select>
-									</span>
-									<span id="span_card_id">
-										<input dojoType="dijit.form.TextBox" name="card_id" id="card_id" value="<?php echo $this->row['card_id']?>" class="fullside" type="text" >
-									</span>
-							   </div>
-							</div>
-							 <div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
-								 <span id="student_name_lbl"><?php echo $tr->translate("STUDENT_NAME")?></span><span id="name_lbl"><?php echo $tr->translate("NAME")?></span> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<span id="span_stu_name">
-									<select   name="stu_name" id="stu_name"  queryExpr="*${0}*" autoComplete="false" class="fullside" dojoType="dijit.form.FilteringSelect" placeholder="Select student" onchange="setNameStudent(2);getBorrowHistory();">
-										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
-										<?php 
-										if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
-											<option value="<?php echo $row['stu_id']?>" <?php if($this->row['stu_id']==$row['stu_id']){echo "selected";}?>><?php echo $row['name']?></option>
-										<?php }?>
-									</select>
-									</span>
-									<span id="span_name">
-										<input dojoType="dijit.form.TextBox" name="name" id="name" value="<?php echo $this->row['name']?>" class="fullside" type="text" >
-									</span>
-							   </div>
-							</div>
-							 <div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<input dojoType="dijit.form.TextBox"   name="phone" id="phone" value="<?php echo $this->row['phone']?>" class="fullside"  type="text">
-							   </div>
+						<div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="d-flex "> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BORROW_INFO");?></p>
+													</div> 
+												</div>
+
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHOOSE_ONE");?> <span class="required">*</span> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<select name="type" id="type" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="hideControll()" >
+														<option value="1" <?php if($this->row['borrow_type']==1){echo "selected";}?>><?php echo $tr->translate("Student")?></option>
+														<option value="2" <?php if($this->row['borrow_type']==2){echo "selected";}?>><?php echo $tr->translate("Teacher")?> </option>
+														<option value="3" <?php if($this->row['borrow_type']==3){echo "selected";}?>> <?php echo $tr->translate("Parents of student")?></option>
+														<option value="4" <?php if($this->row['borrow_type']==4){echo "selected";}?>> <?php echo $tr->translate("Other")?></option>
+													</select>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_ID");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<span id="span_stu_id">
+														<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect"  class="fullside" onchange="setNameStudent(1);" queryExpr="*${0}*" autoComplete="false" >
+															<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
+														<?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
+																<option value="<?php echo $rs_id['stu_id']?>" <?php if($this->row['stu_id']==$rs_id['stu_id']){echo "selected";}?>><?php echo $rs_id['stu_code'];?></option>
+														<?php }?>
+														</select>
+													</span>
+													<span id="span_card_id">
+														<input dojoType="dijit.form.TextBox" name="card_id" id="card_id" value="<?php echo $this->row['card_id']?>" class="fullside" type="text" >
+													</span>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+												<span id="student_name_lbl"><?php echo $tr->translate("STUDENT_NAME")?></span><span id="name_lbl"><?php echo $tr->translate("NAME")?></span> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<span id="span_stu_name">
+													<select   name="stu_name" id="stu_name"  queryExpr="*${0}*" autoComplete="false" class="fullside" dojoType="dijit.form.FilteringSelect" placeholder="Select student" onchange="setNameStudent(2);getBorrowHistory();">
+														<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
+														<?php 
+														if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
+															<option value="<?php echo $row['stu_id']?>" <?php if($this->row['stu_id']==$row['stu_id']){echo "selected";}?>><?php echo $row['name']?></option>
+														<?php }?>
+													</select>
+													</span>
+													<span id="span_name">
+														<input dojoType="dijit.form.TextBox" name="name" id="name" value="<?php echo $this->row['name']?>" class="fullside" type="text" >
+													</span>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.TextBox"   name="phone" id="phone" value="<?php echo $this->row['phone']?>" class="fullside"  type="text">
+											</div>
+											</div>
+										</div>
+									</div>
 							</div>
 						</div>
 					</div>	
 					<div class="col-md-6 col-sm-12 col-xs-12">
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group">
-							   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
-							   </label>
-							</div>
-							<div class="form-group">
-							   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BORROW_NO");?> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->row['borrow_no'];?>"  type="text" readonly class="fullside" >
-							   </div>
-							</div>
-							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BORROW_DATE");?> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" class="fullside" value="<?php echo $this->row['borrow_date'];?>" constraints="{datePattern:'dd/MM/yyyy'}" type="text">
-							   </div>
-							</div>
-							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RETURN_DATE");?> :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text" class="fullside" value="<?php echo $this->row['return_date'];?>" constraints="{datePattern:'dd/MM/yyyy'}">
-							   </div>
-							</div>
-							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> (<?php echo $tr->translate("DAY");?>) :
-							   </label>
-							   <div class="col-md-7 col-sm-7 col-xs-12">
-									<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountday" id="amountday" value="<?php echo $this->row['amount_day'];?>" onkeyup="setEndDate();" type="text"   class="fullside">
-							   </div>
-							</div>		
+						<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+										<div class="d-flex "> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BORROW_INFO");?></p>
+													</div> 
+												</div>
+
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BORROW_NO");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->row['borrow_no'];?>"  type="text" readonly class="fullside" >
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BORROW_DATE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" class="fullside" value="<?php echo $this->row['borrow_date'];?>" constraints="{datePattern:'dd/MM/yyyy'}" type="text">
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RETURN_DATE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text" class="fullside" value="<?php echo $this->row['return_date'];?>" constraints="{datePattern:'dd/MM/yyyy'}">
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> (<?php echo $tr->translate("DAY");?>) :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountday" id="amountday" value="<?php echo $this->row['amount_day'];?>" onkeyup="setEndDate();" type="text"   class="fullside">
+											</div>
+											</div>		
+											</div>
+
+									</div>
+								</div>
 						</div>
+
 					</div>	
+
+
 					<div class="col-md-12 col-sm-12 col-xs-12">
-						<label class="control-label  col-md-12 col-sm-12 col-xs-12" >&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("NOTE");?> :
-						</label>
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<textarea style="min-height: 60px !important;" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"><?php echo $this->row['note'];?></textarea>	
+						<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+									<label class="control-label  col-md-12 col-sm-12 col-xs-12" >&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("NOTE");?> :
+										</label>
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<textarea style="min-height: 60px !important;" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"><?php echo $this->row['note'];?></textarea>	
+										</div>
+
+									</div>
+								</div>
 						</div>
 					</div>
 				</div>	
 	            <div class="col-md-6 col-sm-12 col-xs-12">
-					<div class="card-box">
-						<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
-							<li class="nav-item active">
-								<a class="nav-link " data-toggle="tab" href="#panel21" role="tab">
-									<i class="fa fa-book ml-2"></i> <?php echo $tr->translate("BOOK_INFORMATION");?>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-									<i class="fa fa-history ml-2"></i> <?php echo $tr->translate("BORROW_HISTORY");?>
-								</a>
-							</li>
-						</ul>
-					</div>
+					<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="card-box">
+											<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+												<li class="nav-item active">
+													<a class="nav-link settings-main-icon" data-toggle="tab" href="#panel21" role="tab">
+														<i class="glyphicon glyphicon-book"></i> <?php echo $tr->translate("BOOK_INFORMATION");?>
+													</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link settings-main-icon" data-toggle="tab" href="#panel22" role="tab">
+														<i class="glyphicon glyphicon-hourglass"></i> <?php echo $tr->translate("BORROW_HISTORY");?>
+													</a>
+												</li>
+											</ul>
+										</div>
 
-					<div class="tab-content vertical">
-						<!--Panel 1-->
-						<div class="tab-pane fade in active" id="panel21" role="tabpanel">
-							 <div class="card-box">
-								<div class="form-group">
-									<div class="col-md-5 col-sm-12 col-xs-12">
-										<select name="book" id="book" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="getBookDetail();" >
-											<?php if(!empty($this->book_title)){echo $this->book_title;} ?>
-										</select>
-									</div>
-									<div class="col-md-7 col-sm-12 col-xs-12">
-										<input id="book_detail" />
+										<div class="tab-content vertical">
+											<!--Panel 1-->
+											<div class="tab-pane fade in active" id="panel21" role="tabpanel">
+												<div class="card-box">
+													<div class="form-group">
+														<div class="col-md-5 col-sm-12 col-xs-12">
+															<select name="book" id="book" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="getBookDetail();" >
+																<?php if(!empty($this->book_title)){echo $this->book_title;} ?>
+															</select>
+														</div>
+														<div class="col-md-7 col-sm-12 col-xs-12">
+															<input id="book_detail" />
+														</div>
+													</div>
+													<div class="form-group">
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
+																<tr id="head-title" class="head-td" align="right"></tr>
+															</table>
+														</div>
+														<input type="hidden" name="identity" id="identity"  value="" >
+													</div>
+												</div>
+											</div>
+											<!--/.Panel 1-->
+											<!--Panel 2-->
+											<div class="tab-pane fade in " id="panel22" role="tabpanel">
+												<div class="card-box">
+													<div class="form-group">
+														<table border="1" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+															<thead>
+																<tr id="head-title" class="head-td" align="right">
+																	<th><?php echo $tr->translate("N_O");?></th>
+																	<th><?php echo $tr->translate("BORROW_NO");?></th>
+																	<th><?php echo $tr->translate("BORROW_DATE");?></th>
+																	<th><?php echo $tr->translate("RETURN_DATE");?></th>
+																	<th><?php echo $tr->translate("BOOK_NAME");?></th>
+																	<th><?php echo $tr->translate("BARCODE");?></th>
+																	<th><?php echo $tr->translate("STATUS");?></th>
+																</tr>
+															</thead>
+															<tbody id="table_row_history">
+															
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<!--/.Panel 2-->
+										</div>
+
+
 									</div>
 								</div>
-								<div class="form-group">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
-											<tr id="head-title" class="head-td" align="right"></tr>
-										</table>
-									</div>
-									<input type="hidden" name="identity" id="identity"  value="" >
-								</div>
-							 </div>
-						</div>
-						<!--/.Panel 1-->
-						<!--Panel 2-->
-						<div class="tab-pane fade in " id="panel22" role="tabpanel">
-							<div class="card-box">
-								<div class="form-group">
-									<table border="1" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
-										<thead>
-											<tr id="head-title" class="head-td" align="right">
-												<th><?php echo $tr->translate("N_O");?></th>
-												<th><?php echo $tr->translate("BORROW_NO");?></th>
-												<th><?php echo $tr->translate("BORROW_DATE");?></th>
-												<th><?php echo $tr->translate("RETURN_DATE");?></th>
-												<th><?php echo $tr->translate("BOOK_NAME");?></th>
-												<th><?php echo $tr->translate("BARCODE");?></th>
-												<th><?php echo $tr->translate("STATUS");?></th>
-											</tr>
-										</thead>
-										<tbody id="table_row_history">
-										
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-						<!--/.Panel 2-->
 					</div>
+					
 	           	</div>
 	        </div>
 			<div class="card-box ">
@@ -231,8 +274,8 @@ $baseurl = $this->baseUrl();
 			</div>
 	        <div class="card-box">
 	        	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-					<input type="submit" value="save_close"  id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" type="submit" value="save_close"  id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+						 />
 	        	</div>
 	        </div>
 		</form>

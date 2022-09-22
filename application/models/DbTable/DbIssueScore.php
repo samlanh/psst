@@ -122,7 +122,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
 				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
-				,(SELECT grading.title FROM `rms_scoreengsetting` AS grading WHERE grading.type=2 AND grading.id=g.gradingId LIMIT 1)AS gradingSystem
+				,(SELECT grading.title FROM `rms_scoreengsetting` AS grading WHERE grading.schoolOption=1 AND grading.id=g.gradingId LIMIT 1)AS gradingSystem
 		";
 		
 		
@@ -169,79 +169,173 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$id=$this->insert($_arr);
 			
 			$gradingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
-			$criterial = $dbExternal->getGradingSystemDetail($gradingId);
+			$arrSearch  = array(
+				'gradingId'=>$gradingId
+				,'subjectId'=>$subjectId
+			);
+			$criterial = $dbExternal->getGradingSystemDetail($arrSearch);
 			
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				
-				$total_score = 0;
+				$totalScoreAverage = 0;
 				$criteriaAmount = count($criterial) ;
 				if(!empty($ids))foreach ($ids as $i){
 					
-					foreach ($criterial as $rrw){
-						
-						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+					if(!empty($criterial)) foreach($criterial AS $rowCri){
+						$criterialId=$rowCri['exam_typeid'];						
+						if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
 							
 							$arr=array(
-								'gradingId'		=>$id,
-								'studentId'		=>$_data['student_id'.$i],
-								
-								'subjectId'		=> $subjectId,
-								'totalGrading'			=> $total_score,
-								'totalAverage'	=> number_format(($total_score)/$criteriaAmount,2),
-								'criteriaAmount'=> $criteriaAmount,
-								'remark'		=>$_data['note_'.$i],
+								'gradingId'			=>$id,
+								'studentId'			=>$old_studentid,
+									
+								'subjectId'			=> $subjectId,
+								'totalAverage'		=> number_format($totalScoreAverage,2),
+								'remark'			=> $_data['note_'.$i],
 								
 							);
 							$this->_name='rms_grading_total';
 							$this->insert($arr);
-							$total_score = 0;
+							$totalScoreAverage = 0;
 						}
+						
 						$old_studentid=$_data['student_id'.$i];
-						$score = $_data["score_".$i."_".$rrw['exam_typeid']];
-						$pecentageScore = $_data["pecentage_score".$i."_".$rrw['exam_typeid']];
-						$totalAverage  = $score*($pecentageScore/100);
-						
-						$total_score = $total_score+$score;
-						
-							$arr=array(
-								'gradingId'		=>$id,
-								'studentId'		=>$old_studentid,
-								'criteriaId'	=> $rrw['exam_typeid'],
-								'totalGrading'	=> $score,
-								'percentage'	=> $pecentageScore,
-								'totalAverage'	=> $totalAverage,
+						$pecentageScore = $rowCri['pecentage_score'];
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+								$subcriteriaAmount = count($subCriterial);
 								
-							);
+								$indexSub=0;
+								$titleSubCriterial="";
+								$titleSubCriteriaEng="";
+								
+								$totalGrading =0;
+								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+								
+									
+									if($subcriteriaAmount>1){
+										$titleSubCriterial = $subCriTitle;
+										$titleSubCriteriaEng = $subCriterialEng[$keyV];
+									}
+									
+									$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
+									
+									$totalGrading = $totalGrading+$score;
+									
+									$arr=array(
+										'gradingId'				=>$id,
+										'studentId'				=>$old_studentid,
+										'criteriaId'			=> $criterialId,
+										'totalGrading'			=> $score,
+										'criteriaAmount'		=> $subcriteriaAmount,
+										'percentage'			=> $pecentageScore,
+										
+										
+										'subCriterialTitleKh'	=> $titleSubCriterial,
+										'subCriterialTitleEng'	=> $titleSubCriteriaEng,
+										);
+									
+									$this->_name='rms_grading_detail';
+									$this->insert($arr);
+								
+								}
+								
+								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
 							
-						$this->_name='rms_grading_detail';
-						$this->insert($arr);
+								$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							}
+						}else{
+							$subcriteriaAmount=0;
+							$totalGrading =0;
+							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+								
+								if($rowCri['timeInput']>1){
+									if(empty($_data['checkAll'.$x.$criterialId])){
+										$subcriteriaAmount=$subcriteriaAmount+1;
+										
+										$score = $_data['score_'.$i.'_'.$x.$criterialId];
+										$totalGrading = $totalGrading+$score;
+										
+										
+										$arr=array(
+											'gradingId'			=> $id,
+											'studentId'			=> $old_studentid,
+											'criteriaId'		=> $criterialId,
+											'criteriaAmount'	=> $subcriteriaAmount,
+											'totalGrading'		=> $score,
+											'percentage'		=> $pecentageScore,
+											
+											);
+										
+										$this->_name='rms_grading_detail';
+										$this->insert($arr);
+									
+									}
+								}else{
+									$subcriteriaAmount = $rowCri['timeInput'];
+									$score = $_data['score_'.$i.'_'.$x.$criterialId];
+									$pecentageScore = $rowCri['pecentage_score'];
+									
+									
+									$totalGrading = $totalGrading+$score;
+									
+									
+									$arr=array(
+										'gradingId'			=> $id,
+										'studentId'			=> $old_studentid,
+										'criteriaId'		=> $criterialId,
+										'criteriaAmount'	=> $subcriteriaAmount,
+										'totalGrading'		=> $score,
+										'percentage'		=> $pecentageScore,
+										
+										);
+									
+									$this->_name='rms_grading_detail';
+									$this->insert($arr);
+								
+								}
+								
 						
+								
+							}
+							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+							
+							$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							
+						}
+					
 					}
+					
 				}
 				
 				if(!empty($ids)){
-					if($total_score>0){
+					if($totalScoreAverage>0){
 						$arr=array(
 							'gradingId'		=>$id,
 							'studentId'		=>$_data['student_id'.$i],
 							
 							'subjectId'		=> $subjectId,
-							'totalGrading'			=> $total_score,
-							'totalAverage'	=> number_format(($total_score)/$criteriaAmount,2),
-							'criteriaAmount'=> $criteriaAmount,
+							'totalAverage'	=> number_format($totalScoreAverage,2),
+							
 							'remark'		=>$_data['note_'.$i],
 							
 						);
+						
+						
 						$this->_name='rms_grading_total';
-						$this->insert($arr);
 						$this->insert($arr);
 					}
 				}
 			}
 		
 		  $db->commit();
+		  return $id;
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -324,11 +418,14 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					'teacherId'			=>$this->getUserExternalId(),
 					'modifyDate'		=>date("Y-m-d H:i:s"),
 			);
-		$where="id=".$_data['gradingId'];
-		$this->update($_arr, $where);
+			
+			$id=$_data['id'];
+			
+			$where="id=".$id;
+			$this->update($_arr, $where);
 		
 		if(!empty($_data['status'])){
-			$id=$_data['gradingId'];
+			
 			$this->_name='rms_grading_detail';
 			$this->delete("gradingId=".$id);
 			
@@ -336,70 +433,166 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$this->delete("gradingId=".$id);
 			
 			$gradingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
-			$criterial = $dbExternal->getGradingSystemDetail($gradingId);
+			$arrSearch  = array(
+				'gradingId'=>$gradingId
+				,'subjectId'=>$subjectId
+			);
+			$criterial = $dbExternal->getGradingSystemDetail($arrSearch);
+			
 			
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				
-				$total_score = 0;
+				$totalScoreAverage = 0;
 				$criteriaAmount = count($criterial) ;
 				if(!empty($ids))foreach ($ids as $i){
 					
-					foreach ($criterial as $rrw){
-						
-						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+					if(!empty($criterial)) foreach($criterial AS $rowCri){
+						$criterialId=$rowCri['exam_typeid'];						
+						if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
+							
 							$arr=array(
-								'gradingId'		=>$id,
-								'studentId'		=>$old_studentid,
-								
-								'subjectId'		=> $subjectId,
-								'totalGrading'	=> $total_score,
-								'totalAverage'	=> number_format(($total_score)/$criteriaAmount,2),
-								'criteriaAmount'=> $criteriaAmount,
-								'remark'		=>$_data['note_'.$i],
+								'gradingId'			=>$id,
+								'studentId'			=>$old_studentid,
+									
+								'subjectId'			=> $subjectId,
+								'totalAverage'		=> number_format($totalScoreAverage,2),
+								'remark'			=> $_data['note_'.$i],
 								
 							);
 							$this->_name='rms_grading_total';
 							$this->insert($arr);
-							$total_score = 0;
+							$totalScoreAverage = 0;
 						}
+						
 						$old_studentid=$_data['student_id'.$i];
-						$score = $_data["score_".$i."_".$rrw['exam_typeid']];
-						$pecentageScore = $_data["pecentage_score".$i."_".$rrw['exam_typeid']];
-						$totalAverage  = $score*($pecentageScore/100);
-						
-						$total_score = $total_score+$score;
-						
-							$arr=array(
-								'gradingId'		=>$id,
-								'studentId'		=>$old_studentid,
-								'criteriaId'	=> $rrw['exam_typeid'],
-								'totalGrading'	=> $score,
-								'percentage'	=> $pecentageScore,
-								'totalAverage'	=> $totalAverage,
+						$pecentageScore = $rowCri['pecentage_score'];
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+								$subcriteriaAmount = count($subCriterial);
 								
-							);
+								$indexSub=0;
+								$titleSubCriterial="";
+								$titleSubCriteriaEng="";
+								
+								$totalGrading =0;
+								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+								
+									
+									if($subcriteriaAmount>1){
+										$titleSubCriterial = $subCriTitle;
+										$titleSubCriteriaEng = $subCriterialEng[$keyV];
+									}
+									
+									$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
+									
+									$totalGrading = $totalGrading+$score;
+									
+									$arr=array(
+										'gradingId'				=>$id,
+										'studentId'				=>$old_studentid,
+										'criteriaId'			=> $criterialId,
+										'totalGrading'			=> $score,
+										'criteriaAmount'		=> $subcriteriaAmount,
+										'percentage'			=> $pecentageScore,
+										
+										
+										'subCriterialTitleKh'	=> $titleSubCriterial,
+										'subCriterialTitleEng'	=> $titleSubCriteriaEng,
+										);
+									
+									$this->_name='rms_grading_detail';
+									$this->insert($arr);
+								
+								}
+								
+								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
 							
-						$this->_name='rms_grading_detail';
-						$this->insert($arr);
+								$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							}
+						}else{
+							$subcriteriaAmount=0;
+							$totalGrading =0;
+							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+								
+								if($rowCri['timeInput']>1){
+									if(empty($_data['checkAll'.$x.$criterialId])){
+										$subcriteriaAmount=$subcriteriaAmount+1;
+										
+										$score = $_data['score_'.$i.'_'.$x.$criterialId];
+										$totalGrading = $totalGrading+$score;
+										
+										
+										$arr=array(
+											'gradingId'			=> $id,
+											'studentId'			=> $old_studentid,
+											'criteriaId'		=> $criterialId,
+											'criteriaAmount'	=> $subcriteriaAmount,
+											'totalGrading'		=> $score,
+											'percentage'		=> $pecentageScore,
+											
+											);
+										
+										$this->_name='rms_grading_detail';
+										$this->insert($arr);
+									
+									}
+								}else{
+									$subcriteriaAmount = $rowCri['timeInput'];
+									$score = $_data['score_'.$i.'_'.$x.$criterialId];
+									$pecentageScore = $rowCri['pecentage_score'];
+									
+									
+									$totalGrading = $totalGrading+$score;
+									
+									
+									$arr=array(
+										'gradingId'			=> $id,
+										'studentId'			=> $old_studentid,
+										'criteriaId'		=> $criterialId,
+										'criteriaAmount'	=> $subcriteriaAmount,
+										'totalGrading'		=> $score,
+										'percentage'		=> $pecentageScore,
+										
+										);
+									
+									$this->_name='rms_grading_detail';
+									$this->insert($arr);
+								
+								}
+								
 						
+								
+							}
+							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+							
+							$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							
+						}
+					
 					}
+					
 				}
 				
 				if(!empty($ids)){
-					if($total_score>0){
+					if($totalScoreAverage>0){
 						$arr=array(
 							'gradingId'		=>$id,
 							'studentId'		=>$_data['student_id'.$i],
 							
 							'subjectId'		=> $subjectId,
-							'totalGrading'	=> $total_score,
-							'totalAverage'	=> number_format(($total_score)/$criteriaAmount,2),
-							'criteriaAmount'=> $criteriaAmount,
+							'totalAverage'	=> number_format($totalScoreAverage,2),
+							
 							'remark'		=>$_data['note_'.$i],
 							
 						);
+						
+						
 						$this->_name='rms_grading_total';
 						$this->insert($arr);
 					}
@@ -410,6 +603,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		
 		
 		  $db->commit();
+		  return $id;
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -418,44 +612,98 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    
    
    
-   function getStudentForIssueScore($data){
+   function getStudentForIssueScoreEdit($data){
 	   $dbExternal = new Application_Model_DbTable_DbExternal();
+	   
 	   $students = $dbExternal->getStudentByGroup($data);
-	 
 	   $criterial = $dbExternal->getGradingSystemDetail($data);
 	   
 	   $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 	   $db=$this->getAdapter();
 	   
+	   $gradingId = empty($data['currentID'])?0:$data['currentID'];
+	   
 	   $keyIndex = $data['keyIndex'];
 	   $maxSubjectScore = $data['maxSubjectScore'];
 	   $invalidesms = "rangeMessage:".$maxSubjectScore;
 	   
+	   $identity="";
+	   $arrClassCol = array(
+			2=>"col-md-6 col-sm-6 col-xs-12"
+			,3=>"col-md-4 col-sm-4 col-xs-12"
+			,4=>"col-md-3 col-sm-3 col-xs-12"
+	   );
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';
 				$string.='<tr class="head-td" align="center">';
-					$string.='<th scope="col" width="10px"  >'.$tr->translate('DEL').'</th>';
-					$string.='<th scope="col" width="10px"  >'.$tr->translate('NUM').'</th>';
-					$string.='<th scope="col"  style="width:150px;">'.$tr->translate('STUDENT').'</th>';
-					$string.='<th scope="col" >'.$tr->translate('SEX').'</td>';
+					$string.='<th scope="col" width="10px"  >លុប<small class="lableEng" >Delete</small></th>';
+					$string.='<th scope="col" width="10px"  >ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+					$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
+					$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$colspan=1;
-						if($rowCri['timeInput']>1){
-							$colspan=$rowCri['timeInput'];
+						$criterialId=$rowCri['exam_typeid'];
+						$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
+						$classCol = "col-md-12 col-sm-12 col-xs-12";
+						
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+								$coutnSubCriterial = count($subCriterial);
+								$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
+								$indexSub=0;
+								
+								$titleSubCriteria="";
+								$titleSubCriteriaEng="";
+								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+									if($coutnSubCriterial>1){
+										$titleSubCriterial = $subCriTitle;
+										$titleSubCriteriaEng = $subCriterialEng[$keyV];
+									}
+									$string.='<div class="'.$classCol.'">';
+										$string.='<strong  >'.$maxSubjectScore.'</strong>';
+										$string.='<span class="titleSubCriterial">'.$titleSubCriterial.'</span>';
+										$string.='<small class="lableEng" >'.$titleSubCriteriaEng.'</small>';
+										
+									$string.='</div>';
+								}
+							}
+						}else{
+							
+							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
+							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+								$string.='<div class="'.$classCol.'">';
+								$string.='<strong  >'.$maxSubjectScore.'</strong>';
+								if($rowCri['timeInput']>1){
+									$string.='<div class="custom-control custom-checkbox ">';
+											$string.='<input type="checkbox" class="checkbox custom-control-input" name="checkAll'.$x.$criterialId.'" id="checkAll'.$x.$criterialId.'" value="all" OnChange="checkAllCaterial('.$x.$criterialId.');"  >';
+											$string.='<label class="custom-control-label" for="checkAll'.$x.$criterialId.'">';
+												$string.='<small class="small-label">មិនបញ្ចូល<br />No Entry</small>';
+											$string.='</label>';
+										$string.='</div>';
+								}		
+								$string.='</div>';
+							}
 						}
 						
-					$string.='<th  scope="col" >'.$rowCri['criterialTitle'].'</td>';
+					$string.='</th>';
 					}
-					$string.='<th scope="col">'.$tr->translate('NOTE').'</th>';
+					$string.='<th scope="col">សម្គាល់<small class="lableEng" >Remark</small></th>';
 					$string.='';
 			$string.='</tr>';
-		$string.='<thead>';
+		$string.='</thead>';
 		
 		if(!empty($students)) foreach($students AS $key => $stu){
 			$key++;
 			$keyIndex=$keyIndex+1;
+			
+			if (empty($identity)){
+				$identity=$keyIndex;
+			}else{
+				$identity=$identity.",".$keyIndex;
+			}
 			
 			$rowClasss="odd";
 			if(($keyIndex%2)==0){
@@ -473,17 +721,53 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
 					$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
 					$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
+					$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
 				$string.='</td>';
 				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
 				
 				if(!empty($criterial)) foreach($criterial AS $rowCri){
 					$criterialId=$rowCri['exam_typeid'];
-					$string.='<td data-label="'."'".$rowCri['criterialTitle']."'".'" >';
+					
+					$classCol = "col-md-12 col-sm-12 col-xs-12";
+					
+					
+					$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
 					$string.='<div class="form-group">';
-						for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
-							$string.='<div class="col-md-12 col-sm-12 col-xs-12">';
-							$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
-							$string.='</div>';
+					
+					
+						$rsScore = $dbExternal->getScoreByCriterial($gradingId,$stu['stu_id'],$criterialId);
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$coutnSubCriterial = count($subCriterial);
+								$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
+								$indexSub=0;
+								
+								if(!empty($rsScore)) foreach($rsScore AS $score){ $indexSub++;
+									$string.='<div class="'.$classCol.'">';
+										$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+									$string.='</div>';
+								}
+								
+							}
+						}else{
+							
+							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
+							$k=0;
+							if(!empty($rsScore)) foreach($rsScore AS $score){$k++;
+								$string.='<div class="'.$classCol.'">';
+									$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$k.$criterialId.'"  name="score_'.$keyIndex.'_'.$k.$criterialId.'" />';
+								$string.='</div>';
+							}
+							$currentTimeInput = count($rsScore);
+							if($rowCri['timeInput']>$currentTimeInput){
+								for ($x = $currentTimeInput+1; $x <= $rowCri['timeInput']; $x++) {
+									
+									$string.='<div class="'.$classCol.'">';
+									$string.='<input value="0" readOnly data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+									$string.='</div>';
+								}
+							}
 						}
 					$string.='</div>';
 					$string.='</td>';
@@ -501,11 +785,226 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		
 		$string.='';
 		$string.='</table>';
+		
+		
+		$htmlGradingInfo='';
+				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-warning">';
+					$htmlGradingInfo.='<div class="card-content">';
+						$htmlGradingInfo.='<div class="card-body">';
+							$htmlGradingInfo.='<div class="media d-flex">';
+								$htmlGradingInfo.='<div class="media-body text-white text-left align-self-bottom ">';
+								
+									$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
+										$htmlGradingInfo.='<li class="opt-items titleEx">'.$tr->translate("GRADING_INFO").'</li>';
+										if(!empty($criterial)) foreach($criterial AS $rowCri){
+											$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
+										}
+									$htmlGradingInfo.='</ul>';
+								$htmlGradingInfo.='</div>';
+								$htmlGradingInfo.='<div class="align-self-top">';
+									$htmlGradingInfo.='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+								$htmlGradingInfo.='</div>';
+							$htmlGradingInfo.='</div>';
+						$htmlGradingInfo.='</div>';
+					$htmlGradingInfo.='</div>';
+				$htmlGradingInfo.='</div>';
 	   
 	   $arrContent = array(
 		'contentHtml'=>$string
-		,'identity'=>""
+		,'identity'=>$identity
 		,'keyIndex'=>$keyIndex
+		,'htmlGradingInfo'=>$htmlGradingInfo
+	   );
+	   
+	   return $arrContent;
+   }
+   
+   
+   function getStudentForIssueScore($data){
+	   $dbExternal = new Application_Model_DbTable_DbExternal();
+	   $students = $dbExternal->getStudentByGroup($data);
+	 
+	   $criterial = $dbExternal->getGradingSystemDetail($data);
+	   
+	   $tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	   $db=$this->getAdapter();
+	   
+	   $keyIndex = $data['keyIndex'];
+	   $maxSubjectScore = $data['maxSubjectScore'];
+	   $invalidesms = "rangeMessage:".$maxSubjectScore;
+	   
+	   $identity="";
+	   $arrClassCol = array(
+			2=>"col-md-6 col-sm-6 col-xs-12"
+			,3=>"col-md-4 col-sm-4 col-xs-12"
+			,4=>"col-md-3 col-sm-3 col-xs-12"
+	   );
+	   $string='';
+		$string.='<table class="collape responsiveTable" id="table" >';
+			$string.='<thead>';
+				$string.='<tr class="head-td" align="center">';
+					$string.='<th scope="col" width="10px"  >លុប<small class="lableEng" >Delete</small></th>';
+					$string.='<th scope="col" width="10px"  >ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+					$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
+					$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
+					
+					if(!empty($criterial)) foreach($criterial AS $rowCri){
+						$criterialId=$rowCri['exam_typeid'];
+						$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
+						$classCol = "col-md-12 col-sm-12 col-xs-12";
+						
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+								$coutnSubCriterial = count($subCriterial);
+								$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
+								$indexSub=0;
+								
+								$titleSubCriteria="";
+								$titleSubCriteriaEng="";
+								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+									if($coutnSubCriterial>1){
+										$titleSubCriterial = $subCriTitle;
+										$titleSubCriteriaEng = $subCriterialEng[$keyV];
+									}
+									$string.='<div class="'.$classCol.'">';
+										$string.='<strong  >'.$maxSubjectScore.'</strong>';
+										$string.='<span class="titleSubCriterial">'.$titleSubCriterial.'</span>';
+										$string.='<small class="lableEng" >'.$titleSubCriteriaEng.'</small>';
+										
+									$string.='</div>';
+								}
+							}
+						}else{
+							
+							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
+							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+								$string.='<div class="'.$classCol.'">';
+								$string.='<strong  >'.$maxSubjectScore.'</strong>';
+								if($rowCri['timeInput']>1){
+									$string.='<div class="custom-control custom-checkbox ">';
+											$string.='<input type="checkbox" class="checkbox custom-control-input" name="checkAll'.$x.$criterialId.'" id="checkAll'.$x.$criterialId.'" value="all" OnChange="checkAllCaterial('.$x.$criterialId.');"  >';
+											$string.='<label class="custom-control-label" for="checkAll'.$x.$criterialId.'">';
+												$string.='<small class="small-label">មិនបញ្ចូល<br />No Entry</small>';
+											$string.='</label>';
+										$string.='</div>';
+								}		
+								$string.='</div>';
+							}
+						}
+						
+					$string.='</th>';
+					}
+					$string.='<th scope="col">សម្គាល់<small class="lableEng" >Remark</small></th>';
+					$string.='';
+			$string.='</tr>';
+		$string.='</thead>';
+		
+		if(!empty($students)) foreach($students AS $key => $stu){
+			$key++;
+			$keyIndex=$keyIndex+1;
+			
+			if (empty($identity)){
+				$identity=$keyIndex;
+			}else{
+				$identity=$identity.",".$keyIndex;
+			}
+			
+			$rowClasss="odd";
+			if(($keyIndex%2)==0){
+				$rowClasss= "regurlar";
+			}
+			$gender = $tr->translate('MALE');
+			if($stu['sex']==2){
+				$gender = $tr->translate('FEMALE');
+			}
+					
+			$string.='<tr class="rowData '.$rowClasss.'" id="row'.$keyIndex.'">';
+				$string.='<td data-label="'.$tr->translate("REMOVE_RECORD").'"  align="center"><span title="'.$tr->translate("REMOVE_RECORD").'" class="removeRow" onclick="deleteRecord('.$keyIndex.')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
+				$string.='<td data-label="'.$tr->translate("STUDENT").'"  align="left">';
+					$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
+					$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
+					$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
+					$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
+				$string.='</td>';
+				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
+				
+				if(!empty($criterial)) foreach($criterial AS $rowCri){
+					$criterialId=$rowCri['exam_typeid'];
+					
+					$classCol = "col-md-12 col-sm-12 col-xs-12";
+					
+					
+					$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
+					$string.='<div class="form-group">';
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$coutnSubCriterial = count($subCriterial);
+								$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
+								$indexSub=0;
+								foreach ($subCriterial as $subCriTitle){ $indexSub++;
+									$string.='<div class="'.$classCol.'">';
+										$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+									$string.='</div>';
+								}
+							}
+						}else{
+							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
+							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+								
+								$string.='<div class="'.$classCol.'">';
+								$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+								$string.='</div>';
+							}
+						}
+					$string.='</div>';
+					$string.='</td>';
+				}
+					
+				
+				
+				$string.='<td data-label="'.$tr->translate("NOTE").'"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
+				$string.='';
+			$string.='</tr>';
+			
+		}
+		
+		
+		
+		$string.='';
+		$string.='</table>';
+		
+		
+		$htmlGradingInfo='';
+				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-warning">';
+					$htmlGradingInfo.='<div class="card-content">';
+						$htmlGradingInfo.='<div class="card-body">';
+							$htmlGradingInfo.='<div class="media d-flex">';
+								$htmlGradingInfo.='<div class="media-body text-white text-left align-self-bottom ">';
+								
+									$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
+										$htmlGradingInfo.='<li class="opt-items titleEx">'.$tr->translate("GRADING_INFO").'</li>';
+										if(!empty($criterial)) foreach($criterial AS $rowCri){
+											$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
+										}
+									$htmlGradingInfo.='</ul>';
+								$htmlGradingInfo.='</div>';
+								$htmlGradingInfo.='<div class="align-self-top">';
+									$htmlGradingInfo.='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+								$htmlGradingInfo.='</div>';
+							$htmlGradingInfo.='</div>';
+						$htmlGradingInfo.='</div>';
+					$htmlGradingInfo.='</div>';
+				$htmlGradingInfo.='</div>';
+	   
+	   $arrContent = array(
+		'contentHtml'=>$string
+		,'identity'=>$identity
+		,'keyIndex'=>$keyIndex
+		,'htmlGradingInfo'=>$htmlGradingInfo
 	   );
 	   
 	   return $arrContent;

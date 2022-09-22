@@ -3,75 +3,161 @@
 	$frm =  $this->frm_search;
 ?>	
 <title><?php echo $tr->translate('BROKEN_BOOK_DETAIL_REPORT');?></title>
-<div style="width: 28cm;margin: 0 auto;">
-<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-brokendetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table width="100%">
-		 <tr>
-		 	<td><?php echo $frm->getElement("title");?></td>
-		 	<td><?php echo $frm->getElement("cood_book");?></td>
-		 	<td><?php echo $frm->getElement('parent');?></td>
-		 	<td><?php echo $frm->getElement('block_id');?></td>
-		 	<td><?php echo $frm->getElement('start_date');?></td>
-		 	<td><?php echo $frm->getElement('end_date');?></td>
-		 	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
-		 </tr>
-	</table>
-</form>	
-</div>
-<style>
-.hover:hover{background: #ddd;}
-</style>
-<div style="background: #fff;margin: 0 auto;min-height: 10cm; padding:0.2cm;">
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+
+
+		<div class="card-box">
+				<div class="col-sm-12 border-botom">
+					<div class="col-sm-8 pd-0">
+						<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('BROKEN_BOOK_DETAIL_REPORT');?></h4>
+					</div>
+					<div class="col-sm-4 text-right">
+					</div>
+				</div>
+		</div>
+
+		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-brokendetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			
+
+			<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("title");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+				   		<?php echo $frm->getElement('cood_book')?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+				   		<?php echo $frm->getElement('parent')?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+				 		  <?php echo $frm->getElement("block_id");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+				 		  <?php echo $frm->getElement("start_date");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+				 		  <?php echo $frm->getElement("end_date");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+				   <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+				  
+					
+				</div>
+		</form>	
+
+			
+
 	<div id="divPrint">
 	   <style>
-				table { page-break-inside:auto }
-                tr{ page-break-inside:avoid; page-break-after:auto }
-			   #header {
-					  display: table-header-group;
-					  page-break-inside:avoid; page-break-after:auto;
-					}
+				.style{
+					line-height: 20px;font-size: 11px !important;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						.hideblog{display: none;}
+						.hiddenblog{display: block !important;}
+						.style1:hover{ background: #ccc; }
+						table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+						table { page-break-inside:auto }
+						tr{ page-break-inside:avoid; page-break-after:auto; }
+						#header {
+						display: table-header-group;
+						page-break-inside:avoid; page-break-after:auto;
+						margin-top: 100px;
+						}
+						.hide{visibility: hidden;}
+						@media print {
+						div.divFooter {
+							position: fixed;
+							top: 0;
+							width: 100%;
+							height: 100px;
+							bottom:0px;
+							margin:0;
+						}
+							.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+							
+						}
+						.center{text-align: center !important;}
+						table.content-data{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:8px;
+						}
+						table.content-data thead tr.style {
+						line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+							background: #c1d0f3;
+							font-weight:600;
+						}
+						table.content-data tr.style {
+						white-space: nowrap;
+						
+						}
+						table.tb-footer{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:11px;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						table.tb-footer tr{
+						line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+						}
+						table tr td{
+							padding:0 2px;
+						}
+						tr.voidclass {
+							background: #fff7f7;
+						}
+						td.centerText{
+							text-align: center;
+						}
+						.redBold {
+							font-weight: 600;
+							color: #f80000;
+						}
 		</style>
 		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
 			<tr>
-				<td width="15%" align="center">
-					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+				<td width="20%" align="center">
+					<img style="width:70%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 				</td>
-				<td align="center" width="70%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BROKEN_BOOK_DETAIL_REPORT"); ?></strong><br />
+				<td align="center" width="60%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
+					<span style="padding-left: 0px;  color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("BROKEN_BOOK_DETAIL_REPORT"); ?></span><br />
+
 					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO"); ?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 				</td>
-				<td width="15%" >
+				<td width="20%" >
 					&nbsp;
 				</td>
 				
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+					<table cellpadding="5"​ class="content-data" width="100%"  border="1" >
 						<thead>
-						<tr style="font-size:13px; height: 20px;border: 1px solid #000; background: #ccd9ff; line-height: 30px; font-weight: bold;" align="center" >
-							<td><?php echo $tr->translate("N_O"); ?></td>
-							<td><?php echo $tr->translate("Broken_No"); ?></td>
-							<td><?php echo $tr->translate("BOOK_NAME"); ?></td>
-							<td><?php echo $tr->translate("SERIAL_NO"); ?></td>
-							<td><?php echo $tr->translate("CATEGORY"); ?></td>
-							<td><?php echo $tr->translate("BLOCK_BOOK"); ?></td>
-							<td><?php echo $tr->translate("BROKEN_DATE"); ?></td>
-							<td><?php echo $tr->translate("USER"); ?></td>
+						<tr class="style" align="center" >
+							<td scope="col"><?php echo $tr->translate("N_O"); ?></td>
+							<td scope="col"><?php echo $tr->translate("Broken_No"); ?></td>
+							<td scope="col"><?php echo $tr->translate("BOOK_NAME"); ?></td>
+							<td scope="col"><?php echo $tr->translate("SERIAL_NO"); ?></td>
+							<td scope="col"><?php echo $tr->translate("CATEGORY"); ?></td>
+							<td scope="col"><?php echo $tr->translate("BLOCK_BOOK"); ?></td>
+							<td scope="col"><?php echo $tr->translate("BROKEN_DATE"); ?></td>
+							<td scope="col"><?php echo $tr->translate("USER"); ?></td>
 						</tr>
 						</thead>
 					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->broken_detail))foreach ($this->broken_detail AS $row) { $i++;
 						 
 					?>
-						<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
-							<td><?php echo $i;?></td>
-							<td><?php echo $row['broke_no'];?></td>
-							<td align="left">&nbsp;<?php echo $row['book_name'];?></td>	
-							<td align="left">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?>&nbsp;</td>
-							<td><?php echo $row['cat_name'];?></td>	
-							<td><?php echo $row['block_name'];?></td>
-							<td><?php echo date("d-M-Y",strtotime($row['date_broken']));?>&nbsp;</td>
-							<td><?php echo $row['user_name'];?></td>	
+						<tr class="style hover"  align="center"  >
+							<td data-label="<?php echo $tr->translate("N_O"); ?>"><?php echo $i;?></td>
+							<td data-label="<?php echo $tr->translate("Broken_No"); ?>"><?php echo $row['broke_no'];?></td>
+							<td data-label="<?php echo $tr->translate("BOOK_NAME"); ?>" align="left">&nbsp;<?php echo $row['book_name'];?></td>	
+							<td data-label="<?php echo $tr->translate("SERIAL_NO"); ?>" align="left">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("CATEGORY"); ?>"><?php echo $row['cat_name'];?></td>	
+							<td data-label="<?php echo $tr->translate("BLOCK_BOOK"); ?>"><?php echo $row['block_name'];?></td>
+							<td data-label="<?php echo $tr->translate("BROKEN_DATE"); ?>"><?php echo date("d-M-Y",strtotime($row['date_broken']));?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("USER"); ?>"><?php echo $row['user_name'];?></td>	
 						</tr>
 					<?php }?>	 
 					</table>	

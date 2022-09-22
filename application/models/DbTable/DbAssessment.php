@@ -159,7 +159,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			$assessmentId=$this->insert($_arr);
 			
 			
-			$comments = $this->getCommentByDegree($degreeId);
+			$comments = $dbExternal->getCommentByDegree($degreeId);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				
@@ -193,20 +193,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		}
    }
    
-   function getCommentByDegree($degree){
-		$db=$this->getAdapter();
-		$sql="SELECT
-					dc.comment_id AS id,
-					c.comment AS name
-				FROM
-					rms_degree_comment as dc,
-					rms_comment as c
-				WHERE
-					dc.comment_id = c.id
-					and dc.degree_id = $degree
-			";
-		return $db->fetchAll($sql);
-	}
+  
 	function getAllRating(){
 		$db=$this->getAdapter();
 		$sql="SELECT 
@@ -223,7 +210,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$students = $dbExternal->getStudentByGroup($data);
 	 
 		$degreeId = empty($data['degree'])?0:$data['degree'];
-		$comments = $this->getCommentByDegree($degreeId);
+		$comments = $dbExternal->getCommentByDegree($degreeId);
 		$countComment = count($comments);
 		$countComment = empty($countComment)?1:$countComment;
 		
@@ -354,6 +341,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$commentId = empty($data['commentId'])?0:$data['commentId'];
 	  
 	  	$sql="  SELECT assDetail.*  ";
+	  	$sql.="  ,(SELECT rt.rating FROM rms_rating AS rt WHERE rt.id=assDetail.ratingId LIMIT 1) AS ratingTitle ";
 	  	$sql.="  FROM rms_studentassessment_detail AS assDetail ";
 	  	$sql.="  WHERE assDetail.assessmentId= ".$assessmentId;
 			$sql.="  AND assDetail.studentId= ".$studentId;
@@ -368,7 +356,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	 
 		$currentID = empty($data['currentID'])?0:$data['currentID'];
 		$degreeId = empty($data['degree'])?0:$data['degree'];
-		$comments = $this->getCommentByDegree($degreeId);
+		$comments = $dbExternal->getCommentByDegree($degreeId);
 		$countComment = count($comments);
 		$countComment = empty($countComment)?1:$countComment;
 		
@@ -556,7 +544,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 				$this->_name='rms_studentassessment_detail';
 				$this->delete("assessmentId=".$assessmentId);
 				
-				$comments = $this->getCommentByDegree($degreeId);
+				$comments = $dbExternal->getCommentByDegree($degreeId);
 				if(!empty($_data['identity'])){
 					$ids = explode(',', $_data['identity']);
 					

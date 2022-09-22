@@ -190,7 +190,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		));
 		$supplier_id->setValue($request->getParam("supplier_id"));
 		$opt_p = array(''=>$this->tr->translate("SUPPLIER_NAME"));
-		$_pro=new Accounting_Model_DbTable_DbPurchase();
+		$_pro=new Stock_Model_DbTable_DbPurchase();
 		$rows=$_pro->getSuplierName();
 		if(!empty($rows))foreach ($rows As $row)$opt_p[$row['id']]=$row['sup_name'];
 		$supplier_id->setMultiOptions($opt_p);

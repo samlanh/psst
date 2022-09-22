@@ -55,11 +55,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		try {
     			$db = new Library_Model_DbTable_DbReturnbook();
     			$db->addReturnBook($_data);
-    			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/returnbook/add");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/returnbook/index");
-    			}
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/returnbook/add");
+    			
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

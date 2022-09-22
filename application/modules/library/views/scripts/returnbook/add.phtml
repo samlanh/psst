@@ -95,8 +95,7 @@ $baseurl = $this->baseUrl();
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
                		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					
 					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 	    		</div>
@@ -173,6 +172,8 @@ $baseurl = $this->baseUrl();
 						name = data.name;
 						code = data.card_id;
 					}
+					book_name=dijit.byId("book").get("value");
+					
 					
 					book_detail=dijit.byId("book_detail").get("value");
 					if(book_detail==''){return false;}
@@ -184,7 +185,7 @@ $baseurl = $this->baseUrl();
 						temp+='<th><?php echo $tr->translate("DEL");?></th>';
 						temp+='<th><?php echo $tr->translate("N_O");?></th>';
 						temp+='<th><?php echo $tr->translate("BOOK");?></th>';
-						temp+='<th><?php echo $tr->translate("BOOK_NAME");?></th>';
+						
 						temp+='<th><?php echo $tr->translate("DETAIL");?> ( Borrow Code , Code , Name )</th>';
 						temp+='<th><?php echo $tr->translate("RETURN_DATE");?></th>';
 						dojo.query("#head-title").append(temp);
@@ -193,7 +194,7 @@ $baseurl = $this->baseUrl();
 						template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 						template+='<td width="5%" align="center">'+no+'<input type="hidden" dojoType="dijit.form.TextBox" id="borrow_detail_id'+col+'" name="borrow_detail_id'+col+'" value="'+data.borrow_detail_id+'" /></td>';
 						template+='<td width="20%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" id="book_id'+col+'" name="book_id'+col+'" value="'+book_detail+'" /></td>';
-						template+='<td width="20%">&nbsp;'+data.book_name+'</td>';
+					
 						template+='<td width="53%">'+data.borrow_no+" , "+code+" , "+name+'</td>';
 						template+='<td width="17%" align="center">'+data.return_date+'</td>';
 					tmp='<tr height="30px" id="row'+col+'">';

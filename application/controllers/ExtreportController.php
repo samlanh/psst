@@ -86,6 +86,35 @@ class ExtreportController extends Zend_Controller_Action
     	
     }
 	
+	function rptAssessmentListAction(){
+		$this->_helper->layout()->disableLayout();
+    	$assessmentID=$this->getRequest()->getParam("id");
+    	$assessmentID =empty($assessmentID)?0:$assessmentID;
+		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$row = $dbExternal->getClassAssessmentById($assessmentID);
+		$this->view->rs = $row;
+		
+		$groupId = empty($row['groupId'])?0:$row['groupId'];
+		$degreeId = empty($row['degreeId'])?0:$row['degreeId'];
+		
+		$arrFilter = array(
+			'groupId'=>$groupId,
+		);
+		$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
+		
+		$comments = $dbExternal->getCommentByDegree($degreeId);
+		$this->view->comments =$comments;
+		
+		$frm = new Application_Form_FrmGlobal();
+    	$branch_id = empty($row['branchId'])?1:$row['branchId'];
+    	$this->view->header = $frm->getHeaderReceipt($branch_id);
+    	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branchInfo = $db->getBranchInfo($branch_id);
+	}
+	
 	
 }
 

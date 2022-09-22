@@ -159,7 +159,7 @@
 				                    <?php echo $teachName;?> <span class=" fa fa-angle-down"></span>
 					                 </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-					                    <li><a href="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
+					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'external','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
 					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'external','action'=>'logout','value'=>'1')); ?>">
 					                    <i class="fa fa-sign-out pull-right"></i> <?php echo $tr->translate("SIGN_OUT");?></a>
 					                    </li>

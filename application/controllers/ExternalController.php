@@ -162,6 +162,36 @@ class ExternalController extends Zend_Controller_Action
 		}
 	}
 	
+	function changepasswordAction(){
+		
+		$this->_helper->layout()->disableLayout();
+		if ($this->getRequest()->isPost()){
+			
+			$dbExternal = new Application_Model_DbTable_DbExternal();
+			
+			$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+			$userName = $sessionUserExternal->userName;
+			$userId = $sessionUserExternal->userId;
+		
+			$pass_data=$this->getRequest()->getPost();
+			if ($pass_data['password'] == $sessionUserExternal->pwd){
+				
+				try {
+					$dbExternal->changePassword($pass_data['new_password']);
+					$sessionUserExternal->unlock();
+					$sessionUserExternal->pwd=$pass_data['new_password'];
+					$sessionUserExternal->lock();
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/external");
+				} catch (Exception $e) {
+					Application_Form_FrmMessage::message("INSERT_FAIL");
+				}
+			}
+			else{
+				Application_Form_FrmMessage::Sucessfull("OLD_PASSWORD_INCORRECT","/external/changepassword");
+			}
+		}
+	}
+	
 	
 }
 

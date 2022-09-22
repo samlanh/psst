@@ -49,6 +49,16 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		return $userId;
 	}
 	
+	function changePassword($newpwd){
+		$_user_data=array(
+			'password'=> MD5($newpwd)		
+	    );    	   
+		$currentTeacher = $this->getUserExternalId();
+		$where=$this->getAdapter()->quoteInto('id=?', $currentTeacher); 
+    	$this->_name='rms_teacher';   
+		return  $this->update($_user_data,$where);
+	}
+	
 	function coutingClassByUser($arrCondiction=array()){
 		$db = $this->getAdapter();
 		$sql="

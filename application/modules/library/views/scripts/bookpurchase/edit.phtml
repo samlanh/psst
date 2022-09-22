@@ -34,61 +34,107 @@ $frm_c=$this->frm_cat;
 			</script>
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	        		<div class="form-group">
-	                   <label class="control-label  col-md-4" ><?php echo $tr->translate("PURCHASE_NO");?>
-	                   </label>
-	                   <div class="col-md-8">
-	                   		<input class="fullside" dojoType="dijit.form.TextBox" readonly  name="purchase_no" id="purchase_no" value="<?php echo $this->row['purchase_no'];?>"  type="text"    >
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-4" ><?php echo $tr->translate("ORDER_DATE");?>
-	                   </label>
-	                   <div class="col-md-8">
-	                   		<input class="fullside" dojoType="dijit.form.DateTextBox"   constraints="{datePattern:'dd/MM/yyyy'}" name="date_purchase" id="date_purchase" value="<?php echo $this->row['date_purchase']?>"  type="text" required="required">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-4" ><?php echo $tr->translate("NOTE");?>
-	                   </label>
-	                   <div class="col-md-8">
-	                   		<textarea class="fullside" id="note_p" rows="2"  name="note_p" dojoType="dijit.form.Textarea" style="height:45px;"><?php echo $this->row['note']?></textarea>	
-	                   </div>
-	                </div>
+						<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BUY_INFO");?></p>
+													</div> 
+												</div>
+
+											<div class="form-group">
+											<label class="control-label  col-md-4" ><?php echo $tr->translate("PURCHASE_NO");?>
+											</label>
+											<div class="col-md-8">
+													<input class="fullside" dojoType="dijit.form.TextBox" readonly  name="purchase_no" id="purchase_no" value="<?php echo $this->row['purchase_no'];?>"  type="text"    >
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-4" ><?php echo $tr->translate("ORDER_DATE");?>
+											</label>
+											<div class="col-md-8">
+													<input class="fullside" dojoType="dijit.form.DateTextBox"   constraints="{datePattern:'dd/MM/yyyy'}" name="date_purchase" id="date_purchase" value="<?php echo $this->row['date_purchase']?>"  type="text" required="required">
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-4" ><?php echo $tr->translate("NOTE");?>
+											</label>
+											<div class="col-md-8">
+													<textarea class="fullside" id="note_p" rows="2"  name="note_p" dojoType="dijit.form.Textarea" style="height:45px;"><?php echo $this->row['note']?></textarea>	
+											</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+						</div>
+			
 	             </div>
+
 	             <div class="col-md-8 col-sm-8 col-xs-12">
-					<div class="form-group">
-						<div class="col-md-3 col-sm-12 col-xs-12">
-							<input id="book" />
+					 <div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-book" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BOOK_INFORMATION");?></p>
+													</div> 
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+
+												</div>
+
+										<div class="form-group">
+											<div class="col-md-3 col-sm-12 col-xs-12">
+												<input id="book" />
+											</div>
+											<div class="col-md-3 col-sm-12 col-xs-12">
+												<input class="fullside" dojoType="dijit.form.TextBox" name="serial" id="serial" type="text" placeHolder="<?php echo $tr->translate("SERIAL_NO");?>" >
+											</div>
+											<div class="col-md-3 col-sm-12 col-xs-12">
+												<input class="fullside" dojoType="dijit.form.TextBox" name="barcode" id="barcode" type="text" placeHolder="<?php echo $tr->translate("BARCODE");?>">
+											</div>
+											<div class="col-md-3 col-sm-12 col-xs-12">
+												<input class="fullside" dojoType="dijit.form.TextBox" name="note_new" id="note_new" type="text" placeHolder="<?php echo $tr->translate("NOTE");?>">
+											</div>
+											<div class="col-md-1 col-sm-3 col-xs-12">
+												<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
+													iconClass="dijitIconEditProperty" onclick="addRow();" />
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+												<tr id="head-title" class="head-td" align="right"></tr>
+											</table>
+											<input type="hidden" name="identity" id="identity"  />
+										</div>
+
+
+										</div>
+									</div>
+								</div>
 						</div>
-						<div class="col-md-3 col-sm-12 col-xs-12">
-							<input class="fullside" dojoType="dijit.form.TextBox" name="serial" id="serial" type="text" placeHolder="<?php echo $tr->translate("SERIAL_NO");?>" >
-						</div>
-						<div class="col-md-3 col-sm-12 col-xs-12">
-							<input class="fullside" dojoType="dijit.form.TextBox" name="barcode" id="barcode" type="text" placeHolder="<?php echo $tr->translate("BARCODE");?>">
-						</div>
-						<div class="col-md-3 col-sm-12 col-xs-12">
-							<input class="fullside" dojoType="dijit.form.TextBox" name="note_new" id="note_new" type="text" placeHolder="<?php echo $tr->translate("NOTE");?>">
-						</div>
-						<div class="col-md-1 col-sm-3 col-xs-12">
-							<input type="button" label="<?php echo $tr->translate('ADD');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitIconEditProperty" onclick="addRow();" />
-						</div>
-	                </div>
-					
-	        		<div class="form-group">
-	        			<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
-						</table>
-						<input type="hidden" name="identity" id="identity"  />
-	        		</div>
+	
 	        	</div>
 	         </div>
 	         <div class="clearfix"></div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input  class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+						 />
 	    		</div>
 	    	</div>
 		</form>

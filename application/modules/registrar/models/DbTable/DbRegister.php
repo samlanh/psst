@@ -70,113 +70,117 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 				}elseif($data['student_type']==2){//testing student
 					$rs_stu = $gdb->getStudentTestinfoById($stu_id);
-					$arr = array(
-						'is_registered'=>1,
-					);
-					$this->_name='rms_student_test_result';
-					$where="id = ".$rs_stu['id'];
-					$this->update($arr, $where);
 					
-					$dbg = new Application_Model_DbTable_DbGlobal();
-					$degreeStudent = empty($rs_stu['degree'])?0:$rs_stu['degree'];
-					$stu_code = $dbg->getnewStudentId($data['branch_id'],$degreeStudent);
-					
-					$settingNewStuID = NEW_STU_ID_FROM_TEST;
-					if ($settingNewStuID==1){
-						$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];
-					}
-					
-					$data['degreeStudent'] =$degreeStudent;//For Insert To Tale Count ID
-					$dbg->updateAmountStudetByDegree($data);//For Insert To Tale Count ID
-					
-					$arr = array(
-						'customer_type' =>1,
-						'stu_code'=>$stu_code,
-// 						'academic_year'=>$data['study_year'],
-						'create_date'=>date("Y-m-d H:i:s")
-					);
-					$this->_name='rms_student';
-					$where="stu_id = ".$data['old_stu'];
-					$this->update($arr, $where);
-					
-					// new setup fee_id for student from tested
-					if (!empty($data['study_year'])){
-						$_dbfee = new Accounting_Model_DbTable_DbFee();
-						$feeID = empty($data['study_year'])?0:$data['study_year'];
-						$rowfee = $_dbfee->getFeeById($feeID);
-						if(empty($rowfee)){
-							$academicYear=0;
-						}else{
-							$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
-						}
-						
-						$_arr= array(
-							'branch_id'		=>$data['branch_id'],
-							'user_id'		=>$this->getUserId(),
-							'student_id'	=>$data['old_stu'],
-							'fee_id'		=>$feeID,
-							'academic_year'	=>$academicYear,
-							'note'			=>'',
-							'is_current'	=>1,
-							'is_new'		=>1,
-							'status'		=>1,
-							'create_date'	=>date("Y-m-d H:i:s"),
-							'modify_date'	=>date("Y-m-d H:i:s"),
+					if(!empty($data['auto_test'])){
+						$arr = array(
+							'is_registered'=>1,
 						);
-						$this->_name="rms_student_fee_history";
-						$this->insert($_arr);//check more.
-					}
-					if(!empty($data['group_id'])){
+						$this->_name='rms_student_test_result';
+						$where="id = ".$rs_stu['id'];
+						$this->update($arr, $where);
 						
-						$group_id = $data['group_id'];
-						$is_setgroup = 1;
-						$dbGroup = new Foundation_Model_DbTable_DbGroup();
-						$group_info = $dbGroup->getGroupById($group_id);
-						if($group_info['degree_id']==$data['degree_id'] AND $group_info['grade']==$data['grade']){
-							$array = array(
-								'group_id'=>$group_id
-							);
-							$where =" group_id=0 AND stu_id=".$data['old_stu'];
-							$this->_name="rms_group_detail_student";
-							$this->update($array, $where);
-						}else{
-							$_arr = array(
-									'stu_id'			=>$data['old_stu'],
-									'is_newstudent'		=>1,
-									'status'			=>1,
-									'group_id'			=>$group_id,
-									'degree'			=>$data['degree_id'],
-									'grade'				=>$data['grade_id'],
-									'is_current'		=>1,
-									'is_setgroup'		=>$is_setgroup,
-									'is_maingrade'		=>1,
-									'date'				=>date("Y-m-d"),
-									'create_date'		=>date("Y-m-d H:i:s"),
-									'modify_date'		=>date("Y-m-d H:i:s"),
-									'user_id'			=>$this->getUserId(),
-							);
-							$this->_name="rms_group_detail_student";
-							$this->insert($_arr);
-							
+						$dbg = new Application_Model_DbTable_DbGlobal();
+						$degreeStudent = empty($rs_stu['degree'])?0:$rs_stu['degree'];
+						$stu_code = $dbg->getnewStudentId($data['branch_id'],$degreeStudent);
+						
+						$settingNewStuID = NEW_STU_ID_FROM_TEST;
+						if ($settingNewStuID==1){
+							$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];
 						}
 						
+						$data['degreeStudent'] =$degreeStudent;//For Insert To Tale Count ID
+						$dbg->updateAmountStudetByDegree($data);//For Insert To Tale Count ID
 						
+						$arr = array(
+							'customer_type' =>1,
+							'stu_code'=>$stu_code,
+	// 						'academic_year'=>$data['study_year'],
+							'create_date'=>date("Y-m-d H:i:s")
+						);
+						$this->_name='rms_student';
+						$where="stu_id = ".$data['old_stu'];
+						$this->update($arr, $where);
+						
+						// new setup fee_id for student from tested
+						if (!empty($data['study_year'])){
+							$_dbfee = new Accounting_Model_DbTable_DbFee();
+							$feeID = empty($data['study_year'])?0:$data['study_year'];
+							$rowfee = $_dbfee->getFeeById($feeID);
+							if(empty($rowfee)){
+								$academicYear=0;
+							}else{
+								$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+							}
+							
+							$_arr= array(
+								'branch_id'		=>$data['branch_id'],
+								'user_id'		=>$this->getUserId(),
+								'student_id'	=>$data['old_stu'],
+								'fee_id'		=>$feeID,
+								'academic_year'	=>$academicYear,
+								'note'			=>'',
+								'is_current'	=>1,
+								'is_new'		=>1,
+								'status'		=>1,
+								'create_date'	=>date("Y-m-d H:i:s"),
+								'modify_date'	=>date("Y-m-d H:i:s"),
+							);
+							$this->_name="rms_student_fee_history";
+							$this->insert($_arr);//check more.
+						}
+						if(!empty($data['group_id'])){
+							
+							$group_id = $data['group_id'];
+							$is_setgroup = 1;
+							$dbGroup = new Foundation_Model_DbTable_DbGroup();
+							$group_info = $dbGroup->getGroupById($group_id);
+							if($group_info['degree_id']==$data['degree_id'] AND $group_info['grade']==$data['grade']){
+								$array = array(
+									'group_id'=>$group_id
+								);
+								$where =" group_id=0 AND stu_id=".$data['old_stu'];
+								$this->_name="rms_group_detail_student";
+								$this->update($array, $where);
+							}else{
+								$_arr = array(
+										'stu_id'			=>$data['old_stu'],
+										'is_newstudent'		=>1,
+										'status'			=>1,
+										'group_id'			=>$group_id,
+										'degree'			=>$data['degree_id'],
+										'grade'				=>$data['grade_id'],
+										'is_current'		=>1,
+										'is_setgroup'		=>$is_setgroup,
+										'is_maingrade'		=>1,
+										'date'				=>date("Y-m-d"),
+										'create_date'		=>date("Y-m-d H:i:s"),
+										'modify_date'		=>date("Y-m-d H:i:s"),
+										'user_id'			=>$this->getUserId(),
+								);
+								$this->_name="rms_group_detail_student";
+								$this->insert($_arr);
+							}
+						}
 					}
 					
 				}elseif($data['student_type']==3){//from crm
+					
 					$rs_stu = $gdb->getStudentinfoById($stu_id);
 					$_dbgb = new Application_Model_DbTable_DbGlobal();
-					$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
-					$arr = array(
-							'customer_type' =>4,
-							'is_studenttest' =>1,
-							'serial' => $newSerial,
-							'create_date'=>date("Y-m-d"),
-							'create_date_stu_test'=>date("Y-m-d"),
-					);
-					$this->_name='rms_student';
-					$where="stu_id = ".$stu_id;
-					$this->update($arr, $where);
+					if(!empty($data['auto_test'])){
+						$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
+						$arr = array(
+								'customer_type' =>4,
+								'is_studenttest' =>1,
+								'serial' => $newSerial,
+								'create_date'=>date("Y-m-d"),
+								'create_date_stu_test'=>date("Y-m-d"),
+						);
+						$this->_name='rms_student';
+						$where="stu_id = ".$stu_id;
+						$this->update($arr, $where);
+					}
+					
 				}elseif($data['student_type']==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
 					//$rs_stu = $gdb->getStudentBalanceInfoById($stu_id);
 					$arrStuBalance = array(
@@ -430,8 +434,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				return $rs_stu;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$db->rollBack();//
-			
+			$db->rollBack();
 		}
 	}
 	

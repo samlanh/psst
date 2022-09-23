@@ -3045,7 +3045,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sb.grade LIMIT 1) as grade_label,
 	  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sb.degree LIMIT 1) as degree_label,
 	  	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
-	  	(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label,
+	  	
 	  	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	  	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
 	  	(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,

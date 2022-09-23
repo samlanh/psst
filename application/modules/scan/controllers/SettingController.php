@@ -5,7 +5,7 @@ public function init()
     	header('content-type: text/html; charset=utf8');
 	}
 	public function addAction(){
-		$this->_redirect('/scan/general');
+		$this->_redirect('/scan/setting');
 	}
 	public function indexAction()
 	{

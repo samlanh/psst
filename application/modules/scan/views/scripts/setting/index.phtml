@@ -6,6 +6,9 @@ $frm = $this->frm_general;
 
 $featureScanCallOut=FEATURE_SCAN_CALLOUT;
 ?>
+<style>
+audio{width: 100% !important;}
+</style>
 <form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" >
 	<script type="dojo/method" event="onSubmit">				
 			if(this.validate()) {
@@ -17,15 +20,15 @@ $featureScanCallOut=FEATURE_SCAN_CALLOUT;
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
-	               	<div class="col-sm-12 border-botom">
-			    		<div class="col-sm-8 pd-0">
-			    			<h4 class="m-b-0"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SETTING');?></h4>
-		    			</div>
-		    			<div class="col-sm-4 text-right">
-		    			</div>
-		    		</div>
-		    	</div>
-		    	<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SETTING');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+		 </div>
+		 <div class="card-box">
 		    		<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
 							<div class="card-body"> 
@@ -53,114 +56,118 @@ $featureScanCallOut=FEATURE_SCAN_CALLOUT;
 								</div>
 							</div>
 						</div>
-		    		</div>
-		    		<div class="col-md-6 col-sm-6 col-xs-12">
-		    			<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
+						<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
 							<div class="card-body"> 
 								<div class="row"> 
-									<div class="col-md-12 col-sm-12 col-xs-12"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
 										<div class="d-flex"> 
-											<div class="settings-main-icon ">
-												<i class="glyphicon glyphicon-volume-up"></i>
-											</div> 
-											<div class="col-md-10 col-sm-10 col-xs-12"> 
-												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("AUDIO_SETTING");?></p>
-											</div> 
-										</div>
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-volume-up"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("AUDIO_SETTING");?></p>
+												</div> 
+											</div>
 										<br />
-										<div class="form-group audioBlog">
-											<div class="col-md-12 col-sm-12 col-xs-12">
-												<label class="control-label bold "><?php echo $tr->translate("INTRO_AUDIO");?></label>
-												<input type='file' id="welcomeAudio" name="welcomeAudio" accept="audio/*" placeholder="" class="profile-aud">
-										   </div>
-											<div class="audioOption">
-											<?php 
-												$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
-												$welcomeAudio = $defaultAudio;
-												if(!empty($this->row['welcomeAudio']['keyValue'])){
-													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['welcomeAudio']['keyValue'])){
-														$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['welcomeAudio']['keyValue'];
+										<div class="col-md-6 col-sm-12 col-xs-12"> 
+											<div class="form-group audioBlog">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<label class="control-label bold "><?php echo $tr->translate("INTRO_AUDIO");?></label>
+													<input type='file' id="welcomeAudio" name="welcomeAudio" accept="audio/*" placeholder="" class="profile-aud">
+											   </div>
+												<div class="audioOption">
+												<?php 
+													$defaultAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";
+													$welcomeAudio = $defaultAudio;
+													if(!empty($this->row['welcomeAudio']['keyValue'])){
+														if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['welcomeAudio']['keyValue'])){
+															$welcomeAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['welcomeAudio']['keyValue'];
+														}
 													}
-												}
-												?>
-												<audio id="audioPlay" controls  src="<?php echo $welcomeAudio;?>"></audio>
+													?>
+													<audio id="audioPlay" controls  src="<?php echo $welcomeAudio;?>"></audio>
+												</div>
 											</div>
-										</div>
-										
-										<div class="form-group audioBlog">
-										  <div class="col-md-12 col-sm-12 col-xs-12">
-												<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETIN_AUDIO");?></label>
-												<input type='file' id="confirmGetInAudio" name="confirmGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
-										   </div>
-											<div class="audioOption">
-											<?php 
-												$confirmGetInAudio = $defaultAudio;
-												if(!empty($this->row['confirmGetInAudio']['keyValue'])){
-													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetInAudio']['keyValue'])){
-														$confirmGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetInAudio']['keyValue'];
-													}
-												}
-												?>
-												<audio id="confirmGetInAudioPlay" controls  src="<?php echo $confirmGetInAudio;?>"></audio>
-											</div>
-										</div>
-										<div class="form-group audioBlog">
-											<div class="col-md-12 col-sm-12 col-xs-12">
-												<label class="control-label bold"><?php echo $tr->translate("DENY_GETIN_AUDIO");?></label>
-												<input type='file' id="denyGetInAudio" name="denyGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
-										   </div>
-											<div class="audioOption">
-											<?php 
-												$denyGetInAudio = $defaultAudio;
-												if(!empty($this->row['denyGetInAudio']['keyValue'])){
-													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetInAudio']['keyValue'])){
-														$denyGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetInAudio']['keyValue'];
-													}
-												}
-												?>
-												<audio id="denyGetInAudioPlay" controls  src="<?php echo $denyGetInAudio;?>"></audio>
-											</div>
-										</div>
-										
-										<div class="form-group audioBlog">
-											<div class="col-md-12 col-sm-12 col-xs-12">
-												<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETOUT_AUDIO");?></label>
-												<input type='file' id="confirmGetOutAudio" name="confirmGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
-										   </div>
-											<div class="audioOption">
-											<?php 
-												$confirmGetOutAudio = $defaultAudio;
-												if(!empty($this->row['confirmGetOutAudio']['keyValue'])){
-													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetOutAudio']['keyValue'])){
-														$confirmGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetOutAudio']['keyValue'];
-													}
-												}
-												?>
-												<audio id="confirmGetOutAudioPlay" controls  src="<?php echo $confirmGetOutAudio;?>"></audio>
-											</div>
-										</div>
-										<div class="form-group audioBlog">
 											
-											<div class="col-md-12 col-sm-12 col-xs-12">
-												<label class="control-label bold"><?php echo $tr->translate("DENY_GETOUT_AUDIO");?></label>
-												<input type='file' id="denyGetOutAudio" name="denyGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
-										   </div>
-											<div class="audioOption">
-											<?php 
-												$denyGetOutAudio = $defaultAudio;
-												if(!empty($this->row['denyGetOutAudio']['keyValue'])){
-													if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetOutAudio']['keyValue'])){
-														$denyGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetOutAudio']['keyValue'];
+											<div class="form-group audioBlog">
+											  <div class="col-md-12 col-sm-12 col-xs-12">
+													<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETIN_AUDIO");?></label>
+													<input type='file' id="confirmGetInAudio" name="confirmGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
+											   </div>
+												<div class="audioOption">
+												<?php 
+													$confirmGetInAudio = $defaultAudio;
+													if(!empty($this->row['confirmGetInAudio']['keyValue'])){
+														if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetInAudio']['keyValue'])){
+															$confirmGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetInAudio']['keyValue'];
+														}
 													}
-												}
-												?>
-												<audio id="denyGetOutAudioPlay" controls  src="<?php echo $denyGetOutAudio;?>"></audio>
+													?>
+													<audio id="confirmGetInAudioPlay" controls  src="<?php echo $confirmGetInAudio;?>"></audio>
+												</div>
+											</div>
+											
+											<div class="form-group audioBlog">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<label class="control-label bold"><?php echo $tr->translate("DENY_GETIN_AUDIO");?></label>
+													<input type='file' id="denyGetInAudio" name="denyGetInAudio" accept="audio/*" placeholder="" class="profile-aud">
+											   </div>
+												<div class="audioOption">
+												<?php 
+													$denyGetInAudio = $defaultAudio;
+													if(!empty($this->row['denyGetInAudio']['keyValue'])){
+														if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetInAudio']['keyValue'])){
+															$denyGetInAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetInAudio']['keyValue'];
+														}
+													}
+													?>
+													<audio id="denyGetInAudioPlay" controls  src="<?php echo $denyGetInAudio;?>"></audio>
+												</div>
 											</div>
 										</div>
+										<div class="col-md-6 col-sm-12 col-xs-12"> 
+											<div class="form-group audioBlog">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<label class="control-label bold "><?php echo $tr->translate("CONFIRM_GETOUT_AUDIO");?></label>
+													<input type='file' id="confirmGetOutAudio" name="confirmGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
+											   </div>
+												<div class="audioOption">
+												<?php 
+													$confirmGetOutAudio = $defaultAudio;
+													if(!empty($this->row['confirmGetOutAudio']['keyValue'])){
+														if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['confirmGetOutAudio']['keyValue'])){
+															$confirmGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['confirmGetOutAudio']['keyValue'];
+														}
+													}
+													?>
+													<audio id="confirmGetOutAudioPlay" controls  src="<?php echo $confirmGetOutAudio;?>"></audio>
+												</div>
+											</div>
+											<div class="form-group audioBlog">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<label class="control-label bold"><?php echo $tr->translate("DENY_GETOUT_AUDIO");?></label>
+													<input type='file' id="denyGetOutAudio" name="denyGetOutAudio" accept="audio/*" placeholder="" class="profile-aud">
+											   </div>
+												<div class="audioOption">
+												<?php 
+													$denyGetOutAudio = $defaultAudio;
+													if(!empty($this->row['denyGetOutAudio']['keyValue'])){
+														if (file_exists(PUBLIC_PATH."/images/frontFile/audio/".$this->row['denyGetOutAudio']['keyValue'])){
+															$denyGetOutAudio = $this->baseUrl().'/images/frontFile/audio/'.$this->row['denyGetOutAudio']['keyValue'];
+														}
+													}
+													?>
+													<audio id="denyGetOutAudioPlay" controls  src="<?php echo $denyGetOutAudio;?>"></audio>
+												</div>
+											</div>
+									</div>
 									</div>
 								</div>
 							</div>
 						</div>
+		    		</div>
+		    		<div class="col-md-6 col-sm-6 col-xs-12">
+		    			
 						
 						<div class="card-blogform <?php if($featureScanCallOut==1){ echo "eableFeature";}else{ echo "disableFeature";}?>">
 							<div class="card-body"> 
@@ -198,13 +205,13 @@ $featureScanCallOut=FEATURE_SCAN_CALLOUT;
 							 </div>
 						 </div>
 		    		</div>
-	    		</div>
-	    		<div class="card-box">
-	    			<div class="col-md-12 col-sm-1s2 col-xs-12 border-top mt-20 ptb-10 text-center">
-						<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
-	    			</div>
-	    		</div>
-	  	 </div>
+	        </div>
+    		<div class="card-box">
+    			<div class="col-md-12 col-sm-1s2 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
+    			</div>
+    		</div>
+	  </div>
 	</div>
 </form>
 <style>

@@ -824,49 +824,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	return $db->fetchAll($sql.$where.$order);
     }
-   function getStudentAttendance($search){
-    	$db = $this->getAdapter();
-    	$sql="SELECT 
-		    	 	(SELECT b.branch_namekh FROM `rms_branch` AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,
-			    	s.`stu_id`,
-			    	s.`stu_code`,
-			    	s.`stu_khname`,
-			    	s.`stu_enname`,
-			    	s.`sex`,
-			    	(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) LIMIT 1) AS group_code, 
-			    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-			    	s.`degree` as degree_id,
-					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-					
-					(SELECT `r`.`room_name`	FROM `rms_room` `r` WHERE `r`.`room_id` = s.`room`LIMIT 1) AS room,
-			    	s.`group` 
-			    FROM 
-			    	`rms_student` AS s 
-			    WHERE 
-			    	s.`status`=1 
-		    ";
-    	
-    	$where='';
-    	
- 		if(!empty($search['group'])){
-    		$where.= " AND (SELECT sgh.group_id FROM `rms_student_group_history` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.id DESC LIMIT 1) =".$search['group'];
-    	}
-    	if(!empty($search['study_year'])){
-    		$where.=" AND s.academic_year =".$search['study_year'];
-    	}
-    	if(!empty($search['degree'])){
-    		$where.=" AND s.`degree`=".$search['degree'];
-    	}
-    	if(!empty($search['grade_all'])){
-    		$where.=" AND s.`grade`=".$search['grade_all'];
-    	}
-    	if(!empty($search['session'])){
-    		$where.=" AND s.session=".$search['session'];
-    	}
-    	$order=" ORDER BY degree_id,s.`group`,s.`stu_id` DESC";
-    	return $db->fetchAll($sql.$where.$order);
-    }
+  
     function CountAttendence($stu_id,$att_status,$fromdate,$todate,$group_id){
     	$db = $this->getAdapter();
     	$sql="SELECT COUNT(sad.`id`) AS count_att FROM `rms_student_attendence_detail` AS sad WHERE sad.`stu_id` =$stu_id AND sad.`attendence_status`=$att_status AND (SELECT sa.status FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1)=1 

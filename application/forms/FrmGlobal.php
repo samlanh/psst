@@ -918,7 +918,7 @@ class Application_Form_FrmGlobal{
 							</td>
 							<td width='20%'>លេខបង្កាន់ដៃ/Receipt No
 							</td>
-							<td width='20%'><label id='lb_receipt_no'></label>
+							<td width='20%'><strong style='font-size:12px;'><label id='lb_receipt_no'></label></strong>
 							</td>
 						</tr>
 						<tr>

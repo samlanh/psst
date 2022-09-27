@@ -192,6 +192,13 @@
 								</div> 
 							</div>
 							<div class="form-group">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADING_SETTING");?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12" >
+									<input id="gradingId" />
+									<input type="hidden" id="schoolOption" name="schoolOption" dojoType="dijit.form.TextBox" />
+								</div>
+							 </div>
+							<div class="form-group">
 								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12" >
 									<?php echo $frm->getElement("total_max_score");?>
@@ -298,6 +305,7 @@ var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var teacher_storeass= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var gradingStore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -370,7 +378,9 @@ dojo.ready(function(){
 			if(dept_id==-1){
 				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/degree/add?rightclick=true";?>','_blank');
 			}else{
+				
 				getallGrade();
+				getDegreeInfo();
 			}
 		}
 	}, "degree");	
@@ -409,6 +419,20 @@ dojo.ready(function(){
 			}
 		}
 	}, "room");
+	
+	new dijit.form.FilteringSelect({
+		store: gradingStore,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                     
+		id: "gradingId",
+		name: "gradingId",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADING");?>",          
+		onChange: function() {  
+			
+		}
+	}, "gradingId");
 
 	addRow();
 	 var branch_id = dijit.byId('branch_id');
@@ -826,5 +850,53 @@ function submitDataClose(){
 			}
 		});
 	}
+}
+
+function getDegreeInfo(){
+	var urlGetItemsInfo = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"getinfo"));?>';
+	degree=dijit.byId("degree").get("value");	
+	
+	dojo.xhrPost({
+		url: urlGetItemsInfo,
+		content:{
+			'degreeId':degree
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('schoolOption').set('value',data.schoolOption);  
+			getAllGradingSetting();
+			HideloadingBlock();
+		},
+		error: function(err) {
+			 HideloadingBlock();
+		}
+	});
+}
+function getAllGradingSetting(){
+	var urlGetGrading = '<?php echo $this->url(array("module"=>"issue","controller"=>"gradingsystem","action"=>"getallgrading"));?>';										
+	dijit.byId('gradingId').reset();
+	branch_id=dijit.byId("branch_id").get("value");
+    if(branch_id==-1 || branch_id==''){
+		alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+		dijit.byId('branch_id').focus();
+        return false;
+	}
+	schoolOption=dijit.byId("schoolOption").get("value");
+	dojo.xhrPost({
+		url: urlGetGrading,
+		content:{
+			'branch_id':branch_id
+			,'schoolOption':schoolOption
+			},
+		handleAs:"json",
+		load: function(data) {
+			gradingStore  = getDataStorefromJSON('id','name', data);
+			dijit.byId('gradingId').set('store',gradingStore);  
+			HideloadingBlock();
+		},
+		error: function(err) {
+			 HideloadingBlock();
+		}
+	});
 }
 </script>

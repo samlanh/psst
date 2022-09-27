@@ -3386,5 +3386,26 @@ function getAllgroupStudyNotPass($action=null){
 //   		}
 //   	}
 //   }
+
+
+	public function getAllGradingSetting($data=array()){
+		$db = $this->getAdapter();
+		$branch_id = empty($data['branch_id'])?0:$data['branch_id'];
+		$schoolOption = empty($data['schoolOption'])?0:$data['schoolOption'];
+		$sql=" SELECT 
+					grding.id,
+					grding.title As name ";
+		$sql.=" FROM `rms_scoreengsetting` AS grding ";
+		$sql.="  WHERE grding.status=1 AND grding.title!='' ";
+		if (!empty($branch_id)){
+			$sql.=" AND grding.branch_id =$branch_id ";
+		}
+		if (!empty($schoolOption)){
+			$sql.=" AND grding.schoolOption =$schoolOption ";
+		}
+		$sql.= $this->getAccessPermission();
+		$sql.=" ORDER BY grding.title ASC ";
+	return $db->fetchAll($sql);
+   }
 }
 ?>

@@ -290,6 +290,32 @@
 			Application_Form_FrmMessage::message("Application Error!");
 		}
 	}
+
+	public function AddInitizeqty($_data){
+		$_db= $this->getAdapter();
+		try{
+			$db_items = new Global_Model_DbTable_DbItems();
+		
+			$this->_name='rms_product_location';
+			$ids = explode(',', $_data['identity']);
+			foreach ($ids as $i){
+				$_arr = array(
+						'branch_id'=>$_data['branch'],
+						'pro_id'=>$_data['product_name_'.$i],
+						'pro_qty'=>$_data['qty_'.$i],
+						'price'=>$_data['price_'.$i],
+						'stock_alert'=>$_data['qty_alert_'.$i],
+						'note'=>$_data['note_'.$i],
+						'date'=>$_data['create_date'],
+				);
+				$this->insert($_arr);
+			}
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error!");
+		}
+	}
+
 	
 	function getAllProduct($search = '',$items_type=null){
 		$db = $this->getAdapter();

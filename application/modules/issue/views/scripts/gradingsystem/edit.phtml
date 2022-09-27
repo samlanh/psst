@@ -120,11 +120,13 @@
 	             	</div>
 		         </div>
 		         <div class="clearfix"></div>
-			         <div class="card-box mt-20">
-		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button"  />
-		               	</div>
-		             </div>
+				 <?php if(empty($this->checking)){ ?>
+				 <div class="card-box mt-20">
+					<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+						<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button"  />
+					</div>
+				 </div>
+				 <?php } ?>
 			</div>
 		</form>
     </div>
@@ -265,16 +267,21 @@ tr.rowData {
 				
 				title=1;
 			}
-				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center">';
+				<?php $readOnly="readOnly"; if(empty($this->checking)){ $readOnly="";?>
+				template+='<span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span>';
+				<?php } ?>
+				template+='</td>';
+				
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>"><?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['exam_typeid'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
-				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>"> <input class="fullside" type="text" onKeyup="totalPercent()" value="<?php echo $rs['pecentage_score'];?>" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>"> <input <?php echo $readOnly;?> class="fullside" type="text" onKeyup="totalPercent()" value="<?php echo $rs['pecentage_score'];?>" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				
-				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['timeInput'];?>" /></td>';
+				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input <?php echo $readOnly;?> class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['timeInput'];?>" /></td>';
 				template+='<td data-label="<?php echo $tr->translate("SUBJECT");?>" >';
 				template+='<div class="form-group">';
 					template+='<div class="col-md-12 col-sm-12 col-xs-12"';
-						template+='<select onChange="forSubject('+col+');" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subjectId'+col+'" name="subjectId'+col+'"  >'+subject+'</select>';
+						template+='<select <?php echo $readOnly;?> onChange="forSubject('+col+');" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subjectId'+col+'" name="subjectId'+col+'"  >'+subject+'</select>';
 					template+='</div>';
 				template+='</div>';
 				template+='<div class="form-group">';
@@ -282,7 +289,7 @@ tr.rowData {
 						template+='<input class="fullside" readOnly type="text"  name="subCriterialTitleKh'+col+'" id="subCriterialTitleKh'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorKH");?>" value="<?php echo $rs['subCriterialTitleKh'];?>" />';
 					template+='</div>';
 					template+='<div class="col-md-6 col-sm-6 col-xs-12"';
-						template+='<input class="fullside" readOnly type="text"  name="subCriterialTitleEng'+col+'" id="subCriterialTitleEng'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>" value="<?php echo $rs['subCriterialTitleEng'];?>"/>';
+						template+='<input  class="fullside" readOnly type="text"  name="subCriterialTitleEng'+col+'" id="subCriterialTitleEng'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>" value="<?php echo $rs['subCriterialTitleEng'];?>"/>';
 					template+='</div>';
 				template+='</div>';
 				template+='</td>';
@@ -306,6 +313,13 @@ tr.rowData {
 	 
 	 function forSubject(rowIndex){
 		 subjectId = dijit.byId('subjectId'+rowIndex).get('value');
+		 
+		 <?php if(!empty($this->checking)){ ?>
+			dijit.byId('timeInput'+rowIndex).set('readOnly',true);
+			dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',true);
+			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',true);
+		 <?php }else{ ?>
+		 
 		 if(subjectId>0){
 			dijit.byId('timeInput'+rowIndex).set('value',1);
 			dijit.byId('timeInput'+rowIndex).set('readOnly',true); 
@@ -328,6 +342,7 @@ tr.rowData {
 			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',true); 
 			dijit.byId('subCriterialTitleEng'+rowIndex).set('required',false);
 		 }
+		 <?php } ?>
 	 }
 	 
 	function totalPercent(){

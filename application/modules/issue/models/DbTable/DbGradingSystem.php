@@ -181,4 +181,18 @@ class Issue_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    		$db->rollBack();
    	}
    }
+   
+   function checkingIsInUse($gradingIdSettingID){
+	   $db = $this->getAdapter();
+	   $sql="SELECT grd.* ";
+	   $sql.="
+			FROM `rms_grading` AS grd ,
+				`rms_group` AS g
+	   ";
+	   $sql.=" WHERE grd.groupId = g.id ";
+	   $sql.=" AND g.gradingId = $gradingIdSettingID ";
+	   $sql.=" ORDER BY grd.id DESC ";
+	   $sql.=" LIMIT 1 ";
+	   return $db->fetchRow($sql);
+   }
 }

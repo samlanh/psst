@@ -289,10 +289,11 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 	
 	
 	function printByFormatForTeacher(){
-		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
-		$userName = $sessionUserExternal->userName;
-		$teacherNameKh = $sessionUserExternal->teacher_name_kh;
-		$teacherNameEn = $sessionUserExternal->teacher_name_en;
+		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$teacherInfo =$dbExternal->getCurrentTeacherInfo();
+		$teacherNameKh = empty($teacherInfo['teacher_name_kh'])?"":$teacherInfo['teacher_name_kh'];
+		$teacherNameEn = empty($teacherInfo['teacher_name_en'])?"":$teacherInfo['teacher_name_en'];
 	
 		$teachName = $teacherNameKh;
 		if(empty($teachName)){

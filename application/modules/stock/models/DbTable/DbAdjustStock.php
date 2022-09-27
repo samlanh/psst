@@ -46,6 +46,43 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
 
+	function getAllProductLocattion($search=null){
+    	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	
+    	$sql="SELECT id, note,
+    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
+    	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
+    	(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
+    	pro_qty, price, date, status";
+    	$sql.=$dbp->caseStatusShowImage("status");
+    	$sql.="  FROM `rms_product_location` WHERE 1";
+    	
+    	$where="";
+    	$from_date =(empty($search['start_date']))? '1': "date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
+    	if(!empty($search['title'])){
+    		$s_where=array();
+    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+    		$s_where[]="(SELECT t.id FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id AND t.title LIKE '%{$s_search}%')";
+			//$s_where[]="  REPLACE(note,' ','') LIKE '%{$s_search}%'";
+    		
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
+    	if($search['status_search']==1 OR $search['status_search']==0){
+    		$where.=" AND status=".$search['status_search'];
+    	}
+    	if($search['branch_id']>0 and !empty($search['branch_id'])){
+    		$where.=" AND branch_id=".$search['branch_id'];
+    	}
+    	
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$order=" ORDER BY id DESC";
+
+    	return $db->fetchAll($sql.$where.$order);
+    }
+
     public function getProQtyByLocation($branch_id,$pro_id){
     	$db=$this->getAdapter();
     	$sql=" SELECT pl.id,pl.pro_id,pl.pro_qty  

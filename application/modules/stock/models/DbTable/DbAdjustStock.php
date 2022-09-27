@@ -81,7 +81,6 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	
     	$sql.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
-		echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
 

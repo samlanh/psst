@@ -44,7 +44,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'total_score' 		=> $_data['total_max_score'],
 					'amount_subject' 	=> $_data['divide_subject'],
 					'max_average' 		=> $_data['max_average'],
-					'is_use' 		=> 0
+					'is_use' 		=> 0,
+					'gradingId' 		=> $_data['gradingId'],
 			);
 			if (EDUCATION_LEVEL==1){
 				$_arr['calture'] = $_data['calture'];
@@ -103,7 +104,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'total_score' 		=> $_data['total_max_score'],
 					'amount_subject' 	=> $_data['divide_subject'],
 					'max_average' 		=> $_data['max_average'],
-					'user_id'	  	=> $this->getUserId()
+					'user_id'	  	=> $this->getUserId(),
+					'gradingId' 		=> $_data['gradingId'],
 			);
 			
 			if (EDUCATION_LEVEL==1){

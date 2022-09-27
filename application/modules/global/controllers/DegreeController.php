@@ -208,4 +208,17 @@ class Global_DegreeController extends Zend_Controller_Action {
     		exit();
     	}
     }
+	
+	 function getinfoAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$dbItem = new Global_Model_DbTable_DbItems();
+    		$degreeId = empty($data['degreeId'])?0:$data['degreeId'];
+    	
+    		$type=$this->type; //Degree
+			$row =$dbItem->getDegreeById($degreeId,$type);
+    		print_r(Zend_Json::encode($row));
+    		exit();
+    	}
+    }
 }

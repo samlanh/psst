@@ -92,6 +92,7 @@ class Issue_GradingsystemController extends Zend_Controller_Action {
     	}
 		$this->view->row = $row;
     	$this->view->detail = $db->getGradingSystemDetail($id);
+    	$this->view->checking = $db->checkingIsInUse($id);
     	$frm = new Issue_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -119,4 +120,14 @@ class Issue_GradingsystemController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
     }
+	
+	function getallgradingAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$model = new Application_Model_DbTable_DbGlobal();
+			$row = $model->getAllGradingSetting($data);
+			print_r(Zend_Json::encode($row));
+			exit();
+		}
+   }
 }

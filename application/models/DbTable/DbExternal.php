@@ -43,6 +43,16 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	public function getCurrentTeacherInfo()
+	{		
+		$db = $this->getAdapter();
+		$sql=" SELECT s.* FROM rms_teacher AS s WHERE 1 ";
+		$sql.= " AND ".$db->quoteInto('s.id=?', $this->getUserExternalId());
+		$row=$db->fetchRow($sql);
+		if(!$row) return NULL;
+		return $row;
+	}
+	
 	public static function getUserExternalId(){
 		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
 		$userId = $sessionUserExternal->userId;
@@ -598,10 +608,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		WHERE 
 			sch.id =schDetail.main_schedule_id
 			AND g.id =sch.group_id
-			
+			AND g.is_use =1
+			AND g.is_pass =2
 		";
-		//AND g.is_use =1
-		//AND g.is_pass =2
 		$sql.=" AND schDetail.techer_id=".$this->getUserExternalId();
 		if(!empty($day)){
 			$sql.=" AND schDetail.day_id=".$day;
@@ -682,6 +691,102 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 
 		
 		return $db->fetchRow($sql.$where);
+	}
+	
+	function getDays($type=1){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+			v.key_code AS id 
+			,v.name_kh AS daysKh 
+			,v.name_en AS daysEng 
+		";
+		$sql.=" FROM rms_view AS v ";
+		$sql.=" WHERE 
+				1 
+				AND v.type=18
+			";
+		if($type==1){//Weekly
+			$sql.=' AND v.key_code NOT IN (7) ';
+		}else if($type==2){//Full Weekly
+			$sql.=' AND v.key_code NOT IN (6,7) ';
+		}else if($type==3){//Weekend
+			$sql.=' AND v.key_code IN (6,7) ';
+		}
+		return $db->fetchAll($sql);
+	}
+	function getTimeTeachingByTeacher(){
+		$db = $this->getAdapter();
+		$sql="
+		SELECT 
+			schDetail.from_hour
+			,schDetail.to_hour 
+			,(SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.from_hour LIMIT 1) AS fromHourTitle
+			,(SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.to_hour LIMIT 1) AS toHourTitle
+			,CONCAT ((SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.from_hour LIMIT 1),' - ',(SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.to_hour LIMIT 1)) timeTitle
+		FROM  
+			rms_group_reschedule AS schDetail
+			,rms_group_schedule AS sch
+			,rms_group AS g
+		WHERE 
+			sch.id =schDetail.main_schedule_id
+			AND g.id =sch.group_id 
+		";
+		$sql.=' AND schDetail.techer_id ='.$this->getUserExternalId();
+		$sql.=" GROUP BY CONCAT (schDetail.from_hour,schDetail.to_hour) ";
+		return $db->fetchAll($sql);
+	}
+	
+	function getScheduleInfoDetail($data=array()){
+		$db = $this->getAdapter();
+		$fromHour = empty($data['fromHour'])?0:$data['fromHour'];
+		$toHour = empty($data['toHour'])?0:$data['toHour'];
+		$dayID = empty($data['dayID'])?0:$data['dayID'];
+		
+		
+		
+		$sql="
+			SELECT 
+			g.id
+			,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchName
+			,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
+			,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchLogo
+			
+			,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleKh
+			,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleEng
+			,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameKh
+			,(SELECT te.teacher_name_en FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameEng
+			
+			,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
+			,`g`.`group_code` AS groupCode
+			,`g`.`degree` AS degree_id
+			,`g`.`grade` AS gradeId
+			,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `roomName`
+			,(SELECT rms_items.title FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degreeTitle
+			,(SELECT rms_items.title_en FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degreeTitleEng
+			,(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as gradeTitle
+			,(SELECT rms_itemsdetail.title_en FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as gradeTitleEng
+			,schDetail.*
+		";
+		
+		$sql.=" ";
+		$sql.=" 
+			FROM  
+				rms_group_reschedule AS schDetail
+				,rms_group_schedule AS sch
+				,rms_group AS g
+		";
+		$sql.=" WHERE 
+					sch.id =schDetail.main_schedule_id
+					AND g.id =sch.group_id 
+					AND g.status =1
+					AND g.is_use =1
+					AND g.is_pass =2
+					AND schDetail.day_id =$dayID
+					AND schDetail.from_hour ='$fromHour'
+					AND schDetail.to_hour ='$toHour' ";
+		$sql.=' AND schDetail.techer_id ='.$this->getUserExternalId();
+		$sql.=" LIMIT 1 ";
+		return $db->fetchRow($sql);
 	}
 	
 }

@@ -2286,6 +2286,24 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	return $num;
   }
+  function getMonthInkhmer($monthNum){
+  	$monthKH = array(
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+  	$monthChar = empty($monthKH[$monthNum])?"":$monthKH[$monthNum];
+  	return $monthChar;
+  }
   function calCulateGrade($score,$max_score){
   	$score_avg = ($score / $max_score)*100;
   	if($score_avg < 50){//0.67
@@ -3386,5 +3404,26 @@ function getAllgroupStudyNotPass($action=null){
 //   		}
 //   	}
 //   }
+
+
+	public function getAllGradingSetting($data=array()){
+		$db = $this->getAdapter();
+		$branch_id = empty($data['branch_id'])?0:$data['branch_id'];
+		$schoolOption = empty($data['schoolOption'])?0:$data['schoolOption'];
+		$sql=" SELECT 
+					grding.id,
+					grding.title As name ";
+		$sql.=" FROM `rms_scoreengsetting` AS grding ";
+		$sql.="  WHERE grding.status=1 AND grding.title!='' ";
+		if (!empty($branch_id)){
+			$sql.=" AND grding.branch_id =$branch_id ";
+		}
+		if (!empty($schoolOption)){
+			$sql.=" AND grding.schoolOption =$schoolOption ";
+		}
+		$sql.= $this->getAccessPermission();
+		$sql.=" ORDER BY grding.title ASC ";
+	return $db->fetchAll($sql);
+   }
 }
 ?>

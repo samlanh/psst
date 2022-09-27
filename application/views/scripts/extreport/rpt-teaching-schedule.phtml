@@ -1,0 +1,384 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("DAILY_TEACHING_SCHEDULE");
+	echo $this->headTitle($pageTitle);
+	
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;	
+
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	
+	$template = SCORE_RESULT_TEMPLATE;
+	$branchInfo = $this->branchInfo;
+	
+	$signature="";
+	$stamp="";
+	if (!empty($branchInfo['signature'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$branchInfo['signature'])){
+			$signature = $this->baseUrl().'/images/logo/'.$branchInfo['signature'];
+		}
+	}
+	if (!empty($branchInfo['stamp'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$branchInfo['stamp'])){
+			$stamp = $this->baseUrl().'/images/logo/'.$branchInfo['stamp'];
+		}
+	}
+	
+	
+	$dbExternal = new Application_Model_DbTable_DbExternal();
+	
+	$mainTeacherSigature="";
+	if (!empty($rs['mainTeacherSigature'])){
+		if (file_exists(PUBLIC_PATH."/images/photo/".$rs['mainTeacherSigature'])){
+			$mainTeacherSigature = $this->baseUrl().'/images/photo/'.$rs['mainTeacherSigature'];
+		}
+	}
+	
+	
+	$teacherInfo =$dbExternal->getCurrentTeacherInfo();
+	$teacherNameKh = empty($teacherInfo['teacher_name_kh'])?"":$teacherInfo['teacher_name_kh'];
+	$teacherNameEn = empty($teacherInfo['teacher_name_en'])?"":$teacherInfo['teacher_name_en'];
+
+	$teachName = $teacherNameKh;
+	if(empty($teachName)){
+		$teachName = $teacherNameEn;
+	}else{
+		if(!empty($teacherNameEn)){
+			$teachName = $teachName." / ".$teacherNameEn;
+		}
+	}
+	$teacherTItle = "អ្នកគ្រូ";
+	if($teacherInfo['sex']==1){
+		$teacherTItle = "លោកគ្រូ";
+	}
+?>	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="card mb-1 ">
+			<div class="reportblog">
+				<div id="divPrint">
+					<style type="text/css">
+						.headReportRespone{
+							display:none;
+						}
+						table ,
+						table tr td,
+						table tr td span{
+							color: #002c7b;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+							    font-size: 10px;
+							line-height: 16px;
+						}
+						table tr td small {
+							font-size: 9px;
+							white-space: normal;
+						}
+						table.content-data{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							width: 100%;
+						}
+						table.content-data thead tr.style {
+							line-height: 16px; 
+							padding:1px 0px; 
+							white-space: nowrap;height: 22px; 
+							background: #3c4b76;
+							font-weight:600;
+						}
+						table.content-data thead tr.style td,
+						table.content-data thead tr.style td span{
+							line-height: 16px; 
+							font-weight:600;
+							color: #ffffff;
+						}
+						table.content-data thead tr.style td {
+							padding:2px 0;
+						}
+						table.tb-footer{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						table.tb-footer tr{
+						 line-height: 14px; font-size:10px; padding:2px 0px; height: 25px;
+						}
+						table tr td{
+							padding:0 2px;
+						}
+						span.khmerLabel,
+						span.englishLabel{
+							display:block;
+						}
+						span.khmerName, span.englishName {
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							white-space: nowrap;
+							padding: 0 3px;
+						}
+						tr.style span.khmerName {
+							font-size:12px;
+						}
+						tr.style span.englishName {
+							font-size:11px;
+						}
+						span.valueAmount {
+							font-weight: 600;
+							color: #002c7b;
+						}
+						ul.scoreTitle {
+							padding: 0;
+							margin: 0;
+							list-style: none;
+							font-size: inherit;
+							margin-top: -15px;
+						}
+						ul.scoreTitle li {
+							line-height: 18px;
+							color:#002c7b;
+							list-style-type:none !important;
+						}
+						@media print {
+							ul.printInfo {
+								position: absolute;
+								left: 0;
+								bottom: 5px;
+								list-style: none;
+								margin: 0;
+								padding: 0;
+								visibility: visible;
+							}
+							ul.printInfo li {
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size: 8px;
+								text-align: left;
+								line-height:12px;
+								color: #002c7b;
+							}
+						}
+						
+						td.titleComment {
+							min-width:80px;
+							white-space:normal;
+							
+						}
+						tr.rowValue td {
+							padding:2px;
+						}
+						tr.rowValue td, tr.rowValue td span {
+							line-height: 12px;
+						}
+						tr.rowValue td {
+							padding: 5px 0;
+						}
+						span.valueLabel {
+							display: block;
+							line-height: inherit;
+						}
+						span.empty {
+							color: #8e834e;
+						}
+						span.valueLabel.timeLabel {
+							font-size: 12px;
+							font-weight: 600;
+						}
+						span.valueLabel.khmerLabel {
+							font-size: 10px;
+							font-weight: normal !important;
+							line-height: 18px;
+							font-family: 'Times New Roman','Khmer OS Muol Light';
+						}
+
+						span.className {
+							font-size: 12px;
+							line-height: 16px;
+							margin: 5px 0;
+						}
+					</style>
+						<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+							<tr >
+								<td colspan="3" align="center" >
+									<?php echo $this->headerScore;?>
+									
+								</td>
+							</tr>
+							
+							<?php 
+							$i=0; 
+							
+							$countPass=0;
+							$countFail=0; 
+							$passFemale=0;
+							$failFemale=0;
+							
+							
+							
+							$titleKh='កាលវិភាគបង្រៀនប្រចាំថ្ងៃ';
+							$titleENG="Daily Teaching Schedule";
+							?>
+							<tr>
+								<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<ul class="scoreTitle">
+										<li style="font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+										<?php echo $titleKh;?>
+										</li>
+										<li style="font-size:12px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+											<?php echo $titleENG;?>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											<?php echo $teacherTItle." / Lecturer";?>  : <span style="font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $teachName;?></span>
+										</li>
+										
+									</ul>
+								</td>
+								<td align="center" valign="top"></td>
+							</tr>
+							<tr>
+								<td colspan="3" id="exportExcel" valign="top">
+									
+									<table class="content-data"  cellpadding="2"​  border="1" >
+										<thead>
+											
+											<tr class="style" align="center" >
+												<td	scope="col" >
+													<span class="valueLabel khmerLabel">ម៉ោងបង្រៀន</span>
+													<span class="valueLabel englishLabel">Teaching Time</span>
+												</td>
+												<?php 
+												if(!empty($this->days)) foreach($this->days AS $key => $days){ 
+												?>
+												<td scope="col" class="titleComment"  >
+													<span class="valueLabel khmerLabel"><?php echo $days['daysKh'];?></span>
+													<span class="valueLabel englishLabel"><?php echo $days['daysEng'];?></span>
+												</td>
+												<?php } ?>
+												
+											</tr>
+											
+										</thead>
+										
+										<?php 
+										$i=0; 
+										$m=0;$f=0;
+										if(!empty($this->timeTeaching)) foreach($this->timeTeaching as $time){ 
+										$i++;
+										
+										?>
+										<tr  class="rowValue">
+											
+											<td data-label="ម៉ោងបង្រៀន/Teaching Time" align="center" style="white-space:nowrap;">
+												<?php 
+													
+													$fromHour = $time['from_hour'];
+													$toHour = $time['to_hour'];
+												?>
+												<span class="valueLabel timeLabel"><?php echo $time['fromHourTitle'];?></span>
+												<span class="valueLabel timeLabel">-</span>
+												<span class="valueLabel timeLabel"><?php echo $time['toHourTitle'];?></span>
+											</td>
+											
+											<?php 
+												if(!empty($this->days)) foreach($this->days AS $key => $days){ 
+													$dayID = $days['id'];
+													$arrCondiction = array(
+														'fromHour'	=>$fromHour
+														,'toHour'	=>$toHour
+														,'dayID'	=>$dayID
+													);
+													$row = $dbExternal->getScheduleInfoDetail($arrCondiction);
+												?>
+											<td data-label="<?php echo $days['daysKh']."/".$days['daysEng'];?>" align="center" >
+												<?php if(empty($row)){ ?>
+													<span class="valueLabel khmerLabel empty">មិនមាន</span>
+													<span class="valueLabel englishLabel empty">(Empty)</span>
+												<?php }else{
+													$gradeTitle = $row['gradeTitle'];
+													if(empty($gradeTitle)){ $gradeTitle = $row['gradeTitleEng']; }else{ if(!empty($row['gradeTitleEng'])){$gradeTitle = $gradeTitle."/".$row['gradeTitleEng'];}}
+													?>
+													<span class="valueLabel khmerLabel"><?php echo $row['subjectTitleKh']?></span>
+													<?php if(!empty($row['subjectTitleEng'])){ ?>
+													<span class="valueLabel englishLabel">(<?php echo $row['subjectTitleEng']?>)</span>
+													<?php }?>
+													<span class="className valueLabel"><?php echo $gradeTitle.' <strong>"'.$row['groupCode'].'"</strong>';?></span>
+													<span class="valueLabel roomName">បន្ទប់/Room : <strong>"<?php echo $row['roomName']?>"</strong></span>
+													<span class="valueLabel roomName">សាខា/Branch : <strong>"<?php echo $row['branchName']?>"</strong></span>
+												<?php }?>
+											</td>
+											<?php } ?>
+											
+											
+										</tr>
+									
+										<?php } ?>
+									</table>
+									
+									
+									<table class="reportTotalStudent" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px; color:#4839bd;">
+										
+										<tr>
+											<td colspan="3">&nbsp;</td>
+										</tr>
+										<tr>
+											<td valign="top" width="33%" style="font-family:'Times New Roman','Khmer OS Muol Light'; text-align: center;">
+												បានឃើញ និងឯកភាព<br />
+											</td>
+											<td width="33%" valign="top" style="font-family:'Times New Roman','Khmer OS Battambang'; text-align: center;"></td>
+											<td width="33%" style="white-space: nowrap; font-family:'Times New Roman','Khmer OS Battambang';text-align: right;" valign="top"><?php echo $branchInfo['workat'];?> ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d"));?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m"));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y"));?></td>
+										</tr>
+										<tr>
+											<td valign="top" style="font-family:'Times New Roman','Khmer OS Muol Light'; text-align: center;"><?php echo $branchInfo['principal'];?></td>
+											<td valign="top" style="font-family:'Times New Roman','Khmer OS Battambang'; text-align: center;"></td>
+											<td valign="top" style=" text-align: center; font-family:'Times New Roman','Khmer OS Battambang'; "></td>
+										</tr>
+										<tr>
+											<td valign="top"  style="font-family:'Times New Roman','Khmer OS Muol Light';font-size:14px;text-align: center;">
+												<div>
+													<?php if(!empty($stamp)){?>
+													<img src="<?php echo $stamp;?>" style="max-height:100px;position:relative;" />
+													<?php } ?>
+												</div>
+												<?php if(!empty($signature)){?>
+													<img src="<?php echo $signature;?>" style="left:100px;bottom:50px;width:200px;position:relative;" />
+												<?php } ?>
+											</td>
+											<td></td>
+											<td valign="top" style="font-family:'Times New Roman','Khmer OS Muol Light';font-size:14px;text-align: center;">
+												
+											</td>
+										</tr>
+										<tr>
+											<td valign="top" width="33%" style="font-family:'Times New Roman','Khmer OS Muol Light';font-size:14px;text-align: center;">
+											</td>
+											<td width="33%" valign="top" style="font-family:'Times New Roman','Khmer OS Battambang';font-size:14px;text-align: center;">
+											</td>
+											<td width="33%" style="white-space: nowrap;font-family:'Times New Roman','Khmer os battambang'" valign="top"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							
+						</table>
+						
+					<div class="footPrintDate"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+
+</script>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

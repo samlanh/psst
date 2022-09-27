@@ -136,6 +136,9 @@ dojo.ready(function(){
 	}, "grade");
 	
 	getallGrade();
+	<?php if(!empty($this->search['academic_year'])){?>
+	 dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year'];?>'); 
+	<?php } ?>
 });
 
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
@@ -153,7 +156,7 @@ function getallGrade(){
 				dijit.byId('grade').attr('value','');
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store); 
-			    dijit.byId('grade').attr('value','<?php echo $this->adv_search['grade']?>');    
+			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');    
 			},
 			error: function(err) {
 			}

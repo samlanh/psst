@@ -104,7 +104,9 @@ class ExternalController extends Zend_Controller_Action
     {
 		$this->_helper->layout()->disableLayout();
 		
-		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$teacherInfo = $dbExternal->getCurrentTeacherInfo();
+		$currentAcademic = empty($teacherInfo['currentAcademic'])?0:$teacherInfo['currentAcademic'];
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -112,12 +114,14 @@ class ExternalController extends Zend_Controller_Action
 			$search = array(
 				'adv_search'		=> '',
 				'branch_id'			=> '',
-				'academic_year'		=> '',
+				'academic_year'		=> $currentAcademic,
 				'degree'			=>'',
 				'grade' 			=> '',
 				'session' 			=>'',
 			);
 		}
+		$this->view->search = $search;
+		
 		$dbExternal=new Application_Model_DbTable_DbExternal();
 		$this->view->allClass = $dbExternal->getAllClassByUser($search);
 			

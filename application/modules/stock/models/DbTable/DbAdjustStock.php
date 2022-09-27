@@ -50,7 +50,7 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	
-    	$sql="SELECT id,note,
+    	$sql="SELECT id,
     	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
     	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
     	(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
@@ -62,16 +62,14 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$from_date =(empty($search['start_date']))? '1': "date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
-    
-		if($search['title'] != ""){
-			$s_where = array();
-			$s_search = addslashes(trim($search['title']));
-
-			$s_where[] = "product_name LIKE '%{$s_search}%'";
-			$s_where[] = "product_code  LIKE '%{$s_search}%'";
-			$sql .=' AND ( '.implode(' OR ',$s_where).')';
-		}
-
+    	if(!empty($search['title'])){
+    		$s_where=array();
+    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+    		$s_where[]="  REPLACE(branch_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]="  REPLACE(note,' ','') LIKE '%{$s_search}%'";
+    		
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND status=".$search['status_search'];
     	}

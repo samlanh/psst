@@ -50,7 +50,7 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	
-    	$sql="SELECT id,
+    	$sql="SELECT id, note,
     	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
     	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
     	(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
@@ -65,8 +65,8 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
-    		$s_where[]="  REPLACE(branch_name,' ','') LIKE '%{$s_search}%'";
-			$s_where[]="  REPLACE(note,' ','') LIKE '%{$s_search}%'";
+    		$s_where[]="(SELECT t.id FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id AND t.title LIKE '%{$s_search}%')";
+			//$s_where[]="  REPLACE(note,' ','') LIKE '%{$s_search}%'";
     		
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
@@ -79,6 +79,7 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	
     	$sql.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
+
     	return $db->fetchAll($sql.$where.$order);
     }
 

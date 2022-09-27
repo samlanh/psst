@@ -117,8 +117,8 @@
 									</a>
 								 </li>
 								<li>
-									<a href="<?php echo $this->baseUrl()."/extreport/";?>">
-										<i class="fa fa-file-text" aria-hidden="true"></i> <?php echo $tr->translate('REPORT');?> 
+									<a href="<?php echo $this->baseUrl()."/extreport/rpt-teaching-schedule";?>">
+										<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i> <?php echo $tr->translate('SCHEDULE');?> 
 									</a>
 								 </li>
 							</ul>
@@ -132,7 +132,7 @@
 		          	<div class="nav_menu">
 		            	<nav>
 				              <div class="nav toggle">
-				                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+				                <a id="menu_toggle"><i class="glyphicon glyphicon-align-left"></i></a>
 				              </div>
               				  <ul class="nav navbar-nav navbar-right">
 			              	      <li>
@@ -159,7 +159,7 @@
 				                    <?php echo $teachName;?> <span class=" fa fa-angle-down"></span>
 					                 </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-					                    <li><a href="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
+					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'external','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
 					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'external','action'=>'logout','value'=>'1')); ?>">
 					                    <i class="fa fa-sign-out pull-right"></i> <?php echo $tr->translate("SIGN_OUT");?></a>
 					                    </li>

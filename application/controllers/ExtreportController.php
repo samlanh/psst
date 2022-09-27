@@ -115,6 +115,28 @@ class ExtreportController extends Zend_Controller_Action
     	$this->view->branchInfo = $db->getBranchInfo($branch_id);
 	}
 	
+	function rptTeachingScheduleAction(){
+		$this->_helper->layout()->disableLayout();
+    	$assessmentID=$this->getRequest()->getParam("id");
+    	$assessmentID =empty($assessmentID)?0:$assessmentID;
+		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$row = $dbExternal->getDays();
+		$this->view->days = $row;
+		$row = $dbExternal->getTimeTeachingByTeacher();
+		$this->view->timeTeaching = $row;
+		
+		
+		
+		$frm = new Application_Form_FrmGlobal();
+    	$branch_id = empty($row['branchId'])?1:$row['branchId'];
+    	$this->view->header = $frm->getHeaderReceipt($branch_id);
+    	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branchInfo = $db->getBranchInfo($branch_id);
+	}
+	
 	
 }
 

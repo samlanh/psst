@@ -56,62 +56,82 @@ span.oldsup input[type=checkbox] {
 			}
 			</script>
 			<div class="card-box">
-	        	<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("SUPPLIER_INFO");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SUPPLIER_NAME");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("supplier_name");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("sex");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Tel");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("tel");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("email");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ADDRESS");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("address");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("note");?>
-	                   </div>
-	                </div>
+	        	<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="	glyphicon glyphicon-user" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SUPPLIER_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+											</div>
+
+											
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SUPPLIER_NAME");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("supplier_name");?>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("sex");?>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Tel");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("tel");?>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("email");?>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ADDRESS");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("address");?>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("note");?>
+											</div>
+											</div>
+
+										</div>
+									</div>
+							</div>
+					</div>
+
 	            </div>
 	         </div>    
 	          <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-					 	iconClass="dijitEditorIcon dijitEditorIconSave" />
+					  	 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
 					<input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-						 iconClass="dijitEditorIcon dijitEditorIconSave" />
+						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
                	</div>
              </div>  
 		</form>

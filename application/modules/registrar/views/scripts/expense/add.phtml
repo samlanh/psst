@@ -142,9 +142,9 @@ table.collape tbody td {
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 					<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
-						 iconClass="dijitIconSave"/>
+						 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" />
 					<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
-						 iconClass="dijitIconNewTask"/>
+						class="button-class button-primary" iconClass="glyphicon glyphicon-print" />
                	</div>
              </div>
 		</form>
@@ -286,7 +286,7 @@ table.collape tbody td {
 		</div>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+		<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>

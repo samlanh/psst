@@ -28,7 +28,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				'description'	=>$data['note'],
 				'date'			=>$data['date'],
 				'user_id'		=>$this->getUserId(),
-				'create_date'	=>date('Y-m-d'),
+				'create_date'	=>date('Y-m-d H:i:s'), 
 			);
 		$this->insert($array);
  	} 	 

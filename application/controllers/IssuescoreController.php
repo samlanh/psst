@@ -15,24 +15,26 @@ class IssuescoreController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$id=0;
 		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$teacherInfo = $dbExternal->getCurrentTeacherInfo();
+		$currentAcademic = empty($teacherInfo['currentAcademic'])?0:$teacherInfo['currentAcademic'];
+		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search = array(
 						'adv_search'=>'',
-						
-						'academic_year'=> '',
+						'academic_year'=> $currentAcademic,
 						'exam_type'=>-1,
 						'for_semester'=>-1,
 						'for_month'=>'',
 						'degree'=>0,
 						'grade'=> 0,
-						'start_date'=> date('Y-m-d'),
+						'start_date'=> '',
 						'end_date'=>date('Y-m-d'));
 		}
 		$this->view->search = $search;
-		
 		$db = new Application_Model_DbTable_DbIssueScore();
 		$row = $db->getAllSubjectScoreByClass($search);
 		$this->view->row = $row;

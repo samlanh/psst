@@ -46,8 +46,19 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	public function getCurrentTeacherInfo()
 	{		
 		$db = $this->getAdapter();
-		$sql=" SELECT s.* FROM rms_teacher AS s WHERE 1 ";
+		$sql=" SELECT 
+				gsd.group_id,
+				g.academic_year AS currentAcademic,
+				s.* 
+			FROM rms_teacher AS s 
+					LEFT JOIN `rms_group_subject_detail` AS gsd 
+						INNER JOIN  `rms_group`  AS g
+						ON  gsd.group_id = g.id
+					ON s.id = gsd.teacher
+			WHERE 1 ";
 		$sql.= " AND ".$db->quoteInto('s.id=?', $this->getUserExternalId());
+		$sql.= " ORDER BY g.academic_year DESC ";
+		$sql.= " LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		if(!$row) return NULL;
 		return $row;

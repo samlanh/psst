@@ -159,6 +159,9 @@ a.btn.btn-app.small {
     padding: 0 !important;
 }
 */
+.form-group .col-md-12, .form-group.col-sm-12, .form-group .col-xs-12, .form-group .col-md-11, .form-group.col-sm-11, .form-group .col-xs-11, .form-group .col-md-10, .form-group.col-sm-10, .form-group .col-xs-10, .form-group .col-md-9, .form-group.col-sm-9, .form-group .col-xs-9, .form-group .col-md-8, .form-group.col-sm-8, .form-group .col-xs-8, .form-group .col-md-7, .form-group.col-sm-7, .form-group .col-xs-7, .form-group .col-md-6, .form-group.col-sm-6, .form-group .col-xs-6, .form-group .col-md-5, .form-group.col-sm-5, .form-group .col-xs-5, .form-group .col-md-4, .form-group.col-sm-4, .form-group .col-xs-4, .form-group .col-md-3, .form-group .col-sm-3, .form-group.col-xs-3, .form-group .col-md-2, .form-group.col-sm-2, .form-group .col-xs-2 {
+    padding: 0;
+}
 .form-group div {
     margin-bottom: 2px !important;
 }

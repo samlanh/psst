@@ -58,7 +58,12 @@ class ExtreportController extends Zend_Controller_Action
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getClassSubjectScoreById($gradingID);
 		$this->view->rs = $row;
-		
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");
+		}
+		if ($row['status']==0){
+			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_VIEW","/issuescore/index");
+		}
 		$groupId = empty($row['groupId'])?0:$row['groupId'];
 		
 		$arrFilter = array(

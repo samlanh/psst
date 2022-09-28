@@ -106,9 +106,6 @@ class IssuescoreController extends Zend_Controller_Action
 		$row = $db->getSubjectScoreByID($id);
 		$this->view->rs = $row;	
 		
-		if(empty($row)){
-			$this->_redirect("/issuescore/index");
-		}
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");
 		}

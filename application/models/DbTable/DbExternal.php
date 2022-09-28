@@ -378,7 +378,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			if (!empty($groupId)){
 				$sql.=' AND g.group_id='.$groupId;
 			}
-			$sql.=' AND gr.teacher_id='.$this->getUserExternalId();
+			//$sql.=' AND gr.teacher_id='.$this->getUserExternalId();
 			
 			$stuOrderBy = empty($search['stuOrderBy'])?0:$search['stuOrderBy'];
 			

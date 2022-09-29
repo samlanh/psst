@@ -49,6 +49,9 @@
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
 	
+	<script src="<?php echo $this->baseUrl()?>/admin/sweetalert2/sweetalert2.min.js"></script>
+	<link rel="stylesheet" href="<?php echo $this->baseUrl()?>/admin/sweetalert2/sweetalert2.min.css">
+	
 	<link href="<?php echo $base_url;?>datatable/bootstrap-custome.css" media="screen" rel="stylesheet" type="text/css">
     <!-- Custom Theme Style -->
     <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
@@ -177,7 +180,7 @@
        		 	<div class="" >
 					<div style="clear:both;"></div>
 					<div class="main-container container-fluid">
-						<?php if($controller!='external' && $action!='dashboard' ){?>
+						<?php if( $action!='dashboard' ){?>
 						<div class="breadcrumb-header justify-content-between"> 
 							<div class="left-content"> 
 								<span id="breadcrumbTitle" class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span> 

@@ -65,9 +65,18 @@ class ExtreportController extends Zend_Controller_Action
 			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_VIEW","/issuescore/index");
 		}
 		$groupId = empty($row['groupId'])?0:$row['groupId'];
+		$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
+		$examType = empty($row['examType'])?0:$row['examType'];
+		$forMonth = empty($row['forMonth'])?0:$row['forMonth'];
+		$forSemester = empty($row['forSemester'])?0:$row['forSemester'];
 		
 		$arrFilter = array(
 			'groupId'=>$groupId,
+			'forScoreSubject'=>1,
+			'subjectId'=>$subjectId,
+			'examType'=>$examType,
+			'forMonth'=>$forMonth,
+			'forSemester'=>$forSemester,
 		);
 		$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
 		

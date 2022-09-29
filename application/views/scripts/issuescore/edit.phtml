@@ -1,13 +1,11 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("ISSUE_SCORE");
+	$pageTitle = $tr->translate("EDIT_ISSUE_SCORE");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
 	$pageTitle = '<i class="glyphicon glyphicon-pencil"></i> '.$pageTitle;
-
-	
 	$current_month = date("m");
 	$row = $this->rs;
 ?>	
@@ -21,28 +19,21 @@
 				<h3 class="card-title mb-2 "><?php echo $row['branchName'].' "'.$tr->translate("GROUP")." ".$row['groupCode'].'"'?></h3> 
 			</div>
 			<div class="card-content collapse show mt-1">
-				<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<form id='scoreForm' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">   
 					if(this.validate()){
 						var identity = $('#identity').val();
 						if(identity==''){
-							alert("There is no record to save");
+							var msgTitle = "បំពេញព័ត៌មានមិនគ្រប់គ្រាន់ / Incompleted Data To save";
+							var msgDesc = "មិនមានព័ត៌មានសិស្សដែលត្រូវបញ្ចូល / There is no record to save";
+							infoMessageAlert(msgTitle,msgDesc);
 							return false;
 						}
-						var rowId = $('#identity').val();
-						if(rowId==''){ 
-							alert("<?php echo $tr->translate('NO_RECORD_TO_SUBMIT');?>");
-							return false;
-						}
-						var txt;
-						var r = confirm("Are you sure to submit ?");
-						if(r == true){
-							 dijit.byId('save_new').set('disabled',true);
-							 loadingBlock();
-							 return true;
-						}else{
-							  return false;
-						}
+						var msgTitle = "អ្នកពិតជាចង់រក្សាទុកទីន្នន័យនេះឬ ? / Do you want to Save it ?";
+						var msgDesc = "សូមធ្វើការត្រួតពិនិត្យព័ត៌មានមុនពេលរក្សាទុក ! / Please checking information before saving !";
+						comfirmingSubmit('scoreForm',msgTitle,msgDesc);
+						return false;
+						
 					}else {
 						return false;
 					}
@@ -172,6 +163,7 @@
 							<div id="studentList">
 							</div>
 							<input type="hidden" name="identity" id="identity"  value="" >
+							<input type="hidden" dojoType="dijit.form.TextBox" name="indexKey" id="indexKey"  value="" >
 							<div class="form-group">
 								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
@@ -347,7 +339,7 @@ function filterStudent(){
 					parseContent: true,
 				});
 				
-				
+				calculateAverage();
 	       }else{
 		    	$('#identity').val('');
 	       }
@@ -398,8 +390,35 @@ function checkAllCaterial(index){
 			dijit.byId('score_'+arrays[i]+'_'+index).set("readOnly",false);
 		}
 	}
+	
 }
 
+var urlCalculateEverage= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'calculate-average')); ?>';
+function calculateAverage(indexKey=null){
+	dijit.byId('indexKey').attr('value',indexKey);
+	if(dijit.byId('scoreForm').validate()){
+		dojo.xhrPost({
+			url: urlCalculateEverage,
+			form: dojo.byId("scoreForm"),
+		   handleAs:"json", 
+		   load: function(data) {
+			   if(indexKey!=null){
+				   dijit.byId('average'+indexKey).attr('value',data);
+			   }else{
+				   var identity = $('#identity').val();
+					var arrays = identity.split(',');
+					for(var i=0;i<arrays.length;i++) {
+						keyRow = +arrays[i];
+						dijit.byId('average'+keyRow).attr('value',data[keyRow]);
+					}
+			   }
+			   
+		   },		
+			error: function(err) {
+			}
+		});
+	}	
+}
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

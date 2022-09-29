@@ -180,6 +180,104 @@
 .login-page .developing-box a.copyright {
 	color: #ffbd21;
 }
+@media screen and (max-width: 991px) {
+	.login-page .main-title p.titlepage {
+    font-size: 16px;
+    padding-bottom: 25px;
+}
+.login-page .loginBlog {
+    width: 40%;
+    position: relative;
+    padding: 0 10px;
+}
+.login-page .login-box {
+    width: 185px;
+    max-width: 300px;
+    border-radius: 5px;
+    position: relative;
+    margin: 0 auto;
+    height: auto;
+}
+.login-page p.login-title {
+    font-size: 16px;
+}
+.login-page .instruction-box {
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+}
+.login-page .instruction-box h3 {
+    font-size: 16px;
+    margin: 0;
+}
+.login-page p.instruction-note {
+    font-size: 10px;
+}
+.login-page .loginFormBlog {
+    width: 60%;
+    padding: 0 20px;
+}
+.login_wrapper.login-wrapper {
+    height: 350px;
+    max-width: initial;
+    right: auto;
+    margin: 0 auto;
+    display: block;
+    width: 100%;
+}
+.login_wrapper.login-wrapper .login-left {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    padding: 4px;
+    padding-bottom: 12px;
+}
+.login_wrapper.login-wrapper .login-left .gdt-name-kh {
+    margin-top: 5px;
+    font-size: 12px;
+}
+.login_wrapper.login-wrapper .login-left .gdt-name-en {
+    font-size: 10px;
+}
+.login_wrapper.login-wrapper .login-right {
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    margin: 0;
+    height: auto;
+    padding: 0 10px;
+    margin-top: -10px;
+}
+.login_wrapper.login-wrapper .login-right-wrapper {
+    height: 100%;
+    width: 100%;
+    display: block;
+    padding: 15px 0;
+}
+.loginTitle h4 {
+    font-family: 'Times New Roman' , 'Khmer OS Muol Light';
+    margin: 5px 0;
+    padding: 0;
+    color: #002f5a;
+    font-size: 12px;
+}
+.loginTitle small {
+    display: block;
+    color: #002f5a;
+    line-height: 16px;
+    font-size: 9px;
+}
+.login_wrapper.login-wrapper .login_content h1 {
+    font-family: 'Times New Roman' , 'Khmer OS Muol Light';
+    font-size: 10px;
+    margin: 0;
+}
+.login_content {
+
+    min-width: 0;
+}
+}
 /*==============================
 	END LoginPage
 ==============================*/

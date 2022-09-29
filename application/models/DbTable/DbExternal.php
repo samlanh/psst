@@ -535,11 +535,33 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName
 					,(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName
 					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-				FROM 
-					`rms_group_detail_student` AS sgh
-				WHERE 
+				
+				 "; 
+					
+		$sql.="";
+		$sql.="FROM 
+					`rms_group_detail_student` AS sgh";
+		
+		if(!empty($data['forScoreSubject'])){
+			$sql.="
+				LEFT JOIN rms_grading_total AS gradingTotal 
+					INNER JOIN `rms_grading` AS grading 
+					ON grading.id = gradingTotal.gradingId
+				ON gradingTotal.studentId = sgh.`stu_id` 
+				AND grading.groupId=sgh.`group_id` 
+				AND grading.subjectId=".$data['subjectId'];
+				$sql.="	AND grading.examType=".$data['examType'];
+				if($data['examType']==1){
+					$sql.=" AND grading.forMonth=".$data['forMonth'];
+				}else{
+					$sql.=" AND grading.forSemester=".$data['forSemester'];
+				}
+			
+			
+		}
+		$sql.=" WHERE 
 					sgh.itemType=1 
-					and sgh.`group_id` = ".$groupId; //AND sgh.stop_type=0
+					and sgh.`group_id` =".$groupId;//AND sgh.stop_type=0
 		$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 		if(!empty($data['sortStundent'])){
 			if($data['sortStundent']==1){
@@ -550,6 +572,10 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				$order=" ORDER BY (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 			}
 		}	
+		if(!empty($data['forScoreSubject'])){
+			$order=" ORDER BY gradingTotal.totalAverage DESC";
+		}
+		//echo $sql.$order;exit();
 		return $db->fetchAll($sql.$order);
 	}
 	

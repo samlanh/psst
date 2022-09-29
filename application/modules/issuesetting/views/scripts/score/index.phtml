@@ -1,0 +1,210 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("STUDENT_SCORE"));
+	$frm =  $this->form_search;
+	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
+	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
+	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
+?>	
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-sort-numeric-desc" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_SCORE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form  action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group"> 
+				    <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("adv_search");?></div>
+				    <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("branch_id");?></div>
+				    <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("academic_year");?></div>
+				    <div class="col-md-2 col-sm-2 col-xs-12"> <input id="group" /></div>
+				    <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("degree");?></div>
+				    <div class="col-md-2 col-sm-2 col-xs-12"> <input id="grade" /></div>
+			  </div>
+			  <div class="form-group"> 
+			  		<div class="col-md-2 col-sm-2 col-xs-12">
+			  			<?php echo $frm->getElement("exam_type");?>
+			    	</div>
+			    	<div class="col-md-2 col-sm-2 col-xs-12">
+			    		<?php echo $frm->getElement("for_semester");?>
+			    	</div>
+			    	<div class="col-md-2 col-sm-2 col-xs-12">
+			    		<?php echo $frm->getElement("for_month");?>
+			    	</div>
+			  		<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
+			 		<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div>
+					<div class="col-md-2 col-sm-2 col-xs-12"> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></div>
+				</div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dijit.form.DateTextBox");
+
+	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dojo.ready(function(){
+		
+		new dijit.form.FilteringSelect({
+			store: group_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                      
+			id: "group",
+			name: "group",  
+			class: 'fullside', 
+			readonly:false,
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+			onChange: function() {  
+				
+			}
+		}, "group");
+		
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "grade",
+			name: "grade",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			onChange: function() {  
+
+			}
+		}, "grade");
+		getallGrade();
+		
+		 var branch_id = dijit.byId('branch_id');
+		 branch_id.on('change', function(evt) {
+			 getAllGroup();
+		});
+		 getAllGroup();
+	});
+	var oldBranch = "<?php echo $this->search['branch_id']?>";
+	url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+	function getAllGroup(){
+		dijit.byId('group').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('group').set('store',group_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		degree = dijit.byId('degree').get('value');
+		if(degree=='' || degree==-1){
+			degree ="";
+		}
+		grade = dijit.byId('grade').get('value');
+		if(grade=='' || grade==-1){
+			grade ="";
+		}
+		dojo.xhrPost({
+			url: url_getallgroup,
+			content:{
+				'branch_id':branch_id,
+				'degree':degree,
+				'grade':grade,
+				'noaddnew':1
+			},
+			handleAs:"json",
+			load: function(data) {
+			    group_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('group').set('store',group_store);  
+			    <?php if (!empty($this->search['group'])){?>
+				dijit.byId('group').attr('value','<?php echo $this->search['group']?>');  
+				<?php }?> 
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id=='' || dept_id==-1){return false;}
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id,
+					'noaddnew':1
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('grade').attr('value','');
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store); 
+				    <?php if (!empty($this->search['grade'])){?>
+					dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+					<?php }?> 
+				},
+				error: function(err) {
+				}
+			});
+	}
+	
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="outstanding"){
+					url='<?php echo $urlOutStanding;?>';
+				}else if(key=="outstandingNophoto"){
+					url='<?php echo $urlOutStandingNoPhoto;?>';
+				}else if(key=="scoreresult"){
+					url='<?php echo $urlScoreResult;?>';
+				}else if(key=="scoredetail"){
+					url='<?php echo $urlScoreDetail;?>';
+				}
+				gotoAction();
+			},
+			items: {
+				"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
+				"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
+				"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
+				"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row, '_blank');
+	}
+	
+</script>

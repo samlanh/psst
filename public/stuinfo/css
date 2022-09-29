@@ -1,6 +1,6 @@
 /* khmer */
 @font-face {
-  font-family: 'Hanuman';
+  font-family: 'Khmer OS Battambang';
   font-style: normal;
   font-weight: 400;
   src: url(https://fonts.gstatic.com/s/hanuman/v22/VuJxdNvD15HhpJJBSKrdObFn.woff2) format('woff2');
@@ -8,7 +8,7 @@
 }
 /* latin */
 @font-face {
-  font-family: 'Hanuman';
+  font-family: 'Khmer OS Battambang';
   font-style: normal;
   font-weight: 400;
   src: url(https://fonts.gstatic.com/s/hanuman/v22/VuJxdNvD15HhpJJBSKHdOQ.woff2) format('woff2');

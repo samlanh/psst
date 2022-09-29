@@ -1,0 +1,102 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("STUDENT_ISSUE_HORNOR"));
+	$frm =  $this->frm;
+?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="material-icons-outlined">badge</i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_ISSUE_HORNOR');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("adv_search");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("branch_id");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input id="group" />
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('language_type');?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('status');?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+						<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.DateTextBox");
+
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: group_store,
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                      
+	    id: "group",
+	    name: "group",  
+	    class: 'fullside', 
+	    readonly:false,
+	    required:false,
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	    onChange: function() {  
+	    }
+	}, "group");
+	var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getCompleteGroup();
+	});
+	getCompleteGroup();
+}); 
+var oldBranch='<?php echo $this->search['branch_id'];?>';
+var url_getgroup = '<?php echo $this->url(array("module"=>"issue","controller"=>"index","action"=>"getgroupcomplete"));?>';										
+function getCompleteGroup(){
+	 dijit.byId('group').reset();  
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		 dijit.byId('group').set('store',group_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getgroup,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);  
+		    if(oldBranch == branch_id ){
+		    	 dijit.byId('group').set('value','<?php echo $this->search['group'];?>'); 
+		    }
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";s
+		}
+	});
+}
+</script>

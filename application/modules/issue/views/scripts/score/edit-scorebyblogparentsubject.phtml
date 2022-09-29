@@ -479,7 +479,7 @@ function getSubjectByGroup(){
 	dojo.xhrPost({
 	    url: url_getSubject,
 	    content : { 
-			'group':group,
+			'groupId':group,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {

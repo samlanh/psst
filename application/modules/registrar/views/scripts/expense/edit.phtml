@@ -146,7 +146,7 @@ table.collape tbody td {
 					<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
 						 iconClass="dijitIconSave"/>
 					<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
-						 iconClass="dijitIconNewTask"/>
+						class="button-class button-primary" iconClass="glyphicon glyphicon-print" />
                	</div>
              </div>
 		</form>
@@ -288,7 +288,7 @@ table.collape tbody td {
 		</div>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+		<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>

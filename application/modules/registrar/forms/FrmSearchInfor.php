@@ -402,7 +402,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
     		}
     	}
 		
-		
 		$_stu_code = new Zend_Dojo_Form_Element_FilteringSelect('stu_code');
 		$_stu_code->setAttribs(array(
 				'dojoType'=>$this->filter,

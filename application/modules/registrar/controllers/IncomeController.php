@@ -36,7 +36,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'studentName'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

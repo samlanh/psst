@@ -165,8 +165,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    				`rms_group` AS g 
    			WHERE 
    				g.`id`=s.`group_id` 
-   				AND s.status = 1 
-   				AND s.type_score=1 ";
+   				AND s.status = 1 ";
    		
    		$where='';
 	   	if(!empty($search['adv_search'])){
@@ -277,8 +276,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND g.`id` = s.`group_id`
 		   	AND sd.`is_parent`=1
 		   	AND s.`id`=sd.`score_id`
-		   	AND s.status = 1
-		   	AND s.type_score=1 ";
+		   	AND s.status = 1 ";
    	if (!empty($id)){
    		$sql.=" AND s.id = $id ";
    	}
@@ -394,8 +392,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	st.`stu_id`=sm.`student_id`
 		   	AND g.`id` = s.`group_id`
 		   	AND s.`id`=sm.`score_id`
-		   	AND s.status = 1
-		   	AND s.type_score=1 ";
+		   	AND s.status = 1 ";
    	
 	
 	// 	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
@@ -637,10 +634,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	AND g.`id`=s.`group_id`
 	   	AND sd.`is_parent`=1
 	   	AND s.status = 1
-	   	AND s.type_score=1
 	   	AND g.id= $group_id
-	   	AND sd.student_id=$student_id
-	   	AND s.exam_type=2 ";
+	   	AND sd.student_id=$student_id ";
    	$where='';
    	$order = " GROUP BY sd.subject_id ORDER BY s.for_semester ASC,sd.subject_id,s.for_academic_year,s.for_semester ASC ";
    	return $db->fetchAll($sql.$where.$order);
@@ -670,7 +665,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 					AND g.`id`=s.`group_id`
 				   	AND sd.`is_parent`=1
 				   	AND s.status = 1
-				   	AND s.type_score=1
 				   	AND g.id= $group_id
 				   	AND s.for_semester= $semester_id
 				   	AND sd.subject_id= $subject_id
@@ -702,7 +696,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				AND g.`id`=s.`group_id`
 			   	AND sd.`is_parent`=1
 			   	AND s.status = 1
-			   	AND s.type_score=1
 			   	AND g.id= $group_id
 			   	AND s.for_semester=$semester
 			   	AND sd.student_id= $student_id
@@ -758,7 +751,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		   	AND g.`id`=s.`group_id`
 		   	AND sd.`is_parent`=1
 		   	AND s.status = 1
-		   	AND s.type_score=1
 		   	AND g.id= $group_id
 		   	AND s.for_semester=$semester
 		   	AND sd.student_id=$student_id
@@ -781,7 +773,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 // 					   	AND s.`group_id`=$group_id
 // 					   	AND sd.`is_parent`=1
 // 					   	AND s.status = 1
-// 					   	AND s.type_score=1
+// 					   	
 // 					   	AND s.for_semester=$semester
 // 					   	AND s.exam_type=2
 // 				GROUP BY student_id 	
@@ -811,7 +803,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				AND g.`id`=s.`group_id`
 			   	AND sd.`is_parent`=1
 			   	AND s.status = 1
-			   	AND s.type_score=1
 			   	AND g.id=$group_id
 			   	AND s.for_semester= $semester_id
 			   	AND sd.student_id= $student_id
@@ -943,50 +934,12 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	$db = $this->getAdapter();
    	$sql= "SELECT COUNT(s.id) AS amount_weeklyscore
 	 FROM  	`rms_score` AS s 
-	 WHERE s.`group_id`=$group_id AND s.`type_score`=1 AND DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$monthly_score','%Y-%m')"; 
+	 WHERE s.`group_id`=$group_id  AND DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$monthly_score','%Y-%m')"; 
 //    	echo $sql;exit();
    	return $db->fetchOne($sql);
    }
    
-   function getMonthlyScoreInSemester($student_id,$group_id,$monthly_score){
-   	$db = $this->getAdapter();
-   	$sql="SELECT
-   		s.`group_id`, sd.`student_id`,sd.`subject_id`,sd.`score` AS score,DATE_FORMAT(s.`reportdate`,'%Y-%m') AS date,
-   		s.`type_score`,s.`reportdate`
-	 FROM  `rms_score_detail` AS sd,`rms_score` AS s
-	WHERE 
-	s.id=sd.`score_id` AND sd.`student_id`=$student_id AND s.`group_id`=$group_id
-	AND  DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$monthly_score','%Y-%m') ORDER BY s.`type_score`,sd.`subject_id` ASC";
-   	$result = $db->fetchAll($sql);
-   	$subject_id = 0;
-   	$weekly_score =0;
-   	$sumUpweeklytest=0;
-   	$month_test =0;
-   	$sumUpMonthlytest=0;
-   	$total_all =0;
-	   	foreach($result as $row){
-	   		$amount_test = $this->getAmountWeeklyscoreByGroup($row['group_id'], $row['reportdate']);
-	   		if ($row['type_score']==1){
-		   		if ($subject_id !=$row['subject_id']){
-		   			$weekly_score =0;
-		   		}
-		   		$weekly_score = ($row['score']*5)/($amount_test*10);
-		   		if ($row['subject_id']==9){
-		   			$weekly_score = ($row['score']*10)/($amount_test*10);
-		   		}
-		   		$sumUpweeklytest = $sumUpweeklytest+$weekly_score;
-	   		}else{
-	   			if ($subject_id !=$row['subject_id']){
-	   				$month_test =0;
-	   			}
-	   			$month_test = $month_test +$row['score'];
-	   			$sumUpMonthlytest = $sumUpMonthlytest +$month_test;
-	   		}
-	   		$subject_id =$row['subject_id'];
-	   	}
-	   	$total_all = $sumUpweeklytest+$sumUpMonthlytest;
-	   	return $total_all;
-   }
+   
    
    public function getStundentEnglishSemesterScore($search){ // for rpt-semester-evaluation
    	$db = $this->getAdapter();
@@ -1053,7 +1006,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`, (SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month, s.for_semester,
 	   	s.reportdate
 	   	FROM `rms_teacherscore` AS s, 
-   			`rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
+   			`rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 ";
    	$where='';
    	if(!empty($search['title'])){
    		$s_where=array();
@@ -1221,7 +1174,7 @@ function getExamByExamIdAndStudent($data){
     
     	AND s.`id`=sm.`score_id`
     	AND s.status = 1
-    	AND s.type_score=1
+    	
     	";
     	if (!empty($data['group_id'])){
     		$sql.=" AND gds.`group_id`=".$data['group_id'];
@@ -1272,7 +1225,6 @@ function getExamByExamIdAndStudent($data){
 					AND g.`id`=s.`group_id`
 					AND sd.`is_parent`=1
 					AND s.status = 1
-					AND s.type_score=1
 					AND s.exam_type=1
 					AND g.id= $group_id
 					AND sd.subject_id= $subject_id

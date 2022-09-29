@@ -614,7 +614,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	AND sd.student_id = sm.`student_id`
 			    	AND s.`id`=sm.`score_id`
 			    	AND s.status = 1
-			    	AND s.type_score=1
+			    	
 	    	";
 	    	if (!empty($score_id)){
 	    		$sql.=" AND s.`id`=".$score_id;
@@ -807,8 +807,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 // 	    	AND g.`id`=s.`group_id`
 // 	    	AND sd.`is_parent`=1
 // 	    	AND s.status = 1
-// 	    	AND s.type_score=1
-// 	    	AND s.exam_type=1
 // 	    	AND g.id= $group_id
 // 	    	AND sd.subject_id= $subject_id
 // 	    	AND sd.student_id= $stu_id
@@ -1693,7 +1691,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     
     	AND s.`id`=sm.`score_id`
     	AND s.status = 1
-    	AND s.type_score=1
+    	
     	";
     	if (!empty($data['group_id'])){
     		$sql.=" AND gds.`group_id`=".$data['group_id'];
@@ -1991,7 +1989,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    		AND g.`id` = s.`group_id`
 		    		AND s.`id`=sm.`score_id`
 		    		AND s.status = 1
-		    		AND s.type_score=1
+		    		
     			";
     	
 	    		if (!empty($id)){

@@ -221,4 +221,7 @@ class Api_IndexController extends Zend_Controller_Action
 	   	exit();
    	
    }
+   function jspdfAction(){
+   	
+   }
 }

@@ -1,0 +1,313 @@
+<?php 
+     $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
+     $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+     $frm = $this->frm;
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<style>
+.notShow{
+	display:none !important;
+}
+</style>
+<title><?php echo $this->tr->translate("ADD_METION_SETTING")?></title>
+ <div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-server" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_METION_SETTING');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">   
+	  			 if(this.validate()) {
+					academic_year = dijit.byId("academic_year").get('value');
+					if(academic_year=='' || academic_year==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR");?>");
+						dijit.byId("academic_year").focus();
+						return false;
+					}
+					var rowId = $('#identity').val();
+					if(rowId==''){ 
+						alert("<?php echo $tr->translate("PLEASE_ADD_METION_SETTING");?>");
+						return false;
+					}
+					checkMentionExisting();
+					if(validatecheck==1){
+						alert('<?php echo $tr->translate("This degree on this academic already exists");?>');
+						dijit.byId("degree").focus();
+						return false;
+					}
+					loadingBlock();
+					return true;
+	  			 }else {
+					return false;
+	   			}
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-server"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MENTION");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("academic_year");?>
+										</div>
+									 </div>
+									  <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="degree" />
+										</div>
+									 </div>
+									 <div class="form-group notShow">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("setting_type");?>
+										</div>
+									 </div>
+									 <div class="form-group notShow ">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="grade" />
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("title");?>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("note");?>
+										</div>
+									 </div>
+								 </div>
+							 </div>
+						 </div>
+					 </div>
+				</div>
+				<div class="col-md-8 col-sm-8 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-server"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MENTION");?></p>
+										</div> 
+									</div>
+									<div class="form-group mt-10">
+										<table class="collape responsiveTable">	
+											<thead>
+												<tr id="head-title" class="head-td" align="center"></tr>
+											</thead>
+											<tbody id="table_row" >
+											</tbody>
+										</table>
+										<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+									</div>
+									<div class="form-group mt-10">
+									<input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-sort-by-attributes" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button"  onclick="addRow();" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+	       	<div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button"  />
+					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button"  />
+               	</div>
+             </div>
+		</form>
+    </div>
+</div>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.NumberTextBox");
+    
+    var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+	dojo.ready(function(){ 
+		new dijit.form.FilteringSelect({
+			store: dept_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,
+			id: "degree",
+			name: "degree",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",   
+			onChange: function() {  
+				getallGrade();
+				//checkMentionExisting();
+			}        
+		}, "degree");
+
+		new dijit.form.FilteringSelect({
+			store: dept_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,
+			id: "grade",
+			name: "grade",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",   
+			onChange: function() {  
+				
+			}       
+		}, "grade");
+
+		
+		 var academic_year = dijit.byId('academic_year');
+		 academic_year.on('change', function(evt) {
+			 getAllDegreeByAcademicSchoolOption();
+	    });
+		addRow();
+	});
+
+	url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getdegree'));?>';
+	function getAllDegreeByAcademicSchoolOption(){
+		dijit.byId('degree').reset();
+		academic_year = dijit.byId('academic_year').get('value');
+		if(academic_year=='' || academic_year==-1){
+			var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('degree').set('store',dept_store);  
+			dijit.byId('academic_year').focus();
+			return false;
+		}
+		if(academic_year=='' || academic_year == -1){
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getdegree,
+			content:{
+				'academic_year':academic_year
+				},
+			handleAs:"json",
+			load: function(data) {
+				dept_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('degree').set('store',dept_store);   
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+	var col= 0; var no=0;
+	var title = 0;
+	function addRow() {
+		col++;no++;
+		template='';
+		temp = "";
+	
+		if(title!=1){
+			temp+='<th scope="col" width="2%" ><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th scope="col" width="2%"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("MAX_SCORE");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_GRADE");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_KHMER");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_ENG");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+		}
+			
+		template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+');" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+		template+='<td data-label="<?php echo $tr->translate("MAX_SCORE");?>" ><input required="required" dojoType="dijit.form.NumberTextBox" class="fullside" id="max_score'+col+'" name="max_score'+col+'" placeholder="'+'<?php echo $tr->translate("MAX_SCORE");?>" value="" type="text"  ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("METION_GRADE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_grade'+col+'" name="metion_grade'+col+'" placeholder="'+'<?php echo $tr->translate("METION_GRADE")." eg:A,B,C...";?> " value="" type="text"  ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("METION_IN_KHMER");?>" ><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_khmer'+col+'" name="metion_khmer'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_KHMER");?> eg:ល្អ,បង្គួរ..." value="" type="text"  ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("METION_IN_ENG");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." eg:Excellent,Good,Average... ";?> " value="" type="text"  ></td>';	
+		
+		tmp='<tr id="row'+col+'" class="rowData">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+	}
+	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id=='' || dept_id==-1){return false;}
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id,'noaddnew':1
+					},
+				handleAs:"json",
+				load: function(data){
+					dijit.byId('grade').attr('value','');
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store);   
+				},
+				error: function(err){
+				}
+			});
+	}
+	
+	var validatecheck=0;
+	url_check= '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'mentionsetting','action'=>'check-mention-existing'));?>';
+	function checkMentionExisting(){
+		academic_year = dijit.byId('academic_year').get('value');
+		degree = dijit.byId('degree').get('value');
+		if(academic_year=='' || academic_year==-1){
+			dijit.byId('academic_year').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_check,
+			content:{
+				'academic_year':academic_year,'degree':degree
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data==1){
+					validatecheck=1;
+					return false;
+				}else{
+					validatecheck=0
+				} 
+			},
+			error: function(err) {
+			}
+		});
+	}
+</script>

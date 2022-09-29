@@ -454,17 +454,22 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$results[$key]['stuEnName'] = $rs['stuEnName'];
 				$results[$key]['sex'] = $rs['sex'];
 				$results[$key]['sex'] = $rs['sex'];
+				
+				$data['studentId']=$rs['stu_id'];
+				// 						$data['subjectId']=$rsGroup['subject_id'];
+				$gradingScore = array();
 				if(!empty($resultSubject)){
 					foreach ($resultSubject as $index=> $rsGroup){
+						$data['subjectId']=$rsGroup['subject_id'];
+						$gradingScore[$index] =$this->getGradingScoreData($data);
 // 						$results[$key][$index]['subject'] = $rsGroup['sub_name'];
 // 						$results[$key][$index]['subject_id'] = $rsGroup['subject_id'];
 						
 						
-						$data['studentId']=$rs['stu_id'];
-// 						$data['subjectId']=$rsGroup['subject_id'];
-						$results[$key]['gradingScore'] = $this->getGradingScoreData($data);
+						
 					}
 				}
+				$results[$key]['gradingScore']=$gradingScore;
 			}
 		}
 // 		print_r($results);
@@ -695,12 +700,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$sql.=" AND gt.studentId = ".$data['studentId'];
 		}
 		$sql.=" ORDER BY gd.subjectId ASC ";
-		
-		return $this->getAdapter()->fetchAll($sql);
+		return $this->getAdapter()->fetchRow($sql);
 	}
-	
-	
-	
 }
-
-

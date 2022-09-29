@@ -83,9 +83,9 @@ class Issue_ScoreController extends Zend_Controller_Action {
 // 		$param = array(
 // 				'sortStundent'=>1,
 // 				'groupId'=>4,
-// 				'examType'=>1,
+// 				'examType'=>2,
 // 				'forSemester'=>1,
-// 				'forMonth'=>10
+// // 				'forMonth'=>9
 // 				);
 // 		$student = $db->getStudentByGroup(4,$param);
 // 		print_r($student);

@@ -49,6 +49,7 @@
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
 	
+	<link href="<?php echo $base_url;?>datatable/bootstrap-custome.css" media="screen" rel="stylesheet" type="text/css">
     <!-- Custom Theme Style -->
     <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
     <link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
@@ -85,48 +86,7 @@
 	</div>	
 	<div class="container body"<?php if(($module!='rsvacl' AND $controller!="useraccess" AND $action!="add") AND ($module!='home' AND $controller!="index" AND $action!="index")){?> style="display: none;" <?php }?>>
     	<div class="main_container">
-        	<div class="col-md-3 left_col ">
-          		<div class="left_col scroll-view">
-		            <div class="navbar nav_title">
-		              <a href="<?php echo $this->baseUrl()."/external/dashboard";?>" class="site_title"><span><img src="<?php echo $this->baseUrl()?>/images/cam-app-logo.png" alt="CAM APP TECHNOLOGY"></span></a>
-		            </div>
-            		<div class="clearfix"></div>
-            		<!-- sidebar menu -->
-					<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-					  <div class="menu_section">
-							<ul class="nav side-menu" style="">
-								<li >
-									<a href="<?php echo $this->baseUrl()."/external/dashboard";?>">
-										<i class="fa fa-home" aria-hidden="true"></i> <?php echo $tr->translate('DASHBOARD');?> 
-									</a>
-								 </li>
-								 <li>
-									<a href="<?php echo $this->baseUrl()."/external/group";?>">
-										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('GROUP_LIST');?> 
-									</a>
-								 </li>
-								 <li>
-									<a href="<?php echo $this->baseUrl()."/issuescore/";?>">
-										<i class="glyphicon glyphicon-tasks" aria-hidden="true"></i> <?php echo $tr->translate('SCORE');?> 
-									</a>
-								 </li>
-								  <li>
-									<a href="<?php echo $this->baseUrl()."/assessment/";?>">
-										<i class="glyphicon glyphicon-education" aria-hidden="true"></i> <?php echo $tr->translate('ASSESSMENT');?> 
-									</a>
-								 </li>
-								<li>
-									<a href="<?php echo $this->baseUrl()."/extreport/rpt-teaching-schedule";?>">
-										<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i> <?php echo $tr->translate('SCHEDULE');?> 
-									</a>
-								 </li>
-							</ul>
-					  </div>
-					</div>
-					<!-- sidebar menu -->
-            	</div>
-            </div>
-            <!-- top navigation -->
+			<!-- top navigation -->
 		        <div class="top_nav">
 		          	<div class="nav_menu">
 		            	<nav>
@@ -170,11 +130,54 @@
           			</div>
        			</div>
        		 <!-- /top navigation -->
+        	<div class="col-md-3 left_col ">
+          		<div class="left_col scroll-view">
+		            <div class="navbar nav_title">
+		              <a href="<?php echo $this->baseUrl()."/external/dashboard";?>" class="site_title"><span><img src="<?php echo $this->baseUrl()?>/images/cam-app-logo.png" alt="CAM APP TECHNOLOGY"></span></a>
+		            </div>
+            		<div class="clearfix"></div>
+            		<!-- sidebar menu -->
+					<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+					  <div class="menu_section">
+							<ul class="nav side-menu" style="">
+								<li >
+									<a href="<?php echo $this->baseUrl()."/external/dashboard";?>">
+										<i class="fa fa-home" aria-hidden="true"></i> <?php echo $tr->translate('DASHBOARD');?> 
+									</a>
+								 </li>
+								 <li>
+									<a href="<?php echo $this->baseUrl()."/external/group";?>">
+										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('GROUP_LIST');?> 
+									</a>
+								 </li>
+								 <li>
+									<a href="<?php echo $this->baseUrl()."/issuescore/";?>">
+										<i class="glyphicon glyphicon-tasks" aria-hidden="true"></i> <?php echo $tr->translate('SCORE');?> 
+									</a>
+								 </li>
+								  <li>
+									<a href="<?php echo $this->baseUrl()."/assessment/";?>">
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i> <?php echo $tr->translate('ASSESSMENT');?> 
+									</a>
+								 </li>
+								<li>
+									<a href="<?php echo $this->baseUrl()."/extreport/rpt-teaching-schedule";?>">
+										<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i> <?php echo $tr->translate('SCHEDULE');?> 
+									</a>
+								 </li>
+							</ul>
+					  </div>
+					</div>
+					<!-- sidebar menu -->
+            	</div>
+            </div>
+            
             <!-- page content -->
        		<div class="right_col" role="main" >
        		 	<div class="" >
 					<div style="clear:both;"></div>
 					<div class="main-container container-fluid">
+						<?php if($controller!='external' && $action!='dashboard' ){?>
 						<div class="breadcrumb-header justify-content-between"> 
 							<div class="left-content"> 
 								<span id="breadcrumbTitle" class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span> 
@@ -217,7 +220,7 @@
 							</div> 
 						</div>
 						
-						
+						<?php }?>
 					
 					
 					

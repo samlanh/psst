@@ -80,6 +80,15 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
+// 		$param = array(
+// 				'sortStundent'=>1,
+// 				'groupId'=>4,
+// 				'examType'=>1,
+// 				'forSemester'=>1,
+// 				'forMonth'=>10
+// 				);
+// 		$student = $db->getStudentByGroup(4,$param);
+// 		print_r($student);
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -153,7 +162,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbScore();
 			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
-			$data=$db->getStudentByGroup($data['group'],$data);
+			$data=$db->getStudentByGroup($data['groupId'],$data);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}
@@ -162,7 +171,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbScore();
-			$data=$db->getSubjectByGroup($data['group'],null,$data['exam_type']);
+			$data=$db->getSubjectByGroup($data['groupId'],null,$data['exam_type']);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

@@ -430,10 +430,48 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			}else if($data['sortStundent']==3){
 				$order=" ORDER BY (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 			}
-		}	
-		return $db->fetchAll($sql.$order);
+		}
+			
+		$studentResult =  $db->fetchAll($sql.$order);
+		if(!empty($data['groupId'])){
+			$groupId = $data['groupId'];
+			$this->getSubjectByGroup($data['groupId'],$teacher_id=null,$exam_type=1);
+		}
+		if(!empty($data['examType'])){
+			$examType = $data['examType'];
+		}
+		
+		$resultSubject = $this->getSubjectByGroup($data['groupId'],null,$examType);
+		$results = array();
+// 		print_r($studentResult);
+// 		echo "========<br />";
+		if(!empty($studentResult)){
+			foreach($studentResult as $key=>$rs){
+				$results[$key]['stu_id'] = $rs['stu_id'];
+				$results[$key]['stu_code'] = $rs['stu_code'];
+				$results[$key]['stu_name'] = $rs['stu_name'];
+				$results[$key]['stuKhName'] = $rs['stuKhName'];
+				$results[$key]['stuEnName'] = $rs['stuEnName'];
+				$results[$key]['sex'] = $rs['sex'];
+				$results[$key]['sex'] = $rs['sex'];
+				if(!empty($resultSubject)){
+					foreach ($resultSubject as $index=> $rsGroup){
+// 						$results[$key][$index]['subject'] = $rsGroup['sub_name'];
+// 						$results[$key][$index]['subject_id'] = $rsGroup['subject_id'];
+						
+						
+						$data['studentId']=$rs['stu_id'];
+// 						$data['subjectId']=$rsGroup['subject_id'];
+						$results[$key]['gradingScore'] = $this->getGradingScoreData($data);
+					}
+				}
+			}
+		}
+// 		print_r($results);
+// 		exit();
+		return $results ;
 	}
-	function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
+	function getSubjectByGroup($groupId,$teacher_id=null,$exam_type=1){
 		$db=$this->getAdapter();
 		
 			$dbgb = new Application_Model_DbTable_DbGlobal();
@@ -444,10 +482,11 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			}
 		$sql="SELECT 
 				gsjd.*,
+				gsjd.subject_id,
 				g.amount_subject AS amount_subjectdivide,
 				gsjd.max_score AS max_subjectscore,
 				(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
-				(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
+				(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 				(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
 				(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
 				(gsjd.amount_subject) amtsubject_month,
@@ -459,7 +498,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		 		rms_group as g
 			WHERE 
 				g.id = gsjd.group_id
-				and gsjd.group_id = ".$group_id;
+				and gsjd.group_id = ".$groupId;
 	
 			if($teacher_id!=null){
 				$sql.=" AND gsjd.teacher = ".$teacher_id;
@@ -469,7 +508,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			}else{//for semester
 				$sql.=" AND gsjd.amount_subject_sem >0 ";
 			}
-			$sql.=' ORDER BY gsjd.id ASC ';
+			$sql.=' ORDER BY gsjd.subject_id ASC ';
 			return $db->fetchAll($sql);
 	 	    
 	}
@@ -624,6 +663,40 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		AND sd.`subject_id` = $suj_id
 		AND sd.`student_id`= $student_id ORDER BY sd.subject_id ASC LIMIT 1";
 		return $db->fetchRow($sql);
+	}
+	function getGradingScoreData($data){
+		$sql="
+			SELECT 
+				gt.totalAverage 
+				FROM `rms_grading_total` gt,
+					`rms_grading` gd
+				 WHERE gd.id=gt.gradingId
+				 
+				";
+		if(!empty($data['groupId'])){
+			$sql.=" AND gd.groupId=".$data['groupId'];
+		}
+		
+		if(!empty($data['examType'])){
+			if($data['examType']==1){//month
+				if(!empty($data['forMonth'])){
+					$sql.=" AND gd.formonth= ".$data['forMonth'];
+				}
+			}
+			$sql.=" ANd gd.examType = ".$data['examType'];
+		}
+		if(!empty($data['forSemester'])){
+			$sql.=" AND gd.forSemester = ".$data['forSemester'];
+		}
+		if(!empty($data['subjectId'])){
+			$sql.=" AND gd.subjectId = ".$data['subjectId'];
+		}
+		if(!empty($data['studentId'])){
+			$sql.=" AND gt.studentId = ".$data['studentId'];
+		}
+		$sql.=" ORDER BY gd.subjectId ASC ";
+		
+		return $this->getAdapter()->fetchAll($sql);
 	}
 	
 	

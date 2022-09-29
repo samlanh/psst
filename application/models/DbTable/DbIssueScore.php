@@ -88,7 +88,26 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$order=" ORDER BY grd.id DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
-
+	function checkingDuplicate($_data){
+		$db = $this->getAdapter();
+		$sql=" SELECT grd.* ";
+		$sql.="FROM rms_grading As grd ";
+		$sql.=" WHERE grd.status =1 ";
+	//	$sql.=" AND grd.teacherId =".$this->getUserExternalId();
+		$sql.=" AND grd.groupId=".$_data['groupId'];
+		$sql.=" AND grd.subjectId=".$_data['subjectId'];
+		$sql.=" AND grd.examType=".$_data['examType'];
+		if($_data['examType']==1){
+			$sql.=" AND grd.forMonth=".$_data['forMonth'];
+		}else{
+			$sql.=" AND grd.forSemester=".$_data['forSemester'];
+		}
+		$row = $db->fetchRow($sql);
+		if(!empty($row)){
+			return 1;
+		}
+		return 0;
+	}
 	public function getSubjectScoreByID($id){
 	   	$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();

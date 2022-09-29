@@ -51,97 +51,144 @@
 			</script>
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_LOCATION");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select autoComplete='false' queryExpr="*${0}*"  name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-							   <?php 
-							    if(!empty($this->rsbranch)){
-							    foreach($this->rsbranch as $rs){?>
-							    	<option <?php if($result['from_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-							    <?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_LOCATION");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select autoComplete='false' queryExpr="*${0}*" name="to_location" id="to_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-							    <?php 
-							    if(!empty($this->rsbranch)){
-							   	 foreach($this->rsbranch as $rs){?>
-							    	<option <?php if($result['to_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-							    <?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TRANSFER_NUMBER");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
-										<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
-											<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
-											<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" >
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMARK");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="<?php echo $result['note'];?>" type="text"  >
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-						       <option value="1" <?php if($result['status']==1){echo "selected";}?> ><?php echo $tr->translate("ACTIVE");?></option>
-						       <option value="0" <?php if($result['status']==0){echo "selected";}?> ><?php echo $tr->translate("DEACTIVE");?></option>
-							</select>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-transfer" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TRANSFER_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+											</div>
+
+
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_LOCATION");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<select autoComplete='false' queryExpr="*${0}*"  name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+													<?php 
+														if(!empty($this->rsbranch)){
+														foreach($this->rsbranch as $rs){?>
+															<option <?php if($result['from_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_LOCATION");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<select autoComplete='false' queryExpr="*${0}*" name="to_location" id="to_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+														<?php 
+														if(!empty($this->rsbranch)){
+														foreach($this->rsbranch as $rs){?>
+															<option <?php if($result['to_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TRANSFER_NUMBER");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
+																<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
+																	<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
+																	<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" >
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMARK");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="<?php echo $result['note'];?>" type="text"  >
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+													<option value="1" <?php if($result['status']==1){echo "selected";}?> ><?php echo $tr->translate("ACTIVE");?></option>
+													<option value="0" <?php if($result['status']==0){echo "selected";}?> ><?php echo $tr->translate("DEACTIVE");?></option>
+													</select>
+											</div>
+											</div>
+
+										</div>
+									</div>
+							</div>
+					</div>
+			
+
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
-	            	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SELECT_PRODUCT");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select autoComplete='false' queryExpr="*${0}*" onchange="chcekcProductLocation();" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-									<option></option>
-									<?php 
-								    if(!empty($this->rsproduct)){
-								   	 foreach($this->rsproduct as $rs){?>
-								    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-								    <?php }}
-								  ?>
-							</select>
-	                   </div>
-	                   <div class="clearfix"></div>
-	                </div>
-	                <div class="form-group">
-	                	<table id="table_row" border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
-						</table>
-						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
-	                </div>
+					<div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-object-align-left" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRODUCT_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+											</div>
+
+
+											<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SELECT_PRODUCT");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select autoComplete='false' queryExpr="*${0}*" onchange="chcekcProductLocation();" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+																<option></option>
+																<?php 
+																if(!empty($this->rsproduct)){
+																foreach($this->rsproduct as $rs){?>
+																	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+																<?php }}
+															?>
+														</select>
+												</div>
+												<div class="clearfix"></div>
+												</div>
+												<div class="form-group">
+													<table id="table_row" border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+														<tr id="head-title" class="head-td" align="right"></tr>
+													</table>
+													<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
+												</div>
+
+										</div>
+									</div>
+							</div>
+					</div>
 	            </div>
 	       </div>
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="submit" value="save_new" id="save_new" name="save_close" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open"  />
                	</div>
              </div>  
 		</form>

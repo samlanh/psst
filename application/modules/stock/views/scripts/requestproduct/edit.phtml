@@ -32,64 +32,109 @@ label{font-weight: normal ;}
 			</script>
 			<div class="card-box">
 	             <div class="col-md-5 col-sm-5 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); getbranchinfo();">								
-								<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-										<option value="<?php echo $branch['id']?>" <?php if($row['branch_id']==$branch['id']) echo 'selected="selected"';?>><?php echo $branch['name'];?></option>
-								<?php }?> 
-							 </select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_DATE");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $row['request_date'];?>" type="text"/>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURPOSE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ><?php echo $row['purpose'];?></textarea>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">								
-								<option value="1" <?php if($row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE");?></option>
-								<option value="0" <?php if($row['status']==0) echo 'selected="selected"';?> ><?php echo $tr->translate("DEACTIVE");?></option>
-							</select>
-	                   </div>
-	                </div>
+					 <div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("REQUEST_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+											</div>
+											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); getbranchinfo();">								
+															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+																	<option value="<?php echo $branch['id']?>" <?php if($row['branch_id']==$branch['id']) echo 'selected="selected"';?>><?php echo $branch['name'];?></option>
+															<?php }?> 
+														</select>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_DATE");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $row['request_date'];?>" type="text"/>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURPOSE");?>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ><?php echo $row['purpose'];?></textarea>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">								
+															<option value="1" <?php if($row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE");?></option>
+															<option value="0" <?php if($row['status']==0) echo 'selected="selected"';?> ><?php echo $tr->translate("DEACTIVE");?></option>
+														</select>
+												</div>
+												</div>
+
+										</div>
+
+									</div>
+								</div>
+						</div>
+	
 	             </div>
 	             <div class="col-md-5 col-sm-5 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_NO");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $row['request_no'];?>" class="fullside" readOnly="true">
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_FOR");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="request_for"/>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FOR_SECTION");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="for_section"/>
-	                   </div>
-	                </div>
+						 <div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-export" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("REQUEST_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+											</div>
+
+											<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_NO");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $row['request_no'];?>" class="fullside" readOnly="true">
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REQUEST_FOR");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="request_for"/>
+											</div>
+											</div>
+											<div class="form-group">
+											<label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FOR_SECTION");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="for_section"/>
+											</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+						</div>
+					
 	             </div>
 	         </div>
 	         <div class="card-box">
@@ -117,9 +162,9 @@ label{font-weight: normal ;}
 	         <div class="card-box mt-20">
                	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('GO_EDIT');?>"  dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />								
+						 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />								
 					<input type="button" onclick='printSave();' label="<?php echo $tr->translate("PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
-						iconClass="dijitIconNewTask"/>
+						class="button-class button-primary" iconClass="glyphicon glyphicon-print"/>
                	</div>
              </div>
 		</form>

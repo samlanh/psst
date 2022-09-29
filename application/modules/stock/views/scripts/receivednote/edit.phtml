@@ -48,71 +48,107 @@
 			</script>
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("branch_id");?>
-	                   		<?php echo $frm->getElement("id");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIVED_NUMBER");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("receive_no");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TRANSFER_NUMBER");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="transfer_id" />
-	                   		<?php echo $frm->getElement("f_branch");?>
-	                   		<?php echo $frm->getElement("branch");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("receive_date");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("note");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("status");?>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+												<div class="d-flex "> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-import" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("RECIVE_INFO");?></p>
+													</div> 
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+												&nbsp;
+								
+												</div>
+
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("branch_id");?>
+														<?php echo $frm->getElement("id");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIVED_NUMBER");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("receive_no");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TRANSFER_NUMBER");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<input id="transfer_id" />
+														<?php echo $frm->getElement("f_branch");?>
+														<?php echo $frm->getElement("branch");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("receive_date");?>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("note");?>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("status");?>
+												</div>
+												</div>
+
+										</div>
+									</div>
+
+							</div>
+					</div>
+	
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
-	            	
-	                <div class="form-group">
-	                	<table  border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
-	                		<thead>
-	                			<tr id="head-title" class="head-td" align="center" style="height: 30px;"></tr>
-	                		</thead>
-	                		<tbody id="table_row">
-	                		</tbody>
-						</table>
-						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
-	                </div>
+					<div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											
+											<div class="form-group">
+												<table  border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+													<thead>
+														<tr id="head-title" class="head-td" align="center" style="height: 30px;"></tr>
+													</thead>
+													<tbody id="table_row">
+													</tbody>
+												</table>
+												<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
+											</div>
+
+										</div>
+								</div>
+							</div>
+					</div>
+  
+
 	            </div>
 	       </div>
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="submit" value="save_new" id="save_new" name="save_close" label="<?php echo $tr->translate("SAVE");?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
                	</div>
              </div>  
 		</form>

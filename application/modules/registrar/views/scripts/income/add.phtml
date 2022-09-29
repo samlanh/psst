@@ -125,7 +125,8 @@
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="bank_name" id="bank_name" required="false" class="fullside" dojoType="dijit.form.FilteringSelect" >
+	                   		<select placeHolder='<?php echo $tr->translate("SELECT_BANK");?>' name="bank_name" id="bank_name" required="false" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value=""></option>
 								<?php if(!empty($this->rs_bank)){foreach ($this->rs_bank as $rs_bank){?>
 									<option value="<?php echo $rs_bank['id'];?>"><?php echo $rs_bank['name'];?></option>
 								<?php }}?>
@@ -150,11 +151,11 @@
 	       </div>
 	       <div class="card-box">
                	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
-						<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="submit" dojoType="dijit.form.Button"
-							 iconClass="dijitIconNewTask"/>
-						<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="submit" dojoType="dijit.form.Button"
-							 iconClass="dijitIconNewTask"/>
-						<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button" iconClass="dijitIconNewTask"  onclick="cloneReceipt(); printReceipt('');"   />
+					<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="submit" dojoType="dijit.form.Button"
+						  class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" />
+					<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="submit" dojoType="dijit.form.Button"
+						 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" />
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-print" type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button" onclick="cloneReceipt(); printReceipt('');"   />
 	    		</div>
 	    	</div>
 		</form>
@@ -231,7 +232,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		if(branch_id=="" || branch_id==-1){
 			dijit.byId('invoice').attr('value','');
 			return false;
-		}
+		}lbl_for_date
 		dojo.xhrPost({
 			url:url_get_recceipt_number,
 			content:{
@@ -286,7 +287,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	}
 	function printReceipt(new_receipt){
 		if(dijit.byId('frm_add_tran').validate()) {
-		//////////////////////////////////// check validate ///////////////////////////////
 			branch = dijit.byId('branch_id').get('value')
 			if(branch=='' || branch==0){
 				alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
@@ -312,16 +312,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				dojo.byId("receipt_no").innerHTML = new_receipt;
 			}
 			symbal="$ ";
-			var d = dijit.byId("date").get('value');
 			
-			 if(d!=null){
-				 var day = d.getDate();
-				 var mon = d.toDateString().substr(4,3);
-				 var year = d.getFullYear();
-				 dojo.byId("lbl_for_date").innerHTML  = day+'/'+mon+'/'+year;
-			 }else{
-				 dojo.byId("lbl_for_date").innerHTML  = '';
-			 }
+			 dojo.byId("lbl_for_date").innerHTML  = dijit.byId("date").attr('displayedValue');
 			
 			dojo.byId("lbl_title_income").innerHTML = dijit.byId("title").get('value');
 			if(cate_income==0){
@@ -334,6 +326,9 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			}else{
 				dojo.byId("lbl_payment_method").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 			}
+			dojo.byId("lbl_branch").innerHTML = dijit.byId("branch_id").attr('displayedValue');
+			dojo.byId("lbl_student").innerHTML = dijit.byId("studentId").attr('displayedValue');
+			dojo.byId("lbl_bank").innerHTML = dijit.byId("bank_name").attr('displayedValue');
 			dojo.byId("lbl_total_amount").innerHTML = symbal+dijit.byId("total_income").get('value').toFixed(2);
 			dojo.byId("lbl_cheqe_no").innerHTML = dijit.byId("cheqe_no").get('value');
 			dojo.byId("lbl_description").innerHTML = dijit.byId("note").get('value');
@@ -451,7 +446,7 @@ function getbranchinfo(){
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+		<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 				 type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
 	</div>
 </div>

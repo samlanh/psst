@@ -60,7 +60,7 @@ table.tb-footer tr.style-head {
 					.hideblog{display: none;}
 					.hiddenblog{display: block !important;}
 					.style1:hover{ background: #ccc; }
-					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table tr td ul li{text-align: left;list-style: none;line-height: 25px; }
 					table { page-break-inside:auto }
 					tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
@@ -85,7 +85,7 @@ table.tb-footer tr.style-head {
 					table.content-data{
 						border-collapse:collapse;
 						border:1px solid #000; 
-						font-size:8px;
+						font-size:12px;
 					}
 					table.content-data thead tr.style {
 					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
@@ -146,10 +146,12 @@ table.tb-footer tr.style-head {
 									<tr class="style" align="center">
 										<td scope="col"><?php echo $tr->translate('N_O')?></td>
 										<td scope="col"><?php echo $tr->translate('BRANCH')?></td>
+										<td scope="col"><?php echo $tr->translate('STUDENT_NAME')?></td>
 										<td scope="col"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 										<td scope="col"><?php echo $tr->translate('INCOME_TITLE')?></td>
 										<td scope="col"><?php echo $tr->translate('RECEIPT_NO')?></td>
 										<td scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
+										<td scope="col"><?php echo $tr->translate('BANK_NAME')?></td>
 										<td scope="col"><?php echo $tr->translate('CHEQUE_NO')?></td>
 										<td scope="col"><?php echo $tr->translate('TOTAL')?></td>
 										<td scope="col"><?php echo $tr->translate('DATE')?></td>
@@ -159,19 +161,31 @@ table.tb-footer tr.style-head {
 								</thead>
 								
 							<?php $i=0; 
-								  $total_income = 0;
-							foreach ($this->row AS $row) { $i++;
+								$total_income = 0;
+								$bank = 0;
+								$cash=0;
+								$cheque=0;
+								if(!empty($this->row))foreach ($this->row AS $row) { $i++;
 								if ($row['status']==1){
+									if($row['payment_methodid']==1){//cash
+										$cash += $row['total_amount'];
+									}elseif($row['payment_methodid']==2){//bank
+										$bank += $row['total_amount'];
+									}else{
+										$cheque += $row['total_amount'];
+									}
 									$total_income = $total_income+$row['total_amount'];
 								}
 							?>
 								<tr   <?php if ($row['status']==0){?>  style="background: #ffd9d9;"<?php }?> class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;">
 									<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
 									<td data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $row['branch_name'];?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"><?php echo $row['studentName'];?></td>
 									<td data-label="<?php echo $tr->translate("INCOME_CATEGORY");?>"><?php echo $row['cate_income'];?></td>
 									<td data-label="<?php echo $tr->translate("INCOME_TITLE");?>"><?php echo $row['title'];?></td>
 									<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" align="center"><?php echo $row['invoice'];?></td>
 									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $row['payment_method'];?></td>	
+									<td data-label="<?php echo $tr->translate("BANK_NAME");?>"><?php echo $row['bank_name'];?></td>
 									<td data-label="<?php echo $tr->translate("CHEQUE_NO");?>"><?php echo $row['cheqe_no'];?></td>
 									<td data-label="<?php echo $tr->translate("TOTAL");?>" class="bold" align="right"><?php echo "$ ".number_format($row['total_amount'],2);?></td>
 									<td data-label="<?php echo $tr->translate("DATE");?>" align="center"><?php echo date('d-m-Y',strtotime($row['date']));?></td>
@@ -179,10 +193,15 @@ table.tb-footer tr.style-head {
 								</tr>
 							<?php }?>
 							<tr>
-								<td colspan="6" style="border: 1px solid #fff;border-top: 1px solid #000;"></td>
-								<td class="bold" colspan="4" align="right" style="border: 1px solid #fff;border-top: 1px solid #000;">
-								<?php echo $tr->translate('TOTAL')?>
-								$ <?php echo number_format($total_income,2);?></td>
+								<td colspan="6" style="border: 1px solid #fff;border-top: 1px solid #000;font-size: 14px;"></td>
+								<td class="bold" colspan="6" style="border: 1px solid #fff;border-top: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'">
+									<ul style="font-weight:bold;text-align: left;">
+										<li>សាច់ប្រាក់/Cash : $ <?php echo number_format($cash,2);?></li>
+										<li>ធនាគារ/Bank : $ <?php echo number_format($bank,2);?></li>
+										<li>សែក/Cheque : $ <?php echo number_format($cheque,2);?></li>
+										<li>សរុបរួម/Total : $ <u><?php echo number_format($total_income,2);?></u></li>
+									</ul>
+								</td>
 							</tr>	
 							</table>	
 						</td>

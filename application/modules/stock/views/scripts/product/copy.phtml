@@ -85,7 +85,7 @@ input.btn_borwse_image {
 				}
 			</script>
 			<div class="card-box">
-				<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-6 col-sm-6 col-xs-12">
 					<div class="card-blogform">
 								<div class="card-body"> 
 										<div class="row"> 
@@ -145,9 +145,38 @@ input.btn_borwse_image {
 														<?php echo $frm_items->getElement("cost");?>
 												</div>
 												</div>
+												
+
+											</div>
+										</div>
+								</div>
+					</div>
+			
+
+					
+		         </div>
+		         <div class="col-md-6 col-sm-6 col-xs-12">
+					 <div class="card-blogform">
+								<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+														<div class="settings-main-icon ">
+															<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("IMAGE");?></p>
+														</div> 
+													</div>
+													<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+									
+													</div>
+
 												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12" style=" vertical-align: top;"><?php echo $tr->translate("IMAGE");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12 text-center" >
+													<label class="control-label  col-md-2 col-sm-2 col-xs-12" style=" vertical-align: top;"><?php echo $tr->translate("IMAGE");?> </label>
+													<div class="col-md-6 col-sm-6 col-xs-12 text-center" >
 														<?php 
 														$images = $this->baseUrl().'/images/noimage.jpg';
 														if (!empty($this->row['images'])){
@@ -171,54 +200,7 @@ input.btn_borwse_image {
 													<div class="clearfix"></div>
 												</div>
 
-											</div>
-										</div>
-								</div>
-					</div>
-			
-
-					
-		         </div>
-		         <div class="col-md-8 col-sm-8 col-xs-12">
-					 <div class="card-blogform">
-								<div class="card-body"> 
-										<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12">
-
-												<div class="d-flex "> 
-													<div class="settings-main-icon ">
-														<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DETAIL_INFORMATION");?></p>
-													</div> 
-												</div>
-												<div class="col-md-12 col-sm-12 col-xs-12">
-												&nbsp;
-								
-												</div>
-
-												<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-												<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_LOCATION");?> </label>
-												<div class="col-md-5 col-sm-5 col-xs-12">
-														<input id="branch" />
-												</div>
-												<div class="clearfix"></div>
-												</div>
-												<div class="form-group">
-													<table id="table_row" border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc; white-space: nowrap;">
-														<tr id="head-title" class="head-td" align="right">
-															<th><?php echo $tr->translate("DEL");?></th>
-															<th><?php echo $tr->translate("N_O");?></th>
-															<th><?php echo $tr->translate("BRANCH");?></th>
-															<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>
-															<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>
-															<th><?php echo $tr->translate("QTY_WARNING");?><span class="required">*</span></th>
-															<th><?php echo $tr->translate("OTHER");?></th>
-														</tr>
-													</table>
-													<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
-												</div>
+										
 												<div class="form-group">
 													<label class="control-label  col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 												</div>

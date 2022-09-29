@@ -6,8 +6,6 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
 	$pageTitle = '<i class="glyphicon glyphicon-pencil"></i> '.$pageTitle;
-
-	
 	$current_month = date("m");
 	$row = $this->rs;
 ?>	
@@ -21,7 +19,7 @@
 				<h3 class="card-title mb-2 "><?php echo $row['branchName'].' "'.$tr->translate("GROUP")." ".$row['groupCode'].'"'?></h3> 
 			</div>
 			<div class="card-content collapse show mt-1">
-				<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<form id='scoreForm' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">   
 					if(this.validate()){
 						var identity = $('#identity').val();
@@ -172,6 +170,7 @@
 							<div id="studentList">
 							</div>
 							<input type="hidden" name="identity" id="identity"  value="" >
+							<input type="hidden" dojoType="dijit.form.TextBox" name="indexKey" id="indexKey"  value="" >
 							<div class="form-group">
 								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
@@ -398,8 +397,35 @@ function checkAllCaterial(index){
 			dijit.byId('score_'+arrays[i]+'_'+index).set("readOnly",false);
 		}
 	}
+	
 }
 
+var urlCalculateEverage= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'calculate-average')); ?>';
+function calculateAverage(indexKey=null){
+	dijit.byId('indexKey').attr('value',indexKey);
+	if(dijit.byId('scoreForm').validate()){
+		dojo.xhrPost({
+			url: urlCalculateEverage,
+			form: dojo.byId("scoreForm"),
+		   handleAs:"json", 
+		   load: function(data) {
+			   if(indexKey!=null){
+				   dijit.byId('average'+indexKey).attr('value',data);
+			   }else{
+				   var identity = $('#identity').val();
+					var arrays = identity.split(',');
+					for(var i=0;i<arrays.length;i++) {
+						keyRow = +arrays[i];
+						dijit.byId('average'+keyRow).attr('value',data[keyRow]);
+					}
+			   }
+			   
+		   },		
+			error: function(err) {
+			}
+		});
+	}	
+}
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

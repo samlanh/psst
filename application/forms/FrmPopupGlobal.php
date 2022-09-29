@@ -203,10 +203,26 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 						
 				.fonteng{font-size:16px;}
 				.one{white-space:nowrap;font-size:16px;}
-				.border{border:1px solid #000; min-width:220px}
+				.border{border:1px solid #000 !important; min-width:220px}
 				.heght-row {
 				    height: 38px;
 				}
+				.noted{
+					white-space: pre-wrap;
+					word-wrap: break-word;
+					word-break: break-all;
+					white-space: pre;
+					font:12px Khmer OS Battambang;
+					line-height:15px;
+					font-weight: normal !important;
+					padding:2px;
+					white-space: normal;
+					width:95%;
+				}
+				@page {
+					  size: A5 landscape;
+					  margin: 1cm 1cm 0 1cm;
+					}
 			</style>
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
 				<tr height="90px;">
@@ -232,12 +248,17 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					<td colspan="10" valign="top">
 						<table class="defaulheight" width="100%" border="0" style="font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".';font-size:12px; white-space:nowrap;margin-top:-5px;line-height: 20px;">
 							<tr class="heght-row">
+								<td class="one ">&nbsp;'.$tr->translate("BRANCH").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_branch"></span>&nbsp;</td>
 								<td class="one ">&nbsp;'.$tr->translate("RECEIPT_NO").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="receipt_no"></span>&nbsp;</td>
-								<td class="one " align="left">&nbsp;'.$tr->translate("FOR_DATE").'&nbsp;</td>
+							</tr>
+							<tr class="heght-row">
+								<td class="one " align="left">&nbsp;'.$tr->translate("STUDENT_NAME").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_student"></span>&nbsp;</td>
+								<td class="one " align="left">&nbsp;'.$tr->translate("PAID_DATE").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_for_date"></span>&nbsp;</td>
 							</tr>
-							
 							<tr class="heght-row">
 								<td class="one ">&nbsp;'.$tr->translate("INCOME_TITLE").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_title_income"></span>&nbsp;</td>
@@ -251,19 +272,22 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 								<td class="one " align="left">&nbsp;'.$tr->translate("TOTAL_INCOME").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_total_amount"></span>&nbsp;</td>
 							</tr>
-							
+							<tr class="heght-row">
+								<td class="one ">&nbsp;'.$tr->translate("BANK_NAME").'&nbsp;</td>
+								<td class="border values one">&nbsp;<span id="lbl_bank"></span>&nbsp;</td>
+								<td rowspan="2" class="one " align="left">&nbsp;'.$tr->translate("NOTE").'&nbsp;</td>
+								<td rowspan="2" class="one" style="font-size:10px;min-height:40px;border:1px solid #000;">&nbsp;<span class="noted" id="lbl_description"></span>&nbsp;</td>
+							</tr>
 							<tr class="heght-row">
 								<td class="one ">&nbsp;'.$tr->translate("NOTE_NUMBER").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_cheqe_no"></span>&nbsp;</td>
-								<td class="one " align="left">&nbsp;'.$tr->translate("NOTE").'&nbsp;</td>
-								<td class="border values one">&nbsp;<span id="lbl_description"></span>&nbsp;</td>
 							</tr>
 							
 							<tr style="font-size: 15px; font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';">
 								<td colspan="2" align="center" >អ្នកប្រគល់</td>
 								<td colspan="2" align="center">អ្នកទទួល</td>
 							</tr>
-							<tr style="font-size: 15px;">
+							<tr style="height:70px;">
 								<td colspan="4" align="center">&nbsp;</td>
 							</tr>
 							

@@ -152,6 +152,17 @@ class IssuescoreController extends Zend_Controller_Action
 		}
 	}
 	
+	function calculateAverageAction(){
+		
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbIssueScore();
+			$rs=$db->calculateAverage($data);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	
 	
 }
 

@@ -20,6 +20,11 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	}
     	$sql = "SELECT 
     				*,
+    				
+					(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
+											FROM rms_student AS s
+										   		WHERE s.stu_id=student_id LIMIT 1) AS studentName,
+					(SELECT bank_name FROM `rms_bank` b WHERE bank_id = b.id=bank_id LIMIT 1) AS bank_name,
     				 payment_method AS payment_methodid,
     				(SELECT $branch from rms_branch where br_id = branch_id LIMIT 1) as branch_name,
     				(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income, 

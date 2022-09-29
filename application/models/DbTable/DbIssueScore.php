@@ -678,7 +678,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$string.='<strong  >'.$maxSubjectScore.'</strong>';
 								if($rowCri['timeInput']>1){
 									$string.='<div class="custom-control custom-checkbox ">';
-											$string.='<input type="checkbox" class="checkbox custom-control-input" name="checkAll'.$x.$criterialId.'" id="checkAll'.$x.$criterialId.'" value="all" OnChange="checkAllCaterial('.$x.$criterialId.');"  >';
+											$string.='<input type="checkbox" class="checkbox custom-control-input" name="checkAll'.$x.$criterialId.'" id="checkAll'.$x.$criterialId.'" value="all" OnChange="checkAllCaterial('.$x.$criterialId.'); calculateAverage();"  >';
 											$string.='<label class="custom-control-label" for="checkAll'.$x.$criterialId.'">';
 												$string.='<small class="small-label">មិនបញ្ចូល<br />No Entry</small>';
 											$string.='</label>';
@@ -690,6 +690,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 						
 					$string.='</th>';
 					}
+					$string.='<th scope="col">មធ្យមភាគ<small class="lableEng" >Average</small></th>';
 					$string.='<th scope="col">សម្គាល់<small class="lableEng" >Remark</small></th>';
 					$string.='';
 			$string.='</tr>';
@@ -745,7 +746,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								
 								if(!empty($rsScore)) foreach($rsScore AS $score){ $indexSub++;
 									$string.='<div class="'.$classCol.'">';
-										$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+										$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
 									$string.='</div>';
 								}
 								
@@ -756,7 +757,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							$k=0;
 							if(!empty($rsScore)) foreach($rsScore AS $score){$k++;
 								$string.='<div class="'.$classCol.'">';
-									$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$k.$criterialId.'"  name="score_'.$keyIndex.'_'.$k.$criterialId.'" />';
+									$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$k.$criterialId.'"  name="score_'.$keyIndex.'_'.$k.$criterialId.'" />';
 								$string.='</div>';
 							}
 							$currentTimeInput = count($rsScore);
@@ -773,8 +774,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					$string.='</td>';
 				}
 					
-				
-				
+				$string.='<td data-label="មធ្យមភាគ/Average"><input readOnly dojoType="dijit.form.TextBox" class="fullside" id="average'.$keyIndex.'" name="average'.$keyIndex.'"  value="0" type="text" ></td>';
 				$string.='<td data-label="'.$tr->translate("NOTE").'"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
 				$string.='';
 			$string.='</tr>';
@@ -884,7 +884,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$string.='<strong  >'.$maxSubjectScore.'</strong>';
 								if($rowCri['timeInput']>1){
 									$string.='<div class="custom-control custom-checkbox ">';
-											$string.='<input type="checkbox" class="checkbox custom-control-input" name="checkAll'.$x.$criterialId.'" id="checkAll'.$x.$criterialId.'" value="all" OnChange="checkAllCaterial('.$x.$criterialId.');"  >';
+											$string.='<input type="checkbox" class="checkbox custom-control-input" name="checkAll'.$x.$criterialId.'" id="checkAll'.$x.$criterialId.'" value="all" OnChange="checkAllCaterial('.$x.$criterialId.'); calculateAverage();"  >';
 											$string.='<label class="custom-control-label" for="checkAll'.$x.$criterialId.'">';
 												$string.='<small class="small-label">មិនបញ្ចូល<br />No Entry</small>';
 											$string.='</label>';
@@ -896,7 +896,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 						
 					$string.='</th>';
 					}
+					$string.='<th scope="col">មធ្យមភាគ<small class="lableEng" >Average</small></th>';
 					$string.='<th scope="col">សម្គាល់<small class="lableEng" >Remark</small></th>';
+					
 					$string.='';
 			$string.='</tr>';
 		$string.='</thead>';
@@ -947,7 +949,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$indexSub=0;
 								foreach ($subCriterial as $subCriTitle){ $indexSub++;
 									$string.='<div class="'.$classCol.'">';
-										$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+										$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
 									$string.='</div>';
 								}
 							}
@@ -956,7 +958,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
 								
 								$string.='<div class="'.$classCol.'">';
-								$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+								$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
 								$string.='</div>';
 							}
 						}
@@ -965,8 +967,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				}
 					
 				
-				
-				$string.='<td data-label="'.$tr->translate("NOTE").'"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
+				$string.='<td data-label="មធ្យមភាគ/Average"><input readOnly dojoType="dijit.form.TextBox" class="fullside" id="average'.$keyIndex.'" name="average'.$keyIndex.'"  value="0" type="text" ></td>';
+				$string.='<td data-label="សម្គាល់/Remark"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
 				$string.='';
 			$string.='</tr>';
 			
@@ -1010,5 +1012,210 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	   return $arrContent;
    }
    
-   
+   public function calculateAverage($_data){
+		$db = $this->getAdapter();
+		
+		try{
+			$dbExternal = new Application_Model_DbTable_DbExternal();
+			
+			$subjectId = $_data['subjectId'];
+			$maxSubjectScore = $_data['maxSubjectScore'];
+			$gradingId = empty($_data['gradingId'])?0:$_data['gradingId'];
+			$arrSearch  = array(
+				'gradingId'=>$gradingId
+				,'subjectId'=>$subjectId
+			);
+			$criterial = $dbExternal->getGradingSystemDetail($arrSearch);
+			
+			if(!empty($_data['indexKey'])){
+				$i=$_data['indexKey'];
+				$totalScoreAverage = 0;
+				$criteriaAmount = count($criterial) ;
+				
+				if(!empty($criterial)) foreach($criterial AS $rowCri){
+						$criterialId=$rowCri['exam_typeid'];						
+						
+						$pecentageScore = $rowCri['pecentage_score'];
+						
+						
+						
+						if(!empty($rowCri['subjectId'])){
+							if(!empty($rowCri['subCriterialTitleKh'])){
+								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+								$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+								$subcriteriaAmount = count($subCriterial);
+								
+								$indexSub=0;
+								$titleSubCriterial="";
+								$titleSubCriteriaEng="";
+								
+								$totalGrading =0;
+								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+								
+									
+									if($subcriteriaAmount>1){
+										$titleSubCriterial = $subCriTitle;
+										$titleSubCriteriaEng = $subCriterialEng[$keyV];
+									}
+									
+									$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
+									
+									$totalGrading = $totalGrading+$score;
+									
+								}
+								
+								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+							
+								$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							}
+						}else{
+							$subcriteriaAmount=0;
+							$totalGrading =0;
+							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+								
+								if($rowCri['timeInput']>1){
+									if(empty($_data['checkAll'.$x.$criterialId])){
+										$subcriteriaAmount=$subcriteriaAmount+1;
+										
+										$score = $_data['score_'.$i.'_'.$x.$criterialId];
+										$totalGrading = $totalGrading+$score;
+									
+									}
+								}else{
+									$subcriteriaAmount = $rowCri['timeInput'];
+									$score = $_data['score_'.$i.'_'.$x.$criterialId];
+									$pecentageScore = $rowCri['pecentage_score'];
+									
+									
+									$totalGrading = $totalGrading+$score;
+						
+								
+								}
+								
+						
+								
+							}
+							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+							
+							$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							
+						}
+					
+					}
+					
+				return number_format($totalScoreAverage,2);
+			}else{
+				$oldIndexI=0;
+				$arrAverageOfIdentity = array();
+				if(!empty($_data['identity'])){
+					$ids = explode(',', $_data['identity']);
+					
+					$totalScoreAverage = 0;
+					$criteriaAmount = count($criterial) ;
+					if(!empty($ids))foreach ($ids as $i){
+						
+						if(!empty($criterial)) foreach($criterial AS $rowCri){
+							$criterialId=$rowCri['exam_typeid'];						
+							if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
+								
+								$arrAverageOfIdentity[$oldIndexI]=number_format($totalScoreAverage,2);
+								$totalScoreAverage = 0;
+							}
+							
+							$oldIndexI=$i;
+							$old_studentid=$_data['student_id'.$i];
+							
+							$pecentageScore = $rowCri['pecentage_score'];
+							if(!empty($rowCri['subjectId'])){
+								if(!empty($rowCri['subCriterialTitleKh'])){
+									$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+									$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+									$subcriteriaAmount = count($subCriterial);
+									
+									$indexSub=0;
+									$titleSubCriterial="";
+									$titleSubCriteriaEng="";
+									
+									$totalGrading =0;
+									foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+									
+										
+										if($subcriteriaAmount>1){
+											$titleSubCriterial = $subCriTitle;
+											$titleSubCriteriaEng = $subCriterialEng[$keyV];
+										}
+										
+										$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
+										
+										$totalGrading = $totalGrading+$score;
+										
+									
+									}
+									
+									$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+									$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+								
+									$totalScoreAverage = $totalScoreAverage+$totalGrading;
+								}
+							}else{
+								$subcriteriaAmount=0;
+								$totalGrading =0;
+								for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+									
+									if($rowCri['timeInput']>1){
+										if(empty($_data['checkAll'.$x.$criterialId])){
+											$subcriteriaAmount=$subcriteriaAmount+1;
+											
+											$score = $_data['score_'.$i.'_'.$x.$criterialId];
+											$totalGrading = $totalGrading+$score;
+											
+											
+										
+										}
+									}else{
+										$subcriteriaAmount = $rowCri['timeInput'];
+										$score = $_data['score_'.$i.'_'.$x.$criterialId];
+										$pecentageScore = $rowCri['pecentage_score'];
+										
+										
+										$totalGrading = $totalGrading+$score;
+										
+										
+									
+									}
+									
+							
+									
+								}
+								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+								
+								$totalScoreAverage = $totalScoreAverage+$totalGrading;
+								
+							}
+						
+						}
+						
+					}
+					
+					if(!empty($ids)){
+						if($totalScoreAverage>0){
+							$arrAverageOfIdentity[$oldIndexI]=$totalScoreAverage;
+						}
+					}
+				}
+			
+				return $arrAverageOfIdentity;
+			
+			}
+			
+		
+		 
+		}catch (Exception $e){
+			
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+   }
 }

@@ -190,7 +190,10 @@ body.externalTemplate .main_menu span.fa {
     color: #333;
 }
 body.externalTemplate .left_col.scroll-view .navbar.nav_title {
-    /* background: #009074; */
+	background: #0160ac;
+    box-shadow: 13px 0px 0px #0160ac;
+    border: none;
+    height: 52px;
 }
 
 body.externalTemplate .nav_menu {
@@ -231,6 +234,13 @@ body.externalTemplate  .panel_toolbox>li>a {
     color: #003193;
     font-size: 16px;
 }
+body.externalTemplate .container.body .col-md-3.left_col {
+    box-shadow: 1px 4px 5px #a09797;
+}
+body.externalTemplate  .container.body .right_col {
+    background: #ffffff;
+}
+
 
 body.externalTemplate .head-td {
     background: #f7f7f7;
@@ -256,7 +266,17 @@ body.externalTemplate tr.odd {
     margin-bottom: 20px;
 }
 
-
+.welcomeBox {
+    border-bottom: solid 2px #eee;
+}
+.card-header-welcome .card-title-welcome {
+    line-height: 32px;
+    margin: 0;
+    padding: 0;
+}
+.card-body-welcome {
+    color: #555;
+}
 .breadcrumb-header {
     display: flex;
     margin-top: 20px;
@@ -316,6 +336,14 @@ body.externalTemplate tr.odd {
     background-repeat: repeat-x;
 }
 
+.bg-gradient-directional-darkblue {
+    background-image: -webkit-linear-gradient(90deg,#082c62,#0651a4);
+    background-image: -moz-linear-gradient(90deg,#082c62,#0651a4);
+    background-image: -o-linear-gradient(90deg,#082c62,#0651a4);
+    background-image: linear-gradient(90deg,#082c62,#0651a4);
+    background-repeat: repeat-x;
+}
+
 .primary-custom-card1 {
     position: relative;
     display: flex;
@@ -364,7 +392,7 @@ body.externalTemplate tr.odd {
     content: "";
     width: 5px;
     height: 100%;
-    background: #009074;
+    background: #02014a;
     position: absolute;
     left: 0;
     display: block;
@@ -408,6 +436,15 @@ body.externalTemplate tr.odd {
 .card.border-top-5 {
     border-top-width: 5px!important;
 }
+
+
+.border-bottom-primary.border-bottom-darken-1 {
+    border-bottom: 1px solid #2f61ab!important;
+}
+.card.border-bottom-5 {
+    border-bottom-width: 5px!important;
+}
+
 .align-items-center{
 	align-items: center;
 }
@@ -445,7 +482,7 @@ body.externalTemplate tr.odd {
     background-color: rgba(255, 189, 90, 0.2) !important;
 }
 .text-primary {
-    color: #38cab3 !important;
+    color: #337ab7 !important;
 }
 .text-success {
     color: #24d5b8 !important;

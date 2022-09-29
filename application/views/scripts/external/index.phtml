@@ -48,7 +48,31 @@
     <link href="<?php echo $baseUrl;?>admin/build/css/custom.min.css" rel="stylesheet">
     <link href="<?php echo $baseUrl;?>admin/build/css/external-template.css" rel="stylesheet">
   </head>
-
+<style type="text/css">
+		.container {
+		    padding: 0;
+		    width: auto;
+		}
+		.fullside {
+		    width: 99%;
+		    height: 30px;
+		}
+		.dijitArrowButtonInner, .dijitIconSearch {
+		    margin-top: 6px !important;
+		}
+		.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
+		    height: 30px;
+		}
+		.login_wrapper.login-wrapper .login_content form .dijitValidationTextBoxError .dijitValidationIcon {
+			border: none !important;
+			box-shadow: none !important;
+			color: rgb(255 255 255 / 15%);
+			width: 16px !important;
+			margin: 0 !important;
+			border-radius: 0;
+		}
+		
+	</style>
   <body class="soria login">
     <div class="login-page">
 		<div class="main-title">

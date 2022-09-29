@@ -99,7 +99,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($arrCondiction['classTypeFilter'])){
 			if($arrCondiction['classTypeFilter']==1){
 				//Completed Class
-				$sql.=" AND g.is_pass =4 ";
+				$sql.=" AND g.is_pass NOT IN (0,2) ";
 			}elseif($arrCondiction['classTypeFilter']==2){
 				//Active Class
 				$sql.=" AND g.is_pass=2 ";
@@ -129,7 +129,11 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchName
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
 				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree
+				,(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
+				,(SELECT i.title_en FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitleEng
 				,(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade
+				,(SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
+				,(SELECT id.title_en FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitleEng
 				,(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
 				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `roomName`
 				,CASE
@@ -181,9 +185,23 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($search['is_pass']) AND $search['is_pass']>-1){
 			$where.=' AND g.is_pass='.$search['is_pass'];
 		}
+		
+		if(!empty($search['classTypeFilter'])){
+			if($search['classTypeFilter']==1){
+				//Completed Class
+				$where.=" AND g.is_pass NOT IN (0,2) ";
+			}elseif($search['classTypeFilter']==2){
+				//Active Class
+				$where.=" AND g.is_pass=2 ";
+			}
+		}
+		
 		$where.=' GROUP BY gsjb.group_id ';
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
-		
+		if(!empty($search['limitedRecord'])){
+			$search['limitedRecord'] = empty($search['limitedRecord'])?0:$search['limitedRecord'];
+			$order.=' LIMIT '.$search['limitedRecord'];
+		}
 		return $db->fetchAll($sql.$where.$order);
 	}
 	

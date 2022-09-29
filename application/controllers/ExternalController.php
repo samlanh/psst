@@ -83,6 +83,15 @@ class ExternalController extends Zend_Controller_Action
 		$arrFilter['classTypeFilter']=2;
 		$this->view->activeClass = $dbExternal->coutingClassByUser($arrFilter);
 		
+		
+		$search = array(
+			'limitedRecord'=>10
+		);
+		$search['classTypeFilter']=2;
+		$this->view->activeClassList = $dbExternal->getAllClassByUser($search);
+		$search['classTypeFilter']=1;
+		$this->view->completedClassList = $dbExternal->getAllClassByUser($search);
+		
 		$arrFilterI = array();
 		$date=date("Y-m-d"); 
 		//$date=date("Y-m-d",strtotime("2022-09-20")); 

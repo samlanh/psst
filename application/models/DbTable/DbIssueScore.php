@@ -1202,7 +1202,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					
 					if(!empty($ids)){
 						if($totalScoreAverage>0){
-							$arrAverageOfIdentity[$oldIndexI]=$totalScoreAverage;
+							$arrAverageOfIdentity[$oldIndexI]=number_format($totalScoreAverage,2);
 						}
 					}
 				}

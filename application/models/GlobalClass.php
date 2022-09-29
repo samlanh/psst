@@ -248,7 +248,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		
 		public function getHoursStudy(){
 			if(TIEM_IS_MANUAL==1){
-				$_dbTime = new Issue_Model_DbTable_DbTimeList();
+				$_dbTime = new Issuesetting_Model_DbTable_DbTimeList();
 				$rs = $_dbTime->getAllTimeListActive();
 				$hours="";
 				if(!empty($rs)) {

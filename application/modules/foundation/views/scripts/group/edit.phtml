@@ -929,7 +929,7 @@ function getDegreeInfo(){
 	});
 }
 function getAllGradingSetting(){
-	var urlGetGrading = '<?php echo $this->url(array("module"=>"issue","controller"=>"gradingsystem","action"=>"getallgrading"));?>';										
+	var urlGetGrading = '<?php echo $this->url(array("module"=>"issuesetting","controller"=>"gradingsystem","action"=>"getallgrading"));?>';										
 	dijit.byId('gradingId').reset();
 	branch_id=dijit.byId("branch_id").get("value");
     if(branch_id==-1 || branch_id==''){

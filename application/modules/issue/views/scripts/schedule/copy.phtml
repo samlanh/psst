@@ -309,7 +309,7 @@ function getAllAcademicByBranch(){
 		getAllYear(url_getacademic,contentData,selectedId);
 }
 
-var url_gettecher = '<?php echo $this->url(array("module"=>"issue","controller"=>"schedulesetting","action"=>"getschedulesetting"));?>';										
+var url_gettecher = '<?php echo $this->url(array("module"=>"issuesetting","controller"=>"schedulesetting","action"=>"getschedulesetting"));?>';										
 function getScheduleSettingByBranch(){
 	dijit.byId('schedule_setting').reset();
 	branch_id = dijit.byId('branch_id').get('value');
@@ -360,10 +360,10 @@ function getAllSchoreSettingDetail(){
 		dijit.byId('academic_year').focus();
 		return false;
 	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'issue','controller'=>'schedulesetting','action'=>'getschedulesettingdetail'));?>';
+	url_getgroup = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'schedulesetting','action'=>'getschedulesettingdetail'));?>';
 	if(oldScheduleSetting==schedule_setting){
 		loadingBlock();
-		url_getgroup = '<?php echo $this->url(array('module'=>'issue','controller'=>'schedulesetting','action'=>'getschedulesettingdetailedit'));?>';
+		url_getgroup = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'schedulesetting','action'=>'getschedulesettingdetailedit'));?>';
 	}
 	dojo.xhrPost({
 		url: url_getgroup,

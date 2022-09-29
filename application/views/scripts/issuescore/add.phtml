@@ -9,6 +9,7 @@
 
 	
 	$current_month = date("m");
+	$duplicateMessage = "ពិន្ទុមុខវិជ្ជានេះបានបញ្ចូលរួចរាល់ហើយ / This subject's score has been entered !"
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -18,11 +19,17 @@
 		<div class="card mb-1 ">
 			<div class="card-header pb-1"> 
 				<h3 class="card-title mb-2 "><?php echo $this->row['branch_name'].' "'.$tr->translate("GROUP")." ".$this->row['group_code'].'"'?></h3> 
+				
 			</div>
 			<div class="card-content collapse show mt-1">
-				<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<form id='scoreForm' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">   
 					if(this.validate()){
+						if(isDuplicate==1){
+							var htmlString = $( '.alert-text' ).html();
+							alert(htmlString);
+							return false;
+						}
 						var identity = $('#identity').val();
 						if(identity==''){
 							alert("There is no record to save");
@@ -87,7 +94,7 @@
 														</select>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
+														<select onChange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 																<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
 															<?php }}?>
@@ -130,6 +137,15 @@
 								  
 						  </div>
 						  <div class="col-md-6 col-sm-6 col-xs-12">
+								<div id="duplicateMessage" class="hidden alert round alert-secondary alert-icon-left alert-dismissible mb-3 " role="alert">
+									<span class="alert-icon">
+										<i class="glyphicon glyphicon-time text-dark"></i>
+									</span>
+									<span class="alert-text">
+										<?php echo $duplicateMessage;?>
+									</span>
+									
+								</div>
 								<div class="card-info bg-gradient-directional-primary">
 									<div class="card-content">
 										<div class="card-body">
@@ -164,6 +180,7 @@
 							<div id="studentList">
 							</div>
 							<input type="hidden" name="identity" id="identity"  value="" >
+							<input type="hidden" dojoType="dijit.form.TextBox" name="indexKey" id="indexKey"  value="" >
 							<div class="form-group">
 								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
@@ -213,7 +230,7 @@ span.titleSubCriterial {
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-
+var isDuplicate=0;
 $( document ).ready(function() {
    setPageTitle('<?php echo $pageTitle; ?>');
 });
@@ -283,7 +300,9 @@ function getSubjectInfo(){
 	   handleAs:"json", 
 	   load: function(data) {
 		   dijit.byId('maxSubjectScore').attr('value',data.maxSubjectscore);
+		  
 		   filterStudent();
+		    duplicationRecord();
 	   },		
 	    error: function(err) {
 	    }
@@ -372,6 +391,7 @@ function checkExamType(){
 	if(examType==2){
 		dijit.byId('forMonth').set("readOnly",true);
 	}
+	duplicationRecord();
 }
 
 
@@ -389,7 +409,80 @@ function checkAllCaterial(index){
 		}
 	}
 }
+var urlCalculateEverage= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'calculate-average')); ?>';
+function calculateAverage(indexKey=null){
+	dijit.byId('indexKey').attr('value',indexKey);
+	if(dijit.byId('scoreForm').validate()){
+		dojo.xhrPost({
+			url: urlCalculateEverage,
+			form: dojo.byId("scoreForm"),
+		   handleAs:"json", 
+		   load: function(data) {
+			   if(indexKey!=null){
+				   dijit.byId('average'+indexKey).attr('value',data);
+			   }else{
+				   var identity = $('#identity').val();
+					var arrays = identity.split(',');
+					for(var i=0;i<arrays.length;i++) {
+						keyRow = +arrays[i];
+						dijit.byId('average'+keyRow).attr('value',data[keyRow]);
+					}
+			   }
+			   
+		   },		
+			error: function(err) {
+			}
+		});
+	}	
+}
 
+
+
+var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'checking-duplicate')); ?>';
+function duplicationRecord(){
+	
+	
+	group = dijit.byId('group').get('value');
+	examType = dijit.byId('examType').get('value');
+	subjectId = dijit.byId('subjectId').get('value');
+	forSemester = dijit.byId('forSemester').get('value');
+	forMonth = dijit.byId('forMonth').get('value');
+	
+	if(group==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: urlDuplicationRecord,
+	    content : { 
+			'groupId':group
+			,'subjectId':subjectId
+			,'examType':examType
+			,'forSemester':forSemester
+			,'forMonth':forMonth
+			
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		 
+	       if(data==1){
+				isDuplicate=1;
+				var htmlString = $( '.alert-text' ).html();
+				alert(htmlString);
+				$( "#duplicateMessage" ).removeClass( "hidden" );
+	       }else{
+		    	isDuplicate=0;
+				$( "#duplicateMessage" ).addClass( "hidden" );
+
+	       }
+		  
+		   HideloadingBlock();	
+	   },		
+	    error: function(err) {
+			HideloadingBlock();
+	    }
+	});
+	
+}
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

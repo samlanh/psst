@@ -355,6 +355,10 @@ table.content-data tbody tr:hover {
     background: #eee;
     cursor: crosshair;
 }
+table#table tbody tr:hover {
+    border-bottom: solid 2px #7c8659;
+    background: #e5f2b6;
+}
 .justify-content-between {
     justify-content: space-between!important;
 }

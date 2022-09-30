@@ -43,6 +43,8 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			
+			
 			$_arr = array(
 					'branch_id'				=>$_data['branch_id'],
 					'title'					=>$_data['title'],
@@ -60,6 +62,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
+					$forExamType = empty($_data['forExamType'.$i])?1:2;
 					$arr=array(
 							'score_setting_id'		=>$id,
 							'exam_typeid'			=>$_data['examtype_name_'.$i],
@@ -71,6 +74,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 							'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
 							
 							'note'					=>$_data['note_'.$i],
+							'forExamType'			=>$forExamType,
 					);
 					$this->_name='rms_scoreengsettingdetail';
 					$this->insert($arr);
@@ -141,6 +145,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    		if(!empty($_data['identity'])){
    			$ids = explode(',', $_data['identity']);
    			if(!empty($ids))foreach ($ids as $i){
+				$forExamType = empty($_data['forExamType'.$i])?1:2;
    				if (!empty($_data['detailid'.$i])){
    					$arr=array(
 							'score_setting_id'		=>$id,
@@ -153,6 +158,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 							'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
 							
 							'note'					=>$_data['note_'.$i],
+							'forExamType'			=>$forExamType,
 					);
    					$this->_name='rms_scoreengsettingdetail';
    					$where = " id =".$_data['detailid'.$i];
@@ -169,6 +175,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 							'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
 							
 							'note'					=>$_data['note_'.$i],
+							'forExamType'			=>$forExamType,
 					);
 	   				$this->_name='rms_scoreengsettingdetail';
 	   				$this->insert($arr);

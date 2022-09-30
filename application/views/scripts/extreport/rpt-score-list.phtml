@@ -159,6 +159,17 @@
 							color:#002c7b;
 							list-style-type:none !important;
 						}
+						
+						ul.criterialNote {
+							padding: 0;
+							    margin: 0;
+							padding-left: 20px;
+							list-style: square;
+						}
+
+						ul.criterialNote li {
+							line-height: inherit;
+						}
 						@media print {
 							ul.printInfo {
 								position: absolute;
@@ -448,6 +459,23 @@
 										<?php } ?>
 									</table>
 									
+									<?php if(!empty($this->criterial)) { ?>
+									<table class="reportTotalStudent" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px; color:#4839bd;">
+										<tr>
+											<td>
+												<strong><u>ប្រព័ន្ធដាក់ពិន្ទុសិស្ស / Grading System ៖</u></strong>
+												<ul class="criterialNote">
+												<?php foreach($this->criterial as $criterial){ ?>
+													
+													<li>
+														<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng']." : <strong>".$criterial['pecentage_score']." %</strong>";?>
+													</li>
+												<?php } ?>
+												</ul>
+											</td>
+										</tr>
+									</table>
+									<?php } ?>
 									<?php 
 									$totalStudent = count($this->students);
 									if (!empty($this->students)){?>

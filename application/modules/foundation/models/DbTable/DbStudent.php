@@ -1063,8 +1063,29 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
     	$sql = "SELECT 
 		stu_id AS id, 
-			CONCAT(stu_khname,' ',  stu_code) AS name
+			CONCAT(stu_khname,'-',last_name,' ',stu_enname,'-',stu_code) AS name
 		 FROM `rms_student` WHERE branch_id = $branch_id ";
     	return $db->fetchAll($sql);
     }
+
+	function getStdyInfoById($stu_id){
+		$db = $this->getAdapter();
+		$sql = "SELECT *,	
+					(SELECT title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
+					(SELECT title FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gds.academic_year LIMIT 1) AS academic_year
+	
+		   FROM 
+			rms_student AS s,
+			rms_group_detail_student AS gds
+		WHERE 
+			gds.itemType=1 AND
+			s.stu_id = gds.stu_id
+			AND s.status=1 
+			AND gds.is_current =1
+			AND gds.is_maingrade =1
+			AND s.customer_type=1 
+			AND  s.stu_id=$stu_id ";
+		return $db->fetchRow($sql);
+	}
 }

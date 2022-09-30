@@ -350,6 +350,11 @@ body.externalTemplate .head-td {
 body.externalTemplate tr.odd {
     background: #f7f7f7;
 }
+
+table.content-data tbody tr:hover {
+    background: #eee;
+    cursor: crosshair;
+}
 .justify-content-between {
     justify-content: space-between!important;
 }

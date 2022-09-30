@@ -406,7 +406,7 @@ function checkAllCaterial(index){
 var urlCalculateEverage= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'calculate-average')); ?>';
 function calculateAverage(indexKey=null){
 	dijit.byId('indexKey').attr('value',indexKey);
-	if(dijit.byId('scoreForm').validate()){
+	//if(dijit.byId('scoreForm').validate()){
 		dojo.xhrPost({
 			url: urlCalculateEverage,
 			form: dojo.byId("scoreForm"),
@@ -427,7 +427,7 @@ function calculateAverage(indexKey=null){
 			error: function(err) {
 			}
 		});
-	}	
+	//}	
 }
 
 

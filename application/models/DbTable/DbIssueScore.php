@@ -644,7 +644,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	   
 	   $keyIndex = $data['keyIndex'];
 	   $maxSubjectScore = $data['maxSubjectScore'];
-	   $invalidesms = "rangeMessage:".$maxSubjectScore;
+	   $invalidesms = "rangeMessage: '"."ពិន្ទុធំបំផុតត្រឹម  ".$maxSubjectScore." / Maximum Score is ".$maxSubjectScore."'";
 	   
 	   $identity="";
 	   $arrClassCol = array(
@@ -850,7 +850,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	   
 	   $keyIndex = $data['keyIndex'];
 	   $maxSubjectScore = $data['maxSubjectScore'];
-	   $invalidesms = "rangeMessage:".$maxSubjectScore;
+	   $invalidesms = "rangeMessage: '"."ពិន្ទុធំបំផុតត្រឹម  ".$maxSubjectScore." / Maximum Score is ".$maxSubjectScore."'";
 	   
 	   $identity="";
 	   $arrClassCol = array(

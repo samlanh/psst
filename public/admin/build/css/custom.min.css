@@ -1521,6 +1521,9 @@ p.tx-20 {
 .icon-opacity {
     opacity: .5;
 }
+.icon-opacity2 {
+    opacity: 0.2;
+}
 .font-small-1{font-size:.7rem!important}
 .font-small-2{font-size:.8rem!important}
 .font-small-3{font-size:.9rem!important}

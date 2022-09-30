@@ -807,21 +807,21 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		
 		
 		$htmlGradingInfo='';
-				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-warning">';
+				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-notice">';
 					$htmlGradingInfo.='<div class="card-content">';
 						$htmlGradingInfo.='<div class="card-body">';
 							$htmlGradingInfo.='<div class="media d-flex">';
-								$htmlGradingInfo.='<div class="media-body text-white text-left align-self-bottom ">';
+								$htmlGradingInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 								
 									$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
-										$htmlGradingInfo.='<li class="opt-items titleEx">'.$tr->translate("GRADING_INFO").'</li>';
+										$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">'.$tr->translate("GRADING_INFO").'</h4></li>';
 										if(!empty($criterial)) foreach($criterial AS $rowCri){
 											$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
 										}
 									$htmlGradingInfo.='</ul>';
 								$htmlGradingInfo.='</div>';
 								$htmlGradingInfo.='<div class="align-self-top">';
-									$htmlGradingInfo.='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+									$htmlGradingInfo.='<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>';
 								$htmlGradingInfo.='</div>';
 							$htmlGradingInfo.='</div>';
 						$htmlGradingInfo.='</div>';
@@ -1000,21 +1000,21 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		
 		
 		$htmlGradingInfo='';
-				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-warning">';
+				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-notice">';
 					$htmlGradingInfo.='<div class="card-content">';
 						$htmlGradingInfo.='<div class="card-body">';
 							$htmlGradingInfo.='<div class="media d-flex">';
-								$htmlGradingInfo.='<div class="media-body text-white text-left align-self-bottom ">';
+								$htmlGradingInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 								
 									$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
-										$htmlGradingInfo.='<li class="opt-items titleEx">'.$tr->translate("GRADING_INFO").'</li>';
+										$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">'.$tr->translate("GRADING_INFO").'</h4></li>';
 										if(!empty($criterial)) foreach($criterial AS $rowCri){
 											$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
 										}
 									$htmlGradingInfo.='</ul>';
 								$htmlGradingInfo.='</div>';
 								$htmlGradingInfo.='<div class="align-self-top">';
-									$htmlGradingInfo.='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+									$htmlGradingInfo.='<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>';
 								$htmlGradingInfo.='</div>';
 							$htmlGradingInfo.='</div>';
 						$htmlGradingInfo.='</div>';

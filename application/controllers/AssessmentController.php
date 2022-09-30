@@ -161,7 +161,16 @@ class AssessmentController extends Zend_Controller_Action
 			exit();
 		}
 	}
-	
+	function checkingDuplicateAction(){
+		
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbAssessment();
+			$rs=$db->checkingDuplicate($data);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
 	
 	
 	

@@ -1056,4 +1056,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		return $db->fetchAll($sql);
 	}
+
+	
+	function getAllStudentBybranch($branch_id){
+    	$db = $this->getAdapter();
+		
+    	$sql = "SELECT 
+		stu_id AS id, 
+			CONCAT(stu_khname,' ',  stu_code) AS name
+		 FROM `rms_student` WHERE branch_id = $branch_id ";
+    	return $db->fetchAll($sql);
+    }
 }

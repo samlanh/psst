@@ -37,7 +37,6 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 						'date_input'=>date("Y-m-d"),
 						'note'=>$_data['note'],
 						'user_id'=>$this->getUserId(),
-						'type_score'=>1, // 1 => BacII score
 						'for_academic_year'=>$_data['year_study'],
 						'for_semester'=>$_data['for_semester'],
 						'for_month'=>$_data['for_month'],
@@ -500,7 +499,7 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name` ";
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 and s.score_option=2 ";
+		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 ";
 		
 		if (!empty($teacher_id)){
 			$sql.=" AND s.user_id=$teacher_id";
@@ -564,11 +563,10 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 						'date_input'	=>date("Y-m-d"),
 						'note'			=>$_data['note'],
 						'user_id'		=>$teacher_id,
-						'type_score'	=>1, // 1 => BacII score , 2 => Eng score
 						'for_academic_year'=>$_data['year_study'],
 						'for_semester'	=>$_data['for_semester'],
 						'for_month'		=>$_data['for_month'],
-						'score_option'	=>2, // 1=user input , 2=teacher input
+						
 				);
 				$id=$this->insert($_arr);
 			}
@@ -659,11 +657,10 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 					'date_input'	=>date("Y-m-d"),
 					'note'			=>$_data['note'],
 					'user_id'		=>$teacher_id,
-					'type_score'	=>1, // 1 => BacII score , 2 => Eng score
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'	=>$_data['for_semester'],
 					'for_month'		=>$_data['for_month'],
-					'score_option'	=>2, // 1=user input , 2=teacher input
+					
 			);
 			$where="id=".$_data['score_id'];
 			$this->update($_arr, $where);

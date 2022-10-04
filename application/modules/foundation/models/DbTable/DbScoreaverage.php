@@ -31,7 +31,6 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
-					'type_score'=>1, // 1 => BacII score
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],

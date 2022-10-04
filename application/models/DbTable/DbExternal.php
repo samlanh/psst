@@ -423,6 +423,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			WHERE s.score_setting_id=$gradingId 
 			AND s.subjectId =$subjectId
 		";
+		if(!empty($data['examType'])){
+			$sql.=" AND s.forExamType =".$data['examType'];
+		}
 		$row = $db->fetchRow($sql);
 		
 		$sql="
@@ -436,6 +439,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		";
 		if(!empty($row)){
 			$sql.=" AND s.exam_typeid !=".$row['exam_typeid'];
+		}
+		if(!empty($data['examType'])){
+			$sql.=" AND s.forExamType =".$data['examType'];
 		}
 		$db = $this->getAdapter();
 		$rRow = $db->fetchAll($sql);

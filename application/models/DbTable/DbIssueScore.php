@@ -90,6 +90,11 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	}
 	function checkingDuplicate($_data){
 		$db = $this->getAdapter();
+		
+		$_data['groupId'] = empty($_data['groupId'])?0:$_data['groupId'];
+		$_data['subjectId'] = empty($_data['subjectId'])?0:$_data['subjectId'];
+		$_data['examType'] = empty($_data['examType'])?0:$_data['examType'];
+		$_data['forMonth'] = empty($_data['forMonth'])?0:$_data['forMonth'];
 		$sql=" SELECT grd.* ";
 		$sql.="FROM rms_grading As grd ";
 		$sql.=" WHERE grd.status =1 ";
@@ -191,6 +196,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$arrSearch  = array(
 				'gradingId'=>$gradingId
 				,'subjectId'=>$subjectId
+				,'examType'=>$_data['examType']
 			);
 			$criterial = $dbExternal->getGradingSystemDetail($arrSearch);
 			
@@ -455,6 +461,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$arrSearch  = array(
 				'gradingId'=>$gradingId
 				,'subjectId'=>$subjectId
+				,'examType'=>$_data['examType']
 			);
 			$criterial = $dbExternal->getGradingSystemDetail($arrSearch);
 			
@@ -1040,9 +1047,11 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];
 			$gradingId = empty($_data['gradingId'])?0:$_data['gradingId'];
+			$examType = empty($_data['examType'])?1:2;
 			$arrSearch  = array(
 				'gradingId'=>$gradingId
 				,'subjectId'=>$subjectId
+				,'examType'=>$examType
 			);
 			$criterial = $dbExternal->getGradingSystemDetail($arrSearch);
 			

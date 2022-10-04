@@ -305,7 +305,6 @@ function getSubjectInfo(){
 
 var inx=0;
 
-var url_getStudent= '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-student')); ?>';
 var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'get-student')); ?>';
 function filterStudent(){
 	$('#identity').val('');
@@ -329,6 +328,7 @@ function filterStudent(){
 			'groupId':group
 			,'sortStundent':sortStundent
 			,'maxSubjectScore':maxSubjectScore
+			,'examType':examType
 			,'subjectId':subjectId
 			,'gradingId':gradingId
 			,'keyIndex':inx

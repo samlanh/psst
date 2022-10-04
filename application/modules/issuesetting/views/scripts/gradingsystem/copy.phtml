@@ -94,7 +94,7 @@
 								<tr id="head-title" class="head-td" align="center">
 									<th scope="col" width="35px"><?php echo $tr->translate("DEL");?></th>
 									<th scope="col" width="35px"><?php echo $tr->translate("N_O");?></th>
-									<th scope="col"><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
+									<th scope="col"><?php echo $tr->translate("CRITERIAL_NAME");?></th>
 									<th scope="col"><?php echo $tr->translate("PERCENTAGE");?></th>
 									<th scope="col"><?php echo $tr->translate("TIME_INPUT");?></th>
 									<th scope="col">
@@ -207,7 +207,15 @@
 			}
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>" >'+examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
+				template+='<td data-label="<?php echo $tr->translate("CRITERIAL_NAME");?>" >';			
+				template+=examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" />';			
+				template+='<div class="custom-control custom-checkbox ">';
+						template+='<input type="checkbox" class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
+						template+='<label class="custom-control-label" for="forExamType'+col+'" >';
+							template+='<?php echo $tr->translate('FOR_SEMESTER');?>';
+						template+='</label>';
+					template+='</div>';			
+				template+='</td>';
 				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>" > <input class="fullside" type="text" onKeyup="totalPercent()" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="1" /></td>';
 				template+='<td data-label="<?php echo $tr->translate("SUBJECT");?>" >';
@@ -249,7 +257,16 @@
 			}
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>"><?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['exam_typeid'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
+				template+='<td data-label="<?php echo $tr->translate("CRITERIAL_NAME");?>" >';			
+				template+='<?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['exam_typeid'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" />';			
+				template+='<div class="custom-control custom-checkbox ">';
+						template+='<input type="checkbox" <?php if($rs['forExamType']==2){ echo "checked";}?> class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
+						template+='<label class="custom-control-label" for="forExamType'+col+'" >';
+							template+='<?php echo $tr->translate('FOR_SEMESTER');?>';
+						template+='</label>';
+					template+='</div>';			
+				template+='</td>';
+				
 				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>"> <input class="fullside" type="text" onKeyup="totalPercent()" value="<?php echo $rs['pecentage_score'];?>" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				
 				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['timeInput'];?>" /></td>';

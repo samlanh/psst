@@ -37,10 +37,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
-					'type_score'=>1, // 1 => BacII score
 					'for_academic_year'=>$year_study,
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
+					'score_option'=>$_data['score_option'],
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
@@ -101,6 +101,21 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
+						
+						$where=" groupId=".$_data['group'];
+						$where.=" AND examType=".$_data['exam_type'];
+						$where.=" AND forSemester=".$_data['for_semester'];
+						if($_data['exam_type']==1){//formonth
+							$where.=" AND forMonth=".$_data['for_month'];
+						}
+						$where.=" AND subjectId=".$subject;
+						
+						$dataUpdate = array(
+								'isLock'=>1,
+								'lockBy'=>$this->getUserId()
+								);
+						$this->_name='rms_grading';
+						$this->update($dataUpdate, $where);;
 					}
 				}
 				
@@ -142,7 +157,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'date_input'=>date("Y-m-d"),
 				'note'=>$_data['note'],
 				'user_id'=>$this->getUserId(),
-				'type_score'=>1, 
 				'for_academic_year'=>$year_study,
 				'for_semester'=>$_data['for_semester'],
 				'for_month'=>$_data['for_month'],
@@ -291,7 +305,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		";
 		//s.max_score,
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id  and s.score_option=1 ";//AND s.status=1
+		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id ";//AND s.status=1
 		
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";

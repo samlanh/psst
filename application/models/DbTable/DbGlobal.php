@@ -267,8 +267,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	return $this->getAllItems(1,null);
 } 
-  
-
 
 function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
@@ -300,10 +298,10 @@ function getAllgroupStudyNotPass($action=null){
    
   
    public function getGlobalResultList($sql,$sql_count){
-   	$db = $this->getAdapter();
-   	$rows= $db->fetchAll($sql);
-   	$_count = count($db->fetchAll($sql_count));
-   	return array(0=>$rows,1=>$_count);
+	   	$db = $this->getAdapter();
+	   	$rows= $db->fetchAll($sql);
+	   	$_count = count($db->fetchAll($sql_count));
+	   	return array(0=>$rows,1=>$_count);
 //get all result by param 0 ,get count record by param1
    }
    
@@ -321,22 +319,7 @@ function getAllgroupStudyNotPass($action=null){
 	   if($id==null)return $rs; 
 	   return $rs[$id];
    }
-   
-   public function getAllDegreeStu($id=null){
-   	$rs = array(
-   			0=>$this->tr->translate("SELECT_DEGREE"),
-   			1=>$this->tr->translate("ASSOCIATE"),
-   			2=>$this->tr->translate("BACHELOR"),
-   			3=>$this->tr->translate('MASTER'),
-   			4=>$this->tr->translate('DOCTORATE'),
-   			5=>$this->tr->translate('English Program'),
-   			6=>$this->tr->translate('Computer Course'),
-   			7=>$this->tr->translate('Other')
-   	);
-   	if($id==null)return $rs;
-   	return $rs[$id];
-   }
-   
+
    public static  function getAllStatus($id=null){
 	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	   	$rs = array(
@@ -353,14 +336,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	if($id==null)return $rs;
 	   	return $rs[$id];
    }
-   public function AllStatusHour($id=null){
-	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	   	$rs = array(
-	   			1=>$tr->translate("FULL_TIME"),
-	   			0=>$tr->translate("PART_TIME"));
-	   	if($id==null)return $rs;
-	   	return $rs[$id];
-   }
+  
    public function AllStatusRe($id=null){
 	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	   	$rs = array(

@@ -60,7 +60,6 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 	public function addStudentAttendece($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{
 // 			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 // 			$branch_id = $session_user->branch_id;

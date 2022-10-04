@@ -31,6 +31,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.forType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.forType = 2 THEN grd.forSemester
@@ -106,6 +108,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.forType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.forType = 2 THEN grd.forSemester
@@ -258,7 +262,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 							$commentContentInfo.='<div class="media d-flex">';
 								$commentContentInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 									$commentContentInfo.='<ul class="optListRow gradingInfo">';
-										$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">'.$tr->translate("ASSESSMENT_INFO").'</h4></li>';
+										$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</h4></li>';
 	   $string='';
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
@@ -405,7 +409,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 							$commentContentInfo.='<div class="media d-flex">';
 								$commentContentInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 									$commentContentInfo.='<ul class="optListRow gradingInfo">';
-										$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">'.$tr->translate("ASSESSMENT_INFO").'</h4></li>';
+										$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</h4></li>';
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';

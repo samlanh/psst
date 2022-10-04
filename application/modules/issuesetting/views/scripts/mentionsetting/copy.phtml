@@ -164,7 +164,7 @@
 	});
 
 	olacademic_year = '<?php echo $this->row['academic_year'];?>';
-	url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getdegree'));?>';
+	url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegree'));?>';
 	function getAllDegreeByAcademicSchoolOption(){
 		dijit.byId('degree').reset();
 		academic_year = dijit.byId('academic_year').get('value');

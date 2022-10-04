@@ -77,8 +77,7 @@ class IssuescoreController extends Zend_Controller_Action
 			$this->_redirect("/external/group");
 		}
 	
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view-> month = $db->getAllMonth();
+		$this->view-> month = $dbExternal->getAllMonth();
 		
 	}
 
@@ -121,9 +120,8 @@ class IssuescoreController extends Zend_Controller_Action
 		$this->view->student= $db->getStudentSubjectSccoreforEdit($id);
 		
 		
-	
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view-> month = $db->getAllMonth();
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$this->view-> month = $dbExternal->getAllMonth();
 		
 	}
 	

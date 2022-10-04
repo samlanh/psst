@@ -32,6 +32,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.examType = 2 THEN grd.forSemester
@@ -60,7 +62,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]=" grd.titleScore LIKE '%{$s_search}%'";
 			$s_where[]=" (SELECT br.branch_namekh FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[]=" (SELECT br.branch_nameen FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[]=" grd.note LIKE '%{$s_search}%'";
@@ -132,6 +133,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.examType = 2 THEN grd.forSemester
@@ -171,7 +174,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'branchId'			=>$_data['branch_id'],
 					'groupId'			=>$_data['group'],
-					'titleScore'		=>$_data['title'],
 					'dateInput'			=>date("Y-m-d"),
 			        'examType'			=>$_data['examType'],
 					
@@ -426,7 +428,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'branchId'			=>$_data['branch_id'],
 					'groupId'			=>$_data['group'],
-					'titleScore'		=>$_data['title'],
 					'dateInput'			=>date("Y-m-d"),
 			        'examType'			=>$_data['examType'],
 					
@@ -821,7 +822,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$htmlGradingInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 								
 									$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
-										$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">'.$tr->translate("GRADING_INFO").'</h4></li>';
+										$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានប្រព័ន្ធដាក់ពិន្ទុ / Grading Info.</h4></li>';
 										if(!empty($criterial)) foreach($criterial AS $rowCri){
 											$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
 										}
@@ -1014,7 +1015,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$htmlGradingInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 								
 									$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
-										$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">'.$tr->translate("GRADING_INFO").'</h4></li>';
+										$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានប្រព័ន្ធដាក់ពិន្ទុ / Grading Info.</h4></li>';
 										if(!empty($criterial)) foreach($criterial AS $rowCri){
 											$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
 										}

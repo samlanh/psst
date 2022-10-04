@@ -20,7 +20,8 @@ fieldset{  background:none;}
     		</div>
     	</div>
     	<form id='suspend_service' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-			<script type="dojo/method" event="onSubmit">			
+			<script type="dojo/method" event="onSubmit">	
+						
 				if(this.validate()) {
  					stu_id=dijit.byId("stu_id").get('value');
 					if(stu_id=='' || stu_id==null){
@@ -102,7 +103,7 @@ fieldset{  background:none;}
 													<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
 												</div> 
 												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("សម្រង់ពិន្ទុសិស្ស");?></p>
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
 												</div> 
 											</div>
 											<div class="col-md-12 col-sm-12 col-xs-12">
@@ -144,10 +145,10 @@ fieldset{  background:none;}
 			 <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+               		<input type="button" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 					   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
-					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-					 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
+					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('PRINT');?>"  dojoType="dijit.form.Button" 
+					 class="button-class button-primary" iconClass="glyphicon glyphicon-print" />
                	</div>
              </div>
 		</form>
@@ -175,40 +176,28 @@ fieldset{  background:none;}
 			name: "stu_id",  
 			class: 'fullside',  
 			required:false,
-			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
+				
 				stu_id   = dijit.byId('stu_id').get('value');
 				branch_id= dijit.byId('branch').get('value');
-				if(stu_id==-1 || stu_id==''){
-					if(stu_id==-1){
-						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
-						}
+				if( stu_id==''){
+						alert("please select student name");
 					 return false;
 				}else{
 					var rowId = $('#identity').val();
 	    			if(rowId!=''){ 
 						var rowIDArray = rowId.split(',');
 						for(var n = 0; n < rowIDArray.length; n++){
-						var product_name = dijit.byId('product_name_'+rowIDArray[n]).get('value');
+						var student_name = dijit.byId('student_name_'+rowIDArray[n]).get('value');
 						var location_id = dijit.byId('branch_id_'+rowIDArray[n]).get('value');
-						if(product_name == stu_id && branch_id==location_id){
-							var num=dijit.byId("request_qty"+rowIDArray[n]).get("value");
-							var curr_qty=dijit.byId("curr_qty"+rowIDArray[n]).get("value");
-							  if(isNaN(num)){
-								  num=0;
-							  }
-							  if(curr_qty<=num){
-								  dijit.byId("request_qty"+rowIDArray[n]).attr("value",curr_qty);
-								  return false;
-							  }
-                            dijit.byId("request_qty"+rowIDArray[n]).attr("value",parseFloat(num)+1);
-                            getCurrQty(rowIDArray[n]);
-							return false;
-							}
+						
 						}
 					}
 					addRow();
+					
 				}
+			
 			}
 		}, "stu_id");
 	});	
@@ -237,33 +226,30 @@ function addRow() {
 		col++;no++;
 		template='';
 		if(title!=1){
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';
-			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("STUDENT_NAME");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("គណិត");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ភាសាខ្មែរ");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("រូបវិទ្យា");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("គីមីវិទ្យា");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ជីវៈវិទ្យា");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("អង់គ្លេស");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ពិន្ទុសរុប");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("មធ្យមភាគ");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("RANK");?></th>';
+			
+			temp+='<th rowspan="2"><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th rowspan="2"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th rowspan="2" id="lbl_titlemetion" width="100px"><?php echo $tr->translate("STUDENT_NAME");?></th>';
+			
+		
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("YEAR");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("LEVEL");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("GRADE");?></th>';
+			temp+='</tr>';
 			dojo.query("#head-title").append(temp);
+
 			title=1;
-		}
+		}  
+
 			template+='<td width="47px" align="center">	<i onclick="deleteRecord('+col+')" class="glyphicon glyphicon-trash" aria-hidden="true"></i></td>';
 			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
-			template+='<td width="20%">&nbsp;'+label_stuname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+stu_id+'" /></td>';
-			template+='<td width="100px"><input type="text" required="true" name="math'+col+'" id="math'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;"/></td>';
-			template+='<td width="100px"><input type="text" required="true" name="khmer'+col+'" id="khmer'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" required="true"  name="physic'+col+'" id="physic'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;"  /></td>';
-			template+='<td ><input type="text" required="true" name="chemistry'+col+'" id="chemistry'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td ><input type="text" required="true"  name="biology'+col+'" id="biology'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td ><input type="text"  required="true" name="english'+col+'" id="english'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td ><input type="text"   name="total'+col+'" id="total'+col+'" dojoType="dijit.form.TextBox" style="width:100%;"  readonly="true"/></td>';
-			template+='<td ><input type="text"   name="everage'+col+'" id="everage'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" readonly="true" /></td>';
-			template+='<td ><input type="text"  name="rank'+col+'" id="rank'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" readonly="true" /></td>';
+			template+='<td width="30%">&nbsp;'+label_stuname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="student_name_'+col+'" name="student_name_'+col+'" value="'+stu_id+'" /></td>';
+	
+			template+='<td width="100px"><input type="text" readonly="true" required="false"  name="year'+col+'" id="year'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" readonly="true" required="false"     name="level'+col+'" id="level'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" readonly="true" required="false"    name="grade'+col+'" id="grade'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:100%;"  /></td>';
+			
+			
 		tmp='<tr align="center" id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -282,8 +268,9 @@ function addRow() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		getQtyById(col);
+		getStuInfoById(col);
  }
+
 function deleteRecord(index) {
 
 		var identity = $('#identity').val();
@@ -311,7 +298,7 @@ function deleteRecord(index) {
 
 
 var stu_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_student_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'test','action'=>'get-pro-bylocation')); ?>';
+var url_student_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-student-bylocation')); ?>';
 function getStudentByBranch(){
 	    branch_id=dijit.byId("branch").get("value");
 	    if(branch_id=='' || branch_id==-1){
@@ -336,10 +323,31 @@ function getStudentByBranch(){
 			}
 		});
 }
-function getCurrQty(r){
-	curr_qty=dijit.byId("curr_qty"+r).get("value");
-	request_qty=dijit.byId("request_qty"+r).get("value");
-	var spacing_qty=parseFloat(curr_qty-request_qty);
-	dijit.byId("spacing_qty"+r).attr("value",spacing_qty);
+
+
+var url_stubyid = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-studentinfo-byid')); ?>';
+function getStuInfoById(index){
+	stu_id = dijit.byId('stu_id').get('value');
+
+		dojo.xhrPost({
+			url:url_stubyid,
+			content:{
+				'stu_id':stu_id,
+				},
+			handleAs:"json",
+			load: function(data) {
+				
+			dijit.byId('year'+index).attr("value",data.academic_year);     
+			dijit.byId('level'+index).attr("value",data.degree);
+			dijit.byId('grade'+index).attr("value",data.grade);
+			
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	
 }
+
+
 </script>

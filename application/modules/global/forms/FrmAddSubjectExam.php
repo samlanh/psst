@@ -59,7 +59,12 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 		$_status->setMultiOptions($_status_opt);
 		
 		$_type_subject=  new Zend_Dojo_Form_Element_FilteringSelect('type_subject');
-		$_type_subject->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_type_subject->setAttribs(
+			array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'onChange'=>'langOption()',
+			));
 		$_type_subject_opt = array(
 				1=>$this->tr->translate("STUDY_SUBJECT"),
 				2=>$this->tr->translate("NOT_STUDY_SUBJECT"));

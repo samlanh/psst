@@ -1,5 +1,5 @@
 <?php
-class Foundation_TestController extends Zend_Controller_Action {
+class Foundation_StudentcardController extends Zend_Controller_Action {
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -122,7 +122,7 @@ class Foundation_TestController extends Zend_Controller_Action {
     	}
     }
 	
-    function getProBylocationAction(){
+    function getStudentBylocationAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
 			$branch_id = $data['branch_id'];
@@ -131,11 +131,23 @@ class Foundation_TestController extends Zend_Controller_Action {
     		$db = new Foundation_Model_DbTable_DbStudent();
     		$rows= $db->getAllStudentBybranch($branch_id);
 			
-    		array_unshift($rows, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_STUDENT")));
+    		array_unshift($rows, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_STUDENT_NAME")));
     		print_r(Zend_Json::encode($rows));
     		exit();
     	}
     }
+	function getStudentinfoByidAction(){
+		if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+			$stu_id=$data['stu_id'];
+    		$db = new Foundation_Model_DbTable_DbStudent();
+    		$row= $db->getStdyInfoById($stu_id);
+    		print_r(Zend_Json::encode($row));
+    		exit();
+    	}
+
+
+	}
 	
 /*
 	

@@ -86,6 +86,7 @@ class ExtreportController extends Zend_Controller_Action
 		$arrSearch  = array(
 			'gradingId'=>$gradingId
 			,'subjectId'=>$subjectId
+			,'examType'=>$examType,
 		);
 		$this->view->criterial = $dbExternal->getGradingSystemDetail($arrSearch);
 			

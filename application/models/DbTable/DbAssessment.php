@@ -31,6 +31,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.forType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.forType = 2 THEN grd.forSemester
@@ -106,6 +108,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.forType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.forType = 2 THEN grd.forSemester
@@ -129,6 +133,28 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$sql.=' AND grd.teacherId='.$this->getUserExternalId();
 	   	$sql.="  LIMIT 1 ";
 	   	return $db->fetchRow($sql);
+	}
+	
+	function checkingDuplicate($_data){
+		$db = $this->getAdapter();
+		$sql=" SELECT grd.* ";
+		$sql.="FROM rms_studentassessment As grd ";
+		$sql.=" WHERE grd.status =1 ";
+		$sql.=" AND grd.groupId=".$_data['groupId'];
+		$sql.=" AND grd.forType=".$_data['examType'];
+		if($_data['examType']==1){
+			$sql.=" AND grd.forMonth=".$_data['forMonth'];
+		}else{
+			$sql.=" AND grd.forSemester=".$_data['forSemester'];
+		}
+		if(!empty($_data['currentId'])){
+			$sql.=" AND grd.id !=".$_data['currentId'];
+		}
+		$row = $db->fetchRow($sql);
+		if(!empty($row)){
+			return 1;
+		}
+		return 0;
 	}
 	
 	public function addStudentAssessment($_data){
@@ -230,13 +256,14 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	   );
 	   $commentContentInfo="";
 		$commentContentInfo='';
-				$commentContentInfo.='<div class="card-info bg-gradient-directional-warning">';
+				$commentContentInfo.='<div class="card-info bg-gradient-directional-notice">';
 					$commentContentInfo.='<div class="card-content">';
 						$commentContentInfo.='<div class="card-body">';
 							$commentContentInfo.='<div class="media d-flex">';
-								$commentContentInfo.='<div class="media-body text-white text-left align-self-bottom ">';
+								$commentContentInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 									$commentContentInfo.='<ul class="optListRow gradingInfo">';
-										$commentContentInfo.='<li class="opt-items titleEx">'.$tr->translate("ASSESSMENT_INFO").'</li>';
+										$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</h4></li>';
+	   $string='';
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';
@@ -256,7 +283,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 									$commentContentInfo.='</ul>';
 								$commentContentInfo.='</div>';
 							$commentContentInfo.='<div class="align-self-top">';
-						$commentContentInfo.='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+						$commentContentInfo.='<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>';
 					$commentContentInfo.='</div>';
 				$commentContentInfo.='</div>';
 			$commentContentInfo.='</div>';
@@ -376,13 +403,13 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	   );
 	   $commentContentInfo="";
 		$commentContentInfo='';
-				$commentContentInfo.='<div class="card-info bg-gradient-directional-warning">';
+				$commentContentInfo.='<div class="card-info bg-gradient-directional-notice">';
 					$commentContentInfo.='<div class="card-content">';
 						$commentContentInfo.='<div class="card-body">';
 							$commentContentInfo.='<div class="media d-flex">';
-								$commentContentInfo.='<div class="media-body text-white text-left align-self-bottom ">';
+								$commentContentInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
 									$commentContentInfo.='<ul class="optListRow gradingInfo">';
-										$commentContentInfo.='<li class="opt-items titleEx">'.$tr->translate("ASSESSMENT_INFO").'</li>';
+										$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</h4></li>';
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';
@@ -402,7 +429,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 									$commentContentInfo.='</ul>';
 								$commentContentInfo.='</div>';
 							$commentContentInfo.='<div class="align-self-top">';
-						$commentContentInfo.='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
+						$commentContentInfo.='<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>';
 					$commentContentInfo.='</div>';
 				$commentContentInfo.='</div>';
 			$commentContentInfo.='</div>';

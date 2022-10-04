@@ -81,6 +81,25 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		return  $this->update($_user_data,$where);
 	}
 	
+	function getAllMonth(){
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$month = "month_kh";
+		}else{ // English
+			$month = "month_en";
+		}
+		$sql="SELECT 
+				id 
+				,month_kh AS month_kh 
+				,month_en AS month_en 
+				,$month AS name 
+			FROM rms_month 
+			WHERE status=1 ";
+		return $db->fetchAll($sql);
+	}
+	
 	function coutingClassByUser($arrCondiction=array()){
 		$db = $this->getAdapter();
 		$sql="
@@ -127,6 +146,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			SELECT 
 				g.*
 				,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchName
+				,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
+				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
 				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree
 				,(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
@@ -224,6 +245,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				   	`g`.*
 				   	
 				   	,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name
+					,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
+					,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
 				   	,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS school_nameen
 					,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_logo
 				   	
@@ -344,6 +367,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					 g.gd_id
 					,gr.branch_id AS branchId
 					,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name
+					,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = gr.branch_id LIMIT 1) AS branchNameKh
+					,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = gr.branch_id LIMIT 1) AS branchNameEn
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle
 					,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo
 					,g.`group_id` AS `group_id`
@@ -423,6 +448,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			WHERE s.score_setting_id=$gradingId 
 			AND s.subjectId =$subjectId
 		";
+		if(!empty($data['examType'])){
+			$sql.=" AND s.forExamType =".$data['examType'];
+		}
 		$row = $db->fetchRow($sql);
 		
 		$sql="
@@ -436,6 +464,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		";
 		if(!empty($row)){
 			$sql.=" AND s.exam_typeid !=".$row['exam_typeid'];
+		}
+		if(!empty($data['examType'])){
+			$sql.=" AND s.forExamType =".$data['examType'];
 		}
 		$db = $this->getAdapter();
 		$rRow = $db->fetchAll($sql);
@@ -467,6 +498,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
 				,CASE
 					WHEN grd.examType = 2 THEN grd.forSemester
@@ -645,6 +678,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			,(SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.to_hour LIMIT 1) AS toHourTitle
 			
 			,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchName
+			,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
+			,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameEn
 			,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
 			,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchLogo
 			

@@ -49,6 +49,9 @@
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
 	
+	<script src="<?php echo $this->baseUrl()?>/admin/sweetalert2/sweetalert2.min.js"></script>
+	<link rel="stylesheet" href="<?php echo $this->baseUrl()?>/admin/sweetalert2/sweetalert2.min.css">
+	
 	<link href="<?php echo $base_url;?>datatable/bootstrap-custome.css" media="screen" rel="stylesheet" type="text/css">
     <!-- Custom Theme Style -->
     <link href="<?php echo $base_url;?>admin/build/css/custom.min.css" rel="stylesheet">
@@ -142,12 +145,12 @@
 							<ul class="nav side-menu" style="">
 								<li >
 									<a href="<?php echo $this->baseUrl()."/external/dashboard";?>">
-										<i class="fa fa-home" aria-hidden="true"></i> <?php echo $tr->translate('DASHBOARD');?> 
+										<i class="fa fa-home" aria-hidden="true"></i> <?php echo $tr->translate('HOMEPAGE');?> 
 									</a>
 								 </li>
 								 <li>
 									<a href="<?php echo $this->baseUrl()."/external/group";?>">
-										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('GROUP_LIST');?> 
+										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('CLASS_LIST');?> 
 									</a>
 								 </li>
 								 <li>
@@ -157,12 +160,12 @@
 								 </li>
 								  <li>
 									<a href="<?php echo $this->baseUrl()."/assessment/";?>">
-										<i class="glyphicon glyphicon-education" aria-hidden="true"></i> <?php echo $tr->translate('ASSESSMENT');?> 
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i> <?php echo $tr->translate('STUDENT_ASSESSMENT');?> 
 									</a>
 								 </li>
 								<li>
 									<a href="<?php echo $this->baseUrl()."/extreport/rpt-teaching-schedule";?>">
-										<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i> <?php echo $tr->translate('SCHEDULE');?> 
+										<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i> <?php echo $tr->translate('TEACHING_SCHEDULE');?> 
 									</a>
 								 </li>
 							</ul>

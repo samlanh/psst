@@ -69,6 +69,20 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 				1=>$this->tr->translate("STUDY_SUBJECT"),
 				2=>$this->tr->translate("NOT_STUDY_SUBJECT"));
 		$_type_subject->setMultiOptions($_type_subject_opt);
+
+		$_subject_lang=  new Zend_Dojo_Form_Element_FilteringSelect('subject_lang');
+		$_subject_lang->setAttribs(
+			array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				
+			));
+		$_subject_lang_opt = array(
+				0=>$this->tr->translate("PLEASE_SELECT"),
+				1=>$this->tr->translate("STUDY_IN_KHMER"),
+				2=>$this->tr->translate("STUDY_IN_ENGLISH"));
+		$_subject_lang->setMultiOptions($_subject_lang_opt);
+
 		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
@@ -85,11 +99,12 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 			$_status->setValue($data['status']);
 			$_schoolOption->setValue($data['schoolOption']);
 			$_type_subject->setValue($data['type_subject']);
+			$_subject_lang->setValue($data['subject_lang']);
 			//$_parent->setValue($data['parent']);
 			
 			$id->setValue($data["id"]);
 		}
-		$this->addElements(array($id,$_type_subject,$_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption));
+		$this->addElements(array($id,$_type_subject,$_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption,$_subject_lang));
 		
 		return $this;
 		

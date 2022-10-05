@@ -1067,7 +1067,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		 FROM `rms_student` WHERE branch_id = $branch_id ";
     	return $db->fetchAll($sql);
     }
-
 	function getStdyInfoById($stu_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT *,	

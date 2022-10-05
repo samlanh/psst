@@ -100,17 +100,14 @@ span#message {
 											<?php echo $subject_exam->getElement('type_subject');?>
 										</div>
 									 </div>
+
 									 <div class="form-group">
-										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_LEARNT_IN");?> </label>
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_STUDY_IN");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-											<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="subject_lang" name="subject_lang" type="text" >								
-														<option value="" ><?php echo $tr->translate("CHOOSE_LANGUAGE");?></option>	
-														<option value="1" ><?php echo $tr->translate("LEARNT_IN_KHMER");?></option>
-														<option value="2" ><?php echo $tr->translate("LEARNT_IN_ENGLISH");?></option>
-															
-											</select>
+											<?php echo $subject_exam->getElement('subject_lang');?>
 										</div>
 									 </div>
+									 
 									 <div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHOOL_OPTION");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -202,12 +199,15 @@ function checkDuplicateRecord(){
 function langOption(){
 	type_sub = dijit.byId('type_subject').get('value');
 	if(type_sub == 2){
+		
+		dijit.byId("subject_lang").set('value','0');
 		dijit.byId("subject_lang").set('readOnly',true);
-		dijit.byId('subject_lang').set('disabled',true);  
 
 	}else{
 		dijit.byId("subject_lang").set('readOnly',false);
-		dijit.byId('subject_lang').set('disabled',false); 
+		
+		
+		
 
 	}
 	

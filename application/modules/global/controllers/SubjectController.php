@@ -21,7 +21,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			}
 			$rs_rows = $db->getAllSujectName($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","SHORTCUT","PARENT","SCHOOL_OPTION","MODIFY_DATE","USER","STATUS");
+			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","SHORTCUT","PARENT","STUDY_IN_LANG","SCHOOL_OPTION","MODIFY_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'subject','action'=>'edit',
 			);

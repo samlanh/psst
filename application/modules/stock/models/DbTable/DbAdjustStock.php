@@ -51,12 +51,15 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	
     	$sql="SELECT id, 
-    	(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
-    	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
-    	(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
-    	pro_qty, price, date, status";
+	    	(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
+	    	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
+	    	(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
+    		pro_qty,costing,price,
+    		date,
+			(SELECT (first_name) FROM rms_users WHERE user_id=id LIMIT 1 ) AS byuser,
+    		status ";
     	$sql.=$dbp->caseStatusShowImage("status");
-    	$sql.="  FROM `rms_product_location` WHERE 1";
+    	$sql.="  FROM `rms_product_location` WHERE pro_id IS NOT NULL ";
     	
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': "date >= '".$search['start_date']." 00:00:00'";
@@ -66,8 +69,6 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
     		$s_where[]="(SELECT t.id FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id AND t.title LIKE '%{$s_search}%')";
-		
-    		
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if($search['status_search']==1 OR $search['status_search']==0){
@@ -76,10 +77,8 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	if($search['branch_id']>0 and !empty($search['branch_id'])){
     		$where.=" AND branch_id=".$search['branch_id'];
     	}
-    	
     	$sql.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
-
     	return $db->fetchAll($sql.$where.$order);
     }
 

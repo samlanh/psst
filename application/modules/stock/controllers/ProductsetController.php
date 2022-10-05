@@ -1,6 +1,5 @@
 <?php
 class Stock_ProductsetController extends Zend_Controller_Action {
-	private $type = array(1=>'service',2=>'program');
 	const REDIRECT_URL = '/stock/productset';
 	public function init()
 	{
@@ -26,7 +25,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 			$db =  new Global_Model_DbTable_DbItemsDetail();
 			$rs_rows = $db->getAllProductSet($search,$type);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_CODE","PRODUCT_NAME","PRODUCT_CATEGORY","SELL_PRICE",
+			$collumns = array("PRODUCT_CODE","PRODUCT_NAME","PRODUCT_CATEGORY","SELL_PRICE","ONE_PAYMENT",
 					"DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'productset','action'=>'edit',
@@ -64,12 +63,6 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		$frm->FrmAddItemsDetail(null,$type);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_items = $frm;
-
-		$product_type=1;
-		$d_row= $db->getAllProductsNormal($product_type);
-		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-	    array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
-	    $this->view->productlist=$d_row;
 	    
 	    $db = new Application_Model_DbTable_DbGlobal();
 	    $d_row = $db->getAllItems(3);
@@ -98,12 +91,6 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		    $frm->FrmAddItemsDetail($row,$type);
 		    Application_Model_Decorator::removeAllDecorator($frm);
 		    $this->view->frm_items = $frm;
-		    
-		    $product_type=1;
-		    $d_row= $db->getAllProductsNormal($product_type);
-		    array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		    array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
-		    $this->view->productlist=$d_row;
 	}
 	public function copyAction(){
 		$id=$this->getRequest()->getParam('id');

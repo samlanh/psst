@@ -1771,8 +1771,14 @@ function getAllgroupStudyNotPass($action=null){
   	if(isset($data['isOnepayment'])){
   		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
   	}
+  	if(isset($data['isProductset'])){
+  		$sql.=" AND i.is_productseat=".$data['isProductset'];
+  	}
   	if(!empty($data['proLocation'])){//want to get product in this location
-  		//$sql.=" AND ( OR i.id IN (SELECT pro_id FROM `rms_product_location` WHERE branch_id=".$data['proLocation']."))";
+  		$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is not null AND branch_id=".$data['proLocation'].")";
+  	}
+  	if(!empty($data['notLocation'])){//want to get product in this location
+  		$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is not null AND branch_id=".$data['notLocation'].")";
   	}
   	$branchlist = $this->getAllSchoolOption();
   	if (!empty($branchlist)){

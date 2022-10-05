@@ -30,7 +30,7 @@ fieldset{  background:none;}
 					var identity = $('#identity').val();
                   	if(identity==0 || identity==''){
                         alert('<?php echo $tr->translate('PLEASE_SELECT_PRODUCT');?>');
-                        dijit.byId('product').focus();
+                        dijit.byId('itemId').focus();
                         return false;
 					}
 				if(dijit.byId('items_id').get('value')==-1){
@@ -45,123 +45,122 @@ fieldset{  background:none;}
 			</script>
 			<div class="card-box">
 				<div class="col-md-5 col-sm-5 col-xs-12">
-						<div class="card-blogform">
-								<div class="card-body"> 
-									<div class="row"> 
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex "> 
+										<div class="settings-main-icon ">
+											<i class="	glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BUY_INFO");?></p>
+										</div> 
+									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12">
+											&nbsp;
+									</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm_items->getElement("branch_search");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_CODE");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_items->getElement("code");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_NAME");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm_items->getElement("title");?>
+												<input type="hidden" id="items_type" name="items_type" value="3" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_CATEGORY");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-5 col-sm-5 col-xs-12">
+												<input id="items_id" />
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12">
+												<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh"  type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ONE_PAYMENT");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_items->getElement("is_onepayment");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SELL_PRICE");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_items->getElement("price");?> 
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	            <div class="col-md-7 col-sm-7 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex "> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-tags" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRODUCT_INFO");?></p>
+										</div> 
+									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12">
+									&nbsp;
+									</div>
+									<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+										<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("PRODUCT");?> </label>
+										<div class="col-md-5 col-sm-5 col-xs-12">
+												<input id="itemId" name="itemId" />
+										</div>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshProduct();"/>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<table id="table_row" border="1" style="border-collapse: collapse;border:1px solid #ccc;width: 100%;">
+											<tr id="head-title" class="head-td" align="right">
+												<th><?php echo $tr->translate("DEL");?></th>
+												<th><?php echo $tr->translate("N_O");?></th>
+												<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+												<th><?php echo $tr->translate("CURRENT_QTY");?><span class="required">*</span></th>
+												<th><?php echo $tr->translate("NOTE");?></th>
+											</tr>
+										</table>
+										<input type="hidden" id="identity" name="identity" />
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+									</label>
+									</div>
+									<div class="form-group">
 										<div class="col-md-12 col-sm-12 col-xs-12">
-											<div class="d-flex "> 
-												<div class="settings-main-icon ">
-													<i class="	glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>
-												</div> 
-												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BUY_INFO");?></p>
-												</div> 
-											</div>
-											<div class="col-md-12 col-sm-12 col-xs-12">
-													&nbsp;
-											</div>
-
-
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_CODE");?>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm_items->getElement("code");?>
-												</div>
-												</div>
-												<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_NAME");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm_items->getElement("title");?>
-														<input type="hidden" id="items_type" name="items_type" value="3" />
-												</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_CATEGORY");?> <span class="required">*</span>
-													</label>
-													<div class="col-md-5 col-sm-5 col-xs-12">
-														<input id="items_id" />
-													</div>
-													<div class="col-md-2 col-sm-2 col-xs-12">
-														<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh"  type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
-													</div>
-												</div>
-												<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ONE_PAYMENT");?>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm_items->getElement("is_onepayment");?>
-												</div>
-												</div>
-												<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SELL_PRICE");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm_items->getElement("price");?> 
-												</div>
-												</div>
-
+												<?php echo $frm_items->getElement("note");?>
 										</div>
 									</div>
 								</div>
-						</div>
-
-	            </div>
-
-	            <div class="col-md-7 col-sm-7 col-xs-12">
-					<div class="card-blogform">
-							<div class="card-body"> 
-									<div class="row"> 
-										<div class="col-md-12 col-sm-12 col-xs-12">
-											<div class="d-flex "> 
-												<div class="settings-main-icon ">
-													<i class="glyphicon glyphicon-tags" aria-hidden="true"></i>
-												</div> 
-												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRODUCT_INFO");?></p>
-												</div> 
-											</div>
-											<div class="col-md-12 col-sm-12 col-xs-12">
-											&nbsp;
-							
-											</div>
-
-											<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-												<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("PRODUCT");?> </label>
-												<div class="col-md-5 col-sm-5 col-xs-12">
-														<input id="product" name="product" />
-												</div>
-												<div class="col-md-3 col-sm-3 col-xs-12">
-													<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshProduct();"/>
-												</div>
-												<div class="clearfix"></div>
-											</div>
-											<div class="form-group">
-												<table id="table_row" border="1" style="border-collapse: collapse;border:1px solid #ccc;width: 100%;">
-													<tr id="head-title" class="head-td" align="right">
-														<th><?php echo $tr->translate("DEL");?></th>
-														<th><?php echo $tr->translate("N_O");?></th>
-														<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
-														<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>
-														<th><?php echo $tr->translate("NOTE");?></th>
-													</tr>
-												</table>
-												<input type="hidden" id="identity" name="identity" />
-											</div>
-											<div class="form-group">
-											<label class="control-label  col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("NOTE");?>
-											</label>
-											</div>
-											<div class="form-group">
-											<div class="col-md-12 col-sm-12 col-xs-12">
-													<?php echo $frm_items->getElement("note");?>
-											</div>
-											</div>
-
-										</div>
-									</div>
 							</div>
+						</div>
 					</div>
 	            </div>
 
@@ -178,13 +177,12 @@ fieldset{  background:none;}
 		</form>
 	</div>
 </div>
-
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require("dijit.form.Textarea");
-	var product_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->productlist));?> );
 	var cate_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cat_rows));?> );
 	dojo.ready(function(){ 
 		
@@ -207,44 +205,46 @@ dojo.require("dijit.form.Textarea");
 		}, "items_id");
 
 		new dijit.form.FilteringSelect({
-			store: product_store,
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: false,                        
-			id: "product",
-			name: "product",  
+			id: "itemId",
+			name: "itemId",  
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
-				product   = dijit.byId('product').get('value');
+				product   = dijit.byId('itemId').get('value');
 				if(product==-1){
 					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
 				}else{
 					addRow();
 				}
 			}
-		}, "product");
+		}, "itemId");
 		addRow();
 		dijit.byId('is_onepayment').set('value',1);
+		
+		getRefreshProduct();
+		
 	});	
 
 	function getRefreshProduct(){
-		var url_getgroup = '<?php echo $this->url(array("module"=>"stock","controller"=>"productset","action"=>"refreshproduct"));?>';										
+		branch_id=dijit.byId("branch_search").get("value");
+	    if(branch_id=='' || branch_id==-1){
+		    alert("Please Selected Branch Name!");
+		    return false ;
+	    }										
 			loadingBlock();
-			dojo.xhrPost({
-				url:url_getgroup,
-				handleAs:"json",
-				load: function(data) {
-					product_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('product').set('store',product_store);  
-				   document.getElementsByClassName("overlay")[0].style.display="none";
-				},
-				error: function(err) {
-					document.getElementsByClassName("overlay")[0].style.display="none";
-				}
-			});
+		var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
+		contentData = {
+			'itemsType':3,
+			'isProductset':0,
+			'proLocation':branch_id
+		}
+		getAllItemIdByType(urlGet,contentData);
 	}
-function getRefreshItems(){
+	
+function getRefreshItems(){//category
 	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
 	loadingBlock();
 	dojo.xhrPost({
@@ -272,7 +272,7 @@ function getRefreshItems(){
 	tmp = '';
 	temp='';
 	function addRow() {
-			product_id = dijit.byId("product").get("value");
+			product_id = dijit.byId("itemId").get("value");
 			if(product_id=='' || product_id==-1){
 				return false;
 			}
@@ -289,7 +289,7 @@ function getRefreshItems(){
 			}
 			col++;no++;
 			template='';
-			productoption = dijit.byId("product").attr('displayedValue');
+			productoption = dijit.byId("itemId").attr('displayedValue');
 			if(title!=1){
 				$("#head-title").html("");
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
@@ -333,7 +333,7 @@ function submitDataClose(){
 		var identity = $('#identity').val();
       	if(identity==0 || identity==''){
             alert('<?php echo $tr->translate('PLEASE_SELECT_PRODUCT');?>');
-            dijit.byId('product').focus();
+            dijit.byId('itemId').focus();
             return false;
 		}
 		if(dijit.byId('items_id').get('value')==-1){

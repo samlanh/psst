@@ -153,7 +153,7 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     		$imgnone='<img src="'.BASE_URL.'/images/icon/none.png"/>';
     		$imgtick='<img src="'.BASE_URL.'/images/icon/tick.png"/>';
     		 
-    		$rows= array();
+    		$rows = array();
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		foreach($acl as $com){
     			$img='<img src="'.BASE_URL.'/images/icon/none.png" id="img_'.$com['acl_id'].'" onclick="changeStatus('.$com['acl_id'].','.$id.');" class="pointer"/>';

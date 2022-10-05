@@ -28,7 +28,7 @@ class Stock_ProductController extends Zend_Controller_Action {
 	    	$type=3; //Product
 	    	$rs_rows= $db->getAllProduct($search,$type);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("CODE","PRODUCT_NAME","PRODUCT_CATEGORY","UNIT_COST","QTY","TYPE","ONE_PAYMENT","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("CODE","PRODUCT_NAME","PRODUCT_CATEGORY","QTY","TYPE","ONE_PAYMENT","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'stock','controller'=>'product','action'=>'edit',
 	    	);
@@ -140,7 +140,6 @@ class Stock_ProductController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     	}
     	$this->view->row = $row;
-    	$this->view->productBranch = $db->getProductLocation($id);
     	 
     	$frm = new Global_Form_FrmItemsDetail();
     	$frm->FrmAddItemsDetail($row,$type);

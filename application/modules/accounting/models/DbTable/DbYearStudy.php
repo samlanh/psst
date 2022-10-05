@@ -27,7 +27,6 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 			);
 			$this->insert($_arr);
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
 			$db->rollBack();
 		}
 	}

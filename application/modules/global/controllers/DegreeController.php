@@ -221,4 +221,18 @@ class Global_DegreeController extends Zend_Controller_Action {
     		exit();
     	}
     }
+    function getdegreeAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$_db = new Accounting_Model_DbTable_DbFee();
+    		$row = $_db->getFeeById($data['academic_year']);
+    		$schoolOption = $row['school_option'];
+    		$schoolOption = null;
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$group = $db->getAllItems(1,null,$schoolOption);
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_DEGREE")));
+    		print_r(Zend_Json::encode($group));
+    		exit();
+    	}
+    }
 }

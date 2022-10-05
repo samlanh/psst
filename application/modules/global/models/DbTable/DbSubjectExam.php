@@ -43,6 +43,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					'is_parent'   		=> $_data['par'],
 			        'shortcut'			=> $_data['score_percent'],
 					'type_subject'		=> $_data['type_subject'],
+					'subject_lang'		=> $_data['subject_lang'],
 					'user_id'	  		=> $this->getUserId()
 			);
 			return  $this->insert($_arr);
@@ -63,6 +64,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'schoolOption'   	=> $_data['schoolOption'],
 				'shortcut'			=> $_data['score_percent'],
 				'type_subject'		=> $_data['type_subject'],
+				'subject_lang'		=> $_data['subject_lang'],
 				'user_id'	  		=> $this->getUserId()
 		);
 		$id = empty($_data['id'])?0:$_data['id'];
@@ -77,6 +79,9 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	function getAllSujectName($search=null){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sub_khmer=$tr->translate('STUDY_IN_KHMER');
+		$sub_english=$tr->translate('STUDY_IN_ENGLISH');
 		$db = $this->getAdapter();
 		$sql = " SELECT 
 					id,
@@ -84,6 +89,12 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					subject_titleen,
 					shortcut,
 					(select subject_titlekh from rms_subject as s where s.id = ide.parent limit 1) as parent,
+					
+					CASE 
+						WHEN subject_lang=1 THEN   '$sub_khmer'
+						WHEN subject_lang=2 THEN  '$sub_english'
+					END
+					AS subtitle,
 					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
 					date,
 					(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) as user_name
@@ -111,6 +122,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		if(!empty($search['schoolOption_search'])){
 			$where.= " AND schoolOption  = ".$search['schoolOption_search'];
 		}
+		
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function addNewSubjectajax($_data){

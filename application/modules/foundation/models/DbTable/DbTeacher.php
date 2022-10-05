@@ -536,5 +536,13 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!$row) return NULL;
 		return $row;
 	}
+
+	function getAllStaffBybranch($branch_id){
+    	$db = $this->getAdapter();
+		
+    	$sql = "SELECT id, CONCAT(teacher_name_kh,'-',teacher_name_en,'-',teacher_code) AS name
+		FROM `rms_teacher` WHERE status = 1 AND branch_id = $branch_id ";
+    	return $db->fetchAll($sql);
+    }
 	
 }

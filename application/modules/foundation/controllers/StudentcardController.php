@@ -64,5 +64,19 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
 
 
 	}
+
+	function getStaffBylocationAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+			$branch_id = $data['branch_id'];
+			
+    		$db = new Foundation_Model_DbTable_DbTeacher();
+    		$rows= $db->getAllStaffBybranch($branch_id);
+			
+    		array_unshift($rows, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_STAFF_NAME")));
+    		print_r(Zend_Json::encode($rows));
+    		exit();
+    	}
+    }
 	
 }

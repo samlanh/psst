@@ -13,19 +13,39 @@ fieldset{  background:none;}
 		<div class="card-box">
            <div class="col-sm-12 border-botom">
 		   		<div class="col-sm-8 pd-0">
-		    		<h4 class="m-b-0"><i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PRINT_STUDENT_CARD');?></h4>
+		    		<h4 class="m-b-0"><i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PRINT_CARD');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
     	</div>
+
+		<div class="card-box">
+	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+		            
+		            <li class="nav-item">
+		                <a class="nav-link" data-toggle="tab" href="#student" role="tab">
+		                <i class="glyphicon glyphicon-education ml-2"></i> <?php echo $tr->translate("STUDENTS_CARD");?>
+		                </a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link" data-toggle="tab" href="#staff" role="tab">
+		                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("STAFFS_CARD");?>
+		                </a>
+		            </li>
+					
+		        </ul>
+		 </div>
+
     	<form id='suspend_service' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">	
 						
 				if(this.validate()) {
  					stu_id=dijit.byId("stu_id").get('value');
-					if(stu_id=='' || stu_id==null){
+				 	staff_id=dijit.byId("staff_id").get('value');
+					if(stu_id=='' || stu_id==null || staff_id=='' || staff_id==null){
 						dijit.byId("stu_id").focus();
+						dijit.byId("staff_id").focus();
 						return false;
 					}
                 	dijit.byId("save_close").attr("disabled",true);
@@ -35,6 +55,8 @@ fieldset{  background:none;}
 					return false;
 				}
 				</script>
+	<div class="tab-content vertical">			
+		<div class="tab-pane fade in active" id="student" role="tabpanel">	
 			<div class="card-box">
 				<div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="card-blogform">
@@ -153,7 +175,133 @@ fieldset{  background:none;}
 					 onclick="printSelectedTray('');" />
                	</div>
              </div>
-		</form>
+
+		</div>	
+		
+		
+		<div class="tab-pane fade in " id="staff" role="tabpanel">	
+			<div class="card-box">
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-queen" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp;
+											</div>
+
+											
+												<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch1" name="branch1" type="text" onchange="getStaffByBranch(); 
+														">								
+															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+																	<option value="#" >ជ្រើសរើសសាខា</option>
+																	<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+															<?php }?> 
+														</select>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date1" id="create_date1" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/>
+												</div>
+												</div>
+												
+												<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="note1" name="note1"  ></textarea>
+												</div>
+												</div>	
+
+										</div>
+									</div>
+								</div>
+					</div>
+			
+
+						
+	            </div>
+	            <div class="col-md-9 col-sm-9 col-xs-12">
+					<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-users" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STAFF_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+											&nbsp;
+							
+											</div>
+
+											<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
+												<label class="control-label bold col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("SELECT_STAFF_NAME");?> 
+												</label>
+													<div class="col-md-5 col-sm-5 col-xs-12">
+															<input id="staff_id" name="staff_id" />
+													</div>
+													<div class="col-md-3 col-sm-3 col-xs-12">
+														<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getStaffByBranch();"/>
+													</div>
+													<div class="clearfix"></div>
+												</div>
+												<div class="form-group">
+													<table  style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+														<thead>
+															<tr id="head-title1" class="head-td" align="right"></tr>
+														</thead>
+														<tbody id="table_row1"></tbody>
+													</table>
+													<input type="hidden"  id="identity1" name="identity1" dojoType="dijit.form.TextBox"/>
+													<input type="hidden"  id="staff_ids" name="staff_ids" dojoType="dijit.form.TextBox"/>
+												</div>
+
+										</div>
+									</div>
+
+								</div>
+					</div>
+
+	            	
+	            </div>
+			</div>
+			 <div class="clearfix"></div>
+	         <div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input type="button" name="print_card_staff" id="print_card_staff"  label="<?php echo $tr->translate("SINGLE_IDPRINT");?>"  dojoType="dijit.form.Button" 
+					   class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+					 	  />
+					 <input type="button" name="printselectedTray_staff" id="printselectedTray_staff"  label="<?php echo $tr->translate('SINGLE_IDPRINT_TRAY');?>"  dojoType="dijit.form.Button" 
+					 class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+					  />
+               	</div>
+             </div>
+
+		</div>	 
+	</div>
+	</form>
     	
     </div>
 </div>
@@ -164,11 +312,10 @@ fieldset{  background:none;}
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.DateTextBox");
 	
-	//var pro_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->product));?> );
 	
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){ 
-		getStudentByBranch();
+		
 		new dijit.form.FilteringSelect({
 			store: stu_store,
 			queryExpr: "*${0}*",
@@ -202,6 +349,43 @@ fieldset{  background:none;}
 			
 			}
 		}, "stu_id");
+
+		new dijit.form.FilteringSelect({
+			store: staff_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                      
+			id: "staff_id",
+			name: "staff_id",  
+			class: 'fullside',  
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_STAFF_NAME");?>",          
+			onChange: function() {  
+				
+				staff_id   = dijit.byId('staff_id').get('value');
+				branch_id= dijit.byId('branch1').get('value');
+				if( staff_id==''){
+						alert("please select staff name");
+					 return false;
+				}else{
+					var rowId = $('#identity1').val();
+	    			if(rowId!=''){ 
+						var rowIDArray = rowId.split(',');
+						for(var n = 0; n < rowIDArray.length; n++){
+						var staff_name = dijit.byId('staff_name_'+rowIDArray[n]).get('value');
+						
+						
+						}
+					}
+					addRow1();
+					
+				}
+			
+			}
+		}, "staff_id");
+		getStudentByBranch();
+	//	getStaffByBranch();
+		
 	});	
 </script>
 <script type="text/javascript">
@@ -215,9 +399,10 @@ dojo.ready(function(){
 });	
 
 var template = '';
-var product_name = '';
+var student_name = '';
 var col = 0;
 var no = 0;
+var no1 = 0;
 var title = 0;
 tmp = '';
 temp='';
@@ -294,8 +479,92 @@ function deleteRecord(index) {
 		$('#identity').val(strings);
 		$('#student_ids').val(strings_student);
 		dojo.query("#row"+index).remove();
+
+	}
+/*---------------------------staff-add row--------------------------------------------------------*/
+
+function addRow1() {
+	label_staffname = dijit.byId("staff_id").attr('displayedValue');
+	staff_id=dijit.byId("staff_id").get("value");
+	branch_id=dijit.byId("branch1").get("value");
+		col++;no++;
+		template='';
+		if(title!=1){
+			
+			temp+='<th rowspan="2"><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th rowspan="2"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th rowspan="2" id="lbl_titlemetion" width="100px"><?php echo $tr->translate("STAFF_NAME");?></th>';
+			
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("POSITION");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("LEVEL");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ROLE");?></th>';
+			temp+='</tr>';
+			dojo.query("#head-title1").append(temp);
+
+			title=1;
+		}  
+
+			template+='<td width="47px" align="center">	<i onclick="deleteRecord('+col+')" class="glyphicon glyphicon-trash" aria-hidden="true"></i></td>';
+			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
+			template+='<td width="30%">&nbsp;'+label_staffname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="staff_name_'+col+'" name="staff_name_'+col+'" value="'+staff_id+'" /></td>';
+	
+			template+='<td width="100px"><input type="text" readonly="true" name="position'+col+'" id="position'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"  name="level'+col+'" id="level'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"   name="role'+col+'" id="role'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;"  /></td>';
+			
+			
+		tmp='<tr align="center" id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row1").append(tmp);
+
+		if($("#identity1").val()!="") {
+			var identity = $("#identity1").val();
+			$("#identity1").val(identity+','+col);
+		} else {$("#identity1").val(col);}
+
 		
-}
+		if($("#staff_ids").val()!="") {
+			var staffIds = $("#staff_ids").val();
+			$("#staff_ids").val(staffIds+','+staff_id);
+		} else {$("#staff_ids").val(staff_id);}
+
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+		//getStaffInfoById(col);
+ }
+
+function deleteStaffRecord(index) {
+
+		var identity1 = $('#identity1').val();
+		var arrays = identity1.split(',');
+
+		
+		var staffIds = $('#staff_ids').val();
+		var staff_arrays = staffIds.split(',');
+
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) {
+				arrays.splice(i,1);
+
+				staff_arrays.splice(i,1);
+				
+			}
+		}
+		var strings = arrays.join(',');
+		var strings_staff = staff_arrays.join(',');
+		$('#identity').val(strings);
+		$('#student_ids').val(strings_staff);
+		dojo.query("#row"+index).remove();
+
+
+	}
+
+
+
+/*-----------------------------------------------------------------------*/
+
+		
 
 
 var stu_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
@@ -320,6 +589,35 @@ function getStudentByBranch(){
 				
 			},
 			error: function(err) {
+			   
+			}
+		});
+}
+
+var staff_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_staff_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-staff-bylocation')); ?>';
+function getStaffByBranch(){
+	    branch_id=dijit.byId("branch1").get("value");
+
+	    if(branch_id=='' || branch_id==-1){
+		    alert("Please Selected Branch Name!");
+		    return false ;
+	    }
+		dojo.xhrPost({
+			url:url_staff_branch,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('staff_id').set('value','');
+				staff_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('staff_id').set('store',staff_store); 
+			    document.getElementsByClassName("overlay")[0].style.display="none";
+				
+			},
+			error: function(err) {
+				alert(err);
 			   
 			}
 		});

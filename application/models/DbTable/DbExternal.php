@@ -657,27 +657,33 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 	   	$lang = $_db->currentlang();
+		
+		$label = "name_en";
+		$grade = "rms_itemsdetail.title_en";
+		$degree = "rms_items.title_en";
+		$branchName = "branch_nameen";
+		$subjectTitle = "subject_titleen";
+			
 	   	if($lang==1){// khmer
+	   		$subjectTitle = "subject_titlekh";
+	   		$branchName = "branch_namekh";
 	   		$label = "name_kh";
 	   		$grade = "rms_itemsdetail.title";
 	   		$degree = "rms_items.title";
-	   	}else{ // English
-	   		$label = "name_en";
-	   		$grade = "rms_itemsdetail.title_en";
-	   		$degree = "rms_items.title_en";
 	   	}
 		$day = empty($search['day'])?0:$search['day'];
 		$sql="
 		SELECT 
 			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleKh
 			,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleEng
+			,(SELECT sj.".$subjectTitle." FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitle
 			,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameKh
 			,(SELECT te.teacher_name_en FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameEng
 			,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=schDetail.day_id AND rms_view.type=18 LIMIT 1)AS daysKh
 			,(SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.from_hour LIMIT 1) AS fromHourTitle
 			,(SELECT t.title FROM rms_timeseting AS t WHERE t.value =schDetail.to_hour LIMIT 1) AS toHourTitle
 			
-			,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchName
+			,(SELECT b.".$branchName." FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchName
 			,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
 			,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameEn
 			,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
@@ -839,6 +845,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			SELECT 
 			g.id
 			,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchName
+			,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
+			,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameEn
 			,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
 			,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branchLogo
 			

@@ -46,16 +46,21 @@ class Mobileapp_Model_DbTable_DbAbout extends Zend_Db_Table_Abstract
       	$db = $this->getAdapter();
         $db->beginTransaction();
         try{
+			$isForHome=empty($data['isForHome'])?0:1;
             $arr=array(
-                    'date'=>date("Y-m-d H:i:s"),
-					'modify_date'=>date("Y-m-d H:i:s"),
-					'user_id'=>$this->getUserId(),
+                    'isForHome'		=>$isForHome,
+                    'date'			=>date("Y-m-d H:i:s"),
+					'modify_date'	=>date("Y-m-d H:i:s"),
+					'user_id'		=>$this->getUserId(),
             );
             
             $dbglobal = new Application_Model_DbTable_DbGlobal();
             $lang = $dbglobal->getLaguage();
+			
             if (!empty($data['id'])){
-            	$arr['status']= $data['status'];
+				
+				$status=empty($data['status'])?0:1;
+            	$arr['status']= $status;
             	$where=" id=".$data['id'];
             	$this->_name="mobile_about";
             	$this->update($arr, $where);

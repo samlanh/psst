@@ -501,12 +501,3 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		}
 	}
 }
-
-
-
-
-
-
-
-
-

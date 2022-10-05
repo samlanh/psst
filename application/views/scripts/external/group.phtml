@@ -77,9 +77,6 @@
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 											<ul class="dropdown-menu" role="menu">
 												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-student-list/id/".$row['id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
-												</li>
-												<li>
 													<a target="_blank" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
 												</li>
 												<?php if(!empty($row['mainTeacher'])){ ?>
@@ -87,6 +84,9 @@
 													<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?></a>
 												</li>
 												<?php } ?>
+												<li>
+													<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-student-list/id/".$row['id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
+												</li>
 											</ul>
 										  </li>
 										</ul>

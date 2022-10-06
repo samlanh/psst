@@ -275,7 +275,7 @@ fieldset{  background:none;}
 														<tbody id="table_row1"></tbody>
 													</table>
 													<input type="hidden"  id="identity1" name="identity1" dojoType="dijit.form.TextBox"/>
-													<input type="hidden"  id="staff_ids" name="staff_ids" dojoType="dijit.form.TextBox"/>
+													<input type="hidden"   id="staff_ids" name="staff_ids" dojoType="dijit.form.TextBox"/>
 												</div>
 
 										</div>
@@ -337,7 +337,7 @@ fieldset{  background:none;}
 						var rowIDArray = rowId.split(',');
 						for(var n = 0; n < rowIDArray.length; n++){
 						var student_name = dijit.byId('student_name_'+rowIDArray[n]).get('value');
-						var location_id = dijit.byId('branch_id_'+rowIDArray[n]).get('value');
+					
 						
 						}
 					}
@@ -393,8 +393,21 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 dojo.query("#table_row").append("");
 		 $("#identity").val("");
+		 dijit.byId("stu_id").reset('value');
     });
 });	
+
+dojo.ready(function(){
+	
+	var branch_id = dijit.byId('branch1');
+	branch_id.on('change', function(evt) {
+		dojo.query("#table_row1").append("");
+		$("#identity1").val("");
+		dijit.byId("staff_id").reset('value');
+
+   });
+});	
+
 
 var template = '';
 var student_name = '';
@@ -405,9 +418,24 @@ var title = 0;
 tmp = '';
 temp='';
 function addRow() {
-	label_stuname = dijit.byId("stu_id").attr('displayedValue');
-	stu_id=dijit.byId("stu_id").get("value");
-	branch_id=dijit.byId("branch").get("value");
+	
+		stu_id=dijit.byId("stu_id").get("value");
+	
+		identity = $('#identity').val();
+		if(identity!=''){
+			arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+				student = dijit.byId('student_name_'+arrays[i]).get('value');
+				if(stu_id==student){
+					alert("<?php echo $tr->translate("Already_Exist");?>");
+					return false;
+				}
+			}
+		}
+
+		label_stuname = dijit.byId("stu_id").attr('displayedValue');
+		branch_id=dijit.byId("branch").get("value");
+
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -426,7 +454,7 @@ function addRow() {
 		}  
 
 			template+='<td width="47px" align="center">	<i onclick="deleteRecord('+col+')" class="glyphicon glyphicon-trash" aria-hidden="true"></i></td>';
-			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
+			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="num'+col+'" name="num'+col+'"  /></td>';
 			template+='<td width="30%">&nbsp;'+label_stuname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="student_name_'+col+'" name="student_name_'+col+'" value="'+stu_id+'" /></td>';
 	
 			template+='<td width="100px"><input type="text" readonly="true" name="year'+col+'" id="year'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
@@ -482,9 +510,24 @@ function deleteRecord(index) {
 /*---------------------------staff-add row--------------------------------------------------------*/
 
 function addRow1() {
-	label_staffname = dijit.byId("staff_id").attr('displayedValue');
-	staff_id=dijit.byId("staff_id").get("value");
-	branch_id=dijit.byId("branch1").get("value");
+
+		staff_id=dijit.byId("staff_id").get("value");
+
+		identity1 = $('#identity1').val();
+			if(identity1!=''){
+				arrays = identity1.split(',');
+				for(var i=0;i<arrays.length;i++) {
+					staff = dijit.byId('staff_name_'+arrays[i]).get('value');
+					if(staff_id==staff){
+						alert("<?php echo $tr->translate("Already_Exist");?>");
+						return false;
+				}
+			}
+		}
+
+
+		label_staffname = dijit.byId("staff_id").attr('displayedValue');
+		branch_id=dijit.byId("branch1").get("value");
 		col++;num++;
 		template='';
 		if(title!=1){
@@ -502,8 +545,8 @@ function addRow1() {
 			title=1;
 		}  
 
-			template+='<td width="47px" align="center">	<i onclick="deleteRecord('+col+')" class="glyphicon glyphicon-trash" aria-hidden="true"></i></td>';
-			template+='<td width="15px" align="center"  >'+num+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
+			template+='<td width="47px" align="center">	<i onclick="deleteStaffRecord('+col+')" class="glyphicon glyphicon-trash" aria-hidden="true"></i></td>';
+			template+='<td width="15px" align="center"  >'+num+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="num'+col+'" name="num'+col+'"  /></td>';
 			template+='<td width="30%">&nbsp;'+label_staffname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="staff_name_'+col+'" name="staff_name_'+col+'" value="'+staff_id+'" /></td>';
 	
 			template+='<td width="100px"><input type="text" readonly="true" name="teacher_type'+col+'" id="teacher_type'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
@@ -511,7 +554,7 @@ function addRow1() {
 			template+='<td width="100px"><input type="text" readonly="true"   name="position'+col+'" id="position'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;"  /></td>';
 			
 			
-		tmp='<tr align="center" id="row'+col+'">';
+		tmp='<tr align="center" id="row1'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row1").append(tmp);
 
@@ -526,7 +569,7 @@ function addRow1() {
 			$("#staff_ids").val(staffIds+','+staff_id);
 		} else {$("#staff_ids").val(staff_id);}
 
-		dojo.html.set(dojo.byId("row"+col),template , {
+		dojo.html.set(dojo.byId("row1"+col),template , {
 		     parseContent: true,
 		});
 		getStaffInfoById(col);
@@ -534,11 +577,12 @@ function addRow1() {
 
 function deleteStaffRecord(index) {
 
-		var identity1 = $('#identity1').val();
-		var arrays = identity1.split(',');
+		var identity = $('#identity1').val();
+		var arrays = identity.split(',');
 
 		
 		var staffIds = $('#staff_ids').val();
+
 		var staff_arrays = staffIds.split(',');
 
 		for(var i=0;i<arrays.length;i++) {
@@ -551,9 +595,9 @@ function deleteStaffRecord(index) {
 		}
 		var strings = arrays.join(',');
 		var strings_staff = staff_arrays.join(',');
-		$('#identity').val(strings);
-		$('#student_ids').val(strings_staff);
-		dojo.query("#row"+index).remove();
+		$('#identity1').val(strings);
+		$('#staff_ids').val(strings_staff);
+		dojo.query("#row1"+index).remove();
 
 
 	}

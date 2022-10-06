@@ -38,7 +38,7 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
     
     
 	
-    function getStudentBylocationAction(){
+    function getStudentBybranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
 			$branch_id = $data['branch_id'];
@@ -65,7 +65,7 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
 
 	}
 
-	function getStaffBylocationAction(){
+	function getStaffBybranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
 			$branch_id = $data['branch_id'];
@@ -78,5 +78,19 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
     		exit();
     	}
     }
+
+	function getStaffinfoByidAction(){
+		if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+			$staff_id=$data['staff_id'];
+    		$db = new Foundation_Model_DbTable_DbTeacher();
+    		$row= $db->getStaffInfoById($staff_id);
+		
+    		print_r(Zend_Json::encode($row));
+    		exit();
+    	}
+
+
+	}
 	
 }

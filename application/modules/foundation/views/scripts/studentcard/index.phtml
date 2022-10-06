@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('PRINT_STUDENT_CARD')); 
+	echo $this->headTitle($tr->translate('PRINT_CARD')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 <style>
@@ -23,7 +23,7 @@ fieldset{  background:none;}
 		<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 		            
-		            <li class="nav-item">
+		            <li class="nav-item active">
 		                <a class="nav-link" data-toggle="tab" href="#student" role="tab">
 		                <i class="glyphicon glyphicon-education ml-2"></i> <?php echo $tr->translate("STUDENTS_CARD");?>
 		                </a>
@@ -84,7 +84,7 @@ fieldset{  background:none;}
 														<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getStudentByBranch(); 
 														">								
 															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-																	<option value="#" >ជ្រើសរើសសាខា</option>
+																	<option value="" >ជ្រើសរើសសាខា</option>
 																	<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
 															<?php }?> 
 														</select>
@@ -207,7 +207,7 @@ fieldset{  background:none;}
 														<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch1" name="branch1" type="text" onchange="getStaffByBranch(); 
 														">								
 															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-																	<option value="#" >ជ្រើសរើសសាខា</option>
+																	<option value="" >ជ្រើសរើសសាខា</option>
 																	<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
 															<?php }?> 
 														</select>
@@ -292,10 +292,8 @@ fieldset{  background:none;}
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="button" name="print_card_staff" id="print_card_staff"  label="<?php echo $tr->translate("SINGLE_IDPRINT");?>"  dojoType="dijit.form.Button" 
 					   class="button-class button-primary" iconClass="glyphicon glyphicon-print"
-					 	  />
-					 <input type="button" name="printselectedTray_staff" id="printselectedTray_staff"  label="<?php echo $tr->translate('SINGLE_IDPRINT_TRAY');?>"  dojoType="dijit.form.Button" 
-					 class="button-class button-primary" iconClass="glyphicon glyphicon-print"
-					  />
+					   onclick="printSelectedStaff('');" />
+					
                	</div>
              </div>
 
@@ -383,8 +381,8 @@ fieldset{  background:none;}
 			
 			}
 		}, "staff_id");
-		getStudentByBranch();
-	//	getStaffByBranch();
+		//getStudentByBranch();
+		//getStaffByBranch();
 		
 	});	
 </script>
@@ -402,7 +400,7 @@ var template = '';
 var student_name = '';
 var col = 0;
 var no = 0;
-var no1 = 0;
+var num=0;
 var title = 0;
 tmp = '';
 temp='';
@@ -487,7 +485,7 @@ function addRow1() {
 	label_staffname = dijit.byId("staff_id").attr('displayedValue');
 	staff_id=dijit.byId("staff_id").get("value");
 	branch_id=dijit.byId("branch1").get("value");
-		col++;no++;
+		col++;num++;
 		template='';
 		if(title!=1){
 			
@@ -495,9 +493,9 @@ function addRow1() {
 			temp+='<th rowspan="2"><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th rowspan="2" id="lbl_titlemetion" width="100px"><?php echo $tr->translate("STAFF_NAME");?></th>';
 			
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("POSITION");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("TEACHER_TYPE");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("LEVEL");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ROLE");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("POSITION");?></th>';
 			temp+='</tr>';
 			dojo.query("#head-title1").append(temp);
 
@@ -505,12 +503,12 @@ function addRow1() {
 		}  
 
 			template+='<td width="47px" align="center">	<i onclick="deleteRecord('+col+')" class="glyphicon glyphicon-trash" aria-hidden="true"></i></td>';
-			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
+			template+='<td width="15px" align="center"  >'+num+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
 			template+='<td width="30%">&nbsp;'+label_staffname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="staff_name_'+col+'" name="staff_name_'+col+'" value="'+staff_id+'" /></td>';
 	
-			template+='<td width="100px"><input type="text" readonly="true" name="position'+col+'" id="position'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" readonly="true"  name="level'+col+'" id="level'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" readonly="true"   name="role'+col+'" id="role'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;"  /></td>';
+			template+='<td width="100px"><input type="text" readonly="true" name="teacher_type'+col+'" id="teacher_type'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"  name="degree'+col+'" id="degree'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"   name="position'+col+'" id="position'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;"  /></td>';
 			
 			
 		tmp='<tr align="center" id="row'+col+'">';
@@ -531,7 +529,7 @@ function addRow1() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		//getStaffInfoById(col);
+		getStaffInfoById(col);
  }
 
 function deleteStaffRecord(index) {
@@ -568,7 +566,7 @@ function deleteStaffRecord(index) {
 
 
 var stu_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_student_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-student-bylocation')); ?>';
+var url_student_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-student-bybranch')); ?>';
 function getStudentByBranch(){
 	    branch_id=dijit.byId("branch").get("value");
 	    if(branch_id=='' || branch_id==-1){
@@ -589,13 +587,14 @@ function getStudentByBranch(){
 				
 			},
 			error: function(err) {
+				alert(err);
 			   
 			}
 		});
 }
 
 var staff_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_staff_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-staff-bylocation')); ?>';
+var url_staff_branch= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-staff-bybranch')); ?>';
 function getStaffByBranch(){
 	    branch_id=dijit.byId("branch1").get("value");
 
@@ -603,6 +602,7 @@ function getStaffByBranch(){
 		    alert("Please Selected Branch Name!");
 		    return false ;
 	    }
+
 		dojo.xhrPost({
 			url:url_staff_branch,
 			content:{
@@ -648,6 +648,56 @@ function getStuInfoById(index){
 	
 }
 
+var url_staffbyid = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentcard','action'=>'get-staffinfo-byid')); ?>';
+function getStaffInfoById(index){
+	staff_id = dijit.byId('staff_id').get('value');
+
+		dojo.xhrPost({
+			url:url_staffbyid,
+			content:{
+				'staff_id':staff_id,
+				},
+			handleAs:"json",
+			load: function(data) {
+			
+				dijit.byId('teacher_type'+index).attr("value",data.teacher_type);     
+				dijit.byId('degree'+index).attr("value",data.degree);
+				dijit.byId('position'+index).attr("value",data.position_add);
+			
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	
+}
+
+function printSelectedStaff(typecard){
+
+<?php 
+	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstaff','action'=>'staff-idselected'));
+?>
+var urlink="";
+if(typecard==1){
+	var urlink="?front_card=1";
+}
+staff_ids = dijit.byId('staff_ids').get('value');
+ if(student_ids!=''){
+	window.open(
+			'<?php echo $url_copy;?>'+'/id/'+staff_ids+urlink,
+			  '_blank' 
+			);
+ }else{
+	alert('Please select staff you want to print');
+	return false;
+ }
+ 
+ 
+ 
+}
+
 function printSelected(typecard){
 
 		<?php 
@@ -666,7 +716,7 @@ function printSelected(typecard){
 					  '_blank' 
 					);
 		 }else{
-			alert('Please select record you want to print');
+			alert('Please select student you want to print');
 			return false;
 		 }
 		 

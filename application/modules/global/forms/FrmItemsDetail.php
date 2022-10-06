@@ -201,7 +201,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
-    	$_arr_opt_branch = array(""=>$this->tr->translate("ONE_PAYMENT"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
+    	
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");
@@ -211,9 +212,16 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'required'=>'true',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
+    			'onchange'=>'getRefreshProduct();',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_branch_search->setValue($request->getParam("branch_search"));
+    	if (count($optionBranch)==1){
+    		$_branch_search->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_search->setValue($row['id']);
+    		}
+    	}
     	
     	$auto_payment = new Zend_Dojo_Form_Element_FilteringSelect("auto_payment");
     	$_arr = array(

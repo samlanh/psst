@@ -24,11 +24,13 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$rows = $db->getAllProductLocattion($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","PRODUCT_NAME","BARCODE","CURRENT_QTY","PRICE","DATE","STATUS");
-			$link=array(
-					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('branch_name'=>$link,'adjust_no'=>$link,'request_name'=>$link,));
+			$collumns = array("BRANCH","PRODUCT_NAME","BARCODE","CURRENT_QTY","UNIT_COST","SELL_PRICE","DATE","BY_USER","STATUS");
+
+// 			$link=array(
+// 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
+// 			);
+
+			$this->view->list=$list->getCheckList(0, $collumns, $rows,array());
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("Application Error!");
@@ -64,12 +66,6 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$model = new Application_Model_DbTable_DbGlobal();
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
-			
-			$db = new Global_Model_DbTable_DbItemsDetail();
-			$d_row= $db->getAllProductsNormal(2);//
-			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
-			$this->view->product= $d_row;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');

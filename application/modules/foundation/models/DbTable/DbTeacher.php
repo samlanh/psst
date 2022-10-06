@@ -458,6 +458,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		}
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
+        
 		return $row;
 	}
 	
@@ -544,5 +545,40 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		FROM `rms_teacher` WHERE status = 1 AND branch_id = $branch_id ";
     	return $db->fetchAll($sql);
     }
+
+	public function getStaffInfoById($staff_id){
+		$db = $this->getAdapter();
+		$sql = "SELECT id, 
+						
+		g.teacher_code, 
+		g.teacher_name_kh,
+		g.teacher_name_en,
+		g.home_num,
+		g.branch_id,
+		g.street_num,
+		g.passport_no,
+		DATE_FORMAT(g.dob,'%d-%m-%Y') AS dob,
+		g.pob,
+		g.card_no,
+		g.photo,
+		DATE_FORMAT(g.start_date,'%d-%m-%Y') AS start_date,
+		DATE_FORMAT(g.end_date,'%d-%m-%Y') AS end_date,
+		g.agreement,
+		g.experiences,
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nation) AS nation, 
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+		g.position_add,
+		g.tel,
+		g.email,
+		g.note				
+		FROM rms_teacher AS g WHERE g.status=1 AND g.id =$staff_id ";
+		
+		$sql.=" LIMIT 1";
+		$row=$db->fetchRow($sql);
+		return $row;
+	}
 	
 }

@@ -444,8 +444,8 @@ function addRow() {
 			temp+='<th rowspan="2"><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th rowspan="2" id="lbl_titlemetion" width="100px"><?php echo $tr->translate("STUDENT_NAME");?></th>';
 			
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("YEAR");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("LEVEL");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ACEDMIC_YEAR");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("STUDY_LAVEL");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("GRADE");?></th>';
 			temp+='</tr>';
 			dojo.query("#head-title").append(temp);
@@ -457,9 +457,9 @@ function addRow() {
 			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="num'+col+'" name="num'+col+'"  /></td>';
 			template+='<td width="30%">&nbsp;'+label_stuname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="student_name_'+col+'" name="student_name_'+col+'" value="'+stu_id+'" /></td>';
 	
-			template+='<td width="100px"><input type="text" readonly="true" name="year'+col+'" id="year'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" readonly="true"  name="level'+col+'" id="level'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" readonly="true"   name="grade'+col+'" id="grade'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;"  /></td>';
+			template+='<td width="100px" ><input type="text" readonly="true" name="year'+col+'" id="year'+col+'"  dojoType="dijit.form.TextBox" style="width:100%; color:black;  " /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"  name="level'+col+'" id="level'+col+'"  dojoType="dijit.form.TextBox" style="width:100%; color:black; " /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"   name="grade'+col+'" id="grade'+col+'"  dojoType="dijit.form.TextBox" style="width:100%; color:black;  "  /></td>';
 			
 			
 		tmp='<tr align="center" id="row'+col+'">';
@@ -549,9 +549,9 @@ function addRow1() {
 			template+='<td width="15px" align="center"  >'+num+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="num'+col+'" name="num'+col+'"  /></td>';
 			template+='<td width="30%">&nbsp;'+label_staffname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="staff_name_'+col+'" name="staff_name_'+col+'" value="'+staff_id+'" /></td>';
 	
-			template+='<td width="100px"><input type="text" readonly="true" name="teacher_type'+col+'" id="teacher_type'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" readonly="true"  name="degree'+col+'" id="degree'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" readonly="true"   name="position'+col+'" id="position'+col+'"  dojoType="dijit.form.TextBox" style="width:100%;"  /></td>';
+			template+='<td width="100px"><input type="text" readonly="true" name="teacher_type'+col+'" id="teacher_type'+col+'"  dojoType="dijit.form.TextBox" style="width:100%; color:black; " /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"  name="degree'+col+'" id="degree'+col+'"  dojoType="dijit.form.TextBox" style="width:100%; color:black; " /></td>';
+			template+='<td width="100px"><input type="text" readonly="true"   name="position'+col+'" id="position'+col+'"  dojoType="dijit.form.TextBox" style="width:100%; color:black; "  /></td>';
 			
 			
 		tmp='<tr align="center" id="row1'+col+'">';

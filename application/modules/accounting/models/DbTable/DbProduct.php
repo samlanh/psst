@@ -13,12 +13,12 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql=" SELECT p.id,p.pro_code,
 			 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE rms_branch.br_id=pl.branch_id) AS branch_name,
-				p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_name,
-				(select name_en from rms_view where type=11 and key_code=pro_type) as pro_type,
-			    p.cost, 
-			    p.pro_price, 
-				pl.pro_qty,p.date,p.status
-				FROM rms_product AS p,rms_product_location AS pl
+			  p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_name,
+			 (SELECT name_en from rms_view where type=11 and key_code=pro_type) as pro_type,
+			 p.cost, 
+			 p.pro_price, 
+			 pl.pro_qty,p.date,p.status
+			FROM rms_product AS p,rms_product_location AS pl
 				WHERE p.id=pl.pro_id and sale_set = ".$search['sale_set'];
     	
     	$where="";
@@ -51,7 +51,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
-  
     function getBrandLocation(){
     	$db=$this->getAdapter();
     	$sql="SELECT br_id AS id,CONCAT(branch_nameen) AS `name` FROM rms_branch WHERE STATUS=1  ";

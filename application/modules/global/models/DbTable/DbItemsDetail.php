@@ -260,7 +260,6 @@
 					'note'    		=> $_data['note'],
 					'product_type' 	=> $_data['product_type'],
 					'is_onepayment' => $_data['is_onepayment'],
-					'cost'    		=> $_data['cost'],
 					'schoolOption'  => $schooloption,
 					'images'   	 	=> $photo,
 					'create_date' 	=> date("Y-m-d H:i:s"),
@@ -271,19 +270,19 @@
 			$this->_name = "rms_itemsdetail";
 			$id =  $this->insert($_arr);
 			
-			$this->_name='rms_product_location';
-			$ids = explode(',', $_data['identity']);
-			foreach ($ids as $i){
-				$_arr = array(
-						'pro_id'=>$id,
-						'branch_id'=>$_data['brand_name_'.$i],
-						'pro_qty'=>$_data['qty_'.$i],
-						'price'=>$_data['price_'.$i],
-						'stock_alert'=>$_data['qty_alert_'.$i],
-						'note'=>$_data['note_'.$i],
-				);
-				$this->insert($_arr);
-			}
+// 			$this->_name='rms_product_location';
+// 			$ids = explode(',', $_data['identity']);
+// 			foreach ($ids as $i){
+// 				$_arr = array(
+// 						'pro_id'=>$id,
+// 						'branch_id'=>$_data['brand_name_'.$i],
+// 						'pro_qty'=>$_data['qty_'.$i],
+// 						'price'=>$_data['price_'.$i],
+// 						'stock_alert'=>$_data['qty_alert_'.$i],
+// 						'note'=>$_data['note_'.$i],
+// 				);
+// 				$this->insert($_arr);
+// 			}
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -295,18 +294,19 @@
 		$_db= $this->getAdapter();
 		try{
 			$db_items = new Global_Model_DbTable_DbItems();
-		
 			$this->_name='rms_product_location';
 			$ids = explode(',', $_data['identity']);
 			foreach ($ids as $i){
 				$_arr = array(
-						'branch_id'=>$_data['branch'],
+						'branch_id'=>$_data['branch_id'],
 						'pro_id'=>$_data['product_name_'.$i],
 						'pro_qty'=>$_data['qty_'.$i],
+						'costing'=>$_data['costing_'.$i],
 						'price'=>$_data['price_'.$i],
 						'stock_alert'=>$_data['qty_alert_'.$i],
 						'note'=>$_data['note_'.$i],
 						'date'=>$_data['create_date'],
+						'user_id'=>$this->getUserId()
 				);
 				$this->insert($_arr);
 			}
@@ -343,18 +343,17 @@
 		
 		$sql = " SELECT ide.id,ide.code,$grade,
 			(SELECT $degree FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
-			ide.cost,
 			(SELECT SUM(pl.pro_qty) FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  $string ) AS totalqty,
 			CASE    
 			WHEN  ide.product_type = 1 THEN '".$tr->translate("PRODUCT_FOR_SELL")."'
 			WHEN  ide.product_type = 2 THEN '".$tr->translate("OFFICE_MATERIAL")."'
 			END AS product_type,
 			CASE    
-			WHEN  ide.is_onepayment = 0 THEN '".$tr->translate("IS_VALIDATE")."'
-			WHEN  ide.is_onepayment = 1 THEN '".$tr->translate("ONE_PAYMENTONLY")."'
+				WHEN  ide.is_onepayment = 0 THEN '".$tr->translate("IS_VALIDATE")."'
+				WHEN  ide.is_onepayment = 1 THEN '".$tr->translate("ONE_PAYMENTONLY")."'
 			END AS is_onepayment,
 			ide.modify_date,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
+			(SELECT first_name FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
 			  ";
 		$sql.=$dbgb->caseStatusShowImage("ide.status");
 		$sql.=" FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 0 ";
@@ -424,7 +423,6 @@
 					'note'    => $_data['note'],
 					'product_type' => $_data['product_type'],
 					'is_onepayment' => $_data['is_onepayment'],
-					'cost'    => $_data['cost'],
 					'schoolOption'    => $schooloption,
 					'modify_date' => date("Y-m-d H:i:s"),
 					'status'=> $_data['status'],
@@ -451,56 +449,56 @@
 			
 			if ($level==1 AND $branch_id==1){ // only main Branch and Admin user
 				// For Product Location Section
-				$identitys = explode(',',$_data['identity']);
-				$detailId="";
-				if (!empty($identitys)){
-					foreach ($identitys as $i){
-						if (empty($detailId)){
-							if (!empty($_data['detailid'.$i])){
-								$detailId = $_data['detailid'.$i];
-							}
-						}else{
-							if (!empty($_data['detailid'.$i])){
-								$detailId= $detailId.",".$_data['detailid'.$i];
-							}
-						}
-					}
-				}
-				$this->_name="rms_product_location";
-				$where="pro_id = ".$_data["id"];
-				if (!empty($detailId)){
-					$where.=" AND id NOT IN ($detailId) ";
-				}
-				$this->delete($where);
+// 				$identitys = explode(',',$_data['identity']);
+// 				$detailId="";
+// 				if (!empty($identitys)){
+// 					foreach ($identitys as $i){
+// 						if (empty($detailId)){
+// 							if (!empty($_data['detailid'.$i])){
+// 								$detailId = $_data['detailid'.$i];
+// 							}
+// 						}else{
+// 							if (!empty($_data['detailid'.$i])){
+// 								$detailId= $detailId.",".$_data['detailid'.$i];
+// 							}
+// 						}
+// 					}
+// 				}
+// 				$this->_name="rms_product_location";
+// 				$where="pro_id = ".$_data["id"];
+// 				if (!empty($detailId)){
+// 					$where.=" AND id NOT IN ($detailId) ";
+// 				}
+// 				$this->delete($where);
 			}
 			
 			if (!empty($_data['identity'])){
-				$this->_name='rms_product_location';
-				$ids = explode(',', $_data['identity']);
-				foreach ($ids as $i){
-					if (!empty($_data['detailid'.$i])){
-						$_arr = array(
-								'pro_id'=>$id,
-								'branch_id'=>$_data['brand_name_'.$i],
-								'pro_qty'=>$_data['qty_'.$i],
-								'price'=>$_data['price_'.$i],
-								'stock_alert'=>$_data['qty_alert_'.$i],
-								'note'=>$_data['note_'.$i],
-						);
-						$where =" id =".$_data['detailid'.$i];
-						$this->update($_arr, $where);
-					}else{
-						$_arr = array(
-								'pro_id'=>$id,
-								'branch_id'=>$_data['brand_name_'.$i],
-								'pro_qty'=>$_data['qty_'.$i],
-								'price'=>$_data['price_'.$i],
-								'stock_alert'=>$_data['qty_alert_'.$i],
-								'note'=>$_data['note_'.$i],
-						);
-						$this->insert($_arr);
-					}
-				}
+// 				$this->_name='rms_product_location';
+// 				$ids = explode(',', $_data['identity']);
+// 				foreach ($ids as $i){
+// 					if (!empty($_data['detailid'.$i])){
+// 						$_arr = array(
+// 								'pro_id'=>$id,
+// 								'branch_id'=>$_data['brand_name_'.$i],
+// 								'pro_qty'=>$_data['qty_'.$i],
+// 								'price'=>$_data['price_'.$i],
+// 								'stock_alert'=>$_data['qty_alert_'.$i],
+// 								'note'=>$_data['note_'.$i],
+// 						);
+// 						$where =" id =".$_data['detailid'.$i];
+// 						$this->update($_arr, $where);
+// 					}else{
+// 						$_arr = array(
+// 								'pro_id'=>$id,
+// 								'branch_id'=>$_data['brand_name_'.$i],
+// 								'pro_qty'=>$_data['qty_'.$i],
+// 								'price'=>$_data['price_'.$i],
+// 								'stock_alert'=>$_data['qty_alert_'.$i],
+// 								'note'=>$_data['note_'.$i],
+// 						);
+// 						$this->insert($_arr);
+// 					}
+// 				}
 			}
 			return $id;
 		}catch(exception $e){
@@ -662,6 +660,10 @@
 		$sql = "SELECT ide.id,ide.code,$grade,
 			(SELECT $degree FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 			ide.price,
+			CASE    
+				WHEN  ide.is_onepayment = 0 THEN '".$tr->translate("IS_VALIDATE")."'
+				WHEN  ide.is_onepayment = 1 THEN '".$tr->translate("ONE_PAYMENTONLY")."'
+			END AS is_onepayment,
 			ide.modify_date,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
 			  ";

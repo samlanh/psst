@@ -43,110 +43,147 @@
 	    	</div>
 	    	<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	        		<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getReceiptNumber('');filterClient();">
-								<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
-								<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
-									<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
-								<?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="studentId" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" style="color:red;" name="invoice" id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_CATEGORY");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="cate_income" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_TITLE");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" required name="title" id="title" dojoType="dijit.form.ValidationTextBox" class="fullside" />
-	                   </div>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FOR_DATE");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   	<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
-	                   </div>
-	                </div>
-	                
+					<div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+
+										<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="material-icons-outlined">local_atm</i>
+												
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INCOME_INFO");?></p>
+											</div> 
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getReceiptNumber('');filterClient();">
+														<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
+														<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
+															<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
+														<?php }}?>
+													</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="studentId" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input type="text" style="color:red;" name="invoice" id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_CATEGORY");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="cate_income" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_TITLE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input type="text" required name="title" id="title" dojoType="dijit.form.ValidationTextBox" class="fullside" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FOR_DATE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_OPTION");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="option_type" id="option_type" class="fullside" dojoType="dijit.form.FilteringSelect">
-								<option value="1"><?php echo $tr->translate("OTHER_INCOME");?></option>
-								<option value="2"><?php echo $tr->translate("CREDIT_MEMO");?></option>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_INCOME");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="total_income" id="total_income" required="true" dojoType="dijit.form.NumberTextBox" class="fullside" />
-	                   </div>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
-								<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
-									<option value="<?php echo $payment_method['id']?>"><?php echo $payment_method['name']?></option>
-								<?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select placeHolder='<?php echo $tr->translate("SELECT_BANK");?>' name="bank_name" id="bank_name" required="false" class="fullside" dojoType="dijit.form.FilteringSelect" >
-								<option value=""></option>
-								<?php if(!empty($this->rs_bank)){foreach ($this->rs_bank as $rs_bank){?>
-									<option value="<?php echo $rs_bank['id'];?>"><?php echo $rs_bank['name'];?></option>
-								<?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="cheqe_no" id="cheqe_no" dojoType="dijit.form.TextBox" class="fullside" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:65px;" ></textarea>							
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="material-icons-outlined">payments</i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MONEY");?></p>
+												</div> 
+											</div>
+
+											<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INCOME_OPTION");?> <span class="required">*</span>:
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select name="option_type" id="option_type" class="fullside" dojoType="dijit.form.FilteringSelect">
+															<option value="1"><?php echo $tr->translate("OTHER_INCOME");?></option>
+															<option value="2"><?php echo $tr->translate("CREDIT_MEMO");?></option>
+														</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_INCOME");?> <span class="required">*</span>:
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<input type="text" name="total_income" id="total_income" required="true" dojoType="dijit.form.NumberTextBox" class="fullside" />
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
+															<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
+																<option value="<?php echo $payment_method['id']?>"><?php echo $payment_method['name']?></option>
+															<?php }}?>
+														</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?> :
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<select placeHolder='<?php echo $tr->translate("SELECT_BANK");?>' name="bank_name" id="bank_name" required="false" class="fullside" dojoType="dijit.form.FilteringSelect" >
+															<option value=""></option>
+															<?php if(!empty($this->rs_bank)){foreach ($this->rs_bank as $rs_bank){?>
+																<option value="<?php echo $rs_bank['id'];?>"><?php echo $rs_bank['name'];?></option>
+															<?php }}?>
+														</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?> :
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<input type="text" name="cheqe_no" id="cheqe_no" dojoType="dijit.form.TextBox" class="fullside" />
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:65px;" ></textarea>							
+												</div>
+											</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
 	            </div>
 	       </div>
 	       <div class="card-box">

@@ -45,87 +45,127 @@ table.collape tbody td {
 	    		</div>
 	    	</div>
 	    	<div class="card-box">
+
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                  	 <?php echo $frm->getElement('branch_id');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   	<?php echo $frm->getElement('invoice');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INVOICE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('external_invoice');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EXPENSE_TITLE");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('title');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('payment_method');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('cheque_num');?>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+
+										<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-usd" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("EXPENSE_INFO");?></p>
+											</div> 
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('branch_id');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('invoice');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("INVOICE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('external_invoice');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EXPENSE_TITLE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('title');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('payment_method');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('cheque_num');?>
+											</div>
+										</div>
+									</div>	
+								</div>	
+							</div>	
+					</div>	
+
 	            </div>
+
 	            <div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREATED_DATE");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('Date');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_EXPENSE");?> <span class="required">*</span>:
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('total_amount');?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIVER");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('receiver');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type=hidden id="identity" name="identity" />
-	                   		<?php echo $frm->getElement('Description');?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement('Stutas');?>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="material-icons-outlined">payments</i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("EXPENSE_INFO");?></p>
+												</div> 
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREATED_DATE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('Date');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_EXPENSE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('total_amount');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIVER");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('receiver');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input type=hidden id="identity" name="identity" />
+													<?php echo $frm->getElement('Description');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('Stutas');?>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+					</div>
+			
+
 	            </div>
 	        </div>
 	        <div class="clearfix"></div>
@@ -137,14 +177,14 @@ table.collape tbody td {
 	        	</div>
 	        	<div class="col-md-12 col-sm-12 col-xs-12 ">
 	        		<input type="button" label="<?php echo $tr->translate('ADD_EXPENSE');?>" dojoType="dijit.form.Button" 
-						 	   iconClass="dijitIconEditProperty" onclick="addRow();" />
+					class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addRow();" />
 	        	</div>
 	        </div>
 	        <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 					<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
-						 iconClass="dijitIconSave"/>
+					class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved"/>
 					<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
 						class="button-class button-primary" iconClass="glyphicon glyphicon-print" />
                	</div>

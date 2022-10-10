@@ -173,6 +173,9 @@ fieldset{  background:none;}
 					 <input type="button" name="printselectedTray" id="printselectedTray" value="រក្សាទុក" label="<?php echo $tr->translate('SINGLE_IDPRINT_TRAY');?>"  dojoType="dijit.form.Button" 
 					 class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 					 onclick="printSelectedTray('');" />
+					 <input type="button" name="printPickupCardSelected" id="printPickupCardSelected" value="រក្សាទុក" label="<?php echo $tr->translate('SINGLE_PICKUP_PRINT');?>"  dojoType="dijit.form.Button" 
+					 class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+					 onclick="printPickupCardSelected('');" />
                	</div>
              </div>
 
@@ -773,6 +776,28 @@ function printSelected(typecard){
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-idcard-trayprint'));
+    	?>
+    	var urlink="";
+		if(typecard==1){
+			var urlink="?front_card=1";
+		}
+    	 id_selected = dijit.byId('student_ids').get('value');
+		 if(id_selected!=''){
+			window.open(
+					'<?php echo $url_copy;?>'+'/id/'+id_selected+urlink,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
+		 }else{
+			alert('Please select record you want to print');
+			return false;
+		 }
+	}
+
+	function printPickupCardSelected(typecard){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'print-pickupcard'));
     	?>
     	var urlink="";
 		if(typecard==1){

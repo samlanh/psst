@@ -33,66 +33,112 @@
 			</script>
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-							<select name="branch_id" id="branch_id" class="fullside" onChange="getStudentByBranch();" dojoType="dijit.form.FilteringSelect" >
-								<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
-								<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
-									<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
-								<?php }}?>
-							</select>
-		                </div>
-	             	</div>
-	             	<div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input id="studentid" />
-		                </div>
-	             	</div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+
+										<div class="d-flex "> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-queen" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO");?></p>
+													</div> 
+										</div>
+										<div class="col-md-12 col-sm-12 col-xs-12">
+													&nbsp; 
+										</div>
 					
-	             	<div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<textarea row="4" name="note" id="note"> </textarea>
-		                </div>
-	             	</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<select name="branch_id" id="branch_id" class="fullside" onChange="getStudentByBranch();" dojoType="dijit.form.FilteringSelect" >
+													<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
+													<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+														<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
+													<?php }}?>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input id="studentid" />
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<textarea row="4" name="note" id="note"> </textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
 	             </div>
+
 	             <div class="col-md-8 col-sm-8 col-xs-12">
-		    		<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-		                <label class="control-label bold col-md-2 col-sm-2 col-xs-12">
-							<?php echo $tr->translate("SERVICE");?>
-						</label>
-		                <div class="col-md-5 col-sm-5 col-xs-12">
-		                	<input id="service" name="service" />
-		                </div>
-		                <div class="clearfix"></div>
-	             	</div>
-	             	<div class="form-group">
-	             		<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
-							<thead>
-								<tr id="head-title" class="head-td" align="right" style="width: 100%;">
-									<th width="10%"><?php echo $tr->translate("DEL");?></th>
-									<th width="10%"><?php echo $tr->translate("N_O");?></th>
-									<th width="40%"><?php echo $tr->translate("SERVICE");?></th>
-									<th width="40%"><?php echo $tr->translate("REASON");?></th>
-								</tr>
-							</thead>
-							<tbody id="table_row">
-							
-							</tbody>
-						</table>
-						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-	             	</div>
+					 <div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+												<div class="d-flex "> 
+															<div class="settings-main-icon ">
+																<i class="glyphicon glyphicon-tasks" aria-hidden="true"></i>
+															</div> 
+															<div class="col-md-10 col-sm-10 col-xs-12"> 
+																<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SERVICE_INFO");?></p>
+															</div> 
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+															&nbsp; 
+												</div>
+
+												<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+													<label class="control-label bold col-md-2 col-sm-2 col-xs-12">
+														<?php echo $tr->translate("SERVICE");?>
+													</label>
+													<div class="col-md-5 col-sm-5 col-xs-12">
+														<input id="service" name="service" />
+													</div>
+													<div class="clearfix"></div>
+												</div>
+												<div class="form-group">
+													<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+														<thead>
+															<tr id="head-title" class="head-td" align="right" style="width: 100%;">
+																<th width="10%"><?php echo $tr->translate("DEL");?></th>
+																<th width="10%"><?php echo $tr->translate("N_O");?></th>
+																<th width="40%"><?php echo $tr->translate("SERVICE");?></th>
+																<th width="40%"><?php echo $tr->translate("REASON");?></th>
+															</tr>
+														</thead>
+														<tbody id="table_row">
+														
+														</tbody>
+													</table>
+													<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+												</div>
+
+											</div>
+										</div>
+								</div>
+							</div>
 	             </div>
 			</div>
 			<div class="clearfix"></div>
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 					<input type="submit"  value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
                	</div>
              </div>
 		</form>

@@ -38,55 +38,93 @@ ul.opt-school {
 			</script>
 	    	<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("title");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE_EN");?></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("title_en");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("shortcut");?>
-		                	<input type="hidden" id="type" name="type" value="2" />
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("note");?>
-		                </div>
-		             </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+								<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+
+												<div class="settings-main-icon ">
+															<i class="glyphicon glyphicon-tasks" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SERVICECATE_INFO");?></p>
+												</div> 
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+														&nbsp; 
+											</div>
+
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_degree->getElement("title");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE_EN");?></label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_degree->getElement("title_en");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_degree->getElement("shortcut");?>
+													<input type="hidden" id="type" name="type" value="2" />
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_degree->getElement("note");?>
+												</div>
+											</div>
+										</div>
+								</div>
+								</div>
+					</div>
+			
 		         </div>
+
 		         <div class="col-md-4 col-sm-4 col-xs-12">
-		         	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("School Option");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                	<span><input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
-		                	<ul class="opt-school">
-		                		<?php $identityCheck = ""; if (!empty($this->schoolOption)) foreach ($this->schoolOption as $rs){?>
-		                		<li class="opt-items"> <input checked="checked" type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
-		                			<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
-		                		<?php }?>
-		                	</ul>
-	                	<input type="hidden" id="identityCheck" name="identityCheck" value="<?php echo $identityCheck;?>" />
-	                </div>
+
+					 <div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12">
+
+
+													<div class="form-group">
+													<label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
+														<i class="glyphicon glyphicon-hand-right" aria-hidden="true"></i> <?php echo $tr->translate("School Option");?> 
+													</label>
+													</div>
+													<div class="form-group">
+														<span><input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
+															<ul class="opt-school">
+																<?php $identityCheck = ""; if (!empty($this->schoolOption)) foreach ($this->schoolOption as $rs){?>
+																<li class="opt-items"> <input checked="checked" type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
+																	<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
+																<?php }?>
+															</ul>
+														<input type="hidden" id="identityCheck" name="identityCheck" value="<?php echo $identityCheck;?>" />
+													</div>
+
+											</div>
+									</div>
+								</div>
+						</div>
+
 		         </div>
 		         <div class="clearfix"></div>
 		         <div class="card-box mt-20">
 	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 	               		 <input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
 						<input type="submit"  label="<?php echo $tr->translate("SAVE_NEW");?>" id="save_new" name="save_new" 
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 	               	</div>
 	             </div>
 	    	</div>

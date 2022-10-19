@@ -59,77 +59,129 @@ dojo.require("dijit.form.CheckBox");
 			</script>
 	    	<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REQUEST_NAME");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("request_name");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PHONE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("phone");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAMES");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("stu_name");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("dis_type");?>
-		                </div>
-		             </div>
-		              <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PERIOD");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<div class="col-md-5 col-sm-5 col-xs-12">
-		                	<?php echo $frm_degree->getElement("duration");?>
-		                	</div>
-		                	<div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("duration_type");?>
-		                	</div>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("notes");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("expired_date");?>
-		                </div>
-		             </div>
-		              <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("status");?>
-		                </div>
-		             </div>
+					<div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											
+												<div class="d-flex "> 
+														<div class="settings-main-icon ">
+														
+															<i class="glyphicon glyphicon-tags"></i>
+															
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DISCOUNT_INFO");?></p>
+														</div> 
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+														&nbsp; 
+												</div>
+
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REQUEST_NAME");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("request_name");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PHONE");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("phone");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAMES");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("stu_name");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_TYPE");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("dis_type");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PERIOD");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<div class="col-md-5 col-sm-5 col-xs-12">
+														<?php echo $frm_degree->getElement("duration");?>
+														</div>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("duration_type");?>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("notes");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("expired_date");?>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm_degree->getElement("status");?>
+													</div>
+												</div>
+
+											</div>
+										</div>
+								</div>
+						</div>
+
 		         </div>
+
 		         <div class="col-md-8 col-sm-8 col-xs-12">
-		         		<div class="form-group">
-			         	 	 <div class="col-md-10 col-sm-10 col-xs-10" id="fileList">
-		                	 </div>
-			         	 </div>
-			         	 <div class="form-group">
-			         	 	<button class="btn btn-default addfile" onclick="addRow();" type="button"><?php echo $tr->translate('Add More Doc')?></button>
-							<input type="hidden" name="identity" id="identity"  value="" >
-			         	 </div>
+					 <div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+												<div class="d-flex "> 
+														<div class="settings-main-icon ">
+														
+															<i class="glyphicon glyphicon-file"></i>
+															
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("FILE");?></p>
+														</div> 
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+														&nbsp; 
+												</div>
+
+												<div class="form-group">
+													<div class="col-md-10 col-sm-10 col-xs-10" id="fileList">
+													</div>
+												</div>
+												<div class="form-group">
+													<button class="btn btn-default addfile" onclick="addRow();" type="button"><?php echo $tr->translate('Add More Doc')?></button>
+													<input type="hidden" name="identity" id="identity"  value="" >
+												</div>
+										</div>
+									</div>
+
+							</div>
+						</div>
+
 		         </div>
 		         <div class="clearfix"></div>
 		         <div class="card-box mt-20">
 	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+	               		<input class="button-class button-danger" iconClass="glyphicon glyphicon-erase" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 	               		 <input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
-						<input type="submit" id="save_new" value="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
+						<input type="submit" id="save_new" value="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button"
+						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 	               	</div>
 	             </div>
 	    	</div>

@@ -2174,26 +2174,26 @@ function getAllgroupStudyNotPass($action=null){
   		$colunmname='title';
   	}
   	$sql = "SELECT start_date,expired_date,group_code,
-  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year,
-  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year_only,
-  	
-  	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
-  	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-  	(SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=4 AND `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1) AS session,
-  	(SELECT room_name FROM rms_room WHERE room_id = rms_group.room_id LIMIT 1) AS room,
-  	academic_year AS academic_year_id,
-  	degree AS degree_id,
-  	grade AS grade_id,
-  	SESSION AS session_id,
-  	room_id,
-  	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id=rms_group.teacher_id LIMIT 1) AS teacherNameKh,
-  	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=rms_group.teacher_id LIMIT 1) AS teacherNameEng,
-  	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_kh,
-  	(SELECT rms_items.title_en FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_eng,
-  	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_kh,
-  	(SELECT rms_itemsdetail.title_en FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_eng
-  	FROM
-  	`rms_group` WHERE id=$id LIMIT 1 ";
+		  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year,
+		  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_group.academic_year LIMIT 1) AS year_only,
+		  	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
+		  	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		  	(SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=4 AND `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1) AS session,
+		  	(SELECT room_name FROM rms_room WHERE room_id = rms_group.room_id LIMIT 1) AS room,
+		  	academic_year AS academic_year_id,
+		  	degree AS degree_id,
+		  	grade AS grade_id,
+		  	SESSION AS session_id,
+	  		room_id,
+		  	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id=rms_group.teacher_id LIMIT 1) AS teacherNameKh,
+		  	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=rms_group.teacher_id LIMIT 1) AS teacherNameEng,
+		  	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_kh,
+		  	(SELECT rms_items.title_en FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_eng,
+		  	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_kh,
+		  	(SELECT rms_itemsdetail.title_en FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_eng
+  		FROM
+  			`rms_group` 
+  				WHERE id=$id LIMIT 1 ";
   	// last 4 row query use for cetifcate only ( added in 06-3-2019)
   	return $db->fetchRow($sql);
   }

@@ -68,7 +68,7 @@
 							}
 						}
                			 
-						loadingBlock();	
+						//loadingBlock();	
 					}else {
 						return false;
 					}
@@ -107,6 +107,9 @@
 		                   			<li>
 		                   				<span>&#x2610;</span> <?php echo $tr->translate("FAIL")?> / <?php echo $tr->translate("NOT_CHANGE")?>
 		                   			</li>
+		                   			<li>
+		                   				<?php echo $tr->translate("TOTAL_STUDENT_SELECTED")?><label id="lblStudentSelected"></label>
+		                   			</li>
 		                   		</ul>
 		                   </div>
 		                </div>
@@ -114,7 +117,7 @@
 		                <div class="form-group">
 		                   <div id="data_table" style="min-height: 300px !important;overflow-y: auto; padding: 5px; border: solid 1px #ccc;" class="col-md-12 col-sm-12 col-xs-12">
 		                   </div>
-						   <input type="hidden" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
+						   <input type="text" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
 		                </div>
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog">
@@ -184,7 +187,7 @@
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<?php echo $frm->getElement("note");?>
-								<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" />
+								<input dojoType="dijit.form.TextBox"  type="text" name="identity" id="identity" />
 		                   </div>
 		                </div>
 		                <div class="form-group">
@@ -601,9 +604,18 @@ function setValue(i){
 			}
 		}
 	}
+	countStudentSelected();
+}
+function countStudentSelected(){
+	$('#lblStudentSelected').html('');
+	identitys = $('#identity').val();
+	if(identitys!=''){
+		arraysStu = identitys.split(',');
+		$('#lblStudentSelected').html(arraysStu.length);
+	}
 }
 function check(i){
-	if($('#checkall').is(":checked")){
+	if($('#checkall').is(":checked")){setValue
 		for(var j=1;j<=i;j++){
 			$('#checkbox'+j).each(function() { //loop through each checkbox
 	            this.checked = true;  

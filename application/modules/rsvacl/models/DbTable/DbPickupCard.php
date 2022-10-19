@@ -31,6 +31,24 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
     			else
     				$string = "Image Upload failed";
     		}
+    		
+    		$name_back = $_FILES['photo_back']['name'];
+    		$size = $_FILES['photo_back']['size'];
+    		if (!file_exists($part)) {
+    			mkdir($part, 0777, true);
+    		}
+    		$photo_back='';
+    		if (!empty($name_back)){
+    			$ss = 	explode(".", $name_back);
+    			$image_name = "pickupbgcard_".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['photo_back']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$image_name)){
+    				$photo_back = $image_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
+    		}
+    		
     		$sql="SELECT id FROM rms_pickupcard WHERE 1";
     		$sql.=" AND title='".$_data['title']."' AND branch_id=".$_data['branch_id'];
     		if (!empty($_data['schoolOption'])){
@@ -52,18 +70,19 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
 			
 	    	$_arr = array(
 	    			'branch_id'	    =>$_data['branch_id'],
-	    			'title' =>$_data['title'],
-	    			'background' =>$photo,
-	    			'schoolOption'		=>$_data['schoolOption'],
+	    			'title' 		=>$_data['title'],
+	    			'background' 	=>$photo,
+	    			'background_back'=>$photo_back,
+	    			'schoolOption'	=>$_data['schoolOption'],
 	    			'display_by'	=>$_data['display_by'],
-	    			'issue'		=>$_data['issue'],
-	    			'validate'	=>$_data['valid'],
-					'note'		=>$_data['note'],
-	    			'default'	=>1,
-	    			'status'	=>1,
+	    			'issue'			=>$_data['issue'],
+	    			'validate'		=>$_data['valid'],
+					'note'			=>$_data['note'],
+	    			'default'		=>1,
+	    			'status'		=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'create_date'	=>date("Y-m-d H:i:s"),
-	    			'user_id'	=>$this->getUserId(),					
+	    			'user_id'		=>$this->getUserId(),					
 	    			);
 	    	$this->_name ="rms_pickupcard";
 	    	$this->insert($_arr);//insert data
@@ -72,7 +91,6 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
 	    	}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    		$_db->rollBack();
-	    		echo $e->getMessage(); exit();
 	    	}
     }
 
@@ -82,6 +100,7 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
     	try{
 			$id = $_data['id'];
     		$part= PUBLIC_PATH.'/images/card/';
+    		
     		$name = $_FILES['photo']['name'];
     		$size = $_FILES['photo']['size'];
     		if (!file_exists($part)) {
@@ -133,6 +152,21 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
 					$_arr['background']=$image_name;
 				}
 			}
+			
+			$name = $_FILES['photo_back']['name'];
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$photo='';
+			if (!empty($name)){
+				$ss = 	explode(".", $name);
+				$image_name = "pickupcardback_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['photo_back']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$image_name)){
+					$_arr['background_back']=$image_name;
+				}
+			}
+			
 			$this->_name ="rms_pickupcard";
 			$where=$this->getAdapter()->quoteInto("id=?", $id);
 			$this->update($_arr, $where);
@@ -141,7 +175,6 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
     	}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$_db->rollBack();
-    		echo $e->getMessage(); exit();
     	}
     }
    	

@@ -59,7 +59,6 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
-				echo $e->getMessage();exit();
 			}
 		}
 

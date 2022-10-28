@@ -446,7 +446,7 @@ table.tb-footer tr.style-head {
 		getAllAcademicByBranch();
 	});
 	
-	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id==''){return false;}

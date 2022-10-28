@@ -31,32 +31,58 @@
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-	        		<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BLOCK_NAME");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("block_name");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMARK");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("note");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("status");?>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+
+										<div class="d-flex "> 
+														<div class="settings-main-icon ">
+														
+															<i class="glyphicon glyphicon-th-large"></i>
+															
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BLOCK");?></p>
+														</div> 
+										</div>
+										<div class="col-md-12 col-sm-12 col-xs-12">
+														&nbsp; 
+										</div>
+
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BLOCK_NAME");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("block_name");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMARK");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("note");?>
+											</div>
+										</div>
+										<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("status");?>
+											</div>
+										</div>
+
+									</div>
+							</div>
+						</div>
+					</div>
+
+
 	                <div class="clearfix"></div>
 				    <div class="card-box">
 		               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
 							<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
+								class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open"/>
 			    		</div>
 			    	</div>
 	             </div>

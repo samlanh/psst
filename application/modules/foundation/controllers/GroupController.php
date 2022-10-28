@@ -263,7 +263,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
     		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
     		$model = new Application_Model_DbTable_DbGlobal();
     		
-    		$group = $model->getAllGroupByBranch($branch_id);
+    		$group = $model->getAllGroupName($data);
     		array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
     		
     		$degree = $model->getAllItems(1,null);

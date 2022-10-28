@@ -3218,8 +3218,13 @@ function getAllgroupStudyNotPass($action=null){
 	  	}
 	  	
 	  	if (!empty($data['change_type'])){
-	  		if ($data['change_type']==2){//ឡើងថ្នាក់
-	  		}else{
+	  		if ($data['change_type']==1){//change class
+	  			
+	  		}
+	  		elseif($data['change_type']==2){//ឡើងថ្នាក់
+	  			
+	  		}
+	  		else{
 	  			if(!empty($data['degree'])){
 	  				$sql.=" AND g.degree = ".$data['degree'];
 	  			}

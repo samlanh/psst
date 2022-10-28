@@ -366,7 +366,7 @@ require(["dojo/ready"], function(ready){
 	});
 });
 
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getAllGrade(){
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id==''){return false;}

@@ -459,7 +459,7 @@ table.collape tbody td {
 		});
 	}
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id==''){return false;}

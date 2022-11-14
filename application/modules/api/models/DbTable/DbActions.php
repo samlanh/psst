@@ -40,6 +40,39 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			exit();
 		}
 	}
+	public function loginWebAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getStudentLogin($_data);
+			if ($row['status']){
+				if(!empty($row['value'])){
+					$arrResult = array(
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
+				}else{
+					$arrResult = array(
+						"result" => $row['value'],
+						"code" => "FAIL",
+					);
+				}
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
 	public function changePasswordAction($_data){
 		try{
 			$db = new Api_Model_DbTable_DbApi();
@@ -569,6 +602,240 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$arrResult = array(
 					"code" => "ERR_",
 					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function gradingSystemAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getGradingSystem($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function disciplinePolicyAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getDisciplinePolicy($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function schoolBranchListAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getSchoolBranchList($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	public function studentEvaluationAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getStudentEnvaluation($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function studentEvaluationDetailAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getStudentEnvaluationDetail($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	
+	public function studentAttendanceAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getStudentAttendance($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function studentAttendanceDetailAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getStudentAttendanceDetail($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	public function studentScheduleAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getStudentSchedule($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function studentScoreAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getStudentScore($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function scoreInformationAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getScoreInformation($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function subjectByGroupAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getSubjectByGroup($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	public function studentScoreBySubjectAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getStudentScoreBySubject($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
 			);
 		}
 		print_r(Zend_Json::encode($arrResult));

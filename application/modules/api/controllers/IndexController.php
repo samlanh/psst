@@ -61,6 +61,31 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->holidayEveryYearAction($GetData);
     		}else if ($GetData['url']=="introductionhome"){
     			$_dbAction->introductionHomeAction($GetData);
+				
+			}else if ($GetData['url']=="gradingSystem"){
+    			$_dbAction->gradingSystemAction($GetData);
+			}else if ($GetData['url']=="disciplinePolicy"){
+    			$_dbAction->disciplinePolicyAction($GetData);
+			}else if ($GetData['url']=="branchList"){
+    			$_dbAction->schoolBranchListAction($GetData);
+			}else if ($GetData['url']=="studentEvaluation"){
+    			$_dbAction->studentEvaluationAction($GetData);
+			}else if ($GetData['url']=="studentEvaluationDetail"){
+    			$_dbAction->studentEvaluationDetailAction($GetData);
+			}else if ($GetData['url']=="studentAttendance"){
+    			$_dbAction->studentAttendanceAction($GetData);
+			}else if ($GetData['url']=="studentAttendanceDetail"){
+    			$_dbAction->studentAttendanceDetailAction($GetData);
+			}else if ($GetData['url']=="studentSchedule"){
+    			$_dbAction->studentScheduleAction($GetData);
+			}else if ($GetData['url']=="studentScore"){
+    			$_dbAction->studentScoreAction($GetData);
+			}else if ($GetData['url']=="scoreInformation"){
+    			$_dbAction->scoreInformationAction($GetData);
+			}else if ($GetData['url']=="subjectByGroup"){
+    			$_dbAction->subjectByGroupAction($GetData);
+			}else if ($GetData['url']=="studentScoreBySubject"){
+    			$_dbAction->studentScoreBySubjectAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
@@ -74,6 +99,8 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->changePasswordAction($postData);
     			}else if ($GetData['url']=="addtoken"){// change password
     				$_dbAction->addTokenAction($postData);
+				}else if ($GetData['url']=="authWeb"){
+    				$_dbAction->loginWebAction($postData);
     			}
     			else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);

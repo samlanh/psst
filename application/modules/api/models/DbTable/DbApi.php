@@ -1139,8 +1139,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	$sql_order= "  ORDER BY act.publish_date DESC,act.`id` DESC";
 		    	
 		    	if (!empty($search['limit'])){
-		    		$sql.= "  LIMIT ".$search['limit'];
+		    		$sql_order.= "  LIMIT ".$search['limit'];
 		    	}
+				
+				//New Added
+				if(!empty($search['LimitStart'])){
+					$sql_order.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+				}else if(!empty($search['limitRecord'])){
+					$sql_order.=" LIMIT ".$search['limitRecord'];
+				}
+			
 		    $row = $db->fetchAll($sql.$sql_order);
 		    
 		    $sql.=" AND is_feature=2 ";
@@ -2316,7 +2324,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     			$studentId = empty($search['studentId'])?0:$search['studentId'];
-		    	
+		    	$type = empty($search['type'])?1:$search['type'];
 		    	$label = "name_en";
 				$branchName = "branch_nameen";
 				if($currentLang==1){// khmer
@@ -2340,12 +2348,25 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,sat.`date_attendence`
 						,DATE_FORMAT(sat.`date_attendence`,'%Y%m') AS yearMonth
 						,satd.description
+						
+
+				";
+				if($type==1){//attendance
+					$sql.="
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=2 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countNoPermission
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=3 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countPermission
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=4 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countLate
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=5 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countEalyLeave
-
-				";
+					";
+				}else{//Mistake
+					$sql.="
+						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=1 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countSmallMistake
+						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=2 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countMediumMistake
+						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=3 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countBigMistake
+						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=4 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countOtherMistake
+					";
+				}
+				
 				$sql.="
 					FROM
 						`rms_student_attendence` AS sat 
@@ -2355,7 +2376,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.="
 					WHERE
 						
-						 sat.type=1
+						 sat.type=".$type."
 						AND sat.`status`=1
 				";
 		
@@ -2405,6 +2426,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     			$studentId = empty($search['studentId'])?0:$search['studentId'];
+    			$type = empty($search['type'])?1:$search['type'];
 		    	
 		    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$label = "name_en";
@@ -2423,13 +2445,31 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,satd.`attendence_status`
 					,satd.`type`
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
-					,CASE
+					
+					
+				";
+				if($type==1){//attendance
+					$sql.="
+						,CASE
 							WHEN satd.`attendence_status` = 2 THEN '".$tr->translate("NO_PERMISSION")."'
 							WHEN satd.`attendence_status` = 3 THEN '".$tr->translate("PERMISSION")."'
 							WHEN satd.`attendence_status` = 4 THEN '".$tr->translate("LATE")."'
 							WHEN satd.`attendence_status` = 5 THEN '".$tr->translate("EARLY_LEAVE")."'
 						
-					END AS attendenceStatusTitle
+						END AS attendenceStatusTitle
+					";
+				}else{//Mistake
+					$sql.="
+						,CASE
+							WHEN satd.`attendence_status` = 1 THEN '".$tr->translate("SMALL_MISTACK")."'
+							WHEN satd.`attendence_status` = 2 THEN '".$tr->translate("MEDIUM_MISTACK")."'
+							WHEN satd.`attendence_status` = 3 THEN '".$tr->translate("BIG_MISTACK")."'
+							WHEN satd.`attendence_status` = 4 THEN '".$tr->translate("OTHER")."'
+						
+						END AS attendenceStatusTitle
+					";
+				}
+				$sql.="
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
 					,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `roomName`
 					,sat.`date_attendence`
@@ -2446,7 +2486,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.="
 					WHERE
 						
-						 sat.type=1
+						 sat.type=".$type."
 						AND sat.`status`=1 
 				";
 				$yearMonth = empty($search['id'])?'':$search['id'];
@@ -2859,6 +2899,237 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		
 			 
 			$row = $db->fetchRow($sql);
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	public function getStudentPaymentHistory($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+			if($currentLang==1){
+				$label = "name_kh";
+				$branch = "branch_namekh";
+				$grade = "rms_itemsdetail.title";
+				$degree = "rms_items.title";
+			}
+			
+			$sql=" SELECT 
+    				sp.*
+    				,(SELECT $branch FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branchName
+    				,sp.receipt_number AS receiptNo
+					,sp.create_date AS paymentDate
+	    			,(CASE WHEN sp.data_from=3 THEN s.serial ELSE s.stu_code END) AS stuCode
+	    			,(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stuName
+					,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sp.group_id LIMIT 1) AS groupCode
+	    			,(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS academicYear
+					,(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=sp.payment_method LIMIT 1) AS paymentMethod
+					,sp.number AS methodSerialNumber
+	 		       ,(SELECT CONCAT(u.last_name,'-',u.first_name) FROM rms_users AS u WHERE u.id = sp.user_id LIMIT 1) AS userName
+				   ,(SELECT $label FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS voidTitle
+	 		       
+ 			   FROM 
+    				rms_student AS s,
+					rms_student_payment AS sp
+				WHERE 
+					s.stu_id=sp.student_id 
+					";
+    	
+	    	$from_date =(empty($search['startDate']))? '1': " sp.create_date >= '".date("Y-m-d",strtotime($search['startDate']))." 00:00:00'";
+	    	$to_date = (empty($search['endDate']))? '1': " sp.create_date <= '".date("Y-m-d",strtotime($search['endDate']))." 23:59:59'";
+	    	$where = " AND ".$from_date." AND ".$to_date;
+			$where.=" AND sp.status = 1 ";
+			if(!empty($search['searchBox'])){
+	    		$s_where=array();
+	    		$s_search=addslashes(trim($search['searchBox']));
+	    		$s_search = str_replace(' ', '', addslashes(trim($search['searchBox'])));
+	    		$s_where[]= " REPLACE(sp.receipt_number,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]= " REPLACE(sp.paid_amount,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]= " REPLACE(sp.balance_due,' ','') LIKE '%{$s_search}%'";
+	    		$s_where[]= " REPLACE(sp.number,' ','') LIKE '%{$s_search}%'";
+	    		
+	    		$where.=' AND ('.implode(' OR ', $s_where).')';
+	    	}
+	    	if(!empty($search['academicYear'])){
+	    		$where.=" AND sp.academic_year=".$search['academicYear'];
+	    	}
+			if(!empty($search['paymentMethod'])){
+	    		$where.=" AND sp.payment_method=".$search['paymentMethod'];
+	    	}
+			$where.=" AND sp.student_id = ".$studentId;
+	    	$order=" ORDER BY sp.create_date DESC";
+			if(!empty($search['LimitStart'])){
+				$order.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+			}else if(!empty($search['limitRecord'])){
+	    		$order.=" LIMIT ".$search['limitRecord'];
+	    	}
+		
+			 
+			$row = $db->fetchAll($sql.$where.$order);
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getStudentPaymentInfo($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			$paymentId = empty($search['paymentId'])?0:$search['paymentId'];
+			
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$label = "name_en";
+			$schooName = "school_nameen";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+			if($currentLang==1){// khmer
+				$label = "name_kh";
+				$schooName = "school_namekh";
+				$branch = "branch_namekh";
+				$grade = "rms_itemsdetail.title";
+				$degree = "rms_items.title";
+			}
+			
+			$sql=" SELECT 
+    				sp.*
+    				,(SELECT $schooName FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS schoolName
+    				,(SELECT $branch FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branchName
+    				,sp.receipt_number AS receiptNo
+					,sp.create_date AS paymentDate
+	    			,(CASE WHEN sp.data_from=3 THEN s.serial ELSE s.stu_code END) AS stuCode
+	    			,(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stuName
+					,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sp.group_id LIMIT 1) AS groupCode
+	    			,(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS academicYear
+					,(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=sp.payment_method LIMIT 1) AS paymentMethod
+					,sp.number AS methodSerialNumber
+	 		       ,(SELECT CONCAT(u.last_name,'-',u.first_name) FROM rms_users AS u WHERE u.id = sp.user_id LIMIT 1) AS userName
+				   ,(SELECT $label FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS voidTitle
+	 		       
+ 			   FROM 
+    				rms_student AS s,
+					rms_student_payment AS sp
+				WHERE 
+					s.stu_id=sp.student_id 
+					";
+			$where=" AND sp.status = 1 ";
+			$where.=" AND sp.student_id = ".$studentId;
+			$where.=" AND sp.id = ".$paymentId;
+			$where.=" LIMIT 1 ";
+			$row = $db->fetchRow($sql.$where);
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	public function getStudentPaymentDetail($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			$paymentId = empty($search['paymentId'])?0:$search['paymentId'];
+			
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$label = "name_en";
+			$branch = "branch_nameen";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			if($currentLang==1){
+				$label = "name_kh";
+				$branch = "branch_namekh";
+				$grade = "rms_itemsdetail.title";
+				$degree = "rms_items.title";
+			}
+			
+			$sql=" SELECT 
+					spd.*
+			    	,(SELECT $grade FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS itemsName
+			    	,(SELECT items_type FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS itemsType
+			    	,(SELECT $label FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS paymentTerm
+    			FROM 
+			    	rms_student_payment as sp,
+			    	rms_student_paymentdetail AS spd ";
+			$sql.='WHERE sp.id=spd.payment_id 
+				AND spd.payment_id = '.$paymentId;
+			
+			$row = $db->fetchAll($sql);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	public function getNewsDetail($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$id = empty($search['id'])?0:$search['id'];
+			$sql=" SELECT 
+						a.*,
+						ad.title,
+						ad.description
+					FROM `mobile_news_event` AS a,
+						`mobile_news_event_detail` AS ad
+					WHERE a.id=ad.news_id
+						AND ad.lang= $currentLang 
+						AND a.status=1 ";
+			$sql.=" AND a.id=".$id;
+    		$row = $db->fetchRow($sql);
+			
 			$result = array(
 				'status' =>true,
 				'value' =>$row,

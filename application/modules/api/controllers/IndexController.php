@@ -16,6 +16,10 @@ class Api_IndexController extends Zend_Controller_Action
 //     	header('Content-Type: application/json');
     	$_dbAction = new Api_Model_DbTable_DbActions();
     	$GetData = $this->getRequest()->getParams();
+		
+		$session_lang=new Zend_Session_Namespace('lang');
+		$session_lang->lang_id=empty($GetData['currentLang'])?1:$GetData['currentLang'];
+			
     	if ($_SERVER['REQUEST_METHOD'] == "GET"){
     		if($GetData['url']=="profile"){
     			$_dbAction->profileAction($GetData);
@@ -86,6 +90,14 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->subjectByGroupAction($GetData);
 			}else if ($GetData['url']=="studentScoreBySubject"){
     			$_dbAction->studentScoreBySubjectAction($GetData);
+			}else if ($GetData['url']=="studentPayment"){
+    			$_dbAction->studentPaymentAction($GetData);
+			}else if ($GetData['url']=="studentPaymentInfo"){
+    			$_dbAction->studentPaymentInfoAction($GetData);
+			}else if ($GetData['url']=="studentPaymentDetail"){
+    			$_dbAction->studentPaymentDetailAction($GetData);
+			}else if ($GetData['url']=="newsDetail"){
+    			$_dbAction->newsDetailAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

@@ -1135,7 +1135,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					   	WHEN  act.`status` = 1 THEN '$base_url'
 					  END AS imageUrl
 		    	";
-		    	$sql.=" FROM `mobile_news_event` AS act WHERE act.`status` =1 ";
+		    	$sql.=" FROM `mobile_news_event` AS act  ";
+				if(!empty($search['unreadRecord'])){
+					$stuId = empty($search['studentId'])?:$search['studentId'];
+					$sql.=" LEFT JOIN `mobile_news_event_read` AS re ON act.`id` = re.newsId ";
+					$sql.=" AND re.`stuId` =$stuId ";
+				}
+		    	$sql.=" WHERE act.`status` =1 ";
 		    	$sql_order= "  ORDER BY act.publish_date DESC,act.`id` DESC";
 		    	
 		    	if (!empty($search['limit'])){
@@ -1147,6 +1153,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$sql_order.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
 				}else if(!empty($search['limitRecord'])){
 					$sql_order.=" LIMIT ".$search['limitRecord'];
+				}
+				if(!empty($search['unreadRecord'])){
+					$sql.=" AND  0 = CASE
+						WHEN  re.`is_read` IS NULL THEN 0
+						ELSE  re.`is_read`
+						END  ";
+					return $row = $db->fetchAll($sql.$sql_order);
 				}
 			
 		    $row = $db->fetchAll($sql.$sql_order);
@@ -2976,6 +2989,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($search['paymentMethod'])){
 	    		$where.=" AND sp.payment_method=".$search['paymentMethod'];
 	    	}
+			
+			
 			$where.=" AND sp.student_id = ".$studentId;
 	    	$order=" ORDER BY sp.create_date DESC";
 			if(!empty($search['LimitStart'])){
@@ -2983,7 +2998,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}else if(!empty($search['limitRecord'])){
 	    		$order.=" LIMIT ".$search['limitRecord'];
 	    	}
-		
+			if(!empty($search['unreadRecord'])){
+				$sql.=" AND sp.`isRead` =0 ";
+				return  $db->fetchAll($sql.$where.$order);
+			}
 			 
 			$row = $db->fetchAll($sql.$where.$order);
 			$result = array(
@@ -3307,6 +3325,49 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$result = array(
 				'status' =>true,
 				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function getUnreadNews($search){
+		
+		$db = $this->getAdapter();
+		try{
+			$row = $this->getAllNews($search);
+			$counting = count($row);
+			$allResult = array('rowData'=>$row,'countingRecord'=>$counting);
+			$result = array(
+				'status' =>true,
+				'value' =>$allResult,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	function getUnreadPayments($search){
+		
+		$db = $this->getAdapter();
+		try{
+			$row = $this->getStudentPaymentHistory($search);
+			$counting = count($row);
+			$allResult = array('rowData'=>$row,'countingRecord'=>$counting);
+			$result = array(
+				'status' =>true,
+				'value' =>$allResult,
 			);
 			return $result;
 		}catch(Exception $e){

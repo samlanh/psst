@@ -110,6 +110,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentPaymentDetailAction($GetData);
 			}else if ($GetData['url']=="newsDetail"){
     			$_dbAction->newsDetailAction($GetData);
+			}else if ($GetData['url']=="unread"){
+    			$_dbAction->unreadAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

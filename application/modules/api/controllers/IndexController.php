@@ -65,7 +65,19 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->holidayEveryYearAction($GetData);
     		}else if ($GetData['url']=="introductionhome"){
     			$_dbAction->introductionHomeAction($GetData);
-				
+			
+			}else if ($GetData['url']=="monthOfTheYear"){
+    			$_dbAction->monthOfTheYearAction($GetData);
+			}else if ($GetData['url']=="systemLanguage"){
+    			$_dbAction->systemLanguageAction($GetData);
+			}else if ($GetData['url']=="systemViewType"){
+    			$_dbAction->systemViewTypeAction($GetData);
+			}else if ($GetData['url']=="systemSettingKeycode"){
+    			$_dbAction->systemSettingKeycodeAction($GetData);
+			}else if ($GetData['url']=="systemAcademicYear"){
+    			$_dbAction->systemAcademicYearAction($GetData);
+			}else if ($GetData['url']=="systemStudyDegree"){
+    			$_dbAction->systemStudyDegreeAction($GetData);					
 			}else if ($GetData['url']=="gradingSystem"){
     			$_dbAction->gradingSystemAction($GetData);
 			}else if ($GetData['url']=="disciplinePolicy"){

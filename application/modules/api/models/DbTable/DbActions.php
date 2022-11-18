@@ -914,5 +914,118 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
+	public function systemLanguageAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getSystemLanguage($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function systemViewTypeAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getSystemViewType($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function monthOfTheYearAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getMonthOfTheYear($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	public function systemAcademicYearAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getSystemAcademicYear($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function systemStudyDegreeAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getSystemStudyDegree($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	public function systemSettingKeycodeAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getSystemSettingKeycode($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
 	
 }

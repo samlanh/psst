@@ -3144,4 +3144,178 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	public function getSystemLanguage($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$id = empty($search['id'])?0:$search['id'];
+			$sql="SELECT * FROM `ln_language` AS l WHERE l.`status`=1 ORDER BY l.ordering ASC";
+    		$row = $db->fetchAll($sql);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getSystemViewType($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$type = empty($search['type'])?0:$search['type'];
+			
+			$colunmname='name_en';
+			if ($currentLang==1){
+				$colunmname='name_kh';
+			}
+			$sql="
+				SELECT v.key_code AS id,
+				v.$colunmname AS name
+				FROM `rms_view` AS v WHERE v.status=1 ";
+			$sql.=" AND v.type= ".$type;
+			$oder=" ORDER BY v.key_code ASC ";
+		
+    		$row = $db->fetchAll($sql.$oder);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getMonthOfTheYear($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$colunmname='month_en';
+			if ($currentLang==1){
+				$colunmname='month_kh';
+			}
+			$sql="
+				SELECT m.id,
+				m.$colunmname AS name
+				FROM `rms_month` AS m WHERE m.status=1 ";
+			$oder=" ORDER BY m.id ASC ";
+		
+    		$row = $db->fetchAll($sql.$oder);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getSystemAcademicYear($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			$sql="
+			SELECT ay.id,
+				CONCAT(ay.fromYear,'-',ay.toYear) AS name
+			FROM rms_academicyear AS ay WHERE ay.status=1 ";
+			$oder=" ORDER BY ay.fromYear DESC ";
+		
+    		$row = $db->fetchAll($sql.$oder);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getSystemStudyDegree($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			
+			$colunmname='title_en';
+			if ($currentLang==1){
+				$colunmname='title';
+			}
+			
+			$this->_name = "rms_items";
+			$sql="SELECT m.id, m.$colunmname AS name FROM $this->_name AS m WHERE m.status=1 ";
+			$sql.=" AND m.type=1 ";
+			$sql.=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';	
+		
+    		$row = $db->fetchAll($sql);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	public function getSystemSettingKeycode($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			
+			$sql = 'SELECT `keyName`,`keyValue` FROM `rms_setting`';
+			$_result = $db->fetchAll($sql);
+			
+			$_k = array(); 
+			foreach ($_result as $key => $k) {
+				$_k[$k['keyName']] = $k['keyValue'];
+			}
+			$row = $_k;
+		
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 }

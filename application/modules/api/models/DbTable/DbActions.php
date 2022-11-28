@@ -1055,4 +1055,35 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
+	
+	public function newsReadAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['unreadRecord'] = empty($search['unreadRecord'])?1:$search['unreadRecord'];
+			$search['unreadSection'] = empty($search['unreadSection'])?"newsUnread":$search['unreadSection'];
+		
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->updateNewsRead($search);
+			if (!$row){
+				$arrResult = array(
+					"code" => "FAIL",
+					"message" => "UNABLE_TO_READ_NEWS",
+				);
+			}else{
+				$arrResult = array(
+						"code" => "SUCCESS",
+						"message" => "",
+					);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
 }

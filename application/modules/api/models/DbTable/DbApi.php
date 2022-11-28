@@ -1134,13 +1134,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			    	CASE
 					   	WHEN  act.`status` = 1 THEN '$base_url'
 					  END AS imageUrl
+					,CASE
+						WHEN  re.`is_read` IS NULL THEN 0
+						ELSE  re.`is_read`
+						END AS isRead
 		    	";
 		    	$sql.=" FROM `mobile_news_event` AS act  ";
-				if(!empty($search['unreadRecord'])){
-					$stuId = empty($search['studentId'])?:$search['studentId'];
-					$sql.=" LEFT JOIN `mobile_news_event_read` AS re ON act.`id` = re.newsId ";
-					$sql.=" AND re.`stuId` =$stuId ";
-				}
+				$stuId = empty($search['studentId'])?0:$search['studentId'];
+				$sql.=" LEFT JOIN `mobile_news_event_read` AS re ON act.`id` = re.newsId  AND re.`stuId` =$stuId ";
+				
 		    	$sql.=" WHERE act.`status` =1 ";
 		    	$sql_order= "  ORDER BY act.publish_date DESC,act.`id` DESC";
 		    	
@@ -2649,6 +2651,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}
 			$sql="SELECT
 					s.*
+					
+					
+					
 					,st.`stu_id`
 					,g.`branch_id`
 					,(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchName
@@ -2676,6 +2681,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						WHEN s.exam_type = 2 THEN s.for_semester
 					ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
 					END AS forMonthTitle
+					
+					,CASE
+						WHEN s.exam_type = 2 THEN s.for_semester
+					ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+					END AS recordTitle
+					,s.date_input AS recordDate
+					,'studyScore' AS recordType
 					
 					,sm.total_score AS totalScore
 					,sm.total_avg AS totalAvg
@@ -2736,6 +2748,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$where.=" LIMIT ".$search['limitRecord'];
 			}
 			 
+			if(!empty($search['unreadRecord'])){
+				$sql.=" AND s.`isRead` =0 ";
+				return  $db->fetchAll($sql.$where);
+			}
+			
 			$row = $db->fetchAll($sql.$where);
 			$result = array(
 				'status' =>true,
@@ -2952,6 +2969,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				,(SELECT $branch FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branchName
     				,sp.receipt_number AS receiptNo
 					,sp.create_date AS paymentDate
+					
+					,sp.receipt_number AS recordTitle
+					,sp.create_date AS recordDate
+					,'payment' AS recordType
+					
 	    			,(CASE WHEN sp.data_from=3 THEN s.serial ELSE s.stu_code END) AS stuCode
 	    			,(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stuName
 					,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sp.group_id LIMIT 1) AS groupCode
@@ -3358,11 +3380,22 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	
+	
 	function getUnreadPayments($search){
 		
 		$db = $this->getAdapter();
 		try{
-			$row = $this->getStudentPaymentHistory($search);
+			$row = $this->getStudentScore($search);
+				
+			$rRow = $this->getStudentPaymentHistory($search);
+			$row = (object) array_merge((array) $rRow, (array) $row);//merg two object array list
+			
+			
+		$row = (array) $row;//sort by key Value DESC
+		usort($row, function ($a, $b) {return $a['recordDate'] < $b['recordDate'];});
+		//print_r($row);exit();
+
 			$counting = count($row);
 			$allResult = array('rowData'=>$row,'countingRecord'=>$counting);
 			$result = array(
@@ -3377,6 +3410,50 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				'value' =>$e->getMessage(),
 			);
 			return $result;
+		}
+	}
+	function checkingReadingReady($_data){
+		$db = $this->getAdapter();
+		$sql="SELECT nr.id FROM mobile_news_event_read AS nr WHERE nr.stuId=".$_data['studentId']." AND nr.newsId=".$_data['newsId']." LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	function updateNewsRead($_data){
+		$db = $this->getAdapter();
+		try{
+			if(!empty($_data['markAllRead'])){
+				$row = $this->getAllNews($_data);
+				foreach($row as $rs){
+					$_data['newsId'] = empty($rs['id'])?0:$rs['id'];
+					$checking = $this->checkingReadingReady($_data);
+					if(empty($checking)){
+						$_arr=array(
+							'newsId'	=> $rs['id'],
+							'stuId'	  	=> $_data['studentId'],
+							'date'	  	=> date("Y-m-d"),
+							'is_read'	=> 1,
+						);
+						$this->_name = "mobile_news_event_read";
+						$this->insert($_arr);	
+					}
+				}
+			}else{
+				$checking = $this->checkingReadingReady($_data);
+				if(empty($checking)){
+					$_arr=array(
+						'newsId'	=> $_data['newsId'],
+						'stuId'	  	=> $_data['studentId'],
+						'date'	  	=> date("Y-m-d"),
+						'is_read'	=> 1,
+					);
+					$this->_name = "mobile_news_event_read";
+					$this->insert($_arr);
+				}
+			}
+			
+			return true;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
 		}
 	}
 }

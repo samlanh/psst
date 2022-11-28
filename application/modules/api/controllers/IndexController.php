@@ -127,6 +127,8 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->addTokenAction($postData);
 				}else if ($GetData['url']=="authWeb"){
     				$_dbAction->loginWebAction($postData);
+				}else if ($GetData['url']=="newsRead"){
+    				$_dbAction->newsReadAction($postData);			
     			}
     			else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);

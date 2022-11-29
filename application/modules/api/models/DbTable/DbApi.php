@@ -2688,6 +2688,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					END AS recordTitle
 					,s.date_input AS recordDate
 					,'studyScore' AS recordType
+					,s.isRead AS recordIsread
 					
 					,sm.total_score AS totalScore
 					,sm.total_avg AS totalAvg
@@ -2741,19 +2742,27 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					}	
 				}
 			}
-			$where.=" ORDER BY s.id DESC";
+			
+			$ordering=" ORDER BY s.date_input DESC";
+			$limit=" ";
 			if(!empty($search['LimitStart'])){
-				$where.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
 			}else if(!empty($search['limitRecord'])){
-				$where.=" LIMIT ".$search['limitRecord'];
+				$limit.=" LIMIT ".$search['limitRecord'];
 			}
 			 
 			if(!empty($search['unreadRecord'])){
-				$sql.=" AND s.`isRead` =0 ";
-				return  $db->fetchAll($sql.$where);
+				if($search['unreadRecord']==1){ //unread
+					$sql.=" AND s.`isRead` =0 ";
+				}else if($search['unreadRecord']==2){ //read
+					$sql.=" AND s.`isRead` =1 ";
+				}else if($search['unreadRecord']==3){ //all
+					$ordering=" ORDER BY s.`isRead` ASC,s.date_input DESC";
+				}
+				return  $db->fetchAll($sql.$where.$ordering.$limit);
 			}
 			
-			$row = $db->fetchAll($sql.$where);
+			$row = $db->fetchAll($sql.$where.$ordering.$limit);
 			$result = array(
 				'status' =>true,
 				'value' =>$row,
@@ -2973,6 +2982,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sp.receipt_number AS recordTitle
 					,sp.create_date AS recordDate
 					,'payment' AS recordType
+					,sp.isRead AS recordIsread
 					
 	    			,(CASE WHEN sp.data_from=3 THEN s.serial ELSE s.stu_code END) AS stuCode
 	    			,(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stuName
@@ -3014,18 +3024,25 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			
 			$where.=" AND sp.student_id = ".$studentId;
-	    	$order=" ORDER BY sp.create_date DESC";
+	    	$ordering=" ORDER BY sp.create_date DESC";
+			$limit=" ";
 			if(!empty($search['LimitStart'])){
-				$order.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
 			}else if(!empty($search['limitRecord'])){
-	    		$order.=" LIMIT ".$search['limitRecord'];
+	    		$limit.=" LIMIT ".$search['limitRecord'];
 	    	}
 			if(!empty($search['unreadRecord'])){
-				$sql.=" AND sp.`isRead` =0 ";
-				return  $db->fetchAll($sql.$where.$order);
+				if($search['unreadRecord']==1){ //unread
+					$sql.=" AND sp.`isRead` =0 ";
+				}else if($search['unreadRecord']==2){ //read
+					$sql.=" AND sp.`isRead` =1 ";
+				}else if($search['unreadRecord']==3){ //all
+					$ordering=" ORDER BY sp.`isRead` ASC,sp.create_date DESC";
+				}
+				return  $db->fetchAll($sql.$where.$ordering.$limit);
 			}
 			 
-			$row = $db->fetchAll($sql.$where.$order);
+			$row = $db->fetchAll($sql.$where.$ordering.$limit);
 			$result = array(
 				'status' =>true,
 				'value' =>$row,
@@ -3382,14 +3399,57 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	}
 	
 	
-	function getUnreadPayments($search){
+	function getUnreadNotification($search){
 		
 		$db = $this->getAdapter();
 		try{
-			$row = $this->getStudentScore($search);
+			if($search['unreadRecord']==3){
 				
-			$rRow = $this->getStudentPaymentHistory($search);
-			$row = (object) array_merge((array) $rRow, (array) $row);//merg two object array list
+				if(!empty($search['limitRecord'])){
+					$limitRecordScore=empty($search['limitRecord'])?null:$search['limitRecord'];
+					$limitRecordPayment=empty($search['limitRecord'])?null:$search['limitRecord'];
+					
+					$limitStartScore=empty($search['LimitStart'])?null:$search['LimitStart'];
+					$limitStartPayment=empty($search['LimitStart'])?null:$search['LimitStart'];
+				
+					
+					$search['unreadRecord'] =1;
+					$search['limitRecord'] =null;
+					$search['LimitStart'] =null;
+					$countingUnreadScore = count($this->getStudentScore($search));
+					$countingUnreadPayment = count($this->getStudentPaymentHistory($search));	
+					
+					if(empty($limitStartScore)){
+					
+						$limitRecordScore=$limitRecordScore+$countingUnreadScore;
+						$limitRecordPayment=$limitRecordPayment+$countingUnreadPayment;
+					}else{
+						$limitStartPayment=$limitStartPayment-$countingUnreadScore;
+						
+						$limitStartScore=$limitStartScore-$countingUnreadPayment;
+					}
+					
+					$search['unreadRecord'] =3;
+					$search['limitRecord'] = $limitRecordScore;
+					$search['LimitStart'] = $limitStartScore;
+					$row = $this->getStudentScore($search);
+
+					$search['limitRecord'] = $limitRecordPayment;
+					$search['LimitStart'] = $limitStartPayment;
+					$rRow = $this->getStudentPaymentHistory($search);
+				}else{
+					$row = $this->getStudentScore($search);
+					$rRow = $this->getStudentPaymentHistory($search);
+				}
+				
+				$row = (object) array_merge((array) $rRow, (array) $row);//merg two object array list
+				
+			}else{
+				$row = $this->getStudentScore($search);
+				$rRow = $this->getStudentPaymentHistory($search);
+				$row = (object) array_merge((array) $rRow, (array) $row);//merg two object array list
+				
+			}
 			
 			
 		$row = (array) $row;//sort by key Value DESC

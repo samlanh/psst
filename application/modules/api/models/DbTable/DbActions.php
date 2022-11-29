@@ -1033,10 +1033,11 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$search['unreadRecord'] = empty($search['unreadRecord'])?1:$search['unreadRecord'];
+		$search['notificationType'] = empty($search['notificationType'])?"":$search['notificationType'];
 		$search['unreadSection'] = empty($search['unreadSection'])?"newsUnread":$search['unreadSection'];
 
-		if($search['unreadSection']=="paymentUnread"){
-			$row = $db->getUnreadPayments($search);
+		if($search['unreadSection']=="notificationUnread"){
+			$row = $db->getUnreadNotification($search);
 		}else{
 			$row = $db->getUnreadNews($search);
 		}

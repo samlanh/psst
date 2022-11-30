@@ -2688,7 +2688,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					END AS recordTitle
 					,s.date_input AS recordDate
 					,'studyScore' AS recordType
-					,s.isRead AS recordIsread
+					,sm.isRead AS recordIsread
 					
 					,sm.total_score AS totalScore
 					,sm.total_avg AS totalAvg
@@ -2753,11 +2753,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			 
 			if(!empty($search['unreadRecord'])){
 				if($search['unreadRecord']==1){ //unread
-					$sql.=" AND s.`isRead` =0 ";
+					$sql.=" AND sm.`isRead` =0 ";
 				}else if($search['unreadRecord']==2){ //read
-					$sql.=" AND s.`isRead` =1 ";
+					$sql.=" AND sm.`isRead` =1 ";
 				}else if($search['unreadRecord']==3){ //all
-					$ordering=" ORDER BY s.`isRead` ASC,s.date_input DESC";
+					$ordering=" ORDER BY sm.`isRead` ASC,s.date_input DESC";
 				}
 				return  $db->fetchAll($sql.$where.$ordering.$limit);
 			}
@@ -3480,9 +3480,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	function updateNewsRead($_data){
 		$db = $this->getAdapter();
 		try{
-			if(!empty($_data['markAllRead'])){
+			if($_data['recordType']=="markAllRead"){//
+				
 				$row = $this->getAllNews($_data);
-				foreach($row as $rs){
+				if(!empty($row)) foreach($row as $rs){
 					$_data['newsId'] = empty($rs['id'])?0:$rs['id'];
 					$checking = $this->checkingReadingReady($_data);
 					if(empty($checking)){
@@ -3497,7 +3498,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					}
 				}
 			}else{
+				
 				$checking = $this->checkingReadingReady($_data);
+				
 				if(empty($checking)){
 					$_arr=array(
 						'newsId'	=> $_data['newsId'],
@@ -3510,10 +3513,119 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				}
 			}
 			
-			return true;
+			$unreadRemain = $this->getUnreadNews($_data);
+			$countingRecord=0;
+			if(!empty($unreadRemain['value']['countingRecord'])){
+				$countingRecord=$unreadRemain['value']['countingRecord'];
+			}
+			$result = array(
+					'status' =>true,
+					'value' =>$countingRecord,
+			);
+			return $result;
+			
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			return false;
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function checkingPaymentReading($_data){
+		$db = $this->getAdapter();
+		$sql="SELECT nr.id FROM rms_student_payment AS nr WHERE nr.student_id=".$_data['studentId']." AND nr.id=".$_data['recordId']." AND nr.isRead=1 LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	function checkingScoreReading($_data){
+		$db = $this->getAdapter();
+		$sql="SELECT nr.id FROM rms_score_monthly AS nr WHERE nr.student_id=".$_data['studentId']." AND nr.score_id=".$_data['recordId']." AND nr.isRead=1 LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	function updateNotificationRead($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			if($_data['recordType']=="markAllRead"){ 
+				$row = $this->getStudentPaymentHistory($_data);
+				if(!empty($row)){
+					foreach($row as $rs){
+						$_data['recordId'] = empty($rs['id'])?0:$rs['id'];
+						$checking = $this->checkingPaymentReading($_data);
+						if(empty($checking)){
+							$_arr=array(
+								'readDate'	  	=> date("Y-m-d H:i:s"),
+								'isRead'	=> 1,
+							);
+							$this->_name = "rms_student_payment";
+							$where ="id=".$rs['id']." AND student_id=".$_data['studentId'];
+							$this->update($_arr, $where);
+						}
+					}
+				}
+				$rowScore = $this->getStudentScore($_data);
+				if(!empty($rowScore)){
+					foreach($rowScore as $rs){
+						$_data['recordId'] = empty($rs['id'])?0:$rs['id'];
+						$checking = $this->checkingScoreReading($_data);
+						if(empty($checking)){
+							$_arr=array(
+								'readDate'	  	=> date("Y-m-d H:i:s"),
+								'isRead'	=> 1,
+							);
+							$this->_name = "rms_score_monthly";
+							$where ="score_id=".$rs['id']." AND student_id=".$_data['studentId'];
+							$this->update($_arr, $where);
+						}
+					}
+				}
+			}else{
+				
+				if($_data['recordType']=="payment"){
+					$checking = $this->checkingPaymentReading($_data);
+					if(empty($checking)){
+						$_arr=array(
+							'readDate'	  	=> date("Y-m-d H:i:s"),
+							'isRead'		=> 1,
+						);
+						$this->_name = "rms_student_payment";
+						$where ="id=".$_data['recordId']." AND student_id=".$_data['studentId'];
+						$this->update($_arr, $where);
+					}
+				}else if($_data['recordType']=="studyScore"){
+					$checking = $this->checkingScoreReading($_data);
+					if(empty($checking)){
+						$_arr=array(
+							'readDate'	  	=> date("Y-m-d H:i:s"),
+							'isRead'		=> 1,
+						);
+						$this->_name = "rms_score_monthly";
+						$where ="score_id=".$_data['recordId']." AND student_id=".$_data['studentId'];
+						$this->update($_arr, $where);
+					}
+				}
+			}
+			
+			$unreadRemain = $this->getUnreadNotification($_data);
+			$countingRecord=0;
+			if(!empty($unreadRemain['value']['countingRecord'])){
+				$countingRecord=$unreadRemain['value']['countingRecord'];
+			}
+			$result = array(
+					'status' =>true,
+					'value' =>$countingRecord,
+			);
+			return $result;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
 		}
 	}
 }

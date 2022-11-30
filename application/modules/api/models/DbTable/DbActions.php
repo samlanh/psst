@@ -1060,22 +1060,54 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	public function newsReadAction($search){
 		try{
 			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['newsId'] = empty($search['newsId'])?0:$search['newsId'];
 			$search['unreadRecord'] = empty($search['unreadRecord'])?1:$search['unreadRecord'];
-			$search['unreadSection'] = empty($search['unreadSection'])?"newsUnread":$search['unreadSection'];
-		
+			$search['recordType'] = empty($search['recordType'])?"":$search['recordType'];
+			
 			$db = new Api_Model_DbTable_DbApi();
 			$row = $db->updateNewsRead($search);
-			if (!$row){
+			if ($row['status']){
 				$arrResult = array(
-					"code" => "FAIL",
-					"message" => "UNABLE_TO_READ_NEWS",
-				);
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
 			}else{
 				$arrResult = array(
-						"code" => "SUCCESS",
-						"message" => "",
-					);
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
 			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function notificationReadAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['unreadRecord'] = empty($search['unreadRecord'])?1:$search['unreadRecord'];
+			$search['recordType'] = empty($search['recordType'])?"markAllRead":$search['recordType'];
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->updateNotificationRead($search);
+			if ($row['status']){
+				$arrResult = array(
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){

@@ -39,7 +39,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	}
 	function checkChangePassword($_data){
 		$db = $this->getAdapter();
-		$db->beginTransaction();
 		try{
 	
 			$sql ="

@@ -1107,6 +1107,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'degree'     =>'',
 						'grade_all'  =>'',
 						'session'    =>'',
+						'receipt_order'=>'0',
 						'all_payment'=>'all',
 						'student_payment'=>'',
 						'student_test'=>'',

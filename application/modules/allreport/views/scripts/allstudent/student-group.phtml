@@ -126,6 +126,7 @@ table.tb-footer tr.style-head {
 						</style>
 						<?php 
 						$all_student = 0;
+						$all_newstudent = 0;
 						$drop_student = 0;?>
 					<div id="exportExcel">
 						<table class="content-data" cellpadding="3"  border="1" >
@@ -140,6 +141,8 @@ table.tb-footer tr.style-head {
 								<td scope="col" >&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("ROOM");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
@@ -150,6 +153,7 @@ table.tb-footer tr.style-head {
 						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;
 							  $all_student = $all_student+$rs['Num_Student'];
 							  $drop_student = $drop_student+$rs['student_drop'];
+							  $all_newstudent+=$rs['New_Student'];
 						  ?>
 						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
 						   	<td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $i;?></td>
@@ -161,6 +165,8 @@ table.tb-footer tr.style-head {
 						    <td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
 						    <td data-label="<?php echo $tr->translate("SESSION");?>" >&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
 						    <td data-label="<?php echo $tr->translate("ROOM");?>"  align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
+						    <td data-label="<?php echo $tr->translate("NEW_STUDENT");?>" >&nbsp;<?php echo $rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td data-label="<?php echo $tr->translate("OLD_STUDENT");?>" >&nbsp;<?php echo $rs['Num_Student']-$rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td data-label="<?php echo $tr->translate("TOTAL_STUDENT");?>" >&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td data-label="<?php echo $tr->translate("STUDENT_DROP");?>" >&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td data-label="<?php echo $tr->translate("STUDENT_STUDY");?>" >&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
@@ -172,6 +178,14 @@ table.tb-footer tr.style-head {
 						</table>
 						<br>
 						<table cellpadding="3" class="padd" width="20%" align="right" style="font-size:12px;line-height:27px;white-space:nowrap;font-family:'Times New Roman','Khmer OS Battambang';margin-bottom:10px;color:#4839bd;">
+							<tr>
+								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_NEW_STUDENT");?></td>
+								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_newstudent;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+							</tr>
+							<tr>
+								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_OLD_STUDENT");?></td>
+								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student-$all_newstudent;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+							</tr>
 							<tr>
 								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
 								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>

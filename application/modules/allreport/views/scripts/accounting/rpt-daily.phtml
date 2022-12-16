@@ -56,9 +56,13 @@
        			<?php echo $frm->getElement("end_date");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("receipt_order");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
        			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
+       			
        		</div>
        	</div>
        	<div class="form-group">
@@ -240,7 +244,8 @@
 											  <tr class="style" align="center">
 											    <td scope="col"><?php echo $tr->translate("N_O");?></td>
 											    <td scope="col"><?php echo $tr->translate("RECEIPT_NO");?></td>
-											    <td scope="col"><?php echo $tr->translate("STUDENT");?></td>
+											    <td scope="col"><?php echo $tr->translate("STUDENT_ID");?></td>
+											    <td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
 												<td scope="col"><?php echo $tr->translate("STUDY_INFO");?></td>
 												<td scope="col"><?php echo $tr->translate("FINE");?></td>
 												<td scope="col"><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
@@ -259,15 +264,19 @@
 										  <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,1);return false;" style="<?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?>"​ >
 										    <td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
 										    <td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" class="bold" align="center"><?php echo $rs['receipt_number']; ?></td>
-										    <td data-label="<?php echo $tr->translate("STUDENT");?>" style=" white-space:nowrap; text-align:left">
-										    &nbsp;
+										    <td data-label="<?php echo $tr->translate("STUDENT_ID");?>" style=" white-space:nowrap; text-align:left">
 										   	 <?php 
 										   	 	echo $rs['stu_code'];
-										   	 	echo !empty($rs['stu_khname'])?"/".$rs['stu_khname']:"/".$rs['last_name'].$rs['stu_enname']; 
+										   	 ?>
+										    </td>
+										    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" style=" white-space:nowrap; text-align:left">
+										    &nbsp;
+										   	 <?php 
+										   	 	echo $rs['stu_khname']." ".$rs['last_name'].$rs['stu_enname']; 
 										   	 ?>
 										   	 &nbsp;
 										    </td>
-											<td data-label="<?php echo $tr->translate("STUDY_INFO");?>"><?php 
+											<td style="white-space: normal;max-width:200px;" data-label="<?php echo $tr->translate("STUDY_INFO");?>"><?php 
 													echo $rs['year'];
 													echo empty($rs['degree'])?"":", ".$rs['degree'];
 													echo empty($rs['grade'])?"":", ".$rs['grade'];

@@ -700,8 +700,24 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$type_study->setMultiOptions($typestudy_opt);
 		$type_study->setValue($request->getParam("type_study"));
 		
+		$receipt_order = new Zend_Dojo_Form_Element_FilteringSelect('receipt_order');
+		$receipt_order->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required' =>'true',
+				'class'=>'fullside',
+				'onchange'=>'filterClient();',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>"false"
+		));
+		$opt = array(
+				'0'=>$this->tr->translate('RECEIPT_ASC'),
+				'1'=>$this->tr->translate('RECEIPT_DESC'),
+		);
+		$receipt_order->setMultiOptions($opt);
+		$receipt_order->setValue($request->getParam("receipt_order"));
 		
 		$this->addElements(array(
+				$receipt_order,
 				    $option_type,
 				    $type_study,
 					$school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,

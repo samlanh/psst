@@ -106,7 +106,12 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			//$where.=" AND paystudent_type=3 AND revenue_type=2 AND data_from=4 ";
 // 			$where.=" AND  data_from=3 ";
 // 			$where.=" AND  paystudent_type=3 AND data_from=4 ";
-			$order=" ORDER By sp.id DESC ";
+			if($search['receipt_order']==0){
+				$order=" ORDER By sp.id ASC ";
+			}else{
+				$order=" ORDER By sp.id DESC ";
+			}
+			
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

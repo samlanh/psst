@@ -364,9 +364,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$this->view->rs = $db->getGroupDetail($search);
 		
-		$_db = new Global_Model_DbTable_DbGroup();
-		$teacher = $_db->getAllTeacher();
-		$this->view->teacher = $teacher;
+// 		$_db = new Global_Model_DbTable_DbGroup();
+// 		$teacher = $_db->getAllTeacher();
+// 		$this->view->teacher = $teacher;
 		
 		
 		$form=new Application_Form_FrmSearchGlobal();

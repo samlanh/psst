@@ -2122,6 +2122,39 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				return $result;
 			}
     	}
+		public function getAttendancePolicy($search){
+    		$db = $this->getAdapter();
+    		try{
+    			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+		    	$title="title";
+		    	
+		    	$sql=" SELECT 
+						ad.title,
+						ad.description
+					FROM `mobile_attendencenote` AS a,
+						`mobile_attendencenote_detail` AS ad
+					WHERE a.id=ad.attendance_id
+						AND ad.lang= $currentLang 
+						AND a.status=1 ";
+				$sql.=" ORDER BY a.ordering ASC ";
+				$row = $db->fetchAll($sql);
+			
+    			 
+				$res = $db->fetchAll($sql);
+				$result = array(
+					'status' =>true,
+					'value' =>$row,
+				);
+				return $result;
+			}catch(Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+				);
+				return $result;
+			}
+    	}
 		public function getSchoolBranchList($search){
     		$db = $this->getAdapter();
     		try{

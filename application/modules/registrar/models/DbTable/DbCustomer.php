@@ -61,15 +61,11 @@ class Registrar_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				$_arr= array(
 					'branch_id'		=>1,
 					'user_id'		=>$this->getUserId(),
-					
 					'stu_khname'	=>$_data['stu_khname'],
 					'last_name'		=>ucfirst($_data['last_name']),
 					'stu_enname'	=>ucfirst($_data['name_en']),
 					'sex'			=>$_data['sex'],
-					
 					'customer_type'	=>2,
-					
-					
 					'tel'			=>$_data['phone'],
 					'email'			=>$_data['email'],
 					'home_num'		=>$_data['home_note'],
@@ -78,7 +74,6 @@ class Registrar_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 					'commune_name'	=>$_data['commun_note'],
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
-					
 					
 					//////////////////////////////////////////////				
 					'remark'		=>$_data['remark'],
@@ -113,7 +108,4 @@ class Registrar_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				AND s.customer_type=2";
 		return $db->fetchRow($sql);
 	}
-
-	
-
 }

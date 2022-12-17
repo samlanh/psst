@@ -76,7 +76,6 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 			);
 			$this->insert($array);
 		}catch(Exception $e){
-			echo $e->getMessage();
 		}
  	 }
  	 
@@ -93,7 +92,6 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 			$where=" id = ".$data['id'];
 			$this->update($arr, $where);
 		}catch(Exception $e){
-			echo $e->getMessage();
 		}
 	}
 	
@@ -123,9 +121,4 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 		}
 		return $cate_tree_array;
 	}
-	
-	
 }
-
-
-

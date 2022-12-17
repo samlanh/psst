@@ -719,12 +719,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $_db->getAllYear();
     }
     
-    function getAllYearsServiceFee(){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic) AS years FROM rms_servicefee WHERE `status`=1";
-    	$order=' ORDER BY id DESC';
-    	return $db->fetchAll($sql.$order);
-    }     
+   
     function getPrefixByDegree($degree){
     	$db= $this->getAdapter();
     	$sql=" SELECT shortcut FROM `rms_items` WHERE id=$degree AND type=1  LIMIT 1";
@@ -734,56 +729,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = new Application_Model_DbTable_DbGlobal();
     	return $db->getnewStudentId($branch_id,$degree);
     }
-    function resetReceipt(){
-    	$db = $this->getAdapter();
-    	$receipt = 0;
-    	for($date=6;$date<=21;$date++){
-    		$sql="SELECT *  FROM rms_student_payment ";
-    		$from_date=" create_date >= '".date("Y-m-".$date)." 00:00:00'";
-    		$to_date =" create_date <= '".date("Y-m-".$date)." 23:59:59'";
-    		$where = " WHERE ".$from_date." AND ".$to_date." ORDER BY create_date ASC ";
-    		$rsp = $db->fetchAll($sql.$where);
-    		if(!empty($rsp)){
-    			$this->_name="rms_student_payment";
-    			foreach($rsp as $rp){
-    			$receipt =$receipt+1;
-    			$pre=0;
-    			$acc_length = strlen((int)$receipt);
-    			for($i = $acc_length;$i<5;$i++){
-    				$pre.='0';
-    			}
-    			$arrr = array(
-    					'receipt_number'=>$pre.$receipt,
-    					'note'=>$rp['note'].'('.$rp['receipt_number'].')'
-    					);
-    			$where = "id=".$rp['id'];
-    			$this->update($arrr, $where);
-    		}}
-    		
-    		$sql="SELECT * FROM rms_student_test ";
-    		$from_date =" paid_date >= '".date("Y-m-".$date)." 00:00:00'";
-    		$to_date =" paid_date <= '".date("Y-m-".$date)." 23:59:59'";
-    		$where = " WHERE ".$from_date." AND ".$to_date." ORDER BY paid_date ASC ";
-    		$rst = $db->fetchAll($sql.$where);
-    		if(!empty($rst)){
-    			$this->_name="rms_student_test";
-    			foreach($rst as $rt){
-    				$receipt =$receipt+1;
-    				$pre=0;
-    				$acc_length = strlen((int)$receipt);
-    				for($i = $acc_length;$i<5;$i++){    					
-    					$pre.='0';
-    				}
-    				$arr = array(
-    						'receipt_no'=>$pre.$receipt,
-    						'note'=>$rt['note'].'('.$rt['receipt_no'].")"
-    				);
-    				$where = "id=".$rt['id'];
-    				$this->update($arr, $where);
-    			}
-    		}
-    	}
-     }
+   
     public function getRecieptNo($branch=0){
     	$db = $this->getAdapter();
     	if($branch==0){
@@ -799,18 +745,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql1="SELECT count(id)  FROM ln_income where 1 $branch_id LIMIT 1 ";
     	$income_no = $db->fetchOne($sql1);
     	
-//     	$sql2="SELECT count(id)  FROM rms_student_test where total_price>0 AND paid_date>='2018-03-06' and is_paid=1 $branch_id LIMIT 1 ";
-//     	$stu_test_no = $db->fetchOne($sql2); 
-
-//     	$sql3="SELECT count(id)  FROM rms_change_product where create_date>='2018-03-06' $branch_id LIMIT 1 ";
-//     	$change_product_no = $db->fetchOne($sql3);
-    	
-//     	$sql4="SELECT count(id)  FROM rms_customer_payment where 1 $branch_id LIMIT 1 ";
-//     	$customer_payment = $db->fetchOne($sql4);
-    	
-//     	$sql5="SELECT count(id)  FROM rms_student_clear_balance where 1 $branch_id LIMIT 1 ";
-//     	$clear_balance = $db->fetchOne($sql5);
-    	
     	$new_acc_no= (int)$payment_no + (int)$income_no +  1;
     	//$new_acc_no = $new_acc_no-506;//for psis
     	
@@ -821,22 +755,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
-    //select GEP all old student
-    function getAllGepOldStudent(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code FROM rms_student AS s
-    	      WHERE  s.status=1 ORDER BY stu_id DESC  ";
-    	return $db->fetchAll($sql);
-    }
-    //select Gep old student by id 
-    function getAllGepOldStudentName(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT s.stu_id As stu_id,			
-			(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name	
-		 FROM rms_student AS s
-    	WHERE  s.status=1 ORDER BY stu_id DESC ";
-    	return $db->fetchAll($sql);
-    }
+    
     //select Gep old student by name
     function getGepOldStudent($stu_id){
     	$db=$this->getAdapter();

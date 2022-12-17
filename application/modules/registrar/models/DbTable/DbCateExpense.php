@@ -77,9 +77,7 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 				);
 			$this->insert($array);
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
 		}
-		//print_r($data); exit();
  	 }
  	 
 	 function updateCateExpense($data){
@@ -126,7 +124,6 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}
-		
         $order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}
@@ -150,13 +147,4 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 		}
 		return $cate_tree_array;
 	}
-	
-	
 }
-
-
-
-
-
-
-

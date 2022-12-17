@@ -79,12 +79,3 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     }
 	    
 }
-
-
-
-
-
-
-
-
-

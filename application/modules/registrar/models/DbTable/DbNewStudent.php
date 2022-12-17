@@ -77,15 +77,11 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 				$_arr= array(
 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
-					
 					'stu_khname'	=>$_data['stu_khname'],
 					'last_name'		=>ucfirst($_data['last_name']),
 					'stu_enname'	=>ucfirst($_data['name_en']),
 					'sex'			=>$_data['sex'],
-					
 					'customer_type'	=>1,
-					
-					
 					'tel'			=>$_data['phone'],
 					'email'			=>$_data['email'],
 					'home_num'		=>$_data['home_note'],
@@ -95,10 +91,7 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
 					'studentToken'  =>$stuToken,
-					
-					//////////////////////////////////////////////				
 					'remark'		=>$_data['remark'],
-					
 				);
 				if(!empty($_data['id']) ){
 // 					$_arr['stu_code']=$_data['student_id'];
@@ -211,7 +204,6 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 			Application_Form_FrmMessage::message("INSERT_FAILE");
 		}
 	}
-	
 	public function getNewStudentById($id){
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -238,7 +230,4 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 				AND s.customer_type=1";
 		return $db->fetchRow($sql);
 	}
-
-	
-
 }

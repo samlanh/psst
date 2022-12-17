@@ -59,8 +59,7 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	function getTotalPenalty($search){
-	}
+	
 	function getIncomeDiscount($search){
 		$db=$this->getAdapter();
 // 			$_db = new Application_Model_DbTable_DbGlobal();
@@ -93,6 +92,5 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 				sp.discount_type,
 				sp.itemdetail_id";
 			return $db->fetchAll($sql.$where);
-		
 	}
 }

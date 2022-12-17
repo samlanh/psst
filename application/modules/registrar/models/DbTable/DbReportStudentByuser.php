@@ -17,12 +17,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->branch_id;
     }
-    public function getType(){
-    	$db=$this->getAdapter();
-		$sql=" select type from rms_student_paymentdetail";
-    	return $db->fetchAll($sql);
-    }
-	   
+  
 	function getDailyReport($search=null){
 		try{
 			$_db = new Application_Model_DbTable_DbGlobal();
@@ -119,156 +114,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 	}   
 
 	
-	function getAllChangeProduct($search){
-		try{
-			$_db = new Application_Model_DbTable_DbGlobal();
-			$branch_id = $_db->getAccessPermission('st.branch_id');
-		
-			$db=$this->getAdapter();
-		
-			$from_date =(empty($search['start_date']))? '1': "cp.create_date >= '".$search['start_date']." 00:00:00'";
-			$to_date = (empty($search['end_date']))? '1': "cp.create_date <= '".$search['end_date']." 23:59:59'";
-				
-			$sql="select
-					cp.id,
-					receipt_no,					
-					(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name,	
-					total_payment,
-					credit_memo,
-					cp.create_date,
-					cp.is_void,
-					(select first_name from rms_users where rms_users.id=cp.user_id) as user,
-					(select name_en from rms_view where type=10 and key_code=cp.is_void) as status
-				from
-					rms_change_product cp,
-					rms_student as s
-				where 
-					cp.stu_id=s.stu_id
-			";
-		
-			$where = " AND ".$from_date." AND ".$to_date;
-		
-			if(!empty($search['adv_search'])){
-					$s_where=array();
-					$s_search= addslashes(trim($search['adv_search']));
-					$s_where[]= " receipt_no LIKE '%{$s_search}%'";
-					$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
-					$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
-					$where.=' AND ('.implode(' OR ', $s_where).')';
-			}
-				
-			if(!empty($search['user'])){
-				$where.=" AND cp.user_id = ".$search['user'] ;
-			}
-			
-			$order=" ORDER By cp.id DESC ";
-				
-			// 				    	echo $sql.$where.$order;exit();
-				
-			return $db->fetchAll($sql.$where.$order);
-				
-		}catch(Exception $e){
-			echo $e->getMessage();
-		}
-		
-	}
-	function getAllStudentClearBalance($search){
-		try{
-			$_db = new Application_Model_DbTable_DbGlobal();
-			$branch_id = $_db->getAccessPermission('sp.branch_id');
-	
-			$db=$this->getAdapter();
-	
-			$from_date =(empty($search['start_date']))? '1': "scb.create_date >= '".$search['start_date']." 00:00:00'";
-			$to_date = (empty($search['end_date']))? '1': "scb.create_date <= '".$search['end_date']." 23:59:59'";
-	
-			$sql="SELECT
-						scb.id,
-						s.stu_code,
-						s.stu_khname,
-						s.stu_enname,
-						sp.receipt_number,
-						sp.create_date,
-						scb.receipt_no,
-						scb.total_balance,
-						scb.paid_amount,
-						scb.balance,
-						scb.note,
-						scb.create_date,
-						scb.is_void,
-						(SELECT name_en FROM rms_view AS v WHERE v.type=10 AND v.key_code=scb.is_void) AS status,
-						(SELECT first_name FROM rms_users AS u WHERE u.id=scb.user_id) AS user,
-						(SELECT first_name FROM rms_users AS u WHERE u.id=scb.void_by) AS void_by
-					FROM
-						rms_student_clear_balance scb,
-						rms_student_payment AS sp,
-						rms_student AS s
-					WHERE
-						sp.id = scb.payment_id
-						AND s.stu_id = scb.stu_id
-						$branch_id
-				";
-	
-			$where = " AND ".$from_date." AND ".$to_date;
-	
-			if(!empty($search['adv_search'])){
-			$s_where=array();
-			$s_search= addslashes(trim($search['adv_search']));
-				$s_where[]= " scb.receipt_no LIKE '%{$s_search}%'";
-				$s_where[]= " sp.receipt_number LIKE '%{$s_search}%'";
-				$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
-				$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
-				$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
-				$where.=' AND ('.implode(' OR ', $s_where).')';
-			}
-			if(!empty($search['branch_id'])){
-				$where.= " AND sp.branch_id = ".$search['branch_id'];
-			}
-			if(!empty($search['user'])){
-				$where.=" AND scb.user_id = ".$search['user'] ;
-			}
-			$order=" ORDER By scb.id DESC ";
-			//echo $sql.$where.$order;exit();
-			return $db->fetchAll($sql.$where.$order);
-		}catch(Exception $e){
-			echo $e->getMessage();
-		}
-	}
-	
-	function getClearBalanceById($id){
-		$db=$this->getAdapter();
-		$sql="SELECT
-					scb.id,
-					s.stu_code,
-					s.stu_khname,
-					s.stu_enname,
-					sp.receipt_number,
-					sp.create_date as date_balance,
-					scb.receipt_no,
-					scb.total_balance,
-					scb.paid_amount,
-					scb.balance,
-					scb.note,
-					scb.create_date,
-					scb.is_void,
-					(SELECT name_en FROM rms_view AS v WHERE v.type=10 AND v.key_code=scb.is_void) AS status,
-					(SELECT first_name FROM rms_users AS u WHERE u.id=scb.user_id) AS user,
-					(SELECT first_name FROM rms_users AS u WHERE u.id=scb.void_by) AS void_by,
-					(SELECT first_name FROM rms_users AS u WHERE u.id = scb.user_id) AS first_name,
-					(SELECT last_name FROM rms_users AS u WHERE u.id = scb.user_id) AS last_name
-				FROM
-					rms_student_clear_balance scb,
-					rms_student_payment AS sp,
-					rms_student AS s
-				WHERE
-					sp.id = scb.payment_id
-					AND s.stu_id = scb.stu_id
-					and scb.id = $id
-				LIMIT 
-					1	
-			";
-		return $db->fetchRow($sql);
-	}
 	
 	function getOtherIncomeById($id){
 		$db=$this->getAdapter();
@@ -286,25 +131,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			";
 		return $db->fetchRow($sql);
 	}
-	
-	
-	
-	function getChangeProductById($id){
-		$db=$this->getAdapter();
-		$sql="select
-					*,
-					(select name_en from rms_view where type=2 and key_code=s.sex) as sex,
-					(select CONCAT(first_name,'-',last_name) from rms_users as u where u.id = cp.user_id) as user
-				from
-					rms_student as s,
-					rms_change_product as cp
-				where
-					cp.stu_id = s.stu_id
-					and cp.id = $id
-					limit 1
-			";
-		return $db->fetchRow($sql);
-	}	
 	
 	function submitClosingEngry($data){
 		$db = $this->getAdapter();
@@ -337,7 +163,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			}
 		}
 	}
-	
 	
 	public function getAllStudentUnpaid($search){
 		$_db = $this->getAdapter();

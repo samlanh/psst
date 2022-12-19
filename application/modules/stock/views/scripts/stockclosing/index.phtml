@@ -1,0 +1,104 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
+	echo $this->headTitle($tr->translate('STOCK_CLOSING'));
+	$frm = $this->form_search;
+?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-cubes " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STOCK_CLOSING');?></h4>
+    				</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form action=""	dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+		        	<div class="col-md-2 col-sm-2 col-xs-12">
+		        		<?php echo $frm->getElement("title");?>
+		        	</div>
+		        	<div class="col-md-2 col-sm-2 col-xs-12">
+						<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch_id" name="branch_id" type="text" onchange="onChageFunctionByBranch();">								
+							<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+								<option value="" ><?php echo $tr->translate("SELECT_BRANCH");?></option>
+								<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+							<?php }?> 
+						</select>
+		        	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="adjustDate" />
+		        	</div>
+		        	<div class="col-md-2 col-sm-2 col-xs-12">
+		        		<?php echo $frm->getElement("start_date");?>
+		        	</div>
+		        	<div class="col-md-2 col-sm-2 col-xs-12">	
+		        		<?php echo $frm->getElement("end_date");?>
+		        	</div>
+		        	<div class="col-md-2 col-sm-2 col-xs-12">
+		        		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+		        	</div>
+		        	<div class="col-md-2 col-sm-2 col-xs-12">
+		        	</div>
+		        </div>
+	        </form>        
+		</div>
+		<div class="card-box">
+			<?php  echo $this->list;?>
+		</div>
+	</div>
+</div>
+
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.DateTextBox");
+    
+    require(["dojo/ready"], function(ready){
+		ready(function(){
+			onChageFunctionByBranch();
+		}); 
+		new dijit.form.FilteringSelect({
+			autoComplete: false,
+			queryExpr: "*${0}*",
+			required: true,		           
+			placeHolder:'<?php echo $tr->translate('SELECT_ADJUST_DATE');?>',
+			name: "adjustDate",
+			id: "adjustDate",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+			}
+		}, "adjustDate");
+	 });
+
+	function onChageFunctionByBranch(){
+		dijit.byId('adjustDate').attr('value','');
+		getAdjustDate();
+	} 
+	var urlGetAdjusted = '<?php echo $this->url(array('module'=>'stock','controller'=>'stockclosing','action'=>'getadjustlist')); ?>';
+	function getAdjustDate(){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id==null || branch_id==-1){
+			return false;
+		}
+		dojo.xhrPost({
+			url:urlGetAdjusted,	
+			content:{ 
+				'branch_id':branch_id,
+				'isApproved':1,
+				'isClosed':0,
+			},		    
+			handleAs:"json",
+			load: function(data) {
+				storeAdjust = getDataStorefromJSON('id','name',data);
+				dijit.byId('adjustDate').set('store',storeAdjust);
+			},
+			error: function(err) {
+			}
+		});
+	}
+</script>

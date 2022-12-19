@@ -827,7 +827,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	public function subjectByGroupAction($search){
 		$db = new Api_Model_DbTable_DbApi();
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
-		$row = $db->getSubjectByGroup($search);
+		$row = $db->getSubjectExamedByGroup($search);
 		if ($row['status']){
 			$arrResult = array(
 				"result" => $row['value'],

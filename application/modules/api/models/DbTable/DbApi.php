@@ -2905,7 +2905,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function getSubjectByGroup($search){
+	public function getSubjectExamedByGroup($search){
 		$db = $this->getAdapter();
 		try{
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
@@ -2925,7 +2925,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,gsjd.subject_id AS subjectId
 					,(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitle
 					FROM `rms_score` AS s 
-						JOIN rms_group_subject_detail AS gsjd ON s.group_id =gsjd.group_id 
+						JOIN `rms_score_detail` AS sd ON s.id = sd.score_id AND sd.student_id = $studentId
+						LEFT JOIN rms_group_subject_detail AS gsjd ON s.group_id =gsjd.group_id AND sd.subject_id =gsjd.subject_id 
 						
 					WHERE 
 					s.id =$scoreId

@@ -18,28 +18,34 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 					cl.note,
 					(SELECT create_date FROM `rms_adjuststock` WHERE rms_adjuststock.id= cl.adjustId LIMIT 1) AS adjustDate,
 					(SELECT first_name FROM rms_users WHERE id=cl.userId LIMIT 1 ) AS user_name
-				FROM `rms_closing` cl WHERE 1";
+				FROM `rms_closing` AS cl WHERE 1";
+
+		$where="";
+		$from_date =(empty($search['start_date']))? '1': " cl.closingDate >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " cl.closingDate <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+
+		if(!empty($search['title'])){
+    		$s_where=array();
+    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+    		$s_where[]= " REPLACE((SELECT branch_namekh FROM `rms_branch` WHERE br_id=cl.branchId LIMIT 1),' ','') LIKE '%{$s_search}%'";
+    		$s_where[]= " REPLACE(note,' ','') LIKE '%{$s_search}%'";
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
     	
-    	$from_date =(empty($search['start_date']))? '1': " cl.closingDate >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " cl.closingDate <= '".$search['end_date']." 23:59:59'";
-    	
-    	$where_date = " AND ".$from_date." AND ".$to_date;
-    	$where='';
-    	
-    	if(!empty($search['branch_id'])){
+    	if($search['branch_id']>0 and !empty($search['branch_id'])){
     		$where.= " AND cl.branchId = ".$search['branch_id'];
     	}
-    	if(!empty($where['adjustDate'])){
+    	if(!empty($search['adjustDate'])){
     		$where.= " AND cl.adjustId = ".$search['adjustDate'];
     	}
 		
     	
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$where.= $dbg->getAccessPermission('so.projectId');
-    	
     	$order=' ORDER BY cl.id DESC  ';
     	$db = $this->getAdapter();
-    	return $db->fetchAll($sql.$where_date.$where.$order);
+    	return $db->fetchAll($sql.$where.$order);
     }
 	
 

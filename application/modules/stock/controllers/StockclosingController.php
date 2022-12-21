@@ -10,7 +10,7 @@ class Stock_StockclosingController extends Zend_Controller_Action {
 		$rs_rows=array();
 		$db = new Stock_Model_DbTable_DbClosingStock();
 		try{
-			if(!empty($this->getRequest()->isPost())){
+			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
 			else{
@@ -19,7 +19,7 @@ class Stock_StockclosingController extends Zend_Controller_Action {
     				'branch_id'=>'',
 					'adjustDate'=>'',
     				'start_date'=> date('Y-m-d'),
-    				'end_date'=>date('Y-m-d'),
+    				'end_date'=>date('Y-m-d')
 				);
 			}
 			
@@ -29,7 +29,6 @@ class Stock_StockclosingController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("Application Error");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$this->view->search = $search;
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH_NAME","CLOSING_DATE","NOTE","ADJUST_DATE","BY_USER");
 			$link=array('module'=>'stock','controller'=>'stockclosing','action'=>'index');

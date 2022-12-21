@@ -27,9 +27,11 @@
 							<?php }?> 
 						</select>
 		        	</div>
+				
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<input id="adjustDate" />
+						<input id="adjustDate" /> 
 		        	</div>
+					
 		        	<div class="col-md-2 col-sm-2 col-xs-12">
 		        		<?php echo $frm->getElement("start_date");?>
 		        	</div>
@@ -56,20 +58,21 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
     dojo.require("dijit.form.Textarea");
     dojo.require("dijit.form.DateTextBox");
+
     
     require(["dojo/ready"], function(ready){
 		ready(function(){
-			onChageFunctionByBranch();
+			
 		}); 
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",
-			required: true,		           
 			placeHolder:'<?php echo $tr->translate('SELECT_ADJUST_DATE');?>',
 			name: "adjustDate",
 			id: "adjustDate",
 			searchAttr: "name",
 			class: 'fullside',
+			required: false,
 			onChange: function() {
 			}
 		}, "adjustDate");
@@ -101,4 +104,5 @@
 			}
 		});
 	}
+	
 </script>

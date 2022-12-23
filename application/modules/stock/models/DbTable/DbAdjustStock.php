@@ -343,4 +343,32 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);
     }
+
+	function getAllAdjusted($data){
+    	$db = $this->getAdapter();
+    	$this->_name='rms_adjuststock';
+    	
+    	$sql=" SELECT 
+    		id,
+    		DATE_FORMAT(create_date,'%d-%m-%Y') AS name
+    	FROM $this->_name WHERE 1 ";
+    	
+    	if(isset($data['is_approved'])){
+    		$sql.=" AND is_approved=".$data['is_approved'];
+    	}
+		
+    	if(isset($data['branch_id'])){
+    		$sql.=" AND branch_id=".$data['branch_id'];
+    	}
+	
+    	if(isset($data['is_closed'])){
+    		$sql.=" AND is_closed=".$data['is_closed'];
+    	}
+		
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	
+    	return $db->fetchAll($sql);
+    }
 }

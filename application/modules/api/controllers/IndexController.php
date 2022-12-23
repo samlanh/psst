@@ -82,6 +82,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->gradingSystemAction($GetData);
 			}else if ($GetData['url']=="disciplinePolicy"){
     			$_dbAction->disciplinePolicyAction($GetData);
+			}else if ($GetData['url']=="attendancePolicy"){
+    			$_dbAction->attendancePolicyAction($GetData);
 			}else if ($GetData['url']=="branchList"){
     			$_dbAction->schoolBranchListAction($GetData);
 			}else if ($GetData['url']=="studentEvaluation"){

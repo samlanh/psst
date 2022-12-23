@@ -1293,9 +1293,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$where=' WHERE 
 			g.itemType=1 
-			AND g.is_setgroup = 0 
+			AND g.is_setgroup = 0 AND g.group_id=0
+			AND g.is_current=1
 			AND s.stu_id=g.stu_id 
 			AND s.status=1 
+			AND g.stop_type=0
 			AND s.customer_type=1 ';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();

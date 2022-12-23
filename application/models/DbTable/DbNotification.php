@@ -121,7 +121,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order.$limit);
 	}
 	
-	function getStudentNotYetGroup(){
+	function getStudentNotYetGroup($condiction=array()){
 		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
@@ -143,11 +143,16 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 				gd.itemType=1 AND
 				s.customer_type =1
 				AND s.status=1
+				AND gd.is_current=1
 				AND gd.stop_type=0
 				AND s.stu_id = gd.stu_id AND gd.group_id=0 ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission("s.branch_id");
-		$limit=" LIMIT 10 ";
+		$limit="";
+		if(!empty($condiction['limitRecord'])){
+			
+			$limit=" LIMIT ".$condiction['limitRecord'];
+		}
 		return $db->fetchAll($sql.$limit);
 	}
 	

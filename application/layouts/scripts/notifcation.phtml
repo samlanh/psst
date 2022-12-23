@@ -29,9 +29,14 @@ if (empty($session_user->isnot_cutstock_acl)){
 	$stuproductNew = $dbNotification->getStuProductAlert(1);
 }
 $stu_doc = array();
+$countNoGroupAll=0;
 if (empty($session_user->isnot_student_acl)){
 	$stu_doc = $dbNotification->getStuDocumentAlert();
-	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
+	$condictionArr = array();
+	$countNoGroupAll = $dbNotification->getStudentNotYetGroup($condictionArr);
+	$countNoGroupAll = count($countNoGroupAll);
+	$condictionArr['limitRecord']=10;
+	$stu_nogroup = $dbNotification->getStudentNotYetGroup($condictionArr);
 }
 
 $crmNotif = array();
@@ -84,7 +89,7 @@ if (empty($session_user->isnot_creditmemo_acl)){
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if (count($stu_nogroup)>0){ echo count($stu_nogroup);}?></span>
+					                    <span id="countNews" class="badge bg-green"><?php if ($countNoGroupAll>0){ echo $countNoGroupAll;}?></span>
 					                  </a>
 					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
 						                 <li class=" event title">
@@ -119,7 +124,7 @@ if (empty($session_user->isnot_creditmemo_acl)){
 				                          </li>
 				                          	<?php }?>
 						                <?php }?> 
-						                  <?php if (count($stu_nogroup)>9){?>
+						                  <?php if ($countNoGroupAll > count($stu_nogroup) ){?>
 						                  <li>
 						                      <div class="text-center">
 						                        <a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-notyetgr"?>">

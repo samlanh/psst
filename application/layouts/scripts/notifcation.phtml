@@ -20,28 +20,28 @@ if($level!=1 AND $module=='rsvacl'){
 $dbNotification = new Application_Model_DbTable_DbNotification();
 $teacher_doc = array();
 if (empty($session_user->isnot_lecturer_acl)){
-	$teacher_doc = $dbNotification->getTeachDocumentAlert();
+	$teacher_doc = array();//$dbNotification->getTeachDocumentAlert();
 }
 $stuproduct = array();
 $stuproductNew = array();
 if (empty($session_user->isnot_cutstock_acl)){
-	$stuproduct = $dbNotification->getStuProductAlert();
-	$stuproductNew = $dbNotification->getStuProductAlert(1);
+	$stuproduct = array();//$dbNotification->getStuProductAlert();
+	$stuproductNew = array();//$dbNotification->getStuProductAlert(1);
 }
 $stu_doc = array();
 if (empty($session_user->isnot_student_acl)){
-	$stu_doc = $dbNotification->getStuDocumentAlert();
-	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
+	$stu_doc = array();//$dbNotification->getStuDocumentAlert();
+	$stu_nogroup =array();// $dbNotification->getStudentNotYetGroup();
 }
 
 $crmNotif = array();
 if (empty($session_user->isnot_crm_acl)){
-	$crmNotif = $dbNotification->getCrmNextContactNoti();
+	$crmNotif = array();//$dbNotification->getCrmNextContactNoti();
 }
 
 $creditNotif = array();
 if (empty($session_user->isnot_creditmemo_acl)){
-	$creditNotif = $dbNotification->getCreditMemoNearExpired();
+	$creditNotif = array();//$dbNotification->getCreditMemoNearExpired();
 }
 ?>
 								<?php if (empty($session_user->isnot_crm_acl)){?>

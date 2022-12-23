@@ -647,6 +647,26 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
+	public function attendancePolicyAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getAttendancePolicy($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
 	public function schoolBranchListAction($search){
 		$db = new Api_Model_DbTable_DbApi();
 		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
@@ -807,7 +827,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	public function subjectByGroupAction($search){
 		$db = new Api_Model_DbTable_DbApi();
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
-		$row = $db->getSubjectByGroup($search);
+		$row = $db->getSubjectExamedByGroup($search);
 		if ($row['status']){
 			$arrResult = array(
 				"result" => $row['value'],

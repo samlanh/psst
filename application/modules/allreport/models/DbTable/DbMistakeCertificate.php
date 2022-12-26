@@ -11,12 +11,14 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 		$commune_name="commune_name";
 		$district_name="district_name";
 		$province_name="province_en_name";
+		$occuTitle="occu_enname";
 		if ($currentLang==1){
 			$stuname="s.stu_khname";
 			$village_name="village_namekh";
 			$commune_name="commune_namekh";
 			$district_name="district_namekh";
 			$province_name="province_kh_name";
+			$occuTitle="occu_name";
 		}
 		$sql="SELECT 
 					s.stu_id,
@@ -36,14 +38,19 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 					(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 			    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+					
 					s.`father_enname`,
 					s.`father_job`,
-					(select occu_name from rms_occupation as oc where oc.occupation_id = s.father_job) as fa_job,
+					(SELECT occu_name from rms_occupation as oc where oc.occupation_id = s.father_job) as fa_job,
+					(SELECT occu_enname from rms_occupation as oc where oc.occupation_id = s.father_job) as faJobEng,
+					(SELECT $occuTitle from rms_occupation as oc where oc.occupation_id = s.father_job) as faJobTitle,
 					s.`father_phone`,
 					
 					s.`mother_enname`,
 					s.`mother_job`,
-					(select occu_name from rms_occupation as oc where oc.occupation_id = s.mother_job) as mo_job,
+					(SELECT occu_name from rms_occupation as oc where oc.occupation_id = s.mother_job) as mo_job,
+					(SELECT occu_enname from rms_occupation as oc where oc.occupation_id = s.mother_job) as moJobEng,
+					(SELECT $occuTitle from rms_occupation as oc where oc.occupation_id = s.mother_job) as moJobTitle,
 					s.`mother_phone`,
 					
 					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsd.academic_year LIMIT 1) AS academic_year,

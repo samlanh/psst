@@ -11,6 +11,9 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		try{
 			$title = trim($_data['occu_name']);
+			$titleEn = empty($_data['occu_enname'])?$title:$_data['occu_enname'];
+			$titleEn = trim($titleEn);
+			
 			$sql="SELECT occupation_id FROM rms_occupation WHERE status =".$_data['status'];
 			$sql.=" AND occu_name='".$title."'";
 			$rs = $db->fetchOne($sql);
@@ -19,6 +22,7 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 			}			
 		$_arr=array(
 				'occu_name'	  => $title,
+				'occu_enname' => $titleEn,
 				'create_date' => Zend_Date::now(),
 				'status'  	  => 1,
 				'user_id'	  => $this->getUserId()
@@ -31,8 +35,11 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 		}
 	}
 	public function addNewOccupationPopup($_data){
+		$titleEn = empty($_data['occu_enname'])?$_data['occu_name']:$_data['occu_enname'];
+		$titleEn = trim($titleEn);
 		$_arr=array(
 			'occu_name'	  => $_data['occu_name'],
+			'occu_enname' => $titleEn,
 			'create_date' => Zend_Date::now(),
 			'status'   => $_data['status_j'],
 			'user_id'	  => $this->getUserId()
@@ -48,8 +55,11 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	}
 	public function updateOccupation($_data){
 		$status = empty($_data['status'])?0:1;
+		$titleEn = empty($_data['occu_enname'])?$_data['occu_name']:$_data['occu_enname'];
+		$titleEn = trim($titleEn);
 		$_arr=array(
 			'occu_name'	  	=> $_data['occu_name'],
+			'occu_enname'	=> $titleEn,
 			'create_date' 	=> Zend_Date::now(),
 			'status'   		=> $status,
 			'user_id'	  	=> $this->getUserId()

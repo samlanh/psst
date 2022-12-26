@@ -536,7 +536,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$degree = "rms_items.title_en";
     	}
 
-    	$sql ="SELECT s.stu_id,
+    	$sql ="SELECT 
+					s.stu_id,
 			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 			    	CONCAT(s.last_name,' ',s.stu_enname) AS name,
 			    	s.stu_khname,
@@ -552,8 +553,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	s.street_num,
 			    	s.dob,
 			    	gds.stop_type AS is_subspend,
-			    	
-			    	
+			    	(SELECT $label from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status,
+					
 			    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,

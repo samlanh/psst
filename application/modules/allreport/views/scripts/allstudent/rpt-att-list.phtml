@@ -84,6 +84,43 @@
         </div>
 	</form>
 <div id="divPrint">
+	<style> 
+		td{padding:0 3px; }
+		.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+		table.content-data{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+		table.content-data tr{ page-break-inside:avoid; page-break-after:auto }
+		#header {
+		  display: table-header-group;
+		  page-break-inside:avoid; page-break-after:auto;
+		}
+		td.rotate > div {
+		  transform: rotate(270deg);
+			width: 20px;
+		}
+		tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+		
+		table.content-data{
+			border-collapse:collapse;
+			width:100%;
+			border:1px solid #000; 
+			font-family:'Times New Roman','Khmer OS Battambang';
+			font-size:13px;
+			white-space: nowrap;
+			margin:0 auto;
+			color:#000;
+		}
+		table.content-data thead tr.style-head {
+		   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+			background: #ccd9ff;
+			text-align: center;
+		}
+		table.content-data tr.style-rowdata {
+			font-size:12px; 
+			height: 23px;
+		}
+							
+	</style>
+						
 	<table style="background:#fff; margin: 0 auto; width: 100%;"  border="0">
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
@@ -105,7 +142,7 @@
 			<?php }?>
 			<tr>
 				<td colspan="<?php echo 4+$total_day;?>">
-					<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;line-height: 20px;">
+					<table width="100%" border="0" >
 						<tr>
 							<td>
 								Attendance sheet for : <?php echo $this->rr['grade']?>
@@ -126,22 +163,8 @@
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
-						<style> 
-							td{padding:0 3px; }
-							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
-							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
-							#header {
-							  display: table-header-group;
-							  page-break-inside:avoid; page-break-after:auto;
-							}
-							td.rotate > div {
-							  transform: rotate(270deg);
-								width: 20px;
-							}
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-						</style>
+					<table class="content-data" cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
+						
 						<thead>									
 							<tr>
 								<td colspan="<?php echo 5+$total_day;?>">
@@ -222,7 +245,7 @@
 						</tr>
 						<?php }?>	
 						<tr>
-							<td colspan="5" valign="top" style="padding-top:2px;border:1px solid #fff; border-top:1px solid #000;">
+							<td colspan="<?php echo 5+$total_day;?>" valign="top" style="padding-top:2px;border:1px solid #fff; border-top:1px solid #000;">
 								<span style="font-size: 13px;;">
 									<?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?>
 									<?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT");?>

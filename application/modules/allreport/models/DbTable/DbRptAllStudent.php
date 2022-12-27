@@ -661,6 +661,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	commune_name,
 	    	district_name,
 	    	gds.stop_type AS is_subspend,
+			gds.is_newstudent AS is_stu_new,
+			
 	    	(SELECT $field from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status_student,
 	    	(SELECT $field FROM rms_view where rms_view.type=4 and rms_view.key_code=gds.session LIMIT 1)AS session,
 	    	(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = gds.degree AND gds.is_current=1 AND i.type=1 LIMIT 1) AS degree,

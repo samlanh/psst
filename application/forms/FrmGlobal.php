@@ -336,13 +336,15 @@ class Application_Form_FrmGlobal{
 		";
 		return $str;
 	}
-	function getFooterAccount($spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
+	function getFooterAccount($footerType=1,$spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str="<table width='100%' style='font-size: $font_size;font-family:$font_family'>";
 			for($i=1;$i<=$spacing;$i++){
 				$str.="<tr><td>&nbsp;</td></tr>";
 			}
-		$str.="	<tr>
+			if($footerType==1){ //Account General
+			$str.="	
+				<tr>
 					<td width='25%' align='center'>
 						<span>".$tr->translate('APPROVED_BY')."</span>
 					</td>
@@ -352,32 +354,26 @@ class Application_Form_FrmGlobal{
 					<td width='25%' align='center'>
 						<span>".$tr->translate('PREPARED_BY')."</span>
 					</td>
-				</tr>
-			</table>";
-		return $str;
-	}
-	function getFooterFoundation($spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$str="<table width='100%' style='font-size: $font_size;font-family:$font_family'>";
-			for($i=1;$i<=$spacing;$i++){
-				$str.="<tr><td>&nbsp;</td></tr>";
+				</tr>";
+			}else if($footerType==2){ //Foundation General
+				$str.='
+					<tr>
+						<td width="35%" align="center">
+							<span style="font-size: 14px;font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Battambang'."'".';">'.$tr->translate("CHECKANDAPPROVED").'</span><br />
+							<span style="font-size: 14px;font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Muol Light'."'".';">'.$tr->translate("PRINCIPAL").'</span>
+						</td>
+						<td width="30%">&nbsp;</td>
+						<td width="35%" align="center">
+							<span style=" font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Battambang'."'".';">'.$tr->translate("CREATE_WORK_DATE").'</span><br />
+							<span style=" font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Muol Light'."'".';">'.$tr->translate("PREPARE_BY").'</span>
+						</td>
+					</tr>
+				';
 			}
-		$str.='
-			<tr>
-					<td width="35%" align="center">
-						<span style="font-size: 14px;font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Battambang'."'".';">'.$tr->translate("CHECKANDAPPROVED").'</span><br />
-						<span style="font-size: 14px;font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Muol Light'."'".';">'.$tr->translate("PRINCIPAL").'</span>
-					</td>
-					<td width="30%">&nbsp;</td>
-					<td width="35%" align="center">
-						<span style=" font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Battambang'."'".';">'.$tr->translate("CREATE_WORK_DATE").'</span><br />
-						<span style=" font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Muol Light'."'".';">'.$tr->translate("PREPARE_BY").'</span>
-					</td>
-				</tr>
-			</table>
-		';
+		$str.="	</table>";
 		return $str;
 	}
+	
 	function getFormatReceipt(){
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$last_name=$session_user->last_name;

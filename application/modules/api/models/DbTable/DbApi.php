@@ -92,6 +92,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$commune = "commune_name";
 			$district = "district_name";
 			$vill = 'village_name';
+			$occuTitle='occu_enname';
 			if ($currentLang==1){
 				$colunmname='title';
 				$lbView="name_kh";
@@ -102,6 +103,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$commune = "commune_namekh";
 				$district = "district_namekh";
 				$vill = 'village_namekh';
+				$occuTitle = 'occu_name';
 			}
 	//s.stu_khname,
 			$sql ="SELECT
@@ -145,9 +147,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 						 
 						 g.group_code AS groupCode,
-						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fatherOccupation,
-						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS motherOccupation,
-						(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS guardian_job,
+						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fatherOccupation,
+						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS motherOccupation,
+						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS guardian_job,
 						(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
 						(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
 						(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle

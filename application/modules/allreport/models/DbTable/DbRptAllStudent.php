@@ -536,7 +536,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$degree = "rms_items.title_en";
     	}
 
-    	$sql ="SELECT s.stu_id,
+    	$sql ="SELECT 
+					s.stu_id,
 			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 			    	CONCAT(s.last_name,' ',s.stu_enname) AS name,
 			    	s.stu_khname,
@@ -552,8 +553,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	s.street_num,
 			    	s.dob,
 			    	gds.stop_type AS is_subspend,
-			    	
-			    	
+			    	(SELECT $label from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status,
+					
 			    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
@@ -660,6 +661,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	commune_name,
 	    	district_name,
 	    	gds.stop_type AS is_subspend,
+			gds.is_newstudent AS is_stu_new,
+			
 	    	(SELECT $field from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status_student,
 	    	(SELECT $field FROM rms_view where rms_view.type=4 and rms_view.key_code=gds.session LIMIT 1)AS session,
 	    	(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = gds.degree AND gds.is_current=1 AND i.type=1 LIMIT 1) AS degree,
@@ -1293,9 +1296,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$where=' WHERE 
 			g.itemType=1 
-			AND g.is_setgroup = 0 
+			AND g.is_setgroup = 0 AND g.group_id=0
+			AND g.is_current=1
 			AND s.stu_id=g.stu_id 
 			AND s.status=1 
+			AND g.stop_type=0
 			AND s.customer_type=1 ';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();

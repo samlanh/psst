@@ -80,14 +80,14 @@
 			}
 		});
 	}
-	function getAllItemIdByType(urlGet,contentData,SelectedId=null){
+	function getAllItemIdByType(urlGet,contentData,SelectedId=null){//get item detail
 		dojo.xhrPost({
 			url:urlGet,	
 			handleAs:"json",
 			content:contentData,
 			load: function(data) {
-				studentStore  = getDataStorefromJSON('id','name', data);		
-				dijit.byId('itemId').set('store',studentStore);  
+				Store  = getDataStorefromJSON('id','name', data);		
+				dijit.byId('itemId').set('store',Store);  
 			    if(SelectedId!=null){
 			    	 dijit.byId('itemId').attr('value',SelectedId);
 			    }

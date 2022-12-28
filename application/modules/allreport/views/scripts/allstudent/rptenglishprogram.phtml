@@ -187,9 +187,9 @@
 							}else{
 								$all_total = $all_total+1;
 							}
-							//if($row['is_stu_new']==1){
-								//$total_newstudent = $total_newstudent+1;
-							//}
+							if($row['is_stu_new']==1){
+								$total_newstudent = $total_newstudent+1;
+							}
 						?>
 							<?php $i++;$count++; ?>
 							<tr class="style-rowdata hover" align="center" >
@@ -203,7 +203,7 @@
 								<td ><?php echo $row['degree'];?></td>
 								<td align="left"><?php echo $row['grade'];?></td>
 								<td align="left"><?php echo $row['room_name'];?></td>
-								<td align="left"><?php //echo ($row['is_stu_new']==1)?"New":"";?></td>
+								<td align="left"><?php echo ($row['is_stu_new']==1)?"New":"";?></td>
 								<td align="left"><?php echo (!empty($row['paid_date']))?"Paid":"Unpaid";?></td>
 								<td align="left"><?php echo (!empty($row['paid_date']))?date("d-M-Y",strtotime($row['paid_date'])):"";?></td>
 								<td <?php if($row['is_subspend']==1 OR $row['is_subspend']==2){echo 'style="color: red;"';}?>><?php echo $row['status_student'];?></td>

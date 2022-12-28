@@ -27,8 +27,12 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				(SELECT commune_name FROM ln_commune AS p WHERE p.com_id=s.commune_name LIMIT 1) AS commune_nameeg,
     				(SELECT district_namekh FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_khmer,
     				(SELECT district_name FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_en,
+					
     				(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job,
+					(SELECT occu_enname FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS faJobEng,
 					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
+					(SELECT occu_enname FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS moJobEng,
+					
     				(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degree,
     				(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
     				(SELECT rms_itemsdetail.title_en FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade_eng,

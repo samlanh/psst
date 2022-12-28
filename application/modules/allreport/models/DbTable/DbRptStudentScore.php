@@ -1357,18 +1357,19 @@ function getExamByExamIdAndStudent($data){
 				   	(SELECT group_code from rms_group WHERE rms_group.id=gscg.from_group limit 1) AS from_group_code,
 				   
 				   	gscg.`to_group` ,
-				   	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS to_academic_year,
-				   	(select CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year Limit 1) AS to_academic_year,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = (SELECT rms_group.academic_year FROM rms_group WHERE rms_group.id=gscg.`to_group` LIMIT 1) LIMIT 1) AS to_academic_year,
+				   	
+				   	
 				   	(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=g.grade limit 1) AS to_grade,
 				   
 				   	(select $label from rms_view where rms_view.type=4 and key_code=g.session Limit 1) AS to_session,
 				   	(select $label from rms_view where type=17 and key_code=gscg.change_type Limit 1) as change_type,
 				   	g.group_code as to_group_code
 				FROM
-				   	`rms_group_detail_student` AS gds,
-				   	`rms_group_student_change_group` AS gscg,
-				   	rms_group as g,
-				   	rms_student as st
+				   `rms_group_detail_student` AS gds
+				   	JOIN `rms_group_student_change_group` AS gscg ON  gds.`group_id` = gscg.`to_group` AND gds.`old_group` = gscg.`from_group`
+				   	LEFT JOIN rms_group AS g ON gscg.to_group=g.id
+				   	LEFT JOIN rms_student AS st ON gds.stu_id=st.stu_id
 				WHERE
 					gds.itemType=1 
 				   	AND gds.`group_id` = gscg.`to_group`

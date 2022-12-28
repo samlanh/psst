@@ -3,12 +3,34 @@ class Allreport_Model_DbTable_DbAttendentList extends Zend_Db_Table_Abstract
 {
 	public  function getStudentInfo($search){
 		$_db = $this->getAdapter();
+		
+		$dbGb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbGb->currentlang();
+		$occuTitle="occu_enname";
+		if ($currentLang==1){
+			$occuTitle="occu_name";
+		}
+		
 		$sql = "SELECT stu_id,stu_enname,stu_khname,
 		(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) as gender
 		,stu_code,dob,remark,tel,(SELECT province_kh_name FROM `rms_province` WHERE `province_id`= rms_student.province_id) as pro,
-		father_phone,mother_phone,email,father_khname,father_enname,father_nation,(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = father_job)as far_job,(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = mother_job)as mom_job,
+		father_phone,mother_phone,email,father_khname,father_enname,father_nation,
+		
+		(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = father_job LIMIT 1) AS far_job,
+		(SELECT `occu_enname` FROM `rms_occupation` WHERE `occupation_id` = father_job LIMIT 1)	AS far_jobEng,
+		(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = mother_job LIMIT 1)	AS mom_job,
+		(SELECT `occu_enname` FROM `rms_occupation` WHERE `occupation_id` = mother_job LIMIT 1)	AS mom_jobEng,
+		
+		(SELECT $occuTitle FROM `rms_occupation` WHERE `occupation_id` = father_job LIMIT 1) AS farJobTitle,
+		(SELECT $occuTitle FROM `rms_occupation` WHERE `occupation_id` = mother_job LIMIT 1) AS momJobTitle,
+		
 		mother_enname,mother_khname,mother_nation,guardian_khname,guardian_nation,guardian_document,guardian_enname,address,home_num,street_num,village_name,commune_name,district_name,
-		(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = guardian_job)as guar_job,guardian_tel,guardian_email,remark,
+		
+		(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = guardian_job LIMIT 1)	AS guar_job,
+		(SELECT `occu_enname` FROM `rms_occupation` WHERE `occupation_id` = guardian_job LIMIT 1)	AS guar_jobEng,
+		(SELECT $occuTitle FROM `rms_occupation` WHERE `occupation_id` = guardian_job LIMIT 1) AS guarJobTitle,
+		
+		guardian_tel,guardian_email,remark,
 		(SELECT name_kh FROM `rms_view` WHERE type=1 AND key_code = status) as status,nationality
 		FROM rms_student where status = 1";
 		

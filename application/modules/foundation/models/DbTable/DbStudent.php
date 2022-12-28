@@ -150,25 +150,28 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
 		
+		$village_name = "village_name";
+		$commune_name = "commune_name";
+		$district_name = "district_name";
+		$province = "province_en_name";
+		$occuTitle='occu_enname';
+		$viewTitle = 'name_en';
 		if($lang==1){// khmer
 			$village_name = "village_namekh";
 			$commune_name = "commune_namekh";
 			$district_name = "district_namekh";
 			$province = "province_kh_name";
-		}else{ // English
-			$village_name = "village_name";
-			$commune_name = "commune_name";
-			$district_name = "district_name";
-			$province = "province_en_name";
+			$occuTitle = 'occu_name';
+			$viewTitle = 'name_kh';
 		}
 		
 		$sql = "SELECT s.*,
 					
-					(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
-	    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
-	    			(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+					(SELECT $viewTitle FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
+	    			(SELECT $viewTitle FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
+	    			(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+					(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+					(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
 					(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
 			    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
 			    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,

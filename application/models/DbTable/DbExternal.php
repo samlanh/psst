@@ -355,12 +355,14 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$str_commune='commune_name';
 			$str_district='district_name';
 			$str_province='province_en_name';
+			$occuTitle='occu_enname';
 		if($lang_id==1){//for kh
 			$gender_str = 'name_kh';
 			$str_village='village_namekh';
 			$str_commune='commune_namekh';
 			$str_district='district_namekh';
 			$str_province='province_kh_name';
+			$occuTitle='occu_name';
 		}
 	   	$db = $this->getAdapter();
 		$sql="SELECT
@@ -386,9 +388,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				    ,s.father_enname AS father_name
 				    ,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality
     				,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation
-					,(SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job
+					,(SELECT ".$occuTitle." FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job
 					,s.mother_enname AS mother_name
-					,(SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job
+					,(SELECT ".$occuTitle." FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job
 				    ,(SELECT
 				        `rms_view`.$gender_str
 				      FROM `rms_view`

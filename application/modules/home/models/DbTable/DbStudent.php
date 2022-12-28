@@ -122,6 +122,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dist = 'district_name';
 		$prov = 'province_en_name';
 		$view = 'name_en';
+		$occuTitle='occu_enname';
 		if ($currentLang==1){
 			$colunmname='title';
 			$vill = 'village_namekh';
@@ -129,6 +130,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$dist = 'district_namekh';
 			$prov = 'province_kh_name';
 			$view = 'name_kh';
+			$occuTitle = 'occu_name';
 		}
 		
  		$sql = "SELECT s.*,
@@ -160,9 +162,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			  
 				
-				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
 				 (SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
 				 (SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 				  
@@ -191,6 +193,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dist = 'district_name';
 		$prov = 'province_en_name';
 		$view = 'name_en';
+		$occuTitle='occu_enname';
 		if ($currentLang==1){
 			$colunmname='title';
 			$vill = 'village_namekh';
@@ -198,6 +201,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$dist = 'district_namekh';
 			$prov = 'province_kh_name';
 			$view = 'name_kh';
+			$occuTitle = 'occu_name';
 		}
 	
 		$sql = "SELECT s.*,
@@ -229,9 +233,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			
 	
-		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+		(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+		(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+		(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
 		(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
 		(SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 	

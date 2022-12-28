@@ -14,7 +14,7 @@ table.tb-footer tr.style-head {
 	<div class="card-box">
     	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT_TEST');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file-text " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT_TEST');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
@@ -104,8 +104,8 @@ table.tb-footer tr.style-head {
 					.hiddenblog{display: block !important;}
 					.style1:hover{ background: #ccc; }
 					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-					table { page-break-inside:auto }
-					tr{ page-break-inside:avoid; page-break-after:auto; }
+					table.content-data { page-break-inside:auto }
+					table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
@@ -210,7 +210,7 @@ table.tb-footer tr.style-head {
 											<td data-label="<?php echo $tr->translate("DEGREE");?>"  valign="top"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?><?php if ($rs['updated_result_de']==1){ echo "<br />".$rs['grade_result_title']; }?></td>
 											<td data-label="<?php echo $tr->translate("RESULT_DATE");?>"  valign="top" style="padding: 2px;"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
 											<td data-label="<?php echo $tr->translate("RESULT_BY");?>"  valign="top">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
-											<td data-label="<?php echo $tr->translate("NOTE");?>"  valign="top"><?php echo $rs['note_result']; ?></td>
+											<td data-label="<?php echo $tr->translate("NOTE");?>" align="left" valign="top"><span style="max-width: 330px; display: block; white-space: pre-line; line-height: 16px; overflow-wrap: break-word;padding: 0 1px;" ><?php echo $rs['note_result']; ?></span></td>
 											<td data-label="<?php echo $tr->translate("USER");?>"  valign="center"><?php echo $rs['user_id'];?></td>								    
 											<td data-label="<?php echo $tr->translate("RESULT");?>"  valign="top" style=" <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
 											<td data-label="<?php echo $tr->translate("STATUS");?>"  valign="top" style=" <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?></td>							    
@@ -226,7 +226,7 @@ table.tb-footer tr.style-head {
 								  }?>
 							</table>	
 							<?php if (!empty($this->row)){?>
-							<table width="40%"  align="right" style=" color:#4839bd; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 14px; margin-top: 10px;">
+							<table width="40%"  align="right" style="white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang'; margin-top: 10px;">
 								<tr align="right">
 									<td>
 										<ul style=" list-style: none; padding: 0;">
@@ -249,7 +249,7 @@ table.tb-footer tr.style-head {
 				</tr>
 				<tr>
 					<td colspan="3">
-						<?php echo $this->rsfooteracc;?>
+						<?php echo $this->rsfooterFoundation;?>
 					</td>
 				</tr>
 			</table>

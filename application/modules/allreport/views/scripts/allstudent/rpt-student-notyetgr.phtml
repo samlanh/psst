@@ -3,6 +3,8 @@
 	$this->headTitle($tr->translate('STUDENT_NOT_YET_REPORT')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
+
+	$classHideHeight="110px";
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
@@ -67,8 +69,8 @@ display: table-cell !important;
 					.hiddenblog{display: block !important;}
 					.style1:hover{ background: #ccc; }
 					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-					table { page-break-inside:auto }
-					tr{ page-break-inside:avoid; page-break-after:auto; }
+					table.content-data { page-break-inside:auto }
+					tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
@@ -137,6 +139,7 @@ display: table-cell !important;
 						border: 1px solid #000;	
 						text-align: center;
 					}
+					
 					
 				</style>
 				<tr>

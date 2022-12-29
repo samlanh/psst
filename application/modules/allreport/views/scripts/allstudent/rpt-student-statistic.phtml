@@ -70,6 +70,7 @@ table.tb-footer tr.style-head {
 				text-align: center;
 				padding: 3px 2px;
 			}
+			th,td{  color:#4839bd;}
 			table {page-break-inside:auto }
 			tr{ page-break-inside:avoid; page-break-after:auto; }
 			#header {
@@ -167,19 +168,7 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr >
 				<td colspan="3" width="100%">
-					<table width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
-						<tr>
-							<td  width="25%" align="center">
-								<span style="font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
-							</td>
-							<td  width="50%">&nbsp;</td>
-							<td align="center"  width="25%">
-								<span ><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('PREPARED_BY')?></span>
-							</td>
-						</tr>
-					</table>
+					<?php  echo $this->rsfooter ?>
 				</td>
 			</tr>
 		</table>

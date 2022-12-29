@@ -44,7 +44,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id= empty($search['branch_id'])?1:$search['branch_id'];
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-    	$this->view->rsfooteracc = $frm->getFooterAccount();
+    	$this->view->rsfooteracc = $frm->getFooterAccount(2);
     	
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();
@@ -193,7 +193,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search = array(
-    				'adv_search' 		=> "",
+    				'adv_search' 	=> "",
     				'group' 		=> "",
     				'branch_id' 	=> "",
     				'academic_year'	=> "",
@@ -217,6 +217,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     	
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();
@@ -541,6 +542,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     	
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();
@@ -573,6 +575,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
+		
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$this->view->day = $_db->getAllDay();
@@ -611,6 +615,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     	
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();
@@ -646,6 +651,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     }
     public function rptMistakeAction(){
     	if($this->getRequest()->isPost()){
@@ -706,7 +712,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
     
     	$frm = new Application_Form_FrmGlobal();
-    	$this->view->rsfooteracc = $frm->getFooterAccount();
+    	$this->view->rsfooteracc = $frm->getFooterAccount(2);
     }
     public function rptTotalStudentMistakeAction(){
     	if($this->getRequest()->isPost()){
@@ -737,7 +743,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-    	$this->view->rsfooteracc = $frm->getFooterAccount();
+    	$this->view->rsfooteracc = $frm->getFooterAccount(2);
     }
     function mistakeCertificateAction(){
     	$group_id=$this->getRequest()->getParam("id");
@@ -797,6 +803,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     	
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();
@@ -878,6 +885,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     	
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();
@@ -1034,6 +1042,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
     	$this->view->search = $search;
     	
     	$form=new Application_Form_FrmSearchGlobal();

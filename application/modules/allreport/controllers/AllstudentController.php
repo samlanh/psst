@@ -176,6 +176,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
 	}
 	public function rptenglishprogramAction(){
 		if($this->getRequest()->isPost()){
@@ -241,6 +242,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
 	}	
 	public function rptStudyHistoryAction(){
 		if($this->getRequest()->isPost()){
@@ -336,6 +338,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view-> rsfooter = $frm->getFooterAccount(2);
 		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
@@ -403,6 +406,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
 		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
@@ -436,7 +440,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view->rsfooteracc = $frm->getFooterAccount();
+		$this->view->rsfooteracc = $frm->getFooterAccount(2);
 	}
 	public function rptStudentGroupAction()
 	{
@@ -749,6 +753,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
 		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();

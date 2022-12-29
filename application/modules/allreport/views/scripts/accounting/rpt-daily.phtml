@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("STUDENT_PAYMENT_RECEIPT"));
 	$frm =  $this->form_search;
+	$classHideHeight="110px";
 ?>
 <style>
 	/*
@@ -89,15 +90,15 @@
 	<div id="divPrint" >
 					<style>
 						.style{
-							line-height: 20px;font-size: 11px !important;
+								line-height: 20px;font-size: 11px !important;
 									font-family: 'Times New Roman','Khmer OS Battambang';
 								}
 								.hideblog{display: none;}
 								.hiddenblog{display: block !important;}
 								.style1:hover{ background: #ccc; }
 								table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-								table { page-break-inside:auto }
-								tr{ page-break-inside:avoid; page-break-after:auto; }
+								table.content-data { page-break-inside:auto }
+								tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
 								#header {
 								display: table-header-group;
 								page-break-inside:avoid; page-break-after:auto;

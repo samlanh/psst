@@ -74,11 +74,11 @@ table.tb-footer tr.style-head {
 				</td>
 			</tr>
 		<style>
-			th,td{ padding:0 1px;}
+			th,td{ padding:0 1px; color:#4839bd; }
 							table{ border-collapse:collapse; margin:0 auto;border-color:#4839bd; }
 							.padding{ padding: 0 1px !important;}
-							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
+							table.content-data{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+							tr.content-data{ page-break-inside:avoid; page-break-after:auto }
 							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
 							.hover:hover{background: #ccc;}
 							.hidden{display: none;}
@@ -159,19 +159,8 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
-						<tr>
-							<td width="35%" align="center">
-								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
-							</td>
-							<td width="30%">&nbsp;</td>
-							<td width="35%" align="center">
-								<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
-							</td>
-						</tr>
-					</table>
+					<?php echo $this->rsfooter ?>
+			
 				</td>
 			</tr>
 		</table>

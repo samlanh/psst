@@ -89,7 +89,8 @@
 </style>
 	<div id="divPrint" >
 					<style>
-						.style{
+
+								.style{
 								line-height: 20px;font-size: 11px !important;
 									font-family: 'Times New Roman','Khmer OS Battambang';
 								}
@@ -123,6 +124,7 @@
 									border:1px solid #000; 
 									font-size:8px;
 								}
+								table.content-data tr.titlerow,
 								table.content-data thead tr.style {
 								line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 									background: #c1d0f3;
@@ -154,7 +156,7 @@
 									font-weight: 600;
 									color: #f80000;
 								}
-		
+			
 			</style>
 			<table width ="100%">
 				<tr>
@@ -273,112 +275,101 @@
 										  	 ?>
 										  <?php } ?>
 										  <?php } ?>
-									</table>
-								</td>
-							</tr>
-							<?php if(!empty($this->income)){?>
-							<tr>
-								<td colspan="2"><span style="font-size: 12px;"><?php echo $tr->translate("OTHER_INCOME");?></span> </td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<table class="content-data" align="center" width="100%" border="1">
-										<thead>
-											<tr class="style"  align="center">
-												<td scope="col"><?php echo $tr->translate('N_O')?></td>
-												<td scope="col"><?php echo $tr->translate('TITLE')?></td>
-												<td scope="col"><?php echo $tr->translate('INVOICE_NO')?></td>
-												<td scope="col"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
-												<td scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
-												<td scope="col"><?php echo $tr->translate('TOTAL')?></td>
-												<td scope="col"><?php echo $tr->translate('FOR_DATE')?></td>
-												<td scope="col"><?php echo $tr->translate('USER')?></td>
+										  <?php if(!empty($this->income)){?>
+											<tr>
+												<td colspan="16"><span style="font-size: 12px;"><?php echo $tr->translate("OTHER_INCOME");?></span> </td>
 											</tr>
-										</thead>
-										<style> td{padding:0 3px; }</style>
-									<?php $i=0;foreach($this->income as $row){ $i++;
-										if ($row['status']==1){
-											$total_income_dollar = $total_income_dollar + $row['total_amount'];
-											
-											if($row['payment_methodid']==1){
-												$total_cash = $total_cash+$row['total_amount'];
-											}elseif($row['payment_methodid']==2){
-												$total_bank = $total_bank+$row['total_amount'];
-											}else{
-												$total_cheque = $total_cheque+$row['total_amount'];
-											}
-										}
-									?>
-										<tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,2);return false;" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> " align="center" >
-											<td data-label="<?php echo $tr->translate("N_O");?>"><?php echo $i;?></td>
-											<td data-label="<?php echo $tr->translate("TITLE");?>" style="text-align: left;"><?php echo $row['title'];?></td>
-											<td data-label="<?php echo $tr->translate("INVOICE_NO");?>" class="bold"><?php echo $row['invoice'];?></td>
-											<td data-label="<?php echo $tr->translate("INCOME_CATEGORY");?>"><?php echo $row['income_category'];?></td>
-											<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center" ><?php echo $row['payment_method'];?></td>	
-											<td data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($row['total_amount'],2);?></td>
-											<td data-label="<?php echo $tr->translate("FOR_DATE");?>"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
-											<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['name'];?></td>
-										</tr>
-										 <?php } ?>
-									</table>
-								</td>
-							</tr>
-							<?php }?>
-							<?php if(!empty($this->expense)){?>
-							<tr>
-								<td  colspan="2"><span style="font-size: 12px;"><?php echo $tr->translate("OTHER_EXPENSE");?></span></td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<table class="content-data" width="100%"  align="center" border="1" >
-										<thead>
-											<tr class="style" align="center">
+											<tr class="titlerow "  align="center">
 												<td scope="col"><?php echo $tr->translate('N_O')?></td>
-												<td scope="col"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
+												<td colspan="3" scope="col"><?php echo $tr->translate('TITLE')?></td>
+												<td scope="col"><?php echo $tr->translate('INVOICE_NO')?></td>
+												<td colspan="3" scope="col"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
+												<td colspan="2"  scope="col"><?php echo $tr->translate('TOTAL')?></td>
+												<td colspan="2"  scope="col"><?php echo $tr->translate('FOR_DATE')?></td>
+												<td colspan="2"  scope="col"><?php echo $tr->translate('USER')?></td>
+											</tr>
+											<?php $i=0;foreach($this->income as $row){ $i++;
+												if ($row['status']==1){
+													$total_income_dollar = $total_income_dollar + $row['total_amount'];
+											
+												if($row['payment_methodid']==1){
+												$total_cash = $total_cash+$row['total_amount'];
+												}elseif($row['payment_methodid']==2){
+												$total_bank = $total_bank+$row['total_amount'];
+												}else{
+												$total_cheque = $total_cheque+$row['total_amount'];
+												}
+												}
+											?>
+
+											<tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,2);return false;" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> " align="center" >
+												<td data-label="<?php echo $tr->translate("N_O");?>"><?php echo $i;?></td>
+												<td colspan="3" data-label="<?php echo $tr->translate("TITLE");?>" style="text-align: left;"><?php echo $row['title'];?></td>
+												<td data-label="<?php echo $tr->translate("INVOICE_NO");?>" class="bold"><?php echo $row['invoice'];?></td>
+												<td colspan="3" data-label="<?php echo $tr->translate("INCOME_CATEGORY");?>"><?php echo $row['income_category'];?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center" ><?php echo $row['payment_method'];?></td>	
+												<td colspan="2" data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($row['total_amount'],2);?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("FOR_DATE");?>"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['name'];?></td>
+											</tr>
+
+											<?php } ?>
+
+											<?php if(!empty($this->expense)){?>
+											<tr>
+												<td  colspan="16"><span style="font-size: 12px;"><?php echo $tr->translate("OTHER_EXPENSE");?></span></td>
+											</tr>
+
+											<tr class="titlerow" align="center">
+												<td scope="col"><?php echo $tr->translate('N_O')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
 												<td scope="col"><?php echo $tr->translate('RECEIPT_NO')?></td>
 												<td scope="col"><?php echo $tr->translate('INVOICE_NUM')?></td>
-												<td scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
-												<td scope="col"><?php echo $tr->translate('CHEQUE_NO')?></td>
-												<td scope="col"><?php echo $tr->translate('TOTAL')?></td>
-												<td scope="col"><?php echo $tr->translate('RECEIVER')?></td>
-												<td scope="col"><?php echo $tr->translate('FOR_DATE')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('CHEQUE_NO')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('TOTAL')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('RECEIVER')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('FOR_DATE')?></td>
 												<td scope="col"><?php echo $tr->translate('USER')?></td>
 											</tr>
-										</thead>
-										
-										<?php $i=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;
-										if ($row['status']==1){
-											$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
-											
-											if($row['payment_methodid']==1){
-												$total_cashexp = $total_cashexp+$row['total_amount'];
-											}elseif($row['payment_methodid']==2){
-												$total_bankexp = $total_bankexp+$row['total_amount'];
-											}else{
-												$total_chequeexp = $total_chequeexp+$row['total_amount'];
-											}
-										}
-										?>
-										<tr class="context-menu-one style  hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,3);return false;" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> " align="center" >
-											<td data-label="<?php echo $tr->translate("N_O");?>"><?php echo $i;?></td>
-											<td data-label="<?php echo $tr->translate("EXPENSE_TITLE");?>" style=" text-align: left;">&nbsp;<?php echo $row['title']; ?>&nbsp;</td>
-											<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
-											<td data-label="<?php echo $tr->translate("INVOICE_NUM");?>"><?php echo $row['external_invoice']; ?></td>
-											<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['payment_type']; ?></a></td>	
-											<td data-label="<?php echo $tr->translate("CHEQUE_NO");?>"><?php echo $row['cheque_no']; ?></td>
-											<td data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($row['total_amount'],2);?></td>
-											<td data-label="<?php echo $tr->translate("RECEIVER");?>"><?php echo $row['receiver']; ?></td>
-											<td data-label="<?php echo $tr->translate("FOR_DATE");?>"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
-											<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['name'];?></td>
-										</tr>
-									 <?php } ?>
+											<?php $i=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;
+												if ($row['status']==1){
+													$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
+													
+													if($row['payment_methodid']==1){
+														$total_cashexp = $total_cashexp+$row['total_amount'];
+													}elseif($row['payment_methodid']==2){
+														$total_bankexp = $total_bankexp+$row['total_amount'];
+													}else{
+														$total_chequeexp = $total_chequeexp+$row['total_amount'];
+													}
+												}
+											?>
+											<tr class="context-menu-one style  hover" oncontextmenu="setrowdata(<?php echo $row['id'];?>,3);return false;" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> " align="center" >
+												<td data-label="<?php echo $tr->translate("N_O");?>"><?php echo $i;?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("EXPENSE_TITLE");?>" style=" text-align: left;">&nbsp;<?php echo $row['title']; ?>&nbsp;</td>
+												<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
+												<td data-label="<?php echo $tr->translate("INVOICE_NUM");?>"><?php echo $row['external_invoice']; ?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>" target="blank"><?php echo $row['payment_type']; ?></a></td>	
+												<td colspan="2" data-label="<?php echo $tr->translate("CHEQUE_NO");?>"><?php echo $row['cheque_no']; ?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($row['total_amount'],2);?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("RECEIVER");?>"><?php echo $row['receiver']; ?></td>
+												<td colspan="2" data-label="<?php echo $tr->translate("FOR_DATE");?>"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
+												<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['name'];?></td>
+											</tr>
+
+
+											<?php } ?>
+										<?php }?>
 									</table>
 								</td>
 							</tr>
+						
 							<?php }?>
 							<?php if(!empty($this->row) || !empty($this->income) || !empty($this->expense)){?>
 							<tr>
-								<td colspan="2">
+								<td colspan="16">
 								<?php 
 									$final_total_income = $net_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
 								?>								
@@ -434,20 +425,20 @@
 								<td colspan="3" >
 									<style type="text/css">
 										
+										
 										body{font-family: 'Times New Roman','Khmer OS Battambang'; }
 										table{ border-collapse:collapse; margin:0 auto;
 										border-color:#000; }
 										.padd tr td{  text-align:center}
 										.padd tr th{  background-color: #e4e4e4; }
-										table { page-break-inside:auto }
-										tr{ page-break-inside:avoid; page-break-after:auto }
+										table.content-data{ page-break-inside:auto }
+										tr.content-data{ page-break-inside:avoid; page-break-after:auto }
 										th,td{ padding:0 1px;}
-										table { page-break-inside:auto }
-										tr{ page-break-inside:avoid; page-break-after:auto; }
 										#header {
 										  display: table-header-group;
 										  page-break-inside:avoid; page-break-after:auto;
 										}
+										
 										
 									</style>
 								</td>

@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate('STUDENT_STOP_SERVICE_REPORT'));
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm=$this->form_search;
+	$classHideHeight="110px";
 ?>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
@@ -79,8 +80,8 @@
 					.hiddenblog{display: block !important;}
 					.style1:hover{ background: #ccc; }
 					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-					table { page-break-inside:auto }
-					tr{ page-break-inside:avoid; page-break-after:auto; }
+					table.content-data { page-break-inside:auto }
+					tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;

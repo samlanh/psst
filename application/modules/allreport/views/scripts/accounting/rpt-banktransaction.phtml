@@ -5,6 +5,7 @@
 	$form->FrmSearchRegister();
 	Application_Model_Decorator::removeAllDecorator($form);
 	$frm=$form;
+	$classHideHeight="110px";
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <style>
@@ -63,8 +64,8 @@ table.tb-footer tr.style-head {
 					.hiddenblog{display: block !important;}
 					.style1:hover{ background: #ccc; }
 					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-					table { page-break-inside:auto }
-					tr{ page-break-inside:avoid; page-break-after:auto; }
+					table.content-data { page-break-inside:auto }
+					tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;

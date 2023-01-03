@@ -79,13 +79,15 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			}
 	    		}
     		}
+			$title = trim($_data['branch_namekh']);
+			$titleEn = empty($_data['branch_nameen'])?$title:$_data['branch_nameen'];
+			$titleEn = trim($titleEn);
 	    	$_arr = array(
 	    			'parent'	    =>$_data['main_branch_id'],
 	    			'school_namekh' =>$_data['school_namekh'],
 	    			'school_nameen' =>$_data['school_nameen'],
-	    			
-	    			'branch_nameen' =>$_data['branch_nameen'],
-	    			'branch_namekh' =>$_data['branch_nameen'],
+	    			'branch_nameen' =>$titleEn,
+	    			'branch_namekh' =>$title,
 	    			'prefix'		=>$_data['prefix_code'],
 	    			'br_address'	=>$_data['br_address'],
 	    			'branch_code'	=>$_data['branch_code'],
@@ -164,7 +166,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'school_namekh' =>$_data['school_namekh'],
     			'school_nameen' =>$_data['school_nameen'],
     			'branch_nameen'	=>$_data['branch_nameen'],
-    			'branch_namekh'	=>$_data['branch_nameen'],
+    			'branch_namekh'	=>$_data['branch_namekh'],
     			'prefix'      	=>$_data['prefix_code'],
     			'br_address'	=>$_data['br_address'],
     			'branch_code'	=>$_data['branch_code'],
@@ -231,7 +233,8 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$sql = "SELECT b.br_id,
     			b.school_namekh,
     			b.school_nameen,
-    			b.branch_nameen,
+    			b.branch_namekh,
+				b.branch_nameen,
 		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
 		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.branch_tel1,b.fax,
     			b.other,b.status FROM rms_branch AS b  ";

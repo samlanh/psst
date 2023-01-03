@@ -65,7 +65,7 @@ table#table_row_study {
 
 .form-group.audioBlog{
 	padding: 10px;
-    background: #3b7acc;
+    background: #02014a;
     color: #fff;
     border-radius: 10px;
 }
@@ -238,26 +238,6 @@ table#table_row_study {
 							                   </div>
 							                </div>
 							                
-						               	  <div class="form-group">
-												<div class="d-flex"> 
-													<div class="settings-main-icon ">
-														<i class="material-icons-outlined">
-														perm_camera_mic
-														</i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_NAMEASAUDIO");?></p>
-													</div> 
-												</div>
-											</div>
-											<div class="form-group audioBlog">
-								                <label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("AUDIO");?>
-							                   </label>
-							                  <div class="col-md-9 col-sm-9 col-xs-12">
-													<input type='file' id="audiofile" name="audiofile" accept="audio/*" placeholder="" class="profile-aud">
-											   </div>
-												<div id="app"></div>
-											</div>
 				                	</div>
 				                </div>
 				            </div>
@@ -295,7 +275,7 @@ table#table_row_study {
 														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CURRENT_ADDRESS");?></p>
 													</div> 
 													<div class="col-md-6 col-sm-6 col-xs-12">
-														<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
+														<input class="button-class button-warning" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 													</div>
 												</div>
 											</div>
@@ -377,6 +357,28 @@ table#table_row_study {
 													</div>
 							                   </div>
 							                </div>
+											
+											
+						               	  <div class="form-group">
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="material-icons-outlined">
+														perm_camera_mic
+														</i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_NAMEASAUDIO");?></p>
+													</div> 
+												</div>
+											</div>
+											<div class="form-group audioBlog">
+								                <label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("AUDIO");?>
+							                   </label>
+							                  <div class="col-md-9 col-sm-9 col-xs-12">
+													<input type='file' id="audiofile" name="audiofile" accept="audio/*" placeholder="" class="profile-aud">
+											   </div>
+												<div id="app"></div>
+											</div>
 									</div>
 								</div>
 				            </div>
@@ -404,8 +406,15 @@ table#table_row_study {
 												</div>
 											</div>
 											
-							                <div class="form-group">
+											<div class="form-group">
 							                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FATHER_NAME");?>  :
+							                   </label>
+							                   <div class="col-md-7 col-sm-7 col-xs-12">
+							                   		<?php echo $frm->getElement("father_khname");?>
+							                   </div>
+							                </div>
+							                <div class="form-group">
+							                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME_IN_LATIN");?>  :
 							                   </label>
 							                   <div class="col-md-7 col-sm-7 col-xs-12">
 							                   		<?php echo $frm->getElement("fa_name_en");?>
@@ -474,8 +483,15 @@ table#table_row_study {
 												</div>
 											</div>
 											
-							                <div class="form-group">
+											<div class="form-group">
 							                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MOTHER_NAME");?>  :
+							                   </label>
+							                   <div class="col-md-7 col-sm-7 col-xs-12">
+							                   		<?php echo $frm->getElement("mother_khname");?>
+							                   </div>
+							                </div>
+							                <div class="form-group">
+							                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME_IN_LATIN");?>  :
 							                   </label>
 							                   <div class="col-md-7 col-sm-7 col-xs-12">
 							                   		<?php echo $frm->getElement("mom_name_en");?>
@@ -547,6 +563,13 @@ table#table_row_study {
 											
 						                <div class="form-group">
 						                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME");?>  :
+						                   </label>
+						                   <div class="col-md-7 col-sm-7 col-xs-12">
+						                   		<?php echo $frm->getElement("guardian_khname");?>
+						                   </div>
+						                </div> 
+										<div class="form-group">
+						                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME_IN_LATIN");?>  :
 						                   </label>
 						                   <div class="col-md-7 col-sm-7 col-xs-12">
 						                   		<?php echo $frm->getElement("guardian_name_en");?>
@@ -740,8 +763,7 @@ table#table_row_study {
 													<table width="100%" border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
 														<tr id="head-title" class="head-td"  align="right" style="font-size:12px;"></tr>
 													</table>
-													<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-															iconClass="dijitIconEditProperty" onclick="addRow();" />
+													<input class="button-class button-warning" iconClass="glyphicon glyphicon-sort-by-attributes" type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" onclick="addRow();" />
 															
 													<input type="hidden" id="identity" name="identity" />
 													<input type="hidden" id="popup_index" name="popup_index" />
@@ -884,7 +906,7 @@ table#table_row_study {
 					                   		<input id="group" />
 					                    </div>
 					                     <div class="col-md-3 col-sm-3 col-xs-12">
-					                   		<input type="button" label="<?php echo $tr->translate('Add Study Record');?>" dojoType="dijit.form.Button" iconClass="dijitIconEditProperty" onclick="addRowStudy();" />
+					                   		<input class="button-class button-warning" iconClass="glyphicon glyphicon-sort-by-attributes" type="button" label="<?php echo $tr->translate('Add Study Record');?>" dojoType="dijit.form.Button" onclick="addRowStudy();" />
 					                    </div>
 					                </div>
 									<div class="form-group">
@@ -904,9 +926,9 @@ table#table_row_study {
 			<div class="clearfix"></div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" onclick="getStudentNo();"/>
-               		<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+               		<input type="reset"  class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" onclick="getStudentNo();"/>
+               		<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button"  />
+					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" />
 	    		</div>
 	    	</div>
 		</form>
@@ -1854,10 +1876,8 @@ function addJob(){
 							<input type="hidden" name="" id="value_j" dojoType="dijit.form.TextBox" />
 							<tr>
 								<td colspan="4" align="center">
-									<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="close" name="close" dojoType="dijit.form.Button" 
-									​ ​​iconClass="dijitIconUndo" onclick="hideDialog1();"/>
-									<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save" name="save" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addJob();"/>
+									<input class="button-class button-danger" iconClass="glyphicon glyphicon-off" type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="close" name="close" dojoType="dijit.form.Button" onclick="hideDialog1();"/>
+									<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save" name="save" dojoType="dijit.form.Button" onclick="addJob();"/>
 								</td>
 							</tr>
 						</table>
@@ -1896,10 +1916,8 @@ function addJob(){
 							</tr>
 								<tr>
 									<td colspan="4" align="center">
-										<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_nation" name="hide_nation" dojoType="dijit.form.Button" 
-										​ ​​iconClass="dijitIconUndo" onclick="hideDialog4();"/>
-										<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
-										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
+										<input type="button" class="button-class button-danger" iconClass="glyphicon glyphicon-off" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_nation" name="hide_nation" dojoType="dijit.form.Button" onclick="hideDialog4();"/>
+										<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_nation" name="save_nation" dojoType="dijit.form.Button" onclick="addNationBy();"/>
 									</td>
 								</tr>
 							</table>
@@ -1927,10 +1945,8 @@ function addJob(){
 							
 							<tr>
 								<td colspan="4" align="center">
-									<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide" name="hide" dojoType="dijit.form.Button" 
-									​ ​​iconClass="dijitIconUndo" onclick="hideDialog();"/>
-									<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_lang" name="save_lang" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addLanguage();"/>
+									<input type="button" class="button-class button-danger" iconClass="glyphicon glyphicon-off" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide" name="hide" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+									<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_lang" name="save_lang" dojoType="dijit.form.Button" onclick="addLanguage();"/>
 								</td>
 							</tr>
 						</table>
@@ -1958,10 +1974,8 @@ function addJob(){
 							
 							<tr>
 								<td colspan="4" align="center">
-									<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_know_by" name="hide_know_by" dojoType="dijit.form.Button" 
-									​ ​​iconClass="dijitIconUndo" onclick="hideDialog2();"/>
-									<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_know_by" name="save_know_by" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addKnowBy();"/>
+									<input class="button-class button-danger" iconClass="glyphicon glyphicon-off" type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_know_by" name="hide_know_by" dojoType="dijit.form.Button" onclick="hideDialog2();"/>
+									<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_know_by" name="save_know_by" dojoType="dijit.form.Button"  onclick="addKnowBy();"/>
 								</td>
 							</tr>
 						</table>
@@ -1988,10 +2002,8 @@ function addJob(){
 								</tr>
 								<tr>
 									<td colspan="4" align="center">
-										<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_doc_type" name="hide_doc_type" dojoType="dijit.form.Button" 
-										​ ​​iconClass="dijitIconUndo" onclick="hideDialog3();"/>
-										<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_doc_type" name="save_doc_type" dojoType="dijit.form.Button" 
-										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDocType();"/>
+										<input class="button-class button-danger" iconClass="glyphicon glyphicon-off" type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_doc_type" name="hide_doc_type" dojoType="dijit.form.Button"  onclick="hideDialog3();"/>
+										<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_doc_type" name="save_doc_type" dojoType="dijit.form.Button" onclick="addDocType();"/>
 									</td>
 								</tr>
 							</table>

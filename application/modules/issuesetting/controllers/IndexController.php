@@ -26,7 +26,7 @@ class Issue_IndexController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","GROUP_CODE","FACULTY_KHNAME","FROM_DATE","TO_DATE","ISSUE_DATE","TYPE","USER","STATUS");
 			$link=array(
-					'module'=>'issue','controller'=>'index','action'=>'edit',
+					'module'=>'issuesetting','controller'=>'index','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link,'dept_kh'=>$link,'program_kh'=>$link));
 			

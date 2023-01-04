@@ -124,12 +124,22 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						s.home_num,
 						s.street_num,
 						s.father_enname,
+						s.father_enname AS fatherLatinName,
+						s.father_khname AS fatherKhmerName,
 						s.father_phone,
 						COALESCE(DATE_FORMAT(s.father_dob, '%d-%m-%Y'),'') AS father_dob,
+						
 						s.mother_enname,
+						s.mother_enname AS motherLatinName,
+						s.mother_khname AS motherKhmerName,
+						
 						COALESCE(DATE_FORMAT(s.mother_dob, '%d-%m-%Y'),'') AS mother_dob,
 						s.mother_phone,
+						
 						s.guardian_enname,
+						s.guardian_enname AS guardianLatinName,
+						s.guardian_khname AS guardianKhmerName,
+						
 						s.guardian_tel,
 						COALESCE(DATE_FORMAT(s.guardian_dob, '%d-%m-%Y'),'') AS guardian_dob,
 						s.photo,

@@ -14,7 +14,7 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 			$titleEn = empty($_data['occu_enname'])?$title:$_data['occu_enname'];
 			$titleEn = trim($titleEn);
 			
-			$sql="SELECT occupation_id FROM rms_occupation WHERE status =".$_data['status'];
+			$sql="SELECT occupation_id FROM rms_occupation WHERE 1";
 			$sql.=" AND occu_name='".$title."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
@@ -72,7 +72,7 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql = " SELECT 
 					occupation_id AS id,
-					occu_name,
+					occu_name,occu_enname,
 					create_date,
 					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name";
 		$sql.=$dbp->caseStatusShowImage("status");

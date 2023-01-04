@@ -241,6 +241,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$fa_name_en = new Zend_Dojo_Form_Element_TextBox('fa_name_en');
 		$fa_name_en->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
+				
+		$father_khname = new Zend_Dojo_Form_Element_TextBox('father_khname');
+		$father_khname->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
 		
 		$fa_dob = new Zend_Dojo_Form_Element_DateTextBox('fa_dob');
 		$fa_dob->setAttribs(array(
@@ -258,6 +262,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$mom_name_en->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
 		
+		$mother_khname = new Zend_Dojo_Form_Element_TextBox('mother_khname');
+		$mother_khname->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
+				
 		$mo_dob = new Zend_Dojo_Form_Element_DateTextBox('mo_dob');
 		$mo_dob->setAttribs(array(
 				'data-dojo-Type'=>"dijit.form.DateTextBox",
@@ -273,6 +281,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$guardian_name_en->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
 		
+		$guardian_khname = new Zend_Dojo_Form_Element_TextBox('guardian_khname');
+		$guardian_khname->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
+				
 		$guardian_dob = new Zend_Dojo_Form_Element_DateTextBox('guardian_dob');
 		$guardian_dob->setAttribs(array(
 				'data-dojo-Type'=>"dijit.form.DateTextBox",
@@ -432,6 +444,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
 			
+			$father_khname->setValue($data['father_khname']);
+			$mother_khname->setValue($data['mother_khname']);
+			$guardian_khname->setValue($data['guardian_khname']);
+			
 		}
 	
 		$this->addElements(
@@ -484,6 +500,11 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$from_school,
 						$sponser,
 						$sponser_phone,
+						
+						$father_khname,
+						$mother_khname,
+						$guardian_khname,
+						
 						)
 				);
 		

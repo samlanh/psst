@@ -121,9 +121,9 @@
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 	               	<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" />
 					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+						 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" />
                	</div>
                </div>
 		</form>
@@ -192,6 +192,10 @@
 	    tabindex: "1",         
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>", 
+		onChange:function(){
+			 getAllItemId();
+		}
+	   
 	    
 	}, "studentId");
 
@@ -245,11 +249,11 @@ function getAllAcademicBy(){
 	getAllAcademicByBranch(url_getacademic,contentData);
 }
 function getAllItemId(itemId=''){
+	
 	dijit.byId("itemId").reset();
 	branchId = dijit.byId('branch_id').get('value');
 	studentId = dijit.byId('studentId').get('value');
 	itemType = dijit.byId('itemType').get('value');
-	
 	var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
 	if(branchId==''){
 		return false;
@@ -260,7 +264,8 @@ function getAllItemId(itemId=''){
 		'itemId':itemType,
 		'studentId':studentId,
 		'hiddenParent':1,
-		'isOnepayment':0,
+		'isService':2,
+		//'isOnepayment':0,
 	}
 	getAllItemIdByType(urlGet,contentData);
 }

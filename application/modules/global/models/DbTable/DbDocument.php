@@ -11,6 +11,8 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		try{
 			$title = trim($_data['name']);
+			$titleEn = empty($_data['name_en'])?$title:$_data['name_en'];
+			$titleEn = trim($titleEn);
 			$sql="SELECT id FROM rms_document_type WHERE status =1 ";
 			$sql.=" AND name='".$title."'";
 			$rs = $db->fetchOne($sql);
@@ -19,6 +21,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 			}			
 			$_arr=array(
 					'name'	  	  => $title,
+					'name_en'	  => $titleEn,
 					'create_date' => date("Y-m-d"),
 					'types'		  => $_data['types'],
 					'status'	  => 1,
@@ -47,9 +50,13 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	public function updateDocument($_data){
+		$title = trim($_data['name']);
+		$titleEn = empty($_data['name_en'])?$title:$_data['name_en'];
+		$titleEn = trim($titleEn);
 		$status = empty($_data['status'])?0:1;
 		$_arr=array(
-				'name' 			=> $_data['name'],
+				'name' 			=> $title,
+				'name_en' 		=> $titleEn,
 				'create_date' 	=> date("Y-m-d"),
 				'status'		=> $status,
 				'types'		  	=> $_data['types'],
@@ -64,6 +71,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$sql = " SELECT 
 				    id,
 					name,
+					name_en,
 					create_date,
 					CASE    
 					WHEN  types = 1 THEN '".$tr->translate("STUDENT_DOCUMENT")."'

@@ -52,7 +52,11 @@ class Registrar_InitilizeuseController extends Zend_Controller_Action {
 			try {
 				$_dbmodel = new Registrar_Model_DbTable_DbInitilizeservice();
 				$_discount = $_dbmodel->addInitilizeService($_data);
-				//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/add");
+				if(isset($_data['save_new'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/add");
+				}else{
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				}
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

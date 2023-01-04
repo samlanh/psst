@@ -1780,10 +1780,13 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND i.is_productseat=".$data['isProductset'];
   	}
   	if(!empty($data['proLocation'])){//want to get product in this location
-  		$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is not null AND branch_id=".$data['proLocation'].")";
+  		$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['proLocation'].")";
   	}
   	if(!empty($data['notLocation'])){//want to get product in this location
-  		$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is not null AND branch_id=".$data['notLocation'].")";
+  		$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['notLocation'].")";
+  	}
+  	if(!empty($data['isService'])){
+  		$sql.=" OR i.items_type=2 ";
   	}
   	$branchlist = $this->getAllSchoolOption();
   	if (!empty($branchlist)){
@@ -2082,7 +2085,6 @@ function getAllgroupStudyNotPass($action=null){
   			                           $photo =  $rs["photo"];
 		  			                           
   			                        $str.='<input type="hidden" id="lbl_photoname" value="'.$photo.'" /></div>
-  			                        		<i class="fa fa-male member-star text-active" title="verified user"></i>
   			                        		</div>
 										</div>
 									</div>

@@ -102,6 +102,15 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 			
+			$rows = $this->geLabelByKeyName('hornorTableSetting');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['hornorTableSetting'],'keyName'=>'hornorTableSetting','note'=>"កំណត់តារាងកិត្តិយស នៃការបង្ហាញចំនួនសិស្ស",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['hornorTableSetting']);
+				$where=" keyName= 'hornorTableSetting'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

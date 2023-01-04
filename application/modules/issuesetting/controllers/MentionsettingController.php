@@ -26,7 +26,7 @@ class Issuesetting_MentionsettingController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
     		$collumns = array("ACADEMIC_YEAR","TITLE","DEGREE","STATUS","USER");
     		$link=array(
-    				'module'=>'global','controller'=>'mentionsetting','action'=>'edit',
+    				'module'=>'issuesetting','controller'=>'mentionsetting','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('academic_year'=>$link,'start_date'=>$link,'title'=>$link ));
 			

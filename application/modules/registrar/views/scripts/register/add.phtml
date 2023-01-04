@@ -11,12 +11,8 @@
 	fieldset{  background:none;}
 	.red{ color: red; padding-left:5px;}
 	.tab-content.vertical div.tab-pane {
-	    overflow-y: auto;
-	    max-height: 300px;
-	}
-	.tab-content.vertical div.tab-pane{
-	    overflow-y: auto;
-	    max-height: 300px;
+	   /* overflow-y: auto;
+	    max-height: 300px;*/
 	}
 	.tab-content.vertical div.tab-pane{
     	min-height: 0px !important;
@@ -119,13 +115,15 @@ table.collape tbody td{padding: 0px !important;}
 #lbl_header {display: initial !important;}
 tr.head-td th{padding: 5px 2px;}
 #lbl_blog span{line-height: 25px;font-size: 14px;}
-#table_row td{vertical-align: top;padding:15px 5px;}
+#table_row td{vertical-align: top;padding:8px 2px;}
 .listBox{
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-	border-radius: 10px
+	/*box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+	border-radius: 10px*/
+	border-bottom:1px solid #eee;
 }
+
 .ItemPayment td{padding-top:20px;}
-label.control-td{font-size: 13px;display:block;margin-bottom:0;}
+label.control-td{font-size: 11px;display:block;margin-bottom:0;}
 label.control-td small{font-size: 70%;color:#fff;}
 </style>
 <div class="card">
@@ -311,7 +309,6 @@ label.control-td small{font-size: 70%;color:#fff;}
 				                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image" >
 				                           	<input id="lbl_photoname" id="lbl_photoname" value="abc"  type="hidden" />
 				                        </div>
-				                        <i class="fa fa-male member-star text-active" title="verified user"></i>
 									</div>
 								</div>
 								<div class="col-md-5 col-sm-5 col-xs-12">
@@ -466,7 +463,7 @@ label.control-td small{font-size: 70%;color:#fff;}
 												</label>
 												<small>Qty/Unit Price</small>
 											</th>
-											<th width="120px">
+											<th width="90px">
 												<label class="control-td">
 													ការបញ្ចុះតម្លៃ
 												</label>
@@ -478,13 +475,13 @@ label.control-td small{font-size: 70%;color:#fff;}
 												</label>
 												<small>Total Discount/ Other Fee</small>
 											</th>
-											<th>
+											<th width="90px">
 												<label class="control-td">
 													ប្រាក់ត្រូវបង់ / បានបង់
 												</label>
 												<small>Total Pay/Paid</small>
 											</th>
-											<th>
+											<th width="150px">
 												<label class="control-td">
 													សុពលភាព
 												</label>
@@ -521,6 +518,7 @@ label.control-td small{font-size: 70%;color:#fff;}
 			       	</div>
 			</div>
 			<div class="card-box">
+	        	<br />
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	        	</div>
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
@@ -1275,27 +1273,27 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
 			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label>';
 
-			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
-			template+='<div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
+			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
+			template+='<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM');?>" class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
 
-			template+='<td><div class="form-group"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
-			template+='<div class="form-group"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
+			template+='<td><div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('QTY');?>" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
+			template+='<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('PRICE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
 			template+='<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  /></div></td>';	
 
-			template+='<td class="bgBox"><select placeHolder="Discount Option" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
+			template+='<td class="bgBox"><select placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
 				template+='<option value="0"></option>';	
 				<?php if(!empty($this->rsdiscount))foreach($this->rsdiscount as $rsdis){?>
 					template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo addslashes($rsdis['dis_name']);?></option>';
 				<?php }?>
 				template+='</select>';
-				template+=strCol6+'<input type="text" class="fullside" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></label>';
-				template+=strCol6+'<input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></label>';
+				template+=strCol6+'<input type="text" class="fullside" placeHolder="<?php echo $tr->translate('PERCENT');?>" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></label>';
+				template+=strCol6+'<input type="text" class="fullside" placeHolder="<?php echo $tr->translate('DISCOUNT_AMOUNT');?>" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></label>';
 			template+='</td>';
 			template+='<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" name="total_discount'+col+'" id="total_discount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
-			template+='<div class="form-group"><input type="text" placeHolder="Other Fee" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
+			template+='<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 
 			template+='<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
-			template+='<div class="form-group"><input type="text" require="true" placeHolder="Paid" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div></td>';
+			template+='<div class="form-group"><input type="text" require="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 
 			template+='<td class="bgBox"><div class="form-group"><select class="fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy('+col+');" id="term_study'+col+'" name="term_study'+col+'" dojoType="dijit.form.FilteringSelect" >'+term_study_option+'</select></div>';
 			template+=strCol6+'<input type="text" placeHolder="Start Date" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';

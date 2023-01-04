@@ -105,6 +105,14 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				'placeholder'=>$this->tr->translate("SCHOOL_NAMEEN")
 		));
 		
+		$hornorTableSetting=  new Zend_Dojo_Form_Element_FilteringSelect('hornorTableSetting');
+		$hornorTableSetting->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$hornorTableSettingOpt = array(
+				1=>$this->tr->translate("SHOW_3_STUDENTS"),
+				2=>$this->tr->translate("SHOW_5_STUDENTS"),
+				);
+		$hornorTableSetting->setMultiOptions($hornorTableSettingOpt);
+		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
 			$_branch_add->setValue($data['branch_add']['keyValue']);
@@ -119,6 +127,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			
 			$schooolNameKh->setValue($data['schooolNameKh']['keyValue']);
 			$schooolNameEng->setValue($data['schooolNameEng']['keyValue']);
+			
+			$hornorTableSetting->setValue($data['hornorTableSetting']['keyValue']);
 		}
 		$this->addElements(array(
 				$_sale_stock
@@ -134,6 +144,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				
 				,$schooolNameKh
 				,$schooolNameEng
+				,$hornorTableSetting
 				));
 		
 		return $this;

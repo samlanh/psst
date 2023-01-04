@@ -41,6 +41,8 @@ public function init()
 		$row['schooolNameKh'] = $db_gs->geLabelByKeyName('schooolNameKh');
 		$row['schooolNameEng'] = $db_gs->geLabelByKeyName('schooolNameEng');
 		
+		$row['hornorTableSetting'] = $db_gs->geLabelByKeyName('hornorTableSetting');
+		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();
 		$this->view->allPlaylistvideo = $db_gs->getAllPlaylistvideo();

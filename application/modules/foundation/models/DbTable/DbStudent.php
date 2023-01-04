@@ -285,18 +285,21 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'district_name'	=>$_data['distric_note'],
 						'province_id'	=>$_data['student_province'],
 						
+						'father_khname'	=>$_data['father_khname'],
 						'father_enname'	=>$_data['fa_name_en'],
 						'father_dob'	=>$_data['fa_dob'],
 						'father_nation'	=>$_data['fa_national'],
 						'father_job'	=>$_data['fa_job'],
 						'father_phone'	=>$_data['fa_phone'],
 						
+						'mother_khname'	=>$_data['mother_khname'],
 						'mother_enname'	=>$_data['mom_name_en'],
 						'mother_dob'	=>$_data['mo_dob'],
 						'mother_nation'	=>$_data['mom_nation'],
 						'mother_job'	=>$_data['mo_job'],
 						'mother_phone'	=>$_data['mon_phone'],
 
+						'guardian_khname'=>$_data['guardian_khname'],
 						'guardian_enname'=>$_data['guardian_name_en'],
 						'guardian_dob'	=>$_data['guardian_dob'],
 						'guardian_nation'=>$_data['guardian_national'],
@@ -539,17 +542,21 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
 					
+					'father_khname'	=>$_data['father_khname'],
 					'father_enname'	=>$_data['fa_name_en'],
 					'father_dob'	=>$_data['fa_dob'],
 					'father_nation'	=>$_data['fa_national'],					
 					'father_job'	=>$_data['fa_job'],					
 					'father_phone'	=>$_data['fa_phone'],
 					
+					'mother_khname'	=>$_data['mother_khname'],
 					'mother_enname'	=>$_data['mom_name_en'],
 					'mother_dob'	=>$_data['mo_dob'],
 					'mother_nation'	=>$_data['mom_nation'],
 					'mother_job'	=>$_data['mo_job'],
 					'mother_phone'	=>$_data['mon_phone'],
+					
+					'guardian_khname'=>$_data['guardian_khname'],
 					'guardian_enname'=>$_data['guardian_name_en'],
 					'guardian_dob'	=>$_data['guardian_dob'],
 					'guardian_nation'=>$_data['guardian_national'],

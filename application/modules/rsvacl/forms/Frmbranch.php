@@ -61,11 +61,11 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 				'onkeyup'=>'Calfifty()'
 				));
 
-		$branch_nameen = new Zend_Dojo_Form_Element_ValidationTextBox('branch_nameen');
+		$branch_nameen = new Zend_Dojo_Form_Element_TextBox('branch_nameen');
 		$branch_nameen->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'required'=>true,
+				//'required'=>false,
 				'onkeyup'=>'Caltweenty()'
 				));
 		

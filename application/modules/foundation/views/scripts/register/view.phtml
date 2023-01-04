@@ -284,6 +284,44 @@ table#exportExcel tr td {
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['guardian_document'];?></td>
 								</tr>
+								<tr><td colspan="9">&nbsp;</td></tr>
+								<tr>
+						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			II. ព័ត៌មានឯកសារ
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+								<tr>
+									<td colspan="9">
+										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;">
+												<thead>
+													<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px; " >
+														<td><?php echo $tr->translate("N_O");?></td>
+														<td><?php echo $tr->translate("DOCUMENT_TYPE");?></td>
+														<td><?php echo $tr->translate("DATE_GIVE");?></td>
+														<td><?php echo $tr->translate("RECEIVED");?></td>
+														<td><?php echo $tr->translate("DATE_BACK");?></td>
+														<td><?php echo $tr->translate("NOTE");?></td>
+													</tr>
+												</thead>
+												<tbody>
+											
+												<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
+													<tr style="font-size:12px; height: 22px;"​ align="center">
+																<td align="center"><?php echo $i;?></td>
+																<td><?php echo $rs['document_type'];?></td>
+																<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td>
+																<td align="center"><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
+																<td align="center"><?php if($rs['is_receive']==1){ echo "-"; }else{echo date("d/m/Y",strtotime($rs['date_end']));}?></td>
+																<td><?php echo $rs['note'];?></td>
+													</tr>
+												<?php }}?>
+										
+											
+												</tbody>
+										</table>
+									</td>
+								</tr>
 						    </table>
 					   </td>
 					</tr>

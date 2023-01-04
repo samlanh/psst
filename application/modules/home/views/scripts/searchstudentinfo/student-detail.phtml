@@ -276,13 +276,13 @@ table.content-data{
 										    	<tr>
 										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
 										    			<p class="padding-left">
-										    			<label class="title">ឈ្មោះឪពុក </label> : <label class="value"><?php echo $this->rs['father_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['father_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['father_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?> </label>
+										    			<label class="title">ឈ្មោះឪពុក </label> : <label class="value"><?php echo $this->rs['father_khname'];?></label> <label class="title">ឈ្មោះជាអក្សរឡាតាំង </label> : <label class="value"><?php echo $this->rs['father_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['father_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['father_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?> </label>
 										    			</p>
 										    			<p class="padding-left">
 										    			 <label class="title">មុខរបរ</label> : <label class="value"><?php echo $this->rs['fath_job'];?></label> <label class="title">លេខទូរសព្ទ</label> : <label class="value"><?php echo $this->rs['father_phone'];?></label>
 										    			</p>
 										    			<p class="padding-left">
-										    			<label class="title">ឈ្មោះម្ដាយ </label> : <label class="value"><?php echo $this->rs['mother_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['mother_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?> </label> 
+										    			<label class="title">ឈ្មោះម្ដាយ </label> : <label class="value"><?php echo $this->rs['mother_khname'];?></label> <label class="title">ឈ្មោះជាអក្សរឡាតាំង </label> : <label class="value"><?php echo $this->rs['mother_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['mother_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?> </label> 
 										    			</p>
 										    			<p class="padding-left">
 										    			<label class="title">មុខរបរ</label> : <label class="value"><?php echo $this->rs['moth_job'];?></label> <label class="title">លេខទូរសព្ទ</label> : <label class="value"><?php echo $this->rs['mother_phone'];?></label>
@@ -299,7 +299,7 @@ table.content-data{
 										    	<tr>
 										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
 										    			<p class="padding-left">
-										    			<label class="title">ឈ្មោះអាណាព្យាបាល  </label> : <label class="value"><?php echo $this->rs['guardian_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['guardian_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"> <?php if (!empty($this->rs['guardian_dob']) AND $this->rs['guardian_dob'] !="0000-00-00" AND $this->rs['guardian_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['guardian_dob']));}?></label>
+										    			<label class="title">ឈ្មោះអាណាព្យាបាល  </label> : <label class="value"><?php echo $this->rs['guardian_khname'];?></label>  <label class="title">ឈ្មោះជាអក្សរឡាតាំង </label> : <label class="value"><?php echo $this->rs['guardian_enname'];?></label>  <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['guardian_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"> <?php if (!empty($this->rs['guardian_dob']) AND $this->rs['guardian_dob'] !="0000-00-00" AND $this->rs['guardian_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['guardian_dob']));}?></label>
 										    			</p>
 										    			<p class="padding-left">
 										    			<label class="title">មុខរបរ</label> : <label class="value"><?php echo $this->rs['guard_job'];?></label> <label class="title">លេខអត្ត./លិខិតឆ្លងដែន</label> : <label class="value"><?php echo $this->rs['guardian_document'];?></label> <label class="title">លេខទូរសព្ទ  </label> : <label class="value"><?php echo $this->rs['guardian_tel'];?></label>

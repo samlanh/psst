@@ -160,6 +160,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     				}
     			}
     		}
+			$status = empty($_data['status'])?0:1;
     		
     	$_arr = array(
     			'parent'		=>$_data['main_branch_id'],
@@ -176,7 +177,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'email'		    =>$_data['email'],
     			'website'		=>$_data['website'],
     			'other'			=>$_data['branch_note'],
-    			'status'		=>$_data['branch_status'],
+    			'status'		=>$status,
     			'displayby'		=>2,
     			'schooloptionlist'=>$schooloption,
     			'color'			=>$_data['color'],

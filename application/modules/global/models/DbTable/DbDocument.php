@@ -92,6 +92,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = "name LIKE '%{$s_search}%'";
+			$s_where[] = "name_en LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if($search['type_search']){

@@ -249,6 +249,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		
 		$_db= new Home_Model_DbTable_DbStudent();
 		$this->view->rsStudentRerecord = $_db->getAllStudentStudyRecord($id);
+		$this->view->document =$_db->getStudentDocumentById($id);
 	}
 	
 	public function copyAction(){

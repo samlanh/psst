@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	$this->headTitle($tr->translate('ប្រវត្តិរូបសង្ខេប')); 
 	echo $this->headTitle(''); 
 	$sex='';
 	if($this->rs['sex']==1){
@@ -84,7 +84,7 @@ table#exportExcel tr td {
 					}
 					.hover:hover{background: #ccc;}
 		  		 </style>
-				<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
+				<table width="100%" style="font-size:12px; font-family:'Times New Roman','Khmer OS Battambang';"> 
 					<tr class="head">
 						<td width="40%" valign="middle"></td>
 					   <td width="30%" align="center"></td>
@@ -101,7 +101,7 @@ table#exportExcel tr td {
 					</tr>
 					<tr>
 					   <td colspan="3">
-					   		<table id="exportExcel" style="font-family:'Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;line-height:27px;" width="100%" cellspacing="0">
+					   		<table id="exportExcel" style="font-family:'Times New Roman','Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;line-height:27px;" width="100%" cellspacing="0">
 						    	<tr>
 						    		<td colspan="9" align="right" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
 						    			<img id="profile_wiew" src="<?php echo $photo;?>" alt="" style="width:100px;max-height: 120px;border: solid 1px #a29f9f;"/>
@@ -206,16 +206,19 @@ table#exportExcel tr td {
 								<tr>
 									<td class="title">ឈ្មោះឪពុក</td>
 									<td >:</td>
+									<td class="value"><?php echo $this->rs['father_khname'];?></td>
+									<td >ជាអក្សរឡាតាំង</td>
+									<td >:</td>
 									<td class="value"><?php echo $this->rs['father_enname'];?></td>
 									<td >សញ្ជាតិ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['father_nation'];?></td>
-									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
-									<td >:</td>
-									<td class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['mother_dob']!="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?></td>
 								</tr>
 								<tr>
-									<td class="title">មុខរបរ</td>
+									<td class="title" >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									<td >:</td>
+									<td class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['mother_dob']!="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?></td>
+									<td >មុខរបរ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['fa_job'];?></td>
 									<td >លេខទូរសព្ទ</td>
@@ -225,16 +228,20 @@ table#exportExcel tr td {
 								<tr>
 									<td class="title">ឈ្មោះម្ដាយ</td>
 									<td >:</td>
+									<td class="value"><?php echo $this->rs['mother_khname'];?></td>
+									<td >ជាអក្សរឡាតាំង</td>
+									<td >:</td>
 									<td class="value"><?php echo $this->rs['mother_enname'];?></td>
 									<td >សញ្ជាតិ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['mother_nation'];?></td>
-									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
-									<td >:</td>
-									<td class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?></td>
 								</tr>
 								<tr>
-									<td class="title">មុខរបរ</td>
+									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									<td >:</td>
+									<td class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?></td>
+								
+									<td >មុខរបរ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['mo_job'];?></td>
 									<td >លេខទូរសព្ទ</td>
@@ -251,24 +258,69 @@ table#exportExcel tr td {
 								<tr>
 									<td class="title">ឈ្មោះអាណាព្យាបាល</td>
 									<td >:</td>
+									<td class="value"><?php echo $this->rs['guardian_khname'];?></td>
+									<td >ជាអក្សរឡាតាំង</td>
+									<td >:</td>
 									<td class="value"><?php echo $this->rs['guardian_enname'];?></td>
 									<td >សញ្ជាតិ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['guardian_nation'];?></td>
-									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									</tr>
+								<tr>
+									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
 									<td >:</td>
 									<td class="value"><?php if (!empty($this->rs['guardian_dob']) AND $this->rs['guardian_dob'] !="0000-00-00" AND $this->rs['guardian_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['guardian_dob']));}?> </td>
-								</tr>
-								<tr>
-									<td class="title">មុខរបរ</td>
+								
+									<td >មុខរបរ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['gu_job'];?></td>
 									<td >លេខទូរសព្ទ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['guardian_tel'];?></td>
-									<td >លេខអត្ត./លិខិតឆ្លងដែន</td>
+									
+								</tr>
+								<tr>
+									<td class="title">លេខអត្ត./លិខិតឆ្លងដែន</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['guardian_document'];?></td>
+								</tr>
+								<tr><td colspan="9">&nbsp;</td></tr>
+								<tr>
+						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			II. ព័ត៌មានឯកសារ
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+								<tr>
+									<td colspan="9">
+										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;">
+												<thead>
+													<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px; " >
+														<td><?php echo $tr->translate("N_O");?></td>
+														<td><?php echo $tr->translate("DOCUMENT_TYPE");?></td>
+														<td><?php echo $tr->translate("DATE_GIVE");?></td>
+														<td><?php echo $tr->translate("RECEIVED");?></td>
+														<td><?php echo $tr->translate("DATE_BACK");?></td>
+														<td><?php echo $tr->translate("NOTE");?></td>
+													</tr>
+												</thead>
+												<tbody>
+											
+												<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
+													<tr style="font-size:12px; height: 22px;"​ align="center">
+																<td align="center"><?php echo $i;?></td>
+																<td><?php echo $rs['document_type'];?></td>
+																<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td>
+																<td align="center"><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
+																<td align="center"><?php if($rs['is_receive']==1){ echo "-"; }else{echo date("d/m/Y",strtotime($rs['date_end']));}?></td>
+																<td><?php echo $rs['note'];?></td>
+													</tr>
+												<?php }}?>
+										
+											
+												</tbody>
+										</table>
+									</td>
 								</tr>
 						    </table>
 					   </td>

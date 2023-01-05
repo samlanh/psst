@@ -41,7 +41,10 @@ class Mobileapp_LabelController extends Zend_Controller_Action {
 			$row['lbl_smsnotification']= $db->getMobileLabel("lbl_smsnotification");
 			$row['lbl_paymentnotification']= $db->getMobileLabel("lbl_paymentnotification");
 			$row['lbl_schoolphone']= $db->getMobileLabel("lbl_schoolphone");
+			$row['mockupAppImage']= $db->geLabelByKeyNamesetting("mockupAppImage");
+			$row['qrcodeAppLink']= $db->geLabelByKeyNamesetting("qrcodeAppLink");
 			$this->view->row =$row;
+			
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -181,6 +181,7 @@
 					
 					$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
 					$_arr = array(
+							'branch_id'			=>$_data['branch_id'],
 							'stu_id'			=>$student_i,
 							'is_newstudent'		=>1,
 							'status'			=>1,
@@ -315,6 +316,7 @@
 						
 						$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
 						$_arr = array(
+								'branch_id'			=>$_data['branch_id'],
 								'is_newstudent'		=>1,
 								'status'			=>1,
 								'group_id'			=>0,
@@ -358,6 +360,7 @@
 						$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
 						
 						$_arr = array(
+								'branch_id'			=>$_data['branch_id'],
 								'stu_id'			=>$student_i,
 								'is_newstudent'		=>1,
 								'status'			=>1,

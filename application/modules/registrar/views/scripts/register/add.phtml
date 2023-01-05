@@ -605,11 +605,11 @@ label.control-td small{font-size: 70%;color:#fff;}
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
                		<input onClick="submitAction();" type="button"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
-					 	iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					 	class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove"  />
 					<input onClick="submitAction();" type="button" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-					 	iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					 	class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove"  />
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave();displayNone();"/> 
+						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" onclick="printSave();displayNone();"/> 
 	    		</div>
 	    	</div>
 		</form>
@@ -968,6 +968,7 @@ function getallstudentname(){//
 }
 function checkAutoControl(studentType){
 	$(".displayLabel").html('AUTO_TO_TEST');
+	$('#auto_test').checked;
 	$("#displayControl").css("display", "block");
 	if(studentType==1){//existing
 		$("#displayControl").css("display", "none");
@@ -1296,8 +1297,8 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<div class="form-group"><input type="text" require="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 
 			template+='<td class="bgBox"><div class="form-group"><select class="fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy('+col+');" id="term_study'+col+'" name="term_study'+col+'" dojoType="dijit.form.FilteringSelect" >'+term_study_option+'</select></div>';
-			template+=strCol6+'<input type="text" placeHolder="Start Date" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';
-			template+=strCol6+'<input type="text" placeHolder="End Date" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></label></td>';
+			template+=strCol6+'<input type="text" onchange="getValidate('+col+');" placeHolder="<?php echo $tr->translate('START_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';
+			template+=strCol6+'<input type="text" placeHolder="<?php echo $tr->translate('END_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></label></td>';
 
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" />';
 			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
@@ -1327,8 +1328,8 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				dojo.style('paid_amount'+col, "color", "red");
 			}
 		}
-		//getservicefee(col);
-		//getValidate(col);
+		getservicefee(col);
+		getValidate(col);
 }
 
 
@@ -1420,10 +1421,11 @@ function deleteRecord(index) {
 }
 function getValidate(key){
 	onepayment = dijit.byId('onepayment_'+key).get('value');
-	if(onepayment == 0){
+	start_date = dijit.byId('date_start_'+key).get('value');
+	if(onepayment == 0 && start_date!=null){
 		amount= dijit.byId('qty_'+key).get('value');
 		term = dijit.byId('term_'+key).get('value');
-		start_date = dijit.byId('date_start_'+key).get('value');
+		
 		if(term==1){
 			var a = new Date(start_date);
 			mm = a.getMonth()+amount+1;

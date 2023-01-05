@@ -53,7 +53,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
       	try{
-//       		print_r($_data);exit();
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
       		if(!empty($_data['save_close'])){
@@ -109,10 +108,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     
     public function editAction(){
     	$id=$this->getRequest()->getParam("id");
+    	$db = new Registrar_Model_DbTable_DbRegister();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try{
-    			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->updateRegister($_data,$id);
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register');
     		} catch (Exception $e) {
@@ -120,7 +119,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	$db = new Registrar_Model_DbTable_DbRegister();
     	$rspayment =  $db->getStudentPaymentByID($id);
     	if(empty($rspayment)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
@@ -134,13 +132,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
   				Application_Form_FrmMessage::Sucessfull("Student Payment Receipt Already Void",self::REDIRECT_URL . '/register');
 				exit();
   			}
-			$stu_id = empty($rspayment['stu_id'])?0:$rspayment['stu_id'];
-  			$lastPaymentRecord = $db->getLastStudentPaymentRecord($stu_id);
-  			$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
-  			if ($lastPayId!=$id){
-  				Application_Form_FrmMessage::Sucessfull("Only Last Student Payment Receipt Can to be Void",self::REDIRECT_URL . '/register');
-				exit();
-  			}
+// 			    $stu_id = empty($rspayment['stu_id'])?0:$rspayment['stu_id'];
+//   			$lastPaymentRecord = $db->getLastStudentPaymentRecord($stu_id);
+//   			$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
+//   			if ($lastPayId!=$id){
+//   				Application_Form_FrmMessage::Sucessfull("Only Last Student Payment Receipt Can to be Void",self::REDIRECT_URL . '/register');
+// 				exit();
+//   			}
 		}
     	$this->view->payment = $rspayment;
     	

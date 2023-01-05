@@ -310,6 +310,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'discount_amount'=>$data['discount_amount'.$i],
 							'totalpayment'	=>$data['total_amount'.$i],
 							'paidamount'	=>$data['paid_amount'.$i],
+							
 							'is_onepayment'	=>$data['onepayment_'.$i],
 							'start_date'	=>$data['date_start_'.$i],
 							'validate'		=>$data['validate_'.$i],
@@ -323,17 +324,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
 					if($rs_item['items_type']==3){ // product
 						if($rs_item['is_productseat']==1){ // product set
-							$sql="select 
+							$sql="SELECT 
 										set.pro_id as product_set_id,
 										set.subpro_id as pro_id,
 										set.qty as set_qty,
 										idt.cost,
 										lo.price
-									from 
+									FROM 
 										rms_itemsdetail as idt,
 										rms_product_setdetail as `set`,
 										rms_product_location as lo
-									where
+									WHERE
 										idt.id = set.subpro_id
 										and set.subpro_id = lo.pro_id
 										and set.pro_id = ".$rs_item['id']."
@@ -505,8 +506,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		if($data['void']==1){  // void
 			try{	
 				$rsold = $this->getStudentPaymentByID($payment_id);
-				if($rsold['data_from']!=1){ // not student study payments
+				$stu_id = empty($rsold['stu_id'])?0:$rsold['stu_id'];
+				$lastPaymentRecord = $this->getLastStudentPaymentRecord($stu_id);
+				$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
+				$voidOldreceipt = 0;
+				if ($lastPayId!=$payment_id){//void old receipt 
+					$voidOldreceipt=1;
+				}
+				
+				if($rsold['data_from']!=1 AND $voidOldreceipt==0){ // not student study payments
+					
 					if($rsold['data_from']==2){
+						
 						$arr = array(
 							'is_registered'=>0,
 						);
@@ -517,19 +528,23 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$arr = array(
 							'customer_type'=>4 //reverse to tested student
 						);
+						
 					}elseif($rsold['data_from']==3){
+						
 						$arr = array(
 							'customer_type' =>3, //reverse to crm
 							'is_studenttest' =>0,
 						);
+						
 					}
+					
 					$this->_name='rms_student';
 					$where='stu_id = '.$data['old_stu'];
 					$this->update($arr, $where);
 				}
 				// update payment and validate of service and tuition fee info back ,  and update stock back to origin
-				if($rsold['is_void']==0){
-					$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
+				if($rsold['is_void']==0 AND $voidOldreceipt==0){
+						$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
 				}
 				
 				$this->_name='rms_student_payment';
@@ -541,7 +556,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$where = " id = ".$payment_id;
 				$this->update($arra, $where);
 			
-				if(!empty($data['credit_memo_id']) && $rsold['is_void']==0){//check again because it old code
+				if(!empty($data['credit_memo_id']) AND $rsold['is_void']==0){//check again because it old code
 					$this->updateCreditMemoBack($data);
 				}				
 				

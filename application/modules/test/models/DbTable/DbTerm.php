@@ -73,12 +73,7 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	function getTermById($id=null){
 		$db = $this->getAdapter();
 		$sql=" select * from rms_test_term WHERE id = $id  ";
-// 		$dbp = new Application_Model_DbTable_DbGlobal();
-// 		$sql.=$dbp->getAccessPermission('branch_id');
 		$sql.="LIMIT 1";
 		return $db->fetchRow($sql);
 	}
 }
-
-
-

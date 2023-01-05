@@ -16,7 +16,25 @@ if(!empty($this->row['qrcodeAppLink']['keyValue'])){
 	}
 }
 
+
 ?>
+<style>
+   
+   img.image_view{
+      height: 150px;
+   }
+   img.image_qrcode{
+      height: 150px;
+   }
+   div.button_browse{
+      width: 150px;
+   }
+   div.bt{
+      width: 200px;
+   }
+  
+   
+</style>
 
 <title><?php echo $tr->translate("LABEL_SETTING");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -135,13 +153,14 @@ if(!empty($this->row['qrcodeAppLink']['keyValue'])){
                    </div>
                 </div>
                 <div class="form-group">
-                   
-                   <div class="col-md-6 col-sm-6 col-xs-12 ">
-                        <div class="card">
+                  <div class="control-label col-md-4 col-sm-4 col-xs-12 mt-6">
+                  </div>
+                   <div class="col-md-4 col-sm-4 col-xs-12  ">
+                        <div class="card ">
                            <div class="card-body">
                               <img class="image_view" id="image_view" src="<?php echo $defaultmockupAppImage;?>" alt=""  />
-                              <div class="button_browse">
-                                    <span><?php echo $tr->translate('Change mockupAppImage')?><span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+                              <div class="button_browse bt">
+                                    <span><?php echo $tr->translate('Change_mockupAppImage')?><span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
                                     <input class="btn_borwse_image"  type="file" id="mockupAppImage" name="mockupAppImage" onchange="loadImage()">
                               </div>
                            </div>
@@ -149,13 +168,14 @@ if(!empty($this->row['qrcodeAppLink']['keyValue'])){
                         </div>
 
                    </div>
+                  
                    
-                   <div class="col-md-6 col-sm-6 col-xs-12 ">
+                   <div class="col-md-4 col-sm-4 col-xs-12 ">
                      <div class="card">
                         <div class="card-body">
                            <img class="image_qrcode" id="image_qrcode" src="<?php echo $defaultqrImage;?>" alt=""  />
-                           <div class="button_browse">
-                                 <span><?php echo $tr->translate('Change qrcodeAppLink')?><span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+                           <div class="button_browse ">
+                                 <span><?php echo $tr->translate('Change_qrcodeAppLink')?><span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
                                  <input class="btn_borwse_image"  type="file" id="qrcodeAppLink" name="qrcodeAppLink" onchange="loadqrImage()">
                            </div>
 
@@ -163,9 +183,7 @@ if(!empty($this->row['qrcodeAppLink']['keyValue'])){
 
                      </div>
 	
-                   </div>
-                  
-                   
+                   </div> 
                 </div>
             </div>
     	</div>

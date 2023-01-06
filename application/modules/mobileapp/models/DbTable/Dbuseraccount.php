@@ -287,10 +287,114 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_schoolphone");
 			$this->update($_arr, $where);
+
+
+			$valid_formats = array("jpg", "png", "gif", "bmp","jpeg","ico");
+			$part= PUBLIC_PATH.'/images/slide/app-utility/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$name = $_FILES['mockupAppImage']['name'];
+			$size = $_FILES['mockupAppImage']['size'];
+			$photo='';
+			
+			$rows = $this->geLabelByKeyNamesetting('mockupAppImage');
+			if (empty($rows)){
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$image_name = "mockupAppImage-gn".time().".".end($tem);
+					$tmp = $_FILES['mockupAppImage']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo = $image_name;
+					}
+					else
+						$string = "Image Upload failed";
+					
+					$arr = array(
+							'keyName'=>'mockupAppImage',
+							'keyValue'=>$photo,
+							'user_id'=>$this->getUserId(),
+					);
+					$this->_name='rms_setting';
+					$this->insert($arr);
+				}
+			}else{
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$image_name = time()."mockupAppImage-gn.".end($tem);
+					$tmp = $_FILES['mockupAppImage']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo = $image_name;
+					}
+					else
+						$string = "Image Upload failed";
+					
+					$arr = array(
+							'keyValue'=>$photo,
+					);
+					$where=" keyName= 'mockupAppImage'";
+					$this->_name='rms_setting';
+					$this->update($arr, $where);
+				}
+			}
+
+
+			$name1 = $_FILES['qrcodeAppLink']['name'];
+			$size1 = $_FILES['qrcodeAppLink']['size'];
+			$photo1='';
+			
+			$rows1 = $this->geLabelByKeyNamesetting('qrcodeAppLink');
+			if (empty($rows1)){
+				if (!empty($name1)){
+					$tem =explode(".", $name1);
+					$image_name = "qrcodeAppLink-gn".time().".".end($tem);
+					$tmp = $_FILES['qrcodeAppLink']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo1 = $image_name;
+					}
+					else
+						$string = "Image Upload failed";
+					
+					$arr = array(
+							'keyName'=>'qrcodeAppLink',
+							'keyValue'=>$photo1,
+							'user_id'=>$this->getUserId(),
+					);
+					$this->_name='rms_setting';
+					$this->insert($arr);
+				}
+			}else{
+				if (!empty($name1)){
+					$tem =explode(".", $name1);
+					$image_name = time()."qrcodeAppLink-gn.".end($tem);
+					$tmp = $_FILES['qrcodeAppLink']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo1 = $image_name;
+					}
+					else
+						$string = "Image Upload failed";
+					
+					$arr = array(
+							'keyValue'=>$photo1,
+					);
+					$where=" keyName= 'qrcodeAppLink'";
+					$this->_name='rms_setting';
+					$this->update($arr, $where);
+				}
+			}
+
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	public function geLabelByKeyNamesetting($keyName){
+    	$db = $this->getAdapter();
+    	$sql = " SELECT s.`code`,s.keyName,s.keyValue 
+				FROM `rms_setting` AS s
+				WHERE s.status=1 
+				AND s.`keyName` ='$keyName' LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
 	
 	
 	public function geLabelByKeyName($keyName){

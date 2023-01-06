@@ -1545,7 +1545,7 @@ function netTotal(){
 		netPaidAmount = PaidAmount - credit_memo;
 		
 		dijit.byId('paid_amount').attr('value',netPaidAmount.toFixed(2));
-		readMoneyInKhmer(netAmount.toFixed(2));
+		readMoneyInKhmer(netPaidAmount.toFixed(2));
 }	
 
 function readMoneyInKhmer(netTotal){

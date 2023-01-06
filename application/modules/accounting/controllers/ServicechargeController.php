@@ -256,7 +256,9 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Accounting_Model_DbTable_DbServiceCharge();
-			$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
+// 			$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
+			$service_fee = $db->getServiceFee($data);
+				
 			print_r(Zend_Json::encode($service_fee));
 			exit();
 		}

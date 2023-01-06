@@ -188,10 +188,10 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	$sql="SELECT id, CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') as year from rms_tuitionfee where status=1  $branch_id  ";
     	return $db->fetchAll($sql);
     }
-    public function getServiceFee($year,$item_id,$termid,$student_id,$branch_id){
+    public function getServiceFee($data){
     	$db=$this->getAdapter();
-    	//$sql="SELECT items_type,is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
     	$dbg = new Application_Model_DbTable_DbGlobal();
+    	$item_id = $data['service'];
     	$param = array('Id'=>$item_id);
     	$result = $dbg->getItemDetailRow($param);
     	
@@ -205,7 +205,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 			    		(SELECT is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as is_set,
 			    		(SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as items_type,
 			    		(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    						WHERE sp.student_id = $student_id
+    						WHERE sp.student_id =".$data['studentid']."
 			    				AND spd.itemdetail_id = $item_id
 			    				AND spd.is_start=1
 			    				AND sp.`id`=spd.`payment_id`
@@ -217,14 +217,23 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     				WHERE
 	    				tf.id = tfd.fee_id
 	    				AND tf.status=1
-	    				AND tfd.class_id = $item_id
-	    				AND tfd.payment_term = $termid ";
+	    				AND tfd.class_id =".$item_id;
+	    				
+    			if(!empty($data['term'])){
+    				$sql.=" AND tfd.payment_term = ".$data['term'];
+    			}
     				if($item_type==1){// grade
-    					$sql.=" AND tf.type =1 AND tf.id = $year ";
+    					$sql.=" AND tf.type =1 ";
+    					if(!empty($data['year'])){
+    						$sql.=" AND tf.id =".$data['year'];
+    					}
     				}else if($item_type==2){//service
     					$sql.=" AND tf.type = 2 ";
     				}
-    				$sql.=" AND branch_id = $branch_id LIMIT 1";
+    				if(!empty($data['branch_id'])){
+    					$sql.=" AND branch_id = ".$data['branch_id'];
+    				}
+    				$sql.=" LIMIT 1";
     				return $db->fetchRow($sql);
     	}elseif ($item_type==3){//product
     			if($is_set==1){//for set
@@ -234,7 +243,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    						is_productseat as is_set,
 	    						items_type,
 	    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    						WHERE sp.student_id = $student_id
+    						WHERE sp.student_id = ".$data['studentId']."
     							AND spd.itemdetail_id = $item_id
     							ANd spd.is_start=1
     							AND sp.`id`=spd.`payment_id`
@@ -251,7 +260,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
 	    						(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
 	    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    							WHERE sp.student_id = $student_id
+    							WHERE sp.student_id = ".$data['studentId']."
     							AND spd.itemdetail_id = $item_id
     							ANd spd.is_start=1
     							AND sp.`id`=spd.`payment_id`
@@ -261,7 +270,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     								`rms_product_location`
     							WHERE
     								pro_id=$item_id
-    								AND branch_id = $branch_id LIMIT 1 ";
+    								AND branch_id = ".$data['branch_id']." LIMIT 1 ";
     				}
     				return $db->fetchRow($sql);
     			}

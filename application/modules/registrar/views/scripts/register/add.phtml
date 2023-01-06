@@ -642,6 +642,7 @@ require(["dojo/ready"], function(ready){
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
 		getAllAcademicBy();
+		getAllTermStudy();
 		getAllAcademicTermStudy();
 	});
 
@@ -685,7 +686,7 @@ require(["dojo/ready"], function(ready){
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 		onChange: function() {  
 			academic_year = dijit.byId('study_year').get('value');
-			getAllTermStudy();
+			//getAllTermStudy();
 		}
 	}, "study_year");
 
@@ -1175,17 +1176,17 @@ var term_study_option = '';
 url_term = '<?php echo $this->url(array('module'=>'accounting','controller'=>'term','action'=>'gettermstudy'));?>';
 function getAllTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
-	study_year = dijit.byId('study_year').get('value');
-	if(branch_id=='' || branch_id==-1 || study_year=='' || study_year==-1){
-		dijit.byId('study_year').focus();
-		return false;
-	}
-	getStudyFeeId(study_year);
+	//study_year = dijit.byId('academic_year_'+index).get('value');
+	//if(branch_id=='' || branch_id==-1 || study_year=='' || study_year==-1){
+		//dijit.byId('academic_year_'+index).focus();
+		//return false;
+	//}
+	//getStudyFeeId(study_year);
 	dojo.xhrPost({
 		url: url_term,
 		content:{
 			'branch_id':branch_id,
-			'study_year':study_year,
+			//'study_year':study_year,
 			'option':1,
 		},
 		handleAs:"json",
@@ -1274,7 +1275,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
 			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label>';
 
-			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
+			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
 			template+='<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM');?>" class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
 
 			template+='<td><div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('QTY');?>" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
@@ -1322,9 +1323,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				dijit.byId('price_'+col).attr('value',balance);
 				dijit.byId('total_amount'+col).attr('value',balance);
 				dijit.byId('paid_amount'+col).attr('value',balance);
-				
-				dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
-				
+				//dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
 				dojo.style('paid_amount'+col, "color", "red");
 			}
 		}

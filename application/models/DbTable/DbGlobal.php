@@ -1529,7 +1529,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND branch_id = $branch ";
   	}
   	if($year!=null){
-  		//$sql.=" AND academic_year = $year ";
+  		$sql.=" AND academic_year = $year ";
   	}
   	$rows = $db->fetchAll($sql);
   	if($option==null){

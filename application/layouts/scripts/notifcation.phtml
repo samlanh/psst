@@ -25,8 +25,8 @@ if (empty($session_user->isnot_lecturer_acl)){
 $stuproduct = array();
 $stuproductNew = array();
 if (empty($session_user->isnot_cutstock_acl)){
-	$stuproduct = $dbNotification->getStuProductAlert();
-	$stuproductNew = $dbNotification->getStuProductAlert(1);
+	//$stuproduct = $dbNotification->getStuProductAlert();
+	//$stuproductNew = $dbNotification->getStuProductAlert(1);
 }
 $stu_doc = array();
 if (empty($session_user->isnot_student_acl)){

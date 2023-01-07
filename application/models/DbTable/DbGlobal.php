@@ -1987,7 +1987,12 @@ function getAllgroupStudyNotPass($action=null){
   function getnewStudentId($branch_id,$degree){//used global
 	  	$db = $this->getAdapter();
 	  	$option_type=1;//1 id by branch ,2 by degree
-	  	$option_type=STU_ID_TYPE;
+	  	//$option_type=STU_ID_TYPE;
+		
+		$key = new Application_Model_DbTable_DbKeycode();
+		$dataKey=$key->getKeyCodeMiniInv(TRUE);
+		$option_type=empty($dataKey ['settingStuID'])?$option_type:$dataKey ['settingStuID'];
+		
 	  	$length = '';
 	  	$pre = '';
 	  	if($option_type==1){//auto by branch
@@ -2004,7 +2009,7 @@ function getAllgroupStudyNotPass($action=null){
 	  				7=>7,//EHSS
 	  				8=>8//Pre-English
 	  				);
-	  		
+	  		/*
 	  		$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
 	  		if (!empty($arrDegreeComine[$degree])){
 	  			$pre = $this->getPrefixByDegree(5);
@@ -2017,19 +2022,57 @@ function getAllgroupStudyNotPass($action=null){
 	  		}else{
 	  			$sql.=" AND degree= $degree ";
 	  		}
-	  		
+			*/
+	  		$sql="
+				SELECT COUNT(s.stu_id)
+				FROM `rms_student` AS s
+					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.mainType=1 AND gds.is_maingrade=1
+				WHERE s.branch_id=$branch_id 
+				AND s.customer_type=1
+			";
+			if (!empty($arrDegreeComine[$degree])){
+	  			$pre = $this->getPrefixByDegree(5);
+	  			$s_where = array();
+	  			foreach ($arrDegreeComine as $degree){
+	  				$s_where[] = " gds.degree = $degree ";
+	  			}
+	  			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+	  		}else{
+	  			$sql.=" AND gds.degree= $degree ";
+	  		}
 	  		$stu_num = $db->fetchOne($sql);
 	  	}elseif($option_type==3){
-	  		$pre = $this->getPrefixCode($branch_id);//by branch
-	  		if($degree==5 OR $degree==6){
-	  			$degree='(6,8)';
-	  			$pre="GE";
-	  		}elseif($degree<=4){
-	  			$degree='(1,2,3,4)';
-	  		}
-	  		 
-	  		$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
-	  		$sql.=" AND degree IN $degree ";
+			$pre = $this->getPrefixCode($branch_id);//by branch
+			$dbdeg = new Global_Model_DbTable_DbItems();
+	   		$type=1; 
+	   		$row =$dbdeg->getDegreeById($degree,$type);
+			$schoolOption = empty($row['schoolOption'])?0:$row['schoolOption'];
+			
+			$info = $this->getSchoolOptionInfo($schoolOption);
+			if(!empty($info['prefix'])){
+				$pre.=$info['prefix'];
+			}
+			$sql="
+				SELECT COUNT(s.stu_id)
+				FROM `rms_student` AS s
+					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.mainType=1 AND gds.is_maingrade=1 
+					LEFT JOIN `rms_items` AS deg ON deg.id = gds.degree AND deg.type=1
+				WHERE s.branch_id=$branch_id 
+				AND s.customer_type=1
+			";
+	  		$sql.=" AND deg.schoolOption = $schoolOption ";
+			
+	  		/*
+				if($degree==5 OR $degree==6){
+					$degree='(6,8)';
+					$pre="GE";
+				}elseif($degree<=4){
+					$degree='(1,2,3,4)';
+				}
+				 
+				$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
+				$sql.=" AND degree IN $degree ";
+			*/
 	  		 
 	  		$stu_num = $db->fetchOne($sql);
 	  		
@@ -2042,6 +2085,12 @@ function getAllgroupStudyNotPass($action=null){
 	  	return $pre.$new_acc_no;
 	  	//return $pre.$new_acc_no."A";
   }
+  function getSchoolOptionInfo($id){
+	  $db = $this->getAdapter();
+	  $sql="SELECT sopt.* FROM rms_schooloption AS sopt WHERE sopt.id = $id LIMIT 1";
+	  return $db->fetchRow($sql);
+  }
+  
   function getStudentProfileblog($student_id,$data_from=1,$customer_type=1){
   	$db = $this->getAdapter();
   	
@@ -2058,6 +2107,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	$tr = $this->tr;
   	$str = '';
+  	$studyInfo='';
   	$style='';
   	/*$student_type=$tr->translate("Old Student");
   	$style="style='color:white'";
@@ -2112,17 +2162,25 @@ function getAllgroupStudyNotPass($action=null){
 				  			                            <span class="title-info">'.$tr->translate("MOTHER_NAME").'</span> : <span id="lbl_mother" class="inf-value">'.$rs['mother_enname'].'</span>
 				  			                       	    <span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
 				  			                        	<span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span>
-  			                        					<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
-				  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
 				  			                       	    ';
   			         	 		 			$str.='</p>
   		          						</div>
 								</div>
 			<div class="clear"></div>
   		</div>';
+  			         	
+  			         	
+  			         	$studyInfo='<p class="text-muted info-list font-13">
+				             <span class="title-info">'.$tr->translate('DEGREE').'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span>
+				             <span class="title-info">'.$tr->translate('GRADE').'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span>
+				              <span class="title-info">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value"></span>
+					    </p>';
   			         	 		  
   	}
-  	return $str;
+  	$result = array(
+  					'studentInfo'=>$str,
+  					'studyinfo'=>$studyInfo);
+  	return $result;
   }
   function getCardBackground($branch,$card_type,$schoolOption=null,$degree=null){
 	  $db = $this->getAdapter();

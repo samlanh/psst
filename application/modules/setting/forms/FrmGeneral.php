@@ -67,6 +67,13 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				'class'=>'fullside',
 		));
 		$_payment_day_alert->setValue(1);
+
+		$_test_period = new Zend_Dojo_Form_Element_NumberTextBox('test_period');
+		$_test_period->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+		));
+		
 		
 		$_trasfer_st_cut=  new Zend_Dojo_Form_Element_FilteringSelect('trasfer_st_cut');
 		$_trasfer_st_cut->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -86,8 +93,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 		$settingStuID->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$settingStuIDOpt = array(
 				1=>$this->tr->translate("COUNT_BY_STUDENT"),
-				2=>$this->tr->translate("COUNT_BY_SCHOOL_OPT"),
-				3=>$this->tr->translate("COUNT_BY_DEGREE"),
+				2=>$this->tr->translate("COUNT_BY_DEGREE"),
+				3=>$this->tr->translate("COUNT_BY_SCHOOL_OPT"),
 				);
 		$settingStuID->setMultiOptions($settingStuIDOpt);
 		
@@ -122,6 +129,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$_receipt_print->setValue($data['receipt_print']['keyValue']);
 			$_show_header_receipt->setValue($data['show_header_receipt']['keyValue']);
 			$_payment_day_alert->setValue($data['payment_day_alert']['keyValue']);
+			$_test_period->setValue($data['test_period']['keyValue']);
 			$_trasfer_st_cut->setValue($data['trasfer_st_cut']['keyValue']);
 			$settingStuID->setValue($data['settingStuID']['keyValue']);
 			
@@ -145,6 +153,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$schooolNameKh
 				,$schooolNameEng
 				,$hornorTableSetting
+				,$_test_period
 				));
 		
 		return $this;

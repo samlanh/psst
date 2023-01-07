@@ -2058,6 +2058,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	$tr = $this->tr;
   	$str = '';
+  	$studyInfo='';
   	$style='';
   	/*$student_type=$tr->translate("Old Student");
   	$style="style='color:white'";
@@ -2112,17 +2113,25 @@ function getAllgroupStudyNotPass($action=null){
 				  			                            <span class="title-info">'.$tr->translate("MOTHER_NAME").'</span> : <span id="lbl_mother" class="inf-value">'.$rs['mother_enname'].'</span>
 				  			                       	    <span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
 				  			                        	<span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span>
-  			                        					<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
-				  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
 				  			                       	    ';
   			         	 		 			$str.='</p>
   		          						</div>
 								</div>
 			<div class="clear"></div>
   		</div>';
+  			         	
+  			         	
+  			         	$studyInfo='<p class="text-muted info-list font-13">
+				             <span class="title-info">'.$tr->translate('DEGREE').'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span>
+				             <span class="title-info">'.$tr->translate('GRADE').'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span>
+				              <span class="title-info">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value"></span>
+					    </p>';
   			         	 		  
   	}
-  	return $str;
+  	$result = array(
+  					'studentInfo'=>$str,
+  					'studyinfo'=>$studyInfo);
+  	return $result;
   }
   function getCardBackground($branch,$card_type,$schoolOption=null,$degree=null){
 	  $db = $this->getAdapter();

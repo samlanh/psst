@@ -353,12 +353,14 @@ label.control-td small{font-size: 70%;color:#fff;}
 							</div>
 							<div class="text-center">
 			                   	<div class="member-card card-display-reg">
-				                       <p class="text-muted info-list font-13">
-			                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_degree" class="inf-value" ></span>
-			                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_grade" class="inf-value" ></span>
-			                        	<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span id="lbl_group" class="inf-value" ></span>
-				                     </p>
-			                         <div style="clear: both;"></div>
+			                   		<div id="lblstudyinfo">
+					                     <p class="text-muted info-list font-13">
+				                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_degree" class="inf-value" ></span>
+				                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_grade" class="inf-value" ></span>
+				                        	<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span id="lbl_group" class="inf-value" ></span>
+					                    </p>
+				                    </div>
+			                        <div style="clear: both;"></div>
 			                     </div>
 		               		</div>
 					</div>
@@ -378,7 +380,6 @@ label.control-td small{font-size: 70%;color:#fff;}
 							<div class="text-center">
 			                   	<div class="member-card card-display-reg">
 				                       	<p class="text-muted info-list font-13">
-				                        	
 				                        </p>
 			                         <div style="clear: both;"></div>
 			                     </div>
@@ -998,16 +999,14 @@ function getPaymentHistory(student_id){
 				+'<th class="tdheader"><?php echo $tr->translate('PAID_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('RECEIPT_NO');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PAYMENT_TERM');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('QTY');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('PRICE');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('QTY');?>x<?php echo $tr->translate('PRICE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('SUBTOTAL');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT_TYPE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PAID');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('BALANCE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('START_DATE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('END_DATE');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('VALID_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('NOTE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('STATUS');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('USER');?></th>'
@@ -1019,7 +1018,7 @@ function getPaymentHistory(student_id){
 				tem+= '<tr id=tr_'+i+' style="background-color:none;font-size:11px;text-align:center;" class="hover">';
 				tem += '<td>'+number_record+'</td>';
 				tem += '<td style="text-align:left;">'+respone[i].category+'</td>';
-				tem += '<td style="text-align:left;">'+respone[i].item_name+'</td>';
+				tem += '<td style="text-align:left;"><label class="notedDescription">'+respone[i].item_name+'</label></td>';
 				tem += '<td>'+respone[i].create_date+'</td>';
 				tem += '<td>'+respone[i].receipt_number+'</td>';
 				payment_term='';
@@ -1027,8 +1026,12 @@ function getPaymentHistory(student_id){
 					payment_term=respone[i].payment_term;
 					}
 				tem += '<td style="text-align:left;">'+payment_term+'</td>';
-				tem += '<td>'+respone[i].qty+'</td>';
-				tem += '<td>'+respone[i].fee+'</td>';
+				strQty = respone[i].qty;
+				qty=strQty.replace('.00','');
+
+				strFee = respone[i].fee;
+				fee=strFee.replace('.00','');
+				tem += '<td>'+qty+'x'+fee+'</td>';
 				tem += '<td>'+respone[i].subtotal+'</td>';
 				tem += '<td>'+respone[i].extra_fee+'</td>';
 				if(respone[i].discount_type==null || respone[i].discount_type==''){
@@ -1046,10 +1049,9 @@ function getPaymentHistory(student_id){
 				tem += '<td>'+respone[i].balance+'</td>';
 				start_date='';
 				validate='';
-				if(respone[i].is_onepayment==0){start_date=respone[i].start_date;}
-				if(respone[i].is_onepayment==0){validate=respone[i].validate;}
-				tem += '<td>'+start_date+'</td>';
-				tem += '<td>'+validate+'</td>';
+				if(respone[i].is_onepayment==0 && respone[i].start_date!=null){start_date=respone[i].start_date;}
+				if(respone[i].is_onepayment==0 && respone[i].start_date!=null){validate=respone[i].validate;}
+				tem += '<td>'+start_date+'/'+validate+'</td>';
 				tem += '<td>'+respone[i].note+'</td>';
 				tem += '<td>'+respone[i].void_status+'</td>';
 				tem += '<td style="text-align:left;">'+respone[i].user_name+'</td>';
@@ -1089,7 +1091,9 @@ function getOldStudentInfo(){
 		handleAs:"json",
 		load: function(data) {
 			   if(data){
-				   dojo.byId("lbl_blog").innerHTML = data;
+				   dojo.byId("lbl_blog").innerHTML = data.studentInfo;
+				   dojo.byId("lblstudyinfo").innerHTML = data.studyinfo;
+				   
 			   }
 			   getStudentInformation();
 			   getgradebyDegree(-1,1,2);
@@ -1544,6 +1548,8 @@ function netTotal(){
 		netPaidAmount = PaidAmount - credit_memo;
 		
 		dijit.byId('paid_amount').attr('value',netPaidAmount.toFixed(2));
+		balance = totalPayment-netPaidAmount;
+		dijit.byId('balance_due').attr('value',balance);
 		readMoneyInKhmer(netPaidAmount.toFixed(2));
 }	
 
@@ -1718,7 +1724,7 @@ function printSave(){
 								  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
 								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+' x '+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 
-									  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
+								  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
 								  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
 								  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
 								  percent = isNaN(percents)?'':percents+'%';

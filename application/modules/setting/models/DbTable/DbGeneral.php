@@ -111,6 +111,15 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'hornorTableSetting'";
 				$this->update($arr, $where);
 			}
+			$rows = $this->geLabelByKeyName('test_period');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['test_period'],'keyName'=>'test_period','note'=>"រយះពេលដែលអាចអោយធ្វើ តេស្តម្តងទៀត",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['test_period'],);
+				$where=" keyName= 'test_period'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

@@ -1782,9 +1782,13 @@ function getAllgroupStudyNotPass($action=null){
   	if(!empty($data['proLocation'])){//want to get product in this location
   		$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['proLocation'].")";
   	}
+  	if(!empty($data['includeProLocation'])){//want to get product in this location
+  		$sql.=" OR ( i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['includeProLocation']."))";
+  	}
   	if(!empty($data['notLocation'])){//want to get product in this location
   		$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['notLocation'].")";
   	}
+  	
   	if(!empty($data['isService'])){
   		$sql.=" OR i.items_type=2 ";
   	}
@@ -2058,6 +2062,7 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	$tr = $this->tr;
   	$str = '';
+  	$studyInfo='';
   	$style='';
   	/*$student_type=$tr->translate("Old Student");
   	$style="style='color:white'";
@@ -2112,17 +2117,25 @@ function getAllgroupStudyNotPass($action=null){
 				  			                            <span class="title-info">'.$tr->translate("MOTHER_NAME").'</span> : <span id="lbl_mother" class="inf-value">'.$rs['mother_enname'].'</span>
 				  			                       	    <span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
 				  			                        	<span class="title-info">'.$tr->translate("STATUS").'</span> : <span id="lbl_culturelevel" class="inf-value red bold" >'.$rs['status_student'].'</span>
-  			                        					<span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
-				  			                        	<span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
 				  			                       	    ';
   			         	 		 			$str.='</p>
   		          						</div>
 								</div>
 			<div class="clear"></div>
   		</div>';
+  			         	
+  			         	
+  			         	$studyInfo='<p class="text-muted info-list font-13">
+				             <span class="title-info">'.$tr->translate('DEGREE').'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span>
+				             <span class="title-info">'.$tr->translate('GRADE').'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span>
+				              <span class="title-info">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value"></span>
+					    </p>';
   			         	 		  
   	}
-  	return $str;
+  	$result = array(
+  					'studentInfo'=>$str,
+  					'studyinfo'=>$studyInfo);
+  	return $result;
   }
   function getCardBackground($branch,$card_type,$schoolOption=null,$degree=null){
 	  $db = $this->getAdapter();

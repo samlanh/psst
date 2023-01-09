@@ -593,9 +593,14 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
    }
    function getAllDepartment(){
-   	$db = $this->getAdapter();
-   	$sql="  SELECT depart_id AS id,depart_namekh AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!=''  ";
-   	return $db->fetchAll($sql);
+		$db = $this->getAdapter();
+		$currentLang = $this->currentlang();
+		$colunmName='depart_nameen';
+		if ($currentLang==1){
+			$colunmName='depart_namekh';
+		}
+		$sql="  SELECT depart_id AS id,$colunmName AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!=''  ";
+		return $db->fetchAll($sql);
    }
    
    

@@ -199,9 +199,9 @@
 		                <div class="form-group">
 		                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
 								<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-								 iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"groupstudentchangegroup",'action'=>'index'),null,true); ?>';" />
+								class="button-class button-primary" iconClass="glyphicon glyphicon-repeat" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"groupstudentchangegroup",'action'=>'index'),null,true); ?>';" />
 								<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
+								class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 								<?php $old_iden=""; foreach ($this->studentpass as $id => $rs){?>
 										<input type="hidden" name="old_student<?php echo $id?>" id="old_student<?php echo $id?>" value="<?php echo $rs['stu_id']?>"/>
 										<?php if($id==0){$old_iden.=$id;}else{$old_iden.=','.$id;}?>

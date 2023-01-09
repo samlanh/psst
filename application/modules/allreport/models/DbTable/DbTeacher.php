@@ -187,8 +187,18 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT t.*,
-		(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=t.department) AS dept_name
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+		$colunmName='depart_nameen';
+		if ($currentLang==1){
+			$colunmName='depart_namekh';
+		}
+		
+		$sql = "
+		SELECT t.*,
+			(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=t.department LIMIT 1) AS dept_name,
+			(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=t.department LIMIT 1) AS deptName
 		FROM rms_teacher AS t WHERE t.id =$id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getAccessPermission('t.branch_id');
@@ -216,24 +226,37 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
-		$sql = 'SELECT g.id, 
-				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+		
+		$colunmName='depart_nameen';
+		$label="name_en";
+		if ($currentLang==1){
+			$colunmName='depart_namekh';
+			$label='name_kh';
+		}
+		
+		$sql = '
+			SELECT g.id, 
+				(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
 				g.teacher_code, 
 				g.teacher_name_kh,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.staff_type) AS staff_type,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+				(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=2 	AND v.key_code=g.sex LIMIT 1) AS sex,
+				(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=26 AND v.key_code=g.staff_type LIMIT 1) AS staff_type,
+				(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality, 
+				(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=3 	AND v.key_code=g.degree LIMIT 1) AS degree,
+				(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=24 AND v.key_code=g.teacher_type LIMIT 1) AS teacher_type,
 				(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name,
+				(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name,
+				(SELECT dept.'.$colunmName.' FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName,
 				g.position_add,
 				g.tel,
 				g.photo,
 				g.email,
 				g.note,
-				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1 LIMIT 1) AS `status`
-				FROM rms_teacher AS g WHERE 1';
+				(SELECT v.'.$label.' FROM rms_view AS v WHERE v.key_code=g.status AND v.type=1 LIMIT 1) AS `status`
+			FROM rms_teacher AS g WHERE 1';
 		
 		$where='';
 		if(!empty($search['title'])){
@@ -273,17 +296,27 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	function getTeachDocumentAlert($search){
 		$db = $this->getAdapter();
-		$sql =" SELECT s.branch_id,
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+		
+		$label="name_en";
+		if ($currentLang==1){
+			$label='name_kh';
+		}
+		
+		$sql =" 
+		SELECT s.branch_id,
 			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex) AS sex,
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=s.teacher_type) AS teacher_type, 
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality, 
-			(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=s.degree) AS degree,
+			(SELECT v.$label FROM rms_view v WHERE v.type=2 AND v.key_code=s.sex LIMIT 1) AS sex,
+			(SELECT v.$label FROM rms_view v WHERE v.type=24 AND v.key_code=s.teacher_type LIMIT 1) AS teacher_type, 
+			(SELECT v.$label FROM rms_view v WHERE v.type=21 AND v.key_code=s.nationality LIMIT 1) AS nationality, 
+			(SELECT v.$label FROM rms_view v WHERE v.type=3 AND v.key_code=s.degree LIMIT 1) AS degree,
 			s.teacher_code,s.teacher_name_kh,s.tel,
 			s.email,
 			sd.*
-			FROM `rms_teacher_document` AS sd, `rms_teacher` AS s
-			WHERE s.id = sd.stu_id
+		FROM `rms_teacher_document` AS sd, `rms_teacher` AS s
+		WHERE s.id = sd.stu_id
 			AND sd.is_receive=0
 		";
 		$where ='';

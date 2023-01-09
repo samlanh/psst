@@ -300,10 +300,21 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT 
-					t.*,
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=t.department LIMIT 1) AS dept_name
-		FROM rms_teacher AS t WHERE t.id =$id ";
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+		$colunmName='depart_nameen';
+		if ($currentLang==1){
+			$colunmName='depart_namekh';
+		}
+		
+		$sql = "
+			SELECT 
+				t.*,
+				(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=t.department LIMIT 1) AS dept_name,
+				(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=t.department LIMIT 1) AS deptName
+			FROM rms_teacher AS t WHERE t.id =$id 
+			";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getAccessPermission('t.branch_id');
 		$sql.= $dbp->getSchoolOptionAccess('t.schoolOption');
@@ -333,7 +344,15 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	function getAllDepartment(){
 		$db = $this->getAdapter();
-		$sql = " SELECT depart_id AS id,depart_namekh AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!='' ";
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+		$colunmName='depart_nameen';
+		if ($currentLang==1){
+			$colunmName='depart_namekh';
+		}
+		
+		$sql = " SELECT dept.depart_id AS id,dept.$colunmName AS name FROM `rms_department` AS dept WHERE dept.status=1 AND dept.depart_namekh!='' ";
 		return $db->fetchAll($sql);
 	}
 	

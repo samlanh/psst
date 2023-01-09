@@ -10,7 +10,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     function getAllTuitionFee($search=null){
     	$db=$this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
     	$session_lang=new Zend_Session_Namespace('lang');
     	$lang = $session_lang->lang_id;
     	$field = 'name_en';
@@ -25,8 +26,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) as academic,
 	    	(SELECT $str FROM rms_studytype WHERE rms_studytype.id =t.term_study  LIMIT 1) AS study_type,
 	    	CASE is_multi_study
-			    WHEN 1 THEN 'MULTY_PROGRAM'
-			     WHEN 0 THEN 'ONE_PROGRAM_ONLY'
+			    WHEN 1 THEN '".$tr->translate("MULTY_PROGRAM")."'
+			     WHEN 0 THEN '".$tr->translate("ONE_PROGRAM_ONLY")."'
 			END is_multistudy,
 	    	t.generation,
 	    	(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,

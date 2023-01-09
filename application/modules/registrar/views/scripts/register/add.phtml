@@ -125,6 +125,7 @@ tr.head-td th{padding: 5px 2px;}
 .ItemPayment td{padding-top:20px;}
 label.control-td{font-size: 11px;display:block;margin-bottom:0;}
 label.control-td small{font-size: 70%;color:#fff;}
+tr.balance{background:#fff4f4;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -1277,9 +1278,8 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		template='';
 		
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
-			if(balance>0 && balance!=null){
-				dataLabel=dataLabel+"(Previouse Balance)";
-				}
+
+			
 			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label>';
 
 			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
@@ -1310,11 +1310,17 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" />';
 			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			
 			classOddRow='listBox evenRow';
-			if(col%2==0){
+			if(no%2==0){
 				classOddRow='listBox oddRow';
 			}
-			tmp='<tr class="'+classOddRow+'" id="row'+col+'">';
+			balance = dataRow.balance;
+			if(balance>0 && balance!=null){
+				classOddRow=classOddRow+' balance'
+			}
+			
+		tmp='<tr class="'+classOddRow+'" id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 		if($("#identity").val()!="") {
@@ -1325,7 +1331,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		     parseContent: true,
 		});
 		if(dataRow!=null){
-			balance = dataRow.balance;
+			
 			if(balance>0 && balance!=null){
 				dijit.byId('price_'+col).attr('value',balance);
 				dijit.byId('total_amount'+col).attr('value',balance);
@@ -1336,6 +1342,9 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 
 				dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
 				dijit.byId('validate_'+col).attr('value',dataRow.endDate);
+
+				dijit.byId('remark'+col).attr('value','Previouse Balance');
+
 			}else{
 					getservicefee(col);
 					getValidate(col);
@@ -1590,7 +1599,6 @@ function readMoneyInKhmer(netTotal){
 }
 var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
-		alert('get fee');
 	
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');

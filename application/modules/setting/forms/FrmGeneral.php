@@ -93,8 +93,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 		$settingStuID->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$settingStuIDOpt = array(
 				1=>$this->tr->translate("COUNT_BY_STUDENT"),
-				2=>$this->tr->translate("COUNT_BY_SCHOOL_OPT"),
-				3=>$this->tr->translate("COUNT_BY_DEGREE"),
+				2=>$this->tr->translate("COUNT_BY_DEGREE"),
+				3=>$this->tr->translate("COUNT_BY_SCHOOL_OPT"),
 				);
 		$settingStuID->setMultiOptions($settingStuIDOpt);
 		

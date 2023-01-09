@@ -455,6 +455,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$_arr = array(
 								'stu_id'			=>$id,
 								'is_newstudent'		=>$_data['stu_denttype'],
+								'itemType'			=>1,
 								'status'			=>1,
 								'group_id'			=>$group_id,
 								'degree'			=>$_data['degree_'.$i],
@@ -775,6 +776,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$_arr = array(
 								'stu_id'			=>$stu_id,
 								'is_newstudent'		=>$_data['stu_denttype'],
+								'itemType'			=>1,
 								'status'			=>1,
 								'group_id'			=>$group_id,
 								'degree'			=>$_data['degree_'.$i],
@@ -830,6 +832,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$_arr = array(
 								'stu_id'			=>$stu_id,
 								'is_newstudent'		=>$_data['stu_denttype'],
+								'itemType'			=>1,
 								'status'			=>1,
 								'group_id'			=>$group_id,
 								'degree'			=>$_data['degree_'.$i],

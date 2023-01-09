@@ -115,7 +115,7 @@
 									<input id="to_group" />
 								</div>
 								<div class="col-md-3 col-sm-3 col-xs-12">
-									<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+									<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh"type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
 								</div>
 		                   </div>
 		                </div>
@@ -147,11 +147,11 @@
        	  <div class="clearfix"></div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               			<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+               			<input class="button-class button-danger" iconClass="glyphicon glyphicon-erase"  type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 						<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-						 iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"studentchangegroup",'action'=>'index'),null,true); ?>';" />
+						class="button-class button-primary" iconClass="glyphicon glyphicon-repeat" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"studentchangegroup",'action'=>'index'),null,true); ?>';" />
 						<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
+						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 	    		</div>
 	    	</div>
        </form>

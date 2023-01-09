@@ -143,7 +143,7 @@
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog">
 		            	<div class="form-group">
 		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("NEW_STUDY_INFORMATION");?> 
-		                  <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+		                  <input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
 		                   </label>
 		                </div>
 		                 <div class="form-group">
@@ -192,9 +192,9 @@
 		                <div class="form-group">
 		                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
 		                   		<input type="submit" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
+								   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
 								<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
+									class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 		                   </div>
 		                </div>
 			        </div>

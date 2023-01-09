@@ -3,14 +3,32 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 {
 	public  function getStudentInfo($search){
 		$_db = $this->getAdapter();
-		$sql = "SELECT stu_id,stu_enname,stu_khname,
-		(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) as gender
-		,stu_code,dob,remark,tel,(SELECT province_kh_name FROM `rms_province` WHERE `province_id`= rms_student.province_id) as pro,
-		father_phone,mother_phone,email,father_khname,father_enname,father_nation,(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = father_job)as far_job,(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = mother_job)as mom_job,
-		mother_enname,mother_khname,mother_nation,guardian_khname,guardian_nation,guardian_document,guardian_enname,address,home_num,street_num,village_name,commune_name,district_name,
-		(SELECT `occu_name` FROM `rms_occupation` WHERE `occupation_id` = guardian_job)as guar_job,guardian_tel,guardian_email,remark,
-		(SELECT name_kh FROM `rms_view` WHERE type=1 AND key_code = status) as status,nationality
-		FROM rms_student where status = 1";
+		
+		$dbGb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbGb->currentlang();
+		$occuTitle="occu_enname";
+		$label = "name_en";
+		if ($currentLang==1){
+			$occuTitle="occu_name";
+			$label = "name_kh";
+		}
+		
+		$sql = "
+			SELECT 
+				s.*
+				,(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) as gender
+				,(SELECT province_kh_name FROM `rms_province` WHERE `province_id`= s.province_id) as pro
+		
+				,(SELECT occ.occu_name FROM `rms_occupation` AS occ WHERE occ.occupation_id = s.father_job LIMIT 1)as far_job
+				,(SELECT occ.$occuTitle FROM `rms_occupation` AS occ WHERE occ.occupation_id = s.father_job LIMIT 1)as farJobTitle
+				,(SELECT occ.occu_name FROM `rms_occupation` AS occ WHERE occ.occupation_id = s.mother_job LIMIT 1)as mom_job
+				,(SELECT occ.$occuTitle FROM `rms_occupation` AS occ WHERE occ.occupation_id = s.mother_job LIMIT 1)as momJobTitle
+				,(SELECT occ.occu_name FROM `rms_occupation` AS occ WHERE occ.occupation_id = s.guardian_job LIMIT 1)as guar_job
+				,(SELECT occ.$occuTitle FROM `rms_occupation` AS occ WHERE occ.occupation_id = s.guardian_job LIMIT 1)as guarJobTitle
+		
+				,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=1 AND v.key_code = s.status LIMIT 1) as status
+				,nationality
+		FROM rms_student AS s WHERE s.status = 1";
 		
 		$sql.='';
 		if(empty($search)){
@@ -20,16 +38,15 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		{
 			$s_where = array();
 			$s_search = trim($search['txtsearch']);
-			$s_where[] = " stu_enname LIKE '%{$s_search}%'";
-			$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-			$s_where[] = " stu_code LIKE '%{$s_search}%'";
-			$s_where[] = " nationality LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+			$s_where[] = " s.nationality LIKE '%{$s_search}%'";
 			// 			$s_where[] = " en_name LIKE '%{$s_search}%'";
 			// 			$s_where[] = " sex LIKE '%{$s_search}%'";
 			//			$s_where[] = " nationality LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		
 		return $_db->fetchAll($sql);
 	}
     function getProductsByLocId($loc_id){

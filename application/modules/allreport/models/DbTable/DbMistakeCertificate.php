@@ -41,16 +41,16 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 					
 					s.`father_enname`,
 					s.`father_job`,
-					(SELECT occu_name from rms_occupation as oc where oc.occupation_id = s.father_job) as fa_job,
-					(SELECT occu_enname from rms_occupation as oc where oc.occupation_id = s.father_job) as faJobEng,
-					(SELECT $occuTitle from rms_occupation as oc where oc.occupation_id = s.father_job) as faJobTitle,
+					(SELECT occu_name from rms_occupation as oc where oc.occupation_id = s.father_job LIMIT 1) as fa_job,
+					(SELECT occu_enname from rms_occupation as oc where oc.occupation_id = s.father_job LIMIT 1) as faJobEng,
+					(SELECT $occuTitle from rms_occupation as oc where oc.occupation_id = s.father_job LIMIT 1) as faJobTitle,
 					s.`father_phone`,
 					
 					s.`mother_enname`,
 					s.`mother_job`,
-					(SELECT occu_name from rms_occupation as oc where oc.occupation_id = s.mother_job) as mo_job,
-					(SELECT occu_enname from rms_occupation as oc where oc.occupation_id = s.mother_job) as moJobEng,
-					(SELECT $occuTitle from rms_occupation as oc where oc.occupation_id = s.mother_job) as moJobTitle,
+					(SELECT occu_name from rms_occupation as oc where oc.occupation_id = s.mother_job LIMIT 1) as mo_job,
+					(SELECT occu_enname from rms_occupation as oc where oc.occupation_id = s.mother_job LIMIT 1) as moJobEng,
+					(SELECT $occuTitle from rms_occupation as oc where oc.occupation_id = s.mother_job LIMIT 1) as moJobTitle,
 					s.`mother_phone`,
 					
 					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsd.academic_year LIMIT 1) AS academic_year,

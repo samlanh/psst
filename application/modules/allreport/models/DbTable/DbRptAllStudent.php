@@ -758,71 +758,103 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAllStudentDetail($search){
     	$db = $this->getAdapter();
-    	$sql ='SELECT stu_id,CONCAT(stu_khname," - ",stu_enname," ",last_name)AS name,
-    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
-    	(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
-    	tel,email,stu_code,home_num,street_num,
-    	CONCAT(father_enname," - ",father_khname)AS father_name,father_nation,father_phone,
-    	CONCAT(mother_enname," - ",mother_khname)AS mother_name,mother_nation,mother_phone,
-    	CONCAT(guardian_enname," - ",guardian_khname)AS guardian_name,guardian_nation,guardian_document,guardian_tel,guardian_email,
-    	
-    	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.father_job LIMIT 1)AS father_job,
-    	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.mother_job LIMIT 1)AS mother_job,
-    	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.guardian_job LIMIT 1)AS guardian_job,
-    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1)AS session,
-    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-		(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
-    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
-    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
-    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,
-    	(SELECT name_en FROM rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1)AS sex
-    	FROM rms_student ';
-    	$where=' WHERE customer_type=1 ';    	 
+		
+		$dbGb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbGb->currentlang();
+		$occuTitle="occu_enname";
+		$label = "name_en";
+		if ($currentLang==1){
+			$occuTitle="occu_name";
+			$label = "name_kh";
+		}
+		
+    	$sql ='
+			SELECT 
+				s.*
+				,CONCAT(s.stu_khname," - ",s.stu_enname," ",s.last_name) AS name
+				,(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name
+			
+				,CONCAT(s.father_enname," - ",s.father_khname)AS father_name
+				,CONCAT(s.mother_enname," - ",s.mother_khname)AS mother_name
+				,CONCAT(s.guardian_enname," - ",s.guardian_khname)AS guardian_name
+				
+				
+				,(SELECT occ.occu_enname FROM rms_occupation AS occ WHERE occ.occupation_id=s.father_job LIMIT 1) AS father_job
+				,(SELECT occ.'.$occuTitle.' FROM rms_occupation AS occ WHERE occ.occupation_id=s.father_job LIMIT 1) AS fatherJobTitle
+				,(SELECT occ.occu_enname FROM rms_occupation AS occ WHERE occ.occupation_id=s.mother_job LIMIT 1) AS mother_job
+				,(SELECT occ.'.$occuTitle.' FROM rms_occupation AS occ WHERE occ.occupation_id=s.mother_job LIMIT 1) AS motherJobTitle
+				,(SELECT occ.occu_enname FROM rms_occupation AS occ WHERE occ.occupation_id=s.guardian_job LIMIT 1) AS guardian_job
+				,(SELECT occ.'.$occuTitle.' FROM rms_occupation AS occ WHERE occ.occupation_id=s.guardian_job LIMIT 1) AS guardianJobTitle
+				
+				
+				,(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
+				,(SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree
+				
+				,(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name
+				,(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name
+				,(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name
+				,(SELECT province_en_name from rms_province WHERE rms_province.province_id = s.province_id LIMIT 1)AS province
+				
+				,(SELECT v.name_en 	  FROM rms_view AS v WHERE v.type=4  	AND v.key_code=s.session LIMIT 1)AS session
+				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=4  AND v.key_code=s.session LIMIT 1)AS sessionTitle
+				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=21 	AND v.key_code=s.nationality LIMIT 1) AS nationality
+				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=21 AND v.key_code=s.nationality LIMIT 1) AS nationalityTitle
+				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=21 	AND v.key_code=s.nation LIMIT 1) AS nation,
+				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=21 AND v.key_code=s.nation LIMIT 1) AS nationTitle
+				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=2  	AND v.key_code=s.sex LIMIT 1)AS sex
+				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=2  AND v.key_code=s.sex LIMIT 1)AS sexTitle
+			FROM rms_student AS s 
+				JOIN rms_group_detail_student AS gds ON s.stu_id = gds.stu_id
+			';
+    	$where=' 
+			WHERE 
+				s.customer_type=1 
+				AND gds.itemType =1
+				AND gds.is_maingrade =1
+				AND gds.is_current =1
+			';    	 
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("branch_id");
-    	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = rms_student.degree )');
+    	//$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
     	$order=" order by stu_id DESC";
     	 
     	if(empty($search)){
     		return $db->fetchAll($sql.$where.$order);
     	}
-    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
-    		$s_where[]=" last_name LIKE '%{$s_search}%'";
-    		$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
-    		$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
-    		$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
-    		$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
-    		$s_where[] =" (SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[] =" (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[] =" (SELECT name_en FROM rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " CONCAT(s.stu_enname,s.stu_khname) LIKE '%{$s_search}%'";
+    		$s_where[] =" s.last_name LIKE '%{$s_search}%'";
+    		$s_where[] =" REPLACE(CONCAT(s.last_name,s.stu_enname),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[] =" REPLACE(CONCAT(s.stu_enname,s.last_name),' ','')  	LIKE '%{$s_search}%'";
+    		$s_where[] =" CONCAT(s.stu_enname,' ',s.last_name)  	LIKE '%{$s_search}%'";
+    		$s_where[] =" CONCAT(s.last_name,' ',s.stu_enname)  	LIKE '%{$s_search}%'";
+    		$s_where[] =" (SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] =" (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
     		
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['branch_id'])){
-    		$where.=' AND branch_id='.$search['branch_id'];
+    		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
     	if(!empty($search['study_year'])){
-    		$where.=' AND academic_year='.$search['study_year'];
+    		$where.=' AND gds.academic_year='.$search['study_year'];
     	}
     	if(!empty($search['grade'])){
-    		$where.=' AND grade='.$search['grade_bac'];
+    		$where.=' AND gds.grade='.$search['grade_bac'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND session='.$search['session'];
+    		$where.=' AND gds.session='.$search['session'];
     	}
     	if(!empty($search['group'])){
-    		$where.=' AND group_id='.$search['group'];
+    		$where.=' AND gds.group_id='.$search['group'];
     	}
     	
     	

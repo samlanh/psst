@@ -16,24 +16,27 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$currentlang = $dbg->currentlang();
     	$label="name_en";
+		$colunmName='depart_nameen';
     	if($currentlang==1){
     		$label="name_kh";
+			$colunmName='depart_namekh';
     	}
     	$sql = "SELECT 
 	    			g.*,
-			    	(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+			    	(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
 			    	CASE
-			    	WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
-			    	WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
+						WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
+						WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
 			    	END AS sex,
 			    	CASE
-			    	WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
-			    	WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
+						WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
+						WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
 			    	END AS staff_type_title,
-			    	(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-			    	(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-			    	(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality,
-			    	(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=24 AND v.key_code=g.teacher_type LIMIT 1 ) AS teacher_type,
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree,
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality,
+			    	(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name
+					(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName
     			FROM 
     				rms_teacher AS g 
     			WHERE 
@@ -79,12 +82,14 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$currentlang = $dbg->currentlang();
 		$label="name_en";
+		$colunmName='depart_nameen';
 		if($currentlang==1){
 			$label="name_kh";
+			$colunmName='depart_namekh';
 		}
 		$sql = "
 			SELECT g.*, 
-				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+				(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
 				CASE    
 				WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
 				WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
@@ -93,10 +98,11 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
 				WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
 				END AS staff_type_title,
-				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name,
+				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type LIMIT 1) AS teacher_type,
+				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree LIMIT 1) AS degree,
+				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality LIMIT 1) AS nationality, 
+				(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name,
+				(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName,
 				CASE
 				   	WHEN  g.active_type = 1 THEN '".$tr->translate("STOP")."'
 				   	WHEN  g.active_type = 0 THEN '".$tr->translate("ACTIVING")."'
@@ -150,25 +156,28 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$currentlang = $dbg->currentlang();
 		$label="name_en";
+		$colunmName='depart_nameen';
 		if($currentlang==1){
 			$label="name_kh";
+			$colunmName='depart_namekh';
 		}
 		$sql = "
 			SELECT g.*, 
-				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+				(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
 				CASE    
-				WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
-				WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
+					WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
 				END AS sex,
 				CASE    
-				WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
-				WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
+					WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
+					WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
 				END AS staff_type_title,
-				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name,
-				(SELECT depart_namekh FROM rms_department WHERE rms_department.depart_id=g.department) AS depart_namekh
+				(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type LIMIT 1) AS teacher_type,
+				(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree LIMIT 1) AS degree,
+				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality LIMIT 1) AS nationality, 
+				(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name,
+				(SELECT dept.depart_namekh FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS depart_namekh,
+				(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName
 				FROM rms_teacher AS g WHERE status = 1 and id = $staff_id
 		";
     	return $db->fetchAll($sql);
@@ -180,37 +189,50 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$currentlang = $dbg->currentlang();
     	$label="name_en";
+		$colunmName='depart_nameen';
     	if($currentlang==1){
     		$label="name_kh";
+			$colunmName='depart_namekh';
     	}
     	$sql = "
     	SELECT g.*,
-    	(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
-    	CASE
-    	WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
-    	WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
-    	END AS sex,
-    	CASE
-    	WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
-    	WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
-    	END AS staff_type_title,
-    	(SELECT $label FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-    	(SELECT $label FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-    	(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality,
-    	(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
+			CASE
+				WHEN  g.sex = 1 THEN '".$tr->translate("MALE")."'
+				WHEN g.sex = 2 THEN '".$tr->translate("FEMALE")."'
+			END AS sex,
+			CASE
+				WHEN  g.staff_type = 1 THEN '".$tr->translate("TEACHER")."'
+				WHEN g.staff_type = 2 THEN '".$tr->translate("STAFF")."'
+			END AS staff_type_title,
+			(SELECT v.$label FROM rms_view AS v WHERE v.type=24 AND v.key_code=g.teacher_type LIMIT 1) AS teacher_type,
+			(SELECT v.$label FROM rms_view AS v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree,
+			(SELECT v.$label FROM rms_view AS v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality,
+			(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name,
+			(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName
     	FROM rms_teacher AS g WHERE status = 1 and id = $staff_id GROUP BY staff_type
     	";
     	return $db->fetchAll($sql);
     }
     function getTeachDocumentAlert($search){
     	$db = $this->getAdapter();
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+    	$label="name_en";
+		$colunmName='depart_nameen';
+    	if($currentlang==1){
+    		$label="name_kh";
+			$colunmName='depart_namekh';
+    	}
+		
     	$sql =" SELECT 
     				t.branch_id,
 			    	(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=t.branch_id LIMIT 1) AS branch_name,
-			    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=t.sex LIMIT 1) AS sex,
-			    	(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=t.teacher_type LIMIT 1) AS teacher_type,
-			    	(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=t.nationality LIMIT 1) AS nationality,
-			    	(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=t.degree LIMIT 1) AS degree,
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=2 	AND v.key_code=t.sex LIMIT 1) AS sex,
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=24 AND v.key_code=t.teacher_type LIMIT 1) AS teacher_type,
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=21 AND v.key_code=t.nationality LIMIT 1) AS nationality,
+			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=3 	AND v.key_code=t.degree LIMIT 1) AS degree,
 			    	t.teacher_code,
 			    	t.teacher_name_kh,
 			    	t.tel,

@@ -29,7 +29,7 @@ class Test_IndexController extends Zend_Controller_Action
     		$this->view->adv_search = $search;
 			$rs_rows= $db->getAllStudentTest($search);
     		$list = new Application_Form_Frmtable();
-    		
+
     		$testCondiction = TEST_CONDICTION;
     		$collumns = array("SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","PHONE","DOB","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
     		
@@ -154,6 +154,17 @@ class Test_IndexController extends Zend_Controller_Action
     function createtestexamAction(){
     	$type = $this->getRequest()->getParam("type");
     	$test = $this->getRequest()->getParam("test");
+		$db = new Test_Model_DbTable_DbStudentTest();
+
+		$test_r = $db->getAllTestResult($id,1);
+
+		/*
+
+		$tp = $db->getTestPeriod();
+		echo $tp['keyValue'];
+		exit();
+		*/
+
     	if ($type!=1 AND $type!=2 AND $type!=3){ // check it again with branch that has schooloption
     		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
     		exit();
@@ -172,8 +183,9 @@ class Test_IndexController extends Zend_Controller_Action
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     		}
     	}
+
     	$id = $this->getRequest()->getParam("id");//student id
-    	$db = new Test_Model_DbTable_DbStudentTest();
+    	
     	$schoolOption = $db->getSchoolOptionbyStudentId($id);
 		if(!empty($schoolOption)){
 			if($type!=$schoolOption){
@@ -183,6 +195,7 @@ class Test_IndexController extends Zend_Controller_Action
 		}
     	
     	$row  = $db->getStudentTestById($id);
+		
     	$this->view->rs = $row;
     	if(empty($row)){
     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");

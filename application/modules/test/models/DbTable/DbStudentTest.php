@@ -825,4 +825,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		FROM `rms_result_test_subject` AS r WHERE r.test_result_id=$test_id";
 		return $db->fetchAll($sql);
 	}
+
+	function getTestPeriod(){
+		$db = $this->getAdapter();
+		$sql =" SELECT keyValue FROM `rms_setting` WHERE keyname = 'test_period' ";
+		return $db->fetchRow($sql);
+
+	}
 }

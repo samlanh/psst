@@ -196,6 +196,8 @@
 							'create_date'		=>date("Y-m-d H:i:s"),
 							'modify_date'		=>date("Y-m-d H:i:s"),
 							'user_id'			=>$this->getUserId(),
+							
+							'itemType'			=>1,
 					);
 					$this->_name="rms_group_detail_student";
 					$this->insert($_arr);
@@ -329,6 +331,8 @@
 								'date'				=>date("Y-m-d"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
+								
+								'itemType'			=>1,
 						);
 						$this->_name="rms_group_detail_student";
 						$where = " stu_id =".$_data['detailid'.$i];
@@ -375,6 +379,8 @@
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
+								
+								'itemType'			=>1,
 						);
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);

@@ -566,6 +566,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'modify_date'		=>date("Y-m-d H:i:s"),
 						'user_id'			=>$this->getUserId(),
 						'test_restult_id'		=>$id,
+						
+						'itemType'			=>1,
 				);
 				
 				$arrCheck=array(
@@ -832,4 +834,21 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 
 	}
+
+	function getRowTestResultDate($stu_id,$type=null){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="SELECT 
+			str.*
+			FROM
+			`rms_student_test_result` AS str
+			WHERE 
+			str.stu_test_id = $stu_id ";
+		if (!empty($type)){
+			$sql.=" AND str.test_type = $type";
+		}
+		$sql.=" ORDER BY result_date DESC LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
+	
 }

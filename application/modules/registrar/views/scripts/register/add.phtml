@@ -125,6 +125,7 @@ tr.head-td th{padding: 5px 2px;}
 .ItemPayment td{padding-top:20px;}
 label.control-td{font-size: 11px;display:block;margin-bottom:0;}
 label.control-td small{font-size: 70%;color:#fff;}
+tr.balance{background:#fff4f4;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -1277,6 +1278,8 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		template='';
 		
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
+
+			
 			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label>';
 
 			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
@@ -1299,7 +1302,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 
 			template+='<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
-			template+='<div class="form-group"><input type="text" require="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div></td>';
+			template+='<div class="form-group"><input type="text" require="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /><input type="text" value="0" name="isoldBalance'+col+'" id="isoldBalance'+col+'" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 
 			template+='<td class="bgBox"><div class="form-group"><select class="fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy('+col+');" id="term_study'+col+'" name="term_study'+col+'" dojoType="dijit.form.FilteringSelect" >'+term_study_option+'</select></div>';
 			template+=strCol6+'<input type="text" onchange="getValidate('+col+');" placeHolder="<?php echo $tr->translate('START_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';
@@ -1307,11 +1310,17 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" />';
 			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			
 			classOddRow='listBox evenRow';
-			if(col%2==0){
+			if(no%2==0){
 				classOddRow='listBox oddRow';
 			}
-			tmp='<tr class="'+classOddRow+'" id="row'+col+'">';
+			balance = dataRow.balance;
+			if(balance>0 && balance!=null){
+				classOddRow=classOddRow+' balance'
+			}
+			
+		tmp='<tr class="'+classOddRow+'" id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 		if($("#identity").val()!="") {
@@ -1322,17 +1331,27 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		     parseContent: true,
 		});
 		if(dataRow!=null){
-			balance = dataRow.balance;
-			if(balance>0){
+			
+			if(balance>0 && balance!=null){
 				dijit.byId('price_'+col).attr('value',balance);
 				dijit.byId('total_amount'+col).attr('value',balance);
 				dijit.byId('paid_amount'+col).attr('value',balance);
-				//dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
+				dijit.byId('isoldBalance'+col).attr('value',1);
+				dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
 				dojo.style('paid_amount'+col, "color", "red");
-			}
+
+				dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
+				dijit.byId('validate_'+col).attr('value',dataRow.endDate);
+
+				dijit.byId('remark'+col).attr('value','Previouse Balance');
+
+			}else{
+					getservicefee(col);
+					getValidate(col);
+				}
 		}
-		getservicefee(col);
-		getValidate(col);
+		
+		
 }
 
 
@@ -1580,6 +1599,7 @@ function readMoneyInKhmer(netTotal){
 }
 var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
+	
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');
  		branch_id = dijit.byId('branch_id').get('value');

@@ -154,17 +154,31 @@ class Test_IndexController extends Zend_Controller_Action
     function createtestexamAction(){
     	$type = $this->getRequest()->getParam("type");
     	$test = $this->getRequest()->getParam("test");
+		$id = $this->getRequest()->getParam("id");//student id
 		$db = new Test_Model_DbTable_DbStudentTest();
 
-		$test_r = $db->getAllTestResult($id,1);
+		$result_date = $db->getRowTestResultDate($id,$type);
+			$now = time();
+			$ts1 = strtotime($result_date['result_date']);
+			$year = date('Y', $ts1);
+			$this_year = date('Y', $now);
 
-		/*
+			$month = date('m', $ts1);
+			$this_month = date('m', $now);
+			$month_amount = (($this_year - $year) * 12) + ($this_month - $month);
+			
+		$tp = $db->getTestPeriod();//period in setting
+		$setting_period= $tp['keyValue'];
+		if(empty($setting_period)){
+			$setting_period = 1;
+		}
 
-		$tp = $db->getTestPeriod();
-		echo $tp['keyValue'];
-		exit();
-		*/
-
+		if(!empty($result_date)){
+			if($month_amount < $setting_period){
+				Application_Form_FrmMessage::Sucessfull("THIS TIME CAN NOT TEST AGAIN",self::REDIRECT_URL);
+			}
+		}
+		
     	if ($type!=1 AND $type!=2 AND $type!=3){ // check it again with branch that has schooloption
     		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
     		exit();
@@ -183,9 +197,6 @@ class Test_IndexController extends Zend_Controller_Action
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     		}
     	}
-
-    	$id = $this->getRequest()->getParam("id");//student id
-    	
     	$schoolOption = $db->getSchoolOptionbyStudentId($id);
 		if(!empty($schoolOption)){
 			if($type!=$schoolOption){

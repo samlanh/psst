@@ -55,7 +55,7 @@ class Application_Form_Frmtable
     	$col_str.='</tr></thead>';
     	$row_str='<tbody>';
     	//add element rows	
-    	if($rows==NULL) return $head.$col_str.'</table></div><center style="font-size:18pt;">No record</center></form>';
+    	if($rows==NULL) return $head.$col_str.'</table></div><center style="font-size:18pt;">'.$tr->translate('EMPTY_RECORD').'</center></form>';
     	$temp=0;
     	/*------------------------Check param id----------------------------------*/
 

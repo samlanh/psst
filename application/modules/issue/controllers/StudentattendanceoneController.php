@@ -67,8 +67,9 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->group = $db_global->getAllGroupName();
+		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->group = $db_global->getAllGroupName();
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->branch_name = $db_global->getAllBranch();
 		$this->view->row_year = $db_global->getAllYear();

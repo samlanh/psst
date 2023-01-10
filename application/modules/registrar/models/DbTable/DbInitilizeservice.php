@@ -77,6 +77,8 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 							
 							'feeId'			=> $data['study_year'],
 							'balance'		=> $data['balance_'.$i],
+							'discount_type'	=> $data['discount_type'.$i],
+							'discount_amount'=> $data['discount_amount'.$i],
 							
 							'degree'		=> $resultRow['items_id'],
 							'grade'			=> $data['itemId_'.$i],
@@ -84,6 +86,7 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 							'startDate'		=> empty($data['balance_'.$i])?'':$data['date_start_'.$i],
 							'endDate'		=> empty($data['balance_'.$i])?'':$data['end_date_'.$i],
 							'is_maingrade'	=> ($resultRow['items_type']==1)?1:'',
+							'isoldBalance'	=> ($data['balance_'.$i] > 0)?1:0,
 							'school_option'	=> $resultRow['schoolOption'],
 							'is_current'	=> 1,
 							'stop_type'		=> 0,

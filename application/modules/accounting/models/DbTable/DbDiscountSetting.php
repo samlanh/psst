@@ -20,9 +20,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 	    	 g.discount_id AS id,
 	    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch,
 	    	(SELECT name_en FROM `rms_view` WHERE type=35 AND key_code=g.discountOption LIMIT 1)AS discountOption,
-	    	(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))
-    	FROM rms_student AS s
-    	WHERE s.stu_id=g.studentId LIMIT 1) AS studentName,
+	
 	    	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.itemType LIMIT 1) AS itemType,
 	    	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`g`.`itemId` LIMIT 1) AS itemDetail,
 	    	(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.discountType LIMIT 1) AS disc_name,
@@ -31,6 +29,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		    	WHEN DisValueType=1 THEN '%'
 		    	WHEN DisValueType=2 THEN '$'
 	    	END )) AS DisValueType,
+			(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))
+    		FROM rms_student AS s
+    		WHERE s.stu_id=g.studentId LIMIT 1) AS studentName,
 	    	g.start_date,
 	    	g.end_date,
 	    	(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id LIMIT 1 ) AS user_name

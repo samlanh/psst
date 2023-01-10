@@ -103,11 +103,13 @@
 								<tr id="head-title" class="head-td" align="right" style="width: 100%;">
 									<th width="47px"><?php echo $tr->translate("DEL");?></th>
 									<th width="50px"><?php echo $tr->translate("N_O");?></th>
-									<th width="20%"><?php echo $tr->translate("DESCRIPTION");?></th>
-									<th width="25%"><?php echo $tr->translate("BALANCE");?></th>
-									<th width="25%"><?php echo $tr->translate("START_DATE");?></th>
-									<th width="25%"><?php echo $tr->translate("END_DATE");?></th>
-									<th width="25%"><?php echo $tr->translate("REMARK");?></th>
+									<th width="15%"><?php echo $tr->translate("DESCRIPTION");?></th>
+									<th width="15%"><?php echo $tr->translate("DISCOUNT_TYPE");?></th>
+									<th width="15%"><?php echo $tr->translate("DIS_MAX");?></th>
+									<th width="15%"><?php echo $tr->translate("BALANCE");?></th>
+									<th width="20%"><?php echo $tr->translate("START_DATE");?></th>
+									<th width="20%"><?php echo $tr->translate("END_DATE");?></th>
+									<th width="10%"><?php echo $tr->translate("REMARK");?></th>
 								</tr>
 							</thead>
 							<tbody id="table_row">
@@ -136,6 +138,7 @@
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dijit.form.DateTextBox");
 	 dojo.require("dojo.NodeList-manipulate");
+	 dojo.require("dijit.form.NumberTextBox");
 	var ItemTypestore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->itemType));?> );
 	dojo.ready(function(){
 		dijit.byId('start_date').attr('readOnly',true);
@@ -299,6 +302,8 @@ function addRow(){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT_TYPE");?></th>';
+			temp+='<th><?php echo $tr->translate("DIS_MAX");?></th>';
 			temp+='<th><?php echo $tr->translate("BALANCE");?></th>';
 			temp+='<th><?php echo $tr->translate("START_DATE");?></th>';
 			temp+='<th><?php echo $tr->translate("END_DATE");?></th>';
@@ -309,7 +314,16 @@ function addRow(){
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="10px" align="center">'+no+'</td>';
 			template+='<td class="font-size">&nbsp;'+label_itemId+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="itemId_'+col+'" name="itemId_'+col+'" value="'+itemId+'" /></td>';
-			template+='<td width="100px"><input type="text"  name="balance_'+col+'" class="fullside" id="balance_'+col+'" dojoType="dijit.form.TextBox" placeholder="Balance"/></td>';
+			template+='<td class="font-size"><select placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
+				template+='<option value="0"></option>';	
+				<?php if(!empty($this->rsdiscount))foreach($this->rsdiscount as $rsdis){?>
+					template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo addslashes($rsdis['dis_name']);?></option>';
+				<?php }?>
+				template+='</select>';
+				
+			template+='</td>';
+			template+='<td width="100px"><input type="text" class="fullside" placeHolder="<?php echo $tr->translate('PERCENT');?>" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td width="100px"><input type="text"  name="balance_'+col+'" class="fullside" id="balance_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder="Balance"/></td>';
 			template+="<td style='width:100px;font-size:12px;'><input type='text' placeHolder='Stard Date' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" name='date_start_"+col+"' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
 			template+='<td style="width:100px;font-size:12px;"><input type="text" placeHolder="Validate Date" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+' name="end_date_'+col+'" id="end_date_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='<td width="100px"><input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="Remark"/></td>';

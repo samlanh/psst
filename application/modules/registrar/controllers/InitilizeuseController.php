@@ -52,7 +52,10 @@ class Registrar_InitilizeuseController extends Zend_Controller_Action {
 			try {
 				$_dbmodel = new Registrar_Model_DbTable_DbInitilizeservice();
 				$_discount = $_dbmodel->addInitilizeService($_data);
-				if(isset($_data['save_new'])){
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/index");
+
+				}elseif(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/add");
 				}else{
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -66,6 +69,7 @@ class Registrar_InitilizeuseController extends Zend_Controller_Action {
 		$disc = $model->getAllDiscount();
 		array_unshift($disc, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->discount = $disc;
+		$this->view->rsdiscount = $model->getAllDiscountName();
 		
 		$this->view->itemType = $model->getAllItems();
 		

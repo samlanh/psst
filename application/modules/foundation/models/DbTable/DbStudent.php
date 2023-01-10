@@ -327,10 +327,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'grade_bacc'	=>$_data['grade_baccexam'],
 						'score_bacc'	=>$_data['score_baccexam'],
 						'certificate_bacc'	=>$_data['certificate_baccexam'],
-						
-						
-						
-						
 						'studentToken'=>$stuToken
 						);
 				if (EDUCATION_LEVEL==1){

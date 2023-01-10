@@ -168,6 +168,7 @@
 				                     </label>
 			                		<div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm_items->getElement("kh_name_stu");?>
+										<span id="message" style="color: red; display: block;"></span>
 			                   		</div>
 			                   </div>
 			                   <div class="form-group">
@@ -234,7 +235,7 @@
 				                     </label>
 				                    <div class="col-md-7 col-sm-7 col-xs-12">
 					                    <input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
-											class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="addRow();" />
+											class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="checkStudent();// addRow();" />
 				                   </div>
 				                </div>
 			                </div>
@@ -440,12 +441,54 @@ function copyfromcustomer(){
 	dijit.byId('sex_stu').attr("value",dijit.byId('sex').get('value'));
 	dijit.byId('tel_stu').attr("value",dijit.byId('tel').get('value'));
 }
+
+check_student=0;
+url_CheckStudent = '<?php echo $this->url(array('module'=>'home','controller'=>'crm','action'=>'check-student'));?>';
+function checkStudent(){
+	kh_name_stu = dijit.byId('kh_name_stu').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
+	
+	if(branch_id=='' || branch_id==-1){ return false;}
+	
+	dojo.xhrPost({
+		url:url_CheckStudent,	
+		content:{ 
+			'branch_id': branch_id ,
+			'kh_name_stu': kh_name_stu
+		},
+		handleAs:"json",
+		load: function(data) {	
+			if(data !== false ){
+		   		document.getElementById('message').innerHTML ='<?php echo $tr->translate('STUDENT_ALRADY_EXIST')?>';
+		   		dijit.byId('kh_name_stu').focus();
+				check_student=1;
+			}else{
+				check_student=0;
+				document.getElementById('message').innerHTML ='';
+				addRow();
+			}
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+
 var col = 0;
 var no = 0;
 var title = 0;
 tmp = '';
 temp='';
 function addRow() {
+	/*
+	
+	if(check_student==1){
+		dijit.byId('kh_name_stu').focus();
+		return false;
+	}
+	*/
+	
 	kh_name_stu = dijit.byId('kh_name_stu').get('value');
 	first_name_stu = dijit.byId('first_name_stu').get('value');
 	last_name_stu = dijit.byId('last_name_stu').get('value');
@@ -548,4 +591,7 @@ function editStudent(index) {
 	dijit.byId("degree").attr("value",degree);
 	dijit.byId("grade").attr("value",grade);
 }
+
+
+
 </script>

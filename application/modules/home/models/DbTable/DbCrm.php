@@ -549,4 +549,10 @@
 		$sql="SELECT v.name_kh  FROM `rms_view` AS v WHERE v.key_code = $value AND v.type=$type  LIMIT 1";
 		return $db->fetchOne($sql);
 	}
+
+	public function CheckStudent($data){
+		$db =$this->getAdapter();
+		$sql = "SELECT * FROM `rms_student` WHERE stu_khname = '".$data['kh_name_stu']."' AND branch_id = ".$data['branch_id'];
+		return $db->fetchRow($sql);
+	}
 }

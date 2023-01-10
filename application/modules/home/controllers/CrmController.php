@@ -181,4 +181,14 @@ class Home_CrmController extends Zend_Controller_Action
 			exit();
 		}
 	}
+
+	function checkStudentAction(){// by Seyha check studnt
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Home_Model_DbTable_DbCRM();
+			$datastudent=$db->CheckStudent($data);
+			print_r(Zend_Json::encode($datastudent));
+			exit();
+		}
+	}
 }

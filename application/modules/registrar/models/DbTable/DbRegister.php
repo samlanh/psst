@@ -310,7 +310,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'discount_amount'=>$data['discount_amount'.$i],
 							'totalpayment'	=>$data['total_amount'.$i],
 							'paidamount'	=>$data['paid_amount'.$i],
-							
 							'is_onepayment'	=>$data['onepayment_'.$i],
 							'start_date'	=>$data['date_start_'.$i],
 							'validate'		=>$data['validate_'.$i],
@@ -320,6 +319,30 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						);
 					$this->_name="rms_student_paymentdetail";
 					$studentpaymentid = $this->insert($_arr);
+					
+					$balance = $data['total_amount'.$i]-$data['paid_amount'.$i];
+					if($balance>0){
+						echo $balance;
+						$this->_name='rms_group_detail_student';
+						$arr = array(
+							'feeId'=>$data['academic_year_'.$i],
+							'balance'=>$balance,
+							'isoldBalance'=>1
+							);
+						$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
+						$this->update($arr, $where);
+					}
+					if($balance==0 AND $data['isoldBalance'.$i]==1){
+						$this->_name='rms_group_detail_student';
+						$arr = array(
+							'feeId'=>$data['academic_year_'.$i],
+							'balance'=>0,
+							'isoldBalance'=>0
+						);
+						$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
+						$this->update($arr, $where);
+					}
+					
 
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
 					if($rs_item['items_type']==3){ // product

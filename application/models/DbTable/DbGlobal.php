@@ -593,9 +593,14 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
    }
    function getAllDepartment(){
-   	$db = $this->getAdapter();
-   	$sql="  SELECT depart_id AS id,depart_namekh AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!=''  ";
-   	return $db->fetchAll($sql);
+		$db = $this->getAdapter();
+		$currentLang = $this->currentlang();
+		$colunmName='depart_nameen';
+		if ($currentLang==1){
+			$colunmName='depart_namekh';
+		}
+		$sql="  SELECT depart_id AS id,$colunmName AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!=''  ";
+		return $db->fetchAll($sql);
    }
    
    
@@ -1782,9 +1787,13 @@ function getAllgroupStudyNotPass($action=null){
   	if(!empty($data['proLocation'])){//want to get product in this location
   		$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['proLocation'].")";
   	}
+  	if(!empty($data['includeProLocation'])){//want to get product in this location
+  		$sql.=" OR ( i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['includeProLocation']."))";
+  	}
   	if(!empty($data['notLocation'])){//want to get product in this location
   		$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['notLocation'].")";
   	}
+  	
   	if(!empty($data['isService'])){
   		$sql.=" OR i.items_type=2 ";
   	}

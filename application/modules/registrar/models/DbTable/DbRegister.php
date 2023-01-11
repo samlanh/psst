@@ -320,28 +320,25 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->_name="rms_student_paymentdetail";
 					$studentpaymentid = $this->insert($_arr);
 					
+					$this->_name='rms_group_detail_student';
+					
+					$arr = array(
+						'feeId'=>$data['academic_year_'.$i],
+						'startDate'=>$data['date_start_'.$i],
+						'endDate'=>$data['validate_'.$i],
+					);
+					
 					$balance = $data['total_amount'.$i]-$data['paid_amount'.$i];
 					if($balance>0){
-						echo $balance;
-						$this->_name='rms_group_detail_student';
-						$arr = array(
-							'feeId'=>$data['academic_year_'.$i],
-							'balance'=>$balance,
-							'isoldBalance'=>1
-							);
-						$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
-						$this->update($arr, $where);
+						$arr['balance']=$balance;
+						$arr['isoldBalance']=1;
 					}
-					if($balance==0 AND $data['isoldBalance'.$i]==1){
-						$this->_name='rms_group_detail_student';
-						$arr = array(
-							'feeId'=>$data['academic_year_'.$i],
-							'balance'=>0,
-							'isoldBalance'=>0
-						);
-						$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
-						$this->update($arr, $where);
+					elseif($balance==0 AND $data['isoldBalance'.$i]==1){
+						$arr['balance']=0;
+						$arr['isoldBalance']=0;
 					}
+					$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
+					$this->update($arr, $where);
 					
 
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	

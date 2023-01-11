@@ -154,8 +154,7 @@ tr.balance{background:#fff4f4;}
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REGISTER');?></h4>
 	    			</div>
-	    			<div class="col-sm-4 text-right">
-	    			</div>
+	    			<div class="col-sm-4 text-right"></div>
 	    		</div>
 	    	</div>
 	    	<div class="card-box">
@@ -533,7 +532,7 @@ tr.balance{background:#fff4f4;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select required="false" type="text" name="payment_method" id="payment_method" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
+	                   		<select onchange="checkPaymentMethod();" type="text" name="payment_method" id="payment_method" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
 								<?php if(!empty($this->rs_paymenttype)){foreach ($this->rs_paymenttype as $rs){?>
 								<option value="<?php echo $rs['key_code']?>"><?php echo $rs['view_name']?></option>
 								<?php }}?>
@@ -543,7 +542,7 @@ tr.balance{background:#fff4f4;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select required="false" type="text" name="bank_name" id="bank_name" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
+	                   		<select required="false" readonly type="text" name="bank_name" id="bank_name" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
 								<option value="0"><?php echo $tr->translate('SELECT_BANK_NAME');?></option>
 								<?php if(!empty($this->rsBank)){foreach ($this->rsBank as $rs){?>
 								<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
@@ -554,7 +553,7 @@ tr.balance{background:#fff4f4;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="number" id="number" dojoType="dijit.form.TextBox" class="fullside" />
+	                   		<input type="text" readonly name="number" id="number" dojoType="dijit.form.TextBox" class="fullside" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -1274,19 +1273,15 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		if(serviceId ==''){return false;}
 		//dijit.byId("item").reset();
 
-		col++;no++;
-		template='';
-		
+			col++;no++;
+			template='';
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
-
-			
-			template+='<td class="bgBox" style="font-size:12px;"><label id="item_label_'+col+'">'+dataLabel+'<label>';
-
+			template+='<td class="bgBox" style="font-size:12px;"><label class="notedDescription" id="item_label_'+col+'">'+dataLabel+'<label>';
 			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
 			template+='<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM');?>" class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
 
-			template+='<td><div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('QTY');?>" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
-			template+='<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('PRICE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
+			template+='<td><div class="form-group"><input required="true" type="text" placeHolder="<?php echo $tr->translate('QTY');?>" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
+			template+='<div class="form-group"><input required="true" type="text" placeHolder="<?php echo $tr->translate('PRICE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
 			template+='<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  /></div></td>';	
 
 			template+='<td class="bgBox"><select placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
@@ -1302,7 +1297,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 
 			template+='<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
-			template+='<div class="form-group"><input type="text" require="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /><input type="text" value="0" name="isoldBalance'+col+'" id="isoldBalance'+col+'" dojoType="dijit.form.NumberTextBox"  /></div></td>';
+			template+='<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="0" name="isoldBalance'+col+'" id="isoldBalance'+col+'" dojoType="dijit.form.TextBox"  /></div></td>';
 
 			template+='<td class="bgBox"><div class="form-group"><select class="fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy('+col+');" id="term_study'+col+'" name="term_study'+col+'" dojoType="dijit.form.FilteringSelect" >'+term_study_option+'</select></div>';
 			template+=strCol6+'<input type="text" onchange="getValidate('+col+');" placeHolder="<?php echo $tr->translate('START_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';
@@ -1315,9 +1310,11 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			if(no%2==0){
 				classOddRow='listBox oddRow';
 			}
-			balance = dataRow.balance;
-			if(balance>0 && balance!=null){
-				classOddRow=classOddRow+' balance'
+			if(dataRow!=null){
+				balance = dataRow.balance;
+				if(balance>0 && balance!=null){
+					classOddRow=classOddRow+' balance'
+				}
 			}
 			
 		tmp='<tr class="'+classOddRow+'" id="row'+col+'">';
@@ -1331,9 +1328,11 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		     parseContent: true,
 		});
 		if(dataRow!=null){
-			
+			dijit.byId('service_type_'+col).attr('value',dataRow.itemType);
 			if(balance>0 && balance!=null){
 				dijit.byId('price_'+col).attr('value',balance);
+				
+				
 				dijit.byId('total_amount'+col).attr('value',balance);
 				dijit.byId('paid_amount'+col).attr('value',balance);
 				dijit.byId('isoldBalance'+col).attr('value',1);
@@ -1342,16 +1341,17 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 
 				dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
 				dijit.byId('validate_'+col).attr('value',dataRow.endDate);
-
+				dijit.byId('date_start_'+col).set('readOnly',true);
+				dijit.byId('validate_'+col).set('readOnly',true);
+				dijit.byId('term_study'+col).set('readOnly',true);
+				
 				dijit.byId('remark'+col).attr('value','Previouse Balance');
-
-			}else{
-					getservicefee(col);
-					getValidate(col);
-				}
+			}
+			
+		}else{
+			getservicefee(col);
+			getValidate(col);
 		}
-		
-		
 }
 
 
@@ -1599,7 +1599,7 @@ function readMoneyInKhmer(netTotal){
 }
 var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
-	
+	   
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');
  		branch_id = dijit.byId('branch_id').get('value');
@@ -1620,7 +1620,6 @@ function getservicefee(key){
 		}
 
 		study_year = dijit.byId('academic_year_'+key).get('value');
-		
  		dojo.xhrPost({
  			url:url_service_fee,
  			content:{
@@ -1717,21 +1716,22 @@ function printSave(){
 								  temp+='<td style="border:1px solid #000;">លរ  <small>No. </small></td>';
 								  temp+='<td style="border:1px solid #000;width:200px;"><strong style="color:#000;">ពណ៍នា <small>Description<small></strong></td>';
 								  temp+='<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Pay as</small></strong></td>';
-								  temp+='<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណ,តម្លៃរាយ<small>Qty,Unit Price</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណxតម្លៃរាយ<small>QtyxUnit Price</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បញ្ចុះតម្លៃ<small>Discount</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Fee</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></strong></td>';
-								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid</small></strong></td>';
+								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid($)</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
 							  temp+='</tr>';
 
 							  i=1;  
-								for(var n = 0; n < rowIDArray.length; n++) {
+							  for(var n = 0; n < rowIDArray.length; n++){
 									
 									var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
+									var isoldBalance = dijit.byId("isoldBalance"+rowIDArray[n]).get("value");
 									var term_label = "-";
-									if(items_type!=3){
+									if(items_type!=3 && isoldBalance==0){
 										term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 									}
 								  temp+='<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
@@ -1771,7 +1771,7 @@ function printSave(){
 								  temp+='</tr>';
 								  
 								  i++;
-								}
+							}
 					}else{
 						
 						dojo.byId("lbFather").innerHTML = dojo.byId("lbl_father").innerHTML;
@@ -1958,5 +1958,18 @@ function getbranchinfo(){
 			}
 		});	
 	} 
+}
+function checkPaymentMethod(){
+	paymentId = dijit.byId('payment_method').get('value');
+	
+	dijit.byId('bank_name').set('readOnly',false);
+	dijit.byId('number').set('readOnly',false);
+	
+	if(paymentId==1){
+		dijit.byId('bank_name').attr('value',0);
+		dijit.byId('bank_name').set('readOnly',true);
+		dijit.byId('number').attr('value','');
+		dijit.byId('number').set('readOnly',true);
+	}
 }
 </script>

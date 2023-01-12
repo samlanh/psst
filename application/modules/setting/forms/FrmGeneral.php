@@ -124,18 +124,24 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 		$_discount_percent->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("PERCENT"),
+				'onKeyup' => 'CompareA()'
 		));
 		
-		$_dicount_amount = new Zend_Dojo_Form_Element_NumberTextBox('dicount_amount');
-		$_dicount_amount->setAttribs(array(
+		$_discount_amount = new Zend_Dojo_Form_Element_NumberTextBox('discount_amount');
+		$_discount_amount->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("DISCOUNT_AMOUNT"),
+				'onKeyup' => 'CompareDis()'
 		));
 		
 		$_other_fee = new Zend_Dojo_Form_Element_NumberTextBox('other_fee');
 		$_other_fee->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("other fee"),
+				'onKeyup' => 'CompareOtherFee()'
 		));
 		
 		
@@ -149,6 +155,9 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$_show_header_receipt->setValue($data['show_header_receipt']['keyValue']);
 			$_payment_day_alert->setValue($data['payment_day_alert']['keyValue']);
 			$_test_period->setValue($data['test_period']['keyValue']);
+			$_discount_percent->setValue($data['discount_percent']['keyValue']);
+			$_discount_amount->setValue($data['discount_amount']['keyValue']);
+			$_other_fee->setValue($data['other_fee']['keyValue']);
 			$_trasfer_st_cut->setValue($data['trasfer_st_cut']['keyValue']);
 			$settingStuID->setValue($data['settingStuID']['keyValue']);
 			
@@ -174,7 +183,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$hornorTableSetting
 				,$_test_period
 				,$_discount_percent
-				,$_dicount_amount
+				,$_discount_amount
 				,$_other_fee
 				));
 		

@@ -51,7 +51,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'payment_day_alert'";
 				$this->update($arr, $where);
 			}
-			
+
 			$rows = $this->geLabelByKeyName('trasfer_st_cut');
 			if (empty($rows)){
 				$arr = array('keyValue'=>$data['trasfer_st_cut'],'keyName'=>'trasfer_st_cut','note'=>"0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive",'user_id'=>$dbg->getUserId());
@@ -118,6 +118,36 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			}else{
 				$arr = array('keyValue'=>$data['test_period'],);
 				$where=" keyName= 'test_period'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('discount_percent');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['discount_percent'],'keyName'=>'discount_percent','note'=>"បញ្ចុះតម្លៃជា ភាគរយ(%) ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['discount_percent'],);
+				$where=" keyName= 'discount_percent'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('discount_amount');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['discount_amount'],'keyName'=>'discount_amount','note'=>"បញ្ចុះតម្លៃជា ចំនួន",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['discount_amount'],);
+				$where=" keyName= 'discount_amount'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('other_fee');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['other_fee'],'keyName'=>'other_fee','note'=>"តម្លៃផ្សេងៗ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['other_fee'],);
+				$where=" keyName= 'other_fee'";
 				$this->update($arr, $where);
 			}
 			

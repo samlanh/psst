@@ -31,6 +31,9 @@ public function init()
 		$row['receipt_print'] = $db_gs->geLabelByKeyName('receipt_print');
 		
 		$row['payment_day_alert'] = $db_gs->geLabelByKeyName('payment_day_alert');
+		$row['discount_percent'] = $db_gs->geLabelByKeyName('discount_percent');
+		$row['discount_amount'] = $db_gs->geLabelByKeyName('discount_amount');
+		$row['other_fee'] = $db_gs->geLabelByKeyName('other_fee');
 		$row['test_period'] = $db_gs->geLabelByKeyName('test_period');
 		$row['trasfer_st_cut'] = $db_gs->geLabelByKeyName('trasfer_st_cut');
 		$row['sale_cut_stock'] = $db_gs->geLabelByKeyName('sale_cut_stock');

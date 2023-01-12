@@ -119,6 +119,25 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				2=>$this->tr->translate("SHOW_5_STUDENTS"),
 				);
 		$hornorTableSetting->setMultiOptions($hornorTableSettingOpt);
+
+		$_discount_percent = new Zend_Dojo_Form_Element_NumberTextBox('discount_percent');
+		$_discount_percent->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+		));
+		
+		$_dicount_amount = new Zend_Dojo_Form_Element_NumberTextBox('dicount_amount');
+		$_dicount_amount->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+		));
+		
+		$_other_fee = new Zend_Dojo_Form_Element_NumberTextBox('other_fee');
+		$_other_fee->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+		));
+		
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -154,6 +173,9 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$schooolNameEng
 				,$hornorTableSetting
 				,$_test_period
+				,$_discount_percent
+				,$_dicount_amount
+				,$_other_fee
 				));
 		
 		return $this;

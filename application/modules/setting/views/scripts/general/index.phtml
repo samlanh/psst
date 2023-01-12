@@ -243,6 +243,30 @@ input[type=file] {
 											<div class="col-md-12 col-sm-12 col-xs-12"> 
 												<div class="d-flex"> 
 													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-tags" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DISCOUNT_CALCULATE_SETTING");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<label class="control-label col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate('DISCOUNT')?>%</label>
+													<div class="col-md-2 col-sm-2 col-xs-12 "><?php echo $frm->getElement('discount_percent');?></div>
+													<label class="control-label col-md-2 col-sm-2 col-xs-12 text-center"><?php echo $tr->translate('DISCOUNT_AMOUNT')?></label>
+													<div class="col-md-2 col-sm-2 col-xs-12"><?php echo $frm->getElement('dicount_amount');?></div>
+													<label class="control-label col-md-2 col-sm-2 col-xs-12 text-center"><?php echo $tr->translate('OTHER_FEE')?></label>
+													<div class="col-md-2 col-sm-2 col-xs-12"><?php echo $frm->getElement('other_fee');?></div>
+												</div>
+											</div> 
+										</div> 
+									</div> 
+								</div>
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
 														<i class="fa fa-file-text" aria-hidden="true"></i>
 													</div> 
 													<div class="col-md-10 col-sm-10 col-xs-12"> 

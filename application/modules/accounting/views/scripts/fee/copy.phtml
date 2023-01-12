@@ -130,8 +130,24 @@ table .set-style td, table .set-style th {
 		           </div>
 
 		           <div class="col-md-8 col-sm-8 col-xs-12">
-				  		 <div class="card-blogform">
-								<div class="card-body"> 
+						<div class="card-box">
+							<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+									<li class="nav-item active">
+										<a class="nav-link " data-toggle="tab" href="#panel21" role="tab">
+											<i class="fa fa-money ml-2"></i>
+										<?php echo $tr->translate("FEE");?></a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+										<i class="fa fa-graduation-cap ml-2"></i> <?php echo $tr->translate("START_DATE_END_DATE");?>
+										</a>
+									</li>
+							</ul>
+						</div>
+						<div class="tab-content vertical">
+							<div class="tab-pane fade in active" id="panel21" role="tabpanel">
+								<div class="card-blogform">
+									<div class="card-body"> 
 										<div class="row"> 
 												<div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -169,11 +185,57 @@ table .set-style td, table .set-style th {
 														<input type="hidden" name="identity" id="identity"  value="" >
 													</div>
 												</div>	
-											</div>
-									</div>
-							</div>	
+								   		 </div>
+						     		</div>
+								</div>	
+								
+							</div>
+							<div class="tab-pane fade in" id="panel22" role="tabpanel">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12">
 
-	             </div>
+												<div class="d-flex "> 
+															<div class="settings-main-icon ">
+																<i class="glyphicon glyphicon-education"></i>	
+															</div> 
+															<div class="col-md-10 col-sm-10 col-xs-12"> 
+																<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("START_DATE_END_DATE");?></p>
+															</div> 
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+															&nbsp; 
+												</div>
+
+												<table class="collape tablesorter" id="table_term_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
+													<thead>
+														<tr id="head-title1" class="head-td" align="center" style="width: 100%;">
+															<td><?php echo $tr->translate("DEL");?></td>
+															<td><?php echo $tr->translate("N_O");?></td>
+															<td><?php echo $tr->translate("TITLE");?></td>
+															<td><?php echo $tr->translate("START_DATE");?></td>
+															<td><?php echo $tr->translate("END_DATE");?></td>
+															<td><?php echo $tr->translate("NOTE");?></td>
+														</tr>
+													</thead>
+													<tbody>
+														<tr id="head-title1" class="head-td" align="right"></tr>
+													</tbody>
+												</table>
+												<input type="hidden" name="identity_term" id="identity_term" dojoType="dijit.form.TextBox" value="" >
+												<input type="button" label="<?php echo $tr->translate('ADD_TERM');?>" dojoType="dijit.form.Button" 
+												class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addTermRow();" />
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+
+				  		
+	            	</div>
 		       </div>
     		</div>
     		<div class="clearfix"></div>
@@ -216,6 +278,9 @@ table .set-style td, table .set-style th {
     dojo.require("dijit.form.Textarea");
     dojo.require("dojo.data.ItemFileWriteStore");
     dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
     
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 function alertBeforeSubmit(){
@@ -475,5 +540,40 @@ function filterClient(){
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
+	}
+
+	var col1= 0; var no1=0;
+	var title1 = 0;
+	function addTermRow() {
+		col1++;no1++;
+		template='';
+		temp = "";
+	
+		template+='<td width="2%" align="center"><img onclick="deleteTermRecord('+col1+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td align="center" width="2%">'+no1+'</td>';
+		template+='<td width="10%"><input required="1" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col1+'" name="title_'+col1+'" placeholder="'+'<?php echo $tr->translate("TERM")." ";?> " value="" type="text"  ></td>';	
+		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col1+'" name="startdate_'+col1+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col1+'" name="enddate_'+col1+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col1+'" name="remark_'+col1+'" value="" type="text"  ></td>';	
+		tmp='<tr id="row_term'+col1+'">';
+		tmp+="</tr>";
+		dojo.query("#table_term_row").append(tmp);
+		if($("#identity_term").val()!="") {
+			var identity_term = $("#identity_term").val();
+			$("#identity_term").val(identity_term+','+col1);
+		} else {$("#identity_term").val(col1);}
+		dojo.html.set(dojo.byId("row_term"+col1),template , {
+		     parseContent: true,
+		});
+	}
+	function deleteTermRecord(index) {
+		var identity_term = $('#identity_term').val();
+		var arrays1 = identity_term.split(',');
+		for(var i=0;i<arrays1.length;i++) {
+		if(arrays1[i] == index) arrays1.splice(i,1);
+		}
+		var strings1 = arrays1.join(',');
+		$('#identity_term').val(strings1);
+		dojo.query("#row_term"+index).remove();
 	}
 </script>

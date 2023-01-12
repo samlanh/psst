@@ -116,6 +116,21 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    				$this->insert($_arr);
 	    			}
 	    		}
+				$id_st_term = explode(',', $_data['identity_term']);
+				foreach ($id_st_term as $t){
+						$arr = array(
+								'branch_id'		=>$_data['branch_id'],
+								'academic_year'	=>$_data['from_academic'],
+								'title'			=>$_data['title_'.$t],
+								'start_date'	=>$_data['startdate_'.$t],
+								'end_date'		=>$_data['enddate_'.$t],
+								'note'			=>$_data['remark_'.$t],
+								'create_date'	=>date("Y-m-d"),
+								'user_id'		=>$this->getUserId(),
+							);
+						$this->_name='rms_startdate_enddate';	
+						$this->insert($arr);
+				}
     	    $db->commit();
     	    return true;
     		

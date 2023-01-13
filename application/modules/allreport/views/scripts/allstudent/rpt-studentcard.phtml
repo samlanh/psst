@@ -64,7 +64,7 @@ tbody#table_row tr {
                     	<?php echo $frm->getElement("study_type");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                    	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    </div>
@@ -188,19 +188,22 @@ tbody#table_row tr {
 	<table width="100%" style="margin-top:20px;">
 		<tr>
 			<td align="center">
-				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				<button dojoType="dijit.form.Button" id="printselected"
+				class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 					type="button" onclick="printSelected('');"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
 			</td>
 		</tr>
 		<tr>
 			<td align="center">
-				<button dojoType="dijit.form.Button" id="printselectedTray" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				<button dojoType="dijit.form.Button" id="printselectedTray"
+				class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 					type="button" onclick="printSelectedTray('');"><?php echo $tr->translate("SINGLE_IDPRINT_TRAY");?></button>
 			</td>
 		</tr>
 		<tr>
 			<td align="center">
-				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				<button dojoType="dijit.form.Button" id="printpickupselected" 
+				class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
 			</td>
 		</tr>

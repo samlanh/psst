@@ -59,8 +59,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$rs_stu = $gdb->getStudentinfoById($stu_id);
 					
 					if($rs_stu['is_setstudentid']==0 AND !empty($data['student_code'])){
+						$branch_id = $data['branch_id'];
+						$stu_no = $gdb->getnewStudentId($branch_id,0);
+						
 						$arr = array(
-							'stu_code'=>$data['student_code'],
+							'stu_code'=>$stu_no,
 							'is_setstudentid'=>1,
 						);
 						$this->_name='rms_student';

@@ -2005,7 +2005,7 @@ function getAllgroupStudyNotPass($action=null){
 	  	$length = '';
 	  	$pre = '';
 	  	if($option_type==1){//auto by branch
-	  		$sql="SELECT COUNT(stu_id) FROM `rms_student` WHERE customer_type=1 AND branch_id=".$branch_id;
+	  		$sql="SELECT COUNT(stu_id) FROM `rms_student` WHERE status=1 AND customer_type=1 AND branch_id=".$branch_id;
 	  		$stu_num = $db->fetchOne($sql);
 	  		$pre = $this->getPrefixCode($branch_id);//by branch
 	  	}elseif($option_type==2){

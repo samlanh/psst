@@ -1139,4 +1139,25 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			exit();
 		}
 	}
+	
+	//2023-03-18
+	public function mobileNotifyAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$row = $db->getAllMobileNotification($search);
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
 }

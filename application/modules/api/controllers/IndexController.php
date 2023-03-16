@@ -114,6 +114,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->newsDetailAction($GetData);
 			}else if ($GetData['url']=="unread"){
     			$_dbAction->unreadAction($GetData);
+			}else if ($GetData['url']=="mobileNotify"){ //2023-03-18
+    			$_dbAction->mobileNotifyAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

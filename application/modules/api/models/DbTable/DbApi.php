@@ -118,7 +118,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								WHEN primary_phone = 3 THEN s.mother_phone
 								ELSE s.guardian_tel
 						END as PrimaryContact,
-						COALESCE(DATE_FORMAT(s.dob, '%d-%m-%Y'),'') AS dob,
+						COALESCE(DATE_FORMAT(s.dob, '%d-%m-%Y'),'') AS dobFormat,
 						
 						s.pob,
 						s.home_num,
@@ -1096,7 +1096,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		
     		$token = $row['mobileToken'];
     		
-    		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' LIMIT 1";
+    		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' AND stu_id=0 LIMIT 1";
     		$rsid = $db->fetchOne($sql);
     		if(!empty($rsid)){
     			$_arr =array(
@@ -1110,14 +1110,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		}else{
 	    		$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['id']." AND token='".$token."' LIMIT 1";
 	    		$rs = $db->fetchOne($sql);
+				
 	    		if(empty($rs)){
 	    			$_arr =array(
 	    				'stu_id' 	=> $row['id'],
 	    				'token' 	=> $token,
 	    				'date' 		=> date("Y-m-d H:i:s"),
 	    				'device_type' => $row['deviceType'],
-	    				'device_model' 	> "",
+	    				'device_model' => "",
 	    			);
+					$this->_name = "mobile_mobile_token";
 	    			$this->insert($_arr);
 	    		}
     		}
@@ -1139,7 +1141,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			    	act.*,
 			    	(SELECT ad.description FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description,
 			    	(SELECT ad.title FROM `mobile_news_event_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
-			    	DATE_FORMAT(act.`publish_date`, '%d-%m-%Y') AS publish_date,
+			    	DATE_FORMAT(act.`publish_date`, '%d-%m-%Y') AS publishDateFormat,
 			    	act.image_feature,
 			    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
 			    	CASE
@@ -1945,16 +1947,27 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				return $result;
     			}
     	}		
+		function checkTokenDevice($token="0"){
+			$db = $this->getAdapter();
+			$sql=" SELECT t.* FROM mobile_mobile_token AS t ";
+			$sql.=" WHERE t.token ='$token' LIMIT 1 ";
+			return $db->fetchRow($sql);
+		}
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{
+				
+				$check = $this->checkTokenDevice($_data['token']);
     			$this->_name='mobile_mobile_token';
-    			$array = array(
-    				'token'	=>$_data['token'],
-    				'device_type'=>1,
-    				'date'	=>date('Y-m-d'),
-    			);
-    			return $this->insert($array);
+				if(empty($check)){
+					$array = array(
+						'token'	=>$_data['token'],
+						'device_type'=>1,
+						'date'	=>date('Y-m-d H:i:s'),
+					);
+					return $this->insert($array);
+				}
+    			
     		}catch(Exception $e){
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			return false;
@@ -2932,9 +2945,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}
 			$sql="
 				SELECT 
-					
 					s.*
 					,gsjd.subject_id AS subjectId
+					,sd.`score` AS subjectScore
+					,sd.score_cut
+					,sd.`subject_id`
+					,sd.amount_subject
 					,(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitle
 					FROM `rms_score` AS s 
 						JOIN `rms_score_detail` AS sd ON s.id = sd.score_id AND sd.student_id = $studentId
@@ -3673,4 +3689,68 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	
+	//2023-03-18
+	public function getAllMobileNotification($search){
+    		$db = $this->getAdapter();
+    		try{
+    			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+    			$studentId = empty($search['studentId'])?0:$search['studentId'];
+				if($studentId>0){
+					$studentId = "0,".$studentId;
+				}
+    			$mobileToken = empty($search['mobileToken'])?0:$search['mobileToken'];
+    			$isCounting = empty($search['isCounting'])?0:$search['isCounting'];
+    			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+    			$sql=" SELECT ntf.id, 
+							ntf_d.title,
+							CASE 
+								WHEN ntf.group >0 THEN ss.stu_code 
+								ELSE s.stu_code
+							END AS studentCode,
+							CASE 
+								WHEN ntf.group >0 THEN grp_d.stu_id 
+								ELSE ntf.student
+							END AS studentId,
+							ntf.group,
+							ntf.date AS publicDate,
+							ntf_d.description,
+							ntf.opt_notification,
+							ntf.type,
+							ntf.actionId,
+							COALESCE((SELECT ntf_r.isRead FROM mobile_notify_read AS ntf_r WHERE ntf_r.notification_id = ntf.id AND ntf_r.mobileToken = '$mobileToken' ORDER BY ntf_r.isRead DESC LIMIT 1),0) AS isRead
+						FROM `mobile_notice` AS ntf 
+							JOIN `mobile_notice_detail` AS ntf_d 
+							LEFT JOIN `rms_student` AS s ON s.stu_id = ntf.student 
+							LEFT JOIN (`rms_group_detail_student` AS grp_d JOIN `rms_student` AS ss ON ss.stu_id = grp_d.stu_id ) 
+								ON grp_d.group_id = ntf.group AND grp_d.group_id !=0
+						WHERE ntf_d.notification_id = ntf.id 
+							AND ntf_d.lang = ".$currentLang;
+				$sql.=" 
+					AND CASE 
+						WHEN ntf.group >0 THEN grp_d.stu_id 
+						ELSE ntf.student
+					END IN ($studentId)  ";
+					
+				if(!empty($search['LimitStart'])){
+					$sql.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+				}else if(!empty($search['limitRecord'])){
+					$sql.=" LIMIT ".$search['limitRecord'];
+				}
+    			
+    			$row = $db->fetchAll($sql);
+    			$result = array(
+    					'status' =>true,
+    			'value' =>$row,
+    			);
+    			return $result;
+    		}catch(Exception $e){
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			$result = array(
+    				'status' =>false,
+    				'value' =>$e->getMessage(),
+    			);
+    			return $result;
+    		}
+    }
 }

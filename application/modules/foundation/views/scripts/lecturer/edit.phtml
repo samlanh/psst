@@ -246,11 +246,17 @@
 											<?php echo $frm->getElement("user_name");?>
 									   </div>
 									</div>
+									<div class="form-group">
+									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ></label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+									   		<input class="button-class button-primary" iconClass="glyphicon glyphicon-option-horizontal" type="button" label="<?php echo $tr->translate('CHANGE_PASSWORD');?>" dojoType="dijit.form.Button" onclick="enablePwd(1);"/>
+									   </div>
+									</div>
 									 <div class="form-group">
 									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+											<input readOnly dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
 												 class="fullside" id="password" name="password" value="" type="password">
 									   </div>
 									</div>
@@ -258,7 +264,7 @@
 									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+											<input readOnly dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
 												 class="fullside" id="confirm_password" name="confirm_password" value="" type="password">
 									   </div>
 									</div>
@@ -895,6 +901,12 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	</div>
 </div>
 <script type="text/javascript">
+	function enablePwd(type=null){
+		if(type!=null){
+			dijit.byId('password').set('readOnly',false);
+			dijit.byId('confirm_password').set('readOnly',false);
+		}
+	}
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
 	function getTeacherID(){
 		branch_id = dijit.byId('branch_id').get('value');

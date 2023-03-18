@@ -304,7 +304,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$dbg = new Application_Model_DbTable_DbGlobal();
     	$currentlang = $dbg->currentlang();
 		$colunmName='depart_nameen';
-		if ($currentLang==1){
+		if ($currentlang==1){
 			$colunmName='depart_namekh';
 		}
 		

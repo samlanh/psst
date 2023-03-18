@@ -1,18 +1,13 @@
-<?php
-
-class IssuescoreController extends Zend_Controller_Action
-{
-
-	const REDIRECT_URL = '/home';
-	
+<?php 
+class Issue_DashboardController extends Zend_Controller_Action {
     public function init()
-    {
-        /* Initialize action controller here */
-    	header('content-type: text/html; charset=utf8');  
-    }
-	public function indexAction()
+    {    	
+    	header('content-type: text/html; charset=utf8');
+    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	}
+public function indexAction()
 	{
-		$this->_helper->layout()->disableLayout();
 		$id=0;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
@@ -21,12 +16,10 @@ class IssuescoreController extends Zend_Controller_Action
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
-			$search['externalAuth']=1;
 		}
 		else{
 			$search = array(
 						'adv_search'=>'',
-						'externalAuth'=>1,//for teacher access
 						'academic_year'=> $currentAcademic,
 						'exam_type'=>-1,
 						'for_semester'=>-1,
@@ -173,10 +166,4 @@ class IssuescoreController extends Zend_Controller_Action
 			exit();
 		}
 	}
-	
-}
-
-
-
-
-
+}	

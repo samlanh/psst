@@ -57,8 +57,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': " grd.dateInput <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		
-		$where.=' AND grd.teacherId='.$this->getUserExternalId();
-
+		if(!empty($data['externalAuth'])){
+			$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		}
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
@@ -346,14 +347,10 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 						$arr=array(
 							'gradingId'		=>$id,
 							'studentId'		=>$_data['student_id'.$i],
-							
 							'subjectId'		=> $subjectId,
 							'totalAverage'	=> number_format($totalScoreAverage,2),
-							
 							'remark'		=>$_data['note_'.$i],
-							
 						);
-						
 						
 						$this->_name='rms_grading_total';
 						$this->insert($arr);
@@ -363,7 +360,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		
 		  $db->commit();
 		  return $id;
-		}catch (Exception $e){
+		}catch(Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}

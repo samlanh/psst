@@ -305,6 +305,7 @@ function filterStudent(){
 			'examType':examType,
 			'forSemester':for_semester,
 			'forMonth':for_month,
+			'isLock':0,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
@@ -369,7 +370,7 @@ function filterStudent(){
 						maxValue = "'The value maximumn "+subject[j].max_subjectscore+"'";
 						invalidesms = "rangeMessage:"+maxValue;
 						totalAverage='';
-						if(scoreOption==2){
+						if(scoreOption==1){
 							if(typeof(data[i].gradingScore[j])!= "undefined"){
 								totalAverage = data[i].gradingScore[j].totalAverage;
 							}

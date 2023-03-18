@@ -102,20 +102,20 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
 						
-						$where=" groupId=".$_data['group'];
-						$where.=" AND examType=".$_data['exam_type'];
-						$where.=" AND forSemester=".$_data['for_semester'];
-						if($_data['exam_type']==1){//formonth
-							$where.=" AND forMonth=".$_data['for_month'];
-						}
-						$where.=" AND subjectId=".$subject;
+// 						$where=" groupId=".$_data['group'];
+// 						$where.=" AND examType=".$_data['exam_type'];
+// 						$where.=" AND forSemester=".$_data['for_semester'];
+// 						if($_data['exam_type']==1){//formonth
+// 							$where.=" AND forMonth=".$_data['for_month'];
+// 						}
+// 						$where.=" AND subjectId=".$subject;
 						
-						$dataUpdate = array(
-								'isLock'=>1,
-								'lockBy'=>$this->getUserId()
-								);
-						$this->_name='rms_grading';
-						$this->update($dataUpdate, $where);;
+// 						$dataUpdate = array(
+// 								'isLock'=>1,
+// 								'lockBy'=>$this->getUserId()
+// 								);
+// 						$this->_name='rms_grading';
+// 						$this->update($dataUpdate, $where);;
 					}
 				}
 				
@@ -131,6 +131,18 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						$this->_name='rms_score_monthly';
 						$this->insert($arr);
 					}
+				}
+				$this->_name='rms_grading';
+				foreach ($rssubject as $subject){
+					$where='groupId='.$_data['group'].' AND subjectId='.$subject.' AND forSemester='.$_data['for_semester'].' AND examType ='.$_data['exam_type'];
+					if($_data['exam_type']==1){
+						$where.=' AND formonth='.$_data['for_month'];
+					}
+					$arr = array(
+							'isLock'=>1,
+							'lockBy'=>$this->getUserId()
+							);
+					$this->update($arr, $where);
 				}
 			}
 		  $db->commit();
@@ -470,24 +482,16 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$results[$key]['sex'] = $rs['sex'];
 				
 				$data['studentId']=$rs['stu_id'];
-				// 						$data['subjectId']=$rsGroup['subject_id'];
 				$gradingScore = array();
 				if(!empty($resultSubject)){
 					foreach ($resultSubject as $index=> $rsGroup){
 						$data['subjectId']=$rsGroup['subject_id'];
 						$gradingScore[$index] =$this->getGradingScoreData($data);
-// 						$results[$key][$index]['subject'] = $rsGroup['sub_name'];
-// 						$results[$key][$index]['subject_id'] = $rsGroup['subject_id'];
-						
-						
-						
 					}
 				}
 				$results[$key]['gradingScore']=$gradingScore;
 			}
 		}
-// 		print_r($results);
-// 		exit();
 		return $results ;
 	}
 	function getSubjectByGroup($groupId,$teacher_id=null,$exam_type=1){
@@ -712,6 +716,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}
 		if(!empty($data['studentId'])){
 			$sql.=" AND gt.studentId = ".$data['studentId'];
+		}
+		if(isset($data['isLock'])){
+			$sql.=" AND gd.isLock = ".$data['isLock'];
 		}
 		$sql.=" ORDER BY gd.subjectId ASC ";
 		return $this->getAdapter()->fetchRow($sql);

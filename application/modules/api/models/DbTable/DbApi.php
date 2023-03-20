@@ -1101,7 +1101,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		if(!empty($rsid)){
     			$_arr =array(
     					'stu_id' 	=> $row['id'],
-    					'date' 		=> date("Y-m-d H:i:s"),
     					'device_type' => $row['deviceType'],
     					'device_model' 		=> "",
     			);
@@ -1110,17 +1109,28 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		}else{
 	    		$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['id']." AND token='".$token."' LIMIT 1";
 	    		$rs = $db->fetchOne($sql);
-				
 	    		if(empty($rs)){
-	    			$_arr =array(
+					$currentStudentCheck = 0;
+					if($row['currentStudentId']>0){
+						$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['currentStudentId']." AND token='".$token."' LIMIT 1";
+						$currentStudentCheck = $db->fetchOne($sql);
+					}
+					$_arr =array(
 	    				'stu_id' 	=> $row['id'],
 	    				'token' 	=> $token,
-	    				'date' 		=> date("Y-m-d H:i:s"),
 	    				'device_type' => $row['deviceType'],
 	    				'device_model' => "",
 	    			);
-					$this->_name = "mobile_mobile_token";
-	    			$this->insert($_arr);
+					if($currentStudentCheck >0){
+						$this->_name = "mobile_mobile_token";
+						$where=" id = $currentStudentCheck ";
+						$this->update($_arr,$where);
+					}else{
+						$_arr['date'] = date("Y-m-d H:i:s");
+						$this->_name = "mobile_mobile_token";
+						$this->insert($_arr);
+					}
+					
 	    		}
     		}
     		
@@ -3741,7 +3751,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				
 				if(!empty($isCounting)){
 					$dateToken = empty($tokenInfo['date'])?"2023-01-01 00:00:00":$tokenInfo['date'];
-					$sql.=" AND ntf.date >= '$dateToken' ";
+					if($studentIdValue==0){
+						$sql.=" AND ntf.date >= '$dateToken' ";
+					}
 					$sql.=" AND COALESCE((SELECT ntf_r.isRead FROM mobile_notify_read AS ntf_r WHERE ntf_r.notification_id = ntf.id ".$whereIsRead." ORDER BY ntf_r.isRead DESC LIMIT 1),0) =0 ";
 				}
 				
@@ -3751,7 +3763,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				}else if(!empty($search['limitRecord'])){
 					$sql.=" LIMIT ".$search['limitRecord'];
 				}
-    			
+    	
     			$row = $db->fetchAll($sql);
     			$result = array(
     					'status' =>true,
@@ -3932,12 +3944,44 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		try{
 			$mobileToken 	= empty($_data['mobileToken'])?0:$_data['mobileToken'];
 			$studentId 		= empty($_data['studentId'])?0:$_data['studentId'];
+			$currentStudentId 		= empty($_data['currentStudentId'])?0:$_data['currentStudentId'];
+			$typeRemove 	= empty($_data['typeRemove'])?0:$_data['typeRemove'];
+			$deviceType 	= empty($_data['deviceType'])?1:$_data['deviceType'];
 			
-			if($studentId>0){
-				$where ="stu_id=".$studentId." AND token='$mobileToken' ";
-				$this->_name="mobile_mobile_token";
-				$this->delete($where);
+			if($typeRemove==1){ //Swtiching
+				$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$studentId." AND token='".$mobileToken."' LIMIT 1";
+	    		$rs = $db->fetchOne($sql);
+	    		if(empty($rs)){
+					$currentStudentCheck = 0;
+					if($currentStudentId>0){
+						$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$currentStudentId." AND token='".$mobileToken."' LIMIT 1";
+						$currentStudentCheck = $db->fetchOne($sql);
+					}
+					$_arr =array(
+	    				'stu_id' 	=> $studentId,
+	    				'token' 	=> $mobileToken,		
+	    				'device_type' => $deviceType,
+	    				'device_model' => "",
+	    			);
+					if($currentStudentCheck >0){
+						$this->_name = "mobile_mobile_token";
+						$where=" id = $currentStudentCheck ";
+						$this->update($_arr,$where);
+					}else{
+						$_arr['date'] = date("Y-m-d H:i:s");
+						$this->_name = "mobile_mobile_token";
+						$this->insert($_arr);
+					}
+				}
+			}else{ 
+				if($studentId>0){
+					$where ="stu_id=".$studentId." AND token='$mobileToken' ";
+					$this->_name="mobile_mobile_token";
+					$this->delete($where);
+				}
 			}
+			
+			
 			$result = array(
 					'status' =>true,
 					'value' =>$studentId,
@@ -3959,19 +4003,98 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		try{
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 			$notificationId = empty($search['notificationId'])?0:$search['notificationId'];
+			$recordType = empty($search['recordType'])?0:$search['recordType'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
 				
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+			$month = "month_en";
+			$teacherName= "teacher_name_en";
+			if($currentLang==1){// khmer
+				$teacherName = "teacher_name_kh";
+				$label = "name_kh";
+				$grade = "rms_itemsdetail.title";
+				$degree = "rms_items.title";
+				$branch = "b.branch_namekh";
+				$month = "month_kh";
+			}
 			$sql = "
 				SELECT 
 					ntf.*
+					,ntf.date AS publishDate
 					,ntf_d.title AS announcementTitle
 					,ntf_d.description AS announcementDescription
-				FROM `mobile_notice` AS ntf 
-					JOIN `mobile_notice_detail` AS ntf_d 
-					ON ntf_d.notification_id = ntf.id 
-				WHERE  ntf_d.lang = $currentLang 
+					,g.group_code AS groupCode
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) as academicYearTitle
+					,(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle
+					,(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle
+					,(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
+					,(SELECT t.$teacherName FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName
+					,(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherNameKh
+					,(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teaccherNameEng
+					,(SELECT t.signature FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherSigature
+					,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherTel
+			";	
+			if($recordType==1){
+				$sql.="
+					,sp.receipt_number AS receiptNo
+					,sp.create_date AS paymentDate
+					,COALESCE(sp.grand_total,0) AS grandTotal
+					,COALESCE(sp.credit_memo,0) AS creditMemo
+					,COALESCE(sp.paid_amount,0) AS paidAmount
+					,COALESCE(sp.balance_due,0) AS balanceDue
+					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=8 AND v.key_code=sp.payment_method LIMIT 1) AS paymentMethod
+					,(SELECT CONCAT(COALESCE(u.last_name,''),' ',COALESCE(u.first_name,'')) FROM rms_users AS u WHERE u.id = sp.user_id LIMIT 1) AS receivedBy
+				";
+			}else if($recordType==2){
+				$sql.=" 
+			
+					,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =sc.exam_type LIMIT 1) as forTypeTitle
+					,CASE
+						WHEN sc.exam_type = 2 THEN sc.for_semester
+					ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
+					END AS forMonthTitle
+					
+					,sm.total_score AS totalScore
+					,sm.total_avg AS totalAvg
+					,g.max_average/2 AS passAvrage
+					,(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubject
+					,(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubjectsem
+					,(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as averagePass
+					,FIND_IN_SET( 
+						sm.total_avg, 
+						(
+							SELECT GROUP_CONCAT( smSecond.total_avg ORDER BY total_avg DESC )
+							FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+							sSecond.`id`=smSecond.`score_id`
+							AND sSecond.group_id= g.`id`
+							AND sSecond.id=sc.`id`
+						)
+					) AS rank
+					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+				";
+			}
+			$sql.="	FROM `mobile_notice` AS ntf 
+					JOIN `mobile_notice_detail` AS ntf_d ON ntf_d.notification_id = ntf.id 
+					LEFT JOIN `rms_group` AS g ON g.id = ntf.group
+					";
+			if($recordType==1){
+				$sql.=" 
+					LEFT JOIN `rms_student_payment` AS sp ON sp.id = ntf.actionId AND ntf.type = 1 AND sp.student_id = $studentId
+				";
+			}else if($recordType==2){
+				$sql.="
+					LEFT JOIN (`rms_score` AS sc JOIN rms_score_monthly AS sm on  sc.`id`=sm.`score_id`) ON sc.id = ntf.actionId AND ntf.type = 2 AND sc.status = 1 AND sm.student_id = $studentId
+				";
+			}
+					
+			$sql.="	WHERE  ntf_d.lang = $currentLang 
 					AND ntf.id = $notificationId
 			";
 			$sql.=" LIMIT 1 ";
+
 			$row = $db->fetchRow($sql);
 			$result = array(
 					'status' =>true,

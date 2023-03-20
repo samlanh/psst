@@ -11,6 +11,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 				if(!empty($row['value'])){
 					$row['value']['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
 					$row['value']['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
+					$row['value']['currentStudentId'] = empty($_data['currentStudentId'])?0:$_data['currentStudentId'];
 					$token = $db->generateToken($row['value']);
 					
 					$arrResult = array(

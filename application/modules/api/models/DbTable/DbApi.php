@@ -1101,7 +1101,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		if(!empty($rsid)){
     			$_arr =array(
     					'stu_id' 	=> $row['id'],
-    					'date' 		=> date("Y-m-d H:i:s"),
     					'device_type' => $row['deviceType'],
     					'device_model' 		=> "",
     			);
@@ -1110,17 +1109,28 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		}else{
 	    		$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['id']." AND token='".$token."' LIMIT 1";
 	    		$rs = $db->fetchOne($sql);
-				
 	    		if(empty($rs)){
-	    			$_arr =array(
+					$currentStudentCheck = 0;
+					if($row['currentStudentId']>0){
+						$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['currentStudentId']." AND token='".$token."' LIMIT 1";
+						$currentStudentCheck = $db->fetchOne($sql);
+					}
+					$_arr =array(
 	    				'stu_id' 	=> $row['id'],
 	    				'token' 	=> $token,
-	    				'date' 		=> date("Y-m-d H:i:s"),
 	    				'device_type' => $row['deviceType'],
 	    				'device_model' => "",
 	    			);
-					$this->_name = "mobile_mobile_token";
-	    			$this->insert($_arr);
+					if($currentStudentCheck >0){
+						$this->_name = "mobile_mobile_token";
+						$where=" id = $currentStudentCheck ";
+						$this->update($_arr,$where);
+					}else{
+						$_arr['date'] = date("Y-m-d H:i:s");
+						$this->_name = "mobile_mobile_token";
+						$this->insert($_arr);
+					}
+					
 	    		}
     		}
     		
@@ -3696,12 +3706,19 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     			$studentId = empty($search['studentId'])?0:$search['studentId'];
-				if($studentId>0){
-					$studentId = "0,".$studentId;
-				}
+				
     			$mobileToken = empty($search['mobileToken'])?0:$search['mobileToken'];
     			$isCounting = empty($search['isCounting'])?0:$search['isCounting'];
     			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+				
+				$tokenInfo = $this->getTokenInfo($mobileToken);
+				$studentIdValue = $studentId;
+				
+				$whereIsRead = " AND ntf_r.mobileToken = '$mobileToken' ";
+				if($studentId>0){
+					$studentId = "0,".$studentId;
+					$whereIsRead = " AND ntf_r.studentId = '$studentIdValue' ";
+				}
     			$sql=" SELECT ntf.id, 
 							ntf_d.title,
 							CASE 
@@ -3718,7 +3735,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							ntf.opt_notification,
 							ntf.type,
 							ntf.actionId,
-							COALESCE((SELECT ntf_r.isRead FROM mobile_notify_read AS ntf_r WHERE ntf_r.notification_id = ntf.id AND ntf_r.mobileToken = '$mobileToken' ORDER BY ntf_r.isRead DESC LIMIT 1),0) AS isRead
+							COALESCE((SELECT ntf_r.isRead FROM mobile_notify_read AS ntf_r WHERE ntf_r.notification_id = ntf.id ".$whereIsRead." ORDER BY ntf_r.isRead DESC LIMIT 1),0) AS isRead
 						FROM `mobile_notice` AS ntf 
 							JOIN `mobile_notice_detail` AS ntf_d 
 							LEFT JOIN `rms_student` AS s ON s.stu_id = ntf.student 
@@ -3731,13 +3748,22 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						WHEN ntf.group >0 THEN grp_d.stu_id 
 						ELSE ntf.student
 					END IN ($studentId)  ";
-					
+				
+				if(!empty($isCounting)){
+					$dateToken = empty($tokenInfo['date'])?"2023-01-01 00:00:00":$tokenInfo['date'];
+					if($studentIdValue==0){
+						$sql.=" AND ntf.date >= '$dateToken' ";
+					}
+					$sql.=" AND COALESCE((SELECT ntf_r.isRead FROM mobile_notify_read AS ntf_r WHERE ntf_r.notification_id = ntf.id ".$whereIsRead." ORDER BY ntf_r.isRead DESC LIMIT 1),0) =0 ";
+				}
+				
+				$sql.=" ORDER BY ntf.date DESC ";
 				if(!empty($search['LimitStart'])){
 					$sql.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
 				}else if(!empty($search['limitRecord'])){
 					$sql.=" LIMIT ".$search['limitRecord'];
 				}
-    			
+    	
     			$row = $db->fetchAll($sql);
     			$result = array(
     					'status' =>true,
@@ -3752,5 +3778,336 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     			);
     			return $result;
     		}
+    }
+	
+	public function getTokenInfo($token){
+		$db = $this->getAdapter();
+		$sql="SELECT t.* FROM mobile_mobile_token AS t WHERE t.token = '$token' ORDER BY t.id ASC LIMIT 1";
+		return $db->fetchRow($sql);
+	}
+	
+	public function getNotifyInfoByType($type,$actionId){
+		$db = $this->getAdapter();
+		$sql="SELECT t.* FROM mobile_notice AS t WHERE t.type = '$type' AND t.actionId = '$actionId' LIMIT 1";
+		return $db->fetchRow($sql);
+	}
+	
+	function checkIsRead($studentId,$notificationId){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+				ntf_r.* FROM mobile_notify_read AS ntf_r 
+			WHERE ntf_r.studentId = $studentId AND ntf_r.notification_id=$notificationId 
+			LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
+	function checkIsReadByToken($token,$notificationId){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+				ntf_r.* FROM mobile_notify_read AS ntf_r 
+			WHERE ntf_r.mobileToken = '$token' AND ntf_r.notification_id=$notificationId 
+			LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
+	public function setReadNotification($_data){
+		$db = $this->getAdapter();
+		try{
+			$readType 	= empty($_data['readType'])?"0":$_data['readType'];
+			$recordType 	= empty($_data['recordType'])?"0":$_data['recordType'];
+			$mobileToken 	= empty($_data['mobileToken'])?0:$_data['mobileToken'];
+			$studentId 		= empty($_data['studentId'])?0:$_data['studentId'];
+			$notificationId = empty($_data['notificationId'])?0:$_data['notificationId'];
+			$actionId 		= empty($_data['actionId'])?0:$_data['actionId'];
+			
+			if($readType=="markAllRead"){ 
+				$rowNotify = $this->getAllMobileNotification($_data);
+				
+				if(!empty($rowNotify['value'])){
+					foreach($rowNotify['value'] as $rs){
+						$_arr=array(
+							'notification_id'	=> $rs['id'],
+							'studentId'			=> $studentId,
+							'mobileToken'		=> $mobileToken,
+							'createDate'	  	=> date("Y-m-d H:i:s"),
+							'modifyDate'	  	=> date("Y-m-d H:i:s"),
+							'isRead'	=> 1,
+						);
+						$this->_name = "mobile_notify_read";
+						if($studentId>0){
+							$check = $this->checkIsRead($studentId,$rs['id']);
+							if(empty($check)){
+								$this->insert($_arr);
+							}
+						}else{
+							$check = $this->checkIsReadByToken($mobileToken,$rs['id']);
+							if(empty($check)){
+								$this->insert($_arr);
+							}
+						}
+					}
+				}
+			}else if($readType=="checkTokenRead"){ // when user login
+					$sql="
+						SELECT 
+							ntf_r.* FROM mobile_notify_read AS ntf_r 
+						WHERE ntf_r.mobileToken = '$mobileToken' AND ntf_r.studentId=0
+					 ";
+					$readyByToken = $db->fetchAll($sql);
+					if(!empty($readyByToken)){
+						foreach($readyByToken as $read){
+							if($studentId>0){
+								$check = $this->checkIsRead($studentId,$read['notification_id']);
+								if(empty($check)){
+									$_arr=array(
+										'studentId'			=> $studentId,						
+										'modifyDate'	  	=> date("Y-m-d H:i:s"),
+									);
+									$where = " id = ".$read['id'];
+									$this->_name = "mobile_notify_read";
+									$this->update($_arr,$where);
+								}
+							}
+						}
+					}
+			}else{
+				if($notificationId>0){ 
+					$_arr=array(
+						'notification_id'	=> $notificationId,
+						'studentId'			=> $studentId,
+						'mobileToken'		=> $mobileToken,
+						'createDate'	  	=> date("Y-m-d H:i:s"),
+						'modifyDate'	  	=> date("Y-m-d H:i:s"),
+						'isRead'	=> 1,
+					);
+					$this->_name = "mobile_notify_read";
+					if($studentId>0){
+						$check = $this->checkIsRead($studentId,$notificationId);
+						if(empty($check)){
+							$this->insert($_arr);
+						}
+					}else{
+						$check = $this->checkIsReadByToken($mobileToken,$notificationId);
+						if(empty($check)){
+							$this->insert($_arr);
+						}
+					}
+				}else{
+					$notifyInfo = $this->getNotifyInfoByType($_data['recordType'],$actionId);
+					if(!empty($notifyInfo)){
+						$notificationId = empty($notifyInfo['id'])?0:$notifyInfo['id'];
+						$_arr=array(
+							'notification_id'	=> $notificationId,
+							'studentId'			=> $studentId,
+							'mobileToken'		=> $mobileToken,
+							'createDate'	  	=> date("Y-m-d H:i:s"),
+							'modifyDate'	  	=> date("Y-m-d H:i:s"),
+							'isRead'	=> 1,
+						);
+						$this->_name = "mobile_notify_read";
+						if($studentId>0){
+							$check = $this->checkIsRead($studentId,$notificationId);
+							if(empty($check)){
+								$this->insert($_arr);
+							}
+						}else{
+							$check = $this->checkIsReadByToken($mobileToken,$notificationId);
+							if(empty($check)){
+								$this->insert($_arr);
+							}
+						}
+					}
+				}
+			}
+			
+			$_data['isCounting'] = 1;
+			$unreadRemain = $this->getAllMobileNotification($_data);
+			$countingRecord=0;
+			if(!empty($unreadRemain['value'])){
+				$countingRecord=count($unreadRemain['value']);
+			}
+			$result = array(
+					'status' =>true,
+					'value' =>$countingRecord,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function removeAppTokenId($_data){
+		$db = $this->getAdapter();
+		try{
+			$mobileToken 	= empty($_data['mobileToken'])?0:$_data['mobileToken'];
+			$studentId 		= empty($_data['studentId'])?0:$_data['studentId'];
+			$currentStudentId 		= empty($_data['currentStudentId'])?0:$_data['currentStudentId'];
+			$typeRemove 	= empty($_data['typeRemove'])?0:$_data['typeRemove'];
+			$deviceType 	= empty($_data['deviceType'])?1:$_data['deviceType'];
+			
+			if($typeRemove==1){ //Swtiching
+				$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$studentId." AND token='".$mobileToken."' LIMIT 1";
+	    		$rs = $db->fetchOne($sql);
+	    		if(empty($rs)){
+					$currentStudentCheck = 0;
+					if($currentStudentId>0){
+						$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$currentStudentId." AND token='".$mobileToken."' LIMIT 1";
+						$currentStudentCheck = $db->fetchOne($sql);
+					}
+					$_arr =array(
+	    				'stu_id' 	=> $studentId,
+	    				'token' 	=> $mobileToken,		
+	    				'device_type' => $deviceType,
+	    				'device_model' => "",
+	    			);
+					if($currentStudentCheck >0){
+						$this->_name = "mobile_mobile_token";
+						$where=" id = $currentStudentCheck ";
+						$this->update($_arr,$where);
+					}else{
+						$_arr['date'] = date("Y-m-d H:i:s");
+						$this->_name = "mobile_mobile_token";
+						$this->insert($_arr);
+					}
+				}
+			}else{ 
+				if($studentId>0){
+					$where ="stu_id=".$studentId." AND token='$mobileToken' ";
+					$this->_name="mobile_mobile_token";
+					$this->delete($where);
+				}
+			}
+			
+			
+			$result = array(
+					'status' =>true,
+					'value' =>$studentId,
+			);
+			return $result;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	public function getMobileNotificationDetail($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$notificationId = empty($search['notificationId'])?0:$search['notificationId'];
+			$recordType = empty($search['recordType'])?0:$search['recordType'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+				
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+			$month = "month_en";
+			$teacherName= "teacher_name_en";
+			if($currentLang==1){// khmer
+				$teacherName = "teacher_name_kh";
+				$label = "name_kh";
+				$grade = "rms_itemsdetail.title";
+				$degree = "rms_items.title";
+				$branch = "b.branch_namekh";
+				$month = "month_kh";
+			}
+			$sql = "
+				SELECT 
+					ntf.*
+					,ntf.date AS publishDate
+					,ntf_d.title AS announcementTitle
+					,ntf_d.description AS announcementDescription
+					,g.group_code AS groupCode
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) as academicYearTitle
+					,(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle
+					,(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle
+					,(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
+					,(SELECT t.$teacherName FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName
+					,(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherNameKh
+					,(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teaccherNameEng
+					,(SELECT t.signature FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherSigature
+					,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherTel
+			";	
+			if($recordType==1){
+				$sql.="
+					,sp.receipt_number AS receiptNo
+					,sp.create_date AS paymentDate
+					,COALESCE(sp.grand_total,0) AS grandTotal
+					,COALESCE(sp.credit_memo,0) AS creditMemo
+					,COALESCE(sp.paid_amount,0) AS paidAmount
+					,COALESCE(sp.balance_due,0) AS balanceDue
+					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=8 AND v.key_code=sp.payment_method LIMIT 1) AS paymentMethod
+					,(SELECT CONCAT(COALESCE(u.last_name,''),' ',COALESCE(u.first_name,'')) FROM rms_users AS u WHERE u.id = sp.user_id LIMIT 1) AS receivedBy
+				";
+			}else if($recordType==2){
+				$sql.=" 
+			
+					,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =sc.exam_type LIMIT 1) as forTypeTitle
+					,CASE
+						WHEN sc.exam_type = 2 THEN sc.for_semester
+					ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
+					END AS forMonthTitle
+					
+					,sm.total_score AS totalScore
+					,sm.total_avg AS totalAvg
+					,g.max_average/2 AS passAvrage
+					,(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubject
+					,(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubjectsem
+					,(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as averagePass
+					,FIND_IN_SET( 
+						sm.total_avg, 
+						(
+							SELECT GROUP_CONCAT( smSecond.total_avg ORDER BY total_avg DESC )
+							FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+							sSecond.`id`=smSecond.`score_id`
+							AND sSecond.group_id= g.`id`
+							AND sSecond.id=sc.`id`
+						)
+					) AS rank
+					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+				";
+			}
+			$sql.="	FROM `mobile_notice` AS ntf 
+					JOIN `mobile_notice_detail` AS ntf_d ON ntf_d.notification_id = ntf.id 
+					LEFT JOIN `rms_group` AS g ON g.id = ntf.group
+					";
+			if($recordType==1){
+				$sql.=" 
+					LEFT JOIN `rms_student_payment` AS sp ON sp.id = ntf.actionId AND ntf.type = 1 AND sp.student_id = $studentId
+				";
+			}else if($recordType==2){
+				$sql.="
+					LEFT JOIN (`rms_score` AS sc JOIN rms_score_monthly AS sm on  sc.`id`=sm.`score_id`) ON sc.id = ntf.actionId AND ntf.type = 2 AND sc.status = 1 AND sm.student_id = $studentId
+				";
+			}
+					
+			$sql.="	WHERE  ntf_d.lang = $currentLang 
+					AND ntf.id = $notificationId
+			";
+			$sql.=" LIMIT 1 ";
+
+			$row = $db->fetchRow($sql);
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+				);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
     }
 }

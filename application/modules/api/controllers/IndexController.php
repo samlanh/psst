@@ -114,8 +114,11 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->newsDetailAction($GetData);
 			}else if ($GetData['url']=="unread"){
     			$_dbAction->unreadAction($GetData);
+				
 			}else if ($GetData['url']=="mobileNotify"){ //2023-03-18
     			$_dbAction->mobileNotifyAction($GetData);
+			}else if ($GetData['url']=="mobileNotifyDetail"){
+    			$_dbAction->mobileNotificationDetailAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
@@ -135,6 +138,11 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->newsReadAction($postData);
 				}else if ($GetData['url']=="notificationRead"){
     				$_dbAction->notificationReadAction($postData);
+					
+				}else if ($GetData['url']=="setReadNotification"){
+    				$_dbAction->setReadNotificationAction($postData);
+				}else if ($GetData['url']=="removeTokenApp"){
+    				$_dbAction->removeTokenAction($postData);
     			}
     			else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);

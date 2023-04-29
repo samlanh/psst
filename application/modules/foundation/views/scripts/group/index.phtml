@@ -133,6 +133,7 @@ function getallGrade(){
 	$(function(){
 		$.contextMenu({
 			selector: '.context-menu-one', 
+			selectableSubMenu:true,
 			callback: function(key, options) {
 				var m = "clicked: " + key;
 				if(key=="edit"){
@@ -180,16 +181,35 @@ function getallGrade(){
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
-				"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
-				"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
-				"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-				"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-				"rpt-resultbysemester": {name: "<?php echo $tr->translate("RESULT_SEMESTER1");?>", icon: "fa-file-text-o"},
-				"rpt-semester2": {name: "<?php echo $tr->translate("RESULT_SEMESTER2");?>", icon: "fa-file-text-o"},
-				"scoreyear": {name: "<?php echo $tr->translate("YEARLY_EXAM");?>", icon: "fa-file-text-o"},
-				"outstandingsem1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
-				"outstandingsem2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
-				"outstandingyear": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
+				
+				"list": {
+	                "name": "<?php echo $tr->translate("LIST");?>", 
+	                icon: "fa-file-text-o",
+	                "items": {
+	                	"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
+	    				"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
+	    				"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+	    				"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+	                }
+	            },
+				"outstandingsem": {
+	                "name": "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", 
+	                icon: "fa-file-text-o",
+	                "items": {
+	                	"outstandingsem1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
+	    				"outstandingsem2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
+	    				"outstandingyear": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
+	                }
+	            },
+				"result": {
+	                "name": "<?php echo $tr->translate("RESULT");?>", 
+	                icon: "fa-file-text-o",
+	                "items": {
+	                    "rpt-resultbysemester": {"name": "<?php echo $tr->translate("RESULT_SEMESTER1");?>",icon: "fa-file-text-o"},
+	                    "rpt-semester2": {"name": "<?php echo $tr->translate("RESULT_SEMESTER2");?>",icon: "fa-file-text-o"},
+	                    "scoreyear": {"name": "<?php echo $tr->translate("YEARLY_EXAM");?>",icon: "fa-file-text-o"}
+	                }
+	            },
 			}
 		});
 	});

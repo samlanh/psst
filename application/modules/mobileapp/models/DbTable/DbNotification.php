@@ -48,17 +48,104 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
       	$db = $this->getAdapter();
         $db->beginTransaction();
         try{
+			
+			$arr=array(
+            		'opt_notification' => $data['opt_notification'],
+            		'degree' => empty($data['degree'])?"":$data['degree'],
+            		'group' => empty($data['group'])?"":$data['group'],
+            		'student' => empty($data['student'])?"":$data['student'],
+                  	'date'=>$data['public_date'],
+					'modify_date'=>date("Y-m-d H:i:s"),
+					'user_id'=>$this->getUserId(),
+            );
+            $dbglobal = new Application_Model_DbTable_DbGlobal();
+            $lang = $dbglobal->getLaguage();
+        	 if (!empty($data['id'])){
+				$notificationId = $data['id'];
+        	 	$arr['status']= $data['status'];
+        	 	$where=" id=".$data['id'];
+        	 	$this->_name="mobile_notice";
+        	 	$this->update($arr, $where);
+        	 	$article_id =$data['id'];
+        	 	 
+        	 	if(!empty($lang)){
+        	 		$iddetail="";
+        	 		foreach($lang as $row){
+        	 			$title = str_replace(' ','',$row['title']);
+        	 			if (empty($iddetail)){
+        	 				if (!empty($data['iddetail'.$title])){
+        	 					$iddetail=$data['iddetail'.$title];
+        	 				}
+        	 			}
+        	 			else{
+        	 				if (!empty($data['iddetail'.$title])){
+        	 					$iddetail=$iddetail.",".$data['iddetail'.$title];
+        	 				}
+        	 			}
+        	 		}
+        	 		$this->_name="mobile_notice_detail";
+        	 		$where1=" notification_id=".$data['id'];
+        	 		if (!empty($iddetail)){
+        	 			$where1.=" AND id NOT IN (".$iddetail.")";
+        	 		}
+        	 		$this->delete($where1);
+        	 			
+        	 		foreach($lang as $row){
+        	 			$title = str_replace(' ','',$row['title']);
+        	 			if (!empty($data['iddetail'.$title])){
+        	 				$arr_article = array(
+        	 						'notification_id'=>$article_id,
+        	 						'title'=>$data['title'.$title],
+        	 						'description'=>$data['description'.$title],
+        	 						'lang'=>$row['id'],
+        	 				);
+        	 				$this->_name="mobile_notice_detail";
+        	 				$wheredetail=" notification_id=".$data['id']." AND id=".$data['iddetail'.$title];
+        	 				$this->update($arr_article,$wheredetail);
+        	 			}else{
+        	 				$arr_article = array(
+        	 						'notification_id'=>$article_id,
+        	 						'title'=>$data['title'.$title],
+        	 						'description'=>$data['description'.$title],
+        	 						'lang'=>$row['id'],
+        	 				);
+        	 				$this->_name="mobile_notice_detail";
+        	 				$this->insert($arr_article);
+        	 			}
+        	 		}
+        	 	}
+        	 }else{
+        	 	$this->_name="mobile_notice";
+        	 	$arr['create_date']= date("Y-m-d H:i:s");
+        	 	$arr['status']= 1;
+        	 	$article_id = $this->insert($arr);
+				$notificationId = $article_id;
+				
+        	 	if(!empty($lang)) foreach($lang as $row){
+        	 		$title = str_replace(' ','',$row['title']);
+        	 		$arr_article = array(
+        	 				'notification_id'=>$article_id,
+        	 				'title'=>$data['title'.$title],
+        	 				'description'=>$data['description'.$title],
+        	 				'lang'=>$row['id'],
+        	 		);
+        	 		$this->_name="mobile_notice_detail";
+        	 		$this->insert($arr_article);
+        	 	}
+        	 }
+			 
         	$content = array(
         		"en" =>$data['titleKhmer'],
         	);
         	
         	$data_notify = array(
+        		"notificationId" => $notificationId,
         		"title" => $data['titleKhmer'],
+        		"optNotification" => $data['opt_notification'],
         		"urlType" => 6
         	);
         	
         	$dbg = new Application_Model_DbTable_DbGlobal();
-        	
         	if($data['opt_notification']==1){//All 
 	        	$fields = array(
 	        		'app_id' => APP_ID,
@@ -143,88 +230,7 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
         	
         	
         	
-            $arr=array(
-            		'opt_notification' => $data['opt_notification'],
-            		'degree' => empty($data['degree'])?"":$data['degree'],
-            		'group' => empty($data['group'])?"":$data['group'],
-            		'student' => empty($data['student'])?"":$data['student'],
-                  	'date'=>$data['public_date'],
-					'modify_date'=>date("Y-m-d H:i:s"),
-					'user_id'=>$this->getUserId(),
-            );
-            $dbglobal = new Application_Model_DbTable_DbGlobal();
-            $lang = $dbglobal->getLaguage();
-        	 if (!empty($data['id'])){
-        	 	$arr['status']= $data['status'];
-        	 	$where=" id=".$data['id'];
-        	 	$this->_name="mobile_notice";
-        	 	$this->update($arr, $where);
-        	 	$article_id =$data['id'];
-        	 	 
-        	 	if(!empty($lang)){
-        	 		$iddetail="";
-        	 		foreach($lang as $row){
-        	 			$title = str_replace(' ','',$row['title']);
-        	 			if (empty($iddetail)){
-        	 				if (!empty($data['iddetail'.$title])){
-        	 					$iddetail=$data['iddetail'.$title];
-        	 				}
-        	 			}
-        	 			else{
-        	 				if (!empty($data['iddetail'.$title])){
-        	 					$iddetail=$iddetail.",".$data['iddetail'.$title];
-        	 				}
-        	 			}
-        	 		}
-        	 		$this->_name="mobile_notice_detail";
-        	 		$where1=" notification_id=".$data['id'];
-        	 		if (!empty($iddetail)){
-        	 			$where1.=" AND id NOT IN (".$iddetail.")";
-        	 		}
-        	 		$this->delete($where1);
-        	 			
-        	 		foreach($lang as $row){
-        	 			$title = str_replace(' ','',$row['title']);
-        	 			if (!empty($data['iddetail'.$title])){
-        	 				$arr_article = array(
-        	 						'notification_id'=>$article_id,
-        	 						'title'=>$data['title'.$title],
-        	 						'description'=>$data['description'.$title],
-        	 						'lang'=>$row['id'],
-        	 				);
-        	 				$this->_name="mobile_notice_detail";
-        	 				$wheredetail=" notification_id=".$data['id']." AND id=".$data['iddetail'.$title];
-        	 				$this->update($arr_article,$wheredetail);
-        	 			}else{
-        	 				$arr_article = array(
-        	 						'notification_id'=>$article_id,
-        	 						'title'=>$data['title'.$title],
-        	 						'description'=>$data['description'.$title],
-        	 						'lang'=>$row['id'],
-        	 				);
-        	 				$this->_name="mobile_notice_detail";
-        	 				$this->insert($arr_article);
-        	 			}
-        	 		}
-        	 	}
-        	 }else{
-        	 	$this->_name="mobile_notice";
-        	 	$arr['create_date']= date("Y-m-d H:i:s");
-        	 	$arr['status']= 1;
-        	 	$article_id = $this->insert($arr);
-        	 
-        	 	if(!empty($lang)) foreach($lang as $row){
-        	 		$title = str_replace(' ','',$row['title']);
-        	 		$arr_article = array(
-        	 				'notification_id'=>$article_id,
-        	 				'title'=>$data['title'.$title],
-        	 				'description'=>$data['description'.$title],
-        	 				'lang'=>$row['id'],
-        	 		);
-        	 		$this->_name="mobile_notice_detail";
-        	 		$this->insert($arr_article);
-        	 	}
-        	 }
+            
             $db->commit();
             
         }catch(exception $e){

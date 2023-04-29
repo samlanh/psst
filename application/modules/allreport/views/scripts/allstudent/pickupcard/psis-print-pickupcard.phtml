@@ -2,8 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$type=PICKUP_TYPE;  // tyep=1 for ELT , type=2 for good will 
-	
-// 	print_r($this->groupByBranchAndSchool);exit();
 ?>	
 <title><?php echo $tr->translate("Pickup Card Selected")?></title>
 <script type="text/javascript">
@@ -23,7 +21,7 @@ function getKHMonthByNumber(m){
 		"ធ្នូ",
 		];
 		return (monthName[m-1]);
-}	//     class="dijitHidden"		data-dojo-type="dijit.Dialog"
+}	
 </script>
 <div class="dijitHidden" style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
@@ -41,7 +39,6 @@ function getKHMonthByNumber(m){
 						height:10.3cm; 	
 					}
 					<?php 
-// 					print_r($this->groupByBranchAndSchool);
 					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
 						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
@@ -89,6 +86,10 @@ function getKHMonthByNumber(m){
 					text-align: left;
 					font-weight: bold;
 				}
+					@page {
+					  size:A4 landscape;
+					  margin:0;
+					}
 				</style>
 			<?php 			
 				$i=0;$margin_work = 2;

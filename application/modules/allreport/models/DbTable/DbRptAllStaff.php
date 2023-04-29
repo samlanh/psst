@@ -35,7 +35,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=24 AND v.key_code=g.teacher_type LIMIT 1 ) AS teacher_type,
 			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree,
 			    	(SELECT v.$label FROM rms_view AS v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality,
-			    	(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name
+			    	(SELECT dept.depart_nameen FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS dept_name,
 					(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName
     			FROM 
     				rms_teacher AS g 
@@ -72,7 +72,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.= $dbp->getAccessPermission('g.branch_id');
-    	//echo $sql.$where.$order_by;//exit();
+//     	echo $sql.$where.$order_by;exit();
     	return $db->fetchAll($sql.$where.$order_by);
     }
 	function getAllTeacher($search){

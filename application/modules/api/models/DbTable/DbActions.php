@@ -11,6 +11,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 				if(!empty($row['value'])){
 					$row['value']['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
 					$row['value']['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
+					$row['value']['currentStudentId'] = empty($_data['currentStudentId'])?0:$_data['currentStudentId'];
 					$token = $db->generateToken($row['value']);
 					
 					$arrResult = array(
@@ -1145,10 +1146,100 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$db = new Api_Model_DbTable_DbApi();
 		$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['isCounting'] = empty($search['isCounting'])?0:$search['isCounting'];
 		$row = $db->getAllMobileNotification($search);
+		$result = $row['value'];
+		if(!empty($search['isCounting'])){
+			$result = count($row['value']);
+		}
 		if ($row['status']){
 			$arrResult = array(
-					"result" => $row['value'],
+					"result" => $result,
+					"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function setReadNotificationAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			$search['readType'] = empty($search['readType'])?"markAllRead":$search['readType'];
+			$search['recordType'] = empty($search['recordType'])?"0":$search['recordType'];
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->setReadNotification($search);
+			if ($row['status']){
+				$arrResult = array(
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function removeTokenAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->removeAppTokenId($search);
+			if ($row['status']){
+				$arrResult = array(
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function mobileNotificationDetailAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['notificationId'] = empty($search['notificationId'])?0:$search['notificationId'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		
+		$row = $db->getMobileNotificationDetail($search);
+		$result = $row['value'];
+		
+		if ($row['status']){
+			$arrResult = array(
+					"result" => $result,
 					"code" => "SUCCESS",
 			);
 		}else{

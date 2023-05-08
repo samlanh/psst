@@ -155,7 +155,11 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			
 			$order= ' ORDER BY s.stu_khname ASC ';
 			if ($stuOrderBy==1){
-			$order= " ORDER BY CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ASC ";
+				$order= " ORDER By  `s`.`stu_code` ASC ";
+			}elseif($stuOrderBy==2){
+				$order= ' ORDER BY s.stu_khname ASC ';
+			}elseif($stuOrderBy==3){
+				$order= " ORDER BY CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ASC ";
 			}
 			
 			$dbp = new Application_Model_DbTable_DbGlobal();

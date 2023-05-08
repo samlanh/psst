@@ -27,6 +27,8 @@
 	$amount_day = $amount_day + 1;
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 	$day = array("Mon"=>"ចន្ទ","Tue"=>"អង្គ","Wed"=>"ពុធ","Thu"=>"ព្រហ","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
+
+	//print_r($this->rs );
 ?>	
 <div class="reportblog">
 	<div class="card-box">
@@ -74,8 +76,11 @@
             <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
-					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
-					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("DEFAULT");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+					<option value="2" <?php if($stuOrderBy==2){echo "selected";}?>><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+					<option value="3" <?php if($stuOrderBy==3){echo "selected";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+					
 				</select>
             </div>
              <div class="col-md-3 col-sm-3 col-xs-12">
@@ -145,7 +150,7 @@
 					<table width="100%" border="0" >
 						<tr>
 							<td>
-								Attendance sheet for : <?php echo $this->rr['grade']?>
+								<?php echo $tr->translate("ATTENDANCE_SHEET_FOR");?> : <?php echo $this->rr['grade']?>
 							</td>
 						</tr>
 						<tr>		
@@ -200,7 +205,7 @@
 								<td colspan="5"><?php echo $tr->translate("Weekday");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
 								<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
-									<td class=""><div><span><?php if($lang==1){echo $day[date("D",strtotime($date))];}else{echo date("D",strtotime($date));}?></span></div></td>
+									<td class=""><div><span><?php if($lang==1){echo $day[date("D",strtotime($date))].'/'.date("D",strtotime($date));}else{echo date("D",strtotime($date));}?></span></div></td>
 								<?php }?>
 							<?php }?>
 							</tr>
@@ -221,7 +226,7 @@
 						<tr style="font-size:12px;height: 23px;"​ align="left">
 							<td><?php echo $i;?></td>
 							<td><?php echo $row['stu_code'];?></td>
-							<td align="left"><?php echo ($lang_id==1)?$row['kh_name']:$row['en_name'];?></td>
+							<td align="left"><?php echo ($lang_id==1)?$row['kh_name']:$row['fullName'];?></td>
 							<td><?php 
 								if($lang_id==2){
 									echo $gender[$row['gender']];

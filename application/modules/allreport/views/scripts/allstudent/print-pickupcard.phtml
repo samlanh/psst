@@ -4,29 +4,9 @@
 	$type=PICKUP_TYPE;  // tyep=1 for ELT , type=2 for good will 
 ?>	
 <title><?php echo $tr->translate("Pickup Card Selected")?></title>
-<script type="text/javascript">
-function getKHMonthByNumber(m){
-	var monthName=[
-		"មករា",
-		"កុម្ភៈ",
-		"មីនា",
-		"មេសា",
-		"ឧសភា",
-		"មិថុនា",
-		"កក្កដា",
-		"សីហា",
-		"កញ្ញា",
-		"តុលា",
-		"វិច្ឆិកា",
-		"ធ្នូ",
-		];
-		return (monthName[m-1]);
-}	
-</script>
 <div class="dijitHidden" style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
 		<div id="PickupCard" style="margin: 0 auto;width:100%;" >
-			<?php if($type==1){ // type=1 for ELT format   ?>
 				<style>
 					.card-content-student-printpickup{
 						background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
@@ -39,10 +19,14 @@ function getKHMonthByNumber(m){
 						height:10.3cm; 	
 					}
 					<?php 
+					$expiredDate = '';
+					print_r($this->groupByBranchAndSchool);
 					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
 						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
+						
 						if(!empty($bgpick['background'])){
+							$expiredDate = $bgpick['validate'];
 							if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
 							$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
 							}
@@ -52,8 +36,8 @@ function getKHMonthByNumber(m){
 						background-image: url('<?php echo $imagepick;?>');
 						background-size: 100%;background-repeat: no-repeat;					
 					}
-					<?php }?>
-.profile-card-block .student-photo {
+				<?php }?>
+				.profile-card-block .student-photo {
 					position: absolute;
 					top: 119px;
 					left: 34px;
@@ -90,16 +74,25 @@ function getKHMonthByNumber(m){
 					  size:A4 landscape;
 					  margin:0;
 					}
+						.expired_bg{
+							position: absolute;
+						    left: 50%;
+						    bottom: 16px;
+						    width: 200px;
+							transform:translate(-50%,0%);
+						}
+							.lblexpired{color:#f01a1a;font-weight: bold;}
 				</style>
 			<?php 			
-				$i=0;$margin_work = 2;
+				$i=0;
 				if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
 				<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 					<?php 
 						$image = $this->baseUrl().'/images/no-profile.png';
+						
 						if(!empty($row['photo'])){
 							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+								$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 							}
 							
 						}
@@ -112,277 +105,56 @@ function getKHMonthByNumber(m){
 						}
 						?>
 					<div class="profile-card-block">
-					<div class="student-photo">
-						<?php 
-							$image = "";//$this->baseUrl().'/images/no-profile.png';
-							if(!empty($row['photo'])){
-								if (file_exists(PUBLIC_PATH."/images/".$row['photo'])){
-								$image = $this->baseUrl().'/images/'.$row['photo'];
-								}
-							}
-						?>
-						<img class="photo-size" <?php if(!empty($image)){echo 'src="'.$image.'"';}?>>
-					</div>
-					<div class="stu_code_label" >
-						<?php echo $row['stu_code']; ?> <br/>
-						<?php echo $row['stu_khname']; ?> <br/>
-						<?php echo $row['group_name']; ?> <br/>
-						<?php echo $row['stu_enname']; ?> <br/>
-						<?php echo $row['group_name']; ?> <br/>
-					</div>
-				</div>
-				<div class="parent-card-block">
-					<?php 
-						 $father_photo = "";
-						 if (!empty($row['father_photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['father_photo'])){
-								$father_photo = $this->baseUrl().'/images/photo/'.$row['father_photo'];
-							}
-						 }
-						 //$mother_photo = $this->baseUrl().'/images/no-profile.png';
-						 $mother_photo = "";
-						 if (!empty($row['mother_photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['mother_photo'])){
-								$mother_photo = $this->baseUrl().'/images/photo/'.$row['mother_photo'];
-							}
-						 }
-						 $guardian_photo = "";
-						 if (!empty($row['guardian_photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['guardian_photo'])){
-								$guardian_photo = $this->baseUrl().'/images/photo/'.$row['guardian_photo'];
-							}
-						 }
-					?>
-					<div class="father-photo">
-						<img class="photo-size" <?php if(!empty($father_photo)){echo 'src="'.$father_photo.'"';}?> >
-					</div>
-					<div class="mother-photo">
-						<img class="photo-size" <?php if(!empty($mother_photo)){echo 'src="'.$mother_photo.'"';}?> >
-					</div>
-					<div class="guardian-photo">
-						<img class="photo-size" <?php if(!empty($guardian_photo)){echo 'src="'.$guardian_photo.'"';}?> >
-					</div>
-				</div>
-				</div>
-			<?php }}}else if($type==2){ // type=2 for GoodWill format  ?>
-				<style>
-					.card-content-student-printpickup{
-						background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
-						background-size: 100%;background-repeat: no-repeat;	
-						position: relative;			
-						display:inline-block;	
-						float:left;					
-						border:solid 1px #eee;
-						width: 14.5cm; 
-						height:10.3cm; 	
-					}
-					<?php $issue="";$validate="";if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
-						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
-						if(!empty($bgpick['background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
-								$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
-							}
-							$issue=$bgpick['issue'];
-							$validate=$bgpick['validate'];
-						}
-						?>
-					.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
-						background-image: url('<?php echo $imagepick;?>');
-						background-size: 100%;background-repeat: no-repeat;					
-					}
-					<?php }?>
-					.session-block {
-						font-family: Century Gothic,'Khmer OS Battambang';
-						position: absolute;
-						top: 14.3%;
-						left: 115px;
-						color: #fff;
-						font-weight:bold;
-						font-size:13px;
-					}
-					.student-block {
-						font-family: Arial,'Khmer OS Battambang';
-						position: absolute;
-						top: 22.7%;
-						left: 152px;
-						color: #0a074d;
-						font-size:15px;
-						text-align:left;
-						line-height: 19px;
-					}
-					.father-block {
-						font-family: Arial,'Khmer OS Battambang';
-						position: absolute;
-						top: 43.2%;
-						left: 152px;
-						color: #0a074d;
-						font-size:15px;
-						text-align:left;
-						line-height: 19px;
-					}
-					.mother-block {
-						font-family: Arial,'Khmer OS Battambang';
-						position: absolute;
-						top: 63.5%;
-						left: 152px;
-						color: #0a074d;
-						font-size:15px;
-						text-align:left;
-						line-height: 19px;
-					}
-					.teacher-block {
-						font-family: Century Gothic , 'Khmer OS Battambang';
-						position: absolute;
-						top: 81.3%;
-						left: 155px;
-						color: #fff;
-						font-weight:bold;
-						font-size:14px;
-						text-align:left;
-					}
-					.date-block {
-						font-family: Century Gothic , 'Khmer OS Battambang';
-						position: absolute;
-						top: 88%;
-						left: 155px;
-						color: #1a1754;
-						font-size:14px;
-						text-align:left;
-					}
-					
-					.profile-card-block {
-						position: relative;
-					}
-					.profile-card-block .photo {
-						width: initial;
-						position: absolute;
-						top: 75px;
-						left: 3% !important;
-						border: solid 1px #4a4a4a;
-					}
-					.photo img {
-						min-width: 65px;
-						min-height: 70px;
-						max-width: 65px;
-						max-height: 70px;
-					}
-					.profile-card-block .stu_code {
-						text-align:center;
-						min-width: 70.7px;
-						position: absolute;
-						top: 106px;
-						left: 46% !important;
-						font-weight:bold;
-						font-size:15px;
-						color:#000;
-					}
-					.guardian-card-block .photo {
-						width: initial;
-						position: absolute;
-						top: 152px;
-						left: 3% !important;
-						border: solid 1px #4a4a4a;
-					}
-					.guardian-card-block .photo.pho1 {
-						left: 3% !important;
-						top: 229px;
-					}
-				</style>
-			<?php 			
-				$i=0;$margin_work = 3;
-				if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
-				<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1 || $key==2){ echo "margin-top:0px;";}else{ echo "margin-top:4px;";} ?> width:7.3cm;height:9.99cm;line-height: 16.285px;margin-right:10px;color: #3f3f95;font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-					<?php 
-						$image = "";//$this->baseUrl().'/images/no-profile.png';
-						if(!empty($row['photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
-							}
-							
-						}
-						$stuname = $row['last_name']." ".$row['stu_enname'];
-						$bgge = $_dbgb->getPickupCardBackground($row['branch_id'],$row['schoolOption']);
-						if (!empty($bgge)){
-							if ($bgge['display_by']==2){
-								$stuname = $row['stu_khname'];
-							}
-						}
-						?>
-					<div class="session-block">
-						<?php echo $row['session']." Class";?>
-					</div>
-					<div class="student-block">
-						<?php echo $stuname;?> <br/>
-						<?php echo $row['stu_code'];?><br/>
-						<?php echo $row['grade'];?>
-					</div>
-					
-					<div class="father-block">
-						<?php echo $row['father_enname'];?> <br/>
-						<?php echo $row['father_phone'];?><br/>
-						<?php if(!empty($row['father_enname'])){echo "Father";}?>
-					</div>
-					
-					<div class="mother-block">
-						<?php echo $row['mother_enname'];?> <br/>
-						<?php echo $row['mother_phone'];?><br/>
-						<?php if(!empty($row['mother_enname'])){echo "Mother";}?>
-					</div>
-					<div class="teacher-block">
-						<?php echo $row['teacher_name'];?> <br/>
-					</div>
-					<div class="date-block">
-						<?php echo date("d-m-Y",strtotime($issue));?> <br/>
-						<?php echo date("d-m-Y",strtotime($validate));?> 
-					</div>
-					
-					<div class="profile-card-block">
-						<div class="photo">
-							<img  src="<?php echo $image;?>"  >
+						<div class="student-photo">
+							<img class="photo-size" <?php if(!empty($image)){echo 'src="'.$image.'"';}?>>
+						</div>
+						<div class="stu_code_label" >
+							<?php echo $row['stu_code']; ?> <br/>
+							<?php echo $row['stu_khname']; ?> <br/>
+							<?php echo $row['group_name']; ?> <br/>
+							<?php echo $row['stu_enname']; ?> <br/>
+							<?php echo $row['group_name']; ?> <br/>
 						</div>
 					</div>
-					<div class="guardian-card-block">
+					<div class="parent-card-block">
 						<?php 
-							$guardian_photo = "";//$this->baseUrl().'/images/no-profile.png';
-							 if (!empty($row['guardian_photo'])){
-								if (file_exists(PUBLIC_PATH."/images/photo/".$row['guardian_photo'])){
-									$guardian_photo = $this->baseUrl().'/images/photo/'.$row['guardian_photo'];
-								}
-							 }
-							 $father_photo = "";//$this->baseUrl().'/images/no-profile.png';
+							 $father_photo = "";
 							 if (!empty($row['father_photo'])){
 								if (file_exists(PUBLIC_PATH."/images/photo/".$row['father_photo'])){
 									$father_photo = $this->baseUrl().'/images/photo/'.$row['father_photo'];
 								}
 							 }
-							 $mother_photo = "";//$this->baseUrl().'/images/no-profile.png';
+							 //$mother_photo = $this->baseUrl().'/images/no-profile.png';
+							 $mother_photo = "";
 							 if (!empty($row['mother_photo'])){
 								if (file_exists(PUBLIC_PATH."/images/photo/".$row['mother_photo'])){
 									$mother_photo = $this->baseUrl().'/images/photo/'.$row['mother_photo'];
 								}
 							 }
+							 $guardian_photo = "";
+							 if (!empty($row['guardian_photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['guardian_photo'])){
+									$guardian_photo = $this->baseUrl().'/images/photo/'.$row['guardian_photo'];
+								}
+							 }
 						?>
-						<?php /* if(!empty($row['guardian_photo'])){ ?>
-						<div class="photo">
-							<img  src="<?php echo $guardian_photo;?>" alt="profile-image" >
+						<div class="father-photo">
+							<img class="photo-size" <?php if(!empty($father_photo)){echo 'src="'.$father_photo.'"';}?> >
 						</div>
-						<?php }else{?>
-						<div class="photo">
-							<img  src="<?php echo $father_photo;?>" alt="profile-image" >
+						<div class="mother-photo">
+							<img class="photo-size" <?php if(!empty($mother_photo)){echo 'src="'.$mother_photo.'"';}?> >
 						</div>
-						<?php }*/?>
-						
-						<div class="photo">
-							<img  src="<?php echo $father_photo;?>"  >
+						<div class="guardian-photo">
+							<img class="photo-size" <?php if(!empty($guardian_photo)){echo 'src="'.$guardian_photo.'"';}?> >
 						</div>
-						
-						<div class="photo pho1">
-							<img  src="<?php echo $mother_photo;?>"   >
+					</div>
+					<div class="expired_bg">
+						<div class="lblexpired">
+							Expiration Date: <?php echo date($expiredDate,strtotime("d-m-Y"));?>
 						</div>
 					</div>
 				</div>
-			<?php }}}?>
+			<?php }}?>
 		</div>
 		<table width="100%">
 			<tr>
@@ -418,13 +190,8 @@ function getKHMonthByNumber(m){
 	        window.frames["frame1"].print();
 	        document.body.removeChild(frame1);
 	        HideloadingBlock();
-			<?php 
-				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
-			?>
-			window.location.href = '<?php echo $url_copy;?>';
-	    }, 10000);
+			window.close();
+	    }, 5000);
 	   return false;
 	}
 </script>

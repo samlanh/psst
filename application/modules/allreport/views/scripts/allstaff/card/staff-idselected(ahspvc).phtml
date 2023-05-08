@@ -208,7 +208,7 @@
 							<span class="stuInfo stuAcademic">&nbsp;</span>
 						</div>
 					<?php  
-					$QrCodeValue ='http://ahs.cam-app.com/ahs.25.12.20/public/info/staffinfo/token/'.$row['teacher_code'];
+					$QrCodeValue =URL_STUDENT_PROFILE.'/public/info/staffinfo/token/'.$row['teacher_code'];
 					
 					$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr"),null,true);
 					$url.='?codeReader='.$QrCodeValue;

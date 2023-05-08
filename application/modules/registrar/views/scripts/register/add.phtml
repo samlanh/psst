@@ -882,9 +882,9 @@ function getMonthByNumber(m){
 		?>
 		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
-			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+			<button dojoType="dijit.form.Button" class="button-class button-danger"  iconClass="glyphicon glyphicon-repeat"
 				type="button" onclick="hideDialog();">Cancel</button>
-			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+			<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"
 				type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>
@@ -899,9 +899,9 @@ function getMonthByNumber(m){
 			</tr>
 			<tr>
 				<td align="center">
-					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+					<button dojoType="dijit.form.Button" class="button-class button-danger"  iconClass="glyphicon glyphicon-repeat"
 						type="button" onclick="hideDialog1();"><?php echo $tr->translate("NO");?></button>
-					<button id="comfirmSavePrint" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					<button id="comfirmSavePrint" dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"
 						type="button" onclick="printSubmit()"><?php echo $tr->translate("YES");?></button>
 				</td>
 			</tr>

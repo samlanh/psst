@@ -185,22 +185,20 @@ tbody#table_row tr {
 			</div>
 		</div>
 	</div>
-	<table width="100%" style="margin-top:20px;">
+	<br />
+	<table style="margin:0 auto;padding-top:20px;border-spacing: 30px">
 		<tr>
 			<td align="center">
 				<button dojoType="dijit.form.Button" id="printselected"
 				class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 					type="button" onclick="printSelected('');"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
 			</td>
-		</tr>
-		<tr>
 			<td align="center">
-				<button dojoType="dijit.form.Button" id="printselectedTray"
-				class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+				&nbsp;<button dojoType="dijit.form.Button" id="printselectedTray"
+					class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 					type="button" onclick="printSelectedTray('');"><?php echo $tr->translate("SINGLE_IDPRINT_TRAY");?></button>
+				&nbsp;
 			</td>
-		</tr>
-		<tr>
 			<td align="center">
 				<button dojoType="dijit.form.Button" id="printpickupselected" 
 				class="button-class button-primary" iconClass="glyphicon glyphicon-print"

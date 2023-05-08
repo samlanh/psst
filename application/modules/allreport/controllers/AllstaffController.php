@@ -14,7 +14,6 @@ public function init()
 	
 	public function staffIdselectedAction(){
 		$id=$this->getRequest()->getParam('id');
-		//print_r($id);
 		$k = 0;
 		$condition = '';
 		$ids = explode(',', $id);

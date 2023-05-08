@@ -428,7 +428,6 @@ class Application_Form_FrmGlobal{
 					table{ border-collapse:collapse; margin:0 auto;
 								border-color:#000;font-size:12px; }
 					@page {
-					  /* Chrome sets own margins, we change these printer settings */
 					  margin:0.5cm 1cm 0.3cm 1cm; '
 					   page-break-before: avoid;
 					   /*size: 21cm 14.8cm; */
@@ -910,6 +909,7 @@ class Application_Form_FrmGlobal{
 							-ms-transform: scale(0.5);   /* IE 9 */
 							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
 							transform: scale(0.5);
+							size:A5 landscape;
 						}
 						#page {
 						   border-collapse: collapse;

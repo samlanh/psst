@@ -37,6 +37,8 @@ defined('TIEM_IS_MANUAL') || define('TIEM_IS_MANUAL', 1);//0=static 1= manual cu
 defined('FEATURE_SCAN_CALLOUT') || define('FEATURE_SCAN_CALLOUT', 1);//0=Disable Feature, 1= Enable Feature
 defined('SCORE_RESULT_TEMPLATE') || define('SCORE_RESULT_TEMPLATE', 2);//1=for general,2=for AHS
 
+defined('URL_STUDENT_PROFILE') || define('URL_STUDENT_PROFILE', 'http:192.168.0.108/camappgit/psst');//
+
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),

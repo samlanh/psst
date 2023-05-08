@@ -3,7 +3,6 @@
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
 	$urlLink = $this->url(array("module"=>"default","controller"=>"info","action"=>"staffinfo"),null,true);
-					
 ?>	
 <div style="width:21cm !important;height:29.7cm;padding: 0px;margin:0px;">
 		<div id="divPrint1" >
@@ -30,15 +29,11 @@
 					.card-content-student-print{
 						background-image: url('<?php echo $this->baseUrl()."/images/card/default_card_bg.jpg";?>');
 						background-size: 100%;background-repeat: no-repeat;
-						/*page-break-after: always;	
-						margin-left: -212px;*/	
-						/*transform: rotateZ(-90deg);	*/
 						position: absolute;
 						top: 70.5px;		
 						
 					}
 				<?php 
-				//print_r($this->groupByType);exit();
 				if(!empty($this->groupByType)) foreach($this->groupByType as $bck){
 					$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
 					$color = "000000";
@@ -175,24 +170,25 @@
 				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ 
 					
 					$i++;
-				$imageProfile = "";
-				$imageProfile = $this->baseUrl().'/images/no-profile.png';
-				if(!empty($row['photo'])){
-					if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-						$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
+					$imageProfile = "";
+					$imageProfile = $this->baseUrl().'/images/no-profile.png';
+					if(!empty($row['photo'])){
+						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
+						}
 					}
-				}
-				$prefix="";
-				$validDate="";
-				$bg = $_dbgb->getCardBackground($row['branch_id'],2);
-				$issueDate="";
-				if (!empty($bg)){
+					$prefix="";
+					$validDate="";
+					$bg = $_dbgb->getCardBackground($row['branch_id'],2);
+					$issueDate="";
+					if (!empty($bg)){
+						
+						$prefix = $bg['card_prefix'];
+						$validDate = $bg['valid'];
+						$issueDate = $bg['issue'];
+					}
+					$classPartBlock="blogCard".$i;
 					
-					$prefix = $bg['card_prefix'];
-					$validDate = $bg['valid'];
-					$issueDate = $bg['issue'];
-				}
-				$classPartBlock="blogCard".$i;
 				?>
 					<div class="card-content-student-print card-content-student-print<?php //echo $dep;?> <?php echo $classPartBlock;?>" style=" display:block;line-height: 16.285px; width: 319px;height: 202px; color: #000000;font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';">
 						<div class="profile-card-block">
@@ -208,10 +204,9 @@
 							<span class="stuInfo stuAcademic">&nbsp;</span>
 						</div>
 					<?php  
-					$QrCodeValue ='http://ahs.cam-app.com/ahs.25.12.20/public/info/staffinfo/token/'.$row['teacher_code'];
-					
-					$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr"),null,true);
-					$url.='?codeReader='.$QrCodeValue;
+						$QrCodeValue = URL_STUDENT_PROFILE.'/public/info/staffinfo/token/'.$row['teacher_code'];
+						$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr"),null,true);
+						$url.='?codeReader='.$QrCodeValue;
 					?>
 						<div class="foot-left-block">
 							<div class="qrimages">
@@ -265,14 +260,8 @@
 					.backcard-content-student-print{
 						background-image: url('<?php echo $this->baseUrl()."/images/card/default_card_bg.jpg";?>');
 						background-size: 100%;background-repeat: no-repeat;
-						/*page-break-after: always;	
-						margin-left: -212px;*/	
-						/*transform: rotateZ(-90deg);	*/
 						position: absolute;
 						top: 70.5px;	
-						 
-						
-						
 					}
 				<?php 
 				if(!empty($this->groupByType)) foreach($this->groupByType as $bck){

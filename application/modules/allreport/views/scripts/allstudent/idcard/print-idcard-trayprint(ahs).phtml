@@ -230,7 +230,7 @@ function getKHMonthByNumber(m){
 							<span class="stuInfo stuAcademic"><?php echo $row['academic_year'];?></span>
 						</div>
 					<?php  
-						$QrCodeValue ='http://ahs.cam-app.com/ahs.25.12.20/public/info/studentinfo/token/'.$row['studentToken'];
+						$QrCodeValue =URL_STUDENT_PROFILE.'/public/info/studentinfo/token/'.$row['studentToken'];
 						$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr"),null,true);
 						$url.='?codeReader='.$QrCodeValue;
 					?>

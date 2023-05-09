@@ -817,6 +817,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'teacher' 		=> 0,
 					'subject' 		=> 0,
 					'showsign'		=> 1,
+					'group'        =>'',
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
@@ -831,6 +832,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
 	
 		$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}

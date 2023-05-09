@@ -700,7 +700,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$to_date = (empty($search['end_date']))? '1': "gds.date <= '".$search['end_date']." 23:59:59'";
     	$where .=" AND ".$to_date;
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	
     	$order="  ORDER BY gds.academic_year DESC,gds.degree ASC,gds.grade DESC,gds.session ASC ";
     	if(empty($search)){
@@ -731,7 +731,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			$where.=' AND degree='.$search['degree'];
     	}
     	if(($search['branch_id'])>0){
-    		$where.=' AND branch_id='.$search['branch_id'];
+    		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
     	if($search['study_type']!=''){
     		if($search['study_type']==0){

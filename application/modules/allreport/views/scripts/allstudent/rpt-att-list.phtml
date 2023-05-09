@@ -27,6 +27,9 @@
 	$amount_day = $amount_day + 1;
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 	$day = array("Mon"=>"ចន្ទ","Tue"=>"អង្គ","Wed"=>"ពុធ","Thu"=>"ព្រហ","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
+	$frm =  $this->form_search;
+	$classHideHeight="110px";
+	//print_r($this->rs );
 ?>	
 <div class="reportblog">
 	<div class="card-box">
@@ -40,13 +43,24 @@
     </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
-            <div class="col-md-3 col-sm-3 col-xs-12">
+
+			<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("branch_id");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("academic_year");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<input id="group" />
+        	</div>
+
+            <div class="col-md-2 col-sm-2 col-xs-12">
             	<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="<?php echo $tr->translate('SEARCH');?>....." value="<?php echo $this->datasearch['start_date'];?>" type="text">
             </div>
-             <div class="col-md-3 col-sm-3 col-xs-12">
+             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text">
             </div>
-             <div class="col-md-3 col-sm-3 col-xs-12">
+             <div class="col-md-2 col-sm-2 col-xs-12">
             	<select name="teacher" id="teacher" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setTeacherName();">
 						<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
 						<?php if($this->all_teacher_by_group){foreach ($this->all_teacher_by_group as $teacher){?>
@@ -54,7 +68,9 @@
 						<?php }}?>
 					</select>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-12">
+        </div>
+        <div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
             	<select name="subject" id="subject" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setSubjectName();">
 						<option value="0"><?php echo $tr->translate("SELECT_SUBJECT");?></option>
 						<?php if($this->all_subject_by_group){foreach ($this->all_subject_by_group as $subject){?>
@@ -62,10 +78,7 @@
 						<?php }}?>
 					</select>
             </div>
-            
-        </div>
-        <div class="form-group">
-        	 <div class="col-md-3 col-sm-3 col-xs-12">
+        	 <div class="col-md-2 col-sm-2 col-xs-12">
             	<select name="showsign" id="showsign" dojoType="dijit.form.FilteringSelect" class="fullside">
 						<option value="1" <?php if($this->datasearch['showsign']==1){echo"selected";}?>>Print Show Signature</option>
 						<option value="0" <?php if($this->datasearch['showsign']==0){echo"selected";}?>>Print Hide Signature</option>
@@ -74,8 +87,11 @@
             <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
-					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
-					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("DEFAULT");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+					<option value="2" <?php if($stuOrderBy==2){echo "selected";}?>><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+					<option value="3" <?php if($stuOrderBy==3){echo "selected";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+					
 				</select>
             </div>
              <div class="col-md-3 col-sm-3 col-xs-12">
@@ -118,6 +134,22 @@
 			font-size:12px; 
 			height: 23px;
 		}
+
+		@media print {
+			 #divPrint {
+				position: fixed;
+				top: 0;
+				width: 100%;
+				height: 100px;
+				bottom:0px;
+				margin:0;
+			 }
+			.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+		}
+		@page {
+            size:A4 landscape;
+            margin:0;
+          }
 							
 	</style>
 						
@@ -142,20 +174,20 @@
 			<?php }?>
 			<tr>
 				<td colspan="<?php echo 4+$total_day;?>">
-					<table width="100%" border="0" >
+					<table width="100%" border="0" style="font-size:14px;  font-family: 'Times New Roman','Khmer OS Battambang';"  >
 						<tr>
 							<td>
-								Attendance sheet for : <?php echo $this->rr['grade']?>
+								<?php echo $tr->translate("ATTENDANCE_SHEET_FOR");?> : <?php echo $this->rr['grade']?>
 							</td>
 						</tr>
 						<tr>		
 							<td>
-								Class report for Academic Year : <?php echo $this->rr['academic']?>
+							<?php echo $tr->translate("CLASS_REPORT_FOR_ACADEMIC_YEAR");?> : <?php echo $this->rr['academic']?>
 							</td>
 						</tr>
 						<tr>	
 							<td>
-								Room : <?php echo $this->rr['room_name']?>
+							<?php echo $tr->translate("ROOM");?> : <?php echo $this->rr['room_name']?>
 							</td>
 						</tr>
 					</table>
@@ -171,10 +203,10 @@
 									<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;font-weight: bold;line-height: 25px;">
 										<tr>
 											<td width="50%" style="border-right: 1px solid #000;">
-												Instructor : <label id="teacher_name"> </label>
+												<?php echo $tr->translate("INSTRUCTOR");?> : <label id="teacher_name"> </label>
 											</td>
 											<td width="50%">
-												Subject : <label id="subject_name"> </label>
+												<?php echo $tr->translate("SUBJECT");?> : <label id="subject_name"> </label>
 											</td>
 										</tr>
 									</table>
@@ -191,13 +223,13 @@
 							</tr>
 							<?php }?>
 							<tr class="cheader" align="center" style="background: #ccd9ff;">
-								<td colspan="5"><?php echo $tr->translate("Month");?></td>
+								<td colspan="5"><?php echo $tr->translate("MONTH");?></td>
 								<td style="background: none;" align="center" colspan="<?php echo $total_day;?>">
-									From &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;to&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
+								<?php echo $tr->translate("FROM_DATE");?> &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;<?php echo $tr->translate("TO_DATE");?>&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 								</td>
 							</tr>
 							<tr class="cheader" align="center" style="background: #ccd9ff;" >
-								<td colspan="5"><?php echo $tr->translate("Weekday");?></td>
+								<td colspan="5"><?php echo $tr->translate("WEEKDAY");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
 								<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 									<td class=""><div><span><?php if($lang==1){echo $day[date("D",strtotime($date))];}else{echo date("D",strtotime($date));}?></span></div></td>
@@ -221,7 +253,7 @@
 						<tr style="font-size:12px;height: 23px;"​ align="left">
 							<td><?php echo $i;?></td>
 							<td><?php echo $row['stu_code'];?></td>
-							<td align="left"><?php echo ($lang_id==1)?$row['kh_name']:$row['en_name'];?></td>
+							<td align="left"><?php echo ($lang_id==1)?$row['kh_name']:$row['fullName'];?></td>
 							<td><?php 
 								if($lang_id==2){
 									echo $gender[$row['gender']];
@@ -259,7 +291,73 @@
 		</table>
 	</div>
 </div>
-<script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+
+	dojo.require("dojo.html");
+	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dojo.ready(function(){
+		
+		new dijit.form.FilteringSelect({
+			store: group_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			id: "group",
+			name: "group",  
+			class: 'fullside', 
+			readonly:false,
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+			onChange: function() {  
+				
+			}
+		}, "group");
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function(evt) {
+			getAllGroupByBranch();
+		});
+		var academic_year = dijit.byId('academic_year');
+		academic_year.on('change', function(evt) {
+			getAllGroupByBranch();
+		});
+		getAllGroupByBranch();
+		
+	});
+
+
+	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+	function getAllGroupByBranch(){
+		//dijit.byId('group').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('group').set('store',group_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		academic_year = dijit.byId('academic_year').get('value');
+		if(academic_year=='' || academic_year==-1){academic_year ="";}
+		
+		dojo.xhrPost({
+			url: url_getgroup,
+			content:{
+				'branch_id':branch_id,
+				'academic_year':academic_year,
+				'noaddnew':1,
+				'forfilter':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				group_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('group').set('store',group_store);   
+			},
+			error: function(err) {
+			}
+		});
+	}
+
 	function setTeacherName(){
 		teacher = dijit.byId('teacher').attr('displayedValue');
 		dojo.byId("teacher_name").innerHTML = teacher ;	
@@ -268,4 +366,5 @@
 		subject = dijit.byId('subject').attr('displayedValue');
 		dojo.byId("subject_name").innerHTML = subject;	
 	}
+
 </script>

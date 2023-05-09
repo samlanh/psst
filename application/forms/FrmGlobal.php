@@ -194,9 +194,9 @@ class Application_Form_FrmGlobal{
 					}
 					ul.headReport li span,
 					ul.headReport li{
-						line-height: 18px;
+						line-height: 12px;
 						text-align:left; 
-						font-size:14px;
+						font-size:10px;
 						font-family:'.'"Times New Roman"'.','.'"Khmer OS Muol Light"'.';
 						
 					}

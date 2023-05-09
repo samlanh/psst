@@ -28,7 +28,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$link=array(
     			'module'=>'accounting','controller'=>'servicecate','action'=>'edit',
     	);
-    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
+    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);

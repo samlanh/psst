@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("SERVICE_TYPE"));
 	$frm = $this->frm_degree;
-	$urlCopy = $this->baseUrl()."/accounting/servicecate/copy/id/";
+	$urlDelete = $this->baseUrl()."/accounting/servicecate/delete/id/";
 	$urlEdit = $this->baseUrl()."/accounting/servicecate/edit/id/";
 ?>	
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -40,19 +40,7 @@
 	dojo.require("dijit.form.NumberTextBox");
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
-	// function copyRecord(url){
-	// 	 id = dijit.byId('recordcopy').get('value');
-	// 	 if(id!=''){
-	// 		window.location.href = url+'/id/'+id;
-	// 	 }else{
-	// 		alert('Please select record you want to copy');
-	// 		return false;
-	// 	 }
-	// }
-	// function setValue(index){
-	// 	var recordcopy = $('input[name=copy]:checked').val();
-	// 	dijit.byId('recordcopy').attr('value',recordcopy);
-	// }
+	
 	var row=0;
 	var url="";
 	$(function(){
@@ -62,14 +50,14 @@
 				var m = "clicked: " + key;
 				if(key=="edit"){
 					url='<?php echo $urlEdit;?>';
-				}else if(key=="copy"){
-					url='<?php echo $urlCopy;?>';
+				}else if(key=="delete"){
+					url='<?php echo $urlDelete;?>';
 				}
 				gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
-				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+				"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete"},
 			}
 		});
 	});

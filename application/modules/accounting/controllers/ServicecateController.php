@@ -100,4 +100,47 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
+
+	function deleteAction(){
+		
+
+		$id = $this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$row = $db->checkServiceCate($id);
+		if (!empty($row)){
+			Application_Form_FrmMessage::Sucessfull("Can not delete this record","/accounting/servicecate",2);
+			exit();
+		}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$delete_sms=$tr->translate('CONFIRM_DELETE');
+		echo "<script language='javascript'>
+		var txt;
+		var r = confirm('$delete_sms');
+		if (r == true) {";
+		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/accounting/servicecate/deleterecord/id/".$id."'";
+		echo"}";
+		echo"else {";
+		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/accounting/servicecate'";
+		echo"}
+		</script>";
+	}
+	function deleterecordAction(){
+		
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+		$action=$request->getActionName();
+		$controller=$request->getControllerName();
+		$module=$request->getModuleName();
+		
+		$id = $this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbItems();
+		try {
+				$db->deleteItem($id);
+				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS","/accounting/servicecate");
+				exit();
+			
+		}catch (Exception $e) {
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("DELETE_FAIL");
+		}
+	}
 }

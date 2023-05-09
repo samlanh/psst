@@ -4,6 +4,12 @@
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	return $_dbgb->getUserId();
     }
+	public function checkServiceCate($id){
+		$db = $this->getAdapter();
+		$sql="SELECT s.id FROM rms_itemsdetail AS s WHERE s.items_type=2 AND s.items_id=$id ORDER BY s.id DESC LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+
 	function getAllItemsDetail($search = '',$items_type=null){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();

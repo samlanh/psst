@@ -329,6 +329,14 @@
 		}
 	}
 	
+	function deleteItem($item_id){
+
+		$this->_name="rms_items";
+		$where ="id=".$item_id;
+		$this->delete($where);
+		return $item_id;
+	}
+
 	public function addItemsajax($_data,$type=null){
 		$_arr=array(
 				'title'	  => $_data['fac_enname'],

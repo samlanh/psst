@@ -333,7 +333,7 @@
 	var oldBranch = "<?php echo $this->search['branch_id']?>";
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByBranch(){
-		//dijit.byId('group').reset();
+		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
 			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );

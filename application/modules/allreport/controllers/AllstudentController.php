@@ -836,6 +836,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		$this->view->search = $search;
 
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);

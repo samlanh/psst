@@ -144,6 +144,10 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				if (!empty($id)){
 					$sql.=' AND g.group_id='.$id;
 				}
+			}else{
+				if (!empty($id)){
+					$sql.=' AND g.group_id='.$id;
+				}
 			}
 			
 			$search['study_type'] = empty($search['study_type'])?0:$search['study_type'];

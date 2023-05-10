@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate("PRODUCT"));
 	$urlCopy = $this->baseUrl()."/stock/product/copy/id/";
 	$urlEdit = $this->baseUrl()."/stock/product/edit/id/";
+	$urlDelete = $this->baseUrl()."/stock/product/delete/id/";
 	$frm =  $this->frm_items;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -72,12 +73,15 @@
 					url='<?php echo $urlEdit;?>';
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
+				}else if(key=="delete"){
+					url='<?php echo $urlDelete;?>';
 				}
 				gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+				"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete"},
 			}
 		});
 	});

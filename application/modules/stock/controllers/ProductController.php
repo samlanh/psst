@@ -157,6 +157,48 @@ class Stock_ProductController extends Zend_Controller_Action {
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
     }
+
+	function deleteAction(){
+		
+		$id = $this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$row = $db->checkProductLocation($id);
+		if (!empty($row)){
+			Application_Form_FrmMessage::Sucessfull("Can not delete this record","/stock/product",2);
+			exit();
+		}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$delete_sms=$tr->translate('CONFIRM_DELETE');
+		echo "<script language='javascript'>
+		var txt;
+		var r = confirm('$delete_sms');
+		if (r == true) {";
+		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/deleterecord/id/".$id."'";
+		echo"}";
+		echo"else {";
+		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product'";
+		echo"}
+		</script>";
+	}
+	function deleterecordAction(){
+		
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+		$action=$request->getActionName();
+		$controller=$request->getControllerName();
+		$module=$request->getModuleName();
+		
+		$id = $this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		try {
+				$db->deleteItemDetail($id);
+				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS","/stock/product");
+				exit();
+			
+		}catch (Exception $e) {
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("DELETE_FAIL");
+		}
+	}
     
     function deplicateproAction(){
     	if($this->getRequest()->isPost()){

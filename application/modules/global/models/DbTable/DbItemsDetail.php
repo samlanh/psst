@@ -239,6 +239,8 @@
 			Application_Form_FrmMessage::message("Application Error!");
 		}
 	}	
+
+
 	public function AddProduct($_data){
 		$_db= $this->getAdapter();
 		try{
@@ -402,6 +404,19 @@
 		}
 		$orderby = " ORDER BY ide.ordering ASC, ide.id DESC ";
 		return $db->fetchAll($sql.$where.$location.$orderby);
+	}
+
+	public function checkProductLocation($id){
+		$db = $this->getAdapter();
+		$sql="SELECT s.id FROM rms_product_location AS s WHERE  s.pro_id=$id ORDER BY s.id DESC LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	function deleteProduct($pro_id){
+
+		$this->_name="rms_itemsdetail";
+		$where ="id=".$pro_id;
+		$this->delete($where);
+		return $pro_id;
 	}
 	
 	function getProductLocation($id){

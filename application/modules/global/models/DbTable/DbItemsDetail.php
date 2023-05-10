@@ -22,7 +22,6 @@
 		$this->delete($where);
 		return $item_id;
 	}
-
 	function getAllItemsDetail($search = '',$items_type=null){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();

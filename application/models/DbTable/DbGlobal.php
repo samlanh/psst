@@ -951,6 +951,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
 
 	   	$sql="SELECT s.*,
+	   			DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
 	   			sgd.grade,
 	   			sgd.degree,
 	   			sgd.is_newstudent AS is_stu_new,
@@ -2118,6 +2119,7 @@ function getAllgroupStudyNotPass($action=null){
   	$str = '';
   	$studyInfo='';
   	$style='';
+  	$link = Zend_Controller_Front::getInstance()->getBaseUrl().'/home/searchstudentinfo/student-detail/id/'.$student_id;
   	/*$student_type=$tr->translate("Old Student");
   	$style="style='color:white'";
   	if($rs["is_stu_new"]==1){
@@ -2152,10 +2154,10 @@ function getAllgroupStudyNotPass($action=null){
 							           		<div class="text-center">
 							                   	<div class="member-card card-display-reg">
 							                       	<p class="text-muted info-list font-13">
-				  			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" >'.$rs["stu_code"].'</span><br />
-				  			                       		<span class="title-info">'.$tr->translate("STUDENT_NAMEKHMER").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
-				  			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
-				  			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
+				  			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" ><a target="_blank" href="'.$link.'">'.$rs["stu_code"].'</a></span><br />
+				  			                       		<span class="title-info">'.$tr->translate("STUDENT_NAMEKHMER").'</span> : <span id="lbl_namekh" class="inf-value" ><a target="_blank" href="'.$link.'">'.$rs["stu_khname"].'</a></span><br />
+				  			                       		<span class="title-info">'.$tr->translate("NAME_ENGLISH").'</span> : <span id="lbl_nameen" class="inf-value" ><a target="_blank" href="'.$link.'">'.$rs["last_name"]." ".$rs["stu_enname"].'</a></span><br />
+				  			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.$rs['dob'].'</span><br />
 				  			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
 				  			                        </p>
 				  			                      </div>
@@ -2182,7 +2184,7 @@ function getAllgroupStudyNotPass($action=null){
   			         	$studyInfo='<p class="text-muted info-list font-13">
 				             <span class="title-info">'.$tr->translate('DEGREE').'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span>
 				             <span class="title-info">'.$tr->translate('GRADE').'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span>
-				              <span class="title-info">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value"></span>
+				             <span class="title-info groupinfo">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value groupinfo">'.$rs['group_name'].'</span>
 					    </p>';
   			         	 		  
   	}

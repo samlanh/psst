@@ -652,7 +652,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher,
 					(SELECT $view FROM `rms_view` WHERE TYPE=12 AND key_code = gds.is_pass LIMIT 1) as is_pass_label,
 					gds.is_pass,
-					
 					gds.stop_type
 				FROM
 					rms_group_detail_student AS gds,

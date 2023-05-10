@@ -9,6 +9,19 @@
 		$sql="SELECT s.id FROM rms_itemsdetail AS s WHERE s.items_type=2 AND s.items_id=$id ORDER BY s.id DESC LIMIT 1";
 		return $db->fetchOne($sql);
 	}
+	public function checkService($id){
+		$db = $this->getAdapter();
+		$sql="SELECT s.id FROM rms_tuitionfee_detail AS s WHERE s.class_id=$id ORDER BY s.id DESC LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+
+	function deleteItemDetail($item_id){
+
+		$this->_name="rms_itemsdetail";
+		$where ="id=".$item_id;
+		$this->delete($where);
+		return $item_id;
+	}
 
 	function getAllItemsDetail($search = '',$items_type=null){
 		$db = $this->getAdapter();

@@ -405,7 +405,11 @@
 		$orderby = " ORDER BY ide.ordering ASC, ide.id DESC ";
 		return $db->fetchAll($sql.$where.$location.$orderby);
 	}
-
+	public function checkProductCate($id){
+		$db = $this->getAdapter();
+		$sql="SELECT s.id FROM rms_itemsdetail AS s WHERE s.items_type=3 AND s.items_id=$id ORDER BY s.id DESC LIMIT 1";
+		return $db->fetchOne($sql);
+	}
 	public function checkProductLocation($id){
 		$db = $this->getAdapter();
 		$sql="SELECT s.id FROM rms_product_location AS s WHERE  s.pro_id=$id ORDER BY s.id DESC LIMIT 1";

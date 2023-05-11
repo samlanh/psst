@@ -28,7 +28,7 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	$link=array(
     			'module'=>'stock','controller'=>'productcate','action'=>'edit',
     	);
-    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
+    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
@@ -90,4 +90,46 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
+
+	function deleteAction(){
+		
+		$id = $this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$row = $db->checkProductCate($id);
+		if (!empty($row)){
+			Application_Form_FrmMessage::Sucessfull("Can not delete this record","/stock/productcate",2);
+			exit();
+		}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$delete_sms=$tr->translate('CONFIRM_DELETE');
+		echo "<script language='javascript'>
+		var txt;
+		var r = confirm('$delete_sms');
+		if (r == true) {";
+		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/productcate/deleterecord/id/".$id."'";
+		echo"}";
+		echo"else {";
+		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/productcate'";
+		echo"}
+		</script>";
+	}
+	function deleterecordAction(){
+		
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+		$action=$request->getActionName();
+		$controller=$request->getControllerName();
+		$module=$request->getModuleName();
+		
+		$id = $this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbItems();
+		try {
+				$db->deleteItem($id);
+				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS","/stock/productcate");
+				exit();
+			
+		}catch (Exception $e) {
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("DELETE_FAIL");
+		}
+	}
 }

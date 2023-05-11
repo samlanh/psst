@@ -143,7 +143,9 @@ fieldset{  background:none;}
 												<th><?php echo $tr->translate("DEL");?></th>
 												<th><?php echo $tr->translate("N_O");?></th>
 												<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+												<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>
 												<th><?php echo $tr->translate("CURRENT_QTY");?><span class="required">*</span></th>
+												<th><?php echo $tr->translate("TOTAL_PRICE");?><span class="required">*</span></th>
 												<th><?php echo $tr->translate("NOTE");?></th>
 											</tr>
 										</table>
@@ -295,7 +297,9 @@ function getRefreshItems(){//category
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
 				temp+='<th><?php echo $tr->translate("PRODUCT_NAME");?></th>';
+				temp+='<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>';
 				temp+='<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
+				temp+='<th><?php echo $tr->translate("TOTAL_PRICE");?><span class="required">*</span></th>';
 				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 				dojo.query("#head-title").append(temp);
 				title=1;
@@ -303,7 +307,9 @@ function getRefreshItems(){//category
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
 				template+='<td><input type="hidden" dojoType="dijit.form.TextBox" value="'+product_id+'" id="product_'+col+'" name="product_'+col+'" />'+productoption+'</td>';			
+				template+='<td width="70px"><input class="fullside" type="text" required="true" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="70px"><input class="fullside" type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
+				template+='<td width="70px"><input class="fullside" type="text" required="true" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";

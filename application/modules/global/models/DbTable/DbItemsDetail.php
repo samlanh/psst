@@ -433,6 +433,30 @@
 		$location = $dbgb->getAccessPermission('pl.`branch_id`');
 		return $db->fetchAll($sql.$location);
 	}
+
+	function getProductInfoByLocation($_data = null){
+		$db = $this->getAdapter();
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbgb->currentlang();
+		if($lang=1){
+			$title = "td.title";
+		}elseif($lang=1){
+			$title = "td.title_en";
+		}
+		$sql = "SELECT td.id, $title AS product_name,
+			pl.price
+			FROM rms_itemsdetail AS td 
+			JOIN rms_product_location AS pl ON td.id = pl.pro_id AND pl.branch_id= ".$_data['branch_id'];
+
+		if (!empty($_data['product_id'])) {
+			$sql .= " WHERE td.id= " . $_data['product_id'];
+		}
+		if (!empty($_data['itemsType'])) {
+			$sql .= " AND td.items_type= " . $_data['itemsType'];
+		}
+		
+		return $db->fetchRow($sql);
+	}
 	public function updateProduct($_data){
 		$_db= $this->getAdapter();
 		try{
@@ -564,7 +588,6 @@
 					'is_onepayment' => $_data['is_onepayment'],
 					'product_type' => 1,
 					'is_productseat' => 1,
-					'price'    => $_data['price'],
 					'schoolOption'    => $schooloption,
 					'create_date' => date("Y-m-d H:i:s"),
 					'modify_date' => date("Y-m-d H:i:s"),
@@ -582,6 +605,8 @@
 							'pro_id'=>$id,
 							'subpro_id'=>$_data['product_'.$i],
 							'qty'=>$_data['qty_'.$i],
+							'price'=>$_data['sell_price_'.$i],
+							'total'=>$_data['total_'.$i],
 							'remark'=>$_data['note_'.$i],
 					);
 					$this->insert($_arrss);

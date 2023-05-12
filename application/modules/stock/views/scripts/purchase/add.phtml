@@ -80,7 +80,7 @@ span.oldsup input[type=checkbox] {
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 														<span id="new_cu">
-															<input type="text" dojoType="dijit.form.ValidationTextBox" name="supplier_name"  id="supplier_name" value="" class="fullside" required="required">
+															<input type="text" dojoType="dijit.form.ValidationTextBox" name="supplier_name"  id="supplier_name" value="" class="fullside" required="required" >
 														</span>
 														<span id="old_cu">
 															<select dojoType='dijit.form.FilteringSelect' id="sup_id" name="sup_id" onChange="getSuplierInfo();" class="fullside" required="false"​​  queryExpr="*${0}*" autoComplete="false" placeholder="ជ្រើសរើស ឈ្មោះអ្នកផ្គត់ផ្គង់">
@@ -104,7 +104,7 @@ span.oldsup input[type=checkbox] {
 												<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Tel");?></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="text" dojoType="dijit.form.TextBox" name="phone"  id="phone" value="" class="fullside" >
+														<input type="text" dojoType="dijit.form.TextBox" name="phone"  id="phone" value="" class="fullside" placeHolder="<?php echo $tr->translate("Tel");?>">
 												</div>
 												</div>
 												<div class="form-group">
@@ -160,7 +160,7 @@ span.oldsup input[type=checkbox] {
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURCHASE_NO");?> 
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="text" dojoType="dijit.form.TextBox"   name="purchase_no"  id="purchase_no" value="<?php echo $this->pu_code;?>" class="fullside" readOnly="true">
+														<input type="text" dojoType="dijit.form.TextBox"   name="purchase_no"  id="purchase_no" value="<?php echo $this->pu_code;?>" class="fullside" readOnly="true" >
 												</div>
 												</div>
 												<div class="form-group">
@@ -173,7 +173,7 @@ span.oldsup input[type=checkbox] {
 												<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURCHASE_DATE");?> <span class="required">*</span></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="text" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d")?>" name="purchase_date"  id="purchase_date" class="fullside" >
+														<input type="text" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d")?>" name="purchase_date"  id="purchase_date" class="fullside" required="required" >
 												</div>
 												</div>
 												<div class="form-group">

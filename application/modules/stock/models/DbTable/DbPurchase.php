@@ -25,8 +25,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		 sp.supplier_no,
     		 sp.invoice_no,
     		 s.sup_name,
-    	 	(SELECT $label FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
-		    sp.amount_due,sp.date,
+			 sp.amount_due,
+			(SELECT pd.payment_amount FROM `rms_purchase_payment_detail` as pd WHERE pd.purchase_id=sp.id LIMIT 1 ) AS payment_amount, 
+			(SELECT pd.remain FROM `rms_purchase_payment_detail` AS pd WHERE pd.purchase_id=sp.id LIMIT 1 ) AS remain ,
+		    sp.date,
 		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name 
      		    ";
     	$sql.=$dbp->caseStatusShowImage("sp.status");
@@ -44,8 +46,6 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_where[]= " sp.supplier_no LIKE '%{$s_search}%'";
     		$s_where[]="  s.sup_name LIKE '%{$s_search}%'";
     		$s_where[]="  sp.invoice_no LIKE '%{$s_search}%'";
-    		$s_where[]= " s.tel LIKE '%{$s_search}%'";
-    		$s_where[]= " s.email LIKE '%{$s_search}%'";
     		$s_where[]= " sp.amount_due LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}

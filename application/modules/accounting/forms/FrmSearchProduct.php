@@ -136,7 +136,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$opt_p = array(''=>$this->tr->translate("SELECT_PRODUCT"));
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$rows= $db->getAllProductsNormal(1);//only Normal product for sale
-		if(!empty($rows))foreach ($rows As $row)$opt_p[$row['id']]=$row['name'];
+		if(!empty($rows))foreach ($rows As $row){
+			$opt_p[$row['id']]=$row['name'];}
 		$product->setMultiOptions($opt_p);
 		
 		$location= new Zend_Dojo_Form_Element_FilteringSelect('location');

@@ -26,8 +26,8 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		 sp.invoice_no,
     		 s.sup_name,
 			 sp.amount_due,
-			(SELECT pd.payment_amount FROM `rms_purchase_payment_detail` as pd WHERE pd.purchase_id=sp.id LIMIT 1 ) AS payment_amount, 
-			(SELECT pd.remain FROM `rms_purchase_payment_detail` AS pd WHERE pd.purchase_id=sp.id LIMIT 1 ) AS remain ,
+			 COALESCE((SELECT pd.payment_amount FROM `rms_purchase_payment_detail` as pd WHERE pd.purchase_id=sp.id LIMIT 1 ),0.00) AS payment_amount, 
+			 COALESCE((SELECT pd.remain FROM `rms_purchase_payment_detail` AS pd WHERE pd.purchase_id=sp.id LIMIT 1 ),sp.amount_due_after) AS remain ,
 		    sp.date,
 		    (SELECT first_name FROM rms_users WHERE sp.user_id=id LIMIT 1 ) AS user_name 
      		    ";

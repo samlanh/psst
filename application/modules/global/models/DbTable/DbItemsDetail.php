@@ -884,6 +884,26 @@
 			return 2;
 		}
 	}
+	function getAllProductInBranch(){
+		$db = $this->getAdapter();
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$pro_name = "i.title";
+		}else{ // English
+			$pro_name = "i.title_en";
+		}
+		$sql="SELECT i.id,
+			$pro_name  AS name
+		FROM `rms_itemsdetail` AS i,
+			rms_product_location AS pl
+			WHERE i.id=pl.pro_id 
+				AND i.status =1 
+				AND i.items_type=3  ";
+		$sql.=" ORDER BY i.id DESC ";
+		return $db->fetchAll($sql);
+	}
+	
 	function getAllProductsNormalByAnyOption($data=array()){
 		$db = $this->getAdapter();
 		$_db  = new Application_Model_DbTable_DbGlobal();

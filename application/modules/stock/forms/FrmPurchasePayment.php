@@ -216,7 +216,7 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		}
 		$end_date->setValue($_date);
 		
-		$_arr_optview = array(""=>$this->tr->translate("ALL"));
+		$_arr_optview = array(""=>$this->tr->translate("PAID_BY"));
 		$optionView = $_dbgb->getViewById(8);
 		if(!empty($optionView))foreach($optionView AS $row) $_arr_optview[$row['key_code']]=$row['view_name'];
 		$_paid_by_search = new Zend_Dojo_Form_Element_FilteringSelect("paid_by_search");

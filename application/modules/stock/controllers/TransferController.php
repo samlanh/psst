@@ -59,7 +59,7 @@ class Stock_TransferController extends Zend_Controller_Action {
     	$this->view->branchopt = $branch;
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
-		$d_row= $db->getAllProductsNormal();
+		$d_row= $db->getAllProductInBranch();
 		$this->view->rsproduct =$d_row;
 	}
 	public function editAction(){

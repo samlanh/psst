@@ -70,6 +70,19 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
+
+		$_pay_status=  new Zend_Dojo_Form_Element_FilteringSelect('payment_status');
+		$_pay_status->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				));
+		$_pay_status_opt = array(
+				-1=>$this->tr->translate("ALL_PAYMENT_STATUS"),
+				1=>$this->tr->translate("NOT_PAID"),
+				2=>$this->tr->translate("PAID"),
+			);
+		$_pay_status->setMultiOptions($_pay_status_opt);
+		$_pay_status->setValue($request->getParam("payment_status"));
 		
 		$_sort_by = new Zend_Dojo_Form_Element_FilteringSelect('sort_by');
 		$_sort_by->setAttribs(array(
@@ -208,7 +221,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$product_type->setMultiOptions($_opt);
 		$product_type->setValue($request->getParam("product_type"));
 		
-		$this->addElements(array($_sort_by,$product_type,$supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
+		$this->addElements(array($_pay_status,$_sort_by,$product_type,$supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
 		return $this;
 	} 
 

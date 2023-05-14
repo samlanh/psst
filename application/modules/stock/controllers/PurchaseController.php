@@ -20,6 +20,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     				'start_date'=> date('Y-m-d'),
     				'end_date'=>date('Y-m-d'),
     				'status_search'=>-1,
+					'payment_status'=>-1,
     				);
     		}
 			$db =  new Stock_Model_DbTable_DbPurchase();

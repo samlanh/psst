@@ -53,7 +53,8 @@ class ExternalController extends Zend_Controller_Action
 				exit();
 			}
 			else{
-				$this->view->msg = 'ឈ្មោះគណនី និងពាក្យសម្ងាត់​ មិន​ត្រឺម​ត្រូវ​ទេ ';
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$this->view->msg = $this->view->msg = $tr->translate('INVALID_LOGIN');;
 			}
     	}
     }

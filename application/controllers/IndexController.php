@@ -114,12 +114,14 @@ class IndexController extends Zend_Controller_Action
 					Application_Form_FrmMessage::redirectUrl("/home");	
 					exit();										
 				}
-				else{					
-					$this->view->msg = 'ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់ និង ពាក្យ​​សំងាត់ មិន​ត្រឺម​ត្រូវ​ទេ ';
+				else{
+					$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+					$this->view->msg = $tr->translate('INVALID_LOGIN');
 				}	
 			}
-			else{				
-				$this->view->msg = 'លោកអ្នកមិនមានសិទ្ធិប្រើប្រាស់ទេ!';
+			else{	
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$this->view->msg = $this->view->msg = $tr->translate('INVALID_LOGIN');
 			}			
 		}
 		$session_lang=new Zend_Session_Namespace('lang');

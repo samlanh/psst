@@ -374,6 +374,7 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
+	calculateRowAmount();
 }	
 
 function submitDataClose(){

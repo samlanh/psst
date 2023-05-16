@@ -333,16 +333,18 @@ span.oldsup input[type=checkbox] {
 			return false;
 		}
 		
-		var start_date = dijit.byId('start_date').get('value');
-		var end_date = dijit.byId('end_date').get('value');
 		invoicesearch = dijit.byId('bypuchase_no').get('value');
-		var day = start_date.getDate();
-		if(day <= 9) {day = "0" +day;}
-		var m = start_date.getMonth()+1;
-		if(m <= 9) {m = "0" +m;}
-		var year = start_date.getFullYear();
-		start_date = year+"-"+m+"-"+day;
 
+		var start_date = dijit.byId('start_date').get('value');
+		if(start_date!=null){
+			var day = start_date.getDate();
+			if(day <= 9) {day = "0" +day;}
+			var m = start_date.getMonth()+1;
+			if(m <= 9) {m = "0" +m;}
+			var year = start_date.getFullYear();
+			start_date = year+"-"+m+"-"+day;
+		}
+		var end_date = dijit.byId('end_date').get('value');
 		var day = end_date.getDate();
 		if(day <= 9) {day = "0" +day;}
 		var m = end_date.getMonth()+1;

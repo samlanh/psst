@@ -273,7 +273,7 @@ var urlGetProductInfo = '<?php echo $this->url(array('module'=>'global','control
 				template+='<td width="20%" ><input type="hidden" dojoType="dijit.form.TextBox" value="'+product_id+'" id="product_'+col+'" name="product_'+col+'" />'+data.product_name+'</td>';			
 				template+='<td width="10%"  ><input class="fullside" type="text" readonly="true" value="'+data.price+'" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%" ><input class="fullside" type="text" required="true" placeholder="'+'<?php echo $tr->translate("QTY");?> " onkeyup="subTotal('+col+');" name="qty_'+col+'"  id="qty_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
-				template+='<td width="10%" ><input class="fullside" type="text" readonly="true" required="true" placeholder="'+'<?php echo $tr->translate("TOTAL_PRICE");?> " name="total_'+col+'" id="total_'+col+'" value="0.00" dojoType="dijit.form.NumberTextBox"/></td>';
+				template+='<td width="10%" ><input class="fullside" type="text" readonly="true"  placeholder="'+'<?php echo $tr->translate("TOTAL_PRICE");?> " name="total_'+col+'" id="total_'+col+'" value="0.00" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%"> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 				tmp='<tr id="row'+col+'">';
 				tmp+="</tr>";
@@ -318,7 +318,6 @@ var urlGetProductInfo = '<?php echo $this->url(array('module'=>'global','control
 
 function oldRow() {
 	<?php if(!empty($this->pro_detail)) foreach ($this->pro_detail As $key=>$rs){?>
-	total = 
 	col++;no++;
 	template='';
 	if(title!=1){
@@ -337,7 +336,7 @@ function oldRow() {
 		template+='<td width="20%"><input type="hidden" dojoType="dijit.form.TextBox" value="" id="product_'+col+'" name="product_'+col+'" /><?php echo str_replace("'", '', $rs['title']); ?></td>';	
 		template+='<td width="10%"><input type="text" required="true" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['price'];?>" /> </td>';
 		template+='<td width="10%"><input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" onkeyup="subTotal('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['qty'];?>" /> </td>';
-		template+='<td width="10%"><input type="text" required="true" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo number_format($rs['total'], 2) ;?>" /> </td>';
+		template+='<td width="10%"><input type="text" readonly="true" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="0.00" /> </td>';
 		note_remark = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rs['remark'])));?>';
 		template+='<td width="10%"><input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" value="'+note_remark+'" /><input type="hidden" value="<?php echo $rs["id"];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';
 	tmp='<tr id="row'+col+'">';
@@ -352,6 +351,8 @@ function oldRow() {
 	     parseContent: true,
 	});
 	dijit.byId("product_"+col).attr('value','<?php echo $rs['subpro_id'];?>');
+
+	subTotal(col);
 	<?php }?>
 }
 

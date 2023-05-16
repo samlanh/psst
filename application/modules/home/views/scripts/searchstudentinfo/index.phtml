@@ -344,11 +344,16 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		 branch_id.on('change', function(evt) {
 			 getAllGroupByAcademic();
 	    });
+		study_year = dijit.byId('study_year');
+		study_year.on('change', function(evt) {
+			 getAllGroupByAcademic();
+	    });
 	});
 
 	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByAcademic(){
 		dijit.byId('group').reset();
+	
 		study_year = dijit.byId('study_year').get('value');
 		if(study_year=='' || study_year==-1){
 			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -366,9 +371,7 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 			load: function(data) {
 				group_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('group').set('store',group_store);   
-				if(oldstudy_year==study_year){
-					dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  
-				}
+				dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  	
 			},
 			error: function(err) {
 			}

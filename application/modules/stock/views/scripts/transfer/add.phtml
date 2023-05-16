@@ -130,7 +130,8 @@
 											<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
 											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SELECT_PRODUCT");?></label>
 											<div class="col-md-7 col-sm-7 col-xs-12">
-													<select onchange="chcekcProductLocation();"queryExpr="*${0}*" autoComplete="false"  name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+												<input id="itemId" name="itemId" />
+													<!-- <select onchange="chcekcProductLocation();"queryExpr="*${0}*" autoComplete="false"  name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 														<option value=""><?php echo $tr->translate("SELECT_PRODUCT");?> </option>
 														<?php 
 														if(!empty($this->rsproduct)){
@@ -138,13 +139,20 @@
 															<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 														<?php }}
 														?>
-													</select>
+													</select> -->
 											</div>
 											<div class="clearfix"></div>
 											</div>
 											<div class="form-group">
-												<table id="table_row" border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
-													<tr id="head-title" class="head-td" align="center" style="height: 30px;"></tr>
+												<table id="table_row" border="1" style="border-collapse: collapse;border:1px solid #ccc;width: 100%;">
+													<tr id="head-title" class="head-td" align="right">
+														<th><?php echo $tr->translate("NUM");?></th>
+														<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+														<th><?php echo $tr->translate("CURR_QTY");?></th>
+														<th><?php echo $tr->translate("QTY_TRANSFER");?><span class="required">*</span></th>
+														<th><?php echo $tr->translate("OTHER");?></th>
+														<th><?php echo $tr->translate("DELETE");?></th>
+													</tr>
 												</table>
 												<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
 											</div>
@@ -166,16 +174,71 @@
 		</form>
 	</div>
 </div>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require('dijit.form.NumberTextBox');
+
+	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
+	var to_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+		store: branch_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                         
+		required: true,
+		id: "branch",
+		name: "branch",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
+		onChange: function() {  
+			branch_id = dijit.byId('branch').get('value');
+			if(branch_id==-1){
+				dijit.byId("popup_add_branch").show();
+				}
+			}
+		}, "branch");	
+		
+		new dijit.form.FilteringSelect({
+		store: to_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                          
+		required: true,
+		id: "f_branch",
+		name: "f_branch",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
+		onChange: function(){  
+			branch_id = dijit.byId('f_branch').get('value');
+			if(branch_id==-1){
+				dijit.byId("popup_add_branch").show();
+				}
+				getProByBranch();
+			}
+			
+		}, "f_branch");
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                      
+			id: "itemId",
+			name: "itemId",  
+			class: 'fullside',  
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
+			onChange: function(){  
+					chcekcProductLocation();
+			}
+		}, "itemId");
+		
+	});
 	
 	index=0;
 	function getProductName() {
-		grade=dijit.byId("pro_id").get("value");
+		grade=dijit.byId("itemId").get("value");
 		if(grade==''){return false;}
 		location_id = dijit.byId("f_branch").get("value");
 		if(location_id<0 || location_id==''){
@@ -187,7 +250,7 @@
 			dijit.byId("f_branch").focus()();
 			return false;}
 		
-		pro_id=dijit.byId("pro_id").get("value");
+		pro_id=dijit.byId("itemId").get("value");
 
 		var iden = $("#identity").val();
 		var arrays = iden.split(',');
@@ -201,8 +264,9 @@
 			}
 		}
 		index++;
+		title=0
 		getcurrentproduct(pro_id,location_id,index);
-				if(index==1){
+				if(title!=1){
 					temp='';
 					temp+='<td ><?php echo $tr->translate("NUM");?></td>';
 					temp+='<td ><?php echo $tr->translate("PRODUCT_NAME");?></td>';
@@ -211,8 +275,9 @@
 					temp+='<td ><?php echo $tr->translate("OTHER");?></td>';
 					temp+='<td ><?php echo $tr->translate("DELETE");?></td>';
 					dojo.query("#head-titlehead-title").append(temp);
+					title=1
 				}
-				pro_name = dijit.byId("pro_id").attr('displayedValue')
+				pro_name = dijit.byId("itemId").attr('displayedValue')
 				template='<td width="2%" align="center">'+index+'</td>';
 				template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
 				template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
@@ -243,7 +308,7 @@
 	}
 	var url_getproduct = '<?php echo $this->url(array('module'=>'stock','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
 	function chcekcProductLocation(){
-		pro_id=dijit.byId("pro_id").get("value");
+		pro_id=dijit.byId("itemId").get("value");
 		location_id = dijit.byId("f_branch").get("value");
 		if(location_id<0 || location_id==''){
 			alert("Please select from branch");
@@ -294,44 +359,7 @@
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
 	}
-	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
-	var to_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
-	dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-		store: branch_store,
-		autoComplete: false,
-		queryExpr: "*${0}*",                         
-		required: true,
-		id: "branch",
-		name: "branch",           
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
-		onChange: function() {  
-			branch_id = dijit.byId('branch').get('value');
-			if(branch_id==-1){
-				dijit.byId("popup_add_branch").show();
-				}
-			}
-		}, "branch");	
-		
-		new dijit.form.FilteringSelect({
-		store: to_store,
-		autoComplete: false,
-		queryExpr: "*${0}*",                          
-		required: true,
-		id: "f_branch",
-		name: "f_branch",           
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
-		onChange: function(){  
-			branch_id = dijit.byId('f_branch').get('value');
-			if(branch_id==-1){
-				dijit.byId("popup_add_branch").show();
-				}
-			}
-		}, "f_branch");
-		
-	});
+	
 var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
 function addBranch(){
 		dojo.xhrPost({
@@ -356,4 +384,21 @@ function addBranch(){
 			}
 	});
 }
+
+function getProByBranch(){
+    branch_id=dijit.byId("f_branch").get("value");
+    // if(branch_id=='' || branch_id==-1){
+	//     alert("Please Selected Branch Name!");
+	//     return false ;
+    // }
+  
+	var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
+	contentData = {
+		'itemsType':3,
+		'isProductset':0,
+		'proLocation':branch_id
+	}
+	getAllItemIdByType(urlGet,contentData);
+}
+
 </script>

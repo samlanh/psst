@@ -195,7 +195,7 @@ span.oldsup input[type=checkbox] {
 												<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURCHASE_DATE");?> <span class="required">*</span></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="text" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d",strtotime($this->row_sup['date']))?>" name="purchase_date"  id="purchase_date" class="fullside" >
+														<input type="text" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d",strtotime($this->row_sup['date']))?>" name="purchase_date"  id="purchase_date" class="fullside" required="required">
 												</div>
 												</div>
 												<div class="form-group">

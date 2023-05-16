@@ -19,7 +19,7 @@ fieldset{  background:none;}
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('COPY_PRODUCTSET');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('COPY_PRODUCTSET');?><small id="msg_deplicate" class="red italic"></small></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -33,6 +33,12 @@ fieldset{  background:none;}
                         alert('<?php echo $tr->translate('PLEASE_SELECT_PRODUCT');?>');
                         dijit.byId("itemId").focus();
                         return false;
+					}
+					if(is_deplicate==2){
+						alert("<?php echo $tr->translate("THIS_PRODUCT_SET_ALREADY_EXIST");?>");
+						$("#msg_deplicate").html("<?php echo $tr->translate("THIS_PRODUCT_SET_ALREADY_EXIST");?>");
+						dijit.byId("title").focus();
+						return false;
 					}
 					loadingBlock();
 					return true;
@@ -201,6 +207,13 @@ fieldset{  background:none;}
 			addRow();
 		}
 		getRefreshProduct();
+		getRefreshProduct();
+
+		$("#title").keyup(function(){
+			deplicateItem();
+		});	
+	
+		deplicateItem();
 	});	
 	function getRefreshProduct(){
 		branch_id=dijit.byId("branch_search").get("value");
@@ -365,5 +378,33 @@ function deleteRecord(index) {
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
 		calculateRowAmount();
+}
+var is_deplicate=1;
+function deplicateItem(){
+	var url_deplicate = '<?php echo $this->url(array("module"=>"stock","controller"=>"product","action"=>"deplicatepro"));?>';										
+		category = dijit.byId('items_id').get('value');
+		titles = dijit.byId('title').get('value');
+		if(category=="" || category==-1){
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_deplicate,
+			content:{
+				'title':titles,'category':category
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data==2){
+					$( "#msg_deplicate" ).html("<?php echo $tr->translate("THIS_PRODUCT_SET_ALREADY_EXIST");?>");
+					dijit.byId("title").focus();
+				}else{
+					$( "#msg_deplicate" ).html("");
+				}
+				is_deplicate=data;
+			},
+			error: function(err) {
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			}
+		});
 }
 </script>

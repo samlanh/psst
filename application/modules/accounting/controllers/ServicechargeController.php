@@ -213,15 +213,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		$this->view->rows =$rs_rows;
 	}	
 	
-	public function getallfacAction(){
-		$db = new Application_Model_GlobalClass();
-		if($this->getRequest()->isPost()){
-			$_data = $this->getRequest()->getPost();
-			$rs = $db->getAllServiceItemOption($_data["type"]);
-			print_r(Zend_Json::encode($rs));
-			exit();
-		}
-	}
+
 	
 	function refreshserviceAction(){
 		if($this->getRequest()->isPost()){

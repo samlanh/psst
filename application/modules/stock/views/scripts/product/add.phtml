@@ -68,12 +68,7 @@ input.btn_borwse_image {
 						dijit.byId("items_id").focus();
 						return false;
 					}
-					identity =dijit.byId("identity").get('value');
-					if(identity=='' || identity==null){
-						alert("<?php echo $tr->translate("PLEASE_SET_PRODUCT_FOR_BRANCH");?>");
-						dijit.byId("branch").focus();
-						return false;
-					}
+				
 					if(is_deplicate==2){
 						alert("<?php echo $tr->translate("This Product Already Existing");?>");
 						$("#msg_deplicate").html("<?php echo $tr->translate("This Product Already Existing");?>");
@@ -398,7 +393,7 @@ function deplicateItem(){
 			handleAs:"json",
 			load: function(data) {
 				if(data==2){
-					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Existing");?>");
+					$( "#msg_deplicate" ).html("<?php echo $tr->translate("THIS_PRODUCT_ALREADY_EXIST");?>");
 					dijit.byId("title").focus();
 				}else{
 					$( "#msg_deplicate" ).html("");

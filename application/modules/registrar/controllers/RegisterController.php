@@ -79,10 +79,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	   
 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $rs = $db->getStudentProfileblog(1);
 		$this->view->rsBank = $db->getAllBank();
-	   
-	   
 	   
 	   $frmreceipt = new Application_Form_FrmGlobal();
 	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();
@@ -107,55 +104,55 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     }
     
     public function editAction(){
-    	$id=$this->getRequest()->getParam("id");
     	$db = new Registrar_Model_DbTable_DbRegister();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try{
-    			$db->updateRegister($_data,$id);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register');
+    			$db->updateRegister($_data);
+    			print_r(Zend_Json::encode(1));
+    			exit();
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("UPDATE_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	$rspayment =  $db->getStudentPaymentByID($id);
-    	if(empty($rspayment)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
-    	}
-		if(!empty($rspayment)){
-			if ($rspayment['is_closed']==1){
-  				Application_Form_FrmMessage::Sucessfull("Can Not Void Closed Student Payment Receipt",self::REDIRECT_URL . '/register');
-				exit();
-  			}
-			if ($rspayment['is_void']==1){
-  				Application_Form_FrmMessage::Sucessfull("Student Payment Receipt Already Void",self::REDIRECT_URL . '/register');
-				exit();
-  			}
-// 			    $stu_id = empty($rspayment['stu_id'])?0:$rspayment['stu_id'];
-//   			$lastPaymentRecord = $db->getLastStudentPaymentRecord($stu_id);
-//   			$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
-//   			if ($lastPayId!=$id){
-//   				Application_Form_FrmMessage::Sucessfull("Only Last Student Payment Receipt Can to be Void",self::REDIRECT_URL . '/register');
+//     	$rspayment =  $db->getStudentPaymentByID($id);
+//     	if(empty($rspayment)){
+//     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
+//     	}
+// 		if(!empty($rspayment)){
+// 			if ($rspayment['is_closed']==1){
+//   				Application_Form_FrmMessage::Sucessfull("Can Not Void Closed Student Payment Receipt",self::REDIRECT_URL . '/register');
 // 				exit();
 //   			}
-		}
-    	$this->view->payment = $rspayment;
+// 			if ($rspayment['is_void']==1){
+//   				Application_Form_FrmMessage::Sucessfull("Student Payment Receipt Already Void",self::REDIRECT_URL . '/register');
+// 				exit();
+//   			}
+// // 			    $stu_id = empty($rspayment['stu_id'])?0:$rspayment['stu_id'];
+// //   			$lastPaymentRecord = $db->getLastStudentPaymentRecord($stu_id);
+// //   			$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
+// //   			if ($lastPayId!=$id){
+// //   				Application_Form_FrmMessage::Sucessfull("Only Last Student Payment Receipt Can to be Void",self::REDIRECT_URL . '/register');
+// // 				exit();
+// //   			}
+// 		}
+//     	$this->view->payment = $rspayment;
     	
-    	$db = new Allreport_Model_DbTable_DbRptPayment();
-    	$rs = $db->getStudentPaymentByid($id);
-    	$this->view->rr = $rs;
-    	$this->view->row =  $db->getPaymentReciptDetail($id);
+//     	$db = new Allreport_Model_DbTable_DbRptPayment();
+//     	$rs = $db->getStudentPaymentByid($id);
+//     	$this->view->rr = $rs;
+//     	$this->view->row =  $db->getPaymentReciptDetail($id);
     	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+//     	$key = new Application_Model_DbTable_DbKeycode();
+//     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     	
-    	$branch_id=null;
-    	if(!empty($rs)){
-    		$branch_id = $rs['branch_id'];
-    	}
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt($branch_id);
+//     	$branch_id=null;
+//     	if(!empty($rs)){
+//     		$branch_id = $rs['branch_id'];
+//     	}
+//     	$_db = new Application_Form_FrmGlobal();
+//     	$this->view->header = $_db->getHeaderReceipt($branch_id);
     }
     public function editcustomerpaymentAction(){
     	$id=$this->getRequest()->getParam('id');

@@ -49,11 +49,36 @@
 		</div>
 	</div>
 </div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'មូលហេតុដែលត្រូវមោឃៈ'"  id="updateForm" style="width:350px;" >
+		<div class="card pb-10 pt-10 pl-10 pr-10">
+			<form id="updateFormInfo"  name="data" action="" dojoType="dijit.form.Form" method="post">
+				<div class="card-box">
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" >មូលហេតុ :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input style="min-height:70px;" class="fullside" type="text" dojoType="dijit.form.Textarea" name="reason" id="reason" placeholder="មូលហេតុ" />
+							<input type="hidden" dojoType="dijit.form.TextBox" name="paymentId" id="paymentId"  />
+					   </div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<button onclick="updateReceipt();" iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="button">មោឃៈឥលូវនេះ</button>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+</div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.Textarea");
 	
 	dojo.ready(function(){
 		var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -90,9 +115,50 @@
 		});
 		getAllAcademicByBranch();
 	});
-	url_getacademic= '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
+
+	function updateReceipt(){
+		let urlUpdateInfo = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'edit'));?>';
+		
+		if(dijit.byId('updateFormInfo').validate()){
+				if (confirm('<?php echo $tr->translate("CONFIRM_VOID")?>')) {
+			    } else {
+					dijit.byId('updateFormInfo').reset();
+					dijit.byId('updateForm').hide();
+			    	 return false;
+			    }
+			loadingBlock();
+			dojo.xhrPost({
+				url: urlUpdateInfo,
+				form: dojo.byId("updateFormInfo"),
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('updateFormInfo').reset();
+					dijit.byId('updateForm').hide();
+					if(data==1){
+						alert('<?php echo $tr->translate("VOID_SUCCESS")?>');
+						location.reload();
+					}else if(data==2){
+						alert('<?php echo $tr->translate("NO_RECORD")?>');
+					}else if(data==3){
+						alert('<?php echo $tr->translate("RECEIPT_WAS_VOID")?>');
+					}else if(data==5){
+						alert('<?php echo $tr->translate("RECEIPT_EXISTING_VOID")?>');
+					}else{
+						alert('<?php echo $tr->translate("VOID_UNSUCCESS")?>');
+					}
+					dijit.byId('reason').set('value','');
+					HideloadingBlock();
+				},
+				error: function(err) {
+				}
+			});
+		}
+	}
+	
+	
 	var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
 	function getAllAcademicByBranch(){
+		let url_getacademic= '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 		dijit.byId('study_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
@@ -120,8 +186,9 @@
 		});
 	}
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
+		let url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+		
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id==''){return false;}
 		dojo.xhrPost({
@@ -162,10 +229,12 @@
 				var m = "clicked: " + key;
 				if(key=="issue"){
 					url='<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/";?>';
+					gotoAction();
 				}else if(key=="void"){
-					url='<?php echo $this->baseUrl()."/registrar/register/edit/id/";?>';
+					dijit.byId('paymentId').set('value',row);
+					dijit.byId('updateForm').show();
+					//url='<?php //echo $this->baseUrl()."/registrar/register/edit/id/";?>';
 				}
-				gotoAction();
 			},
 			items: {
 				"issue": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-print", accesskey: "e"},

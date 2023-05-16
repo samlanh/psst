@@ -27,7 +27,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	    }
     	    $rs_row=$db->getAllBorrow($search);
 	    	$glClass = new Application_Model_GlobalClass();
-			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
+			
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BORROW_NO","BORROWER","CODE","NAME","PHONE","BORROW_DATE","RETURN_DATE","NOTE","USER",
 					"STATUS");

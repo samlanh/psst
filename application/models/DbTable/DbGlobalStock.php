@@ -112,27 +112,25 @@ class Application_Model_DbTable_DbGlobalStock extends Zend_Db_Table_Abstract
 				p.product_type,
 				(SELECT pl.pro_qty FROM rms_product_location AS pl WHERE pl.branch_id=p.id AND pl.branch_id= $branch_id LIMIT 1) AS currentQty,
 				(SELECT pl.costing FROM rms_product_location AS pl WHERE pl.pro_id=p.id AND pl.branch_id= $branch_id LIMIT 1) AS currentPrice,
-				p.measure AS measureTitle
-		";
+				p.measure AS measureTitle ";
 			$sql.=" FROM
 			`rms_itemsdetail` AS p ";
 				
 			if(!empty($branch_id)){
-			$sql.=" ,rms_product_location AS l";
+				$sql.=" ,rms_product_location AS l";
 				$sql.=" WHERE p.status=1
-				AND p.pro_id=l.pro_id ";
+				AND p.id=l.pro_id ";
 				$sql.=" AND l.branch_id=".$branch_id;
 			}else{
 				$sql.=" WHERE p.status=1 ";
 			}
 			if(!empty($_data['categoryId'])){
-			$sql.=" AND p.items_id= ".$_data['categoryId'];
+				$sql.=" AND p.items_id= ".$_data['categoryId'];
 			}
 			if(!empty($_data['productId'])){
-			$sql.=" AND p.id= ".$_data['productId'];
+				$sql.=" AND p.id= ".$_data['productId'];
 			}
-			$sql.=" ORDER BY p.id DESC LIMIT	1 ";
-	
+				$sql.=" ORDER BY p.id DESC LIMIT 1";
 			return $db->fetchRow($sql);
 	
 	}

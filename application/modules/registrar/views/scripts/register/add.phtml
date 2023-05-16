@@ -522,10 +522,6 @@ tr.balance{background:#fff4f4;}
 									<tbody id="table_row">
 									</tbody>
 								</table>
-								
-			        	 		<!-- <table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-								 	<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;color:#000"></tr>
-								</table> -->
 			        	 	</div>
 			        	 </div>
 			       	</div>
@@ -995,7 +991,7 @@ function checkAutoControl(studentType){
 	$(".displayLabel").html('AUTO_TO_TEST');
 	$('#auto_test').checked;
 	$("#displayControl").css("display", "block");
-	if(studentType==1){//existing
+	if(studentType==1 || studentType==4){//existing
 		$("#displayControl").css("display", "none");
 	}
 	else if(studentType==2){//from
@@ -1354,8 +1350,6 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			dijit.byId('service_type_'+col).attr('value',dataRow.itemType);
 			if(balance>0 && balance!=null){
 				dijit.byId('price_'+col).attr('value',balance);
-				
-				
 				dijit.byId('total_amount'+col).attr('value',balance);
 				dijit.byId('paid_amount'+col).attr('value',balance);
 				dijit.byId('isoldBalance'+col).attr('value',1);
@@ -1622,7 +1616,6 @@ function readMoneyInKhmer(netTotal){
 }
 var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
-	   
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');
  		branch_id = dijit.byId('branch_id').get('value');

@@ -251,7 +251,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 	//End Block Sale Product
 	
     public function rptTransferAction(){
-		$db = new Accounting_Model_DbTable_DbTransferstock();
+		$db = new Stock_Model_DbTable_DbTransferstock();
     	try{
     		if($this->getRequest()->isPost()){
     			$search = $this->getRequest()->getPost();
@@ -280,7 +280,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
 	}
     public function rptTransferdetailAction(){
-		$db = new Accounting_Model_DbTable_DbTransferstock();
+		$db = new Stock_Model_DbTable_DbTransferstock();
 		$id=$this->getRequest()->getParam("id");
 		$this->view->rs = $db->getTransferById($id);
 		$this->view->rsdetail = $db->getTransferByIdDetail($id);

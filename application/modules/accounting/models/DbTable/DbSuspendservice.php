@@ -220,12 +220,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   	$sql="SELECT stu_id,stu_code  FROM rms_student ORDER BY  stu_code DESC ";
 	   	return $db->fetchAll($sql);
    }
-   
-   public function getAllStudentName(){
-	   	$db = $this->getAdapter();
-	   	$sql="SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name  FROM rms_student ORDER BY  stu_code DESC ";
-	   	return $db->fetchAll($sql);
-   }
+  
    
    function getStudentID($acacemic){
 	   	$db=$this->getAdapter();

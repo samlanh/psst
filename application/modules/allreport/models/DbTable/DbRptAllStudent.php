@@ -746,16 +746,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function getAllStudentID(){
-    	$db = $this->getAdapter();
-    	$sql="select stu_id as id,stu_code from rms_student ";
-    	return $db->fetchAll($sql);
-    }
-    function getAllStudentName(){
-    	$db = $this->getAdapter();
-    	$sql="select stu_id as id,stu_enname as name from rms_student ";
-    	return $db->fetchAll($sql);
-    }
+  =
     public function getAllStudentDetail($search){
     	$db = $this->getAdapter();
 		

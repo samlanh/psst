@@ -10,7 +10,7 @@ class Stock_TransferController extends Zend_Controller_Action {
 
     public function indexAction()
     {	
-    	$db = new Accounting_Model_DbTable_DbTransferstock();
+    	$db = new Stock_Model_DbTable_DbTransferstock();
     	try{
     		if($this->getRequest()->isPost()){
     			$search = $this->getRequest()->getPost();
@@ -41,7 +41,7 @@ class Stock_TransferController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
     }
 	public function addAction(){
-		$db = new Accounting_Model_DbTable_DbTransferstock();
+		$db = new Stock_Model_DbTable_DbTransferstock();
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
@@ -63,7 +63,7 @@ class Stock_TransferController extends Zend_Controller_Action {
 		$this->view->rsproduct =$d_row;
 	}
 	public function editAction(){
-		$db = new Accounting_Model_DbTable_DbTransferstock();
+		$db = new Stock_Model_DbTable_DbTransferstock();
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
@@ -102,7 +102,7 @@ class Stock_TransferController extends Zend_Controller_Action {
 	function getcurrentproductAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Accounting_Model_DbTable_DbTransferstock();
+			$db = new Stock_Model_DbTable_DbTransferstock();
 			$rs = $db->getProductLocation($data['pro_id'],$data['location_id']);
 			if(empty($rs)){$rs = array('pro_qty'=>0);}
 			print_r(Zend_Json::encode($rs));

@@ -242,13 +242,14 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    						is_onepayment as onepayment,
 	    						is_productseat as is_set,
 	    						items_type,
-	    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    						WHERE sp.student_id = ".$data['studentId']."
-    							AND spd.itemdetail_id = $item_id
-    							ANd spd.is_start=1
-    							AND sp.`id`=spd.`payment_id`
-    							AND sp.is_void=0
-    							ORDER BY spd.validate DESC LIMIT 1) AS validate
+	    						(SELECT spd.validate FROM rms_student_payment as sp,
+		    						rms_student_paymentdetail as spd
+			    						WHERE sp.student_id = ".$data['studentid']."
+			    							AND spd.itemdetail_id = $item_id
+			    							AND spd.is_start=1
+			    							AND sp.`id`=spd.`payment_id`
+			    							AND sp.is_void=0
+			    							ORDER BY spd.validate DESC LIMIT 1) AS validate
     							FROM
     								`rms_itemsdetail`
     								WHERE
@@ -260,7 +261,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
 	    						(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
 	    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-    							WHERE sp.student_id = ".$data['studentId']."
+    							WHERE sp.student_id = ".$data['studentid']."
     							AND spd.itemdetail_id = $item_id
     							ANd spd.is_start=1
     							AND sp.`id`=spd.`payment_id`

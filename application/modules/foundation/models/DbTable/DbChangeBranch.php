@@ -31,24 +31,7 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 		return $_db->fetchAll($sql);		
 	}
 	
-	public function getAllStudentName(){
-		$_db = $this->getAdapter();
-		$sql = "SELECT st.stu_id as id,		
-		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name
-		FROM 
-			`rms_student` as st,
-			rms_group_detail_student as gds
-		 WHERE  
-		 gds.itemType=1 
-		AND gds.is_pass=0 
-		and gds.stu_id=st.stu_id 
-		and is_setgroup=1 
-		
-		and st.status=1 
-		group by gds.stu_id";
-		
-		return $_db->fetchAll($sql);
-	}
+	
 	
 	public function getAllGroup(){
 		$db = $this->getAdapter();

@@ -778,9 +778,9 @@
 			$degree = "it.title_en";
 		}
 		$sql="SELECT i.id,
-		CONCAT($grade,' (',(SELECT $degree FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+		COALESCE($grade,' (',(SELECT $degree FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 		FROM `rms_itemsdetail` AS i
-		WHERE i.status =1 AND i.items_type=3 AND i.is_productseat=0  ";
+		WHERE i.status =1 AND (i.title_en!='' OR i.title!='') AND i.items_type=3 AND i.is_productseat=0  ";
 		
 		if(!empty($product_type)){//check type product sale or office
 			$sql.= " AND i.product_type = ".$db->quote($product_type);
@@ -797,7 +797,6 @@
 		$user = $dbgb->getUserInfo();
 		$level = $user['level'];
 		if ($level!=1){
-			//$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
 			$sql .=' AND i.schoolOption IN ( '.$user['schoolOption'].')';
 		}
 		$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";

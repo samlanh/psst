@@ -97,6 +97,7 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		$_date_payment->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'value'=>'now',
+				'required'=>true,
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',));
 		$_date_payment->setValue(date("Y-m-d"));

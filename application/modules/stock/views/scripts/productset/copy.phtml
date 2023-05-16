@@ -226,6 +226,9 @@ tmp = '';
 temp='';
 function addRow() {
 		product_id = dijit.byId("itemId").get("value");
+		productoption = dijit.byId("itemId").attr('displayedValue');
+		dijit.byId("itemId").attr('value','');
+		
 		if(product_id=='' || product_id==-1){
 			return false;
 		}
@@ -240,7 +243,6 @@ function addRow() {
 				 }
 			}
 		}
-		 productoption = dijit.byId("itemId").attr('displayedValue');
 		col++;no++;
 		template='';
 		if(title!=1){

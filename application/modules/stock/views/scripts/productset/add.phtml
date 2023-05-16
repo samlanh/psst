@@ -275,9 +275,11 @@ function getRefreshItems(){//category
 	temp='';
 	var urlGetProductInfo = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'productinfo')); ?>';
 	function addRow() {
-
 			branch_id=dijit.byId("branch_search").get("value");
 			product_id = dijit.byId("itemId").get("value");
+			productoption = dijit.byId("itemId").attr('displayedValue');
+			dijit.byId("itemId").attr('value','');
+			
 			if(product_id=='' || product_id==-1){
 				return false;
 			}
@@ -294,7 +296,7 @@ function getRefreshItems(){//category
 			}
 			col++;no++;
 			template='';
-			productoption = dijit.byId("itemId").attr('displayedValue');
+			
 			if(title!=1){
 				$("#head-title").html("");
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';

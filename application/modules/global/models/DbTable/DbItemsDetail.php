@@ -606,7 +606,6 @@
 							'subpro_id'=>$_data['product_'.$i],
 							'qty'=>$_data['qty_'.$i],
 							'price'=>$_data['sell_price_'.$i],
-							'total'=>$_data['total_'.$i],
 							'remark'=>$_data['note_'.$i],
 					);
 					$this->insert($_arrss);
@@ -680,7 +679,6 @@
 							'subpro_id'=>$_data['product_'.$i],
 							'price'=>$_data['sell_price_'.$i],
 							'qty'=>$_data['qty_'.$i],
-							'total'=>$_data['total_'.$i],
 							'remark'=>$_data['note_'.$i],
 						);
 						$where =" id =".$_data['detailid'.$i];

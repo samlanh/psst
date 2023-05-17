@@ -24,7 +24,7 @@ class Test_TermController extends Zend_Controller_Action {
 			$db = new Test_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("TITLE","START_DATE","END_DATE","CREATE_DATE","USER","STATUS");
+    		$collumns = array("BRANCH","TITLE","START_DATE","END_DATE","CREATE_DATE","USER","STATUS");
     		$link=array(
     				'module'=>'test','controller'=>'term','action'=>'edit',
     		);
@@ -56,6 +56,9 @@ class Test_TermController extends Zend_Controller_Action {
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
     	}
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbg->getAllBranch();
+    	$this->view->branchopt = $branch;
     }
 	public function editAction(){
 		$db = new Test_Model_DbTable_DbTerm();
@@ -77,6 +80,10 @@ class Test_TermController extends Zend_Controller_Action {
     		exit();
     	}
     	$this->view->row = $row;
+
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbg->getAllBranch();
+    	$this->view->branchopt = $branch;
     	
 	}
 }

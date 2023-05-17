@@ -262,10 +262,10 @@ table .set-style td, table .set-style th {
 				<tr>
 					<td align="center">
 						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="no" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideAlert();"/>
+							dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" onclick="hideAlert();"/>
 							
 						<input type="button"  label="<?php echo $tr->translate("AGREE");?>" id="yes" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="submitDataClose();"/>
+							dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" onclick="submitDataClose();"/>
 					</td>
 				</tr>
 			</table>
@@ -300,6 +300,7 @@ function alertBeforeSubmit(){
 						dijit.byId("popup_alert").show();
 					}else{
 						alert('<?php echo $tr->translate('RECORD_EXIST');?>');
+						dijit.byId("generation").focus();
 					}
 				},
 				error:function(e){

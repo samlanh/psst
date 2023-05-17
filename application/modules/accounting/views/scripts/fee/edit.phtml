@@ -201,12 +201,36 @@ table .set-style td, table .set-style th {
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input class="button-class button-danger" iconClass="glyphicon glyphicon-earase" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" onclick="submitDataClose();" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" name="save_close" dojoType="dijit.form.Button" 
+					<input type="button" onclick="alertBeforeSubmit(1);" label="<?php echo $tr->translate('GO_EDIT');?>" id="save_close" name="save_close" dojoType="dijit.form.Button" 
 					class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open"/>
                	</div>
              </div>
     	</form>
     </div>
+</div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_alert" >
+		<form  id='frm_alert' name='frm_alert' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" style="margin: 0 auto; width:100%">
+			    <tr>
+					<td align="center" style="font-size: 20px;color: red;">
+						<?php echo $tr->translate("CONFIRM_SAVE");?>
+					</td>
+					<input type="hidden" name="save_type" id="save_type" dojoType="dijit.form.TextBox" /> 
+				</tr>
+				<tr>
+					<td align="center">
+						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="no" 
+							dojoType="dijit.form.Button" 
+							class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" onclick="hideAlert();"/>
+						<input type="button"  label="<?php echo $tr->translate("AGREE");?>" id="yes" 
+							dojoType="dijit.form.Button"
+							class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" onclick="submitDataClose();"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </div>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
@@ -214,6 +238,15 @@ table .set-style td, table .set-style th {
     dojo.require("dijit.form.Textarea");
     dojo.require("dojo.data.ItemFileWriteStore");
     dojo.require('dijit.form.NumberTextBox');
+
+function alertBeforeSubmit(save_type){
+	
+	dijit.byId('save_type').attr('value',save_type);
+	dijit.byId("popup_alert").show();
+}
+function hideAlert(){
+	dijit.byId("popup_alert").hide();
+}
     
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 function submitDataClose(){

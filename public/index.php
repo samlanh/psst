@@ -31,7 +31,7 @@ defined('SCORE_RESULT_TEMPLATE') || define('SCORE_RESULT_TEMPLATE', 2);//1=for g
 defined('NEW_STU_ID_FROM_TEST') || define('NEW_STU_ID_FROM_TEST', 1);//0=default,1=show stu_id register to enter
 defined('STU_ID_TYPE') || define('STU_ID_TYPE', 3);//1=Auto By Branch,2=Auto By Degree,3 by school option
 defined('STU_SERIAL_TYPE') || define('STU_SERIAL_TYPE', 2);//1=for general,2=for psis
-defined('TEST_CONDICTION') || define('TEST_CONDICTION', 2);//1=for general show branch in text index,2=for psis(not show)
+defined('TEST_CONDICTION') || define('TEST_CONDICTION', 1);//1=for general show branch in text index,2=for psis(not show)
 defined('STUDY_DAY_SETTING') || define('STUDY_DAY_SETTING', 2);//0=default 7 day 1= 6 day study, 2= 5 day study
 defined('TIEM_IS_MANUAL') || define('TIEM_IS_MANUAL', 1);//0=static 1= manual customize
 defined('FEATURE_SCAN_CALLOUT') || define('FEATURE_SCAN_CALLOUT', 1);//0=Disable Feature, 1= Enable Feature

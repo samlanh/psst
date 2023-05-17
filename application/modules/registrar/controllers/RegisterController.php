@@ -94,7 +94,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$receipt_no = $db->addRegister($_data);
-//     			$receipt_no = str_replace('"','',$receipt_no);
     			print_r(Zend_Json::encode($receipt_no));
     			exit();
     		} catch (Exception $e) {

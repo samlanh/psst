@@ -360,6 +360,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'balance_due'	=> $data['balance_due'],
 					'amount_in_khmer'=> $data['money_in_khmer'],
 					'payment_method'=> $data['payment_method'],
+					'bank_id'		=>$data['bank_name'],
 					'number'	    => $data['number'],
 					'note'			=> $data['note'],
 					'create_date'	=> $paid_date,

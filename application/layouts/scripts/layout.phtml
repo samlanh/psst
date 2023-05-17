@@ -153,7 +153,6 @@ if($module!='default'){
 		<?php }?>
    </script>
 	<?php }?>
-	 
 	<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
 	<link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
 	 <style>
@@ -178,7 +177,6 @@ span#message {
 }
 	</style>
 </head>
-<?php //oncontextmenu="return false;" ?>
 <body class="nav-md soria footer_fixed ">
 	<div class="overlay">
 		<div class="overlay-load">
@@ -206,7 +204,6 @@ span#message {
 				              </div>
               				  <ul class="nav navbar-nav navbar-right">
 			              	      <li>
-              							
 			              		     <a title="Khmer" href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				              			<img src="<?php echo $this->baseUrl()."/images/";?><?php if ($currentlang == 1){ echo "km.png";}else{ echo "en.jpg";}?>"> 
 				              		</a>
@@ -235,7 +232,6 @@ span#message {
 					                    </li>
 				                  </ul>
 				                </li>
-				               
 				              <?php echo $this->render('notifcation.phtml');?>   
 				              <li class="">
 				                  	<a onclick="dijit.byId('popupCalculator').show();" href="javascript:;" title="<?php echo $tr->translate("CALCULATOR");?>"  class="user-profile " >
@@ -254,33 +250,32 @@ span#message {
        		 	<div style="clear:both;"></div>
              	<?php if($module!='allreport' AND ($module!='home' OR $controller=="crm") AND $module!='default' ){?>
              		<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
-								<?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' ){?>
-									<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
+							<?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' ){?>
+								<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
 									<a title="<?php echo $tr->translate('ADD_NEW');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
 										<i class="fa fa-plus-circle" aria-hidden="true"></i>
 									</a>
-									</div>
-									<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport' OR $action=='createtestexam'){?>
-									<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
+								</div>
+								<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport' OR $action=='createtestexam'){?>
+								<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
 									<a title="<?php echo $tr->translate('GO_BACK');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
 										<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
 									</a>
-									</div>
-								<?php }?>
+								</div>
+							<?php }?>
 							 <?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
 								<div class="ptss__header add-edit-action">
-								<a  class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
-									<i class="fa fa-plus-circle" aria-hidden="true"></i>
-								</a>
+									<a  class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
+										<i class="fa fa-plus-circle" aria-hidden="true"></i>
+									</a>
 								</div>
 							<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport'){?>
 								<div class="ptss__header add-edit-action">
-								<a class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
-								<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> <?php echo $tr->translate('GO_BACK');?>
-								</a>
+									<a class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
+									<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> <?php echo $tr->translate('GO_BACK');?>
+									</a>
 								</div>
 								<?php }?>
-							
 						</div>
 				<?php }?>
        		 	
@@ -309,37 +304,32 @@ span#message {
 								<div class="row">
 							    	<div class="col-md-12 col-sm-12 col-xs-12">
 							    	<?php }?>
-							<?php 
-								$db = new Application_Model_DbTable_DbUsers();
-	            				$rs = $db->getAccessUrl($module,$controller,$action);
-
-	            				echo $this->layout()->content;
-	            				
-//  								if(!empty($teacher_id)){
-//  									echo $this->layout()->content;
-//  								}else{
-//  									if(!empty($rs) OR $action=='changepassword'){
-//  										echo $this->layout()->content;
-//  									}else{
-//  										//echo $this->render('pagenotfund.phtml');
-//  									}
-//  								}
-	            				//echo $this->layout()->content;
-            				 ?>
-            				 <?php if($module!='home') {?>
+										<?php 
+											$db = new Application_Model_DbTable_DbUsers();
+				            				$rs = $db->getAccessUrl($module,$controller,$action);
+				            				echo $this->layout()->content;
+				            				
+			//  								if(!empty($teacher_id)){
+			//  									echo $this->layout()->content;
+			//  								}else{
+			//  									if(!empty($rs) OR $action=='changepassword'){
+			//  										echo $this->layout()->content;
+			//  									}else{
+			//  										//echo $this->render('pagenotfund.phtml');
+			//  									}
+			//  								}
+				            				//echo $this->layout()->content;
+			            				 ?>
+			            				 <?php if($module!='home' OR ( $module=="home" AND $controller!=="index")) {?>
 			            			 </div>
 			            		</div>
 			            	</section>
             			 <?php }?>
-	            			<?php
-				               	if($module=='report' AND $action!='rpt-paymentschedules'){
-				            ?>
-			                <?php }?>
        		 	</div>
        		</div>
          </div>
      </div>
-     <footer>
+     <footer class="footer_fixed ">
           <div class="pull-right">
            All rights reserved
            & Developed By <a target="_blank" href="http://cam-app.com/">Cam App Technology</a>

@@ -1130,7 +1130,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->rsfooteracc = $frm->getFooterAccount();
 			
 			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-	
+			
+			if(!empty($search['student_payment'])){
+				$data1=$this->view->row = $db->getDailyReport($search);
+			}
+			
 			if(!empty($search['all_payment'])){
 				$data1=$this->view->row = $db->getDailyReport($search);
 				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
@@ -1139,9 +1143,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
 				$this->view->expense = $_db1->getAllOtherExpense($search);
 			}
-			if(!empty($search['student_payment'])){
-				$data1=$this->view->row = $db->getDailyReport($search);
-			}
+			
 			if(!empty($search['income'])){
 					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
 					$this->view->income = $_db->getAllOtherIncome($search);

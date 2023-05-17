@@ -49,6 +49,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_id,
 						(SELECT name_en FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
 						(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = sp.payment_method LIMIT 1) AS paymentMethod,
+						(SELECT bank_name FROM `rms_bank` WHERE rms_bank.id=sp.bank_id LIMIT 1) bank_name,
+						sp.number,
 						sp.grand_total AS total_payment,
 						sp.credit_memo,
 						sp.grand_total,

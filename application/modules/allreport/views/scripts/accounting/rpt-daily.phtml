@@ -5,14 +5,8 @@
 	$classHideHeight="110px";
 ?>
 <style>
-	/*
-	.hover:hover{ background:#ccc;}
-	table.content-data tr.style-head,
-	table.tb-footer tr.style-head {
-	   font-weight: bold !important;
-	}
-	*/
 	.hideprintdate{display:none !important;}
+	.hover:hover{ background: #ddd;}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
@@ -84,10 +78,7 @@
 			</tr>
 		</table>
 	</form>
-<style>
-.hover:hover{ background: #ddd;}
-</style>
-	<div id="divPrint" >
+	<div id="divPrint" style="back">
 					<style>
 
 								.style{
@@ -164,8 +155,7 @@
 				</tr>
 				<tr class="line"><td colspan="3"></td></tr>
 				<tr style="font-size: 12px;">
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 					<td align="center"  width="70%">
 						<div style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></div>
 						<?php if(!empty($this->search["start_date"])){?><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';line-height: 22px;"><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span><?php }?>
@@ -176,7 +166,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel" valign="top">
-						<table  style="width:100%; white-space: nowrap; !important;">
+						<table   style="width:100%; white-space: nowrap; !important;">
 							<?php if (!empty($this->row)){  ?>
 							<tr>
 								<td colspan="2"><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?></td>
@@ -247,7 +237,7 @@
 										    <td data-label="<?php echo $tr->translate("Credit Memo");?>"><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
 											<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>"><?php echo number_format($rs['paid_amount'],2); ?></td>
 											<td data-label="<?php echo $tr->translate("BALANCE");?>" <?php if($rs['balance_due']>0){echo"style='background:#efb6b6;'";}?>><?php echo number_format($rs['balance_due'],2); ?></td>
-											<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>"><?php echo $rs['paymentMethod']; ?></td>
+											<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>"><?php echo $rs['paymentMethod'].$rs['bank_name'].$rs['number']; ?></td>
 										    <td data-label="<?php echo $tr->translate("PAID_DATE");?>"><?php echo date('d-m-Y (H:i)', strtotime($rs['create_date'])); ?></td>
 										   	<td data-label="<?php echo $tr->translate("NOTE");?>"><span class="rsNote"><?php echo $rs['note']; ?></span></td>
 										    <td data-label="<?php echo $tr->translate("USER");?>" align="center"><?php echo $rs['user_id'];?></td>
@@ -358,8 +348,6 @@
 												<td colspan="2" data-label="<?php echo $tr->translate("FOR_DATE");?>"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 												<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['name'];?></td>
 											</tr>
-
-
 											<?php } ?>
 										<?php }?>
 									</table>
@@ -396,23 +384,24 @@
 								  			<td style="font-weight:bold;"><?php echo $tr->translate("PAID_AMOUNT");?></td>
 								  			<td style="color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
 								  			<td style="font-weight:bold;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
-											<td colspan="7" style="border-bottom:5px double #000;color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
+											<td style="border-bottom:5px double #000;color:blue; font-weight:bold;font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
 								  		</tr>
-								  		<tr><td colspan="10"><br /></td></tr>
+								  		<tr><td colspan="4"><br /></td></tr>
 								  		<tr>
-								  			<td colspan="10" style="border-bottom:1px solid #000;margin-top: 10px;"></td>
+								  			<td colspan="4" style="border-bottom:1px solid #000;margin-top: 10px;"></td>
 								  		</tr>
 								  		<tr>
-								  			<td colspan="10">
-									  			<div style="width:33%;float: left;text-align: center; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+								  			<td colspan="4">
+									  			<div style="width:33%;float:left;text-align: center; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
 									  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
 									  			</div>
-									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+									  			<div style="width:33%;float:left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
 									  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp,2);?>
 									  			</div>
-									  			<div style="width:33%;float: left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
+									  			<div style="width:33%;float:left;text-align: center;font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">
 									  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp,2);?>
 									  			</div>
+									  			<div style="clear: both;"></div>
 									  		</td>
 								  		</tr>
 								    </table>
@@ -424,8 +413,6 @@
 							<tr>
 								<td colspan="3" >
 									<style type="text/css">
-										
-										
 										body{font-family: 'Times New Roman','Khmer OS Battambang'; }
 										table{ border-collapse:collapse; margin:0 auto;
 										border-color:#000; }
@@ -452,23 +439,6 @@
 				</td>
 			</tr>
 		</table>
-	</div>	
-</div>
-<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
-	<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
-		<i class="fa fa-print"></i>
-	</div>
-	<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
-	<div class="ptss__settings">
-		<div class="ptss__single-setting" id="ptss__layout">
-			<div class="ptss__setting-control">
-				<div class="ptss__layout-wrapper">
-					<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
-					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
-					<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
-				</div>
-			</div>
-		</div>
 	</div>
 </div>
 <script type="text/javascript">

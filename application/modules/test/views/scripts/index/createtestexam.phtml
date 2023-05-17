@@ -434,7 +434,7 @@ function getStudntTestByBranch(){
 	});
 }
 
-url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
 <?php $testCondiction = TEST_CONDICTION; 
 if ($testCondiction==2){
 ?>
@@ -449,7 +449,7 @@ function getAllTermStudy(){
 		url: url_term_study,
 		content:{
 			'branch_id':branch_id,
-			'study_year':0,
+			//'study_year':0,
 			'option':0
 		},
 		handleAs:"json",
@@ -461,6 +461,7 @@ function getAllTermStudy(){
 			<?php }?>
 		},
 		error: function(err) {
+			alert(err);
 		}
 	});
 }

@@ -1087,6 +1087,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'onChange'=>'getStudntTestByBranch();',
     			'class'=>'fullside height-text',
     			'autoComplete'=>'false',
+				'readOnly'=>'false',
     			'queryExpr'=>'*${0}*',));
     	
     	$_arr_opt_stu = array(""=>$this->tr->translate("PLEASE_SELECT"));

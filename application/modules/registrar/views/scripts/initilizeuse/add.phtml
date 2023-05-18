@@ -228,6 +228,7 @@ function getAllstudentBranch(){
 	branchId = dijit.byId('branch_id').get('value');
 	if(branchId==''){
 		 dijit.byId('branch_id').focus();
+		 return false;
 	}
 	var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
 	

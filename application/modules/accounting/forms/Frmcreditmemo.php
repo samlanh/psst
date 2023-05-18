@@ -19,7 +19,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$optstu = $db->getAllStudent(1,1);
 		$student_id->setMultiOptions($optstu);
 	
-		$db = new Application_Model_DbTable_DbGlobal();
 		$stu_id = new Zend_Dojo_Form_Element_FilteringSelect('stu_idto');
 		$stu_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -28,7 +27,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(1)'
 		));
-		$optstu = $db->getAllStudent(1,1);
 		$stu_id->setMultiOptions($optstu);
 	
 		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
@@ -51,7 +49,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(2)'
 		));
-		$optstu = $db->getAllStudent(1,2);
 		$stu_name->setMultiOptions($optstu);
 	
 	
@@ -199,17 +196,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$optstu = $db->getAllStudent(1,2);
 		$student_id->setMultiOptions($optstu);
 	
-// 		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
-// 		$student_name->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'class'=>'fullside',
-// 				'autoComplete'=>"true",
-// 				'queryExpr'=>'*${0}*',
-// 				'onchange'=>'setSelected(2)'
-// 		));
-// 		$optstu = $db->getAllStudent(1,2);
-// 		$student_name->setMultiOptions($optstu);
-	
 		$stu_name = new Zend_Dojo_Form_Element_FilteringSelect('stu_name');
 		$stu_name->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -218,7 +204,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(2)'
 		));
-		$optstu = $db->getAllStudent(1,2);
 		$stu_name->setMultiOptions($optstu);
 	
 		$_Date = new Zend_Dojo_Form_Element_DateTextBox('Date');
@@ -325,7 +310,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$optstu = $db->getAllStudent(1,1);
 		$student_id->setMultiOptions($optstu);
 	
-		$db = new Application_Model_DbTable_DbGlobal();
 		$stu_id = new Zend_Dojo_Form_Element_FilteringSelect('stu_idto');
 		$stu_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -334,7 +318,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(1)'
 		));
-		$optstu = $db->getAllStudent(1,1);
 		$stu_id->setMultiOptions($optstu);
 	
 		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
@@ -357,7 +340,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(2)'
 		));
-		$optstu = $db->getAllStudent(1,2);
 		$stu_name->setMultiOptions($optstu);
 	
 	

@@ -281,7 +281,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				AND ds.stu_id = $stu_id AND ds.is_current=1 ";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
-// 		$where.=$dbp->getAccessPermission();
 		return $db->fetchAll($sql.$where);
 	}
 	

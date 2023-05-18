@@ -841,17 +841,17 @@ function getAllgroupStudyNotPass($action=null){
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 
    	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
-   	stu_code,
-   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
-   	FROM rms_student AS s,
-		rms_group_detail_student as gds
-   	WHERE 
-		gds.itemType=1
-		AND gds.stu_id = s.stu_id 
-		AND gds.is_current=1 AND gds.is_maingrade=1
-		AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
-		AND (stu_enname!='' OR s.stu_khname!='')
-		AND s.status=1  AND customer_type=1 ";
+	   	stu_code,
+	   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
+	   	FROM rms_student AS s,
+			rms_group_detail_student as gds
+	   	WHERE 
+			gds.itemType=1
+			AND gds.stu_id = s.stu_id 
+			AND gds.is_current=1 AND gds.is_maingrade=1
+			AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
+			AND (stu_enname!='' OR s.stu_khname!='')
+			AND s.status=1  AND customer_type=1 ";
    	if($branchid!=null){
    		$sql.=" AND s.branch_id=".$branchid;
    	}

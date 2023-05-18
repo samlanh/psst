@@ -1,6 +1,6 @@
 <?php
 
-class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
+class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_cardbackground'; 
 	 public function getUserId(){

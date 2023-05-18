@@ -535,15 +535,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			return false;
 		}
 	}
-	public function getTeacherid($user_name)
-	{
-		$select=$this->select();
-		$select->from($this,'id')
-		->where('user_name=?',$user_name);
-		$row=$this->fetchRow($select);
-		if(!$row) return NULL;
-		return $row['id'];
-	}
+	
 	public function getTeacherInfo($user_id)
 	{
 		$select=$this->select();

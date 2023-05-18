@@ -66,7 +66,7 @@ Class Library_Form_FrmCategory extends Zend_Dojo_Form {
 		
 		$id = new Zend_Form_Element_Hidden("id");
 		if($data!=null){
-			//print_r($data);exit();
+			
 			$cat_name->setValue($data['name']);
 			$_cateory_parent->setValue($data['parent_id']);
 			$note->setValue($data['remark']);
@@ -117,7 +117,7 @@ Class Library_Form_FrmCategory extends Zend_Dojo_Form {
 	
 		$id = new Zend_Form_Element_Hidden("id");
 		if($data!=null){
-			//print_r($data);exit();
+			
 			$cat_name->setValue($data['block_name']);
 			$note->setValue($data['remark']);
 			$status->setValue($data['status']);

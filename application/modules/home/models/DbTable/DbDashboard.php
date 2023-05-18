@@ -1,6 +1,5 @@
 <?php class Home_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract{
 
-	protected $_name = 'rms_student_test';
     public function getUserId(){
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	return $_dbgb->getUserId();

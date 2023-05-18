@@ -30,7 +30,7 @@ class Library_IndexController extends Zend_Controller_Action {
 			}
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();//exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function addAction(){

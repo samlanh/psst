@@ -66,42 +66,18 @@ class RsvAcl_Model_DbTable_DbUserType extends Zend_Db_Table_Abstract
 	public function insertUserType($arr)
 	{
 		$data=array(); 
-		/*foreach($arr as $key=>$value){
-     		if(!($key=='confirm_password' ||
-     			 $key=='password' ||
-     		     $key=='user_level_id' ||
-     		     substr($key, 0,11)=='division_id' ||
-     		     $key=='save'
-     		  ) 	 
-     		){     		
-     			$data[$key]=$value;
-     		}     	
-     	}	*/
+		
 		$data['user_type']=$arr['user_type'];  
 		$data['parent_id']=$arr['parent_id'];  	
      	$data['status']='1';
-     	//print_r($data);exit;
-    	return $this->insert($data); 
+     	return $this->insert($data); 
 	}	
 	//update user
 	public function updateUserType($arr,$user_type_id)
 	{
-		//print_r($arr); exit;
+		
 		$data=array(); 	
-		//Sophen commented on 17 May 2012   	
-    /* 	foreach($arr as $key=>$value){
-     		if(!($key=='confirm_password' ||
-     			 $key=='password' ||
-     		     $key=='user_level_id' ||
-     		     substr($key, 0,11)=='division_id' ||
-     		     $key=='save'
-     		  ) 	 
-     		){     		
-     			$data[$key]=$value;
-     			
-     		}     
-     		
-     	}*/	
+	
 		
 		$status = empty($arr['status'])?0:1;
 		
@@ -114,11 +90,10 @@ class RsvAcl_Model_DbTable_DbUserType extends Zend_Db_Table_Abstract
 	
 	public function updateUserTypeAccess($arr,$user_type_id)
 	{
-		//print_r($arr); exit;
+		
 		$data=array(); 	  		
         $data['user_type']=$arr;	
-        //echo $data['user_type'].$user_type_id; exit;
-    	$where=$this->getAdapter()->quoteInto('user_type_id=?',$user_type_id);
+        $where=$this->getAdapter()->quoteInto('user_type_id=?',$user_type_id);
 		$this->update($data,$where); 
 	}
 	//function dupdate field status user to force use become inaction

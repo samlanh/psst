@@ -32,7 +32,6 @@ class Rsvacl_PickupcardController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$fm = new RsvAcl_Form_FrmPickupCard();
 		$frm = $fm->FrmCardmg();

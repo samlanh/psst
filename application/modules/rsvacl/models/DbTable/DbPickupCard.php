@@ -11,7 +11,6 @@ class RsvAcl_Model_DbTable_DbPickupCard extends Zend_Db_Table_Abstract
     function addPickupCard($_data){
     	$_db= $this->getAdapter();
     	$_db->beginTransaction();
-    	//print_r($_FILES['photo']); exit();
     	try{
     		$part= PUBLIC_PATH.'/images/card/';
     		$name = $_FILES['photo']['name'];

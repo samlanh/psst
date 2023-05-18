@@ -92,7 +92,7 @@ class Test_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
 				}
 			}
 		}catch(Exception $e){
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	function getAlltermforedit(){

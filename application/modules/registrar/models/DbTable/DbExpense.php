@@ -45,7 +45,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 			$_db->commit();
 		}catch(Exception $e){
 			$_db->rollBack();
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
  	}
 	function updatExpense($data){
@@ -87,9 +87,8 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 			$_db->commit();
 		}catch(Exception $e){
 			$_db->rollBack();
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		//print_r($data); exit();
 	}
 	function getexpensebyid($id){
 		$db = $this->getAdapter();

@@ -413,26 +413,6 @@ function getAllAcademicByBranch(){
 		getAllYear(url_getacademic,contentData,selectedId);
 }
 
-var url_get_stu = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'getstudenttestbybranch')); ?>';
-function getStudntTestByBranch(){
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id==''){
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_get_stu,
-		content:{
-			'branch_id':branch_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			student_store  = getDataStorefromJSON('id','name', data);
-			dijit.byId('stu_test_id').set('store',student_store);  
-		},
-		error: function(err) {
-		}
-	});
-}
 
 url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
 <?php $testCondiction = TEST_CONDICTION; 

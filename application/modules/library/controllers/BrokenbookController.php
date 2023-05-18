@@ -25,7 +25,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	    }
     	    $rs_row=$db->getAllBroken($search);
 	    	$glClass = new Application_Model_GlobalClass();
-			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BOOK_NO","NOTE","BROKEN_DATE","USER","STATUS");
 			$link=array(
@@ -34,7 +33,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_row,array('broke_no'=>$link,'date_broken'=>$link,'qty'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     	
     	$frm_major = new Library_Form_FrmSearchMajor();
@@ -57,7 +56,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
@@ -77,7 +75,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
-    			echo $e->getMessage();
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
     	$this->view->row=$db->getBrokenById($id);

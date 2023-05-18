@@ -102,7 +102,7 @@
 </script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
-var dept_store  = getDataStorefromJSON('id','name', <?php //print_r(Zend_Json::encode($this->dept));?> );
+var dept_store  = getDataStorefromJSON('id','name');
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 	    store: dept_store,

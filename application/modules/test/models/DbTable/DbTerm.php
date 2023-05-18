@@ -62,7 +62,7 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 			$this->_name='rms_test_term';	
 			$this->insert($arr);
     	}catch(Exception $e){
-    		echo $e->getMessage();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 	}
 	
@@ -81,7 +81,7 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 			$where=" id = ".$data['id'];
 			$this->update($arr, $where);
     	}catch(Exception $e){
-    		echo $e->getMessage();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 	}
 	function getTermById($id=null){

@@ -530,8 +530,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	$db= new Allreport_Model_DbTable_DbRptStudentScore();
     	$this->view->student_pass = $db->getAllStudentPassed($search);
-    	//$this->view->student_fail= $db->getAllStudentFailed($search);
-    	//print_r($this->view->student_fail);exit();
     	
     	$_db= new Allreport_Model_DbTable_DbRptGroupStudentChangeGroup();
     	$this->view->change_type = $_db->getChangeType();

@@ -3041,6 +3041,9 @@ function getAllgroupStudyNotPass($action=null){
   			id,
   			note as name 
   			FROM rms_test_term WHERE status=1 AND note !=''  ";
+	if(!empty($data['branch_id'])){
+		$sql.=" AND  branch_id=".$data['branch_id'];
+	}
   	$sql.=" ORDER BY id DESC";
   	$rows = $db->fetchAll($sql);
   	if($option==null){

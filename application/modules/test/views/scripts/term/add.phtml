@@ -51,6 +51,12 @@
 													<div class="col-md-12 col-sm-12 col-xs-12">
 															&nbsp; 
 													</div>
+													<div class="form-group">
+														<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> </label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<input id="branch_id" />
+														</div>
+													</div>
 
 													<div class="form-group">
 														<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span> </label>
@@ -98,8 +104,25 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ObjectStore");
-	
+	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){ 
+
+		new dijit.form.FilteringSelect({
+		store: branch_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                         
+		required: true,
+		id: "branch_id",
+		name: "branch_id",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
+		onChange: function() {  
+			// branch_id = dijit.byId('branch_id').get('value');
+			// if(branch_id==-1){
+			// 	dijit.byId("popup_add_branch").show();
+			// 	}
+			}
+		}, "branch_id");	
 	
 	});
 

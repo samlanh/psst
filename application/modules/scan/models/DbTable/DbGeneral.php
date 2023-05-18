@@ -17,9 +17,6 @@ class Scan_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 		try{
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			
-		
-			
-			
 			$partAudio= PUBLIC_PATH.'/images/frontFile/audio/';
 			if (!file_exists($partAudio)) {
 				mkdir($partAudio, 0777, true);
@@ -267,30 +264,6 @@ class Scan_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-	}
-	function getAllSchoolOption(){
-		$db = $this->getAdapter();
-		$sql="SELECT * FROM `rms_schooloption`";
-		return $db->fetchAll($sql);
-	}
-	function getAllGradeAudio(){
-		$db = $this->getAdapter();
-		
-		$dbg = new Application_Model_DbTable_DbGlobal();
-		$lang = $dbg->currentlang();
-		$grade = "ie.title_en";
-		if($lang==1){// khmer
-			$grade = "ie.title";
-		}
-		
-		$sql="SELECT sga.*,(SELECT $grade FROM rms_itemsdetail AS ie WHERE ie.id=sga.gradeId AND ie.items_type=1 LIMIT 1) AS gradeTitle FROM `rms_setting_grade_audio` AS sga WHERE sga.status=1 ";
-		return $db->fetchAll($sql);
-	}
-	
-	function getAllPlaylistvideo(){
-		$db = $this->getAdapter();
-		$sql="SELECT sga.* FROM `rms_setting_playlistvideo` AS sga WHERE sga.status=1 ";
-		return $db->fetchAll($sql);
 	}
 }
 

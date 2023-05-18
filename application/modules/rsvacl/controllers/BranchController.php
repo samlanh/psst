@@ -67,10 +67,8 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
-				
 			}
 		}
-		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		
 		$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
 		$this->view->schoolOption = $_dbmodel->getAllSchoolOption();
@@ -95,8 +93,6 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
 			}
 		}
-		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		
 		$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
 		$this->view->schoolOption = $_dbmodel->getAllSchoolOption();
 		
@@ -142,15 +138,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 		$this->view->frm_branch=$update;
 		Application_Model_Decorator::removeAllDecorator($update);
 	}
-	function addbranchAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();		
-    		$db = new RsvAcl_Model_DbTable_DbBranch();
-    		$gty= $db->addajaxs($data);
-    		print_r(Zend_Json::encode($gty));
-    		exit();
-    	}   
-    }
+	
     
     function checkduplicateAction(){
     	if($this->getRequest()->isPost()){

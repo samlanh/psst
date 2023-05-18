@@ -10,8 +10,17 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     
 	public function getAllTerm($search){
 		$db= $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+    	$lang = $dbp->currentlang();
+    	if($lang==1){// khmer
+    		
+    		$branch = "branch_namekh";
+    	}else{ // English
+    		$branch = "branch_nameen";
+    	}
 		$sql="SELECT 
 					id,
+					(SELECT $branch FROM rms_branch WHERE br_id= branch_id LIMIT 1) AS branch_name,
 					note AS title,
 					start_date,
 					end_date,
@@ -32,6 +41,9 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     		$s_where[]= " REPLACE(note,' ','') LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
+		if(!empty($search['branch_id'])){
+    		$where.=" AND branch_id=".$search['branch_id'];
+    	}
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
@@ -39,6 +51,7 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     	$db= $this->getAdapter();
     	try{
     		$arr = array(
+					'branch_id'		=>$data['branch_id'],
 					'start_date'	=>$data['start_date'],
 					'end_date'		=>$data['end_date'],
 					'note'			=>$data['title'],
@@ -57,6 +70,7 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$db= $this->getAdapter();
 		try{
 			$arr = array(
+					'branch_id'		=>$data['branch_id'],
 					'start_date'	=>$data['start_date'],
 					'end_date'		=>$data['end_date'],
 					'note'			=>$data['title'],

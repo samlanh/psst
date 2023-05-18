@@ -105,15 +105,6 @@ class Rsvacl_CardmgController extends Zend_Controller_Action {
 		$this->view->frm_branch = $frm;
 	}
 	
-	function addbranchAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-		
-    		$db = new RsvAcl_Model_DbTable_DbCardmg();
-    		$gty= $db->addajaxs($data);
-    		print_r(Zend_Json::encode($gty));
-    		exit();
-    	}   
-    }
+	=
 }
 

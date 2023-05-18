@@ -224,7 +224,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 	}
 	function getAllSchoolOption(){
 		$db = $this->getAdapter();
-		$sql="SELECT * FROM `rms_schooloption`";
+		$sql="SELECT * FROM `rms_schooloption` WHERE s.status = 1 ";
 		return $db->fetchAll($sql);
 	}
 	function getAllGradeAudio(){

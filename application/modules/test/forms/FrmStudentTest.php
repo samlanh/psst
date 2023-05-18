@@ -1203,8 +1203,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	}
     	
     	$_arr_opt_term = array(""=>$this->tr->translate("SELECT_TERM"));
-//     	$optionBranch = $_dbgb->getAllBranch();
-//     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_term[$row['id']]=$row['name'];
+
     	$term = new Zend_Dojo_Form_Element_FilteringSelect("term_test");
     	$term->setMultiOptions($_arr_opt_term);
     	$term->setAttribs(array(
@@ -1214,12 +1213,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',));
     	$term->setValue($request->getParam("term_test"));
-//     	if (count($optionBranch)==1){
-//     		$term->setAttribs(array('readonly'=>'readonly'));
-//     		if(!empty($optionBranch))foreach($optionBranch AS $row){
-//     			$term->setValue($row['id']);
-//     		}
-//     	}
     	
     	if (!empty($detailscore)){
     		$_score->setValue($detailscore['score']);

@@ -1,6 +1,7 @@
 <?php 
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
 ?>
 <style>
 #table tr td{
@@ -51,8 +52,19 @@
 												<div class="col-md-12 col-sm-12 col-xs-12">
 															&nbsp; 
 												</div>
-
-
+												
+												<div class="form-group">
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<select autoComplete='false' queryExpr="*${0}*"  name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside" readonly="false">
+															<?php 
+																if(!empty($this->branchopt)){
+																foreach($this->branchopt as $rs){?>
+																<option <?php if($this->row['branch_id']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+															<?php }}?>
+														</select>
+													</div>
+												</div>
 												<div class="form-group">
 													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
 													<div class="col-md-7 col-sm-7 col-xs-12">

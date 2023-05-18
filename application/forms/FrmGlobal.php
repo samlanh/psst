@@ -844,7 +844,6 @@ class Application_Form_FrmGlobal{
 					.blogbranchlogo{
 						margin:0 auto;position:absolute;top:10px !important;left:100px;
 					}
-					#PrintReceipt a{text-decoration: none;color:#000;}
 				</style>
 				<div id='PrintReceipt' style='width:100%cm !important; padding: 0px;'>
 					<style>
@@ -902,9 +901,15 @@ class Application_Form_FrmGlobal{
 							margin-bottom: 0px !important;
 						}
 						@page {
-							size:A5 landscape;
 							margin:0cm 0.7cm 0cm 0.7cm;
 							page-break-before: avoid;
+							/*size: A4 landscape;*/
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							size:A5 landscape;
 						}
 						#page {
 						   border-collapse: collapse;

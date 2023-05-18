@@ -54,10 +54,17 @@ table.tb-footer tr.style-head {
         	<div class="col-md-2 col-sm-2 col-xs-12">
         		<?php echo $frm->getElement("department");?>
         	</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStudent();">
+					<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
+					<option value="2"><?php echo $tr->translate("SELECTED_STUDENT_OPTION");?></option>
+				</select>
+             </div>
+			
         </div>
 	</form>
 <div id="divPrint">
-		<table  style="background:#fff; margin: 0 auto; width: 100%; ">
+		<table class="NORMAL_OPTION"  style="background:#fff; margin: 0 auto; width: 100%; ">
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
@@ -205,6 +212,35 @@ table.tb-footer tr.style-head {
 				</td>
 			</tr>
 		</table>
+		<div class="card-box SELECTED_STUDENT_OPTION">
+			<div class="col-md-12 col-sm-12 col-xs-12" style=" padding: 0;">
+				<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+					<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?> </label>
+					<div class="col-md-5 col-sm-5 col-xs-12">
+						<select name="studentID" id="studentID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
+							<option value="0"><?php echo $tr->translate("SELECT_STUDENT");?></option>
+							<?php if(!empty($this->stu_forOption)){ foreach ($this->stu_forOption AS $row) { ?>
+							<option value="<?php echo $row['stu_id']; ?>"><?php echo $row['stu_code']." ".$row['name']." ".$row['grade'];?></option>
+							<?php }} ?>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+						<thead>
+							<tr id="head-title" class="head-td" align="right" style="width: 100%;">
+								<th width="5%"><?php echo $tr->translate("DEL");?></th>
+								<th width="5%"><?php echo $tr->translate("N_O");?></th>
+								<th ><?php echo $tr->translate("STUDENT");?></th>
+							</tr>
+						</thead>
+						<tbody id="table_row">
+						</tbody>
+						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <table width="100%">
@@ -393,8 +429,55 @@ table.tb-footer tr.style-head {
 		</div>		
 	</div>
 </div>
-
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	// new dijit.form.FilteringSelect({
+	// 	store: group_store,
+	//     queryExpr: "*${0}*",
+	// 	autoComplete: false,                     
+	//     id: "group",
+	//     name: "group",  
+	//     class: 'fullside', 
+	//     readonly:false,
+	//     required:false,
+	//     placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	//     onChange: function() {  
+		    
+	//     }
+	// }, "group");
+	
+	// new dijit.form.FilteringSelect({
+	// 	queryExpr: "*${0}*",
+	// 	autoComplete: false,                     
+	// 	required: false,                        
+	// 	id: "grade",
+	// 	name: "grade",  
+	// 	class: 'fullside',  
+	// 	placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+	// 	onChange: function() {  
+	// 		 getAllGroupByBranch();
+	// 	}
+	// }, "grade");
+	
+	//  var branch_id = dijit.byId('branch_id');
+	//  branch_id.on('change', function(evt) {
+	// 	 getAllGroupByBranch();
+    // });
+	//  var academic_year = dijit.byId('academic_year');
+	//  academic_year.on('change', function(evt) {
+	// 	 getAllGroupByBranch();
+    // });
+	//  getAllGroupByBranch();
+	//  getallGrade();
+	 
+	 getBlogStudent();
+});
+
+
 function getKHMonthByNumber(m){
 	var monthName=[
 		"មករា",
@@ -491,4 +574,19 @@ function getKHMonthByNumber(m){
 			$('#id_selected').val(strings);
 		}
 	}
+
+	function getBlogStudent(){
+		optionSelect=dijit.byId("optionSelect").get("value");
+		if(optionSelect==1){
+			$(".NORMAL_OPTION").css("display", "table");
+			$(".SELECTED_STUDENT_OPTION").css("display", "none");
+		}else{
+			$("#id_selected").val('');
+			dojo.query("#table_row").append("");
+			$(".NORMAL_OPTION").css("display", "none");
+			$(".SELECTED_STUDENT_OPTION").css("display", "block");
+		}
+		
+	}
+
 </script>

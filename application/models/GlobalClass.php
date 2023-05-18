@@ -83,6 +83,23 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 	
 		return  $hours;
 	}
+	
+	
+	
+	
+		public function getList($url,$frm,$start,$limit,$record_count){
+			$page = new Application_Form_FrmNavigation($url, $start, $limit, $record_count);
+			$page->init($url, $start, $limit, $record_count);//can wrong $form
+			$nevigation = $page->navigationPage();
+			$rows_per_page = $page->getRowsPerPage($limit, $frm);
+			$result_row = $page->getResultRows();
+			$arr = array(
+					"nevigation"=>$nevigation,
+					"rows_per_page"=>$rows_per_page,
+					"result_row"=>$result_row);
+			return $arr;
+		}
+		
 		public function getAllPayMentTermOption(){
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$rows = $_db->getAllPaymentTerm();
@@ -92,7 +109,19 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			}
 			return $option;
 		}
-		
+		public function getAllFacultyOption(){
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$param =array(
+				'itemsType'=>1
+			);
+			$rows = $_db->getAllItemDetail($param);
+			array_unshift($rows, array('id'=>-1,'name'=>"select grade"));
+			$options = '';
+			if(!empty($rows))foreach($rows as $value){
+				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+			}
+			return $options;
+		}
 		public function getAllSession(){
 			$db=$this->getAdapter();
 			$sql=" SELECT key_code AS id,CONCAT(name_en,'-',name_kh) AS `name` FROM rms_view WHERE `type`=4 AND `status`=1 ";
@@ -103,7 +132,18 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		    }
 		    return $options;
 		}
-		
+		public function getAllServiceItemOption($type=null){
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			$rows = $_db->getAllstudentRequest($type);
+			array_unshift($rows,array('id' => '-1',"name"=>$tr->translate("ADD_NEW")));
+			array_unshift($rows,array('id' => '',"name"=>$tr->translate("SELECT_SERVICE"), ));
+			$options = '';
+			if(!empty($rows))foreach($rows as $value){
+				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+			}
+			return $options;
+		}
 		public function getImgActive($rows,$base_url, $case='',$type=null){
 			if($rows){
 				$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
@@ -121,6 +161,66 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			return $rows;
 		}
 		
+		public function getGetPayTerm($rows,$base_url, $case=''){
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			if($rows){
+				foreach ($rows as $i =>$row){
+					if($row['payment_term'] == 2){
+						$rows[$i]['payment_term']=$tr->translate('TERM');
+					}
+					else if($row['payment_term'] == 1){
+						$rows[$i]['payment_term']=$tr->translate('MONTHLY');
+					}
+					else if($row['payment_term'] == 3){
+						$rows[$i]['payment_term']=$tr->translate('SEMESTER');
+					}
+					else if($row['payment_term'] == 4){
+						$rows[$i]['payment_term']=$tr->translate('YEAR');
+					}
+				}
+			}
+			return $rows;
+		}
+		public function getSession($rows,$base_url, $case=''){
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			if($rows){
+				foreach ($rows as $i =>$row){
+					if($row['session_id'] == 1){
+						$rows[$i]['session_id']=$tr->translate('MORNING');
+					}
+					else if($row['session_id'] ==2){
+						$rows[$i]['session_id']=$tr->translate('AFTERNOON');
+					}
+					else if($row['session_id'] == 3){
+						$rows[$i]['session_id']=$tr->translate('EVENING');
+					}
+					else if($row['session_id'] == 4){
+						$rows[$i]['session_id']=$tr->translate('ចុងសបា្តហ៏');
+					}
+				}
+			}
+			return $rows;
+		}
+		public function getsunjectOption(){
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$rows = $_db->getAllsubject();
+			$options = '';
+			if(!empty($rows))foreach($rows as $value){
+				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['subject_name'], ENT_QUOTES).'</option>';
+			}
+			$options .= '<option Value="-1">Add New</option>';
+			return $options;
+		}
+		public function getTeachersunjectOption(){
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$rows = $_db->getAllTeacherSubject();
+			$options = '';
+			if(!empty($rows))foreach($rows as $value){
+				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['subject_name'].' , '.$value['teacher_name'], ENT_QUOTES).'</option>';
+			}
+			$options .= '<option Value="-1">Add New</option>';
+			return $options;
+		}
 		public function getAllExpenseIncomeType($type){
 			$_db = new Registrar_Model_DbTable_DbCateExpense();
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();

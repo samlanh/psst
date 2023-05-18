@@ -111,19 +111,8 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'stamp'			=>$imgstamp,
 	    			
 	    		);
-// 	    	$check = $this->getCheckHasBranch();
-// 	    	if (empty($check)){
-// 	    		$school = $this->getAllSchoolOption();
-// 	    		$list = "";
-// 	    		if (!empty($school)){
-// 	    			foreach ($school as $sss){
-// 	    				if (empty($list)){$list=$sss['id'];}else{$list=$list.",".$sss['id'];}
-// 	    			}
-// 	    		}
-// 	    		$_arr['schooloptionlist']=$list;
-// 	    	}
 	    	$this->_name ="rms_branch";
-	    	$this->insert($_arr);//insert data
+	    	$this->insert($_arr);
 	    	
 	    	$_db->commit();
     	}catch(Exception $e){
@@ -141,7 +130,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     public function updateBranch($_data,$id){
     	$_db= $this->getAdapter();
     	$_db->beginTransaction();
-    	//print_r($_data); exit();
     	try{
     		$part= PUBLIC_PATH.'/images/logo/';
     		$name = $_FILES['photo']['name'];
@@ -222,7 +210,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	
     	$_db->commit();
     	}catch(Exception $e){
-    		exit();
     		Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$_db->rollBack();
@@ -240,7 +227,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.branch_tel1,b.fax,
     			b.other,b.status FROM rms_branch AS b  ";
     	$where = ' WHERE  b.branch_nameen !="" ';   	
-//     	(SELECT name_en FROM `rms_view` AS v WHERE v.`type` = 4 AND v.key_code = b.displayby)AS displayby,
     	if(!empty($search['adv_search'])){
     		$s_where=array();
     		$s_search=trim(addslashes($search['adv_search']));
@@ -258,7 +244,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 			$where.= " AND b.status = ".$search['status'];
 		}
     	$order=' ORDER BY b.br_id DESC';
-   //echo $sql.$where;
    return $db->fetchAll($sql.$where.$order);
    }
       
@@ -284,17 +269,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	return "C-".$pre.$new_acc_no;
     }
 	
-	function addajaxs($_data){
-		//return '0000';
-    	$_arr = array(
-				'branch_namekh'=>$_data['branch_nameen'],
-				'branch_nameen'=>$_data['branch_nameen'],
-				'fax'=>$_data['fax'], 
-				'br_address'=>$_data['br_address'],
-    			);
-    	return $this->insert($_arr);//insert data
-    }
-    
+	
     function getAllBranchCount(){
     	$db = $this->getAdapter();
     	$this->_name = "rms_branch";
@@ -319,6 +294,4 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	}
     	return 0;
     }
-}  
-	  
-
+}

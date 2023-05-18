@@ -50,7 +50,7 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 				'style'=>'color:red',
 				'onkeyup'=>'Calcuhundred()'
 				));
-		$br_code=Global_Model_DbTable_DbBranch::getBranchCode();
+		$br_code=RsvAcl_Model_DbTable_DbBranch::getBranchCode();
 		$br_id->setValue($br_code);
 		
 		$branch_namekh = new Zend_Dojo_Form_Element_ValidationTextBox('branch_namekh');
@@ -109,8 +109,8 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 				'style'=>'color:red',
 				'onkeyup'=>'Calcuhundred()'
 				));
-		$db_code=Global_Model_DbTable_DbBranch::getBranchCode();
-		$branch_code->setValue($db_code);
+		$db_code=RsvAcl_Model_DbTable_DbBranch::getBranchCode();
+		$branch_code->setValue($br_code);
 		
 		$branch_tel = new Zend_Dojo_Form_Element_TextBox('branch_tel');
 		$branch_tel->setAttribs(array(

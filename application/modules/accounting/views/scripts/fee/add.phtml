@@ -275,9 +275,11 @@
 				<tr>
 					<td align="center">
 						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="no" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideAlert();"/>
+							dojoType="dijit.form.Button" 
+							class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" onclick="hideAlert();"/>
 						<input type="button"  label="<?php echo $tr->translate("AGREE");?>" id="yes" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="checkSaveType();"/>
+							dojoType="dijit.form.Button"
+							class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" onclick="checkSaveType();"/>
 					</td>
 				</tr>
 			</table>

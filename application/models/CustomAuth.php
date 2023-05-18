@@ -19,6 +19,71 @@ class Application_Model_CustomAuth extends Zend_Controller_Plugin_Abstract
 		$this->_auth = $auth;
 	}
  
+
+		
+	public function preDispatch(Zend_Controller_Request_Abstract $request)
+ 	{ 	
+ 		//clear session from search session
+ 		$this->clearSession();
+ 		
+ 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+ 		$module = $request->getModuleName();
+ 		$controller = $request->getControllerName();
+ 		$action = $request->getActionName();
+ 		$url = $module."/".$controller."/".$action;
+ 		$_url = "";
+ 		
+ 		
+ 		if(isset($session_user->arr_acl)){
+	 		$arr_acl = $session_user->arr_acl;
+	 		$valid_action = FALSE;
+	 		
+	 		foreach($arr_acl as $acl){
+				if($module==$acl["module"] && $controller==$acl["controller"]){
+					$valid_action = TRUE;
+					break;
+				}elseif($module==="rsvAcl" && $controller==="user" && $action==="change-password"){ //all user level can change password all
+					$valid_action = TRUE;
+					break;
+				}elseif($module==="rsvAcl" && $session_user->level==="1"){ //user level 1 can access all action in module "rsvAcl"
+					$valid_action = TRUE;
+					break;
+				}
+				
+	 		} 
+	 		
+	 		//redirect to homepage
+	 		if(!$valid_action){
+	 			//For all url that can access all user type
+// 	 			if($url !== "default/index/index" && $url !=="default/error/error" && $url !=="default/index/changepassword" && $url !=="default/index/logout"){
+// 	 				$_url = '/';
+// 	 			}
+	 			$_have = false;
+	 			foreach ($this->_exception_url as $i => $val){
+	 				if($url === $val){
+	 					$_have = true;
+	 					break;
+	 				}
+	 			}
+	 			if(!$_have) {
+	 				$_url = '/';
+	 			}		
+	 		}
+	 		else{
+	 			$_url = $this->rewriteUrl($url);
+	 		}
+ 		}else{ //no login
+ 			//redirect to login page
+	 		if($url !== "default/index/index"){ 
+	 			$_url = "/";
+	 		}
+	 	}
+	 	
+	 	if(!empty($_url)){
+	 		Application_Form_FrmMessage::redirectUrl($_url);
+	 	}
+			
+ 	}
  	
  	protected function rewriteUrl($url){
  		if(!empty($this->_rewrite_url[$url])){
@@ -72,4 +137,23 @@ class Application_Model_CustomAuth extends Zend_Controller_Plugin_Abstract
 			 
 	   return $this->_response->setRedirect($url);
 	}
+	
+	private function clearSession(){
+		$req = Zend_Controller_Front::getInstance()->getRequest();
+		$module = $req->getModuleName();
+		$controller = $req->getControllerName();
+		$action = $req->getActionName();
+		$clr = array(
+				array("s"=>"search_hotline", "m"=>"cs", "c"=>"cs-reports", "a"=>"index")
+		);
+	
+		foreach ($clr as $key => $r) {
+			if($module !== $r['m'] && $controller !== $r['c'] && $action !== $r['a']){
+				$ses_search = new Zend_Session_Namespace($r['s']);
+				$ses_search->unsetAll();
+			}
+		}
+	}
+	
 }
+

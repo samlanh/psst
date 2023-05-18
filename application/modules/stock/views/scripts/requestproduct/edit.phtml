@@ -593,28 +593,7 @@ function deleteRecord(index){
 	dojo.query("#row"+index).remove();
 	sumAmountDue();
 }
-var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->branchopt));?> );
-var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
-function addBranch(){
-	if(dijit.byId('frm_addbranch').validate()){
-		dojo.xhrPost({
-				url:url_addbranch,
-				form: dojo.byId("frm_addbranch"),
-				handleAs:"json",
-				load: function(data) {
-					var Itemmake = { 
-							 id: data,
-							 name: dijit.byId('branch_nameen').get('value')
-						   };
-			   addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
-			   dijit.byId('frm_addbranch').reset();
-			   dijit.byId("popup_add_branch").hide();	
-			},
-			error: function(err) {
-			}
-		});
-	}
-}
+
 function hideDialog(){
 	dijit.byId('frm_addbranch').reset();
 	dijit.byId("popup_add_branch").hide();

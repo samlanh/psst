@@ -22,7 +22,6 @@ public function init()
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/scan/setting");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAILE");
-				echo $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}

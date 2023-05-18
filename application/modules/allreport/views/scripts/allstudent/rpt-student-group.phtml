@@ -28,10 +28,10 @@
     </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
+            <div class="col-md-3 col-sm-3 col-xs-12">
+            	<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
 					<option value="-1"><?php echo $tr->translate("STUDENT_TYPE");?></option>
 					<?php if(!empty($this->study_type)){foreach($this->study_type as $rs){?>
@@ -39,14 +39,14 @@
 					<?php }}?>
 				</select>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
-					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
-					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
 				</select>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="col-md-3 col-sm-3 col-xs-12">
             	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
             </div>
         </div>

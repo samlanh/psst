@@ -110,7 +110,6 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		}
    }
    public function updateStudentAttendence($_data){
-		//print_r($_data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
@@ -159,7 +158,6 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
-			echo $e->getMessage();
 		}
    }
 	function getStudyYears(){

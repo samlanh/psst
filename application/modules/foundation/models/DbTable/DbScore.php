@@ -187,7 +187,6 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		  $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }

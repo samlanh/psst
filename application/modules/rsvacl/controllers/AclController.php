@@ -42,9 +42,9 @@ class RsvAcl_AclController extends Zend_Controller_Action
     	if($this->getRequest()->getParam('id')){
     		$db = new RsvAcl_Model_DbTable_DbAcl();
     		$acl_id = $this->getRequest()->getParam('id');
-    		//echo $acl_id; exit;
+    		
     		$rs=$db->getAcl($acl_id);
-    		//print_r($rs); exit;
+    		
     		$this->view->acl_data=$rs;
     	}  	 
     	

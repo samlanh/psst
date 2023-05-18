@@ -32,7 +32,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_row,array('purchase_no'=>$link,'title'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
     	}
     	
     	$frm_major = new Library_Form_FrmSearchMajor();
@@ -54,8 +53,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());;
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
@@ -102,7 +100,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/bookpurchase/index");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
-    			echo $e->getMessage();exit();
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();

@@ -645,7 +645,6 @@ class Issue_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 	public function updateTeacherStudentScore($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		//print_r($_data);exit();
 		try{
 			$session_t=new Zend_Session_Namespace('authteacher');
 			$teacher_id = $session_t->teacher_id;

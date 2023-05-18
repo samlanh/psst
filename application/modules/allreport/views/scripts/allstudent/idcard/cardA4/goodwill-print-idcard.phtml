@@ -25,7 +25,7 @@
 							$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
 							$color = "000000";
 							$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
-							//print_r($bg);
+							
 							if(!empty($bg['background'])){
 								if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 									$image = $this->baseUrl().'/images/card/'.$bg['background'];

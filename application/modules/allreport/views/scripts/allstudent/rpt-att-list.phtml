@@ -29,7 +29,6 @@
 	$day = array("Mon"=>"ចន្ទ","Tue"=>"អង្គ","Wed"=>"ពុធ","Thu"=>"ព្រហ","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
 	$frm =  $this->form_search;
 	$classHideHeight="110px";
-	//print_r($this->rs );
 ?>	
 <div class="reportblog">
 	<div class="card-box">
@@ -95,27 +94,14 @@
 					</div>
 				</div>
 		</div>
-		<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="col-md-12 col-sm-12 col-xs-12 ">
 				<div class="card-blogform">
 					<div class="card-body"> 
 						<div class="row"> 
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<!-- <div class="d-flex "> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SELECT");?></p>
-										</div> 
-								</div>
+							<div class="col-md-12 col-sm-12 col-xs-12 ">
 								<div class="form-group">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										&nbsp;
-									</div>
-								</div> -->
-								<div class="form-group">
-									<div class="col-md-3 col-sm-3 col-xs-12 text-center">
-										<p class="tx-20 font-weight-semibold "><?php echo $tr->translate("SELECT");?></p>
+									<div class="col-md-3 col-sm-3 col-xs-12 text-center ">
+										<p class="tx-20 font-weight-semibold "><i class="glyphicon glyphicon-ok-sign" aria-hidden="true">&nbsp;</i><?php echo $tr->translate("SHOW");?> </p>
 									</div>
 									<div class="col-md-3 col-sm-6 col-xs-12">
 										<select name="teacher" id="teacher" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setTeacherName();">

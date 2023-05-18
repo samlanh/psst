@@ -106,7 +106,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		}
    }
    public function updateStudentAttendence($_data){
-		//print_r($_data);exit();
+		
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{

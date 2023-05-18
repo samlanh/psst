@@ -43,7 +43,6 @@ class Stock_importController extends Zend_Controller_Action {
 			$this->view->frm = $frm;
 			
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}

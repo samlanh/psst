@@ -21,8 +21,6 @@ class Mobileapp_Model_DbTable_DbNotice extends Zend_Db_Table_Abstract
 
 	function add($data){
 
-		//print_r($data); exit();
-	
 		if(!empty($data['description'])){
 			$des =  $data['description'];
 		}else{

@@ -109,7 +109,7 @@ Class Library_Form_FrmBookreturn extends Zend_Dojo_Form {
 		$old_photo = new Zend_Form_Element_Hidden("old_photo");
 		
 		if($data!=null){
-			//print_r($data);exit();
+			
 			$book_name	->setValue($data['title']);
 			$book_id	->setValue($data['book_no']);
 			$author_name->setValue($data['author']);

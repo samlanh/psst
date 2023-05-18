@@ -83,7 +83,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 
@@ -181,7 +181,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	

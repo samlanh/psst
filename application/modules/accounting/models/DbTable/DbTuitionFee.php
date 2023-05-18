@@ -155,8 +155,8 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     		$db->commit();
     		return true;
     	}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$db->rollBack();
-    		echo $e->getMessage();
     	}
     }
    

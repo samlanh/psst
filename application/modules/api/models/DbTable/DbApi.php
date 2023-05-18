@@ -3525,7 +3525,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 		$row = (array) $row;//sort by key Value DESC
 		usort($row, function ($a, $b) {return $a['recordDate'] < $b['recordDate'];});
-		//print_r($row);exit();
 
 			$counting = count($row);
 			$allResult = array('rowData'=>$row,'countingRecord'=>$counting);

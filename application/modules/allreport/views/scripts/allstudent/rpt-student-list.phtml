@@ -49,8 +49,8 @@ table.tb-footer tr.style-head {
             <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
-					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
-					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
 				</select>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
@@ -82,8 +82,8 @@ table.tb-footer tr.style-head {
 					</td>
 					<td align="center" style="font-family:'Times New Roman','Khmer OS Muol Light';" valign="top">
 						<span style="color:#4839bd; font-size: 12px;"><?php echo $tr->translate("STUDENT_LIST_REPORT");?></span>
-						<div>
-							<?php echo $tr->translate("ACADEMIC_YEAR");?>
+						<div >
+							<span style="font-size: 12px;"> <?php echo $tr->translate("ACADEMIC_YEAR");?></span>
 							<?php echo $this->rr['academic'];?>
 						</div>
 					</td>
@@ -135,6 +135,11 @@ table.tb-footer tr.style-head {
 								font-size:12px; 
 								height: 23px;
 							}
+							@page {
+								page:A4;
+								size:landscape;
+								margin:0;
+								}
 						</style>
 						<table class="content-data"  cellpadding="5"​  border="1" >
 							<thead>

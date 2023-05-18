@@ -381,7 +381,6 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$_db->rollBack();
-    		echo $e->getMessage(); exit();
     	}
     }
     

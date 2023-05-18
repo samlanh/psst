@@ -56,7 +56,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
 		$id=$this->getRequest()->getParam('id');
@@ -84,7 +83,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
 	
@@ -128,7 +126,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull("Void Successfully",self::REDIRECT_URL."/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Void Payment Faile");
-				echo $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}else{
@@ -171,7 +168,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 				$this->view->rowdetail = $db->getCutStockDetailBYId($id);
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("err");
-				echo $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}else{

@@ -89,8 +89,8 @@ tbody#table_row tr {
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
 				<td colspan="3" align="center">
-					<strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
-					<strong  style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+					<strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
+					<strong  style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 				</td>
 			</tr>
 			<style>
@@ -112,7 +112,7 @@ tbody#table_row tr {
 				<div id="exportExcel">
 					<table cellpadding="4" style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;color:#080808;"  border="1" >
 						<thead>
-							<tr style="font-size:14px; height: 20px;background: #f8ccaf; font-weight: bold" align="center" >
+							<tr style="font-size:12px; height: 20px;background: #f8ccaf; font-weight: bold" align="center" >
 								<th rowspan="2" class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></th>
 								<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
 								<th rowspan="2"><?php echo $tr->translate("BRANCH");?></th>
@@ -132,7 +132,7 @@ tbody#table_row tr {
 							</tr>
 						</thead>
 					<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
-						<tr style="font-size:13px;line-height:18px;" align="center" class="hover" >
+						<tr style="font-size:12px;line-height:18px;" align="center" class="hover" >
 							<td class="hidden">
 								<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 								<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />

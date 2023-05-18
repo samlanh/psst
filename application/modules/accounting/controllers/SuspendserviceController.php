@@ -33,8 +33,8 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('suspend_no'=>$link,'code'=>$link,'kh_name'=>$link,'en_name'=>$link));
 		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			echo $e->getMessage();
 		}
 		$this->view->rs =$search;
 		
@@ -60,8 +60,8 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 				}
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				echo $e->getMessage();exit();
 			}
 		}
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -80,7 +80,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
+				
 			}
 		}
 		$_db = new Application_Model_DbTable_DbGlobal();

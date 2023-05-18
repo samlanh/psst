@@ -1,7 +1,6 @@
 <?php
 class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'rms_student_test';
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
@@ -267,9 +266,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}else{ // English
 			$label = "name_en";
 			$branch = "branch_nameen";
-		}
-// 		
-// 		
+		}		
 
 		$testCondiction = TEST_CONDICTION;
 		
@@ -453,21 +450,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			return $id;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	}
 	
-	function getAllStudentByBranchTested($branch){
-		$db=$this->getAdapter();
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$branch_id = $_db->getAccessPermission();
-		$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name 
-			FROM rms_student_test 
-		WHERE (en_name!='' OR kh_name!='') AND is_makestudenttest=1 AND status=1 and register=0 $branch_id ";
-		$sql.=" AND branch_id = $branch ";
-		$sql.=" ORDER BY id DESC ";
-		return $db->fetchAll($sql);
-	}
 	
 	function insertTestExam($data,$type=null,$test=null){
 		$db=$this->getAdapter();

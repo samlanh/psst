@@ -65,7 +65,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 	
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			
 		}
 	}
 	
@@ -125,7 +125,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			
 		}
 		$form=new Accounting_Form_FrmSearchProduct();
 		$form=$form->FrmSearchProduct();
@@ -199,7 +199,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$frm=new Accounting_Form_FrmSearchProduct();
 		$form=$frm->FrmSearchProduct();
@@ -245,7 +244,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	}
 	//End Block Sale Product
@@ -370,7 +368,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	
 		$_pur =  new Accounting_Model_DbTable_DbRequestProduct();
@@ -450,7 +447,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$form=new Accounting_Form_FrmSearchProduct();
 		$form->FrmSearchProduct();
@@ -488,7 +484,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			echo $e->getMessage();//exit();
 		}
 		$form=new Accounting_Form_FrmSearchProduct();
 		$form->FrmSearchProduct();

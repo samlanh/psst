@@ -11,7 +11,6 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     }
     public function updateItemsByImport($formData,$data){
     	$db = $this->getAdapter();
-    	//print_r($formData);exit();
     	$count = count($data);
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	for($i=2; $i<=$count; $i++){

@@ -97,7 +97,6 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	    		$_db->rollBack();
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
-	    	//print_r($_data); exit();
 	}
 	public function updateStaff($_data){
 		$_db= $this->getAdapter();		
@@ -183,7 +182,6 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
     		$_db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	//print_r($_data); exit();
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();

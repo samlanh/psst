@@ -21,8 +21,6 @@ public function init()
 		$this->view->session = $rs_row = $db->getAllSession();
 		$this->view->rs = $db->getAllStu();
 		$this->view->year = $db->getAllYearGeneration();
-		//print_r($this->view->year);
-		//$this->view->search=$search;
 	}
 	
 	public function rptamountstudentAction()

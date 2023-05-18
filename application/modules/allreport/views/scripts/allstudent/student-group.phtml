@@ -86,7 +86,7 @@ table.tb-footer tr.style-head {
 				<td width="28%" align="left">
 				</td>
 				<td width="44%" align="center">
-					<span style="font-weight:200;color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></span>
+					<span style="font-weight:200;color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></span>
 				</td>
 				<td align="right" width="28%"></td>
 			</tr>
@@ -209,23 +209,7 @@ table.tb-footer tr.style-head {
 			</tr>
 			<tr >
 				<td colspan="3"  style="border:1px solid #fff; ">
-				<?php echo $this->rsfooter ?>
-				
-				<!--
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 12">
-						<tr>
-							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
-							</td>
-							<td width="30%">&nbsp;</td>
-							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
-							</td>
-						</tr>
-					</table>
-						-->
+					<?php echo $this->rsfooter ?>	
 				</td>
 			</tr>
 		</table>
@@ -397,10 +381,17 @@ $(function(){
 			gotoAction();
 		},
 		items: {
-			"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
-			"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
-			"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-			"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+			"list": {
+	                "name": "<?php echo $tr->translate("LIST");?>", 
+	                icon: "fa-file-text-o",
+	                "items": {
+	                	"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
+	    				"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
+	    				"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+	    				"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+	                }
+	            },
+			
 			"rpt-assessmentterm": {name: "<?php echo $tr->translate("Assessment Term");?>", icon: "fa-file-text-o"},
 			<?php $dbacc = new Application_Model_DbTable_DbUsers();
 	 		$rs = $dbacc->getAccessUrl("allreport","allstudent",'rpt-studentgroup-adjust');

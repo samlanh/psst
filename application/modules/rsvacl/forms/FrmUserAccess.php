@@ -57,13 +57,13 @@ class RsvAcl_Form_FrmUserAccess extends Zend_Form
 			  INNER JOIN rms_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ut.user_type_id =".$id;
 		}
 		
-		//print_r($sql); exit;
+		
 		$project=$db_user->getGlobalDb($sql);		
           if($project){
 			$i=0;			
 						
 			foreach($project as $read){
-				//print_r($read);exit;
+				
 				$i++;
 				
 				
@@ -84,7 +84,7 @@ class RsvAcl_Form_FrmUserAccess extends Zend_Form
     }
        
     public function setAcl($arr){
-    	//print_r($arr);exit;
+    	
         for($i=1;$i<=$this->getPlus();$i++)
     	{
     		foreach($arr as $div){

@@ -32,7 +32,6 @@ class Registrar_CateincomeController extends Zend_Controller_Action
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$frm = new Registrar_Form_FrmSearchexpense();
     	$frm = $frm->AdvanceSearch();
@@ -58,7 +57,6 @@ class Registrar_CateincomeController extends Zend_Controller_Action
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
 		$db = new Registrar_Model_DbTable_DbCateIncome();

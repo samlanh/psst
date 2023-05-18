@@ -92,23 +92,16 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/expense");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
-		
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
-// 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$user_type=$_db->getUserType();
-// 		if($user_type!=1){
-// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/expense');
-// 		}
+
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbExpense();
 		$row  = $db->getexpensebyid($id);
 		$this->view->row = $row;
 		$this->view->rows = $db->getexpenseDetailbyid($id);
-		//print_r($this->view->rows); exit();
-    	/////////////////////|||||||||\\\\\\\\\\\\\\\\\\\\\\\
+		/////////////////////|||||||||\\\\\\\\\\\\\\\\\\\\\\\
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
     	

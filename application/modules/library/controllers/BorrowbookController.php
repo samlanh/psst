@@ -60,7 +60,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$db = new Library_Model_DbTable_DbBorrowbook();
@@ -97,7 +96,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();

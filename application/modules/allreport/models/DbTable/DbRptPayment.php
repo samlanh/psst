@@ -629,151 +629,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    public function getPaymentByDate($search){
-    	$db = $this->getAdapter();
-    	 
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch = $_db->getAccessPermission();
-    	
-    	$sql="SELECT 
-				  sp.id,
-				  DATE_FORMAT(sp.create_date,'%Y-%m-%d') AS for_date,
-				  SUM(CASE WHEN spd.type=1 THEN paidamount ELSE 0 END) AS fulltime_fee,
-				  SUM(CASE WHEN spd.type=2 THEN paidamount ELSE 0 END) AS parttime_fee,
-				  SUM(CASE WHEN spd.type=3 THEN paidamount ELSE 0 END) AS service_fee,
-				  SUM(CASE WHEN spd.type=4 THEN paidamount ELSE 0 END) AS material_fee,
-				  0 AS 'g_total_test_price',
-				  0 AS 'total_test_price',
-				  0 AS 'total_otherincome'
-				FROM
-				  rms_student_payment AS sp,
-				  rms_student_paymentdetail AS spd 
-				WHERE 
-				  sp.id = spd.payment_id 
-				  AND sp.is_void = 0 
-				  $branch
-    		";
-    	
-    	$where = ' ';
-    	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
-    	$where .= " AND ".$from_date." AND ".$to_date;
-    	
-    	$group_by = " GROUP BY DATE_FORMAT(sp.create_date,'%Y-%m-%d') ";
-    	$order=" order by sp.`create_date` ASC";
-    	
-    	 
-    	if(!empty($search['title'])){
-    		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
-    	if($search['branch_id']>0){
-    		$where .= " AND sp.branch_id = ".$search['branch_id'];
-    	}
-    	if($search['study_year']>0){
-    		$where .= " AND sp.year = ".$search['study_year'];
-    	}
-    	if($search['degree']>0){
-    		$where .= " AND sp.degree = ".$search['degree'];
-    	}
-    	if($search['grade_all']>0){
-    		$where .= " AND sp.grade = ".$search['grade_all'];
-    	}
-    	if($search['session']>0){
-    		$where .= " AND sp.session = ".$search['session'];
-    	}
-    	if($search['user']>0){
-    		$where .= " AND sp.user_id = ".$search['user'];
-    	}
-    	
-    	$row = $db->fetchAll($sql.$where.$group_by.$order);
-    	$studentTestPayment = $this->getStudentTestPaymentDate($search);
-    	if (!empty($studentTestPayment)){
-    		$row = array_merge($row, $studentTestPayment);
-    	}
-    	$otherIncome = $this->getTotalOtherIncomeByDate($search);
-    	if (!empty($otherIncome)){
-    		$row = array_merge($row, $otherIncome);
-    	}
-//     	foreach ($row as $rs){
-//     		echo $rs['for_date']." fulltime_fee: ".$rs['fulltime_fee']." parttime_fee: ".$rs['parttime_fee']." g_total_test_price: ".$rs['g_total_test_price']." g_total_test_price: ".$rs['total_otherincome']."<br />";
-//     	}
-//     	exit();
-    	$payment = array();
-    	$i=0;
-    	foreach ($row as $key => $rs)
-    	{ $i++;
-    		$date = date_create($rs['for_date']);
-    		$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").date_format($date, "s").time();
-    		if (array_key_exists($newIndex,$payment)){
-    			$sale_date = $rs['for_date'];
-    			$seee = date("s",strtotime("$sale_date +$i second"));
-    			$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").$seee.time();
-    			$payment[$newIndex] = $rs;
-    		}else{
-    			$payment[$newIndex] = $rs;
-    		}
-    	}
-//     	print_r($payment);exit();
-    	krsort($payment);
-    	return $payment;
-    }
-    function getStudentTestPaymentDate($search=null){
-    	try{
-    		$_db = new Application_Model_DbTable_DbGlobal();
-    		$branch_id = $_db->getAccessPermission('st.branch_id');
-    		$db=$this->getAdapter();
-    			
-    		$from_date =(empty($search['start_date']))? '1': "st.paid_date >= '".$search['start_date']." 00:00:00'";
-    		$to_date = (empty($search['end_date']))? '1': "st.paid_date <= '".$search['end_date']." 23:59:59'";
-    		
-    		$sql="SELECT
-    		st.id,
-    		st.`paid_date` AS for_date,
-    		0 AS 'fulltime_fee',
-			0 AS 'parttime_fee',
-			0 AS 'service_fee',
-			0 AS 'material_fee',
-    		SUM(st.total_price) AS g_total_test_price, 
-			SUM(st.price) AS total_test_price,
-			0 AS 'total_otherincome'
-    		FROM
-    		rms_student_test AS st
-    		WHERE
-    		total_price>0
-    		AND status=1
-    		$branch_id ";
-    
-    		$where = " AND ".$from_date." AND ".$to_date;
-    		if($search['branch_id']>0){
-    			$where .= " AND st.branch_id = ".$search['branch_id'];
-    		}
-    		if(!empty($search['title'])){
-	    		$s_where=array();
-	    		$s_search= addslashes(trim($search['title']));
-    				$s_where[]= " st.receipt_no LIKE '%{$s_search}%'";
-    				$s_where[]= " st.kh_name LIKE '%{$s_search}%'";
-    				$s_where[]= " st.en_name LIKE '%{$s_search}%'";
-    				$s_where[]= " st.serial LIKE '%{$s_search}%'";
-    				$where.=' AND ('.implode(' OR ', $s_where).')';
-    		}
-    		if(!empty($search['degree'])){
-    			$where.= " AND st.degree = ".$search['degree'];
-    		}
-    		if(!empty($search['user'])){
-    			$where.=" AND account_userid = ".$search['user'] ;
-    		}
-    		$group_by = " GROUP BY DATE_FORMAT(st.paid_date,'%Y-%m-%d') ";
-    		$order=" order by st.paid_date ASC";
-    		
-    		return $db->fetchAll($sql.$where.$group_by.$order);
-    					
-    	}catch(Exception $e){
-    		echo $e->getMessage();
-    	}
-    }
+   
     function getTotalOtherIncomeByDate($search){
     	try{
     		$_db = new Application_Model_DbTable_DbGlobal();
@@ -820,7 +676,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		return $db->fetchAll($sql.$where.$group_by.$order);
     			
     	}catch(Exception $e){
-    			echo $e->getMessage();
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
     function getCustomerPaymentById($id){
@@ -842,7 +698,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			";
     		return $db->fetchRow($sql);
 	    }catch(Exception $e){
-	   		echo $e->getMessage();
+	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    }
     }
     function updateValidationbyreceipt($data){

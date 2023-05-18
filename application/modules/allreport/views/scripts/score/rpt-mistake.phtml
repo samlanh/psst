@@ -152,10 +152,10 @@
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td align="center" >
 										<?php  $check_date = $db->checkDateMistake(date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-											//print_r($check_date);exit();
+											
 											if (!empty($check_date)){
 												$attentence_status = $db->getStatusMistakeStudent($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-												//print_r($attentence_status);exit();
+												
 												if($attentence_status['type']==2){//from mistake
 													if ($attentence_status['attendence_status']==1){ 
 														echo "S"; $s=$s+1;

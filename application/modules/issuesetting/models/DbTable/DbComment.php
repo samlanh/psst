@@ -24,7 +24,7 @@ class Issuesetting_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 			$this->insert($_arr);
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function getCommentById($id){

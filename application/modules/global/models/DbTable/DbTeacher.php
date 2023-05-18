@@ -296,7 +296,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
     	}
-    	//print_r($_data); exit();
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();

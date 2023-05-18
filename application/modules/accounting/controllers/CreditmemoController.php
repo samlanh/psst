@@ -95,7 +95,6 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 		$db = new Accounting_Model_DbTable_DbCreditmemo();
 		$row  = $db->getCreditmemobyid($id);
 		$this->view->row = $row;
-		//print_r($row); exit();
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemoadd($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -143,7 +142,6 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 //     		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'student_name'=>$link));
 //     	}catch (Exception $e){
 //     		Application_Form_FrmMessage::message("Application Error");
-//     		echo $e->getMessage();
 //     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 //     	}
 // 		$frm = new Registrar_Form_FrmSearchexpense();

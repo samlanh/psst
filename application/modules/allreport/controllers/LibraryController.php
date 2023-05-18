@@ -33,7 +33,6 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$this->view->search = $search;
 		$frm_major = new Library_Form_FrmSearchMajor();
@@ -50,7 +49,6 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	}
 	
@@ -78,7 +76,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			
 		}
 		$this->view->search = $search;
 		$frm_major = new Library_Form_FrmSearchMajor();
@@ -113,7 +111,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			
 		}
 		$this->view->search = $search;
 		$frm_major = new Library_Form_FrmSearchMajor();
@@ -146,7 +144,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			
 		}
 		$this->view->search = $search;
 		$frm_major = new Library_Form_FrmSearchMajor();
@@ -178,7 +176,6 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$this->view->search = $search;
 		$frm_major = new Library_Form_FrmSearchMajor();
@@ -210,7 +207,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
+			
 		}
 		$this->view->search = $search;
 		$frm_major = new Library_Form_FrmSearchMajor();
@@ -241,7 +238,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			echo $e->getMessage();
+			
 		}
 			
 		$this->view->search = $search;

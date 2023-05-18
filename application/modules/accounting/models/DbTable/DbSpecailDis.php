@@ -122,10 +122,9 @@
 				}
 			}
 			}catch(Exception $e){
-	    		//$_db->rollBack();
+	    		$_db->rollBack();
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
-		//print_r($_data); exit();
 	}
 	
 	

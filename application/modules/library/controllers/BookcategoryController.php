@@ -22,7 +22,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    		);
     	    }
 	    	$rows = $db->getAllCategoryVandy(0,'','','',$search);
-	    	//print_r($rows);exit();
+	    	
 		    $this->view->cate=$rows;
 	    	 
     	}catch (Exception $e){
@@ -51,7 +51,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     			
     	}
@@ -77,7 +76,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	

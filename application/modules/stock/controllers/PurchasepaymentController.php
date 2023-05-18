@@ -118,7 +118,6 @@ class Stock_PurchasepaymentController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull("Void Successfully",self::REDIRECT_URL."/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Void Payment Faile");
-				echo $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}	
 		}else{

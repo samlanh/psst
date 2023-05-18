@@ -115,7 +115,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		));
 		
 		if($data!=null){
-			//print_r($data);exit();
+			
 			$book_name	->setValue($data['title']);
 			$author_name->setValue($data['author']);
 			$_cateory_parent->setValue($data['cat_id']);

@@ -121,12 +121,10 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 		}
    }
    public function updateStudentAttendence($_data){
-		//print_r($_data);exit();
+		
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-// 			$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-// 			$branch_id = $session_user->branch_id;
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],
 					'group_id'=>$_data['group'],

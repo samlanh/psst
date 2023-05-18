@@ -116,7 +116,7 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 		}
    }
    public function updateStudentAttendenceOne($_data,$id){
-		//print_r($_data);exit();
+		
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{

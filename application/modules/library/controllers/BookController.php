@@ -36,7 +36,7 @@ protected $tr;
 //     	    $this->view->book_row=$db->getAllBook($search);
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     	
     	$frm_major = new Library_Form_FrmSearchMajor();
@@ -60,7 +60,6 @@ protected $tr;
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBook();
@@ -101,7 +100,6 @@ protected $tr;
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	 
@@ -144,7 +142,6 @@ protected $tr;
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	 

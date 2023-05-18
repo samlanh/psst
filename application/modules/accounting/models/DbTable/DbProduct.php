@@ -129,7 +129,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     public function addCategory($_data){
-    	//print_r($_data);exit();
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
@@ -148,8 +147,8 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     		}
     		$db->commit();
     	}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$db->rollBack();
-    		echo $e->getMessage();
     	}
     }
     function getGategoryById($id){

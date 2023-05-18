@@ -118,7 +118,7 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->student= $db->getStudentSccoreforEdit($id);
 		$this->view->subjectGroup = $db->getSubjectByGroup($row['group_id'],$teacher_id,$row['exam_type']);
-		//print_r($this->view->student);
+		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();

@@ -234,16 +234,7 @@ class Test_IndexController extends Zend_Controller_Action
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
     }
-    function getstudenttestbybranchAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$_dbgb = new Test_Model_DbTable_DbStudentTest();
-    		$serial = $_dbgb->getAllStudentByBranchTested($data['branch_id']);
-    		array_unshift($serial,array ( 'id' =>"",'name' => $this->tr->translate("PLEASE_SELECT")));
-    		print_r(Zend_Json::encode($serial));
-    		exit();
-    	}
-    }
+    
     function webcamAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

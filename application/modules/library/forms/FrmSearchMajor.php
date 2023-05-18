@@ -97,7 +97,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
 		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
 		$result = $db_stu->getAllStudentId(2);
-		//print_r($result);exit();
+		
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['stu_id']]=$row['name'];
 		}
@@ -111,7 +111,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		));
 		$option = array("0"=>$this->tr->translate("Select Borrow Name"));
 		$result = $db_stu->getAllBorrowName();
-		//print_r($result);exit();
+		
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['id']]=$row['name'];
 		}
@@ -167,7 +167,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$option = array("0"=>$this->tr->translate("SELECT_BLOCK_BOOK"));
 		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
 		$result = $db_stu->getAllBlcok();
-		//print_r($result);exit();
+		
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['id']]=$row['name'];
 		}
@@ -184,7 +184,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
 		$db_stuname=new Library_Model_DbTable_DbCategory();
 		$result = $db_stuname->getAllStudentOpt();
-		//print_r($result);exit();
+		
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['stu_id']]=$row['name'];
 		}
@@ -252,7 +252,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
 		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
 		$result = $db_stu->getAllStudentId(2);
-		//print_r($result);exit();
+		
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['stu_id']]=$row['name'];
 		}
@@ -267,7 +267,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$option = array("0"=>$this->tr->translate("SELECT_BLOCK_BOOK"));
 		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
 		$result = $db_stu->getAllBlcok();
-		//print_r($result);exit();
+		
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['id']]=$row['name'];
 		}

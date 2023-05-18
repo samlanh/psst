@@ -9,7 +9,6 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
     }
 	public function addNewDiscount($_data){
 		$db = $this->getAdapter();
-		//print_r($_data); exit();
 		try{
 			$sql="SELECT disco_id FROM rms_discount WHERE status =".$_data['status'];
 			$sql.=" AND dis_name='".$_data['dis_name']."'";
@@ -26,7 +25,7 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 		$this->insert($_arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	

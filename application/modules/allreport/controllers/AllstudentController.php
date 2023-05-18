@@ -14,20 +14,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$front_card=$this->getRequest()->getParam('front_card');
 		$this->view->front = empty($front_card)?"":$front_card;
 		$k = 0;
-// 		$condition = '';
-// 		$ids = explode(',', $id);
-// 		foreach ($ids as $id_stu){
-// 			if($k==0){
-// 				$condition .= $id_stu;
-// 				$k=1;
-// 			}else{
-// 				$condition .= ' or s.stu_id = '.$id_stu;
-// 			}
-// 		}
+
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudentSelected($id);
 		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($id);
-		//print_r($this->view->groupByBranchAndSchool);exit();
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}

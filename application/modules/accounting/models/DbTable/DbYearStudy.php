@@ -51,7 +51,7 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 			$where=" id = ".$_data['id'];
 			$this->update($_arr, $where);
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
+		    Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
 	}

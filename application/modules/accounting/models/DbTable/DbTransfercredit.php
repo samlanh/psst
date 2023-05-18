@@ -50,7 +50,6 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	
 	function transfercreditMemo($data){
 		$db = $this->getAdapter();
-		//print_r($data); exit();
  		try{
 			$sql="SELECT id FROM rms_transfer_credit WHERE student_id =".$data['student_id'];
  			$sql.=" AND stu_name='".$data['stu_name']."'";
@@ -95,8 +94,8 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			$this->_name='rms_creditmemo';
 			$this->insert($arr);
 		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
-			echo $e->getMessage();exit();
 		}
 	}
 	function updatefercreditMemo($data){

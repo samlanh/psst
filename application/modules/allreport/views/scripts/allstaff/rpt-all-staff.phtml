@@ -24,49 +24,81 @@ table.tb-footer tr.style-head {
     		</div>
     	</div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<div class="form-group">
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("title");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("branch_id");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("degree");?>
-        	</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("teacher_type");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("nationality");?>
-        	</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("active_type");?>
-        	</div>
-			
-		</div>	
-		<div class="form-group">
-			
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("staff_type");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("department");?>
-        	</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-        		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-        	</div>
-			
-        </div>
-		<div class="form-group">
-			
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStaff();">
-					<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
-					<option value="2"><?php echo $tr->translate("SELECTED_STUDENT_OPTION");?></option>
-				</select>
-      		</div>
-        </div>
+		<div class="col-md-12 col-sm-12 col-xs-12 ">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12 ">
+									<div class="form-group">
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("title");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("branch_id");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("degree");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("teacher_type");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("nationality");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("active_type");?>
+										</div>
+										
+									</div>	
+									<div class="form-group">
+										
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("staff_type");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("department");?>
+										</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+		</div>
+		
+		<div class="col-md-12 col-sm-12 col-xs-12 ">
+				<div class="card-blogform">
+					<div class="card-body"> 
+						<div class="row"> 
+							<div class="col-md-12 col-sm-12 col-xs-12 ">
+								<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+									<div class="col-md-3 col-sm-3 col-xs-12 text-center ">
+										<p class="tx-20 font-weight-semibold "><i class="glyphicon glyphicon-ok-sign" aria-hidden="true">&nbsp;</i><?php echo $tr->translate("SELECT_TEACHER");?> </p>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStaff();">
+											<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
+											<option value="2"><?php echo $tr->translate("SELECTED_STAFF_OPTION");?></option>
+										</select>
+									</div>
+									<div class="col-md-5 col-sm-5 col-xs-12">
+										<select name="staffID" id="staffID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
+											<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
+											<?php if(!empty($this->rs)){ foreach ($this->rs AS $row) { ?>
+											<option value="<?php echo $row['id']; ?>"><?php echo $row['teacher_code']." ".$row['teacher_name_kh'];?></option>
+											<?php }} ?>
+										</select>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
 		
 	</form>
 <div id="divPrint">
@@ -224,32 +256,29 @@ table.tb-footer tr.style-head {
 			</tr>
 		</table>
 		<div class="card-box SELECTED_STUDENT_OPTION">
-			<div class="col-md-12 col-sm-12 col-xs-12" style=" padding: 0;">
-				<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-					<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?> </label>
-					<div class="col-md-5 col-sm-5 col-xs-12">
-						<select name="staffID" id="staffID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
-							<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
-							<?php if(!empty($this->rs)){ foreach ($this->rs AS $row) { ?>
-							<option value="<?php echo $row['id']; ?>"><?php echo $row['teacher_code']." ".$row['teacher_name_kh'];?></option>
-							<?php }} ?>
-						</select>
+			<div class="col-md-12 col-sm-12 col-xs-12 ">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12 ">
+									<div class="form-group">
+										<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc; line-height: 30px;">
+											<thead>
+												<tr id="head-title" class="head-td" align="right" style="width: 100%;">
+													<th width="5%"><?php echo $tr->translate("DEL");?></th>
+													<th width="5%"><?php echo $tr->translate("N_O");?></th>
+													<th ><?php echo $tr->translate("TEACHER_NAME");?></th>
+												</tr>
+											</thead>
+											<tbody id="table_row">
+											</tbody>
+											<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc; line-height: 30px;">
-						<thead>
-							<tr id="head-title" class="head-td" align="right" style="width: 100%;">
-								<th width="5%"><?php echo $tr->translate("DEL");?></th>
-								<th width="5%"><?php echo $tr->translate("N_O");?></th>
-								<th ><?php echo $tr->translate("TEACHER_NAME");?></th>
-							</tr>
-						</thead>
-						<tbody id="table_row">
-						</tbody>
-						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-					</table>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -257,9 +286,8 @@ table.tb-footer tr.style-head {
 <table width="100%">
 	<tr>
 		<td align="center">
-			<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				type="button" onclick="printSelected();"><?php echo $tr->translate('Print Selected')?></button>
-			<!-- <input type="button" dojoType="dijit.form.Button" label="<?php //echo $tr->translate('Print ID Card')?>" iconClass="dijitEditorIcon dijitEditorIconPrint"  onclick="printIDCard();" /> -->
+			<button dojoType="dijit.form.Button" id="printselected" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+				type="button" onclick="printSelected();"><?php echo $tr->translate('PRINT_CARD')?></button>
 		</td>
 	</tr>
 </table>
@@ -456,6 +484,12 @@ var template = '';
 	tmp = '';
 	temp='';
 function addRow(){ 
+	optionSelect=dijit.byId("optionSelect").get("value");
+	if(optionSelect!=2){
+		dijit.byId('staffID').attr('value',0);
+		dijit.byId('optionSelect').focus();
+		return false;
+	}
 	staffID=dijit.byId("staffID").get("value");
 	if(staffID=='' || staffID==0){return false;}
 	var iden = $("#id_selected").val();
@@ -606,6 +640,8 @@ function getKHMonthByNumber(m){
 	function getBlogStaff(){
 		optionSelect=dijit.byId("optionSelect").get("value");
 		if(optionSelect==1){
+			dijit.byId('staffID').attr('value',0);
+			$("#id_selected").val('');
 			$(".NORMAL_OPTION").css("display", "table");
 			$(".SELECTED_STUDENT_OPTION").css("display", "none");
 		}else{

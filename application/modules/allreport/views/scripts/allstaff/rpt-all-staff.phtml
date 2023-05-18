@@ -41,13 +41,11 @@ table.tb-footer tr.style-head {
         		<?php echo $frm->getElement("nationality");?>
         	</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-        		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+        		<?php echo $frm->getElement("active_type");?>
         	</div>
 		</div>	
 		<div class="form-group">
-			<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("active_type");?>
-        	</div>
+			
         	<div class="col-md-2 col-sm-2 col-xs-12">
         		<?php echo $frm->getElement("staff_type");?>
         	</div>
@@ -55,13 +53,16 @@ table.tb-footer tr.style-head {
         		<?php echo $frm->getElement("department");?>
         	</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-				<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStudent();">
+        		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+        	</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStaff();">
 					<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
 					<option value="2"><?php echo $tr->translate("SELECTED_STUDENT_OPTION");?></option>
 				</select>
-             </div>
-			
+      		</div>
         </div>
+		
 	</form>
 <div id="divPrint">
 		<table class="NORMAL_OPTION"  style="background:#fff; margin: 0 auto; width: 100%; ">
@@ -76,7 +77,7 @@ table.tb-footer tr.style-head {
 				<td width="10%" align="right">
 				</td>
 				<td width="60%" align="center">
-					<span​​ style="color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STAFF_INFORMATION");?></span><br/>
+					<span​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STAFF_INFORMATION");?></span><br/>
 				</td>
 				<td width="5%" align="right">
 				</td>
@@ -157,6 +158,11 @@ table.tb-footer tr.style-head {
 					table.content-data tr td{
 						padding: 1px;
 					}
+					@page {
+						page:A4;
+						size:landscape;
+						margin:0;
+       				 }
 			
 		</style>
 			<tr>
@@ -217,10 +223,10 @@ table.tb-footer tr.style-head {
 				<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 					<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?> </label>
 					<div class="col-md-5 col-sm-5 col-xs-12">
-						<select name="studentID" id="studentID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
-							<option value="0"><?php echo $tr->translate("SELECT_STUDENT");?></option>
-							<?php if(!empty($this->stu_forOption)){ foreach ($this->stu_forOption AS $row) { ?>
-							<option value="<?php echo $row['stu_id']; ?>"><?php echo $row['stu_code']." ".$row['name']." ".$row['grade'];?></option>
+						<select name="staffID" id="staffID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
+							<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
+							<?php if(!empty($this->rs)){ foreach ($this->rs AS $row) { ?>
+							<option value="<?php echo $row['id']; ?>"><?php echo $row['teacher_code']." ".$row['teacher_name_kh'];?></option>
 							<?php }} ?>
 						</select>
 					</div>
@@ -231,7 +237,7 @@ table.tb-footer tr.style-head {
 							<tr id="head-title" class="head-td" align="right" style="width: 100%;">
 								<th width="5%"><?php echo $tr->translate("DEL");?></th>
 								<th width="5%"><?php echo $tr->translate("N_O");?></th>
-								<th ><?php echo $tr->translate("STUDENT");?></th>
+								<th ><?php echo $tr->translate("TEACHER_NAME");?></th>
 							</tr>
 						</thead>
 						<tbody id="table_row">
@@ -260,7 +266,7 @@ table.tb-footer tr.style-head {
 			<style>
 					.card-content-student-print{
 						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
-						 background-size: 100%;background-repeat: no-repea
+						 background-size: 100%;background-repeat: no-repeat;
 						 page-break-after:always;					
 					}
 					<?php if(!empty($this->groupByType)) foreach($this->groupByType as $bck){
@@ -434,49 +440,66 @@ table.tb-footer tr.style-head {
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-dojo.ready(function(){
-	// new dijit.form.FilteringSelect({
-	// 	store: group_store,
-	//     queryExpr: "*${0}*",
-	// 	autoComplete: false,                     
-	//     id: "group",
-	//     name: "group",  
-	//     class: 'fullside', 
-	//     readonly:false,
-	//     required:false,
-	//     placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-	//     onChange: function() {  
-		    
-	//     }
-	// }, "group");
-	
-	// new dijit.form.FilteringSelect({
-	// 	queryExpr: "*${0}*",
-	// 	autoComplete: false,                     
-	// 	required: false,                        
-	// 	id: "grade",
-	// 	name: "grade",  
-	// 	class: 'fullside',  
-	// 	placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-	// 	onChange: function() {  
-	// 		 getAllGroupByBranch();
-	// 	}
-	// }, "grade");
-	
-	//  var branch_id = dijit.byId('branch_id');
-	//  branch_id.on('change', function(evt) {
-	// 	 getAllGroupByBranch();
-    // });
-	//  var academic_year = dijit.byId('academic_year');
-	//  academic_year.on('change', function(evt) {
-	// 	 getAllGroupByBranch();
-    // });
-	//  getAllGroupByBranch();
-	//  getallGrade();
-	 
-	 getBlogStudent();
+dojo.ready(function(){ 
+	getBlogStaff();
 });
 
+var template = '';
+	var col = 0;
+	var no = 0;
+	var title = 0;
+	tmp = '';
+	temp='';
+function addRow(){ 
+	staffID=dijit.byId("staffID").get("value");
+	if(staffID=='' || staffID==0){return false;}
+	var iden = $("#id_selected").val();
+	var arrays = iden.split(',');
+	 if(arrays!=""){
+		 for(var i=0;i< arrays.length;i++) {
+			 readychoose = dijit.byId('class_'+arrays[i]).get('value');
+			 if(readychoose==staffID){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+				 	return false;
+			 }
+		}
+	}
+		col++;no++;
+		labelStaff = dijit.byId("staffID").attr('displayedValue');
+		template='';
+		if(title!=1){
+			$("#head-title").html("");    
+			temp+='<th with="5%"><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th with="5%"><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th><?php echo $tr->translate("TEACHER_NAME");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+		}
+			template+='<td width="5%"align="center"><img onclick="deleteRecord('+staffID+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="5%" align="center">'+no+'</td>';
+			template+='<td>&nbsp;'+labelStaff+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="class_'+staffID+'" name="class_'+staffID+'" value="'+staffID+'" /></td>';
+		tmp='<tr " id="row'+staffID+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+
+		if($("#id_selected").val()!="") {
+			var identity = $("#id_selected").val();
+			$("#id_selected").val(identity+','+staffID);
+		} else {$("#id_selected").val(staffID);}
+		dojo.html.set(dojo.byId("row"+staffID),template , {
+		     parseContent: true,
+		});
+ }
+  function deleteRecord(index){
+	var identity = $('#id_selected').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#id_selected').val(strings);
+	dojo.query("#row"+index).remove();
+}
 
 function getKHMonthByNumber(m){
 	var monthName=[
@@ -575,7 +598,7 @@ function getKHMonthByNumber(m){
 		}
 	}
 
-	function getBlogStudent(){
+	function getBlogStaff(){
 		optionSelect=dijit.byId("optionSelect").get("value");
 		if(optionSelect==1){
 			$(".NORMAL_OPTION").css("display", "table");

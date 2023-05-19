@@ -835,13 +835,15 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    /*blog get student*/
-   function getAllStudent($opt=null,$type=2,$branchid=null){
+   function getAllListStudent($opt=null,$type=2,$branchid=null){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 
-   	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
+   	$sql=" SELECT 
+   		s.stu_id AS stu_id,
 	   	stu_code,
+	   	s.stu_id AS id,
 	   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
 	   	FROM rms_student AS s,
 			rms_group_detail_student as gds
@@ -852,6 +854,7 @@ function getAllgroupStudyNotPass($action=null){
 			AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
 			AND (stu_enname!='' OR s.stu_khname!='')
 			AND s.status=1  AND customer_type=1 ";
+   	
    	if($branchid!=null){
    		$sql.=" AND s.branch_id=".$branchid;
    	}
@@ -1606,15 +1609,34 @@ function getAllgroupStudyNotPass($action=null){
 		  			"modify_date"=>date("Y-m-d"),
 	  			);
 	  	$this->_name="rms_degree_language";
-		$id = $this->insert($array);
-		echo ($id);
-		exit();
-	 // 	return $id;
+		$langId = $this->checklangLevel($data['title']);
+		if(empty($langId)){
+			$id = $this->insert($array);
+			$result=array(
+                "addNew" => 1,
+				"id" => $id,
+			);
+			return $result;
+		}else{
+			$result=array(
+                "addNew" => 0,
+				"id" => $langId,
+			);
+			return $result;
+		}
+		
+		
   }
+  function checklangLevel($title){
+	$db =$this->getAdapter();
+	$sql = "SELECT id FROM `rms_degree_language` WHERE  title = '".$title."' limit 1";
+	return $db->fetchOne($sql);
+	
+}
   
   function addNationType($data){
   	try{
-  		$db = $this->getAdapter();
+  		
   		$key_code = $this->getLastKeycodeByType(21);
   		$arr = array(
   				'name_en'	=>$data['title_en'],
@@ -1625,23 +1647,29 @@ function getAllgroupStudyNotPass($action=null){
   				'type'=>21,
   		);
   		$this->_name="rms_view";
-		$exist = $this->checkNation($data);
-		if(!empty($exist)){
-			$id = $this->insert($arr);
+		$nationId = $this->checkNation($data['title_kh']);
+		if(empty($nationId)){
+			$this->insert($arr);
+			$result=array(
+                "addNew" => 1,
+				"id" => $key_code,
+			);
 		}else{
-			return $exist;
+			$result=array(
+                "addNew" => 0,
+				"id" => $nationId,
+			);
 		}
-  		
-  		return $key_code;
+		return $result;
   	}catch (Exception $e){
   		echo '<script>alert('."$e".');</script>';
   	}
   }
-  function checkNation($data){
-	$sql = "SELECT key_code FROM `rms_view` WHERE type=21 name_kh =' ".$data['title_kh']." ' LIMIT 1 ";
+  function checkNation($title){
 	$db =$this->getAdapter();
-	$number = $db->fetchOne($sql);
-	return $number;
+	$sql = "SELECT key_code FROM `rms_view` WHERE type=21 AND name_kh = '".$title."' limit 1";
+	
+	return $db->fetchOne($sql);;
 }
   function getLastKeycodeByType($type){
   	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
@@ -2124,8 +2152,8 @@ function getAllgroupStudyNotPass($action=null){
 	  		$rs = $this->getStudentinfoById($student_id);
 	    }elseif($data_from==2){//test
 	  		$rs = $this->getStudentTestinfoById($student_id);
-	  	}elseif($data_from==4){//crm
-	  		//$rs = $this->getStudentBalanceInfoById($student_id);
+	  	}elseif($data_from==4){//student late
+	  		$rs = $this->getStudentBalanceInfoById($student_id);
 	    }
   	}else{//customer//WHERE s.customer_type=2 
   		$rs = $this->getCustomerinfoById($student_id);
@@ -3123,7 +3151,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" GROUP BY s.stu_id ORDER BY s.stu_id DESC";
   		return $db->fetchAll($sql);
   }
-  /*function getStudentBalanceInfoById($stu_id){//stop use
+  function getStudentBalanceInfoById($stu_id){//stop use
   	$db=$this->getAdapter();
   	$currentLang = $this->currentlang();
   	$colunmname='title_en';
@@ -3161,7 +3189,7 @@ function getAllgroupStudyNotPass($action=null){
   		AND s.stu_id=$stu_id
   	LIMIT 1 ";
   	return $db->fetchRow($sql);
-  }*/
+  }
   function getStudentToken(){
   	return 'PSIS'.date('YmdHis');
   }

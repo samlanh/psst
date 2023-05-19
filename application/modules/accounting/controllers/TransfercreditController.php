@@ -90,9 +90,6 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
 			}
     	$this->view->row = $row;
     	
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->all_student_name = $db->getAllStudent();
-    	
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemo($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

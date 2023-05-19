@@ -46,15 +46,6 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_bydate->setMultiOptions($_date_opt);
 		$_bydate->setValue($request->getParam("by_date"));
 		
-// 		$_currency_type = new Zend_Dojo_Form_Element_FilteringSelect('payment_id');
-// 		$_currency_type->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'class'=>'fullside'
-// 		));
-// 		$opt = array(-1=>"--Select Currency Type--",1=>"Dollar",2=>'Riel',3=>"Bath");
-// 		$_currency_type->setMultiOptions($opt);
-// 		$_currency_type->setValue($request->getParam("currency_type"));
-		
 		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_type');
 		$payment_method->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -62,7 +53,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		));
 		$opt = $db->getViewById(8,1);
 		$payment_method->setMultiOptions($opt);
-		$payment_method->setValue($request->getParam("currency_type"));
+		$payment_method->setValue($request->getParam("payment_type"));
 		
 		$_releasedate = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$_releasedate->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',

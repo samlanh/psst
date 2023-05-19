@@ -630,89 +630,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$data=$this->view->rs = $rs_rows;
 		$this->view->search = $search;
 		
-// 		if($this->getRequest()->isPost()){
-// 			$_data=$this->getRequest()->getPost();
-// 			$search = array(
-// 				'txtsearch' => $_data['txtsearch'],
-// 				'year' => $_data['year'],
-// 				'branch_id' => $_data['branch_id'],
-// 				'service_type' => $_data['service_type'],
-// 				'service' => $_data['service'],
-// 			);
-// 		}
-// 		else{
-// 			$search=array(
-// 				'txtsearch' =>'',
-// 				'year' =>'',
-// 				'branch_id' =>'',
-// 				'service_type'=>-1, 
-// 				'service' =>-1,
-// 			);
-// 		}
-	
-// 		$db = new Allreport_Model_DbTable_DbRptServiceCharge();
-// 		$service= $db->getAllServiceFee($search);
-		
-// 		$form=new Registrar_Form_FrmSearchInfor();
-// 		$form->FrmSearchRegister();
-// 		Application_Model_Decorator::removeAllDecorator($form);
-// 		$this->view->form_search=$form;
-	
-// 		$model = new Application_Model_DbTable_DbGlobal();
-// 		$row=0;$indexterm=1;$key=0;$rs_rows=array();
-// 		if(!empty($service)){
-// 			foreach ($service as $i => $rs) {
-// 				$rows = $db->getServiceFeebyId($rs['id'],$search['service_type'],$search['service']);
-// 				$fee_row=1;
-// 				if(!empty($rows))foreach($rows as $payment_tran){
-// 					if($payment_tran['payment_term']==1){
-// 						$rs_rows[$key]=$this->headAddRecordServiceFee($rs,$key);
-// 						$term = $model->getAllPaymentTerm($fee_row);
-	
-// 						$rs_rows[$key]['service_name'] = $payment_tran['service_name'];
-// 						$rs_rows[$key]['ser_type'] = $payment_tran['ser_type'];
-// 						$rs_rows[$key]['remark'] = $payment_tran['remark'];
-// 						$rs_rows[$key]['monthly'] = $payment_tran['price_fee'];
-// 						$key_old=$key;
-// 						$key++;
-// 					}elseif($payment_tran['payment_term']==2){
-// 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
-// 						$rs_rows[$key_old]['quarter'] = $payment_tran['price_fee'];
-							
-// 					}elseif($payment_tran['payment_term']==3){
-// 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
-// 						$rs_rows[$key_old]['semester'] = $payment_tran['price_fee'];
-// 					}
-// 					elseif($payment_tran['payment_term']==4){
-// 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
-// 						$rs_rows[$key_old]['year'] = $payment_tran['price_fee'];
-// 					}
-// 				}
-// 			}
-// 		}
-// 		else{
-// 			$rs_rows = array();
-// 			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-// 		}
-// 		$this->view->rs = $rs_rows;
-// 		$this->view->search = $search;
-// 		$db = new Allreport_Model_DbTable_DbRptFee();
-// 		$year = $db->getAllYearFee();
-// 		$this->view->row = $year;
+
 	}
-// 	public function headAddRecordServiceFee($rs,$key){
-// 		$result[$key] = array(
-// 				'id' 	  => $rs['id'],
-// 				'academic'=> $rs['academic'],
-// 				'monthly'=>'',
-// 				'quarter'=>'',
-// 				'semester'=>'',
-// 				'year'=>'',
-// 				'date'=>$rs['create_date'],
-// 				'status'=> Application_Model_DbTable_DbGlobal::getAllStatus($rs['status'])
-// 		);
-// 		return $result[$key];
-// 	}
+
 	
 	public function rptInvoiceAction(){
 		try{

@@ -1,6 +1,6 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$frm = $this->frm_credit;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm = $this->frm_credit;
 ?>
 <title><?php echo $tr->translate("CREDIT_MEMO");?></title>
 <style>	
@@ -40,98 +40,90 @@ $frm = $this->frm_credit;
 					<div class="card-blogform">
 							<div class="card-body"> 
 								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DETAIL_INFORMATION");?></p>
+											</div> 
+										</div>
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
-											<div class="d-flex "> 
-													<div class="settings-main-icon ">
-														<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DETAIL_INFORMATION");?></p>
-													</div> 
+												&nbsp; 
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
+													<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $row){?>
+													<option value="<?php echo $row['id']?>"><?php echo $row['name'];?></option>
+													<?php }?>
+												</select>
+										</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input id="student_id" />
 											</div>
-											<div class="col-md-12 col-sm-12 col-xs-12">
-													&nbsp; 
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement('Date');?>
 											</div>
-
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
-														<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $row){?>
-														<option value="<?php echo $row['id']?>"><?php echo $row['name'];?></option>
-														<?php }?>
-													</select>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement('end_date');?>
 											</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input id="student_id" />
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-												<?php echo $frm->getElement('Date');?>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-												<?php echo $frm->getElement('end_date');?>
-												</div>
-											</div>
-
 										</div>
 									</div>
+								</div>
 							</div>
 						</div>
-
 		         </div>
 		         <div class="col-md-4 col-sm-4 col-xs-12">
 					 <div class="card-blogform">
 							<div class="card-body"> 
 								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-tasks" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CREDIT_MEMO");?></p>
+											</div> 
+										</div>
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
-												<div class="d-flex "> 
-														<div class="settings-main-icon ">
-															<i class="glyphicon glyphicon-tasks" aria-hidden="true"></i>
-														</div> 
-														<div class="col-md-10 col-sm-10 col-xs-12"> 
-															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CREDIT_MEMO");?></p>
-														</div> 
-												</div>
-												<div class="col-md-12 col-sm-12 col-xs-12">
-														&nbsp; 
-												</div>
-
-
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_AMOUNT");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('total_amount');?>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('prob');?>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="hidden" id="identity" name="identity" />
-														<?php echo $frm->getElement('Description');?>
-													</div>
-												</div>
+												&nbsp; 
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_AMOUNT");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('total_amount');?>
 											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('prob');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input type="hidden" id="identity" name="identity" />
+												<?php echo $frm->getElement('Description');?>
+											</div>
+										</div>
 									</div>
+								</div>
 							</div>
 						</div>
-
 		         </div>
 			</div>
 			<div class="clearfix"></div>
@@ -153,8 +145,6 @@ $frm = $this->frm_credit;
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		autoComplete: false,
@@ -173,25 +163,25 @@ dojo.ready(function(){
 	 		getallstudentname();
 	    });
 });
-var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
-function getallstudentname(){//
+function getallstudentname(){
+	let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	branch_id = dijit.byId("branch_id").attr("value");
 	if(branch_id==''){  
 		dijit.byId("branch_id").focus();
 		return false;}
-	dojo.xhrPost({
-		url:url_data,
-		content:{
-			'branch_id':branch_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			student_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('student_id').set('store',student_store);  
-		},
-		error: function(err) {
-		}
-	});
+		dojo.xhrPost({
+			url:url_data,
+			content:{
+				'branch_id':branch_id
+			},
+			handleAs:"json",
+			load: function(data) {
+				student_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('student_id').set('store',student_store);  
+			},
+			error: function(err) {
+			}
+		});
 }
 function submitDataClose(){
 	student_id = dijit.byId('student_id').get('value');

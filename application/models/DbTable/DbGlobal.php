@@ -1606,7 +1606,10 @@ function getAllgroupStudyNotPass($action=null){
 		  			"modify_date"=>date("Y-m-d"),
 	  			);
 	  	$this->_name="rms_degree_language";
-	  	return $this->insert($array);
+		$id = $this->insert($array);
+		echo ($id);
+		exit();
+	 // 	return $id;
   }
   
   function addNationType($data){
@@ -1622,12 +1625,24 @@ function getAllgroupStudyNotPass($action=null){
   				'type'=>21,
   		);
   		$this->_name="rms_view";
-  		$id = $this->insert($arr);
+		$exist = $this->checkNation($data);
+		if(!empty($exist)){
+			$id = $this->insert($arr);
+		}else{
+			return $exist;
+		}
+  		
   		return $key_code;
   	}catch (Exception $e){
   		echo '<script>alert('."$e".');</script>';
   	}
   }
+  function checkNation($data){
+	$sql = "SELECT key_code FROM `rms_view` WHERE type=21 name_kh =' ".$data['title_kh']." ' LIMIT 1 ";
+	$db =$this->getAdapter();
+	$number = $db->fetchOne($sql);
+	return $number;
+}
   function getLastKeycodeByType($type){
   	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
   	$db =$this->getAdapter();

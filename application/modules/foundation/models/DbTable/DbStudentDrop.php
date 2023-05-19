@@ -16,7 +16,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	function getAllStudentName(){
 		$_db = $this->getAdapter();
 		$db=new Application_Model_DbTable_DbGlobal();
-		return $db->getAllStudent();
+		return $db->getAllListStudent();
 		
 
 	}

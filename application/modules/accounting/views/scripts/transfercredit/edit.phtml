@@ -192,17 +192,15 @@
 		</form>
     </div>
 </div>
-
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.store.Memory");
-var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_student_name));?> );
+//dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.store.Memory");
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
-		store: student_store,
 		autoComplete: false,
 		queryExpr: "*${0}*",                     
 		id: "stu_name",
@@ -235,6 +233,7 @@ function getallstudentname(){//
 		load: function(data) {
 			student_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('stu_name').set('store',student_store);  
+		   dijit.byId('stu_name').attr('value','<?php echo $this->row['stu_name'];?>');
 		},
 		error: function(err) {
 			alert(err);

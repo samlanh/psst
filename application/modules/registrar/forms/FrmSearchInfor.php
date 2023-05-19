@@ -402,51 +402,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
     		}
     	}
 		
-		$_stu_code = new Zend_Dojo_Form_Element_FilteringSelect('stu_code');
-		$_stu_code->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$_stu_code->setValue($request->getParam("stu_code"));
-		$db = new Application_Model_DbTable_DbGlobal();
-		$result = $db->getAllStuCode();
-		$opt_stu_code = array(''=>$this->tr->translate("SELECT_STUDENT_ID"));
-		if(!empty($result))foreach ($result As $rs)$opt_stu_code[$rs['id']]=$rs['stu_code'];
-		$_stu_code->setMultiOptions($opt_stu_code);
-		
-		$_stu_name = new Zend_Dojo_Form_Element_FilteringSelect('stu_name');
-		$_stu_name->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$_stu_name->setValue($request->getParam("stu_name"));
-		$db = new Application_Model_DbTable_DbGlobal();
-		$result = $db->getAllStudent();
-		$opt_stu_name = array(''=>$this->tr->translate("SELECT_STUDENT_NAME"));
-		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
-		$_stu_name->setMultiOptions($opt_stu_name);
-		
-		//student id
-		$stuname_con = new Zend_Dojo_Form_Element_FilteringSelect('stuname_con');
-		$stuname_con->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$stuname_con->setValue($request->getParam("stuname_con"));
-		$db = new Application_Model_DbTable_DbGlobal();
-		$result = $db->getAllStudent();
-		$opt_stu_name = array(''=>$this->tr->translate("SELECT_STUDENT_NAME"));
-		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
-		$stuname_con->setMultiOptions($opt_stu_name);
 		
 		//term 
 		$term = new Zend_Dojo_Form_Element_FilteringSelect('term');
@@ -720,9 +675,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$receipt_order,
 				    $option_type,
 				    $type_study,
-					$school_option,$is_pass,$item,$finished_status,$term_test,$term,$stuname_con,
+					$school_option,$is_pass,$item,$finished_status,$term_test,$term,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
-					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
+					$service_type,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
 					$_sortby,

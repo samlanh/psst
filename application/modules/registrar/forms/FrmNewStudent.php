@@ -31,7 +31,6 @@ Class Registrar_Form_FrmNewStudent extends Zend_Dojo_Form {
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		
-		
 		$_arr_opt_branch = array(""=>$tr->translate("PLEASE_SELECT"));
 		$optionBranch = $_db->getAllBranch();
 		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
@@ -139,10 +138,8 @@ Class Registrar_Form_FrmNewStudent extends Zend_Dojo_Form {
 		));
 		
 		if($data!=null){
-			
 			$_branch_id->setValue($data['branch_id']);
 			$student_id->setValue($data['stu_code']);
-			
 			$stu_khname->setValue($data['stu_khname']);
 			$name_en->setValue($data['stu_enname']);
 			$last_name->setValue($data['last_name']);
@@ -150,38 +147,29 @@ Class Registrar_Form_FrmNewStudent extends Zend_Dojo_Form {
 			$phone->setValue($data['tel']);
 			$email->setValue($data['email']);
 			$_student_province->setValue($data['province_id']);
-			
 			$home_note->setValue($data['home_num']);
 			$way_note->setValue($data['street_num']);
-			
 			$remark->setValue($data['remark']);
 			$status->setValue($data['status']);
-			
 			$id->setValue($data['stu_id']);
 		}
 		
 		$this->addElements(array(
 			$_branch_id,
 			$student_id,
-				
-				
 			$stu_khname,
 			$name_en,
 			$last_name,
 			$_sex,
 			$phone,
 			$email,
-			
 			$home_note,
 			$way_note,
 			$_student_province,
-			
 			$remark,
 			$status,
-		
 			$id,
 		));
 		return $this;
-		
 	}	
 }

@@ -105,7 +105,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("FROM_SCHOOL"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
-    	
     	));
     	
     	$reason=  new Zend_Form_Element_Textarea('reason');
@@ -131,11 +130,9 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_tel_stu = new Zend_Dojo_Form_Element_TextBox('tel_stu');
     	$_tel_stu->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			//'required'=>'true',
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("PHONE"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Tel")
-    			 
     	));
     	
     	$note=  new Zend_Form_Element_Textarea('note');
@@ -172,7 +169,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("First Name"),
     			'missingMessage'=>$this->tr->translate("Forget Enter First Name")
-    			 
     	));
     	 
     	$_last_name_stu = new Zend_Dojo_Form_Element_TextBox('last_name_stu');
@@ -181,7 +177,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("last Name"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
-    	
     	));
     	
     	$_arr = array(1=>$this->tr->translate("MALE"),2=>$this->tr->translate("FEMALE"));
@@ -189,7 +184,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_sex_stu->setMultiOptions($_arr);
     	$_sex_stu->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			
     			'class'=>'fullside height-text',));
     	
     	$_age_stu = new Zend_Dojo_Form_Element_NumberTextBox('age_stu');
@@ -218,7 +212,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_sex_stu->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    			
     			'class'=>'fullside height-text',));
     	
     	//for form Search
@@ -249,7 +242,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     		}
     	}
     	
-    	
     	$_arr = array(""=>$this->tr->translate("ASK_FOR"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH_KNOWLEDGE"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("CHINESE_KNOWLEDGE"),5=>$this->tr->translate("OTHER"));
     	$_ask_for_search = new Zend_Dojo_Form_Element_FilteringSelect("ask_for_search");
     	$_ask_for_search->setMultiOptions($_arr);
@@ -274,12 +266,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));
     	$_know_by_search->setValue($request->getParam("know_by_search"));
-    	
-//     	$_arr = array(-1=>$this->tr->translate("ALL"),1=>
-//     			$this->tr->translate("PROGRESSING"),
-//     			2=>$this->tr->translate("WAITING_COMPLETED"),
-//     			3=>$this->tr->translate("COMPLETED"),
-//     			0=>$this->tr->translate("CANCEL"));
     	
     	$_arr= $_dbgb->getcrmFollowupStatus();
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
@@ -355,7 +341,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$followup->setMultiOptions($_arr);
     	
     	$followup->setValue($request->getParam('followup_status'));
-    	
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
@@ -462,7 +447,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			);
     	$followup->setMultiOptions($_arr);
     	
-    	
     	$next_contact= new Zend_Dojo_Form_Element_DateTextBox('next_contact');
     	$next_contact->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
@@ -507,7 +491,6 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     		}
     		$followup->setValue($data["followup_status"]);
     	}
-    	
     	
     	$this->addElements(array(
     			$followup,

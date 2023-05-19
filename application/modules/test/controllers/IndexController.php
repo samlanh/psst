@@ -103,7 +103,7 @@ class Test_IndexController extends Zend_Controller_Action
     			exit();
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		}
     	}
     	$row  = $db->getStudentTestById($id);
@@ -206,7 +206,6 @@ class Test_IndexController extends Zend_Controller_Action
 		}
     	
     	$row  = $db->getStudentTestById($id);
-		
     	$this->view->rs = $row;
     	if(empty($row)){
     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
@@ -229,7 +228,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->form = $frm;
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rs_subjecttestkhmer = $db->getViewById(31);
-		
 		
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);

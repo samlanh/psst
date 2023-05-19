@@ -835,13 +835,15 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    /*blog get student*/
-   function getAllStudent($opt=null,$type=2,$branchid=null){
+   function getAllListStudent($opt=null,$type=2,$branchid=null){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 
-   	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
+   	$sql=" SELECT 
+   		s.stu_id AS stu_id,
 	   	stu_code,
+	   	s.stu_id AS id,
 	   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
 	   	FROM rms_student AS s,
 			rms_group_detail_student as gds
@@ -852,6 +854,7 @@ function getAllgroupStudyNotPass($action=null){
 			AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
 			AND (stu_enname!='' OR s.stu_khname!='')
 			AND s.status=1  AND customer_type=1 ";
+   	
    	if($branchid!=null){
    		$sql.=" AND s.branch_id=".$branchid;
    	}
@@ -2109,8 +2112,8 @@ function getAllgroupStudyNotPass($action=null){
 	  		$rs = $this->getStudentinfoById($student_id);
 	    }elseif($data_from==2){//test
 	  		$rs = $this->getStudentTestinfoById($student_id);
-	  	}elseif($data_from==4){//crm
-	  		//$rs = $this->getStudentBalanceInfoById($student_id);
+	  	}elseif($data_from==4){//student late
+	  		$rs = $this->getStudentBalanceInfoById($student_id);
 	    }
   	}else{//customer//WHERE s.customer_type=2 
   		$rs = $this->getCustomerinfoById($student_id);
@@ -3108,7 +3111,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" GROUP BY s.stu_id ORDER BY s.stu_id DESC";
   		return $db->fetchAll($sql);
   }
-  /*function getStudentBalanceInfoById($stu_id){//stop use
+  function getStudentBalanceInfoById($stu_id){//stop use
   	$db=$this->getAdapter();
   	$currentLang = $this->currentlang();
   	$colunmname='title_en';
@@ -3146,7 +3149,7 @@ function getAllgroupStudyNotPass($action=null){
   		AND s.stu_id=$stu_id
   	LIMIT 1 ";
   	return $db->fetchRow($sql);
-  }*/
+  }
   function getStudentToken(){
   	return 'PSIS'.date('YmdHis');
   }

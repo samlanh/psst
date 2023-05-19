@@ -987,7 +987,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getAllGerneralOldStudentName(){
     	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllStudent();
+    	return $db->getAllListStudent();
     }
     //select general  old student by name
     

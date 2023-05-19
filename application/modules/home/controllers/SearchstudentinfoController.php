@@ -138,4 +138,3 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 }
-

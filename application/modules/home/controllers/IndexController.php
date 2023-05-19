@@ -125,25 +125,20 @@ class Home_IndexController extends Zend_Controller_Action
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
-    
-    	
     }
     
     public function viewAction()
     {
        
     }
-
     public function addAction()
     {
       
     }
-
     public function editedAction()
     {
        
     }
-	
     public function newsAction(){
     	$id = $this->getRequest()->getParam("id");
     	if (empty($id)){
@@ -207,17 +202,8 @@ class Home_IndexController extends Zend_Controller_Action
     			$this->view->previousPage = $currentPage-1;
     		}
     		
-    		
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
-
 }
-
-
-
-
-
-
-

@@ -376,7 +376,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			if ($customer_type==2){
 				$rows = $db->getAllCustomer(null,$branch_id);
 			}else{
-				$rows = $db->getAllStudent(null,2,$branch_id);
+				$rows = $db->getAllListStudent(null,2,$branch_id);
 			}
 			
 			print_r(Zend_Json::encode($rows));

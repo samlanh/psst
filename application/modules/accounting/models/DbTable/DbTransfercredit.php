@@ -8,7 +8,6 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	}
 	function getAllTransfer($search=null){
 		$db = $this->getAdapter();
-		//$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$sql="SELECT 
 				c.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				
@@ -44,6 +43,9 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND c.status  = ".$search['status'];
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('c.branch_id');
+		
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}
@@ -51,15 +53,14 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	function transfercreditMemo($data){
 		$db = $this->getAdapter();
  		try{
-			$sql="SELECT id FROM rms_transfer_credit WHERE student_id =".$data['student_id'];
- 			$sql.=" AND stu_name='".$data['stu_name']."'";
+			$sql="SELECT id FROM rms_transfer_credit WHERE student_id =".$data['studentId'];
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
 			}
 			$arr = array(
 				'branch_id'		=>$data['branch_id'],
-				'student_id'	=>$data['student_id'],
+				'student_id'	=>$data['studentId'],
 				'total_amount'	=>$data['total_amount'],
 				'total_amountafter'=>$data['total_amount'],
 				'note'			=>$data['Description'],
@@ -67,9 +68,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'type'			=>0,
 				'date'			=>$data['Date'],
 				'end_date'		=>$data['end_date'],
-				
-				//'stu_idto'		=>$data['stu_idto'],
-				'stu_name'		=>$data['stu_name'],
+				'stu_name'		=>$data['toStudentId'],
 				'start_date'	=>$data['start_date'],
 				'end_dates'		=>$data['end_dates'],
 				'problem'		=>$data['problem'],
@@ -78,10 +77,10 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'user_id'		=>$this->getUserId(),);
 			$this->_name='rms_transfer_credit';
 			$this->insert($arr);
-		
+			
 			$arr = array(
 				'branch_id'		=>$data['branch_id'],
-				'student_id'	=>$data['stu_name'],
+				'student_id'	=>$data['toStudentId'],
 				'total_amount'	=>0,
 				'total_amountafter'=>0,
 				'note'			=>$data['Description'],
@@ -93,6 +92,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'user_id'		=>$this->getUserId(),);
 			$this->_name='rms_creditmemo';
 			$this->insert($arr);
+			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
@@ -101,7 +101,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	function updatefercreditMemo($data){
 			$arr = array(
 					'branch_id'		=>$data['branch_id'],
-					'student_id'	=>$data['student_id'],
+					'student_id'	=>$data['studentId'],
 					'total_amount'	=>$data['total_amount'],
 					'total_amountafter'=>$data['total_amount'],
 					'note'			=>$data['Description'],
@@ -109,9 +109,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 					'type'			=>0,
 					'date'			=>$data['Date'],
 					'end_date'		=>$data['end_date'],
-	
-					//'stu_idto'		=>$data['stu_idto'],
-					'stu_name'		=>$data['stu_name'],
+					'stu_name'		=>$data['toStudentId'],
 					'start_date'	=>$data['start_date'],
 					'end_dates'		=>$data['end_dates'],
 					'problem'		=>$data['problem'],
@@ -125,6 +123,8 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	function getTransferbyid($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM rms_transfer_credit where id=$id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 }

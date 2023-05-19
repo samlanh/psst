@@ -172,7 +172,8 @@ function getallstudentname(){
 		dojo.xhrPost({
 			url:url_data,
 			content:{
-				'branch_id':branch_id
+				'branch_id':branch_id,
+				'customer_type':1
 			},
 			handleAs:"json",
 			load: function(data) {

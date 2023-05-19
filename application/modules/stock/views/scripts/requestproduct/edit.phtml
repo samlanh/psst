@@ -754,9 +754,9 @@ function hideDialogForSection(){
 					<tr>
 						<td colspan="2" align="center" >
 							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogRequestFor();"/>
+							dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-remove-circle" onclick="hideDialogRequestFor();"/>
 							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRequestFor();"/>
+							dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" onclick="addRequestFor();"/>
 						</td>
 					</tr>
 				</table>	
@@ -784,9 +784,9 @@ function hideDialogForSection(){
 					<tr>
 						<td colspan="2" align="center" >
 							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancel_for_section" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogForSection();"/>
+							dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-remove-circle" onclick="hideDialogForSection();"/>
 							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submit_for_section" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addForSection();"/>
+							dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" onclick="addForSection();"/>
 						</td>
 					</tr>
 				</table>	

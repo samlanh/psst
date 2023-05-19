@@ -63,8 +63,8 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 					Application_Form_FrmMessage::message($sms);
 				}				
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -87,7 +87,8 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 				$db->updatcreditMemo($data);				
 				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
 		

@@ -24,19 +24,21 @@
     			</div>
     		</div>
     	</div>
-    	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'transfercredit','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+    	<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-				stu_name = dijit.byId('stu_name').get('value');
-				stu_idfrom = dijit.byId('student_name').get('value');
-				if(stu_idfrom == stu_name){
-					alert ("<?php echo $tr->translate("MESSAGE_DON_INOUT");?>");
-					return false; 
-				}else{ 
-					return true;}
-				stu_idto = dijit.byId('stu_idto').get('value');
-       			 if(stu_idto==0){
-					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();return false;}
+				studentId = dijit.byId('studentId').get('value');
+				toStudentId = dijit.byId('toStudentId').get('value');
+       			 if(studentId==toStudentId){
+					alert('<?php echo $tr->translate("STUDENT_MUST_DIFFERENCE");?>');
+					dijit.byId('toStudentId').focus();
+					return false;
+				}
+				total_amount= dijit.byId('total_amount').get('value');
+				if(total_amount==0){
+					alert('<?php echo $tr->translate("NO_BALANCE_TRANSFER");?>');
+					return false;
+				}
         			dijit.byId("saveclose").set("disabled",true);
 					return true;
 			}else {
@@ -46,138 +48,125 @@
 			<div class="card-box">
 				<div class="col-md-5 col-sm-5 col-xs-12">
 					<div class="card-blogform">
-							<div class="card-body"> 
-									<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12">
-
-														<div class="d-flex "> 
-																	<div class="settings-main-icon ">
-																		<i class="material-icons-outlined">person</i>
-																		
-																	</div> 
-																	<div class="col-md-10 col-sm-10 col-xs-12"> 
-																		<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INFORMATION_TO");?></p>
-																	</div> 
-														</div>
-														<div class="col-md-12 col-sm-12 col-xs-12">
-																	&nbsp; 
-														</div>
-
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement('branch_id');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_CODE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<?php echo $frm->getElement('student_id');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement('student_name');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<?php echo $frm->getElement('Date');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement('end_date');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SPACE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<?php echo $frm->getElement('total_amount');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<?php echo $frm->getElement('prob');?>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE")?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input type="hidden" id="identity" name="identity" />
-																<?php echo $frm->getElement('Description');?>
-															</div>
-														</div>
-													</div>
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex "> 
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">person</i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INFORMATION_TO");?></p>
+										</div> 
+										</div>
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											&nbsp; 
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement('branch_id');?>
 											</div>
-									</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input id="studentId" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('Date');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement('end_date');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SPACE");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('total_amount');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('prob');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE")?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input type="hidden" id="identity" name="identity" />
+												<?php echo $frm->getElement('Description');?>
+											</div>
+										</div>
+								</div>
 							</div>
-
+						</div>
+					</div>
 		         </div>
 		         <div class="col-md-5 col-sm-5 col-xs-12">
 					 <div class="card-blogform">
-							<div class="card-body"> 
-									<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12">
-
-												<div class="d-flex "> 
-														<div class="settings-main-icon ">
-														
-															<i class="material-icons-outlined">transfer_within_a_station</i>
-															
-														</div> 
-														<div class="col-md-10 col-sm-10 col-xs-12"> 
-															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INFORMATION_RECEIVE");?></p>
-														</div> 
-												</div>
-												<div class="col-md-12 col-sm-12 col-xs-12">
-														&nbsp; 
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<input id="stu_name" />
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="text" name="start_date" readOnly="readOnly" id="start_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-													<input type="text" name="end_dates" readOnly="readOnly" id="end_dates" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['end_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('problem');?>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE")?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="hidden" id="identity" name="identity" />
-														<?php echo $frm->getElement('Descriptions');?>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('status');?>
-													</div>
-												</div>
-											</div>
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex "> 
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">transfer_within_a_station</i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INFORMATION_RECEIVE");?></p>
+										</div> 
+									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										&nbsp; 
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="toStudentId" />
 										</div>
 									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" name="start_date" readOnly="readOnly" id="start_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+										<input type="text" name="end_dates" readOnly="readOnly" id="end_dates" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['end_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement('problem');?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE")?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="hidden" id="identity" name="identity" />
+											<?php echo $frm->getElement('Descriptions');?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement('status');?>
+										</div>
+									</div>
+								</div>
 							</div>
+						</div>
+					</div>
 		         </div>
 			</div>
 			<div class="clearfix"></div>
@@ -193,70 +182,80 @@
     </div>
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
-//dojo.require("dojo.data.ObjectStore");
-//dojo.require("dojo.store.Memory");
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		autoComplete: false,
 		queryExpr: "*${0}*",                     
-		id: "stu_name",
-		name: "stu_name",   
-		required:true, 
-		value:'<?php echo $this->row['stu_name'];?>',       
+		id: "studentId",
+		name: "studentId",   
+		required:true,    
+		'readOnly':true,    
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() {  
 		}
-	}, "stu_name");
+	}, "studentId");
+
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "toStudentId",
+		name: "toStudentId",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() {  
+		}
+	}, "toStudentId");
+	
+
+	getAllstudentBranch();
 	getallstudentname();
 	 var branch_id = dijit.byId('branch_id');
 	 	branch_id.on('change', function(evt) {
+	 		getAllstudentBranch();
 	 		getallstudentname();
 	    });
 });
-var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+function getAllstudentBranch(){
+	dijit.byId("studentId").reset();
+	branchId = dijit.byId('branch_id').get('value');
+	if(branchId==''){
+		 dijit.byId('branch_id').focus();
+	}
+	selectedId = '<?php echo $this->row['student_id'];?>';
+	contentData = {
+			'branch_id':branchId,
+			'customer_type':1
+			}
+	getAllStudentByBranch(urlGet,contentData,selectedId);
+}
+
 function getallstudentname(){//
 	branch_id = dijit.byId("branch_id").attr("value");
 	if(branch_id==''){  
 		dijit.byId("branch_id").focus();
 		return false;}
-	dojo.xhrPost({
-		url:url_data,
-		content:{
-			'branch_id':branch_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			student_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('stu_name').set('store',student_store);  
-		   dijit.byId('stu_name').attr('value','<?php echo $this->row['stu_name'];?>');
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
-}
-	dojo.ready(function(){
-		setSelected(1);
-	});
-function setSelected(type){
-	if(type==1){
-		student_id = dijit.byId("student_id").get('value');
-		dijit.byId("student_name").attr('value',student_id);
-	}else{
-		student_id = dijit.byId("student_name").get('value');
-		dijit.byId("student_id").attr('value',student_id);
-	}
-	if(type==1){
-		stu_idto = dijit.byId("stu_idto").get('value');
-		dijit.byId("stu_name").attr('value',stu_idto);
-	}else{
-		stu_idto = dijit.byId("stu_name").get('value');
-		dijit.byId("stu_idto").attr('value',stu_idto);
-	}
+		dojo.xhrPost({
+			url:urlGet,
+			content:{
+				'branch_id':branch_id,
+				'customer_type':1
+			},
+			handleAs:"json",
+			load: function(data) {
+				student_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('toStudentId').set('store',student_store);  
+			   	dijit.byId('toStudentId').attr('value','<?php echo $this->row['stu_name'];?>');
+			},
+			error: function(err) {
+			}
+		});
 }
 </script>

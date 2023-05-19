@@ -103,9 +103,8 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 				}
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/issue/reschedulegroup/");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
-				$err =$e->getMessage();
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
 		
@@ -161,9 +160,8 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
 				}
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/issue/reschedulegroup/");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
-				$err =$e->getMessage();
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
 		$_db = new Foundation_Model_DbTable_DbRescheduleGroup();

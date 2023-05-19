@@ -27,59 +27,90 @@ tbody#table_row tr {
     		</div>
     	</div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<div class="form-group">
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("adv_search");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("branch_id");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("academic_year");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input id="group" />
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("degree");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<input id="grade" />
-                   </div>
-             </div>
-             <div class="form-group">
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("session");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("start_date");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("end_date");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("stu_type");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement("study_type");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
-             </div>
-			 <div class="form-group">
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-						<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStudent();">
-							<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
-							<option value="2"><?php echo $tr->translate("SELECTED_STUDENT_OPTION");?></option>
-						</select>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-						
-                   </div>
-             </div>
+			
+			 <div class="col-md-12 col-sm-12 col-xs-12 ">
+				<div class="card-blogform">
+					<div class="card-body"> 
+						<div class="row"> 
+							<div class="col-md-12 col-sm-12 col-xs-12 ">
+								<div class="form-group">
+									<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("adv_search");?>
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("branch_id");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("academic_year");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<input id="group" />
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("degree");?>
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+											<input id="grade" />
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("session");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("start_date");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("end_date");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("stu_type");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<?php echo $frm->getElement("study_type");?>
+									</div>
+										<div class="col-md-2 col-sm-2 col-xs-12">
+											<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			 
+			<div class="col-md-12 col-sm-12 col-xs-12 ">
+				<div class="card-blogform">
+					<div class="card-body"> 
+						<div class="row"> 
+							<div class="col-md-12 col-sm-12 col-xs-12 ">
+								<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+									<div class="col-md-3 col-sm-3 col-xs-12 text-center ">
+										<p class="tx-20 font-weight-semibold "><i class="glyphicon glyphicon-ok-sign" aria-hidden="true">&nbsp;</i><?php echo $tr->translate("SELECT_STUDENT");?> </p>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStudent();">
+											<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
+											<option value="2"><?php echo $tr->translate("SELECTED_STUDENT_OPTION");?></option>
+										</select>
+									</div>
+									<div class="col-md-5 col-sm-5 col-xs-12">
+										<select name="studentID" id="studentID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
+											<option value="0"><?php echo $tr->translate("SELECT_STUDENT");?></option>
+											<?php if(!empty($this->stu_forOption)){ foreach ($this->stu_forOption AS $row) { ?>
+											<option value="<?php echo $row['stu_id']; ?>"><?php echo $row['stu_code']." ".$row['name']." ".$row['grade'];?></option>
+											<?php }} ?>
+										</select>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 	</form>
 	<div id="divPrint">
 		<table class="NORMAL_OPTION" border="0" style="background:#fff; margin: 0 auto; width: 100%;height:auto; ">
@@ -157,31 +188,28 @@ tbody#table_row tr {
 		</table>
 		<div class="card-box SELECTED_STUDENT_OPTION">
 			<div class="col-md-12 col-sm-12 col-xs-12" style=" padding: 0;">
-				<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-					<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?> </label>
-					<div class="col-md-5 col-sm-5 col-xs-12">
-						<select name="studentID" id="studentID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
-							<option value="0"><?php echo $tr->translate("SELECT_STUDENT");?></option>
-							<?php if(!empty($this->stu_forOption)){ foreach ($this->stu_forOption AS $row) { ?>
-							<option value="<?php echo $row['stu_id']; ?>"><?php echo $row['stu_code']." ".$row['name']." ".$row['grade'];?></option>
-							<?php }} ?>
-						</select>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12 ">
+									<div class="form-group">
+										<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc; line-height: 30px;">
+											<thead>
+												<tr id="head-title" class="head-td" align="right" style="width: 100%;">
+													<th width="5%"><?php echo $tr->translate("DEL");?></th>
+													<th width="5%"><?php echo $tr->translate("N_O");?></th>
+													<th ><?php echo $tr->translate("STUDENT");?></th>
+												</tr>
+											</thead>
+											<tbody id="table_row">
+											</tbody>
+											<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc; line-height: 30px;">
-						<thead>
-							<tr id="head-title" class="head-td" align="right" style="width: 100%;">
-								<th width="5%"><?php echo $tr->translate("DEL");?></th>
-								<th width="5%"><?php echo $tr->translate("N_O");?></th>
-								<th ><?php echo $tr->translate("STUDENT");?></th>
-							</tr>
-						</thead>
-						<tbody id="table_row">
-						</tbody>
-						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-					</table>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -881,6 +909,8 @@ function getallGrade(){
 	function getBlogStudent(){
 		optionSelect=dijit.byId("optionSelect").get("value");
 		if(optionSelect==1){
+			dijit.byId('studentID').attr('value',0);
+			$("#id_selected").val('');
 			$(".NORMAL_OPTION").css("display", "table");
 			$(".SELECTED_STUDENT_OPTION").css("display", "none");
 		}else{
@@ -898,6 +928,12 @@ function getallGrade(){
 	tmp = '';
 	temp='';
 function addRow(){ 
+	optionSelect=dijit.byId("optionSelect").get("value");
+	if(optionSelect!=2){
+		dijit.byId('studentID').attr('value',0);
+		dijit.byId('optionSelect').focus();
+		return false;
+	}
 	studentID=dijit.byId("studentID").get("value");
 	if(studentID=='' || studentID==0){return false;}
 	var iden = $("#id_selected").val();

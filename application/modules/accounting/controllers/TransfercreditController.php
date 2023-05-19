@@ -40,31 +40,34 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->frm_search=$form;
-    	
     }
-	 public function addAction()
+    public function addAction()
     {
+    	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
     	if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();	
-			$db = new Accounting_Model_DbTable_DbCreditmemo();				
-			try {
-				$sms = "INSERT_SUCCESS";
-				$_transfer = $db->addCreditmemo($data);
-				if($_transfer==-1){
-					$sms = "RECORD_EXIST";
-				}
-				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/creditmemo");
-				}else{
-					Application_Form_FrmMessage::message($sms);
-				}				
-			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
+    		$data=$this->getRequest()->getPost();
+    		$data['id'] = $id;
+    		try {
+    			$sms="INSERT_SUCCESS";
+    			$db = new Accounting_Model_DbTable_DbTransfercredit();
+    			$_transfer = $db->transfercreditMemo($data);
+    			if($_transfer==-1){
+    				$sms = "RECORD_EXIST";
+    			}
+    			Application_Form_FrmMessage::Sucessfull($sms, "/accounting/transfercredit");
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    		}
+    	}
+    	
+    	$db = new Accounting_Model_DbTable_DbCreditmemo();
+    	$row  = $db->getCreditmemobyid($id);
+    	$this->view->row = $row;
+    
     	$pructis=new Accounting_Form_Frmcreditmemo();
-    	$frm = $pructis->Frmcreditmemo();
+    	$frm = $pructis->Frmcreditmemotran($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }
@@ -79,52 +82,23 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     			$_transfer = $db->updatefercreditMemo($data);
     			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/transfercredit");
     		} catch (Exception $e) {
-    			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
     		}
     	}
+    	
     	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	$db = new Accounting_Model_DbTable_DbTransfercredit();
     	$row  = $db->getTransferbyid($id);
-			if(empty($row)){
-				Application_Form_FrmMessage::redirectUrl("/accounting/transfercredit");
-			}
+		if(empty($row)){
+			Application_Form_FrmMessage::redirectUrl("/accounting/transfercredit");
+		}
     	$this->view->row = $row;
     	
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemo($row);
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_credit=$frm;
-    }
-    
-    public function transferAction()
-    {
-    	$id = $this->getRequest()->getParam('id');
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$data['id'] = $id;
-    		try {
-    			$sms="INSERT_SUCCESS";
-    			$db = new Accounting_Model_DbTable_DbTransfercredit();
-    			$_transfer = $db->transfercreditMemo($data);
-    			if($_transfer==-1){
-    				$sms = "RECORD_EXIST";
-    			}
-    			Application_Form_FrmMessage::Sucessfull($sms, "/accounting/transfercredit");
-    		} catch (Exception $e) {
-    			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
-    		}
-    	}
-    	$id = $this->getRequest()->getParam('id');
-    	if(empty($id)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/accounting/creditmemo");
-    		exit();
-    	}
-    	$db = new Accounting_Model_DbTable_DbCreditmemo();
-    	$row  = $db->getCreditmemobyid($id);
-    	$this->view->row = $row;
-    
-    	$pructis=new Accounting_Form_Frmcreditmemo();
-    	$frm = $pructis->Frmcreditmemotran($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }

@@ -8,7 +8,6 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	}
 	function getAllCreditmemo($search=null){
 		$db = $this->getAdapter();
-		//$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$sql="SELECT 
 				c.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
@@ -27,9 +26,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				rms_student AS s
 			  WHERE
 				s.stu_id = c.student_id";
-		//$where = ' ';
 		$str_date=' c.date ';
-		//$str_date=' c.end_date ';
 		if(!empty($search['by_date'])==0){
 		}else if($search['by_date']==1){//create
 			$str_date=' c.date ';
@@ -58,8 +55,11 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND c.status = ".$search['status'];
 		}
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('c.branch_id');
+		
 		$order=" order by id DESC";
-		//echo $sql.$where.$order; exit();
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function addCreditmemo($data){
@@ -105,9 +105,11 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		$where=" id = ".$data['id'];
 		$this->update($arr, $where);
 	}
- function getCreditmemobyid($id){
-	$db = $this->getAdapter();
-	$sql=" SELECT * FROM rms_creditmemo where id=$id ";
-	return $db->fetchRow($sql);
-}
+  function getCreditmemobyid($id){
+		$db = $this->getAdapter();
+		$sql=" SELECT * FROM rms_creditmemo where id=$id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
+		return $db->fetchRow($sql);
+	}
 }

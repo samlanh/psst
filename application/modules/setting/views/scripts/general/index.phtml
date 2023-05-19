@@ -101,6 +101,11 @@ input[type=file] {
 						<i class="fa fa-cog ml-2"></i> <?php echo $tr->translate("SYSTEM_SETTING");?>
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panelSetting4" role="tab">
+						<i class="fa fa-graduation-cap ml-2"></i> <?php echo $tr->translate("STUDENT_SETTING");?>
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="col-md-9 col-sm-9 col-xs-12">
@@ -361,7 +366,59 @@ input[type=file] {
 							</div> 
 						</div> 
 					</div>
-					<!--End Panel 3-->							
+					<!--End Panel 3-->		
+					<div class="tab-pane fade in " id="panelSetting4" role="tabpanel">
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-graduation-cap" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("COUNT_STUDENT_SETTING");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('COUNT_STUDENT_ID_OPTION')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php  echo $frm->getElement('count_stuid_option');?></div>
+												</div>
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('NEW_STU_ID_TEST')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php  echo $frm->getElement('new_stuid_test');?></div>
+												</div>
+											</div> 
+										</div> 
+									</div> 
+								</div>
+								
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-file-text" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DOCUMENT_DISPLAY_SETTING");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('DOCUMENT_DISPLAY_SETTING')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('doc_display');?></div>
+												</div>
+											</div> 
+										</div> 
+									</div> 
+								</div>
+							</div> 
+						</div> 
+					</div>
+					<!--End Panel 4-->					
 				</div>
 			</div>
 		</div>

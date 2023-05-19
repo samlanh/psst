@@ -143,7 +143,30 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				'placeholder'=>$this->tr->translate("other fee"),
 				'onKeyup' => 'CompareOtherFee()'
 		));
-		
+		$countStuidOption=  new Zend_Dojo_Form_Element_FilteringSelect('count_stuid_option');
+		$countStuidOption->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$countStuIDOpt = array(
+				1=>$this->tr->translate("AUTO_BY_BRANCH"),
+				2=>$this->tr->translate("AUTO_BY_DEGREE"),
+				3=>$this->tr->translate("BY_SCHOOL_OPT"),
+				);
+		$countStuidOption->setMultiOptions($countStuIDOpt);
+
+		$newStuIdTest=  new Zend_Dojo_Form_Element_FilteringSelect('new_stuid_test');
+		$newStuIdTest->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$newStuIDOpt = array(
+				0=>$this->tr->translate("Default"),
+				1=>$this->tr->translate("show stu_id register to enter"),
+				);
+		$newStuIdTest->setMultiOptions($newStuIDOpt);
+
+		$docDisplay=  new Zend_Dojo_Form_Element_FilteringSelect('doc_display');
+		$docDisplay->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$docDOpt = array(
+				0=>$this->tr->translate("HIDE"),
+				1=>$this->tr->translate("SHOW"),
+				);
+		$docDisplay->setMultiOptions($docDOpt);
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -185,6 +208,9 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$_discount_percent
 				,$_discount_amount
 				,$_other_fee
+				,$countStuidOption
+				,$newStuIdTest
+				,$docDisplay
 				));
 		
 		return $this;

@@ -1609,12 +1609,34 @@ function getAllgroupStudyNotPass($action=null){
 		  			"modify_date"=>date("Y-m-d"),
 	  			);
 	  	$this->_name="rms_degree_language";
-	  	return $this->insert($array);
+		$langId = $this->checklangLevel($data['title']);
+		if(empty($langId)){
+			$id = $this->insert($array);
+			$result=array(
+                "addNew" => 1,
+				"id" => $id,
+			);
+			return $result;
+		}else{
+			$result=array(
+                "addNew" => 0,
+				"id" => $langId,
+			);
+			return $result;
+		}
+		
+		
   }
+  function checklangLevel($title){
+	$db =$this->getAdapter();
+	$sql = "SELECT id FROM `rms_degree_language` WHERE  title = '".$title."' limit 1";
+	return $db->fetchOne($sql);
+	
+}
   
   function addNationType($data){
   	try{
-  		$db = $this->getAdapter();
+  		
   		$key_code = $this->getLastKeycodeByType(21);
   		$arr = array(
   				'name_en'	=>$data['title_en'],
@@ -1625,12 +1647,30 @@ function getAllgroupStudyNotPass($action=null){
   				'type'=>21,
   		);
   		$this->_name="rms_view";
-  		$id = $this->insert($arr);
-  		return $key_code;
+		$nationId = $this->checkNation($data['title_kh']);
+		if(empty($nationId)){
+			$this->insert($arr);
+			$result=array(
+                "addNew" => 1,
+				"id" => $key_code,
+			);
+		}else{
+			$result=array(
+                "addNew" => 0,
+				"id" => $nationId,
+			);
+		}
+		return $result;
   	}catch (Exception $e){
   		echo '<script>alert('."$e".');</script>';
   	}
   }
+  function checkNation($title){
+	$db =$this->getAdapter();
+	$sql = "SELECT key_code FROM `rms_view` WHERE type=21 AND name_kh = '".$title."' limit 1";
+	
+	return $db->fetchOne($sql);;
+}
   function getLastKeycodeByType($type){
   	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
   	$db =$this->getAdapter();

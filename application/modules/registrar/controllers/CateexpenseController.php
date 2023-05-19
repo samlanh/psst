@@ -21,7 +21,6 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
     		else{
     			$search = array(
     					"adv_search"=>'',
-    					"currency_type"=>-1,
     					"status"=>-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),

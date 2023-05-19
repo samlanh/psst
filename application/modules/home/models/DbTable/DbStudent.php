@@ -2,7 +2,6 @@
 
 class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 {
-	
 	protected $_name = 'rms_student';
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -21,12 +20,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$field = 'name_kh';
 					$colunmname='title';
 				}
-				//(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-// 				(SELECT $field FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
-// 				(SELECT $field FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
-// 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-// 				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
-// 				(SELECT $field FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				$sql ="SELECT  s.stu_id,
 							s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
 							CASE
@@ -68,16 +61,12 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
-			
 			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(father_enname,' ','')  	LIKE '%{$s_search}%'";
-			
 			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_enname,' ','')  	LIKE '%{$s_search}%'";
-			
 			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(guardian_khname,' ','')  	LIKE '%{$s_search}%'";
-			
 			$s_where[]=" REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
@@ -240,13 +229,13 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 	
 		FROM
-		rms_student as s,
-		rms_group_detail_student AS ds
+			rms_student as s,
+			rms_group_detail_student AS ds
 		WHERE
-		ds.itemType=1
-		AND s.stu_id = ds.stu_id
-		AND ds.is_maingrade=1
-		AND s.studentToken='".addslashes($stToken)."'";
+			ds.itemType=1
+			AND s.stu_id = ds.stu_id
+			AND ds.is_maingrade=1
+			AND s.studentToken='".addslashes($stToken)."'";
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("s.`branch_id`");
@@ -482,7 +471,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND st.`stu_id` = sdd.`stu_id` 
 					and sdd.stu_id = $stu_id
 			";
-		//AND g.is_pass!=1
 		 
 		$order =" GROUP BY sd.group_id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
 		return $db->fetchAll($sql.$order);
@@ -573,19 +561,19 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	function getSumStatusAttendence($stu_id,$group){
 		$db = $this->getAdapter();
 		$sql="SELECT
-		sat.`group_id`,
-		satd.`attendence_status`,
-		COUNT(satd.`attendence_status`) AS total,
-		sat.`date_attendence`,
-		satd.description
+			sat.`group_id`,
+			satd.`attendence_status`,
+			COUNT(satd.`attendence_status`) AS total,
+			sat.`date_attendence`,
+			satd.description
 		FROM
-		`rms_student_attendence` AS sat,
-		`rms_student_attendence_detail` AS satd
+			`rms_student_attendence` AS sat,
+			`rms_student_attendence_detail` AS satd
 		WHERE
-		sat.`id`= satd.`attendence_id`
-		AND sat.type=1
-		AND satd.`stu_id`=$stu_id
-		AND sat.`group_id`=$group GROUP BY satd.`attendence_status`";
+			sat.`id`= satd.`attendence_id`
+			AND sat.type=1
+			AND satd.`stu_id`=$stu_id
+			AND sat.`group_id`=$group GROUP BY satd.`attendence_status`";
 		return $db->fetchAll($sql);
 	}
 	

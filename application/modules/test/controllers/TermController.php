@@ -18,9 +18,7 @@ class Test_TermController extends Zend_Controller_Action {
     				'academic_year'=>"",
 				);
     		}
-    		
     		$this->view->search = $search;
-    		
 			$db = new Test_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
 			$list = new Application_Form_Frmtable();
@@ -37,6 +35,7 @@ class Test_TermController extends Zend_Controller_Action {
     		
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 		}
 	}
     public function addAction()
@@ -84,6 +83,5 @@ class Test_TermController extends Zend_Controller_Action {
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$branch = $dbg->getAllBranch();
     	$this->view->branchopt = $branch;
-    	
 	}
 }

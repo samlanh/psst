@@ -537,7 +537,7 @@ function getMonthByNumber(m){
 	return (monthName[m-1]);
 }
 function getallstudentname(){//
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id==''){
 			dijit.byId("branch_id").focus();

@@ -194,7 +194,7 @@ dojo.ready(function(){
 	    });
 });
 var study_id = '<?php echo $this->row['study_id']?>';
-var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudent')); ?>';
+var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudentdata')); ?>';
 function getallstudentname(){//
 	branch_id = dijit.byId("branch_id").attr("value");
 	if(branch_id==''){  

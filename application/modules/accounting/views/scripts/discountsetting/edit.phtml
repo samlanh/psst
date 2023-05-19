@@ -258,7 +258,7 @@
 		if(discountOption==1){
 			return false;
 		}
-		var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+		var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 		selectedId = '<?php echo $result['studentId'];?>';
 		contentData = {
 				'branch_id':branchId,

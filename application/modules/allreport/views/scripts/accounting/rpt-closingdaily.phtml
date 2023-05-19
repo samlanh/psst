@@ -466,7 +466,7 @@ table.tb-footer tr.style-head {
 		});
 	}
 	
-	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	function getAllAcademicByBranch(){
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id==''){  

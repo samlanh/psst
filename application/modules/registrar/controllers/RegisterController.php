@@ -367,12 +367,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getallstudentAction(){
+	function getliststudenturlAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
-// 			$rows = $db->getAllStudent(null,2,$branch_id);
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
 			$customer_type = empty($data['customer_type'])?1:$data['customer_type'];
 			if ($customer_type==2){

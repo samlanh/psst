@@ -254,7 +254,7 @@ dojo.ready(function(){
 	 getAllStudentBranch();
 });
 
-var url_getstudent = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudent'));?>';
+var url_getstudent = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudentdata'));?>';
 function getAllStudentBranch(){
 	dijit.byId('student').reset();
 	branch_id = dijit.byId('branch_id').get('value');

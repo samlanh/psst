@@ -297,7 +297,7 @@ function getAllGroupByBranch(typeFrom=0){
 	});
 }
 function getallstudentname(){//
-	var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudent')); ?>';
+	var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudentdata')); ?>';
 	dijit.byId('from_group').reset();
 	dijit.byId('studentid').reset();
 	branch_id = dijit.byId("branch_id").attr("value");

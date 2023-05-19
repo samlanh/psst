@@ -265,7 +265,7 @@
 		dojo.query("#row"+index).remove();
 	}
 	
-	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	function getStudentByBranch(student_id = 0){//
 		//dojo.query("#table_row").append("");
 		dijit.byId("studentid").attr("value","");

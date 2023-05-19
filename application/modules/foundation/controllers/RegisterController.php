@@ -527,7 +527,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	}
 	
 	//new get student study class new create on 24-3-2020
-	function getallstudentAction(){
+	function getallstudentdataAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();

@@ -145,7 +145,7 @@ require(["dojo/ready"], function(ready){
 });
 
 function getallstudentname(){//
-	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	dijit.byId("old_stu").reset();
 	customer_type = dijit.byId("customer_type").attr("value");
 	branch_id = dijit.byId("branch_id").attr("value");

@@ -956,7 +956,7 @@ function checkCustomerType(){
 function getallstudentname(){//
 	student_type = dijit.byId("student_type").attr("value");
 	if(student_type==1){//old
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	}else if(student_type==2){//tested student
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm

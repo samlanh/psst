@@ -233,7 +233,7 @@
 		    });
 	});
 	function getallstudentname(){//
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 		branch_id = dijit.byId("branch_search").attr("value");
 		if(branch_id==''){
 			dijit.byId("branch_search").focus();

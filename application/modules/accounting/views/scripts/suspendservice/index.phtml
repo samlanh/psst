@@ -75,7 +75,7 @@
 		getStudentByBranch("<?php echo $this->rs['studentid']?>");
 	});	
 	
-	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	function getStudentByBranch(stu_id=''){//
 		dijit.byId("studentid").attr("value","");
 		branch_id = dijit.byId("branch_id").get("value");

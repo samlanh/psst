@@ -184,7 +184,7 @@ function getallGrade(){
 	});
 }
 
-var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 function getallstudentname(){//
 	dijit.byId('student_name').reset();
 	branch_id = dijit.byId('branch_id').get('value');

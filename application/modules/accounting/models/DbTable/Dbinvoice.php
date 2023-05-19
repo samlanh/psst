@@ -45,8 +45,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND v.branch_id=".$search['branch_id'];
     	}
-    	if(!empty($search['student_name'])){
-    		$where.=" AND v.student_name=".$search['student_name'];
+    	if(!empty($search['studentId'])){
+    		$where.=" AND v.student_name=".$search['studentId'];
     	}
 		$order=" ORDER BY v.id DESC";
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -87,7 +87,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
     	try{
     		$dbg = new Application_Model_DbTable_DbGlobal();
-    		$rs_stu = $dbg->getStudentinfoById($data['student_name']);
+    		$rs_stu = $dbg->getStudentinfoById($data['studentId']);
     		$degree_id = 0;
     		$grade_id = 0;
     		if(!empty($rs_stu)){
@@ -97,8 +97,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$invoice_num= $this->getvCode($data['branch_id']);
 	    	$arr = array(
 	    			'branch_id'=>$data['branch_id'],
-	    			'student_name'=>$data['student_name'],
-	    			'student_id'=>$data['student_name'],
+	    			'student_name'=>$data['studentId'],
+	    			'student_id'=>$data['studentId'],
 					'invoice_date'=>$data['invoice_date'],
 	    			'invoice_num'=>$invoice_num,
 					'input_date'=>$data['input_date'],
@@ -140,8 +140,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		try{
 	    	$arr = array(
     			'branch_id'=>$data['branch_id'],
-    			'student_name'=>$data['student_name'],
-    			'student_id'=>$data['student_name'],
+    			'student_name'=>$data['studentId'],
+    			'student_id'=>$data['studentId'],
 				'invoice_date'=>$data['invoice_date'],
     			'invoice_num'=>$data['invoice_num'],
 				'input_date'=>$data['input_date'],

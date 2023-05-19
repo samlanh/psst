@@ -228,6 +228,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
     		$student_id = empty($data['student_id'])?null:$data['student_id'];
+    		$data['dept_id'] = empty($data['dept_id'])?null:$data['dept_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
     		$groupDetailId = empty($data['groupDetailId'])?null:$data['groupDetailId'];
     		

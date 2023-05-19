@@ -22,7 +22,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    		try{
 	   		$arr = array(
 	   				'branch_id'		=> $data['branch_id'],
-		   			'student_id'	=> $data['studentid'],
+		   			'student_id'	=> $data['studentId'],
 	   				'note'			=> $data['note'],
 		   			'create_date'	=> date("Y-m-d"),
 		   			'user_id'		=>$this->getUserId()
@@ -64,7 +64,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   	try{
 	   		$arr = array(
 	   				'branch_id'		=> $data['branch_id'],
-		   			'student_id'	=> $data['studentid'],
+		   			'student_id'	=> $data['studentId'],
 	   				'note'			=> $data['note'],
 		   			'user_id'		=> $this->getUserId()
 	   		);
@@ -177,8 +177,8 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   	if(!empty($search['branch_id'])){
 	   		$where.=" AND ss.branch_id=".$search['branch_id'];
 	   	}
-	   	if(!empty($search['studentid'])){
-	   		$where.=" AND ss.student_id=".$search['studentid'];
+	   	if(!empty($search['studentId'])){
+	   		$where.=" AND ss.student_id=".$search['studentId'];
 	   	}
 	   	return $db->fetchAll($sql.$where.$order);
    }

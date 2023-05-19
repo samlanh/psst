@@ -358,11 +358,18 @@ function addLanguage(){
 			form: dojo.byId("frm_lang_level"),
 			handleAs:"json",
 			load: function(data) {
-			var Itemmake = { 
-					 id: dijit.byId('title').get('value'),
-					 name: dijit.byId('title').get('value')
-				   };
-		   addDataToSelectbox(dijit.byId('lang_level'), language_store, Itemmake, dijit.byId('title').get('value'));
+	
+				if(data.addNew= 1){
+                      var Itemmake = { 
+						id: dijit.byId('title').get('value'),
+						name: dijit.byId('title').get('value')
+						};
+						addDataToSelectbox(dijit.byId('lang_level'), language_store, Itemmake, dijit.byId('title').get('value'));
+				}else {
+
+					dijit.byId('lang_level').attr("value", data.id);
+				}
+		
 		   dijit.byId('frm_lang_level').reset();
 		   dijit.byId("popup_lang_level").hide();
 			},

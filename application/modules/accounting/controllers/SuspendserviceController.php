@@ -19,7 +19,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 				$search=array(
 					'adv_search' 	=>'',
 					'branch_id' 	=>-1,
-					'studentid' 	=>'',
+					'studentId' 	=>'',
 					'start_date' 	=>date("Y-m-d"),
 					'end_date' 		=>date("Y-m-d"),
 				);

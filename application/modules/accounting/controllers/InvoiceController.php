@@ -15,7 +15,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     			$search=array(
 					'search'=>'',
     				'branch_id'=>'',
-					'student_name' => '',
+					'studentId' => '',
 					'group'=>'',
 					'degree'=>'',
 					'grade'=>'',

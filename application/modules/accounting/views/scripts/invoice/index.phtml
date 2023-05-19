@@ -1,11 +1,11 @@
 <?php
-$request = Zend_Controller_Front::getInstance ()->getRequest ();
-$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-$frm = $this->frm;
-$formList = new Application_Form_Frmtable();
-
-$urlPrint = $this->baseUrl()."/allreport/accounting/rpt-invoicedetail/id/";
-$urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
+	$request = Zend_Controller_Front::getInstance ()->getRequest ();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
+	$frm = $this->frm;
+	$formList = new Application_Form_Frmtable();
+	
+	$urlPrint = $this->baseUrl()."/allreport/accounting/rpt-invoicedetail/id/";
+	$urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
 ?>
 <title><?php echo $tr->translate("INVOICE");?></title>
 <meta charset="utf-8">
@@ -16,7 +16,6 @@ $urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0">
 							<i class="material-icons-outlined">receipt_long</i>
-					
 						&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('INVOICE');?>
 					</h4>
     			</div>
@@ -34,7 +33,7 @@ $urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
 					  <?php echo $frm->getElement("branch_id");?>
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
-					   <input id="student_name" />
+					   <input id="studentId" />
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
 						 <input id="group" />
@@ -54,8 +53,8 @@ $urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
 					  	<?php echo $frm->getElement("end_date");?>
 					 </div>
 					   <div class="col-md-2 col-sm-2 col-xs-12">
-					   	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
-					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+						   	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
+						showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 					 </div>
 				</div>
 			</form>
@@ -83,15 +82,16 @@ dojo.ready(function(){
 		store: student_store,
 		autoComplete: false,
 		queryExpr: "*${0}*",                     
-		id: "student_name",
-		name: "student_name",   
+		id: "studentId",
+		name: "studentId",   
 		required: false,        
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() { 
 			getStudentInfo();
 		}
-	}, "student_name");
+	}, "studentId");
+	
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -184,32 +184,26 @@ function getallGrade(){
 	});
 }
 
-var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 function getallstudentname(){//
-	dijit.byId('student_name').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('student_name').set('store',student_store);  
-		dijit.byId('branch_id').focus();
-		return false;
+	dijit.byId("studentId").reset();
+	branchId = dijit.byId('branch_id').get('value');
+	if(branchId==''){
+		 dijit.byId('branch_id').focus();
+		 return false;
 	}
-	dojo.xhrPost({
-		url:url_data,
-		content:{
-			'branch_id':branch_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			student_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('student_name').set('store',student_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('student_name').set('value','<?php echo $this->search['student_name']?>');  
-		    }
-		},
-		error: function(err) {
+	let urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+	
+	contentData = {
+			'branch_id':branchId,
+			'customer_type':1
 		}
-	});
+	
+	let selectedId = '';
+	 if(oldBranch==branch_id){
+		 selectedId = '<?php echo $this->search['studentId']?>';
+	    }
+	getAllStudentByBranch(urlGet,contentData,selectedId);
+	
 }
 
 var row=0;

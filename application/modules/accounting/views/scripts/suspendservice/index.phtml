@@ -30,7 +30,7 @@
 						</select>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<input id="studentid" />
+						<input id="studentId" />
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("start_date");?>
@@ -51,11 +51,11 @@
 </div>
 
 <script src="<?php echo $base_url;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
-	dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
 	
 	student_store = getDataStorefromJSON('id','name');
@@ -64,39 +64,31 @@
 		    queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: false,
-		    id: "studentid",
-		    name: "studentid",           
+		    id: "studentId",
+		    name: "studentId",           
 		    class: 'fullside',  
 		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
-		    onChange: function() {  
-		    	//getServiceByStudent();
-		    }
-		}, "studentid");
-		getStudentByBranch("<?php echo $this->rs['studentid']?>");
+		  
+		}, "studentId");
+		getStudentByBranch("<?php echo $this->rs['studentId']?>");
 	});	
 	
 	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	function getStudentByBranch(stu_id=''){//
-		dijit.byId("studentid").attr("value","");
-		branch_id = dijit.byId("branch_id").get("value");
-		if(branch_id>0){
-			dojo.xhrPost({
-				url:url_data,
-				content:{
-					'branch_id':branch_id
-				},
-				handleAs:"json",
-				load: function(data) {
-					student_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('studentid').set('store',student_store);  
-					if(stu_id!=''){
-						dijit.byId("studentid").attr("value",stu_id);
-					}
-				},
-				error: function(err) {
-				}
-			});
+
+		dijit.byId("studentId").attr('value','');
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			 dijit.byId('branch_id').focus();
+			 return false;
 		}
+		let urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		
+		contentData = {
+				'branch_id':branchId,
+				'customer_type':1
+			}
+		getAllStudentByBranch(urlGet,contentData,stu_id);
 	}
 
 </script>

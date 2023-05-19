@@ -66,14 +66,14 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		try{
 		$sql="SELECT id FROM rms_creditmemo WHERE branch_id =".$data['branch_id'];
-		$sql.=" AND student_id='".$data['student_id']."'";
+		$sql.=" AND student_id='".$data['studentId']."'";
 		$rs = $db->fetchOne($sql);
 		if(!empty($rs)){
 			return -1;
 		}
 		$arr = array(
 			'branch_id'		=>$data['branch_id'],
-			'student_id'	=>$data['student_id'],
+			'student_id'	=>$data['studentId'],
 			'total_amount'	=>$data['total_amount'],
 			'total_amountafter'=>$data['total_amount'],
 			'note'			=>$data['Description'],
@@ -91,7 +91,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	 function updatcreditMemo($data){
 		$arr = array(
 			'branch_id'		=>$data['branch_id'],
-			'student_id'	=>$data['student_id'],
+			'student_id'	=>$data['studentId'],
 			'total_amount'	=>$data['total_amount'],
 			'total_amountafter'=>$data['total_amount'],
 			'note'			=>$data['Description'],

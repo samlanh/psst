@@ -1,10 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_SUSPEND_SERVICE')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
-
-
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -65,7 +62,7 @@
 										<div class="form-group">
 											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT");?> </label>
 											<div class="col-md-7 col-sm-7 col-xs-12">
-												<input id="studentid" />
+												<input id="studentId" />
 											</div>
 										</div>
 										
@@ -145,14 +142,12 @@
     </div>
 </div>
 
-
-<script src="<?php echo $base_url;?>/js/help.js"></script>
-
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
-	dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dijit.form.Textarea");
 	
 	student_store = getDataStorefromJSON('id','name');
 	service_store = getDataStorefromJSON('id','name');
@@ -162,14 +157,14 @@
 		    queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: true,
-		    id: "studentid",
-		    name: "studentid",           
+		    id: "studentId",
+		    name: "studentId",           
 		    class: 'fullside',  
 		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
 		    onChange: function() {  
 		    	getServiceByStudent();
 		    }
-		}, "studentid");
+		}, "studentId");
 		
 		new dijit.form.FilteringSelect({
 		    queryExpr: "*${0}*",
@@ -241,26 +236,22 @@
 		dojo.query("#row"+index).remove();
 	}
 	
-	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	function getStudentByBranch(){//
 		dojo.query("#table_row").append("");
-		dijit.byId("studentid").attr("value","");
-		branch_id = dijit.byId("branch_id").get("value");
-		if(branch_id>0){
-			dojo.xhrPost({
-				url:url_data,
-				content:{
-					'branch_id':branch_id
-				},
-				handleAs:"json",
-				load: function(data) {
-					student_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('studentid').set('store',student_store);  
-				},
-				error: function(err) {
-				}
-			});
+		dijit.byId("studentId").reset();
+		
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			 dijit.byId('branch_id').focus();
+			 return false;
 		}
+		let urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		
+		contentData = {
+				'branch_id':branchId,
+				'customer_type':1
+			}
+		getAllStudentByBranch(urlGet,contentData);
 	}
 	
 	var url_service = '<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'getservice')); ?>';

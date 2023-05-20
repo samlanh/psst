@@ -167,6 +167,14 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				1=>$this->tr->translate("SHOW"),
 				);
 		$docDisplay->setMultiOptions($docDOpt);
+
+		$nameRequired=  new Zend_Dojo_Form_Element_FilteringSelect('name_required');
+		$nameRequired->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$reOPt = array(
+				0=>$this->tr->translate("NOT_REQUIRED"),
+				1=>$this->tr->translate("REQUIRED"),
+				);
+		$nameRequired->setMultiOptions($reOPt);
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -186,8 +194,13 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			
 			$schooolNameKh->setValue($data['schooolNameKh']['keyValue']);
 			$schooolNameEng->setValue($data['schooolNameEng']['keyValue']);
-			
 			$hornorTableSetting->setValue($data['hornorTableSetting']['keyValue']);
+
+			$countStuidOption->setValue($data['count_stuid_option']['keyValue']);
+			$newStuIdTest->setValue($data['new_stuid_test']['keyValue']);
+			$docDisplay->setValue($data['doc_display']['keyValue']);
+			$nameRequired->setValue($data['name_required']['keyValue']);
+
 		}
 		$this->addElements(array(
 				$_sale_stock
@@ -211,6 +224,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$countStuidOption
 				,$newStuIdTest
 				,$docDisplay
+				,$nameRequired
 				));
 		
 		return $this;

@@ -10,10 +10,8 @@ class Scan_Model_DbTable_DbStudentSetTime extends Zend_Db_Table_Abstract
 	public function addSetLockTimeStudent($data){
 		$db = $this->getAdapter();
 		try{
-	  		
 	  		$ids = explode(',', $data['identity']);
 			if(!empty($ids))foreach ($ids as $i){
-				
 				if(!empty($data['studentId'.$i])){
 					$studentId = $data['studentId'.$i];
 					$_arr = array(
@@ -22,11 +20,9 @@ class Scan_Model_DbTable_DbStudentSetTime extends Zend_Db_Table_Abstract
 						'dateUpdatedLock'	=>date("Y-m-d H:i:s"),
 						'setLockBy'     	=>$this->getUserId()
 					);
-					
 					$where=$this->getAdapter()->quoteInto("stu_id=?", $studentId);
 					$this->update($_arr,$where);
 				}
-				
 			}
 			
 		}catch (Exception $e){
@@ -34,7 +30,6 @@ class Scan_Model_DbTable_DbStudentSetTime extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
 	}
-	
 
 	function getAllSetLockTimeStudent($search){
 		$db = $this->getAdapter();

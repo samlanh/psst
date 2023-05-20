@@ -48,10 +48,10 @@ tr.head-td th {
 					dijit.byId("branch_id").focus();
 					return false;
 				}
-				student_id = dijit.byId('student_id').get('value');
-				if(student_id==""){
+				studentId = dijit.byId('studentId').get('value');
+				if(studentId==""){
 					alert("<?php echo $tr->translate('PLEASE_SELECT_STUDENT');?>");
-					dijit.byId("student_id").focus();
+					dijit.byId("studentId").focus();
 					return false;
 				}
 				if($('#identity').val()==""){
@@ -86,20 +86,18 @@ tr.head-td th {
 													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CUT_STOCK_INFO");?></p>
 												</div> 
 											</div>
-											
-
 											<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement("branch_id");?>
+													<?php echo $frm->getElement("branch_id");?>
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input id="student_id" />
+														<input id="studentId" />
 														<input type="hidden" name="student_name" id="student_name"  value="<?php echo $this->exchange_rate;?>" class="form-control" />
 												</div>
 											</div>
@@ -117,21 +115,16 @@ tr.head-td th {
 														<?php echo $frm->getElement("all_balance");?>
 												</div>
 											</div>
-
 										</div>
 									</div>
-
 							</div>	
 						</div>
-	
 		            </div>
-
 		            <div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="card-blogform">
 							<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
 											<div class="d-flex "> 
 												<div class="settings-main-icon ">
 													<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
@@ -140,7 +133,6 @@ tr.head-td th {
 													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INVOICE_INFO");?></p>
 												</div> 
 											</div>
-
 											<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> 
 												</label>
@@ -169,14 +161,11 @@ tr.head-td th {
 														<?php echo $frm->getElement("amount");?>
 												</div>
 											</div>
-
 										</div>
 									</div>
 							</div>
 						</div>
-		
 		            </div>
-
 				</div>
 			</div>
 			<div class="x_panel">
@@ -249,7 +238,6 @@ tr.head-td th {
 							<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-											
 											<div class="d-flex "> 
 													<div class="settings-main-icon ">
 														<i class="glyphicon glyphicon-usd" aria-hidden="true"></i>
@@ -392,15 +380,15 @@ var oldStudent = '<?php echo empty($this->stu['stu_id'])?'':$this->stu['stu_id']
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
-			id: "student_id",
-			name: "student_id",   
+			id: "studentId",
+			name: "studentId",   
 			required:true,        
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function(){
 					getStudentProductPaymentDetail();
 			}
-		}, "student_id");
+		}, "studentId");
 		
 		var branch_id = dijit.byId('branch_id');
 	 	branch_id.on('change', function(evt) {
@@ -536,30 +524,20 @@ function getMonthByNumber(m){
 		];
 	return (monthName[m-1]);
 }
-function getallstudentname(){//
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
-		branch_id = dijit.byId("branch_id").attr("value");
-		if(branch_id==''){
-			dijit.byId("branch_id").focus();
-			return false;
+function getallstudentname(){
+		dijit.byId("studentId").reset();
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			 dijit.byId('branch_id').focus();
+			 return false;
 		}
-		dojo.xhrPost({
-			url:url_data,
-			content:{
-				'student_name':1,
-				'branch_id':branch_id,
-			},
-			handleAs:"json",
-			load: function(data) {
-				student_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('student_id').set('store',student_store);  
-			    if(oldBranch == branch_id){
-			    	dijit.byId('student_id').set('value',oldStudent);  
-			    }
-			},
-			error: function(err) {
+		let urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		
+		contentData = {
+				'branch_id':branchId,
+				'customer_type':1
 			}
-		});
+		getAllStudentByBranch(urlGet,contentData);
 	}
 	var keyindex=1;
 	var url_getSupplier = '<?php echo $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'getallpaydetailbystudent')); ?>';
@@ -569,9 +547,9 @@ function getallstudentname(){//
 			dijit.byId("branch_id").focus();
 			return false;
 		}
-		student_id = dijit.byId('student_id').get('value');
-		if(student_id==""){
-			dijit.byId("student_id").focus();
+		studentId = dijit.byId('studentId').get('value');
+		if(studentId==""){
+			dijit.byId("studentId").focus();
 			return false;
 		}
 		invoicesearch = dijit.byId('bypuchase_no').get('value');
@@ -580,7 +558,7 @@ function getallstudentname(){//
 			url: url_getSupplier,
 			content:{
 				'branch_id':branch_id,
-				'student_id':student_id,
+				'student_id':studentId,
 				'keyindex':keyindex,
 				'bypuchase_no':invoicesearch,
 	 			},

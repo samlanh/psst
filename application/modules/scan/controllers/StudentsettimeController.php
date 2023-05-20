@@ -56,6 +56,4 @@ class Scan_StudentsettimeController extends Zend_Controller_Action {
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rsbranch = $_db->getAllBranch();
 	}
-	
-	
 }

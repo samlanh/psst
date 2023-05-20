@@ -25,7 +25,7 @@
 					var identity = $('#identity').val();
 					if(identity==''){
 						alert("There is no record to save");
-						dijit.byId("old_stu").focus();
+						dijit.byId("studentId").focus();
 						return false;
 					}
 					 loadingBlock();
@@ -64,7 +64,7 @@
 						<div class="form-group">
 						   <label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?></label>
 						   <div class="col-md-7 col-sm-7 col-xs-12">
-								<input id="old_stu" />
+								<input id="studentId" />
 						   </div>
 						</div>
 				   </div>
@@ -112,6 +112,7 @@ table.tableShowData tr#head-title {
 }
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dojo.number");
@@ -132,41 +133,32 @@ require(["dojo/ready"], function(ready){
 	new dijit.form.FilteringSelect({
 		autoComplete: false,
 		queryExpr: "*${0}*",                     
-		id: "old_stu",
-		name: "old_stu",   
+		id: "studentId",
+		name: "studentId",   
 		required:true,        
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() {  
 			addRecord();
 		}
-	}, "old_stu");
+	}, "studentId");//old_stu
 	
 });
 
 function getallstudentname(){//
-	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
-	dijit.byId("old_stu").reset();
-	customer_type = dijit.byId("customer_type").attr("value");
-	branch_id = dijit.byId("branch_id").attr("value");
-	if(branch_id==''){
-		dijit.byId("branch_id").focus();
-		return false;
-	}
-	dojo.xhrPost({
-		url:url_data,
-		content:{
-			'student_name':1,
-			'branch_id':branch_id,
-			'customer_type':customer_type
-		},
-		handleAs:"json",
-		load: function(data) {
-		    dijit.byId('old_stu').set('store',getDataStorefromJSON('id','name', data));  
-		},
-		error: function(err) {
+	dijit.byId("studentId").reset();
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			 dijit.byId('branch_id').focus();
+			 return false;
 		}
-	});
+		let urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		
+		contentData = {
+				'branch_id':branchId,
+				'customer_type':1
+			}
+		getAllStudentByBranch(urlGet,contentData);
 }
 
 var template = '';
@@ -184,10 +176,10 @@ function addRecord() {
 			return false;
 		}
 	
-		studentName = dijit.byId('old_stu').get('value');
+		studentName = dijit.byId('studentId').get('value');
 		if(studentName==''){
 			alert("<?php echo $tr->translate("SELECT_STUDENT_NAME");?>");
-			dijit.byId('old_stu').focus();
+			dijit.byId('studentId').focus();
 			return false;
 		}
 	
@@ -195,7 +187,7 @@ function addRecord() {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		if(identity!=""){
-			currentStudent = dijit.byId('old_stu').get('value');
+			currentStudent = dijit.byId('studentId').get('value');
 			for(var i=0;i<arrays.length;i++) {
 				oldStudent = dijit.byId('studentId'+arrays[i]).get('value');
 				if(currentStudent == oldStudent){
@@ -210,8 +202,8 @@ function addRecord() {
 			return false;
 		}
 	
-		labelStudent = dijit.byId("old_stu").attr('displayedValue');
-		studentId = dijit.byId("old_stu").get("value");
+		labelStudent = dijit.byId("studentId").attr('displayedValue');
+		studentId = dijit.byId("studentId").get("value");
 		
 		col++;no++;
 		template='';

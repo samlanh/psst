@@ -7,25 +7,8 @@
 	$settingNewStuID = NEW_STU_ID_FROM_TEST;
 ?>
 <style>
-	select{ width:100%;}
-	fieldset{  background:none;}
-	.red{ color: red; padding-left:5px;}
-	.tab-content.vertical div.tab-pane {
-	   /* overflow-y: auto;
-	    max-height: 300px;*/
-	}
-	.tab-content.vertical div.tab-pane{
-    	min-height: 0px !important;
-	}
 	.tablesorter tr td{
 		border: 1px solid #000;	
-	}
-	.card-box-border{
-    	background-color: #ffffff;
-    	border:1px solid rgba(98, 103, 115, 0.2);
-    	padding: 10px;
-    	margin-bottom: 20px;
-    	color: #000;
 	}
 span.user-badge.bg-warning{
     position: absolute;
@@ -231,7 +214,7 @@ tr.balance{background:#fff4f4;}
 				                    <div class="col-md-7 col-sm-7 col-xs-12">
 										<label class="control-label custom-switch float-end "> 
 											<a href="javascript:void(0);" class="switchButton status"></a> 
-											<input type="checkbox" id="auto_test" name="auto_test" class="custom-switch-input"  > 
+											<input type="checkbox" id="auto_test" name="auto_test" class="custom-switch-input" checked  > 
 											<span class="custom-switch-indicator custom-radius switch-status"></span> 
 										</label>
 									</div>
@@ -673,8 +656,8 @@ require(["dojo/ready"], function(ready){
 		name: "old_stu",   
 		required:true,        
 		class: 'fullside', 
-		placeHolder:"<?php echo $tr->translate("CHOOSE");//$tr->translate("SELECT_STUDENT_NAME");?>",          
-		onChange: function() {  
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function(){  
 			getOldStudentInfo();
 			getCreditMemo();
 			getExistingService();
@@ -977,7 +960,9 @@ function getallstudentname(){//
 		content:{
 			'student_name':1,
 			'branch_id':branch_id,
-			'customer_type':customer_type
+			'branchId':branch_id,
+			'customerType':customer_type,
+			'joinGroup':1,
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -988,17 +973,14 @@ function getallstudentname(){//
 	});
 }
 function checkAutoControl(studentType){
-	$(".displayLabel").html('AUTO_TO_TEST');
-	$('#auto_test').checked;
+	$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
 	$("#displayControl").css("display", "block");
 	if(studentType==1 || studentType==4){//existing
 		$("#displayControl").css("display", "none");
 	}
 	else if(studentType==2){//from
-		$(".displayLabel").html('AUTO_TO_STUDENT');
+		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
 	}
-	
-	
 }
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
 function getPaymentHistory(student_id){
@@ -1290,12 +1272,17 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			}
 		}
 		if(serviceId ==''){return false;}
-		//dijit.byId("item").reset();
+		dijit.byId("item").reset();
 
 			col++;no++;
 			template='';
 			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
-			template+='<td class="bgBox" style="font-size:12px;"><label class="notedDescription" id="item_label_'+col+'">'+dataLabel+'<label>';
+			template+='<td class="bgBox" style="font-size:12px;"><div class="form-group"><label class="notedDescription" id="item_label_'+col+'">'+dataLabel+'<label></div>';
+			template+='<label class="control-label custom-switch float-end">';
+				template+='<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
+					template+='<input type="checkbox" id="autoNextPay'+col+'" name="autoNextPay'+col+'" class="custom-switch-input" checked  >'; 
+						template+='<span class="custom-switch-indicator custom-radius switch-status"></span>'; 
+							template+='</label></div>';
 			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
 			template+='<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM');?>" class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
 
@@ -1355,13 +1342,11 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				dijit.byId('isoldBalance'+col).attr('value',1);
 				dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
 				dojo.style('paid_amount'+col, "color", "red");
-
 				dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
 				dijit.byId('validate_'+col).attr('value',dataRow.endDate);
 				dijit.byId('date_start_'+col).set('readOnly',true);
 				dijit.byId('validate_'+col).set('readOnly',true);
 				dijit.byId('term_study'+col).set('readOnly',true);
-				
 				dijit.byId('remark'+col).attr('value','Previouse Balance');
 			}
 			
@@ -1494,7 +1479,7 @@ function getValidate(key){
 		var y = a.getFullYear();
 		var epx_date = y + '-' + mm + '-' + dd ;
 		dijit.byId('validate_'+key).attr('value',epx_date);
-		if(term==5){
+		if(term==6){
 			dijit.byId("validate_"+key).attr("value",null);
 		}		 
 	}
@@ -1626,7 +1611,7 @@ function getservicefee(key){
  		if(term==''){
  	 		return false;
  	 	}
-		if(term==5){
+		if(term==6){
 			dijit.byId("price_"+key).set('readOnly',false);
 			dijit.byId("price_"+key).attr("value",0);
 			calculateTotal(key);
@@ -1977,7 +1962,6 @@ function getbranchinfo(){
 }
 function checkPaymentMethod(){
 	paymentId = dijit.byId('payment_method').get('value');
-	
 	dijit.byId('bank_name').set('readOnly',false);
 	dijit.byId('number').set('readOnly',false);
 	

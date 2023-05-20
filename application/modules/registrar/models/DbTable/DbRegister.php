@@ -91,33 +91,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$where="stu_id = ".$data['old_stu'];
     		$this->update($arr, $where);
     	
-    		// new setup fee_id for student from tested
-    		if (!empty($data['study_year'])){
-    			$_dbfee = new Accounting_Model_DbTable_DbFee();
-    			$feeID = empty($data['study_year'])?0:$data['study_year'];
-    			$rowfee = $_dbfee->getFeeById($feeID);
-    			if(empty($rowfee)){
-    				$academicYear=0;
-    			}else{
-    				$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
-    			}
-    				
-    			$_arr= array(
-    					'branch_id'		=>$data['branch_id'],
-    					'user_id'		=>$this->getUserId(),
-    					'student_id'	=>$data['old_stu'],
-    					'fee_id'		=>$feeID,
-    					'academic_year'	=>$academicYear,
-    					'note'			=>'',
-    					'is_current'	=>1,
-    					'is_new'		=>1,
-    					'status'		=>1,
-    					'create_date'	=>date("Y-m-d H:i:s"),
-    					'modify_date'	=>date("Y-m-d H:i:s"),
-    			);
-    			$this->_name="rms_student_fee_history";
-    			$this->insert($_arr);//check more.
-    		}
     		if(!empty($data['group_id'])){
     				
     			$group_id = $data['group_id'];
@@ -300,7 +273,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->addStudentFromToTesting($data);
 				}elseif($data['student_type']==3){//from crm
 					
-					
 					$_dbgb = new Application_Model_DbTable_DbGlobal();
 					if(!empty($data['auto_test'])){
 						$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
@@ -340,10 +312,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$credit_after = 0;
 				}
 				
-// 				$arr = array(
-// 					'balance_due'=>0
-// 				);
-// 				$this->_name='rms_student_payment';
+				$this->_name='rms_student_payment';
+				// 				$arr = array(
+				// 					'balance_due'=>0
+				// 				);
 // 				$where="student_id = ".$stu_id;
 // 				$this->update($arr, $where);//clear old balance
 				
@@ -398,11 +370,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$cut_id="";
 				$totalQty=0;
-				if ($condictionSale!=1){
+				if ($condictionSale!=1){//cut ready 
 					$dbstock = new Stock_Model_DbTable_DbCutStock();
 					$itemsCode = $dbstock->getCutStockode($data['branch_id']);
 					$_arr=array(
 							'branch_id'	   => $data['branch_id'],
+							'paymentId'	   => $paymentid,
 							'serailno'	   => $itemsCode,
 							'student_id'   => $data['old_stu'],
 							'balance'      => 0,
@@ -451,8 +424,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'totalpayment'	=>$data['total_amount'.$i],
 							'paidamount'	=>$data['paid_amount'.$i],
 							'is_onepayment'	=>$data['onepayment_'.$i],
-							'start_date'	=>$data['date_start_'.$i],
-							'validate'		=>$data['validate_'.$i],
+							'start_date'	=>($data['onepayment_'.$i]==1)?'':$data['date_start_'.$i],
+							'validate'		=>($data['onepayment_'.$i]==1)?'':$data['validate_'.$i],
 							'is_start'		=>1,
 							'note'			=>$data['remark'.$i],
 							'is_parent'     =>$spd_id,
@@ -472,16 +445,48 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$arr['isoldBalance']=1;
 					}
 					elseif($balance==0 AND $data['isoldBalance'.$i]==1){
-						$arr['balance']=0;
+						$balance = 0;
+						$arr['balance']=$balance;
 						$arr['isoldBalance']=0;
 					}
 					$this->_name='rms_group_detail_student';
 					$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
 					$this->update($arr, $where);
 					
-
-			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
+					$param = array(
+							'Id'=>$data['item_id'.$i]
+					);
+// 					$resultRow = $gdb->getItemDetailRow($param);
 					
+					if(!empty($rs_item)){
+						$_arr= array(
+								'branch_id'		=> $data['branch_id'],
+								'stu_id'		=> $data['old_stu'],
+								'itemType'		=> $rs_item['items_type'],
+								'feeId'			=> $data['academic_year_'.$i],
+								'academic_year'	=> $data['academic_year_'.$i],
+								'degree'		=> $rs_item['items_id'],//not yet
+								'grade'			=> $data['item_id'.$i],
+								'startDate'		=> $data['date_start_'.$i],
+								'endDate'		=> empty($data['balance_'.$i])?'':$data['end_date_'.$i],
+// 								'is_maingrade'	=> ($resultRow['items_type']==1)?1:'',
+// 								'discount_type'	=> $data['discount_type'.$i],
+// 								'discount_amount'=> $data['discount_amount'.$i],
+								'isoldBalance'	=> ($data['balance_'.$i] > 0)?1:0,
+								'school_option'	=> $rs_item['schoolOption'],
+								'balance'	=> $balance,
+								'isoldBalance'	=> ($balance>=0?1:0),
+								'stop_type'		=> 0,
+								'status'		=> 1,
+								'is_newstudent'	=> 1,
+								'note'			=> $data['remark'.$i],
+								'create_date'	=> date("Y-m-d H:i:s"),
+								'user_id'		=> $this->getUserId(),
+						);
+						$id = $this->insert($_arr);
+					}
+					
+			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
 					
 					if($rs_item['items_type']==3){ // product
 						$data['is_productseat'] = $rs_item['is_productseat'];
@@ -489,130 +494,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$data['cutStockId'] = $cut_id;
 						$data['costing'] = $rs_item['cost'];
 						$data['conditionCutStock'] = $condictionSale;
-							
 						$this->cutStockDetail($data,$i);
-// 						$totalCosting = 0;
-// 						if($rs_item['is_productseat']==1){ // product set
-// 							$sql="SELECT 
-// 										set.pro_id as product_set_id,
-// 										set.subpro_id as pro_id,
-// 										set.qty as set_qty,
-// 										idt.cost,
-// 										lo.price,
-// 										lo.costing
-// 									FROM 
-// 										rms_itemsdetail as idt,
-// 										rms_product_setdetail as `set`,
-// 										rms_product_location as lo
-// 									WHERE
-// 										idt.id = set.subpro_id
-// 										and set.subpro_id = lo.pro_id
-// 										and set.pro_id = ".$rs_item['id']."
-// 										and lo.branch_id = ".$data['branch_id'];
-// 							$sql.=" GROUP BY set.subpro_id ORDER BY set.id ASC ";
-// 							$result = $db->fetchAll($sql);
-// 							if(!empty($result)){
-// 								foreach ($result as $row){
-// 									$totalQty = $totalQty+($row['set_qty'] * $data['qty_'.$i]);//count QtyReceive
-// 									$qty_after = $row['set_qty'] * $data['qty_'.$i];
-									
-// 									$totalCosting = $totalCosting+($qty_after*$row['costing']);//for for product 
-									
-// 									if ($condictionSale!=1){
-// 										$qty_after=0;
-// 									}
-// 									$arr_sale = array(
-// 											'payment_id'		=>$paymentid,
-// 											'is_product_set'	=>1,
-// 											'product_set_id'	=>$row['product_set_id'],
-// 											'pro_id'			=>$row['pro_id'],
-// 											'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
-// 											'qty_after'			=>$qty_after,
-// 											'cost'				=>$row['costing'],
-// 											'price'				=>$row['price'],
-// 											'user_id'			=>$this->getUserId(),
-// 										);
-// 									$this->_name="rms_saledetail";
-// 									$sale_detailid = $this->insert($arr_sale);
-									
-// 									if ($condictionSale!=1){
-// 										$arrs = array(
-// 												'cutstock_id'=>$cut_id,
-// 												'student_paymentdetail_id'=>$sale_detailid,
-// 												'product_id'=>$row['pro_id'],
-// 												'due_amount'=>0,
-// 												'qty_receive'=>$row['set_qty'] * $data['qty_'.$i],
-// 												'remain'=>0,
-// 												'remide_date'=>'',
-// 										);
-// 										$this->_name ='rms_cutstock_detail';
-// 										$this->insert($arrs);
-// 										$dbpu = new Stock_Model_DbTable_DbPurchase();
-// 										$dbpu->updateStock($row['pro_id'],$data['branch_id'],-($row['set_qty'] * $data['qty_'.$i]));
-// 									}
-// 								}
-								
-								
-// 								$this->_name="rms_student_paymentdetail";
-// 								$arr = array(
-// 										'productCost'=>$totalCosting
-// 									);
-// 								$where ='id='.$studentpaymentid;
-// 								$this->update($arr, $where);
-// 							}
-// 						}else{ // product normal
-							
-// 							$dbs = new Application_Model_DbTable_DbGlobalStock();
-// 							$arr = array(
-// 								'branch_id'=>$data['branch_id'],
-// 								'productId'=>$data['item_id'.$i]
-// 							);
-// 							$resultItem = $dbs->getProductInfoByLocation($arr);
-// 							if(!empty($resultItem)){
-// 								$totalCosting = $resultItem['currentPrice'];//costing
-// 								$this->_name="rms_student_paymentdetail";
-// 								$arr = array(
-// 										'productCost'=>$totalCosting
-// 								);
-// 								$where ='id='.$studentpaymentid;
-// 								$this->update($arr, $where);
-// 							}
-							
-// 							$totalQty = $totalQty+$data['qty_'.$i];//count QtyReceive
-// 							$qty_after = $data['qty_'.$i];
-// 							if ($condictionSale!=1){
-// 								$qty_after=0;
-// 							}
-// 							$arr_sale = array(
-// 									'payment_id'		=>$paymentid,
-// 									'is_product_set'	=>0,
-// 									'product_set_id'	=>$data['item_id'.$i],
-// 									'pro_id'			=>$data['item_id'.$i],
-// 									'qty'				=>$data['qty_'.$i],
-// 									'qty_after'			=>$qty_after,
-// 									'cost'				=>$rs_item['cost'],
-// 									'price'				=>$data['price_'.$i],
-// 									'user_id'			=>$this->getUserId(),
-// 								);
-// 							$this->_name="rms_saledetail";
-// 							$sale_detailid= $this->insert($arr_sale);
-							
-// 							if ($condictionSale!=1){
-// 								$arrs = array(
-// 										'cutstock_id'=>$cut_id,
-// 										'student_paymentdetail_id'=>$sale_detailid,
-// 										'product_id'=>$data['item_id'.$i],
-// 										'due_amount'=>0,
-// 										'qty_receive'=>$data['qty_'.$i],
-// 										'remain'=>0,
-// 										'remide_date'=>'',
-// 								);
-// 								$this->_name ='rms_cutstock_detail';
-// 								$this->insert($arrs);
-// 								$dbpu = new Stock_Model_DbTable_DbPurchase();
-// 								$dbpu->updateStock($data['item_id'.$i],$data['branch_id'],-$data['qty_'.$i]);
-// 							}
-// 						}
 					}
 				}
 				
@@ -685,17 +567,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$this->update($array, $where);
 	}
 	
-	function updateCustomerPayment($data,$id){
-		if($data['void']==1){
-			$arr = array(
-					'is_void'=>1,
-					'void_by'=>$this->getUserId(),
-					);
-			$where = "id = $id";
-			$this->_name="rms_customer_payment";
-			$this->update($arr, $where);
-		}
-	}
 	
 	function updateRegister($data,$payment_id){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
@@ -983,12 +854,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $_db->getAllStuCode();
 
     }
-    //select general  old student by id
-    
-    function getAllGerneralOldStudentName(){
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllListStudent();
-    }
+   
     //select general  old student by name
     
     function getStudentById($stu_id){

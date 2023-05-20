@@ -31,9 +31,8 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('group_name'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-			$this->view->all_student_code = $db->getAllGerneralOldStudent();
+			
+			
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -61,9 +60,8 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
     	}
-		$db = new Registrar_Model_DbTable_DbRegister();
-		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-		$this->view->all_student_code = $db->getAllGerneralOldStudent();
+		
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
@@ -93,9 +91,6 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     	
     	$data['study_year'] = empty($data['study_year'])?null:$data['study_year'];
     	
-		$db = new Registrar_Model_DbTable_DbRegister();
-		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		
 		$model = new Application_Model_DbTable_DbGlobal();

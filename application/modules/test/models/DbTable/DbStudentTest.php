@@ -453,7 +453,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	
 	function insertTestExam($data,$type=null,$test=null){
 		$db=$this->getAdapter();
 		$db->beginTransaction();
@@ -480,14 +479,13 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['updated_result']=1;
 				$array['is_current']=1;
 				$array['result_by']=$this->getUserId();
-				
 			}
 			$data['test_restult_id']=$test;
 			if (!empty($data['id'])){
-				
 				if($test!=null){
 					$_arr = array(
 						'stu_id'			=>$data['stu_test_id'],
+						'feeId'				=>$data['academic_year'],
 						'is_newstudent'		=>1,
 						'status'			=>1,
 						'group_id'			=>0,
@@ -504,18 +502,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					);
 					$check  = $this->checkStudentInGroupDetail($data);
 					if (!empty($check)){
-						$result  = $this->getTestResultById($test,$type,$data['stu_test_id']);
-	// 					$where = "stu_id=".$data['stu_test_id']." AND degree = ".$result['degree_result']." AND grade=".$result['grade_result']." AND group_id=0";
-						
 						$where = "stu_id=".$data['stu_test_id'];
 						$where.=" AND test_restult_id = $test ";
-						//Old Condiction Update not Clear
-// 						$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
-// 						$where.=" AND degree = ".$degreeUp;
-// 						$gradeUp = empty($result['grade_result'])?$data['grade_result']:$result['grade_result'];
-// 						$where.=" AND degree = ".$gradeUp;
-// 						$where." AND group_id=0 ";
-						
 						$this->_name="rms_group_detail_student";
 						$this->update($_arr, $where);
 					}else{
@@ -528,7 +516,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$where = " id = $id ";
 				$this->_name="rms_student_test_result";
 				$this->update($array, $where);
-				
+
 			}else{
 				
 				$array['create_date']=date("Y-m-d H:i:s");
@@ -537,10 +525,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				
 				$_arr = array(
 						'stu_id'			=>$data['stu_test_id'],
+						'feeId'				=>$data['academic_year'],
+						'academic_year'		=>$data['academic_year'],
 						'is_newstudent'		=>1,
 						'status'			=>1,
 						'group_id'			=>0,
-						'academic_year'		=>$data['academic_year'],
 						'degree'			=>empty($data['degree_result'])?$data['degree']:$data['degree_result'],
 						'grade'				=>empty($data['grade_result'])?$data['grade']:$data['grade_result'],
 						'is_current'		=>1,
@@ -550,84 +539,28 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'create_date'		=>date("Y-m-d H:i:s"),
 						'modify_date'		=>date("Y-m-d H:i:s"),
 						'user_id'			=>$this->getUserId(),
-						'test_restult_id'		=>$id,
-						
+						'test_restult_id'	=>$id,
 						'itemType'			=>1,
 				);
 				
 				$arrCheck=array(
-						'stu_test_id'			=>$data['stu_test_id'],
-						//'degree_result'			=>empty($data['degree_result'])?$data['degree']:$data['degree_result'],
+						'stu_test_id'	=>$data['stu_test_id'],
 						);
 				$check  = $this->checkStudentInGroupDetail($arrCheck);
 				if (!empty($check)){
 					$where = "stu_id=".$data['stu_test_id'];
-					//$degreeUp = empty($result['degree_result'])?$data['degree_result']:$result['degree_result'];
 					$degreeUp = empty($check['degree'])?$data['degree']:$check['degree'];
 					$where.=" AND degree = ".$degreeUp;
 					$this->_name="rms_group_detail_student";
 					$this->update($_arr, $where);
 				}else{
-					
 					$schoolOption = empty($data['schoolOption'])?1:$check['schoolOption'];
 					$_arr['school_option']=$schoolOption;
 					$this->_name="rms_group_detail_student";
 					$this->insert($_arr);
 				}
-				
-				
 			}
-			
-			$_dbfee = new Accounting_Model_DbTable_DbFee();
-			$feeID = empty($data['fee_id'])?0:$data['fee_id'];
-			if(!empty($data['fee_id'])){
-				$rowfee = $_dbfee->getFeeById($feeID);
-				$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
-					
-				if(!empty($data['studentStudyFee'])){
-					$_arrFee= array(
-							'branch_id'		=>$data['branch_id'],
-							'user_id'		=>$this->getUserId(),
-							'student_id'	=>$data['stu_test_id'],
-							'fee_id'		=>$data['fee_id'],
-							'academic_year'	=>$academicYear,
-							'note'			=>"Update From Test Result",
-							'is_current'	=>1,
-							'status'		=>1,
-							'modify_date'	=>date("Y-m-d H:i:s"),
-					);
-					$this->_name="rms_student_fee_history";
-					$whereFee=" id = ".$data['studentStudyFee'];
-					$this->update($_arrFee, $whereFee);
-				}else{				
-					$_arrFee= array(
-							'branch_id'		=>$data['branch_id'],
-							'user_id'		=>$this->getUserId(),
-							'student_id'	=>$data['stu_test_id'],
-							'fee_id'		=>$data['fee_id'],
-							'academic_year'	=>$academicYear,
-							'note'			=>"Set From Test Result",
-							'is_current'	=>1,
-							'is_new'		=>1,
-							'status'		=>1,
-							'create_date'	=>date("Y-m-d H:i:s"),
-							'modify_date'	=>date("Y-m-d H:i:s"),
-					);
-					$this->_name="rms_student_fee_history";
-					$this->insert($_arrFee);
-				}
-			}
-			
-			
-				
-			
-			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
-			
-			}
-			
-			
 			if ($type==1){
-				
 				if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
 					$identitys = explode(',',$data['identity']);
 					$detailId="";
@@ -656,11 +589,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						foreach ($ids as $i){
 							if (!empty($data['detailid'.$i])){
 								$arr = array(
-										'test_result_id'	=>$id,
-										'subjecttest_id'	=>$data['subjecttest_id_'.$i],
-										'score'	=>$data['score_'.$i],
-										'comment'	=>$data['comment_'.$i],
-										'note'	=>$data['note_'.$i],
+									'test_result_id'	=>$id,
+									'subjecttest_id'	=>$data['subjecttest_id_'.$i],
+									'score'	=>$data['score_'.$i],
+									'comment'	=>$data['comment_'.$i],
+									'note'	=>$data['note_'.$i],
 								);
 								$this->_name="rms_result_test_subject";
 								$where1=" id = ".$data['detailid'.$i];
@@ -672,14 +605,13 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 									'score'	=>$data['score_'.$i],
 									'comment'	=>$data['comment_'.$i],
 									'note'	=>$data['note_'.$i],
-									);
+								);
 								$this->_name="rms_result_test_subject";
 								$this->insert($arr);
 							}
 						}
 					}
 				}
-				
 			}
 			$db->commit();
 			return $id;

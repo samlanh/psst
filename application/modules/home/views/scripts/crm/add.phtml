@@ -230,25 +230,24 @@
 				                   		<input id="grade" />
 				                   </div>
 				                </div>
-				                <div class="form-group">
-				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
-				                     </label>
-				                    <div class="col-md-7 col-sm-7 col-xs-12">
-					                    <input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
-											class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="checkStudent();// addRow();" />
-				                   </div>
-				                </div>
+				                
 			                </div>
 			               </div>
 			        </div>
 			        <div class="card-blogform">
 							<div class="card-body">
 							   <div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
-				                   <i class="material-icons-outlined">
-										people_alt
-									</i><?php echo $tr->translate("STUDY_INFO");?> 
-				                   </label>
+				                   <div class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
+					                  <div class="col-md-7 col-sm-7 col-xs-12">
+					                   <i class="material-icons-outlined">
+											people_alt
+										</i><?php echo $tr->translate("STUDY_INFO");?> 
+										</div>
+										 <div class="col-md-3 col-sm-3 col-xs-12">
+										 	<input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
+											class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="checkStudent();// addRow();" />
+										 </div>
+				                   </div>
 			               	   </div>
 			                 <div class="form-group">
 				         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">

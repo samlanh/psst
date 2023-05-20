@@ -13,24 +13,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	
 	
-	function getAllStudentName(){
-		$_db = $this->getAdapter();
-		$db=new Application_Model_DbTable_DbGlobal();
-		return $db->getAllListStudent();
-		
-
-	}
-	
-	public function getAllStudentIDEdit(){
-		$_db = $this->getAdapter();
-		
-		$db=new Application_Model_DbTable_DbGlobal();
-		$branch_id = $db->getAccessPermission();
-		
-		$sql = "SELECT stu_id,stu_code FROM `rms_student` where status = 1  $branch_id  ";
-		$orderby = " ORDER BY stu_code ";
-		return $_db->fetchAll($sql.$orderby);
-	}
 	
 	public function getAllStudentNameEdit(){
 		$_db = $this->getAdapter();

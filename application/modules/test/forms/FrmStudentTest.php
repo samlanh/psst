@@ -1081,6 +1081,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
     	$_branch_id->setMultiOptions($_arr_opt_branch);
+    	
+    	
     	$_branch_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',

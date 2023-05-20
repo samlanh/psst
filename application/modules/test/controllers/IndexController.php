@@ -158,14 +158,15 @@ class Test_IndexController extends Zend_Controller_Action
 		$db = new Test_Model_DbTable_DbStudentTest();
 
 		$result_date = $db->getRowTestResultDate($id,$type);
-			$now = time();
-			$ts1 = strtotime($result_date['result_date']);
-			$year = date('Y', $ts1);
-			$this_year = date('Y', $now);
+		
+		$now = time();
+		$ts1 = strtotime($result_date['result_date']);
+		$year = date('Y', $ts1);
+		$this_year = date('Y', $now);
 
-			$month = date('m', $ts1);
-			$this_month = date('m', $now);
-			$month_amount = (($this_year - $year) * 12) + ($this_month - $month);
+		$month = date('m', $ts1);
+		$this_month = date('m', $now);
+		$month_amount = (($this_year - $year) * 12) + ($this_month - $month);
 			
 		$tp = $db->getTestPeriod();//period in setting
 		$setting_period= $tp['keyValue'];
@@ -228,9 +229,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->form = $frm;
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rs_subjecttestkhmer = $db->getViewById(31);
-		
-		$db= new Foundation_Model_DbTable_DbStudent();
-		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
     }
     
     function webcamAction(){

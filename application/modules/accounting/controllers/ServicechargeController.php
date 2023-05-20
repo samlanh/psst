@@ -93,7 +93,6 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
 		$row = $_db->getServiceChargeById($id);
@@ -125,24 +124,25 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		if(!empty($rows))foreach($rows as $payment_tran){
 			if($payment_tran['payment_term']==1){
 				$rs_rows[$key] = array(
-						'class_id'=>$payment_tran['class_id'],
-						'session_id'=>$payment_tran['session'],
-						'monthly'=>$payment_tran['tuition_fee'],
-						'semester'=>'',
-						'year'=>'',
-						'note'=>$payment_tran['remark'],
-						'status'=>$payment_tran['status'],
+					'class_id'=>$payment_tran['class_id'],
+					'session_id'=>$payment_tran['session'],
+					'monthly'=>$payment_tran['tuition_fee'],
+					'semester'=>'',
+					'year'=>'',
+					'note'=>$payment_tran['remark'],
+					'status'=>$payment_tran['status'],
 				);
 				$key_old=$key;
 				$key++;
-			}elseif($payment_tran['payment_term']==4){
-				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
-		
 			}elseif($payment_tran['payment_term']==2){
 				$rs_rows[$key_old]['quarter'] = $payment_tran['tuition_fee'];
 			}
 			elseif($payment_tran['payment_term']==3){
 				$rs_rows[$key_old]['semester'] = $payment_tran['tuition_fee'];
+			}elseif($payment_tran['payment_term']==4){
+				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
+			}elseif($payment_tran['payment_term']==5){
+				$rs_rows[$key_old]['onepayment'] = $payment_tran['tuition_fee'];
 			}
 		}
 		$this->view->rows =$rs_rows;	
@@ -190,24 +190,28 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		if(!empty($rows))foreach($rows as $payment_tran){
 			if($payment_tran['payment_term']==1){
 				$rs_rows[$key] = array(
-						'class_id'=>$payment_tran['class_id'],
-						'session_id'=>$payment_tran['session'],
-						'monthly'=>$payment_tran['tuition_fee'],
-						'semester'=>'',
-						'year'=>'',
-						'note'=>$payment_tran['remark'],
-						'status'=>$payment_tran['status'],
+					'class_id'=>$payment_tran['class_id'],
+					'session_id'=>$payment_tran['session'],
+					'monthly'=>$payment_tran['tuition_fee'],
+					'semester'=>'',
+					'year'=>'',
+					'note'=>$payment_tran['remark'],
+					'status'=>$payment_tran['status'],
 				);
 				$key_old=$key;
 				$key++;
-			}elseif($payment_tran['payment_term']==4){
-				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
-		
 			}elseif($payment_tran['payment_term']==2){
 				$rs_rows[$key_old]['quarter'] = $payment_tran['tuition_fee'];
 			}
 			elseif($payment_tran['payment_term']==3){
 				$rs_rows[$key_old]['semester'] = $payment_tran['tuition_fee'];
+			}
+			elseif($payment_tran['payment_term']==4){
+				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
+			
+			}
+			elseif($payment_tran['payment_term']==5){
+				$rs_rows[$key_old]['onepayment'] = $payment_tran['tuition_fee'];
 			}
 		}
 		$this->view->rows =$rs_rows;
@@ -256,9 +260,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Accounting_Model_DbTable_DbServiceCharge();
-// 			$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
 			$service_fee = $db->getServiceFee($data);
-				
 			print_r(Zend_Json::encode($service_fee));
 			exit();
 		}

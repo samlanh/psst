@@ -54,7 +54,6 @@ class Registrar_InitilizeuseController extends Zend_Controller_Action {
 				$_discount = $_dbmodel->addInitilizeService($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/index");
-
 				}elseif(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/initilizeuse/add");
 				}else{

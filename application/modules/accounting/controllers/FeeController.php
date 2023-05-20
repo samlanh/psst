@@ -116,6 +116,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 				$rs_rows[$key] = array(
 						'class_id'=>$payment_tran['class_id'],
 						'session_id'=>$payment_tran['session'],
+						'onepayment'=>'',
 						'monthly'=>$payment_tran['tuition_fee'],
 						'semester'=>'',
 						'year'=>'',
@@ -124,14 +125,15 @@ class Accounting_FeeController extends Zend_Controller_Action {
 				);
 				$key_old=$key;
 				$key++;
-			}elseif($payment_tran['payment_term']==4){
-				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
-
 			}elseif($payment_tran['payment_term']==2){
 				$rs_rows[$key_old]['quarter'] = $payment_tran['tuition_fee'];
 			}
 			elseif($payment_tran['payment_term']==3){
 				$rs_rows[$key_old]['semester'] = $payment_tran['tuition_fee'];
+			}elseif($payment_tran['payment_term']==4){
+				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
+			}elseif($payment_tran['payment_term']==5){
+				$rs_rows[$key_old]['onepayment'] = $payment_tran['tuition_fee'];
 			}
 		}
 	   $this->view->rows =$rs_rows;
@@ -176,6 +178,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 				$rs_rows[$key] = array(
 						'class_id'=>$payment_tran['class_id'],
 						'session_id'=>$payment_tran['session'],
+						'onepayment'=>'',
 						'monthly'=>$payment_tran['tuition_fee'],
 						'semester'=>'',
 						'year'=>'',
@@ -184,14 +187,19 @@ class Accounting_FeeController extends Zend_Controller_Action {
 				);
 				$key_old=$key;
 				$key++;
-			}elseif($payment_tran['payment_term']==4){
-				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
-
-			}elseif($payment_tran['payment_term']==2){
+			}elseif($payment_tran['payment_term']==1){
+				$rs_rows[$key_old]['monthly'] = $payment_tran['tuition_fee'];
+			}
+			elseif($payment_tran['payment_term']==2){
 				$rs_rows[$key_old]['quarter'] = $payment_tran['tuition_fee'];
 			}
 			elseif($payment_tran['payment_term']==3){
 				$rs_rows[$key_old]['semester'] = $payment_tran['tuition_fee'];
+			}elseif($payment_tran['payment_term']==4){
+				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
+			}
+			elseif($payment_tran['payment_term']==5){
+				$rs_rows[$key_old]['onepayment'] = $payment_tran['tuition_fee'];
 			}
 		}
 	   $this->view->rows =$rs_rows;

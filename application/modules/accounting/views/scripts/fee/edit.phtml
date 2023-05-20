@@ -454,10 +454,11 @@ function initailize(){
 	     parseContent: true,
 	});
 	dijit.byId('class_'+col).attr('value',<?php echo $row['class_id']?>);
-	dijit.byId('fee'+col+'_1').attr('value',<?php echo $row['monthly']?>);
-	dijit.byId('fee'+col+'_2').attr('value',<?php echo $row['quarter']?>);
-	dijit.byId('fee'+col+'_3').attr('value',<?php echo $row['semester']?>);
-	dijit.byId('fee'+col+'_4').attr('value',<?php echo $row['year']?>);
+	dijit.byId('fee'+col+'_1').attr('value',<?php echo $row['onepayment']?>);
+	dijit.byId('fee'+col+'_2').attr('value',<?php echo $row['monthly']?>);
+	dijit.byId('fee'+col+'_3').attr('value',<?php echo $row['quarter']?>);
+	dijit.byId('fee'+col+'_4').attr('value',<?php echo $row['semester']?>);
+	dijit.byId('fee'+col+'_5').attr('value',<?php echo $row['year']?>);
 	dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
 	<?php } }?>
 }

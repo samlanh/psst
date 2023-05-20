@@ -513,7 +513,8 @@
 		dojo.xhrPost({
 			url:url_data,
 			content:{
-				'branch_id':branch_id
+				'branchId':branch_id,
+				'customerType':1
 			},
 			handleAs:"json",
 			load: function(data) {

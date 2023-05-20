@@ -104,11 +104,9 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$db = new Foundation_Model_DbTable_DbStudentDrop();
-		$this->view->stu_id = $db->getAllStudentNameEdit();
 			
 		$db = new Application_Model_DbTable_DbGlobal();
-		$stu = $db->getAllStudentName();
+		$stu = $db->getAllListStudentName();
 		$this->view->stuname=$stu;
 			
 		$db_global = new Application_Model_DbTable_DbGlobal();

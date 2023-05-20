@@ -156,62 +156,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt($branch_id);
     }
-    public function editcustomerpaymentAction(){
-    	$id=$this->getRequest()->getParam('id');
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try {
-    			$db = new Registrar_Model_DbTable_DbRegister();
-    			$db->updateCustomerPayment($_data,$id);
-    			if(isset($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));   			 
-    		}
-    	}
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->all_dept = $_db->getAllDegreeName();
-    	 
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->teacher = $db->getPaymentEdit($id);
-    	 
-    	$rspayment =  $db->getCustomerPaymentByID($id);
-    	$this->view->payment =$rspayment;
-    	 
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	$user_type_id = $session_user->level;
-    	$payment_date = date("Y-m-d",strtotime($rspayment['create_date']));
-    	$current_date = date("Y-m-d");
-    	if($user_type_id!=1 AND $current_date>$payment_date){
-    		Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit", self::REDIRECT_URL . '/register/index');
-    	}
-    	$this->view->customer_payment_detail = $db->getCustomerPaymentDetailByID($id);
-    	 
-    	$this->view->service_only = $db->getServiceOnlyByID($id);
-    	 
-    	$this->view->product_only = $db->getProductOnlyByID($id);
-    	 
-    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
-    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-    	$this->view->all_year = $db->getAllYears();
-    	$this->view->all_session = $db->getAllSession();
-    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
-    	$this->view->all_service = $db->getAllService();
-    	$this->view->all_room = $db->getAllRoom();
-    
-//     	$test = $this->view->branch_info = $db->getBranchInfo();
-    	$db = new Foundation_Model_DbTable_DbStudent();
-    	$this->view->group = $db->getAllgroup();
-    	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt();
-    }
+   
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -377,7 +322,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			if ($customer_type==2){
 				$rows = $db->getAllCustomer(null,$branch_id);
 			}else{
-				$rows = $db->getAllListStudent(null,2,$branch_id);
+				$rows = $db->getAllListStudent($data);
 			}
 			
 			print_r(Zend_Json::encode($rows));

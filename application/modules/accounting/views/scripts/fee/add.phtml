@@ -72,7 +72,6 @@
 						<div class="card-body"> 
 							<div class="row"> 
 								<div class="col-md-12 col-sm-12 col-xs-12">
-
 									<div class="d-flex "> 
 										<div class="settings-main-icon ">
 											<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
@@ -84,7 +83,6 @@
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										&nbsp; 
 									</div>
-
 									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -132,7 +130,6 @@
 						</div>
 					</div>
 	             </div>
-
 	             <div class="col-md-8 col-sm-8 col-xs-12">
 					<div class="card-box">
 						<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
@@ -154,7 +151,6 @@
 								<div class="card-body"> 
 										<div class="row"> 
 											<div class="col-md-12 col-sm-12 col-xs-12">
-
 												<div class="d-flex "> 
 													<div class="settings-main-icon ">
 														<i class="material-icons-outlined">payments</i>
@@ -166,11 +162,10 @@
 												<div class="col-md-12 col-sm-12 col-xs-12">
 													&nbsp; 
 												</div>
-
 												<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 													<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 													<div class="col-md-5 col-sm-5 col-xs-12">
-															<input id="grade" name="grade" />
+														<input id="grade" name="grade" />
 													</div>
 													<div class="clearfix"></div>
 												</div>
@@ -180,10 +175,10 @@
 															<tr id="head-title" class="head-td" align="right" style="width: 100%;">
 																<th width="47px"><?php echo $tr->translate("DEL");?></th>
 																<th width="50px"><?php echo $tr->translate("N_O");?></th>
-																<th width="20%"><?php echo $tr->translate("GRADE");?></th>
+																<th width="12%"><?php echo $tr->translate("GRADE");?></th>
 																<?php $s=0; ?>
 																<?php  foreach ($payment_term as $value){?>
-																<th width="11%"><?php echo"$value"; ?></th>			
+																<th><?php echo"$value"; ?></th>			
 																<?php }?>
 																<th width="25%"><?php echo $tr->translate("REMARK");?></th>
 															</tr>
@@ -208,19 +203,17 @@
 								<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
 											<div class="d-flex "> 
-														<div class="settings-main-icon ">
-															<i class="glyphicon glyphicon-education"></i>	
-														</div> 
-														<div class="col-md-10 col-sm-10 col-xs-12"> 
-															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("START_DATE_END_DATE");?></p>
-														</div> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-education"></i>	
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("START_DATE_END_DATE");?></p>
+												</div> 
 											</div>
 											<div class="col-md-12 col-sm-12 col-xs-12">
-														&nbsp; 
+												&nbsp; 
 											</div>
-
 											<table class="collape tablesorter" id="table_term_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
 												<thead>
 													<tr id="head-title1" class="head-td" align="center" style="width: 100%;">
@@ -244,10 +237,7 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
-
-
 	             </div>
 			</div>
 			<div class="clearfix"></div>
@@ -295,7 +285,6 @@
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
 	
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -395,7 +384,6 @@ function checkSaveType(){
 				}
 			},
 			error:function(e){
-				alert(e);
 			}
 		});
 	}
@@ -494,9 +482,11 @@ function addRow(){
 			 }
 		}
 	}
+	
 	var payment_term = '<?php echo count($this->payment_term);?>';
 		col++;no++;
 		label_grade = dijit.byId("grade").attr('displayedValue');
+		dijit.byId("grade").reset();
 		template='';
 		if(title!=1){
 			$("#head-title").html("");    

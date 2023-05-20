@@ -378,7 +378,7 @@ function getAllgroupStudyNotPass($action=null){
 	   			2=>$this->tr->translate('TERM'),
 	   			3=>$this->tr->translate('SEMESTER'),
 	   			4=>$this->tr->translate('YEAR'),
-	   			
+	   			5=>$this->tr->translate('ONE_PAYMENT_ONLY'),
 	   	);
 	   	if($id==null){return $opt_term;}
 	   	else {
@@ -835,7 +835,7 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    /*blog get student*/
-   function getAllListStudent($opt=null,$type=2,$branchid=null){
+   function getAllListStudent($data){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -845,26 +845,58 @@ function getAllgroupStudyNotPass($action=null){
 	   	stu_code,
 	   	s.stu_id AS id,
 	   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
-	   	FROM rms_student AS s,
-			rms_group_detail_student as gds
-	   	WHERE 
-			gds.itemType=1
+	   	FROM rms_student AS s ";
+   
+   	if(!empty($data['joinGroup'])){
+   		$sql.=', rms_group_detail_student as gds ';
+   		$where=" WHERE gds.stu_id = s.stu_id";
+   	}else{
+   		$where=" WHERE 1";
+   	}
+   	if(!empty($data['itemType'])){
+   		$where.=" AND gds.itemType=".$data['itemType'];
+   	}
+   	if(!empty($data['activStudent'])){
+   		$where.=" AND AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4) ";
+   	}
+   	if(isset($data['isCurrent'])){
+   		$where.=" AND gds.is_current=".$data['isCurrent'];
+   	}
+   	if(isset($data['isMaingrad'])){
+   		$where.=" AND gds.is_maingrade=".$data['isMaingrad'];
+   	}
+   	$branchStr = 'branchId';
+   	if(!empty($data['branch_id'])){
+   		$branchStr = 'branch_id';
+   	}
+   	if(!empty($data['branchId'])){
+   		$where.=" AND s.branch_id=".$data[$branchStr];
+   	}
+   	if(!empty($data['branchId'])){
+   		$where.=" AND s.branch_id=".$data['branchId'];
+   	}
+   
+   	if(!empty($data['customerType'])){
+   		$where.=" AND s.customer_type=".$data['customerType'];
+   	}
+   	$where.=" AND (s.stu_enname!='' OR s.stu_khname!='') ";
+			
+	   /*	WHERE 
+			
 			AND gds.stu_id = s.stu_id 
 			AND gds.is_current=1 AND gds.is_maingrade=1
 			AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4)
 			AND (stu_enname!='' OR s.stu_khname!='')
-			AND s.status=1  AND customer_type=1 ";
+			AND s.status=1  AND customer_type=1 ";*/
    	
-   	if($branchid!=null){
-   		$sql.=" AND s.branch_id=".$branchid;
-   	}
-   	$sql.=" GROUP BY s.stu_id ORDER BY stu_code ASC, stu_khname ASC ";
-   	$rows = $db->fetchAll($sql);
-   	if($opt!=null){
+   	
+   	$group=" GROUP BY s.stu_id ORDER BY stu_code ASC, stu_khname ASC ";
+   	$rows = $db->fetchAll($sql.$where.$group);
+   	if(!empty($data['opt'])){
    		$options=array(0=>$tr->translate("CHOOSE"));
    		if(!empty($rows))foreach($rows AS $row){
    			$lable = $row['stu_code'];
-   			if($type==2){$lable = $row['name'];}
+   			if($data['type']==2){$lable= $row['name'];}
    			$options[$row['id']]=$lable;
    		}
    		return $options;
@@ -872,7 +904,7 @@ function getAllgroupStudyNotPass($action=null){
    		return $rows;
    	}
    }
-   function getAllStudentName($opt=null,$type=2,$branchid=null){
+   function getAllListStudentName($opt=null,$type=2,$branchid=null){
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
 	   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -965,9 +997,9 @@ function getAllgroupStudyNotPass($action=null){
 		   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
 		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
-		   		(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) AS academic_year,
-		   		(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) ) ) AS academic_year_label,
-		   		(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id,
+		   		sgd.academic_year,
+		   		(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sgd.academic_year LIMIT 1)) AS academic_year_label,
+		   		sgd.feeId AS fee_id,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=sgd.group_id AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) AS group_name
 	   		FROM 
 	   			rms_student AS s
@@ -2079,7 +2111,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql="
 				SELECT COUNT(s.stu_id)
 				FROM `rms_student` AS s
-					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.mainType=1 AND gds.is_maingrade=1
+					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.is_maingrade=1
 				WHERE s.branch_id=$branch_id 
 				AND s.customer_type=1
 			";
@@ -2108,7 +2140,7 @@ function getAllgroupStudyNotPass($action=null){
 			$sql="
 				SELECT COUNT(s.stu_id)
 				FROM `rms_student` AS s
-					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.mainType=1 AND gds.is_maingrade=1 
+					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.is_maingrade=1 
 					LEFT JOIN `rms_items` AS deg ON deg.id = gds.degree AND deg.type=1
 				WHERE s.branch_id=$branch_id 
 				AND s.customer_type=1
@@ -3234,7 +3266,6 @@ function getAllgroupStudyNotPass($action=null){
 			  	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE stu_khname END) AS stu_name,
 			  	st.sex, 
 			  	gs.`stu_id`,
-			  	gs.mainType,
 				gs.is_maingrade,
 				gs.itemType,
 				gs.startDate,

@@ -141,11 +141,11 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     			foreach ($ids as $i){
     				foreach ($id_term as $j){
     					$_arr = array(
-    							'fee_id'=>$_data['id'],
-    							'class_id'=>$_data['class_'.$i],
-    							'payment_term'=>$j,
-    							'tuition_fee'=>$_data['fee'.$i.'_'.$j],
-    							'remark'=>$_data['remark'.$i],
+    						'fee_id'=>$_data['id'],
+    						'class_id'=>$_data['class_'.$i],
+    						'payment_term'=>$j,
+    						'tuition_fee'=>$_data['fee'.$i.'_'.$j],
+    						'remark'=>$_data['remark'.$i],
     					);
     					$this->insert($_arr);
     				}

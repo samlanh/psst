@@ -268,8 +268,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 		
 		contentData = {
-				'branch_id':branchId,
-				'customer_type':1
+				'branchId':branchId,
+				'customerType':1
 				}
 		selectedId='<?php echo $this->rs['cate_income']?>';
 		getAllStudentByBranch(urlGet,contentData,selectedId);

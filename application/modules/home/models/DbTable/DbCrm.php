@@ -192,11 +192,9 @@
 							'is_current'		=>1,
 							'is_setgroup'		=>0,
 							'is_maingrade'		=>1,
-							'date'				=>date("Y-m-d"),
 							'create_date'		=>date("Y-m-d H:i:s"),
 							'modify_date'		=>date("Y-m-d H:i:s"),
 							'user_id'			=>$this->getUserId(),
-							
 							'itemType'			=>1,
 					);
 					$this->_name="rms_group_detail_student";
@@ -299,7 +297,6 @@
 						$array = array(
 							'branch_id'	  => $_data['branch_id'],
 							'crm_id'	  => $id,
-							//'customer_type'=>3,
 							'stu_khname'=> $_data['kh_name_'.$i],
 							'stu_enname'=> $_data['first_name_'.$i],
 							'last_name'=> $_data['last_name_'.$i],
@@ -328,10 +325,8 @@
 								'is_current'		=>1,
 								'is_setgroup'		=>0,
 								'is_maingrade'		=>1,
-								'date'				=>date("Y-m-d"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
-								
 								'itemType'			=>1,
 						);
 						$this->_name="rms_group_detail_student";
@@ -375,11 +370,9 @@
 								'is_current'		=>1,
 								'is_setgroup'		=>0,
 								'is_maingrade'		=>1,
-								'date'				=>date("Y-m-d"),
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
-								
 								'itemType'			=>1,
 						);
 						$this->_name="rms_group_detail_student";

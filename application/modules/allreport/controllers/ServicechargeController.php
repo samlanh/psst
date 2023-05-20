@@ -40,13 +40,17 @@ public function init()
 					if($payment_tran['payment_term']==1){
 						$rs_rows[$key]=$this->headAddRecordTuitionFee($rs,$key);
 						$term = $model->getAllPaymentTerm($fee_row);
-
-						
 						$rs_rows[$key]['service_name'] = $payment_tran['service_name'];
 						$rs_rows[$key]['monthly'] = $payment_tran['price_fee'];
 						$key_old=$key;
 						$key++;
-					}elseif($payment_tran['payment_term']==2){
+					}
+					elseif($payment_tran['payment_term']==0){
+						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
+						$rs_rows[$key_old]['onepayment'] = $payment_tran['price_fee'];
+							
+					}
+					elseif($payment_tran['payment_term']==2){
 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
 						$rs_rows[$key_old]['quarter'] = $payment_tran['price_fee'];
 						 

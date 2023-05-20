@@ -74,15 +74,12 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 							'branch_id'		=> $data['branch_id'],
 							'stu_id'		=> $data['studentId'],
 							'itemType'		=> $resultRow['items_type'],
-							
 							'feeId'			=> $data['study_year'],
 							'balance'		=> $data['balance_'.$i],
 							'discount_type'	=> $data['discount_type'.$i],
 							'discount_amount'=> $data['discount_amount'.$i],
-							
 							'degree'		=> $resultRow['items_id'],
 							'grade'			=> $data['itemId_'.$i],
-							
 							'startDate'		=> empty($data['balance_'.$i])?'':$data['date_start_'.$i],
 							'endDate'		=> empty($data['balance_'.$i])?'':$data['end_date_'.$i],
 							'is_maingrade'	=> ($resultRow['items_type']==1)?1:'',
@@ -95,7 +92,6 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 							'academic_year'	=> $year,
 							'note'			=> $data['remark'.$i],
 							'create_date'	=> date("Y-m-d H:i:s"),
-							'date'			=> date("Y-m-d"),
 							'user_id'		=> $this->getUserId(),
 					);
 					$id = $this->insert($_arr);

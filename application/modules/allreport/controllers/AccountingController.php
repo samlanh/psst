@@ -468,9 +468,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptFee();
 		$group= new Allreport_Model_DbTable_DbRptFee();
 		$rs_rows = $group->getAllTuitionFee($search);
-	
-// 		$year = $db->getAllYearFee();
-// 		$this->view->row = $year;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
@@ -493,10 +490,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						$rs_rows[$key]['session'] = $payment_tran['session'];
 						$rs_rows[$key]['remark'] = $payment_tran['remark'];
 						$rs_rows[$key]['monthly'] = $payment_tran['tuition_fee'];
-						 
+						$rs_rows[$key]['one_payment'] = '';
+						
 						$key_old=$key;
 						$key++;
-					}elseif($payment_tran['payment_term']==2){
+					}elseif($payment_tran['payment_term']==0){
+						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
+						$rs_rows[$key_old]['one_payment'] = $payment_tran['tuition_fee'];
+	
+					}
+					elseif($payment_tran['payment_term']==2){
 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
 						$rs_rows[$key_old]['quarter'] = $payment_tran['tuition_fee'];
 	

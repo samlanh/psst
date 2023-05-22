@@ -187,7 +187,17 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->insert($arr);
 			}else{
 				$arr = array('keyValue'=>$data['name_required']);
-				$where=" keyName= 'doc_display'";
+				$where=" keyName= 'name_required'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('entry_stuid');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['entry_stuid'],'keyName'=>'entry_stuid','note'=>"Can Entry Student Id or Disable When Register New Student ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['entry_stuid']);
+				$where=" keyName= 'entry_stuid'";
 				$this->update($arr, $where);
 			}
 			

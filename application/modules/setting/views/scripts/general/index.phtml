@@ -335,10 +335,17 @@ input[type=file] {
 												</div>
 												<div class="form-group">
 													<label class="control-label col-md-4 col-sm-4 col-xs-12">
-														<?php echo $tr->translate('NEW_STU_ID_TEST')?>
+														<?php echo $tr->translate('NEW_STU_ID_FROM_TEST')?>
 														<small><?php echo $tr->translate('SHOW_STUID_REGISTER_TO_ENTER')?></small>
 													</label>
 													<div class="col-md-8 col-sm-8 col-xs-12"><?php  echo $frm->getElement('new_stuid_test');?></div>
+												</div>
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12">
+														<?php echo $tr->translate('ENTRY_STUDENT_ID_SETING')?>
+														<small><?php echo $tr->translate('CAN_ENTRY_STUID_OR_DISABLE')?></small>
+													</label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php  echo $frm->getElement('entry_stuid');?></div>
 												</div>
 											</div> 
 										</div> 
@@ -358,7 +365,7 @@ input[type=file] {
 												</div> 
 												<div class="form-group">
 													<label class="control-label col-md-4 col-sm-4 col-xs-12">
-														<?php echo $tr->translate('DOCUMENT_DISPLAY_SETTING')?>
+														<?php echo $tr->translate('DISPLAY_STUDENT_DOCUMENT_SETTING')?>
 														<small><?php echo $tr->translate('DISPLAY_STUDENT_DOCUMENT')?></small>
 													</label>
 													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('doc_display');?></div>

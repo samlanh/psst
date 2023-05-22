@@ -546,4 +546,21 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+
+	function getallnationAction(){//all get nation use this function
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    
+    		$nation = $db->getAllNation();
+    		if(!empty($data['addNew'])){
+    			array_unshift($nation, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		}
+    		array_unshift($nation, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_NATION")));
+    		print_r(Zend_Json::encode($nation));
+    		exit();
+    	}
+    }
+
+
 }

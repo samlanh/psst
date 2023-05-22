@@ -1638,6 +1638,7 @@ function getAllgroupStudyNotPass($action=null){
   	try{
   		
   		$key_code = $this->getLastKeycodeByType(21);
+		
   		$arr = array(
   				'name_en'	=>$data['title_en'],
   				'name_kh'	=>$data['title_kh'],
@@ -1669,10 +1670,10 @@ function getAllgroupStudyNotPass($action=null){
 	$db =$this->getAdapter();
 	$sql = "SELECT key_code FROM `rms_view` WHERE type=21 AND name_kh = '".$title."' limit 1";
 	
-	return $db->fetchOne($sql);;
+	return $db->fetchOne($sql);
 }
   function getLastKeycodeByType($type){
-  	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
+  	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY id DESC LIMIT 1 ";
   	$db =$this->getAdapter();
   	$number = $db->fetchOne($sql);
   	return $number+1;

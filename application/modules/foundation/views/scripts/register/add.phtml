@@ -73,7 +73,7 @@ table#table_row_study {
 	display: none;
 }
 </style>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
@@ -935,6 +935,7 @@ table#table_row_study {
 		</form>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.NumberTextBox");
@@ -956,7 +957,9 @@ var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var nation_store  = getDataStorefromJSON('id','name');
 dojo.ready(function(){
+	
 
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
@@ -1101,10 +1104,7 @@ dojo.ready(function(){
 	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',1);
-	     } else {
-	    	nation = dijit.byId('nation').get('value');
-			dijit.byId('studen_national').attr('value',nation);
-	    }  
+	     }
 	   } 
 	}, "nation");
 	dijit.byId('nation').attr('value',0);
@@ -1126,8 +1126,7 @@ dojo.ready(function(){
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',2);
 	     }
-	    else {
-	    }  
+	    
 	   } 
 	}, "studen_national");
 	dijit.byId('studen_national').attr('value',0);
@@ -1148,12 +1147,7 @@ dojo.ready(function(){
 	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',3);
-	     } else {
-	    	nation = dijit.byId('fa_national').get('value');
-			dijit.byId('mom_nation').attr('value',nation);
-			dijit.byId('guardian_national').attr('value',nation);
-		    
-	    }  
+	     }  
 	   } 
 	}, "fa_national");
 	dijit.byId('fa_national').attr('value',0);
@@ -1175,8 +1169,7 @@ dojo.ready(function(){
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',4);
 	     }
-	    else {
-	    }  
+	   
 	   } 
 	}, "mom_nation");
 	dijit.byId('mom_nation').attr('value',0);
@@ -1198,8 +1191,7 @@ dojo.ready(function(){
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',5);
 	     }
-	    else {
-	    }  
+	   
 	   } 
 	}, "guardian_national");
 	dijit.byId('guardian_national').attr('value',0);
@@ -1333,7 +1325,33 @@ dojo.ready(function(){
 			 getRefreshItems();
 	    });
 		 getRefreshItems();	 
+		 getAllNation();
 }); 
+
+
+function getAllNation(){ 
+	var url_getnation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"getallnation"));?>';										
+	dojo.xhrPost({
+		url: url_getnation,
+		content:{
+			'addNew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			
+			var nation_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('nation').set('store',nation_store);  
+			dijit.byId('studen_national').set('store',nation_store);  
+			dijit.byId('fa_national').set('store',nation_store); 
+			dijit.byId('mom_nation').set('store',nation_store); 
+			dijit.byId('guardian_national').set('store',nation_store); 
+		},
+		error: function(err) {
+			console.log(err);
+		}
+	});
+}
+
 url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroup(){
 	dijit.byId('group').reset();
@@ -1640,12 +1658,6 @@ function addLanguage(){
 		});
 	}
 }
-
-var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
-var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
-var nation_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
-var nation_store3  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
-var nation_store4  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 function addNationBy(){
 	if(dijit.byId('frm_nation_kh').validate()){
@@ -1666,61 +1678,33 @@ function addNationBy(){
 							id: data.id,
 							name: dijit.byId('title_kh').get('value')
 					   };
-					   data = data.id;
+				data = data.id;
 				if(type==1){	   
-					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-					addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-					addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-					addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-					//dijit.byId('guardian_national').attr('value',fa_job);
-					//dijit.byId('studen_national').attr('value',mo_job);
-					//dijit.byId('mom_nation').attr('value',fa_job);
-					//dijit.byId('fa_national').attr('value',fa_job);
+					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);	
+
 				}else if(type==2){
-					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-					addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-					addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-					addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-					//dijit.byId('nation').attr('value',mo_job);
-					//dijit.byId('guardian_national').attr('value',fa_job);
-					//dijit.byId('mom_nation').attr('value',fa_job);
-					//byId('fa_national').attr('value',fa_job);
+				
+					addDataToSelectbox(dijit.byId('studen_national'), nation_store, Itemmake, data);
+					
 				}else if(type==3){
-					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-					addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-					addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-					addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-					//dijit.byId('nation').attr('value',mo_job);
-					//dijit.byId('guardian_national').attr('value',fa_job);
-					//dijit.byId('studen_national').attr('value',mo_job);
-					//dijit.byId('mom_nation').attr('value',fa_job);
+				
+					addDataToSelectbox(dijit.byId('fa_national'), nation_store, Itemmake, data);
+					
 				}else if(type==4){
-					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-					addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-					addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-					addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-					//dijit.byId('nation').attr('value',mo_job);
-					//dijit.byId('guardian_national').attr('value',fa_job);
-					//dijit.byId('studen_national').attr('value',mo_job);
-					//dijit.byId('fa_national').attr('value',fa_job);
+					
+					addDataToSelectbox(dijit.byId('mom_nation'), nation_store, Itemmake, data);
+					
 				}else if(type==5){
-					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-					addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
-					addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
-					addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
-					//dijit.byId('nation').attr('value',mo_job);
-					//dijit.byId('studen_national').attr('value',mo_job);
-					//dijit.byId('mom_nation').attr('value',fa_job);
-					//dijit.byId('fa_national').attr('value',fa_job);
+					
+					addDataToSelectbox(dijit.byId('guardian_national'), nation_store, Itemmake, data);
+					
 				}
+				getAllNation();	
+				
 				dijit.byId('frm_nation_kh').reset();
 				dijit.byId("popup_nation").hide();
 				HideloadingBlock();
+				
 			},
 			error: function(err) {
 			}

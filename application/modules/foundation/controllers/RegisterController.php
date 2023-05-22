@@ -561,6 +561,20 @@ class Foundation_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
+	function getalljobAction(){//all get nation use this function
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    
+    		$job = $db->getOccupation();
+    		if(!empty($data['addNew'])){
+    			array_unshift($job, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		}
+    		array_unshift($job, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_JOB")));
+    		print_r(Zend_Json::encode($job));
+    		exit();
+    	}
+    }
 
 
 }

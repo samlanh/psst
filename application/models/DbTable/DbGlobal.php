@@ -1670,6 +1670,7 @@ function getAllgroupStudyNotPass($action=null){
   	try{
   		
   		$key_code = $this->getLastKeycodeByType(21);
+		
   		$arr = array(
   				'name_en'	=>$data['title_en'],
   				'name_kh'	=>$data['title_kh'],
@@ -1701,10 +1702,10 @@ function getAllgroupStudyNotPass($action=null){
 	$db =$this->getAdapter();
 	$sql = "SELECT key_code FROM `rms_view` WHERE type=21 AND name_kh = '".$title."' limit 1";
 	
-	return $db->fetchOne($sql);;
+	return $db->fetchOne($sql);
 }
   function getLastKeycodeByType($type){
-  	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
+  	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY id DESC LIMIT 1 ";
   	$db =$this->getAdapter();
   	$number = $db->fetchOne($sql);
   	return $number+1;
@@ -3305,7 +3306,7 @@ function getAllgroupStudyNotPass($action=null){
   			$sql.=" AND gs.`degree` = ".$data['degree'];
   		}
   		if(!empty($data['grade'])){
-  			$sql.=" AND gs.`degree` = ".$data['grade'];
+  			$sql.=" AND gs.`grade` = ".$data['grade'];
   		}
   		if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
   			$sql.=" AND gs.`stop_type` = ".$data['stopType'];
@@ -3565,5 +3566,67 @@ function getAllgroupStudyNotPass($action=null){
 		$sql.=" ORDER BY grding.title ASC ";
 	return $db->fetchAll($sql);
    }
+   function getOneStudentGroupDetailData($data){
+	   	$db=$this->getAdapter();
+	   	 
+	   	$currentLang = $this->currentlang();
+	   	$colunmname='title_en';
+	   	if ($currentLang==1){
+	   		$colunmname='title';
+	   	}
+   	 
+   	$sql="SELECT
+	   	st.stu_code AS stu_code,
+	   	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE stu_khname END) AS stu_name,
+	   	st.sex,
+	   	gs.`stu_id`,
+	   	gs.is_maingrade,
+	   	gs.itemType,
+	   	gs.startDate,
+	   	gs.endDate,
+	   	gs.feeId,
+	   	gs.balance,
+	   	gs.group_id,
+	   	gs.academic_year,
+	   	gs.degree,
+	   	gs.degree AS itemId,
+	   	gs.grade,
+	   	gs.grade AS itemDetailId,
+	   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
+	   	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel
+   	FROM
+	   	`rms_group_detail_student` AS gs,
+	   	rms_student as st
+   	WHERE
+   	st.stu_id=gs.stu_id ";
+	   	if(!empty($data['item_type'])){
+	   		$sql.=" AND gs.`itemType` = ".$data['item_type'];
+	   	}
+	   	if(!empty($data['group_id'])){
+	   		$sql.=" AND gs.`group_id` = ".$data['group_id'];
+	   	}
+	   	if(!empty($data['studentId'])){
+	  	 	$sql.=" AND gs.`stu_id` = ".$data['studentId'];
+	   	}
+	   	if(isset($data['isMaingrade'])){
+	   		$sql.=" AND gs.`is_maingrade` = ".$data['isMaingrade'];
+	   	}
+	   	if(isset($data['isCurrent'])){
+	   		$sql.=" AND gs.`is_current` = ".$data['isCurrent'];
+	   	}
+	   	if(!empty($data['degree'])){
+	   		$sql.=" AND gs.`degree` = ".$data['degree'];
+	   	}
+	   	if(!empty($data['grade'])){
+	   		$sql.=" AND gs.`grade` = ".$data['grade'];
+	   	}
+	   	if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
+	   		$sql.=" AND gs.`stop_type` = ".$data['stopType'];
+	   	}
+	   	if(!empty($data['groupId'])){
+	   		$sql.=" AND gs.`group_id` = ".$data['groupId'];
+	   	}
+	   	return $db->fetchRow($sql);
+   	}
 }
 ?>

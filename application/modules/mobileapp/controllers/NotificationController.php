@@ -62,9 +62,9 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	        $dbstudent = new Foundation_Model_DbTable_DbStudent();
 	        $group = $dbstudent->getAllgroup();
 	        $this->view->group = $group;
-	        $dbre = new Registrar_Model_DbTable_DbRegister();
-	        $this->view->all_student = $dbre->getAllGerneralOldStudent();
 	        $dbglobal = new Application_Model_DbTable_DbGlobal();
+	        $this->view->all_student = $dbglobal->getAllStuCode();
+	        
 	        $this->view->lang = $dbglobal->getLaguage();
 	        
 	        $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
@@ -103,10 +103,10 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	    $dbstudent = new Foundation_Model_DbTable_DbStudent();
 	    $group = $dbstudent->getAllgroup();
 	    $this->view->group = $group;
-	    $dbre = new Registrar_Model_DbTable_DbRegister();
-	    $this->view->all_student = $dbre->getAllGerneralOldStudent();
 	    
 	    $dbglobal = new Application_Model_DbTable_DbGlobal();
+	    $this->view->all_student = $dbglobal->getAllStuCode();
+	    
 	    $this->view->lang = $dbglobal->getLaguage();
 	    $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
 

@@ -6,7 +6,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
-    	 
     }
     
     public function getBranchId(){
@@ -20,7 +19,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			FROM rms_student_payment AS sp,
     			   rms_student_paymentdetail AS spd WHERE
     		sp.id=spd.payment_id AND is_start=1 
-    		AND spd.itemdetail_id= $service_id 
+    		AND spd.itemdetail_id=$service_id 
     		AND sp.student_id=$studentid 
     		ORDER BY spd.validate DESC LIMIT 1 ";
     	return $db->fetchOne($sql);
@@ -31,18 +30,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
 
-    function getStudentExist($data){
-    	$db = $this->getAdapter();
-    	
-    	$name = $data['en_name'];
-    	$year = $data['study_year'];
-    	$grade = $data['grade'];
-    	$session = $data['session'];
-    	$room = $data['room'];
-    	
-    	$sql = "select stu_enname from rms_student where stu_enname = '$name' and academic_year = $year and grade = $grade and session = $session and room = $room ";
-    	return $db->fetchOne($sql);
-    }
     function setStudentId($data){
     	$gdb = new  Application_Model_DbTable_DbGlobal();
     	$rs_stu = $gdb->getStudentinfoById($data['old_stu']);
@@ -258,10 +245,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		//$paid_date = $data['paid_date'];
 		$paid_date = date("Y-m-d H:i:s");
-				
-		$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
-		
 		$gdb = new  Application_Model_DbTable_DbGlobal();
+		$stu_id = $data['old_stu'];//$this->getnewStudentId($data['dept']);
+		
 		$rs_stu = $gdb->getStudentinfoById($stu_id);
 		$receipt_number = $this->getRecieptNo($data['branch_id']);
 			try{
@@ -289,7 +275,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 					
 				}elseif($data['student_type']==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-					
 					//$rs_stu = $gdb->getStudentBalanceInfoById($stu_id);
 					$arrStuBalance = array(
 						'is_balance' =>0,
@@ -299,7 +284,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$whereStuBalance="id = ".$data['studentBalanceId'];
 					$this->update($arrStuBalance, $whereStuBalance);
 				}
-			
 				
 				$data['credit_memo'] = empty($data['credit_memo'])?0:$data['credit_memo'];
 				
@@ -359,7 +343,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						}
 					}
 				}
-				
 				/*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 // 					$dbpush = new  Application_Model_DbTable_DbGlobal();
 // 					$dbpush->getTokenUser(null,$id, 1);
@@ -379,7 +362,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'serailno'	   => $itemsCode,
 							'student_id'   => $data['old_stu'],
 							'balance'      => 0,
-// 							'total_received'=>$data['qty_'.$i],
 							'total_qty_due' => 0,
 							'received_date' => $paid_date,
 							'create_date'   => date("Y-m-d H:i:s"),
@@ -407,31 +389,33 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 					
 					$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
-					$_arr = array(
-							'payment_id'	=>$paymentid,
-							'feeId'			=>$data['academic_year_'.$i],
-							'service_type'	=>$rs_item['items_type'],
-							'itemdetail_id'	=>$data['item_id'.$i],
-							'payment_term'	=>$data['term_'.$i],
-							'fee'			=>$data['price_'.$i],
-							'qty'			=>$data['qty_'.$i],
-							'qty_balance'	=>$data['qty_'.$i],
-							'subtotal'		=>$data['subtotal_'.$i],
-							'extra_fee'		=>$data['extra_fee'.$i],
-							'discount_type'	=>$data['discount_type'.$i],
-							'discount_percent'=>$data['discount_'.$i],
-							'discount_amount'=>$data['discount_amount'.$i],
-							'totalpayment'	=>$data['total_amount'.$i],
-							'paidamount'	=>$data['paid_amount'.$i],
-							'is_onepayment'	=>$data['onepayment_'.$i],
-							'start_date'	=>($data['onepayment_'.$i]==1)?'':$data['date_start_'.$i],
-							'validate'		=>($data['onepayment_'.$i]==1)?'':$data['validate_'.$i],
-							'is_start'		=>1,
-							'note'			=>$data['remark'.$i],
-							'is_parent'     =>$spd_id,
-						);
-					$this->_name="rms_student_paymentdetail";
-					$studentpaymentid = $this->insert($_arr);
+					if(!empty($rs_item)){
+						$_arr = array(
+								'payment_id'	=>$paymentid,
+								'feeId'			=>$data['academic_year_'.$i],
+								'service_type'	=>$rs_item['items_type'],
+								'itemdetail_id'	=>$data['item_id'.$i],
+								'payment_term'	=>$data['term_'.$i],
+								'fee'			=>$data['price_'.$i],
+								'qty'			=>$data['qty_'.$i],
+								'qty_balance'	=>$data['qty_'.$i],
+								'subtotal'		=>$data['subtotal_'.$i],
+								'extra_fee'		=>$data['extra_fee'.$i],
+								'discount_type'	=>$data['discount_type'.$i],
+								'discount_percent'=>$data['discount_'.$i],
+								'discount_amount'=>$data['discount_amount'.$i],
+								'totalpayment'	=>$data['total_amount'.$i],
+								'paidamount'	=>$data['paid_amount'.$i],
+								'is_onepayment'	=>$data['onepayment_'.$i],
+								'start_date'	=>($data['onepayment_'.$i]==1)?'':$data['date_start_'.$i],
+								'validate'		=>($data['onepayment_'.$i]==1)?'':$data['validate_'.$i],
+								'is_start'		=>1,
+								'note'			=>$data['remark'.$i],
+								'is_parent'     =>$spd_id,
+							);
+						$this->_name="rms_student_paymentdetail";
+						$studentpaymentid = $this->insert($_arr);
+					}
 					
 					$arr = array(
 						'feeId'=>$data['academic_year_'.$i],
@@ -453,41 +437,41 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
 					$this->update($arr, $where);
 					
-					$param = array(
-							'Id'=>$data['item_id'.$i]
-					);
-// 					$resultRow = $gdb->getItemDetailRow($param);
-					
 					if(!empty($rs_item)){
-						$_arr= array(
-								'branch_id'		=> $data['branch_id'],
-								'stu_id'		=> $data['old_stu'],
-								'itemType'		=> $rs_item['items_type'],
-								'feeId'			=> $data['academic_year_'.$i],
-								'academic_year'	=> $data['academic_year_'.$i],
-								'degree'		=> $rs_item['items_id'],//not yet
-								'grade'			=> $data['item_id'.$i],
-								'startDate'		=> $data['date_start_'.$i],
-								'endDate'		=> empty($data['balance_'.$i])?'':$data['end_date_'.$i],
-// 								'is_maingrade'	=> ($resultRow['items_type']==1)?1:'',
-// 								'discount_type'	=> $data['discount_type'.$i],
-// 								'discount_amount'=> $data['discount_amount'.$i],
-								'isoldBalance'	=> ($data['balance_'.$i] > 0)?1:0,
-								'school_option'	=> $rs_item['schoolOption'],
-								'balance'	=> $balance,
-								'isoldBalance'	=> ($balance>=0?1:0),
-								'stop_type'		=> 0,
-								'status'		=> 1,
-								'is_newstudent'	=> 1,
-								'note'			=> $data['remark'.$i],
-								'create_date'	=> date("Y-m-d H:i:s"),
-								'user_id'		=> $this->getUserId(),
-						);
-						$id = $this->insert($_arr);
+						$arr =array(
+								'studentId'=>$data['old_stu'],
+								'grade'=>$data['item_id'.$i],
+								'isCurrent'=>1,
+								'stopType'=>0
+								);
+						$resultDetail = $gdb->getOneStudentGroupDetailData($arr);
+						if(empty($resultDetail) AND !empty($data['autoNextPay'.$i])){
+							$_arr= array(
+									'branch_id'		=> $data['branch_id'],
+									'stu_id'		=> $data['old_stu'],
+									'itemType'		=> $rs_item['items_type'],
+									'school_option'	=> $rs_item['schoolOption'],
+									'grade'			=> $data['item_id'.$i],
+									'degree'		=> $rs_item['items_id'],
+									'feeId'			=> $data['academic_year_'.$i],
+									'academic_year'	=> $data['academic_year_'.$i],
+									'startDate'		=> $data['date_start_'.$i],
+									'endDate'		=> $data['end_date_'.$i],
+									'isoldBalance'	=> ($data['balance_'.$i] > 0)?1:0,
+									'balance'	=> $balance,
+									'isoldBalance'	=> ($balance>=0?1:0),
+									'is_current'	=> 1,
+									'stop_type'		=> 0,
+									'status'		=> 1,
+									'is_newstudent'	=> 1,
+									'note'			=> $data['remark'.$i],
+									'create_date'	=> date("Y-m-d H:i:s"),
+									'user_id'		=> $this->getUserId(),
+							);
+							$id = $this->insert($_arr);
+						}
 					}
-					
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
-					
 					if($rs_item['items_type']==3){ // product
 						$data['is_productseat'] = $rs_item['is_productseat'];
 						$data['paymentId'] = $paymentid;
@@ -497,7 +481,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$this->cutStockDetail($data,$i);
 					}
 				}
-				
 				if ($condictionSale!=1){
 					$dbstock = new Stock_Model_DbTable_DbCutStock();
 					$itemsCode = $dbstock->getCutStockode($data['branch_id']);
@@ -519,14 +502,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	
-	function getParentIDToUpdateBack($payment_id){
-		$db=$this->getAdapter();
-		$sql="select is_parent from rms_student_paymentdetail where payment_id = $payment_id";
-		return $db->fetchAll($sql);	
-	}
-		
-	
 	function updatePaymentInfoBack($payment_id,$type){
 		$db = $this->getAdapter();
 		$sql="select * from rms_student_paymentdetail where payment_id = $payment_id ";
@@ -536,19 +511,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				if($result['is_parent']>0 && $result['service_type'] != 4){
 					$this->_name="rms_student_paymentdetail";
 					$array = array(
-							'is_start'=>1,
-							);
+						'is_start'=>1,
+					);
 					$where = " id = ".$result['is_parent'];
 					$this->update($array, $where);
 				}
 			}
 		}			
-	}
-	function deleteFromGroup($stu_id,$group_id){
-		$db = $this->getAdapter();
-		$where = " group_id = $group_id and stu_id = $stu_id";
-		$this->_name="rms_group_detail_student";
-		$this->delete($where);
 	}
 	
 	function updateCreditMemoBack($data){
@@ -568,116 +537,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	
 	
-	function updateRegister($data,$payment_id){
-		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
-		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		
-		if($data['void']==1){  // void
-			try{	
-				$rsold = $this->getStudentPaymentByID($payment_id);
-				$stu_id = empty($rsold['stu_id'])?0:$rsold['stu_id'];
-				$lastPaymentRecord = $this->getLastStudentPaymentRecord($stu_id);
-				$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
-				$voidOldreceipt = 0;
-				if ($lastPayId!=$payment_id){//void old receipt 
-					$voidOldreceipt=1;
-				}
-				
-				if($rsold['data_from']!=1 AND $voidOldreceipt==0){ // not student study payments
-					
-					if($rsold['data_from']==2){
-						
-						$arr = array(
-							'is_registered'=>0,
-						);
-						$this->_name='rms_student_test_result';
-						$where="stu_test_id = ".$data['old_stu']." AND degree_result=".$rsold['degree_id']." AND grade_result=".$rsold['grade'];
-						$this->update($arr, $where);//reverse to tested student
-						
-						$arr = array(
-							'customer_type'=>4 //reverse to tested student
-						);
-						
-					}elseif($rsold['data_from']==3){
-						
-						$arr = array(
-							'customer_type' =>3, //reverse to crm
-							'is_studenttest' =>0,
-						);
-						
-					}
-					
-					$this->_name='rms_student';
-					$where='stu_id = '.$data['old_stu'];
-					$this->update($arr, $where);
-				}
-				// update payment and validate of service and tuition fee info back ,  and update stock back to origin
-				if($rsold['is_void']==0 AND $voidOldreceipt==0){
-						$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
-				}
-				
-				$this->_name='rms_student_payment';
-				$arra=array(
-					'is_void'=>$data['void'],
-					'void_by'=>$this->getUserId(),
-					'void_note'=>$data['void_note'],
-				);
-				$where = " id = ".$payment_id;
-				$this->update($arra, $where);
-			
-				if(!empty($data['credit_memo_id']) AND $rsold['is_void']==0){//check again because it old code
-					$this->updateCreditMemoBack($data);
-				}				
-				
-				$key = new Application_Model_DbTable_DbKeycode();
-				$keydata=$key->getKeyCodeMiniInv(TRUE);
-				$condictionSale = empty($keydata['sale_cut_stock'])?0:$keydata['sale_cut_stock'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
-				if ($condictionSale!=1){
-					$sql="SELECT sd.* FROM `rms_saledetail` AS sd WHERE sd.payment_id =$payment_id";
-					$saleDetail = $db->fetchAll($sql);
-					if (!empty($saleDetail)) foreach ($saleDetail as $rs){
-						//Qurey Cut Stock Detail
-						$sql = "SELECT cd.* FROM `rms_cutstock_detail` AS cd WHERE cd.`student_paymentdetail_id` =".$rs['id'];
-						$cutDetail = $db->fetchAll($sql);
-						$qtyReceive = 0;
-						if (!empty($cutDetail)) foreach ($cutDetail as $cut){
-							$qtyReceive = $qtyReceive+$cut['qty_receive'];
-							//Void All This Payment Cut Stock
-							$_arr=array(
-				    			'status'	      => 0,
-				    			'user_id'  =>$this->getUserId(),
-				    			'modify_date'	  => date("Y-m-d H:i:s"),
-					    	);
-					    	$this->_name ='rms_cutstock';
-					    	$where = ' id = '.$cut['cutstock_id'];
-					    	$this->update($_arr, $where);
-						}
-						//Update Sale Detial back
-						$_arr=array(
-								'qty_after'	      => ($rs['qty_after']+$qtyReceive),
-						);
-						$this->_name ='rms_saledetail';
-						$where = ' id = '.$rs['id'];
-						$this->update($_arr, $where);
-						
-						$dbpu = new Stock_Model_DbTable_DbPurchase();
-						$dbpu->updateStock($rs['pro_id'],$data['branch_id'],+$qtyReceive);
-					}
-				}
-				
-// 				$where = " payment_id = $payment_id";
-// 				$this->_name='rms_saledetail';
-// 				$this->delete($where);
-
-				$db->commit();
-				return 0;
-			}catch (Exception $e){
-				Application_Form_FrmMessage::message("UPDATE_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				$db->rollBack();
-			}
-		}					
-	}
     function getAllStudentRegister($search=null){
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$user = $_db->getUserAccessPermission('sp.user_id');
@@ -746,36 +605,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    	if(!empty($search['study_year'])){
 	    		$where.=" AND sp.academic_year=".$search['study_year'];
 	    	}
-// 	    	if(!empty($search['session'])){
-// 	    		$where.=" AND sp.session=".$search['session'];
-// 	    	}
-// 	    	if(!empty($search['degree'])){
-// 	    		$where.=" AND sp.degree=".$search['degree'];
-// 	    	}
-// 	    	if(!empty($search['grade_all'])){
-// 	    		$where.=" AND sp.grade=".$search['grade_all'];
-// 	    	}
 	    	if(!empty($search['user'])){
 	    		$where.=" AND sp.user_id=".$search['user'];
 	    	}
 	    	$order=" ORDER BY sp.id DESC";
-    	return $db->fetchAll($sql.$where.$order);
+    		return $db->fetchAll($sql.$where.$order);
     }
-
    
-    function getAllGrade($grade_id,$student_id,$is_stutested){
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllGradeStudyByDegree($grade_id,$student_id,$is_stutested);
-    }
-    function getPaymentTerm($generat,$payment_term,$grade){
-//     	$db = $this->getAdapter();
-//     	$_db  = new Application_Model_DbTable_DbGlobal();
-//     	$branch_id = $_db->getAccessPermission();
-//     	$sql="SELECT tfd.id,tfd.tuition_fee FROM rms_tuitionfee AS tf,rms_tuitionfee_detail AS tfd WHERE tf.id = tfd.fee_id
-//     	 		AND tfd.fee_id = $generat AND tfd.class_id = $grade AND tfd.payment_term = $payment_term  $branch_id ";
-    	 		
-//     	return $db->fetchRow($sql);
-    }
     function getStudentInfoBalance($studentid){
     	$db = $this->getAdapter();
     	$sql = "SELECT 
@@ -787,31 +623,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  rms_student AS s
 				WHERE s.stu_id=$studentid LIMIT 1 ";
     	return $db->fetchRow($sql);
-    }
-   
-//     function getAllYearsProgramFee(){
-//     	$db = $this->getAdapter();
-//     	$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS years,(select name_en from rms_view where type=7 and key_code=time) as time FROM rms_tuitionfee
-//     	        WHERE `status`=1 GROUP BY from_academic,to_academic,generation,time ";
-//     	$order=' ORDER BY id DESC';
-//     	return $db->fetchAll($sql.$order);
-//     }
-    
-    function getAllYears($type=1){
-    	$db = $this->getAdapter();
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	return $_db->getAllYear();
-    }
-    
-   
-    function getPrefixByDegree($degree){
-    	$db= $this->getAdapter();
-    	$sql=" SELECT shortcut FROM `rms_items` WHERE id=$degree AND type=1  LIMIT 1";
-    	return $db->fetchOne($sql);
-    }
-    public function getNewAccountNumber($branch_id,$degree){
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getnewStudentId($branch_id,$degree);
     }
    
     public function getRecieptNo($branch=0){
@@ -839,140 +650,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
-    
-    //select Gep old student by name
-    function getGepOldStudent($stu_id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT stu_id,stu_enname,stu_khname,sex,`session` As ses,degree,grade FROM rms_student 
-    	       WHERE  stu_id=$stu_id LIMIT 1";
-    	return $db->fetchRow($sql);
-    }
-    //select all Gerneral old student
-    function getAllGerneralOldStudent(){
-    	$db=$this->getAdapter();
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	return $_db->getAllStuCode();
-
-    }
-   
-    //select general  old student by name
-    
-    function getStudentById($stu_id){
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getStudentinfoById($stu_id);
-    }
-
-
-
-    //function add rms_student_detailpayment
-    function addStudentPaymentDetail($data,$type,$paymentid,$complete,$comment,$payment_id_ser){
-    	$db=$this->getAdapter();
-    	    if($type==4){
-    	    	$fee = $data["tuitionfee"];
-    	    	$subtotal=$data["tuitionfee"]-($data["tuitionfee"]*$data['discount']/100);
-    	    	$discount=$data['discount'];
-    	    	$paidamount=$data['books'];
-    	    	$paidamount=$paidamount-($data["remark"]+$data["addmin_fee"]);
-    	    	$balance= $data['total'] - $data['books'];
-    	    }elseif($type==5){
-    	    	$fee = $data["remark"];
-    	    	$subtotal = $data["remark"];
-    	    	$paidamount = $data['remark'];
-    	    	$discount = 0;
-    	    	$balance = 0;
-    	    	$comment="បង់រួច";
-    	    }elseif($type==6){
-    	    	$fee = $data["addmin_fee"];
-    	    	$subtotal = $data["addmin_fee"];
-    	    	$paidamount=$data['addmin_fee'];
-    	    	$discount=0;
-    	    	$balance=0;
-    	    	$comment="បង់រួច";
-    	    }
-    		$arr=array(
-    				'payment_id'=>$paymentid,
-    				'type'=>1,
-    				'service_id'=>$type,
-    				'payment_term'=>$data['payment_term'],
-    				'fee'=>$fee,
-    				'qty'=>1,
-    				//'subtotal'=>$data['total'],
-    				'subtotal'=>$subtotal,
-    				'paidamount'=>$paidamount,
-    				'balance'=>$balance,
-    				'discount_percent'=>$discount,
-    				'discount_fix'=>0,
-    				'note'=>$data['not'],
-    				'start_date'=>$data['start_date'],
-    				'validate'=>$data['end_date'],
-    				'references'=>'frome registration',
-    				'is_parent'		=>$payment_id_ser,
-    				'is_complete'	=>$complete,
-    				'comment'		=>$comment,
-    				'user_id'=>$this->getUserId(),
-    		);
-    		
-    		$this->insert($arr);
-    }
-    function getGradeAllDept($type){
-    	$db = new Application_Model_DbTable_DbGlobal();
-		
-		$param = array(
-			'itemsType'=>2
-		);
-    	return $db->getAllItemDetail($param);
-    }  
-    
-    function getAllDegree(){
-    	$db=$this->getAdapter();
-    	$_dbg = new Application_Model_DbTable_DbGlobal();
-    	return $_dbg->getAllItems(1,null);
-    }
-
-    
-    function getAllDegreeBac($type){
-    	$db=new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllItems($type,null);
-    }
-   
-   
-    
-    
-    function getAllUser(){
-    	$db=$this->getAdapter();
-    	
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	
-    	$sql="SELECT id,CONCAT(last_name,' - ',first_name) as name FROM rms_users WHERE active=1 $branch_id order by id desc ";
-    	return $db->fetchAll($sql);
-    }
-    
-    public function getNewStudent($newid,$stu_type){
-    	$db = $this->getAdapter();
-    	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE 1 ";
-    	$acc_no = $db->fetchOne($sql);
-    	$new_acc_no= (int)$acc_no+1;
-    	$new_acc_no=100+$new_acc_no;
-    	$pre='';
-    	$acc_no= strlen((int)$acc_no+1);
-    	for($i = $acc_no;$i<=5;$i++){
-    		$pre.='0';
-    	}
-    	return $pre.$new_acc_no;
-    }
-   
-    
-    public function getAllService(){
-    	$db = $this->getAdapter();
-    }
-    
-    function getAllProductName(){
-    	$db = $this->getAdapter();
-    	$sql="SELECT id,pro_name FROM `rms_product` WHERE STATUS=1 AND pro_name!='' ORDER BY pro_name";
-    	return $db->fetchAll($sql);
-    } 
-    
     
     public function getAllTermbyItemdetail($branch_id,$year,$item_id){
     		$db=$this->getAdapter();
@@ -1016,129 +693,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		}
     		$options .= '<option value="5" >'.$tr->translate('OTHER').'</option>';
     		return $options;
-    		
-    }
-    function getProductFee($service_id){
-    	$db=$this->getAdapter();
-    	$sql="select price,cost from rms_program_name where service_id=$service_id";
-    	return $db->fetchRow($sql);
-    }    
-    function getStudentPaymentByID($id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT 
-    			sp.*,
-	    		s.stu_enname,
-	    		s.stu_khname,
-	    		s.sex,
-	    		s.stu_code,
-	    		s.stu_id,
-	    		
-				sp.degree as degree_id,
-	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
-	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-	    		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
-	    		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name
-    		FROM
-    		  	rms_student_payment as sp,
-    		  	rms_student as s
-    		WHERE 
-    			s.stu_id = sp.student_id
-    			AND sp.id=$id AND is_closed=0 ";
-    	return $db->fetchRow($sql);
-    }    
-    function getCustomerPaymentByID($id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT
-    				*
-    			FROM
-			    	rms_customer_payment
-    			WHERE
-			    	id=$id ";
-    	return $db->fetchRow($sql);
-    }
-    function getCustomerPaymentDetailByID($id){
-    	$db=$this->getAdapter();
-    	$sql="select * from rms_customer_payment_detail where customer_id=$id ";
-    	return $db->fetchAll($sql);
-    }
-    function getStudentPaymentDetailServiceByID($id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT sd.*,
-			(SELECT (title) FROM `rms_itemsdetail` WHERE id=itemdetail_id LIMIT 1) as item_name
-    	FROM rms_student_paymentdetail AS sd 
-    	WHERE sd.payment_id=$id ";
-    	return $db->fetchAll($sql);
-    }
-    function getServiceOnlyByID($id){
-    	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=$id ";
-    	return $db->fetchAll($sql);
-    }
-    function getProductOnlyByID($id){
-    	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=$id ";
-    	return $db->fetchAll($sql);
-    }
-    
-    function getBranchInfo(){
-    	$db=$this->getAdapter();
-    	$sql=" select * from rms_branch where br_id = ".$this->getBranchId();
-    	return $db->fetchRow($sql);
     }
 	
-	
-    function getPaymentEdit($payment_id){
-    	$db = $this->getAdapter();
-    	$sql = " select student_id from rms_student_payment where id = $payment_id ";
-    	$stu_id = $db->fetchOne($sql);
-    	if(!empty($stu_id)){
-    		$sql1="select teacher_id from rms_student where stu_id = $stu_id ";
-    		return $db->fetchOne($sql1);
-    	}
-    }
-    
-    function getAllProvince(){
-		$db = $this->getAdapter();
-    	$sql = " select province_id as id , province_kh_name as name from ln_province where status=1 ";
-    	return $db->fetchAll($sql);
-	}
-	function getAllDistrict(){
-		$db = $this->getAdapter();
-		$sql = " select dis_id as id , district_namekh as name from ln_district where status=1 ";
-		return $db->fetchAll($sql);
-	}
-	function getAllCommune(){
-		$db = $this->getAdapter();
-		$sql = " select com_id as id , commune_namekh as name from ln_commune where status=1 ";
-		return $db->fetchAll($sql);
-	}
-	function getAllVillage(){
-		$db = $this->getAdapter();
-		$sql = " select vill_id as id , village_namekh as name from ln_village where status=1 ";
-		return $db->fetchAll($sql);
-	}    
-	function getAllStudentTested($branch_id){//get all student test
-		$_db = new Application_Model_DbTable_DbGlobal();
-		return $_db->getAllstudentTest($branch_id,1);
-	}
-	function getStudentTestInfo($stu_test_id){
-		$_db = new Application_Model_DbTable_DbGlobal();
-		return $_db->getStudentinfoById($stu_test_id);
-	}
-	function getCreditMemoByStuId($stu_id){
-		$db=$this->getAdapter();
-		$sql="SELECT id, total_amountafter from rms_creditmemo where student_id = $stu_id and total_amountafter>0 ";
-		return $db->fetchRow($sql);
-	}
-	
-	function getStartDate($service_id , $stu_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT spd.validate from rms_student_payment as sp,rms_student_paymentdetail as spd
-				where sp.student_id = $stu_id and spd.service_id = $service_id and spd.is_complete=1 and spd.is_start=1 AND sp.`id`=spd.`payment_id` and sp.is_void=0 ";
-		$order=' ORDER BY spd.id DESC';
-		return $db->fetchOne($sql.$order);
-	}
-	function getStudentPaymentHistory($studentid){
+	function getStudentPaymentHistory($data){
 		$db = $this->getAdapter();
 		$_db  = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
@@ -1187,90 +744,85 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					item.id=spd.itemdetail_id
     				AND s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND sp.student_id = $studentid ORDER BY sp.create_date DESC ";
-			return $db->fetchAll($sql);
-	}
-	
-// 	function getStartDateEndDate($id){
-// 		$db = $this->getAdapter();
-// 		$sql="select start_date,end_date,note from rms_startdate_enddate where id = $id ";
-// 		return $db->fetchRow($sql);
-// 	}
-	function getStudentPaidExist($student_id,$start_date,$end_date){//សម្រាប់ត្រួតពិនិត្យមើល ថាតើ សិស្សធ្លាប់បង់ប្រាក់ម្តងរឺនៅក្នុងអំឡុង Date នឹង
-		$sql="SELECT
-			sp.id
-			FROM
-			rms_student_payment AS sp,
-			`rms_student_paymentdetail` spd
-			WHERE
-			sp.student_id=$student_id
-			AND service_id=4
-			AND sp.id = spd.payment_id ";
-		$start_date = date("Y-m-d",strtotime($start_date));
-		$end_date = date("Y-m-d",strtotime($end_date));
-		$from_date =(empty($start_date))? '1': "spd.start_date = '".$start_date."'";
-		$to_date = (empty($end_date))? '1': "spd.validate = '".$end_date."'";
-		$sql.=" AND ".$from_date." AND ".$to_date;
-		return $this->getAdapter()->fetchOne($sql);
-	}
-	
-	/*function updateBalance($data,$payment_id){
-		$db = $this->getAdapter();
-		$sql="select * from rms_student_payment where id = $payment_id LIMIT 1 ";
-		$result = $db->fetchRow($sql);
-		if(!empty($result)){
-			$array = array(
-					"payment_id"	=>$payment_id,
-					"stu_id"		=>$data['stu_id'],
-					"receipt_no"	=>$this->getRecieptNo($result['branch_id']),
-					"total_balance"	=>$data['total_balance'],
-					"paid_amount"	=>$data['paid_amount'],
-					"balance"		=>$data['balance'],
-					"note"			=>$data['note'],
-					
-					"create_date"	=>date("Y-m-d H:i:s"),
-					"user_id"		=>$this->getUserId(),
-				);
-			$this->_name = "rms_student_clear_balance";
-			$this->insert($array);
-			
-			$arr = array(
-					"paid_amount"	=>$result['paid_amount'] + $data['paid_amount'],
-					"balance_due"	=>$result['balance_due'] - $data['paid_amount'],
-				);
-			$where = "id = $payment_id";
-			$this->_name = "rms_student_payment";
-			$this->update($arr, $where);
+    				  ";
+		if(!empty($data['studentId'])){
+			$sql.=" AND sp.student_id =".$data['studentId'];
 		}
-	}*/
-	
-	function voidStudentClearBalance($id){
-		$db = $this->getAdapter();
-		$sql="select * from rms_student_clear_balance where id = $id LIMIT 1 ";
-		$result = $db->fetchRow($sql);
-		if(!empty($result)){
-			$array = array(
-					"is_void"	=>1,
-					"void_by"	=>$this->getUserId(),
-				);
-			$this->_name = "rms_student_clear_balance";
-			$where = " id = $id";
-			$this->update($array, $where);
-				
-			
-			$sql1="select * from rms_student_payment where id = ".$result['payment_id']." LIMIT 1 ";
-			$row_payment = $db->fetchRow($sql1);
-			if(!empty($row_payment)){
-				$arr = array(
-						"paid_amount"	=>$row_payment['paid_amount'] - $result['paid_amount'],
-						"balance_due"	=>$row_payment['balance_due'] + $result['paid_amount'],
-				);
-				$where = "id = ".$result['payment_id'];
-				$this->_name = "rms_student_payment";
-				$this->update($arr, $where);
+		$sql.=" ORDER BY sp.create_date DESC ";
+		$results =  $db->fetchAll($sql);
+		
+		if(!empty($data['returnHtml'])){
+			$str = '';
+			if(!empty($results)){
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$str.='<table class="collape tablesorter" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">'
+						.'<thead><tr  class="head-td" style="background:#ececec;font-size:10px;color:#000"><th class="tdheader">'.$tr->translate("N_O").'</th>'
+						.'<th class="tdheader">'.$tr->translate('SERVICE_CATE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('SERVICES').'</th>'
+						.'<th class="tdheader">'.$tr->translate('PAID_DATE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('RECEIPT_NO').'</th>'
+						.'<th class="tdheader">'.$tr->translate('PAYMENT_TERM').'</th>'
+						.'<th class="tdheader">'.$tr->translate('QTY').'x'.$tr->translate('PRICE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('SUBTOTAL').'</th>'
+						.'<th class="tdheader">'.$tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT").'</th>'
+						.'<th class="tdheader">'.$tr->translate('DISCOUNT_TYPE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('DISCOUNT').'</th>'
+						.'<th class="tdheader">'.$tr->translate('PAID').'</th>'
+						.'<th class="tdheader">'.$tr->translate('BALANCE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('VALID_DATE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('NOTE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('STATUS').'</th>'
+						.'<th class="tdheader">'.$tr->translate('USER').'</th>'
+						.'<th class="tdheader">'.$tr->translate('DETAIL').'</th>'
+				.'</thead>';
+				$url = Zend_Controller_Front::getInstance()->getBaseUrl();
+				foreach($results as $key=> $result){
+					$str.= '<tr style="background-color:none;font-size:11px;text-align:center;" class="hover">';
+						$str.= '<td>'.($key+1).'</td>';
+						$str.= '<td style="text-align:left;">'.$result['category'].'</td>';
+						$str.= '<td style="text-align:left;"><label class="notedDescription">'.$result['item_name'].'</label></td>';
+						$str.= '<td>'.$result['create_date'].'</td>';
+						$str.= '<td>'.$result['receipt_number'].'</td>';
+						$payment_term='';
+						if($result['payment_term']!=null){
+							$payment_term=$result['payment_term'];
+						}
+						$str.= '<td style="text-align:left;">'.$payment_term.'</td>';
+						$str.= '<td>'.$result['qty'].'x'.$result['fee'].'</td>';
+						$str.= '<td>'.$result['subtotal'].'</td>';
+						$str.= '<td>'.$result['extra_fee'].'</td>';
+						if($result['discount_type']==null || $result['discount_type']){
+							$dis_type = "";
+						}else{
+							$dis_type = $result['discount_type'];
+						}
+						$str.= '<td>'.$dis_type.'</td>';
+						$discount_percent='';
+						if($result['discount_percent']>=0){
+							$discount_percent=$discount_percent.'/';
+						}
+						
+							$validate ='';
+						if($result['is_onepayment']!=1){
+							$validate=$result['start_date'].'/'.$result['validate'];
+						}
+						$str.= '<td>'.$discount_percent.$result['discount_amount'].'</td>';
+						$str.= '<td>'.$result['paidamount'].'</td>';
+						$str.= '<td>'.$result['balance'].'</td>';
+						
+						$str.= '<td>'.$validate.'</td>';
+						$str.= '<td>'.$result['note'].'</td>';
+						$str.= '<td>'.$result['void_status'].'</td>';
+						$str.= '<td style="text-align:left;">'.$result['user_name'].'</td>';
+						$str.= '<td style="text-align:left;"><a target="_blank" href="'.$url.'/allreport/accounting/rptreceiptdetail/id/'.$result['payment_id'].'">'.$tr->translate('DETAIL').'</a></td>';
+					$str.="</tr>";
+				}
 			}
+			return $str;
 		}
+		return $results;
 	}
+
 	
 	function getLastStudentPaymentRecord($stuId){
     	$db=$this->getAdapter();
@@ -1281,7 +833,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		s.sex,
 	    		s.stu_code,
 	    		s.stu_id,
-	    		
 				sp.degree as degree_id,
 	    		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 	    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,

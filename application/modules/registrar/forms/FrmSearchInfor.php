@@ -12,11 +12,10 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$this->filter = 'dijit.form.FilteringSelect';
 		$this->text = 'dijit.form.TextBox';
 		$this->btn = 'dijit.form.Button';
-		//$this->validate = 'dijit.form.TextBox';
 	}
 	public function FrmSearchRegister($type=1){ 
 		
-		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$db = new Application_Model_DbTable_DbGlobal();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
@@ -43,13 +42,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				
 		));
 		$study_year->setValue($request->getParam("study_year"));
-		$db_years=new Registrar_Model_DbTable_DbRegister();
-		$years=$_dbgb->getAllAcademicYear();
+		$years=$db->getAllAcademicYear();
 		$opt = array(''=>$this->tr->translate("SELECT_YEAR"));
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['name'];
 		$study_year->setMultiOptions($opt);
 		
-		$db = new Application_Model_DbTable_DbGlobal();
 		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
 		$_status_type = new Zend_Dojo_Form_Element_FilteringSelect("status_type");
 		$_status_type->setMultiOptions($_arr_opt);
@@ -70,14 +67,13 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$item->setValue($request->getParam("item"));
-		$items = $_dbgb->getAllItems($type);
+		$items = $db->getAllItems($type);
 		$opt = array(''=>$this->tr->translate("SELECT_CATEGORY"));
 		if(!empty($items))foreach($items AS $row) $opt[$row['id']]=$row['name'];
 		$item->setMultiOptions($opt);
 		
-		$model = new Application_Model_DbTable_DbGlobal();
 		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_DISTYPE"));
-		$Option = $model->getAllDiscount();
+		$Option = $db->getAllDiscount();
 		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
 		$_dis_type = new Zend_Dojo_Form_Element_FilteringSelect("dis_type");
 		$_dis_type->setMultiOptions($_arr_opt);
@@ -126,7 +122,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$_group->setValue($request->getParam("group"));
-		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllGroup();
 		$opt_group = array(''=>$this->tr->translate("SELECT_GROUP"));
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
@@ -173,8 +168,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 				));
 		$_session->setValue($request->getParam("session"));
-		$opt_ses=new Application_Model_DbTable_DbGlobal();
-		$opt_sesion=$opt_ses->getSession();
+		$opt_sesion=$db->getSession();
 		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);
@@ -188,7 +182,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$_room->setValue($request->getParam("room"));
-		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllRoom();
 		$opt_room = array(''=>$this->tr->translate("ROOM_NAME"));
 		if(!empty($result))foreach ($result As $rs)$opt_room[$rs['id']]=$rs['name'];
@@ -220,8 +213,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		));
 		$_degree->setValue($request->getParam('degree'));
 		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
-		$opt_degree = $_dbgb->getAllItems(1);//degree
-// 		$opt_degree=$db_years->getAllDegree();
+		$opt_degree = $db->getAllItems(1);//degree
 		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
 		$_degree->setMultiOptions($opt_deg);
 		
@@ -239,7 +231,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		if($type==2){
 			$opt_deg = array(''=>$this->tr->translate("CATE_TYPE"));
 		}
-		$opt_degree=$db_years->getAllDegreeBac($type);
+		$opt_degree=$db->getAllItems($type,null);
 		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
 		$_degree_bac->setMultiOptions($opt_deg);
 		
@@ -257,7 +249,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$param = array(
 			'itemsType'=>$type
 		);
-		$opt_grade= $_dbgb->getAllItemDetail($param);
+		$opt_grade= $db->getAllItemDetail($param);
 		if(!empty($opt_grade))foreach ($opt_grade As $rows)$opt_g[$rows['id']]=$rows['name'];
 		$_grade->setMultiOptions($opt_g);
 		
@@ -274,7 +266,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		if($type==2){
 			$opt_g_all = array(''=>$this->tr->translate("SELECT_SERVICE"));
 		}
-		$opt_grade_all=$db_years->getGradeAllDept($type);
+		$opt_grade_all=$db->getAllItems($type);
 		if(!empty($opt_grade_all))foreach ($opt_grade_all As $rows)$opt_g_all[$rows['id']]=$rows['name'];
 		$_grade_all->setMultiOptions($opt_g_all);
 		
@@ -384,7 +376,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$end_date->setValue($_date);
 		
 		$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
-    	$optionBranch = $_dbgb->getAllBranch();
+    	$optionBranch = $db->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
     	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
     	$_branch_id->setMultiOptions($_arr_opt_branch);
@@ -413,7 +405,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$term->setValue($request->getParam("term"));
-		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllTerm();
 		$opt_stu_name = array(''=>$this->tr->translate("SELECT_TERM"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
@@ -461,7 +452,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
-		$db = new Application_Model_DbTable_DbGlobal();
 		$study_option = $db->getViewById(9,1);
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
 		$study_status->setMultiOptions($study_option);
@@ -482,7 +472,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$_subject->setValue($request->getParam("subject"));
-		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllSubjectName();
 		$opt_group = array(''=>$this->tr->translate("SELECT_SUBJECT"));
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
@@ -498,7 +487,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$_teacher->setValue($request->getParam("teacher"));
-		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllTeahcerName();
 		$opt_group = array(''=>$this->tr->translate("SELECT_TEACHER"));
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
@@ -520,8 +508,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$_day->setMultiOptions($opt_group);
 		
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
-		$userinfo = $_dbgb->getUserInfo();
-		$optionUser = $_dbgb->getAllUser();
+		$userinfo = $db->getUserInfo();
+		$optionUser = $db->getAllUser();
 		if(!empty($optionUser))foreach($optionUser AS $row) $_arr_opt_user[$row['id']]=$row['name'];
 		$_user_id = new Zend_Dojo_Form_Element_FilteringSelect("user_id");
 		$_user_id->setMultiOptions($_arr_opt_user);
@@ -587,7 +575,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$_for_semester->setValue($request->getParam("for_semester"));
 		
 		$_opt_month = array(0=>$this->tr->translate("SELECT_MONTH"));
-		$_allMonth = $_dbgb->getAllMonth();
+		$_allMonth = $db->getAllMonth();
 		if(!empty($_allMonth))foreach($_allMonth AS $row) $_opt_month[$row['id']]=$row['name'];
 		$_for_month = new Zend_Dojo_Form_Element_FilteringSelect("for_month");
 		$_for_month->setMultiOptions($_opt_month);
@@ -601,7 +589,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$_for_month->setValue($request->getParam("for_month"));
 		
 		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"));
-		$Option = $model->getAllSchoolOption();
+		$Option = $db->getAllSchoolOption();
 		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
 		$school_option = new Zend_Dojo_Form_Element_FilteringSelect("school_option");
 		$school_option->setMultiOptions($_arr_opt);
@@ -614,7 +602,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		
 		$_arr_opt = array(''=>$this->tr->translate("TEST_TYPE"));
-		$rows = $_dbgb->getPlacementTestType();
+		$rows = $db->getPlacementTestType();
 		if(!empty($rows))foreach($rows AS $row) $_arr_opt[$row['id']]= preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($row['name'])));
 		$_test_type = new Zend_Dojo_Form_Element_FilteringSelect("test_type");
 		$_test_type->setMultiOptions($_arr_opt);

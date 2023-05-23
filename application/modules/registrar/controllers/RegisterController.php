@@ -36,8 +36,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     				"TOTAL_PAYMENT","CREDIT_MEMO","PAID","BALANCE",
     							"PAYMENT_METHOD","CHEQUE_NO","DATE_PAY","USER","STATUS","VOID_BY");
     		
-    		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);
-    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array());
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -104,58 +103,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     }
-    
-    public function editAction(){
-    	$id=$this->getRequest()->getParam("id");
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try{
-    			$db->updateRegister($_data,$id);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register');
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("UPDATE_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		}
-    	}
-    	$rspayment =  $db->getStudentPaymentByID($id);
-    	if(empty($rspayment)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
-    	}
-		if(!empty($rspayment)){
-			if ($rspayment['is_closed']==1){
-  				Application_Form_FrmMessage::Sucessfull("Can Not Void Closed Student Payment Receipt",self::REDIRECT_URL . '/register');
-				exit();
-  			}
-			if ($rspayment['is_void']==1){
-  				Application_Form_FrmMessage::Sucessfull("Student Payment Receipt Already Void",self::REDIRECT_URL . '/register');
-				exit();
-  			}
-// 			    $stu_id = empty($rspayment['stu_id'])?0:$rspayment['stu_id'];
-//   			$lastPaymentRecord = $db->getLastStudentPaymentRecord($stu_id);
-//   			$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
-//   			if ($lastPayId!=$id){
-//   				Application_Form_FrmMessage::Sucessfull("Only Last Student Payment Receipt Can to be Void",self::REDIRECT_URL . '/register');
-// 				exit();
-//   			}
-		}
-    	$this->view->payment = $rspayment;
-    	
-    	$db = new Allreport_Model_DbTable_DbRptPayment();
-    	$rs = $db->getStudentPaymentByid($id);
-    	$this->view->rr = $rs;
-    	$this->view->row =  $db->getPaymentReciptDetail($id);
-    	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
-    	$branch_id=null;
-    	if(!empty($rs)){
-    		$branch_id = $rs['branch_id'];
-    	}
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt($branch_id);
-    }
    
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
@@ -186,15 +133,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-//     function getPaymentTermAction(){
-//     	if($this->getRequest()->isPost()){
-//     		$data=$this->getRequest()->getPost();
-//     		$db = new Registrar_Model_DbTable_DbRegister();
-//     		$payment = $db->getPaymentTerm($data['generat_id'],$data['pay_id'],$data['grade_id']);
-//     		print_r(Zend_Json::encode($payment));
-//     		exit();
-//     	}
-//     }
     function getBanlancePriceAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -223,15 +161,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-//     function getProductFeeAction(){
-//     	if($this->getRequest()->isPost()){
-//     		$data=$this->getRequest()->getPost();
-//     		$db = new Registrar_Model_DbTable_DbRegister();
-//     		$product_fee = $db->getProductFee($data['service_id']);
-//     		print_r(Zend_Json::encode($product_fee));
-//     		exit();
-//     	}
-//     }
 	
 	function getReceiptNoAction(){
 		if($this->getRequest()->isPost()){
@@ -247,7 +176,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$stu_info = $db->getStudentTestInfo($data['student_id']);
+			$stu_info = $db->getStudentTestInfoRegister($data['student_id']);
 			print_r(Zend_Json::encode($stu_info));
 			exit();
 		}
@@ -265,7 +194,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$validate = $db->getStartDate($data['service_id'],$data['stu_id']);
+			$validate = $db->getStartDateRegister($data['service_id'],$data['stu_id']);
 			print_r(Zend_Json::encode($validate));
 			exit();
 		}
@@ -274,41 +203,17 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$payment = $db->getStudentPaymentHistory($data['student_id']);
+			$payment = $db->getStudentPaymentHistory($data);
 			print_r(Zend_Json::encode($payment));
 			exit();
 		}
 	}
-// 	function congratulationletterAction(){
-// 		$id=$this->getRequest()->getParam('id');
-// 		if(empty($id)){$this->_redirect("registrar/register");}
-// 		$db = new Registrar_Model_DbTable_DbRegister();
-// 		$this->view->rs = $db->getStudentPaymentByID($id);
-// 	}
-	/*function getStartDateEndDateAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$date = $db->getStartDateEndDate($data['id']);
-			print_r(Zend_Json::encode($date));
-			exit();
-		}
-	}*/
-// 	function getstudentpaidexistAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Registrar_Model_DbTable_DbRegister();
-// 			$data = $db->getStudentPaidExist($data['stu_id'],$data['start_date'],$data['end_date']);
-// 			print_r(Zend_Json::encode($data));
-// 			exit();
-// 		}
-// 	}
 	function getallstudenttestAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
+			$db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
-			$rows = $db->getAllStudentTested($branch_id);
+			$rows = $db->getStudentinfoById($branch_id);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}
@@ -324,7 +229,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			}else{
 				$rows = $db->getAllListStudent($data);
 			}
-			
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}
@@ -426,14 +330,4 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	/*function getstudentbalanceinformationAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$stuId = empty($data['student_id'])?0:$data['student_id'];
-			$rs = $db->getStudentBalanceInfoById($stuId);
-			print_r(Zend_Json::encode($rs));
-			exit();
-		}
-	}*/
 }

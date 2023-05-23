@@ -989,78 +989,12 @@ function getPaymentHistory(student_id){
 	dojo.xhrPost({
 		url:url_studentpayment,
 		content:{
-			'student_id':student_id,
+			'studentId':student_id,
+			'returnHtml':1
 		},
 		handleAs:"json",
-		load: function(respone) {
-			tem='<table class="collape tablesorter" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;"  >'
-				+'<thead><tr  class="head-td" style="background:#ececec;font-size:10px;color:#000"><th class="tdheader"><?php echo $tr->translate('N_O');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('SERVICE_CATE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('SERVICES');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('PAID_DATE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('RECEIPT_NO');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('PAYMENT_TERM');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('QTY');?>x<?php echo $tr->translate('PRICE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('SUBTOTAL');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT_TYPE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('PAID');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('BALANCE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('VALID_DATE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('NOTE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('STATUS');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('USER');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('DETAIL');?></th>'
-			+'</thead>';
-			number_record=0;
-			for(i=0;i<respone.length;i++){
-				number_record++;
-				tem+= '<tr id=tr_'+i+' style="background-color:none;font-size:11px;text-align:center;" class="hover">';
-				tem += '<td>'+number_record+'</td>';
-				tem += '<td style="text-align:left;">'+respone[i].category+'</td>';
-				tem += '<td style="text-align:left;"><label class="notedDescription">'+respone[i].item_name+'</label></td>';
-				tem += '<td>'+respone[i].create_date+'</td>';
-				tem += '<td>'+respone[i].receipt_number+'</td>';
-				payment_term='';
-				if(respone[i].payment_term!=null){
-					payment_term=respone[i].payment_term;
-					}
-				tem += '<td style="text-align:left;">'+payment_term+'</td>';
-				strQty = respone[i].qty;
-				qty=strQty.replace('.00','');
-
-				strFee = respone[i].fee;
-				fee=strFee.replace('.00','');
-				tem += '<td>'+qty+'x'+fee+'</td>';
-				tem += '<td>'+respone[i].subtotal+'</td>';
-				tem += '<td>'+respone[i].extra_fee+'</td>';
-				if(respone[i].discount_type==null || respone[i].discount_type==''){
-					dis_type = "";
-				}else{
-					dis_type = respone[i].discount_type;
-				}
-				tem += '<td>'+dis_type+'</td>';
-				discount_percent='';
-				if(respone[i].discount_percent>=0){
-					discount_percent=respone[i].discount_percent+'/';
-				}
-				tem += '<td>'+discount_percent+'/'+respone[i].discount_amount+'</td>';
-				tem += '<td>'+respone[i].paidamount+'</td>';
-				tem += '<td>'+respone[i].balance+'</td>';
-				start_date='';
-				validate='';
-				if(respone[i].is_onepayment==0 && respone[i].start_date!=null){start_date=respone[i].start_date;}
-				if(respone[i].is_onepayment==0 && respone[i].start_date!=null){validate=respone[i].validate;}
-				tem += '<td>'+start_date+'/'+validate+'</td>';
-				tem += '<td>'+respone[i].note+'</td>';
-				tem += '<td>'+respone[i].void_status+'</td>';
-				tem += '<td style="text-align:left;">'+respone[i].user_name+'</td>';
-				tem += '<td style="text-align:left;"><a target="_blank" href="<?php echo $this->baseUrl().'/allreport/accounting/rptreceiptdetail/id/';?>'+respone[i].payment_id+'"><?php echo $tr->translate('DETAIL');?></a></td>';
-				tem+="</tr>";
-			}
-			tem+='</table>';
-			dojo.byId('table_paymenthistory').innerHTML = tem;
+		load: function(responeHtml) {
+			dojo.byId('table_paymenthistory').innerHTML = responeHtml;
 		},
 		error: function(err) {
 		}
@@ -1272,7 +1206,6 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			}
 		}
 		if(serviceId ==''){return false;}
-		dijit.byId("item").reset();
 
 			col++;no++;
 			template='';
@@ -1280,12 +1213,15 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<td class="bgBox" style="font-size:12px;"><div class="form-group"><label class="notedDescription" id="item_label_'+col+'">'+dataLabel+'<label></div>';
 			template+='<label class="control-label custom-switch float-end">';
 				template+='<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
-					template+='<input type="checkbox" id="autoNextPay'+col+'" name="autoNextPay'+col+'" class="custom-switch-input" checked  >'; 
+				checked='checked';
+				if(dataRow!=null){
+					checked='';
+				}
+					template+='<input type="checkbox" id="autoNextPay'+col+'" name="autoNextPay'+col+'" class="custom-switch-input" '+checked+' />'; 
 						template+='<span class="custom-switch-indicator custom-radius switch-status"></span>'; 
 							template+='</label></div>';
 			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
 			template+='<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM');?>" class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></div></td>';
-
 			template+='<td><div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('QTY');?></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('QTY');?>" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
 			template+='<div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('PRICE');?></span></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('PRICE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
 			template+='<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  /></div></td>';	
@@ -1335,21 +1271,21 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		});
 		if(dataRow!=null){
 			dijit.byId('service_type_'+col).attr('value',dataRow.itemType);
+			dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
+			dijit.byId('validate_'+col).attr('value',dataRow.endDate);
+			dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
+			
 			if(balance>0 && balance!=null){
 				dijit.byId('price_'+col).attr('value',balance);
 				dijit.byId('total_amount'+col).attr('value',balance);
 				dijit.byId('paid_amount'+col).attr('value',balance);
 				dijit.byId('isoldBalance'+col).attr('value',1);
-				dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
 				dojo.style('paid_amount'+col, "color", "red");
-				dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
-				dijit.byId('validate_'+col).attr('value',dataRow.endDate);
-				dijit.byId('date_start_'+col).set('readOnly',true);
-				dijit.byId('validate_'+col).set('readOnly',true);
 				dijit.byId('term_study'+col).set('readOnly',true);
 				dijit.byId('remark'+col).attr('value','Previouse Balance');
+				dijit.byId('date_start_'+col).set('readOnly',true);
+				dijit.byId('validate_'+col).set('readOnly',true);
 			}
-			
 		}else{
 			getservicefee(col);
 			getValidate(col);
@@ -1374,7 +1310,6 @@ function getExistingService(){
 	isAutopayment = '';
 	if(student_type==1){//student
 		var urlget = "<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>";
-		
 	}else{//2 crm/3
 		if(student_type==2){//test
 			isAutopayment = 2;
@@ -1408,15 +1343,13 @@ function getExistingService(){
 
 var urlget_removeoption = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'gettermbyservice')); ?>";
 function getItemOption(){
-	
 	serviceId = dijit.byId("item").get("value");
 	if(serviceId ==''){return false;}
-	
 	serviceLabel = dijit.byId("item").attr("displayedValue");
 	
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id==''){dijit.byId('branch_id').focus();return false;}
-	
+	dijit.byId("item").attr('value','');
 	dojo.xhrPost({
 		url:urlget_removeoption,
 		content:{
@@ -1561,9 +1494,7 @@ function netTotal(){
 			totalPayment += dijit.byId('total_amount'+rowIDArray[n]).get('value');
 			PaidAmount += isNaN(dijit.byId('paid_amount'+rowIDArray[n]).get('value'))?0:dijit.byId('paid_amount'+rowIDArray[n]).get('value'); ;
 		}
-
 		dijit.byId('grand_total').attr('value',totalPayment);
-		
 		credit_memo = dijit.byId('credit_memo').get('value');
 		credit_memo = isNaN(credit_memo)?0:credit_memo;
 		netPaidAmount = PaidAmount - credit_memo;
@@ -1872,7 +1803,6 @@ function printSubmit(){
 				dojo.byId("lb_stu_id").innerHTML = NewStuCodeFromTest;
 			}
 			<?php }?>
-			 
 			<?php 
 				$key = new Application_Model_DbTable_DbKeycode();
 				$result=$key->getKeyCodeMiniInv(TRUE);
@@ -1896,19 +1826,21 @@ function printSubmit(){
 	});	
 }
 function submitAction(){
-	year = dijit.byId('study_year').get('value');
-	if(year==-1){
-		dijit.byId("study_year").focus();
-		return false;
+	if(dijit.byId('office_receipt').validate()){	
+		year = dijit.byId('study_year').get('value');
+		if(year==-1){
+			dijit.byId("study_year").focus();
+			return false;
+		}
+		var identity = $('#identity').val();
+		if(identity==''){
+			alert("There is no record to save");
+			dijit.byId("item").focus();
+			return false;
+		}
+		loadingBlock();
+		$('#office_receipt').submit();
 	}
-	var identity = $('#identity').val();
-	if(identity==''){
-		alert("There is no record to save");
-		dijit.byId("item").focus();
-		return false;
-	}
-	loadingBlock();
-	$('#office_receipt').submit();
 }
 var url_creditmemo = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
 function getCreditMemo(){

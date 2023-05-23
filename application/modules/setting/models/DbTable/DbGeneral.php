@@ -200,6 +200,16 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'entry_stuid'";
 				$this->update($arr, $where);
 			}
+
+			$rows = $this->geLabelByKeyName('pay_as_group');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['pay_as_group'],'keyName'=>'pay_as_group','note'=>"Can Pay Student Payment As Group ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['pay_as_group']);
+				$where=" keyName= 'pay_as_group'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

@@ -24,23 +24,22 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		}
 		 
 		$sql = "SELECT t.id,
-		(SELECT CONCAT(branch_nameen) from rms_branch WHERE br_id =t.branch_id LIMIT 1) AS branch,
-		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) as academic,
-		(SELECT $str FROM rms_studytype WHERE rms_studytype.id =t.term_study  LIMIT 1) AS study_type,
-		CASE is_multi_study
-		WHEN 1 THEN '".$tr->translate("MULTY_PROGRAM")."'
-		WHEN 0 THEN '".$tr->translate("ONE_PROGRAM_ONLY")."'
-		END is_multistudy,
-		t.generation,
-		(SELECT count(sfh.student_id) FROM rms_student_fee_history AS sfh WHERE sfh.fee_id = t.id LIMIT 1 ) AS amountStudent,
-		(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
-		t.create_date,
-		(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,
-		(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user ";
-		 
+					(SELECT CONCAT(branch_nameen) from rms_branch WHERE br_id =t.branch_id LIMIT 1) AS branch,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) as academic,
+					(SELECT $str FROM rms_studytype WHERE rms_studytype.id =t.term_study  LIMIT 1) AS study_type,
+					CASE is_multi_study
+					WHEN 1 THEN '".$tr->translate("MULTY_PROGRAM")."'
+					WHEN 0 THEN '".$tr->translate("ONE_PROGRAM_ONLY")."'
+					END is_multistudy,
+					t.generation,
+					(SELECT count(ds.stu_id) FROM rms_group_detail_student AS ds WHERE ds.feeId = t.id AND ds.itemType=1  LIMIT 1 ) AS amountStudent,
+					(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
+					t.create_date,
+					(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,
+					(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user ";
 		$sql.=$dbp->caseStatusShowImage("t.status");
 		$sql.=" FROM `rms_tuitionfee` AS t
-		WHERE t.type=1	";
+				WHERE t.type=1	";
 		 
 		$where =" ";
 	
@@ -117,7 +116,6 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 	function getSearchStudentbyFeeId($search){
 		$db=$this->getAdapter();
 		$sql="SELECT 
-				sd.gd_id,
 				s.stu_id,
 				s.stu_code,
 				s.stu_enname,
@@ -126,26 +124,24 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				s.sex,
 				sd.degree,
 				sd.grade,
-				(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) AS fee_id,
-				(SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) AS academic_year,
+				sd.feeId AS fee_id,
+				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
 			  FROM 
 			  	rms_student AS s,
-			  	`rms_group_detail_student` AS sd,
-			  	rms_student_fee_history as sf
+			  	`rms_group_detail_student` AS sd
 		 	  WHERE 
 				sd.itemType=1 AND
 				s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
 				AND sd.stop_type=0
-				AND sd.is_maingrade = 1
 				AND sd.is_current=1
-				AND s.stu_id=sf.student_id
-				AND sf.is_current=1 ";
+				AND s.stu_id=sd.stu_id
+				AND sd.is_current=1 ";
 		if(!empty($search['fromFeeid'])){
-			$sql.=" AND sf.fee_id =".$search['fromFeeid'];
+			$sql.=" AND sd.feeId =".$search['fromFeeid'];
 		}
 		if(!empty($search['branch_id'])){
 			$sql.=" AND s.branch_id =".$search['branch_id'];
@@ -154,7 +150,6 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			
 			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";

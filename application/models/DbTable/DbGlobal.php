@@ -1718,8 +1718,28 @@ function getAllgroupStudyNotPass($action=null){
   			"create_date"=>date("Y-m-d H:i:s"),
   	);
   	$this->_name="rms_know_by";
-  	return $this->insert($array);
+	$khnow_by= $this->checkKnownBy($data['title_know_by']);
+	if(empty($khnow_by)){
+		$id= $this->insert($array);
+		$result=array(
+			"addNew" => 1,
+			"id" => $id,
+		);	
+	}else{
+		$result=array(
+			"addNew" => 0,
+			"id" => $khnow_by,
+		);
+	}
+ 	return $result;
   }
+
+  function checkKnownBy($title){
+	$db =$this->getAdapter();
+	$sql = "SELECT id FROM `rms_know_by` WHERE  title = '".$title."' limit 1";
+	
+	return $db->fetchOne($sql);
+}
   
   function addDocstudentType($data){
   	$array = array(
@@ -3195,30 +3215,27 @@ function getAllgroupStudyNotPass($action=null){
   	}
   
   	$sql="SELECT s.*,
-	  	sb.grade,
-	  	sb.degree,
-	  	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sb.grade LIMIT 1) as grade_label,
-	  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sb.degree LIMIT 1) as degree_label,
+	  	sgd.grade,
+	  	sgd.degree,
+	  	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
+	  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label,
 	  	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
-	  	
 	  	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	  	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
 	  	(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
-	  	(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) AS academic_year,
-	  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sb.academic_year LIMIT 1) AS academic_year_label,
-	  	(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id,
-	  	sb.group_detail_id AS groupDetailId,
-	  	sb.id AS studentBalanceId,
+	  	sgd.academic_year,
+	  	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sgd.feeId LIMIT 1) AS academic_year_label,
+	  	feeId as fee_id,
+	  	sgd.gd_id AS groupDetailId,
 	  	sgd.is_newstudent AS is_stu_new
   	FROM
-	  	`rms_student_balance` AS sb ,
 	  	 rms_group_detail_student AS sgd,
 		`rms_student` AS s
   	WHERE
-		sgd.itemType=1 AND
-  		s.stu_id = sb.stu_id 
-  		AND sgd.gd_id = sb.group_detail_id 
-  		AND sb.status=1
+		sgd.itemType=1 
+		AND sgd.balance>0
+		AND isoldBalance=1
+  		AND s.stu_id = sgd.stu_id 
   		AND s.stu_id=$stu_id
   	LIMIT 1 ";
   	return $db->fetchRow($sql);

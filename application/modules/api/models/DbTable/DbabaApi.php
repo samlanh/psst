@@ -165,9 +165,9 @@ class Api_Model_DbTable_DbabaApi extends Zend_Db_Table_Abstract
 	   			sgd.grade,
 	   			sgd.degree,
 			   	(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
-				(SELECT title FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label, 		
-		   		(SELECT tf.academic_year FROM rms_tuitionfee AS tf WHERE tf.id=(SELECT fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) LIMIT 1) AS academic_year,
-		   		(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 LIMIT 1) AS fee_id
+				(SELECT title FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label, 
+		   		sgd.academic_year,
+				sgd.feeId AS fee_id
 				
 	   		FROM 
 	   			rms_student AS s

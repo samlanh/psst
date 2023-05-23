@@ -44,7 +44,26 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 			'status'   => $_data['status_j'],
 			'user_id'	  => $this->getUserId()
 		);
-		return  $this->insert($_arr);
+		$job = $this->checkOccupation($_data['occu_name']);
+		if(empty($job)){
+			$id = $this->insert($_arr);
+			$result=array(
+                "addNew" => 1,
+				"id" => $id,
+			);
+		}else{
+			$result=array(
+                "addNew" => 0,
+				"id" => $job,
+			);
+		}
+		return $result;
+	}
+	function checkOccupation($title){
+		$db =$this->getAdapter();
+		$sql = "SELECT occupation_id FROM `rms_occupation` WHERE  occu_name = '".$title."' limit 1";
+		return $db->fetchOne($sql);
+		
 	}
 	public function getOccupationById($id){
 		$db = $this->getAdapter();

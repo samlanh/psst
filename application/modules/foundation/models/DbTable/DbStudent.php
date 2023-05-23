@@ -78,7 +78,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					WHEN primary_phone = 3 THEN s.mother_phone
 					ELSE s.guardian_tel
 				END as tel,
-				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(SELECT fee_id FROM `rms_student_fee_history` WHERE student_id=s.stu_id AND is_current=1 LIMIT 1) LIMIT 1) AS academic,
+				(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.academic_year=(SELECT academic_year FROM `rms_group_detail_student` WHERE stu_id=s.stu_id AND is_current=1 LIMIT 1) LIMIT 1) AS academic,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
 			
@@ -141,8 +141,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
-		//$where.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1 )');
-
+		
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){
@@ -181,8 +180,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				AND s.customer_type=1";
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$sql.=$dbp->getAccessPermission();
-// 			$sql.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1 LIMIT 1)');
-			///$sql.= $dbp->getSchoolOptionAccess('(SELECT tf.school_option FROM `rms_student_fee_history` AS sfh,rms_tuitionfee tf WHERE sfh.student_id=s.stu_id AND sfh.fee_id=tf.id AND sfh.is_current=1)');
 			return $db->fetchRow($sql);
 	}
 	
@@ -530,7 +527,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
 					'tel'			=>$_data['phone'],
-					'primary_phone'	=>$_data['primary_phone'],
+					//'primary_phone'	=>$_data['primary_phone'],
 					'pob'			=>$_data['pob'],
 					'home_num'		=>$_data['home_note'],
 					'street_num'	=>$_data['way_note'],
@@ -726,33 +723,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				}
 			}
 			
-			$_dbfee = new Accounting_Model_DbTable_DbFee();
-			$feeID = empty($_data['academic_year'])?0:$_data['academic_year'];
-			$rowfee = $_dbfee->getFeeById($feeID);
-			$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
-			
-			$currentFee =  $this->getCurentFeeStudentHistory($stu_id);
-			
-			$_arr= array(
-					'branch_id'		=>$_data['branch_id'],
-					'user_id'		=>$this->getUserId(),
-					'student_id'	=>$stu_id,
-					'fee_id'		=>$_data['academic_year'],
-					'academic_year'		=>$academicYear,
-					'note'			=>$_data['remark'],
-					'is_current'	=>1,
-					'is_new'		=>$_data['stu_denttype'],
-					'status'		=>1,
-					'modify_date'	=>date("Y-m-d H:i:s"),
-			);
-			$this->_name="rms_student_fee_history";
-			if (!empty($currentFee)){
-				$where="student_id = ".$stu_id." AND is_current=1";
-				$this->update($_arr, $where);
-			}else{
-				$_arr['create_date']=date("Y-m-d H:i:s");
-				$this->insert($_arr);
-			}
 			
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			if(!empty($_data['identity_study'])){

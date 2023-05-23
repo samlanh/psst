@@ -752,8 +752,11 @@ table#table_row_study {
 															library_books
 														</i>
 													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<div class="col-md-3 col-sm-3 col-xs-12"> 
 														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DOCUMENT_INFO");?></p>
+													</div> 
+													<div class="col-md-6 col-sm-6 col-xs-12"> 
+														<input class="button-class button-warning" iconClass="glyphicon glyphicon-trash" type="button" label="<?php echo $tr->translate('CLEAR_ALL');?>" dojoType="dijit.form.Button" onclick="addRow();" />
 													</div> 
 												</div>
 											</div>
@@ -1132,8 +1135,6 @@ dojo.require("dojo.data.ObjectStore");
 
 var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->lang_level));?> );
 var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-// var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
-// var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
@@ -1871,11 +1872,6 @@ function addNationBy(){
 	if(dijit.byId('frm_nation_kh').validate()){
 		loadingBlock();
 		type=dijit.byId('value_j').get('value');
-		nation=dijit.byId('nation').get('value');
-		studen_national=dijit.byId('studen_national').get('value');
-		fa_national=dijit.byId('fa_national').get('value');
-		mom_nation=dijit.byId('mom_nation').get('value');
-		guardian_national=dijit.byId('guardian_national').get('value');
 		dojo.xhrPost({
 			url:url_add_nation,
 			form: dojo.byId("frm_nation_kh"),
@@ -1928,16 +1924,23 @@ function addKnowBy(){
 			form: dojo.byId("frm_know_by"),
 			handleAs:"json",
 			load: function(data) {
-				var Itemmake = { 
-						id: data,
+				if(data.addNew == 1){
+					var Itemmake = { 
+						id: data.id,
 						name: dijit.byId('title_know_by').get('value')
 				    };
-				addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, data);
+					addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, data.id);
+				}else{
+					
+					dijit.byId('know_by').attr("value", data.id);
+				}
+				
 				dijit.byId('frm_know_by').reset();
 				dijit.byId("popup_know_by").hide();
 				HideloadingBlock();
 			},
 			error: function(err) {
+				alert(err);
 			}
 		});
 		
@@ -1990,29 +1993,21 @@ function addJob(){
 	if(dijit.byId('frm_add_tran1').validate()){
 		loadingBlock();
 		type=dijit.byId('value_j').get('value');
-		fa_job=dijit.byId('fa_job').get('value');
-		mo_job=dijit.byId('mo_job').get('value');
-		gu_job=dijit.byId('gu_job').get('value');
 		dojo.xhrPost({
 			url:url_add_job,
 			form: dojo.byId("frm_add_tran1"),
 			handleAs:"json",
 			load: function(data) {
 				var Itemmake = { 
-							id: data,
+							id: data.id,
 							name: dijit.byId('occu_name').get('value')
 					   };
 				if(type==1){	   
-					addDataToSelectbox(dijit.byId('fa_job'), job_store, Itemmake, data);
-					
+					addDataToSelectbox(dijit.byId('fa_job'), job_store, Itemmake, data.id);
 				}else if(type==2){
-				
-					addDataToSelectbox(dijit.byId('mo_job'), job_store, Itemmake, data);
-					
+					addDataToSelectbox(dijit.byId('mo_job'), job_store, Itemmake, data.id);
 				}else if(type==3){
-					
-					addDataToSelectbox(dijit.byId('gu_job'), job_store, Itemmake, data);
-				
+					addDataToSelectbox(dijit.byId('gu_job'), job_store, Itemmake, data.id);
 				}
 				getAllJob();
 				dijit.byId('frm_add_tran1').reset();

@@ -388,11 +388,16 @@ function addKnowBy(){
 			form: dojo.byId("frm_know_by"),
 			handleAs:"json",
 			load: function(data) {
-			var Itemmake = { 
-					 id: dijit.byId('title_know_by').get('value'),
-					 name: dijit.byId('title_know_by').get('value')
-				   };
-		   addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, dijit.byId('title_know_by').get('value'));
+				if(data.addNew == 1){
+					var Itemmake = { 
+						id: data.id,
+						name: dijit.byId('title_know_by').get('value')
+				    };
+					addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, data.id);
+				}else{
+					
+					dijit.byId('know_by').attr("value", data.id);
+				}
 		   dijit.byId('frm_know_by').reset();
 		   dijit.byId("popup_know_by").hide();
 			},

@@ -170,7 +170,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$student_rs =  $db->getStudentById($id);
 		$this->view->rs = $student_rs;
 		$this->view->row = $db->getStudentDocumentById($id);
-		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
+		//$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
 		$this->view->currentStudy =  $db->getCurentStudentStudy($id);
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
@@ -210,7 +210,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$_dbmodel = new Global_Model_DbTable_DbOccupation();
 				$row = $_dbmodel->addNewOccupationPopup($data);
-				$result = array("id"=>$row);
 				print_r(Zend_Json::encode($row));
 				exit();
 			}catch(Exception $e){
@@ -320,7 +319,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
 		$this->view->row = $db->getStudentDocumentById($id);
-		$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
+		//$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
 // 		$this->view->year = $db->getAllYear();
 // 		$this->view->room = $row =$db->getAllRoom();
 		

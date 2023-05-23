@@ -183,6 +183,14 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				1=>$this->tr->translate("Can Entry Student Id"),
 				);
 		$entryStuId->setMultiOptions($entryStuIDOpt);
+
+		$groupPayment=  new Zend_Dojo_Form_Element_FilteringSelect('pay_as_group');
+		$groupPayment->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$gOpt = array(
+				0=>$this->tr->translate("DEFAULT"),
+				1=>$this->tr->translate("PAYMENT_AS_GROUP"),
+				);
+		$groupPayment->setMultiOptions($gOpt);
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -209,6 +217,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$docDisplay->setValue($data['doc_display']['keyValue']);
 			$nameRequired->setValue($data['name_required']['keyValue']);
 			$entryStuId->setValue($data['entry_stuid']['keyValue']);
+			$groupPayment->setValue($data['pay_as_group']['keyValue']);
 
 		}
 		$this->addElements(array(
@@ -235,6 +244,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$docDisplay
 				,$nameRequired
 				,$entryStuId
+				,$groupPayment
 				));
 		
 		return $this;

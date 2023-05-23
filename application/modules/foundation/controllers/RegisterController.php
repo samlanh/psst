@@ -114,8 +114,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
 		
-// 		$rr = $db->getStudyHishotryById($id);
-// 		$this->view->rr = $rr;
 		if($this->getRequest()->isPost())
 		{
 			try{
@@ -283,8 +281,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
 			exit();
 		}
-// 		$rr = $db->getStudyHishotryById($id);
-// 		$this->view->rr = $rr;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
@@ -312,16 +308,13 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		$this->view->degree = $db->getAllFecultyName();
+		$this->view->degree = $_db->getAllItems(1,null);
 		
 		$this->view->province = $db->getProvince();
 		
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
 		$this->view->row = $db->getStudentDocumentById($id);
-		//$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
-// 		$this->view->year = $db->getAllYear();
-// 		$this->view->room = $row =$db->getAllRoom();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($test);
@@ -364,22 +357,18 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->know_by = $row;
 		
 		$row = $_db->getAllDocumentType(); // degree language
-// 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		
-		$this->view->degree = $db->getAllFecultyName();
+		$this->view->degree = $_db->getAllItems(1,null);
 		
 		$this->view->province = $db->getProvince();
 		
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
 		$this->view->row = $db->getStudentDocumentById($id);
-		//echo $test['group_id'];exit();
 		
-		$this->view->year = $db->getAllYear();
-		$this->view->room = $row =$db->getAllRoom();
+		$this->view->year = $_db->getAllAcademicYear();
+		$this->view->room = array();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($test);
@@ -408,9 +397,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$db = new Application_Model_DbTable_DbGlobal();
 				$row = $db->addNationType($data);
-// 				if($row==-1){
-// 					$sms = "RECORD_EXIST";
-// 				}
 				print_r(Zend_Json::encode($row));
 				exit();
 			}catch(Exception $e){

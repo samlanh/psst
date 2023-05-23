@@ -58,12 +58,7 @@ table .set-style tr td a {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP_CODE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<select class="fullside" dojoType="dijit.form.FilteringSelect" required="true"  id="academy" name="academy" type="text">
-											<option value=""><?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
-											<?php if(!empty($this->academy)) foreach($this->academy as $row){?>
-												<option value="<?php echo $row['id'];?>"><?php echo $row['years']; ?></option>
-											<?php }?>
-										</select>
+										<input id="academy" /><!-- change it to group by branch like add page  -->
 				                   </div>
 				                 </div>
 			                </div>

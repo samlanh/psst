@@ -30,25 +30,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		return null;
 	}
-	function updategroupstudent(){
-		$db=$this->getAdapter();
-		$sql="SELECT 
-		s.`stu_id`,
-		s.group_id,
-		(SELECT `group_id` FROM `rms_group_detail_student` WHERE itemType=1 AND rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1 )
-		 AS current_groupid
-		 FROM `rms_student` AS s  WHERE s.group_id>0
-		 AND s.group_id !=(SELECT `group_id` FROM `rms_group_detail_student` WHERE itemType=1 AND rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1)";
-			$result = $db->fetchAll($sql);
-			
-			foreach($result as $rs){
-				$arr = array(
-						'group_id'=>$rs['current_groupid']
-						);	
-				$where=" stu_id=".$rs['stu_id'];
-				$this->update($arr, $where);
-			}
-	}
+	
 	public function getAllStudent($search){
 		$_db = $this->getAdapter();
 		
@@ -196,7 +178,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dob  = $_data['date_of_birth'];
 		$stu_code  = $_data['student_id'];
 		$sql = "SELECT * FROM rms_student WHERE customer_type=1 AND stu_code="."'$stu_code'"." AND stu_khname="."'$name_en'"." AND sex=".$sex." AND dob="."'$dob'";
-// 		"AND grade='".$grade."' AND session='".$session."'";      
 		if (!empty($idStu)){
 			$sql.=" AND stu_id !=$idStu";
 		}                  
@@ -419,22 +400,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$rowfee = $_dbfee->getFeeById($feeID);
 				$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
 				
-				$_arr= array(
-						'branch_id'		=>$_data['branch_id'],
-						'user_id'		=>$this->getUserId(),
-						'student_id'	=>$id,
-						'fee_id'		=>$_data['academic_year'],
-						'academic_year'		=>$academicYear,
-						'note'			=>$_data['remark'],
-						'is_current'	=>1,
-						'is_new'		=>$_data['stu_denttype'],
-						'status'		=>1,
-						'create_date'	=>date("Y-m-d H:i:s"),
-						'modify_date'	=>date("Y-m-d H:i:s"),
-				);
-				$this->_name="rms_student_fee_history";
-				$this->insert($_arr);
-				
 				$dbGroup = new Foundation_Model_DbTable_DbGroup();
 				if(!empty($_data['identity_study'])){
 					$ids = explode(',', $_data['identity_study']);
@@ -464,7 +429,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						if (!empty($group_info)){
 							$_arr['session'] = $group_info['session'];
 							$academic_year = $group_info['academic_year'];
-							
 						}else{
 							$_dbf = new Accounting_Model_DbTable_DbFee();
 							$rowfee = $_dbf->getFeeById($_data['academic_year']);
@@ -486,19 +450,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							$whereGroup = 'id = '.$group_id;
 							$this->update($data_gro, $whereGroup);
 						}
-						
 					}
 				}
 				
-// 				//for update depart m
-// 				$sql="SELECT id_start FROM `rms_items` WHERE id=".$_data['degree']." LIMIT 1";
-// 				$id_start = $_db->fetchOne($sql);
-// 				$this->_name="rms_items";
-// 				$arr=array(
-// 						'id_start'=>$id_start+1
-// 				);
-// 				$where="id = ".$_data['degree'];
-// 				$this->update($arr, $where);
 				$_db->commit();
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -564,10 +518,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'sponser'		=>$_data['sponser'],
 					'sponser_phone'	=>$_data['sponser_phone'],
 					//////////////////////////////////////////////
-					
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
-					
 					'date_bacc'	=>$_data['date_baccexam'],
 					'province_bacc'	=>$_data['school_province'],
 					'center_bacc'	=>$_data['center_baccexam'],
@@ -576,10 +528,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'grade_bacc'	=>$_data['grade_baccexam'],
 					'score_bacc'	=>$_data['score_baccexam'],
 					'certificate_bacc'	=>$_data['certificate_baccexam'],
-					
-					
-					
-					
 					);
 			if (EDUCATION_LEVEL==1){
 				$_arr['calture'] = $_data['calture'];
@@ -719,10 +667,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						}
 						$this->insert($_arr);
 					}
-					
 				}
 			}
-			
 			
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			if(!empty($_data['identity_study'])){
@@ -732,12 +678,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
-						
 						$group_info = $dbGroup->getGroupById($group_id);
-						
 						$isMain = 0;
 						if(!empty($_data['is_main']) AND $i==$_data['is_main']){ $isMain =1;}
-						
 						
 						$_arr = array(
 								'stu_id'			=>$stu_id,
@@ -759,7 +702,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						if (!empty($group_info)){
 							$_arr['session'] = $group_info['session'];
 							$academic_year = $group_info['academic_year'];
-								
 						}else{
 							$academic_year=0;
 							if(!empty($_data['academic_year'])){
@@ -788,9 +730,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						}
 						
 					}else{
-						
 						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
-						
 						$group_info = $dbGroup->getGroupById($group_id);
 						$is_setgroup = empty($_data['group_'.$i])?0:1;
 						$isMain = 0;
@@ -827,10 +767,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							}
 						}
 						$_arr['academic_year'] = $academic_year;
-						
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);
-						
 						if($group_id>0){
 							$this->_name = 'rms_group';
 							$data_gro = array(
@@ -843,77 +781,24 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					}
 				}
 			}
-			
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
 	}
-	function getStudyHishotryById($id){
-		$db = $this->getAdapter();
-		$sql="SELECT * FROM rms_study_history WHERE stu_id = ".$id;
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		//$sql.=$dbp->getAccessPermission();
-		return $db->fetchRow($sql);
-	}
-	
 
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM `rms_student` WHERE stu_id=$stu_id LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}
-	function getSearchStudent($search){
-		$db=$this->getAdapter();
-		$sql="SELECT stu_id ,stu_code,stu_enname,stu_khname,sex,degree,grade,academic_year from rms_student 
-			WHERE `status`=1 ";
-		
-		 if(!empty($search['grade'])){
-		 	$sql.=" AND grade =".$search['grade'];
-		 }
-		 if(!empty($search['session'])){
-		 	$sql.=" AND session =".$search['session'];
-		 }
-		 if(!empty($search['academy'])){
-		 	$sql.=" AND academic_year =".$search['academy'];
-		 }
-		return $db->fetchAll($sql);
-	}
-
-	public function getNewAccountNumber($newid,$stu_type){
-		$db = $this->getAdapter();
-		$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE status=1 ";
-		$acc_no = $db->fetchOne($sql);
-		$new_acc_no= (int)$acc_no+1;
-		$new_acc_no=100+$new_acc_no;
-		$pre='';
-		$acc_no= strlen((int)$acc_no+1);
-		for($i = $acc_no;$i<5;$i++){
-			$pre.='0';
-		}
-		return $pre.$new_acc_no;
-	}
 	
-	function getAllYear(){
-		$db = $this->getAdapter();
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$branch_id = $_db->getAccessPermission();
-		
-		$sql = "select id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')')as years,(select name_en from rms_view where type=7 and key_code=time) as time  from  rms_tuitionfee  where status=1 $branch_id  ";
-		$group = " group by from_academic,to_academic,generation,time ";
-		return $db->fetchAll($sql);
-	}
-	public function getAllFecultyName(){
-		$_dbg = new Application_Model_DbTable_DbGlobal();
-		return $_dbg->getAllItems(1,null);
-	}
 	function getProvince(){
 		$_db = new Application_Model_DbTable_DbGlobal();
 		return $_db->getAllProvince();
 	}
-	function getAllRoom(){
+	function getAllRoomFundation(){
 		$db = $this->getAdapter();
 		$sql ="SELECT room_name as name,room_id as id FROM rms_room WHERE is_active=1 ";
 		return $db->fetchAll($sql);

@@ -437,39 +437,31 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
 					$this->update($arr, $where);
 					
-					if(!empty($rs_item)){
-						$arr =array(
-								'studentId'=>$data['old_stu'],
-								'grade'=>$data['item_id'.$i],
-								'isCurrent'=>1,
-								'stopType'=>0
-								);
-						$resultDetail = $gdb->getOneStudentGroupDetailData($arr);
-						if(empty($resultDetail) AND !empty($data['autoNextPay'.$i])){
+					if(!empty($rs_item) AND !empty($data['autoNextPay'.$i])){
 							$_arr= array(
-									'branch_id'		=> $data['branch_id'],
-									'stu_id'		=> $data['old_stu'],
-									'itemType'		=> $rs_item['items_type'],
-									'school_option'	=> $rs_item['schoolOption'],
-									'grade'			=> $data['item_id'.$i],
-									'degree'		=> $rs_item['items_id'],
-									'feeId'			=> $data['academic_year_'.$i],
-									'academic_year'	=> $data['academic_year_'.$i],
-									'startDate'		=> $data['date_start_'.$i],
-									'endDate'		=> $data['end_date_'.$i],
-									'isoldBalance'	=> ($data['balance_'.$i] > 0)?1:0,
-									'balance'	=> $balance,
-									'isoldBalance'	=> ($balance>=0?1:0),
-									'is_current'	=> 1,
-									'stop_type'		=> 0,
-									'status'		=> 1,
-									'is_newstudent'	=> 1,
-									'note'			=> $data['remark'.$i],
-									'create_date'	=> date("Y-m-d H:i:s"),
-									'user_id'		=> $this->getUserId(),
+								'branch_id'		=> $data['branch_id'],
+								'studentId'		=> $data['old_stu'],
+								'itemType'		=> $rs_item['items_type'],
+								'grade'			=> $data['item_id'.$i],
+								'degree'		=> $rs_item['items_id'],
+								'feeId'			=> $data['academic_year_'.$i],
+								'academic_year'	=> $data['academic_year_'.$i],
+								'startDate'		=> $data['date_start_'.$i],
+								'endDate'		=> $data['validate_'.$i],
+								'discountType'	=>'',
+								'discountAmount'=>'',
+								'balance'		=> $balance,
+								'schoolOption'	=> $rs_item['schoolOption'],
+								'isMaingrade'	=>1,
+								'isCurrent'		=> 1,
+								'stopType'		=> 0,
+								'status'		=> 1,
+								'isNewStudent'	=> 1,
+								'remark'		=> $data['remark'.$i],
+								'create_date'	=> date("Y-m-d H:i:s"),
+								'user_id'		=> $this->getUserId(),
 							);
-							$id = $this->insert($_arr);
-						}
+						$gdb->AddItemToGroupDetailStudent($_arr);//to insert rms_group_detail_student Item
 					}
 			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
 					if($rs_item['items_type']==3){ // product
@@ -691,7 +683,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		if($item_type==3){
     			$options .= '<option value="1" >'.$tr->translate('MONTHLY').'</option>';
     		}
-    		$options .= '<option value="5" >'.$tr->translate('OTHER').'</option>';
+    		$options .= '<option value="6" >'.$tr->translate('OTHER').'</option>';
     		return $options;
     }
 	
@@ -847,5 +839,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY sp.id DESC ";
 		$sql.=" LIMIT 1 ";
     	return $db->fetchRow($sql);
+    }
+    public function getNewAccountNumber($newid,$stu_type){
+    	$db = $this->getAdapter();
+    	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE status=1 ";
+    	$acc_no = $db->fetchOne($sql);
+    	$new_acc_no= (int)$acc_no+1;
+    	$new_acc_no=100+$new_acc_no;
+    	$pre='';
+    	$acc_no= strlen((int)$acc_no+1);
+    	for($i = $acc_no;$i<5;$i++){
+    		$pre.='0';
+    	}
+    	return $pre.$new_acc_no;
     }
 }

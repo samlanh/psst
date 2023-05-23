@@ -33,8 +33,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'required'=>false
 		));
 		$generation->setValue($request->getParam("study_year"));
-		$db_years=new Registrar_Model_DbTable_DbRegister();
-		$years=$db_years->getAllYearsRegister();
+		$years=$_dbg->getAllYear(1,null);
 		$opt = array(''=>$this->tr->translate("SELECT_YEAR"));
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['name'];
 		$generation->setMultiOptions($opt);
@@ -47,7 +46,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		));
 		$user->setValue($request->getParam('user'));
 		$opt_user = array(''=>$this->tr->translate("USER"));
-		$opt_all_user=$db_years->getAllUserRegister();
+		$opt_all_user=$_dbg->getAllUser();
 		if(!empty($opt_all_user))foreach ($opt_all_user As $row)$opt_user[$row['id']]=$row['name'];
 		$user->setMultiOptions($opt_user);
 		

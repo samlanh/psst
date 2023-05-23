@@ -3643,7 +3643,59 @@ function getAllgroupStudyNotPass($action=null){
 	   	if(!empty($data['groupId'])){
 	   		$sql.=" AND gs.`group_id` = ".$data['groupId'];
 	   	}
+	   	if(!empty($data['branchId'])){
+	   		$sql.=" AND s.`branch_id` = ".$data['branchId'];
+	   	}
+	   	$sql.=" LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    	}
+   	function AddItemToGroupDetailStudent($data){
+   		try{
+	   		$arr =array(
+						'studentId'=>$data['studentId'],
+						'grade'=>$data['grade'],
+						'isCurrent'=>$data['isCurrent'],
+   						'isMaingrade'=>$data['isMaingrade'],
+						'stopType'=>$data['stopType']
+					);
+	   		$resultDetail = $this->getOneStudentGroupDetailData($arr);
+	   		
+	   		if(empty($resultDetail)){
+	   			$result = $this->getFeeStudyinfoById($data['feeId']);
+	   			$academicYear = empty($result)?'':$result['id'];
+	   			
+	   			$_arr= array(
+	   					'branch_id'		=> $data['branch_id'],
+	   					'stu_id'		=> $data['studentId'],
+	   					'itemType'		=> $data['itemType'],
+	   					'grade'			=> $data['grade'],
+	   					'degree'		=> $data['degree'],
+	   					'feeId'			=> $data['feeId'],
+	   					'academic_year'	=> empty($data['academicYear'])?$academicYear:$data['academicYear'],
+	   					'startDate'		=> $data['startDate'],
+	   					'endDate'		=> $data['endDate'],
+	   					'balance'		=> $data['balance'],
+	   					'isoldBalance'	=> ($data['balance']>=0?1:0),
+	   					'discount_type'	=> $data['discountType'],
+	   					'discount_amount'=> $data['discountAmount'],
+	   					'school_option'	=> $data['schoolOption'],
+	   					'is_maingrade'	=> $data['isMaingrade'],
+	   					'is_current'	=> $data['isCurrent'],
+	   					'stop_type'		=> $data['stopType'],
+	   					'status'		=> 1,
+	   					'is_newstudent'	=> $data['isNewStudent'],
+	   					'note'			=> $data['remark'],
+	   					'create_date'	=> date("Y-m-d H:i:s"),
+	   					'user_id'		=> $this->getUserId(),
+	   			);
+	   			$this->_name='rms_group_detail_student';
+	   			$id = $this->insert($_arr);
+	   		}
+	   	}catch (Exception $e){
+	   		Application_Form_FrmMessage::message("INSERT_FAIL");
+	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	   	}
+   	}
+   	
 }
 ?>

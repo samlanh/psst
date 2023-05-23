@@ -323,7 +323,7 @@ function addRow(){
 				template+='</select>';
 				
 			template+='</td>';
-			template+='<td width="100px"><input type="text" class="fullside" placeHolder="<?php echo $tr->translate('PERCENT');?>" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td width="100px"><input type="text" class="fullside" placeHolder="<?php echo $tr->translate('PERCENT');?>" data-dojo-props="constraints:{min:0,max:100}" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td width="100px"><input type="text"  name="balance_'+col+'" class="fullside" id="balance_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder="Balance"/></td>';
 			template+="<td style='width:100px;font-size:12px;'><input type='text' placeHolder='Stard Date' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" name='date_start_"+col+"' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
 			template+='<td style="width:100px;font-size:12px;"><input type="text" placeHolder="Validate Date" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+' name="end_date_'+col+'" id="end_date_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';

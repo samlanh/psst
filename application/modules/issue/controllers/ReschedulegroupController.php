@@ -243,11 +243,12 @@ class Issue_ReschedulegroupController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Foundation_Model_DbTable_DbStudent();
+			$model = new Application_Model_DbTable_DbGlobal();
     		$group = $db->getAllgroup();
-    		$degree = $db->getAllFecultyName();    		
+    		$degree = $model->getAllItems(1,null);    		
     		array_unshift($group, array ('id' => -1, 'name' => 'Add New'));
     		
-    		$model = new Application_Model_DbTable_DbGlobal();
+    		
     		$room = $model->getAllRoom();
     		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
     		

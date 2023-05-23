@@ -144,8 +144,6 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("APPLICATION_ERROR");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-		$dbstudent = new Foundation_Model_DbTable_DbStudent();
-		$this->view->academy = $dbstudent->getAllYear();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllDegreeName();
 		

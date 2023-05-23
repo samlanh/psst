@@ -150,6 +150,56 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'other_fee'";
 				$this->update($arr, $where);
 			}
+
+			$rows = $this->geLabelByKeyName('count_stuid_option');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['count_stuid_option'],'keyName'=>'count_stuid_option','note'=>"couting Student Id  By Option ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['count_stuid_option']);
+				$where=" keyName= 'count_stuid_option'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('new_stuid_test');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['new_stuid_test'],'keyName'=>'new_stuid_test','note'=>"Setting Can Enter New Id For Student Test ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['new_stuid_test']);
+				$where=" keyName= 'new_stuid_test'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('doc_display');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['doc_display'],'keyName'=>'doc_display','note'=>"Can Show/Hide Student Document When Register ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['doc_display']);
+				$where=" keyName= 'doc_display'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('name_required');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['name_required'],'keyName'=>'name_required','note'=>"Can Show/Hide Student Document When Register ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['name_required']);
+				$where=" keyName= 'name_required'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('entry_stuid');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['entry_stuid'],'keyName'=>'entry_stuid','note'=>"Can Entry Student Id or Disable When Register New Student ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['entry_stuid']);
+				$where=" keyName= 'entry_stuid'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

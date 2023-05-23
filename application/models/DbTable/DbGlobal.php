@@ -1718,8 +1718,28 @@ function getAllgroupStudyNotPass($action=null){
   			"create_date"=>date("Y-m-d H:i:s"),
   	);
   	$this->_name="rms_know_by";
-  	return $this->insert($array);
+	$khnow_by= $this->checkKnownBy($data['title_know_by']);
+	if(empty($khnow_by)){
+		$id= $this->insert($array);
+		$result=array(
+			"addNew" => 1,
+			"id" => $id,
+		);	
+	}else{
+		$result=array(
+			"addNew" => 0,
+			"id" => $khnow_by,
+		);
+	}
+ 	return $result;
   }
+
+  function checkKnownBy($title){
+	$db =$this->getAdapter();
+	$sql = "SELECT id FROM `rms_know_by` WHERE  title = '".$title."' limit 1";
+	
+	return $db->fetchOne($sql);
+}
   
   function addDocstudentType($data){
   	$array = array(

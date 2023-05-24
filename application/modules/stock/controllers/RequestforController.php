@@ -56,7 +56,6 @@ class Stock_RequestforController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
 			$exist = $db->checkCheckRequestFor($_data);
     		try {
 				if(empty($exist)){

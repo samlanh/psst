@@ -756,7 +756,7 @@ table#table_row_study {
 														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DOCUMENT_INFO");?></p>
 													</div> 
 													<div class="col-md-6 col-sm-6 col-xs-12"> 
-														<input class="button-class button-warning" iconClass="glyphicon glyphicon-trash" type="button" label="<?php echo $tr->translate('CLEAR_ALL');?>" dojoType="dijit.form.Button" onclick="addRow();" />
+														<input class="button-class button-warning" iconClass="glyphicon glyphicon-trash" type="button" label="<?php echo $tr->translate('CLEAR_ALL');?>" dojoType="dijit.form.Button" onclick="deleteAllRow();" />
 													</div> 
 												</div>
 											</div>
@@ -1144,7 +1144,7 @@ var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-var nation_store  = getDataStorefromJSON('id','name');
+var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?>);
 dojo.ready(function(){
 	
 
@@ -1294,7 +1294,7 @@ dojo.ready(function(){
 	     }
 	   } 
 	}, "nation");
-	dijit.byId('nation').attr('value',0);
+	dijit.byId('nation').attr('value',1);
 
 	new dijit.form.FilteringSelect({
 		store: nation_store,
@@ -1316,7 +1316,7 @@ dojo.ready(function(){
 	    
 	   } 
 	}, "studen_national");
-	dijit.byId('studen_national').attr('value',0);
+	dijit.byId('studen_national').attr('value',1);
 
 	new dijit.form.FilteringSelect({
 		store: nation_store,
@@ -1337,7 +1337,7 @@ dojo.ready(function(){
 	     }  
 	   } 
 	}, "fa_national");
-	dijit.byId('fa_national').attr('value',0);
+	dijit.byId('fa_national').attr('value',1);
 
 	new dijit.form.FilteringSelect({
 		store: nation_store,
@@ -1359,7 +1359,7 @@ dojo.ready(function(){
 	   
 	   } 
 	}, "mom_nation");
-	dijit.byId('mom_nation').attr('value',0);
+	dijit.byId('mom_nation').attr('value',1);
 
 	new dijit.form.FilteringSelect({
 		store: nation_store,
@@ -1381,7 +1381,7 @@ dojo.ready(function(){
 	   
 	   } 
 	}, "guardian_national");
-	dijit.byId('guardian_national').attr('value',0);
+	dijit.byId('guardian_national').attr('value',1);
 	
 	new dijit.form.FilteringSelect({
 		store: language_store,
@@ -1882,33 +1882,44 @@ function addNationBy(){
 							id: data.id,
 							name: dijit.byId('title_kh').get('value')
 					   };
-				data = data.id;
-				if(type==1){	   
-					addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);	
-
-				}else if(type==2){
-				
-					addDataToSelectbox(dijit.byId('studen_national'), nation_store, Itemmake, data);
+				if(type==1){	  
+					if(data.addNew == 1){
+						addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data.id);	
+					}else{
+						dijit.byId('nation').attr('value', data.id);
+					}
 					
+				}else if(type==2){
+					if(data.addNew == 1){
+						addDataToSelectbox(dijit.byId('studen_national'), nation_store, Itemmake, data.id);	
+					}else{
+						dijit.byId('studen_national').attr('value', data.id);
+					}
+						
 				}else if(type==3){
-				
-					addDataToSelectbox(dijit.byId('fa_national'), nation_store, Itemmake, data);
+					if(data.addNew == 1){
+						addDataToSelectbox(dijit.byId('fa_national'), nation_store, Itemmake, data.id);	
+					}else{
+						dijit.byId('fa_national').attr('value', data.id);
+					}
 					
 				}else if(type==4){
-					
-					addDataToSelectbox(dijit.byId('mom_nation'), nation_store, Itemmake, data);
-					
+					if(data.addNew == 1){
+						addDataToSelectbox(dijit.byId('mom_nation'), nation_store, Itemmake, data.id);	
+					}else{
+						dijit.byId('mom_nation').attr('value', data.id);
+					}
 				}else if(type==5){
-					
-					addDataToSelectbox(dijit.byId('guardian_national'), nation_store, Itemmake, data);
-					
+					if(data.addNew == 1){
+						addDataToSelectbox(dijit.byId('guardian_national'), nation_store, Itemmake, data.id);	
+					}else{
+						dijit.byId('guardian_national').attr('value', data.id);
+					}
 				}
 				getAllNation();	
-				
 				dijit.byId('frm_nation_kh').reset();
 				dijit.byId("popup_nation").hide();
 				HideloadingBlock();
-				
 			},
 			error: function(err) {
 			}
@@ -2166,6 +2177,14 @@ date_format = '"dd/MM/yyyy"';
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
+	}
+	function deleteAllRow() {
+		var identity = $('#identity').val();
+		 var arrays = identity.split(',');
+		for(var i=0;i<=arrays.length;i++){	
+			deleteRecord(arrays[i]);
+		}
+ 		no = 0;		
 	}
 	
 	function checkDocument(index){

@@ -61,7 +61,15 @@ class Stock_Model_DbTable_DbForSection extends Zend_Db_Table_Abstract
     	$sql = "SELECT * FROM rms_for_section WHERE id = $id limit 1 ";
     	return $db->fetchRow($sql);
     }	
-    
+    function checkSection($_data){
+		
+		$db = $this->getAdapter();
+    	$sql=" SELECT * FROM `rms_for_section` WHERE title='".addslashes((trim($_data['title'])))."'";
+		if(!empty($_data['id'])){
+			$sql.=" AND id !=".$_data['id'];
+		}	
+		return $db->fetchOne($sql);	
+	}
 }
 
 

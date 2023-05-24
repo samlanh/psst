@@ -117,7 +117,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				FROM 
 					rms_group_student_change_group AS gsc 
 						WHERE gsc.from_group=".$data['from_group']." 
-							AND gsc.to_group=".$data['to_group'];
+							AND gsc.to_group=".$data['groupId'];
 		return $db->fetchRow($sql);
 	}
 	
@@ -149,17 +149,17 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$arra=array(
 					'array_checkbox'	=>	$final_array,
 						);
-				$where = ' from_group='.$_data['from_group'].' and to_group='.$_data['to_group'];
+				$where = ' from_group='.$_data['from_group'].' and to_group='.$_data['groupId'];
 				$this->update($arra, $where);
 			}else{
 				
-				$_data['to_group'] = empty($_data['to_group'])?0:$_data['to_group'];
+				$_data['groupId'] = empty($_data['groupId'])?0:$_data['groupId'];
 				
 				$_arr= array(
 					'user_id'		=>$this->getUserId(),
 					'branch_id'	=>$_data['branch_id'],
 					'from_group'	=>$_data['from_group'],
-					'to_group'		=>$_data['to_group'],
+					'to_group'		=>$_data['groupId'],
 					'change_type'	=>$_data['change_type'],
 					'moving_date'	=>$_data['moving_date'],
 					'note'			=>$_data['note'],
@@ -176,18 +176,18 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 			$this->_name='rms_group_detail_student';
 			$dbg = new Application_Model_DbTable_DbGlobal();
-			$group_detail = $this->getGroupDetail($_data['to_group']);
+			$group_detail = $this->getGroupDetail($_data['groupId']);
 			
 			$idsss=explode(',', $_data['identity']);
 			if($_data['change_type']==1){//ផ្លាស់ប្តូរក្រុម /worked
 				foreach ($idsss as $k){
 					if (!empty($_data['stu_id_'.$k])){
 						// not yet update price of new fee
-						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['to_group']);
+						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['groupId']);
 						if(empty($rsexist)){
-							$groupResult = $this->getGroupDetail($_data['to_group']);
+							$groupResult = $this->getGroupDetail($_data['groupId']);
 							$stu=array(
-									'group_id'		=> $_data['to_group'],
+									'group_id'		=> $_data['groupId'],
 									'session'		=> $groupResult['session'],
 									'degree'		=> $groupResult['degree'],
 									'grade'			=> $groupResult['grade'],
@@ -219,7 +219,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						'is_use'	=>1,
 						'is_pass'	=>2,//studing
 				);
-				$where=" id=".$_data['to_group'];
+				$where=" id=".$_data['groupId'];
 				$this->update($group, $where);
 				
 			}elseif ($_data['change_type']==2){//ឡើងថ្នាក់
@@ -231,11 +231,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);
 							$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
 						
-							$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['to_group']);
+							$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['groupId']);
 							if(empty($rsexist)){
 								$arr=array(
 										'stu_id'		=>$_data['stu_id_'.$k],
-										'group_id'		=>$_data['to_group'],
+										'group_id'		=>$_data['groupId'],
 										'session'		=>$group_detail['session'],
 										'degree'		=>$group_detail['degree'],
 										'grade'			=>$group_detail['grade'],
@@ -271,7 +271,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					'is_use'	=>1,
 					'is_pass'	=>2,//studing
 				);
-				$where=" id=".$_data['to_group'];
+				$where=" id=".$_data['groupId'];
 				$this->update($group, $where);
 				
 				$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$_data['from_group']." AND stop_type=0 ORDER BY is_pass ASC ";
@@ -319,7 +319,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 				$arr=array(
 					'stu_id'		=>$newStuId,//$_data['stu_id_'.$k],
-					'group_id'		=>$_data['to_group'],
+					'group_id'		=>$_data['groupId'],
 					'session'		=>0,
 					'degree'		=>$_data['degree'],
 					'grade'			=>$_data['grade'],
@@ -581,7 +581,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$_arr=array(
 						'user_id'		=>$this->getUserId(),
 						'from_group'	=>$_data['from_group'],
-						'to_group'		=>$_data['to_group'],
+						'to_group'		=>$_data['groupId'],
 						'change_type'	=>$_data['change_type'],
 						'moving_date'	=>$_data['moving_date'],
 						'note'			=>$_data['note'],
@@ -621,7 +621,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				}
 				$this->delete($where);
 				
-				$group_detail = $this->getGroupDetail($_data['to_group']);
+				$group_detail = $this->getGroupDetail($_data['groupId']);
 				if(empty($_data['identity'])){
 					$_data['identity'] = $_data['old_array_checkbox'];
 				}
@@ -693,7 +693,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				}
 				
 				if ($stopType!=3){
-					$group_detail = $this->getGroupDetail($_data['to_group']);
+					$group_detail = $this->getGroupDetail($_data['groupId']);
 					$dbg = new Application_Model_DbTable_DbGlobal();
 					$this->_name='rms_group_detail_student';
 					$ids=explode(',', $_data['identity']);
@@ -702,11 +702,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['from_group']);
 							$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
 								
-							$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['to_group']);
+							$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['groupId']);
 							if(empty($rsexist)){
 								$arr=array(
 										'stu_id'		=>$_data['stu_id_'.$i],
-										'group_id'		=>$_data['to_group'],
+										'group_id'		=>$_data['groupId'],
 										'session'		=>$group_detail['session'],
 										'degree'		=>$group_detail['degree'],
 										'grade'			=>$group_detail['grade'],
@@ -735,7 +735,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							'is_use'	=>1,
 							'is_pass'	=>2,
 					);
-					$where=" id=".$_data['to_group'];
+					$where=" id=".$_data['groupId'];
 					$this->update($group, $where);
 				}
 				

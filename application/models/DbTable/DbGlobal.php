@@ -786,6 +786,9 @@ function getAllgroupStudyNotPass($action=null){
 	   	if(!empty($data['branch_id'])){
 	   		$sql.=" AND branch_id=".$data['branch_id'];
 	   	}
+	   	if(!empty($data['academicYear'])){
+	   		$sql.=" AND academic_year.branch_id=".$data['academicYear'];
+	   	}
 	   	if(isset($data['isFinished'])){
 	   		$sql.=" AND is_finished=".$data['isFinished'];
 	   	}
@@ -3388,29 +3391,24 @@ function getAllgroupStudyNotPass($action=null){
 		 	 $sql.=" AND g.id != ".$data['group_id'];
 	  	}
 	  	
-	  	if (!empty($data['change_type'])){
-	  		if ($data['change_type']==1){//change class
+	 
+  		if(!empty($data['change_type']) AND $data['change_type']==2){//ឡើងថ្នាក់
+  			$sql.=" AND g.grade != ".$data['grade'];
+  		}
+  		elseif(!empty($data['change_type'])  AND $data['change_type']==3){//ឆ្លងភូមិសិក្សា
+	  		if(!empty($data['degree'])){
+	  			$sql.=" AND g.degree != ".$data['degree'];
+	  		}
+  		}else{
+  			if (!empty($data['degree'])){
+  				$sql.=" AND g.degree = ".$data['degree'];
+  			}
+  			if (!empty($data['grade'])){
+  				$sql.=" AND g.grade = ".$data['grade'];
+  			}
+  		}
 	  			
-	  		}
-	  		elseif($data['change_type']==2){//ឡើងថ្នាក់
-	  			$sql.=" AND g.grade != ".$data['grade'];
-	  		}
-	  		else{
-	  			if(!empty($data['degree'])){
-	  				$sql.=" AND g.degree = ".$data['degree'];
-	  			}
-	  			if(!empty($data['grade'])){
-	  				$sql.=" AND g.grade = ".$data['grade'];
-	  			}
-	  		}
-	  	}else{
-	  		if (!empty($data['degree'])){
-	  			$sql.=" AND g.degree = ".$data['degree'];
-	  		}
-	  		if (!empty($data['grade'])){
-	  			$sql.=" AND g.grade = ".$data['grade'];
-	  		}
-	  	}
+	  	
 	  	
 	  	$sql.= $this->getAccessPermission('g.branch_id');
   		$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";

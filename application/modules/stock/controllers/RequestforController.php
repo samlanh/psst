@@ -37,13 +37,14 @@ class Stock_RequestforController extends Zend_Controller_Action {
     	$db = new Stock_Model_DbTable_DbRequestfor();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
+			$exist = $db->checkCheckRequestFor($_data);
     		try{
-    			$db->addNewRequestFor($_data);
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/requestfor/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/requestfor/add");
-    			}
+				if(empty($exist)){
+					$db->addNewRequestFor($_data);
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/requestfor/add");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("Already Exist!", "/stock/requestfor/add", 2);
+				}
     		}catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -55,10 +56,14 @@ class Stock_RequestforController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
+			$exist = $db->checkCheckRequestFor($_data);
     		try {
-    			$db->updateNewRequestFor($_data,$id);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/stock/requestfor/index");
+				if(empty($exist)){
+					$db->updateNewRequestFor($_data,$id);
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/stock/requestfor/index");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("Already Exist!", "/stock/requestfor/index");
+				}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

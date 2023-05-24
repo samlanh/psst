@@ -38,13 +38,15 @@ class Stock_ForsectionController extends Zend_Controller_Action {
     	$db = new Stock_Model_DbTable_DbForSection();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
+			$exist = $db->checkSection($_data);
     		try {
-    			$db->addForSection($_data);
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/forsection/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/forsection/add");
-    			}
+				if(empty($exist)){
+					$db->addForSection($_data);
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/stock/forsection/add");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("Already Exist!", "/stock/forsection/add");
+				}
+    			
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -56,10 +58,14 @@ class Stock_ForsectionController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
+			$exist = $db->checkSection($_data);
     		try {
-    			$db->updateForSection($_data,$id);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/stock/forsection/index");
+				if(empty($exist)){
+					$db->updateForSection($_data,$id);
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/stock/forsection/index");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("Already Exist", "/stock/forsection/index");
+				}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

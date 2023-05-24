@@ -52,7 +52,7 @@ class Stock_Model_DbTable_DbRequestfor extends Zend_Db_Table_Abstract
     		'status'=>$_data['status'],
     		'user_id'=>$this->getUserId(),
     	);
-    	$where = " id = $id ";
+    	$where = " id = $id";
     	return $this->update($_arr, $where);
     }
     
@@ -61,7 +61,15 @@ class Stock_Model_DbTable_DbRequestfor extends Zend_Db_Table_Abstract
     	$sql = "SELECT * FROM rms_request_for WHERE id = $id limit 1 ";
     	return $db->fetchRow($sql);
     }	
-    
+	function checkCheckRequestFor($_data){
+		
+		$db = $this->getAdapter();
+    	$sql=" SELECT * FROM `rms_request_for` WHERE title='".addslashes((trim($_data['title'])))."'";
+		if(!empty($_data['id'])){
+			$sql.=" AND id !=".$_data['id'];
+		}	
+		return $db->fetchOne($sql);	
+	}
 }
 
 

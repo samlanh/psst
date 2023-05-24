@@ -129,7 +129,7 @@ label{font-weight: normal ;}
 	             </div>
 	         </div>
 	         <div class="card-box">
-	         	<div class="col-md-12 col-sm-12 col-xs-12">
+	         	<div class="col-md-10 col-sm-10 col-xs-12">
 	         		<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
 	                   <label class="control-label bold col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("SELECT_PRODUCT");?> 
 	                   </label>
@@ -303,14 +303,14 @@ function getReceiptNo(){
 		<div id="print_request" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
-				    <td colspan="10"  style="" align="center">
+				    <td colspan="10"   align="center">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
 							<tr>
 								<td colspan="3"><label id="lbl_header"></label></td>
 							</tr>
 							<tr>
 								<td width="30%"></td>
-								<td width="40%" align="center" valign="top" style="">
+								<td width="40%" align="center" valign="top" >
 									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណស្នើស្តុក</div> 
 									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">REQUEST STOCK VOUCHER</div> 
 									<br />
@@ -522,7 +522,7 @@ function addRow() {
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="47px" align="center"><i  onclick="deleteRecord('+col+')" class="fa fa-trash" aria-hidden="true"></i></td>';
 			template+='<td width="15px" align="center"  >'+no+'</td>';
 			template+='<td width="250px">&nbsp;<input type="hidden" dojoType="dijit.form.TextBox" id="label_product_name_'+col+'" name="label_product_name_'+col+'" value="'+label_proname+'" />'+label_proname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+pro_id+'" /></td>';
 			template+='<td> <input type="text" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
@@ -649,10 +649,15 @@ function addRequestFor(){
 			handleAs:"json",
 			load: function(data) {
 				var Itemmake = { 
-					id: data,
+					id: data.id,
 				    name: dijit.byId('title').get('value')
 				};
-			   addDataToSelectbox(dijit.byId('request_for'), request_for_store, Itemmake, data);
+				if(data.addNew){
+					addDataToSelectbox(dijit.byId('request_for'), request_for_store, Itemmake, data.id);
+				}else{
+					dijit.byId("request_for").attr("value",data.id);
+				}
+			   
 			   hideDialogRequestFor();
 			   dijit.byId("submitfor").attr("disabled",false);
 			},
@@ -675,12 +680,16 @@ function addForSection(){
 			handleAs:"json",
 			load: function(data) {
 				var Itemmake = { 
-						 id: data,
+						 id: data.id,
 						 name: dijit.byId('title_for_section').get('value')
 					   };
-			   addDataToSelectbox(dijit.byId('for_section'), for_section_store, Itemmake, data);
+				if(data.addNew == 1){
+					addDataToSelectbox(dijit.byId('for_section'), for_section_store, Itemmake, data.id);
+				}else{
+					dijit.byId("for_section").attr("value",data.id);
+				}
 			   hideDialogForSection();
-			   dijit.byId("submit_section").attr("disabled",true);
+			   dijit.byId("submit_section").attr("disabled",false);
 			},
 			error: function(err) {
 			}

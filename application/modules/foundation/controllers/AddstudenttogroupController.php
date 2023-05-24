@@ -95,19 +95,19 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 	}
 	
 	public function submit1Action(){
-		$id=$this->getRequest()->getParam("id");
-		if($this->getRequest()->isPost()){
-			try{
-				$_data = $this->getRequest()->getPost();
-				$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
-				$row = $db->editStudentGroup($_data, $id);
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-		$this->_redirect('/foundation/addstudenttogroup/index');
+// 		$id=$this->getRequest()->getParam("id");
+// 		if($this->getRequest()->isPost()){
+// 			try{
+// 				$_data = $this->getRequest()->getPost();
+// 				$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
+// 				$row = $db->editStudentGroup($_data, $id);
+// 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+// 			}catch(Exception $e){
+// 				Application_Form_FrmMessage::message("INSERT_FAIL");
+// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 			}
+// 		}
+// 		$this->_redirect('/foundation/addstudenttogroup/index');
 	}
 	function editAction(){
 		$this->_redirect('/foundation/addstudenttogroup');
@@ -115,9 +115,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$_db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 		$g_id = $_db->getGroupById($id);
-		
-		$this->view->id = $g_id;
-		$row = $_db->getStudentGroup($id);
+		$row = $_db->getStudentGroupAddStudent($id);
 		$this->view->rr = $row;
 			try{
 				if($this->getRequest()->isPost()){
@@ -146,12 +144,6 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			}
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllDegreeName();
-		
-		$group = new Foundation_Model_DbTable_DbAddStudentToGroup();
-		$group_option = $group->getGroupToEdit();
-		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
-		$this->view->group = $group_option;
-		$this->view->room = $group->getRoom();
 		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();

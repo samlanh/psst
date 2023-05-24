@@ -20,15 +20,11 @@
     	</div>
 		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit"> 
+					
 					branch=dijit.byId('branch_id').get('value');
 					if(branch==''){
 						alert('Please Select Branch!');
 						dijit.byId('branch_id').focus()
-						return false;
-					}
-				 	start_date=dijit.byId('start_date').get('value');
-					if(end_date<start_date){
-						alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ!');
 						return false;
 					}
   					if(this.validate()){
@@ -122,7 +118,7 @@
            <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               	<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+	               	<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" />
 					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" />
@@ -253,7 +249,6 @@ function getAllAcademicBy(){
 	getAllAcademicByBranch(url_getacademic,contentData);
 }
 function getAllItemId(itemId=''){
-	
 	dijit.byId("itemId").reset();
 	branchId = dijit.byId('branch_id').get('value');
 	studentId = dijit.byId('studentId').get('value');
@@ -263,13 +258,11 @@ function getAllItemId(itemId=''){
 		return false;
 	}
 	contentData = {
-		//'branch_id':branchId,
 		'includeProLocation':branchId,
 		'itemId':itemType,
 		'studentId':studentId,
 		'hiddenParent':1,
 		'isService':2,
-		//'isOnepayment':0,
 	}
 	getAllItemIdByType(urlGet,contentData);
 }

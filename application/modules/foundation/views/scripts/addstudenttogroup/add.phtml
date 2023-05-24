@@ -4,19 +4,9 @@
 	$frm =  $this->form_search;
 ?>	
 <head>
- <link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/multi-select.css" media="screen" rel="stylesheet" type="text/css" />
+ 	<link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/multi-select.css" media="screen" rel="stylesheet" type="text/css" />
 </head>
-
 <style>
-select{ width:100%;}
-fieldset{  background:#DFF7FD;}
-table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1); padding:2px;}
-table tr td.null-border{ background: #fff; border-left:none !important;}
-table .set-style td,table .set-style th{ padding: 5px; border:0px solid #ccc;}
-table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
-table .set-style tr td a {
-    font-size: 14px;
-}
 .ms-container .ms-selectable {
     margin: 0 10px;
 }
@@ -62,7 +52,12 @@ a.btnstyle:hover{color:#eee;}
 									dijit.byId('branch_id').focus();
 									return false;
 								}
-								
+								grade = dijit.byId('grade').get('value');
+								if(grade==''){
+									alert('<?php echo $tr->translate("SELECT_GRADE");?>');
+									dijit.byId('grade').focus();
+									return false;
+								}
 								return true;
 	   						}else {
 								return false;
@@ -130,6 +125,34 @@ a.btnstyle:hover{color:#eee;}
 											class="button-class button-primary" iconClass="glyphicon glyphicon-search"/>
 									 </div>
 				                 </div>
+				                 <div class="form-group">
+				                 	<div class="card-blogform bgintro">
+											<div class="card-body introduction">
+							               	  <div class="form-group">
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-info-circle" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INTRODUCTION");?></p>
+													</div> 
+												</div>
+											</div>
+											<div class="form-group">
+								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >1 ស្វែងរកសិស្សតាម ឆ្នាំសិក្សា,កម្រិត/វគ្គ ,ថ្នាក់/កម្រិត ណាមួយ រួចចុចស្វែងរក</label>
+							                </div>
+							                <div class="form-group">
+								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >2 ចុចលើប៊ូតុង ជ្រើសរើសទាំងអស់ ឬ យកសិស្សណាដែលចង់ដាក់ចូលក្រុម</label>
+							                </div>
+							                <div class="form-group">
+								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >3 ជ្រើសរើសថ្នាក់ ក្នុង ព័ត៌មានថ្នាក់ </label>
+							                </div>
+							                <div class="form-group">
+								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >4 រក្សាទុក </label>
+							                </div>
+										   </div>
+										</div>
+				                 </div>
 				              </div>
 		                </div>
 					</form>
@@ -149,7 +172,7 @@ a.btnstyle:hover{color:#eee;}
 							alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
 							return false;
 						}
-						//loadingBlock();	
+						loadingBlock();	
 						return true;
 	   				}else {
 						return false;
@@ -189,34 +212,6 @@ a.btnstyle:hover{color:#eee;}
 					             </div>
 					             <div class="card-box">
 						            <div class="col-md-6 col-sm-6 col-xs-12">
-										<div class="card-blogform bgintro">
-											<div class="card-body introduction">
-							               	  <div class="form-group">
-												<div class="d-flex"> 
-													<div class="settings-main-icon ">
-														<i class="fa fa-info-circle" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INTRODUCTION");?></p>
-													</div> 
-												</div>
-											</div>
-											<div class="form-group">
-								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >1 ស្វែងរកសិស្សតាម ឆ្នាំសិក្សា,កម្រិត/វគ្គ ,ថ្នាក់/កម្រិត ណាមួយ រួចចុចស្វែងរក</label>
-							                </div>
-							                <div class="form-group">
-								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >2 ចុចលើប៊ូតុង ជ្រើសរើសទាំងអស់ ឬ យកសិស្សណាដែលចង់ដាក់ចូលក្រុម</label>
-							                </div>
-							                <div class="form-group">
-								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >3 ជ្រើសរើសថ្នាក់ ក្នុង ព័ត៌មានថ្នាក់ </label>
-							                </div>
-							                <div class="form-group">
-								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >4 រក្សាទុក </label>
-							                </div>
-										   </div>
-										</div>
-						            </div>
-						            <div class="col-md-6 col-sm-6 col-xs-12">
 						            	<div class="card-blogform">
 											<div class="card-body">
 							               	  <div class="form-group">
@@ -243,9 +238,21 @@ a.btnstyle:hover{color:#eee;}
 								                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
 								                   </div>
 								                </div>
-								            	<div class="form-group">
-								                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("DETAIL")?> :
-								                   </label>
+								              </div>
+								          </div>
+						            </div>
+						            <div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="card-blogform">
+											<div class="card-body">
+												<div class="form-group">
+								                   <div class="d-flex"> 
+														<div class="settings-main-icon ">
+															<i class="fa fa-server " aria-hidden="true"></i>
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DETAIL");?></p>
+														</div> 
+													</div>
 								                </div>
 								            	<div class="form-group">
 								                   <div class="col-md-12 col-sm-12 col-xs-12">
@@ -257,28 +264,26 @@ a.btnstyle:hover{color:#eee;}
 														<input type="hidden" name="room_group" id="room_group" dojoType="dijit.form.TextBox" />
 								                   </div>
 								                </div>
-								                <div class="form-group">
-								                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-								                   		<input type="submit" id="save_close" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_CLOSE");?>"
-														   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved"/>
-														<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
-															class="button-class button-primary" iconClass="	glyphicon glyphicon-floppy-open"/>
-								                   </div>
-								                </div>
-								              </div>
-								            </div>
+						               		 </div>
+						                </div>
 						            </div>
 						        </div>
+						         <div class="card-box">
+							         <div class="form-group">
+					                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+					                   		<input type="submit" id="save_close" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_CLOSE");?>"
+											   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved"/>
+											<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
+												class="button-class button-primary" iconClass="	glyphicon glyphicon-floppy-open"/>
+					                   </div>
+					                </div>
+						         </div>
 			         	 </form>
 		            </div>
-		            
 	            <div class="clearfix"></div>
 	        </div>
 	        <div class="card-box" style="margin-top: 10px;">
-		        	
-		            
-		            <div class="clearfix"></div>
-	            
+		    <div class="clearfix"></div>
        	 </div>
 	</div>
 </div>
@@ -291,7 +296,6 @@ dojo.require("dojo.NodeList-manipulate");
 dojo.require('dijit.form.Textarea');
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
-dojo.require("dojo.data.ItemFileWriteStore"); 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 
@@ -310,8 +314,17 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 getAllGroup();
   	});
-	
 
+	 var degree = dijit.byId('degree');
+	 degree.on('change', function(evt) {
+		 getAllGroup();
+  	});
+
+	 var grade = dijit.byId('grade');
+	 grade.on('change', function(evt) {
+		 getAllGroup();
+  	});
+	
 	new dijit.form.FilteringSelect({
 	    store: group_store,
 	    queryExpr: "*${0}*",
@@ -327,7 +340,7 @@ dojo.ready(function(){
 		    	dojo.byId('lbldetail').innerHTML='';
 		    	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
 			}else{
-				toStudentGroup();
+				getGroupDetail();
 			}        
 	    } 
 	}, "group");
@@ -359,10 +372,9 @@ function getallGrade(){
 </script>
 <script type="text/javascript">
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
-function toStudentGroup(){
+function getGroupDetail(){
 		group = dijit.byId('group').get('value');
 		if(group==-1 || group==''){
-			alert('Please select group !!! ');
 			return false;
 		}
 	dojo.xhrPost({
@@ -383,14 +395,15 @@ function toStudentGroup(){
 		}
 	});
 }
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
-}
 
 url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroup(){
-	
 	dijit.byId('group').reset();
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){
+		return false;
+	}
+	
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
 		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -403,14 +416,16 @@ function getAllGroup(){
 		degree ="";
 	}
 	
-	grade = dijit.byId('grade').get('value');
-	if(grade=='' || grade==-1){
-		grade ="";
+	
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){
+		academic_year ="";
 	}
 	dojo.xhrPost({
 		url: url_getallgroup,
 		content:{
 			'branch_id':branch_id,
+			'academic_year':academic_year,
 			'degree':degree,
 			'grade':grade,
 			'noaddnew':0

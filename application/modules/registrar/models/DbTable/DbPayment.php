@@ -216,8 +216,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 						WHEN s.customer_type = 3 THEN '".$tr->translate("CRM")."'
 						WHEN s.customer_type = 4 THEN '".$tr->translate("Student Test")."'
 					END as typeStudent,
-		
-					(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id=s.stu_id AND sf.is_current=1 ORDER BY sf.id DESC LIMIT 1) AS currentFeeId,
+		ds.feeId AS currentFeeId,
 					(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
 					(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
 					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,

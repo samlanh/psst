@@ -842,11 +842,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-// 	function getCurentFeeStudentHistory($student_id){
-// 		$db=$this->getAdapter();
-// 		$sql="SELECT sh.* FROM rms_student_fee_history AS sh WHERE sh.student_id=$student_id AND sh.is_current=1 ORDER BY sh.id DESC LIMIT 1";
-// 		return $db->fetchRow($sql);
-// 	}
+
 	function getCurentStudentStudy($student_id){
 		$db=$this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();

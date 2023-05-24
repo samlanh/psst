@@ -7,56 +7,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
-	
-	}
-	
-	function getAllYear(){
-		$db = $this->getAdapter();
-		$sql = "select id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')')as years from rms_tuitionfee ";
-		return $db->fetchAll($sql);
-	}
-	
-	public function getRoom(){
-		$db = $this->getAdapter();
-		$sql = "SELECT room_id,room_name FROM rms_room WHERE is_active = 1";
-		return $db->fetchAll($sql);
-	}
-	public function getGroup(){
-		$db = $this->getAdapter();
-		$sql="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-			 (SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-			 FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
-		return $db->fetchAll($sql);
-	}
-	
-	public function getGroupToEdit(){
-		$db = $this->getAdapter();
-		$sql="SELECT id,group_code as name FROM rms_group WHERE status = 1 ";
-		return $db->fetchAll($sql);
-	}
-	
-	public function getGroupById($id){
-		$db = $this->getAdapter();
-		$sql = "SELECT id,status FROM rms_group WHERE id=".$id;
-		return $db->fetchRow($sql);
-	
-	}
-	public function getStudentGroup($id){
-		$db = $this->getAdapter();
-		$sql = "SELECT 
-					`group_id`,
-					stu_id,
-					(SELECT `stu_code` FROM `rms_student`WHERE `stu_id`=`gds`.`stu_id`)AS code,
-					(SELECT `stu_enname` FROM `rms_student`WHERE `stu_id`=`gds`.`stu_id`)AS en_name, 
-					(SELECT `stu_khname` FROM `rms_student`WHERE `stu_id`=`gds`.`stu_id`)AS kh_name
-				FROM 
-					`rms_group_detail_student` as gds 
-				WHERE 
-					sgd.itemType=1 
-					AND `status`=1 AND`group_id`=".$id;
-			
-		return $db->fetchAll($sql);
-		
 	}
 	
 	public function getGroupDetail($search){
@@ -140,7 +90,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	
 	public function editStudentGroup($_data,$id){
 		$db = $this->getAdapter();
-		$rr = $this->getStudentGroup($id);
+		$rr = array();//old code select student by group id
 		$this->_name='rms_student';
 		if(!empty($rr)){
 			foreach($rr as $row){
@@ -204,7 +154,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 						'degree'=>$group_info['degree'],
 						'grade'	=>$group_info['grade'],
 					);
-					$checkRecord = $this->checkStudentGroupDetail($_arrcheck);
+					$checkRecord = $this->checkStudentGroupDetailRow($_arrcheck);
 					if (!empty($checkRecord)){
 						$arr_up = array(
 								'user_id'	=>$this->getUserId(),
@@ -239,56 +189,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
-// 	public function addStudentGroup($_data){
-// 		$db = $this->getAdapter();
-// 		try{
-// 			if(!empty($_data['public-methods'])){
-				
-// 				$all_stu_id = $_data['public-methods'];
-// 				foreach ($all_stu_id as $stu_id){
-// 					$arr = array(
-// 						'user_id'	=>$this->getUserId(),
-// 						'group_id'	=>$_data['group'],
-// 						'stu_id'	=>$stu_id,
-// 						'status'	=>1,
-// 						'date'		=>date('Y-m-d')
-// 					);
-// 					$this->_name='rms_group_detail_student';
-// 					$this->insert($arr);
-					
-// 					$this->_name='rms_student';
-// 					$data=array(
-// 						'is_setgroup'	=> 1,
-// 						'academic_year'	=> $_data['academic_year_group'],
-// 						'degree'		=> $_data['degree_group'],
-// 						'grade'			=> $_data['grade_group'],
-// 						'session'		=> $_data['session_group'],
-// 						'room'			=> $_data['room_group'],
-// 						'group_id'		=> $_data['group'],
-// 					);
-// 					$where='stu_id = '.$stu_id;
-// 					$this->update($data, $where);
-// 				}
-				
-// 				$this->_name = 'rms_group';
-// 				$data_gro = array(
-// 					'is_use'=> 1,//ប្រើប្រាស់
-// 					'is_pass'=> 2,//កំពុងសិក្សា
-// 				);
-// 				$where = 'id = '.$_data['group'];
-// 				$this->update($data_gro, $where);
-// 			}
-// 		}catch(Exception $e){
-// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 		}
-// 	}
 
-	
-	public function getAllFecultyName(){
-		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		return $_dbgb->getAllItems(1,null);
-	}
 	function getSearchStudent($search){
 		$db=$this->getAdapter();
 		$sql="SELECT 
@@ -304,7 +205,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				sd.feeId AS fee_id,
 				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+				(SELECT `title` FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
 			  FROM 
 			  	rms_student AS s,
 			  	`rms_group_detail_student` AS sd 
@@ -315,26 +216,26 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				AND s.customer_type = 1 
 				AND sd.stop_type=0
 				AND sd.is_setgroup = 0 ";
-		if(!empty($search['academic_year'])){
-			$sql.=" AND (SELECT tf.academic_year FROM `rms_tuitionfee` AS tf WHERE tf.id =(SELECT sf.fee_id FROM `rms_student_fee_history` AS sf WHERE sf.student_id = s.stu_id AND sf.is_current = 1 ORDER BY sf.id DESC LIMIT 1) LIMIT 1) =".$search['academic_year'];
-		}
-		if(!empty($search['degree'])){
-			$sql.=" AND sd.degree =".$search['degree'];
-		}
-		if(!empty($search['grade'])){
-			$sql.=" AND sd.grade =".$search['grade'];
-		}
-		if(!empty($search['session'])){
-			$sql.=" AND sd.session =".$search['session'];
-		}
-		if(!empty($search['branch_id'])){
-			$sql.=" AND s.branch_id =".$search['branch_id'];
-		}
-		$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-		$sql.=" ORDER BY s.stu_id DESC ";
+			if(!empty($search['academic_year'])){
+				$sql.=" AND sd.academic_year =".$search['academic_year'];
+			}
+			if(!empty($search['degree'])){
+				$sql.=" AND sd.degree =".$search['degree'];
+			}
+			if(!empty($search['grade'])){
+				$sql.=" AND sd.grade =".$search['grade'];
+			}
+			if(!empty($search['session'])){
+				$sql.=" AND sd.session =".$search['session'];
+			}
+			if(!empty($search['branch_id'])){
+				$sql.=" AND s.branch_id =".$search['branch_id'];
+			}
+			$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade";
+			$sql.=" ORDER BY s.stu_id DESC ";
 		return $db->fetchAll($sql);
 	}
-	function checkStudentGroupDetail($_data){
+	function checkStudentGroupDetailRow($_data){
 		$db=$this->getAdapter();
 		$sql=" SELECT
 				sd.gd_id,
@@ -373,4 +274,3 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		return $db->fetchRow($sql);
 	}
 }
-

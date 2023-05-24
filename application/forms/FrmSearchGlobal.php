@@ -63,7 +63,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
 		$_academic->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("SERVIC"),
+				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
 				'class'=>'fullside',
 				'required'=>false,
 				'queryExpr'=>'*${0}*',

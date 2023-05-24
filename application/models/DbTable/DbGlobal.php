@@ -3393,7 +3393,7 @@ function getAllgroupStudyNotPass($action=null){
 	  			
 	  		}
 	  		elseif($data['change_type']==2){//ឡើងថ្នាក់
-	  			
+	  			$sql.=" AND g.grade != ".$data['grade'];
 	  		}
 	  		else{
 	  			if(!empty($data['degree'])){

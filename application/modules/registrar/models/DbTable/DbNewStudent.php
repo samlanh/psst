@@ -209,9 +209,8 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
 		$sql = "SELECT s.*,
-					(SELECT sh.id FROM rms_student_fee_history AS sh WHERE sh.student_id=s.stu_id AND sh.is_current=1 ORDER BY sh.id DESC LIMIT 1) as feeHistoryId,
-					(SELECT sh.fee_id FROM rms_student_fee_history AS sh WHERE sh.student_id=s.stu_id AND sh.is_current=1 ORDER BY sh.id DESC LIMIT 1) as fee_id,
-					(SELECT sh.academic_year FROM rms_student_fee_history AS sh WHERE sh.student_id=s.stu_id AND sh.is_current=1 ORDER BY sh.id DESC LIMIT 1) as academicYyear,
+					gds.feeId AS fee_id,
+					gds.academic_year AS academicYyear,
 					gds.gd_id,
 					gds.academic_year,
 					gds.degree,

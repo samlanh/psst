@@ -337,8 +337,27 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     			'create_date'=>date("Y-m-d"),
     			'user_id'=>$this->getUserId(),
     		);
-    	return $this->insert($arr);
+		$ref = $this->checkCheckRequestFor($data['title']);
+		if(empty($ref)){
+			$id = $this->insert($arr);
+			$result=array(
+                "addNew" => 1,
+				"id" => $id,
+			);
+		}else{
+			$result=array(
+                "addNew" => 0,
+				"id" => $ref,
+			);
+		}
+		return $result;
     }
+	function checkCheckRequestFor($title){
+		$db =$this->getAdapter();
+		$sql = "SELECT id FROM `rms_request_for` WHERE  title = '".$title."' limit 1";
+		return $db->fetchOne($sql);
+		
+	}
     
     function addNewForSection($data){
     	$this->_name="rms_for_section";
@@ -347,6 +366,24 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     			'create_date'=>date("Y-m-d"),
     			'user_id'=>$this->getUserId(),
     	);
-    	return $this->insert($arr);
+		$section = $this->checkCheckRequestFor($data['title_for_section']);
+		if(empty($section)){
+			$id = $this->insert($arr);
+			$result=array(
+                "addNew" => 1,
+				"id" => $id,
+			);
+		}else{
+			$result=array(
+                "addNew" => 0,
+				"id" => $section,
+			);
+		}
+		return $result;
     }
+	function checkCheckSectionFor($title){
+		$db =$this->getAdapter();
+		$sql = "SELECT id FROM `rms_for_section` WHERE  title = '".$title."' limit 1";
+		return $db->fetchOne($sql);
+	}
 }

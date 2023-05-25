@@ -136,19 +136,20 @@
 										   </div>
 										</div>
 										<div class="form-group">
-										   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATIONALITY");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-												<?php echo $frm->getElement("nationality");?>
-										   </div>
-										</div>
-										<div class="form-group">
 										   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATION");?>
 										   </label>
 										   <div class="col-md-7 col-sm-7 col-xs-12">
 												<?php echo $frm->getElement("nation");?>
 										   </div>
 										</div>
+										<div class="form-group">
+										   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATIONALITY");?>
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("nationality");?>
+										   </div>
+										</div>
+										
 										
 									</div>
 								</div>
@@ -465,6 +466,7 @@
 			<div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+				   <input type="hidden" id="indexkey" name="indexkey" dojoType="dijit.form.ValidationTextBox" />
                		<input type="reset" class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" /><!--onclick="submitDataClose()"-->
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" />
@@ -502,7 +504,7 @@
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_en" name="title_en" value="" type="text">
 											<input type="hidden" id="status_na" name="status_na" value="1" />
-											<input type="hidden" id="indexkey" name="indexkey" value="1" />
+											
 										</div>
 									 </div>
 								</div>
@@ -613,10 +615,7 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dojo.NodeList-manipulate");
 
-function setSelected(){
-		nationality = dijit.byId("nationality").get('value');
-		dijit.byId("nation").attr('value',nationality);
-	}
+
 	
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
@@ -624,6 +623,7 @@ var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json:
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->department_type));?> );
+var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 	dojo.ready(function(){
 		getTeacherID();
 		new dijit.form.FilteringSelect({
@@ -725,25 +725,67 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 	});
 	require(["dojo/ready"], function(ready){
 		new dijit.form.FilteringSelect({
-			name: "nationality",
-			id: "nationality",
-			searchAttr: "name",
-			class: 'fullside',
-			onChange: function() {
-				popupNation(1);
-		    }
-		}, "nationality");
-		new dijit.form.FilteringSelect({
+			store: nation_store,
 			name: "nation",
 			id: "nation",
 			searchAttr: "name",
 			class: 'fullside',
+			placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
 			onChange: function() {
-				popupNation(2);
+				var nation = dijit.byId('nation').get('value');
+				if(nation == -1){
+					dijit.byId("save_nation").attr("disabled",false);
+					dijit.byId("popup_nation").show();
+					dijit.byId('indexkey').attr('value',1);
+				}else{
+					dijit.byId('nationality').attr('value',nation);
+				}
+				
 		    }
 		}, "nation");
-		setSelected();
+		new dijit.form.FilteringSelect({
+			store: nation_store,
+			name: "nationality",
+			id: "nationality",
+			searchAttr: "name",
+			class: 'fullside',
+			placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+			onChange: function() {
+				var nationality = dijit.byId('nationality').get('value');
+				if(nationality == -1){
+					dijit.byId("save_nation").attr("disabled",false);
+					dijit.byId("popup_nation").show();
+					dijit.byId('indexkey').attr('value',2);
+				}
+		    }
+		}, "nationality");
+		
+		dijit.byId("nation").attr('value',1);
+		dijit.byId("nationality").attr('value',1);
+		getAllNation();
 	});
+
+function getAllNation(){ 
+	var url_getnation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"getallnation"));?>';										
+	dojo.xhrPost({
+		url: url_getnation,
+		content:{
+			'addNew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			
+			var nation_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('nation').set('store',nation_store);  
+			dijit.byId('nationality').set('store',nation_store);  
+		
+		},
+		error: function(err) {
+			console.log(err);
+		}
+	});
+}
+
 </script>
 <script type="text/javascript">
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
@@ -931,29 +973,9 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 	    readURL(this);
 	});
 	
-	
-	function popupNation(key){
-		dijit.byId("save_nation").attr("disabled",false);
-		if(key==1){
-			var nation = dijit.byId('nationality').get('value');
-			$("#indexkey").val(key);
-			dijit.byId('nation').attr('value',nation);
-		}else{
-			var nation = dijit.byId('nation').get('value');
-			$("#indexkey").val(key);
-		}
-		if(nation==''){
-			return false;
-		}
-		if(nation==-1){
-			dijit.byId("popup_nation").show();
-		}
-	}
-	
-	var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
-	var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 	var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 		function addNationBy(){
+			var indexkey = dijit.byId('indexkey').get('value');
 			if(dijit.byId('frm_nation_kh').validate()){
 				dijit.byId("save_nation").attr("disabled",true);
 				loadingBlock();	
@@ -962,28 +984,25 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 					form: dojo.byId("frm_nation_kh"),
 					handleAs:"json",
 					load: function(data) {
-						var indexkey = $("#indexkey").val();
+						var indexkey = dijit.byId('indexkey').get('value');
 						var Itemmake = { 
-							 id: data,
+							 id: data.id,
 							 name: dijit.byId('title_kh').get('value')
 						   };
 						   if(indexkey==1){
-							   addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data);
-							   addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
-							   dijit.byId('nation').set('store', nation_store);
-							   nation =  dijit.byId('nation').get('value');
-							   if(nation!=""){
-							   dijit.byId('nation').set('value', nation);
-							   }
+								if(data.addNew == 1){
+									addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data.id);
+								}else{
+									dijit.byId('nation').attr('value',data.id);
+								}
 						   }else{	  
-							  addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data); 
-						   	  addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
-							  dijit.byId('nationality').set('store', nation_store);
-							  nation =  dijit.byId('nationality').get('value');
-							  if(nation!=""){
-							  dijit.byId('nationality').set('value', nation);
-							  }
+								if(data.addNew == 1){
+									addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data.id);
+								}else{
+									dijit.byId('nationality').attr('value',data.id);
+								}
 						   }
+						   getAllNation();
 						   dijit.byId('frm_nation_kh').reset();
 						   dijit.byId("popup_nation").hide();
 						   HideloadingBlock();

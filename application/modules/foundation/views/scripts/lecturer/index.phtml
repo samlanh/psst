@@ -4,6 +4,7 @@
 	
 	$urlCopy = $this->baseUrl()."/foundation/lecturer/copy/id/";
 	$urlView = $this->baseUrl()."/foundation/lecturer/view/id/";
+	$urlEdit = $this->baseUrl()."/foundation/lecturer/edit/id/";
 ?>	
 <?php $frm =  $this->frm_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -76,9 +77,13 @@ dojo.require("dijit.form.DateTextBox");
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
 				}
+				else if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}
 				gotoAction();
 			},
 			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
 				"view": {name: "<?php echo $tr->translate("Profile");?>", icon: "fa-user"},
 			}

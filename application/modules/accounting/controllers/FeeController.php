@@ -230,7 +230,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		$db = new Application_Model_DbTable_DbGlobal();
 			$result = $db->getAllYearByBranch($data);
 			if(!empty($data['selectOption'])){
-				array_unshift($result, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
+				array_unshift($result, array ( 'id' =>'','name' =>$this->tr->translate("PLEASE_SELECT_STUDENT_FEE")));
 			}
 			print_r(Zend_Json::encode($result));
 			exit();

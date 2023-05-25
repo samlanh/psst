@@ -787,7 +787,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		$sql.=" AND branch_id=".$data['branch_id'];
 	   	}
 	   	if(!empty($data['academicYear'])){
-	   		$sql.=" AND academic_year.branch_id=".$data['academicYear'];
+	   		$sql.=" AND academic_year =".$data['academicYear'];
 	   	}
 	   	if(isset($data['isFinished'])){
 	   		$sql.=" AND is_finished=".$data['isFinished'];

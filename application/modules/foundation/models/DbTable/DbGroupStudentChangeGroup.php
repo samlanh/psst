@@ -193,7 +193,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 				$fromGroupDetail = $this->getGroupDetailInStudentChangeGroup($_data['from_group']);
 				
-				
 				foreach ($idsss as $k){
 					if (!empty($_data['stu_id_'.$k])){
 					

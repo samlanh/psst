@@ -213,7 +213,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
-			$rows = $db->getStudentinfoById($branch_id);
+			$rows = $db->getAllstudentTest($branch_id);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

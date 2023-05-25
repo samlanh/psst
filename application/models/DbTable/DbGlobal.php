@@ -3390,10 +3390,13 @@ function getAllgroupStudyNotPass($action=null){
 	    if (!empty($data['group_id'])){
 		 	 $sql.=" AND g.id != ".$data['group_id'];
 	  	}
-	  	
 	 
   		if(!empty($data['change_type']) AND $data['change_type']==2){//ឡើងថ្នាក់
-  			$sql.=" AND g.grade != ".$data['grade'];
+  			if(!empty($data['toGrade'])){
+  				$sql.=" AND g.grade = ".$data['toGrade'];
+  			}else{
+  				$sql.=" AND g.grade != ".$data['grade'];
+  			}
   		}
   		elseif(!empty($data['change_type'])  AND $data['change_type']==3){//ឆ្លងភូមិសិក្សា
 	  		if(!empty($data['degree'])){
@@ -3677,15 +3680,21 @@ function getAllgroupStudyNotPass($action=null){
 	   					'discount_type'	=> $data['discountType'],
 	   					'discount_amount'=> $data['discountAmount'],
 	   					'school_option'	=> $data['schoolOption'],
+	   					
 	   					'is_maingrade'	=> $data['isMaingrade'],
 	   					'is_current'	=> $data['isCurrent'],
 	   					'stop_type'		=> $data['stopType'],
-	   					'status'		=> 1,
+	   					'is_setgroup'	=> empty($data['isSetGroup'])?0:1,
 	   					'is_newstudent'	=> $data['isNewStudent'],
+	   					
+	   					'status'		=> 1,
 	   					'note'			=> $data['remark'],
 	   					'create_date'	=> date("Y-m-d H:i:s"),
 	   					'user_id'		=> $this->getUserId(),
 	   			);
+	   			if(!empty($data['groupId'])){
+	   				$_arr['group_id']=$data['groupId'];
+	   			}
 	   			$this->_name='rms_group_detail_student';
 	   			$id = $this->insert($_arr);
 	   		}

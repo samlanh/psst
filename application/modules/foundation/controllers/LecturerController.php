@@ -237,6 +237,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			$db = new Global_Model_DbTable_DbTeacher();
 			$row = $db->getAllDepartment();
 			array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			array_unshift($row, array ( 'id' => '','name' =>$this->tr->translate("PLEASE_SELECT_DEPARTMENT")));
 			print_r(Zend_Json::encode($row));
 			exit();
 		}

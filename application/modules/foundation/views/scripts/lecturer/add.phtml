@@ -622,7 +622,7 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->department_type));?> );
+var department_store  = getDataStorefromJSON('id','name' );
 var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 	dojo.ready(function(){
 		getTeacherID();
@@ -720,8 +720,9 @@ var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::en
 				}
 			}, "village_name");
 			filterDistrict();
-			dijit.byId('province_id').attr('value',12)
+			dijit.byId('province_id').attr('value',12);
 			oldRow();
+			getRefreshDepartment();
 	});
 	require(["dojo/ready"], function(ready){
 		new dijit.form.FilteringSelect({
@@ -763,6 +764,7 @@ var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::en
 		dijit.byId("nation").attr('value',1);
 		dijit.byId("nationality").attr('value',1);
 		getAllNation();
+		
 	});
 
 function getAllNation(){ 
@@ -833,12 +835,12 @@ function getAllNation(){
 			url:url_getdepartment,
 			handleAs:"json",
 			load: function(data) {
-				teacher_storeass  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('department').set('store',teacher_storeass);  
+			
+				department_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('department').set('store',department_store);  
 			    document.getElementsByClassName("overlay")[0].style.display="none";
 			},
 			error: function(err) {
-				
 				document.getElementsByClassName("overlay")[0].style.display="none";
 			}
 		});

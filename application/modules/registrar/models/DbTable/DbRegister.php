@@ -406,7 +406,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'discount_amount'=>$data['discount_amount'.$i],
 								'totalpayment'	=>$data['total_amount'.$i],
 								'paidamount'	=>$data['paid_amount'.$i],
-								'is_onepayment'	=>$data['onepayment_'.$i],
+								'is_onepayment'	=>($data['term_'.$i]==5)?1:0,//5 = one payment
 								'start_date'	=>($data['onepayment_'.$i]==1)?'':$data['date_start_'.$i],
 								'validate'		=>($data['onepayment_'.$i]==1)?'':$data['validate_'.$i],
 								'is_start'		=>1,

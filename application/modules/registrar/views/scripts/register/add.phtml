@@ -676,7 +676,7 @@ require(["dojo/ready"], function(ready){
 		class: 'fullside', 
 		style:'height: 30px;',
 		onChange: function() {  
-			getItemOption();
+			getItemTermOption();
 		}
 	}, "item");
 	
@@ -1215,10 +1215,14 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<label class="control-label custom-switch float-end">';
 				template+='<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
 				checked='checked';
+				disabled='';
 				if(dataRow!=null){
-					checked='';
-				}
-					template+='<input type="checkbox" id="autoNextPay'+col+'" name="autoNextPay'+col+'" class="custom-switch-input" '+checked+' />'; 
+					if((student_type=='3'|| student_type=='2') || dataRow.is_onepayment=='1'){
+						checked='';
+						disabled='disabled';
+					}
+				}				
+					template+='<input type="checkbox" id="autoNextPay'+col+'" name="autoNextPay'+col+'" class="custom-switch-input" '+checked+' '+disabled+' />'; 
 						template+='<span class="custom-switch-indicator custom-radius switch-status"></span>'; 
 							template+='</label></div>';
 			template+='<td ><div class="form-group"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');getAllTermStudy('+col+');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR');?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_'+col+'" id="academic_year_'+col+'" name="term_'+col+'" >'+academicOption+'</select></div>';
@@ -1247,7 +1251,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+=strCol6+'<input type="text" placeHolder="<?php echo $tr->translate('END_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></label></td>';
 
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" />';
-			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/><input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/></td>';
 			
 			classOddRow='listBox evenRow';
 			if(no%2==0){
@@ -1275,6 +1279,9 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			dijit.byId('date_start_'+col).attr('value',dataRow.startDate);
 			dijit.byId('validate_'+col).attr('value',dataRow.endDate);
 			dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
+			if(dataRow.is_onepayment=='1'){
+				dijit.byId('term_'+col).attr('value',5);
+			}
 			
 			if(balance>0 && balance!=null){
 				dijit.byId('price_'+col).attr('value',balance);
@@ -1343,7 +1350,7 @@ function getExistingService(){
 }
 
 var urlget_removeoption = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'gettermbyservice')); ?>";
-function getItemOption(){
+function getItemTermOption(){
 	serviceId = dijit.byId("item").get("value");
 	if(serviceId ==''){return false;}
 	serviceLabel = dijit.byId("item").attr("displayedValue");
@@ -1378,9 +1385,8 @@ function deleteRecord(index) {
 	dojo.query("#row"+index).remove();
 }
 function getValidate(key){
-	onepayment = dijit.byId('onepayment_'+key).get('value');
 	start_date = dijit.byId('date_start_'+key).get('value');
-	if(onepayment == 0 && start_date!=null){
+	if(start_date!=null){
 		amount= dijit.byId('qty_'+key).get('value');
 		term = dijit.byId('term_'+key).get('value');
 		
@@ -1566,7 +1572,7 @@ function getservicefee(key){
  			load: function(data){
 	 			dijit.byId("remark"+key).attr("value",'');
 	 			dijit.byId("price_"+key).attr("value",data.price);
-	 			dijit.byId("onepayment_"+key).attr("value",data.onepayment);
+	 			//dijit.byId("onepayment_"+key).attr("value",data.onepayment);
 	 			dijit.byId("service_type_"+key).attr("value",data.items_type);
 	 			calculateTotal(key);
  				if(data.validate!=null){
@@ -1691,8 +1697,8 @@ function printSave(){
 								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
-								  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
-								  if(service_type==1){//one payment only
+								  onepaymentType = dijit.byId("term_"+rowIDArray[n]).get('value');
+								  if(onepaymentType==5){//one payment only
 									  start_date = '';
 									  epx_date='';
 								  }else{//period
@@ -1753,8 +1759,7 @@ function printSave(){
 								  }
 								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 		
-								  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
-								  if(service_type==1){//one payment only
+								  if(is_onePayment==5){//one payment only
 									  start_date = '';
 									  epx_date='';
 								  }else{//period
@@ -1764,17 +1769,17 @@ function printSave(){
 								  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
 								  temp+='</tr>';
 								  i++;
-								}
+						}
 					}
 							
 		temp+='</table>';
 
 		<?php if ($settingNewStuID==1){?>
-		student_type = dijit.byId("student_type").attr("value");
-		if(student_type==2){
-			var NewStuCodeFromTest = dijit.byId('student_code').attr('value'); 
-			dojo.byId("lb_stu_id").innerHTML = NewStuCodeFromTest;
-		}
+			student_type = dijit.byId("student_type").attr("value");
+			if(student_type==2){
+				var NewStuCodeFromTest = dijit.byId('student_code').attr('value'); 
+				dojo.byId("lb_stu_id").innerHTML = NewStuCodeFromTest;
+			}
 		<?php }?>
 		dojo.byId('t_amountmoneytype').innerHTML = temp;
 		dijit.byId("terms").show();	

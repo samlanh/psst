@@ -3300,7 +3300,10 @@ function getAllgroupStudyNotPass($action=null){
 				gs.grade,
 				gs.grade AS itemDetailId,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
-				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel,
+				(SELECT rms_items.is_onepayment FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as is_onepayment
+				
+				
 				
 		  	FROM
 		  		`rms_group_detail_student` AS gs,
@@ -3484,7 +3487,8 @@ function getAllgroupStudyNotPass($action=null){
 		  	i.product_type,
 		  	i.is_productseat,
 		  	i.schoolOption,
-		  	i.is_autopayment
+		  	i.is_autopayment,
+		  	is_onepayment
   		FROM `rms_itemsdetail` i WHERE
   			i.status=1 ";
   	 

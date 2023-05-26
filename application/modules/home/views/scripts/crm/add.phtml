@@ -155,7 +155,7 @@
 							<div class="form-group">
 								<div class="d-flex"> 
 									<div class="settings-main-icon ">
-										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+										<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 									</div> 
 									<div class="col-md-10 col-sm-10 col-xs-12"> 
 										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFORMATION");?></p>
@@ -235,20 +235,21 @@
 			               </div>
 			        </div>
 			        <div class="card-blogform">
-							<div class="card-body">
-							   <div class="form-group">
-				                   <div class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" >
-					                  <div class="col-md-7 col-sm-7 col-xs-12">
-					                   <i class="material-icons-outlined">
-											people_alt
-										</i><?php echo $tr->translate("STUDY_INFO");?> 
-										</div>
-										 <div class="col-md-3 col-sm-3 col-xs-12">
+						<div class="card-body">
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-7 col-sm-7 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
+									</div> 
+									<div class="col-md-3 col-sm- col-xs-12">
 										 	<input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
 											class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="checkStudent();// addRow();" />
-										 </div>
-				                   </div>
-			               	   </div>
+									</div>
+								</div>
+							</div>
 			                 <div class="form-group">
 				         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
 									<tr id="head-title" class="head-td" align="right" style="white-space:nowrap;"></tr>

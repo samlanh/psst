@@ -91,6 +91,17 @@ tr#head-title {
 		            <li class="nav-item active">
 		                <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("STUDENT_INFO");?></a>
 		            </li>
+					<li class="nav-item">
+		                <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+		                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("PARENT_INFO");?>
+		                </a>
+		            </li>
+					<li class="nav-item">
+		                <a class="nav-link" data-toggle="tab" href="#panel24" role="tab">
+		                 <i class="fa fa-graduation-cap ml-2" aria-hidden="true"></i><?php echo $tr->translate("STUDY_INFO");?>
+		                </a>
+		            </li>
+		           
 		        </ul>
 		    </div>
 		    <!--/. Tab Menu -->
@@ -101,297 +112,424 @@ tr#head-title {
 			        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
 				    	<div class="card-box">
 				        	<div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
-				                   </label>
-				                </div>
-				               
-				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("branch_id");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_ID");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("stu_code");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SERIAL");?> <span class="required">*</span>:
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("serial");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?> <span class="required">*</span>:
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("kh_name");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Last Name");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("en_name");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("First Name");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("first_name");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("sex");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_STATUS");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("student_status");?>
-				                   </div>
-				                </div>
-				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATIONALITY");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("nationality");?>
-				                   </div>
-				                </div>
-				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATION");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("nation");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DOB");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("dob");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("POB");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("pob");?>
-				                   </div>
-				                </div>
-				                <div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_SCHOOL");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("old_school");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_GRADE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("old_grade");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OCCUPATION");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("student_option");?>
-				                   </div>
-				                </div>
-				             </div>
-				             <div class="col-md-4 col-sm-4 col-xs-12">
-				             	<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
-				                  	<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
-				                   </label>
-				                </div>
-				                
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NUMBER_HOME");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("home_num");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STREET");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("street_num");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PROVINCE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("province_id");?>
-				                   </div>
-				                </div>
-				                 <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISTRICT");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="district_name"/>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COMMUNE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="commune_name"/>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("VILLAGE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="village_name"/>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO");?> 
-				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("phone");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("email");?>
-				                   </div>
-				                </div>
-								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
-				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_NAME");?> <span class="required">*</span> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("parent_name");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_TEL");?> <span class="required">*</span> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("parent_tel");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("TEST_INFO");?> 
-				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TEST_TYPE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("test_type");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TEST_VERSION");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="test_setting_id" />
-				                   </div>
-				                </div>
-				             </div>
-				             <div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_TEST_INFORMATION");?> 
-				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <div class="col-md-12 col-sm-12 col-xs-12 " >
-				                   		<div class="account-image text-center">
-											<div class="image-box">
-												<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
+												</div> 
 											</div>
-											<div class="button_browse">
-											<div id='preview'></div>	
-													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-													<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
-													<input type="hidden" name="uploaded" id="uploaded" />
-											</div>
-											<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
 										</div>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("EMERGENCY_CONTACT");?> 
-				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <label style="  white-space: normal;  font-style: italic;" class="control-label col-md-12 col-sm-12 col-xs-12 " > 
-				                   List any person whom you would like to be contacted in case of emergency.
-				                   </label>
-				                </div>
-				        		<div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("emergency_name");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RELATIONSHIP_TO_STUDENT");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("relationship_to_student");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("emergency_tel");?>
-				                   </div>
-				                </div>
+										<div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("branch_id");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_ID");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("stu_code");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SERIAL");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("serial");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("kh_name");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Last Name");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("en_name");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("First Name");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("first_name");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("sex");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_STATUS");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("student_status");?>
+											</div>
+										</div>
+										<div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATIONALITY");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("nationality");?>
+											</div>
+										</div>
+										<div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NATION");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("nation");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DOB");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("dob");?>
+											</div>
+										</div>
+										
+									
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OCCUPATION");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("student_option");?>
+											</div>
+										</div>
+									</div>
+								</div>
+				             </div>
+				             <div class="col-md-4 col-sm-4 col-xs-12">
+								 <div class="card-blogform">
+									<div class="card-body"> 
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+														<i class="material-icons-outlined">
+														place
+														</i>
+													</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ADDRESS_INFO");?></p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("POB");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("pob");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-map" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-7 col-sm-7 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CURRENT_ADDRESS");?></p>
+												</div> 
+												<label class="col-md-3 col-sm-3 col-xs-12" >
+													<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group">
+											
+										</div>
+										
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NUMBER_HOME");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("home_num");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STREET");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("street_num");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PROVINCE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("province_id");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISTRICT");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="district_name"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COMMUNE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="commune_name"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("VILLAGE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="village_name"/>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-phone" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CONTACT_INFO");?></p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("phone");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("email");?>
+											</div>
+										</div>
+									</div>
+								 </div>
+				             </div>
+				             <div class="col-md-4 col-sm-4 col-xs-12">
+								 <div class="card-blogform">
+									<div class="card-body"> 
+										<div class="form-group">
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="material-icons-outlined">
+														add_a_photo
+														</i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PHOTO");?></p>
+													</div> 
+												</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12 col-sm-12 col-xs-12 " >
+													<div class="account-image text-center">
+														<div class="image-box">
+															<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+														</div>
+														<div class="button_browse">
+														<div id='preview'></div>	
+																<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+																<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
+																<input type="hidden" name="uploaded" id="uploaded" />
+														</div>
+														<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
+													</div>
+											</div>
+										</div>
+									</div>
+								 </div>
+								 <div class="card-blogform dijitHidden">
+									<div class="card-body"> 
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TEST_INFO");?></p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TEST_TYPE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("test_type");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TEST_VERSION");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input id="test_setting_id" />
+											</div>
+										</div>
+									</div>
+								</div>
 				             </div>
 				        </div>
-				        <div class="card-box">
-				    	</div>
-				    	<div class="card-box">
-				    		<div class="col-md-12 col-sm-12 col-xs-12">
-				            	<div class="col-sm-12 border-botom">
-						    		<div class="col-sm-12 pd-0">
-						    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("EDUCATIONAL_BACKGROUND")?>(SchoolName , Grade/Level/Year , Major , Year)</h4>
-					    			</div>
-					    		</div>
-				            	<div class="form-group">
-				                   <div class="col-md-12 col-sm-12 col-xs-12">
-				                   		<table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;width: 100%;">
-									    	<tr id="head-title" class="head-td" align="center"></tr>
-										</table>
-										<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-										class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addRow();" />
-										<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-				                   </div>
-				                </div>
-				            </div>
-				       </div>
 				   </div>
 				   <!--/.Panel 1-->
+				   <div class="tab-pane fade in " id="panel24" role="tabpanel">
+				    	<div class="card-box">
+				        	<div class="col-md-4 col-sm-4 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group <?php if ($testCondiction==2){ echo "hiddenControl";}?>">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_SCHOOL");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("old_school");?>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_GRADE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("old_grade");?>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+				            </div>
+							<div class="col-md-8 col-sm-8 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("EDUCATIONAL_BACKGROUND")?>(SchoolName , Grade/Level/Year , Major , Year)</p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+													<table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;width: 100%;">
+														<tr id="head-title" class="head-td" align="center"></tr>
+													</table>
+													<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+													class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addRow();" />
+													<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+										</div>
+										</div>
+									</div>
+								</div>
+				            </div>
+				        </div>
+				   </div>
+				    <!--/.Panel 2-->
+					<div class="tab-pane fade in " id="panel22" role="tabpanel">
+				    	<div class="card-box">
+				        	<div class="col-md-4 col-sm-4 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PARENT_INFO");?></p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_NAME");?> <span class="required">*</span> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("parent_name");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_TEL");?> <span class="required">*</span> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("parent_tel");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												&nbsp;
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-hand-o-right" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("EMERGENCY_CONTACT");?></p>
+												</div> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label style="  white-space: normal;  font-style: italic;" class="control-label col-md-12 col-sm-12 col-xs-12 " > 
+											List any person whom you would like to be contacted in case of emergency.
+											</label>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("emergency_name");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RELATIONSHIP_TO_STUDENT");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("relationship_to_student");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("emergency_tel");?>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+				            </div>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								
+							</div>
+				        </div>
+				   </div>
+				     <!--/.Panel 2-->
 	       		</div>
 	      	 </div>
 	        <div class="card-box">

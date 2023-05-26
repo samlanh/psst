@@ -232,7 +232,9 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_branch_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'autoComplete'=>'false',
+				'required'=>'false',
     			'queryExpr'=>'*${0}*',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
     			'class'=>'fullside height-text',));
     	$_branch_search->setValue($request->getParam("branch_search"));
     	if (count($optionBranch)==1){
@@ -247,9 +249,10 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_ask_for_search->setMultiOptions($_arr);
     	$_ask_for_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
+				'placeholder'=>$this->tr->translate("ASK_FOR"),
     			'class'=>'fullside height-text',));
     	
     	$_ask_for_search->setValue($request->getParam("ask_for_search"));
@@ -261,9 +264,10 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_know_by_search->setMultiOptions($_arr_opt_know);
     	$_know_by_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
+				'placeholder'=>$this->tr->translate("KNOW_BY"),
     			'class'=>'fullside height-text',));
     	$_know_by_search->setValue($request->getParam("know_by_search"));
     	
@@ -273,7 +277,9 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$_status_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'autoComplete'=>'false',
+				'required'=>'false',
     			'queryExpr'=>'*${0}*',
+				'placeholder'=>$this->tr->translate("STATUS"),
     			'class'=>'fullside height-text',));
     	$_status_search->setValue($request->getParam("status_search"));
     	
@@ -295,7 +301,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside',
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			'placeholder'=>$this->tr->translate("END_DATE"),
-    			'required'=>false));
+    			'required'=>'false'));
     	$_date = $request->getParam("end_date");
     	if(empty($_date)){
     		$_date = date("Y-m-d");
@@ -331,6 +337,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'required'=>'false',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
+				'placeholder'=>$this->tr->translate("FOLLOWU_STATUS"),
     			'class'=>'fullside height-text',));
     	 
     	$_arr =array(

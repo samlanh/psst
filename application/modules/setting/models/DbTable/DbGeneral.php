@@ -210,6 +210,24 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'pay_as_group'";
 				$this->update($arr, $where);
 			}
+			$rows = $this->geLabelByKeyName('show_pic_receipt');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['show_pic_receipt'],'keyName'=>'show_pic_receipt','note'=>"Can Hide/Show Pic In Receipt ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['show_pic_receipt']);
+				$where=" keyName= 'show_pic_receipt'";
+				$this->update($arr, $where);
+			}
+			$rows = $this->geLabelByKeyName('test_online');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['test_online'],'keyName'=>'test_online','note'=>"Can Hide/Show Test Online  ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['test_online']);
+				$where=" keyName= 'test_online'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

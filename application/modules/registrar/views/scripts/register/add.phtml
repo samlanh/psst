@@ -81,9 +81,6 @@ span.inf-value {
 .text-deactive {
     color: #ff1203;
 }
-.card-box.search-list {
-    min-height: 400px;
-}
 a.btn.btn-default.btn-detail {
     background: #009688;
     padding: 10px;
@@ -279,9 +276,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					              <div class="form-group">
 					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?></label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
-					                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
-					                   
-					                   		<!-- For  សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់ -->
+					                   		<input type="text" name="note" id="note" class="fullside"  dojoType="dijit.form.Textarea"/>
 					                   		<input type="hidden" name="studentBalanceId" id="studentBalanceId" class="fullside" dojoType="dijit.form.TextBox"/>
 					                   		<input type="hidden" name="groupDetailId" id="groupDetailId" class="fullside" dojoType="dijit.form.TextBox"/>
 					                   </div>
@@ -441,7 +436,7 @@ span.custom-switch-indicator{line-height: 20px;}
 		    </div>
 		    <div class="tab-content vertical">
 			        <!--Panel 1-->
-			        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
+			        <div class="fade in active" id="panel21" role="tabpanel">
 			        	 <div class="card-box">
 			        	 	<div class="col-md-12 col-sm-12 col-xs-12">
 			        	 		<table class="responsiveTable ItemPayment" style="border-collapse: collapse; width:100%;">

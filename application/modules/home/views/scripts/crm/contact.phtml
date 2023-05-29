@@ -49,89 +49,133 @@ table.history-record tbody tr td {
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<div class="form-group">
-		                <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CONTACT_DATE");?> <span class="required">*</span></label>
-		                <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<?php echo $frm_items->getElement("contact_date");?>
-		                	<?php echo $frm_items->getElement("id");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		               <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FEEDBACK_OPTION");?> <span class="required">*</span></label>
-		               <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<input value="" type="text" id="e15" name="feedback_type" style="width: 100%">
-		                </div>
-		             </div>
-					<div class="form-group">
-		                <label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FEEDBACK");?> <span class="required">*</span></label>
-		                <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<?php echo $frm_items->getElement("feedback");?>
-		                </div>
-		             </div>
-	                <div class="form-group">
-		               <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("PROCCESS");?> </label>
-		               <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<?php echo $frm_items->getElement("proccess");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		               <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FOLLOWU_STATUS");?> </label>
-		               <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<?php echo $frm_items->getElement("followup_status");?>
-		                </div>
-		             </div>
-					<div class="form-group">
-		                <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("NEXT_DATE_CONTACT");?> </label>
-		                <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<?php echo $frm_items->getElement("next_contact");?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-	                   <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CONTACT_BY");?>
-	                   </label>
-	                   <div class="col-md-9 col-sm-9 col-xs-12">
-	                   		<?php echo $frm_items->getElement("user_contact");?>
-	                   </div>
-	                </div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-phone-alt" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CONTACT_INFO");?></p>
+									</div> 
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CONTACT_DATE");?> <span class="required">*</span></label>
+								<div class="col-md-9 col-sm-9 col-xs-12">
+									<?php echo $frm_items->getElement("contact_date");?>
+									<?php echo $frm_items->getElement("id");?>
+								</div>
+							</div>
+							<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FEEDBACK_OPTION");?> <span class="required">*</span></label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+									<input value="" type="text" id="e15" name="feedback_type" style="width: 100%">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FEEDBACK");?> <span class="required">*</span></label>
+								<div class="col-md-9 col-sm-9 col-xs-12">
+									<?php echo $frm_items->getElement("feedback");?>
+								</div>
+							</div>
+							<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("PROCCESS");?> </label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+									<?php echo $frm_items->getElement("proccess");?>
+								</div>
+							</div>
+							<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FOLLOWU_STATUS");?> </label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+									<?php echo $frm_items->getElement("followup_status");?>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("NEXT_DATE_CONTACT");?> </label>
+								<div class="col-md-9 col-sm-9 col-xs-12">
+									<?php echo $frm_items->getElement("next_contact");?>
+								</div>
+							</div>
+							<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CONTACT_BY");?>
+							</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+									<?php echo $frm_items->getElement("user_contact");?>
+							</div>
+							</div>
+
+						</div>
+					</div>
+					
 		         </div>
+
 		         <div class="col-md-6 col-sm-6 col-xs-12">
-		         	<div class="form-group">
-		         		<ul style="list-style: none;">
-		         			<li><span class="bold" style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> <span > : <?php echo $this->row['kh_name'];?> (<?php echo $this->row['first_name']." ".$this->row['last_name'];?>)</span></li>
-		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("FROM_SCHOOL");?></span> <span > : <?php echo $this->row['old_school'];?> </span></li>
-		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("ASK_FOR");?></span> <span > : <?php echo $this->row['ask_for_title'];?></span></li>
-		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("TEL");?></span> <span > : <?php echo $this->row['tel'];?></span></li>
-		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("Amount Contacted");?></span> <span class="bold" > : <?php echo count($this->history);?></span></li>
-		         		</ul>
-		         	</div>
-		         	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_HISTORY");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                	<table class="history-record" >
-	                		<thead>
-	                			<tr>
-	                				<th><?php echo $tr->translate("NUM");?></th>
-	                				<th><?php echo $tr->translate("CONTACT_DATE");?></th>
-	                				<th style="width: 150px;"><?php echo $tr->translate("FEEDBACK");?></th>
-	                				<th><?php echo $tr->translate("NEXT_DATE_CONTACT");?></th>
-	                				<th><?php echo $tr->translate("CONTACT_BY");?></th>
-	                			</tr>
-	                		</thead>
-	                		<tbody>
-	                			<?php if(!empty($this->history))foreach ($this->history as $key => $record){?>
-	                			<tr>
-	                				<td align="center">&nbsp;<?php echo $key+1;?>&nbsp;</td>
-	                				<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($record['contact_date']))?>&nbsp;</td>
-	                				<td align="left">&nbsp;<?php echo $record['feedback'];?>&nbsp;</td>
-	                				<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($record['next_contact']))?>&nbsp;</td>
-	                				<td align="center">&nbsp;<?php echo $record['user_contact_name'];?>&nbsp;</td>
-	                			</tr>
-	                			<?php }?>
-	                		</tbody>
-	                	</table>
-	                </div>
+					 <div class="card-blogform">
+						<div class="card-body"> 
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
+									</div> 
+								</div>
+							</div>
+							<div class="form-group">
+								<ul style="list-style: none;">
+									<li><span class="bold" style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> <span > : <?php echo $this->row['kh_name'];?> (<?php echo $this->row['last_name']." ".$this->row['first_name'];?>)</span></li>
+									<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("FROM_SCHOOL");?></span> <span > : <?php echo $this->row['old_school'];?> </span></li>
+									<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("ASK_FOR");?></span> <span > : <?php echo $this->row['ask_for_title'];?></span></li>
+									<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("TEL");?></span> <span > : <?php echo $this->row['tel'];?></span></li>
+									<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("Amount Contacted");?></span> <span class="bold" > : <?php echo count($this->history);?></span></li>
+								</ul>
+							</div>
+						</div>
+					 </div>
+
+					 <div class="card-blogform">
+						<div class="card-body"> 
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CONTACT_HISTORY");?></p>
+									</div> 
+								</div>
+							</div>
+							<div class="form-group">
+								<table class="history-record" >
+									<thead>
+										<tr>
+											<th><?php echo $tr->translate("NUM");?></th>
+											<th><?php echo $tr->translate("CONTACT_DATE");?></th>
+											<th style="width: 150px;"><?php echo $tr->translate("FEEDBACK");?></th>
+											<th><?php echo $tr->translate("NEXT_DATE_CONTACT");?></th>
+											<th><?php echo $tr->translate("CONTACT_BY");?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php if(!empty($this->history))foreach ($this->history as $key => $record){?>
+										<tr>
+											<td align="center">&nbsp;<?php echo $key+1;?>&nbsp;</td>
+											<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($record['contact_date']))?>&nbsp;</td>
+											<td align="left">&nbsp;<?php echo $record['feedback'];?>&nbsp;</td>
+											<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($record['next_contact']))?>&nbsp;</td>
+											<td align="center">&nbsp;<?php echo $record['user_contact_name'];?>&nbsp;</td>
+										</tr>
+										<?php }?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					 </div>
+		         	
+		         
 		         </div>
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">

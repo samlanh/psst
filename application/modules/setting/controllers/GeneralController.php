@@ -52,6 +52,8 @@ public function init()
 		$row['name_required'] = $db_gs->geLabelByKeyName('name_required');
 		$row['entry_stuid'] = $db_gs->geLabelByKeyName('entry_stuid');
 		$row['pay_as_group'] = $db_gs->geLabelByKeyName('pay_as_group');
+		$row['show_pic_receipt'] = $db_gs->geLabelByKeyName('show_pic_receipt');
+		$row['test_online'] = $db_gs->geLabelByKeyName('test_online');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

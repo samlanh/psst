@@ -191,6 +191,22 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				1=>$this->tr->translate("PAYMENT_AS_GROUP"),
 				);
 		$groupPayment->setMultiOptions($gOpt);
+
+		$picDisplay=  new Zend_Dojo_Form_Element_FilteringSelect('show_pic_receipt');
+		$picDisplay->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$picOpt = array(
+				0=>$this->tr->translate("HIDE"),
+				1=>$this->tr->translate("SHOW"),
+				);
+		$picDisplay->setMultiOptions($picOpt);
+
+		$testOnline=  new Zend_Dojo_Form_Element_FilteringSelect('test_online');
+		$testOnline->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$testOpt = array(
+				0=>$this->tr->translate("HIDE"),
+				1=>$this->tr->translate("SHOW"),
+				);
+		$testOnline->setMultiOptions($testOpt);
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -218,6 +234,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$nameRequired->setValue($data['name_required']['keyValue']);
 			$entryStuId->setValue($data['entry_stuid']['keyValue']);
 			$groupPayment->setValue($data['pay_as_group']['keyValue']);
+			$picDisplay->setValue($data['show_pic_receipt']['keyValue']);
+			$testOnline->setValue($data['test_online']['keyValue']);
 
 		}
 		$this->addElements(array(
@@ -245,6 +263,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$nameRequired
 				,$entryStuId
 				,$groupPayment
+				,$picDisplay
+				,$testOnline
 				));
 		
 		return $this;

@@ -169,16 +169,14 @@ table.tb-footer tr.style-head {
 					.know_byitem{display: inline-table;width:33%;}
 					.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
 					.know_by li{line-height: 15px;}
-					@page {
-						page:A4;
-						size: landscape;
-					}
 					.oddRecord{background:#ecf1ff;}
-				@page {
-					page:A4;
-					size: landscape;
-				}
-			</style>
+					@media print {
+							@page {
+								page:A4;
+								size: landscape;
+								 margin: 0.5cm;
+							}
+						}	</style>
 				<tr>
 					<td colspan="3">
 						<div id="exportExcel">

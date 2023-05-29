@@ -105,6 +105,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.TextBox',
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("POB"),
+				'style'=>'min-height:55px;',
     			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
     	));
     	

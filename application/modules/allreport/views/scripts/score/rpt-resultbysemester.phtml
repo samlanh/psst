@@ -22,8 +22,6 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
-<form  action="" dojoType="dijit.form.Form" method="post">
-</form>
 	<div style="background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
 		<style type="text/css">
@@ -45,56 +43,59 @@
 			td span {
 			    line-height: initial !important;
 			}
+			@media print{
+				@page{
+					page:A4;
+					size: portrait;
+					margin: 0.5cm;
+				}
+				body{padding:0.5cm;}
+			}
 		</style>
-		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: Arial,'Khmer OS Battambang'; ">
-				<?php
-					$semester_str = array(1=>"I",2=>"II");
-					$student=0; $female=0;
-					 $old_groupid=0; $i=0; $count_fail=0;  $old_average = 0; $old_rank=0;
-					 $duplicate=0;$count_pass=0;
-					 
-					 $pass_female=0;
-					 $fail_female=0;
-					 $date_input =date("Y-m-d");
-					 if (!empty($this->rs_scoresemester)){ foreach($this->rs_scoresemester as $key=> $rs){ 
-						if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");}else{ $female++; $sex = $tr->translate("FEMALE_SHORT");}
-						$student++;
-				?>
-				<?php if ($old_groupid!=$rs['group_id']){ if (!empty($rs['date_input'])){ $date_input = $rs['date_input'];}  ?>
-			    <?php $i=0; $count_fail=0;?>
-			 	<tr>
-					<td valign="top" align="center" width="32%" >
-						<span​​ style="color:#000; font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
-							<br /><br />
-							<?php echo $tr->translate("MINISTRY_INPHNOMPENH");?><br />
-							<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
-							<?php echo $rs['school_namekh'];?>
-						</span>
-					</td>
-					<td align="center" width="36%">
-					</td>
-					<td valign="top" align="center" width="32%">
-						<strong​​ style="color:#000; font-size: 14px;font-family: Arial,'Khmer OS Muol Light';">
-							<?php echo $tr->translate("NATIONALITY_OFKINGDOM");?><br />
-							<?php echo $tr->translate("NATION_RELIGION_KING");?>
-						</strong>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center" style="border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-						<span​​ style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("ចំណាត់ថ្នាក់ប្រចាំឆមាសលើកទី").$dbgb->getNumberInkhmer($rs['for_semester']);?></span><br />
-						<span​​ style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("GROUP")." ".$rs['group_code'];?></span><br />
-						<span​​ style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("ACADEMIC_YEAR")." ".$dbgb->getNumberInkhmer($rs['start_year'])."-".$dbgb->getNumberInkhmer($rs['end_year']);?></span>
-					</td>
-					<td ></td>
-				</tr>
-				<tr>
-					<td colspan="3" >
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" id="exportExcel">
-						<table border="1" cellpadding="0"​ style=" font-size:13px; margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  >
+			<table style="background:#fff; margin: 0 auto; font-family: Arial,'Khmer OS Battambang'; ">
+					<?php
+						$semester_str = array(1=>"I",2=>"II");
+						$student=0; $female=0;
+						 $old_groupid=0; $i=0; $count_fail=0;  $old_average = 0; $old_rank=0;
+						 $duplicate=0;$count_pass=0;
+						 
+						 $pass_female=0;
+						 $fail_female=0;
+						 $date_input =date("Y-m-d");
+						 if (!empty($this->rs_scoresemester)){ foreach($this->rs_scoresemester as $key=> $rs){ 
+							if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");}else{ $female++; $sex = $tr->translate("FEMALE_SHORT");}
+							$student++;
+					?>
+					<?php if ($old_groupid!=$rs['group_id']){ if (!empty($rs['date_input'])){ $date_input = $rs['date_input'];}  ?>
+				    <?php $i=0; $count_fail=0;?>
+				 	<tr>
+						<td valign="top" align="center" width="32%" >
+							<span​​ style="color:#000; font-size: 12px;font-family: Arial,'Khmer OS Muol Light';">
+								<br /><br />
+								<?php echo $tr->translate("MINISTRY_INPHNOMPENH");?><br />
+								<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
+								<?php echo $rs['school_namekh'];?>
+							</span>
+						</td>
+						<td align="center" width="36%">
+						</td>
+						<td valign="top" align="center" width="32%">
+							<strong​​ style="color:#000; font-size: 14px;font-family: Arial,'Khmer OS Muol Light';">
+								<?php echo $tr->translate("NATIONALITY_OFKINGDOM");?><br />
+								<?php echo $tr->translate("NATION_RELIGION_KING");?>
+							</strong>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center" style="border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+							<span​​ style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("ចំណាត់ថ្នាក់ប្រចាំឆមាសលើកទី").$dbgb->getNumberInkhmer($rs['for_semester']);?></span><br />
+							<span​​ style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("GROUP")." ".$rs['group_code'];?></span><br />
+							<span​​ style="color: black;font-size: 12px;font-family: Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("ACADEMIC_YEAR")." ".$dbgb->getNumberInkhmer($rs['start_year'])."-".$dbgb->getNumberInkhmer($rs['end_year']);?></span>
+						</td>
+						<td ></td>
+					</tr>
+				</table>
+				<table border="1" cellpadding="0"​ style=" font-size:13px; margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  >
 							<tr class="cheader" align="center"  style="font-size:14px;font-family: Arial,'Khmer OS Battambang';">
 								<td width="3%"><?php echo $tr->translate("NUM");?></td>
 								<td width="24%"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
@@ -221,19 +222,11 @@
 										</table>
 									</td>
 								</tr>
-							<?php }?>
-						</table>
-					</td>
-				</tr>
+					<?php }?>
 			</table>
 		</div>
-		<table width="100%">
-			<tr>
-				<td colspan="3" align="center"><button dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></td>
-			</tr>
-		</table>
-		
-	</div>
+		<div align="center"><button dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></div>
+</div>
 <script>
 	function printSelected(){
 		group = dijit.byId('group_id').get('value');

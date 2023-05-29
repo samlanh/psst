@@ -156,7 +156,7 @@
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 									<td scope="col" colspan="2">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
 									<td scope="col" colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-									<td scope="col" colspan="8">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+									<td scope="col" colspan="10">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
 								</tr>
 								<tr class="style" align="center">
 									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_ID');?></td>
@@ -165,8 +165,10 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?></td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('UNIT_COST');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL_COST');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('PROFIT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('PAID_AMOUNT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('RECEIPT_NO');?></td>
 									<td scope="col"> &nbsp;<?php echo $tr->translate('CREATED_DATE');?>&nbsp;</td>
@@ -187,8 +189,14 @@
 							    <td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
 							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo number_format($rs['qty'],0);?></td>
 							    <td data-label="<?php echo $tr->translate("UNIT_COST");?>"><?php echo "$ ".$rs['cost'];?></td>
+							    <td data-label="<?php echo $tr->translate("TOTAL_COST");?>">
+							    <?php 
+								    $totalCost = $rs['qty']*$rs['cost'];
+								    echo number_format($totalCost,2);
+								?></td>
 							    <td data-label="<?php echo $tr->translate("SELL_PRICE");?>"><?php echo "$ ".$rs['fee'];?></td>
 							    <td data-label="<?php echo $tr->translate("TOTAL");?>">&nbsp;$&nbsp;<?php echo $rs['subtotal'];?>&nbsp;</td>
+							    <td data-label="<?php echo $tr->translate("TOTAL");?>">&nbsp;$&nbsp;<?php echo $rs['subtotal']-$totalCost;?>&nbsp;</td>
 							    <td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>">&nbsp;$&nbsp;<?php echo $rs['paidamount'];?>&nbsp;</td>
 							    <td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><strong><?php echo $rs['receipt_number'];?></strong></td>
 							    <td data-label="<?php echo $tr->translate("CREATED_DATE");?>"><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>

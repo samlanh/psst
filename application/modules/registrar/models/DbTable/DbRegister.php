@@ -116,7 +116,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function cutStockDetail($data,$i){
     	$db = $this->getAdapter();
     	$condictionSale = $data['conditionCutStock'];
-    	
+    	$totalQty=0;
     	$totalCosting = 0;
     	if($data['is_productseat']==1){ // product set
     		$sql="SELECT
@@ -139,9 +139,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$result = $db->fetchAll($sql);
     		if(!empty($result)){
     			foreach ($result as $row){
-    				$totalQty = $totalQty+($row['set_qty'] * $data['qty_'.$i]);//count QtyReceive
     				$qty_after = $row['set_qty'] * $data['qty_'.$i];
-    					
     				$totalCosting = $totalCosting+($qty_after*$row['costing']);//for for product
     					
     				if ($condictionSale!=1){
@@ -177,12 +175,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     					$dbpu->updateStock($row['pro_id'],$data['branch_id'],-($row['set_qty'] * $data['qty_'.$i]));
     				}
     			}
-    	
     			$this->_name="rms_student_paymentdetail";
     			$arr = array(
     					'productCost'=>$totalCosting
     			);
-    			$where ='id='.$data['paymentId'];
+    			$where ='id='.$data['paymentDetailId'];
     			$this->update($arr, $where);
     		}
     	}else{ // product normal
@@ -200,11 +197,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			$arr = array(
     					'productCost'=>$totalCosting
     			);
-    			$where ='id='.$data['paymentId'];
+    			$where ='id='.$data['paymentDetailId'];
     			$this->update($arr, $where);
     		}
     			
-    		$totalQty = $totalQty+$data['qty_'.$i];//count QtyReceive
+//     		$totalQty = $totalQty+$data['qty_'.$i];//count QtyReceive
     		$qty_after = $data['qty_'.$i];
     		if ($condictionSale!=1){
     			$qty_after=0;
@@ -407,14 +404,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'totalpayment'	=>$data['total_amount'.$i],
 								'paidamount'	=>$data['paid_amount'.$i],
 								'is_onepayment'	=>($data['term_'.$i]==5)?1:0,//5 = one payment
-								'start_date'	=>($data['onepayment_'.$i]==1)?'':$data['date_start_'.$i],
-								'validate'		=>($data['onepayment_'.$i]==1)?'':$data['validate_'.$i],
+								'start_date'	=>($data['term_'.$i]==5)?'':$data['date_start_'.$i],
+								'validate'		=>($data['term_'.$i]==5)?'':$data['validate_'.$i],
 								'is_start'		=>1,
 								'note'			=>$data['remark'.$i],
 								'is_parent'     =>$spd_id,
 							);
 						$this->_name="rms_student_paymentdetail";
-						$studentpaymentid = $this->insert($_arr);
+						$paymentDetailId = $this->insert($_arr);
 					}
 					
 					$arr = array(
@@ -467,6 +464,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					if($rs_item['items_type']==3){ // product
 						$data['is_productseat'] = $rs_item['is_productseat'];
 						$data['paymentId'] = $paymentid;
+						$data['paymentDetailId'] = $paymentDetailId;
 						$data['cutStockId'] = $cut_id;
 						$data['costing'] = $rs_item['cost'];
 						$data['conditionCutStock'] = $condictionSale;
@@ -681,7 +679,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		if($item_type==3){
-    			$options .= '<option value="1" >'.$tr->translate('MONTHLY').'</option>';
+    			$options .= '<option value="5" >'.$tr->translate('ONE_PAYMENTONLY').'</option>';
     		}
     		$options .= '<option value="6" >'.$tr->translate('OTHER').'</option>';
     		return $options;

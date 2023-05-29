@@ -602,11 +602,11 @@
 			if (!empty($ids)){
 				foreach ($ids as $i){
 					$_arrss = array(
-							'pro_id'=>$id,
-							'subpro_id'=>$_data['product_'.$i],
-							'qty'=>$_data['qty_'.$i],
-							'price'=>$_data['sell_price_'.$i],
-							'remark'=>$_data['note_'.$i],
+						'pro_id'=>$id,
+						'subpro_id'=>$_data['product_'.$i],
+						'qty'=>$_data['qty_'.$i],
+						'price'=>$_data['sell_price_'.$i],
+						'remark'=>$_data['note_'.$i],
 					);
 					$this->insert($_arrss);
 				}

@@ -10,6 +10,16 @@
 	$urlAssesment = $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/";
 	
 	$urlStudentGroupAdjust = $this->baseUrl()."/allreport/allstudent/rpt-studentgroup-adjust/id/";
+	
+	$urlStudentGroup = $this->baseUrl()."/allreport/allstudent/rpt-student-group/id/";
+	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
+	$urlTotalAtt = $this->baseUrl()."/allreport/score/rpt-totalattendance/id/";
+	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
+	$urlAssesment = $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/";
+	$urlscoresemester = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
+	$urloutstanding1 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
+	$urlscoreyear = $this->baseUrl()."/allreport/score/rpt-resultbyyear/id/";
+	$urloutstandingyear = $this->baseUrl()."/allreport/score/yearly-outstanding-student/id/";
 ?>
 <div class="reportblog">
 	<div class="card-box">
@@ -377,7 +387,33 @@ $(function(){
 				url='<?php echo $urlAssesment;?>';
 			}else if(key=="rptAdjustStudent"){
 				url='<?php echo $urlStudentGroupAdjust;?>';
-			}  
+			}else if(key=="outstandingsem1"){
+				url='<?php echo $urloutstanding1;?>';
+				window.open(url+''+row+'/type/1','_blank');
+				return true;
+			}else if(key=="outstandingsem2"){
+				url='<?php echo $urloutstanding1;?>';
+				window.open(url+''+row+'/type/2','_blank');
+				return true;
+			}else if(key=="outstandingyear"){
+				url='<?php echo $urloutstandingyear;?>';
+				window.open(url+''+row+'/type/3','_blank');
+				return true;
+			}else if(key=="rpt-semester2"){
+				url='<?php echo $urlscoresemester;?>';
+				window.open(url+''+row+'/type/2','_blank');
+				return true;
+			}else if(key=="rpt-resultbysemester"){
+				url='<?php echo $urlscoresemester;?>';
+				window.open(url+''+row+'/type/1','_blank');
+				return true;
+			}
+			else if(key=="scoreyear"){
+				url='<?php echo $urlscoreyear;?>';
+				window.open(url+''+row+'/type/3','_blank');
+				return true;
+			}
+			 
 			gotoAction();
 		},
 		items: {
@@ -391,6 +427,24 @@ $(function(){
 	    				"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
 	                }
 	            },
+            "outstandingsem": {
+                "name": "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", 
+                icon: "fa-file-text-o",
+                "items": {
+                	"outstandingsem1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
+    				"outstandingsem2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
+    				"outstandingyear": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
+                }
+            },
+			"result": {
+                "name": "<?php echo $tr->translate("RESULT");?>", 
+                icon: "fa-file-text-o",
+                "items": {
+                    "rpt-resultbysemester": {"name": "<?php echo $tr->translate("RESULT_SEMESTER1");?>",icon: "fa-file-text-o"},
+                    "rpt-semester2": {"name": "<?php echo $tr->translate("RESULT_SEMESTER2");?>",icon: "fa-file-text-o"},
+                    "scoreyear": {"name": "<?php echo $tr->translate("YEARLY_EXAM");?>",icon: "fa-file-text-o"}
+                }
+            },
 			
 			"rpt-assessmentterm": {name: "<?php echo $tr->translate("Assessment Term");?>", icon: "fa-file-text-o"},
 			<?php $dbacc = new Application_Model_DbTable_DbUsers();

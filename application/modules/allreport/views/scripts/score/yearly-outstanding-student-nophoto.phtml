@@ -24,6 +24,13 @@
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
+			@media print{
+				@page {
+					page:A4;
+					size: portrait;
+					margin: 0.5cm;
+				}
+			}
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php

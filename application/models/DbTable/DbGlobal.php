@@ -3301,10 +3301,7 @@ function getAllgroupStudyNotPass($action=null){
 				gs.grade AS itemDetailId,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel,
-				(SELECT rms_items.is_onepayment FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as is_onepayment
-				
-				
-				
+				(SELECT rms_itemsdetail.is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as is_onepayment
 		  	FROM
 		  		`rms_group_detail_student` AS gs,
 		  		rms_student as st

@@ -1423,6 +1423,9 @@ function getValidate(key){
 var url_get_start_end_date = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstartdateenddate')); ?>";
 function getTermStudy(key){
 	term_study = dijit.byId('term_study'+key).get('value');
+	if(term_study==''){
+		return false;
+	}
 	if(term_study>0){
 		dojo.xhrPost({
 			url:url_get_start_end_date,

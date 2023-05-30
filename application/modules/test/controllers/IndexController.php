@@ -19,7 +19,7 @@ class Test_IndexController extends Zend_Controller_Action
     			$search = array(
     					'branch_search'=>'',
     					'txtsearch'=>'',
-    					'degree' => '',
+    					'degree_search' => '',
     					'result_status' => '',
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
@@ -127,6 +127,7 @@ class Test_IndexController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
     }
+	
     function profileAction(){
     	$id = $this->getRequest()->getParam('id');
     	$db = new Test_Model_DbTable_DbStudentTest();
@@ -248,6 +249,9 @@ class Test_IndexController extends Zend_Controller_Action
     		$option = empty($data['option'])?null:$data['option'];
     		$rows = $db->getAllTestTerm($data,$option);
     		array_unshift($rows,array ( 'id' =>"",'name' => $this->tr->translate("SELECT_TERM")));
+			if($data['addNew']){
+				array_unshift($rows,array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+			}
     		print_r(Zend_Json::encode($rows));
     		exit();
     	}

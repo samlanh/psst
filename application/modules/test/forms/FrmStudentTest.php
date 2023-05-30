@@ -102,7 +102,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	
     	$_pob = new Zend_Dojo_Form_Element_TextBox('pob');
     	$_pob->setAttribs(array(
-    			'dojoType'=>'dijit.form.TextBox',
+    			'dojoType'=>'dijit.form.SimpleTextarea',
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("POB"),
 				'style'=>'min-height:55px;',
@@ -377,7 +377,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_degree_search->setMultiOptions($_arr_opt);
     	$_degree_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_DEGREE"),
     			'onChange'=>'getAllGrade();',
     			'class'=>'fullside height-text',
     			'autoComplete'=>'false',
@@ -453,7 +454,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'class'=>'fullside',
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			'placeholder'=>$this->tr->translate("END_DATE"),
-    			'required'=>false));
+    			'required'=>'false'));
     	$_date = $request->getParam("end_date");
     	if(empty($_date)){
     		$_date = date("Y-m-d");
@@ -467,8 +468,9 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_branch_search->setMultiOptions($_arr_opt_branch);
     	$_branch_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'class'=>'fullside height-text',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',));
     	$_branch_search->setValue($request->getParam("branch_search"));
@@ -1214,7 +1216,9 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'false',
     			'class'=>'fullside height-text',
+				'placeholder'=>$this->tr->translate("SELECT_TERM"),
     			'autoComplete'=>'false',
+				'onChange'=>'addNewTerm();',
     			'queryExpr'=>'*${0}*',));
     	$term->setValue($request->getParam("term_test"));
     	

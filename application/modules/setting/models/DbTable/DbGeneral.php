@@ -13,6 +13,15 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				AND s.`keyName` ='$keyName' LIMIT 1";
     	return $db->fetchRow($sql);
     }
+    public static function geValueByKeyName($keyName){
+    	$db = new Application_Model_DbTable_DbGlobal();;
+    	$sql = " SELECT keyValue
+    	FROM `rms_setting`
+    	WHERE status=1
+    	AND `keyName` ='$keyName' LIMIT 1";
+    	return $db->getGlobalDbOne($sql);
+    }
+    
 	public function updateWebsitesetting($data){
 		try{
 			$dbg = new Application_Model_DbTable_DbGlobal();
@@ -228,6 +237,30 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'test_online'";
 				$this->update($arr, $where);
 			}
+			
+			$rows = $this->geLabelByKeyName('show_groupin_payment');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['show_groupin_payment'],'keyName'=>'show_groupin_payment','note'=>"can select group in payment or not ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['show_groupin_payment']);
+				$where=" keyName= 'show_groupin_payment'";
+				$this->update($arr, $where);
+			}
+			
+			$rows = $this->geLabelByKeyName('receipt_paddingtop');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['receipt_paddingtop'],'keyName'=>'receipt_paddingtop','note'=>"padding top of receipt",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['receipt_paddingtop']);
+				$where=" keyName= 'receipt_paddingtop'";
+				$this->update($arr, $where);
+			}
+			
+			
+			
+			
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

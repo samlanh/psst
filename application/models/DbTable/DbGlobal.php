@@ -33,6 +33,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   		if(!$row) return NULL;
   		return $row;
   	}
+  	public function getGlobalDbOne($sql)
+  	{
+  		$db=$this->getAdapter();
+  		$result=$db->fetchOne($sql);
+  		return $result;
+  	}
   	
     public function isRecordExist($conditions,$tbl_name){
 		$db=$this->getAdapter();		

@@ -4,8 +4,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
     {    	
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
-    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	
+    	defined('SHOW_DOCUMENT') || define('SHOW_DOCUMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('doc_display'));
+    	defined('STU_EN_REQUIRED') || define('STU_EN_REQUIRED', Setting_Model_DbTable_DbGeneral::geValueByKeyName('name_required'));
+    	
     }
 	public function indexAction(){
 		try{

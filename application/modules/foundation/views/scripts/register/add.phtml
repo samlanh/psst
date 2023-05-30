@@ -1475,12 +1475,9 @@ dojo.ready(function(){
 				}
 			}
 		}, "village_note");
-
 		
-		filterDistrict();
 		dijit.byId('student_province').attr('value',12);
-		getStudentNo();
-		oldRow();
+		
 		dijit.byId('nation').attr("value",1);
 		dijit.byId('fa_national').attr("value",1);
 
@@ -1488,7 +1485,7 @@ dojo.ready(function(){
 		 branch_id.on('change', function(evt) {
 			 getRefreshGroup();
 	    });
-		 getRefreshGroup();	    
+		
 
 		 var student_id = dijit.byId('student_id');
 		 	student_id.on('keyUp', function(evt) {
@@ -1510,9 +1507,14 @@ dojo.ready(function(){
 		 branch_id.on('change', function(evt) {
 			 getRefreshItems();
 	    });
+		    
+		 filterDistrict();
+		 getRefreshGroup();	    
+		 getStudentNo();
 		 getRefreshItems();	 
 		 getAllNation();
 		 getAllJob();
+		 initilizeDoc();
 }); 
 
 function getAllJob(){ 
@@ -2119,8 +2121,10 @@ date_format = '"dd/MM/yyyy"';
 		bs_input_file();
 	}
 
-	function oldRow() {
-		<?php if(!empty($this->doc)){ //echo '111111';exit();
+	function initilizeDoc() {
+		<?php 
+		if(SHOW_DOCUMENT==1){
+		if(!empty($this->doc)){
 			foreach($this->doc as $row){ 
 		?>
 		col++;no++;
@@ -2165,7 +2169,7 @@ date_format = '"dd/MM/yyyy"';
 		});
 
 		bs_input_file();
-		<?php }}?>
+		<?php }}}?>
 	}
 	function deleteRecord(index) {
 		var identity = $('#identity').val();

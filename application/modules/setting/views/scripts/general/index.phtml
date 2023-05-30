@@ -206,6 +206,10 @@ input[type=file] {
 													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('receipt_print')?></div>
 												</div>
 												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('PADDINGTOP_RECEIPT')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('receipt_paddingtop')?></div>
+												</div>
+												<div class="form-group">
 													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('SHOW_HEADER_RECEIPT')?></label>
 													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('show_header_receipt')?></div>
 												</div>
@@ -213,6 +217,58 @@ input[type=file] {
 													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('SHOW_PIC_IN_RECEIPT')?></label>
 													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('show_pic_receipt')?></div>
 												</div>
+												
+												<div class="card-blogform">
+													<div class="card-body"> 
+														<div class="row"> 
+															<div class="col-md-12 col-sm-12 col-xs-12"> 
+																<div class="d-flex"> 
+																	<div class="settings-main-icon ">
+																		<i class="glyphicon glyphicon-tags" aria-hidden="true"></i>
+																	</div> 
+																	<div class="col-md-10 col-sm-10 col-xs-12"> 
+																		<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DISCOUNT_CALCULATE_SETTING");?></p>
+																	</div> 
+																</div> 
+																<div class="form-group mb-4">
+																	<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('DISCOUNT')?>%</label>
+																	<div class="col-md-8 col-sm-8 col-xs-12 "><?php echo $frm->getElement('discount_percent');?></div>
+																</div>
+																<div class="form-group">
+																	<label class="control-label col-md-4 col-sm-4 col-xs-12 r"><?php echo $tr->translate('DISCOUNT_AMOUNT')?></label>
+																	<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('discount_amount');?></div>
+																</div>
+																<div class="form-group">
+																	<label class="control-label col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate('OTHER_FEE')?></label>
+																	<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('other_fee');?></div>
+																</div>
+															</div> 
+														</div> 
+													</div> 
+												</div>
+												
+												<div class="card-blogform">
+													<div class="card-body"> 
+														<div class="row"> 
+															<div class="col-md-12 col-sm-12 col-xs-12"> 
+																<div class="d-flex"> 
+																	<div class="settings-main-icon ">
+																		<i class="fa fa-money" aria-hidden="true"></i>
+																	</div> 
+																	<div class="col-md-10 col-sm-10 col-xs-12"> 
+																		<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PAYMENT_SETTING");?></p>
+																	</div> 
+																</div> 
+																<div class="form-group">
+																	<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Payment Amount Day Alert')?></label>
+																	<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('payment_day_alert');?></div>
+																</div>
+															</div> 
+														</div> 
+													</div> 
+												</div>
+												
+												
 											</div> 
 										</div> 
 									</div> 
@@ -226,56 +282,6 @@ input[type=file] {
 					<div class="tab-pane fade in " id="panelSetting3" role="tabpanel">
 						<div class="card-box">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="card-blogform">
-									<div class="card-body"> 
-										<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12"> 
-												<div class="d-flex"> 
-													<div class="settings-main-icon ">
-														<i class="fa fa-money" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PAYMENT_SETTING");?></p>
-													</div> 
-												</div> 
-												<div class="form-group">
-													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Payment Amount Day Alert')?></label>
-													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('payment_day_alert');?></div>
-												</div>
-											</div> 
-										</div> 
-									</div> 
-								</div>
-								
-								
-								<div class="card-blogform">
-									<div class="card-body"> 
-										<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12"> 
-												<div class="d-flex"> 
-													<div class="settings-main-icon ">
-														<i class="glyphicon glyphicon-tags" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DISCOUNT_CALCULATE_SETTING");?></p>
-													</div> 
-												</div> 
-												<div class="form-group mb-4">
-													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('DISCOUNT')?>%</label>
-													<div class="col-md-8 col-sm-8 col-xs-12 "><?php echo $frm->getElement('discount_percent');?></div>
-												</div>
-												<div class="form-group">
-													<label class="control-label col-md-4 col-sm-4 col-xs-12 r"><?php echo $tr->translate('DISCOUNT_AMOUNT')?></label>
-													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('discount_amount');?></div>
-												</div>
-												<div class="form-group">
-													<label class="control-label col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate('OTHER_FEE')?></label>
-													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('other_fee');?></div>
-												</div>
-											</div> 
-										</div> 
-									</div> 
-								</div>
 								<div class="card-blogform">
 									<div class="card-body"> 
 										<div class="row"> 
@@ -358,6 +364,13 @@ input[type=file] {
 														<small><?php echo $tr->translate('SHOW_STUID_REGISTER_TO_ENTER')?></small>
 													</label>
 													<div class="col-md-8 col-sm-8 col-xs-12"><?php  echo $frm->getElement('new_stuid_test');?></div>
+												</div>
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12">
+														<?php echo $tr->translate('SHOW_GROUP_IN_PAYMENT')?>
+														<small><?php echo $tr->translate('SHOW_GROUP_IN_PAYMENT_SUBTITLE')?></small>
+													</label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php  echo $frm->getElement('show_groupin_payment');?></div>
 												</div>
 												<div class="form-group">
 													<label class="control-label col-md-4 col-sm-4 col-xs-12">

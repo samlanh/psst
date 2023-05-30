@@ -835,6 +835,12 @@ class Application_Form_FrmGlobal{
 			}
 			return $str;
 		}elseif($receipt_type==3){//psis
+			$paddingTop = PADDINGTOP_RECEIPT.'px';
+			$showPic = SHOW_PIC_INRECEIPT;
+			$showPic = ($showPic==1)?'display:block;':'display:none;';
+			$settingAmtReceipt = AMOUNT_RECEIPT;
+			$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape':'size:A4 portrait;';
+			
 			$str="<style>
 					.hearder_table{height:20px !important;}
 					.defaulheight{line-height:10px !important;}
@@ -900,16 +906,18 @@ class Application_Form_FrmGlobal{
 						.print label{
 							margin-bottom: 0px !important;
 						}
-						@page {
-							margin:0cm 0.7cm 0cm 0.7cm;
-							page-break-before: avoid;
-							/*size: A4 landscape;*/
-							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-							-ms-transform: scale(0.5);   /* IE 9 */
-							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-							transform: scale(0.5);
-							size:A5 landscape;
+						@media print{
+							@page{
+								margin:0cm 0.7cm 0cm 0.7cm;
+								page-break-before: avoid;
+								-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+								-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+								-ms-transform: scale(0.5);   /* IE 9 */
+								-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+								transform: scale(0.5);
+								$pageSetup
+							}
+							a{text-decoration:none;color:#000;}
 						}
 						#page {
 						   border-collapse: collapse;
@@ -923,7 +931,7 @@ class Application_Form_FrmGlobal{
 						}
 					</style>
 					<table width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
-						<tr height='90px'>
+						<tr style='height:$paddingTop'>
 							<td align='center' valign='top' colspan='5'>
 								<label id='lbl_header'></label>
 							</td>
@@ -954,7 +962,7 @@ class Application_Form_FrmGlobal{
 							<td>ឆ្នាំសិក្សា/Academic Year</td>
 							<td> : &nbsp;<label id='lb_academic_year' class='one'>&nbsp;</label></td>
 							<td rowspan='5' valign='top'>
-								<div style='float:right;border:1px solid #000;width:70px;height:85px;text-align:right'>
+								<div style='float:right;border:1px solid #000;width:70px;height:85px;text-align:right; $showPic '>
 									<label id='lb_photo'></label>
 								</div>
 							</td>
@@ -1053,9 +1061,7 @@ class Application_Form_FrmGlobal{
 					</div>
 				</div>
 			</div>";
-			$key = new Application_Model_DbTable_DbKeycode();
-			$result=$key->getKeyCodeMiniInv(TRUE);
-			if($result['receipt_print']>1){
+			if($settingAmtReceipt>1){
 				$str.="<div id='divPrint1'>
 				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
 				<div id='printblog2'></div>

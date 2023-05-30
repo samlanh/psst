@@ -5,6 +5,8 @@
 	$username=$session_user->last_name.$session_user->first_name;
 	
 	$settingNewStuID = NEW_STU_ID_FROM_TEST;
+	$settingShowGroup = SHOW_GROUP_INPAYMENT;
+	$settingAmtReceipt = AMOUNT_RECEIPT;
 ?>
 <style>
 	.tablesorter tr td{
@@ -230,7 +232,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 					                   </div>
 					            </div>
-					            <div class="form-group stuCodeControl">
+					            <div class="form-group" <?php if ($settingShowGroup==0){?>style="display: none;"<?php }?>>
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?>  :
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -713,11 +715,9 @@ dojo.ready(function(){
 	<?php if ($settingNewStuID==1){?>
 	var student_type = dijit.byId('student_type');
 	student_type.on('change', function(evt) {
-		checkStudentType();
 		dijit.byId('group_id').attr('value','')
 		getallgroupby();
 	});
-	checkStudentType();
 	<?php }?>
 });
 
@@ -773,14 +773,6 @@ function getallgroupby(){//
 		});
 }
 
-function checkStudentType(){
-	dijit.byId('student_code').attr('value',""); 
-	student_type = dijit.byId("student_type").attr("value");
-	$(".stuCodeControl").css("display", "none");
-	if(student_type==2){
-		$( ".stuCodeControl" ).css("display", "flow-root");
-	}
-}
 
 var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
 function getStudentNo(degree_id=0){
@@ -911,7 +903,7 @@ function confirmBeforePrint(){
 	dijit.byId('alertBeforePrint').show();
 }
 function displayNone(){
-	//document.getElementById('PrintReceipt1').style.display="none";
+	document.getElementById('PrintReceipt1').style.display="none";
 }
 function hideDialog(){
 	dijit.byId('terms').hide();
@@ -1808,10 +1800,7 @@ function printSubmit(){
 			}
 			<?php }?>
 			<?php 
-				$key = new Application_Model_DbTable_DbKeycode();
-				$result=$key->getKeyCodeMiniInv(TRUE);
-				$amount_print = $result['receipt_print'];
-				for($prin=0;$prin<$amount_print-1;$prin++){?>
+				for($prin=0;$prin<$settingAmtReceipt;$prin++){?>
 					dojo.byId("printblog2").innerHTML ='';
 					dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
 			<?php }?>

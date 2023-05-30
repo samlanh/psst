@@ -167,7 +167,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				1=>$this->tr->translate("SHOW"),
 				);
 		$docDisplay->setMultiOptions($docDOpt);
-
+		
 		$nameRequired=  new Zend_Dojo_Form_Element_FilteringSelect('name_required');
 		$nameRequired->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$reOPt = array(
@@ -208,6 +208,16 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				);
 		$testOnline->setMultiOptions($testOpt);
 		
+		$show_groupin_payment=  new Zend_Dojo_Form_Element_FilteringSelect('show_groupin_payment');
+		$show_groupin_payment->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$show_groupin_payment->setMultiOptions($docDOpt);
+		
+		$paddingTopReceipt = new Zend_Dojo_Form_Element_NumberTextBox('receipt_paddingtop');
+		$paddingTopReceipt->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+		));
+		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
 			$_branch_add->setValue($data['branch_add']['keyValue']);
@@ -236,9 +246,13 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$groupPayment->setValue($data['pay_as_group']['keyValue']);
 			$picDisplay->setValue($data['show_pic_receipt']['keyValue']);
 			$testOnline->setValue($data['test_online']['keyValue']);
+			$show_groupin_payment->setValue($data['show_groupin_payment']['keyValue']);
+			$paddingTopReceipt->setValue($data['receipt_paddingtop']['keyValue']);
 
 		}
 		$this->addElements(array(
+				$paddingTopReceipt,
+				$show_groupin_payment,
 				$_sale_stock
 				,$_label_animation
 				,$_branch_tel

@@ -40,16 +40,22 @@ class Test_TermController extends Zend_Controller_Action {
 	}
     public function addAction()
     {	
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db = new Test_Model_DbTable_DbTerm();
+		$isaddterm = $this->getRequest()->getParam('addterm');
     	if($this->getRequest()->isPost()){
 	    	try{
+				
 	    		$data = $this->getRequest()->getPost();
 	    		$db->addTermStudy($data);
-	    		if(isset($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+				if(!empty($isaddterm)){
+					$alert = $tr->translate("INSERT_SUCCESS");
+					echo "<script> alert('".$alert."');</script>";
+		    		echo "<script>window.close();</script>";
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
 				}
+	    		
 	    	}catch(Exception $e){
 	    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

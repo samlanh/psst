@@ -127,6 +127,7 @@ class Test_IndexController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
     }
+	
     function profileAction(){
     	$id = $this->getRequest()->getParam('id');
     	$db = new Test_Model_DbTable_DbStudentTest();

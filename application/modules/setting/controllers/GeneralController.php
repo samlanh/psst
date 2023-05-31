@@ -46,7 +46,6 @@ public function init()
 		
 		$row['hornorTableSetting'] = $db_gs->geLabelByKeyName('hornorTableSetting');
 
-		$row['count_stuid_option'] = $db_gs->geLabelByKeyName('count_stuid_option');
 		$row['new_stuid_test'] = $db_gs->geLabelByKeyName('new_stuid_test');
 		$row['doc_display'] = $db_gs->geLabelByKeyName('doc_display');
 		$row['name_required'] = $db_gs->geLabelByKeyName('name_required');
@@ -56,6 +55,10 @@ public function init()
 		$row['test_online'] = $db_gs->geLabelByKeyName('test_online');
 		$row['show_groupin_payment'] = $db_gs->geLabelByKeyName('show_groupin_payment');
 		$row['receipt_paddingtop'] = $db_gs->geLabelByKeyName('receipt_paddingtop');
+		
+		$row['studentPrefixOpt'] = $db_gs->geLabelByKeyName('studentPrefixOpt');
+		$row['studentIPrefix'] = $db_gs->geLabelByKeyName('studentIPrefix');
+		$row['studentIdLength'] = $db_gs->geLabelByKeyName('studentIdLength');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

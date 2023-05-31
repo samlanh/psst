@@ -782,7 +782,8 @@ function getStudentNo(degree_id=0){
 	dojo.xhrPost({
 		url:url_getstuno,
 		content:{
-			'branch_id':branch_id,'dept_id':degree_id
+			'branch_id':branch_id,
+			'dept_id':degree_id
 			},
 		handleAs:"json",
 		load: function(data) {

@@ -222,10 +222,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	function getStuNoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
+			$db = new Application_Model_DbTable_DbGlobal();
 			$degree=empty($data['dept_id'])?0:$data['dept_id'];
 			$branch_id=$data['branch_id'];
-			$stu_no = $db->getNewAccountNumber($branch_id,$degree);
+			$stu_no = $db->getnewStudentId($branch_id,$degree);
 			print_r(Zend_Json::encode($stu_no));
 			exit();
 		}

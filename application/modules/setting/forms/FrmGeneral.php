@@ -143,14 +143,6 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				'placeholder'=>$this->tr->translate("other fee"),
 				'onKeyup' => 'CompareOtherFee()'
 		));
-		$countStuidOption=  new Zend_Dojo_Form_Element_FilteringSelect('count_stuid_option');
-		$countStuidOption->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
-		$countStuIDOpt = array(
-				1=>$this->tr->translate("AUTO_BY_BRANCH"),
-				2=>$this->tr->translate("AUTO_BY_DEGREE"),
-				3=>$this->tr->translate("BY_SCHOOL_OPT"),
-				);
-		$countStuidOption->setMultiOptions($countStuIDOpt);
 
 		$newStuIdTest=  new Zend_Dojo_Form_Element_FilteringSelect('new_stuid_test');
 		$newStuIdTest->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -218,6 +210,32 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			'class'=>'fullside',
 		));
 		
+		
+		$StudentIdLength = new Zend_Dojo_Form_Element_NumberTextBox('studentIdLength');
+		$StudentIdLength->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'placeholder'=>'Length'
+		));
+		
+		$studentIPrefix = new Zend_Dojo_Form_Element_NumberTextBox('studentIPrefix');
+		$studentIPrefix->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'placeholder'=>'Prefix'
+		));
+		
+		$studentPrefixOpt = new Zend_Dojo_Form_Element_FilteringSelect('studentPrefixOpt');
+		$studentPrefixOpt->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$countStuIDOpt = array(
+				1=>$this->tr->translate("BY_BRANCH"),
+				2=>$this->tr->translate("BY_DEGREE"),
+				3=>$this->tr->translate("BY_SCHOOL_OPTION"),
+				4=>$this->tr->translate("BY_ENTRY"),
+		);
+		$studentPrefixOpt->setMultiOptions($countStuIDOpt);
+		
+		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
 			$_branch_add->setValue($data['branch_add']['keyValue']);
@@ -238,7 +256,6 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$schooolNameEng->setValue($data['schooolNameEng']['keyValue']);
 			$hornorTableSetting->setValue($data['hornorTableSetting']['keyValue']);
 
-			$countStuidOption->setValue($data['count_stuid_option']['keyValue']);
 			$newStuIdTest->setValue($data['new_stuid_test']['keyValue']);
 			$docDisplay->setValue($data['doc_display']['keyValue']);
 			$nameRequired->setValue($data['name_required']['keyValue']);
@@ -248,9 +265,16 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$testOnline->setValue($data['test_online']['keyValue']);
 			$show_groupin_payment->setValue($data['show_groupin_payment']['keyValue']);
 			$paddingTopReceipt->setValue($data['receipt_paddingtop']['keyValue']);
+			
+			$studentPrefixOpt->setValue($data['studentPrefixOpt']['keyValue']);
+			$studentIPrefix->setValue($data['studentIPrefix']['keyValue']);
+			$StudentIdLength->setValue($data['studentIdLength']['keyValue']);
 
 		}
 		$this->addElements(array(
+				$studentPrefixOpt,
+				$studentIPrefix,
+				$StudentIdLength,
 				$paddingTopReceipt,
 				$show_groupin_payment,
 				$_sale_stock
@@ -263,7 +287,6 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$_payment_day_alert
 				,$_trasfer_st_cut
 				,$settingStuID
-				
 				,$schooolNameKh
 				,$schooolNameEng
 				,$hornorTableSetting
@@ -271,7 +294,6 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$_discount_percent
 				,$_discount_amount
 				,$_other_fee
-				,$countStuidOption
 				,$newStuIdTest
 				,$docDisplay
 				,$nameRequired
@@ -282,7 +304,6 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				));
 		
 		return $this;
-		
 	}
 	
 }

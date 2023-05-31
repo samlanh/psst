@@ -160,15 +160,6 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 
-			$rows = $this->geLabelByKeyName('count_stuid_option');
-			if (empty($rows)){
-				$arr = array('keyValue'=>$data['count_stuid_option'],'keyName'=>'count_stuid_option','note'=>"couting Student Id  By Option ",'user_id'=>$dbg->getUserId());
-				$this->insert($arr);
-			}else{
-				$arr = array('keyValue'=>$data['count_stuid_option']);
-				$where=" keyName= 'count_stuid_option'";
-				$this->update($arr, $where);
-			}
 
 			$rows = $this->geLabelByKeyName('new_stuid_test');
 			if (empty($rows)){
@@ -258,9 +249,35 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 			
+			$rows = $this->geLabelByKeyName('studentPrefixOpt');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['studentPrefixOpt'],'keyName'=>'','note'=>"student id prefix option",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['studentPrefixOpt']);
+				$where=" keyName= 'studentPrefixOpt'";
+				$this->update($arr, $where);
+			}
 			
+			$rows = $this->geLabelByKeyName('studentIPrefix');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['studentIPrefix'],'keyName'=>'','note'=>"",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['studentIPrefix']);
+				$where=" keyName= 'studentIPrefix'";
+				$this->update($arr, $where);
+			}
 			
-			
+			$rows = $this->geLabelByKeyName('studentIdLength');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['studentIdLength'],'keyName'=>'','note'=>"",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['studentIdLength']);
+				$where=" keyName= 'studentIdLength'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

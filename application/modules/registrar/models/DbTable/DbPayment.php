@@ -340,7 +340,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 		$paid_date = date("Y-m-d H:i:s");
 		
 		
-		//$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
+		
 		//$receipt_number = $this->getRecieptNo($data['branch_id']);
 		
 		$DbRegister = new Registrar_Model_DbTable_DbRegister();

@@ -2101,21 +2101,29 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getnewStudentId($branch_id,$degree){//used global
 	  	$db = $this->getAdapter();
-	  	$option_type=1;//1 id by branch ,2 by degree
 	  	//$option_type=STU_ID_TYPE;
+// 		$key = new Application_Model_DbTable_DbKeycode();
+// 		$dataKey=$key->getKeyCodeMiniInv(TRUE);
+	  	$prefixOpt = Setting_Model_DbTable_DbGeneral::geValueByKeyName('studentPrefixOpt');
+	  	if($prefixOpt==1){//branch
+	  		$pre = $this->getPrefixCode($branch_id);//by branch
+	  	}elseif($prefixOpt==2){
+	  		$pre = $this->getPrefixByDegree($degree);
+	  	}elseif($prefixOpt==3){
+	  		$pre='';//assign below 
+	  	}
+	  	else{//by entry
+	  		$pre = Setting_Model_DbTable_DbGeneral::geValueByKeyName('studentIPrefix');
+	  	}
+	  	
+	  	$idLength = Setting_Model_DbTable_DbGeneral::geValueByKeyName('studentIdLength');
+	  	
+		$option_type = Setting_Model_DbTable_DbGeneral::geValueByKeyName('settingStuID');// count type setting
 		
-		$key = new Application_Model_DbTable_DbKeycode();
-		$dataKey=$key->getKeyCodeMiniInv(TRUE);
-		$option_type=empty($dataKey ['settingStuID'])?$option_type:$dataKey ['settingStuID'];
-		
-	  	$length = '';
-	  	$pre = '';
 	  	if($option_type==1){//auto by branch
 	  		$sql="SELECT COUNT(stu_id) FROM `rms_student` WHERE status=1 AND customer_type=1 AND branch_id=".$branch_id;
 	  		$stu_num = $db->fetchOne($sql);
-	  		$pre = $this->getPrefixCode($branch_id);//by branch
 	  	}elseif($option_type==2){
-	  		$pre = $this->getPrefixByDegree($degree);
 			
 	  		//degree option for combine amount 5,6,7,8
 	  		$arrDegreeComine = array(
@@ -2124,29 +2132,15 @@ function getAllgroupStudyNotPass($action=null){
 	  				7=>7,//EHSS
 	  				8=>8//Pre-English
 	  				);
-	  		/*
-	  		$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
-	  		if (!empty($arrDegreeComine[$degree])){
-	  			$pre = $this->getPrefixByDegree(5);
-	  			
-	  			$s_where = array();
-	  			foreach ($arrDegreeComine as $degree){
-	  				$s_where[] = " degree = $degree ";
-	  			}
-	  			$sql .=' AND ( '.implode(' OR ',$s_where).')';
-	  		}else{
-	  			$sql.=" AND degree= $degree ";
-	  		}
-			*/
 	  		$sql="
 				SELECT COUNT(s.stu_id)
 				FROM `rms_student` AS s
 					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.is_maingrade=1
 				WHERE s.branch_id=$branch_id 
+				AND gds.itemType=1
 				AND s.customer_type=1
 			";
 			if (!empty($arrDegreeComine[$degree])){
-	  			$pre = $this->getPrefixByDegree(5);
 	  			$s_where = array();
 	  			foreach ($arrDegreeComine as $degree){
 	  				$s_where[] = " gds.degree = $degree ";
@@ -2157,7 +2151,6 @@ function getAllgroupStudyNotPass($action=null){
 	  		}
 	  		$stu_num = $db->fetchOne($sql);
 	  	}elseif($option_type==3){
-			$pre = $this->getPrefixCode($branch_id);//by branch
 			$dbdeg = new Global_Model_DbTable_DbItems();
 	   		$type=1; 
 	   		$row =$dbdeg->getDegreeById($degree,$type);
@@ -2173,32 +2166,18 @@ function getAllgroupStudyNotPass($action=null){
 					JOIN `rms_group_detail_student` AS gds ON gds.stu_id = s.stu_id AND gds.is_maingrade=1 
 					LEFT JOIN `rms_items` AS deg ON deg.id = gds.degree AND deg.type=1
 				WHERE s.branch_id=$branch_id 
+				AND gds.itemType=1
 				AND s.customer_type=1
 			";
 	  		$sql.=" AND deg.schoolOption = $schoolOption ";
-			
-	  		/*
-				if($degree==5 OR $degree==6){
-					$degree='(6,8)';
-					$pre="GE";
-				}elseif($degree<=4){
-					$degree='(1,2,3,4)';
-				}
-				 
-				$sql="SELECT SUM(amount_student) FROM `rms_student_id` WHERE branch_id=$branch_id ";
-				$sql.=" AND degree IN $degree ";
-			*/
-	  		 
 	  		$stu_num = $db->fetchOne($sql);
-	  		
 	  	}
 	  	$new_acc_no= (int)$stu_num+1;
 	  	$length = strlen((int)$new_acc_no);
-	  	for($i = $length;$i<4;$i++){
+	  	for($i = $length;$i<$idLength;$i++){
 	  		$pre.='0';
 	  	}
 	  	return $pre.$new_acc_no;
-	  	//return $pre.$new_acc_no."A";
   }
   function getSchoolOptionInfo($id){
 	  $db = $this->getAdapter();

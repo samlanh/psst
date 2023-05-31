@@ -1,4 +1,3 @@
-
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('STUDENT_INFO'));
@@ -10,7 +9,6 @@
 	$urlCopy = $this->baseUrl()."/foundation/register/copy/id/";
 	$urlEdit = $this->baseUrl()."/foundation/register/edit/id/";
 	$urlView = $this->baseUrl()."/foundation/register/view/id/";
-// 	$urlTrandrop = $this->baseUrl()."/foundation/studenttrandrop/stutrandrop/id/";
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -36,13 +34,13 @@
                    		<input id="study_year" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input id="group" />
+                   		<input id="groupId" />
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("degree");?>
                    </div>
 				   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input id="grade_all" />
+                   		<input id="gradeId" />
                    </div>
                 </div>
                 <div class="form-group">
@@ -74,16 +72,13 @@
 	</div>
 </div>	
 
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: academic_store,
@@ -96,144 +91,97 @@
 			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 			onChange: function() {  
 				academic_year = dijit.byId('study_year').get('value');
-				getAllGroupByAcademic()
+				getGroupByBranch()
 			}
 		}, "study_year");
+		
 		new dijit.form.FilteringSelect({
-			store: group_store,
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: false,                      
-			id: "group",
-			name: "group",  
+			id: "groupId",
+			name: "groupId",  
 			class: 'fullside', 
 			readonly:false,
 			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-			onChange: function() {  
-				
-			}
-		}, "group");
+		}, "groupId");
 		
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: false,                        
-			id: "grade_all",
-			name: "grade_all",  
+			id: "gradeId",
+			name: "gradeId",  
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {  
 
 			}
-		}, "grade_all");
-		getallGrade();
+		}, "gradeId");
 		
 		 var branch_id = dijit.byId('branch_id');
 		 branch_id.on('change', function(evt) {
 			 getAllAcademicByBranch();
-			 getAllGroupByBranch();
+			 getGroupByBranch();
 		});
 		 getAllAcademicByBranch();
-		 getAllGroupByBranch();
+		 getGroupByBranch();
+		 getallGrade();
 	});
-	url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 	var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
 	function getAllAcademicByBranch(){
+		let= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
+		
 		dijit.byId('study_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
-			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('study_year').set('store',academic_store);  
 			dijit.byId('branch_id').focus();
 			return false;
 		}
+		
 		contentData = {
 			'branch_id':branch_id
 		}
 		selectedId = '';
 		if(oldBranch==branch_id){
-			selectedId = '<?php echo $this->search['study_year']?>';
+			selectedId = '<?php echo $this->adv_search['study_year']?>';
 		}
-		
 		getAllYear(url_getacademic,contentData,selectedId,'study_year');
-
 	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-	function getAllGroupByBranch(){
-		dijit.byId('group').reset();
+	function getGroupByBranch(){
+		let url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
 			dijit.byId('branch_id').focus();
 			return false;
 		}
-		dojo.xhrPost({
-			url: url_getgroup,
-			content:{
-				'branch_id':branch_id,'noaddnew':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				group_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('group').set('store',group_store);   
-				if(oldBranch==branch_id){
-					dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  
-				}
-			},
-			error: function(err) {
-			}
-		});
-	}
-	var oldstudy_year = '<?php echo $this->search['study_year'];?>';
-	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
-	function getAllGroupByAcademic(){
-		dijit.byId('group').reset();
-		study_year = dijit.byId('study_year').get('value');
-		if(study_year=='' || study_year==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
-			getAllGroupByBranch();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getgroupbyAca,
-			content:{
-				'academic_year':study_year,
+
+		contentData = {
+				'branch_id':branch_id,
+				'academic_year':dijit.byId('study_year').get('value'),
 				'noaddnew':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				group_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('group').set('store',group_store);   
-				if(oldstudy_year==study_year){
-					dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  
-				}
-			},
-			error: function(err) {
 			}
-		});
+			selectedId = '';
+			if(oldBranch==branch_id){
+				selectedId = '<?php echo $this->adv_search['groupId']?>';
+			}
+			getAllGroupByBranch(url_getgroup,contentData,selectedId);
 	}
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+	
 	function getallGrade(){
 		dept_id = dijit.byId('degree').get('value');
-		if(dept_id==''){return false;}
-		dojo.xhrPost({
-			url:url_dept,
-			content:{
+		if(dept_id==''){dijit.byId('degree').focus();return false;}
+		let url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+
+		contentData = {
 				'dept_id':dept_id,
 				'noaddnew':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('grade_all').set('store',grade_store);   
-				dijit.byId('grade_all').attr('value','<?php echo $this->adv_search['grade_all']?>');  
-			},
-			error: function(err) {
 			}
-		});
+			selectedId = '';
+			if('<?php echo $this->adv_search['degree']?>'==dept_id){
+				selectedId = '<?php echo $this->adv_search['gradeId']?>';
+			}
+			getGradebyDegree(url_dept,contentData,selectedId);
 	}
 
 	function copyRecord(url){
@@ -265,16 +213,13 @@
 				}
 				else if(key=="view"){
 					url='<?php echo $urlView;?>';
-				//}else if(key=="stutrandrop"){
-					//url='<?php //echo $urlTrandrop;?>';
 				}
 				gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
-				"view": {name: "<?php echo $tr->translate("Profile");?>", icon: "fa-user"},
-				//"stutrandrop": {name: "<?php //echo $tr->translate("STUDENT_DROP");?>", icon: "fa-info-circle"},
+				"view": {name: "<?php echo $tr->translate("FRONTDESK_INFO");?>", icon: "fa-user"},
 			}
 		});
 	});

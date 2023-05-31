@@ -58,6 +58,7 @@ class Test_IndexController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->form_search = $frm;
     }
+	
     public function addAction()
     {
     	if($this->getRequest()->isPost()){

@@ -720,13 +720,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 										'degree'		=>$_data['degree'],
 										'grade'			=>$_data['grade'],
 										'academic_year'	=>$academicYear,
-								
 										'user_id'		=>$this->getUserId(),
 										'status'		=>1,
-										'date'			=>date('Y-m-d'),
 										'create_date'	=>date('Y-m-d H:i:s'),
 										'modify_date'	=>date('Y-m-d H:i:s'),
-										'type'			=>1,
 										'old_group'		=>$_data['from_group'],
 										'is_setgroup'	=>1,
 										'is_current'	=>1,
@@ -762,7 +759,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 										'user_id'		=>$this->getUserId(),
 										'status'		=>1,
-										'date'			=>date('Y-m-d'),
 										'create_date'		=>date('Y-m-d H:i:s'),
 										'modify_date'		=>date('Y-m-d H:i:s'),
 										'type'			=>1,

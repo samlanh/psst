@@ -251,7 +251,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			
 			$rows = $this->geLabelByKeyName('studentPrefixOpt');
 			if (empty($rows)){
-				$arr = array('keyValue'=>$data['studentPrefixOpt'],'keyName'=>'','note'=>"student id prefix option",'user_id'=>$dbg->getUserId());
+				$arr = array('keyValue'=>$data['studentPrefixOpt'],'keyName'=>'studentPrefixOpt','note'=>"student id prefix option",'user_id'=>$dbg->getUserId());
 				$this->insert($arr);
 			}else{
 				$arr = array('keyValue'=>$data['studentPrefixOpt']);
@@ -261,7 +261,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			
 			$rows = $this->geLabelByKeyName('studentIPrefix');
 			if (empty($rows)){
-				$arr = array('keyValue'=>$data['studentIPrefix'],'keyName'=>'','note'=>"",'user_id'=>$dbg->getUserId());
+				$arr = array('keyValue'=>$data['studentIPrefix'],'keyName'=>'studentIPrefix','note'=>"",'user_id'=>$dbg->getUserId());
 				$this->insert($arr);
 			}else{
 				$arr = array('keyValue'=>$data['studentIPrefix']);
@@ -271,7 +271,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			
 			$rows = $this->geLabelByKeyName('studentIdLength');
 			if (empty($rows)){
-				$arr = array('keyValue'=>$data['studentIdLength'],'keyName'=>'','note'=>"",'user_id'=>$dbg->getUserId());
+				$arr = array('keyValue'=>$data['studentIdLength'],'keyName'=>'studentIdLength','note'=>"",'user_id'=>$dbg->getUserId());
 				$this->insert($arr);
 			}else{
 				$arr = array('keyValue'=>$data['studentIdLength']);

@@ -124,7 +124,6 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					$stu=array(
 						'stop_type'		=>3,// graduated
 					);
-// 					$where=" stu_id=".$rs;
 					$where=" stu_id=".$rs." AND group_id=".$_data['group'];
 					$this->_name='rms_group_detail_student';
 					$this->update($stu, $where);

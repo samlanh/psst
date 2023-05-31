@@ -2101,9 +2101,6 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getnewStudentId($branch_id,$degree){//used global
 	  	$db = $this->getAdapter();
-	  	//$option_type=STU_ID_TYPE;
-// 		$key = new Application_Model_DbTable_DbKeycode();
-// 		$dataKey=$key->getKeyCodeMiniInv(TRUE);
 	  	$prefixOpt = Setting_Model_DbTable_DbGeneral::geValueByKeyName('studentPrefixOpt');
 	  	if($prefixOpt==1){//branch
 	  		$pre = $this->getPrefixCode($branch_id);//by branch
@@ -3666,13 +3663,11 @@ function getAllgroupStudyNotPass($action=null){
 	   					'discount_type'	=> $data['discountType'],
 	   					'discount_amount'=> $data['discountAmount'],
 	   					'school_option'	=> $data['schoolOption'],
-	   					
 	   					'is_maingrade'	=> $data['isMaingrade'],
 	   					'is_current'	=> $data['isCurrent'],
 	   					'stop_type'		=> $data['stopType'],
 	   					'is_setgroup'	=> empty($data['isSetGroup'])?0:1,
 	   					'is_newstudent'	=> $data['isNewStudent'],
-	   					
 	   					'status'		=> 1,
 	   					'note'			=> $data['remark'],
 	   					'create_date'	=> date("Y-m-d H:i:s"),

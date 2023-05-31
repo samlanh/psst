@@ -7,7 +7,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-	public function AddNewStaff($_data){
+	public function AddNewStaffGlobal($_data){
 		$_db= $this->getAdapter();		
 		$_db->beginTransaction();
 			try{

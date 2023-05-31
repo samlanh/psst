@@ -130,7 +130,6 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 							'is_current'		=>1,
 							'is_setgroup'		=>0,
 							'is_maingrade'		=>1,
-							'date'				=>date("Y-m-d"),
 							'modify_date'		=>date("Y-m-d H:i:s"),
 							'user_id'			=>$this->getUserId(),
 					);
@@ -188,7 +187,6 @@ class Registrar_Model_DbTable_DbNewStudent extends Zend_Db_Table_Abstract
 							'is_current'		=>1,
 							'is_setgroup'		=>0,
 							'is_maingrade'		=>1,
-							'date'				=>date("Y-m-d"),
 							'create_date'		=>date("Y-m-d H:i:s"),
 							'modify_date'		=>date("Y-m-d H:i:s"),
 							'user_id'			=>$this->getUserId(),

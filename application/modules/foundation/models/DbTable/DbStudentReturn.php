@@ -157,7 +157,6 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 							'is_setgroup'		=>1,
 							'is_maingrade'		=>1,
 							'note'				=>"New Group Detail From Student Return",
-							'date'				=>date("Y-m-d"),
 							'create_date'		=>date("Y-m-d H:i:s"),
 							'modify_date'		=>date("Y-m-d H:i:s"),
 							'user_id'			=>$this->getUserId(),

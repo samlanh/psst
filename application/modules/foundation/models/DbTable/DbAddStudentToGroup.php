@@ -118,7 +118,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 							'group_id'=>$_data['group'],
 							'stu_id'=>$student,
 							'status'=>$_data['status'],
-							'date'=>date('Y-m-d')
 					);
 					$this->_name='rms_group_detail_student';
 					$this->insert($arr);
@@ -167,7 +166,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 								'is_current'=>1,
 								'is_setgroup'=>1,
 								'is_maingrade'	=>1,
-								'date'		=>date('Y-m-d'),
 								'modify_date'=>date("Y-m-d H:i:s"),
 						);
 						

@@ -13,7 +13,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	
 	
-	
 	public function getAllStudentNameEdit(){
 		$_db = $this->getAdapter();
 	
@@ -161,8 +160,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'branch_id'	=>$_data['branch_id'],
 						'study_id'	=>$_data['studentid'],
 						'stu_id'	=>$stu_id,
-						
-						'type'		=>$_data['type'],
 // 						'status'	=>$_data['status'],
 						'date_stop'	=>$_data['datestop'],
 						'reason'	=>$_data['reason'],

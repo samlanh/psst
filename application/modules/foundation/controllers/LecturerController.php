@@ -58,7 +58,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			try {
 				$sms="INSERT_SUCCESS";
 				$dbmodel = new Global_Model_DbTable_DbTeacher();
-				$id = $dbmodel->AddNewStaff($_data);
+				$id = $dbmodel->AddNewStaffGlobal($_data);
 				if($id==-1){
 					$sms = "RECORD_EXIST";
 				}
@@ -169,7 +169,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 				}
 				$data['id'] = $id;
 				$db = new Global_Model_DbTable_DbTeacher();
-				$idss = $db->AddNewStaff($data);
+				$idss = $db->AddNewStaffGlobal($data);
 				$sms = "COPY_SUCCESS";
 				if($idss==-1){
 					$sms = "RECORD_EXIST";

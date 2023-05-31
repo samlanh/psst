@@ -181,7 +181,6 @@ class Foundation_Model_DbTable_DbChangeBranch extends Zend_Db_Table_Abstract
 							'status'	=>1,
 							'is_current'	=>1,
 							'is_newstudent'	=>1,
-							'date'		=>date('Y-m-d'),
 							'create_date' 	=> date("Y-m-d H:i:s"),
 							'modify_date' 	=> date("Y-m-d H:i:s"),
 							'user_id'		=>$this->getUserId(),

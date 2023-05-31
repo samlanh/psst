@@ -213,15 +213,16 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 		
 		$StudentIdLength = new Zend_Dojo_Form_Element_NumberTextBox('studentIdLength');
 		$StudentIdLength->setAttribs(array(
-				'dojoType'=>'dijit.form.TextBox',
+				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'placeholder'=>'Length'
 		));
 		
-		$studentIPrefix = new Zend_Dojo_Form_Element_NumberTextBox('studentIPrefix');
+		$studentIPrefix = new Zend_Dojo_Form_Element_TextBox('studentIPrefix');
 		$studentIPrefix->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
+				'required'=>'true',
 				'placeholder'=>'Prefix'
 		));
 		

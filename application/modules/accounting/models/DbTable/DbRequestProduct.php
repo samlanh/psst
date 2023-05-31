@@ -366,7 +366,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     			'create_date'=>date("Y-m-d"),
     			'user_id'=>$this->getUserId(),
     	);
-		$section = $this->checkCheckRequestFor($data['title_for_section']);
+		$section = $this->checkCheckSectionFor($data['title_for_section']);
 		if(empty($section)){
 			$id = $this->insert($arr);
 			$result=array(

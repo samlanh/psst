@@ -697,15 +697,16 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
 		if($lang==1){// khmer
+			$name = "s.stu_khname";
 			$grade = "idd.title";
 			$degree = "i.title";
 		}else{ // English
+			$name = "CONCAT(s.last_name ,'  ', s.stu_enname) as engName";
 			$grade = "idd.title_en";
 			$degree = "i.title_en";
 		}
 		
-		$sql="SELECT str.id, s.serial, s.stu_khname,
-		        CONCAT(s.last_name ,' ', s.stu_enname) as engName,
+		$sql="SELECT str.id, s.serial, $name,
 				CASE    
 					WHEN  str.test_type = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
 					WHEN  str.test_type = 2 THEN '".$tr->translate("ENGLISH")."'
@@ -715,10 +716,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,
 				(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 				(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
-				str.result_date,
+				str.result_date,str.score,
 				(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
 				(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
-				str.score,
+				
 				(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
 				FROM
 				`rms_student_test_result` AS str

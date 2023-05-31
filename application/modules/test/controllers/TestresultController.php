@@ -30,7 +30,7 @@ class Test_TestresultController extends Zend_Controller_Action
 			$rs_rows= $db->getAllStudentTestResult($search);
     		$list = new Application_Form_Frmtable();
 
-    		$collumns = array("SERIAL","STUDENT_NAMEKHMER","NAME_EN","TEST_TYPE","TEST_DATE","TEST_TERM","DEGREE","GRADE","RESULT_DATE","GRADE","DEGREE","SCORE","BY");
+    		$collumns = array("SERIAL","STUDENT_NAMEKHMER","TEST_TYPE","TEST_DATE","TEST_TERM","DEGREE","GRADE","RESULT_DATE","SCORE","DEGREE","GRADE","BY");
     		// $link=array(
     		// 		'module'=>'test','controller'=>'term','action'=>'edit',
     		// );

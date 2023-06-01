@@ -17,13 +17,10 @@ class Test_TestresultController extends Zend_Controller_Action
     		}
     		else{
     			$search = array(
-    					// 'branch_search'=>'',
-    					// 'txtsearch'=>'',
-    					// 'degree_search' => '',
-    					// 'result_status' => '',
+    					
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
-    					// 'term_test'=>''
+    				
     			);
     		}
     		$this->view->adv_search = $search;

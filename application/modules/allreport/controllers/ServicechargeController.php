@@ -10,9 +10,7 @@ public function init()
 	}
 	
 	public function indexAction(){
-// 		$group= new allreport_Model_DbTable_DbRptGroup();
-// 		$this->view->rs = $rs_rows = $group->getAllGroup();
-			
+
 	}
 	public function rptServiceChargeAction(){
 

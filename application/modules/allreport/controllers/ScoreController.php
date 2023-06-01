@@ -75,7 +75,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	
     	$this->view->search=$search;
-//     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	
     	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();
@@ -387,33 +386,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
     }
-    /*function rptSubjectScoredetailAction(){//for kentridge
-    	
-    	if($this->getRequest()->isPost()){
-    		$search=$this->getRequest()->getPost();
-    	}
-    	else{
-    		$search = array(
-    				'title',
-    				'room'=>0,
-    				'group_name' => 0,
-    				'study_year'=> 0,
-    				'grade'=> 0,
-    				'degree'=>0,
-    				'session'=> 0,
-    				'for_month'=>date('m'),
-    		);
-    	}
-    	
-    	$this->view->search=$search;
-    	$stu_id=$this->getRequest()->getParam("id");
-    	$group_id=$this->getRequest()->getParam("group");
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-//     	$this->view->studentgroup = $db->getStundetScoreList($search);
-    	$this->view->scoreByStudent = $db->getStundetScoreDetail($stu_id,$group_id);
-    	$this->view->studentinfo = $db->getStundetInfo($stu_id,$group_id);
-    	
-    }*/
+   
     
     function rptMonthlyScoreStudentAction(){
     	

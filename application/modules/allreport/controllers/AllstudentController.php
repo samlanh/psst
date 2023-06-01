@@ -24,16 +24,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function printPickupcardAction(){
 		$id=$this->getRequest()->getParam('id');
 		$k = 0;
-// 		$condition = '';
-// 		$ids = explode(',', $id);
-// 		foreach ($ids as $id_stu){
-// 			if($k==0){
-// 				$condition .= $id_stu;
-// 				$k=1;
-// 			}else{
-// 				$condition .= ' or stu_id = '.$id_stu;
-// 			}
-// 		}
+
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $db->getAllStudentSelected($id);
 		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($id);

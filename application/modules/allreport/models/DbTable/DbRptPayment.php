@@ -573,14 +573,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				AND is_void=0 ";
     	if(!empty($search['title'])){
     		$s_where = array();
-//     		$s_search = addslashes(trim($search['title']));
-//     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-//     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
-//     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-//     		$s_where[] = " p.title LIKE '%{$s_search}%'";
-//     		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
-//     		$where .=' AND ( '.implode(' OR ',$s_where).')';
-        
     	}
     	if($search['branch_id']>0){
     		$where .= " and sp.branch_id = ".$search['branch_id'];
@@ -682,28 +674,11 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
              $ids = explode(',', $data['identity']);
              $disc = 0;
              $total = 0;
-//              print_r($data);exit();
              foreach ($ids as $i){
 		    	$_arr = array(
-// 		    			'service_id'	=>$data['service_'.$i],
-// 		    			'payment_term'	=>$data['term_'.$i],
-// 		    			'fee'			=>$data['price_'.$i],
-// 		    			'qty'			=>$data['qty_'.$i],
-// 		    			'subtotal'		=>$data['subtotal_'.$i],
-// 		    			'late_fee'		=>$data['late_fee_service_'.$i],
-// 		    			'extra_fee'		=>$data['additional_fee_'.$i],
-// 		    			'discount_percent'	=>$data['discount_'.$i],
-// 		    			'discount_fix'	=>0,
-// 		    			'paidamount'	=>$data['paidamount_'.$i],
-// 		    			'balance'		=>0,
 		    			'is_onepayment'=>$data['onepayment_'.$i],
 		    			'start_date'	=>$data['start_date'.$i],
 		    			'validate'		=>$data['end_date'.$i],
-// 		    			'note'			=>$data['remark'.$i],
-// 		    			'type'			=>$payfor_type,
-// 		    			'is_parent'		=>$spd_id,
-// 		    			'is_complete'   =>$complete,
-// 		    			'comment'		=>$status,
 		    	);
 		    	
 		    	$where="id = ".$data['id_'.$i];

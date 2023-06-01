@@ -310,11 +310,7 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	return $pre.$new_acc_no;
     }
      
-    function getProductById($id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT * FROM rms_product WHERE id=$id";
-    	return $db->fetchRow($sql);
-    }
+   
     
     function getAllBranch(){
     	$db = $this->getAdapter();

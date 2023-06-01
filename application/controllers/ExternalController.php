@@ -95,7 +95,6 @@ class ExternalController extends Zend_Controller_Action
 		
 		$arrFilterI = array();
 		$date=date("Y-m-d"); 
-		//$date=date("Y-m-d",strtotime("2022-09-20")); 
 		$dayofweek = date('w', strtotime($date));
 		$currentDay=$dayofweek;
 		$nextDay=$dayofweek+1;

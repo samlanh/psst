@@ -460,8 +460,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							);
 						$gdb->AddItemToGroupDetailStudent($_arr);//to insert rms_group_detail_student Item
 					}
-			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
-					if($rs_item['items_type']==3){ // product
+			if($rs_item['items_type']==3){ // product
 						$data['is_productseat'] = $rs_item['is_productseat'];
 						$data['paymentId'] = $paymentid;
 						$data['paymentDetailId'] = $paymentDetailId;
@@ -838,17 +837,5 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql.=" LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
-//     public function getNewAccountNumber($newid,$stu_type){
-//     	$db = $this->getAdapter();
-//     	$sql="  SELECT COUNT(stu_id)  FROM rms_student WHERE status=1 ";
-//     	$acc_no = $db->fetchOne($sql);
-//     	$new_acc_no= (int)$acc_no+1;
-//     	$new_acc_no=100+$new_acc_no;
-//     	$pre='';
-//     	$acc_no= strlen((int)$acc_no+1);
-//     	for($i = $acc_no;$i<5;$i++){
-//     		$pre.='0';
-//     	}
-//     	return $pre.$new_acc_no;
-//     }
+
 }

@@ -35,8 +35,6 @@ class Mobileapp_IndexController extends Zend_Controller_Action
         Application_Form_FrmMessage::message("Application Error");
         Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     }
-  //  $dbglobal = new Application_Model_DbTable_DbVdGlobal();
-    //    $this->view->lang = $dbglobal->getLaguage();
     }
 
     public function editAction()

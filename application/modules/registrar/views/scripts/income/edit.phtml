@@ -304,7 +304,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	function printReceipt(new_receipt){
 		if(dijit.byId('frm_add_tran').validate()) {
 		
-		//////////////////////////////////// check validate ///////////////////////////////
 			cate_income = dijit.byId('cate_income').get('value')
 			if(cate_income==0 || cate_income==-1){
 				alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');

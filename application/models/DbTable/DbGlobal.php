@@ -463,17 +463,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	$sql = " SELECT prefix FROM `rms_branch` WHERE br_id = $branch_id LIMIT 1 ";
 	   	return $db->fetchOne($sql);
    }
-//    function getallComposition(){
-// 	   	$db  = $this->getAdapter();
-// 	   	$sql = " SELECT occupation_id AS id,occu_name AS name FROM `rms_occupation` WHERE occu_name!='' AND status=1 ORDER BY id DESC ";
-// 	   	return $db->fetchAll($sql);
-//    }
 
-//    function getallSituation(){
-//    	$db  = $this->getAdapter();
-//    	$sql = " SELECT situ_id AS id ,situ_name AS name FROM `rms_situation` WHERE situ_name!='' AND status=1 ORDER BY id DESC ";
-//    	return $db->fetchAll($sql);
-//    }
    function getAllProvince($opt=null,$option=null){
    	$db= $this->getAdapter();
    	$lang = $this->currentlang();
@@ -610,12 +600,7 @@ function getAllgroupStudyNotPass($action=null){
    }
    
    
-   function getallProductName(){
-   	$db = $this->getAdapter();
-   	$sql=" SELECT id ,pro_name as name FROM `rms_product` 
-   		WHERE status=1 AND pro_name!='' ORDER BY pro_name,sale_set ";
-   	return $db->fetchAll($sql);
-   }
+  
    
 	function getAllBranch(){
     	$db = $this->getAdapter();
@@ -1049,7 +1034,6 @@ function getAllgroupStudyNotPass($action=null){
 		    AND t.is_current=1 AND updated_result=1
 		   	AND s.stu_id=$stu_id LIMIT 1 ";
    	return $db->fetchRow($sql);
-   	//	t.stu_test_id=s.stu_id 	AND
 	   
    }
    
@@ -3504,48 +3488,6 @@ function getAllgroupStudyNotPass($action=null){
   	
   	return $this->getAdapter()->fetchAll($sql);
   }
-  
-//   function getSubjectByGroup($data){
-  
-//   }
-//   function getStudentInfo($data){
-  
-//   }
-//   function getGroupInfo($data){
-  
-//   }
-//   function getStudentbyBranch($data){
-//   }
-//   function getGroupBranch($data){
-//   }
-
-//   function GenerateNewId(){
-//   	$db = $this->getAdapter();
-//   	$sql="SELECT stu_id FROM  `rms_student` WHERE customer_type=1 AND degree_old IN (2) ORDER BY stu_id ASC";
-//   	$rs =  $db->fetchAll($sql);
-//   	if(!empty($rs)){
-//   		$key=0;
-//   		$pretext = 'GPP';
-//   		$key_in = 0;
-//   		foreach($rs as $r){
-//   			$pre="";
-//   			$key++;
-  			
-//   			$length = strlen((int)$key);
-//   			for($i = $length;$i<4;$i++){
-//   				$pre.='0';
-//   			}
-//   			$newId =  $pretext.$pre.$key;
-  			
-//   			$this->_name = 'rms_student';
-//   			$data_gro = array(
-//   					'stu_code'=> $newId,//ប្រើប្រាស់
-//   			);
-//   			$whereGroup = 'stu_id = '.$r['stu_id'];
-//   			$this->update($data_gro, $whereGroup);
-//   		}
-//   	}
-//   }
 
 
 	public function getAllGradingSetting($data=array()){

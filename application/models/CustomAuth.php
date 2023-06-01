@@ -54,10 +54,6 @@ class Application_Model_CustomAuth extends Zend_Controller_Plugin_Abstract
 	 		
 	 		//redirect to homepage
 	 		if(!$valid_action){
-	 			//For all url that can access all user type
-// 	 			if($url !== "default/index/index" && $url !=="default/error/error" && $url !=="default/index/changepassword" && $url !=="default/index/logout"){
-// 	 				$_url = '/';
-// 	 			}
 	 			$_have = false;
 	 			foreach ($this->_exception_url as $i => $val){
 	 				if($url === $val){

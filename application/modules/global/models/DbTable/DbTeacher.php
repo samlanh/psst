@@ -145,7 +145,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				if (!file_exists($part)) {
 					mkdir($part, 0777, true);
 				}
-		////////////////////////////////////////////////////////////////////	
+		////////////	
 				$teacher_code = $this->getTeacherCode();
 				$_arr=array(
 						'branch_id' 		 => $_data['branch_id'],

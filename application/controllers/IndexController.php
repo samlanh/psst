@@ -32,13 +32,8 @@ class IndexController extends Zend_Controller_Action
 		if($this->getRequest()->isPost())		
 		{
 			$dbgb = new Application_Model_DbTable_DbGlobal();
-			$sys = $dbgb->getPh();
-			if (!$sys){
- 				//$session_user=new Zend_Session_Namespace(SYSTEM_SES);
- 				//$session_user->unsetAll();
-				//Application_Form_FrmMessage::redirectUrl("/");
-				//exit();
-			}
+			$sys = $dbgb->getPh();//don't know what is for using
+			
 			
 			$formdata=$this->getRequest()->getPost();
 			if($form->isValid($formdata))
@@ -149,7 +144,6 @@ class IndexController extends Zend_Controller_Action
 
     public function logoutAction()
     {
-        // action body
         if($this->getRequest()->getParam('value')==1){        	
         	$aut=Zend_Auth::getInstance();
         	$aut->clearIdentity();        	
@@ -166,8 +160,7 @@ class IndexController extends Zend_Controller_Action
 
     public function changepasswordAction()
     {
-        // action body
-        if ($this->getRequest()->isPost()){ 
+       if ($this->getRequest()->isPost()){ 
 			$session_user=new Zend_Session_Namespace(SYSTEM_SES);    		
     		$pass_data=$this->getRequest()->getPost();
     		if ($pass_data['password'] == $session_user->pwd){
@@ -327,7 +320,7 @@ class IndexController extends Zend_Controller_Action
     	$this->view->exam_id = $exam_id;
     	$this->view->setting = $_dbpl->getPlacementSetting($test_setting_id);
     	
-    	$startTime  = date("Y-m-d H:i:s",strtotime($exam['start'])); //"2019-10-01 15:52:12";
+    	$startTime  = date("Y-m-d H:i:s",strtotime($exam['start'])); 
     	$duration = empty($exam['duration'])?1:number_format($exam['duration'],0);
     	$endTiem = date("Y-m-d H:i:s",strtotime("+$duration min $startTime"));
     	

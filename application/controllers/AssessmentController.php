@@ -125,7 +125,6 @@ class AssessmentController extends Zend_Controller_Action
 		if ($row['status']==0){
 			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_EDIT","/assessment/index");
 		}
-		//$this->view->student= $db->getStudentSubjectSccoreforEdit($id);
 		
 	
 		$dbExternal = new Application_Model_DbTable_DbExternal();

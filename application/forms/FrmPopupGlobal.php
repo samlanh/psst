@@ -3,7 +3,7 @@
 class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 {
 	protected $tr;
-	protected $tvalidate ;//text validate
+	protected $tvalidate ;
 	protected $filter;
 	protected $t_num;
 	protected $text;

@@ -46,9 +46,6 @@ class Allreport_Model_DbTable_DbAttendentList extends Zend_Db_Table_Abstract
 			$s_where[] = " stu_khname LIKE '%{$s_search}%'";
 			$s_where[] = " stu_code LIKE '%{$s_search}%'";
 			$s_where[] = " nationality LIKE '%{$s_search}%'";
-			// 			$s_where[] = " en_name LIKE '%{$s_search}%'";
-			// 			$s_where[] = " sex LIKE '%{$s_search}%'";
-			//			$s_where[] = " nationality LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		return $_db->fetchAll($sql);

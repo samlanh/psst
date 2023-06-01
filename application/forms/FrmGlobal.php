@@ -295,7 +295,6 @@ class Application_Form_FrmGlobal{
 	
 	function getLeftLogo($branch_id){
 		
-		//$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
 		if (empty($branch_id)){
 			$optionBranch = $db->getAllBranch();
@@ -1525,8 +1524,6 @@ class Application_Form_FrmGlobal{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-// 		$rs = $db->getBranchInfo($branch_id);
-// 		print_r($rs);exit();
 		
 		$sql="SELECT
 		   	g.`branch_id`,

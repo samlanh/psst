@@ -73,19 +73,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	if(!empty($search['service'])){
      		$where .=" and item.id=".$search['service'];
      	}
-     	
-//      	if(($search['service_type']>0)){
-//      		$where.= " AND item.items_type = ".$search['service_type'];
-//      	}
-//      	if(($search['grade_all']>0)){
-//      		$where.= " AND s.grade = ".$search['grade_all'];
-//      	}
-//      	if(($search['group']>0)){
-//      		$where.= " AND s.group_id = ".$search['group'];
-//      	}
-//      	if(($search['degree']>0)){
-//      		$where.= " AND sp.degree = ".$search['degree'];
-//      	}
+ 
      	if(($search['branch_id']>0)){
      		$where.= " AND sp.branch_id = ".$search['branch_id'];
      	}

@@ -38,7 +38,7 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 				return -1;
 			}
 			
-		////////////////////////////////////////////////////////////////////////////////////////	
+		/////////	
 			$_arr = array(
 					'branch_id'		=>$_data['branch_id'],
 					'group_id'		=>$_data['group'],

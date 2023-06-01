@@ -59,7 +59,7 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	
     	return $db->fetchOne($find);
     }
-    ////////////////
+  
     public function addTuitionFee($_data){
     	
     	$db = $this->getAdapter();
@@ -76,7 +76,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    				'to_academic'=>$_data['to_year'],
 	    				'generation'=>$_data['generation'],
 	    				'note'=>$_data['note'],
-	    				//'time'=>$_data['time'],
 	    				'branch_id'=>$_data['branch'],
 	    				'create_date'=>date("Y-m-d"),
 	    				'user_id'=>$this->getUserId()
@@ -92,7 +91,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    				$_arr = array(
 	    						'fee_id'=>$fee_id,
 	    						'class_id'=>$_data['class_'.$i],
-	    						//'session'=>$_data['session_'.$i],
 	    						'payment_term'=>$j,
 	    						'tuition_fee'=>$_data['fee'.$i.'_'.$j],
 	    						'remark'=>$_data['remark'.$i]
@@ -142,7 +140,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 						$_arr = array(
 								'fee_id'=>$_data['id'],
 								'class_id'=>$_data['class_'.$i],
-								//'session'=>$_data['session_'.$i],
 								'payment_term'=>$j,
 								'tuition_fee'=>$_data['fee'.$i.'_'.$j],
 								'remark'=>$_data['remark'.$i],

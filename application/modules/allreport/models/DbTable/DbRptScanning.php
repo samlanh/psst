@@ -50,7 +50,6 @@ class Allreport_Model_DbTable_DbRptScanning extends Zend_Db_Table_Abstract
 		   	WHEN  s.is_covidTested = 0 THEN '".$tr->translate("NOT_YET_TEST_COVID")."'
 			 	END AS is_covidTestedTitle ";
 			
-		//$sql.=$dbp->caseStatusShowImage("status");
 		$sql.=" FROM `rms_student` as s WHERE s.setBy>0 ";
 			
 		$where="";  
@@ -141,7 +140,6 @@ class Allreport_Model_DbTable_DbRptScanning extends Zend_Db_Table_Abstract
 			 	END AS scanTypeTitle ";
 				
 			
-		//$sql.=$dbp->caseStatusShowImage("status");
 		$sql.=" FROM 
 		rms_scan_transaction AS sct,
 		`rms_student` as s WHERE sct.stu_id=s.stu_id  ";

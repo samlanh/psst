@@ -1185,7 +1185,6 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $this->monthlySemester['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;
 								<strong>
-										<?php //echo $dbgb->calCulateGrade($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?>
 										<?php  echo $dbgb->getMentionScore($this->monthlySemester['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],1);?>
 								</strong>
 								&nbsp;</td>

@@ -110,9 +110,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" REPLACE(s.remark,' ','') LIKE '%{$s_search}%'";
     		$s_where[]=" REPLACE(s.home_num,' ','') LIKE '%{$s_search}%'";
     		$s_where[]=" REPLACE(s.street_num,' ','') LIKE '%{$s_search}%'";
-    	//	$s_where[]=" REPLACE(s.village_name,' ','') LIKE '%{$s_search}%'";
-    	//	$s_where[]=" REPLACE(s.commune_name,' ','') LIKE '%{$s_search}%'";
-    	//	$s_where[]=" REPLACE(s.district_name,' ','') LIKE '%{$s_search}%'";
+    	
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['academic_year'])){

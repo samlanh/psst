@@ -67,14 +67,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
     }
 	public function addNewDiscountset($_data){
 		$db = $this->getAdapter();
-  		try{
-// 			$sql="SELECT discount_id FROM rms_dis_setting WHERE 
-// 				discountOption=".$_data['discountOption']." AND discountType =".$_data['disname_id'];
-// 			$sql.=" AND discountValue='".$_data['discountValue']."'";
-// 			$rs = $db->fetchOne($sql);
-// 			if(!empty($rs)){
-// 				return -1;
-// 			}		
+  		try{		
 	
 		$_arr=array(
 				'branch_id'   => $_data['branch_id'],

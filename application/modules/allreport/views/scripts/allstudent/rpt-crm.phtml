@@ -298,9 +298,7 @@ table.tb-footer tr.style-head {
 <script type="text/javascript">
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.store.Memory");
-	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	
 require(["dojo/ready"], function(ready){

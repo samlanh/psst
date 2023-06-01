@@ -507,59 +507,9 @@
 			$id =  $_data["id"];
 			$where = $_db->quoteInto("id=?", $id);
 			$this->update($_arr, $where);
-			
-			if ($level==1 AND $branch_id==1){ // only main Branch and Admin user
-				// For Product Location Section
-// 				$identitys = explode(',',$_data['identity']);
-// 				$detailId="";
-// 				if (!empty($identitys)){
-// 					foreach ($identitys as $i){
-// 						if (empty($detailId)){
-// 							if (!empty($_data['detailid'.$i])){
-// 								$detailId = $_data['detailid'.$i];
-// 							}
-// 						}else{
-// 							if (!empty($_data['detailid'.$i])){
-// 								$detailId= $detailId.",".$_data['detailid'.$i];
-// 							}
-// 						}
-// 					}
-// 				}
-// 				$this->_name="rms_product_location";
-// 				$where="pro_id = ".$_data["id"];
-// 				if (!empty($detailId)){
-// 					$where.=" AND id NOT IN ($detailId) ";
-// 				}
-// 				$this->delete($where);
-			}
-			
+
 			if (!empty($_data['identity'])){
-// 				$this->_name='rms_product_location';
-// 				$ids = explode(',', $_data['identity']);
-// 				foreach ($ids as $i){
-// 					if (!empty($_data['detailid'.$i])){
-// 						$_arr = array(
-// 								'pro_id'=>$id,
-// 								'branch_id'=>$_data['brand_name_'.$i],
-// 								'pro_qty'=>$_data['qty_'.$i],
-// 								'price'=>$_data['price_'.$i],
-// 								'stock_alert'=>$_data['qty_alert_'.$i],
-// 								'note'=>$_data['note_'.$i],
-// 						);
-// 						$where =" id =".$_data['detailid'.$i];
-// 						$this->update($_arr, $where);
-// 					}else{
-// 						$_arr = array(
-// 								'pro_id'=>$id,
-// 								'branch_id'=>$_data['brand_name_'.$i],
-// 								'pro_qty'=>$_data['qty_'.$i],
-// 								'price'=>$_data['price_'.$i],
-// 								'stock_alert'=>$_data['qty_alert_'.$i],
-// 								'note'=>$_data['note_'.$i],
-// 						);
-// 						$this->insert($_arr);
-// 					}
-// 				}
+
 			}
 			return $id;
 		}catch(exception $e){

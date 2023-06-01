@@ -18,29 +18,6 @@ class Application_Model_DbTable_DbGlobalStock extends Zend_Db_Table_Abstract
 		}
 		return $lang;
 	}
-// 	public function getGlobalDb($sql)
-//   	{
-//   		$db=$this->getAdapter();
-//   		$row=$db->fetchAll($sql);  		
-//   		if(!$row) return NULL;
-//   		return $row;
-//   	}
-  	
-//   	public function getGlobalDbRow($sql)
-//   	{
-//   		$db=$this->getAdapter();  		
-//   		$row=$db->fetchRow($sql);
-//   		if(!$row) return NULL;
-//   		return $row;
-//   	}
-  	
-//     public function isRecordExist($conditions,$tbl_name){
-// 		$db=$this->getAdapter();		
-// 		$sql="SELECT * FROM ".$tbl_name." WHERE ".$conditions." LIMIT 1"; 
-// 		$row= count($db->fetchRow($sql));
-// 		if(!$row) return NULL;
-// 		return $row;	
-//     }
 	
 	function addProductHistoryQty($branch_id,$pro_id,$tranType,$Qty,$tranId=0){//done
 		$this->_name='rms_product_history';

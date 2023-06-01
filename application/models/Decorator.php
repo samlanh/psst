@@ -37,7 +37,6 @@ class Application_Model_Decorator
 		//if(is_array($arr_menu)){
 		foreach($arr_menu as $param=>$url){
 			
-			//if($access!=''){
 			if($param==$controller){
 				$uri=$this->baseUrl().'/'.$module.'/'.$param;
 				$url=str_replace('href=""', 'href="'.$uri.'"', $url);
@@ -55,8 +54,6 @@ class Application_Model_Decorator
 			$i++;
 		}
 		return $menu;
-		// }
-		//return null;
 	}
 	public function spanMenu($url,$controller,$class="current-left"){
 		$temp=str_replace('<a', '<a class="'.$class.'"', $url);

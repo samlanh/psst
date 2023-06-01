@@ -101,7 +101,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 		$row  = $db->getexpensebyid($id);
 		$this->view->row = $row;
 		$this->view->rows = $db->getexpenseDetailbyid($id);
-		/////////////////////|||||||||\\\\\\\\\\\\\\\\\\\\\\\
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
     	

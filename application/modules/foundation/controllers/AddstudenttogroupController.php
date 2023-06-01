@@ -94,21 +94,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		}
 	}
 	
-	public function submit1Action(){
-// 		$id=$this->getRequest()->getParam("id");
-// 		if($this->getRequest()->isPost()){
-// 			try{
-// 				$_data = $this->getRequest()->getPost();
-// 				$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
-// 				$row = $db->editStudentGroup($_data, $id);
-// 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-// 			}catch(Exception $e){
-// 				Application_Form_FrmMessage::message("INSERT_FAIL");
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 			}
-// 		}
-// 		$this->_redirect('/foundation/addstudenttogroup/index');
-	}
+	
 	function editAction(){
 		$this->_redirect('/foundation/addstudenttogroup');
 		exit();

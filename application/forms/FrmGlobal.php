@@ -1002,7 +1002,7 @@ class Application_Form_FrmGlobal{
 							Say in US Dollars
 							<div style='font-size:10px;min-height:40px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
 						</td>
-						<td>ត្រូវបង់/Total Payment<label id='lb_fine'></label></td>
+						<td>ត្រូវបង់/Total Payment</td>
 						<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_total_payment'></label></td>
 					</tr>
 					<tr>
@@ -1055,7 +1055,9 @@ class Application_Form_FrmGlobal{
 						<div id='lbl_branchlogo'></div>
 						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
 						<label id='lb_branchname'></label>
-						<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
+						<div style='line-height:10px;'><label id='lb_branchnameen'></label>
+						<label id='lb_fine'></label>
+						</div>
 						</div>
 					</div>
 				</div>

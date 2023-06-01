@@ -234,12 +234,15 @@
                				<tr class="head-td" align="center">
                					<th scope="col" width="4%" ><?php echo $tr->translate("DEL");?></th>
 								<th scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>
-								<th scope="col" width="22%"  style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-								<th scope="col" width="15%">
+								<th scope="col" width="20%"  style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+								<th scope="col" width="20%">
 									<div class="custom-control custom-checkbox ">
+										<label class="float-start">
+											<?php echo $tr->translate('TEACHER');?>&nbsp;&nbsp;|
+										</label>
 										<input type="checkbox" class="checkbox custom-control-input" value="0" id="checking_teach"  name="checking_teach" onclick="check();" id="checkall" >
 										<label class="custom-control-label" for="checking_teach">
-											<?php echo $tr->translate('TEACHER');?>
+											<?php echo $tr->translate('FOLLOW_TEACHER_ROOM');?>
 										</label>
 									</div>
 								</th>
@@ -252,12 +255,12 @@
                			</thead>
 						<tbody id="table_row"></tbody>
 						<tr>
-							<td colspan="3" align="right">&nbsp;&nbsp;</td>
+							<td colspan="4" align="right">&nbsp;&nbsp;</td>
 							<td ></td>
 							<td ><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.TextBox" /></td>
 							<td ><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.TextBox" /></td>
 							<td ><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.TextBox" /></td>
-							<td colspan="2" ></td>
+							<td colspan="1" ></td>
 						</tr>
 					</table>
     			</div>

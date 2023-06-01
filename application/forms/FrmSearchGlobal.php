@@ -34,7 +34,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_branch_id->setMultiOptions($_arr_opt_branch);
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 				'class'=>'fullside height-text',));
@@ -65,7 +65,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_academic->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
 				'class'=>'fullside',
-				'required'=>false,
+				'required'=>'false',
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false',
 		));
@@ -98,7 +98,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$_session->setValue($request->getParam("session"));
 		$opt_sesion=$_dbgb->getViewById(4);
@@ -112,7 +112,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$_teacher->setValue($request->getParam("teacher"));
 		$result = $_dbgb->getAllTeahcerName();
@@ -127,7 +127,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'missingMessage'=>'Invalid Module!',
-				'required'=>false
+				'required'=>'false'
 		));
 		$opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
 		$rs = $_dbgb->getViewById(9);
@@ -138,6 +138,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_startdate = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$_startdate->setAttribs(array('dojoType'=>$this->date,
 				'class'=>'fullside',
+				'required'=>'false',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'placeholder'=>$this->tr->translate("START_DATE"),
 		));
@@ -149,7 +150,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_enddate = new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$_enddate->setAttribs(array(
 				'dojoType'=>$this->date,
-				'required'=>'true',
+				'required'=>'false',
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'placeholder'=>$this->tr->translate("END_DATE"),
@@ -162,7 +163,12 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_enddate->setValue($_date);
 		
 		$_status_search=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status_search->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status_search->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("STATUS"),
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL"),
 				1=>$this->tr->translate("ACTIVE"),

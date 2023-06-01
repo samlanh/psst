@@ -67,8 +67,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		}
       		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	}catch (Exception $e) {
-      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
@@ -218,8 +218,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
-			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
-			$rows = $db->getAllstudentTest($branch_id);
+			$rows = $db->getAllstudentTest($data);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}
@@ -317,16 +316,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		}
 	}
 	
-	function getstudentbalanceAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
-			$rows = $db->getAllStudentBalance($branch_id);
-			print_r(Zend_Json::encode($rows));
-			exit();
-		}
-	}
+	
 	function getserviceitemAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

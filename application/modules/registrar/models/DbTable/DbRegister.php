@@ -442,7 +442,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'grade'			=> $data['item_id'.$i],
 								'degree'		=> $rs_item['items_id'],
 								'feeId'			=> $data['academic_year_'.$i],
-								'academic_year'	=> $data['academic_year_'.$i],
+								'academic_year'	=> '',
 								'startDate'		=> $data['date_start_'.$i],
 								'endDate'		=> $data['validate_'.$i],
 								'discountType'	=>'',
@@ -454,9 +454,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'stopType'		=> 0,
 								'status'		=> 1,
 								'isNewStudent'	=> 1,
+								'entryFrom'		=>'4',
 								'remark'		=> $data['remark'.$i],
 								'create_date'	=> date("Y-m-d H:i:s"),
 								'user_id'		=> $this->getUserId(),
+								'entryFrom'		=> 4
 							);
 						$gdb->AddItemToGroupDetailStudent($_arr);//to insert rms_group_detail_student Item
 					}

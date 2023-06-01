@@ -202,10 +202,9 @@ span.custom-switch-indicator{line-height: 20px;}
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();" >
-											<option value="1"><?php echo $tr->translate("Existing Student");?></option>
-											<option value="2"><?php echo $tr->translate("Tested Student");?></option>
-											<option value="3"><?php echo $tr->translate("CRM");?></option>
-											<option value="4"><?php echo $tr->translate("សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់");?></option>
+											<option value="1">1.<?php echo $tr->translate("Existing Student");?></option>
+											<option value="2">2.<?php echo $tr->translate("Tested Student");?></option>
+											<option value="3">3.<?php echo $tr->translate("CRM_STUDENT");?></option>
 										</select>
 				                   </div>
 				                </div>
@@ -290,7 +289,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					<div class="card-blogform">
 						<div class="card-body">
 							<div class="img-back"></div>
-			                <span class="user-badge bg-warning" >Old Student</span>
+			                <div id="lblstudenttypeinfo" ><span class="user-badge bg-warning" >Student Type</span></div>
 							<div class="form-group">
 								<div class="d-flex"> 
 									<div class="settings-main-icon ">
@@ -564,7 +563,7 @@ span.custom-switch-indicator{line-height: 20px;}
 	                </div>
 	        	</div>
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	                <div class="form-group">
+	                <div class="form-group" style="display: none;">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FINE");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -817,13 +816,10 @@ function getgradebyDegree(dept_id,a,type=1){
 	dept_id = dijit.byId("category").get("value");
 	student_id = dijit.byId("old_stu").get("value");
 
-	groupDetailId = 0;
 	student_type = dijit.byId("student_type").get("value");
 	is_stutested=0;
 	if(student_type==2){
 		is_stutested  = 1;
-	}else if(student_type==4){
-		groupDetailId = dijit.byId("groupDetailId").get("value");
 	}
 	dojo.xhrPost({
 		url:url_dept,
@@ -831,7 +827,7 @@ function getgradebyDegree(dept_id,a,type=1){
 			'dept_id':dept_id,
 			'student_id':student_id,
 			'is_stutested':is_stutested,
-			'groupDetailId':groupDetailId
+			'groupDetailId':0
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -933,8 +929,6 @@ function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
-	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalance')); ?>';
 	}
 	checkAutoControl(student_type);
 	dijit.byId("old_stu").reset();
@@ -952,6 +946,7 @@ function getallstudentname(){//
 			'branchId':branch_id,
 			'customerType':customer_type,
 			'joinGroup':1,
+			'issueResult':1//for get student test get result
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -964,7 +959,7 @@ function getallstudentname(){//
 function checkAutoControl(studentType){
 	$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
 	$("#displayControl").css("display", "block");
-	if(studentType==1 || studentType==4){//existing
+	if(studentType==1){//existing
 		$("#displayControl").css("display", "none");
 	}
 	else if(studentType==2){//from
@@ -996,8 +991,6 @@ function getOldStudentInfo(){
 		data_from=2;
 	}else if(student_type==3){//crm
 		data_from=3;
-	}else if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-		data_from=4;
 	}
 	customer_type = dijit.byId("customer_type").attr("value");
 	
@@ -1017,7 +1010,7 @@ function getOldStudentInfo(){
 			   if(data){
 				   dojo.byId("lbl_blog").innerHTML = data.studentInfo;
 				   dojo.byId("lblstudyinfo").innerHTML = data.studyinfo;
-				   
+				   dojo.byId("lblstudenttypeinfo").innerHTML = data.studenttypeinfo;
 			   }
 			   getStudentInformation();
 			   getgradebyDegree(-1,1,2);
@@ -1035,9 +1028,6 @@ function getStudentInformation(){
 	var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinformation')); ?>';
 
 	student_type = dijit.byId("student_type").attr("value");
-	if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentbalanceinformation')); ?>';
-	}
 	
 	student_id=dijit.byId('old_stu').get('value');
 	dojo.byId("lb_grade").innerHTML = "";
@@ -1081,11 +1071,6 @@ function getStudentInformation(){
 			academic_year_label = data.academic_year_label;
 			if(academic_year_label== undefined){
 				academic_year_label='&nbsp;';
-			}
-			
-			if(student_type==4){//សិស្សនៅមិនទាន់ទូទាត់ ថ្នាក់សិក្សាចាស់
-				dijit.byId('studentBalanceId').set('value',data.studentBalanceId);
-				dijit.byId('groupDetailId').set('value',data.groupDetailId);
 			}
 			
 			dojo.byId("lb_academic_year").innerHTML = academic_year_label;

@@ -1,7 +1,7 @@
 <?php
 class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 {
-	public  function getStudentInfo($search){
+	public  function getStudentInfoReport($search){
 		$_db = $this->getAdapter();
 		
 		$dbGb = new Application_Model_DbTable_DbGlobal();
@@ -178,7 +178,6 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	function checkPrevConcern($value,$type){
 		$db = $this->getAdapter();
-// 		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=22  LIMIT 1";
 		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=$type  LIMIT 1";
 		return $db->fetchOne($sql);
 	}
@@ -384,9 +383,6 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($search['province_search'])){
 				$where .= " AND st.province_id = ".$search['province_search'];
 			}
-	// 		if($search['register_status']!=''){
-	// 			$where .= " and st.register = ".$search['register_status'];
-	// 		}
 			if($search['result_status']!=''){
 				$where .= " and str.updated_result = ".$search['result_status'];
 			}

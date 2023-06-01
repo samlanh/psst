@@ -46,7 +46,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		));
 		$user->setValue($request->getParam('user'));
 		$opt_user = array(''=>$this->tr->translate("USER"));
-		$opt_all_user=$_dbg->getAllUser();
+		$opt_all_user=$_dbg->getAllUserGlobal();
 		if(!empty($opt_all_user))foreach ($opt_all_user As $row)$opt_user[$row['id']]=$row['name'];
 		$user->setMultiOptions($opt_user);
 		

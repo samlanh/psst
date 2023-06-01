@@ -121,7 +121,6 @@
 				}
 			}
 			}catch(Exception $e){
-	    		$_db->rollBack();
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
 	}

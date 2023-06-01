@@ -17,10 +17,14 @@ class Test_TestresultController extends Zend_Controller_Action
     		}
     		else{
     			$search = array(
-    					
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
-    				
+    					'branch_search'=>'',
+    					'advance_search'=>'',
+    					'degree_search' => '',
+    					'type_exam_search' => '',
+    					'start_date'=> date('Y-m-d'),
+    					'end_date'=>date('Y-m-d'),
     			);
     		}
     		$this->view->adv_search = $search;
@@ -28,9 +32,6 @@ class Test_TestresultController extends Zend_Controller_Action
     		$list = new Application_Form_Frmtable();
 
     		$collumns = array("SERIAL","STUDENT_NAMEKHMER","TEST_TYPE","TEST_DATE","TEST_TERM","DEGREE","GRADE","RESULT_DATE","SCORE","DEGREE","GRADE","BY");
-    		// $link=array(
-    		// 		'module'=>'test','controller'=>'term','action'=>'edit',
-    		// );
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array( ));
 
 			$frm = new Test_Form_FrmStudentTest();

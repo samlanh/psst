@@ -501,6 +501,21 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
 				$_type_exam->setValue($userinfo['schoolOption']);
 			}
 		}
+
+		$_arr_type_exam = array(
+			""=>$this->tr->translate("TYPE_TEST"),
+			1=>$this->tr->translate("KHMER_KNOWLEDGE"),
+			2=>$this->tr->translate("ENGLISH"),
+			3=>$this->tr->translate("UNIVERSITY")
+		);
+    	$_type_exam_search = new Zend_Dojo_Form_Element_FilteringSelect("type_exam_search");
+    	$_type_exam_search->setMultiOptions($_arr_type_exam);
+    	$_type_exam_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
+    	$_type_exam_search->setValue($request->getParam("type_exam_search"));
 		
 		$_arr_opt = array(''=>$this->tr->translate("TEST_TYPE"));
 		$rows = $_dbgb->getPlacementTestType();
@@ -623,7 +638,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$end_date,
     			$_branch_search,
 				$_type_exam,
-    			$_test_type
+    			$_test_type,
+				$_type_exam_search 
     			));
     	return $this;
     }

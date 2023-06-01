@@ -700,8 +700,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			}
 	
 			$db=$this->getAdapter();
-			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
-			$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
 			$sql=" SELECT
 			            sp.id,
 						sp.branch_id,

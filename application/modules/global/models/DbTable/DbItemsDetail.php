@@ -434,13 +434,13 @@
 		return $db->fetchAll($sql.$location);
 	}
 
-	function getProductInfoByLocation($_data = null){
+	function getProductInfoByLocationItem($_data = null){
 		$db = $this->getAdapter();
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$lang = $dbgb->currentlang();
-		if($lang=1){
+		if($lang==1){
 			$title = "td.title";
-		}elseif($lang=1){
+		}elseif($lang==1){
 			$title = "td.title_en";
 		}
 		$sql = "SELECT td.id, $title AS product_name,

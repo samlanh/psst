@@ -357,7 +357,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		
 		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
 		$userinfo = $_dbgb->getUserInfo();
-		$optionUser = $_dbgb->getAllUser();
+		$optionUser = $_dbgb->getAllUserGlobal();
 		if(!empty($optionUser))foreach($optionUser AS $row) $_arr_opt_user[$row['id']]=$row['name'];
 		$_user_id = new Zend_Dojo_Form_Element_FilteringSelect("user_id");
 		$_user_id->setMultiOptions($_arr_opt_user);

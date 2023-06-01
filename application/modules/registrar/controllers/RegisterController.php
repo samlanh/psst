@@ -29,7 +29,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		    	'session'=>'',
     		    	'grade_all'=>'',
     		    	'branch_id'=>0,
-    		    	'user'=>'',
+    		    	'userId'=>'',
     		    	'start_date'=> date('Y-m-d'),
     		    	'end_date'=>date('Y-m-d')
     			);

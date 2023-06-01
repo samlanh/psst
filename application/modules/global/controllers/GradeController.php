@@ -218,7 +218,7 @@ class Global_GradeController extends Zend_Controller_Action {
 		if ($this->getRequest()->isPost()) {
 			$data = $this->getRequest()->getPost();
 			$db = new Global_Model_DbTable_DbItemsDetail();
-			$_row = $db->getProductInfoByLocation($data);
+			$_row = $db->getProductInfoByLocationItem($data);
 			print_r(Zend_Json::encode($_row));
 			exit();
 		}

@@ -594,8 +594,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    	if(!empty($search['study_year'])){
 	    		$where.=" AND sp.academic_year=".$search['study_year'];
 	    	}
-	    	if(!empty($search['user'])){
-	    		$where.=" AND sp.user_id=".$search['user'];
+	    	if(!empty($search['userId'])){
+	    		$where.=" AND sp.user_id=".$search['userId'];
 	    	}
 	    	$order=" ORDER BY sp.id DESC";
     		return $db->fetchAll($sql.$where.$order);

@@ -162,7 +162,7 @@ public function init()
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbStudent();
-		$row = $db->getStudentInfo($search);
+		$row = $db->getStudentInfoReport($search);
 		$this->view->rs = $row;
 	}
 	public function rptAllresultAction()

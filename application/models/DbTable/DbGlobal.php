@@ -112,7 +112,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   	END AS status ";
    	return $string;
    }
-   function getAllUser($branchId=null){
+   function getAllUserGlobal($branchId=null){
 	   	$db = $this->getAdapter();
 	   	$sql="SELECT
 			u.id,
@@ -149,11 +149,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	if (!empty($result)){
 	   		$row = $result;
 	   	}
-// 	   	// this case check all user that avaiable in all branch that current user can access
-// 	   	$sql.= $this->getAccessPermission("u.branch_list");
 	   	
-		//this for check more by branch record of data
-	   	//ex: when we enter register student in which branch filter only user in that branch
 	   	$result =array();
 	   	if (!empty($branchId)){
 	   		$bra = explode(",", $branchId);
@@ -177,6 +173,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   		$row = $result;
 	   	}
 	   	return $row;
+   }
+   function getUserListbyBranch($data){
+   		$db = $this->getAdapter();
+   	
+		$sql="SELECT
+			   	u.id,
+			   	CONCAT(u.last_name,' ',u.first_name) AS name
+			   	FROM `rms_users` AS u WHERE u.active=1
+			   	AND u.is_system =0 ";
+		if(!empty($data['branchId'])){
+			$sql.=' AND u.branch_list= '.$data['branchId'];
+		}
+	    return $db->fetchAll($sql);
    }
    
    public function getUserInfo(){

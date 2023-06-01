@@ -180,4 +180,13 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			}
 		}
 	}
+	function getUserAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$gty= $db->getUserListbyBranch($data);
+			print_r(Zend_Json::encode($gty));
+			exit();
+		}
+	}
 }

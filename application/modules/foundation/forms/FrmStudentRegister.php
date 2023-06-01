@@ -131,13 +131,13 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));
-		
+		$entry_stuId=(ENTY_STUID==0)?'readOnly':'false';
 		$student_id = new Zend_Dojo_Form_Element_TextBox('student_id');
 		$student_id->setAttribs(array('dojoType'=>$this->tvalidate,
 				'class'=>'fullside',
 				'required'=>'true',
 				'style'=>'color: red;',
-				'readOnly'=>'readOnly',
+				'readOnly'=>$entry_stuId,
 				));
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$level = $session_user->level;

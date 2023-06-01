@@ -4,9 +4,10 @@ class Test_IndexController extends Zend_Controller_Action
 	const REDIRECT_URL = '/test/index';
     public function init()
     {
+		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		defined('SHOW_TEST_ONLINE') || define('SHOW_TEST_ONLINE', Setting_Model_DbTable_DbGeneral::geValueByKeyName('test_online'));
     }
     public function indexAction()
     {

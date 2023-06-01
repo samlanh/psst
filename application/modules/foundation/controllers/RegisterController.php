@@ -8,6 +8,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
     	
     	defined('SHOW_DOCUMENT') || define('SHOW_DOCUMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('doc_display'));
     	defined('STU_EN_REQUIRED') || define('STU_EN_REQUIRED', Setting_Model_DbTable_DbGeneral::geValueByKeyName('name_required'));
+		defined('ENTY_STUID') || define('ENTY_STUID', Setting_Model_DbTable_DbGeneral::geValueByKeyName('entry_stuid'));
     	
     }
 	public function indexAction(){

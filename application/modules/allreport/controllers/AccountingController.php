@@ -280,7 +280,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Model_Decorator::removeAllDecorator($form);
 			$this->view->form_search=$form;
 			
-			$this->view->rs = array();
+			$db = new Allreport_Model_DbTable_DbRptStudentBalance();
+			$this->view->rs = $db->getAllStudentBalance($search);
 			$this->view->search = $search;
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

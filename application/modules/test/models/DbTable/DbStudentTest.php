@@ -688,7 +688,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY str.id DESC ";
 		return $db->fetchAll($sql);
 	}
-	function getAllStudentTestResult($data){
+	function getAllStudentTestResult($search = null){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		
@@ -721,11 +721,36 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
 				FROM
 				`rms_student_test_result` AS str
-				INNER JOIN `rms_student` AS s ON str.stu_test_id = s.stu_id
+				INNER JOIN `rms_student` AS s ON str.stu_test_id = s.stu_id 
+				WHERE str.is_current = 1
 			 ";
+			$from_date =(empty($search['start_date']))? '1': " str.result_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': " str.result_date <= '".$search['end_date']." 23:59:59'";
 		
-		$sql.=" ORDER BY str.id DESC ";
-		return $db->fetchAll($sql);
+			$where = " AND ".$from_date." AND ".$to_date;
+			 if (!empty($search['advance_search'])){
+				$s_where = array();
+				$s_search = str_replace(' ', '', addslashes(trim($search['advance_search'])));
+				$s_where[] = " REPLACE(s.serial,' ','')  LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(s.stu_khname,' ','')  LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(s.stu_enname,' ','')  LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(s.last_name,' ','')  LIKE '%{$s_search}%'";
+				$where .=' AND ('.implode(' OR ',$s_where).')';
+			}    
+			if(!empty($search['branch_search'])){
+					$where .= " AND s.branch_id = ".$search['branch_search'];
+			}
+			if(!empty($search['type_exam_search'])){
+				$where .= " AND str.test_type  = ".$search['type_exam_search'];
+			}
+			if(!empty($search['degree_search'])){
+				$where .= " AND str.degree_result = ".$search['degree_search'];
+			}
+			$dbp = new Application_Model_DbTable_DbGlobal();
+			$where.=$dbp->getAccessPermission('s.branch_id');
+
+			$order =" ORDER BY str.id DESC ";
+			return $db->fetchAll($sql.$where.$order);
 	}
 	
 	function getTestResultById($id,$type=null,$stu_id=null){

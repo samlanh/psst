@@ -3,15 +3,13 @@
 	echo $this->headTitle('បង្កាន់ដៃបង់ប្រាក់');
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$result = $this->rr;
-	
 	$receiptType = RECEIPT_TYPE;
 ?>
 <style>
-#footer{display: none;}
-table tr td strong{
-	padding-left: 0px;
-}
-
+	#footer{display: none;}
+	table tr td strong{
+		padding-left: 0px;
+	}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
@@ -67,7 +65,7 @@ function setDatatoReceipt(){
 		dojo.byId("lb_paid_amount").innerHTML = '<?php echo number_format($result['paid_amount'],2);?>';	
 		dojo.byId("lb_balance_due").innerHTML = '<?php echo number_format($result['balance_due'],2);?>';	
 		dojo.byId("lb_paymentmethod").innerHTML = '<?php echo $result['payment_method'];?>';	
-		dojo.byId("lb_paymentnumber").innerHTML = '<?php echo $result['number'];?>';
+		dojo.byId("lb_paymentnumber").innerHTML = '<?php echo $result['bankName'].' '.$result['number'];?>';
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $result['user'];?>';
 
 		dojo.byId("lb_grade").innerHTML = '<?php echo empty($result['grade'])?"&nbsp;":$result['grade']; echo empty($result['group_name'])?"":" (".$result['group_name'].")";?>';
@@ -180,7 +178,7 @@ function setDatatoReceipt(){
 						paid='<?php echo number_format($rs['paidamount'],2);?>';
 					  temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
 					  
-					  period='<?php if($rs['is_onepayment']!=1){echo $rs['start_date']; ?>-<?php echo empty($rs['validate'])?"":$rs['validate']; }else{echo'&nbsp;';}?>';		  				  
+					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo $rs['start_date']; ?>-<?php echo empty($rs['validate'])?"":$rs['validate']; }else{echo'&nbsp;';}?>';		  				  
 					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</td>';
 					  note = '<?php echo addslashes($rs['note']);?>';
 					  var div = document.getElementById('noteContent');

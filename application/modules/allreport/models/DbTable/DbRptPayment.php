@@ -52,6 +52,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.balance_due,
     				sp.note,
     			   (SELECT $label FROM rms_view where rms_view.type = 8 and key_code=sp.payment_method LIMIT 1) AS payment_method,
+    			   (SELECT bank_name from `rms_bank` where id=sp.bank_id LIMIT 1) AS bankName,
     			   sp.number,
     				(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_tuitionfee.academic_year LIMIT 1)
 					 FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
@@ -398,21 +399,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$degree = "rms_items.title_en";
     	}
     	$sql=" SELECT 
-			    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
-			    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
-			    	(SELECT `rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
 			    	(SELECT $grade FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS service,
 			    	(SELECT items_type FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS items_type,
+			    	spd.payment_term as paymentTermId,
 			    	(SELECT $label FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
-			    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-			    	sp.receipt_number as receipt_number,
-			    	sp.`grand_total` AS total_payment,
-			    	sp.`paid_amount` as paid_amount,
-			    	sp.`balance_due` as balance_due,
-			    	sp.`amount_in_khmer` as amount_in_khmer,
-			    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
-			    	spd.id,
-			    	spd.payment_id,
 			    	spd.is_onepayment,
 			    	spd.subtotal,
 			    	spd.paidamount,

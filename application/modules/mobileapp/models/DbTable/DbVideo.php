@@ -39,7 +39,6 @@ public static function getUserId(){
     	}
     	if(!empty($search['category'])){
     		$dbCate = new Mobileapp_Model_DbTable_DbCategory();
-//     		$where .=' AND act.category = '.$search['category'];
     		$condiction = $dbCate->getChildCategory($search['category']);
     		if (!empty($condiction)){
     			$where.=" AND act.category IN ($condiction)";

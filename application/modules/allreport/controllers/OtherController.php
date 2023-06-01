@@ -12,27 +12,7 @@ public function init()
 	
 	}
 	
-	public function rptCarAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = array(
-						'txtsearch' => $_data['txtsearch'],
-				);
-			}
-			else{
-				$search=array(
-						'txtsearch' =>'',
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptCar();
-			$this->view->rs = $db->getAllCar($search);
-			$this->view->search=$search;
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
+	
 	
 	public function rptAcademicYearAction(){
 	

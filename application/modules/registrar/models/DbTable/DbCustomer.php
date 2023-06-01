@@ -74,8 +74,7 @@ class Registrar_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 					'commune_name'	=>$_data['commun_note'],
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
-					
-					//////////////////////////////////////////////				
+									
 					'remark'		=>$_data['remark'],
 					
 				);

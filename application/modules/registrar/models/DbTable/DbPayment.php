@@ -565,7 +565,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					$this->_name="rms_student_paymentdetail";
 					$studentpaymentid = $this->insert($_arr);
 
-			////////////////////////////////////////// if product type => insert to sale_detail //////////////////////////////	
+			
 					if($rs_item['items_type']==3){ // product
 						if($rs_item['is_productseat']==1){ // product set
 							$sql="select 

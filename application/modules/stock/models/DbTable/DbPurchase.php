@@ -332,33 +332,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		   		Application_Form_FrmMessage::message("INSERT_FAIL");
 		   	}
     }
-    function getProductNames(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.branch_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
- 				WHERE p.id=pl.pro_id AND p.status=1  ";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('branch_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-        $rows=$db->fetchAll($sql);
-        
-        array_unshift($rows,array('id' => '',"name"=>"Please select product name"));
-        $options = '';
-        if(!empty($rows))foreach($rows as $value){
-        	$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
-        }
-        return $options;
-    }
+   
     
-    function getProductName(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.branch_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-    	WHERE p.id=pl.pro_id AND p.status=1  ";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('branch_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-    	return $db->fetchAll($sql);
-    }
-    
+   
     function getPurchaseCode($branch_id=null){
     	$db = new Application_Model_DbTable_DbGlobal();
     	return $db->getPuchaseNo($branch_id);

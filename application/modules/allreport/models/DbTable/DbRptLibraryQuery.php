@@ -375,9 +375,6 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	WHERE b.id=bd.borr_id ";
     	 
     	$where = '';
-//     	$from_date =(empty($search['start_date']))? '1': "b.borrow_date >= '".$search['start_date']." 00:00:00'";
-//     	$to_date = (empty($search['end_date']))? '1': "b.borrow_date <= '".$search['end_date']." 23:59:59'";
-//     	$where = " AND ".$from_date." AND ".$to_date;
     	 
     	if(!empty($search["title"])){
     		$s_where=array();

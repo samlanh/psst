@@ -817,7 +817,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id = ".$id;
 				$this->update($_arr, $where);
 				
-			/////////////////////// Update student to study in old_group in group_detail_student  //////////////////////////////////
+			//// Update student to study in old_group in group_detail_student  ///
 				$this->_name='rms_group_detail_student';
 				$StudentOldGroup = $this->getAllStudentOldGroup($_data['from_group']);
 				if(!empty($StudentOldGroup)){
@@ -848,12 +848,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						}
 					}
 				}
-			//////////////////////// delete record student that added to new group //////////////////////////////////////	
+			///// delete record student that added to new group ///////////////	
 				$this->_name='rms_group_detail_student';
 				$where = "old_group = ".$_data['from_group']." and group_id = ".$_data['old_to_group'];
 				$this->delete($where);
 
-			//////////////////////// get group_detail_info to update student info back to old group /////////////////////	
+			/////// get group_detail_info to update student info back to old group /////	
 				$group_detail = $this->getGroupDetailInStudentChangeGroup($_data['from_group']);
 				$this->_name = 'rms_group';
 				$group=array(

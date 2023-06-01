@@ -58,20 +58,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$status_opt = $db->AllStatusRe();
 		$_status_type->setMultiOptions($status_opt);
 		
-		$item = new Zend_Dojo_Form_Element_FilteringSelect('item');
-		$item->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$item->setValue($request->getParam("item"));
-		$items = $db->getAllItems($type);
-		$opt = array(''=>$this->tr->translate("SELECT_CATEGORY"));
-		if(!empty($items))foreach($items AS $row) $opt[$row['id']]=$row['name'];
-		$item->setMultiOptions($opt);
-		
 		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_DISTYPE"));
 		$Option = $db->getAllDiscount();
 		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
@@ -113,21 +99,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$finished_status->setMultiOptions($opt);
 		$finished_status->setValue($request->getParam("finished_status"));
 		
-		$_group = new Zend_Dojo_Form_Element_FilteringSelect('group');
-		$_group->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$_group->setValue($request->getParam("group"));
-		$result = $db->getAllGroup();
-		$opt_group = array(''=>$this->tr->translate("SELECT_GROUP"));
-		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
-		$_group->setMultiOptions($opt_group);
-		
-		$_cate = new Zend_Dojo_Form_Element_FilteringSelect('cate_income');
+		$_cate = new Zend_Dojo_Form_Element_FilteringSelect('cate_income');//should be remove it becuase all index not call it to use
 		$_cate->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
@@ -142,22 +114,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		if(!empty($result))foreach ($result As $rs)$opt_cate[$rs['id']]=$rs['name'];
 		$_cate->setMultiOptions($opt_cate);
 		
-		$term_test = new Zend_Dojo_Form_Element_FilteringSelect('term_test');
-		$term_test->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$result = $db->getallTermtest();
-		$optterm = array(''=>$this->tr->translate("SELECT_TERM"));
-		if(!empty($result))foreach ($result As $rs){
-			$optterm[$rs['id']]=$rs['name'];
-		}
-		$term_test->setMultiOptions($optterm);
-		$term_test->setValue($request->getParam("term_test"));
-
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
 		$_session->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -172,20 +128,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);
-		
-		$_room = new Zend_Dojo_Form_Element_FilteringSelect('room');
-		$_room->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$_room->setValue($request->getParam("room"));
-		$result = $db->getAllRoom();
-		$opt_room = array(''=>$this->tr->translate("ROOM_NAME"));
-		if(!empty($result))foreach ($result As $rs)$opt_room[$rs['id']]=$rs['name'];
-		$_room->setMultiOptions($opt_room);
 		
 		$_time = new Zend_Dojo_Form_Element_FilteringSelect('time');
 		$_time->setAttribs(array('dojoType'=>$this->filter,
@@ -270,36 +212,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		if(!empty($opt_grade_all))foreach ($opt_grade_all As $rows)$opt_g_all[$rows['id']]=$rows['name'];
 		$_grade_all->setMultiOptions($opt_g_all);
 		
-		$user = new Zend_Dojo_Form_Element_FilteringSelect('user');
-		$user->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("PLEASE_SELECT_USER"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$user->setValue($request->getParam('user'));
-		$opt_user = array(''=>$this->tr->translate("PLEASE_SELECT_USER"));
-		$opt_all_user=$db->getAllUser();
-		if(!empty($opt_all_user))foreach ($opt_all_user As $row)$opt_user[$row['id']]=$row['name'];
-		$user->setMultiOptions($opt_user);
-		
-		$sess_gep = new Zend_Dojo_Form_Element_FilteringSelect('sess_gep');
-		$sess_gep->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("TIME"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$sess_gep->setValue($request->getParam("sess_gep"));
-		$ses_gep = array(''=>$this->tr->translate("TIME"),
-				1=>$this->tr->translate("PART_TIME"),
-				2=>$this->tr->translate("FULL_TIME"),
-		);
-		$sess_gep->setMultiOptions($ses_gep);
-		
-		
 		$service = new Zend_Dojo_Form_Element_FilteringSelect('service');
 		$service->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("SERVIC"),
@@ -315,9 +227,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 			'itemsType'=>2
 		);
 		
-		$ser_rows = $db->getAllItemDetail($param);
-		if(!empty($ser_rows))foreach($ser_rows As $row)$opt_ser[$row['id']]=$row['name'];
-		$service->setMultiOptions($opt_ser);
+// 		$ser_rows = $db->getAllItemDetail($param);
+// 		if(!empty($ser_rows))foreach($ser_rows As $row)$opt_ser[$row['id']]=$row['name'];
+// 		$service->setMultiOptions($opt_ser);
 		
 		$pay_term = new Zend_Dojo_Form_Element_FilteringSelect('pay_term');
 		$pay_term->setAttribs(array('dojoType'=>$this->filter,
@@ -393,7 +305,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
     			$_branch_id->setValue($row['id']);
     		}
     	}
-		
 		
 		//term 
 		$term = new Zend_Dojo_Form_Element_FilteringSelect('term');
@@ -506,26 +417,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$opt_group = array(''=>$this->tr->translate("SELECT_DAY"));
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
 		$_day->setMultiOptions($opt_group);
-		
-		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
-		$userinfo = $db->getUserInfo();
-		$optionUser = $db->getAllUser();
-		if(!empty($optionUser))foreach($optionUser AS $row) $_arr_opt_user[$row['id']]=$row['name'];
-		$_user_id = new Zend_Dojo_Form_Element_FilteringSelect("user_id");
-		$_user_id->setMultiOptions($_arr_opt_user);
-		$_user_id->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
-		if ($userinfo['level']!=1){
-			$_user_id->setAttribs(array(
-					'readonly'=>true,
-			));
-			$_user_id->setValue($userinfo['user_id']);
-		}
-		$_user_id->setValue($request->getParam("user_id"));
-		
 		
 		
 		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
@@ -663,11 +554,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$receipt_order,
 				    $option_type,
 				    $type_study,
-					$school_option,$is_pass,$item,$finished_status,$term_test,$term,
-					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
-					$service_type,$_degree_bac,$_dis_type,$_room,$_branch_id,$start_date,
-					$user,$end_date,$sess_gep,$_title,$generation,
-					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
+					$school_option,$is_pass,$finished_status,$term,
+					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$payment_by,$study_year,$academic_year,
+					$service_type,$_degree_bac,$_dis_type,$_branch_id,$start_date,
+					$end_date,$_title,$generation,
+					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,
 					$_sortby,
 					$_exam_type,
 					$_for_semester,

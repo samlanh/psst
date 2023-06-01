@@ -70,12 +70,9 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     	if(empty($id)){
     		$this->_redirect('/rsvacl/useraccess');
     	}
-//     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-//     	print_r($session_user->arr_acl);exit();
     	
     	/* Initialize action controller here */
     	if($this->getRequest()->getParam('id')){
-//     		$id = $this->getRequest()->getParam('id');
     		$where = " ";
     		$status = null;
     		if($this->getRequest()->isPost()){

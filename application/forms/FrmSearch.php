@@ -53,9 +53,6 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 			));
 		$_date = $request->getParam("start_date");
 
-		if(empty($_date)){
-			//$_date = date('Y-m-01');
-		}
 		$_startdate->setValue($_date);
 		
 		

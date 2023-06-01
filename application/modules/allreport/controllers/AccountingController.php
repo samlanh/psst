@@ -332,15 +332,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}
-// 	public function submitlateAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data=$this->getRequest()->getPost();
-// 			$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
-// 			$db->submitlatePayment($data);
-// 			$this->_redirect("/allreport/accounting/rptstudentpaymentlate");
-// 		}
-// 	}
-	
+
 	public function rptExpenseAction(){
 		try{
 			if($this->getRequest()->isPost()){

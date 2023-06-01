@@ -57,16 +57,11 @@ class Mobileapp_AttendencenoteController extends Zend_Controller_Action
                 Application_Form_FrmMessage::message("INSERT_SUCCESS");
             }
         }
-       // $frm = new Other_Form_FrmBanner();
-       // $frm_manager=$frm->FrmAddBanner();
-     //   Application_Model_Decorator::removeAllDecorator($frm_manager);
-       // $this->view->frm = $frm_manager;
     }catch (Exception $e){
         Application_Form_FrmMessage::message("Application Error");
         Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     }
-  //  $dbglobal = new Application_Model_DbTable_DbVdGlobal();
-    //    $this->view->lang = $dbglobal->getLaguage();
+
     }
 
     public function editAction()

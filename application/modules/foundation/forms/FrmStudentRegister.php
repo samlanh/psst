@@ -54,7 +54,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
-// 				'onChange'=>'getAllGroupByBranch();getAllAcademicByBranch();',
 				'onChange'=>'getAllAcademicByBranch();getStudentNo();',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',

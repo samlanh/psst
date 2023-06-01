@@ -40,9 +40,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 	    	AND gds.`is_pass`=0
 	    	AND gds.`type`=1 ";
     	$datenow = date("Y-m-d");
-//     	$sql.=" AND s.`stu_id` NOT IN (SELECT student_id FROM rms_student_payment AS sp,`rms_student_paymentdetail` AS spd WHERE sp.id=spd.`payment_id` AND spd.`service_id`=4 AND sp.`is_void`=0)
-//     			AND s.`stu_id` NOT IN (SELECT ste.`stu_id` FROM `rms_startdate_enddate_stu` AS ste WHERE  '$datenow' BETWEEN ste.start_date AND ste.end_date LIMIT 1 ORDER by ste.`id` DESC  ) $branch_id";
-    	
+	
      	$order=" ORDER by gds.group_id ASC ,s.stu_khname ASC ";
      	$where=" ";
      	if(($search['grade_all']>0)){

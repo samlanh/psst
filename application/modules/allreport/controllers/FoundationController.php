@@ -175,67 +175,6 @@ public function init()
 	}
 	
 	
-//////////report student score 
-//     function rptStudentScoreAction(){
-// //     	if($this->getRequest()->isPost()){
-// //     		$_data=$this->getRequest()->getPost();
-// //     		$search = array(
-// //     				'txtsearch' => $_data['txtsearch'],
-// //     				//'searchby' => $_data['searchby'],
-// //     		);
-// //     	}
-// //     	else{
-// //     		$search=array(
-// //     				'txtsearch' =>'',
-// //     		);
-// //     	}
-//     	$group= new Allreport_Model_DbTable_DbRptGroup();
-//     	$this->view->rs = $rs_rows = $group->getAllGroup($search=null);
-//     	$this->view->search = $search;
-//     	$parent=new Allreport_Model_DbTable_DbRptStudentScore();
-//     	$this->view->row_parent=$parent->getParentName();
-//     	$this->view->row_sub=$parent->getSubjectdByParent();
-//     	$this->view->row_studet=$parent->getAllSubjectByStudent();
-//     	$this->view->row_aca=$parent->getAcademic();
-//     	$rows = $parent->getStudenetGroupSubject();
-//     	$result = array();
-//     	if(!empty($rows))foreach ($rows as $key =>$rs){
-//     		$result[$key]=array(
-//     				'stu_id'=>$rs['stu_id'],
-//     				'stu_enname'=>$rs['stu_enname'],
-//     				'stu_code'=>$rs['stu_code'],
-//     				'id'=>$rs['id'],
-//     				'group_code'=>$rs['group_code'],
-//     				'group_id'=>$rs['group_id'],
-//     				
-//     				'room_id'=>$rs['room_id'],
-//     				'from_academic'=>$rs['from_academic'],
-//     				'to_academic'=>$rs['to_academic'],
-//     				'semester'=>$rs['semester'],
-//     				'session'=>$rs['session'],
-//     				'degree'=>$rs['degree'],
-//     				'grade'=>$rs['grade'],
-//     			
-//     				
-//     				'start_date'=>$rs['start_date'],
-//     				'expired_date'=>$rs['expired_date'],
-//     				'user_id'=>$rs['user_id'],
-//     				'academic_year'=>$rs['academic_year'],
-//     				'subject_name'=>$rs['subject_name'],
-//     				'subject_id'=>$rs['subject_id'],
-//     				);
-//     		$itemrs = $parent->getScoreByGroupId($rs['stu_id'],$rs['subject_id'],$rs['group_id']);
-// //     		$itemrs = $parent->getScoreByGroupId($rs['subject_id'],$rs['group_id']);
-//     		foreach ($itemrs as $index => $item){
-//     			$result[$key]['subject_id'.$index]=$item['subject_name'];
-//     			$result[$key]['total_score'.$index]=$item['total_score'];
-//     		}
-//     	}
-//     	//$data= $this->view->row_group=$parent->getStudenetGroupSubject();
-//     	$data= $this->view->row_group=$result;
-// //     	print_r($data);exit();
-//     }
-
     function rptStudentScoreTestAction(){
     	$group= new Allreport_Model_DbTable_DbRptGroup();
     	$this->view->rs = $rs_rows = $group->getAllGroup($search=null);
@@ -275,7 +214,7 @@ public function init()
     		);
     
     		$itemrs = $parent->getScoreByGroupId($rs['stu_id'],$rs['subject_id'],$rs['group_id']);
-    		//     		$itemrs = $parent->getScoreByGroupId($rs['subject_id'],$rs['group_id']);
+    		
     		foreach ($itemrs as $index => $item){
     			$result[$key]['subject_id'.$index]=$item['subject_name'];
     			$result[$key]['total_score'.$index]=$item['total_score'];

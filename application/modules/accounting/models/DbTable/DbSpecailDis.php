@@ -34,7 +34,6 @@
 		notes,
 		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
 		FROM `rms_specail_discount` AS d WHERE 1 ";
-		//(SELECT rms_view.name_kh FROM rms_view WHERE rms_view.type=11 AND rms_view.key_code =d.status LIMIT 1) AS status,
 		$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";
 		if(!empty($search['advance_search'])){
 			$s_where = array();

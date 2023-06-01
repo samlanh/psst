@@ -61,7 +61,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	
     	return $db->fetchOne($find);
     }
-    ////////////////
     public function addTuitionFee($_data){
     	
     	$db = $this->getAdapter();

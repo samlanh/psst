@@ -320,7 +320,7 @@
 				$this->update($_arr, $where);
 			}
 			
-		//////////////////////// degree comment ////////////////////////////////////	
+		//// degree comment /////	
 			$this->updateItemsDetailByItems($_data);
 			return $id;
 		}catch(exception $e){

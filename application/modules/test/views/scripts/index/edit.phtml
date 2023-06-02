@@ -5,6 +5,7 @@
 	
 	$testCondiction = TEST_CONDICTION;
 	$test_online = SHOW_TEST_ONLINE;
+
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
@@ -560,6 +561,18 @@ a.btn.btn-primary.btn-xs {
 				        	</div>
 				        </div>
 				        <?php }?>
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="col-sm-12 mt-20 ptb-10 text-center">
+											<input class="button-class button-primary" iconClass="glyphicon glyphicon-list-alt" type="button" label="<?php echo $tr->translate('CREATE_TEST_EXAM_EN');?>" dojoType="dijit.form.Button" onclick="goEnglishTest();"/>
+											<input class="button-class button-primary" iconClass="glyphicon glyphicon-list-alt" type="button" label="<?php echo $tr->translate('CREATE_TEST_EXAM_KH');?>" dojoType="dijit.form.Button" onclick="goKhTest();"/>
+	    								</div>
+									</div>
+								</div>
+							</div>
+						</div>
 			        </div>
 			        <!--/.Panel 2-->
 					<div class="tab-pane fade in " id="panel24" role="tabpanel">
@@ -807,6 +820,13 @@ dojo.ready(function(){
 		});
 		getAllTestSetting();
 });
+
+function goEnglishTest(){
+	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/test/index/createtestexam?type=2&id=".$this->rs['stu_id'];?>','_blank');
+}
+function goKhTest(){
+	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/test/index/createtestexam?type=1&id=".$this->rs['stu_id'];?>','_blank');
+}
 
 var url_section = '<?php echo $this->url(array("module"=>"placement","controller"=>"setting","action"=>"allsettings"));?>';										
 function getAllTestSetting(){

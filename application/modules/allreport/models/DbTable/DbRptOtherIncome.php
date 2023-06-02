@@ -7,7 +7,7 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-    function getAllOtherIncome($search){
+    function getAllOtherIncome($search){//2-6-23
     	$db=$this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
@@ -17,20 +17,26 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	}else{ // English
     		$label = "name_en";
     		$branch = "branch_nameen";
+    		
     	}
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql = "SELECT 
     				*,
-    				
+    				CASE
+						WHEN optionType = 1 THEN '".$tr->translate("OTHER_INCOME")."'
+						ELSE '".$tr->translate("OTHER_INCOME")."'
+					END as incomeType,
 					(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
-											FROM rms_student AS s
-										   		WHERE s.stu_id=student_id LIMIT 1) AS studentName,
+					FROM rms_student AS s
+					WHERE s.stu_id=student_id LIMIT 1) AS studentName,
 					(SELECT bank_name FROM `rms_bank` b WHERE bank_id = b.id=bank_id LIMIT 1) AS bank_name,
     				 payment_method AS payment_methodid,
     				(SELECT $branch from rms_branch where br_id = branch_id LIMIT 1) as branch_name,
     				(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income, 
 	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income LIMIT 1) as income_category,
 	    			(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method LIMIT 1) AS payment_method,
-	    			(SELECT CONCAT(first_name) from rms_users as u where u.id = user_id LIMIT 1)  as name
+	    			(SELECT CONCAT(first_name) from rms_users as u where u.id = user_id LIMIT 1)  as byUser,
+	    			(SELECT first_name FROM rms_users WHERE rms_users.id = voidBy LIMIT 1) AS voidBy
     			 FROM 
     				ln_income  
     			WHERE 
@@ -38,10 +44,10 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	
     	$where= ' ';
     	$order=" ORDER BY id DESC ";
-    	if (!empty($search['sortby'])){
-    		if ($search['sortby']==1){
+    	if (!empty($search['receipt_order'])){
+    		if ($search['receipt_order']==1){
     			$order=" ORDER BY date DESC ";
-    		}else if ($search['sortby']==2){
+    		}else if ($search['receipt_order']==2){
     			$order=" ORDER BY id DESC ";
     		}
     	}

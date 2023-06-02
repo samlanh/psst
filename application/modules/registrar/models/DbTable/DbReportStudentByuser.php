@@ -2,27 +2,25 @@
 
 class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'rms_student';
-    public function getUserId(){
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	return $session_user->user_id;
-    }
+//     public function getUserId(){
+//     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+//     	return $session_user->user_id;
+//     }
     
-    function getUserType(){
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	return $session_user->level;
-    }
+//     function getUserType(){
+//     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+//     	return $session_user->level;
+//     }
     
-    public function getBranchId(){
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	return $session_user->branch_id;
-    }
+//     public function getBranchId(){
+//     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+//     	return $session_user->branch_id;
+//     }
   
 	function getDailyReport($search=null){
 		try{
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = $_db->getAccessPermission('sp.branch_id');
-			
 			$lang = $_db->currentlang();
 			if($lang==1){// khmer
 				$label = "name_kh";
@@ -34,22 +32,19 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
 			$sql=" SELECT
-			            sp.id,
-						sp.receipt_number,
 						s.stu_code,
 						s.stu_khname,
 						s.stu_enname,
 						s.last_name,
-						(SELECT title FROM `rms_items` WHERE rms_items.id=sp.degree LIMIT 1 ) AS degree,
+						(SELECT title FROM `rms_items` WHERE rms_items.id=sp.degree LIMIT 1) AS degree,
 						(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS grade,
 						(SELECT name_en FROM rms_view WHERE rms_view.type = 4 AND key_code=sp.session LIMIT 1) AS session,
-						sp.create_date,
-						sp.is_void,
-						(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS year,
-						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_id,
+						(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS FeeYear,
 						(SELECT name_en FROM rms_view WHERE type=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
 						(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = sp.payment_method LIMIT 1) AS paymentMethod,
 						(SELECT bank_name FROM `rms_bank` WHERE rms_bank.id=sp.bank_id LIMIT 1) bank_name,
+						sp.id,
+						sp.receipt_number,
 						sp.number,
 						sp.grand_total AS total_payment,
 						sp.credit_memo,
@@ -60,33 +55,35 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.note,
 						sp.is_closed,
 						sp.payment_method,
-						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
+						sp.create_date,
+						sp.is_void,
+						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS Byuser,
+						(SELECT first_name FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS voidBy
 				  FROM
 						rms_student AS s,
 						rms_student_payment AS sp
 				  WHERE 
 						s.stu_id = sp.student_id  
-						$branch_id  ";
+						$branch_id ";
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	
 			if(!empty($search['adv_search'])){
 				$s_where=array();
 				$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-				
 				$s_where[] = " REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
-				$s_where[] = " REPLACE(receipt_number,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(last_name,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
 				$s_where[]=	 " REPLACE(CONCAT(last_name,stu_enname),' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(receipt_number,' ','') LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(!empty($search['branch_id'])){
 				$where.= " AND sp.branch_id = ".$search['branch_id'];
 			}
-			if(!empty($search['user'])){
-					$where.= " AND sp.user_id = ".$search['user'];
+			if(!empty($search['userId'])){
+					$where.= " AND sp.user_id = ".$search['userId'];
 			}
 			if(!empty($search['degree'])){
 				$where.= " AND sp.degree = ".$search['degree'];
@@ -100,18 +97,16 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			if(!empty($search['stu_name'])){
 				$where.= " AND sp.student_id = ".$search['stu_name'];
 			}
-			//$where.=" AND paystudent_type=3 AND revenue_type=2 AND data_from=4 ";
-// 			$where.=" AND  data_from=3 ";
-// 			$where.=" AND  paystudent_type=3 AND data_from=4 ";
+	
 			if($search['receipt_order']==0){
 				$order=" ORDER By sp.id ASC ";
 			}else{
 				$order=" ORDER By sp.id DESC ";
 			}
-			
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 		}
 	}   
 

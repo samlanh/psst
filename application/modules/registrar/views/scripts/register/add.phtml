@@ -899,12 +899,15 @@ function getallstudentname(){//
 }
 function checkAutoControl(studentType){
 	$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
+	
 	$("#displayControl").css("display", "block");
-	if(studentType==1 || studentType==4){//existing
+	$(".stuCodeControl").css("display", "none");
+	
+	if(studentType==1){//existing
 		$("#displayControl").css("display", "none");
 	}
 	else if(studentType==2){//from
-		$("#displayControl").css("display", "none");
+		$(".stuCodeControl").css("display", "block");
 		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
 	}
 }
@@ -964,6 +967,7 @@ function checkAutoControl(studentType){
 	}
 
 function getStudentInformation(){
+
 	dijit.byId('studentBalanceId').set('value',0);
 	dijit.byId('groupDetailId').set('value',0);
 	

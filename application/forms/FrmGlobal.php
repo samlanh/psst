@@ -845,7 +845,7 @@ class Application_Form_FrmGlobal{
 			$showPic = SHOW_PIC_INRECEIPT;
 			$showPic = ($showPic==1)?'display:block;':'display:none;';
 			$settingAmtReceipt = AMOUNT_RECEIPT;
-			$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape':'size:A4 portrait;';
+			$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape;':'size:A4 portrait;';
 			
 			$str="<style>
 					.hearder_table{height:20px !important;}

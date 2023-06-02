@@ -7,6 +7,76 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 	}
+	public function rptDailyAction()
+	{
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'branch_id'     =>0,
+						'degree'     =>'',
+						'grade_all'  =>'',
+						'session'    =>'',
+						'receipt_order'=>'0',
+						'all_payment'=>'all',
+						'student_payment'=>'',
+						'income'    =>'',
+						'stu_code'  =>'',
+						'stu_name'  =>'',
+						'expense'   =>'',
+						'change_product'=>'',
+						'customer_payment'=>'',
+						'clear_balance'=>'',
+						'userId'	=>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'  => date('Y-m-d'),
+				);
+			}
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		
+		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+		
+		if(!empty($search['student_payment'])){
+			$data1=$this->view->row = $db->getDailyReport($search);
+		}
+		
+		if(!empty($search['income'])){
+			$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+			$this->view->income = $_db->getAllOtherIncome($search);
+		}
+		if(!empty($search['expense'])){
+			$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+			$this->view->expense = $_db1->getAllOtherExpense($search);
+		}
+			
+		if(!empty($search['all_payment'])){
+			$data1=$this->view->row = $db->getDailyReport($search);
+			$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+			$this->view->income = $_db->getAllOtherIncome($search);
+				
+			$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+			$this->view->expense = $_db1->getAllOtherExpense($search);
+		}
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	}
+	
 	function rptSpecaildiscountAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -972,74 +1042,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 
-	public function rptDailyAction()
-	{
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-						'adv_search' =>'',
-						'branch_id'     =>0,
-						'degree'     =>'',
-						'grade_all'  =>'',
-						'session'    =>'',
-						'receipt_order'=>'0',
-						'all_payment'=>'all',
-						'student_payment'=>'',
-						'student_test'=>'',
-						'income'    =>'',
-						'stu_code'  =>'',
-						'stu_name'  =>'',
-						'expense'   =>'',
-						'change_product'=>'',
-						'customer_payment'=>'',
-						'clear_balance'=>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'  => date('Y-m-d'),
-				);
-			}
 	
-			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-			$frm = new Application_Form_FrmGlobal();
-			$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
-			
-			$this->view->rsfooteracc = $frm->getFooterAccount();
-			
-			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-			
-			if(!empty($search['student_payment'])){
-				$data1=$this->view->row = $db->getDailyReport($search);
-			}
-			
-			if(!empty($search['all_payment'])){
-				$data1=$this->view->row = $db->getDailyReport($search);
-				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
-				$this->view->income = $_db->getAllOtherIncome($search);
-						
-				$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
-				$this->view->expense = $_db1->getAllOtherExpense($search);
-			}
-			
-			if(!empty($search['income'])){
-					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
-					$this->view->income = $_db->getAllOtherIncome($search);
-			}
-			if(!empty($search['expense'])){
-					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
-					$this->view->expense = $_db1->getAllOtherExpense($search);
-			}
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-		$this->view->search = $search;
-	}
 	function rptreceiptdetailAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptPayment();

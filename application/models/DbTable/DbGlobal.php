@@ -1097,7 +1097,7 @@ function getAllgroupStudyNotPass($action=null){
 	   			$sql.=" AND result.updated_result=1";
 	   		}
 	   		
-	   		$sql.=" GROUP BY stu_id.stu_id ORDER BY stu_id.stu_id DESC";
+	   		$sql.=" GROUP BY result.stu_test_id ORDER BY rms_student.stu_id DESC";
 	   
 	   	return $db->fetchAll($sql);
    }

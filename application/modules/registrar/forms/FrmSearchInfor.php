@@ -121,7 +121,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 				));
 		$_session->setValue($request->getParam("session"));
 		$opt_sesion=$db->getSession();

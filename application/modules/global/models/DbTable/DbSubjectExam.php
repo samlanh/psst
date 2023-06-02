@@ -116,7 +116,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				$s_where[]= " shortcut LIKE '%{$s_search}%'";
 			$where .= ' AND ( '.implode(' OR ',$s_where).')';
 		}
-		if($search['status_search']>-1){
+		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$search['status_search'];
 		}
 		if(!empty($search['schoolOption_search'])){

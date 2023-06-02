@@ -42,7 +42,6 @@ class Registrar_Model_DbTable_DbInitilizeservice extends Zend_Db_Table_Abstract
 								'remark'		=> $data['remark'.$i],
 								'create_date'	=> date("Y-m-d H:i:s"),
 								'user_id'		=> $this->getUserId(),
-								'entryFrom'		=> 5
 						);
 						$db->AddItemToGroupDetailStudent($_arr);//to insert rms_group_detail_student Item
 						

@@ -681,6 +681,14 @@ span.user-badge.bg-warning {
 				getAllAcademicBy();
 				getAllTermStudy();
 				getAllAcademicTermStudy();
+				
+				<?php if ($settingNewStuID==1){?>
+				var student_type = dijit.byId('student_type');
+				student_type.on('change', function(evt) {
+					dijit.byId('group_id').attr('value','')
+					getallgroupby();
+				});
+				<?php }?>
 			});
 		
 			new dijit.form.FilteringSelect({
@@ -739,13 +747,6 @@ span.user-badge.bg-warning {
 				}
 			}, "group_id");
 		
-			<?php if ($settingNewStuID==1){?>
-			var student_type = dijit.byId('student_type');
-			student_type.on('change', function(evt) {
-				dijit.byId('group_id').attr('value','')
-				getallgroupby();
-			});
-			<?php }?>
 		});	
 
 function getallgroupby(){// 
@@ -860,12 +861,13 @@ function hideDialog1(){
 
 function getallstudentname(){//
 	student_type = dijit.byId("student_type").attr("value");
+	let url_data='';
 	if(student_type==1){//old
-		let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	}else if(student_type==2){//tested student
-		let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
+		url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm
-		let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
+		url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
 
 	checkAutoControl(student_type);
@@ -885,7 +887,6 @@ function getallstudentname(){//
 			'branchId':branch_id,
 			'customerType':customer_type,
 			'joinGroup':1,
-			'issueResult':1//for get student test get result
 		},
 		handleAs:"json",
 		load: function(data) {
@@ -895,18 +896,20 @@ function getallstudentname(){//
 		}
 	});
 }
-	function checkAutoControl(studentType){
-		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
-		$("#displayControl").css("display", "block");
-		if(studentType==1){//existing
-			$("#displayControl").css("display", "none");
-		}
-		else if(studentType==2){//from
-			$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
-		}
+function checkAutoControl(studentType){
+	$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
+	$("#displayControl").css("display", "block");
+	if(studentType==1 || studentType==4){//existing
+		$("#displayControl").css("display", "none");
 	}
-	var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
+	else if(studentType==2){//from
+		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
+	}
+}
+
 	function getPaymentHistory(student_id){
+		let url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
+		
 		if(student_id==-1 || student_id==''){return false;}
 		dojo.xhrPost({
 			url:url_studentpayment,
@@ -924,17 +927,15 @@ function getallstudentname(){//
 	}
 	
 	function getOldStudentInfo(){
-		student_type = dijit.byId("student_type").attr("value");
+	student_type = dijit.byId("student_type").attr("value");
 		data_from= 1;
 		if(student_type==2){//tested student
 			data_from=2;
 		}else if(student_type==3){//crm
 			data_from=3;
-		}
-		customer_type = dijit.byId("customer_type").attr("value");
-		
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+		}		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 		student_id=dijit.byId('old_stu').get('value');
+		customer_type = dijit.byId("customer_type").attr("value");
 		if(student_id==''){return false;}
 		dijit.byId('old_stu').attr('value',student_id);	
 		dojo.xhrPost({

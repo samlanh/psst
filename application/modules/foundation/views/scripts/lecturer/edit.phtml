@@ -17,7 +17,6 @@
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_TEACHER');?></h4>
     			</div>
     			<div class="col-sm-4 pd-0 text-right">
-    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv()"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("Print Card");?></a>
     			</div>
     			<div class="clearfix"></div>
     		</div>
@@ -474,145 +473,13 @@
 							</thead>
 						</table>
 						<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" onclick="addRow();" />
+						<input type="button" class="button-class button-danger" iconClass="glyphicon glyphicon-erase" label="<?php echo $tr->translate('CLEAR_ALL');?>" dojoType="dijit.form.Button" onclick="deleteAllRow();" />
 						<input type="hidden" id="identity" name="identity" />
 						<input type="hidden" id="popup_index" name="popup_index" />
 					</div>		
 				</div>
 				 <div class="form-group">
-				 	<div id="divPrint" style="margin: 0; padding: 0; display: none;" >
-						<style>
-								<?php 
-								$prefix ="";
-								$validDate="";
-								$color = "000000";
-								$teacher_name = $this->rs['teacher_name_en'];
-								
-								$type = 3;
-								if ($this->rs['staff_type']==1){
-									$type = 2;
-								}else if ($this->rs['staff_type']==1){
-									$type = 3;
-								}
-								$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
-									$bg = $_dbgb->getCardBackground($this->rs['branch_id'],$type);
-									if(!empty($bg['background'])){
-										if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
-										$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
-										}
-										if ($bg['display_by']==2){
-											$teacher_name = $this->rs['teacher_name_kh'];
-										}
-										if (!empty($bg['colorcode'])){
-											$color = str_replace("#", "", $bg['colorcode']);
-										}
-										$prefix = $bg['card_prefix'];
-										$validDate = $bg['valid'];
-									}
-								?>
-							.card-content-print{
-								 background-image: url('<?php echo $imagebg;?>');
-								 background-size: 100%;background-repeat: no-repeat;								
-								}
-							.profile-card-block {
-								position: relative;
-							}
-							.profile-card-block .photo {
-								text-align: center;
-								width: 100%;
-								position: absolute;
-								top: 96px;
-								left: -0.58px;
-							}
-							.photo img {
-								width: 70.7px;
-								height: 92px;
-							}
-							.name-card-block {
-								position: relative;
-							}
-					
-							.name-card-block ul.list-data {
-								list-style-type: none;
-								padding: 0;
-								width: 100%;
-								position: absolute;
-								text-align: center;
-								top: 182.5px;
-								color: #01049f;
-								font-weight: bold;
-								font-size: 12px;
-							}	
-						.name-card-block ul.list-data li{
-							line-height: 16px;	    
-						}
-						.card-content-print .name-card-block ul.list-data li .staff-id{
-							color:#<?php echo $color;?>;
-						}		    
-							
-						.name-card-block ul.list-data li.utiliy-value{
-							font-size: 10px;
-							line-height: 14px;
-						}
-						.foot-left-block {
-							position: relative;
-						}
-						.qrimages {
-							position: absolute;
-							top: 262px;
-							width: 100%;
-							text-align: center;
-						}
-						.qrimages img {
-							width: 80%;
-							text-align: center;
-							height: 17px;
-						}
-						.validdate {
-							position: relative;
-						}
-						.validdate .exp_date {
-								 color: #01049f;
-							position: absolute;
-							top: 245.5px;
-							right: 5px;
-							font-size: 5px;
-							font-weight: 700 !important;
-						}
-					</style>
-						<div class="card-content-print " style=" line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-							<div class="profile-card-block">
-								<div class="photo">
-									<img  src="<?php echo $image;?>" alt="profile-image" >
-								</div>
-							</div>
-							<div class="name-card-block">
-								<ul class="list-data">
-									<li><span class="title_value">&nbsp;<?php echo $teacher_name;?></span></li>
-									<li class="utiliy-value"><span class="title_value">Position:&nbsp;<?php echo $this->rs['position_add'];?></span></li>
-									<li class="utiliy-value"><span class="title_value">Dept:&nbsp;<?php echo $this->rs['dept_name'];?></span></li>
-									<li><span class="title_value staff-id">&nbsp;ID: <?php echo $this->rs['teacher_code'];?></span></li>
-								</ul>
-							</div>
-							<div class="validdate">
-								<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
-							</div>
-							<?php  
-	// 	                    	$prefix = $this->data["prefix_barcode_teacher"];
-	// 	                    	if ($this->rs['staff_type']==2){
-	// 	                    		$prefix = $this->data["prefix_barcode_staff"];
-	// 	                    	}
-	// 	                    	$barcode = $prefix."-".$this->rs['teacher_code']."-".date("y");
-							$barcode = $prefix."-".$this->rs['teacher_code']."-".date("y",strtotime($validDate));
-							$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
-							<div class="foot-left-block">
-								<div class="qrimages">
-									<img  src="<?php echo $url;?>" alt="profile-image" >
-								</div>
-							</div>
-							<div class="foot-right-block">
-							</div>
-						</div>
-                    </div>
+				 	
 				 </div>		
 	         </div>
           </div>
@@ -1317,6 +1184,14 @@ function deleteRecord(index) {
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
 }
+function deleteAllRow() {
+		var identity = $('#identity').val();
+		 var arrays = identity.split(',');
+		for(var i=0;i<=arrays.length;i++){	
+			deleteRecord(arrays[i]);
+		}
+ 		no = 0;		
+}
 
 function popupDocType(index){
 	id = dijit.byId('document_type_'+index).get('value');
@@ -1334,29 +1209,6 @@ function checkStaffType(){
 	}else{
 		dijit.byId("teacher_type").set('readOnly',true);
 	}
-}
-
-function PrintDiv() {
-	loadingBlock();
-  	 var contents = document.getElementById("divPrint").innerHTML;
- 	  var frame1 = document.createElement('iframe');
-    frame1.name = "frame1";
-    frame1.style.position = "absolute";
-    frame1.style.top = "-1000000px";
-    document.body.appendChild(frame1);
-    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
-    frameDoc.document.write('<html><head><title>Employee ID</title>');
-    frameDoc.document.write('</head><body>');
-    frameDoc.document.write(contents);
-    frameDoc.document.write('</body></html>');
-    frameDoc.document.close();
-    setTimeout(function () {
-        window.frames["frame1"].focus();
-        window.frames["frame1"].print();
-        document.body.removeChild(frame1);
-        HideloadingBlock();
-    }, 2000);
-   return false;
 }
 
 function bs_input_file() {

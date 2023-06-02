@@ -372,6 +372,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT $branch FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 				g.teacher_code, 
 				g.teacher_name_kh,
+				g.teacher_name_en,
 				(SELECT $label FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex LIMIT 1) AS sex,
 				(SELECT $label FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.staff_type LIMIT 1) AS staff_type,
 				(SELECT $label FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality LIMIT 1) AS nationality, 
@@ -403,7 +404,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where.=' AND degree='.$search['degree'];
 		}
-		if($search['teacher_type']>-1){
+		if($search['teacher_type'] != '' AND  $search['teacher_type']>-1){
 			$where.=' AND teacher_type='.$search['teacher_type'];
 		}
 		if(!empty($search['nationality'])){
@@ -415,10 +416,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!empty($search['staff_type'])){
 			$where.=' AND staff_type='.$search['staff_type'];
 		}
-		if($search['status']>-1){
+		if($search['status'] != '' AND  $search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}
-		if($search['active_type']>-1){
+		if($search['active_type'] != '' AND $search['active_type']>-1){
 			$where.=' AND active_type='.$search['active_type'];
 		}
 		$order_by=" ORDER BY id DESC";

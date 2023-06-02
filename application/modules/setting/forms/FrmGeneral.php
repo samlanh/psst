@@ -235,6 +235,22 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				4=>$this->tr->translate("BY_ENTRY"),
 		);
 		$studentPrefixOpt->setMultiOptions($countStuIDOpt);
+
+		$docTeacher=  new Zend_Dojo_Form_Element_FilteringSelect('teacher_doc');
+		$docTeacher->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$teachOpt = array(
+				0=>$this->tr->translate("HIDE"),
+				1=>$this->tr->translate("SHOW"),
+				);
+		$docTeacher->setMultiOptions($teachOpt);
+
+		$paymentDate=  new Zend_Dojo_Form_Element_FilteringSelect('payment_date');
+		$paymentDate->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$paydateOpt = array(
+				0=>$this->tr->translate("DISABLE"),
+				1=>$this->tr->translate("ENABLE"),
+				);
+		$paymentDate->setMultiOptions($paydateOpt);
 		
 		
 		if($data!=null){
@@ -270,6 +286,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$studentPrefixOpt->setValue($data['studentPrefixOpt']['keyValue']);
 			$studentIPrefix->setValue($data['studentIPrefix']['keyValue']);
 			$StudentIdLength->setValue($data['studentIdLength']['keyValue']);
+			$docTeacher->setValue($data['teacher_doc']['keyValue']);
+			$paymentDate->setValue($data['payment_date']['keyValue']);
 
 		}
 		$this->addElements(array(
@@ -302,6 +320,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$groupPayment
 				,$picDisplay
 				,$testOnline
+				,$docTeacher
+				,$paymentDate
 				));
 		
 		return $this;

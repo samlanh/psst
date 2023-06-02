@@ -4,6 +4,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
     {    	
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+		defined('SHOW_TEACH_DOCUMENT') || define('SHOW_TEACH_DOCUMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('teacher_doc'));
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function indexAction(){
@@ -34,7 +35,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","ID_CARD","TEACHER_NAME","SEX","TYPE",
+			$collumns = array("BRANCH","ID_CARD","TEACHER_NAME","NAME_EN","SEX","TYPE",
 					"NATIONALITY","DEGREE","TEACHER_TYPE","POSITION","PHONE","EMAIL","NOTE","SCHOOL_OPTION","WORKING_STATUS","STATUS");
 			$link=array('module'=>'foundation','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));

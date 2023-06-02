@@ -17,6 +17,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$dist = 'district_name';
 		$prov = 'province_en_name';
 		$view = 'name_en';
+		$brannch = 'branch_nameen';
 		if ($currentLang==1){
 			$colunmname='title';
 			$vill = 'village_namekh';
@@ -24,11 +25,13 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			$dist = 'district_namekh';
 			$prov = 'province_kh_name';
 			$view = 'name_kh';
+			$brannch = 'branch_namekh';
 		}
 		
 		$db = $this->getAdapter();
 		$sql = "
 			SELECT g.*, 
+				(SELECT b.$brannch FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,	
 				(SELECT p.$prov FROM rms_province AS p WHERE p.code=g.province_id LIMIT 1) AS province_name,	
 				(SELECT d.$dist FROM ln_district AS d WHERE d.dis_id=g.district_name LIMIT 1) AS dis_name,	
 				(SELECT c.$comm FROM ln_commune AS c WHERE c.com_id=g.commune_name LIMIT 1) AS com_name,	

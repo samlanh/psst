@@ -110,7 +110,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_degree->setMultiOptions($_arr_opt_degree);
 		$_degree->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'class'=>'fullside height-text',));
 		$_degree->setValue($request->getParam("degree"));
 		
@@ -147,8 +147,9 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_nationality->setMultiOptions($_arr_opt_nation);
 		$_nationality->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside height-text'
-				,)
+				'class'=>'fullside height-text',
+				'required'=>'false',
+				)
 			);
 		$_nationality->setValue($request->getParam("nationality"));
 		
@@ -159,11 +160,17 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_branch_id->setMultiOptions($_arr_opt_branch);
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside height-text',));
+				'class'=>'fullside height-text',
+				'required'=>'false',
+			));
 		$_branch_id->setValue($request->getParam("branch_id"));
 		
 		$_staff=  new Zend_Dojo_Form_Element_FilteringSelect('staff_type');
-		$_staff->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_staff->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+		));
 		$_staff_opt = array(
 				0=>$this->tr->translate("SELECT_TYPE"),
 				1=>$this->tr->translate("TEACHER"),
@@ -172,7 +179,11 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_staff->setValue($request->getParam("staff_type"));
 		
 		$_teacher=  new Zend_Dojo_Form_Element_FilteringSelect('teacher_type');
-		$_teacher->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_teacher->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+		));
 		$_teacher_opt = array(
 				-1=>$this->tr->translate("PLEASE_SELECT_TEACHER_TYPE"),
 				1=>$this->tr->translate("TEACHER_KHMER"),
@@ -181,7 +192,11 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_teacher->setValue($request->getParam("teacher_type"));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -191,7 +206,11 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		
 		
 		$_active_type=  new Zend_Dojo_Form_Element_FilteringSelect('active_type');
-		$_active_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$_active_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+		));
 		$_active_type_opt = array(
 				-1=>$this->tr->translate("PLEASE_SELECT"),
 				0=>$this->tr->translate("ACTIVING"),

@@ -280,7 +280,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Model_Decorator::removeAllDecorator($form);
 			$this->view->form_search=$form;
 			
-			$this->view->rs = array();
+			
 			$this->view->search = $search;
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

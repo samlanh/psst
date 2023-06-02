@@ -59,6 +59,8 @@ public function init()
 		$row['studentPrefixOpt'] = $db_gs->geLabelByKeyName('studentPrefixOpt');
 		$row['studentIPrefix'] = $db_gs->geLabelByKeyName('studentIPrefix');
 		$row['studentIdLength'] = $db_gs->geLabelByKeyName('studentIdLength');
+		$row['teacher_doc'] = $db_gs->geLabelByKeyName('teacher_doc');
+		$row['payment_date'] = $db_gs->geLabelByKeyName('payment_date');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

@@ -39,7 +39,7 @@ table#exportExcel tr td {
     font-size: 14px !important;
 }
 label.title {
-    font-size: 14px !important;
+    font-size: 12px !important;
     min-width: 100px !important;
 }
 label.value {
@@ -77,7 +77,7 @@ dojo.ready(function(){
 	   			label.value{
 	   				font-weight: initial;
 	   				min-width: 90px;
-	   				font-size: 14px;
+	   				font-size: 12px;
 	   				display: inline-block;
 				}
 				p.padding-left {
@@ -85,7 +85,7 @@ dojo.ready(function(){
 					    line-height: 20px;
 				}
 				label.title {
-				    font-size: 14px;
+				    font-size: 12px;
 				    min-width: 80px;
 				    display: inline-block;
 				}
@@ -104,20 +104,22 @@ dojo.ready(function(){
 						<td width="35%" align="center"></td>
 					</tr>
 					<tr class="head">
-						<td colspan="2" valign="middle">
-							<div style=" display: inline-block;    vertical-align: top;">
+						<td colspan="2" valign="middle" >
+							<div style=" display: inline-block;  vertical-align: top; text-align: center;">
 								<?php echo $this->rsheader;?>
+								<span style="font-size:12px;line-height: 14px; font-weight: initial; font-family:'Khmer OS Battambang';">(<?php echo $this->rs['branch_name'];?>)</span>
 							</div>
+							
 					   </td>
 					   <td align="center" valign="top">
-					   		<h2 style="font-size:16px;line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
-					   		<h2 style="font-size:14px;line-height: 14px; font-weight: initial; font-family:'Khmer OS Battambang';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+					   		<h2 style="font-size:14px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
+					   		<h2 style="font-size:14px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Battambang';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
 					   		<img alt="" src="<?php echo $this->baseUrl()."/images/sign.PNG"?>" style=" width: 120px;">
 					   </td>
 					</tr>
 					<tr class="head">
 					   <td colspan="3" align="center">
-					   		<h1 style="font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';text-decoration: underline;" >ប្រវត្តិរូបសង្ខេប</h1>
+					   		<h1 style="font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';text-decoration: underline;" >ប្រវត្តិរូបសង្ខេប</h1>
 					   </td>
 					</tr>
 					<tr>
@@ -131,21 +133,21 @@ dojo.ready(function(){
 						    		</td>
 						    	</tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
 						    			I. <?php echo $tr->translate("LECTURER_INFO");?>
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
 						    			<p class="padding-left">
-						    			<label class="title">ឈ្មោះគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_name_kh'];?></label> <label class="title">ភេទ</label> : <label class="value"><?php echo $this->rs['sex'];?></label> <label class="title">អត្តលេខ</label> : <label class="value"><?php echo $this->rs['teacher_code'];?></label>
+						    			<label class="title">ឈ្មោះគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_name_kh'];?></label> <label class="title">ជាអក្សរឡាតាំង</label> : <label class="value"><?php echo $this->rs['teacher_name_en'];?></label>  <label class="title">អត្តលេខ</label> : <label class="value"><?php echo $this->rs['teacher_code'];?></label>
 						    			</p>
 						    			<p class="padding-left">
-						    			 <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label><label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ជនជាតិ</label> : <label class="value"><?php echo $this->rs['nation'];?></label>
+										<label class="title">ភេទ</label> : <label class="value"><?php echo $this->rs['sex'];?></label> 	<label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ជនជាតិ</label> : <label class="value"><?php echo $this->rs['nation'];?></label>
 						    			</p>
 										<p class="padding-left">
-											<label class="title">ទីកន្លែងកំណើត</label> : <label class="value"><?php echo $this->rs['pob'];?></label> 
+											<label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label>	<label class="title">ទីកន្លែងកំណើត</label> : <label class="value"><?php echo $this->rs['pob'];?></label> 
 						    			</p>
 						    			<p class="padding-left">
 											<label class="title">ប្រភេទគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_type'];?></label> 
@@ -154,13 +156,13 @@ dojo.ready(function(){
 						    	</tr>
 						    	<tr><td>&nbsp;</td></tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
 						    			II. <?php echo $tr->translate("CURRENT_ADDRESS");?>
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
 						    			<p class="padding-left">
 						    			<label class="title">លេខផ្ទះ</label> : <label class="value"><?php echo $this->rs['home_num'];?></label><label class="title">ផ្លូវលេខ</label> : <label class="value"><?php echo $this->rs['street_num'];?></label><label class="title">ភូមិ</label> : <label class="value"><?php echo $this->rs['Village_name'];?></label>​ 
 						    			</p>
@@ -171,13 +173,13 @@ dojo.ready(function(){
 						    	</tr>
 						    	<tr><td>&nbsp;</td></tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
 						    			III. <?php echo $tr->translate("CONTACT_INFO");?>
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
 						    			<p class="padding-left">
 						    			<label class="title">លេខទូរស័ព្ទ </label> : <label class="value"><?php echo $this->rs['tel'];?></label><label class="title">អ៊ីម៉ែល </label> : <label class="value"><?php echo $this->rs['email'];?></label> 
 						    			</p>
@@ -194,13 +196,13 @@ dojo.ready(function(){
 						    	</tr>
 						    	<tr><td>&nbsp;</td></tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
 						    			VI. <?php echo $tr->translate("CONTACT_INFO_EXPER");?>
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
 						    	<tr>
-						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
 						    			<p class="padding-left">
 						    			<label class="title">កម្រិតសិក្សា</label> : <label class="value"><?php echo $this->rs['degree'];?></label>  <label class="title">ថ្ងៃចាប់ផ្តើម</label> : <label class="value"><?php echo $this->rs['start_date'];?></label><label class="title">ថ្ងៃបញ្ចប់ </label> : <label class="value"><?php echo $this->rs['end_date'];?></label> 
 						    			</p>

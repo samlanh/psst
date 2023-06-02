@@ -1000,10 +1000,10 @@ function getAllgroupStudyNotPass($action=null){
 		   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
 		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
+		   		sgd.academic_year,
+		   		sgd.is_newstudent,
 		   		(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sgd.academic_year LIMIT 1)) AS academic_year_label,
 		   		sgd.feeId AS fee_id,
-		   		sgd.academic_year,
-				sgd.is_newstudent AS isNewStudent,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=sgd.group_id AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) AS group_name
 	   		FROM 
 	   			rms_student AS s
@@ -1034,10 +1034,9 @@ function getAllgroupStudyNotPass($action=null){
 		t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
 		'N/A' AS status_student,
 		t.id,
-		'1' AS isNewStudent,
 	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=t.session_result LIMIT 1) as session_label,
-	   	'N/A' AS room_label
-	   	
+	   	'N/A' AS room_label,
+	   	'1' AS is_newstudent
 	   	FROM rms_student as s,
 	   		rms_student_test_result As t
 	   	WHERE 
@@ -1048,7 +1047,7 @@ function getAllgroupStudyNotPass($action=null){
 	   
    }
    
-   function getCustomerinfoById($stu_id){//for student with result//will not use
+   function getCustomerinfoById($stu_id){//for student with result
    	$db=$this->getAdapter();
    	$currentLang = $this->currentlang();
    	$colunmname='title_en';
@@ -1056,40 +1055,49 @@ function getAllgroupStudyNotPass($action=null){
    		$colunmname='title';
    	}
    	$sql="SELECT s.*,
-   	'N/A' as group_name,
-   	'N/A' as degree_culture,
-   	 0 AS total_amountafter,
-   	 0 AS credit_memo_id,
-   	'N/A' as grade_label,
-   	'N/A' as degree_label,
-   	'N/A' AS degree,
-   	'N/A' AS grade,
-   	'N/A' AS session,
-   	'N/A' AS status_student,
-   	'N/A' as session_label,
-   	'N/A' AS room_label
+	   	'N/A' as group_name,
+	   	'N/A' as degree_culture,
+	   	 0 AS total_amountafter,
+	   	 0 AS credit_memo_id,
+	   	'N/A' as grade_label,
+	   	'N/A' as degree_label,
+	   	'N/A' AS degree,
+	   	'N/A' AS grade,
+	   	'N/A' AS session,
+	   	'N/A' AS status_student,
+	   	'N/A' as session_label,
+	   	'1' AS is_newstudent,
+	   	'N/A' AS room_label
    	FROM rms_student as s
    	WHERE
-    s.customer_type=2
-   	AND s.stu_id=$stu_id LIMIT 1 ";
+	    s.customer_type=2
+	   	AND s.stu_id=$stu_id LIMIT 1 ";
    	return $db->fetchRow($sql);
    }
    /*tested student*/
    function getAllstudentTest($data){//get all
-   		$db=$this->getAdapter();
-   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
-	   		FROM rms_student,rms_student_test_result AS result
+	   	$db=$this->getAdapter();
+	   	
+	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',last_name,' ',stu_enname,']') AS name
+	   			FROM rms_student,
+	   			rms_student_test_result AS result
 	   		WHERE
-	   		stu_id = result.stu_test_id AND result.updated_result=1 AND
-	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 "; 
-   		$sql.=" AND is_studenttest=1 ";
-   		if (!empty($data['branch_id'])){
-   			$sql.=" AND branch_id = ".$data['branch_id'];
-   		}
-   		if(!empty($data['issueResult'])){
-   			$sql.=" AND (SELECT stu_test_id FROM `rms_student_test_result` WHERE stu_id=stu_test_id AND updated_result=1)";
-   		}
-   		$sql.=" GROUP BY stu_id ORDER BY stu_id DESC";
+		   		stu_id = result.stu_test_id 
+		   		AND result.updated_result=1 
+		   		AND (stu_khname!='' OR stu_enname!='') 
+	   			AND status=1  
+	   			AND customer_type=4 "; //AND customer_type=4
+	   		$sql.=" AND is_studenttest=1 ";
+	   		
+	   		
+	   		if (!empty($data['branch_id'])){
+	   			$sql.=" AND rms_student.branch_id = ".$data['branch_id'];
+	   		}
+	   		if(!empty($data['issueResult'])){
+	   			$sql.=" AND result.updated_result=1";
+	   		}
+	   		
+	   		$sql.=" GROUP BY stu_id.stu_id ORDER BY stu_id.stu_id DESC";
 	   
 	   	return $db->fetchAll($sql);
    }
@@ -2250,16 +2258,14 @@ function getAllgroupStudyNotPass($action=null){
 				             <span class="title-info">'.$tr->translate('GRADE').'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span>
 				             <span class="title-info groupinfo">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value groupinfo">'.$rs['group_name'].'</span>
 					    </p>';
-  			         	
-  			         	$strStudentType = $rs['isNewStudent']==1?'New Student':'Old Student';
-  			         	
-  			         	$studenttypeinfo='<span class="user-badge bg-warning">'.$strStudentType.'</span>';
+  			         	$strStatus=($rs['is_newstudent']==1)?'New Student':'Old Student';
+  			         	$studentStatus='<span class="user-badge bg-warning">Student Type</span>';
   			         	 		  
   	}
   	$result = array(
   					'studentInfo'=>$str,
   					'studyinfo'=>$studyInfo,
-  					'studenttypeinfo'=>$studenttypeinfo
+  					'studenttypeinfo'=>$studentStatus
   			);
   	return $result;
   }
@@ -3159,25 +3165,7 @@ function getAllgroupStudyNotPass($action=null){
   		}
   }
   
-  function getAllStudentBalance($branch=null){//get all
-  	$db=$this->getAdapter();
-  	$branch_id = $this->getAccessPermission();
-  	$sql="
-  		SELECT
-			s.stu_id AS id,
-			CONCAT(COALESCE(s.stu_code,'-'),COALESCE(s.stu_khname,''),' [',s.last_name,' ',s.stu_enname,']') AS name
-		FROM
-				`rms_student_balance` AS sb ,
-				`rms_student` AS s
-		WHERE
-				s.stu_id = sb.stu_id 
-				AND sb.is_balance =1 
-				AND sb.status=1
-  				$branch_id "; 
-  	
-  		$sql.=" GROUP BY s.stu_id ORDER BY s.stu_id DESC";
-  		return $db->fetchAll($sql);
-  }
+ 
   
   function getStudentToken(){
   	return 'PSIS'.date('YmdHis');

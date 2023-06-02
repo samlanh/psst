@@ -186,7 +186,6 @@
 											    <td scope="col"><?php echo $tr->translate("STUDENT_ID");?></td>
 											    <td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
 												<td scope="col"><?php echo $tr->translate("STUDY_INFO");?></td>
-												<td scope="col"><?php echo $tr->translate("FINE");?></td>
 												<td scope="col"><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
 												<td scope="col"><?php echo $tr->translate("Credit Memo");?></td>
 												<td scope="col"><?php echo $tr->translate("PAID_AMOUNT");?></td>
@@ -223,7 +222,6 @@
 												echo empty($rs['session'])?"":", ".$rs['session'];
 											?>
 											</td>
-											<td data-label="<?php echo $tr->translate("FINE");?>"><?php if($rs['penalty']!=0){echo number_format($rs['penalty'],2);} ?></td>
 											<td data-label="<?php echo $tr->translate("TOTAL_PAYMENT");?>"><?php echo number_format($rs['grand_total'],2); ?></td>
 										    <td data-label="<?php echo $tr->translate("Credit Memo");?>"><?php if($rs['credit_memo']>0){echo number_format($rs['credit_memo'],2);} ?></td>
 											<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>"><?php echo number_format($rs['paid_amount'],2); ?></td>
@@ -266,9 +264,9 @@
 												<td scope="col"><?php echo $tr->translate('INVOICE_NO')?></td>
 												<td colspan="3" scope="col"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 												<td colspan="2" scope="col"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
-												<td colspan="2"  scope="col"><?php echo $tr->translate('TOTAL')?></td>
-												<td colspan="2"  scope="col"><?php echo $tr->translate('FOR_DATE')?></td>
-												<td colspan="2"  scope="col"><?php echo $tr->translate('USER')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('TOTAL')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('FOR_DATE')?></td>
+												<td colspan="2" scope="col"><?php echo $tr->translate('USER')?></td>
 											</tr>
 											<?php $i=0;foreach($this->income as $row){ $i++;
 												if ($row['status']==1){

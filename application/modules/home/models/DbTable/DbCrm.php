@@ -329,6 +329,7 @@
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
 								'itemType'			=>1,
+								'entryFrom'			=>1,
 						);
 						$this->_name="rms_group_detail_student";
 						$where = " stu_id =".$_data['detailid'.$i];

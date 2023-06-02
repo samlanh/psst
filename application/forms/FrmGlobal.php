@@ -1062,9 +1062,8 @@ class Application_Form_FrmGlobal{
 						<div id='lbl_branchlogo'></div>
 						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
 						<label id='lb_branchname'></label>
-						<div style='line-height:10px;'><label id='lb_branchnameen'></label>
 						<label id='lb_fine'></label>
-						</div>
+						<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
 						</div>
 					</div>
 				</div>

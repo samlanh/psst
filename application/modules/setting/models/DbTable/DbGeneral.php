@@ -278,6 +278,25 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'studentIdLength'";
 				$this->update($arr, $where);
 			}
+			$rows = $this->geLabelByKeyName('teacher_doc');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['teacher_doc'],'keyName'=>'teacher_doc','note'=>"Can Show/Hide Teacher Document  ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['teacher_doc']);
+				$where=" keyName= 'teacher_doc'";
+				$this->update($arr, $where);
+			}
+
+			$rows = $this->geLabelByKeyName('payment_date');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['payment_date'],'keyName'=>'payment_date','note'=>"Can Enable/Disable  Payment Date ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['payment_date']);
+				$where=" keyName= 'payment_date'";
+				$this->update($arr, $where);
+			}
 			
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

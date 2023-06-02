@@ -229,7 +229,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
 		}
-		if($search['status']>-1){
+		if(!empty($search['status']) AND $search['status']>-1 ){
 			$where.=' AND g.status='.$search['status'];
 		}
 		if(!empty($search['branch_id'])){

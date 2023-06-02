@@ -454,6 +454,7 @@
 							</thead>
 						</table>
 						<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" onclick="addRow();" />
+						<input type="button" class="button-class button-danger" iconClass="glyphicon glyphicon-erase" label="<?php echo $tr->translate('CLEAR_ALL');?>" dojoType="dijit.form.Button" onclick="deleteAllRow();" />
 								
 						<input type="hidden" id="identity" name="identity" />
 						<input type="hidden" id="popup_index" name="popup_index" />	
@@ -1163,6 +1164,14 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
+}
+function deleteAllRow() {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<=arrays.length;i++){	
+		deleteRecord(arrays[i]);
+	}
+ 	no = 0;		
 }
 
 function popupDocType(index){

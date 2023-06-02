@@ -284,15 +284,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'isCurrent'		=>1,
 									'isNewStudent'	=>1,
 									'isMaingrade'	=>1,//not sure
-									'entryFrom'		=> 3
+									'entryFrom'	=>4,//not sure
 							);
 							
-							/*$arr=array(
-									'session'		=> $group_detail['session'],
-									'degree'		=> $group_detail['degree'],
-									'grade'			=> $group_detail['grade'],
-									'entryFrom'		=> 3
-							);*/
+							
 							
 							$db = $dbg->AddItemToGroupDetailStudent($arr);
 						}
@@ -358,7 +353,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							'isCurrent'		=>1,
 							'isNewStudent'	=>1,
 							'isMaingrade'	=>1,//not sure
-							'entryFrom'		=> 3
+							'entryFrom'	=>4,//not sure
 					);
 					if(!empty($_data['groupId'])){
 						$arr['groupId'];

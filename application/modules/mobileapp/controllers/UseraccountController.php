@@ -79,7 +79,5 @@ class Mobileapp_UseraccountController extends Zend_Controller_Action {
 // 	//view detial student by id
 	public function viewAction(){
 		$id=$this->getRequest()->getParam("id");
-// 		$db= new Mobileapp_Model_DbTable_Dbuseraccount();
-// 		$this->view->rs = $db->getStudentViewDetailById($id);
 	}
 }

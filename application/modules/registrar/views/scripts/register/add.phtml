@@ -525,7 +525,7 @@ span.custom-switch-indicator{line-height: 20px;}
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_DATE");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
+	                   		<input type="text" <?php echo(ENABLE_DATE_PAYMENT==1)?'':'readOnly'?> dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -681,6 +681,14 @@ span.user-badge.bg-warning {
 				getAllAcademicBy();
 				getAllTermStudy();
 				getAllAcademicTermStudy();
+				
+				<?php if ($settingNewStuID==1){?>
+				var student_type = dijit.byId('student_type');
+				student_type.on('change', function(evt) {
+					dijit.byId('group_id').attr('value','')
+					getallgroupby();
+				});
+				<?php }?>
 			});
 		
 			new dijit.form.FilteringSelect({
@@ -739,13 +747,6 @@ span.user-badge.bg-warning {
 				}
 			}, "group_id");
 		
-			<?php if ($settingNewStuID==1){?>
-			var student_type = dijit.byId('student_type');
-			student_type.on('change', function(evt) {
-				dijit.byId('group_id').attr('value','')
-				getallgroupby();
-			});
-			<?php }?>
 		});	
 
 function getallgroupby(){// 
@@ -860,12 +861,13 @@ function hideDialog1(){
 
 function getallstudentname(){//
 	student_type = dijit.byId("student_type").attr("value");
+	let url_data='';
 	if(student_type==1){//old
-		let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
 	}else if(student_type==2){//tested student
-		let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
+		url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm
-		let url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
+		url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
 
 	checkAutoControl(student_type);
@@ -895,18 +897,21 @@ function getallstudentname(){//
 		}
 	});
 }
-	function checkAutoControl(studentType){
-		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
-		$("#displayControl").css("display", "block");
-		if(studentType==1){//existing
-			$("#displayControl").css("display", "none");
-		}
-		else if(studentType==2){//from
-			$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
-		}
+function checkAutoControl(studentType){
+	$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
+	$("#displayControl").css("display", "block");
+	if(studentType==1 || studentType==4){//existing
+		$("#displayControl").css("display", "none");
 	}
-	var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
+	else if(studentType==2){//from
+		$("#displayControl").css("display", "none");
+		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
+	}
+}
+
 	function getPaymentHistory(student_id){
+		let url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
+		
 		if(student_id==-1 || student_id==''){return false;}
 		dojo.xhrPost({
 			url:url_studentpayment,
@@ -924,17 +929,15 @@ function getallstudentname(){//
 	}
 	
 	function getOldStudentInfo(){
-		student_type = dijit.byId("student_type").attr("value");
+	student_type = dijit.byId("student_type").attr("value");
 		data_from= 1;
 		if(student_type==2){//tested student
 			data_from=2;
 		}else if(student_type==3){//crm
 			data_from=3;
-		}
-		customer_type = dijit.byId("customer_type").attr("value");
-		
-		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+		}		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 		student_id=dijit.byId('old_stu').get('value');
+		customer_type = dijit.byId("customer_type").attr("value");
 		if(student_id==''){return false;}
 		dijit.byId('old_stu').attr('value',student_id);	
 		dojo.xhrPost({
@@ -971,6 +974,7 @@ function getStudentInformation(){
 	student_id=dijit.byId('old_stu').get('value');
 	dojo.byId("lb_grade").innerHTML = "";
 	dojo.byId("lb_academic_year").innerHTML ="";
+	$(".stuCodeControl").css("display", "none");
 	if(student_id==''){return false;}
 	loadingBlock();
 	dojo.xhrPost({

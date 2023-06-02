@@ -454,11 +454,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'stopType'		=> 0,
 								'status'		=> 1,
 								'isNewStudent'	=> 1,
-								'entryFrom'		=>'4',
 								'remark'		=> $data['remark'.$i],
 								'create_date'	=> date("Y-m-d H:i:s"),
 								'user_id'		=> $this->getUserId(),
-								'entryFrom'		=> 4
+								'entryFrom'	=>4,
 							);
 						$gdb->AddItemToGroupDetailStudent($_arr);//to insert rms_group_detail_student Item
 					}

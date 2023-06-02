@@ -427,6 +427,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'is_current'		=>1,
 								'is_setgroup'		=>$is_setgroup,
 								'is_maingrade'		=>$isMain,
+								'entryFrom'			=>3,
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
@@ -753,6 +754,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'create_date'		=>date("Y-m-d H:i:s"),
 								'modify_date'		=>date("Y-m-d H:i:s"),
 								'user_id'			=>$this->getUserId(),
+								'entryFrom'			=>3,
 						);
 						
 						if (!empty($group_info)){
@@ -820,9 +822,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	function getStudentViewDetailById($id){
 		$db=$this->getAdapter();
 		
-		//(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degreeTitle,
-		//(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
-		//(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
 		$sql="SELECT *,(SELECT province_kh_name FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS province_name,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
@@ -841,7 +840,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-
 	function getCurentStudentStudy($student_id){
 		$db=$this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();

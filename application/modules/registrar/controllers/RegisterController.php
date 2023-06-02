@@ -12,6 +12,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
     	defined('SHOW_PIC_INRECEIPT') || define('SHOW_PIC_INRECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_pic_receipt'));
     	defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
+    	defined('ENABLE_DATE_PAYMENT') || define('ENABLE_DATE_PAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('payment_date'));
     }
     public function indexAction(){
     	try{
@@ -66,8 +67,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		}
       		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	}catch (Exception $e) {
-      		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+      		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
@@ -314,7 +315,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 	
 	function getserviceitemAction(){
 		if($this->getRequest()->isPost()){

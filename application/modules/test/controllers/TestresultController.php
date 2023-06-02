@@ -1,7 +1,7 @@
 <?php
 class Test_TestresultController extends Zend_Controller_Action
 {
-	const REDIRECT_URL = '/test/index';
+	const REDIRECT_URL = '/test/testresult';
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
@@ -23,8 +23,6 @@ class Test_TestresultController extends Zend_Controller_Action
     					'advance_search'=>'',
     					'degree_search' => '',
     					'type_exam_search' => '',
-    					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d'),
     			);
     		}
     		$this->view->adv_search = $search;
@@ -44,4 +42,8 @@ class Test_TestresultController extends Zend_Controller_Action
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
+	public function addAction(){
+		$this->_redirect('/test/testresult');
+	}
+	
 }

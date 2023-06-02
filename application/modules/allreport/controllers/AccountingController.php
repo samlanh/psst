@@ -76,6 +76,25 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		$this->view->search = $search;
 	}
+	function reprintOtherIncomeAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+		$id = empty($id)?0:$id;
+		$row = $db->getOtherIncomeById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/accounting/rpt-other-income");
+			exit();
+		}
+		
+		$this->view->row = $row;
+		
+		$_db = new Application_Form_FrmGlobal();
+		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+		$this->view->header = $_db->getHeaderReceipt($branch_id);
+	
+		$frmpopup = new Application_Form_FrmPopupGlobal();
+		$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
+	}
 	
 	function rptSpecaildiscountAction(){
 		try{
@@ -1173,25 +1192,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			
 		}
 	}
-	function reprintOtherIncomeAction(){
-		$id=$this->getRequest()->getParam("id");
-		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-		$row = $db->getOtherIncomeById($id);
-		$this->view->row = $row;
-		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/accounting/rpt-other-income");
-			exit();
-		}
-		$key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	
-		$_db = new Application_Form_FrmGlobal();
-		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
-		$this->view->header = $_db->getHeaderReceipt($branch_id);
-		
-		$frmpopup = new Application_Form_FrmPopupGlobal();
-		$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
-	}
 	public function rptStudentunpaidAction()
 	{
 		try{

@@ -17,7 +17,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 //     	return $session_user->branch_id;
 //     }
   
-	function getDailyReport($search=null){
+	function getDailyReport($search=null){//using
 		try{
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = $_db->getAccessPermission('sp.branch_id');
@@ -112,20 +112,25 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 
 	
 	
-	function getOtherIncomeById($id){
+	function getOtherIncomeById($id){//using
 		$db=$this->getAdapter();
 		$sql="SELECT
 					*,
-					(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income) AS cate_income,
-					(SELECT name_kh FROM rms_view WHERE TYPE=8 AND key_code = payment_method) AS payment_method,
-					(SELECT first_name FROM rms_users AS u WHERE u.id = user_id) AS first_name,
-					(SELECT last_name FROM rms_users AS u WHERE u.id = user_id) AS last_name
+					(SELECT branch_namekh from rms_branch where br_id = branch_id LIMIT 1) as branch_name,
+					(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
+						FROM rms_student AS s
+						WHERE s.stu_id=student_id LIMIT 1) AS studentName,
+					(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income,
+					(SELECT name_kh FROM rms_view WHERE TYPE=8 AND key_code = payment_method LIMIT 1) AS payment_method,
+					(SELECT bank_name FROM `rms_bank` b WHERE ln_income.bank_id = b.id LIMIT 1) AS bank_name,
+					(SELECT CONCAT(last_name,' ',first_name) FROM rms_users AS u WHERE u.id = user_id LIMIT 1) AS userName
 				FROM
 					`ln_income`
 				WHERE
-					id = $id
-				LIMIT 1
-			";
+					id =".$id;
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$sql.= $_db->getAccessPermission();
+		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}
 	

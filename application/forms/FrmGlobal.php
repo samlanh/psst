@@ -93,9 +93,9 @@ class Application_Form_FrmGlobal{
 					<td width='48%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
 						<div style='font-size:18px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
 						<div style='font-size:18px;font-family:Times New Roman'>".$school_name."</div>
-						<div style='font-size:10px;line-height: 16px;margin-top: 2px;max-width:100%;white-space:pre-line;'>".$address."</div>
+						<div style='font-size:10px;line-height: 10px;margin-top: 2px;max-width:100%;white-space:pre-line;'>".$address."</div>
 					</td>
-					<td width='30%' valign='top' style='font-size:10px;line-height: 18px;font-family: Khmer OS Battambang;' >
+					<td width='30%' valign='top' style='font-size:10px;line-height: 15px;font-family: Khmer OS Battambang;' >
 						<div style='line-height: 16px;'>&nbsp;</div>
 						<div style='line-height: 16px;'>".$tel."</div>
 						<div style='line-height: 16px;'>".$email."</div>
@@ -1070,7 +1070,7 @@ class Application_Form_FrmGlobal{
 			</div>";
 			if($settingAmtReceipt>1){
 				$str.="<div id='divPrint1'>
-				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
+				<div style='vertical-align: middle;margin:10px 0px 10px 0px'></div>
 				<div id='printblog2'></div>
 				</div>";
 			}

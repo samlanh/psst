@@ -71,22 +71,26 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		if(!empty($rs)){
 			return -1;
 		}
-		$arr = array(
-			'branch_id'		=>$data['branch_id'],
-			'student_id'	=>$data['studentId'],
-			'total_amount'	=>$data['total_amount'],
-			'total_amountafter'=>$data['total_amount'],
-			'note'			=>$data['Description'],
-			'prob'			=>$data['prob'],
-			'type'			=>0,
-			'date'			=>$data['Date'],
-			'end_date'		=>$data['end_date'],
-			'status'		=>1,
-			'user_id'		=>$this->getUserId(),);
-		$this->insert($arr);
+			$arr = array(
+				'branch_id'		=>$data['branch_id'],
+				'student_id'	=>$data['studentId'],
+				'total_amount'	=>$data['total_amount'],
+				'total_amountafter'=>$data['total_amount'],
+				'note'			=>$data['Description'],
+				'prob'			=>$data['prob'],
+				'type'			=>0,
+				'date'			=>$data['Date'],
+				'end_date'		=>$data['end_date'],
+				'status'		=>1,
+				'user_id'		=>$this->getUserId(),);
+			$this->insert($arr);
 		}catch (Exception $e){
-			$db->rollBack();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
+ 	 }
+ 	 function getCreditMemobyStudent(){
+ 	 	
  	 }
 	 function updatcreditMemo($data){
 		$arr = array(

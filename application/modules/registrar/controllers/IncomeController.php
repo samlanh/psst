@@ -7,6 +7,9 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	defined('ENABLE_DATE_PAYMENT') || define('ENABLE_DATE_PAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('payment_date'));
+    	defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
+    	
     }
     public function indexAction()
     {
@@ -83,10 +86,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	
     	$frmpopup = new Application_Form_FrmPopupGlobal();
     	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
-    	 
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
     }
     public function editAction()
     {

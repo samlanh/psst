@@ -7,7 +7,7 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-    function getAllOtherIncome($search){//2-6-23
+    function getAllOtherIncome($search){//using 2-6-23
     	$db=$this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
@@ -43,14 +43,7 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     				1 ";
     	
     	$where= ' ';
-    	$order=" ORDER BY id DESC ";
-    	if (!empty($search['receipt_order'])){
-    		if ($search['receipt_order']==1){
-    			$order=" ORDER BY date DESC ";
-    		}else if ($search['receipt_order']==2){
-    			$order=" ORDER BY id DESC ";
-    		}
-    	}
+    	
     	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
@@ -76,6 +69,13 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$where.= $_db->getAccessPermission();
+    	
+    		if($search['receipt_order']==1){
+    			$order=" ORDER BY id DESC ";
+    		}else{
+    			$order=" ORDER BY id ASC ";
+    		}
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     function getAllOtherIncomebyCate($search){

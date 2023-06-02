@@ -276,7 +276,11 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_title->setValue($request->getParam("title"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside"));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'required'=>'false',
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -295,7 +299,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_schoolOption_search->setMultiOptions($_arr_opt);
 		$_schoolOption_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$_schoolOption_search->setValue($request->getParam("schoolOption_search"));

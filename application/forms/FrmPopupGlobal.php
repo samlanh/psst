@@ -180,6 +180,17 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 	}	
 	
 	public function receiptOtherIncome(){
+		
+		defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
+		defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
+		defined('SHOW_HEADER_RECEIPT') || define('SHOW_HEADER_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_header_receipt'));
+		
+		$paddingTop = PADDINGTOP_RECEIPT.'px';
+		$settingAmtReceipt = AMOUNT_RECEIPT;
+		$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape;':'size:A4 portrait;';
+		$showReport = (SHOW_HEADER_RECEIPT==1)?'display:block':'display:none';
+		
+		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$key = new Application_Model_DbTable_DbKeycode();
 		$data=$key->getKeyCodeMiniInv(TRUE);
@@ -201,8 +212,8 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 				.h1{ margin-top: -6px;}
 				.values{ min-height: 25px; padding: 2px 5px;display: block; font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';}
 						
-				.fonteng{font-size:16px;}
-				.one{white-space:nowrap;font-size:16px;}
+				.fonteng{font-size:14px;}
+				.one{white-space:nowrap;font-size:14px;}
 				.border{border:1px solid #000 !important; min-width:220px}
 				.heght-row {
 				    height: 38px;
@@ -219,26 +230,42 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					white-space: normal;
 					width:95%;
 				}
-				@page {
-					  size: A5 landscape;
-					  margin: 1cm 1cm 0 1cm;
+				@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							'.$pageSetup.'
+						}
 					}
+						
 			</style>
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
-				<tr height="90px;">
-					<td id="header_receipt" align="center" valign="top">
+				<tr style="height:'.$paddingTop.'">
+					<td colspan="10" style="'.$showReport.'" id="header_receipt" align="center" valign="top">
 					</td>
 				</tr>
-				<tr height="40px;">
+				<tr>
+					<td style="border-top:2px dashed #000;'.$showReport.'">&nbsp;</td>
+				</tr>
+				<tr>
 					<td colspan="10"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-top: -15px;">
+						<table width="100%" style="font-size:12px;margin-top:-5px;">
 							<tr>
 								<td width="30%"></td>
-								<td align="center" width="40%" style="font-size: 16px; line-height: 20px;">
-									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 16px;">បង្កាន់ដៃបង់ប្រាក់</div>
+								<td align="center" width="40%" style="font-size: 14px; line-height: 20px;">
+									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 12px;">បង្កាន់ដៃបង់ប្រាក់</div>
 									<strong>OFFICIAL RECEIPT</strong>
 								</td>
 								<td width="30%" valign="center" align="center">
+									<div style="font-size: 12px;margin-top:-10px;" id="time_footer">
+										Print By:'.$last_name." ".$username.$usertype.'
+					        			<br />Print Date:'.date("d-m-Y, g:i a").'
+					        		</div>
 								</td>
 							</tr>
 						</table>
@@ -246,7 +273,7 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 				</tr>
 				<tr>
 					<td colspan="10" valign="top">
-						<table class="defaulheight" width="100%" border="0" style="font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".';font-size:12px; white-space:nowrap;margin-top:-5px;line-height: 20px;">
+						<table class="defaulheight" width="100%" border="0" style="font-family: '."'.Times New Roman.'".','."'Khmer OS Battambang'".';font-size:12px; white-space:nowrap;line-height: 20px;">
 							<tr class="heght-row">
 								<td class="one ">&nbsp;'.$tr->translate("BRANCH").'&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_branch"></span>&nbsp;</td>
@@ -279,35 +306,35 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 								<td rowspan="2" class="one" style="font-size:10px;min-height:40px;border:1px solid #000;">&nbsp;<span class="noted" id="lbl_description"></span>&nbsp;</td>
 							</tr>
 							<tr class="heght-row">
-								<td class="one ">&nbsp;'.$tr->translate("NOTE_NUMBER").'&nbsp;</td>
+								<td class="one ">&nbsp;'.$tr->translate("CHEQUE_NO").'/Acc No.&nbsp;</td>
 								<td class="border values one">&nbsp;<span id="lbl_cheqe_no"></span>&nbsp;</td>
 							</tr>
 							
 							<tr style="font-size: 15px; font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';">
-								<td colspan="2" align="center" >អ្នកប្រគល់</td>
-								<td colspan="2" align="center">អ្នកទទួល</td>
+								<td colspan="2" align="center">បេឡាករ/Cashier</td>
+								<td colspan="2" align="center" >អតិថិជន/Customer</td>
 							</tr>
-							<tr style="height:70px;">
+							<tr style="height:75px;">
 								<td colspan="4" align="center">&nbsp;</td>
 							</tr>
-							
 							<tr style="font-size: 15px;">
-								<td colspan="2" align="center"></td>
-								<td colspan="2" align="center" style="line-height: 13px;">
+								<td colspan="2" align="center">
 									<h4 id="user_sign" style="font-weight:bold; font-family: Arial Black;color:#000; font-size: 13px;font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';"> 
 								        '.$last_name." ".$username.$usertype.'
 					        		</h4>
-					        		<div style="font-size: 12px;margin-top:-10px;" id="time_footer">
-					        			'.date("F j, Y, g:i a").'
-					        		</div>
+								</td>
+								<td colspan="2" align="center" style="line-height: 13px;">
 					        	</td>
 							</tr>
-							
 						</table>
 					</td>
 				</tr>
 			</table>
 		';
+		if($settingAmtReceipt>1){
+			$str.="<div style='vertical-align: middle;margin:10px 0px 10px 0px;'></div>
+				<div id='printblog2'></div>";
+		}
 		return $str;
 	}
 	

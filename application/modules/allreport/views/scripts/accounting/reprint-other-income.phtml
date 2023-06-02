@@ -3,14 +3,8 @@
 	$this->headTitle('បង្កាន់ដៃបង់ប្រាក់'); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
+	defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
 ?>
-<style>
-#footer{display: none;}
-table tr td strong{
-	padding-left: 0px;
-}
-.defaulheight{line-height: 22px !important;}
-</style>
 <div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
 	<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
 		<i class="fa fa-print"></i>
@@ -42,18 +36,14 @@ table tr td strong{
    		<div id="divPrint">
    			<div id="divPrint1" style="width: 100%; height: 13cm ; padding: 0px; margin: 0px;">
    			<?php 
-			echo $this->officailreceipt;
+				echo $this->officailreceipt;
 			?>
 			</div>
-			<?php if($this->data['receipt_print']>1){?>
-			<div id="divPrint2" style="width: 100%;height: 13cm ; padding: 0px; margin: 0px;">
-				<div style="border:2px dashed #000; vertical-align: middle;margin:0 0px 40px 0px"></div>
-				<div id="printblog2"></div>
-			</div>
+			<?php if(AMOUNT_RECEIPT>1){?>
+				<div id="divPrint2" style="width: 100%;height: 13cm ; padding: 0px; margin: 0px;">
+					<div id="printblog2"></div>
+				</div>
 			<?php }?>
-		
-			
-			
 		</div>	
    	</div>
 </div>
@@ -64,7 +54,7 @@ require(["dojo/ready"], function(ready){
 		 loadingBlock();
 		 printSave();
 		 setTimeout(function () {
-			 <?php if($this->data['receipt_print']>1){?>
+			 <?php if(AMOUNT_RECEIPT>1){?>
 			 dojo.byId('printblog2').innerHTML = dojo.byId('divPrint1').innerHTML;
 			 <?php }?>
 	        HideloadingBlock();
@@ -78,19 +68,24 @@ function printSave(){
 	$( "#header_receipt" ).append( "<?php echo preg_replace( "/\r|\n/", "",$this->header);?>" );
 	<?php }?>
 	var statusvoid="";
-	<?php if ($this->row['status']==0){?>
+	<?php if ($this->row['isVoid']==1){?>
 		statusvoid="<?php echo preg_replace( "/\r|\n/", "", strip_tags("(Void)"));?>";
 	<?php }?>
+	
+	dojo.byId("lbl_branch").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['branch_name'])));?>';
+	dojo.byId("lbl_student").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['studentName'])));?>';
+	
 	dojo.byId("receipt_no").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['invoice'])));?>'+" "+statusvoid;
-	dojo.byId("lbl_for_date").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(date("d/M/Y",strtotime($this->row['date'])))));?>';
+	dojo.byId("lbl_for_date").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(date("d/m/Y",strtotime($this->row['date'])))));?>';
 	dojo.byId("lbl_title_income").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['title'])));?>';
 	dojo.byId("lbl_cate_income").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['cate_income'])));?>';
 	dojo.byId("lbl_payment_method").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['payment_method'])));?>';
+	dojo.byId("lbl_bank").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['bank_name'])));?>';
+	
 	dojo.byId("lbl_total_amount").innerHTML = symbal+'<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(number_format($this->row['total_amount'],2))));?>';
 	dojo.byId("lbl_cheqe_no").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['cheqe_no'])));?>';
 	dojo.byId("lbl_description").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['description'])));?>';
-	dojo.byId("user_sign").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['last_name']." ".$this->row['first_name'])));?>';
-	dojo.byId("time_footer").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars(date("F j, Y, g:i a",strtotime($this->row['create_date'])))));?>';
+	dojo.byId("user_sign").innerHTML = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['userName'])));?>';
 }
 										
 

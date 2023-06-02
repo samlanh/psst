@@ -7,27 +7,26 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-    function getAllOtherExpense($search){//
+    function getAllOtherExpense($search){//using
     	$db=$this->getAdapter();
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
     	$sql = "SELECT *,
-    			payment_type AS payment_methodid, 
-    			(SELECT name_en from rms_view where rms_view.type=8 and key_code=payment_type LIMIT 1) AS payment_type,
-    			(SELECT CONCAT(first_name) from rms_users as u where u.id = user_id LIMIT 1) AS name
+    				description as note,
+	    			payment_type AS payment_methodid, 
+	    			(SELECT name_en FROM rms_view WHERE rms_view.type=8 and key_code=payment_type LIMIT 1) AS payment_type,
+	    			(SELECT name_en FROM rms_view WHERE type=10 AND key_code=isVoid LIMIT 1) AS voidStatus,
+	    			(SELECT first_name FROM rms_users as u WHERE u.id = user_id LIMIT 1) AS byUser,
+	    			(SELECT first_name FROM rms_users as u WHERE u.id = voidBy LIMIT 1) AS voidByUser
     			 FROM ln_expense  WHERE 1 $branch_id  ";
     	$where= ' ';
-    	$order=" ORDER BY id DESC ";
     	
     	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
     	
-    	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
-    	}
     	
     	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
@@ -44,7 +43,11 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
     		$s_where[] = " external_invoice LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-
+    	if($search['receipt_order']==0){
+    		$order=" ORDER By id ASC ";
+    	}else{
+    		$order=" ORDER By id DESC ";
+    	}
     	return $db->fetchAll($sql.$where.$order);
     }
     function getAllExpensebycate($search){//

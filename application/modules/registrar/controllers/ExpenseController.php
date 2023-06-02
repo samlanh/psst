@@ -8,6 +8,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	defined('ENABLE_DATE_PAYMENT') || define('ENABLE_DATE_PAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('payment_date'));
     }
     public function indexAction()
     {

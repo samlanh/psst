@@ -12,45 +12,101 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}	
 	function addIncome($data){
-		$db = new Registrar_Model_DbTable_DbRegister();
-	    $receipt_no = $db->getRecieptNo($data['branch_id']);
-		$array = array(
-				'branch_id'		=>$data['branch_id'],
-				'student_id'	=>$data['studentId'],
-				'optionType'	=>$data['option_type'],
-				'title'			=>$data['title'],
-				'cate_income'	=>$data['cate_income'],
-				'total_amount'	=>$data['total_income'],
-				'invoice'		=>$receipt_no,
-				'payment_method'=>$data['payment_method'],
-				'bank_id'		=>$data['bank_name'],
-				'cheqe_no'		=>$data['cheqe_no'],
-				'description'	=>$data['note'],
-				'date'			=>$data['date'],
-				'user_id'		=>$this->getUserId(),
-				'create_date'	=>date('Y-m-d H:i:s'), 
-			);
-		$this->insert($array);
+		
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+			$dbg = new Registrar_Model_DbTable_DbRegister();
+		    $receipt_no = $dbg->getRecieptNo($data['branch_id']);
+			$array = array(
+					'branch_id'		=>$data['branch_id'],
+					'invoice'		=>$receipt_no,
+					'student_id'	=>$data['studentId'],
+					'optionType'	=>$data['option_type'],
+					'title'			=>$data['title'],
+					'cate_income'	=>$data['cate_income'],
+					'total_amount'	=>$data['total_income'],
+					'payment_method'=>$data['payment_method'],
+					'bank_id'		=>$data['bank_name'],
+					'cheqe_no'		=>$data['cheqe_no'],
+					'description'	=>$data['note'],
+					'date'			=>$data['date'],
+					'expire_date'	=>$data['expire_date'],
+					'user_id'		=>$this->getUserId(),
+					'create_date'	=>date('Y-m-d H:i:s'), 
+				);
+			$incomeId = $this->insert($array);
+			
+			if($data['option_type']==2){
+				$dbm = new Accounting_Model_DbTable_DbCreditmemo();
+				$arr = array(
+						'branch_id'		=>$data['branch_id'],
+						'studentId'		=>$data['studentId'],
+						'total_amount'	=>$data['total_income'],
+						'Description'	=>$data['note'],
+						'prob'			=>'',
+						'type'			=>0,
+						'date'			=>$data['date'],
+						'end_date'		=>$data['expire_date'],
+						'status'		=>1,
+						'otherincome_id'=>$incomeId
+						);
+				$dbm->addCreditmemo($arr);
+			}
+			$db->commit();
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+			
+		}
  	} 	 
 	function updateIncome($data){
-		$arr = array(
-				'branch_id'		=>$data['branch_id'],
-				'student_id'	=>$data['studentId'],
-				'optionType'	=>$data['option_type'],
-				'bank_id'		=>$data['bank_name'],
-				'title'			=>$data['title'],
-				'cate_income'	=>$data['cate_income'],
-				'total_amount'	=>$data['total_income'],
-				'invoice'		=>$data['invoice'],
-				'payment_method'=>$data['payment_method'],
-				'cheqe_no'		=>$data['cheqe_no'],
-				'description'	=>$data['note'],
-				'date'			=>$data['date'],
-				'status'		=>$data['status'],
-				'user_id'		=>$this->getUserId(),
-			);
-		$where=" id = ".$data['id'];
-		$this->update($arr, $where);
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+			$arr = array(
+					'branch_id'		=>$data['branch_id'],
+					'student_id'	=>$data['studentId'],
+					'optionType'	=>$data['option_type'],
+					'bank_id'		=>$data['bank_name'],
+					'title'			=>$data['title'],
+					'cate_income'	=>$data['cate_income'],
+					'total_amount'	=>$data['total_income'],
+					'invoice'		=>$data['invoice'],
+					'payment_method'=>$data['payment_method'],
+					'cheqe_no'		=>$data['cheqe_no'],
+					'description'	=>$data['note'],
+					'date'			=>$data['date'],
+					'status'		=>$data['status'],
+					'expire_date'		=>$data['expire_date'],
+					'user_id'		=>$this->getUserId(),
+				);
+			$where=" id = ".$data['id'];
+			$this->update($arr, $where);
+// 			if($data['option_type']==2){
+				$dbm = new Accounting_Model_DbTable_DbCreditmemo();
+				$arr = array(
+					'branch_id'		=>$data['branch_id'],
+					'studentId'		=>$data['studentId'],
+					'total_amount'	=>$data['total_income'],
+					'Description'	=>$data['note'],
+					'prob'			=>'',
+					'type'			=>0,
+					'date'			=>$data['date'],
+					'end_date'		=>$data['expire_date'],
+					'status'		=>$data['status'],
+					'otherincome_id'=>$data['id']
+				);
+				$data['id']='';
+				$dbm->updatcreditMemo($arr);
+				$db->commit();
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+				
+		}
 	}
 	
 	function getIncomeById($id){
@@ -79,21 +135,21 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
 						FROM rms_student AS s
 					   		WHERE s.stu_id=student_id LIMIT 1) AS studentName,
-					   		
-				(SELECT cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
-				title,
-				invoice,
-				(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
-				(SELECT bank_name FROM `rms_bank` b WHERE bank_id = b.id=bank_id LIMIT 1) AS bank_name,
-				cheqe_no,
 				CASE
 					WHEN optionType=1 THEN '$Option1'
 					WHEN optionType=2 THEN '$Option2'
 				END
-				AS optionType,
+				AS optionType,	   		
+				invoice,
 				total_amount,
-				description,
-				date
+				date,
+				(SELECT cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
+				title,
+				(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
+				(SELECT bank_name FROM `rms_bank` b WHERE b.id=bank_id LIMIT 1) AS bank_name,
+				cheqe_no,
+				description
+				
 		";
 		
 		$sql.=$dbp->caseStatusShowImage("ln_income.status");
@@ -117,11 +173,11 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.= " AND branch_id = ".$search['branch_id'];
 		}
-		if($search['option_type']>0){
+		if(!empty($search['option_type']) AND $search['option_type']>0){
 			$where.= " AND optionType = ".$search['option_type'];
 		}
 		
-		if($search['status']>-1){
+		if(!empty($search['status']) AND $search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}
         $order=" order by id desc ";

@@ -74,6 +74,13 @@ table.collape tbody td {
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREATED_DATE");?> <span class="required">*</span>:
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('Date');?>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?> :
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -88,75 +95,76 @@ table.collape tbody td {
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EXPENSE_TITLE");?> <span class="required">*</span>:
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIVER");?> :
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-												<?php echo $frm->getElement('title');?>
+												<?php echo $frm->getElement('receiver');?>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-												<?php echo $frm->getElement('payment_method');?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?> :
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-												<?php echo $frm->getElement('cheque_num');?>
+												<input type="hidden" id="identity" name="identity" />
+												<?php echo $frm->getElement('Description');?>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 	             </div>
-
-
 	             <div class="col-md-4 col-sm-4 col-xs-12">
 					 <div class="card-blogform">
 						<div class="card-body"> 
 								<div class="row"> 
 									<div class="col-md-12 col-sm-12 col-xs-12">
-											<div class="d-flex "> 
-												<div class="settings-main-icon ">
-													<i class="material-icons-outlined">payments</i>
-												</div> 
-												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("EXPENSE_INFO");?></p>
-												</div> 
+										<div class="d-flex "> 
+											<div class="settings-main-icon ">
+												<i class="material-icons-outlined">payments</i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("EXPENSE_INFO");?></p>
+											</div> 
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EXPENSE_TITLE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('title');?>
 											</div>
-
-											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREATED_DATE");?> <span class="required">*</span>:
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_EXPENSE");?> <span class="required">*</span>:
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement('total_amount');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?> :
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('payment_method');?>
+											</div>
+										</div>
+										<div class="form-group">
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?>
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('Date');?>
+													<select placeHolder='<?php echo $tr->translate("SELECT_BANK");?>' name="bank_name" id="bank_name" required="false" class="fullside" dojoType="dijit.form.FilteringSelect" >
+														<option value=""></option>
+														<?php if(!empty($this->rs_bank)){foreach ($this->rs_bank as $rs_bank){?>
+															<option value="<?php echo $rs_bank['id'];?>"><?php echo $rs_bank['name'];?></option>
+														<?php }}?>
+													</select>
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_EXPENSE");?> <span class="required">*</span>:
+												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?>/Acc No.
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('total_amount');?>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIVER");?> :
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('receiver');?>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?> :
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="hidden" id="identity" name="identity" />
-														<?php echo $frm->getElement('Description');?>
+														<?php echo $frm->getElement('cheque_num');?>
 												</div>
 											</div>
 										</div>
@@ -194,6 +202,15 @@ table.collape tbody td {
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
 		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
+			<style>
+			@media print {
+					@page {
+						page: A4;
+						size: portrait;
+						margin: 0.8cm;
+					}
+				}
+			</style>
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
@@ -633,6 +650,19 @@ require(["dojo/ready"], function(ready){
 });	
 function filterClient(){
 	getbranchinfo();
+}
+function setReadonlyCheque(){
+	payment_method = dijit.byId('payment_method').get('value');
+	if(payment_method == 1){
+		dijit.byId('cheque_num').attr('value','');
+		dijit.byId("cheque_num").set('readOnly',true);
+		dijit.byId('bank_name').attr('value','');
+		dijit.byId("bank_name").set('readOnly',true);
+	}else{
+		dijit.byId("cheque_num").set('readOnly',false);
+		dijit.byId("bank_name").set('readOnly',false);
+		
+	}
 }
 var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
 function getbranchinfo(){

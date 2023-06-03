@@ -320,7 +320,7 @@
 								class="bold"><?php echo $row['invoice'];?></td>
 							<td colspan="2"
 								data-label="<?php echo $tr->translate("STUDENT_NAME");?>"
-								class="bold"><?php echo $row['studentName'];?></td>
+								class="bold" align="left"><?php echo $row['studentName'];?></td>
 							<td data-label="<?php echo $tr->translate("INCOME_TITLE");?>"
 								style="text-align: left;"><?php echo $row['title'];?></td>
 							<td data-label="<?php echo $tr->translate("INCOME_CATEGORY");?>"><?php echo $row['income_category'];?></td>
@@ -328,7 +328,7 @@
 							<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>"><?php echo number_format($row['total_amount'],2);?></td>
 							<td colspan="2"
 								data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>"
-								align="center"><?php echo $row['payment_method'];?></td>
+								align="left"><?php echo $row['payment_method'].' '.$row['bank_name'].' '.$row['cheqe_no'];?></td>
 							<td data-label="<?php echo $tr->translate("FOR_DATE");?>"><?php echo date('d-m-Y',strtotime($row['date']));?></td>
 							<td data-label="<?php echo $tr->translate("NOTE");?>"><span
 								class="noted"><?php echo $row['description'];?></span></td>

@@ -9,6 +9,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	defined('ENABLE_DATE_PAYMENT') || define('ENABLE_DATE_PAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('payment_date'));
+    	 
     }
     public function indexAction()
     {
@@ -63,11 +64,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$user_type=$_db->getUserType();
-// 		if($user_type!=1){
-// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-// 		}
     	$pructis=new Registrar_Form_Frmexpense();
     	$frm = $pructis->FrmAddExpense();
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -80,6 +76,9 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rs_bank = $db->getAllBank();
     }
     public function editAction()
     {
@@ -117,6 +116,9 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	 
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rs_bank = $db->getAllBank();
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){

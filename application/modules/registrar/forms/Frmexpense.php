@@ -53,7 +53,6 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows = $db->getAllBranch();
-		//$options_rr=array(''=>$this->tr->translate("PLEASE_SELECT"));
 		if(!empty($rows))foreach($rows AS $row){$options_rr[$row['id']]=$row['name'];}
 		$_branch_id->setMultiOptions($options_rr);
 		
@@ -118,6 +117,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		$payment_method->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'onchange'=>'setReadonlyCheque();'
 		));
 		$opt = $db->getViewById(8,1);
 		$payment_method->setMultiOptions($opt);

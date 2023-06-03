@@ -9,7 +9,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	defined('ENABLE_DATE_PAYMENT') || define('ENABLE_DATE_PAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('payment_date'));
     	defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
-    	
     }
     public function indexAction()
     {
@@ -35,11 +34,11 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$_db = new Application_Model_DbTable_DbGlobal();
 			$rs_rows= $db->getAllIncome($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","STUDENT_NAME","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","BANK_NAME","CHEQUE_NO","INCOME_OPTION","TOTAL_INCOME","NOTE","PAID_DATE","STATUS");
+    		$collumns = array("BRANCH","STUDENT_NAME","INCOME_OPTION","RECEIPT_NO","TOTAL_INCOME","PAID_DATE","INCOME_CATEGORY","INCOME_TITLE","PAYMENT_METHOD","BANK_NAME","CHEQUE_NO","NOTE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'studentName'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'studentName'=>$link,'cate_name'=>$link,'total_amount'=>$link,'invoice'=>$link,'optionType'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -90,9 +89,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     public function editAction()
     {
     	if($this->getRequest()->isPost()){
-    		$id = $this->getRequest()->getParam('id');
 			$data=$this->getRequest()->getPost();	
-			$data['id']=$id;
 			$db = new Registrar_Model_DbTable_DbIncome();				
 			try {
 				$db->updateIncome($data);				
@@ -105,6 +102,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$id = $this->getRequest()->getParam('id');
+		$id = (empty($id))?0:$id;
 		$db = new Registrar_Model_DbTable_DbIncome();
 		$row  = $db->getIncomeById($id);
 		
@@ -115,7 +113,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		if($user_type_id!=1 AND $current_date>$payment_date){
 			Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit",'/registrar/income');
 		}
-		
 		$this->view->rs = $row;
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
@@ -128,8 +125,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$this->view->cate_income = $cate_income;
     	$this->view->parent = $_db->getParentCateIncome();
     	
-    	
-    	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$branch_income= $db->getAllBranch();
     	$this->view->branch_name = $branch_income;
@@ -139,8 +134,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	$frmpopup = new Application_Form_FrmPopupGlobal();
     	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
     	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){

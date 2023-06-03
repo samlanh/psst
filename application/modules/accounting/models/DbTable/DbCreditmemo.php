@@ -79,10 +79,14 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'note'			=>$data['Description'],
 				'prob'			=>$data['prob'],
 				'type'			=>0,
-				'date'			=>$data['Date'],
+				'date'			=>date('Y-m-d H:i:s',strtotime($data['date'])),
 				'end_date'		=>$data['end_date'],
 				'status'		=>1,
-				'user_id'		=>$this->getUserId(),);
+				'user_id'		=>$this->getUserId()
+				);
+			if(!empty($data['otherincome_id'])){
+				$arr['otherincome_id']=$data['otherincome_id'];
+			}
 			$this->insert($arr);
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -93,21 +97,26 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
  	 	
  	 }
 	 function updatcreditMemo($data){
-		$arr = array(
-			'branch_id'		=>$data['branch_id'],
-			'student_id'	=>$data['studentId'],
-			'total_amount'	=>$data['total_amount'],
-			'total_amountafter'=>$data['total_amount'],
-			'note'			=>$data['Description'],
-			'prob'			=>$data['prob'],
-			'type'			=>0,
-			'date'			=>$data['Date'],
-			'end_date'		=>$data['end_date'],
-			'status'		=>$data['status'],
-			'user_id'		=>$this->getUserId(),
-		);
-		$where=" id = ".$data['id'];
-		$this->update($arr, $where);
+			$arr = array(
+				'branch_id'		=>$data['branch_id'],
+				'student_id'	=>$data['studentId'],
+				'total_amount'	=>$data['total_amount'],
+				'total_amountafter'=>$data['total_amount'],
+				'note'			=>$data['Description'],
+				'prob'			=>$data['prob'],
+				'type'			=>0,
+				'date'			=>$data['Date'],
+				'end_date'		=>$data['end_date'],
+				'status'		=>$data['status'],
+				'user_id'		=>$this->getUserId(),
+			);
+			if(!empty($data['otherincome_id'])){
+				$where="otherincome_id = ".$data['otherincome_id'];
+			}else{
+				$where=" id = ".$data['id'];
+			}
+			
+			$this->update($arr, $where);
 	}
   function getCreditmemobyid($id){
 		$db = $this->getAdapter();

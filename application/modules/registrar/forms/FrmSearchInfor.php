@@ -105,7 +105,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_CATEGORY"),
 		));
 		$_cate->setValue($request->getParam("cate_income"));
 		$_db = new Registrar_Model_DbTable_DbCateIncome();	
@@ -251,7 +252,12 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$pay_term->setMultiOptions($opt_term);
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("ALL_STATUS"),
+				));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -278,6 +284,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$end_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
+				'required'=>'true',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'placeholder'=>$this->tr->translate("END_DATE")
 				));
@@ -508,11 +515,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$option_type = new Zend_Dojo_Form_Element_FilteringSelect('option_type');
 		$option_type->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required' =>'true',
+				'required' =>'false',
 				'class'=>'fullside',
-				'onchange'=>'filterClient();',
 				'queryExpr'=>'*${0}*',
-				'autoComplete'=>"false"
+				'autoComplete'=>"false",
+				'placeholder'=>$this->tr->translate('SELECT_TYPE')
 		));
 		$opt = array(
 				'0'=>$this->tr->translate('SELECT_TYPE'),

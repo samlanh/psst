@@ -257,8 +257,8 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 						<table width="100%" style="font-size:12px;margin-top:-5px;">
 							<tr>
 								<td width="30%"></td>
-								<td align="center" width="40%" style="font-size: 14px; line-height: 20px;">
-									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 12px;">បង្កាន់ដៃបង់ប្រាក់</div>
+								<td align="center" width="40%" style="font-size: 12px; line-height: 20px;">
+									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 14px;">បង្កាន់ដៃបង់ប្រាក់</div>
 									<strong>OFFICIAL RECEIPT</strong>
 								</td>
 								<td width="30%" valign="center" align="center">

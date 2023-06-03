@@ -38,17 +38,26 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     function addAction(){
     	if($this->getRequest()->isPost()){
     		try{
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     			$sms="INSERT_SUCCESS";
     			$_data = $this->getRequest()->getPost();
+				$addCate= $this->getRequest()->getParam("addCate");
     			$db = new Global_Model_DbTable_DbItems();
     			$degree_id= $db->AddDegree($_data);
     			if($degree_id==-1){
     				$sms = "RECORD_EXIST";
     			}
-    			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
-    			}
-    			Application_Form_FrmMessage::Sucessfull($sms,  self::REDIRECT_URL."/add");
+				if(!empty($addCate)){
+					$alert = $tr->translate("INSERT_SUCCESS");
+					echo "<script> alert('".$alert."');</script>";
+		    		echo "<script>window.close();</script>";
+				}else{
+					if(isset($_data['save_close'])){
+						Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
+					}
+					Application_Form_FrmMessage::Sucessfull($sms,  self::REDIRECT_URL."/add");
+				}
+    			
     		}catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("Application Error!");

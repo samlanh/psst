@@ -129,6 +129,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_status_search->setMultiOptions($_arr);
     	$_status_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("STATUS"),
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_status_search->setValue($request->getParam("status_search"));
@@ -140,7 +142,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_items_search->setMultiOptions($_arr_opt);
     	$_items_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT"),
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
@@ -154,8 +157,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_product_type_search->setMultiOptions($_arr);
     	$_product_type_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'autoComplete'=>'false',
+				'placeholder'=>$this->tr->translate("TYPE"),
     			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
@@ -173,8 +177,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_onepayment->setMultiOptions($_arr);
     	$_onepayment->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'autoComplete'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_TYPE"),
     			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));

@@ -44,13 +44,21 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+			$addCate=$this->getRequest()->getParam('addCate');
 			try{
-				$row = $db->addProductSet($_data);
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+				$db->addProductSet($_data);
+				if(!empty($addCate)){
+					$alert = $tr->translate("INSERT_SUCCESS");
+					echo "<script> alert('".$alert."');</script>";
+		    		echo "<script>window.close();</script>";
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+					if(isset($_data['save_close'])){
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+					}else{
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+					}
 				}
+				
 				
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){

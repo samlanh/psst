@@ -393,13 +393,13 @@
 		if(!empty($search['items_search'])){
 			$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
 		}
-		if($search['status_search']>-1){
+		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
-		if($search['is_onepayment']>-1){
+		if($search['is_onepayment']>-1 AND $search['is_onepayment']!=''){
 			$where.= " AND is_onepayment = ".$db->quote($search['is_onepayment']);
 		}
-		if($search['product_type_search']>-1){
+		if($search['product_type_search']>-1 AND $search['product_type_search']!=''){
 			$where.= " AND ide.product_type = ".$db->quote($search['product_type_search']);
 		}
 		$orderby = " ORDER BY ide.ordering ASC, ide.id DESC ";

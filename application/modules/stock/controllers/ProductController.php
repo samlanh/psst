@@ -21,7 +21,6 @@ class Stock_ProductController extends Zend_Controller_Action {
     				'is_onepayment'=>-1,
     				'product_type_search'=>-1,
     				'status_search' => -1,
-    				'is_onepayment'=>-1,
     				'auto_payment'=>-1
 	    		);
 	    	}

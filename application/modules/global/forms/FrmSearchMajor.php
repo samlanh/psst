@@ -111,6 +111,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_degree->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'false',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT"),
 				'class'=>'fullside height-text',));
 		$_degree->setValue($request->getParam("degree"));
 		
@@ -123,6 +124,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_department->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_DEPARTMENT"),
 				'class'=>'fullside height-text',));
 		$_department->setValue($request->getParam("department"));
 		
@@ -148,6 +150,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_nationality->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside height-text',
+				'placeholder'=>$this->tr->translate("SELECT_NATION"),
 				'required'=>'false',
 				)
 			);
@@ -161,6 +164,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside height-text',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_BRANCH"),
 				'required'=>'false',
 			));
 		$_branch_id->setValue($request->getParam("branch_id"));
@@ -169,6 +173,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_staff->setAttribs(array(
 			'dojoType'=>$this->filter,
 			'class'=>'fullside',
+			'placeholder'=>$this->tr->translate("SELECT_TYPE"),
 			'required'=>'false',
 		));
 		$_staff_opt = array(
@@ -182,6 +187,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_teacher->setAttribs(array(
 			'dojoType'=>$this->filter,
 			'class'=>'fullside',
+			'placeholder'=>$this->tr->translate("PLEASE_SELECT_TEACHER_TYPE"),
 			'required'=>'false',
 		));
 		$_teacher_opt = array(
@@ -194,6 +200,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array(
 			'dojoType'=>$this->filter,
+			'placeholder'=>$this->tr->translate("STATUS"),
 			'class'=>'fullside',
 			'required'=>'false',
 		));
@@ -208,6 +215,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_active_type=  new Zend_Dojo_Form_Element_FilteringSelect('active_type');
 		$_active_type->setAttribs(array(
 			'dojoType'=>$this->filter,
+			'placeholder'=>$this->tr->translate("PLEASE_SELECT"),
 			'class'=>'fullside',
 			'required'=>'false',
 		));

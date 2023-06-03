@@ -35,6 +35,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 				'class'=>'fullside height-text',));
@@ -112,6 +113,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
+				'placeholder'=>$this->tr->translate("SELECT_TEACHER"),
 				'required'=>'false'
 		));
 		$_teacher->setValue($request->getParam("teacher"));
@@ -121,9 +123,9 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_teacher->setMultiOptions($opt_group);
 		
 		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
-		$is_pass->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SERVIC"),
+		$is_pass->setAttribs(array('dojoType'=>$this->filter,
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'missingMessage'=>'Invalid Module!',

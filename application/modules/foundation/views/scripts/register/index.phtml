@@ -127,7 +127,7 @@
 	});
 	var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
 	function getAllAcademicByBranch(){
-		let= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
+		let url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 		
 		dijit.byId('study_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');

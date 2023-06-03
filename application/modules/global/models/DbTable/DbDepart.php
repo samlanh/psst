@@ -74,7 +74,7 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 			$s_where[] = " depart_nameen LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		if($search['status']>-1){
+		if($search['status']>-1 AND $search['status']!=''){
 			$where.=' AND status='.$search['status'];
 		}
 		return $db->fetchAll($sql.$where.$order);

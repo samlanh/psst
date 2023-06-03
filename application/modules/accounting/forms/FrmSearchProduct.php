@@ -62,6 +62,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$_status->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("STATUS"),
 				));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),

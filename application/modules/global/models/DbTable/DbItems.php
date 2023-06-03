@@ -39,7 +39,7 @@
 		if(!empty($search['schoolOption_search'])){
 			$where.= " AND d.schoolOption  = ".$db->quote($search['schoolOption_search']);
 		}
-		if($search['status_search']>-1){
+		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
 		
@@ -68,7 +68,7 @@
 			$s_where[] = " d.shortcut LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		if($search['status_search']>-1){
+		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
 		$where.= $dbp->getSchoolOptionAccess('d.schoolOption');

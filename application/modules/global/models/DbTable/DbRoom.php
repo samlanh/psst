@@ -97,7 +97,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.=" AND branch_id=".$search['branch_id'];
 		}
-		if($search['status']>-1){
+		if($search['status']>-1 AND $search['status']!=''){
 			$where.= " AND is_active = ".$search['status'];
 		}
 		$where.= $dbp->getAccessPermission('branch_id');

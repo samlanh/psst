@@ -38,7 +38,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false,
+				'required'=>'false',
 				
 		));
 		$study_year->setValue($request->getParam("study_year"));
@@ -301,7 +301,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
     	$_branch_id->setMultiOptions($_arr_opt_branch);
     	$_branch_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
+    			'required'=>'false',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'class'=>'fullside height-text',));

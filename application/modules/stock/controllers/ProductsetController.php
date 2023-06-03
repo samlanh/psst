@@ -18,7 +18,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 	    			'items_search'=>"",
     				'start_date'=> date('Y-m-d'),
     				'end_date'=>date('Y-m-d'),
-    				'status_search'=>1,
+    				'status_search'=>-1,
     			);
     		}
     		$type=3; //Product

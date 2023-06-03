@@ -247,7 +247,12 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_title->setValue($request->getParam("title"));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("STATUS"),
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -261,7 +266,8 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows= $db->getAllBranch();
@@ -286,6 +292,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array(
 			'dojoType'=>$this->filter,
+			'placeholder'=>$this->tr->translate("STATUS"),
 			"class"=>"fullside",
 			'required'=>'false',
 		));
@@ -308,6 +315,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_schoolOption_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'false',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$_schoolOption_search->setValue($request->getParam("schoolOption_search"));
@@ -534,12 +542,20 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
-				'placeholder'=>$this->tr->translate("SEARCH_OCCUPATION_TITLE")));
+		$_title->setAttribs(array(
+			'dojoType'=>$this->text,
+			"class"=>"fullside",
+			'placeholder'=>$this->tr->translate("SEARCH_OCCUPATION_TITLE")
+		));
 		$_title->setValue($request->getParam("title"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'placeholder'=>$this->tr->translate("STATUS"),
+			'required'=>'false',
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -555,8 +571,11 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
-				'placeholder'=>$this->tr->translate("SEARCH_DISCOUNT_TITLE")));
+		$_title->setAttribs(array(
+			'dojoType'=>$this->text,
+			"class"=>"fullside",
+			'placeholder'=>$this->tr->translate("SEARCH_DISCOUNT_TITLE")
+			));
 		$_title->setValue($request->getParam("title"));
 		
 		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
@@ -566,11 +585,19 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_branch_id->setMultiOptions($_arr_opt_branch);
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside height-text',));
+				'class'=>'fullside height-text',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_BRANCH"),
+				'required'=>'false',
+			));
 		$_branch_id->setValue($request->getParam('branch_id'));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("STATUS"),
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -591,7 +618,12 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_title->setValue($request->getParam("title"));
 		
 		$_type=  new Zend_Dojo_Form_Element_FilteringSelect('type_search');
-		$_type->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'placeholder'=>$this->tr->translate("PLEASE_SELECT_CATEGORY"),
+			'required'=>'false',
+		));
 		$_type_opt = array(
 				0=>$this->tr->translate("PLEASE_SELECT_CATEGORY"),
 				1=>$this->tr->translate("STUDENT_DOCUMENT"),
@@ -600,7 +632,12 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_type->setValue($request->getParam("type_search"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'placeholder'=>$this->tr->translate("STATUS"),
+			'required'=>'false',
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -620,7 +657,11 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_title->setValue($request->getParam("title"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,));
+		$_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'placeholder'=>$this->tr->translate("STATUS"),
+			'required'=>'false',
+		));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),

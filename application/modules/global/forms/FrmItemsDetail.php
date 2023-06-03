@@ -80,7 +80,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_status->setMultiOptions($_arr);
     	$_status->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	
@@ -188,6 +188,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
     	$start_date->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
+				'placeholder'=>$this->tr->translate("START_DATE"),
     			'value'=>'now',
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			'class'=>'fullside',));
@@ -199,8 +200,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$end_date->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
     			'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("END_DATE"),
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-    			'required'=>false));
+    			'required'=>'false'));
     	$_date = $request->getParam("end_date");
     	if(empty($_date)){
     		$_date = date("Y-m-d");
@@ -242,10 +244,11 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$auto_payment->setMultiOptions($_arr);
     	$auto_payment->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
+				'placeholder'=>$this->tr->translate("SELECT_TYPE"),
     			'class'=>'fullside height-text',));
     	$auto_payment->setValue($request->getParam("auto_payment"));
     	

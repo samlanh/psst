@@ -167,6 +167,8 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	$_status_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'missingMessage'=>'Invalid Module!',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("STATUS"),
     			'class'=>'fullside height-text',));
     	$_status_search->setValue($request->getParam("status_search"));
     	
@@ -177,7 +179,8 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	$_schoolOption_search->setMultiOptions($_arr_opt);
     	$_schoolOption_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT"),
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_schoolOption_search->setValue($request->getParam("schoolOption_search"));

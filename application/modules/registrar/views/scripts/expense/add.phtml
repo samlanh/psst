@@ -196,19 +196,18 @@ table.collape tbody td {
 		</form>
 	</div>
 </div>
-
-<div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
-		<div id="printexpense" style="width: 19cm !important; height: 12.3cm ; padding: 0px; margin-bottom:30px; ">
-			<?php echo $this->officailExpensereceipt;?>
+	<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+		<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
+			<div id="printexpense" style="width: 19cm !important; height: 12.3cm ; padding: 0px; margin-bottom:30px; ">
+				<?php echo $this->officailExpensereceipt;?>
+			</div>
+			<button dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-remove"
+				type="button" onclick="hideDialog();"><?php echo $tr->translate('CANCEL');?></button>
+			<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+				type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 		</div>
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-				type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
-				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
-</div>
-<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+	<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 <script>
 require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
 </script>
@@ -350,7 +349,6 @@ require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
 			var yyyy = today.getFullYear();
 			dojo.byId("bl_branch").innerHTML = dijit.byId("branch_id").attr('displayedValue');
 			dojo.byId("lb_paynote").innerHTML = dijit.byId("title").attr('displayedValue');
-			
 			dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
 			dojo.byId("lb_receipt_no").innerHTML = new_receipt;
 			dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
@@ -361,12 +359,12 @@ require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
 			dojo.byId("lb_cheque").innerHTML = dijit.byId("cheque_num").attr('displayedValue');
 			dojo.byId("lb_invoice").innerHTML = dijit.byId("external_invoice").get('value');
 			var rowId = $('#identity').val();
-			let totalPaid = dijit.byId("total_amount").get('value');
+			let totalPaid = dojo.number.format(dijit.byId("total_amount").get('value'),{places:2});
 			var rowIDArray = rowId.split(',');
 			template="";
 				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:12px;font-family:Khmer OS Battambang !important;  " id="table">'
 					  temp+='<tr class="" style="text-align:center; height:25px;">';
-						  temp+='<td><strong>លរ/No</div></strong></td>';
+						  temp+='<td><strong>លរ/No.</div></strong></td>';
 						  temp+='<td><strong>ប្រភេទចំណាយ/Expense Type</strong></td>';
 						  temp+='<td><strong>ពណ៌នា/Description</strong></td>';
 						  temp+='<td><strong>តម្លៃ/Price</strong></td>';

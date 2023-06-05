@@ -125,9 +125,51 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				
 		}
+	}
+	public function rptExpenseAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}else{
+				$search=array(
+						'txtsearch' =>'',
+						'branch_id' =>'',
+						'start_date'=>date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+			$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
+			$this->view->row = $db->getAllexspan($search);
+			$this->view->search = $search;
+				
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
 	
+	public function rptExpensedetailAction(){
+		$id = $this->getRequest()->getParam("id");
+		$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
+		$row =$db->getAllexspanByid($id);
+		$this->view->row = 	$row;
+		$this->view->detail = $db->getAllexspandetailByid($id);
+	
+		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+		$_db = new Application_Form_FrmGlobal();
+		$this->view->header = $_db->getHeaderReceipt($branch_id);
+		
+		$frmpopup = new Application_Form_FrmPopupGlobal();
+		$this->view->officailExpensereceipt = $frmpopup->getExpenseReceipt();
 	}
 	function rptSpecaildiscountAction(){
 		try{
@@ -452,48 +494,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
-	}
-
-	public function rptExpenseAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}else{
-				$search=array(
-						'txtsearch' =>'',
-						'branch_id' =>'',
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
-			$this->view->row = $db->getAllexspan($search);
-			$this->view->search = $search;
-			
-			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-			$frm = new Application_Form_FrmGlobal();
-			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-			$this->view->rsfooteracc = $frm->getFooterAccount();
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-	}
-	
-    public function rptExpensedetailAction(){
-		$id = $this->getRequest()->getParam("id");
-		$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
-		$row =$db->getAllexspanByid($id);
-		$this->view->row = 	$row;
-		$this->view->detail = $db->getAllexspandetailByid($id);
-		
-		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
-		$_db = new Application_Form_FrmGlobal();
-		$this->view->header = $_db->getHeaderReceipt($branch_id);
 	}
 	
 	public function rptExpenseBycateAction(){

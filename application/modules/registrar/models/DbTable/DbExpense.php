@@ -23,6 +23,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					'description'	=>$data['Description'],
 					'receiver'		=>$data['receiver'],
 					'cheque_no'		=>$data['cheque_num'],
+					'bank_id'		=>$data['bank_name'],
 					'external_invoice'=>$data['external_invoice'],
 					'date'			=>$data['Date'],
 					'user_id'		=>$this->getUserId(),

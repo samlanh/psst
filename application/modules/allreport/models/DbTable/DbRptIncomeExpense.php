@@ -101,24 +101,25 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     	return $total;
     }
     
-	public function getAllexspanByid($id){
+	public function getAllexspanByid($id){//using
 	    $db=$this->getAdapter();
 	    $sql="SELECT 
 	      			e.* ,
-					b.branch_namekh AS branch ,
 					u.user_name ,
-					(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type) AS pay	
+					DATE_FORMAT(date,'%d-%m-%Y' ) date,
+					(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =e.branch_id LIMIT 1) AS branch_name,
+					(SELECT name_kh FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
+					(SELECT bank_name FROM `rms_bank` b WHERE b.id=e.bank_id LIMIT 1) AS bank_name,
+					(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1	) AS pay	
 				FROM ln_expense AS e ,
-    				 rms_branch AS b ,
 					 rms_users AS u 
 			    WHERE 
-	      			b.br_id=e.branch_id 
-	      			AND e.user_id=u.id 
-	      			and e.id=$id
+	      			e.user_id=u.id 
+	      			AND e.id=$id
 	      		";
 	    return $db->fetchrow($sql);
     }
-	public function getAllexspandetailByid($id){
+	public function getAllexspandetailByid($id){//using
 	    $db=$this->getAdapter();
 	      $sql="SELECT 
 	      			e.* ,

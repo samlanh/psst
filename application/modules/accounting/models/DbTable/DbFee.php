@@ -62,7 +62,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	if($search['school_option']>0){
     		$where.=" AND t.school_option=".$search['school_option'];
     	}
-    	if($search['status']>-1){
+    	if($search['status']>-1 AND $search['status']!=''){
     		$where.=" AND t.status=".$search['status'];
     	}
     	

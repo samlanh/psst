@@ -366,7 +366,7 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 				.expenseReceipt ul{text-align:left;
 				padding:0;
 				}
-				.expenseReceipt ul li{list-style-type:none;}
+				.expenseReceipt ul li{list-style-type:none;line-height:18px;}
 				@media print {
 					@page {
 						page: A5;
@@ -375,6 +375,8 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					}
 				}
 				.tablesorter td{border:1px solid #000 !important;}
+				.smallsize{font-size:8px !important;}
+				#lbl_header{width:100%;}
 				
 			</style>
 				<table width="100%"  class="expenseReceipt" cellspacing="0"  cellpadding="0" style=" font-family:Khmer OS Battambang !important; height:10cm; font-size:12px !important;white-space:nowrap;">
@@ -388,8 +390,8 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					</tr>
 					<tr>
 						<td width="30%">
-							<div id="lbl_printby">Print by '.$paidBy.'</div>
-							<label id="lbl_printdate">Print Date '.date('d-m-Y g:i a').'</label>
+							<div id="lbl_printby" class="smallsize">Print by '.$paidBy.'</div>
+							<label id="lbl_printdate" class="smallsize">Print Date '.date('d-m-Y g:i a').'</label>
 						</td>
 						<td valign="top" align="center">
 							<div style="font-size: 14px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div>
@@ -428,12 +430,12 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					<tr>
 						<td align="center">
 							<div
-								style="width: 70%; border-bottom: 1px solid #000; margin-bottom: 10px; margin-top: 40px;"></div>
+								style="width: 70%; border-bottom: 1px solid #000; margin-bottom: 10px; margin-top: 70px;"></div>
 							<div style="margin-top: -11px;">Date : '.date('d / m / Y , H:i:s ',strtotime(Zend_Date::now())).'</div>
 						</td>
 						<td ></td>
 						<td>
-							<div style="width: 70%; border-bottom: 1px solid #000; margin-bottom: 10px; margin-top: 40px;"></div>
+							<div style="width: 70%; border-bottom: 1px solid #000; margin-bottom: 10px; margin-top: 70px;"></div>
 							<div style="margin-top: -11px;">Date :
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /

@@ -192,10 +192,6 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		
 		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$key = new Application_Model_DbTable_DbKeycode();
-		$data=$key->getKeyCodeMiniInv(TRUE);
-		
-		$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
 		
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 		$last_name=$session_user->last_name;
@@ -337,30 +333,145 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		}
 		return $str;
 	}
-	
-	
-	function printByFormatForTeacher(){
+	function getExpenseReceipt(){
 		
-		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$teacherInfo =$dbExternal->getCurrentTeacherInfo();
-		$teacherNameKh = empty($teacherInfo['teacher_name_kh'])?"":$teacherInfo['teacher_name_kh'];
-		$teacherNameEn = empty($teacherInfo['teacher_name_en'])?"":$teacherInfo['teacher_name_en'];
-	
-		$teachName = $teacherNameKh;
-		if(empty($teachName)){
-			$teachName = $teacherNameEn;
-		}else{
-			if(!empty($teacherNameEn)){
-				$teachName = $teachName." / ".$teacherNameEn;
-			}
+		defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
+		defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
+		defined('SHOW_HEADER_RECEIPT') || define('SHOW_HEADER_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_header_receipt'));
+		
+		$paddingTop = PADDINGTOP_RECEIPT.'px';
+		$settingAmtReceipt = AMOUNT_RECEIPT;
+		$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape;':'size:A4 portrait;';
+		$showReport = (SHOW_HEADER_RECEIPT==1)?'':'display:none';
+		
+		
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$last_name=$session_user->last_name;
+		$username = $session_user->first_name;
+		$paidBy= $last_name." ".$username;
+		
+			$str='<style>
+				.noted{
+					white-space: pre-wrap;
+					word-wrap: break-word;
+					word-break: break-all;
+					white-space: pre;
+					font:12px Khmer OS Battambang;
+					line-height:15px;
+					font-weight: normal !important;
+					padding:2px;
+					white-space: normal;
+					width:98%;
+				}
+				.expenseReceipt ul{text-align:left;
+				padding:0;
+				}
+				.expenseReceipt ul li{list-style-type:none;}
+				@media print {
+					@page {
+						page: A5;
+						size: '.$pageSetup.';
+						margin: 0.8cm;
+					}
+				}
+				.tablesorter td{border:1px solid #000 !important;}
+				
+			</style>
+				<table width="100%"  class="expenseReceipt" cellspacing="0"  cellpadding="0" style=" font-family:Khmer OS Battambang !important; height:10cm; font-size:12px !important;white-space:nowrap;">
+					<tr  style="height:'.$paddingTop.'">
+						<td colspan="3" style="'.$showReport.'" align="center" valign="top">
+							<label id="lbl_header"></label>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" style="border-top:2px dashed #000;'.$showReport.'">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="30%">
+							<div id="lbl_printby">Print by '.$paidBy.'</div>
+							<label id="lbl_printdate">Print Date '.date('d-m-Y g:i a').'</label>
+						</td>
+						<td valign="top" align="center">
+							<div style="font-size: 14px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div>
+							<div style="font-size: 12px;sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div>
+						</td>
+						<td width="30%" align="left" >
+							<div style="font-size: 12px;font-weight:bold;">
+								N<sup>o</sup> : <label id="lb_receipt_no"></label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">
+							<ul>
+								<li>សាខា : <label id="bl_branch"></label></li>
+								<li>ចំណាយឱ្យ​  : <label id="bl_payfor"></label></li>
+								<li>ពណ៌នាចំនាយ : <label id="lb_paynote"></label></li>
+								<li>សម្គាល់ : <label id="lb_note" class="noted"></label></li>
+							</ul>
+						</td>
+						<td></td>
+						<td valign="top">
+							<ul>
+								<li>វិក័យប័ត្រ : <label id="lb_invoice"></label></li>
+								<li>ថ្ងៃចំណាយ : <label id="lb_paiddate"></label></li>
+								<li>ចំណាយជា : <label id="lb_paymentmehtod"></label></li>
+								<li>ឈ្មោះធនាគារ : <label id="lb_bank"></label></li>
+								<li>សែក /Account No. : <label id="lb_cheque"></label></li>
+							</ul>
+						</td>
+					</tr>
+						<td colspan="3">
+							<div id="t_amountmoneytype"></div>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<div
+								style="width: 70%; border-bottom: 1px solid #000; margin-bottom: 10px; margin-top: 40px;"></div>
+							<div style="margin-top: -11px;">Date : '.date('d / m / Y , H:i:s ',strtotime(Zend_Date::now())).'</div>
+						</td>
+						<td ></td>
+						<td>
+							<div style="width: 70%; border-bottom: 1px solid #000; margin-bottom: 10px; margin-top: 40px;"></div>
+							<div style="margin-top: -11px;">Date :
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /</div>
+						</td>
+				</tr>
+				<tr>
+					<td align="center" valign="top">
+						<div style="font-weight:bold;color:#000; font-size: 14px;">'.$paidBy.'
+						</div>
+					</td>
+					<td></td>
+					<td  valign="top">
+						<div
+							style="font-weight: bold; color: #000; font-size: 14px;">
+							<strong>Received By :</strong> &nbsp;<label id="lb_receiver"> </label>
+						</div>
+					</td>
+				</tr>
+			</table>';
+		if($settingAmtReceipt>1){
+			$str.="<div style='vertical-align: middle;margin:10px 0px 10px 0px;'></div>
+			<div id='printblog2'></div>";
 		}
-	
-		$string='
-				<ul class="printInfo">
-					<li>Print Date / Time : '.date("d/m/Y"." H:i:s").'</li>
-					<li>Print By : '.$teachName.'</li>
-				<ul>
-		';
-		return $string;
-	}
+	return $str;
 }
+ 
+function printByFormatForTeacher(){ $dbExternal = new
+Application_Model_DbTable_DbExternal(); $teacherInfo
+=$dbExternal->getCurrentTeacherInfo(); $teacherNameKh =
+empty($teacherInfo['teacher_name_kh'])?"":$teacherInfo['teacher_name_kh'];
+$teacherNameEn =
+empty($teacherInfo['teacher_name_en'])?"":$teacherInfo['teacher_name_en'];
+
+$teachName = $teacherNameKh; if(empty($teachName)){ $teachName =
+$teacherNameEn; }else{ if(!empty($teacherNameEn)){ $teachName =
+$teachName." / ".$teacherNameEn; } } $string='
+<ul class="printInfo">
+	<li>Print Date / Time : '.date("d/m/Y"." H:i:s").'</li>
+	<li>Print By : '.$teachName.'</li>
+	<ul>'; return $string; } }

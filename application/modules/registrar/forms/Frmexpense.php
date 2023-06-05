@@ -43,6 +43,10 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		));
 		$_Date->setValue(date('Y-m-d'));
 		
+		if(ENABLE_DATE_PAYMENT==0){
+			$_Date->setAttrib('readOnly', 'readOnly');
+		}
+		
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',

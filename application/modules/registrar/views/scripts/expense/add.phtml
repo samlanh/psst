@@ -11,7 +11,7 @@ $frm = $this->frm_expense;
 	height: 30px;
 }
 #lbl_header {
-    display: initial !important;///
+    display: initial !important;
 }
 table.collape tbody td {
     padding: 2px;
@@ -21,9 +21,7 @@ table.collape tbody td {
 	margin-top:0px !important;
 }
 </style>
- <script>
-	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
- </script>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -191,7 +189,7 @@ table.collape tbody td {
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 					<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
 						 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" />
-					<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+					<input type="button" onclick='cloneReceipt();printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
 						class="button-class button-primary" iconClass="glyphicon glyphicon-print" />
                	</div>
              </div>
@@ -201,145 +199,8 @@ table.collape tbody td {
 
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
-		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
-			<style>
-			@media print {
-					@page {
-						page: A4;
-						size: portrait;
-						margin: 0.8cm;
-					}
-				}
-			</style>
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
-				<tr height="90px;">
-					<td colspan="10"  style="" align="center" valign="top">
-						<label id="lbl_header"></label>
-					</td>
-				</tr>
-				<tr>
-				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-top: -10px;">
-							<tr>
-								<td width="30%">
-								</td>
-								<td width="40%" align="center" valign="top" style="line-height: 20px;">
-									<div style="font-size: 16px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
-									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div> 
-								</td>
-								<td width="30%">
-									<div style="font-size: 12px;font-weight:bold;text-align:center;">
-										N<sup>o</sup> : <label id="lb_receipt_no"></label>
-									</div>
-								</td>
-							</tr>
-						</table>
-				    </td>
-				</tr>
-				<tr>
-					<td colspan="10">
-						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-1px;line-height: 17px;">
-							<tr >
-								<td width="10%"></td>
-								<td width="18%"></td>
-								<td width="9%"></td>
-								<td width="18%"></td>
-								<td width="4%"></td>
-								<td width="8%"></td>
-								<td width="4%"></td>
-								<td width="5%"></td>
-								<td width="3%"></td>
-								<td width="8%"></td>
-							</tr>
-							<tr style="line-height: 15px;">
-								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
-								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
-								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
-								<td valign="top"> :&nbsp; <label id="lb_paiddate"></label> </td>
-								<td colspan="3">ចំណាយជា  </br />Payment Method</td>
-								<td colspan="3" valign="top">:&nbsp;<label id="lb_paymentmehtod"></label></td>
-							</tr>
-							<tr style="line-height: 15px;">
-								<td>សម្គាល់  </br /> Note </td>
-								<td colspan="3" valign="top"> :&nbsp; <label id="lb_note"></label></td>
-								<td colspan="3">វិក័យប័ត្រ  </br />Invoice</td>
-								<td colspan="3" valign="top">:&nbsp;<label id="lb_invoice"></label></td>
-							</tr>
-							<tr>
-								<td colspan="10">
-									<div id="t_amountmoneytype"></div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="10" valign="bottom">
-									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
-										<tr>
-											<td width="20%"></td>
-											<td width="20%"></td>
-											<td width="15%"></td>
-											<td width="15%"></td>
-											<td width="15%"></td>
-											<td width="15%"></td>
-										</tr>
-										<tr>
-											<td colspan="2"  align="center">
-												<div style="margin-top:-5px;"></div>
-											</td>
-											<td colspan="2">
-												&nbsp;
-											</td>
-											<td>
-												<div style="margin-top:-15px;"></div>
-											</td>
-											<td>
-											</td>
-										</tr>
-										<tr>
-											<td colspan="4"></td>
-											<td>
-												<div class="nomargin" style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
-											</td>
-											<td>
-												<div class="nomargin" style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
-											</td>
-										</tr>
-										<tr >
-											<td colspan="2" align="center" valign="top">
-												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
-													<?php 
-													   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
-													   $last_name=$session_user->last_name;
-													   $username = $session_user->first_name;
-													   echo"Paid By : ".$last_name." ".$username;
-													?>
-												</div>
-											</td>
-											<td colspan="2" valign="top">
-												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
-													<strong>Received By :</strong> &nbsp;<label id="lb_receiver"> </label>
-												</div>
-											</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td colspan="2" align="center" >
-												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></div>
-												<div style="margin-top:-11px;">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
-											</td>
-											<td colspan="2" align="center" width="30%">
-												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></div>
-												<div style="margin-top:-11px;">Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / </div>
-											</td>
-											<td colspan="2" align="center"></td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
+		<div id="printexpense" style="width: 19cm !important; height: 12.3cm ; padding: 0px; margin-bottom:30px; ">
+			<?php echo $this->officailExpensereceipt;?>
 		</div>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
@@ -348,7 +209,11 @@ table.collape tbody td {
 	</div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+<script>
+require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+</script>
 <script type="text/javascript">
+
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
@@ -483,39 +348,44 @@ table.collape tbody td {
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
+			dojo.byId("bl_branch").innerHTML = dijit.byId("branch_id").attr('displayedValue');
+			dojo.byId("lb_paynote").innerHTML = dijit.byId("title").attr('displayedValue');
+			
 			dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
 			dojo.byId("lb_receipt_no").innerHTML = new_receipt;
 			dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
-			dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
 			dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
 			dojo.byId("lb_receiver").innerHTML = dijit.byId("receiver").get('value');
 			dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+			dojo.byId("lb_bank").innerHTML = dijit.byId("bank_name").attr('displayedValue');
+			dojo.byId("lb_cheque").innerHTML = dijit.byId("cheque_num").attr('displayedValue');
 			dojo.byId("lb_invoice").innerHTML = dijit.byId("external_invoice").get('value');
 			var rowId = $('#identity').val();
+			let totalPaid = dijit.byId("total_amount").get('value');
 			var rowIDArray = rowId.split(',');
 			template="";
-				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
-					  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
-					  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃ/Price</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួន/QTY</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
+				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:12px;font-family:Khmer OS Battambang !important;  " id="table">'
+					  temp+='<tr class="" style="text-align:center; height:25px;">';
+						  temp+='<td><strong>លរ/No</div></strong></td>';
+						  temp+='<td><strong>ប្រភេទចំណាយ/Expense Type</strong></td>';
+						  temp+='<td><strong>ពណ៌នា/Description</strong></td>';
+						  temp+='<td><strong>តម្លៃ/Price</strong></td>';
+						  temp+='<td><strong>ចំនួន/Qty</strong></td>';
+						  temp+='<td><strong>ចំនួនប្រាក់/Amount</strong></td>';
 					  temp+='</tr>';
 					  n=0;
 					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-					  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<tr style="height: 22px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("price_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("qty_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center">'+dijit.byId("price_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center">'+dijit.byId("qty_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center">'+dijit.byId("total_"+rowIDArray[n]).attr('displayedValue')+'</td>';
 					  i++;
 					  temp+='</tr>';
 					}
 					for(row = n+1;row<4;row++){
-						  temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+						  temp+='<tr style="height: 22px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
 						  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
 						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
 						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
@@ -523,6 +393,11 @@ table.collape tbody td {
 						  temp+='<td style="border:1px solid #000;"></td>';
 						  temp+='</tr>';
 					}
+					 temp+='<tr style="height: 22px;"​ align="center">';
+					 temp+='<td style="border:1px solid #fff !important;border-top:1px solid #000;" colspan="3"></td>';
+					  temp+='<td colspan="2" align="center" style="border-bottom:1px solid #fff !important;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">ចំណាយសរុប/Total Amount</td>';
+					  temp+='<td style="border:1px solid #000 !important;"><label id="lb_total_received">$ '+totalPaid+'</label></td>';
+					  temp+='</tr>';
 				temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			dijit.byId("terms").show();	
@@ -545,6 +420,15 @@ table.collape tbody td {
 		window.frames["print_frame"].window.focus();
 		window.frames["print_frame"].window.print();
 		$('#office_receipt').submit();
+	}
+	function cloneReceipt(){
+		loadingBlock();
+		setTimeout(function () {
+			 <?php if(AMOUNT_RECEIPT>1){?>
+			 	dojo.byId('printblog2').innerHTML = dojo.byId('printexpense').innerHTML;
+			 <?php }?>
+	        HideloadingBlock();
+	    }, 500);
 	}
 
 	function checkValidateAddRow(){

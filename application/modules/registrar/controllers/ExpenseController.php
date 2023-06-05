@@ -79,6 +79,9 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rs_bank = $db->getAllBank();
+    	
+    	$frmpopup = new Application_Form_FrmPopupGlobal();
+    	$this->view->officailExpensereceipt = $frmpopup->getExpenseReceipt();
     }
     public function editAction()
     {

@@ -225,7 +225,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$id = $db->fetchOne($sql);
 		$id = $id + 1;
 		$length = strlen($id) + 1;
-		$pre = '';
+		$pre = 'PM';
 		for($i=$length;$i<=6;$i++){
 			$pre.='0';
 		}

@@ -179,4 +179,109 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		));
 		return $this;		
 	}	
+	public function FrmSearchTutionfee($data=null){
+		$db = new Application_Model_DbTable_DbGlobal();
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+
+		$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
+    	$optionBranch = $db->getAllBranch();
+    	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+    	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+    	$_branch_id->setMultiOptions($_arr_opt_branch);
+    	$_branch_id->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
+    			'required'=>'false',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside height-text',));
+    	$_branch_id->setValue($request->getParam("branch_id"));
+    	if (count($optionBranch)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
+
+		$_title = new Zend_Dojo_Form_Element_TextBox('title');
+		$_title->setAttribs(array(
+				'dojoType'=>$this->text,
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SEARCH")));
+		$_title->setValue($request->getParam("title"));
+		
+		$type_study = new Zend_Dojo_Form_Element_FilteringSelect('type_study');
+		$type_study->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'required' =>'false',
+			'class'=>'fullside',
+			'placeholder'=>$this->tr->translate("TIME"),
+			'onchange'=>'filterClient();',
+			'queryExpr'=>'*${0}*',
+			'autoComplete'=>"false"
+		));
+		$typestudy_opt = $db->getAllTermStudyTitle(1);
+		$type_study->setMultiOptions($typestudy_opt);
+		$type_study->setValue($request->getParam("type_study"));
+
+		$schooloption = new Zend_Dojo_Form_Element_FilteringSelect('school_option');
+		$schooloption->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'required' =>'false',
+			'placeholder'=>$this->tr->translate("SELECT_SCHOOL_OPTIONS"),
+			'class'=>'fullside',
+			'queryExpr'=>'*${0}*',
+			'autoComplete'=>"false"
+		));
+		
+		$rsschool = $db->getAllSchoolOption();
+		$options=array(-1=>$this->tr->translate("SELECT_SCHOOL_OPTIONS"));
+		if(!empty($rsschool))foreach($rsschool AS $row){
+			$options[$row['id']]=$row['name'];
+		}
+		$schooloption->setMultiOptions($options);
+		$schooloption->setValue($request->getParam("school_option"));
+
+		$_is_finished_search = new Zend_Dojo_Form_Element_FilteringSelect('is_finished_search');
+		$_is_finished_search->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'required' =>'false',
+			'placeholder'=>$this->tr->translate("PROCESS_TYPE"),
+			'class'=>'fullside',
+			'queryExpr'=>'*${0}*',
+			'autoComplete'=>"false"
+		));
+		
+		$rows = $db->getProcessTypeView();
+		$options=array(""=>$this->tr->translate("PROCESS_TYPE"));
+		if(!empty($rows))foreach($rows AS $row){
+			$options[$row['id']]=$row['name'];
+		}
+		$_is_finished_search->setMultiOptions($options);
+		$_is_finished_search->setValue($request->getParam("is_finished_search"));
+
+		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
+		$_status->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("ALL_STATUS"),
+				));
+		$_status_opt = array(
+				-1=>$this->tr->translate("ALL_STATUS"),
+				1=>$this->tr->translate("ACTIVE"),
+				0=>$this->tr->translate("DACTIVE"));
+		$_status->setMultiOptions($_status_opt);
+		$_status->setValue($request->getParam("status"));
+		
+		$this->addElements(array(
+			$type_study
+			,$schooloption 
+			,$_is_finished_search
+			,$_status
+			,$_title 
+			,$_branch_id
+		));
+		return $this;		
+	}	
 }

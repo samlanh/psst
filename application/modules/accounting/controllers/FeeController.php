@@ -40,14 +40,9 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$this->view->branch = $_db->getAllBranch();    	
     	$frm = new Accounting_Form_FrmFee();
-    	$frm->FrmTutionfee();
+    	$frm->FrmSearchTutionfee();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_fee = $frm;
-    	
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
     }
     public function addAction()
     {

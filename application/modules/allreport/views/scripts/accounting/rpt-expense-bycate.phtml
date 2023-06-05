@@ -3,7 +3,7 @@
 	echo $this->headTitle($tr->translate('RPT_CATE_EXPENSE')); 
 	$frm=$this->form_search;
 ?>	
-<div style="background: #fff;width: 100%;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+<div style="width: 100%;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
@@ -44,7 +44,15 @@
 					page-break-inside:avoid; page-break-after:auto;
 				  }
 					table tr th{background-color: #ccc;}	
-					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
+					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }	
+
+					@media print {
+						@page {
+							page: A4;
+							size: landscape;
+							margin: 0.8cm;
+						}
+					}
 		</style>
 		<div id="exportExcel">
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">

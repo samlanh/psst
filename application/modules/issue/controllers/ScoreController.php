@@ -148,15 +148,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
-	function getGradeAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$_dbgb = new Application_Model_DbTable_DbGlobal();
-			$grade = $_dbgb->getAllGradeStudyByDegree($data['degree']);
-			print_r(Zend_Json::encode($grade));
-			exit();
-		}
-	}
+	
 	function getStudentAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

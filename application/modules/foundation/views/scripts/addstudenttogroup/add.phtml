@@ -117,6 +117,17 @@ a.btnstyle:hover{color:#eee;}
 					                   </div>
 					                </div>
 								</div>
+								<div class="form-group">
+					                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+					                <div class="col-md-7 col-sm-7 col-xs-12">
+					                	<select id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
+										   	<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+										   	<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+										   	<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+										   	<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+										</select>
+					                </div>
+					             </div>
 				                <div class="form-group">
 			                   		 <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
 					                 </label>
@@ -167,11 +178,18 @@ a.btnstyle:hover{color:#eee;}
 							dijit.byId('branch_id').focus();
 							return false;
 						}
-						group = dijit.byId('group').get('value');
-						if(group == -1){
-							alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
-							return false;
-						}
+							groupId = dijit.byId('group').get('value');
+								if(groupId<=0){
+									alert('<?php echo $tr->translate("SELECT_GROUP");?>');
+									dijit.byId('group').focus();
+									return false;
+								}
+								identity = dijit.byId('identity').get('value');
+								if(identity<=0){
+									alert('<?php echo $tr->translate("SELECT_STUDENT");?>');
+									return false;
+								}
+
 						loadingBlock();	
 						return true;
 	   				}else {
@@ -199,7 +217,11 @@ a.btnstyle:hover{color:#eee;}
 										 <div class="clearfix" style="margin-top:10px;"></div>
 										<div class="col-md-12 col-sm-12 col-xs-12">
 											<select multiple id="public-methods" name="public-methods[]" >
-												<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
+												<?php $no=0;
+												$strStuId='';
+												if(!empty($this->rs)) foreach($this->rs as $key=> $row){ $no++;
+												$strStuId = ($key==0)?$row['gd_id']:$strStuId.=','.$row['gd_id'];
+												?>
 													<option value="<?php echo $row['gd_id'];?>">
 														<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
 													</option>
@@ -214,36 +236,6 @@ a.btnstyle:hover{color:#eee;}
 						            <div class="col-md-6 col-sm-6 col-xs-12">
 						            	<div class="card-blogform">
 											<div class="card-body">
-							               	  <div class="form-group">
-												<div class="d-flex"> 
-													<div class="settings-main-icon ">
-														<i class="fa fa-sitemap" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_INFO");?></p>
-													</div> 
-												</div>
-											  </div>
-								                <div class="form-group">
-								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
-								                   <div class="col-md-7 col-sm-7 col-xs-12">
-								                   		<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getAllGroup();"/>
-								                   </div>
-								                </div>
-								                <div class="form-group">
-								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP_CODE");?> <span class="required">*</span> :
-								                   </label>
-								                   <div class="col-md-7 col-sm-7 col-xs-12">
-								                   		<input id="group" />
-								                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
-								                   </div>
-								                </div>
-								              </div>
-								          </div>
-						            </div>
-						            <div class="col-md-6 col-sm-6 col-xs-12">
-										<div class="card-blogform">
-											<div class="card-body">
 												<div class="form-group">
 								                   <div class="d-flex"> 
 														<div class="settings-main-icon ">
@@ -256,16 +248,43 @@ a.btnstyle:hover{color:#eee;}
 								                </div>
 								            	<div class="form-group">
 								                   <div class="col-md-12 col-sm-12 col-xs-12">
-								                   		<label id="lbldetail" name=lbldetail style="border: 1px solid #ccc; background:#fff; font-size: 13px; min-height:70px;display:block;"></label>
-														<input type="hidden" name="academic_year_group" id="academic_year_group" dojoType="dijit.form.TextBox" /> 
-														<input type="hidden" name="degree_group" id="degree_group" dojoType="dijit.form.TextBox" />
-														<input type="hidden" name="grade_group" id="grade_group" dojoType="dijit.form.TextBox" />
-														<input type="hidden" name="session_group" id="session_group" dojoType="dijit.form.TextBox" />
-														<input type="hidden" name="room_group" id="room_group" dojoType="dijit.form.TextBox" />
+								                   		<label id="lbldetail" name=lbldetail style="background:#fff; font-size: 12px; min-height:37px;display:block;"></label>
+														<input type="hidden" name="allStudent" id="allStudent" dojoType="dijit.form.TextBox" value="<?php echo $strStuId;?>"/> 
+								                   		<input type="hidden" id="identity"  name="identity" id="allStudent" dojoType="dijit.form.TextBox" /> 
 								                   </div>
 								                </div>
 						               		 </div>
 						                </div>
+						            	
+						            	
+						            </div>
+						            <div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="card-blogform">
+											<div class="card-body">
+							               	  <div class="form-group">
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-sitemap" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-5 col-sm-5 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_INFO");?></p>
+													</div> 
+													<div class="col-md-5 col-sm-5 col-xs-12">
+								                   		<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getAllGroup();"/>
+								                   </div>
+												</div>
+											  </div>
+								                
+								                <div class="form-group">
+								                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP_CODE");?> <span class="required">*</span> :
+								                   </label>
+								                   <div class="col-md-7 col-sm-7 col-xs-12">
+								                   		<input id="group" />
+								                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
+								                   </div>
+								                </div>
+								              </div>
+								          </div>
 						            </div>
 						        </div>
 						         <div class="card-box">
@@ -348,6 +367,30 @@ dojo.ready(function(){
 	getAllGroup();
 });
 
+
+$('#deselect-all').click(function(){
+  $('#public-methods').multiSelect('deselect_all');
+  dijit.byId('identity').attr('value','');
+});
+
+$('#public-methods').multiSelect({
+	afterSelect: function(values){
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+values);
+		} else {$("#identity").val(values);}
+	},
+	afterDeselect: function(values){
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == values) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+	}
+});
+
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getallGrade(){
 	dept_id = dijit.byId('degree').get('value');
@@ -385,11 +428,6 @@ function getGroupDetail(){
 		handleAs:"json",
 		load: function(data) {
 			dojo.byId('lbldetail').innerHTML='<span style="color:red;">Academic :  </span>'+data.year+'<span style="color:red;"> , Degree :  </span>'+data.degree+'<br /><span style="color:red;">  Grade :  </span>'+data.grade+'<span style="color:red;"> , Session :  </span>'+data.session+'<span style="color:red;"> , Room :  </span>'+data.room;   
-			dijit.byId('academic_year_group').attr('value',data.academic_year_id);
-			dijit.byId('degree_group').attr('value',data.degree_id);
-			dijit.byId('grade_group').attr('value',data.grade_id);
-			dijit.byId('session_group').attr('value',data.session_id);
-			dijit.byId('room_group').attr('value',data.room_id);
 		},
 		error: function(err) {
 		}

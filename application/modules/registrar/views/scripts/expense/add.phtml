@@ -1,27 +1,10 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-$frm = $this->frm_expense;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+	$frm = $this->frm_expense;
 ?>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
-<title><?php echo $tr->translate("ADD_OTHER_EXPENSE")?></title>
-<style>	
-.fullside {
-	width: 100%;
-	height: 30px;
-}
-#lbl_header {
-    display: initial !important;
-}
-table.collape tbody td {
-    padding: 2px;
-    border-bottom: solid 1px #eee;
-}
-.nomargin{
-	margin-top:0px !important;
-}
-</style>
 
+<title><?php echo $tr->translate("ADD_OTHER_EXPENSE")?></title>
 <div class="card">
 	<div class="card-content collapse show">
 		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -147,29 +130,23 @@ table.collape tbody td {
 											</div>
 										</div>
 										<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<select placeHolder='<?php echo $tr->translate("SELECT_BANK");?>' name="bank_name" id="bank_name" required="false" class="fullside" dojoType="dijit.form.FilteringSelect" >
-														<option value=""></option>
-														<?php if(!empty($this->rs_bank)){foreach ($this->rs_bank as $rs_bank){?>
-															<option value="<?php echo $rs_bank['id'];?>"><?php echo $rs_bank['name'];?></option>
-														<?php }}?>
-													</select>
-												</div>
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BANK_NAME");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('bank_name');?>
 											</div>
-											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?>/Acc No.
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement('cheque_num');?>
-												</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CHEQUE_NO");?>/Acc No.
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement('cheque_num');?>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-
+						</div>
 	             </div>
 	        </div>
 	        <div class="clearfix"></div>
@@ -211,12 +188,11 @@ table.collape tbody td {
 <script>
 require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
 </script>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
 	dojo.ready(function(){
 		getReceiptNumber("");
 		addRow();
@@ -512,7 +488,7 @@ require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
 								<tr>
 									<td colspan="2" align="center">
 										<input type="button" onclick="addCateExpense();" value="save_new" name="ex_save_new"  id="ex_save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-											iconClass="dijitEditorIcon dijitEditorIconSave" />
+											class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
 									</td>
 								</tr>
 							</table>	

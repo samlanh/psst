@@ -54,19 +54,19 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	 	$_db->beginTransaction();
 	 	try{
 			$arr = array(	
-					'branch_id'		=>$data['branch_id'],
-					'title'			=>$data['title'],
-					'total_amount'	=>$data['total_amount'],
-					'invoice'		=>$data['invoice'],
-					'payment_type'	=>$data['payment_method'],
-					'description'	=>$data['Description'],
-					'receiver'		=>$data['receiver'],
-					'cheque_no'		=>$data['cheque_num'],
-					'external_invoice'=>$data['external_invoice'],
-					'date'			=>$data['Date'],
-					'status'		=>$data['Stutas'],
-					'user_id'		=>$this->getUserId(),
-					//'create_date'=>date('Y-m-d H:i:s'),
+					'branch_id'		=> $data['branch_id'],
+					'title'			=> $data['title'],
+					'total_amount'	=> $data['total_amount'],
+					'invoice'		=> $data['invoice'],
+					'payment_type'	=> $data['payment_method'],
+					'bank_id'		=> $data['bank_name'],
+					'description'	=> $data['Description'],
+					'receiver'		=> $data['receiver'],
+					'cheque_no'		=> $data['cheque_num'],
+					'external_invoice'=> $data['external_invoice'],
+					'date'			=> $data['Date'],
+					'status'		=> $data['Stutas'],
+					'user_id'		=> $this->getUserId(),
 				);
 			$where=" id = ".$data['id'];
 			$this->update($arr, $where);
@@ -116,14 +116,14 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		$sql=" SELECT 
 					id,
 					(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
+					invoice,
+					external_invoice,
+					(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
+					(SELECT bank_name FROM `rms_bank` b WHERE b.id=bank_id LIMIT 1) AS bank_name,
+					total_amount,
+					date,
 					receiver,
 					title,
-					invoice,
-					(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
-					external_invoice,
-					total_amount,
-					description,
-					date,
 					(SELECT first_name FROM `rms_users` WHERE rms_users.id=ln_expense.user_id LIMIT 1) as user_name
 			";
 		$sql.=$dbp->caseStatusShowImage("ln_expense.status");

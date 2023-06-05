@@ -7,38 +7,7 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-    function getAllIncomeExpense($search){
-    	$db=$this->getAdapter();
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	
-    	$sql = "SELECT *,
-    			
-    			(SELECT CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id)  as name
-    			 FROM ln_income_expense  WHERE 1 $branch_id  ";
-    	$where= ' ';
-    	$order=" ORDER BY id DESC ";
-    	
-    	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
-    	}
-    	
-    	if(!empty($search['branch_id'])){
-    		$where.=" AND branch_id = ".$search['branch_id'] ;
-    	}
-    	if(!empty($search['user'])){
-    		$where.=" AND user_id = ".$search['user'] ;
-    	}
-    	
-    	if(!empty($search['txtsearch'])){
-    		$s_where = array();
-    		$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " account_id LIKE '%{$s_search}%'";
-    		$s_where[] = " invoice LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
-    	return $db->fetchAll($sql.$where.$order);
-    }
+    
 	public function getAllexspan($search){//report expense
 	   $db=$this->getAdapter();
 	   $sql="SELECT e.* ,

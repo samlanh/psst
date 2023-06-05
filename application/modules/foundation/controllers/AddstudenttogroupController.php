@@ -28,12 +28,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$rs= $db->getGroupDetail($search);
 		$list = new Application_Form_Frmtable();
 		$this->view->search = $search;
-		if(!empty($rs)){
-		}
-		else{
-			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-		}
-		$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
+		$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS","AMOUNT_STUDENT");
 		$link=array(
 				'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
 		);
@@ -58,7 +53,8 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 						'degree' => '',
 						'grade' => '',
 						'session' => '',
-						'academic_year'=> ''
+						'academic_year'=> '',
+						'sortStundent'=>0
 					);
 			}
 			$this->view->search=$search;
@@ -93,59 +89,4 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			}
 		}
 	}
-	
-	
-	function editAction(){
-		$this->_redirect('/foundation/addstudenttogroup');
-		exit();
-		$id=$this->getRequest()->getParam("id");
-		$_db = new Foundation_Model_DbTable_DbAddStudentToGroup();
-		$g_id = $_db->getGroupById($id);
-		$row = $_db->getStudentGroupAddStudent($id);
-		$this->view->rr = $row;
-			try{
-				if($this->getRequest()->isPost()){
-					$_data=$this->getRequest()->getPost();
-					$search = array(
-							'degree' => $_data['degree'],
-							'grade' => $_data['grade'],
-							'session' => $_data['session'],
-							'academy'=> $_data['academy']);
-					$rs = $_db->getSearchStudent($search);
-					$this->view->rs = $rs;
-				}else{
-					$search = array(
-							'degree' => 0,
-							'grade' => 0,
-							'session' => 0,
-							'academy'=> 0
-							);
-				}
-			
-				$this->view->value=$search;
-		
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("APPLICATION_ERROR");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $_db->getAllDegreeName();
-		
-		$db=new Application_Model_DbTable_DbGlobal();
-		$this->view->rs_session=$db->getSession();
-	}
-	function getGradeAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-// 			$db = new Foundation_Model_DbTable_DbStudent();
-// 			$grade = $db->getAllGrade($data['dept_id']);
-			$_dbgb = new Application_Model_DbTable_DbGlobal();
-			$grade = $_dbgb->getAllGradeStudyByDegree($data['dept_id']);
-			array_unshift($grade, array ( 'id' => '', 'name' => $this->tr->translate("SELECT_GRADE")) );
-			print_r(Zend_Json::encode($grade));
-			exit();
-		}
-	}
-	
-	
 }

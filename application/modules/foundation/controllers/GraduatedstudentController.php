@@ -99,22 +99,4 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 		}
 	}
 
-	function getGradeAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-			$student = $db->getGradeByDegree($data['dept_id']);
-			print_r(Zend_Json::encode($student));
-			exit();
-		}
-	}
-    function addGroupAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Foundation_Model_DbTable_DbGraduatedStudent();
-    		$student = $db->AddNewGroupAjax($data);
-    		print_r(Zend_Json::encode($student));
-    		exit();
-    	}
-    }
 }

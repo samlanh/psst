@@ -33,11 +33,11 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","RECEIVER","EXPENSE_TITLE","RECEIPT_NO","PAYMENT_METHOD","INVOICE","TOTAL_EXPENSE","NOTE","FOR_DATE","BY_USER","STATUS");
+    		$collumns = array("BRANCH","RECEIPT_NO","INVOICE","PAYMENT_METHOD","BANK_NAME","TOTAL_EXPENSE","FOR_DATE","RECEIVER","EXPENSE_TITLE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'expense','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'title'=>$link,'invoice'=>$link,'receiver'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'bank_name'=>$link,'payment_type'=>$link,'invoice'=>$link,'external_invoice'=>$link,'total_amount'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -76,9 +76,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
-    	
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rs_bank = $db->getAllBank();
     	
     	$frmpopup = new Application_Form_FrmPopupGlobal();
     	$this->view->officailExpensereceipt = $frmpopup->getExpenseReceipt();
@@ -119,9 +116,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	 
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
-    	
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rs_bank = $db->getAllBank();
     	
     	$frmpopup = new Application_Form_FrmPopupGlobal();
     	$this->view->officailExpensereceipt = $frmpopup->getExpenseReceipt();

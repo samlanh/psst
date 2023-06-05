@@ -133,26 +133,8 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		}
 	}	
 	
-	function getGradeAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-			$student = $db->getGradeByDegree($data['dept_id']);
-			print_r(Zend_Json::encode($student));
-			exit();
-		}
-	}
 	
-    function addGroupAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-    		$student = $db->AddNewGroupAjax($data);
-    		print_r(Zend_Json::encode($student));
-    		exit();
-    	}
-    }
-	
+    
 	
 }
 

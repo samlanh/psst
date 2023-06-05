@@ -109,13 +109,24 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		
 		$external_invoice = new Zend_Dojo_Form_Element_ValidationTextBox('external_invoice');
 		$external_invoice->setAttribs(array(
-				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
+			'dojoType'=>'dijit.form.TextBox',
+			'class'=>'fullside',
 		));
-// 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$invoice_no= $_db->getExpenseRecieptNo();
-// 		$db = new Registrar_Model_DbTable_DbIncome();
 
+		$bank_id = new Zend_Dojo_Form_Element_FilteringSelect('bank_name');
+		$bank_id->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'required' =>'false',
+			'class'=>'fullside',
+		));
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$rows = $db->getAllBank();
+		$options = array();
+		if(!empty($rows))foreach($rows AS $row){
+			$options[$row['id']]=$row['name'];
+		}
+		$bank_id->setMultiOptions($options);
 		
 		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
 		$payment_method->setAttribs(array(
@@ -128,6 +139,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		$id = new Zend_Form_Element_Hidden("id");
 		if($data!=null){
 			$payment_method->setValue($data['payment_type']);
+			$bank_id->setValue($data['bank_id']);
 			$_branch_id->setValue($data['branch_id']);
 			$title->setValue($data['title']);
 			$receiver->setValue($data['receiver']);
@@ -142,7 +154,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			$external_invoice->setValue($data['external_invoice']);
 		}
 		
-		$this->addElements(array($cheque_num,$invoice,$payment_method,$title,$_Date ,$receiver,$_stutas,$_Description,$total_income,
+		$this->addElements(array($bank_id,$cheque_num,$invoice,$payment_method,$title,$_Date ,$receiver,$_stutas,$_Description,$total_income,
 				$total_amount,$convert_to_dollar,$_branch_id,$for_date,$id,$external_invoice));
 		return $this;
 		

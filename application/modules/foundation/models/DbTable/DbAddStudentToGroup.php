@@ -35,9 +35,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
 					`g`.`note`,
-					(select $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id LIMIT 1)AS remain_Student
+					(SELECT $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
+					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student
 				FROM
 					rms_group g
 				where
@@ -83,7 +82,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('g.`branch_id`');
-		
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
@@ -139,13 +137,15 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	}
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
+		$db->beginTransaction();
 		try{
-			if(!empty($_data['public-methods'])){
-				$dbGroup = new Foundation_Model_DbTable_DbGroup();
-				$group_info = $dbGroup->getGroupById($_data['group']);
-				$all_stu_id = $_data['public-methods'];
-				
-				foreach ($all_stu_id as $stu_id){
+			if(!empty($_data['identity'])){
+					
+					$dbGroup = new Foundation_Model_DbTable_DbGroup();
+					$group_info = $dbGroup->getGroupById($_data['group']);
+					
+					$ids = explode(',', $_data['identity']);
+					if(!empty($ids))foreach ($ids as $stu_id){
 					
 					$_arrcheck = array(
 						'gd_id'	=>$stu_id,
@@ -180,10 +180,13 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				);
 				$where = 'id = '.$_data['group'];
 				$this->update($data_gro, $where);
+				$db->commit();
 			}
+			
 		}catch(Exception $e){
-			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
 	}
 
@@ -197,11 +200,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				s.stu_khname,
 				s.last_name,
 				s.sex,
-				sd.degree,
-				sd.grade,
-				sd.feeId AS fee_id,
-				sd.academic_year,
-				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
 				(SELECT `title` FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
 			  FROM 
 			  	rms_student AS s,
@@ -228,9 +226,22 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			if(!empty($search['branch_id'])){
 				$sql.=" AND s.branch_id =".$search['branch_id'];
 			}
+			
 			$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-			$sql.=" ORDER BY s.stu_id DESC ";
-		return $db->fetchAll($sql);
+			
+			$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+			
+			$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+			if(!empty($search['sortStundent'])){
+				if($search['sortStundent']==1){
+					$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+				}else if($search['sortStundent']==2){
+					$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+				}else if($search['sortStundent']==3){
+					$order=" ORDER BY (SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+				}
+			}
+		return $db->fetchAll($sql.$order);
 	}
 	function checkStudentGroupDetailRow($_data){
 		$db=$this->getAdapter();

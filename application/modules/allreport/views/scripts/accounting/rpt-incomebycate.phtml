@@ -48,7 +48,14 @@
 				.padd tr th{  background-color: #ccc; }
 				th,td{ padding:0 1px;}
 				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-				td{padding:0 3px; }
+				td{padding:0 3px;}
+					@media print{
+						@page {
+							page: A4;
+							size: portrait;
+							margin: 0.8cm;
+						}
+					}
 			</style>
 		<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
 			<tr>
@@ -62,7 +69,7 @@
 				<td width="20%" align="center">
 				</td>
 				<td width="60%" align="center">
-					<div style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
+					<div style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
 					<strong style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?>For <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="20%" align="center"><label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label></td>
@@ -74,7 +81,7 @@
 				<td colspan="3">
 					<table class="padd" width="100%" align="left" style="white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
 						<thead>
-							<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
+							<tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
 								<td style="text-align: right;" colspan="2"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 								<td style=""></td>
 								<td style=""><?php echo $tr->translate('TOTAL_INCOME')?></td>
@@ -89,7 +96,7 @@
 							$no=0;
 						 ?>
 						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-							<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+							<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;"><?php echo $rs['category_name'];?></td>
 								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
@@ -107,21 +114,21 @@
 						  }
 						  
 						  if($total_penalty!=0){ ?>
-					  		<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+					  		<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;"><?php echo $tr->translate('FINE');?></td>
 								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
 								<td style=""><?php echo number_format($total_penalty,2);?></td>
 							</tr>
 						  <?php }if($credit_memo>0){?>
-						  	<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+						  	<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
 								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
 								<td style=""><?php echo number_format($credit_memo,2);?></td>
 							</tr>
 						  <?php }?>
-						  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+						  <tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
 								<td style="white-space: nowrap;width:200px;"></td>
@@ -134,7 +141,7 @@
 							</tr>
 						  
 						   <?php if(!empty($this->rsincome)){ foreach($this->rsincome as $key => $rs){?>
-							  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+							  <tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;"><?php echo $rs['income_category'];?></td>
 								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
@@ -144,7 +151,7 @@
 								 	$total_otherincome = $total_otherincome + $rs['total_income'];
 						 	 	}
 						 	 	?>
-						 	 <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+						 	 <tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 								<td style=""></td>
 								<td style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTAL');?></td>
 								<td style="white-space: nowrap;width:200px;"></td>
@@ -169,7 +176,7 @@
 							<td width="30%"><?php echo $tr->translate("CREATE_WORK_DATE");?></td>
 						</tr>
 						<tr style="text-align: center;">
-							<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
+							<td width="30%" style="font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light'"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
 							<td width="30%"><?php echo $tr->translate("ACCOUNTANT_MNG");?></td>
 							<td width="30%"><?php echo $tr->translate("CASHIER");?></td>
 						</tr>

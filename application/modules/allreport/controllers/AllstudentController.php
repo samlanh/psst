@@ -193,7 +193,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 		
 	}	
-	public function rptStudentStatisticAction(){
+	public function rptStudentStatisticAction(){//using
 		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -347,11 +347,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$this->view->rs = $db->getGroupDetail($search);
-		
-// 		$_db = new Global_Model_DbTable_DbGroup();
-// 		$teacher = $_db->getAllTeacher();
-// 		$this->view->teacher = $teacher;
-		
 		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();

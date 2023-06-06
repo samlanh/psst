@@ -1372,7 +1372,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function getGroupBYStudentGrade($search){//រាប់សិស្សទាំងអស់ មិនគិតឈប់
+    function getGroupBYStudentGrade($search){//using
     	$db = $this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
@@ -1388,87 +1388,62 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$degree = "rms_items.title_en";
     	}
     	$sql="SELECT 
-				g.branch_id,
-				(SELECT $branch FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
-				g.academic_year,
+				s.branch_id,
+				(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+				gds.academic_year,
+				gds.session,
 				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gds.academic_year LIMIT 1) AS academic_year_name,
-				g.session,
-				(SELECT $label FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1) AS `session_name`, 
-				g.grade,
-				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
-				g.degree,
-				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
-				COUNT(gds.stu_id) AS total_stu
+				(SELECT $label FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=gds.session LIMIT 1) AS `session_name`, 
+				gds.grade,
+				gds.degree,
+				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
+				(SELECT $degree FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+				COUNT(gds.stu_id) AS totalStu,
+				COUNT(DISTINCT  gds.`is_newstudent`) AS newStudent,
+				COUNT(if(gds.is_newstudent = '0', gds.is_newstudent, NULL)) AS oldStudent,
+				COUNT(if(gds.stop_type = '1', gds.stop_type, NULL)) AS stopStudent,
+				COUNT(if(gds.stop_type = '2', gds.stop_type, NULL)) AS suspendStudent
+				
 			FROM 
 				`rms_group_detail_student` AS gds,
-				`rms_group` AS g,
 				rms_student as s
 			WHERE 
 				gds.itemType=1 
-    			AND g.id = gds.group_id 
-    			and gds.stu_id = s.stu_id
-    			and s.status = 1 
+    			AND gds.stu_id = s.stu_id
+    			AND s.status = 1 
+    			AND s.customer_type=1
     	";
     	$where=' ';
     	if(($search['branch_id'])>0){
-    		$where.=' AND g.branch_id='.$search['branch_id'];
+    		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
-    	if(($search['study_status'])>0){
-    		$where.=' AND g.is_pass='.$search['study_status'];
-    	}
+//     	if(($search['study_status'])>0){
+//     		$where.=' AND g.is_pass='.$search['study_status'];
+//     	}
     	if(!empty($search['academic_year'])){
-    		$where.=' AND g.academic_year='.$search['academic_year'];
+    		$where.=' AND gds.academic_year='.$search['academic_year'];
     	}
     	if(!empty($search['degree'])){
-    		$where.=' AND g.degree='.$search['degree'];
+    		$where.=' AND gds.degree='.$search['degree'];
     	}
     	if(!empty($search['grade'])){
-    		$where.=' AND g.grade='.$search['grade'];
+    		$where.=' AND gds.grade='.$search['grade'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND g.session='.$search['session'];
+    		$where.=' AND gds.session='.$search['session'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission("g.branch_id");
-    	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
-    	$group_by = " GROUP BY g.branch_id,g.`academic_year`,
-			g.`degree`,g.`grade`,g.`session`";
-    	$order_by = " ORDER BY g.branch_id DESC,g.`academic_year` ASC,
-			g.`degree` ASC,g.`grade` ASC,g.`session` ASC ";
+    	$where.=$dbp->getAccessPermission("s.branch_id");
+    	
+    	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `gds`.`degree` )');
+
+    	$group_by = " GROUP BY gds.branch_id,gds.`academic_year`,
+			gds.`degree`,gds.`grade`,gds.`session`";
+    	
+    	$order_by = " ORDER BY s.branch_id DESC,gds.`academic_year` ASC, gds.`degree` ASC,gds.`grade` ASC,gds.`session` ASC ";
     	return $db->fetchAll($sql.$where.$group_by.$order_by);
     }
-    function getCountStuBYtype($branch_id,$academic_year,$degree,$grade,$session,$status_study=0,$is_new=null){
-    	$db = $this->getAdapter();
-    	$sql="SELECT 
-				COUNT(gds.stu_id) AS total_stu
-			FROM 
-				`rms_group_detail_student` AS gds,
-				`rms_group` AS g,
-				rms_student as s
-			WHERE 
-				gds.itemType=1 
-				AND g.id = gds.group_id
-				AND gds.stu_id = s.stu_id
-    		    AND s.status = 1
-				AND g.branch_id =$branch_id
-				AND g.academic_year=$academic_year
-				AND g.degree = $degree
-				AND g.grade = $grade
-				AND g.session = $session ";
-    	if (!empty($is_new)){
-    		$sql.=" AND gds.is_newstudent = 1";
-    	}else{
-    		if($status_study!=0){
-    			$sql.=" AND gds.stop_type != 0";
-    		}else{
-    			$sql.=" AND gds.stop_type = 0";
-    		}
-//     		if($status_study>0){
-//     			$sql.=' AND g.is_pass='.$status_study;
-//     		}
-    	}
-    	return $db->fetchOne($sql);
-    }
+    
     
     function getStudenCetificate($search){
     	$db = $this->getAdapter();

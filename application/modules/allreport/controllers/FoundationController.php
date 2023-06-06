@@ -13,7 +13,6 @@ public function init()
 		
 	}
 	
-	
 	public function rptamountstudentbyyearAction()
 	{
 		$db= new Allreport_Model_DbTable_DbRptAmountStudentByYear();

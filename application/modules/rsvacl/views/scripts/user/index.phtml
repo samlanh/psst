@@ -27,12 +27,15 @@
 		<div class="card-box">
 			<form name="frmlist_users" action="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-	               <div class="col-md-2 col-sm-2 col-xs-12">
-	               		<input class="fullside" type="text" name="txtsearch" id="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_NAME_USER");?>"  dojoType="dijit.form.TextBox"
-				 style="height: 30px;" value='<?php echo $this->txtsearch;?>'/>
+	             
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+	               		<?php echo $frm->getElement('adv_search');?>
+	               </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+	               		<?php echo $frm->getElement('branch_id');?>
 	               </div>
 	               <div class="col-md-2 col-sm-2 col-xs-12">
-	               		<select class="fullside" name="user_type" id="user_type"  onChange="document.frmlist_agent.submit();" style=" height: 30px;" dojoType="dijit.form.FilteringSelect"> 
+	               		<select class="fullside" name="user_type" id="user_type"  onChange="document.frmlist_agent.submit();" style=" height: 30px;" dojoType="dijit.form.FilteringSelect" required="false" placeholder="<?php echo $tr->translate("PLEASE_USER_TYPE");?>"> 
 							<option value="-1" <?php if($this->user_type == -1) echo 'selected="selected"';?> ><?php echo $tr->translate("PLEASE_USER_TYPE");?></option> 
 							<?php foreach ($this->user_typelist as $key => $ut) : ?>
 								<option value="<?php echo $ut['id'];?>" <?php if($ut['id'] == $this->user_type) echo 'selected'?>><?php echo $ut['name'];?></option>
@@ -40,7 +43,7 @@
 						</select>
 	               </div>
 	               <div class="col-md-2 col-sm-2 col-xs-12">
-	               		<?php echo $frm->getElement('status_search');?>
+	               		<?php echo $frm->getElement('status');?>
 	               </div>
 	               <div class="col-md-2 col-sm-2 col-xs-12">
 	               		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH")?></button>

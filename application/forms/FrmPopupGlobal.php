@@ -369,8 +369,7 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 				.expenseReceipt ul li{list-style-type:none;line-height:18px;}
 				@media print {
 					@page {
-						page: A5;
-						size: '.$pageSetup.';
+						'.$pageSetup.';
 						margin: 0.8cm;
 					}
 				}

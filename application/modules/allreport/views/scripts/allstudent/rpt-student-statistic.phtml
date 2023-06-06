@@ -32,15 +32,17 @@ table.tb-footer tr.style-head {
 	            	<div class="col-md-3 col-sm-3 col-xs-12">
 	            		<?php echo $frm->getElement("degree");?>
 	            	</div>
-	            </div>
-	            <div class="form-group">
-	            	<div class="col-md-3 col-sm-3 col-xs-12">
+	            	<div class="col-md-2 col-sm-2 col-xs-12">
 	            		<input id="grade" />
 	            	</div>
+	            	<div class="col-md-1 col-sm-1 col-xs-12"></div>
+	            </div>
+	            <div class="form-group">
+	            	
 	            	<div class="col-md-3 col-sm-3 col-xs-12">
 	            		<?php echo $frm->getElement("session");?>
 	            	</div>
-	            	<div class="col-md-3 col-sm-3 col-xs-12">
+	            	<div class="col-md-3 col-sm-3 col-xs-12" style="display: none;">
 	            			<?php echo $frm->getElement("study_status");?>
 	            	</div>
 	            	<div class="col-md-3 col-sm-3 col-xs-12">
@@ -58,47 +60,47 @@ table.tb-footer tr.style-head {
 				<td width="15%" align="center">
 				</td>
 				<td width="70%"  align="center">
-					<span style=" color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
+					<span style=" color:#4839bd; font-size:14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
 					<span style=" color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></span>
 				</td>
 				<td width="15%" align="center">
 				</td>
 			</tr>
 		<style>
-			table tr th{
-				border: 1px solid #000;	
-				text-align: center;
-				padding: 3px 2px;
-			}
-			th,td{  color:#4839bd;}
-			table {page-break-inside:auto }
-			tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			
-			table.content-data{
-				border-collapse:collapse;
-				width:100%;
-				border:1px solid #4839bd; 
-				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
-				white-space: nowrap;
-				margin:0 auto;
-				color:#4839bd;
-				margin:0 auto;
-			}
-			table.content-data thead tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 20px; 
-				background: #ccd9ff;
-				text-align: center;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}
+				table tr th{
+					border: 1px solid #000;	
+					text-align: center;
+					padding: 3px 2px;
+				}
+				table {page-break-inside:auto }
+				tr{ page-break-inside:avoid; page-break-after:auto; }
+				table.content-data{
+					border-collapse:collapse;
+					width:100%;
+					border:1px solid #4839bd; 
+					font-family:'Times New Roman','Khmer OS Battambang';
+					font-size:12px;
+					white-space: nowrap;
+					margin:0 auto;
+					color:#4839bd;
+					margin:0 auto;
+				}
+				table.content-data thead tr.style-head {
+				   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 20px; 
+					background: #ccd9ff;
+					text-align: center;
+				}
+				table.content-data tr.style-rowdata {
+					font-size:12px; 
+					height: 23px;
+				}
+				@media print {
+					@page {
+						page: A4;
+						size: portrait;;
+						margin: 0.5cm;
+					}
+				}
 		</style>
 			<tr>
 				<td colspan="3" valign="top">
@@ -108,7 +110,7 @@ table.tb-footer tr.style-head {
 						<thead>
 							<tr class="style-head">
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-								<td colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
+								<td colspan="10"><?php echo $tr->translate("STUDY_INFO");?>
 									<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 								</td>
 							</tr>
@@ -118,28 +120,35 @@ table.tb-footer tr.style-head {
 								<td><?php echo $tr->translate("DEGREE");?></td>
 								<td><?php echo $tr->translate("GRADE");?></td>
 								<td><?php echo $tr->translate("SESSION");?></td>
-								<td><?php echo $tr->translate("AMOUNT_STUDENT");?></td>
-								<td><?php echo $tr->translate("NEW_STUDENT");?></td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td><?php echo $tr->translate("STUDENT_DROP");?></td>
 								<td><?php echo $tr->translate("STUDENT_STUDY");?></td>
 							</tr>
 						</thead>
-					<?php $i=0;
-					$total_amount_student = 0;
-					$total_amount_student_new = 0;
-					$total_amount_student_drop=0;
-					$total_studying=0;
+					<?php 
+						$i=0;
+						$totalNew = 0;
+						$totalOld=0;
+						$totalStudent = 0;
+						$totalDrop=0;
+						$totalStudying=0;
+					if(!empty($this->rs)){
 						foreach($this->rs AS $key=>$row){  
 							
-							$studyng = $dbst->getCountStuBYtype($row['branch_id'], $row['academic_year'], $row['degree'], $row['grade'], $row['session']);
-							$stop = $dbst->getCountStuBYtype($row['branch_id'], $row['academic_year'], $row['degree'], $row['grade'], $row['session'],1);
-							$newstu = $dbst->getCountStuBYtype($row['branch_id'], $row['academic_year'], $row['degree'], $row['grade'], $row['session'],1,1);
-							$totalstu = $row['total_stu'];
+							$newStudent = $row['newStudent'];
+							$oldStudent = $row['oldStudent'];
+							$totalstu = $row['totalStu'];
+							$stopStudent = $row['suspendStudent']+$row['stopStudent'];
+							$studyngStudent =$row['totalStu']-$stopStudent;
 							
-							$total_amount_student=$total_amount_student+$totalstu;
-							$total_amount_student_new=$total_amount_student_new+$newstu;
-							$total_amount_student_drop=$total_amount_student_drop+$stop;
-							$total_studying = $total_studying+$studyng;
+							$totalNew=$totalNew+$newStudent;
+							$totalOld = $totalOld+$oldStudent;
+							$totalStudent =$totalStudent+$totalstu;
+							$totalDrop=$totalDrop+$stopStudent;
+							$totalStudying=$totalStudying+$studyngStudent;
+							
 					?>
 						<tr class="style-rowdata hover" align="center"  >
 							<td><?php echo ++$i;?></td>
@@ -148,25 +157,27 @@ table.tb-footer tr.style-head {
 							<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
 							<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
 							<td><?php echo $row['session_name'];?></td>
+							<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $newstu." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $stop." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $studyng." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $stopStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $studyngStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 						</tr>
-						<?php } ?>	
-						<tr align="center" class="hover" style="bold;height:30px;font-size:15px;">
+						<?php }} ?>	
+						<tr align="center" class="hover" style="bold;height:30px;font-size:14px;">
 							<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
-							<td><?php echo $total_amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
-							<td><?php echo $total_amount_student_new." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
-							<td><?php echo $total_studying." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
+							<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
+							<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $totalDrop." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td><?php echo $totalStudying." ".$tr->translate("STUDENT_UNIT");?></td>
 						</tr>
 					</table> 
 					<?php }?>
 				</div>	
 				</td>
 			</tr>
-			<tr >
+			<tr>
 				<td colspan="3" width="100%">
 					<?php  echo $this->rsfooter ?>
 				</td>
@@ -178,11 +189,7 @@ table.tb-footer tr.style-head {
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
 
-dojo.require("dojo.html");
-var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-	
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
 		autoComplete: false,                     

@@ -35,29 +35,39 @@
 							dijit.byId('branch_id').focus();
 							return false;
 						}
+
+						academicYear=dijit.byId('study_year').get('value');
+               			 if(academicYear==0 || academicYear==''){
+                        		alert('<?php echo $tr->translate("SELECT_STUDY_YEAR");?>');
+								dijit.byId('study_year').focus();
+								return false;	
+                		}
+
+						FromgroupId=dijit.byId('from_group').get('value');
 						groupId=dijit.byId('groupId').get('value');
 						changeType = dijit.byId('change_type').get('value');
-						if(changeType!=1){
-							academicYear=dijit.byId('academic_year').get('value');
-               			 	if(academicYear==0 || academicYear==''){
-                        		alert('<?php echo $tr->translate("PLEASE_SELECT_FEE_STUDY");?>');
-								dijit.byId('academic_year').focus();
-								return false;	
-                			}
-							gradeId=dijit.byId('gradeId').get('value');
-							
-               			 	if((gradeId==0 || gradeId=='') && (groupId==0 || groupId=='')){
-                        		alert('<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>');
-								dijit.byId('degree').focus();
-								return false;	
-                			}
-							
-						}else{
-               			 	if(groupId==0 || groupId==''){
+
+						if(changeType==1){//change group
+							if((FromgroupId==0 || FromgroupId=='' || groupId==0 || groupId=='') || FromgroupId==groupId){
                         		alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
 								dijit.byId('groupId').focus();
 								return false;	
                 			}
+						}else if(changeType==2){//upgrade grade
+							gradeId=dijit.byId('gradeId').get('value');
+							if(gradeId==0 || gradeId==''){
+                        		alert('<?php echo $tr->translate("SELECT_GRADE");?>');
+								dijit.byId('academic_year').focus();
+								return false;	
+                			}
+						}else{
+							degree=dijit.byId('degree').get('value');
+							degreeId=dijit.byId('degreeId').get('value');
+               			 	if((degree==0 || degree=='') && (degreeId==0 || degreeId=='')){
+                        		alert('<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>');
+								dijit.byId('degreeId').focus();
+								return false;	
+                			}	
 						}
 						loadingBlock();	
 					}else {
@@ -117,30 +127,35 @@
 			                </div>
 						</div>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-				                <div class="card-blogform">
-									<div class="card-body"> 
-										<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12"> 
-												<div class="d-flex"> 
-													<div class="settings-main-icon">
-														<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex ">ជ្រើសរើសមុខងារ</p>
-													</div> 
-												</div>
-												<div class="form-group">
-									                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
-									                   </label>
-									                   <div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("change_type");?>
-									                   </div>
-									                </div>
+			                <div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<div class="d-flex"> 
+												<div class="settings-main-icon">
+													<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex ">ជ្រើសរើសមុខងារ</p>
+												</div> 
 											</div>
+											<div class="form-group">
+							                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
+							                   </label>
+							                   <div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("change_type");?>
+							                   </div>
+							                </div>
+							                <div class="form-group">
+								                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+								                <div class="col-md-7 col-sm-7 col-xs-12">
+								                	<?php echo $frm->getElement("branch_id");?>
+								                </div>
+								            </div>
 										</div>
 									</div>
 								</div>
-				                
+							</div>
 				                <div class="form-group">
 									<div class="d-flex"> 
 										<div class="settings-main-icon ">
@@ -151,13 +166,6 @@
 										</div> 
 									</div>
 				                </div>
-				                <div class="form-group">
-					                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-					                <div class="col-md-7 col-sm-7 col-xs-12">
-					                	<?php echo $frm->getElement("branch_id");?>
-					                </div>
-					            </div>
-					            
 					            <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?>  :
 				                   </label>
@@ -196,6 +204,35 @@
 			                </div>
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog " style="padding-right:40px;">
+		                 <div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row">
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa fa-sitemap" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_FEE_INFORMATION");?></p>
+										</div>
+									</div>
+									<div class="form-group">
+					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MOVING_DATE");?>  :
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $frm->getElement("moving_date");?>
+					                   </div>
+					                </div>
+					                 <div class="form-group upDegreeStudent">
+					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FEE");?>  :
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<input id="academic_year" />
+					                   </div>
+					                </div>  
+								</div>
+							</div>
+						</div> 
+										
 		                <div class="form-group">
 							<div class="d-flex"> 
 								<div class="settings-main-icon ">
@@ -209,20 +246,6 @@
 								</div> 
 							</div>
 		                </div>
-		                 <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MOVING_DATE");?>  :
-		                   </label>
-		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<?php echo $frm->getElement("moving_date");?>
-		                   </div>
-		                </div>
-		                 <div class="form-group upDegreeStudent">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FEE");?>  :
-		                   </label>
-		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<input id="academic_year" />
-		                   </div>
-		                </div>  
 		                <div class="form-group otherCondiction">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span> :
 		                   </label>
@@ -261,13 +284,11 @@
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<?php echo $frm->getElement("note");?>
-								<input dojoType="dijit.form.TextBox" type="hidden" name="identity" id="identity" />
+								<input dojoType="dijit.form.TextBox" type="text" name="identity" id="identity" />
 		                   </div>
 		                </div>
 		                <div class="form-group">
 		                   <div class="col-md-8 col-sm-8 col-xs-12 text-center">
-		                   		<input type="submit" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-								   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
 								<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 									class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
 		                   </div>
@@ -396,7 +417,8 @@ dojo.ready(function(){
 	    name: "gradeId",  
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-	    onChange: function() {  
+	    onChange: function() { 
+	    	getToGroupByBranch(); 
 	    }
 	}, "gradeId");
 	
@@ -443,7 +465,7 @@ dojo.ready(function(){
 		class: "fullside", 		
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 		onChange: function() {  
-			getAllFromGroupByBranch();
+			getToGroupByBranch();
 		}
 	}, "study_year");
 
@@ -713,7 +735,6 @@ function getAllFromGroupByBranch(typeFrom=0){
 	
 	dijit.byId('groupId').reset();
 	branch_id = dijit.byId('branch_id').get('value');
-	study_year = dijit.byId('study_year').get('value');
 	if(branch_id=='' || branch_id==-1){
 		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 		dijit.byId('from_group').set('store',group_store);  
@@ -737,8 +758,9 @@ function getAllFromGroupByBranch(typeFrom=0){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
+			'forfilter':'1',
 			'branch_id':branch_id,
-			'academic_year':study_year,
+			'isUse':1,
 			'degree':fromDegree,
 			'grade':fromGrade,
 			'group_id':fromGroup,
@@ -752,15 +774,7 @@ function getAllFromGroupByBranch(typeFrom=0){
 		    	dijit.byId('from_group').set('store',group_store);  
 			}
 			
-			contentData = {
-					'branch_id':branch_id,
-					'academic_year':study_year,
-					'degree':fromDegree,
-					'grade':fromGrade,
-					'group_id':fromGroup,
-					'change_type':changeType,
-				}
-		    getToGroupByBranch(contentData);
+			getToGroupByBranch();
 		},
 		error: function(err) {
 		}
@@ -769,16 +783,7 @@ function getAllFromGroupByBranch(typeFrom=0){
 
 var url_getgroup1 = '<?php echo $this->url(array("module"=>"foundation","controller"=>"group","action"=>"getgroup"));?>';										
 function getRefreshGroup(){
-	branch_id = dijit.byId('branch_id').get('value');
-	study_year = dijit.byId('study_year').get('value');
-	change_type = dijit.byId('change_type').get('value');
-
-	contentData={
-		'change_type':change_type,
-		'branch_id':branch_id,
-		'academic_year':study_year
-	}
-	getToGroupByBranch(contentData);
+	getToGroupByBranch();
 }
 
 /*to group */
@@ -797,8 +802,43 @@ function getStudyYear(){
 }
 
 function getToGroupByBranch(contentData){
-	contentData['group_id']=dijit.byId('from_group').get('value');
-	contentData['change_type']='';
+	dijit.byId('groupId').reset();
+	fromDegree = dijit.byId('degree').get('value');
+	fromGrade = dijit.byId('grade').get('value');
+	if(fromGrade=='' || fromGrade==null){
+		return false;
+	}
+	group_id=dijit.byId('from_group').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	study_year = dijit.byId('study_year').get('value');
+	if(study_year=='' || study_year==-1){
+		dijit.byId('study_year').focus();
+		return false;
+	}
+	
+	let change_type = dijit.byId('change_type').get('value');
+	if(change_type==1){
+		change_type='';//corrected
+	}else if(change_type==2){
+		fromDegree = dijit.byId('degreeId').get('value');
+		fromGrade = dijit.byId('gradeId').get('value');
+		if(fromGrade=='' || fromGrade==null){
+			return false;
+		}
+	}
+	
+	contentData={
+			'branch_id':branch_id,
+			'academic_year':study_year,
+			//'change_type':change_type,
+			'group_id':group_id,
+			'degree':fromDegree,
+			'grade':fromGrade,
+		}
 	getAllGroupByBranch(url_getgroup,contentData);
 }
 

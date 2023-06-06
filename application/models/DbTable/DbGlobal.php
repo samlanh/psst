@@ -2369,6 +2369,7 @@ function getAllgroupStudyNotPass($action=null){
   	return $pre.$new_acc_no;
   }
   function ifStudentinGroupReady($student_id,$group_id){
+  	$group_id = empty($group_id)?0:$group_id;
   	$db = $this->getAdapter();
   	$sql="SELECT * FROM rms_group_detail_student WHERE itemType=1 AND stu_id=$student_id AND group_id=$group_id";
   	return $db->fetchRow($sql);
@@ -3317,6 +3318,9 @@ function getAllgroupStudyNotPass($action=null){
 	    if (!empty($data['group_id'])){
 		 	 $sql.=" AND g.id != ".$data['group_id'];
 	  	}
+	  	if (isset($data['isUse'])){
+	  		$sql.=" AND g.is_use= ".$data['isUse'];
+	  	}
 	 
   		if(!empty($data['change_type']) AND $data['change_type']==2){//ឡើងថ្នាក់
   			if(!empty($data['toGrade'])){
@@ -3337,8 +3341,6 @@ function getAllgroupStudyNotPass($action=null){
   				$sql.=" AND g.grade = ".$data['grade'];
   			}
   		}
-	  			
-	  	
 	  	
 	  	$sql.= $this->getAccessPermission('g.branch_id');
   		$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
@@ -3562,7 +3564,7 @@ function getAllgroupStudyNotPass($action=null){
 	   					'startDate'		=> $data['startDate'],
 	   					'endDate'		=> $data['endDate'],
 	   					'balance'		=> $data['balance'],
-	   					'isoldBalance'	=> ($data['balance']>=0?1:0),
+	   					'isoldBalance'	=> ($data['balance']>0?1:0),
 	   					'discount_type'	=> $data['discountType'],
 	   					'discount_amount'=> $data['discountAmount'],
 	   					'school_option'	=> $data['schoolOption'],
@@ -3580,10 +3582,14 @@ function getAllgroupStudyNotPass($action=null){
 	   			if(!empty($data['groupId'])){
 	   				$_arr['group_id']=$data['groupId'];
 	   			}
+	   			if(!empty($data['oldGroup'])){
+	   				$_arr['old_group']=$data['oldGroup'];
+	   			}
 	   			$this->_name='rms_group_detail_student';
 	   			$id = $this->insert($_arr);
 	   		}
 	   	}catch (Exception $e){
+	   		echo $e->getMessage();exit();
 	   		Application_Form_FrmMessage::message("INSERT_FAIL");
 	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	   	}

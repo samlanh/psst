@@ -1,4 +1,3 @@
-
 <?php
 class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
     public function init()

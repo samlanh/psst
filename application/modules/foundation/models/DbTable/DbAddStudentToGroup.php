@@ -85,56 +85,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
-	public function editStudentGroup($_data,$id){
-		$db = $this->getAdapter();
-		$rr = array();//old code select student by group id
-		$this->_name='rms_student';
-		if(!empty($rr)){
-			foreach($rr as $row){
-				$data=array(
-						'is_setgroup' 	=> 0,
-						'group_id' 		=> 0,
-				);
-				$where='stu_id = '.$row['stu_id'];
-				$this->update($data, $where);
-		    }
-		}
-		
-		$where = " group_id = $id and status=1 and is_pass=0 ";
-		$this->_name='rms_group_detail_student';
-		$this->delete($where);
-		
-		
-		if($_data['status'] != 0){
-			if(!empty($_data['public-methods'])){
-				
-				$array_student = $_data['public-methods'];
-				foreach ($array_student as $student){
-					$arr = array(
-							'user_id'=>$this->getUserId(),
-							'group_id'=>$_data['group'],
-							'stu_id'=>$student,
-							'status'=>$_data['status'],
-					);
-					$this->_name='rms_group_detail_student';
-					$this->insert($arr);
-				
-					$this->_name='rms_student';
-					$data=array(
-							'is_setgroup'	=> 1,
-							'group_id'		=>$_data['group'],
-							'academic_year'	=> $_data['academic_year_group'],
-							'degree'		=> $_data['degree_group'],
-							'grade'			=> $_data['grade_group'],
-							'session'		=> $_data['session_group'],
-							'room'			=> $_data['room_group'],
-					);
-					$where='stu_id = '.$student;
-					$this->update($data, $where);
-				}
-			}
-		}
-	}
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
@@ -247,16 +197,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		$db=$this->getAdapter();
 		$sql=" SELECT
 				sd.gd_id,
-				s.stu_id,
-				s.stu_code,
-				s.stu_enname,
-				s.stu_khname,
-				s.last_name,
-				s.sex,
-				sd.degree,
-				sd.grade,
-				sd.academic_year,
-				sd.is_setgroup
+				s.stu_id
 			  FROM 
 			  	rms_student AS s,
 			  	`rms_group_detail_student` AS sd 

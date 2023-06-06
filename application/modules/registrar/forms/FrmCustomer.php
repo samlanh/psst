@@ -117,35 +117,27 @@ Class Registrar_Form_FrmCustomer extends Zend_Dojo_Form {
 			$phone->setValue($data['tel']);
 			$email->setValue($data['email']);
 			$_student_province->setValue($data['province_id']);
-			
 			$home_note->setValue($data['home_num']);
 			$way_note->setValue($data['street_num']);
-			
 			$remark->setValue($data['remark']);
 			$status->setValue($data['status']);
-			
 			$id->setValue($data['stu_id']);
 		}
 		
 		$this->addElements(array(
-		
 			$stu_khname,
 			$name_en,
 			$last_name,
 			$_sex,
 			$phone,
 			$email,
-			
 			$home_note,
 			$way_note,
 			$_student_province,
-			
 			$remark,
 			$status,
-			
 			$id,
 		));
 		return $this;
-		
 	}	
 }

@@ -1,13 +1,10 @@
 <?php 
-$frm = $this->frm_search;
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$urlReceipt = $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";
+	$frm = $this->frm_search;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$urlReceipt = $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";
+	$urlEdit = $this->baseUrl()."/registrar/expense/edit/id/";
 ?>
 <title><?php echo $tr->translate("OTHER_EXPENSE")?></title>
-<script>
-	dojo.require('dijit.form.Button');
-	dojo.require("dijit.form.DateTextBox");
-</script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -54,6 +51,8 @@ $urlReceipt = $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";
 	</div>
 </div>
 <script>
+	dojo.require('dijit.form.Button');
+	dojo.require("dijit.form.DateTextBox");
 var row=0;
 var url="";
 $(function(){
@@ -63,11 +62,14 @@ $(function(){
 			var m = "clicked: " + key;
 			if(key=="receipt"){
 				url='<?php echo $urlReceipt;?>';
+			}else if(key=='edit'){
+				url='<?php echo $urlEdit;?>';
 			}
 			gotoAction();
 		},
 		items: {
-			"receipt": {name: "<?php echo $tr->translate("PAYMENT_VOUCHER");?>", icon: "fa-money", accesskey: "c"},
+			"receipt": {name: "<?php echo $tr->translate("PAYMENT_VOUCHER");?>", icon: "fa-print", accesskey: "c"},
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "fa-edit", accesskey: "c"},
 		}
 	});
 });
@@ -79,4 +81,3 @@ function gotoAction(){
 	 window.open(url+row, '_blank');
 }
 </script>
-

@@ -39,7 +39,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'required'=>'false',
-				
 		));
 		$study_year->setValue($request->getParam("study_year"));
 		$years=$db->getAllAcademicYear();
@@ -282,11 +281,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");
 		$end_date->setAttribs(array(
-				'dojoType'=>"dijit.form.DateTextBox",
-				'class'=>'fullside',
-				'required'=>'true',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'placeholder'=>$this->tr->translate("END_DATE")
+			'dojoType'=>"dijit.form.DateTextBox",
+			'class'=>'fullside',
+			'required'=>'true',
+			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'placeholder'=>$this->tr->translate("END_DATE")
 				));
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){
@@ -317,11 +316,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		//term 
 		$term = new Zend_Dojo_Form_Element_FilteringSelect('term');
 		$term->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
 		));
 		$term->setValue($request->getParam("term"));
 		$result = $db->getAllTerm();
@@ -331,11 +330,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		$generation = new Zend_Dojo_Form_Element_FilteringSelect('generation');
 		$generation->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
 		));
 		$generation->setValue($request->getParam("generation"));
 		$generoption=$db->getAllGeneration(1,1);
@@ -343,11 +342,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		$service_type = new Zend_Dojo_Form_Element_FilteringSelect('service_type');
 		$service_type->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
 		));
 		
 		$opt = array(''=>$this->tr->translate("PLEASE_SELECT"),
@@ -359,9 +358,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		$payment_by = new Zend_Dojo_Form_Element_FilteringSelect('payment_by');
 		$payment_by->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>false
 		));
 		
 		$study_status = new Zend_Dojo_Form_Element_FilteringSelect('study_status');
@@ -374,21 +373,19 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$study_option = $db->getViewById(9,1);
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
 		$study_status->setMultiOptions($study_option);
-		
 		$study_status->setValue($request->getParam("study_status"));
 		
 		$opt=array(-1=>"Select Payment By",1=>"Tution Fee",2=>"Service",3=>"Product");
 		$payment_by->setMultiOptions($opt);
 		$payment_by->setValue($request->getParam("payment_by"));
 		
-		//day 
 		$_subject = new Zend_Dojo_Form_Element_FilteringSelect('subject');
 		$_subject->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
 		));
 		$_subject->setValue($request->getParam("subject"));
 		$result = $db->getAllSubjectName();
@@ -399,11 +396,11 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		//teacher 
 		$_teacher = new Zend_Dojo_Form_Element_FilteringSelect('teacher');
 		$_teacher->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
 		));
 		$_teacher->setValue($request->getParam("teacher"));
 		$result = $db->getAllTeahcerName();
@@ -411,21 +408,19 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
 		$_teacher->setMultiOptions($opt_group);
 		
-		//day
 		$_day= new Zend_Dojo_Form_Element_FilteringSelect('day');
 		$_day->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
 		));
 		$_day->setValue($request->getParam("day"));
 		$result = $db->getAllDayName();
 		$opt_group = array(''=>$this->tr->translate("SELECT_DAY"));
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
 		$_day->setMultiOptions($opt_group);
-		
 		
 		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
 		$is_pass->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
@@ -442,7 +437,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$is_pass->setMultiOptions($opt);
 		$is_pass->setValue($request->getParam("is_pass"));
 		
-		
 		$_sortby=  new Zend_Dojo_Form_Element_FilteringSelect('sortby');
 		$_sortby->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_sortby_opt = array(
@@ -451,7 +445,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				2=>$this->tr->translate("SORT_BY_RECEIPT"));
 		$_sortby->setMultiOptions($_sortby_opt);
 		$_sortby->setValue($request->getParam("sortby"));
-		
 		
 		$_arr = array(0=>$this->tr->translate("SELECT_TYPE"),1=>$this->tr->translate("MONTHLY"),2=>$this->tr->translate("SEMESTER"));
 		$_exam_type = new Zend_Dojo_Form_Element_FilteringSelect("exam_type");
@@ -560,18 +553,18 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		
 		$this->addElements(array(
 				$receipt_order,
-				    $option_type,
-				    $type_study,
-					$school_option,$is_pass,$finished_status,$term,
-					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$payment_by,$study_year,$academic_year,
-					$service_type,$_degree_bac,$_dis_type,$_branch_id,$start_date,
-					$end_date,$_title,$generation,
-					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,
-					$_sortby,
-					$_exam_type,
-					$_for_semester,
-					$_for_month,
-					$_test_type
+			    $option_type,
+			    $type_study,
+				$school_option,$is_pass,$finished_status,$term,
+				$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$payment_by,$study_year,$academic_year,
+				$service_type,$_degree_bac,$_dis_type,$_branch_id,$start_date,
+				$end_date,$_title,$generation,
+				$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,
+				$_sortby,
+				$_exam_type,
+				$_for_semester,
+				$_for_month,
+				$_test_type
 				));
 		return $this;
 	} 

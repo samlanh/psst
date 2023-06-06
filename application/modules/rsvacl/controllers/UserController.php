@@ -28,9 +28,11 @@ class RsvAcl_UserController extends Zend_Controller_Action
         	$_data=$this->getRequest()->getPost();
         }else{
         	$_data = array(
-        			'status_search'=>-1,
+        			
+        			'adv_search'=>'',
+					'branch_id'=>'',
+					'status'=>-1,
         			'user_type'=>-1,
-        			'txtsearch'=>''
         	);
         }
         $rs_rows = $db_user->getUserList($_data);
@@ -62,14 +64,13 @@ class RsvAcl_UserController extends Zend_Controller_Action
         );
         $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_access'=>$link,'user_type'=>$link,'user_name'=>$link,'name'=>$link));
     	$this->view->user_type = $_data['user_type'];
-    	$this->view->txtsearch = $_data['txtsearch'];
     	
-    	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree(null);
+    	
+    	$frm = new Application_Form_FrmSearchGlobal();
+    	$frm->FrmSearch(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_user = $frm;
-    	$this->view->user_type = $_data['user_type'];
-    	$this->view->active = $_data['status_search'];
+    	
     }
 	public function addAction()
 	{

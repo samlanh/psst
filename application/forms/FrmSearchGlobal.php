@@ -371,7 +371,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_user_id->setMultiOptions($_arr_opt_user);
 		$_user_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		if ($userinfo['level']!=1){

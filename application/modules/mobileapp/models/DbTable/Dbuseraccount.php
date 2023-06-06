@@ -88,6 +88,9 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			$s_where[]=" district_name LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
+		if(!empty($search['branch_id'])){
+			$where.=" AND s.branch_id=".$search['branch_id'];
+		}
 		if(!empty($search['academic_year'])){
 			$where.=" AND gds.academic_year=".$search['academic_year'];
 		}
@@ -100,7 +103,7 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=" AND (SELECT g.session FROM rms_group AS g WHERE g.id = gds.group_id LIMIT 1)=".$search['session'];
 		}
-		if($search['status']>-1){
+		if($search['status']>-1 AND $search['status']!=''){
 			$where.=" AND s.status=".$search['status'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();

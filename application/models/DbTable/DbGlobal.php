@@ -185,9 +185,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if(!empty($data['branchId'])){
 			$sql.=' AND u.branch_list= '.$data['branchId'];
 		}
+		if(!empty($data['branch_filter'])){
+			$sql.=' AND u.branch_id= '.$data['branch_filter'];
+		}
 	    return $db->fetchAll($sql);
    }
-   
+ 
    public function getUserInfo(){
 	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$session_teacher=new Zend_Session_Namespace('authteacher');

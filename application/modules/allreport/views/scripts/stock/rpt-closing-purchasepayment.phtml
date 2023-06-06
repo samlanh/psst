@@ -32,8 +32,8 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("paid_by_search");?>
                    </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("user_id");?>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input id="user_id" />
                    </div>
                 </div>
                 <div class="form-group">
@@ -213,7 +213,7 @@
 							</table>
 							<div class="card-box">
 		               			<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-									<button iconclass="dijitIconSave" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("Closing Entry");?></button>
+									<button class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved"dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("Closing Entry");?></button>
 								</div>
 							</div>	
 						</form>
@@ -228,20 +228,40 @@
 		</div>		
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-//dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore"); 
-//dojo.require("dojo.html");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.Textarea");
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-	<?php if (!empty($this->search['first'])){?>
+	
+	 new dijit.form.FilteringSelect({
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "user_id",
+			name: "user_id",   
+			value:"<?php echo $this->search['user_id'];?>",
+			required:false,        
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_USER");?>",          
+		}, "user_id");
+
+	 var branch_id = dijit.byId('branch_search');
+		 	branch_id.on('change', function(evt) {
+				getallUserAcc();
+	 });
+
+	 <?php if (!empty($this->search['first'])){?>
 	 dijit.byId('start_date').set('value',null);  
 	 <?php }?>
 	 <?php if (!empty($this->search['start_date'])){?>
 	 dijit.byId('start_date').set('value',null);  
 	 <?php }?>
+
+	 getallUserAcc();
 });
 function checkall(){
 	if ($('#check_all').is(':checked')) {
@@ -250,6 +270,35 @@ function checkall(){
 		$(".checkbox").prop('checked', false);
 	}
 }
+
+
+function getallUserAcc(){//
+		var url_data = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'get-user-by-branch')); ?>';
+		branch_filter = dijit.byId("branch_search").get("value");
+		if(branch_filter==''){
+			dijit.byId("user_id").attr("value", "");
+			dijit.byId("branch_search").focus();
+			return false;
+		}
+		dijit.byId("user_id").reset();
+		dojo.xhrPost({
+			url:url_data,
+			content:{
+				'branch_filter':branch_filter,
+			},
+			handleAs:"json",
+			load: function(data) {
+				user_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('user_id').set('store',user_store);  
+			    <?php if (!empty($this->search['user_id'])){?>
+			    dijit.byId('user_id').set('value','<?php echo $this->search['user_id'];?>'); 
+			   
+			    <?php }?>
+			},
+			error: function(err){
+			}
+		});
+	}
 </script>
 
 

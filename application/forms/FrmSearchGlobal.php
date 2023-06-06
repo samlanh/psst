@@ -84,7 +84,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$_room->setValue($request->getParam("room"));
 		$result = $_dbgb->getAllRoom();
@@ -201,7 +201,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$study_option = $_dbgb->getViewById(9,1);
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
@@ -214,7 +214,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$optRsChange = $_dbgb->getAllChangeGroup(1); // 1=ប្តូរក្រុម
 		$changegrou_opt = array(''=>$this->tr->translate("SELECT_GROUP"));
@@ -228,7 +228,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$optRs=$_dbgb->getViewById(17);
 		$opt_change_type = array(''=>$this->tr->translate("CHANGE_TYPE"));
@@ -302,7 +302,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$result = $_dbgb->getAllDayName();
 		$opt_group = array(''=>$this->tr->translate("SELECT_DAY"));
@@ -330,7 +330,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$generation->setValue($request->getParam("generation"));
 		$generoption=$_dbgb->getAllGeneration(1,1);
@@ -354,7 +354,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false'
 		));
 		$finish_opt = new Accounting_Model_DbTable_DbTuitionFee();
 		$fin_row=$finish_opt->getProcessTypeView();
@@ -371,7 +371,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_user_id->setMultiOptions($_arr_opt_user);
 		$_user_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		if ($userinfo['level']!=1){
@@ -441,7 +441,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
 		$_type->setAttribs(array('dojoType'=>$this->filter,
 				'class'=>'fullside',
-				'required'=>false,
+				'required'=>'false',
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false',
 		));

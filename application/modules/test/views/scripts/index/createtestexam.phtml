@@ -507,7 +507,7 @@ function getAllTermStudy(){
 	});
 }
 
-var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+var url_get_grade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getAllGrade(){
 	dijit.byId('grade').set('value',''); 
 	dept_id = dijit.byId('degree').get('value');
@@ -522,7 +522,8 @@ function getAllGrade(){
 	dojo.xhrPost({
 		url:url_get_grade,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -538,7 +539,7 @@ function getAllGrade(){
 		}
 	});
 }
-var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+var url_get_grade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getAllGradeResult(){
 	dijit.byId('grade_result').set('value',''); 
 	dept_id = dijit.byId('degree_result').get('value');
@@ -548,7 +549,8 @@ function getAllGradeResult(){
 	dojo.xhrPost({
 		url:url_get_grade,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {

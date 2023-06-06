@@ -1205,6 +1205,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				dijit.byId('validate_'+col).set('readOnly',true);
 			}else{
 				dijit.byId('date_start_'+col).attr('value',dataRow.endDate);
+				getservicefee(col);
 			}
 		}else{
 			getservicefee(col);

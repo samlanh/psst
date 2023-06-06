@@ -363,7 +363,7 @@ function getAllGroupByBranch(){
 	}
 	
 var oldItems = '<?php echo $this->search['item']?>';
-var url_degree = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+var url_degree = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getgradebyDegree(){
 		dept_id = dijit.byId("item").get("value");
 		if(dept_id==-1){
@@ -373,6 +373,7 @@ function getgradebyDegree(){
 			url:url_degree,
 			content:{
 				'dept_id':dept_id,
+				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

@@ -17,37 +17,37 @@
     	</div>
     </div>
 	<div class="card-box">
-			<form action=""	dojoType="dijit.form.Form" method="post">
+		<form action=""	dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                    		<?php echo $frm->getElement("adv_search");?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                    		<?php echo $frm->getElement("branch_search");?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                    		<input id="student_id" />
                    </div>
                 	<div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("start_date");?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
+                 </div>
+                 <div class="form-group">
+	                   <div class="col-md-3 col-sm-3 col-xs-12">
+                   		<?php echo $frm->getElement("start_date");?>
+                   	</div>
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	 <div class="col-md-7 col-sm-7 col-xs-12">
-                   			<?php echo $frm->getElement("user_id");?>
-                   		</div>
-                   		<div class="col-md-5 col-sm-5 col-xs-12">
-                   			<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    	 	<input id="userId" />
+                    </div>
+                   	<div class="col-md-2 col-sm-2 col-xs-12">
+                   		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
 								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-                   		</div>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
-                </div>
-			</form>
-		</div>
+                   	</div>
+	            </div>
+		</form>
+	</div>
 	<div id="divPrint">
 		<table border="0" style="background:#fff; margin: 0 auto; width: 100%;font-family:'Times New Roman','Khmer OS Battambang' ">
 			<tr>
@@ -66,9 +66,6 @@
 				</td>
 				<td width="15%" align="center">
 				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 		<style>
 			.style{
@@ -141,6 +138,13 @@
 					table.content-data tr td{
 						padding: 2px;
 					}	
+					@media print {
+						@page {
+							page: A4;
+							size: landscape;
+							margin: 0.8cm;
+						}
+				}
 		
 		</style>
 			<tr>
@@ -169,7 +173,6 @@
 										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
 										<td scope="col">&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 										<td scope="col">&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
-										
 									</tr>
 								</thead>
 								<?php $i=0; if (!empty($this->rs)) foreach ($this->rs as $key=> $row){$i++;?>
@@ -183,7 +186,6 @@
 									<td data-label="<?php echo $tr->translate("Received Date");?>" align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['received_date']))?>&nbsp;</td>
 									<td data-label="<?php echo $tr->translate("Total Received");?>" align="center">&nbsp;<?php echo $row['total_received'];?>&nbsp;</td>
 									<td data-label="<?php echo $tr->translate("Total Remain");?>" align="center">&nbsp;<?php echo $row['total_qty_due'];?>&nbsp;</td>
-									
 									<td data-label="<?php echo $tr->translate("STUDENT_CODE");?>"  align="center">&nbsp;<?php echo $row['stu_code'];?></td>
 									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
 									<td data-label="<?php echo $tr->translate("DEGREE");?>" >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
@@ -196,13 +198,13 @@
 						</div>	
 						<div class="card-box">
 							<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-								<button iconclass="dijitIconSave" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("Closing Entry");?></button>
+								<button class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"  dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("Closing Entry");?></button>
 							</div>
 						</div>
 					</form>
 				</td>
 			</tr>
-			<tr >
+			<tr>
 				<td colspan="3" width="100%">
 					<?php echo $this->rsfooteracc;?>
 				</td>
@@ -211,10 +213,12 @@
 	</div>
 </div>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"></script>
 <script type="text/javascript">
+	
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dijit.form.Textarea");
+	
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
@@ -226,6 +230,17 @@
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		}, "student_id");
+
+		new dijit.form.FilteringSelect({
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "userId",
+			name: "userId",   
+			required:false,        
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_USER");?>",          
+		}, "userId");
+		
 		getallstudentname();
 		 var branch_id = dijit.byId('branch_search');
 		 	branch_id.on('change', function(evt) {
@@ -239,6 +254,7 @@
 			dijit.byId("branch_search").focus();
 			return false;
 		}
+		getAllUser(branch_id);
 		dojo.xhrPost({
 			url:url_data,
 			content:{
@@ -259,7 +275,17 @@
 			}
 		});
 	}
-
+	function getAllUser(branchId){
+		contentData={
+			'branchId':branchId,
+		}
+		let url_user = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'get-user')); ?>';
+		selectedId = '';
+		if('<?php echo $this->search['branch_search'];?>'==branchId){
+			selectedId = '<?php echo $this->search['userId'];?>';
+		}
+		getAllUserByBranch(url_user,contentData,selectedId);
+	}
 
 	function checkall(){
 		if ($('#check_all').is(':checked')) {

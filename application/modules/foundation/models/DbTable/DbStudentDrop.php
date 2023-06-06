@@ -111,13 +111,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'branch_id'	 => $_data['branch_id'],
 						'study_id'	=>$_data['studentid'],
 						'stu_id'	=>$stu_id,
-// 						'studentname'=> $_data['studentname'],
 						'gender'	 => $_data['gender'],
-						
 						'type'		 => $_data['type'],
 						'date_stop'	 => $_data['datestop'],
 						'reason'	 => $_data['reason'],
-						
 						'group'		 => $_data['group'],
 						'academic_year'	=> $_data['academic_year'],
 						'calture'	 => $_data['calture'],
@@ -125,7 +122,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'degree'	 => $_data['degree'],
 						'grade'		 => $_data['grade'],
 						'room'		 => $_data['room'],
-						
 						'user_id'	 => $this->getUserId(),
 						'create_date'=> date('Y-m-d H:i:s'),
 						'modify_date'=> date('Y-m-d H:i:s'),
@@ -163,7 +159,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 // 						'status'	=>$_data['status'],
 						'date_stop'	=>$_data['datestop'],
 						'reason'	=>$_data['reason'],
-						
 						'gender'	=>$_data['gender'],
 						'group'		=>$_data['group'],
 						'academic_year'	=>$_data['academic_year'],
@@ -185,8 +180,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				);
 				$this->update($ar, $where);
 			}
-			
-	
 
 			$db->commit();
 		}catch(Exception $e){

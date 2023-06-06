@@ -159,14 +159,14 @@ Class Stock_Form_FrmPurchasePayment extends Zend_Dojo_Form {
 		));
 		$_adv_search->setValue($request->getParam("adv_search"));
 		
-		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
 		$optionBranch = $_dbgb->getAllBranch();
 		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
 		$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");
 		$_branch_search->setMultiOptions($_arr_opt_branch);
 		$_branch_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false',
 				'missingMessage'=>'Invalid Module!',

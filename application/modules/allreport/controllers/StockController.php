@@ -716,7 +716,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
 						'status_search'=>'',
-						'user_id'=>"",
+						'userId'=>"",
 				);
 			}
 			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();

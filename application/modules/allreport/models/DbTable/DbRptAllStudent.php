@@ -1316,12 +1316,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$where=' WHERE 
 			g.itemType=1 
-			AND g.is_setgroup = 0 AND g.group_id=0
+			AND g.is_setgroup = 0 
 			AND g.is_current=1
 			AND s.stu_id=g.stu_id 
 			AND s.status=1 
 			AND g.stop_type=0
-			AND s.customer_type=1 ';
+			AND s.customer_type=1
+    		AND (SELECT stu_test_id FROM `rms_student_test_result` WHERE stu_test_id=s.stu_id AND is_registered=1 LIMIT 1) ';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
@@ -1364,11 +1365,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
-//     	if(!empty($search['session'])){
-//     		$where.=' AND s.session='.$search['session'];
-//     	}
+    	if(!empty($search['session'])){
+    		$where.=' AND s.session='.$search['session'];
+    	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	return $db->fetchAll($sql.$where.$order);
     }
     

@@ -3,13 +3,12 @@
 	$this->headTitle($tr->translate('STUDENT_NOT_YET_REPORT')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
-
 	$classHideHeight="110px";
 ?>	
 <style>
-.hover:hover{ background:#ccc;}
-.hidden{visibility: visible !important;
-display: table-cell !important;
+	.hover:hover{ background:#ccc;}
+	.hidden{visibility: visible !important;
+	display: table-cell !important;
 }
 </style>
 <div class="reportblog">
@@ -55,7 +54,7 @@ display: table-cell !important;
 					</td>
 					<td width="70%"  align="center">
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_NOT_YET_REPORT");?></strong><br />
-						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
 					<td width="15%" align="center">
 					</td>
@@ -103,12 +102,8 @@ display: table-cell !important;
 						font-weight:600;
 					}
 					table.content-data tr.style {
-					   
 					   white-space: nowrap;
-						
 					}
-					
-					
 					table.tb-footer{
 						border-collapse:collapse;
 						border:1px solid #000; 
@@ -139,7 +134,13 @@ display: table-cell !important;
 						border: 1px solid #000;	
 						text-align: center;
 					}
-					
+					@media print {
+						@page {
+							page: A4;
+							size: portrait;
+							margin: 0.8cm;
+						}
+				}
 					
 				</style>
 				<tr>

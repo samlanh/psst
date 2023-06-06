@@ -134,21 +134,24 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		if(empty($search)){
 			return $sql.$where.$orderby;
 		}
-		if ($search['status_search'] >= 0){
-			$where = 'AND u.`active` = '.$search['status_search'];
-		}
 		
-		if (!empty($search['txtsearch'])){
+		if (!empty($search['adv_search'])){
 			$fields = array('u.last_name', 'u.first_name', 'u.user_name');
 			$s_where = array();
 			foreach($fields as $field)
 			{
-				$s_where[] = $field." LIKE '%{$search['txtsearch']}%'";
+				$s_where[] = $field." LIKE '%{$search['adv_search']}%'";
 			}
 			$where .= ' AND ('.implode(' OR ',$s_where).')';
 		}
+		if (!empty($search['branch_id'])){
+			$where = 'AND u.`branch_id` = '.$search['branch_id'];
+		}
+		if ($search['status'] > -1 AND $search['status']!=''){
+			$where = 'AND u.`active` = '.$search['status'];
+		}
 		
-		if ($search['user_type'] >= 0 ){
+		if ($search['user_type'] > -1 AND $search['user_type']!=''){
 			$where .= ' AND u.`user_type` = '. $search['user_type'];
 		}
 		

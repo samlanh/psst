@@ -94,10 +94,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentdrop/index");
 				exit();
 			}
-			if ($row['isReturn']==1){
-				Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_STUDENT_ALREADY_RETUN_SCHOOL","/foundation/studentdrop/index");
-				exit();
-			}
+			// if ($row['isReturn']==1){
+			// 	Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_STUDENT_ALREADY_RETUN_SCHOOL","/foundation/studentdrop/index");
+			// 	exit();
+			// }
 			
 			
 		}catch(Exception $e){

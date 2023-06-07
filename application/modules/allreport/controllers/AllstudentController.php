@@ -683,17 +683,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			}
 		
 			$db = new Allreport_Model_DbTable_DbStudent();
+			$this->view->search=$search;
 			$this->view->row = $db->getAllStudentTest($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$this->view->search = $search;
-		$frm = new Test_Form_FrmStudentTest();
-		$frm->FrmAddStudentTest(null);
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->form_search = $frm;
-		
+	
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);

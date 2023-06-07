@@ -390,34 +390,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		$this->view->search=$search;
 	}
-	public function rptStudentChangeGroupAction(){
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-				'adv_search' => '',
-				'branch_id' => '',
-				'academic_year' => '',
-				'degree'	=>'',
-				'grade' 	=> '',
-				'session' => '',
-			);
-		}
-		$group= new Allreport_Model_DbTable_DbRptStudentChangeGroup();
-		$this->view->rs = $rs_rows = $group->getAllStudentChangeGroup($search);
-		$this->view->search=$search;
-		
-		$form=new Application_Form_FrmSearchGlobal();
-		$forms=$form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-		
-		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view->rsfooteracc = $frm->getFooterAccount(2);
-	}
+	
 	public function rptStudentGroupAction()
 	{
 		$id=$this->getRequest()->getParam("id");
@@ -683,17 +656,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			}
 		
 			$db = new Allreport_Model_DbTable_DbStudent();
+			$this->view->search=$search;
 			$this->view->row = $db->getAllStudentTest($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$this->view->search = $search;
-		$frm = new Test_Form_FrmStudentTest();
-		$frm->FrmAddStudentTest(null);
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->form_search = $frm;
-		
+	
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);

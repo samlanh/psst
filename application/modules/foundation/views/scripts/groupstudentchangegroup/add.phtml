@@ -284,7 +284,7 @@
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<?php echo $frm->getElement("note");?>
-								<input dojoType="dijit.form.TextBox" type="text" name="identity" id="identity" />
+								<input dojoType="dijit.form.TextBox" type="hidden" name="identity" id="identity" />
 		                   </div>
 		                </div>
 		                <div class="form-group">
@@ -823,12 +823,15 @@ function getToGroupByBranch(contentData){
 	let change_type = dijit.byId('change_type').get('value');
 	if(change_type==1){
 		change_type='';//corrected
-	}else if(change_type==2){
+	}else if(change_type==2 || change_type==3){
 		fromDegree = dijit.byId('degreeId').get('value');
 		fromGrade = dijit.byId('gradeId').get('value');
 		if(fromGrade=='' || fromGrade==null){
 			return false;
 		}
+	}else{
+		//fromDegree = dijit.byId('degree').get('value');
+		change_type='';//corrected
 	}
 	
 	contentData={

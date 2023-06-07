@@ -3550,8 +3550,15 @@ function getAllgroupStudyNotPass($action=null){
 	   		$resultDetail = $this->getOneStudentGroupDetailData($arr);
 	   		
 	   		if(empty($resultDetail)){
-	   			$result = $this->getFeeStudyinfoById($data['feeId']);
-	   			$academicYear = empty($result)?'':$result['id'];
+	   			$academicYear='';
+		   			if(!empty($data['feeId'])){
+			   			$result = $this->getFeeStudyinfoById($data['feeId']);
+			   			$academicYear = empty($result)?'':$result['id'];
+		   			}
+	   			
+	   			if(empty($data['schoolOption'])){
+	   				$data['schoolOption'] = $this->getSchoolOptionbyDegree($data['degree']);
+	   			}
 	   			
 	   			$_arr= array(
 	   					'branch_id'		=> $data['branch_id'],
@@ -3589,7 +3596,6 @@ function getAllgroupStudyNotPass($action=null){
 	   			$id = $this->insert($_arr);
 	   		}
 	   	}catch (Exception $e){
-	   		echo $e->getMessage();exit();
 	   		Application_Form_FrmMessage::message("INSERT_FAIL");
 	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	   	}

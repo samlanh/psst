@@ -235,7 +235,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['groupId'];
 				$this->update($group, $where);
 				
-			}elseif ($_data['change_type']==2){//ឡើងថ្នាក់
+			}elseif ($_data['change_type']==2){//ឡើងថ្នាក់//done
 				
 				$this->_name='rms_group_detail_student';
 				foreach ($idsss as $k){
@@ -245,7 +245,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
 						
 // 						$group_detail = $this->getGroupDetailInStudentChangeGroup($_data['groupId']);
-						
 					
 						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);
 						if(!empty($rsexist)){//old infor
@@ -258,6 +257,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							$this->update($stu, $where);
 							
 							$arr = array(
+									'branch_id'	=>$_data['branch_id'],
 									'studentId'		=>$_data['stu_id_'.$k],//$_data['stu_id_'.$k],
 									'itemType'		=>1,
 									'groupId'		=>$_data['groupId'],
@@ -275,7 +275,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'discountAmount'=>'',
 									'user_id'		=>$this->getUserId(),
 									'status'		=>1,
-									'date'			=>date('Y-m-d'),
 									'create_date'	=>date('Y-m-d H:i:s'),
 									'modify_date'	=>date('Y-m-d H:i:s'),
 									'old_group'		=>$_data['from_group'],
@@ -285,6 +284,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'isNewStudent'	=>0,
 									'isMaingrade'	=>1,//not sure
 									'entryFrom'	=>4,//not sure
+									'remark'	=>'grade upgrade'
 							);
 							$db = $dbg->AddItemToGroupDetailStudent($arr);
 						}
@@ -302,32 +302,34 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					$this->update($group, $where);
 				}
 				
-				// old group
-				$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$_data['from_group']." AND stop_type=0 ORDER BY is_pass ASC ";
-				$resultOldGroup = $this->getAdapter()->fetchOne($sql);
-				if(!empty($resultOldGroup)){
-					$this->_name = 'rms_group';
-					$group=array(
-						'is_use'	=>1,
-						'is_pass'	=>1,//passed
-					);
-					$where=" id=".$_data['from_group'];
-					$this->update($group, $where);
-				}
+				$this->updateOldGrouptoFinish($_data['from_group']);//old group
 				
 			}elseif($_data['change_type']==3){//ឆ្លងភូមិសិក្សា
 				$newStuId = '';
-				// need to check update old group to finished and group detail finish also
 				foreach ($idsss as $k){
 					if(!empty($_data['stu_id_'.$k])){
-						$newStuId = $this->duplicateStudent($_data['stu_id_'.$k]);
+						
+						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);
+						if(!empty($rsexist)){//old infor
+							$stu=array(
+									'is_pass'		=> 1,
+									'is_current'	=> 0,
+							);
+							$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group']." AND itemType=1";
+							$this->_name='rms_group_detail_student';
+							$this->update($stu, $where);
+						}
+						
+						$newStuId = $this->duplicateStudent($_data['stu_id_'.$k]);//duplicate student
+						
 						$arr = array(
-								'studentId'		=>$newStuId,//$_data['stu_id_'.$k],
+								'branch_id'		=> $_data['branch_id'],
+								'studentId'		=>$newStuId,
 								'itemType'		=>1,
+								'academicYear'	=>$academicYear,
 								'groupId'		=>$_data['groupId'],
-	// 							'feeId'			=>
-	// 							'schoolOption'  =>
-								'academic_year' =>$_data['study_year'],
+								'oldGroup'		=>$_data['from_group'],
+								'feeId'			=>$_data['academic_year'],
 								'degree'		=>$degreeId,
 								'grade'			=>$gradeId,
 								'session'		=>0,
@@ -336,21 +338,22 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'balance'		=>0,
 								'discountType'	=>'',
 								'discountAmount'=>'',
-								'academicYear'	=>$academicYear,
 								'user_id'		=>$this->getUserId(),
 								'status'		=>1,
-								'date'			=>date('Y-m-d'),
 								'create_date'	=>date('Y-m-d H:i:s'),
 								'modify_date'	=>date('Y-m-d H:i:s'),
 								'old_group'		=>$_data['from_group'],
-	// 							'is_setgroup'	=>0,
+								'isSetGroup'	=>empty($_data['groupId'])?0:1,
 								'stopType'		=>0,
 								'isCurrent'		=>1,
 								'isNewStudent'	=>1,
 								'isMaingrade'	=>1,//not sure
 								'entryFrom'	=>4,//not sure
+								'remark'	=>'ឆ្លងភូមិសិក្សា'
 						);
 						$db = $dbg->AddItemToGroupDetailStudent($arr);
+						
+						
 					}
 				}
 				
@@ -375,6 +378,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	}
 	function updateOldGrouptoFinish($groupId){
 		$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$groupId." AND stop_type=0 ORDER BY is_pass ASC LIMIT 1 ";
+		
 		$resultOldGroup = $this->getAdapter()->fetchOne($sql);
 		if(!empty($resultOldGroup)){
 			$this->_name = 'rms_group';
@@ -500,79 +504,78 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					street_num,
 					village_name,
 					commune_name,
-						district_name,
-						province_id,
-						father_enname,
-						father_dob,
-						father_nation,
-						father_job,
-						father_phone,
-						mother_enname,
-						mother_dob,
-						mother_nation,
-						mother_job,
-						mother_phone,
-						guardian_enname,
-						guardian_dob,
-						guardian_nation,
-						guardian_job,
-						guardian_tel,
-						lang_level,
-						from_school,
-						know_by,
-						sponser,
-						sponser_phone,
-						STATUS,
-						remark,
-						photo,
-						customer_type,
-						date_bacc,
-						province_bacc,
-						center_bacc,
-						room_bacc,
-						table_bacc,
-						grade_bacc,
-						score_bacc,
-						certificate_bacc,
-						calture,
-						father_photo,
-						mother_photo,
-						guardian_photo,
-						NOW(),0,street,
-						vill_id,
-						comm_id,
-						dis_id,
-						pro_id,
-						audioTitle,
-						studentToken,
-						is_vaccined,
-						is_covidTested,
-						dateUpdatedCovidFeature,
-						setBy,
-						crm_degree,
-						crm_grade,
-						crm_id,
-						email,
-						emergency_name,
-						emergency_tel,
-						father_khname,
-						guardian_document,
-						guardian_email,
-						guardian_first_name,
-						guardian_khname,
-						is_studenttest,
-						modify_date,
-						mother_khname,
-						PASSWORD,
-						relationship_to_student,
-						SERIAL,
-						
-						student_option,
-						student_status,
-						test_id,
-						test_setting_id,
-						test_type,
-						$userId
+					district_name,
+					province_id,
+					father_enname,
+					father_dob,
+					father_nation,
+					father_job,
+					father_phone,
+					mother_enname,
+					mother_dob,
+					mother_nation,
+					mother_job,
+					mother_phone,
+					guardian_enname,
+					guardian_dob,
+					guardian_nation,
+					guardian_job,
+					guardian_tel,
+					lang_level,
+					from_school,
+					know_by,
+					sponser,
+					sponser_phone,
+					STATUS,
+					remark,
+					photo,
+					customer_type,
+					date_bacc,
+					province_bacc,
+					center_bacc,
+					room_bacc,
+					table_bacc,
+					grade_bacc,
+					score_bacc,
+					certificate_bacc,
+					calture,
+					father_photo,
+					mother_photo,
+					guardian_photo,
+					NOW(),0,street,
+					vill_id,
+					comm_id,
+					dis_id,
+					pro_id,
+					audioTitle,
+					studentToken,
+					is_vaccined,
+					is_covidTested,
+					dateUpdatedCovidFeature,
+					setBy,
+					crm_degree,
+					crm_grade,
+					crm_id,
+					email,
+					emergency_name,
+					emergency_tel,
+					father_khname,
+					guardian_document,
+					guardian_email,
+					guardian_first_name,
+					guardian_khname,
+					is_studenttest,
+					modify_date,
+					mother_khname,
+					password,
+					relationship_to_student,
+					serial,
+					student_option,
+					student_status,
+					test_id,
+					test_setting_id,
+					test_type,
+					$userId
 		FROM rms_student WHERE stu_id=$stu_id LIMIT 1";
 		 $db->query($sql);
 		return $db->lastInsertId();

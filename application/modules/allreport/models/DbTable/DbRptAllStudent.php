@@ -1321,8 +1321,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			AND s.stu_id=g.stu_id 
 			AND s.status=1 
 			AND g.stop_type=0
-			AND s.customer_type=1
-    		AND (SELECT stu_test_id FROM `rms_student_test_result` WHERE stu_test_id=s.stu_id AND is_registered=1 LIMIT 1) ';
+			AND s.customer_type=1 ';
+    	//AND (SELECT stu_test_id FROM `rms_student_test_result` WHERE stu_test_id=s.stu_id AND is_registered=1 LIMIT 1) //some student not test and add direct to student
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();

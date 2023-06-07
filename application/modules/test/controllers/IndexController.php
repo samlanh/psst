@@ -251,7 +251,7 @@ class Test_IndexController extends Zend_Controller_Action
     		$option = empty($data['option'])?null:$data['option'];
     		$rows = $db->getAllTestTerm($data,$option);
     		array_unshift($rows,array ( 'id' =>"",'name' => $this->tr->translate("SELECT_TERM")));
-			if($data['addNew']){
+			if(!empty($data['addNew'])){
 				array_unshift($rows,array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			}
     		print_r(Zend_Json::encode($rows));

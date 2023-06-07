@@ -52,7 +52,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 //  				}
 // 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
+				//Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}

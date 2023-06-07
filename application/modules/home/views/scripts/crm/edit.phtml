@@ -395,7 +395,7 @@ dojo.ready(function(){
 	getAllGrade();	
 	initailize();
 });
-var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+var url_get_grade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getAllGrade(grade_id=0){
 	dijit.byId('grade').set('value',''); 
 	dept_id = dijit.byId('degree').get('value');
@@ -405,7 +405,8 @@ function getAllGrade(grade_id=0){
 	dojo.xhrPost({
 		url:url_get_grade,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data){

@@ -197,11 +197,13 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_study_type->setValue($request->getParam("study_type"));
 		
 		$study_status = new Zend_Dojo_Form_Element_FilteringSelect('study_status');
-		$study_status->setAttribs(array('dojoType'=>$this->filter,
+		$study_status->setAttribs(array(
+				'dojoType'=>$this->filter,
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>'false'
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("STUDENT_TYPE"),
 		));
 		$study_option = $_dbgb->getViewById(9,1);
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
@@ -214,7 +216,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>'false'
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_GROUP"),
 		));
 		$optRsChange = $_dbgb->getAllChangeGroup(1); // 1=ប្តូរក្រុម
 		$changegrou_opt = array(''=>$this->tr->translate("SELECT_GROUP"));
@@ -228,7 +231,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>'false'
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("CHANGE_TYPE"),
 		));
 		$optRs=$_dbgb->getViewById(17);
 		$opt_change_type = array(''=>$this->tr->translate("CHANGE_TYPE"));
@@ -246,6 +250,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_exam_type->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'placeholder'=>$this->tr->translate("SELECT_TYPE"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$_exam_type->setValue($request->getParam("exam_type"));
@@ -256,6 +261,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_for_semester->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'placeholder'=>$this->tr->translate("SELECT_SEMESTER"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$_for_semester->setValue($request->getParam("for_semester"));
@@ -269,6 +275,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'autoComplete'=>'false',
+				'placeholder'=>$this->tr->translate("CHOOSE_MONTH"),
 				'queryExpr'=>'*${0}*',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
@@ -284,7 +291,10 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		* For Issue Certificate/Letter Praise
 		* */
 		$_language_type=  new Zend_Dojo_Form_Element_FilteringSelect('language_type');
-		$_language_type->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
+		$_language_type->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+		));
 		$_language_opt = array(
 				0=>$this->tr->translate("PLEASE_SELECT"),
 				1=>$this->tr->translate("KHMER"),
@@ -344,6 +354,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$school_option->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		$school_option->setValue($request->getParam("school_option"));
@@ -372,6 +383,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_user_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'false',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_USER"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		if ($userinfo['level']!=1){
@@ -388,16 +400,18 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		* For Student Test
 		* */
 		$_arr = array(
-				""=>$this->tr->translate("TYPE_TEST"),
-				1=>$this->tr->translate("CREATE_TEST_EXAM_KH"),
-				2=>$this->tr->translate("CREATE_TEST_EXAM_EN"),
-				3=>$this->tr->translate("CREATE_TEST_EXAM_UNIV")
+			""=>$this->tr->translate("TYPE_TEST"),
+			1=>$this->tr->translate("KHMER_KNOWLEDGE"),
+			2=>$this->tr->translate("ENGLISH"),
+		//	3=>$this->tr->translate("UNIVERSITY")
 		);
 		$_type_exam = new Zend_Dojo_Form_Element_FilteringSelect("type_exam");
 		$_type_exam->setMultiOptions($_arr);
 		$_type_exam->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside height-text',
+				'placeholder'=>$this->tr->translate("TYPE_TEST"),
+				'required'=>'false',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',));
 		$_type_exam->setValue($request->getParam("type_exam"));
@@ -417,7 +431,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_student_option_search->setMultiOptions($_arr);
 		$_student_option_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'placeholder'=>$this->tr->translate("OCCUPATION"),
+				'required'=>'false',
 				'class'=>'fullside height-text',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',));
@@ -430,8 +445,9 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_province_search->setMultiOptions($opt);
 		$_province_search->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SELECT_PROVINCE"),
 				'onChange'=>'filterDistrict();',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
@@ -444,6 +460,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				'required'=>'false',
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_TYPE"),
 		));
 		
 		$db = new Foundation_Model_DbTable_DbStudentDrop();
@@ -456,6 +473,35 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		}
 		$_type->setMultiOptions($opt);
 		$_type->setValue($request->getParam("type"));
+
+		$_result_status=  new Zend_Dojo_Form_Element_FilteringSelect('result_status');
+		$_result_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("RESULT_TEST_TYPE"),
+		));
+		$_result_status_opt = array(
+				''=>$this->tr->translate("RESULT_TEST_TYPE"),
+				1=>$this->tr->translate("GET_RESULT"),
+				0=>$this->tr->translate("NO_RESULT"));
+		$_result_status->setMultiOptions($_result_status_opt);
+		$_result_status->setValue($request->getParam("result_status"));
+		
+		$_register_status=  new Zend_Dojo_Form_Element_FilteringSelect('register_status');
+		$_register_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("ENROLL_STATUS"),
+		));
+		$_register_status_opt = array(
+				''=>$this->tr->translate("ENROLL_STATUS"),
+				1=>$this->tr->translate("ENROLLED"),
+				0=>$this->tr->translate("NOT_YET_ENROLL")
+			);
+		$_register_status->setMultiOptions($_register_status_opt);
+		$_register_status->setValue($request->getParam("register_status"));
 		
 		
 		$this->addElements(array(
@@ -488,7 +534,9 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$finished_status,
 				$_type_exam,
 				$_student_option_search,
-				$_province_search
+				$_province_search,
+				$_result_status,
+				$_register_status
 				)
 			);
 		return $this;

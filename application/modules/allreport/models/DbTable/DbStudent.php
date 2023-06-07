@@ -384,14 +384,16 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$where .= " AND st.province_id = ".$search['province_search'];
 			}
 			if($search['result_status']!=''){
-				$where .= " and str.updated_result = ".$search['result_status'];
+				$where .= " AND str.updated_result = ".$search['result_status'];
+			}
+			if($search['register_status']!=''){
+				$where .= " AND str.is_registered = ".$search['register_status'];
 			}
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$where.=$dbp->getAccessPermission("st.branch_id");
 			$sql.= $dbp->getSchoolOptionAccess('str.test_type');
 			
 			$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
-			
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

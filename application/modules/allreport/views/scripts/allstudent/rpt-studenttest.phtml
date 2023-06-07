@@ -38,39 +38,37 @@ table.tb-footer tr.style-head {
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("degree");?>
                    </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-    	               	<?php echo $frm->getElement("student_option_search");?>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("type_exam");?>
                    </div>
+                  
                 </div>
                 <div class="form-group">
-               		<div class="col-md-2 col-sm-2 col-xs-12">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("student_option_search");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("province_search");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("result_status");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("register_status");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("start_date");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("end_date");?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("type_exam");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-    	               	<?php echo $frm->getElement("province_search");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>><?php echo $tr->translate("RESULT_TEST_TYPE"); ?></option>
-			   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>><?php echo $tr->translate("NO_RESULT"); ?></option>
-			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>><?php echo $tr->translate("GET_RESULT"); ?></option>
-			   			</select>
-                   </div>
+                </div>
+				<div class="form-group">
+               		
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
+                   
                 </div>
 			</form>
 		</div>
@@ -87,7 +85,7 @@ table.tb-footer tr.style-head {
 					<td width="20%" align="right">
 					</td>
 					<td width="60%" align="center">
-						<span style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_TEST");?></span><br/>
+						<span style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_TEST");?></span><br/>
 						<span style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 					</td>
 					<td width="20%" align="right"></td>
@@ -97,7 +95,7 @@ table.tb-footer tr.style-head {
 				</tr>
 			<style>
 				.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 20px;font-size: 12px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.hideblog{display: none;}
@@ -133,7 +131,7 @@ table.tb-footer tr.style-head {
 				
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
@@ -147,11 +145,11 @@ table.tb-footer tr.style-head {
 					table.tb-footer{
 						border-collapse:collapse;
 						border:1px solid #000; 
-						font-size:11px;
+						font-size:12px;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					table.tb-footer tr{
-					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					 line-height: 12px; font-size:11px; padding:2px 0px; height: 25px;
 					}
 					table tr td{
 						padding:0 2px;
@@ -168,6 +166,18 @@ table.tb-footer tr.style-head {
 					}
 					table.content-data tr td{
 						padding: 1px;
+					}
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							size:A4 portrait;
+						}
 					}
 			
 			</style>
@@ -189,7 +199,7 @@ table.tb-footer tr.style-head {
 										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
 										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
 										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate(""); ?>&nbsp;</td>
+										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
 									  </tr>
 									 <tr class="style"  align="center">
 										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE"); ?><br /><?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
@@ -265,7 +275,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-
+	getAllTermStudy();
 	new dijit.form.FilteringSelect({
 		placeHolder:"<?php echo $tr->translate("SELECT_TERM");?>",   
 		queryExpr: "*${0}*",
@@ -277,38 +287,37 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "term_test");
-	 var academic_year = dijit.byId('academic_year');
-	 academic_year.on('change', function(evt) {
+	 var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
 		 getAllTermStudy();
     });
-	 getAllTermStudy();
+
 });
 
-url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
-<?php $testCondiction = TEST_CONDICTION; 
-if ($testCondiction==2){
-?>
-url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
-<?php }?>
-var oldterm = "<?php echo $this->search['branch_id']?>";
+var url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
+
 function getAllTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
-	study_year = dijit.byId('academic_year').get('value');
-	if(study_year==''){study_year=0;}
+	if(branch_id=='' || branch_id==-1){
+		return false;
+	}
+
 	dojo.xhrPost({
 		url: url_term_study,
 		content:{
 			'branch_id':branch_id,
-			'study_year':study_year,
 			'option':0
 		},
 		handleAs:"json",
 		load: function(data){
 			term_store  = getDataStorefromJSON('id','name', data);
 			dijit.byId('term_test').set('store',term_store); 
-		    dijit.byId('term_test').set('value','<?php echo $this->search['term_test']?>');  
+			<?php if (!empty($this->search['term_test'])){?>
+				dijit.byId('term_test').attr('value','<?php echo $this->search['term_test']?>');  
+			<?php }?>
 		},
 		error: function(err) {
+			alert(err);
 		}
 	});
 }

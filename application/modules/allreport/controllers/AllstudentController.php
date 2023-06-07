@@ -9,7 +9,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function indexAction()
 	{
 	}
-	public function printIdcardAction(){
+	public function printIdcardAction(){//using
 		$id=$this->getRequest()->getParam('id');
 		$front_card=$this->getRequest()->getParam('front_card');
 		$this->view->front = empty($front_card)?"":$front_card;
@@ -21,7 +21,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
-	public function printPickupcardAction(){
+	public function printPickupcardAction(){//using
 		$id=$this->getRequest()->getParam('id');
 		$k = 0;
 
@@ -30,7 +30,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->groupByBranchAndSchool = $db->getAllStudentSelectedBG($id);
 	}
 	
-	public function rptStudentcardAction(){
+	public function rptStudentcardAction(){//using
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -70,6 +70,77 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+	}
+	public function studentGroupAction()
+	{
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+			$search['issetGroup']=0;
+		}
+		else{
+			$search = array(
+					'adv_search' 		=> "",
+					'group' 		=> "",
+					'branch_id' 	=> "",
+					'academic_year'	=> "",
+					'grade' 		=> "",
+					'session' 		=> "",
+					'teacher' 		=> "",
+					'room'=>0,
+					'degree'=>0,
+					'study_status'=>-1,
+					'issetGroup'=>0,
+			);
+		}
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$this->view->rs = $db->getGroupDetailReport($search);
+		
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->studentUngroup = $group->getGroupBYStudentGrade($search);
+		
+	
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
+	}
+	public function rptStudentStatisticAction(){//using
+		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'adv_search' 		=>'',
+					'academic_year' 	=>'',
+					'grade' 	=>'',
+					'session' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'study_status'=>-1,
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->rs = $group->getGroupBYStudentGrade($search);
+		$this->view->search=$search;
+	
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
 	}
 	public function rptAllStudentprofileAction(){
 		if($this->getRequest()->isPost()){
@@ -193,38 +264,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 		
 	}	
-	public function rptStudentStatisticAction(){//using
-		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-				'adv_search' 		=>'',
-				'academic_year' 	=>'',
-				'grade' 	=>'',
-				'session' 		=>'',
-				'branch_id'		=>0,
-				'degree'		=>0,
-				'study_status'=>-1,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
-			);
-		}
-		$form=new Application_Form_FrmSearchGlobal();
-		$forms=$form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
 	
-		$group= new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $group->getGroupBYStudentGrade($search);
-		$this->view->search=$search;
-		
-		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view->rsfooter = $frm->getFooterAccount(2);
-	}	
 	public function rptStudyHistoryAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -326,39 +366,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
-	public function studentGroupAction()
-	{
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search = array(
-					'adv_search' 		=> "",
-					'group' 		=> "",
-					'branch_id' 	=> "",
-					'academic_year'	=> "",
-					'grade' 		=> "",
-					'session' 		=> "",
-					'teacher' 		=> "",
-					'room'=>0,
-					'degree'=>0,
-					'study_status'=>-1,
-				);
-		}
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$this->view->rs = $db->getGroupDetail($search);
-		
-		$form=new Application_Form_FrmSearchGlobal();
-		$forms=$form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-		$this->view->search = $search;
-		
-		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view-> rsfooter = $frm->getFooterAccount(2);
-	}
+	
 	public function rptgroupstudentchangegroupAction()
 	{
 		if($this->getRequest()->isPost()){

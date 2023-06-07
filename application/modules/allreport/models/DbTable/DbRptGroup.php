@@ -194,7 +194,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   	}
 		 return $db->fetchAll($sql.$order);
 	}
-	public function getGroupDetail($search){
+	public function getGroupDetailReport($search){//using
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();
 	   	$lang = $_db->currentlang();

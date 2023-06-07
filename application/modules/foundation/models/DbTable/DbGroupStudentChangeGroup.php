@@ -869,7 +869,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$sql="SELECT sh.* FROM rms_student_fee_history AS sh WHERE sh.student_id=$student_id  ORDER BY sh.id DESC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	function getAllStudentFromGroup($from_group){
+	function getAllStudentFromGroupChangeGroup($data){
 		$db=$this->getAdapter();
 		$sql="SELECT 
 				gds.stu_id as stu_id,
@@ -884,9 +884,24 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				gds.itemType=1 
 				AND gds.stop_type = 0 
 				AND gds.stu_id=st.stu_id 
-				AND gds.group_id=$from_group
 				AND gds.is_pass=0 ";
-		return $db->fetchAll($sql);
+		
+		if($data['group_id']){
+			$sql.=" AND gds.group_id=".$data['group_id'];
+		}
+		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		
+		$order=" ORDER BY st.stu_khname ASC ";
+		if(!empty($data['sortStundent'])){
+			if($data['sortStundent']==1){
+				$order=" ORDER BY st.stu_code ASC ";
+			}else if($data['sortStundent']==2){
+				$order=" ORDER BY s.stu_khname ASC ";
+			}else if($data['sortStundent']==3){
+				$order=" ORDER BY $studentName ASC ";
+			}
+		}
+		return $db->fetchAll($sql.$order);
 	}
 	
 	function getAllStudentFromGroupUpdate($from_group){

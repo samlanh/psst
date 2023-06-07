@@ -128,30 +128,30 @@ table.tb-footer tr.style-head {
 								background: #ccd9ff;
 								text-align: center;
 							}
-							table.content-data tr.style-rowdata {
-								font-size:12px; 
-								height: 23px;
-							}
-							#BrowserPrintDefaults{display:none} 
-
-							.blue{
-								color:#4839bd!important;
-			
+							@media print {
+								@page {
+									page: A4;
+									size: portrait;;
+									margin: 0.8cm;
+								}
 							}
 						</style>
 						<?php 
-						$all_student = 0;
-						$all_newstudent = 0;
-						$drop_student = 0;?>
+						$totalNew = 0;
+						$totalOld=0;
+						$totalStudent = 0;
+						$totalDrop=0;
+						$totalStudying=0;
+						?>
 					<div id="exportExcel">
 						<table class="content-data" cellpadding="3"  border="1" >
 						  <thead>
 							  <tr class="style-head">
 							    <td scope="col" >&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 							    <td scope="col" >&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-							    <td scope="col" >&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
 							    <td scope="col" >&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
+							    <td scope="col" >&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
+							    <td scope="col" >&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
@@ -166,15 +166,17 @@ table.tb-footer tr.style-head {
 						  </thead>
 						  <?php $i=0; 
 						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;
-							  $all_student = $all_student+$rs['Num_Student'];
-							  $drop_student = $drop_student+$rs['student_drop'];
-							  $all_newstudent+=$rs['New_Student'];
+							  $totalStudent = $totalStudent+$rs['Num_Student'];
+							  $totalDrop = $totalDrop+$rs['student_drop'];
+							  $totalNew+=$rs['New_Student'];
+							  $totalStudying = $totalStudying+($rs['Num_Student']-$rs['student_drop']);
+							  $totalOld =$totalOld+($rs['Num_Student']-$rs['New_Student']);
 						  ?>
 						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
 						   	<td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $i;?></td>
 						   	<td data-label="<?php echo $tr->translate("BRANCH");?>"  align="left">&nbsp;<?php echo $rs['branch_name']; ?></td>
-						    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left">&nbsp;<?php echo $rs['group_code']; ?></td>
 						    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"  align="left">&nbsp;<?php echo $rs['academic']; ?></td>
+						    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left">&nbsp;<?php echo $rs['group_code']; ?></td>
 						    <td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo $rs['semester']; ?></td>
 						    <td data-label="<?php echo $tr->translate("DEGREE");?>"  align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
 						    <td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
@@ -190,30 +192,58 @@ table.tb-footer tr.style-head {
 						  <?php 
 						  	
 						  }} ?>
-						</table>
-						<br>
-						<table cellpadding="3" class="padd" width="20%" align="right" style="font-size:12px;line-height:27px;white-space:nowrap;font-family:'Times New Roman','Khmer OS Battambang';margin-bottom:10px;color:#4839bd;">
-							<tr>
-								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_NEW_STUDENT");?></td>
-								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_newstudent;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						
+						<?php if (!empty($this->studentUngroup)){?>
+							<tr class="style-head">
+								<td colspan="15"><?php echo $tr->translate("STUDENT_NOT_YET_REPORT");?></td>
 							</tr>
-							<tr>
-								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_OLD_STUDENT");?></td>
-								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student-$all_newstudent;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+					<?php 
+						$i=0;
+					if(!empty($this->studentUngroup)){
+						foreach($this->studentUngroup AS $key=>$row){  
+							
+							$newStudent = $row['newStudent'];
+							$oldStudent = $row['oldStudent'];
+							$totalstu = $row['totalStu'];
+							$stopStudent = $row['suspendStudent']+$row['stopStudent'];
+							$studyngStudent =$row['totalStu']-$stopStudent;
+							
+							$totalNew=$totalNew+$newStudent;
+							$totalOld = $totalOld+$oldStudent;
+							$totalStudent =$totalStudent+$totalstu;
+							$totalDrop=$totalDrop+$stopStudent;
+							$totalStudying=$totalStudying+$studyngStudent;
+							
+					?>
+						<tr class="style-rowdata hover" align="center"  >
+							<td><?php echo ++$i;?></td>
+							<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
+							<td align="left">&nbsp;<?php echo $row['academic_year_name'];?>&nbsp;</td>
+							<td></td>
+							<td></td>
+							<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
+							<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
+							<td><?php echo $row['session_name'];?></td>
+							<td></td>
+							<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $stopStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $studyngStudent." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td></td>	
+						</tr>
+						<?php }} ?>	
+					<?php }?>
+							<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
+								<td colspan="9"><?php echo $tr->translate("TOTAL");?></td>
+								<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
+								<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
+								<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+								<td><?php echo $totalDrop." ".$tr->translate("STUDENT_UNIT");?></td>
+								<td><?php echo $totalStudying." ".$tr->translate("STUDENT_UNIT");?></td>
+								<td></td>
 							</tr>
-							<tr>
-								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
-								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
-							</tr>
-							<tr>
-								<td style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("STUDENT_DROP");?></td>
-								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $drop_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
-							</tr>
-							<tr>
-								<td style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("STUDENT_STUDY");?></td>
-								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student - $drop_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
-							</tr>
-						</table>
+					</table> 
 					</div>
 				</td>
 			</tr>

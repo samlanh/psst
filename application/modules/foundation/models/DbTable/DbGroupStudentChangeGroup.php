@@ -314,7 +314,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							$stu=array(
 									'is_pass'		=> 1,
 									'stop_type'		=> 3,//ឆ្លងភូមិសិក្សា
-									'is_current'	=> 0,
+									'is_current'	=> 1,//still show in front desk
 							);
 							$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group']." AND itemType=1";
 							$this->_name='rms_group_detail_student';

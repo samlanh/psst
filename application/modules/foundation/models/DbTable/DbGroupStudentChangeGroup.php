@@ -313,6 +313,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						if(!empty($rsexist)){//old infor
 							$stu=array(
 									'is_pass'		=> 1,
+									'stop_type'		=> 3,//ឆ្លងភូមិសិក្សា
 									'is_current'	=> 0,
 							);
 							$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group']." AND itemType=1";
@@ -366,7 +367,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					$where=" id=".$_data['groupId'];
 					$this->update($group, $where);
 				}
-				$this->updateOldGrouptoFinish($_data['from_group']);
+				
+				$this->updateOldGrouptoFinish($_data['from_group'],3);
 			}
 			$_db->commit();
 			
@@ -376,8 +378,14 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
 	}
-	function updateOldGrouptoFinish($groupId){
-		$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$groupId." AND stop_type=0 ORDER BY is_pass ASC LIMIT 1 ";
+	function updateOldGrouptoFinish($groupId,$stopType=null){
+		$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$groupId;
+		if($stopType!=null){
+			$sql.=" AND stop_type= ".$stopType;
+		}else{
+			$sql.=" AND stop_type=0";
+		}
+		$sql.=" ORDER BY is_pass ASC LIMIT 1 ";
 		
 		$resultOldGroup = $this->getAdapter()->fetchOne($sql);
 		if(!empty($resultOldGroup)){

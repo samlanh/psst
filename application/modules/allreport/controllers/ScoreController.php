@@ -205,7 +205,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		);
     	}
     	$db = new Allreport_Model_DbTable_DbRptGroup();
-    	$rs= $db->getGroupDetail($search);
+    	$rs= $db->getGroupDetailReport($search);
     	$this->view->rs = $rs;
     	$this->view->search=$search;
     	    
@@ -985,43 +985,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rating = $db->getRatingValuation();
     }
-    public function studentEvaluationgroupAction()
-    {
-    	if($this->getRequest()->isPost()){
-    		$search=$this->getRequest()->getPost();
-    	}
-    	else{
-    		$search = array(
-    				'adv_search' 		=> "",
-    				'group' 		=> "",
-    				'branch_id' 	=> "",
-    				'academic_year'	=> "",
-    				'grade' 		=> "",
-    				'session' 		=> "",
-    				'teacher' 		=> "",
-    				'room'=>0,
-    				'degree'=>0,
-    				'study_status'=>-1,
-    		);
-    	}
-    	$db = new Allreport_Model_DbTable_DbRptGroup();
-    	$this->view->rs = $db->getGroupDetail($search);
-    	$_db = new Global_Model_DbTable_DbGroup();
-    	$teacher = $_db->getAllTeacher();
-    	$this->view->teacher = $teacher;
-    
-    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-    	$frm = new Application_Form_FrmGlobal();
-    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view->rsfooter = $frm->getFooterAccount(2);
-    	$this->view->search = $search;
-    	
-    	$form=new Application_Form_FrmSearchGlobal();
-    	$forms=$form->FrmSearch();
-    	Application_Model_Decorator::removeAllDecorator($forms);
-    	$this->view->form_search=$form;
-    }
-    public function rptStudentGroupAction()
+   
+    public function rptStudentGroupAction()//to right click show score result or hornor script
     {
     	$id=$this->getRequest()->getParam("id");
     	if(empty($id)){

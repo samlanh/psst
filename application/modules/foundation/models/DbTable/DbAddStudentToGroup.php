@@ -181,14 +181,14 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			
 			$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
 			
-			$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+			$order=" ORDER BY s.stu_khname ASC ";
 			if(!empty($search['sortStundent'])){
 				if($search['sortStundent']==1){
-					$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+					$order=" ORDER BY s.stu_code ASC ";
 				}else if($search['sortStundent']==2){
-					$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+					$order=" ORDER BY  s.stu_khname ASC ";
 				}else if($search['sortStundent']==3){
-					$order=" ORDER BY (SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sd.`stu_id` LIMIT 1) ASC ";
+					$order=" ORDER BY $studentName ASC ";
 				}
 			}
 		return $db->fetchAll($sql.$order);

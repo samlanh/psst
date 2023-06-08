@@ -117,7 +117,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-			$student = $db->getAllStudentFromGroup($data['from_group']);
+			$student = $db->getAllStudentFromGroupChangeGroup($data);
 			print_r(Zend_Json::encode($student));
 			exit();
 		}

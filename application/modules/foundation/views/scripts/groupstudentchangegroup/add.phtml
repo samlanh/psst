@@ -189,6 +189,17 @@
 				                   </div>
 				                </div>
 				                <div class="form-group">
+					                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+					                <div class="col-md-7 col-sm-7 col-xs-12">
+					                	<select id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
+										   	<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+										   	<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+										   	<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+										   	<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+										</select>
+					                </div>
+					             </div>
+				                <div class="form-group">
 				                	<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
 				                	<?php echo $tr->translate("STUDENT_INFO");?>
 				                   	</label>
@@ -271,7 +282,7 @@
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_GROUP");?> <span class="required">(*)</span>
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		 	<input id="groupId" />
+		                   		<input id="groupId" />
 		                   </div>
 		                </div>
 		                <div class="form-group">
@@ -287,11 +298,19 @@
 								<input dojoType="dijit.form.TextBox" type="hidden" name="identity" id="identity" />
 		                   </div>
 		                </div>
-		                <div class="form-group">
-		                   <div class="col-md-8 col-sm-8 col-xs-12 text-center">
-								<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-									class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
+		                <div class="form-group ">
+		                	<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row"> 
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ></label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+												class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
+					                   </div>
+					                  </div>
+		                   		</div>
 		                   </div>
+		                   
 		                </div>
 			        </div>
 			    </div>
@@ -361,9 +380,6 @@ dojo.ready(function(){
 		name: "academic_year",
 		class: "fullside", 		
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-		onChange: function() {  
-			//academic_year = dijit.byId('academic_year').get('value');
-		}
 	}, "academic_year");
 
 	new dijit.form.FilteringSelect({
@@ -423,7 +439,6 @@ dojo.ready(function(){
 	}, "gradeId");
 	
 	
-	
 	new dijit.form.FilteringSelect({
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
@@ -480,13 +495,11 @@ dojo.ready(function(){
 	});
 	var change_type = dijit.byId('change_type');
 	change_type.on('change', function(evt) {
-		changeTypeMove()
 		conditionGroup();
 	});
 	getAllFeeByBranch();
 	getRefreshItems();
 	getallGrade();
-	changeTypeMove();
 	conditionGroup();
 }); 
 
@@ -496,17 +509,6 @@ function conditionGroup(){
 	if(changeType==1){
 		$(".conditionGroup").css("display", "none");
 	}
-}
-function changeTypeMove(){
-	/*changeType = dijit.byId('change_type').get('value');
-	if(changeType==3){
-		$(".upDegreeStudent").css("display", "flow-root");
-		$(".otherCondiction").css("display", "none");
-	}else{
-		$(".otherCondiction").css("display", "flow-root");
-		$(".upDegreeStudent").css("display", "none");
-		getAllGroupByBranch(1);
-	}*/
 }
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllFeeByBranch(){
@@ -594,7 +596,8 @@ function getStudentFromGroup(){
 	dojo.xhrPost({
 		url:url_get_all_student_from_group,
 		content:{
-			'from_group':from_group
+			'group_id':from_group,
+			'sortStundent':dijit.byId('sortStundent').get('value')
 			},
 		handleAs:"json",
 		load: function(respone){

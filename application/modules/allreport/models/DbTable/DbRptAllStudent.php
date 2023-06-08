@@ -1409,7 +1409,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
 				(SELECT $degree FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 				COUNT(gds.stu_id) AS totalStu,
-				COUNT(DISTINCT  gds.`is_newstudent`) AS newStudent,
+				COUNT(if(gds.is_newstudent = '1', gds.is_newstudent, NULL)) AS newStudent,
 				COUNT(if(gds.is_newstudent = '0', gds.is_newstudent, NULL)) AS oldStudent,
 				COUNT(if(gds.stop_type = '1', gds.stop_type, NULL)) AS stopStudent,
 				COUNT(if(gds.stop_type = '2', gds.stop_type, NULL)) AS suspendStudent
@@ -1427,9 +1427,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(($search['branch_id'])>0){
     		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
-//     	if(($search['study_status'])>0){
-//     		$where.=' AND g.is_pass='.$search['study_status'];
-//     	}
+    	if(($search['study_status'])>0){
+    		if($search['study_status']==1){//upgraded
+    			$where.=' AND gds.stop_type=0 AND gds.is_pass=1';
+    		}elseif($search['study_status']==2){//studying
+    			$where.=' AND gds.stop_type=0 AND gds.is_pass=0';
+    		}
+    		
+    	}
     	if(!empty($search['academic_year'])){
     		$where.=' AND gds.academic_year='.$search['academic_year'];
     	}
@@ -1441,6 +1446,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['session'])){
     		$where.=' AND gds.session='.$search['session'];
+    	}
+    	if(isset($search['issetGroup'])){
+    		$where.=' AND gds.is_setgroup='.$search['issetGroup'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("s.branch_id");

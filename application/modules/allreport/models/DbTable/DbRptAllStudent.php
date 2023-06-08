@@ -1294,11 +1294,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$branch = "branch_namekh";
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
+			
     	}else{ // English
     		$label = "name_en";
     		$branch = "branch_nameen";
     		$grade = "rms_itemsdetail.title_en";
-    		$degree = "rms_items.title_en";
+    		
     	}
     	$sql = "SELECT 
     			s.stu_id,s.stu_code,s.stu_khname,s.last_name,s.stu_enname,s.sex,s.tel,s.email,
@@ -1308,7 +1309,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	(SELECT $label FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
 		    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) as academic_year,
 		    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-		    	(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree
+		    	(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree,
+				(SELECT sg.group_code  FROM `rms_group` AS sg WHERE sg.id=g.group_id  LIMIT 1) AS group_name,
+				g.is_setgroup
 		    	
     		FROM 
     			rms_student as s ,
@@ -1316,7 +1319,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$where=' WHERE 
 			g.itemType=1 
-			AND g.is_setgroup = 0 
+
 			AND g.is_current=1
 			AND s.stu_id=g.stu_id 
 			AND s.status=1 
@@ -1367,6 +1370,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['session'])){
     		$where.=' AND s.session='.$search['session'];
+    	}
+		if(!empty($search['group'])){
+    		$where.=' AND g.group_id='.$search['group'];
+    	}
+		if($search['student_group_status']>-1 AND $search['student_group_status']!=''){
+    		$where.=' AND g.is_setgroup='.$search['student_group_status'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');

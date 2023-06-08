@@ -502,6 +502,21 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			);
 		$_register_status->setMultiOptions($_register_status_opt);
 		$_register_status->setValue($request->getParam("register_status"));
+
+		$_student_group_status=  new Zend_Dojo_Form_Element_FilteringSelect('student_group_status');
+		$_student_group_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("STATUS"),
+		));
+		$_group_status_opt = array(
+				-1=>$this->tr->translate("ALL_STUDENT"),
+				1=>$this->tr->translate("IS_GROUP"),
+				0=>$this->tr->translate("NOT_YET_GROUP")
+			);
+		$_student_group_status->setMultiOptions($_group_status_opt);
+		$_student_group_status->setValue($request->getParam("student_group_status"));
 		
 		
 		$this->addElements(array(
@@ -536,7 +551,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_student_option_search,
 				$_province_search,
 				$_result_status,
-				$_register_status
+				$_register_status,
+				$_student_group_status
 				)
 			);
 		return $this;

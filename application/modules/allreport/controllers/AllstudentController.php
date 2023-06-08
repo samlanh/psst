@@ -735,7 +735,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 				'academic_year'=> '',
 				'grade' 	=> '',
 				'group'		=> '',
-				'stu_type'	=> '',
+				'student_group_status'	=> -1,
 			);
 		}
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();

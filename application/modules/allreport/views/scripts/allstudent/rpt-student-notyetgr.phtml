@@ -1,9 +1,10 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('STUDENT_NOT_YET_REPORT')); 
+	$this->headTitle($tr->translate('RPT_STUDENT')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$classHideHeight="110px";
+
 ?>	
 <style>
 	.hover:hover{ background:#ccc;}
@@ -15,7 +16,7 @@
 	<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_NOT_YET_REPORT');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -38,6 +39,17 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                     	<input id="grade" />
                    </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<input id="group" />
+                   </div>
+                    
+          </div>
+		  <div class="form-group">
+                  
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("student_group_status");?>
+                   </div>
+                 
                      <div class="col-md-2 col-sm-2 col-xs-12">
                     	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
@@ -53,7 +65,7 @@
 					<td width="15%" align="center">
 					</td>
 					<td width="70%"  align="center">
-						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_NOT_YET_REPORT");?></strong><br />
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT");?></strong><br />
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
 					<td width="15%" align="center">
@@ -134,13 +146,20 @@
 						border: 1px solid #000;	
 						text-align: center;
 					}
-					@media print {
-						@page {
+					
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
 							page: A4;
 							size: portrait;
-							margin: 0.8cm;
 						}
-				}
+					}
 					
 				</style>
 				<tr>
@@ -153,7 +172,8 @@
 									<th scope="col" rowspan="2"><?php echo $tr->translate("BRANCH");?></th>
 									<th scope="col" colspan="5"><?php echo $tr->translate("STUDENT_INFO");?></th>
 									<th scope="col" colspan="2"><?php echo $tr->translate("CONTACT_INFO");?></th>
-									<th scope="col" colspan="3"><?php echo $tr->translate("STUDY_INFO");?></th>
+									<th scope="col" colspan="4"><?php echo $tr->translate("STUDY_INFO");?></th>
+									<th scope="col"  rowspan="2"><?php echo $tr->translate("STATUS");?></th>
 								</tr>
 								<tr class="style"  style="text-align:center;">
 									<th scope="col"><?php echo $tr->translate("STUDENT_CODE");?></th>
@@ -166,6 +186,7 @@
 									<th scope="col"><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
 									<th scope="col"><?php echo $tr->translate("DEGREE");?></th>
 									<th scope="col"><?php echo $tr->translate("GRADE");?></th>
+									<th scope="col"><?php echo $tr->translate("GROUP");?></th>
 								</tr>
 							</thead>
 						<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
@@ -182,6 +203,8 @@
 								<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"  >&nbsp;<?php echo $row['academic_year'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("DEGREE");?>"  >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("GROUP");?>"  align="left">&nbsp;<?php echo $row['group_name'];?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("SEX");?>"  >&nbsp;<?php if($row['is_setgroup']==1){ echo $tr->translate("IS_GROUP");}else { echo $tr->translate("NOT_YET_GROUP");}?>&nbsp;</td>	
 							</tr>
 						<?php }?>	
 						</table>	
@@ -199,6 +222,7 @@
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
@@ -211,14 +235,31 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "grade");
+
+	new dijit.form.FilteringSelect({
+		store : group_store,
+		queryExpr: "*${0}*",
+		autoComplete: false, 
+		required: false,
+		id: "group",
+		name: "group",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+		onChange: function() {  
+		}
+	}, "group");
+
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-  });
+		getAllGroupByBranch();
+	  });
 	getallGrade();
+	getAllGroupByBranch();
 });
 
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getallGrade(){
+	getAllGroupByBranch();
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id=='' || dept_id==-1){return false;}
 		dojo.xhrPost({
@@ -232,10 +273,49 @@ function getallGrade(){
 				dijit.byId('grade').attr('value','');
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store); 
-			    dijit.byId('grade').attr('value','<?php echo $this->adv_search['grade']?>');    
+			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');    
 			},
 			error: function(err) {
 			}
 		});
+}
+var url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){degree ="";}
+	grade = dijit.byId('grade').get('value');
+	if(grade=='' || grade==-1){grade ="";}
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){academic_year ="";}
+	
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,
+			'degree':degree,
+			'grade':grade,
+			'academic_year':academic_year,
+			'noaddnew':1,
+			'forfilter':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);   
+			dijit.byId('group').attr('value','<?php echo $this->search['group']?>');  
+		  
+		},
+		error: function(err) {
+		}
+	});
+	
 }
 </script>

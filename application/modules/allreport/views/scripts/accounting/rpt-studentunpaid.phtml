@@ -94,12 +94,19 @@
 				    line-height: 14px;
 				    display: block;
 				}
-				@media print 
-				{
-				    @page {
-				      margin:0.5cm;
-				    }
-				}
+			
+				@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							page: A4;
+						}
+					}
 			</style>
 			<table style="background:#fff; margin: 0 auto; width:100%;white-space: nowrap;" >
 				<tr>

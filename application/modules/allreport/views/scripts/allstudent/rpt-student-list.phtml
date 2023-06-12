@@ -84,22 +84,22 @@ table.tb-footer tr.style-head {
 						<span style="color:#4839bd; font-size: 12px;"><?php echo $tr->translate("STUDENT_LIST_REPORT");?></span>
 						<div >
 							<span style="font-size: 12px;"> <?php echo $tr->translate("ACADEMIC_YEAR");?></span>
-							<?php echo $this->rr['academic'];?>
+							<?php echo !empty($this->rr['academic'])?$this->rr['academic']:'';?>
 						</div>
 					</td>
 					<td style="width:200px;">
 						<table style="width: 100%;white-space: nowrap;line-height: 20px;color:#4839bd;font-size:12px;font-family:Times New Roman,Khmer OS Battambang;" >
 							<tr>
 								<td><?php echo $tr->translate("DEGREE");?></td>
-								<td>: <?php echo $this->rr['degree'];?></td>
+								<td>: <?php echo !empty($this->rr['degree'])?$this->rr['degree']:'';?></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("STUDY_GROUP");?></td>
-								<td>: <?php echo $this->rr['group_code'];?></td>
+								<td>: <?php echo !empty($this->rr['group_code'])?$this->rr['group_code']:'';?></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("CLASSES");?></td>
-								<td>: <?php echo $this->rr['room_name'];?></td>
+								<td>: <?php echo !empty($this->rr['group_code'])?$this->rr['group_code']:'';?></td>
 							</tr>
 						</table>
 					</td>
@@ -168,12 +168,12 @@ table.tb-footer tr.style-head {
 							<?php  $i=0;
 								$male=0;$femle=0;
 								$str='';
-							foreach ($this->rs as $key=> $row){ $i++;
-							if($key==0){
-								$str=$key+1;
-							}else{
-								$str.=",".($key+1);
-							}
+								foreach ($this->rs as $key=> $row){ $i++;
+									if($key==0){
+										$str=$key+1;
+									}else{
+										$str.=",".($key+1);
+								}
 							?>
 							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" id="<?php echo "row".$i?>"  align="left">
 								<td width="10px">&nbsp;<?php echo $i;?>&nbsp;</td>
@@ -227,7 +227,7 @@ table.tb-footer tr.style-head {
 										</tr>
 									</table>
 								<input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
-								<input type="hidden" name="group_id" id="group_id" value="<?php echo $this->rr['id'];?>" />
+								<input type="hidden" name="group_id" id="group_id" value="<?php echo !empty($this->rr['id'])?$this->rr['id']:'';?>" />
 								</td>
 							</tr>
 							<tr>
@@ -247,7 +247,7 @@ table.tb-footer tr.style-head {
 										<tr>
 											<td valign="top"  style="font-family:'Khmer MEF2';font-size:12px;text-align: center;"></td>
 											<td valign="top" ></td>
-											<td valign="top" style="font-family:'Khmer MEF2';font-size:12px;text-align: center;"><br /><br /><?php echo $this->rr['teacher_name_kh'];?></td>
+											<td valign="top" style="font-family:'Khmer MEF2';font-size:12px;text-align: center;"><br /><br /><?php echo !empty($this->rr['teacher_name_kh'])?$this->rr['teacher_name_kh']:'';?></td>
 										</tr>
 									</table>
 								</td>

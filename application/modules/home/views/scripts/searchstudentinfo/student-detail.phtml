@@ -153,6 +153,13 @@ table.content-data{
 									    color: #1ABB9C;
 									}
 									tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+						@media print {
+								@page {
+									page: A4;
+									size: portrait;;
+									margin: 0.8cm;
+								}
+							}
 				        	</style>
 				        		<div style="background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 								<table width="100%" style="font-size:12px; font-family:'Times New Roman','Khmer OS Battambang';"> 
@@ -513,6 +520,13 @@ table.content-data{
 									?>	
 									<style>
 										table.main_table tr{line-height:22px !important;}
+							@media print {
+								@page {
+									page: A4;
+									size: landscape;
+									margin: 0.8cm;
+								}
+							}
 									</style>
 									<div style=" background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">	
 										<div id="divPrintSchedule">

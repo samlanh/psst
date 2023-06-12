@@ -464,7 +464,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			if (!empty($data['edit'])){//for all page edit 
 				$data=$db->getAllStudentByGroupForEdit($data['groupId']);
 			}else{
-				$data=$db->getStudentByGroup($data);
+				$data=$db->getStudentByGroupGlobal($data);
 			}
 			print_r(Zend_Json::encode($data));
 			exit();

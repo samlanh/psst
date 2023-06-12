@@ -652,7 +652,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					and gds.status=1
 				order by 
 					gds.is_pass ASC,
-					gds.date ASC
+					gds.create_date ASC
 						
 			";
 		return $db->fetchAll($sql);

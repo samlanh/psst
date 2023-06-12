@@ -3198,7 +3198,7 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT schoolOption FROM rms_items WHERE id=".$degree_id;
   	return $db->fetchOne($sql);
   }
-  function getStudentByGroup($data){
+  function getStudentByGroupGlobal($data){
   	$db=$this->getAdapter();
   	
   	$currentLang = $this->currentlang();
@@ -3213,6 +3213,10 @@ function getAllgroupStudyNotPass($action=null){
   				
 				st.stu_code AS stu_code,
 			  	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE stu_khname END) AS stu_name,
+			  	st.stu_khname,
+			  	st.last_name,
+				st.stu_enname,
+			  	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=st.sex LIMIT 1) as gender,
 			  	st.sex, 
 			  	gs.`stu_id`,
 				gs.is_maingrade,
@@ -3266,15 +3270,16 @@ function getAllgroupStudyNotPass($action=null){
   			//$sql.=" AND gs.`group_id` = ".$data['groupId'];
   		}
   		
-  		$order="";
+  		$order=" ORDER BY st.stu_khname ASC ";
   		if(!empty($data['orderStucode'])){//
-  			$order.=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
+  			$order.=" ORDER BY st.stu_code  ASC ";
   		}
   		if(!empty($data['orderKhmerName'])){
-  			$order.=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
+  			$order.=" ORDER BY st.stu_khname ASC ";
   		}
   		if(!empty($data['orderEnglishName'])){
-  			$order.=" ORDER BY (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = gs.`stu_id` LIMIT 1) ASC ";
+  			$studentName="CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,''))";
+  			$order.=" ORDER BY $studentName ASC ";
   		}
   		if(!empty($data['orderitemType'])){
   			$order.=" ORDER BY gs.`itemType` ASC ";

@@ -71,6 +71,17 @@
 										</div>
 									 </div>
 									 <div class="form-group">
+						                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+						                <div class="col-md-7 col-sm-7 col-xs-12">
+						                	<select onchange="getStudentFromGroup();" id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
+											   	<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+											   	<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+											   	<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+											   	<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+											</select>
+						                </div>
+						             </div>
+									 <div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADUATE_DATE");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm->getElement("graduate_date");?>
@@ -159,7 +170,7 @@
 			required:false,
 			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 			onChange:function(){
-				toStudentGroup(1);
+				getGroupInfo(1);
 				getStudentFromGroup();			 						 						
 			}
 		},"group");
@@ -167,14 +178,18 @@
 		branch_id.on('change', function(evt) {
 			getAllGroupByBranch();
 		});
+
+		dijit.byId('type').attr('value',4);
+		dijit.byId('type').set('readOnly','true');
+
+		getAllGroupByBranch();
 	}); 
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByBranch(){
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
+			dijit.byId('group').reset();  
 			dijit.byId('branch_id').focus();
 			return false;
 		}
@@ -197,12 +212,24 @@
 var url_get_all_student_from_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
 function getStudentFromGroup(){
 	from_group = dijit.byId('group').get('value');
+	stringData='orderKhmerName';
+	shortData = dijit.byId('sortStundent').get('value');
+	if(shortData==1){
+		stringData='orderStucode';
+	}
+	else if(shortData==2){
+		stringData='orderKhmerName';
+	}
+	else if(shortData==3){
+		stringData='orderEnglishName';
+	}
+
 	dojo.xhrPost({
 		url:url_get_all_student_from_group,
 		content:{
 			'groupId':from_group,
 			'isCurrent':1,
-			'itemType':1,
+			stringData:1
 			},
 		handleAs:"json",
 		load: function(respone) {
@@ -230,12 +257,11 @@ function getStudentFromGroup(){
 									tem += '</label>';
 								tem += '</div>';
 							tem += '</td>';
-								
 							tem += '<td data-label="<?php echo $tr->translate("NUM");?>" align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
 							tem += '<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+respone[i].stu_code+'</td>';
 							tem += '<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>">'+respone[i].stu_khname+'</td>';
 							tem += '<td data-label="<?php echo $tr->translate("NAME_EN");?>">'+respone[i].last_name+' '+respone[i].stu_enname+'</td>';
-							tem += '<td data-label="<?php echo $tr->translate("SEX");?>" align="center">'+respone[i].sex+'</td>';
+							tem += '<td data-label="<?php echo $tr->translate("SEX");?>" align="center">'+respone[i].gender+'</td>';
 						tem += '</tr>';
 				}
 			}
@@ -267,9 +293,8 @@ function CheckAll(index){
 	}
 }
 
-//var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
 var url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
-function toStudentGroup(type){
+function getGroupInfo(type){
 	togroup = dijit.byId('group').get('value');
 	dojo.xhrPost({
 		url:url_group,

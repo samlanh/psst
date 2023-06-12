@@ -695,7 +695,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$sql.=" AND (SELECT i.schoolOption FROM `rms_items` AS i WHERE i.id = gds.degree AND i.type=1  LIMIT 1) = 2 ";
     	$where=' ';
-    	$to_date = (empty($search['end_date']))? '1': "gds.date <= '".$search['end_date']." 23:59:59'";
+    	$to_date = (empty($search['end_date']))? '1': "gds.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .=" AND ".$to_date;
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');

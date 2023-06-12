@@ -454,7 +454,9 @@ function checkStudent(){
 	kh_name_stu = dijit.byId('kh_name_stu').get('value');
 	branch_id = dijit.byId('branch_id').get('value');
 	
-	if(branch_id=='' || branch_id==-1){ return false;}
+	if(branch_id=='' || branch_id==-1){ 
+		dijit.byId('branch_id').focus();
+		return false;}
 	
 	dojo.xhrPost({
 		url:url_CheckStudent,	

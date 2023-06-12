@@ -441,7 +441,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
-			$db->submitDateList($search);
+// 			$db->submitDateList($search);
 			$row = $db->getStudentGroup(null,$search,1);
 			$rs=array();
 			if(!empty($row[0]['group_id'])){
@@ -465,7 +465,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rr = $rs;
 		
 		$frm = new Application_Form_FrmGlobal();
-		$this->view->rsheader = $frm->getLetterHeaderReport($rs['branch_id'],3);
+		$branchId=(!empty($rs['branch_id']))?$rs['branch_id']:0;
+		$this->view->rsheader = $frm->getLetterHeaderReport($branchId,3);
 		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();

@@ -146,27 +146,23 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql ='SELECT 
     	s.last_name,
     	s.stu_enname,
-    	s.dob,
+    	s.pob,
     	s.father_enname,
     	s.mother_enname,
-    	s.pob,
+    	DATE_FORMAT(s.dob,"%d-%m-%Y") AS dob,
     	s.sex,
     	CONCAT(s.stu_khname) as name_kh,
     	CONCAT(s.stu_enname," ",s.last_name) as name_en,
-   			
     	s.tel,s.email,s.stu_code,s.home_num,s.street_num,
     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
 		s.photo,
-    	
-    	
     	gds.degree as dept,
 	    (SELECT rms_items.title FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree,
 	    (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
     	(SELECT name_kh from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status,
     	gds.stop_type AS is_subspend,
     	gds.is_newstudent AS is_stu_new,
-    	
     	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
     	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
     	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
@@ -175,9 +171,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_namekh,
     	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_namekh,
     	(SELECT rms_province.province_kh_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province_kh_name
-    	FROM rms_student AS s,
-    	rms_group_detail_student AS gds
-    	 ';
+    		FROM rms_student AS s,
+    		rms_group_detail_student AS gds ';
     	$where=' WHERE 
 			gds.itemType=1 
 			AND gds.stu_id = s.stu_id 
@@ -782,28 +777,28 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				,(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name
 				,(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name
 				,(SELECT province_en_name from rms_province WHERE rms_province.province_id = s.province_id LIMIT 1)AS province
-				
-				,(SELECT v.name_en 	  FROM rms_view AS v WHERE v.type=4  	AND v.key_code=s.session LIMIT 1)AS session
-				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=4  AND v.key_code=s.session LIMIT 1)AS sessionTitle
+				,(SELECT v.name_en 	  FROM rms_view AS v WHERE v.type=4  	AND v.key_code=gds.session LIMIT 1) AS session
+				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=4  AND v.key_code=gds.session LIMIT 1)AS sessionTitle
 				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=21 	AND v.key_code=s.nationality LIMIT 1) AS nationality
 				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=21 AND v.key_code=s.nationality LIMIT 1) AS nationalityTitle
-				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=21 	AND v.key_code=s.nation LIMIT 1) AS nation,
+				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=21 	AND v.key_code=s.nation LIMIT 1) AS nation
 				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=21 AND v.key_code=s.nation LIMIT 1) AS nationTitle
 				,(SELECT v.name_en    FROM rms_view AS v WHERE v.type=2  	AND v.key_code=s.sex LIMIT 1)AS sex
 				,(SELECT v.'.$label.' FROM rms_view AS v WHERE v.type=2  AND v.key_code=s.sex LIMIT 1)AS sexTitle
 			FROM rms_student AS s 
-				JOIN rms_group_detail_student AS gds ON s.stu_id = gds.stu_id
+				JOIN rms_group_detail_student AS gds 
+				ON s.stu_id = gds.stu_id
 			';
     	$where=' 
 			WHERE 
 				s.customer_type=1 
 				AND gds.itemType =1
-				AND gds.is_maingrade =1
-				AND gds.is_current =1
+				AND gds.is_maingrade=1
+				AND gds.is_current=1
 			';    	 
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission("branch_id");
+    	$where.=$dbp->getAccessPermission("s.branch_id");
     	//$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degree )');
     	$order=" order by stu_id DESC";
     	 
@@ -844,7 +839,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.=' AND gds.group_id='.$search['group'];
     	}
-    	
     	
     	return $db->fetchAll($sql.$where.$order);
     }

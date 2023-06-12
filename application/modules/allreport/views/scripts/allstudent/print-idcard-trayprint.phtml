@@ -4,19 +4,12 @@
 	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
 	$type=$this->rs[0]['card_type'];//CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
 ?>	
-<div style="width:21cm !important;height:29.7cm;padding: 0px;margin:0px;">
-	
+
+<div style="width:21cm !important;height:12.7cm;padding: 0px;margin:0px;">
 		<div id="divPrint1" >
 			<div class='bgcard'>
 			<?php if($type==1){// psis format ?>
 				<style>
-					#divPrint1{
-						width: 21cm;
-						height: 29.7cm;
-						background: none;
-						position: relative;
-						border: 0;
-					}
 					.bgcard{
 						background-image: url('<?php echo $this->baseUrl()."/images/card/bgsizepvccard.jpg";?>');background-size: 100%;
 						background-repeat: no-repeat;
@@ -219,15 +212,12 @@
 		</div>
 	</div>
 </div>
-<table width="100%">
-	<tr>
-		<td align="center">
-			<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
-			<button dojoType="dijit.form.Button" id="printall" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				type="button" onclick="print();"><?php echo $tr->translate("PRINT");?></button>
-		</td>
-	</tr>
-</table>
+<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
+	<div class="row"> 
+		<button dojoType="dijit.form.Button" id="printall" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+		type="button" onclick="print();"><?php echo $tr->translate("PRINT");?></button>
+	</div>
+</div>
 <script type="text/javascript">
 	dojo.ready(function(){
 		print();

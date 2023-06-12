@@ -61,7 +61,7 @@ public function init()
 		$row['studentIdLength'] = $db_gs->geLabelByKeyName('studentIdLength');
 		$row['teacher_doc'] = $db_gs->geLabelByKeyName('teacher_doc');
 		$row['payment_date'] = $db_gs->geLabelByKeyName('payment_date');
-		$row['saturday_schedule'] = $db_gs->geLabelByKeyName('saturday_schedule');
+		$row['studyday_schedule'] = $db_gs->geLabelByKeyName('studyday_schedule');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

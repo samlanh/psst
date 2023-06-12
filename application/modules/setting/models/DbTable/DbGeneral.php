@@ -298,13 +298,13 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$this->update($arr, $where);
 			}
 
-			$rows = $this->geLabelByKeyName('saturday_schedule');
+			$rows = $this->geLabelByKeyName('studyday_schedule');
 			if (empty($rows)){
-				$arr = array('keyValue'=>$data['saturday_schedule'],'keyName'=>'saturday_schedule','note'=>"Can Enable/Disable  Saturday in Shcedule ",'user_id'=>$dbg->getUserId());
+				$arr = array('keyValue'=>$data['studyday_schedule'],'keyName'=>'studyday_schedule','note'=>"Can Enable/Disable  Saturday in Shcedule ",'user_id'=>$dbg->getUserId());
 				$this->insert($arr);
 			}else{
-				$arr = array('keyValue'=>$data['saturday_schedule']);
-				$where=" keyName= 'saturday_schedule'";
+				$arr = array('keyValue'=>$data['studyday_schedule']);
+				$where=" keyName= 'studyday_schedule'";
 				$this->update($arr, $where);
 			}
 			

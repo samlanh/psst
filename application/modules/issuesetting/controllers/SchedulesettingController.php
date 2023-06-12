@@ -6,6 +6,7 @@ class Issuesetting_SchedulesettingController extends Zend_Controller_Action {
 		header('content-type: text/html; charset=utf8');
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+		defined('STUDY_DAY_SETTING') || define('STUDY_DAY_SETTING', Setting_Model_DbTable_DbGeneral::geValueByKeyName('studyday_schedule'));
 	}
 	public function indexAction()
     {
@@ -134,6 +135,7 @@ class Issuesetting_SchedulesettingController extends Zend_Controller_Action {
     }
     
     public function getschedulesettingAction(){
+		
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Issuesetting_Model_DbTable_DbScheduleSetting();

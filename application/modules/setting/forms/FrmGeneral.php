@@ -252,13 +252,14 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				);
 		$paymentDate->setMultiOptions($paydateOpt);
 
-		$saturdaySched=  new Zend_Dojo_Form_Element_FilteringSelect('saturday_schedule');
-		$saturdaySched->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
-		$satOpt = array(
-				0=>$this->tr->translate("HIDE"),
-				1=>$this->tr->translate("SHOW"),
+		$studydaySchedule=  new Zend_Dojo_Form_Element_FilteringSelect('studyday_schedule');
+		$studydaySchedule->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$dayOpt = array(
+				0=>$this->tr->translate("DEFAULT"),
+				1=>$this->tr->translate("MON_SAT"),
+				2=>$this->tr->translate("MON_FRI"),
 				);
-		$saturdaySched->setMultiOptions($satOpt);
+		$studydaySchedule->setMultiOptions($dayOpt);
 		
 		
 		if($data!=null){
@@ -296,7 +297,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$StudentIdLength->setValue($data['studentIdLength']['keyValue']);
 			$docTeacher->setValue($data['teacher_doc']['keyValue']);
 			$paymentDate->setValue($data['payment_date']['keyValue']);
-			$saturdaySched->setValue($data['saturday_schedule']['keyValue']);
+			$studydaySchedule->setValue($data['studyday_schedule']['keyValue']);
 
 		}
 		$this->addElements(array(
@@ -331,7 +332,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$testOnline
 				,$docTeacher
 				,$paymentDate
-				,$saturdaySched
+				,$studydaySchedule
 				));
 		
 		return $this;

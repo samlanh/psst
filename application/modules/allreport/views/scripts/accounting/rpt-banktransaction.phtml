@@ -57,7 +57,7 @@ table.tb-footer tr.style-head {
 		<style>
 
 				.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 20px;font-size: 12px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.hideblog{display: none;}
@@ -91,18 +91,18 @@ table.tb-footer tr.style-head {
 						font-size:8px;
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
 					table.tb-footer{
 						border-collapse:collapse;
 						border:1px solid #000; 
-						font-size:11px;
+						font-size:12px;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					table.tb-footer tr{
-					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					 line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
 					}
 					table tr td{
 						padding:0 2px;
@@ -120,38 +120,19 @@ table.tb-footer tr.style-head {
 					table.content-data tr td{
 						padding: 2px;
 					}
-			/*
-			a{text-decoration: none;color: 000;}
-			table {page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
-			tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			table.content-data{
-				border-collapse:collapse;
-				width:100%;
-				font-family:'Times New Roman','Khmer OS Battambang';
-				font-size:13px;
-				white-space: nowrap;
-				margin:0 auto;
-				color:#000;
-				margin:0 auto;
-			}
-			table.content-data  tr.style-head {
-			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-				background: #CCD9FF;
-				text-align: center;
-			}
-			table.content-data tr td{
-				padding: 2px;
-			}
-			table.content-data tr.style-rowdata {
-				font-size:12px; 
-				height: 23px;
-			}
-			*/
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							page: A4;
+							size: landscape;
+						}
+					}
 		</style>
 		<table width="100%">
 			<tr>
@@ -165,7 +146,7 @@ table.tb-footer tr.style-head {
 				<td width="15%" align="center">
 				</td>
 				<td align="center" width="70%">
-					<span style="padding-left: 0px; color:#000; font-size: 14px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('TPT_BANKTRANSACTION');?></span> 
+					<span style="padding-left: 0px; color:#000; font-size: 12px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('TPT_BANKTRANSACTION');?></span> 
 					<?php if(!empty($this->adv_search['start_date'])){?><div><?php echo date("d/m/Y",strtotime($this->adv_search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->adv_search['end_date']));?></div><?php }?>
 				</td>
 				<td width="15%" align="center"></td>
@@ -217,7 +198,7 @@ table.tb-footer tr.style-head {
 						?>
 					</table>
 					<table align="right" style="font-family:'Times New Roman','Khmer OS Battambang';">
-						  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+						  <tr style="font-size:12px; color:#000; height: 18px;"​ align="center">
 							<td style="width:146px; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
 						  </tr>

@@ -58,7 +58,7 @@ table.tb-footer tr.style-head {
 	<div id="divPrint">
 		<style>
 			.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 20px;font-size: 12px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.hideblog{display: none;}
@@ -94,7 +94,7 @@ table.tb-footer tr.style-head {
 				
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:10px !important; padding:2px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 25px; font-size:12px !important; padding:2px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
@@ -111,7 +111,7 @@ table.tb-footer tr.style-head {
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					table.tb-footer tr{
-					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					 line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
 					}
 					table tr td{
 						padding:0 2px;
@@ -135,6 +135,19 @@ table.tb-footer tr.style-head {
 						text-align:center;
 						
 					}
+					@media print{
+								@page{
+									margin:0.3cm 0.7cm 0cm 0.7cm;
+									page-break-before: avoid;
+									-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+									-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+									-ms-transform: scale(0.5);   /* IE 9 */
+									-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+									transform: scale(0.5);
+									page: A4;
+									size: landscape;
+								}
+					}
 		</style>
 		<table  style="background:#fff; margin: 0 auto; width: 100%; ">
 			<tr>
@@ -148,8 +161,8 @@ table.tb-footer tr.style-head {
 				<td width="10%" align="right">
 				</td>
 				<td width="60%" align="center">
-					<span​​ style="color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_TEACHER_DOCUMENT_ALERT");?></span><br/>
-					<span​​ style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
+					<span​​ style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_TEACHER_DOCUMENT_ALERT");?></span><br/>
+					<span​​ style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 				</td>
 				<td width="5%" align="right">
 				</td>

@@ -48,7 +48,7 @@
 		<style type="text/css">
 
 			.style{
-				line-height: 20px;font-size: 11px !important;
+				line-height: 20px;font-size: 12px !important;
 				font-family: 'Times New Roman','Khmer OS Battambang';
 			}
 			.hideblog{display: none;}
@@ -79,10 +79,10 @@
 			table.content-data{
 				border-collapse:collapse;
 				border:1px solid #000; 
-				font-size:8px;
+				font-size:12px;
 			}
 			table.content-data thead tr.style {
-			line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+			line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 				background: #c1d0f3;
 				font-weight:600;
 			}
@@ -93,11 +93,11 @@
 			table.tb-footer{
 				border-collapse:collapse;
 				border:1px solid #000; 
-				font-size:11px;
+				font-size:12px;
 				font-family: 'Times New Roman','Khmer OS Battambang';
 			}
 			table.tb-footer tr{
-			line-height: 14px; font-size:11px; padding:2px 0px; height: 20px;
+			line-height: 14px; font-size:12px; padding:2px 0px; height: 20px;
 			}
 			table tr td{
 				padding:0 2px;
@@ -111,28 +111,19 @@
 			.redBold {
 				font-weight: 600;
 			}
-/*
-			.styleth{
-				font-size:12px; 
-				height: 20px;
-				background-color: #ccd9ff;
-				line-height: 30px;
-				font-weight: bold;
+			@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							page: A4;
+						}
+				}
 
-			}
-			.styletr{
-				font-size:12px;
-				height: 20px;
-
-			}
-			
-
-			th,td{ padding:0 1px;}
-			table{ border-collapse:collapse; margin:0 auto;
-			border-color:#000; }
-			.padd tr td{ text-align:left}
-			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-			*/
 			</style>
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
 			<table width="100%">
@@ -147,8 +138,8 @@
 					<td width="25%" align="left">
 					</td>
 					<td align="center" width="50%">
-						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'khmer os muol light';"><?php echo $tr->translate('RPT_DISCOUNT_SETTING');?></strong><br >
-						<span style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'khmer os muol light';"><?php echo $tr->translate('RPT_DISCOUNT_SETTING');?></strong><br >
+						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td align="right" width="25%">&nbsp;</td>
 				</tr>

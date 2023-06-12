@@ -137,19 +137,18 @@
 						font-weight: 600;
 						color: #f80000;
 					}
-					/*
-						table{ border-collapse:collapse; margin:0 auto;
-						border-color:#000; }
-						.padd tr td{  }
-						.padd tr th{  background-color: #ccc; }
-						table {page-break-inside:auto }
-						tr{ page-break-inside:avoid; page-break-after:auto; }
-						#header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
-						}	tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-						.hideprintdate{display:block;font-size:10px;white-space:nowrap;}
-					*/
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							page: A4;
+						}
+					}
 				</style>
 				<td colspan="3" id="exporteExcel">
 					<table class="content-data" width="100%" border="1" align="center" >

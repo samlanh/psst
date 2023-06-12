@@ -73,13 +73,49 @@ tr.EvenRow {
 												<?php }?>
 											</select>
 										</div>
-									 </div>
+									</div>
 									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input id="group" />
 										</div>
 									 </div>
+									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<select id="sortStundent" name="sortStundent" class="fullside" onchange="getInfoBygroup()"  dojoType="dijit.form.FilteringSelect" >
+												<option value="1"><?php echo $tr->translate("DEFAULT");?></option>
+												<option value="2"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+												<option value="3"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+												<option value="4"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+											</select>
+										</div>
+									 </div>
+									 <div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="" type="text" style=" height: 60px !important;"  >
+										</div>
+									 </div>
+								 </div>
+							</div>
+						</div>
+					</div>
+		         </div>
+	          	<div class="col-md-6 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MISTAKE");?></p>
+										</div> 
+									</div>
+									
 									 <div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MISTAKE_DATE");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -104,32 +140,6 @@ tr.EvenRow {
 												<option value="1"><?php echo $tr->translate("SEMESTER1");?></option>
 												<option value="2"><?php echo $tr->translate("SEMESTER2");?></option>
 											</select>
-										</div>
-									 </div>
-								 </div>
-							</div>
-						</div>
-					</div>
-		         </div>
-	          	<div class="col-md-6 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("NOTE");?></p>
-										</div> 
-									</div>
-									<div class="form-group">
-										<label class="control-label  col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-									 </div>
-									 <div class="form-group">
-										<div class="col-md-12 col-sm-12 col-xs-12">
-											<input class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="" type="text" style=" height: 60px !important;"  >
 										</div>
 									 </div>
 									 <div id="gr-info"></div>
@@ -306,11 +316,13 @@ function filterStudentBygroup(){
 	if(group==''){
 		return false;
 	}
+	sortStundent = dijit.byId('sortStundent').get('value');
 	dojo.xhrPost({
 	    url: url_getStudentbygroup,
 	    content : { 
 		    'group':group,
 			'item_type':1,
+			'sortStundent':sortStundent,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {

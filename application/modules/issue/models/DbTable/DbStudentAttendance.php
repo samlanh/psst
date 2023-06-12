@@ -254,7 +254,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 							AND sgh.status = 1
 							AND sgh.stop_type=0
 							AND sgh.`group_id`=".$group_id;
-			$order=" ORDER BY s.stu_khname ASC";
+		
 		}else{
 			$sql="SELECT 
 					sgh.`stu_id`,
@@ -273,9 +273,23 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					
 					and sgh.stop_type=0
 					AND sgh.`group_id`=".$group_id;
-			$order=" ORDER BY s.stu_khname ASC";
 			
 		}
+		if(!empty($data['sortStundent'])){
+			if($data['sortStundent']==1){
+				$order=" ORDER BY s.stu_khname ASC";
+			}elseif($data['sortStundent']==2){
+				$order=" ORDER BY s.stu_code ASC";
+			}elseif($data['sortStundent']==3){
+				$order=" ORDER BY s.stu_khname ASC";
+			}elseif($data['sortStundent']==4){
+				$order=" ORDER BY s.last_name ASC";
+			}
+		}else{
+			$order=" ORDER BY s.last_name ASC";
+		}
+		
+		
 		return $db->fetchAll($sql.$order);
 	}
 	function getSubjectBygroup($group_id){

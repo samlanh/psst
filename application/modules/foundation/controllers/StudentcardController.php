@@ -34,10 +34,6 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
 			
 			
 	}
-	
-    
-    
-	
     function getStudentBybranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -64,7 +60,6 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
 
 
 	}
-
 	function getStaffBybranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -89,8 +84,9 @@ class Foundation_StudentcardController extends Zend_Controller_Action {
     		print_r(Zend_Json::encode($row));
     		exit();
     	}
-
-
+	}
+	function  addAction(){
+		$this->_redirect('/foundation/studentcard');
 	}
 	
 }

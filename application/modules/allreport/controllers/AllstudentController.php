@@ -84,7 +84,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'branch_id' 	=> "",
 					'academic_year'	=> "",
 					'grade' 		=> "",
-					'session' 		=> "",
+					'school_option' => "",
 					'teacher' 		=> "",
 					'room'=>0,
 					'degree'=>0,

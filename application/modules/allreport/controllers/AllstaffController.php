@@ -1,11 +1,8 @@
 <?php
 class Allreport_AllstaffController extends Zend_Controller_Action {
-	
-	
 public function init()
     {    	
      /* Initialize action controller here */
-    	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction()
@@ -29,7 +26,6 @@ public function init()
 		$db = new Allreport_Model_DbTable_DbRptAllStaff();
 		$this->view->rs = $db->getAllStaffSelected($condition);
 		$this->view->groupByType = $db->getAllStaffSelectedGroupBy($condition);
-// 		print_r($db->getAllStaffSelectedGroupBy($condition));exit();
 		
 	}
 	
@@ -95,6 +91,4 @@ public function init()
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount(2);
 	}
-	
 }
-

@@ -261,8 +261,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	if($search['degree']>0){
 	   		$where.=' AND `g`.`degree`='.$search['degree'];
 	   	}
-	   	if(!empty($search['session'])){
-	   		$where.=' AND g.session='.$search['session'];
+	   	if(!empty($search['school_option'])){
+	   		$where.=' AND g.school_option='.$search['school_option'];
 	   	}
 	   	if(!empty($search['group'])){
 	   		$where.=' AND g.id='.$search['group'];

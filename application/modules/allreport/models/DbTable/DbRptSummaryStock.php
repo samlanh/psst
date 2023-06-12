@@ -4,16 +4,6 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'rms_itemsdetail';
-    function getAllProductName(){
-    	$db = $this->getAdapter();
-    	$sql="select id , CONCAT(code,' => ',title) as name FROM rms_itemsdetail WHERE status=1 AND items_type=3";
-    	return $db->fetchAll($sql);
-    }
-    function getAllProductType(){
-    	$db = $this->getAdapter();
-    	$sql="select id , title as name FROM rms_items WHERE status=1 AND type=3";
-    	return $db->fetchAll($sql);
-    }
     function getAllRequestProduct($search=null){
     	$db = $this->getAdapter();
     	$sql="SELECT

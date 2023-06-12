@@ -22,6 +22,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$dbg = new Application_Model_DbTable_DbGlobal();
+			$schoolOption = $dbg->getSchoolOptionbyDegree($_data['degree']);
+			
 			$_arr=array(
 					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],
@@ -32,6 +35,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'time' 			=> $_data['time'],
 					'degree' 		=> $_data['degree'],
 					'grade' 		=> $_data['grade'],
+					'school_option' => $schoolOption,
 // 					'calture' 		=> $_data['calture'],
 // 					'start_date'	=> $_data['start_date'],
 // 					'expired_date'	=> $_data['end_date'],
@@ -82,6 +86,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$dbg = new Application_Model_DbTable_DbGlobal();
+			$schoolOption = $dbg->getSchoolOptionbyDegree($_data['degree']);
+			
 			$_arr=array(
 					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],
@@ -92,7 +99,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'time' 			=> $_data['time'],
 					'degree' 		=> $_data['degree'],
 					'grade'		 	=> $_data['grade'],
-// 					'calture' 		=> $_data['calture'],
+					'school_option' => $schoolOption,
 // 					'start_date' 	=> $_data['start_date'],
 // 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
@@ -161,11 +168,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$row=$db->fetchAll($sql);
 		return $row;
 	}
-	
-	
-	
-	
-	
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -252,7 +254,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $db->getAllYear();
 	}
 	
-	
 	public function getAllSubjectStudy($opt=null,$schoolOption=null){
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -332,8 +333,4 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$sql ="SELECT * FROM rms_teacher AS g WHERE g.id=$teacher_id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	
-	
-	
 }
-

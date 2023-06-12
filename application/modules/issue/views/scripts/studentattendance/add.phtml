@@ -476,11 +476,11 @@ function filterStudentBygroup(){
 						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>">&nbsp;'+data[i].stu_name+'</td>';
 						str+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+data[i].gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
 						str+='<td data-label="<?php echo $tr->translate("ATTENDANCE");?>">';
-							str+='<input type="radio" checked="checked" name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
-							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>';
+							str+='<input type="radio" checked="checked" name="attendence'+inx+'" id="attendence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
+							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
+							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
+							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
+							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>';
 						str+='</td>';
 						str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
 					str+='</tr>';
@@ -522,11 +522,12 @@ function getStudyYear(){
 function CheckAll(){
 	var identity = $('#identity').val();
 	check_type = $('input[name="attendence_opt"]:checked').val();
+	var arrays = identity.split(',');
+	alert(arrays);
 	if(identity==""){
 		return false;
 	}else{
-		 var arrays = identity.split(',');
-		 if(arrays!=""){
+		if(arrays!=""){
 	    	 for(var i=1;i<= arrays.length;i++) {
 	    		 if($("#check_all").is(':checked')){
 	    			 $('input[value="'+check_type+'"]').attr("checked",true);

@@ -48,9 +48,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		                   AND s.status = 1 
 						AND s.customer_type = 1 ";
 			$orderby = " ORDER BY s.stu_khname ASC ";
-		if(empty($search)){
-			return $_db->fetchAll($sql.$orderby);
-		}
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
@@ -96,7 +93,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) ='.$search['study_status'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission();
+		$where.=$dbp->getAccessPermission('s.branch_id');
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	

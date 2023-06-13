@@ -174,6 +174,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function rptStudentGroupAction()
 	{
 		$id=$this->getRequest()->getParam("id");
+		$id = (empty($id))?0:$id;
 		if(empty($id)){
 			$this->_redirect("/allreport/allstudent/student-group");
 		}
@@ -188,8 +189,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$row = $db->getStudentGroup($id,$search,0);
-		$this->view->rs = $row;
+		$result = $db->getStudentGroup($id,$search,0);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
+		}
+		$this->view->rs = $result;
 		$rs = $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 	
@@ -200,6 +204,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	{
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$id=$this->getRequest()->getParam("id");
+		$id = (empty($id))?0:$id;
 		if(empty($id)){
 			$this->_redirect("/allreport/allstudent/student-group");
 		}
@@ -220,11 +225,16 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'academic_year'	=> "",
 					'study_type'	=>0
 			);
-			$row = $db->getStudentGroup($id,$search,1);
-			$rs= $db->getGroupDetailByID($id);
 		}
+		
+		$result = $db->getGroupDetailByID($id);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
+		}
+		
 		$this->view->search = $search;
-	
+		
+		$row = $db->getStudentGroup($id,$search,1);
 		$this->view->rs = $row;
 		$this->view->rr = $rs;
 	
@@ -289,11 +299,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	public function rptCrmDetailAction(){
 		$id=$this->getRequest()->getParam("id");
-		if(empty($id)){
-			$this->_redirect("/allreport/allstudent/rpt-crm");
-		}
+		$id = (empty($id))?0:$id;
 		$db = new Home_Model_DbTable_DbCRM();
 		$row = $db->getCRMById($id);
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/rpt-crm");
+		}
 		$this->view->rs = $row;
 	
 		$rowdetail = $db->getCRMDetailById($id);
@@ -500,6 +511,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function rptAttListAction()
 	{
 		$id=$this->getRequest()->getParam("id");
+		$id = (empty($id))?0:$id;
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -516,17 +528,22 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
+		
+		$result = $db->getGroupDetailByID($id);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
+		}
+		
 		$row = $db->getStudentGroup($id,$search,0);
 		$this->view->rs = $row;
 	
-		$rs= $db->getGroupDetailByID($id);
-		$this->view->rr = $rs;
+		$this->view->rr = $result;
 		$this->view->datasearch = $search;
 		$this->view->search = $search;
 		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
 	
-		$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
+		$branch_id = empty($result['branch_id'])?null:$result['branch_id'];
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);

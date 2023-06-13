@@ -99,9 +99,16 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'));
 			}
 		    $id = $this->getRequest()->getParam('id');
+		    $id = (empty($id))?0:$id;
+		    
+		   
 			$this->view->adv_search=$search;
-			$student = $db->getStudentById($id);
-			$this->view->rs =$student;
+			$studentResult = $db->getStudentById($id);
+			if(empty($studentResult)){
+				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/home/searchstudentinfo");
+			}
+			
+			$this->view->rs =$studentResult;
 			$this->view->rsStudentRerecord = $db->getAllStudentStudyRecord($id);
 			$this->view->document =$db->getStudentDocumentById($id);
 			

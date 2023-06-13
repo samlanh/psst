@@ -1785,6 +1785,10 @@ function getCreditMemo(){
 }
 function getbranchinfo(){
 		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || isNaN(branch_id)){
+			dijit.byId('branch_id').focus();
+			return false;
+		}
 		let url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfodetail')); ?>";
 		dojo.xhrPost({
 			url:url_getbranch,

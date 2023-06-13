@@ -232,9 +232,13 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	//view detial student by id
 	public function viewAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = (empty($id))?0:$id;
 		$db= new Foundation_Model_DbTable_DbStudent();
-		$this->view->rs = $db->getStudentViewDetailById($id);
-		
+		$result =  $db->getStudentViewDetailById($id);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/register");
+		}
+		$this->view->rs =$result;
 		$_db= new Home_Model_DbTable_DbStudent();
 		$this->view->rsStudentRerecord = $_db->getAllStudentStudyRecord($id);
 		$this->view->document =$_db->getStudentDocumentById($id);

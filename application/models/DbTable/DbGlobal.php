@@ -48,6 +48,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $row;	
     }
     public function getAllDay($all=0){
+    	defined('STUDY_DAY_SETTING') || define('STUDY_DAY_SETTING', Setting_Model_DbTable_DbGeneral::geValueByKeyName('studyday_schedule'));
+    	
     	$db=$this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();

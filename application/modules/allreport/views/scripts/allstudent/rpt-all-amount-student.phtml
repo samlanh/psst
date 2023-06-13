@@ -247,7 +247,7 @@ table.tb-footer tr.style-head {
 										<td  data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
 										<td  data-label="<?php echo $tr->translate("NAME_ENGLISH");?>" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
 										<td  data-label="<?php echo $tr->translate("SEX");?>" >&nbsp;<?php echo $row['sex'];?>&nbsp;</td>	
-										<td  data-label="<?php echo $tr->translate("DOB");?>" >&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
+										<td  data-label="<?php echo $tr->translate("DOB");?>" >&nbsp;<?php echo $row['dob'];?>&nbsp;</td>
 										<td  data-label="<?php echo $tr->translate("STATUS");?>" <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>>&nbsp;<?php echo $row['status'];?>&nbsp;</td>	
 									</tr>
 									<?php $grade=$row['grade'];?>

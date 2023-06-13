@@ -122,12 +122,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			u.branch_id,
 			u.branch_list
 			 FROM `rms_users` AS u WHERE u.active=1
-			AND u.is_system =0";
-	   $row = $db->fetchAll($sql);
+			AND u.is_system =0 ";
 	   	
 	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 	   	$branch_list = $session_user->branch_list;
 	   	$level = $session_user->level;
+	   $row = $db->fetchAll($sql);
 	   
 	   	$result =array();
 	   	if ($level!=1){

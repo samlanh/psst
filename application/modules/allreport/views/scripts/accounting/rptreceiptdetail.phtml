@@ -39,7 +39,7 @@
 <script type="text/javascript">
 dojo.ready(function(){
 	readMoneyInKhmer("<?php echo $this->rr['paid_amount'];?>");
-	getbranchinfo();
+	getbranchHeader();
 	setDatatoReceipt();
 });	
 function setDatatoReceipt(){	
@@ -231,8 +231,10 @@ function readMoneyInKhmer(netTotal){
 	if(netTotal==0){khmer_amount='';}
 	dojo.byId("lb_read_khmer").innerHTML =money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng
 }
-var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfodetail')); ?>";
-function getbranchinfo(){
+
+
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchHeader(){
 	branch_id = '<?php echo $this->rr['branch_id'];?>';
 	if(branch_id != ""){
 		dojo.xhrPost({
@@ -242,18 +244,11 @@ function getbranchinfo(){
 				},
 			handleAs:"json",
 			load: function(data){
-				dojo.byId("lbl_email").innerHTML = data.email;
-				dojo.byId("lbl_website").innerHTML = data.website;
-				dojo.byId("lbl_address").innerHTML = data.br_address;
-				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
-				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
-				dojo.byId("lbl_branchphone").innerHTML = data.branch_tel+', '+data.branch_tel1;
-				dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
+				dojo.byId('lbl_header').innerHTML=data;
 			},
 			error: function(err) {
 			}
 		});	
 	} 
 }
-
 </script>

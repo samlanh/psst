@@ -163,12 +163,6 @@
 </style>
 <script>
 dojo.require("dijit/layout/TabContainer");
-	$(function(){		
-		$('#fmod').val('<?php echo $df['fmod']?>');
-		$('#fcon').val('<?php echo $df['fcon']?>');
-		$('#fact').val('<?php echo $df['fact']?>');
-		$('#fstatus').val('<?php echo $df['fstatus']?>');
-	});
 	
 	function changeStatus(id, user_type){
 		url = "<?php echo BASE_URL;?>/rsvacl/useraccess/update-status";
@@ -179,7 +173,12 @@ dojo.require("dijit/layout/TabContainer");
 		if( $("#img_" + id).attr("src") == tick_src){
 			status = "yes";
 		}
-		$.post( url, { 'acl_id': id, 'status': status, 'user_type_id':user_type},
+		$.post( url, 
+			{ 
+			'acl_id': id,
+			'status': status,
+			'user_type_id':user_type
+		},
 	      function( data ) {
 			 img_src = none_src;
 	         if(data == "yes"){

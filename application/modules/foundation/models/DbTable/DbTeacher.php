@@ -86,12 +86,11 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				DATE_FORMAT(g.dob,'%d-%m-%Y') AS dob,
 				DATE_FORMAT(g.start_date,'%d-%m-%Y') AS start_date,
 				DATE_FORMAT(g.end_date,'%d-%m-%Y') AS end_date,
-				
 				(SELECT v.$label FROM rms_view AS V WHERE v.type=2  AND v.key_code=g.sex LIMIT 1) AS sex,
 				(SELECT v.$label FROM rms_view AS V WHERE v.type=24 AND v.key_code=g.teacher_type LIMIT 1) AS teacher_type, 
 				(SELECT v.$label FROM rms_view AS V WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality, 
 				(SELECT v.$label FROM rms_view AS V WHERE v.type=21 AND v.key_code=g.nation LIMIT 1) AS nation, 
-				(SELECT v.$label FROM rms_view AS V WHERE v.type=3  AND rms_view.key_code=g.degree LIMIT 1) AS degree		
+				(SELECT v.$label FROM rms_view AS V WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree		
 			FROM rms_teacher AS g WHERE g.status=1 AND g.id =$staff_id ";
 		
 		$sql.=" LIMIT 1";

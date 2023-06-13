@@ -180,7 +180,7 @@ span.custom-switch-indicator{line-height: 20px;}
 				                <div class="form-group">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicBy();">
+				                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchHeader();getallstudentname();getAllAcademicBy();">
 							    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
 							    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
 							    			<?php }?>
@@ -674,13 +674,12 @@ span.user-badge.bg-warning {
 
 	require(["dojo/ready"], function(ready){
 			ready(function(){
-				getbranchinfo();
+				getbranchHeader();
 				getallgroupby();
 				getallstudentname();
 				getgradebyDegree(-1,1,2);
 				getAllAcademicBy();
 				getAllTermStudy();
-				getAllAcademicTermStudy();
 				
 				<?php if ($settingNewStuID==1){?>
 				var student_type = dijit.byId('student_type');
@@ -1055,6 +1054,8 @@ var academicOption = '';
 url_term_study = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id==''){
+		return false;}
 	dojo.xhrPost({
 		url: url_term_study,
 		content:{
@@ -1783,33 +1784,28 @@ function getCreditMemo(){
 		});	
 	} 
 }
-function getbranchinfo(){
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchHeader(){
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || isNaN(branch_id)){
 			dijit.byId('branch_id').focus();
 			return false;
 		}
-		let url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfodetail')); ?>";
-		dojo.xhrPost({
-			url:url_getbranch,
-			content:{
-				'branch_id':branch_id,
+		getAllAcademicTermStudy();
+		if(branch_id != ""){
+			dojo.xhrPost({
+				url:url_getbranch,
+				content:{
+					'branch_id':branch_id,
+					},
+				handleAs:"json",
+				load: function(data){
+					dojo.byId('lbl_header').innerHTML=data;
 				},
-			handleAs:"json",
-			load: function(data){
-				dojo.byId("lbl_email").innerHTML = data.email;
-				dojo.byId("lbl_website").innerHTML = data.website;
-				dojo.byId("lbl_address").innerHTML = data.br_address;
-				dojo.byId("lb_branchname").innerHTML = data.school_namekh;
-				dojo.byId("lb_branchnameen").innerHTML = data.school_nameen;
-				dojo.byId("lbl_branchphone").innerHTML = data.branch_tel+', '+data.branch_tel1;
-				if(data.photo!='' && data.photo!=null){
-					dojo.byId("lbl_branchlogo").innerHTML ='<img style="max-height:65px;max-width:80px;" src="<?php echo $this->baseUrl();?>/images/'+data.photo+'" />' ;
+				error: function(err) {
 				}
-			},
-			error: function(err) {
-			}
-		});	
+			});	
+		} 
 }
 function checkPaymentMethod(){
 	paymentId = dijit.byId('payment_method').get('value');
@@ -1823,4 +1819,5 @@ function checkPaymentMethod(){
 		dijit.byId('number').set('readOnly',true);
 	}
 }
+
 </script>

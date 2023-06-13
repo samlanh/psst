@@ -839,13 +839,16 @@ class Application_Form_FrmGlobal{
 			defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
 			defined('SHOW_PIC_INRECEIPT') || define('SHOW_PIC_INRECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_pic_receipt'));
 			defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
+			defined('SHOW_HEADER_RECEIPT') || define('SHOW_HEADER_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_header_receipt'));
 			
 			
 			$paddingTop = PADDINGTOP_RECEIPT.'px';
 			$showPic = SHOW_PIC_INRECEIPT;
 			$showPic = ($showPic==1)?'display:block;':'display:none;';
 			$settingAmtReceipt = AMOUNT_RECEIPT;
-			$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape;':'size:A4 portrait;';
+			$pageSetup = ($settingAmtReceipt==1)?'page:A5;size:landscape;':'page:A4;size:portrait;';
+			
+			$showReport = (SHOW_HEADER_RECEIPT==1)?'visibility:visible':'visibility:hidden';
 			
 			$str="<style>
 					.hearder_table{height:20px !important;}
@@ -938,8 +941,7 @@ class Application_Form_FrmGlobal{
 					</style>
 					<table width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
 						<tr style='height:$paddingTop'>
-							<td align='center' valign='top' colspan='5'>
-								<label id='lbl_header'></label>
+							<td id='lbl_header' align='center' valign='top' style='".$showReport."' colspan='5'>
 							</td>
 						</tr>
 						<tr>

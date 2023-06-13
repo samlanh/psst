@@ -22,7 +22,6 @@ fieldset{  background:none;}
 
 		<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
-		            
 		            <li class="nav-item active">
 		                <a class="nav-link" data-toggle="tab" href="#student" role="tab">
 		                <i class="glyphicon glyphicon-education ml-2"></i> <?php echo $tr->translate("STUDENTS_CARD");?>
@@ -36,7 +35,6 @@ fieldset{  background:none;}
 					
 		        </ul>
 		 </div>
-
     	<form id='suspend_service' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">	
 						
@@ -63,7 +61,6 @@ fieldset{  background:none;}
 								<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
 											<div class="d-flex "> 
 												<div class="settings-main-icon ">
 													<i class="glyphicon glyphicon-queen" aria-hidden="true"></i>
@@ -75,51 +72,42 @@ fieldset{  background:none;}
 											<div class="col-md-12 col-sm-12 col-xs-12">
 													&nbsp;
 											</div>
-
-											
 												<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getStudentByBranch(); 
-														">								
-															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-																	<option value="" >ជ្រើសរើសសាខា</option>
-																	<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
-															<?php }?> 
-														</select>
+													<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getStudentByBranch();">								
+														<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+																<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+														<?php }?> 
+													</select>
 												</div>
 												</div>
 												<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date" id="create_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/>
-												</div>
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date" id="create_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/>
+													</div>
 												</div>
 												
 												<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
-												</div>
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+															<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
+													</div>
 												</div>	
-
 										</div>
 									</div>
 								</div>
 					</div>
-			
-
-						
 	            </div>
 	            <div class="col-md-9 col-sm-9 col-xs-12">
 					<div class="card-blogform">
 								<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
 											<div class="d-flex "> 
 												<div class="settings-main-icon ">
 													<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
@@ -132,7 +120,6 @@ fieldset{  background:none;}
 											&nbsp;
 							
 											</div>
-
 											<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
 												<label class="control-label bold col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?> 
 												</label>
@@ -154,14 +141,10 @@ fieldset{  background:none;}
 													<input type="hidden"  id="identity" name="identity" dojoType="dijit.form.TextBox"/>
 													<input type="hidden"  id="student_ids" name="student_ids" dojoType="dijit.form.TextBox"/>
 												</div>
-
 										</div>
 									</div>
-
 								</div>
 					</div>
-
-	            	
 	            </div>
 			</div>
 			 <div class="clearfix"></div>
@@ -180,65 +163,53 @@ fieldset{  background:none;}
              </div>
 
 		</div>	
-		
-		
 		<div class="tab-pane fade in " id="staff" role="tabpanel">	
 			<div class="card-box">
 				<div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="card-blogform">
-								<div class="card-body"> 
-									<div class="row"> 
-										<div class="col-md-12 col-sm-12 col-xs-12">
-
-											<div class="d-flex "> 
-												<div class="settings-main-icon ">
-													<i class="glyphicon glyphicon-queen" aria-hidden="true"></i>
-												</div> 
-												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO");?></p>
-												</div> 
-											</div>
-											<div class="col-md-12 col-sm-12 col-xs-12">
-													&nbsp;
-											</div>
-
-											
-												<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch1" name="branch1" type="text" onchange="getStaffByBranch(); 
-														">								
-															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-																	<option value="" >ជ្រើសរើសសាខា</option>
-																	<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
-															<?php }?> 
-														</select>
-												</div>
-												</div>
-												<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date1" id="create_date1" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/>
-												</div>
-												</div>
-												
-												<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="note1" name="note1"  ></textarea>
-												</div>
-												</div>	
-
-										</div>
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex "> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-queen" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO");?></p>
+										</div> 
 									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12">
+											&nbsp;
+									</div>
+										<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch1" name="branch1" type="text" onchange="getStaffByBranch();">								
+												<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+														<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+												<?php }?> 
+											</select>
+										</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DATE");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+													<input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date1" id="create_date1" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="note1" name="note1"  ></textarea>
+										</div>
+									</div>	
 								</div>
+							</div>
+						</div>
 					</div>
-			
-
-						
 	            </div>
 	            <div class="col-md-9 col-sm-9 col-xs-12">
 					<div class="card-blogform">
@@ -384,8 +355,8 @@ fieldset{  background:none;}
 			
 			}
 		}, "staff_id");
-		//getStudentByBranch();
-		//getStaffByBranch();
+		getStudentByBranch();
+		getStaffByBranch();
 		
 	});	
 </script>

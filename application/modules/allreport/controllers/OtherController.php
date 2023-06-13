@@ -14,25 +14,7 @@ public function init()
 	
 	
 	
-	public function rptAcademicYearAction(){
 	
-		if($this->getRequest()->isPost()){
-			$_data=$this->getRequest()->getPost();
-			$search = array(
-					'txtsearch' => $_data['txtsearch'],
-			);
-		}
-		else{
-			$search=array(
-					'txtsearch' =>'',
-			);
-		}
-	
-		$db= new Allreport_Model_DbTable_DbRptAcademicYear();
-		$this->view->rs = $db->getAllAcademic($search);
-		$this->view->search = $search;
-			
-	}
 	
 	public function rptLecturerAction(){
 		if($this->getRequest()->isPost()){

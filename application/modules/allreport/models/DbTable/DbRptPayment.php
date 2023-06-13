@@ -70,7 +70,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				rms_student_paymentdetail as spd
     			WHERE 
     				sp.student_id=s.stu_id 
-    				and sp.id=$id LIMIT 1 ";
+    				and sp.id=$id  ";
+    	$sql.=$_db->getAccessPermission('sp.branch_id');
+    	$sql.=" LIMIT 1 ";
     		return $db->fetchRow($sql);
     }
     

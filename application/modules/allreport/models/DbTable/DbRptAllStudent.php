@@ -544,10 +544,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	s.stu_code,
 			    	s.home_num,
 			    	s.street_num,
-			    	s.dob,
+			    	DATE_FORMAT(s.dob,'%d-%m-%Y') As dob,
 			    	gds.stop_type AS is_subspend,
 			    	(SELECT $label from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status,
-					
 			    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
@@ -577,7 +576,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where .= " AND ".$from_date." AND ".$to_date;
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
     	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = gds.degree )');
     	
     	$order=" ORDER BY gds.academic_year DESC,gds.degree ASC,gds.grade DESC,gds.session ASC,s.stu_khname ASC ";

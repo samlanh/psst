@@ -363,7 +363,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student As s
 				where 
-					stu_id=$id AND is_studenttest=1";
+					stu_id=$id AND is_studenttest=1 ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('s.branch_id');
 		return $db->fetchRow($sql);
 	}
 	

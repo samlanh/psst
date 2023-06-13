@@ -75,27 +75,7 @@
 		$where.=$dbp->getAccessPermission('c.branch_id');
 		$where.=" ORDER BY c.id DESC";
 		$row = $db->fetchAll($sql.$where);
-		$resutl = $row;
-// 		if (!empty($search['prev_concern'])){
-// 			$resutl = array();
-// 			$epl = explode(",", $search['prev_concern']);
-// 			$array = array();
-// 			foreach ($epl as $ss){
-// 				$key = $this->checkPrevConcern($ss);
-// 				$array[$key] = $key;
-// 			}
-			
-// 			if (!empty($row)) foreach ($row as $key => $rs){
-// 				$exp = explode(",", $rs['prev_concern']);
-// 				foreach ($exp as $ss){
-// 					if (in_array($ss, $array)) {
-// 						$resutl[$key] = $rs;
-// 						break;
-// 					}
-// 				}
-// 			}
-// 		}
-		return $resutl;
+		return $row;
     }
     function checkPrevConcern($value){
     	$db = $this->getAdapter();

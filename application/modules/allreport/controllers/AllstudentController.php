@@ -257,6 +257,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'degree' => "",
 						'grade' => "",
 						'status_search' => -1,
+						'school_option' => '',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
 				);

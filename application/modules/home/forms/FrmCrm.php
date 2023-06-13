@@ -348,6 +348,19 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$followup->setMultiOptions($_arr);
     	
     	$followup->setValue($request->getParam('followup_status'));
+
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"));
+		$Option = $_dbgb->getAllSchoolOption();
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$school_option = new Zend_Dojo_Form_Element_FilteringSelect("school_option");
+		$school_option->setMultiOptions($_arr_opt);
+		$school_option->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'placeholder'=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"),
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$school_option->setValue($request->getParam("school_option"));
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
@@ -397,7 +410,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			$_status_search,
     			$start_date,
     			$end_date,
-    			$_crm_list
+    			$_crm_list,
+				$school_option
     			));
     	return $this;
     }

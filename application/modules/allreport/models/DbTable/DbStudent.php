@@ -149,6 +149,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if($search['crm_process']>-1){
 			$where.= " AND s.customer_type = ".$db->quote($search['crm_process']);
 		}
+		if(!empty($search['school_option'])){
+			$where.= " AND ds.school_option = ".$db->quote($search['school_option']);
+		}
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('c.branch_id');

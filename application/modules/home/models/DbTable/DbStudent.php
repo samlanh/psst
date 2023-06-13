@@ -560,7 +560,18 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql="SELECT
 			sat.`group_id`,
 			satd.`attendence_status`,
-			COUNT(satd.`attendence_status`) AS total,
+			
+			COUNT(if(satd.attendence_status = '1' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalComeSemester1,
+			COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalASemester1,
+			COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalPSemester1,
+			COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalLSemester1,
+			COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalELSemester1,
+			
+			COUNT(IF(satd.attendence_status = '1' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalComeSemester2,
+			COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalASemester2,
+			COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalPSemester2,
+			COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalLSemester2,
+			COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalELSemester2,
 			sat.`date_attendence`,
 			satd.description
 		FROM
@@ -570,8 +581,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			sat.`id`= satd.`attendence_id`
 			AND sat.type=1
 			AND satd.`stu_id`=$stu_id
-			AND sat.`group_id`=$group GROUP BY satd.`attendence_status`";
-		return $db->fetchAll($sql);
+			AND sat.`group_id`=$group GROUP BY satd.`stu_id` ";
+		return $db->fetchRow($sql);
 	}
 	
 	function addReadNews($id){

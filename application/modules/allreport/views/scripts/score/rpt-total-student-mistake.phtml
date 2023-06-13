@@ -121,7 +121,14 @@ table.tb-footer tr.style-head {
 				table.content-data tr.style-rowdata {
 					font-size:12px; 
 					height: 23px;
-				}			
+				}		
+					@media print{
+							@page {
+								page:A4;
+								size: portrait;
+								margin: 0.5cm;
+							}
+						}	
 			</style>
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
@@ -130,7 +137,9 @@ table.tb-footer tr.style-head {
 			<tr>
 				<td colspan="3" id="exportExcel">
 					<table class="content-data" cellpadding="5"​  border="1" >							
-						<?php $i=0; $old_groupid=0; if (!empty($this->student)) foreach ($this->student as $key => $rs){
+						<?php $i=0; $old_groupid=0;
+						$_db = new Home_Model_DbTable_DbStudent();
+						 if (!empty($this->student)) foreach ($this->student as $key => $rs){
 							if ($rs['sex']==1){$sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
 						?>
 						<?php if ($old_groupid!=$rs['group_id']){ ?>
@@ -154,7 +163,6 @@ table.tb-footer tr.style-head {
 										<br />
 										<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
 										<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
-									 	<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['semester'];?></span> , 
 									 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
 									 	, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
 									</span>
@@ -191,11 +199,6 @@ table.tb-footer tr.style-head {
 							<?php $s=0; $m=0; $b=0;$other=0; ?>
 							<?php  
 								$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], null, $rs['group_id']);
-								$lateAttedence = $db->getAttendenceFoul($rs['group_id'],$rs['stu_id']);
-								$late_foul = 0;
-								if (!empty($lateAttedence)){
-									$late_foul = $lateAttedence['count_foul_att'];
-								}
 								if (!empty($mistake_status)) foreach ($mistake_status as $sta){
 									if ($sta['mistake_type']==1){
 										$s=$sta['count_mistack'];
@@ -210,55 +213,25 @@ table.tb-footer tr.style-head {
 										$other = $sta['count_mistack'];
 									}
 								}
-								?>
-							<td align="center"><?php echo $s+$late_foul;?></td>
+								$attentenceStatus = $_db->getSumStatusAttendence($rs['stu_id'], $rs['group_id']);
+								$totalLate = $attentenceStatus['totalLSemester1']+$attentenceStatus['totalLSemester2'];
+								$totalEarlyLate = $attentenceStatus['totalELSemester1']+$attentenceStatus['totalELSemester2'];
+							?>
+							<td align="center"><?php echo $s+$totalLate+$totalEarlyLate;?></td>
 							<td align="center"><?php echo $m;?></td>
 							<td align="center"><?php echo $b;?></td>
 							<td align="center"><?php echo $other;?></td>
 							
-							
-							<?php 
-							$_db = new Home_Model_DbTable_DbStudent();
-							$attentence_status = $_db->getSumStatusAttendence($rs['stu_id'], $rs['group_id']);
-							$absent=0;
-							$permission=0;
-							$late=0;
-							$early_leave=0;
-							foreach ($attentence_status as $rs){
-									if ($rs['attendence_status']==2){
-										$absent =$absent+$rs['total'];
-										//$A=$A+1;
-										//Absent
-									}
-									else if ($rs['attendence_status']==3){
-										$permission =$permission+$rs['total'];
-										//$P = $P+1;
-										//Permission
-									}
-									else if ($rs['attendence_status']==4){
-										$late =$late+$rs['total'];
-										//$L = $L+1;
-										//Late
-									}
-									else if ($rs['attendence_status']==5){
-										$early_leave =$early_leave+$rs['total'];
-										//$EL = $EL+1;
-										//Early Leave
-									}else{
-										echo " ";
-									}
-								}
-							?>
-							<td align="center"><?php echo $absent;?></td>
-							<td align="center"><?php echo $permission;?></td>
-							<td align="center"><?php echo $late;?></td>
-							<td align="center"><?php echo $early_leave;?></td>
+							<td align="center"><?php echo $attentenceStatus['totalASemester1']+$attentenceStatus['totalASemester2'];?></td>
+							<td align="center"><?php echo $attentenceStatus['totalPSemester1']+$attentenceStatus['totalPSemester2'];?></td>
+							<td align="center"><?php echo $totalLate;?></td>
+							<td align="center"><?php echo $totalEarlyLate;?></td>
 							
 						</tr>
 							<?php $old_groupid = $rs['group_id'];
 						}?>
 						<tr>
-							<td align="right" colspan="12" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+							<td align="right" colspan="13" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 								<span style="font-family: Times New Roman,Khmer OS Battambang; font-size: 12px;">
 									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</span><br />

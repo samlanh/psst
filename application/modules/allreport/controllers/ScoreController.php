@@ -905,9 +905,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     public function rptTotalattendanceAction()
     {
     	$id=$this->getRequest()->getParam("id");
-    	if(empty($id)){
-    		$this->_redirect("/allreport/allstudent/student-group");
-    	}
+    	$id = empty($id)?0:$id;
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
     		$search['txtsearch']=empty($search['txtsearch'])?'':$search['txtsearch'];
@@ -919,8 +917,14 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     				'study_type'=>0);
     	}
     	$this->view->search = $search;
+    	
     	$db = new Allreport_Model_DbTable_DbRptGroup();
     	$row = $db->getStudentGroup($id,$search,1);
+    	
+    	if(empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
+    	}
+    	
     	$this->view->rs = $row;
     	$rs= $db->getGroupDetailByID($id);
     	$this->view->rr = $rs;
@@ -928,6 +932,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    	$this->view->rsfooter = $frm->getFooterAccount(2);
     }
     
     

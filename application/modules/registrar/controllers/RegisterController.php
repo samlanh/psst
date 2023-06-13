@@ -84,10 +84,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	   
 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $rs = $db->getStudentProfileblog(1);
 		$this->view->rsBank = $db->getAllBank();
-	   
-	   
 	   
 	   $frmreceipt = new Application_Form_FrmGlobal();
 	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();

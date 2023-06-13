@@ -9,9 +9,6 @@
 	$settingAmtReceipt = AMOUNT_RECEIPT;
 ?>
 <style>
-	.tablesorter tr td{
-		border: 1px solid #000;	
-	}
 span.user-badge.bg-warning{
     position: absolute;
     top:5px;
@@ -579,7 +576,7 @@ span.custom-switch-indicator{line-height: 20px;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo"  dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 					<div class="form-group">
@@ -614,7 +611,7 @@ span.custom-switch-indicator{line-height: 20px;}
 	</div>
 </div>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 13.7cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:25.5cm;height: 15cm ; overflow-y: scroll" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 		<style>
 			table{ border-collapse:collapse; margin:0 auto;
 				border-color:#000;font-size:12px !important; }
@@ -1516,10 +1513,13 @@ function printSave(){
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
+		
 		dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
 		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
-		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
+
+		var d = new Date(); // for now
+		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy+' '+d.toLocaleTimeString();
 
 		 var nameKhValue = dojo.byId("lbl_namekh").innerHTML; 
 		 lblNamekh=nameKhValue+"";
@@ -1565,8 +1565,8 @@ function printSave(){
 					
 					if(receipt_type==1 || receipt_type==2 || receipt_type==3){
 					
-						 temp='<table class="collape tablesorter" width="100%" align="center" style="white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
-							  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
+						 temp='<table class="tableDetail" width="100%" id="table">'
+							  temp+='<tr class="hearder_table">';
 								  temp+='<td style="border:1px solid #000;">លរ  <small>No. </small></td>';
 								  temp+='<td style="border:1px solid #000;width:200px;"><strong style="color:#000;">ពណ៍នា <small>Description<small></strong></td>';
 								  temp+='<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Pay as</small></strong></td>';

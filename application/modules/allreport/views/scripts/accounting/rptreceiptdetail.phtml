@@ -25,6 +25,7 @@
 					margin:0cm 0.7cm 0cm 0.7cm;
 					page-break-before: avoid;
 				}
+				table small{line-height: 3px;}
 		</style>
 		<?php 
 			$amount_print = $this->data['receipt_print'];
@@ -75,7 +76,7 @@ function setDatatoReceipt(){
 
 		<?php if($receiptType==4){?>
 		template="";
-				 temp='<table border="1" class="tableDetail" width="100%" align="center" style="border-collapse: collapse; border: solid 1px #000; line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: '+"'Times New Roman','Khmer OS Battambang'"+';" id="table">'
+				 temp='<table class="tableDetail" width="100%" align="center" style="white-space:nowrap; padding: 0px; margin: 0px;font-family: '+"'Times New Roman','Khmer OS Battambang'"+';" id="table">'
 					  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;">';
 						  temp+='<td>លេខរៀង<br />No.</td>';
 						  temp+='<td><strong style="color:#000;">បរិយាយ<br />Description</strong></td>';
@@ -130,8 +131,8 @@ function setDatatoReceipt(){
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 		<?php }else{?>
 			template="";
-				 temp='<table class="collape tablesorter" width="100%" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
-					  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;background:#f2f2f2;font-weight:bold;">';
+				 temp='<table class="tableDetail" width="100%" id="table">'
+					  temp+='<tr class="hearder_table">';
 						  temp+='<td style="border:1px solid #000;">លរ<small>No. </small></td>';
 						  temp+='<td style="border:1px solid #000;">ពណ៍នា<small>Description</small></td>';
 						  temp+='<td style="border:1px solid #000;">បង់ជា<small>Pay as</small></td>';
@@ -156,10 +157,10 @@ function setDatatoReceipt(){
 						if(items_type!=3){
 							term_label = '';//dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
 						}
-					  temp+='<tr style="font-size:inherit;height: 18px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<tr style="font-size:11px;line-height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
 					 
-					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">&nbsp;'+item_label+'</td>'; 
+					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;"><label class="notedDescription">&nbsp;'+item_label+'</label></td>'; 
 					  term = '<?php if ($rs['is_onepayment']!=1) { echo $rs['payment_term']; }else{ echo "-";}?>';
 					  temp+='<td align="center" style="border:1px solid #000;line-height:10px;">'+term+'</td>';
 					  fee='<?php echo number_format($rs['fee'],2);?>';
@@ -178,8 +179,9 @@ function setDatatoReceipt(){
 						paid='<?php echo number_format($rs['paidamount'],2);?>';
 					  temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
 					  
-					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo $rs['start_date']; ?>-<?php echo empty($rs['validate'])?"":$rs['validate']; }else{echo'&nbsp;';}?>';		  				  
-					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</td>';
+					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo '<span class="spanBlog">'.$rs['start_date'].'</span>'; echo empty($rs['validate'])?"":'<span class="spanBlog">'.$rs['validate'].'</span>';}else{echo'&nbsp;';}?>';	
+							  				  
+					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</span></td>';
 					  note = '<?php echo addslashes($rs['note']);?>';
 					  var div = document.getElementById('noteContent');
 					var htmlString = $( '#noteContent'+'<?php echo $key;?>').html();

@@ -54,24 +54,18 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			try {
 				$rs =  $db->addStudentAttendece($_data);
 				if(isset($_data['save_new'])){
-					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/studentattendance/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/studentattendance/add");
 				}
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/studentattendance");
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$this->view->group = $db_global->getAllGroupName();
+		
 		$this->view->branch_id=$db_global->getAllBranch();
-		$this->view->branch_name = $db_global->getAllBranch();
-		$this->view->row_year = $db_global->getAllYear();
-		$this->view->session = $db_global->getSession();
-		$this->view->degree = $db_global->getDegree();
-		$this->view->grade = $db_global->getAllGrade();
-		$this->view->room = $db_global->getAllRoom();
 	}
 	
 	public	function editAction(){
@@ -97,13 +91,6 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->row=$result;
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->branch_id=$db_global->getAllBranch();
-		$this->view->row_year=$db_global->getAllYear();
-		$this->view->session=$db_global->getSession();
-		$this->view->degree=$db_global->getDegree();
-		$this->view->group = $db_global->getAllgroupStudyNotPass($result['group_id']);
-		$this->view->room = $row =$db_global->getAllRoom();
-		$this->view->grade = $db_global->getAllGrade();
-		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->allstudentBygroup = $db->getAllStudentByGroupForEdit($result['group_id']);
 	}

@@ -1228,7 +1228,7 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchOne($sql);
    }
    function pushNotification($student=null,$groupId=null,$urlType,$titleId=null,$textTitle=null){//$urlType 1payment,2score,3att,4discipline,5news
-   		
+   		return 11;//close notification
    		if(AUTO_PUSH_NOTIFICATION==0){
    			return false;
    		}

@@ -476,7 +476,7 @@ function filterStudentBygroup(type=null){
 							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
 							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>';
 						str+='</td>';
-						str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>" ><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
+						str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>" ><input dojoType="dijit.form.Textarea"  class="fullside" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
 					str+='</tr>';
 				    if(inx!=1) {//identity set value 1,2,3,4,5
 						var identity = $('#identity').val();
@@ -548,7 +548,7 @@ function initailize(){
 					str+='<input type="radio" <?php if ($student_att['attendence_status']==4){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
 					str+='<input type="radio" <?php if ($student_att['attendence_status']==5){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>';
 				str+='</td>';
-				str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo str_replace("'", '', $student_att['description']); ?>" style="'+textareastyle+'"></td>';
+				str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside" name="comment'+inx+'" type="text" value="<?php echo str_replace("'", '', $student_att['description']); ?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';
 		    if(inx!=1) {//identity set value 1,2,3,4,5
 				var identity = $('#identity').val();

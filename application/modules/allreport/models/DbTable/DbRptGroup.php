@@ -336,8 +336,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 					gsd.teacher = t.id
 					AND t.teacher_name_kh!=''
 					AND gsd.group_id =  $group_id	
-		
+
 			";
+		$sql.=" GROUP BY t.teacher_name_kh";
 		return $db->fetchAll($sql);
 	}
 	

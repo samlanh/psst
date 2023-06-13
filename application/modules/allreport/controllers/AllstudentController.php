@@ -524,7 +524,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'subject' 		=> 0,
 					'showsign'		=> 1,
 					'group'        =>'',
-					'branch_id'        =>'',
+					'branch_id'     =>'',
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();

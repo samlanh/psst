@@ -837,6 +837,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.guardian_nation) AS guardian_nation
 		
 	 FROM rms_student AS s WHERE s.stu_id=$id";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('s.branch_id');
 		return $db->fetchRow($sql);
 	}
 	

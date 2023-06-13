@@ -1064,18 +1064,20 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptPayment();
 		$rs = $db->getStudentPaymentByid($id);
+		if(empty($rs)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/accounting/rpt-daily");
+		}
+		
 		$this->view->rr = $rs;
 		$this->view->row =  $db->getPaymentReciptDetail($id);
 		 
 		$key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);// will remove
 		 
 		$branch_id=null;
 		if(!empty($rs)){
 			$branch_id = $rs['branch_id'];
 		}
-// 		$_db = new Application_Form_FrmGlobal();
-// 		$this->view->header = $_db->getHeaderReceipt($branch_id);
 		
 		$frmreceipt = new Application_Form_FrmGlobal();
 		$this->view->officailreceipt = $frmreceipt->getFormatReceipt();

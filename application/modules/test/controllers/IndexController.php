@@ -110,11 +110,12 @@ class Test_IndexController extends Zend_Controller_Action
     	}
     	$row  = $db->getStudentTestById($id);
     	$this->view->rs = $row; 
-    	$this->view->row_detail=$db->getStudentTestDetail($id);
+    	
     	if(empty($row)){
-    		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
+    		Application_Form_FrmMessage::Sucessfull('No Record',self::REDIRECT_URL);
     		exit();
     	}
+    	$this->view->row_detail=$db->getStudentTestDetail($id);
     	$this->view->testresult = $db->getAllTestResult($id);
     	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -132,8 +133,13 @@ class Test_IndexController extends Zend_Controller_Action
 	
     function profileAction(){
     	$id = $this->getRequest()->getParam('id');
+    	$id = (empty($id))?0:$id;
     	$db = new Test_Model_DbTable_DbStudentTest();
-    	$this->view->row = $row = $db->getStudentTestProfileById($id);
+    	$result = $db->getStudentTestProfileById($id);
+    	if(empty($result)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD",self::REDIRECT_URL);
+    	}
+    	$this->view->row = $row = $result;
     	$this->view->row_detail=$db->getStudentTestDetail($id);
     	
     	$this->view->testresultkh = $db->getAllTestResult($id,1);

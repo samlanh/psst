@@ -211,7 +211,11 @@ table.tb-footer tr.style-head {
 									 </tr>
 									
 								</thead>
-								<?php $updated_result=0; $i=0; if(!empty($this->row)){ foreach($this->row as $rs){ $i++;?>
+								<?php 
+								$updated_result=0;
+								$total_register=0;
+								 $i=0; 
+								if(!empty($this->row)){ foreach($this->row as $rs){ $i++;?>
 									  <tr class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center"  >
 											<td data-label="<?php echo $tr->translate("N_O");?>"   align="center"><?php echo $i;?></td>
 											<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"  ><?php echo $rs['serial']; ?><br /><?php echo $rs['stu_code']; ?></td>
@@ -234,6 +238,9 @@ table.tb-footer tr.style-head {
 										if($rs['updated_result_de']==1){
 											$updated_result = $updated_result + 1;
 										}
+										if($rs['is_registered']==1){
+											$total_register = $total_register + 1;
+										}
 									  ?>
 								  <?php }
 								  }?>
@@ -251,6 +258,12 @@ table.tb-footer tr.style-head {
 											</li>
 											<li>
 												<?php echo $tr->translate("TOTAL_NO_RESULT");?> : <?php echo ($i-$updated_result);?> <?php echo $tr->translate("STUDENT_UNIT");?>
+											</li>
+											<li>
+												<?php echo $tr->translate("TOTAL_REGISTER_STUDENT");?> : <?php echo $total_register;?> <?php echo $tr->translate("STUDENT_UNIT");?>
+											</li>
+											<li>
+												<?php echo $tr->translate("TOTAL_NOT_YET_REGISTER_STUDENT");?> : <?php  echo ($i-$total_register);?> <?php echo $tr->translate("STUDENT_UNIT");?>
 											</li>
 										</ul>
 									</td>

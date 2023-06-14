@@ -85,17 +85,17 @@ class Application_Form_FrmGlobal{
 		}
 		
 	    if($setting['show_header_receipt']==1){
-			$str="<table width='100%' style='white-space:nowrap;'>
+			$str="<table style='width:100%;white-space:nowrap;position: absolute;'>
 				<tr>
-					<td width='22%' valign='top'>
-						<img style='".$styleLogo."' src=".$logo.">
+					<td style='width:22%;' valign='top'>
+						&nbsp;<img style='".$styleLogo."' src=".$logo.">
 					</td>
-					<td width='48%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
-						<div style='font-size:18px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
-						<div style='font-size:18px;font-family:Times New Roman'>".$school_name."</div>
+					<td valign='top' style='width:48%;font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
+						<div style='font-size:16px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
+						<div style='font-size:14px;font-family:Times New Roman'>".$school_name."</div>
 						<div style='font-size:10px;line-height: 10px;margin-top: 2px;max-width:100%;white-space:pre-line;'>".$address."</div>
 					</td>
-					<td width='30%' valign='top' style='font-size:10px;line-height: 15px;font-family: Khmer OS Battambang;' >
+					<td valign='top' style='width:30%;font-size:10px;line-height: 15px;font-family: Khmer OS Battambang;' >
 						<div style='line-height: 16px;'>&nbsp;</div>
 						<div style='line-height: 16px;'>".$tel."</div>
 						<div style='line-height: 16px;'>".$email."</div>
@@ -841,7 +841,6 @@ class Application_Form_FrmGlobal{
 			defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
 			defined('SHOW_HEADER_RECEIPT') || define('SHOW_HEADER_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_header_receipt'));
 			
-			
 			$paddingTop = PADDINGTOP_RECEIPT.'px';
 			$showPic = SHOW_PIC_INRECEIPT;
 			$showPic = ($showPic==1)?'display:block;':'display:none;';
@@ -887,8 +886,10 @@ class Application_Form_FrmGlobal{
 							white-space: normal;
 							width:200px;
 						}
-						table{ border-collapse:collapse; margin:0 auto;
-								border-color:#000;font-size:10px; }
+						table.print{ border-collapse:collapse; margin:0 auto;
+								border-color:#000;font-size:12px;
+								line-height:18px;
+			 			}
 						.blogbranchlogo{
 							margin:0 auto;position:absolute;top:10px;left:100px;
 						}
@@ -907,6 +908,18 @@ class Application_Form_FrmGlobal{
 							display:block;
 							line-height:15px;
 						}
+						table.tableDetail{
+							border-collapse: collapse; border: solid 1px #000; line-height:22px;
+							font-size:12px;font-family: Khmer OS Battambang;
+							text-align:center;
+						}
+						table tr.hearder_table{
+								background:#f2f2f2;
+								font-weight:bold;
+								line-height:20px;
+								text-align:center;
+								white-space:nowrap;
+							}
 						.spanBlog{
 							display:block !important;
 							line-height:12px;
@@ -965,7 +978,7 @@ class Application_Form_FrmGlobal{
 							<td width='20%'><label id='lb_date' class='one bold'></label></td>
 						</tr>
 						<tr>
-							<td>អត្តលេខ/Student ID,Test ID </td>
+							<td>អត្តលេខ,Student ID/Test ID</td>
 							<td> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
 							<td>ឆ្នាំសិក្សា/Academic Year</td>
 							<td> : &nbsp;<label id='lb_academic_year' class='one'>&nbsp;</label></td>
@@ -982,7 +995,7 @@ class Application_Form_FrmGlobal{
 							<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
 						</tr>
 						<tr>
-							<td>surname-Name</td>
+							<td>Family Name-Name</td>
 							<td> : &nbsp;<label id='lb_namelatin' class='one bold' style='display: inline-block; vertical-align: top;'></label></td>
 							<td>ថ្នាក់/Class</td>
 							<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
@@ -992,7 +1005,7 @@ class Application_Form_FrmGlobal{
 							<td>ភេទ/Gender </td>
 							<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
 							<td>ថ្នាកទី/Grade/Level​​​</td>
-							<td rowspan='2'> : &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
+							<td rowspan='2' valign='top'> : &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
 						</tr>
 						<tr>
 							<td>លេខទូរសព្ទ/Tel</td>

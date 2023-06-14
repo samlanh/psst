@@ -171,9 +171,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$sql.=$dbp->getAccessPermission("gr.branch_id");
 			
-		   	if(empty($search)){
-		   		return $db->fetchAll($sql.$order);
-		   	}
 		   	if(!empty($search['txtsearch'])){
 		   		$s_where = array();
 		   		$s_search = addslashes(trim($search['txtsearch']));

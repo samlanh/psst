@@ -167,8 +167,15 @@
 	                    		<span class="exp_date"><?php //echo date("F j, Y",strtotime($validDate))?></span>
 	                    	</div>
 					<?php  
-							$QrCodeValue = $row['studentToken'];
-							$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$QrCodeValue),null,true);?>
+// 							$QrCodeValue = $row['studentToken'];
+// 							$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$QrCodeValue),null,true);
+							
+							$QrCodeValue =URL_STUDENT_PROFILE.'/public/info/studentinfo/token/'.$row['studentToken'];
+							$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr"),null,true);
+							$url.='?codeReader='.$QrCodeValue;
+							
+							?>
+							
 							<div class="foot-left-block">
 								<div class="qrimages">
 									<img  src="<?php echo $url;?>" alt="profile-image" >

@@ -49,7 +49,6 @@ class IndexController extends Zend_Controller_Action
 					$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 					$user_id=$db_user->getUserID($user_name);
 					$user_info = $db_user->getUserInfo($user_id);
-					
 					$arr_acl=$db_user->getArrAcl($user_info['user_type']);
 					$a_i = 0;
 					$arr_actin = array();
@@ -74,8 +73,13 @@ class IndexController extends Zend_Controller_Action
 					$session_user->branch_id= $user_info['branch_id'];
 					$session_user->branch_list= $user_info['branch_list'];
 					$session_user->schoolOption= $user_info['schoolOption'];
+					
 
 					$db = new Application_Model_DbTable_DbUsers();
+					
+					$isAddPayment = $db_user->getAccessUrl("registrar","register","add");
+					$session_user->accessRegistarBtn= !empty($isAddPayment)?1:0;
+					
 					$creditmemo = $db->getAccessUrl("accounting","creditmemo","index");
 					if (empty($creditmemo)){
 						$session_user->isnot_creditmemo_acl= 1;
@@ -190,9 +194,7 @@ class IndexController extends Zend_Controller_Action
     public function  dashboardAction(){
     	$this->_helper->layout()->disableLayout();
     }
-    public static function start(){
-    	return ($this->getRequest()->getParam('limit_satrt',0));
-    }
+   
     function changelangeAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
@@ -382,7 +384,6 @@ class IndexController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		try{
     			$data = $this->getRequest()->getPost();
-    			
     			$session_user=new Zend_Session_Namespace(SUTUDENT_SESSION);
     			$test_type = $session_user->test_type;
     			$test_setting_id = $session_user->test_setting_id;

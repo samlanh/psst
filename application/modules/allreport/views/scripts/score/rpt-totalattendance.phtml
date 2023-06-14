@@ -93,6 +93,7 @@
 								margin: 0.5cm;
 							}
 						}
+						.pink{background: #fff2f2;}
 					</style>
 					<table class="content-data" cellpadding="3" border="1">
 						<thead>
@@ -102,8 +103,10 @@
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
 								<td rowspan="2"><?php echo $tr->translate("NAME_ENGLISH");?></td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
-								<td colspan="4" align="center"><?php echo $tr->translate("ABSENT");?></td>
-								<td colspan="4" align="center"><?php echo $tr->translate("DISCIPLINE_TYPE");?></td>
+								<td colspan="4" align="center"><?php echo $tr->translate("SEMESTER1");?></td>
+								<td colspan="4" align="center" class="pink"><?php echo $tr->translate("SEMESTER2");?></td>
+								<td colspan="4" align="center"><?php echo $tr->translate("TOTAL");?></td>
+								<td colspan="4" align="center" class="pink"><?php echo $tr->translate("DISCIPLINE_TYPE");?></td>
 							</tr>
 							<tr class="style-head" >
 								<td align="center"><?php echo $tr->translate("NO_PERMISSION");?></td>
@@ -111,20 +114,27 @@
 								<td align="center"><?php echo $tr->translate("LATE");?></td>
 								<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>	
 								
-								<td align="center"><?php echo $tr->translate("SMALL_MISTACK");?></td>
-								<td align="center"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
-								<td align="center"><?php echo $tr->translate("BIG_MISTACK");?></td>	
-								<td align="center"><?php echo $tr->translate("OTHER");?></td>	
+								<td align="center" class="pink"><?php echo $tr->translate("NO_PERMISSION");?></td>
+								<td align="center" class="pink"><?php echo $tr->translate("PERMISSION");?></td>
+								<td align="center" class="pink"><?php echo $tr->translate("LATE");?></td>
+								<td align="center" class="pink"><?php echo $tr->translate("EARLY_LEAVE");?></td>	
+								
+								<td align="center"><?php echo $tr->translate("NO_PERMISSION");?></td>
+								<td align="center"><?php echo $tr->translate("PERMISSION");?></td>
+								<td align="center"><?php echo $tr->translate("LATE");?></td>
+								<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>	
+								
+								<td align="center" class="pink"><?php echo $tr->translate("SMALL_MISTACK");?></td>
+								<td align="center" class="pink"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
+								<td align="center" class="pink"><?php echo $tr->translate("BIG_MISTACK");?></td>	
+								<td align="center" class="pink"><?php echo $tr->translate("OTHER");?></td>	
 							</tr>
 						</thead>
 						<?php  
 						$db = new Home_Model_DbTable_DbStudent();
-						$A=0;
-						$P=0;
-						$L=0;
-						$EL=0;
 						$i=0;
 						$male=0;$femle=0;
+						$_db = new Allreport_Model_DbTable_DbRptAllStudent();
 						foreach ($this->rs as $row){ $i++;?>
 						<tr align="center" class="style-rowdata hover">
 							<td><?php echo $i;?></td>
@@ -141,50 +151,30 @@
 								?>
 							</td>
 							<?php 
-							$attentence_status = $db->getSumStatusAttendence($row['stu_id'], $row['group_id']);
-							$absent=0;
-							$permission=0;
-							$late=0;
-							$early_leave=0;
-							foreach ($attentence_status as $rs){
-									if ($rs['attendence_status']==2){
-										$absent =$absent+$rs['total'];
-										$A=$A+1;
-										//Absent
-									}
-									else if ($rs['attendence_status']==3){
-										$permission =$permission+$rs['total'];
-										 $P = $P+1;
-										//Permission
-									}
-									else if ($rs['attendence_status']==4){
-										$late =$late+$rs['total'];
-										$L = $L+1;
-										//Late
-									}
-									else if ($rs['attendence_status']==5){
-										$early_leave =$early_leave+$rs['total'];
-										$EL = $EL+1;
-										//Early Leave
-									}else{
-										echo " ";
-									}
-								}
+								$attentenceStatus = $db->getSumStatusAttendence($row['stu_id'], $row['group_id']);
+								
+								$totalLate = $attentenceStatus['totalLSemester1']+$attentenceStatus['totalLSemester2'];
+								$totalEarlyLate = $attentenceStatus['totalELSemester1']+$attentenceStatus['totalELSemester2'];
 							?>
-							<td align="center"><?php echo $absent;?></td>
-							<td align="center"><?php echo $permission;?></td>
-							<td align="center"><?php echo $late;?></td>
-							<td align="center"><?php echo $early_leave;?></td>
+							<td align="center"><?php echo $attentenceStatus['totalASemester1'];?></td>
+							<td align="center"><?php echo $attentenceStatus['totalPSemester1'];?></td>
+							<td align="center"><?php echo $attentenceStatus['totalLSemester1'];?></td>
+							<td align="center"><?php echo $attentenceStatus['totalELSemester1'];?></td>
+							
+							<td align="center" class="pink"><?php echo $attentenceStatus['totalASemester2'];?></td>
+							<td align="center" class="pink"><?php echo $attentenceStatus['totalPSemester2'];?></td>
+							<td align="center" class="pink"><?php echo $attentenceStatus['totalLSemester2'];?></td>
+							<td align="center" class="pink"><?php echo $attentenceStatus['totalELSemester2'];?></td>
+							
+							<td align="center"><?php echo $attentenceStatus['totalASemester1']+$attentenceStatus['totalASemester2'];?></td>
+							<td align="center"><?php echo $attentenceStatus['totalPSemester1']+$attentenceStatus['totalPSemester2'];?></td>
+							
+							<td align="center"><?php echo $totalLate;?></td>
+							<td align="center"><?php echo $totalEarlyLate;?></td>
 							
 							<?php $s=0; $m=0; $b=0;$other=0; ?>
 							<?php  
-								$_db = new Allreport_Model_DbTable_DbRptAllStudent();
 								$mistake_status = $_db->getTotalStatusMistake($row['stu_id'], null, $row['group_id']);
-								$lateAttedence = $_db->getAttendenceFoul($row['group_id'],$row['stu_id']);
-								$late_foul = 0;
-								if (!empty($lateAttedence)){
-									$late_foul = $lateAttedence['count_foul_att'];
-								}
 								if (!empty($mistake_status)) foreach ($mistake_status as $sta){
 									if ($sta['mistake_type']==1){
 										$s=$sta['count_mistack'];
@@ -201,10 +191,10 @@
 								}
 							?>
 							    
-							<td align="center"><?php echo $s+$late_foul;?></td>
-							<td align="center"><?php echo $m;?></td>
-							<td align="center"><?php echo $b;?></td>
-							<td align="center"><?php echo $other;?></td>
+							<td align="center" class="pink"><?php echo $s+$totalLate+$totalEarlyLate;?></td>
+							<td align="center" class="pink"><?php echo $m;?></td>
+							<td align="center" class="pink"><?php echo $b;?></td>
+							<td align="center" class="pink"><?php echo $other;?></td>
 						</tr>
 						<?php }?>	
 					</table>	
@@ -212,24 +202,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 12px">
-						<tr>
-							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
-							</td>
-							<td width="30%">&nbsp;</td>
-							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
-							</td>
-						</tr>
-					</table>
+						<?php echo $this->rsfooter;?>
 				</td>
 			</tr>
 		</table>

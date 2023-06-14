@@ -212,9 +212,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$search=$this->getRequest()->getPost();
 			// 			$db->submitDateList($search);
 			$row = $db->getStudentGroup(null,$search,1);
-			$rs=array();
+			$result=array();
 			if(!empty($row[0]['group_id'])){
-				$rs = $db->getGroupDetailByID($row[0]['group_id']);
+				$result = $db->getGroupDetailByID($row[0]['group_id']);
 			}
 		}
 		else{
@@ -236,10 +236,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$row = $db->getStudentGroup($id,$search,1);
 		$this->view->rs = $row;
-		$this->view->rr = $rs;
+		$this->view->rr = $result;
 	
 		$frm = new Application_Form_FrmGlobal();
-		$branchId=(!empty($rs['branch_id']))?$rs['branch_id']:0;
+		$branchId=(!empty($result['branch_id']))?$result['branch_id']:0;
 		$this->view->rsheader = $frm->getLetterHeaderReport($branchId,3);
 	
 		$form=new Application_Form_FrmSearchGlobal();
@@ -524,7 +524,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'subject' 		=> 0,
 					'showsign'		=> 1,
 					'group'        =>'',
-					'branch_id'     =>'',
+					'branch_id'        =>'',
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();

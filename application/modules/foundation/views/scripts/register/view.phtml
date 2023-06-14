@@ -10,7 +10,7 @@
 	}
 	$photo=$this->baseUrl().'/images/no-profile.png';
 	if(!empty($this->rs['photo'])){
-		$photo=$this->baseUrl().'/images/'.$this->rs['photo'];
+		$photo=$this->baseUrl().'/images/photo/'.$this->rs['photo'];
 	}
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
@@ -62,8 +62,8 @@ table#exportExcel tr td {
 				<style>
 		   			label.value{
 		   				font-weight: initial;
-		   				min-width: 90px;
-		   				font-size: 14px;
+		   				min-width: 80px;
+		   				font-size: 12px;
 		   				display: inline-block;
 					}
 					padding-left {
@@ -71,7 +71,7 @@ table#exportExcel tr td {
 						line-height: 20px;
 					}
 					label.title {
-					    font-size: 14px;
+					    font-size: 12px;
 					    min-width: 80px;
 					    display: inline-block;
 					}
@@ -83,82 +83,201 @@ table#exportExcel tr td {
 					    margin-bottom: 10px;
 					}
 					.hover:hover{background: #ccc;}
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							size:A4 portrait;
+						}
+					}
 		  		 </style>
 				<table width="100%" style="font-size:12px; font-family:'Times New Roman','Khmer OS Battambang';"> 
 					<tr class="head">
 						<td width="40%" valign="middle"></td>
 					   <td width="30%" align="center"></td>
 					   <td width="30%" align="center">
-					   		<h2 style="font-size:16px; line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
-					   		<h2 style="font-size:14px; line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+					   		<h2 style="font-size:12px; line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
+					   		<h2 style="font-size:12px; line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
 					   		<img alt="" src="<?php echo $this->baseUrl()."/images/sign.PNG"?>" style=" width: 120px;">
 					   </td>
 					</tr>
 					<tr class="head">
 					   <td colspan="3" align="center">
-					   		<h2 style="font-size:16px;font-weight: initial;font-family:'Khmer OS Muol Light';text-decoration: underline;" >ប្រវត្តិរូបសង្ខេប</h2>
+					   		<h2 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';text-decoration: underline;" >ប្រវត្តិរូបសង្ខេប</h2>
 					   </td>
 					</tr>
 					<tr>
 					   <td colspan="3">
-					   		<table id="exportExcel" style="font-family:'Times New Roman','Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;line-height:27px;" width="100%" cellspacing="0">
+					   		<table  id="exportExcel" style="font-family:'Times New Roman','Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;line-height:27px;" width="100%" cellspacing="0">
 						    	<tr>
-						    		<td colspan="9" align="right" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
-						    			<img id="profile_wiew" src="<?php echo $photo;?>" alt="" style="width:100px;max-height: 120px;border: solid 1px #a29f9f;"/>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+									<td colspan="6" style="font-size:12px; font-weight: initial; font-family:'Khmer OS Muol Light';">
 						    			I. ព័ត៌មានសិស្ស
 						    			<div class="border"></div>
 						    		</td>
+						    		<td colspan="3" rowspan="3" align="center" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			<img id="profile_wiew" src="<?php echo $photo;?>" alt="" style="width:100px;max-height: 120px;border: solid 1px #a29f9f;"/>
+						    		</td>
 						    	</tr>
 								<tr>
-									<td width="10%" class="title padding-left">នាមត្រកូល-ខ្លួន</td>
+									<td class="title padding-left">នាមត្រកូល-ខ្លួន</td>
+									<td >:</td>
+									<td  class="value"><?php echo $this->rs['stu_khname'];?></td>
+									<td class="title">ជាអក្សរឡាតាំង</td>
+									<td >:</td>
+									<td  class="value"><?php echo $this->rs['last_name']." ".$this->rs['stu_enname'];?></td>
+									<td colspan="3"></td>
+								</tr>
+								<tr>
+									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									<td >:</td>
+									<td class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></td>
+									<td class="title">អត្តលេខ</td>
 									<td width="1%">:</td>
-									<td width="22%" class="value"><?php echo $this->rs['stu_khname'];?></td>
-									<td width="10%">ជាអក្សរឡាតាំង</td>
-									<td width="1%">:</td>
-									<td width="22%" class="value"><?php echo $this->rs['last_name']." ".$this->rs['stu_enname'];?></td>
-									<td width="10%">អត្តលេខ</td>
-									<td width="1%">:</td>
-									<td width="22%" class="value"><?php echo $this->rs['stu_code'];?></td>
+									<td  class="value"><?php echo $this->rs['stu_code'];?></td>
+									<td colspan="3"></td>
 								</tr>
 								
 								<tr>
 									<td class="title padding-left">សញ្ជាតិ</td>
 									<td >:</td>
 									<td class="value"><?php echo $this->rs['nationality'];?></td>
-									<td >ភេទ</td>
+									<td class="title">ភេទ</td>
 									<td >:</td>
 									<td class="value"><?php echo $sex;?></td>
-									<td >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
-									<td >:</td>
-									<td class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></td>
+									<td colspan="3"></td>
 								</tr>
 								<tr>
 									<td class="title padding-left">ទីកន្លែងកំណើត</td>
 									<td >:</td>
-									<td class="value"><?php echo $this->rs['pob'];?></td>
+									<td colspan="3" class="value"><?php echo $this->rs['pob'];?></td>
+									<td colspan="4"></td>
 								</tr>
 								<tr>
 									<td class="title padding-left">លេខទូរសព្ទ</td>
 									<td >:</td>
-									<td colspan="4" class="value"><?php echo $this->rs['tel'];?></td>
-									<td >អ៊ីម៉ែល</td>
+									<td  class="value"><?php echo $this->rs['tel'];?></td>
+									<td class="title">អ៊ីម៉ែល</td>
 									<td >:</td>
 									<td class="value"><?php $this->rs['email'];?></td>
+									<td colspan="3"></td>
+								</tr>
+								
+								<!-- 
+								<tr>
+									<td class="title">ផ្សេងៗ</td>
+									<td >:</td>
+									<td colspan="7" class="value"><?php //echo $this->rs['remark'];?></td>
+								</tr>
+								 -->
+						    	<tr><td colspan="9">&nbsp;</td></tr>
+						    	<tr>
+						    		<td colspan="9" style="font-size:12px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			II. ព័ត៌មានមាតាបិតា
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+								<tr>
+									<td class="title">ឈ្មោះឪពុក</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['father_khname'];?></td>
+									<td class="title">ជាអក្សរឡាតាំង</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['father_enname'];?></td>
+									<td class="title">សញ្ជាតិ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['father_nation'];?></td>
+								</tr>
+								<tr>
+									<td class="title" >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									<td >:</td>
+									<td class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['mother_dob']!="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?></td>
+									<td class="title">មុខរបរ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['fa_job'];?></td>
+									<td class="title">លេខទូរសព្ទ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['father_phone'];?></td>
+								</tr>
+								<tr>
+						    		<td colspan="9" style="font-size:12px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+								<tr>
+									<td class="title">ឈ្មោះម្ដាយ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['mother_khname'];?></td>
+									<td class="title">ជាអក្សរឡាតាំង</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['mother_enname'];?></td>
+									<td class="title">សញ្ជាតិ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['mother_nation'];?></td>
+								</tr>
+								<tr>
+									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									<td >:</td>
+									<td class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?></td>
+								
+									<td class="title">មុខរបរ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['mo_job'];?></td>
+									<td class="title">លេខទូរសព្ទ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['mother_phone'];?></td>
+								</tr>
+						    	<tr><td colspan="9">&nbsp;</td></tr>
+						    	<tr>
+						    		<td colspan="9" style="font-size:12px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			III. ព័ត៌មានអាណាព្យាបាល
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+								<tr>
+									<td class="title">ឈ្មោះអាណាព្យាបាល</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['guardian_khname'];?></td>
+									<td class="title">ជាអក្សរឡាតាំង</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['guardian_enname'];?></td>
+									<td class="title">សញ្ជាតិ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['guardian_nation'];?></td>
+									</tr>
+								<tr>
+									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
+									<td >:</td>
+									<td class="value"><?php if (!empty($this->rs['guardian_dob']) AND $this->rs['guardian_dob'] !="0000-00-00" AND $this->rs['guardian_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['guardian_dob']));}?> </td>
+								
+									<td class="title">មុខរបរ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['gu_job'];?></td>
+									<td class="title">លេខទូរសព្ទ</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['guardian_tel'];?></td>
+									
+								</tr>
+								<tr>
+									<td class="title">លេខអត្ត./លិខិតឆ្លងដែន</td>
+									<td >:</td>
+									<td class="value"><?php echo $this->rs['guardian_document'];?></td>
 								</tr>
 								<tr><td colspan="9">&nbsp;</td></tr>
 								<tr>
-						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
-						    			II. ព័ត៌មានការសិក្សា
+						    		<td colspan="9" style="font-size:12px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			IV. ព័ត៌មានការសិក្សា
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
 								<tr>
 									<td colspan="9">
-										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;">
+										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap; font-family:'Times New Roman','Khmer OS Battambang';">
 												<thead>
 													<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px; " >
 														<td><?php echo $tr->translate('N_O');?></td>
@@ -190,117 +309,16 @@ table#exportExcel tr td {
 										</table>
 									</td>
 								</tr>
-								<!-- 
-								<tr>
-									<td class="title">ផ្សេងៗ</td>
-									<td >:</td>
-									<td colspan="7" class="value"><?php //echo $this->rs['remark'];?></td>
-								</tr>
-								 -->
-						    	<tr><td colspan="9">&nbsp;</td></tr>
-						    	<tr>
-						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
-						    			III. ព័ត៌មានមាតាបិតា
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-								<tr>
-									<td class="title">ឈ្មោះឪពុក</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_khname'];?></td>
-									<td >ជាអក្សរឡាតាំង</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_enname'];?></td>
-									<td >សញ្ជាតិ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_nation'];?></td>
-								</tr>
-								<tr>
-									<td class="title" >ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
-									<td >:</td>
-									<td class="value"><?php if (!empty($this->rs['father_dob']) AND $this->rs['father_dob'] !="0000-00-00" AND $this->rs['mother_dob']!="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['father_dob']));}?></td>
-									<td >មុខរបរ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['fa_job'];?></td>
-									<td >លេខទូរសព្ទ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['father_phone'];?></td>
-								</tr>
-								<tr>
-						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
-						    			
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-								<tr>
-									<td class="title">ឈ្មោះម្ដាយ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_khname'];?></td>
-									<td >ជាអក្សរឡាតាំង</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_enname'];?></td>
-									<td >សញ្ជាតិ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_nation'];?></td>
-								</tr>
-								<tr>
-									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
-									<td >:</td>
-									<td class="value"><?php if (!empty($this->rs['mother_dob']) AND $this->rs['mother_dob'] !="0000-00-00" AND $this->rs['mother_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['mother_dob']));}?></td>
-								
-									<td >មុខរបរ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['mo_job'];?></td>
-									<td >លេខទូរសព្ទ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['mother_phone'];?></td>
-								</tr>
-						    	<tr><td colspan="9">&nbsp;</td></tr>
-						    	<tr>
-						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
-						    			IV. ព័ត៌មានអាណាព្យាបាល
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-								<tr>
-									<td class="title">ឈ្មោះអាណាព្យាបាល</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_khname'];?></td>
-									<td >ជាអក្សរឡាតាំង</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_enname'];?></td>
-									<td >សញ្ជាតិ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_nation'];?></td>
-									</tr>
-								<tr>
-									<td class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</td>
-									<td >:</td>
-									<td class="value"><?php if (!empty($this->rs['guardian_dob']) AND $this->rs['guardian_dob'] !="0000-00-00" AND $this->rs['guardian_dob'] !="1970-01-01"){ echo date("d/m/Y",strtotime($this->rs['guardian_dob']));}?> </td>
-								
-									<td >មុខរបរ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['gu_job'];?></td>
-									<td >លេខទូរសព្ទ</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_tel'];?></td>
-									
-								</tr>
-								<tr>
-									<td class="title">លេខអត្ត./លិខិតឆ្លងដែន</td>
-									<td >:</td>
-									<td class="value"><?php echo $this->rs['guardian_document'];?></td>
-								</tr>
 								<tr><td colspan="9">&nbsp;</td></tr>
 								<tr>
-						    		<td colspan="9" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
-						    			II. ព័ត៌មានឯកសារ
+						    		<td colspan="9" style="font-size:12px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			V. ព័ត៌មានឯកសារ
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
 								<tr>
 									<td colspan="9">
-										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;">
+										<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap; font-family:'Times New Roman','Khmer OS Battambang';">
 												<thead>
 													<tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px; " >
 														<td><?php echo $tr->translate("N_O");?></td>

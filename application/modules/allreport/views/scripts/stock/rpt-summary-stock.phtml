@@ -3,8 +3,8 @@
 	echo $this->headTitle($tr->translate('RPT_SUMMARY_STOCK')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
-	
 	$db=new Allreport_Model_DbTable_DbRptSummaryStock();
+	$classHideHeight=classHideHeight;
 	
 ?>
 <style>

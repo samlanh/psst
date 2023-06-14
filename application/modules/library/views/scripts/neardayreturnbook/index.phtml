@@ -1,9 +1,9 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
-	 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 	echo $this->headTitle(''); 
 	$frm =  $this->frm_search;
+	$classHideHeight=classHideHeight;
 ?>
 <script type="text/javascript">
     dojo.require("dijit.form.DateTextBox");

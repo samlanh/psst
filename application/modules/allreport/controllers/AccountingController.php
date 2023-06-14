@@ -296,6 +296,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
+				$search['receipt_order']=1;
 			}
 			else{
 				$search = array(
@@ -314,6 +315,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'user'=>-1,
 						'session'=>-1,
 						'pay_term'=>'',
+						'receipt_order'=>1
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();

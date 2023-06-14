@@ -138,9 +138,9 @@
 						foreach ($this->rs as $row){ $i++;?>
 						<tr align="center" class="style-rowdata hover">
 							<td><?php echo $i;?></td>
-							<td><?php echo $row['stu_code'];?></td>
-							<td align="left"><?php echo $row['kh_name'];?></td>
-							<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
+							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$row['group_id'],'stu_id'=>$row['stu_id']));?>" target="_blank"><?php echo $row['stu_code'];?></a></td>
+							<td align="left"><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$row['group_id'],'stu_id'=>$row['stu_id']));?>" target="_blank"><?php echo $row['kh_name'];?></a></td>
+							<td align="left"><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$row['group_id'],'stu_id'=>$row['stu_id']));?>" target="_blank"><?php echo $row['last_name'].' '.$row['en_name'];?></a></td>
 							<td>
 								<?php echo $row['sex'];
 									if($row['gender']==1){

@@ -376,8 +376,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     		$dayId = empty($search['dayId'])?1:$search['dayId'];
     		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
-//     		$dayStudy = $this->getDaySchedule($stuInfo,$search,$currentLang);
-//     		$timeStudy = $this->getTimeSchelduleByYGS($stuInfo,$search,$currentLang);
     		
     		$arrStudyValue = array();
     		$dayIndex="";

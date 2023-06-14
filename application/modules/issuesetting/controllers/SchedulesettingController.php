@@ -110,6 +110,7 @@ class Issuesetting_SchedulesettingController extends Zend_Controller_Action {
     
     public function copyAction(){
     	$id = $this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
     	$db = new Issuesetting_Model_DbTable_DbScheduleSetting();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
@@ -123,6 +124,10 @@ class Issuesetting_SchedulesettingController extends Zend_Controller_Action {
     		}
     	}
     	$row = $db->getScheduleSettingById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    		exit();
+    	}
     	$this->view->detail = $db->getScheduleSettingDetail($id);
     	
     	$frm = new Issuesetting_Form_FrmScheduleSetting();

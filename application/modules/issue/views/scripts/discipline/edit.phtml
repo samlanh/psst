@@ -209,11 +209,10 @@ dojo.ready(function(){
 		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 		    onChange: function() {  
 		    	group_id = dijit.byId('group').get('value');
-		    	getInfoBygroup();
 		    }
 		}, "group");
 		getAllGroupByBranch();
-		//initailize();
+		initailize();
 });
 
 function gender(sex){
@@ -278,53 +277,6 @@ function AllowOnlyNumbers(e) {
        }
   }
 var olbranch = '<?php echo $this->row['branch_id'];?>';
-var olgroup = '<?php echo $this->row['group_id'];?>';
-function getInfoBygroup(type=null){
-	url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
-	group = dijit.byId('group').get('value');
-	if(group==''){
-		alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>");
-		dojo.byId("gr-info").innerHTML = "";
-		return false;
-	}
-	dojo.xhrPost({
-		url:url_group,	
-		content:{ 
-			'group_id': group,'string':1
-		},
-		handleAs:"json",
-		load: function(data) {
-			string='';
-				string+='<div class="card-info bg-gradient-directional-warning">';
-					string+='<div class="card-content">';
-						string+='<div class="card-body">';
-							string+='<div class="media d-flex">';
-								string+='<div class="media-body text-white text-left align-self-bottom mt-3">';
-									string+='<span class="d-block mb-1 font-medium-1"></span>';
-									string+='<h3 class="text-white mb-10"><?php echo $tr->translate("GROUP_STUDENT_INFO");?></h3>';
-										string+=data;
-								string+='</div>';
-								string+='<div class="align-self-top">';
-									string+='<i class="glyphicon glyphicon-briefcase icon-opacity text-white font-large-4 float-end"></i>';
-								string+='</div>';
-							string+='</div>';
-						string+='</div>';
-					string+='</div>';
-				string+='</div>';
-				
-			dojo.byId("gr-info").innerHTML = string;
-			if(olgroup==group){
-				initailize();
-			}else{
-				filterStudentBygroup(type);
-			}
-		},
-		error: function(err) {
-		}
-	});
-	
-	
-}
 var inx=0;
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(type = null){
@@ -394,7 +346,7 @@ function filterStudentBygroup(type = null){
 							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
 							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("OTHER");?></label>';
 						str+='</td>';
-						str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
+						str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside"  name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
 					str+='</tr>';
 				    if(inx!=1) {
 						var identity = $('#identity').val();
@@ -478,7 +430,7 @@ function initailize(){
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==3){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==4){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("OTHER");?></label>';
 				str+='</td>';
-				str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo addslashes($discipline_type['description']);?>" style="'+textareastyle+'"></td>';
+				str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea" name="comment'+inx+'" type="text" value="<?php echo addslashes($discipline_type['description']);?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';
 		    if(inx!=1) {
 				var identity = $('#identity').val();

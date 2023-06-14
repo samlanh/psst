@@ -164,4 +164,14 @@ class Issuesetting_SchedulesettingController extends Zend_Controller_Action {
     		exit();
     	}
     }
+	function getHourStudyAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_GlobalClass();
+			//$option = empty($data['option'])?null:$data['option'];
+			$rows = $db->getHoursStudy();
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
 }

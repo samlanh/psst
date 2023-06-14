@@ -252,7 +252,15 @@ table.tb-footer tr.style-head {
 									<td data-label="<?php echo $tr->translate("DEGREE");?>"  align="left">&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("TYPE");?>" >&nbsp;<?php echo $row['customer_type'];?>&nbsp;</td>	
-									<td data-label="<?php echo $tr->translate("CREATE_DATE");?>" >&nbsp;<?php echo $row['create_date'];?>&nbsp;</td>	
+									<td data-label="<?php echo $tr->translate("CREATE_DATE");?>" >&nbsp;
+									<?php
+										$format = 'd-M-Y';
+										$dateString = $row["create_date"];
+										$date = new DateTime($dateString);
+										$create_date = $date->format($format);
+										echo $create_date;
+									 ?>
+									 &nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("BY_USER");?>" >&nbsp;<?php echo $row['userby'];?>&nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("STATUS");?>" >&nbsp;<?php echo $row['crm_status_title'];?>&nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("FOLLOWU_STATUS");?>" >&nbsp;<?php echo $row['followup_status'];?>&nbsp;</td>	

@@ -104,20 +104,10 @@
 										<p class="tx-20 font-weight-semibold "><i class="glyphicon glyphicon-ok-sign" aria-hidden="true">&nbsp;</i><?php echo $tr->translate("SHOW");?> </p>
 									</div>
 									<div class="col-md-3 col-sm-6 col-xs-12">
-										<select name="teacher" id="teacher" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setTeacherName();">
-												<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
-												<?php if($this->all_teacher_by_group){foreach ($this->all_teacher_by_group as $teacher){?>
-													<option value="<?php echo $teacher['id']?>"><?php echo $teacher['name']?></option>
-												<?php }}?>
-											</select>
+										<input id="teacher" />
 									</div>
 									<div class="col-md-3 col-sm-3 col-xs-12">
-										<select name="subject" id="subject" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setSubjectName();">
-												<option value="0"><?php echo $tr->translate("SELECT_SUBJECT");?></option>
-												<?php if($this->all_subject_by_group){foreach ($this->all_subject_by_group as $subject){?>
-													<option value="<?php echo $subject['id']?>"><?php echo $subject['name']?></option>
-												<?php }}?>
-											</select>
+										<input id="subject" />
 									</div>
 								</div>
 
@@ -328,6 +318,8 @@
 	dojo.require("dojo.html");
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_teacher_by_group));?> );
+	var subject_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_subject_by_group));?> );
 	dojo.ready(function(){
 		
 		new dijit.form.FilteringSelect({
@@ -341,9 +333,39 @@
 			required:false,
 			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 			onChange: function() {  
-				
+				getAllTeacherByGroup();
+				getAllSubjectByGroup();
 			}
 		}, "group");
+		new dijit.form.FilteringSelect({
+			store: teacher_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			id: "teacher",
+			name: "teacher",  
+			class: 'fullside', 
+			readonly:false,
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
+			onChange: function() {  
+				setTeacherName();
+			}
+		}, "teacher");
+		new dijit.form.FilteringSelect({
+			store: subject_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			id: "subject",
+			name: "subject",  
+			class: 'fullside', 
+			readonly:false,
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_SUBJECT");?>",          
+			onChange: function() {  
+				setSubjectName();
+			}
+		}, "subject");
+
 		var branch_id = dijit.byId('branch_id');
 		branch_id.on('change', function(evt) {
 			getAllGroupByBranch();
@@ -385,6 +407,52 @@
 				if(oldBranch==branch_id){
 		    		dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
 		  	 	}
+			},
+			error: function(err) {
+			}
+		});
+	}
+
+	url_getteacher = '<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'get-teacherbygroup'));?>';
+	function getAllTeacherByGroup(){
+		dijit.byId('teacher').reset();
+		group = dijit.byId('group').get('value');
+		if(group=='' || group==-1){
+			dijit.byId('group').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getteacher,
+			content:{
+				'group':group,
+				},
+			handleAs:"json",
+			load: function(data) {
+				teacher_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('teacher').set('store',teacher_store);   
+			},
+			error: function(err) {
+			}
+		});
+	}
+
+	url_getsubject = '<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'get-all-subjectbygroup'));?>';
+	function getAllSubjectByGroup(){
+		dijit.byId('subject').reset();
+		group = dijit.byId('group').get('value');
+		if(group=='' || group==-1){
+			dijit.byId('group').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getsubject,
+			content:{
+				'group':group,
+				},
+			handleAs:"json",
+			load: function(data) {
+				subject_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('subject').set('store',subject_store);   
 			},
 			error: function(err) {
 			}

@@ -725,8 +725,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search=array(
-    				'start_date'	=> null,
-    				'end_date'		=> date('Y-m-d'),
+    				'start_date'=> null,
+    				'end_date'	=> date('Y-m-d'),
     		);
     	}
     	$this->view->search=$search;
@@ -734,7 +734,12 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->group_id = $group_id;
     
     	$db = new Allreport_Model_DbTable_DbMistakeCertificate();
-    	$row = $db->getStudentInfo($group_id,$stu_id);
+    	$row = $db->getStudentInfoMistake($group_id,$stu_id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/score/rpt-total-student-mistake");
+    		exit();
+    	}
+    	
     	$this->view->student_info = $row;
     
     	$form=new Registrar_Form_FrmSearchInfor();

@@ -184,7 +184,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	}
     
     	$order=" GROUP BY gr.year_id,gr.group_id
-    	ORDER BY gr.year_id,gr.group_id,times DESC ";
+    	ORDER BY gr.year_id,gr.group_id,times ASC ";
     	if(!empty($search['branch_id'])){
     		$where.=' AND gr.branch_id='.$search['branch_id'];
     	}
@@ -213,8 +213,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     function getTimeSchelduleByYGS($year,$group){ /* get Time for show in schedule VD*/
     	$db=$this->getAdapter();
     	$sql="
-    		SELECT gr.from_hour,
-			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS timeValueConcat,
+    		SELECT 
+    		gr.from_hour,
+    		gr.to_hour,
 			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
 			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
 			REPLACE(CONCAT((SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1),'-',(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1)),' ','') AS times
@@ -222,7 +223,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			FROM rms_group_reschedule AS gr 
 			WHERE gr.year_id=$year AND gr.group_id=$group
 			GROUP BY REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','')
-			ORDER BY times ASC";
+			ORDER BY gr.from_hour ASC ";
     	$row = $db->fetchAll($sql);
     	return $row;
     }
@@ -237,7 +238,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$subjecct = "subject_titleen";
     		$teacher = "teacher_name_en";
     	}
-    	$sql="SELECT gr.from_hour,
+    	$sql="SELECT 
+    		gr.from_hour,
 			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
 			(SELECT s.$subjecct FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
 			(SELECT t.$teacher FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
@@ -248,23 +250,6 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			AND gr.`day_id` =$day LIMIT 1";
     	return $db->fetchRow($sql);
     }
-//     function getSubleByHour($year,$group,$hour){
-//     $db=$this->getAdapter();
-//     $sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
-//     REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
-//     (SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
-//     (SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
-//     (SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
-//     FROM rms_group_reschedule AS gr
-    
-//     WHERE gr.year_id=$year
-//     AND gr.group_id=$group
-    
-//     AND REPLACE(CONCAT(gr.from_hour,'-',gr.to_hour),' ','')='$hour'
-//     GROUP BY gr.day_id
-//     ORDER BY gr.day_id,times ASC ";
-//     return $db->fetchAll($sql);
-//     }
     
     function getSubjectListByYG($year,$group){
 	    $db=$this->getAdapter();

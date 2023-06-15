@@ -580,8 +580,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$group= new Allreport_Model_DbTable_DbRptStudentDrop();
     	$this->view->rs = $rs_rows = $group->getAllRescheduleGroup($search);
     	$this->view->search=$search;
-//     	$db_glob = new Application_Model_GlobalClass();
-//     	$this->view->opttime = $db_glob->getHoursStudy();
     
     	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();

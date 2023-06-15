@@ -216,9 +216,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['grade_all']>0){
     		$where .= " AND sp.grade = ".$search['grade_all'];
     	}
-    	if($search['user']>0){
-    		$where .= " and sp.user_id = ".$search['user'];
-    	}
+//     	if($search['user']>0){
+//     		$where .= " and sp.user_id = ".$search['user'];
+//     	}
     	if($order_no==1){
     		$order=" ORDER BY sp.branch_id ASC, sp.id ASC ";
     	}elseif($order_no==2){//used order by student 
@@ -380,9 +380,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['grade_all']>0){
     		$where .= " AND sp.grade = ".$search['grade_all'];
     	}
-    	if($search['user']>0){
-    		$where .= " and sp.user_id = ".$search['user'];
-    	}
+//     	if($search['user']>0){
+//     		$where .= " and sp.user_id = ".$search['user'];
+//     	}
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getPaymentReciptDetail($id){

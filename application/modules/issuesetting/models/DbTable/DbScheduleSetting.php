@@ -219,7 +219,10 @@ class Issuesetting_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstrac
 			   		<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="settingdetail_'.$index.'" name="settingdetail_'.$index.'" value="'.$rs['id'].'" />
 		   			<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="from_hour_'.$index.'" name="from_hour_'.$index.'" value="'.$rs['from_hour'].'" />
 		   			<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" id="to_hour_'.$index.'" name="to_hour_'.$index.'" value="'.$rs['to_hour'].'" />
-		   		
+		   			<div class="custom-control custom-checkbox ">
+						<input type="checkbox" class="checkboxAttendance custom-control-input" onchange="CheckAll('.$index.','.count($allDay).');"  name="breaktime'.$index.'" id="breaktime'.$index.'">
+						<label class="custom-control-label" for="breaktime'.$index.'" id="lblbreaktime'.$index.'">'.$tr->translate("NO_STUDY").'</label>
+					</div>
 		   		</span>
 	   		</td>
    		';

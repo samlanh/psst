@@ -3,8 +3,8 @@
 	echo $this->headTitle($tr->translate("SCHEDULE_SETTING"));
 	
 	$formList = new Application_Form_Frmtable();
-	$urlCopy = $this->baseUrl()."/issue/schedulesetting/copy/id/";
-	$urlEdit = $this->baseUrl()."/issue/schedulesetting/edit/id/";
+	$urlCopy = $this->baseUrl()."/issuesetting/schedulesetting/copy/id/";
+	$urlEdit = $this->baseUrl()."/issuesetting/schedulesetting/edit/id/";
 	 $frm =  $this->frm_items;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -103,8 +103,5 @@ dojo.require("dijit.form.DateTextBox");
 	var recordid ='';
 	function gotoAction(){
 		window.location.href =url+row;
-		 //window.open(url+row);
 	}
 </script> 
-
-

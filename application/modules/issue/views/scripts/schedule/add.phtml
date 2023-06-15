@@ -88,10 +88,25 @@
 										</div>
 									 </div>
 									 <div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHEDULE_SETTING");?> <span class="required">*</span></label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="schedule_setting" />
-										</div>
+										<div class="card-blogform">
+											<div class="card-body"> 
+												<div class="row"> 
+													<div class="d-flex"> 
+															<div class="settings-main-icon ">
+																<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>
+															</div> 
+															<div class="col-md-10 col-sm-10 col-xs-12"> 
+																<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCHEDULE_SETTING");?></p>
+															</div> 
+														</div>
+														
+													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHEDULE_SETTING");?> <span class="required">*</span></label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<input id="schedule_setting" />
+													</div>
+												</div>
+											</div>
+										  </div>
 									 </div>
 								 </div>
 							 </div>
@@ -195,6 +210,7 @@ dojo.ready(function(){
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",
 		onChange: function() {  
+			getAllGroupByBranch();
 			getAllSchoreSettingDetail();
 		}
 	}, "academic_year");
@@ -268,7 +284,9 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroupbybrannch,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,
+			'academic_year':dijit.byId('academic_year').get('value'),
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -345,7 +363,10 @@ function getAllSchoreSettingDetail(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'schedule_setting':schedule_setting,'academic_year':academic_year,'keyrow':keyrow
+			'branch_id':branch_id,
+			'schedule_setting':schedule_setting,
+			'academic_year':academic_year,
+			'keyrow':keyrow
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -356,9 +377,27 @@ function getAllSchoreSettingDetail(){
 			keyrow = data.keyrow;
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
+}
+function CheckAll(recordId,Comlumn){
+	if($('#breaktime'+recordId).is(":checked")){
+		$('#lblbreaktime'+recordId).html('<?php echo $tr->translate("STUDY");?>');
+		
+		for (let records=1;records<=Comlumn;records++){
+			let keyIndex=recordId+'_'+records;
+			 dijit.byId("type_"+keyIndex).attr("value",2);
+			 disableColume(keyIndex);
+		}
+	}else{
+		$('#lblbreaktime'+recordId).html('<?php echo $tr->translate("NO_STUDY");?>');
+
+		for (let records=1;records<=Comlumn;records++){
+			let keyIndex=recordId+'_'+records;
+			 dijit.byId("type_"+keyIndex).attr("value",1);
+			 disableColume(keyIndex);
+		}
+	}
 }
 
 function disableColume(keyIndex){

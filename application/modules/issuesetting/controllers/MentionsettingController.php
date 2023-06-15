@@ -1,6 +1,6 @@
 <?php
 class Issuesetting_MentionsettingController extends Zend_Controller_Action {
-	const REDIRECT_URL = '/global/mentionsetting';
+	const REDIRECT_URL = '/issuesetting/mentionsetting';
 	public function init()
     {    	
     	header('content-type: text/html; charset=utf8');

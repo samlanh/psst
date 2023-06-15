@@ -311,6 +311,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
+   	$where.= $_db->getAccessPermission('s.branch_id');
+   	
    	$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` 
    		ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
    	if($limit==2){
@@ -394,7 +396,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND s.`id`=sm.`score_id`
 		   	AND s.status = 1 ";
    	
-	
 	   	
    	if (!empty($id)){
    		$sql.=" AND s.id = $id ";
@@ -430,6 +431,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
+   	
+   	$where.= $_db->getAccessPermission('s.branch_id');
+   	
    	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
    	ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
    	if($limit==2){
@@ -1039,7 +1043,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	}
    	
    	$_db = new Application_Model_DbTable_DbGlobal();
-   	$where.= $_db->getAccessPermission('branch_id');
+   	$where.= $_db->getAccessPermission('s.branch_id');
    	
    	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
    	return $db->fetchAll($sql.$where.$order);

@@ -56,7 +56,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
-    		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,null,1);
+    		$resultScore = $db->getStundetScoreDetailGroup($search,null,1);
     	}
     	else{
     		$row = $db->getScoreExamByID($id);
@@ -71,9 +71,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     				'degree'=>'',
     				'session'=> '',
     		);
-    		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
+    		$resultScore = $db->getStundetScoreDetailGroup($search,$id,1);
     	}
-    	
+    	$this->view->studentgroup = $resultScore;
     	$this->view->search=$search;
     	
     	$this->view->month = $db->getAllMonth();
@@ -108,6 +108,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		$result = $db->getStundetScoreResult($search,$id,1);
     		$this->view->studentgroup = $result;
     	}
+    	
     	$this->view->search=$search;
     	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();

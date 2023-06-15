@@ -2509,8 +2509,8 @@ function getAllgroupStudyNotPass($action=null){
 			WHERE s.id = sd.metion_score_id
 				AND s.academic_year=$academic
 				AND degree = $degree
-				AND $score <= sd.max_score
-				ORDER BY sd.max_score ASC
+				AND $score>=sd.max_score
+				ORDER BY sd.max_score DESC
 				LIMIT 1";
   	return $db->fetchOne($sql);
   }

@@ -450,6 +450,16 @@
 								margin: 0.8cm;
 							}
 						}
+						.principalStamp{
+							position: relative;
+						}
+						.principalStamp .signature{
+							left: 45%;
+						    top: 40%;
+						    height: 100px;
+						    width: 200px;
+						    position: absolute;
+						}
 				</style>
 			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
@@ -692,14 +702,19 @@
 					</tr>
 					<tr>
 						<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-							<div>
-								<img src="<?php echo $this->baseUrl().'/images/logo/'.$branchInfo['stamp'];?>" style="max-height:100px;position:relative;" /></div>
-								<img src="<?php echo $this->baseUrl().'/images/logo/'.$branchInfo['signature'];?>" style="left:100px;bottom:50px;width:200px;position:relative;" />
+							<div class="principalStamp">
+								<div class="stamp">
+									<img src="<?php echo $this->baseUrl().'/images/logo/'.$branchInfo['stamp'];?>" style="height:120px;position:relative;" />
+								</div>
+								<div class="signature">
+									<img src="<?php echo $this->baseUrl().'/images/logo/'.$branchInfo['signature'];?>" />
+								</div>
+							</div>
 						</td>
 						<td></td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
 							<?php if(!empty($rs['teacher_sigature'])){?>
-							<div><img src="<?php echo $this->baseUrl().'/images/photo/'.$rs['teacher_sigature'];?>" style="width:200px;position:relative;margin-bottom:20px;" /></div>
+							<div><img src="<?php echo $this->baseUrl().'/images/photo/'.$rs['teacher_sigature'];?>" style="width:200px;height:100px;position:relative;margin-bottom:20px;" /></div>
 							<?php }else{?>
 							<div style="height: 100px;"></div>
 							<?php } ?>

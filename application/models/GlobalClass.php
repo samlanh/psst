@@ -2,6 +2,7 @@
 
 class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 {
+	
    public static function getInvoiceNo(){	
 		$sub=substr(uniqid(rand(10,1000),false),rand(0,10),5);
 		$date= new Zend_Date();
@@ -247,10 +248,12 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		}
 		
 		public function getHoursStudy(){
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			if(TIEM_IS_MANUAL==1){
 				$_dbTime = new Issuesetting_Model_DbTable_DbTimeList();
 				$rs = $_dbTime->getAllTimeListActive();
-				$hours="";
+				$hours='<option value=" ">'.$tr->translate('SELECT_HOUR').'</option>';
+				$hours.='<option value="-1">'.$tr->translate('ADD_NEW').'</option>';
 				if(!empty($rs)) {
 					foreach($rs AS $k){
 						$hours.='<option value="'.$k['id'].'">'.$k['name'].'</option>';
@@ -258,62 +261,62 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 				}
 				return  $hours;
 			}else{
-			$hours ='<option value="07.00">07:00 AM </option>'.
-					'<option value="07.15">07:15 AM </option>'.
-					'<option value="07.30">07:30 AM </option>'.
-					'<option value="07.45">07:45 AM </option>'.
-					'<option value="08.00">08:00 AM </option>'.
-					'<option value="08.15">08:15 AM </option>'.
-					'<option value="08.20">08:20 AM </option>'.
-					'<option value="08.30">08:30 AM </option>'.
-					'<option value="08.40">08:40 AM </option>'.
-					'<option value="08.50">08:50 AM </option>'.
-					'<option value="09.00">09:00 AM </option>'.
-					'<option value="09.15">09:15 AM </option>'.
-					'<option value="09.30">09:30 AM </option>'.
-					'<option value="09.40">09:40 AM </option>'.
-					'<option value="09.50">09:50 AM </option>'.
-					'<option value="10.00">10:00 AM </option>'.
-					'<option value="10.15">10:15 AM </option>'.
-					'<option value="10.20">10:20 AM </option>'.
-					'<option value="10.30">10:30 AM </option>'.
-					'<option value="10.40">10:40 AM </option>'.
-					'<option value="11.00">11:00 AM </option>'.
-					'<option value="11.15">11:15 AM </option>'.
-					'<option value="11.30">11:30 AM </option>'.
-					'<option value="12.00">12:00 AM </option>'.
-					'<option value="12.30">12:30 AM </option>'.
-					'<option value="13.00">01:00 PM </option>'.
-					'<option value="13.30">01:30 PM </option>'.
-					'<option value="13.40">01:40 PM </option>'.
-					'<option value="13.50">01:50 PM </option>'.
-					'<option value="14.00">02:00 PM </option>'.
-					'<option value="14.10">02:10 PM </option>'.
-					'<option value="14.30">02:30 PM </option>'.
-					'<option value="14.35">02:35 PM </option>'.
-					'<option value="14.40">02:40 PM </option>'.
-					'<option value="14.50">02:50 PM </option>'.
-					'<option value="15.00">03:00 PM </option>'.
-					'<option value="15.10">03:10 PM </option>'.
-					'<option value="15.30">03:20 PM </option>'.
-					'<option value="15.30">03:30 PM </option>'.
-					'<option value="15.35">03:35 PM </option>'.
-					'<option value="15.45">03:45 PM </option>'.
-					'<option value="16.00">04:00 PM </option>'.
-					'<option value="16.10">04:10 PM </option>'.
-					'<option value="16.30">04:30 PM </option>'.
-					'<option value="17.00">05:00 PM </option>'.
-					'<option value="17.30">05:30 PM </option>'.
-					'<option value="18.00">06:00 PM </option>'.
-					'<option value="18.30">06:30 PM </option>'.
-					'<option value="19.00">07:00 PM </option>'.
-					'<option value="19.30">07:30 PM </option>'.
-					'<option value="20.00">08:00 PM </option>'.
-					'<option value="20.15">08:15 PM </option>'.
-					'<option value="20.30">08:30 PM </option>'.
-					'<option value="21.00">09:00 PM </option>'.
-					'<option value="21.30">09:30 PM </option>';
-			return  $hours;
+			// $hours ='<option value="07.00">07:00 AM </option>'.
+			// 		'<option value="07.15">07:15 AM </option>'.
+			// 		'<option value="07.30">07:30 AM </option>'.
+			// 		'<option value="07.45">07:45 AM </option>'.
+			// 		'<option value="08.00">08:00 AM </option>'.
+			// 		'<option value="08.15">08:15 AM </option>'.
+			// 		'<option value="08.20">08:20 AM </option>'.
+			// 		'<option value="08.30">08:30 AM </option>'.
+			// 		'<option value="08.40">08:40 AM </option>'.
+			// 		'<option value="08.50">08:50 AM </option>'.
+			// 		'<option value="09.00">09:00 AM </option>'.
+			// 		'<option value="09.15">09:15 AM </option>'.
+			// 		'<option value="09.30">09:30 AM </option>'.
+			// 		'<option value="09.40">09:40 AM </option>'.
+			// 		'<option value="09.50">09:50 AM </option>'.
+			// 		'<option value="10.00">10:00 AM </option>'.
+			// 		'<option value="10.15">10:15 AM </option>'.
+			// 		'<option value="10.20">10:20 AM </option>'.
+			// 		'<option value="10.30">10:30 AM </option>'.
+			// 		'<option value="10.40">10:40 AM </option>'.
+			// 		'<option value="11.00">11:00 AM </option>'.
+			// 		'<option value="11.15">11:15 AM </option>'.
+			// 		'<option value="11.30">11:30 AM </option>'.
+			// 		'<option value="12.00">12:00 AM </option>'.
+			// 		'<option value="12.30">12:30 AM </option>'.
+			// 		'<option value="13.00">01:00 PM </option>'.
+			// 		'<option value="13.30">01:30 PM </option>'.
+			// 		'<option value="13.40">01:40 PM </option>'.
+			// 		'<option value="13.50">01:50 PM </option>'.
+			// 		'<option value="14.00">02:00 PM </option>'.
+			// 		'<option value="14.10">02:10 PM </option>'.
+			// 		'<option value="14.30">02:30 PM </option>'.
+			// 		'<option value="14.35">02:35 PM </option>'.
+			// 		'<option value="14.40">02:40 PM </option>'.
+			// 		'<option value="14.50">02:50 PM </option>'.
+			// 		'<option value="15.00">03:00 PM </option>'.
+			// 		'<option value="15.10">03:10 PM </option>'.
+			// 		'<option value="15.30">03:20 PM </option>'.
+			// 		'<option value="15.30">03:30 PM </option>'.
+			// 		'<option value="15.35">03:35 PM </option>'.
+			// 		'<option value="15.45">03:45 PM </option>'.
+			// 		'<option value="16.00">04:00 PM </option>'.
+			// 		'<option value="16.10">04:10 PM </option>'.
+			// 		'<option value="16.30">04:30 PM </option>'.
+			// 		'<option value="17.00">05:00 PM </option>'.
+			// 		'<option value="17.30">05:30 PM </option>'.
+			// 		'<option value="18.00">06:00 PM </option>'.
+			// 		'<option value="18.30">06:30 PM </option>'.
+			// 		'<option value="19.00">07:00 PM </option>'.
+			// 		'<option value="19.30">07:30 PM </option>'.
+			// 		'<option value="20.00">08:00 PM </option>'.
+			// 		'<option value="20.15">08:15 PM </option>'.
+			// 		'<option value="20.30">08:30 PM </option>'.
+			// 		'<option value="21.00">09:00 PM </option>'.
+			// 		'<option value="21.30">09:30 PM </option>';
+			// return  $hours;
 			}
 	}
 }

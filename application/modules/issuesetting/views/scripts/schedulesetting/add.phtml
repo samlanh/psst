@@ -83,9 +83,12 @@
 										<div class="settings-main-icon ">
 											<i class="material-icons-outlined">alarm</i>
 										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<div class="col-md-3 col-sm-3 col-xs-12"> 
 											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TIME_LIST");?></p>
 										</div> 
+										<div class="col-md-3 col-sm-3 col-xs-12 ">
+											<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" dojoType="dijit.form.Button" onclick="getHoursStudy();" label="<?php echo $tr->translate("GET_DATA");?>"  />
+										</div>
 									</div>
 									<br />
 									<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
@@ -133,10 +136,41 @@
 	dojo.ready(function(){ 
 		$("#title").keyup(function(){
 		});
+		getHoursStudy();
 	});	
+
+	function addNewHour(col){
+		from_hour = dijit.byId('from_hour'+col).get('value');
+				if(from_hour==-1){
+					window.open('<?php echo $this->baseUrl();?>/issuesetting/timelist/add?isAddHour=1');
+					dijit.byId('from_hour'+col).reset();
+				}
+		}
+
+var worktype_option = '';
+urlGetHour ='<?php echo $this->url(array('module'=>'issuesetting','controller'=>'schedulesetting','action'=>'get-hour-study'))?>';
+function getHoursStudy(){
+	dojo.xhrPost({
+		url: urlGetHour,
+		content:{
+		},
+		handleAs:"json",
+		load: function(data){
+			if(data){
+				timeOpt = data;
+			}
+		},
+		error: function(err) {
+		}
+	});
+	dijit.byId('from_hour'+col).reset();
+	dijit.byId('to_hour'+col).reset();
+}
+
+
+
 	var template = '';
-	var branch_name = '<?php echo $this->branch_name; ?>';
-	var timeOpt = '<?php echo $this->opttime;?>';
+
 	var col = 0;
 	var no = 0;
 	var title = 0;
@@ -158,8 +192,8 @@
 			}
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-				template+='<td data-label="<?php echo $tr->translate("FROM_TIME");?>"><select dojoType="dijit.form.FilteringSelect" class="fullside" name="from_hour'+col+'" id="from_hour'+col+'" >'+timeOpt+'</select></td>';			
-				template+='<td data-label="<?php echo $tr->translate("TO_TIME");?>"><select dojoType="dijit.form.FilteringSelect" class="fullside" name="to_hour'+col+'" id="to_hour'+col+'" >'+timeOpt+'</select></td>';
+				template+='<td data-label="<?php echo $tr->translate("FROM_TIME");?>"><select dojoType="dijit.form.FilteringSelect" onchange="addNewHour('+col+');" class="fullside" name="from_hour'+col+'" id="from_hour'+col+'" >'+timeOpt+'</select></td>';			
+				template+='<td data-label="<?php echo $tr->translate("TO_TIME");?>"><select dojoType="dijit.form.FilteringSelect" onchange="addNewHour('+col+');" class="fullside" name="to_hour'+col+'" id="to_hour'+col+'" >'+timeOpt+'</select></td>';
 				template+='<td data-label="<?php echo $tr->translate("NOTE");?>"> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr id="row'+col+'" class="rowData">';
 			tmp+="</tr>";
@@ -172,6 +206,7 @@
 			dojo.html.set(dojo.byId("row"+col),template , {
 			     parseContent: true,
 			});
+			getHoursStudy();
 	 }
 	function deleteRecord(index) {
 			var identity = $('#identity').val();
@@ -183,4 +218,6 @@
 			$('#identity').val(strings);
 			dojo.query("#row"+index).remove();
 	}
+
+
 </script>

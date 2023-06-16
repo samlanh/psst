@@ -98,9 +98,15 @@
 				    overflow: hidden;
 				    text-overflow: ellipsis;
 				    display: inline-block;
-				    /* max-width: 130px; */
 				}	
 				.hover:hover{background: #ccc;}
+				@media print {
+							@page {
+								page:A4;
+								size: portrait;
+								 margin: 0.5cm;
+							}
+						}	
 			</style>		
 				<tr>
 					<td colspan="3">
@@ -116,7 +122,7 @@
 								?>
 								<tr>
 									<td align="right" colspan="<?php echo $amount_day+5;?>" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-										<span​​ style="font-weight:bold;color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
+										<span​​ style="font-weight:bold;color:#000; font-size: 12px;font-family: 'Times New Roman','Khmer OS Battambang';">
 										<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 										</span>
 									</td>
@@ -124,16 +130,15 @@
 								<?php }$i=0; ?>
 								<tr>
 									<td align="center" colspan="<?php echo $amount_day+5;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-										<span​​ style="color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
-										<span​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';"><?php if(!empty($this->search['start_date'])){?>&nbsp  <?php echo date('d-M-Y',strtotime($this->search['start_date']));?>  ដល់   <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span><br>
-										<span​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';">
+										<span​​ style="color:#000; font-size: 12px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></span><br />
+										<span​​ style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol light';"><?php if(!empty($this->search['start_date'])){?>&nbsp  <?php echo date('d-M-Y',strtotime($this->search['start_date']));?>  ដល់   <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span><br>
+										<span​​ style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol light';">
 											<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 											<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
 											<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $month[date("m",strtotime($end_date))]." ".date("Y",strtotime($end_date));?></span>
 											<br />
 											<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
 											<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
-										 	<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['semester'];?></span> , 
 										 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
 										 	, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
 										</span>
@@ -163,7 +168,7 @@
 								<tr style="border: solid 1px #fff;">
 									<td>
 										<table cellpadding="5"​ border="1" style="font-family:'Times New Roman','Khmer OS Battambang'; border:1px solid #000; border-collapse: collapse; margin:0 auto; width:100%; white-space: nowrap;" >
-											<tr style="font-size:13px; background: #ccd9ff;">
+											<tr style="font-size:12px; background: #ccd9ff;">
 												<td rowspan="2" align="center">
 													<?php echo $tr->translate("DATE");?>	
 												</td>
@@ -231,7 +236,7 @@
 													}
 												}
 											?>
-											<tr style="font-size:13px;">
+											<tr style="font-size:12px;">
 												<td align="center"><?php echo date("d-m-Y",strtotime($rs['mistake_date']));?></td>
 												<td align="center"><?php echo $small;?></td>
 												<td align="center"><?php echo $medium;?></td>
@@ -266,7 +271,7 @@
 								<?php if (!empty($this->student)){?>
 								<tr>
 									<td align="right" colspan="<?php echo $amount_day+5;?>" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-										<span​​ style="font-family: 'Times New Roman','Khmer OS Battambang'; color:#000; font-size: 13px;">
+										<span​​ style="font-family: 'Times New Roman','Khmer OS Battambang'; color:#000; font-size: 12px;">
 										<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 										</span>
 									</td>

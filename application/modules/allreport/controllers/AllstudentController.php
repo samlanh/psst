@@ -512,8 +512,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	{
 		$id=$this->getRequest()->getParam("id");
 		$id = (empty($id))?0:$id;
+		$db = new Allreport_Model_DbTable_DbRptGroup();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
+			$result = $db->getGroupDetailByID($search['group']);
 		}
 		else{
 			$search = array(
@@ -523,13 +525,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'teacher' 		=> 0,
 					'subject' 		=> 0,
 					'showsign'		=> 1,
-					'group'        =>'',
-					'branch_id'        =>'',
+					'group'       	=>'',
+					'branch_id'     =>'',
 			);
+			$result = $db->getGroupDetailByID($id);
 		}
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		
-		$result = $db->getGroupDetailByID($id);
+	
 		if(empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
 		}
@@ -553,6 +554,25 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
+	function getTeacherbygroupAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Allreport_Model_DbTable_DbRptGroup();
+			$data=$db->getAllTeacherByGroup($data['group']);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	function getAllSubjectbygroupAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Allreport_Model_DbTable_DbRptGroup();
+			$data=$db->getAllSubjectByGroup($data['group']);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+
 	public function rptenglishprogramAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -648,15 +668,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	
-	function getSubjectbygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Allreport_Model_DbTable_DbRptAllStudent();
-			$data=$db->getSubjectByGroup($data['group']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+	
 	public function rptStudentDropAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -688,6 +700,15 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+	}
+	function getSubjectbygroupAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Allreport_Model_DbTable_DbRptAllStudent();
+			$data=$db->getSubjectByGroup($data['group']);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
 	}
 	
 	public function rptgroupstudentchangegroupAction()

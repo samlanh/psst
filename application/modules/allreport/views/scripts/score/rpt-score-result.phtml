@@ -781,9 +781,6 @@
 		window.open(url+'stu_id/'+student_id+'/group_id/'+group_id+'/exam_type/'+type_exam+'/for_semester/'+semester+'/for_month/'+month);
 	}
 	
-	
-	
-
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -833,21 +830,29 @@
 	function getAllAcademicByBranch(){
 		dijit.byId('study_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');
+	
 		if(branch_id=='' || branch_id==-1){
 			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 			dijit.byId('study_year').set('store',academic_store);  
 			dijit.byId('branch_id').focus();
 			return false;
 		}
-		
-		contentData = {
-			'branch_id':branch_id
-		}
-		selectedId = '';
-		if(oldBranch==branch_id){
-			selectedId = '<?php echo $this->search['study_year']?>';
-		}
-		getAllYear(url_getacademic,contentData,selectedId);
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data) {
+			    group_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('study_year').set('store',group_store);   
+			    if(oldBranch==branch_id){
+			    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
+			    }
+			},
+			error: function(err) {
+			}
+		});
 	}
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
 	function getAllGroupByBranch(){

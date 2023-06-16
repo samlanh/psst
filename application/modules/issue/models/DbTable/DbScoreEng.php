@@ -266,7 +266,7 @@ class Issue_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 			FROM 
 			`rms_scoreengsettingdetail` AS s,
 			`rms_exametypeeng` AS seng
-			WHERE seng.id = s.exam_typeid
+			WHERE seng.id = s.criteriaId
 			AND score_setting_id=$id";
 		return $db->fetchAll($sql);
 	}

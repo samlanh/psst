@@ -212,7 +212,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				if(!empty($ids))foreach ($ids as $i){
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$criterialId=$rowCri['exam_typeid'];						
+						$criterialId=$rowCri['criteriaId'];						
 						if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
 							
 							$arr=array(
@@ -473,7 +473,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				if(!empty($ids))foreach ($ids as $i){
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$criterialId=$rowCri['exam_typeid'];						
+						$criterialId=$rowCri['criteriaId'];						
 						if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
 							
 							$arr=array(
@@ -667,7 +667,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$criterialId=$rowCri['exam_typeid'];
+						$criterialId=$rowCri['criteriaId'];
 						$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
 						$classCol = "col-md-12 col-sm-12 col-xs-12";
 						
@@ -751,7 +751,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
 				
 				if(!empty($criterial)) foreach($criterial AS $rowCri){
-					$criterialId=$rowCri['exam_typeid'];
+					$criterialId=$rowCri['criteriaId'];
 					
 					$classCol = "col-md-12 col-sm-12 col-xs-12";
 					
@@ -867,13 +867,13 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';
 				$string.='<tr class="head-td" align="center">';
-					$string.='<th scope="col" width="10px"  >លុប<small class="lableEng" >Delete</small></th>';
-					$string.='<th scope="col" width="10px"  >ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+					$string.='<th scope="col" width="10px">លុប<small class="lableEng" >Delete</small></th>';
+					$string.='<th scope="col" width="10px">ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
 					$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
 					$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$criterialId=$rowCri['exam_typeid'];
+						$criterialId=$rowCri['criteriaId'];
 						$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
 						$classCol = "col-md-12 col-sm-12 col-xs-12";
 						
@@ -958,7 +958,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
 				
 				if(!empty($criterial)) foreach($criterial AS $rowCri){
-					$criterialId=$rowCri['exam_typeid'];
+					$criterialId=$rowCri['criteriaId'];
 					
 					$classCol = "col-md-12 col-sm-12 col-xs-12";
 					
@@ -990,7 +990,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					$string.='</td>';
 				}
 					
-				
 				$string.='<td data-label="មធ្យមភាគ/Average"><input readOnly dojoType="dijit.form.TextBox" class="fullside" id="average'.$keyIndex.'" name="average'.$keyIndex.'"  value="0" type="text" ></td>';
 				$string.='<td data-label="សម្គាល់/Remark"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
 				$string.='';
@@ -998,12 +997,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			
 		}
 		
-		
-		
 		$string.='';
 		$string.='</table>';
-		
-		
 		$htmlGradingInfo='';
 				$htmlGradingInfo.='<div class="card-info bg-gradient-directional-notice">';
 					$htmlGradingInfo.='<div class="card-content">';
@@ -1059,11 +1054,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				$criteriaAmount = count($criterial) ;
 				
 				if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$criterialId=$rowCri['exam_typeid'];						
+						$criterialId=$rowCri['criteriaId'];						
 						
 						$pecentageScore = $rowCri['pecentage_score'];
-						
-						
 						
 						if(!empty($rowCri['subjectId'])){
 							if(!empty($rowCri['subCriterialTitleKh'])){
@@ -1078,7 +1071,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$totalGrading =0;
 								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
 								
-									
 									if($subcriteriaAmount>1){
 										$titleSubCriterial = $subCriTitle;
 										$titleSubCriteriaEng = $subCriterialEng[$keyV];
@@ -1087,12 +1079,10 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 									$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
 									
 									$totalGrading = $totalGrading+$score;
-									
 								}
 								
 								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
 								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-							
 								$totalScoreAverage = $totalScoreAverage+$totalGrading;
 							}
 						}else{
@@ -1103,30 +1093,19 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								if($rowCri['timeInput']>1){
 									if(empty($_data['checkAll'.$x.$criterialId])){
 										$subcriteriaAmount=$subcriteriaAmount+1;
-										
 										$score = $_data['score_'.$i.'_'.$x.$criterialId];
 										$totalGrading = $totalGrading+$score;
-									
 									}
 								}else{
 									$subcriteriaAmount = $rowCri['timeInput'];
 									$score = $_data['score_'.$i.'_'.$x.$criterialId];
 									$pecentageScore = $rowCri['pecentage_score'];
-									
-									
 									$totalGrading = $totalGrading+$score;
-						
-								
 								}
-								
-						
-								
 							}
 							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
 							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-							
 							$totalScoreAverage = $totalScoreAverage+$totalGrading;
-							
 						}
 					
 					}
@@ -1143,9 +1122,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					if(!empty($ids))foreach ($ids as $i){
 						
 						if(!empty($criterial)) foreach($criterial AS $rowCri){
-							$criterialId=$rowCri['exam_typeid'];						
+							$criterialId=$rowCri['criteriaId'];						
 							if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
-								
 								$arrAverageOfIdentity[$oldIndexI]=number_format($totalScoreAverage,2);
 								$totalScoreAverage = 0;
 							}
@@ -1167,22 +1145,15 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 									$totalGrading =0;
 									foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
 									
-										
 										if($subcriteriaAmount>1){
 											$titleSubCriterial = $subCriTitle;
 											$titleSubCriteriaEng = $subCriterialEng[$keyV];
 										}
-										
 										$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
-										
 										$totalGrading = $totalGrading+$score;
-										
-									
 									}
-									
 									$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
 									$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-								
 									$totalScoreAverage = $totalScoreAverage+$totalGrading;
 								}
 							}else{
@@ -1193,37 +1164,21 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 									if($rowCri['timeInput']>1){
 										if(empty($_data['checkAll'.$x.$criterialId])){
 											$subcriteriaAmount=$subcriteriaAmount+1;
-											
 											$score = $_data['score_'.$i.'_'.$x.$criterialId];
 											$totalGrading = $totalGrading+$score;
-											
-											
-										
 										}
 									}else{
 										$subcriteriaAmount = $rowCri['timeInput'];
 										$score = $_data['score_'.$i.'_'.$x.$criterialId];
 										$pecentageScore = $rowCri['pecentage_score'];
-										
-										
 										$totalGrading = $totalGrading+$score;
-										
-										
-									
 									}
-									
-							
-									
 								}
 								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
 								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-								
 								$totalScoreAverage = $totalScoreAverage+$totalGrading;
-								
 							}
-						
 						}
-						
 					}
 					
 					if(!empty($ids)){
@@ -1232,12 +1187,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 						}
 					}
 				}
-			
 				return $arrAverageOfIdentity;
-			
 			}
-			
-		
 		 
 		}catch (Exception $e){
 			

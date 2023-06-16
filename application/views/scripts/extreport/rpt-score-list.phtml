@@ -398,7 +398,7 @@
 											
 											if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
 												$timeInput = $criterial['timeInput'];
-												$rsScore = $dbExternal->getScoreByCriterial($gradingId,$student['studentId'],$criterial['exam_typeid']);
+												$rsScore = $dbExternal->getScoreByCriterial($gradingId,$student['studentId'],$criterial['criteriaId']);
 												if(!empty($rsScore)) foreach($rsScore AS $score){
 											?>
 											<td data-label="<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng'];?>" align="center">

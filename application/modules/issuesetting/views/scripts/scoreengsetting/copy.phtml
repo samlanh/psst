@@ -198,7 +198,7 @@
 			}
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>"  align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>"  align="center">'+no+'</td>';
-				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>" ><?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['exam_typeid'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
+				template+='<td data-label="<?php echo $tr->translate("ITEMS_SCORE_ENG");?>" ><?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['criteriaId'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
 				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>" > <input class="fullside" type="text" onKeyup="totalPercent()" value="<?php echo $rs['pecentage_score'];?>" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				template+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input class="fullside" type="text" value="<?php echo $rs['note'];?>" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/><input class="fullside" type="hidden" value="<?php echo $rs['id'];?>" required="true" name="detailid'+col+'" id="detailid'+col+'" dojoType="dijit.form.TextBox" /></td>';
 			tmp='<tr class="rowData" id="row'+col+'">';

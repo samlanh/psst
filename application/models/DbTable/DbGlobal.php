@@ -3469,11 +3469,14 @@ function getAllgroupStudyNotPass($action=null){
 					grding.title As name ";
 		$sql.=" FROM `rms_scoreengsetting` AS grding ";
 		$sql.="  WHERE grding.status=1 AND grding.title!='' ";
-		if (!empty($branch_id)){
+		if(!empty($branch_id)){
 			$sql.=" AND grding.branch_id =$branch_id ";
 		}
-		if (!empty($schoolOption)){
+		if(!empty($schoolOption)){
 			$sql.=" AND grding.schoolOption =$schoolOption ";
+		}
+		if(!empty($data['degreeId'])){
+			$sql.=" AND grding.degreeId =".$data['degreeId'];
 		}
 		$sql.= $this->getAccessPermission();
 		$sql.=" ORDER BY grding.title ASC ";

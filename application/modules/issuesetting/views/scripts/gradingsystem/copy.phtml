@@ -4,6 +4,7 @@
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_items;
 ?>
+<link href="<?php echo $this->baseUrl();?>/css/externalstyle.css" media="screen" rel="stylesheet" type="text/css">
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -28,6 +29,11 @@
 					if(identity=='' || identity==null){
 						alert("<?php echo $tr->translate("PLEASE_SET_ITEMS");?>");
 						dijit.byId("branch").focus();
+						return false;
+					}
+					total_percent = dijit.byId('total_percent').get('value');
+					if(total_percent!='100'){
+						alert("<?php echo $tr->translate("TOTAL_MUST_BE_100_PERCENTAGE");?>");
 						return false;
 					}
 					loadingBlock();
@@ -84,7 +90,10 @@
 	                   		<?php echo $frm_items->getElement("examtype_items");?>
 	                   </div>
 	                   <div class="col-md-5 col-sm-5 col-xs-12">
-	                    	<?php echo $frm_items->getElement("total_percent");?>
+	                    	<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL");?>(%)<span class="required">*</span></label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm_items->getElement("total_percent");?>
+						   </div>
 	                   </div>
 	                   <div class="clearfix"></div>
 	                </div>
@@ -258,7 +267,7 @@
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 				template+='<td data-label="<?php echo $tr->translate("CRITERIAL_NAME");?>" >';			
-				template+='<?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['exam_typeid'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" />';			
+				template+='<?php echo $rs['exam_typetitle'];?><input class="fullside" type="hidden" value="<?php echo $rs['criteriaId'];?>" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" />';			
 				template+='<div class="custom-control custom-checkbox ">';
 						template+='<input type="checkbox" <?php if($rs['forExamType']==2){ echo "checked";}?> class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
 						template+='<label class="custom-control-label" for="forExamType'+col+'" >';

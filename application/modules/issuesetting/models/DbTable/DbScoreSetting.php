@@ -60,7 +60,7 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
 				if(!empty($ids))foreach ($ids as $i){
 					$arr=array(
 							'score_setting_id'=>$id,
-							'exam_typeid'=>$_data['examtype_name_'.$i],
+							'criteriaId'=>$_data['examtype_name_'.$i],
 							'pecentage_score'=>$_data['percentage'.$i],
 							'note'=>$_data['note_'.$i],
 					);
@@ -134,7 +134,7 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    				if (!empty($_data['detailid'.$i])){
    					$arr=array(
    							'score_setting_id'=>$id,
-   							'exam_typeid'=>$_data['examtype_name_'.$i],
+   							'criteriaId'=>$_data['examtype_name_'.$i],
    							'pecentage_score'=>$_data['percentage'.$i],
    							'note'=>$_data['note_'.$i],
    					);
@@ -144,7 +144,7 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    				}else{
 	   				$arr=array(
 	   						'score_setting_id'=>$id,
-	   						'exam_typeid'=>$_data['examtype_name_'.$i],
+	   						'criteriaId'=>$_data['examtype_name_'.$i],
 	   						'pecentage_score'=>$_data['percentage'.$i],
 	   						'note'=>$_data['note_'.$i],
 	   				);

@@ -51,7 +51,7 @@ class Issuesetting_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$note->setAttribs(array(
     			'dojoType'=>'dijit.form.Textarea',
     			'class'=>'fullside',
-    			'style'=>'font-family: inherit;  min-height:100px !important; max-width:100%;'));
+    			'style'=>'font-family: inherit;  min-height:80px !important; max-width:100%;'));
     	
     	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -159,17 +159,33 @@ class Issuesetting_Form_FrmScoreSetting extends Zend_Dojo_Form
     	));
 		$_schoolOption->setValue(1);
 		
+		$degreeId = new Zend_Dojo_Form_Element_FilteringSelect("degreeId");
+		$degreeId->setMultiOptions($_arr);
+		$degreeId->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
+		$degreeResult = $_dbgb->getAllItems(1);
+		$degreeOpt =array();
+		if(!empty($degreeResult))foreach($degreeResult AS $row){
+			 $degreeOpt[$row['id']]=$row['name'];
+		}
+		$degreeId->setMultiOptions($degreeOpt);
+		$degreeId->setValue($request->getParam("status_search"));
+		
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
     		$title->setValue($data["title"]);
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
+    		$degreeId->setValue($data["degreeId"]);
     		$id->setValue($data["id"]);
-			
     		$_schoolOption->setValue($data["schoolOption"]);
     	}
     	$this->addElements(array(
+    			$degreeId,
     			$_branch_id,
     			$title,
 				$note,

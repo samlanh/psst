@@ -444,8 +444,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				s.*
-				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitle 
-				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitleEng 
+				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
+				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
 			FROM `rms_scoreengsettingdetail` AS s 
 			WHERE s.score_setting_id=$gradingId 
 			AND s.subjectId =$subjectId
@@ -458,14 +458,14 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				s.*
-				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitle 
-				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS criterialTitleEng 
+				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
+				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
 			FROM `rms_scoreengsettingdetail` AS s 
 			WHERE s.score_setting_id=$gradingId 
 			AND s.subjectId =0
 		";
 		if(!empty($row)){
-			$sql.=" AND s.exam_typeid !=".$row['exam_typeid'];
+			$sql.=" AND s.criteriaId !=".$row['criteriaId'];
 		}
 		if(!empty($data['examType'])){
 			$sql.=" AND s.forExamType =".$data['examType'];

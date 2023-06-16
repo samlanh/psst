@@ -941,12 +941,17 @@ function getAllGradingSetting(){
 		dijit.byId('branch_id').focus();
         return false;
 	}
+    degreeId = dijit.byId("degree").get("value");
+    if(degreeId==-1 || degreeId==''){
+        return false;
+	}
 	schoolOption=dijit.byId("schoolOption").get("value");
 	dojo.xhrPost({
 		url: urlGetGrading,
 		content:{
-			'branch_id':branch_id
-			,'schoolOption':schoolOption
+			'branch_id':branch_id,
+			'degreeId':degreeId,
+			'schoolOption':schoolOption
 			},
 		handleAs:"json",
 		load: function(data) {

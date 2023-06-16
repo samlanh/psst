@@ -129,9 +129,7 @@ class IssuescoreController extends Zend_Controller_Action
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$this->view-> month = $dbExternal->getAllMonth();
-		
 	}
-	
 	
 	function getStudentAction(){
 		
@@ -169,7 +167,6 @@ class IssuescoreController extends Zend_Controller_Action
 	}
 	
 	function checkingDuplicateAction(){
-		
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbIssueScore();
@@ -178,10 +175,4 @@ class IssuescoreController extends Zend_Controller_Action
 			exit();
 		}
 	}
-	
 }
-
-
-
-
-

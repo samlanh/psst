@@ -164,7 +164,6 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		$sql=" SELECT id,
 		(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
 		account_id,invoice,
-		curr_type,
 		total_amount,disc,date,status FROM $this->_name ";
 	
 		if (!empty($search['adv_search'])){

@@ -64,26 +64,38 @@
 												</div> 
 											</div>
 											<div class="form-group">
+												<div class="card-blogform">		  
+												    <div class="card-body"> 
+														<div class="row">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">
+																ប្រភេទប្រឡង
+															</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
+																	<option value="1">ប្រចាំខែ/Monthly Exam</option>
+																	<option value="2">ប្រចាំឆមាស/Semester Exam</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+	
+											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ពិន្ទុសម្រាប់/Score For</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
-															<option value="1">ប្រចាំខែ/Monthly Exam</option>
-															<option value="2">ប្រចាំឆមាស/Semester Exam</option>
-														</select>
-														
+													<div class="col-md-7 col-sm-7 col-xs-12">
 														<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branch_id']?>" />
 														<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
 														<input type="hidden" name="gradingId" id="gradingId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['gradingId']?>"/>
-													
 													</div>
-													<div class="col-md-4 col-sm-4 col-xs-12">
+													<div class="col-md-6 col-sm-6 col-xs-12">
 														<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								
 															<option value="1">ឆមាសទី១/Semester I</option>
 															<option value="2">ឆមាសទី២/Semester II</option>
 														</select>
 													</div>
-													<div class="col-md-4 col-sm-4 col-xs-12">
+													<div class="col-md-6 col-sm-6 col-xs-12">
 														<select onChange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 																<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
@@ -95,7 +107,6 @@
 											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">មុខវិជ្ជា/Subject</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													
 													<input id="subjectId" />
 													<input type="hidden" name="maxSubjectScore" id="maxSubjectScore" class="fullside" dojoType="dijit.form.TextBox" value="0"/>
 												</div>
@@ -117,14 +128,10 @@
 													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="" type="text" style=" height: 120px !important;"  >
 												</div>
 											 </div>
-											 
 										 </div>
 									 </div>
 								 </div>
 							 </div>
-							
-								
-								  
 						  </div>
 						  <div class="col-md-6 col-sm-6 col-xs-12">
 								<div id="duplicateMessage" class="hidden alert round alert-secondary alert-icon-left alert-dismissible mb-3 " role="alert">
@@ -148,7 +155,6 @@
 														<li class="opt-items two-column"><span class="lbl-tt">កម្រិត/Degree</span>: 			<span class="text-value"><?php echo $this->row['degree']?></span></li>
 														<li class="opt-items two-column"><span class="lbl-tt">បន្ទប់/Room</span>: 				<span class="text-value"><?php echo $this->row['room_name']?></span></li>
 														<li class="opt-items two-column"><span class="lbl-tt">ថ្នាក់/Grade</span>: 				<span class="text-value"><?php echo $this->row['grade']?></span></li>
-														
 													</ul>
 												</div>
 												<div class="align-self-top">
@@ -160,9 +166,6 @@
 								</div>
 								<div id="gradingInfo">
 								</div>
-								
-							 
-								 
 						  </div>
 					 </div>
 					 <div class="card-box">
@@ -172,7 +175,6 @@
 							<input type="hidden" name="identity" id="identity"  value="" >
 							<input type="hidden" dojoType="dijit.form.TextBox" name="indexKey" id="indexKey"  value="" >
 							<div class="form-group">
-								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 								</table>
 							</div>
@@ -290,9 +292,8 @@ function getSubjectInfo(){
 	   handleAs:"json", 
 	   load: function(data) {
 		   dijit.byId('maxSubjectScore').attr('value',data.maxSubjectscore);
-		  
 		   filterStudent();
-		    duplicationRecord();
+		   duplicationRecord();
 	   },		
 	    error: function(err) {
 	    }
@@ -332,9 +333,7 @@ function filterStudent(){
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		 
 	       if(data!=""){
-				
 				inx=data.keyIndex;
 				$("#identity").val(data.identity);
 				
@@ -384,7 +383,6 @@ function checkExamType(){
 	duplicationRecord();
 }
 
-
 function checkAllCaterial(index){
 	
 	var identity = $('#identity').val();
@@ -402,36 +400,32 @@ function checkAllCaterial(index){
 var urlCalculateEverage= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'calculate-average')); ?>';
 function calculateAverage(indexKey=null){
 	dijit.byId('indexKey').attr('value',indexKey);
-	//if(dijit.byId('scoreForm').validate()){
-		dojo.xhrPost({
-			url: urlCalculateEverage,
-			form: dojo.byId("scoreForm"),
-		   handleAs:"json", 
-		   load: function(data) {
-			   if(indexKey!=null){
-				   dijit.byId('average'+indexKey).attr('value',data);
-			   }else{
-				   var identity = $('#identity').val();
-					var arrays = identity.split(',');
-					for(var i=0;i<arrays.length;i++) {
-						keyRow = +arrays[i];
-						dijit.byId('average'+keyRow).attr('value',data[keyRow]);
-					}
-			   }
-			   
-		   },		
-			error: function(err) {
-			}
-		});
-	//}	
+	dojo.xhrPost({
+		url: urlCalculateEverage,
+		form: dojo.byId("scoreForm"),
+	   handleAs:"json", 
+	   load: function(data) {
+		   if(indexKey!=null){
+			   dijit.byId('average'+indexKey).attr('value',data);
+		   }else{
+			   var identity = $('#identity').val();
+				var arrays = identity.split(',');
+				for(var i=0;i<arrays.length;i++) {
+					keyRow = +arrays[i];
+					dijit.byId('average'+keyRow).attr('value',data[keyRow]);
+				}
+		   }
+		   
+	   },		
+		error: function(err) {
+		}
+	});
 }
 
 
 
 var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'checking-duplicate')); ?>';
 function duplicationRecord(){
-	
-	
 	group = dijit.byId('group').get('value');
 	examType = dijit.byId('examType').get('value');
 	subjectId = dijit.byId('subjectId').get('value');
@@ -453,17 +447,20 @@ function duplicationRecord(){
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		 
 	       if(data==1){
+	    	   $('#identity').val('');
+				dojo.query("#table_row").append("");
+				loadingBlock();
+				
 				isDuplicate=1;
 				var msgTitle = $( '.msgTitle' ).html();
 				var msgDesc = $( '.msgDesc' ).html();
 				infoMessageAlert(msgTitle,msgDesc);
 				$( "#duplicateMessage" ).removeClass( "hidden" );
+				
 	       }else{
 		    	isDuplicate=0;
 				$( "#duplicateMessage" ).addClass( "hidden" );
-
 	       }
 		  
 		   HideloadingBlock();	

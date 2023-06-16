@@ -101,6 +101,7 @@ class Issuesetting_GradingsystemController extends Zend_Controller_Action {
     
     public function copyAction(){
     	$id = $this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
     	$db = new Issuesetting_Model_DbTable_DbGradingSystem();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
@@ -114,6 +115,11 @@ class Issuesetting_GradingsystemController extends Zend_Controller_Action {
     		}
     	}
     	$row = $db->getGradingSystemById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    		exit();
+    	}
+    	
     	$this->view->detail = $db->getGradingSystemDetail($id);
     	$frm = new Issuesetting_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);

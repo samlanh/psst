@@ -967,13 +967,16 @@ ul.listSmallBtn {
 
 ul.listSmallBtn li {margin-bottom: 2px;}
 a.small-button-class {
-    padding: 5px;
-    font-size: 10px;
+    padding: 8px;
+    font-size: 12px;
     color: #fff;
     background-color: #0150a6;
     border-color: #004b9c;
     border-radius: 6px;
+	width:160px !important;
+	display: block;
 }
+a.small-button-class i{font-size: 12px;}
 
 a.small-button-class:hover {
     background: #010069;

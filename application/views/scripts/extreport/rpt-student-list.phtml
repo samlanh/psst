@@ -168,6 +168,11 @@
 								line-height:12px;
 								color: #002c7b;
 							}
+							@page {
+								page:A4;
+								size: portrait;
+								 margin: 0.8cm;
+							}
 						}
 					</style>
 					<table style="margin: 0 auto; width: 100%;color:#000;"  >
@@ -305,11 +310,11 @@
 											<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
 												<div>
 													<?php if(!empty($stamp)){?>
-													<img src="<?php echo $stamp;?>" style="max-height:100px;position:relative;" />
+													<img src="<?php echo $stamp;?>" style="max-height:120px;position:relative;" />
 													<?php } ?>
 												</div>
 												<?php if(!empty($signature)){?>
-													<img src="<?php echo $signature;?>" style="left:100px;bottom:50px;width:200px;position:relative;" />
+													<img src="<?php echo $signature;?>" style="left:80px;bottom:80px;width:200px;position:relative;" />
 												<?php } ?>
 											</td>
 											<td></td>

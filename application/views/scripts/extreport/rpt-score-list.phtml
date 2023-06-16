@@ -170,7 +170,7 @@
 						ul.criterialNote li {
 							line-height: inherit;
 						}
-						@media print {
+						@media print{
 							ul.printInfo {
 								position: absolute;
 								left: 0;
@@ -186,6 +186,11 @@
 								text-align: left;
 								line-height:12px;
 								color: #002c7b;
+							}
+							@page {
+								page:A4;
+								size: portrait;
+								 margin: 0.8cm;
 							}
 						}
 					</style>

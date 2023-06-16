@@ -3,7 +3,7 @@
 class IssuescoreController extends Zend_Controller_Action
 {
 
-	const REDIRECT_URL = '/home';
+	const REDIRECT_URL = '/external';
 	
     public function init()
     {
@@ -73,8 +73,13 @@ class IssuescoreController extends Zend_Controller_Action
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getGroupDetailByID($id);
-		$this->view->row = $row;
 		
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/dashboard");
+			exit();
+		}
+		
+		$this->view->row = $row;
 		if(empty($row)){
 			$this->_redirect("/external/group");
 		}

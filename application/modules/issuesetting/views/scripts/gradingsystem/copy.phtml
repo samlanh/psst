@@ -30,6 +30,11 @@
 						dijit.byId("branch").focus();
 						return false;
 					}
+					total_percent = dijit.byId('total_percent').get('value');
+					if(total_percent!='100'){
+						alert("<?php echo $tr->translate("TOTAL_MUST_BE_100_PERCENTAGE");?>");
+						return false;
+					}
 					loadingBlock();
 					return true;
 				}else {
@@ -84,7 +89,10 @@
 	                   		<?php echo $frm_items->getElement("examtype_items");?>
 	                   </div>
 	                   <div class="col-md-5 col-sm-5 col-xs-12">
-	                    	<?php echo $frm_items->getElement("total_percent");?>
+	                    	<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL");?>(%)<span class="required">*</span></label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm_items->getElement("total_percent");?>
+						   </div>
 	                   </div>
 	                   <div class="clearfix"></div>
 	                </div>

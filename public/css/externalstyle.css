@@ -1,0 +1,13 @@
+.introduction{
+	background:#b1badf !important;
+	border-radius: 5px;
+	padding:5px;
+}
+.introduction label{
+	font-size: 13px;
+	white-space: pre-line;
+}
+.introduction ul li{font-size: 12px;}
+.introduction p.font-weight-semibold{
+	line-height: 20px;
+}

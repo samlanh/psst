@@ -173,24 +173,19 @@
 											<i class="glyphicon glyphicon-comment" aria-hidden="true"></i>
 										</div> 
 										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("COMMENT");?></p>
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
 										</div> 
 									</div>
 									<br />
 									<div class="form-group">
-										<table class="collape responsiveTable" style="table-layout: fixed;" id="table">
+										<table class="table table-condensed table-striped" style="table-layout: fixed;" id="table">
 											<thead>
-												<tr>
-													<th scope="col" width="5%"></th>
-													<th scope="col" width="60%"></th>
-													<th scope="col" width="17%"></th>
-													<th scope="col" width="18%"></th>
-												</tr>
 												<tr id="head-title" class="head-td" align="center">
-													<th scope="col"><?php echo $tr->translate('N_O');?></th>
-													<th scope="col"><?php echo $tr->translate('COMMENT');?></th>
-													<th scope="col"><?php echo $tr->translate('RATING');?></th>
-													<th scope="col"><?php echo $tr->translate('NOTE');?></th>
+													<th width="5%" scope="col"><?php echo $tr->translate('N_O');?></th>
+													<th scope="col"><?php echo $tr->translate('STUDEN_CODE');?></th>
+													<th scope="col"><?php echo $tr->translate('STUDEN_NAME');?></th>
+													<th scope="col"><?php echo $tr->translate('GENDER');?></th>
+													<th scope="col"><?php echo $tr->translate('GO_RATING');?></th>
 												</tr>
 											</thead>
 											<tbody id="table_row" >
@@ -255,70 +250,7 @@ dojo.ready(function(){
 		getAllGroupByBranch();
 });
 
-var template1 = '';
-var col1 = 0;
-var no1 = 0;
-tmp1 = '';
-var url_degree_comment = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-comment')); ?>';
-function getCommentByDegree(){
-	degree = dijit.byId('degree').get('value');
-	if(degree>0){
-		dojo.query("#table_row").append("");
-		dojo.xhrPost({
-			url:url_degree_comment,
-			content:{
-				'degree':degree
-				},
-			handleAs:"json",
-			load: function(data) {
-				if(data){
-					for(i=0;i<data.length;i++){			
-						template1='';
-						col1++;no1++;
-						label_comment = data[i]['comment'];
-						template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'</td>';
-						template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+col1+'" name="comment_id_'+col1+'" value="'+data[i]['id']+'" /></td>';
-						
-						template1+='<td data-label="<?php echo $tr->translate("RATING");?>">';
-							template1+='<select queryExpr="*${0}*" autoComplete="false" name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.FilteringSelect" >';
-								template1+='<option value="-1"><?php echo $tr->translate("SELECT")?></option>';
-								<?php if($this->rating){foreach($this->rating as $rating){?>
-								template1+='<option value="<?php echo $rating['id']?>"><?php echo $rating['id'].'-'.$rating['rating']?></option>';
-								<?php }}?>
-							template1+='</select>';
-						template1+='</td>';
-						
-						template1+='<td data-label="<?php echo $tr->translate("NOTE");?>"> <input type="text" name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="សម្គាល់"/></td>';
-						tmp1='<tr class="rowData" id="row'+col1+'">';
-						tmp1+="</tr>";
-						dojo.query("#table_row").append(tmp1);
-						
-						if($("#identity").val()!="") {
-							var identity = $("#identity").val();
-							$("#identity").val(identity+','+col1);
-						} else {$("#identity").val(col1);}
-						dojo.html.set(dojo.byId("row"+col1),template1 , {
-							 parseContent: true,
-						});
-					}
-				}
-			},
-			error: function(err) {
-			}
-		});
-	}
-}
 
-function deleteRecord(index) {
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
-	}
-	var strings = arrays.join(',');
-	$('#identity').val(strings);
-	dojo.query("#row"+index).remove();
-}
  //validate controll form 
 function checkForType(){
 	for_type = dijit.byId("for_type").get("value");
@@ -369,7 +301,8 @@ function getInfoBygroup(){
 		
 			dojo.byId("gr-info").innerHTML = string;
 			dijit.byId('degree').set('value',data.degree);
-			getCommentByDegree();
+		
+			filterStudentBygroup();
 		},
 		error: function(err) {
 		}
@@ -389,7 +322,8 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,
+			'noaddnew':1
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -425,4 +359,241 @@ function getStudentByGroup(){
 		}
 	});
 }
+
+var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
+function filterStudentBygroup(){
+	var textareastyle=" font-family: 'Khmer OS Battambang'";
+	group = dijit.byId('group').get('value');
+	if(group==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: url_getStudentbygroup,
+	    content : { 
+		    'group':group,
+			'item_type':1,
+			
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		   tem="";
+	       if(data!=""){
+				num =0;
+				title=0;
+				temp='';
+				str='';
+				column = 0;
+				str='';
+				for(i=0;i<data.length;i++){
+					
+					var classRow="OddRow";
+					if((i%2)==0){
+						classRow="EvenRow";
+					}
+				
+					inx = i+1;
+					num++;
+					column++;
+					var gender='';
+					if(data[i].sex==1){
+						gender="<?php echo $tr->translate("MALE");?>";
+					}else{
+						gender="<?php echo $tr->translate("FEMALE");?>";
+					}
+					str+='<tr data-toggle="collapse" data-target="#demo_'+column+'"  class=" accordion-toggle rowData text-primary text-center '+classRow+'">';
+						str+='<td data-label="<?php echo $tr->translate("NUM");?>">'+inx+'</td>';
+						str+='<td data-label="<?php echo $tr->translate("STUDEN_CODE");?>">'+data[i].stu_code+'</td>';
+						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>" style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
+						str+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
+						str+='<td data-label="<?php echo $tr->translate("GO_RATING");?>"><input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-comment" label="<?php echo $tr->translate('GO_RATING');?>" dojoType="dijit.form.Button"/></td>';
+					str+='</tr>';
+					str+='<tr>';
+						str+='<td colspan="5" class="hiddenRow">';
+							str+='<div class="accordian-body collapse" id="demo_'+column+'"> ';
+									str+='<table class="table table-striped">';
+										str+='<thead>';
+											str+='<tr class="info">';
+												str+='<th scope="col"><?php echo $tr->translate('N_O');?></th>';
+												str+='<th scope="col"><?php echo $tr->translate('COMMENT');?></th>';
+												str+='<th scope="col"><?php echo $tr->translate('RATING');?></th>';
+												str+='<th scope="col"><?php echo $tr->translate('NOTE');?></th>';
+											str+='</tr>';
+										str+='</thead>';
+										str+='<tbody>';
+											str+='<tr data-toggle="collapse" data-target="#demo_'+column+'" class="accordion-toggle"> id="table_cmt_row_'+column+'"';
+											str+='</tr';
+											str+='<input type="hidden" name="identity_cmt_'+column+'" id="identity_cmt_'+column+'"  value="" >';
+										str+='</tbody>';
+									str+='</table>';
+							str+='</div>';
+						str+='</td';
+					str+='</tr>';
+				
+				    if(inx!=1) {
+						var identity = $('#identity').val();
+						$('#identity').val(identity+','+inx);
+					} else {
+						$('#identity').val(inx);
+					}
+					getCommentByDegree(column);
+				}
+				dojo.html.set(dojo.byId("table_row"),str, {
+					 parseContent: true,
+				});
+	       }else{
+	    	   $('#identity').val('');
+	    	   document.getElementById("table_row").innerHTML = '';
+	       }
+	   },		
+	    error: function(err) {
+	    }
+	});
+}
+
+var template1 = '';
+var col1 = 0;
+var no1 = 0;
+tmp1 = '';
+var url_degree_comment = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-comment')); ?>';
+function getCommentByDegree(column){
+	degree = dijit.byId('degree').get('value');
+	if(degree>0){
+		dojo.query("#table_cmt_row_"+col1).append("");
+		dojo.xhrPost({
+			url:url_degree_comment,
+			content:{
+				'degree':degree
+				},
+			handleAs:"json",
+			load: function(data) {
+				alert(data);
+				if(data){
+					for(i=0;i<data.length;i++){			
+						template1='';
+						col1++;no1++;
+						label_comment = data[i]['comment'];
+						template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'</td>';
+						template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+column+'_' + col1 + '" name="comment_id_'+column+'_' + col1 +'" value="'+data[i]['id']+'" /></td>';
+						
+						template1+='<td data-label="<?php echo $tr->translate("RATING");?>">';
+							template1+='<select queryExpr="*${0}*" autoComplete="false" name="rating_id_'+column+'_' + col1 +'" class="fullside" id="'+column+'_' + col1 +'" dojoType="dijit.form.FilteringSelect" >';
+								template1+='<option value="-1"><?php echo $tr->translate("SELECT")?></option>';
+								<?php if($this->rating){foreach($this->rating as $rating){?>
+								template1+='<option value="<?php echo $rating['id']?>"><?php echo $rating['id'].'-'.$rating['rating']?></option>';
+								<?php }}?>
+							template1+='</select>';
+						template1+='</td>';
+						
+						template1+='<td data-label="<?php echo $tr->translate("NOTE");?>"> <input type="text" name="remark'+column+'_' + col1 +'" class="fullside" id="'+column+'_' + col1 +'" dojoType="dijit.form.TextBox" placeholder="សម្គាល់"/></td>';
+						tmp1='<tr class="rowData" id="row_cmt'+col1+'">';
+						tmp1+="</tr>";
+
+						dojo.query("#table_cmt_row_"+col1).append(tmp1);
+						if($("#identity_cmt_"+column).val()!="") {
+							var identity_cmt = $("#identity_cmt_").val();
+							$("#identity_cmt_"+column).val(identity_cmt+','+col1);
+						} else {$("#identity_cmt_"+column).val(col1);}
+						dojo.html.set(dojo.byId("row_cmt"+col1),template1 , {
+							 parseContent: true,
+						});
+						
+					}
+				}
+			},
+			error: function(err) {
+			}
+		});
+	}
+}
+
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
 </script>
+
+
+<!-- <div class="container">
+	<div class="col-md-12">
+    	<div class="panel panel-default">
+				<div class="panel-heading">
+					Employee
+				</div>
+      		  <div class="panel-body">
+					<table class="table table-condensed table-striped">
+						<thead>
+							<tr>
+							<th></th>
+							<th>Fist Name</th>
+							<th>Last Name</th>
+							<th>City</th>
+							<th>State</th>
+							<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+								<td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+								<td>Carlos</td>
+								<td>Mathias</td>
+								<td>Leme</td>
+								<td>SP</td>
+								<td>new</td>
+							</tr>
+							<tr>
+								<td colspan="12" class="hiddenRow">
+									<div class="accordian-body collapse" id="demo1"> 
+											<table class="table table-striped">
+												<thead>
+													<tr class="info">
+														<th>Job</th>
+														<th>Company</th>
+														<th>Salary</th>		
+														<th>Date On</th>	
+														<th>Date off</th>	
+														<th>Action</th>	
+													</tr>
+												</thead>	
+												<tbody>
+													<tr data-toggle="collapse"  class="accordion-toggle" data-target="#demo10">
+														<td> <a href="#">Enginner Software</a></td>
+														<td>Google</td>
+														<td>U$8.00000 </td>
+														<td> 2016/09/27</td>
+														<td> 2017/09/27</td>
+														<td> 
+															<a href="#" class="btn btn-default btn-sm">
+																<i class="glyphicon glyphicon-cog"></i>
+															</a>
+														</td>
+													</tr>
+													<tr>
+														<td>Scrum Master</td>
+														<td>Google</td>
+														<td>U$8.00000 </td>
+														<td> 2016/09/27</td>
+														<td> 2017/09/27</td>
+														<td> 
+															<a href="#" class="btn btn-default btn-sm">
+																<i class="glyphicon glyphicon-cog"></i>
+															</a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+									</div> 
+								</td>
+							</tr>
+						</tbody>
+					</table>
+          	  </div>
+          </div> 
+      </div>
+	</div>
+        -->

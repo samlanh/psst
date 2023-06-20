@@ -429,7 +429,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$rs = $db->getExamByExamIdAndStudent($data);
     	$this->view->rs = $rs;
     	
-    	$evaluation = $db->getStudentEvaluation($data);
+    	$evaluation = array();//$db->getStudentEvaluation($data);
     	$this->view->evaluation = $evaluation;
     	if ($rs['exam_type']==2){
     		$monthlysemesterAverage = $db->getAverageMonthlyForSemester($rs['group_id'], $rs['for_semester'], $rs['student_id']);
@@ -442,7 +442,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$group = $db->getAllGroupOfStudent($data['stu_id']);
     	$this->view->group = $group;
     	$db = new Foundation_Model_DbTable_DbScore();
-    	$subject =$db->getSubjectByGroup($data['group_id'],null,$data['exam_type']);
+    	$subject =$db->getSubjectScoreByGroup($data['group_id'],null,$data['exam_type']);
     	$this->view->subject = $subject;
     	$this->view-> month = $db->getAllMonth();
     	
@@ -987,7 +987,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$group = $db->getAllGroupOfStudent($data['stu_id']);
     	$this->view->group = $group;
     	$db = new Foundation_Model_DbTable_DbScore();
-    	$subject =$db->getSubjectByGroup($data['group_id'],null,$data['exam_type']);
+    	$subject =$db->getSubjectScoreByGroup($data['group_id'],null,$data['exam_type']);
     	$this->view->subject = $subject;
     	$this->view-> month = $db->getAllMonth();
     	 

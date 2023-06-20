@@ -65,7 +65,7 @@ public function indexAction()
 		$id = empty($id)?0:$id;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getGroupDetailByID($id);
+		$row = $dbExternal->getGroupDetailByIDExternal($id);
 		$this->view->row = $row;
 		
 		if(empty($row)){

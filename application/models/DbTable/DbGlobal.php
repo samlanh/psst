@@ -3610,6 +3610,11 @@ function getAllgroupStudyNotPass($action=null){
 	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	   	}
    	}
-   	
+   	public static function getTeacherUserId(){
+   		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+   		$userId = $sessionUserExternal->userId;
+   		$userId = empty($userId)?0:$userId;
+   		return $userId;
+   	}
 }
 ?>

@@ -51,14 +51,10 @@ class AssessmentController extends Zend_Controller_Action
 	{
 		$this->_helper->layout()->disableLayout();
 		
-			
-		$key = new Application_Model_DbTable_DbKeycode();
-		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		$db = new Application_Model_DbTable_DbAssessment();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			
-			try {
+			try{
 				$rs = $db->addStudentAssessment($_data);
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/add");
@@ -74,23 +70,18 @@ class AssessmentController extends Zend_Controller_Action
 		$id = empty($id)?0:$id;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getGroupDetailByID($id);
+		$row = $dbExternal->getGroupDetailByIDExternal($id);
 		$this->view->row = $row;
 		
 		if(empty($row)){
-			$this->_redirect("/external/group");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/external/dashboard");
 		}
-	
 		$this->view-> month = $dbExternal->getAllMonth();
-		
-		
 	}
 
 	public function editAction()
 	{
 		$this->_helper->layout()->disableLayout();
-		$key = new Application_Model_DbTable_DbKeycode();
-		$dbset=$key->getKeyCodeMiniInv(TRUE);
 
 		$db = new Application_Model_DbTable_DbAssessment();
 		if($this->getRequest()->isPost()){
@@ -111,7 +102,7 @@ class AssessmentController extends Zend_Controller_Action
 		$this->view->row = $row;	
 		
 		if(empty($row)){
-			$this->_redirect("/assessment/index");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment");
 		}
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment/index");

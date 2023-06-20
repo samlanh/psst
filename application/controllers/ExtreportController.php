@@ -37,7 +37,7 @@ class ExtreportController extends Zend_Controller_Action
 		$row = $db->getStudentListByGroup($search);
 		$this->view->row = $row;
 		
-		$rs = $db->getGroupDetailByID($id);
+		$rs = $db->getGroupDetailByIDExternal($id);
 		$this->view->rr = $rs;
 		
 		$frm = new Application_Form_FrmGlobal();
@@ -60,9 +60,11 @@ class ExtreportController extends Zend_Controller_Action
 		$this->view->rs = $row;
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");
+			exit();
 		}
 		if ($row['status']==0){
 			Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_VIEW","/issuescore/index");
+			exit();
 		}
 		$groupId = empty($row['groupId'])?0:$row['groupId'];
 		$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
@@ -89,7 +91,6 @@ class ExtreportController extends Zend_Controller_Action
 			,'examType'=>$examType,
 		);
 		$this->view->criterial = $dbExternal->getGradingSystemDetail($arrSearch);
-			
 		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];
@@ -98,7 +99,6 @@ class ExtreportController extends Zend_Controller_Action
     	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->branchInfo = $db->getBranchInfo($branch_id);
-    	
     }
 	
 	function rptAssessmentListAction(){

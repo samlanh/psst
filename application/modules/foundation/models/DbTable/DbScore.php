@@ -332,7 +332,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC, (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 		return $db->fetchAll($sql.$order);
 	}
-	function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
+	function getSubjectScoreByGroup($group_id,$teacher_id=null,$exam_type=1){
 		$db=$this->getAdapter();
 		$sql="SELECT 
 					gsjd.*,

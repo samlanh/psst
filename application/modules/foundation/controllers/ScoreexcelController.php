@@ -145,7 +145,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbScore();
-			$data=$db->getSubjectByGroup($data['group']);
+			$data=$db->getSubjectScoreByGroup($data['group']);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

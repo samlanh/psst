@@ -110,7 +110,7 @@
 							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" required="1" dojoType="dijit.form.ValidationTextBox" />
+									<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" required="true" dojoType="dijit.form.ValidationTextBox" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -204,14 +204,13 @@
 						</div>
 					 </div>
 		         </div>
-		     </div>
 		      <div class="card-box">
 				<div class="col-md-12 col-sm-12 col-xs-12">
 		    		<div class="form-group">
 		    			<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 							<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
-		    			<input type="hidden" name="identity" id="identity"  value="" >
+		    			<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
 		    		</div>
 		    	</div>
 		   </div>
@@ -229,7 +228,6 @@
 tr.odd {
     background: #daeef5;
 }
-
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
@@ -240,8 +238,6 @@ dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.ready(function(){
-	 //getInfoBygroup();
-	 //getSubjectByGroup();
 	var subject = [];
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
@@ -342,11 +338,11 @@ function filterStudentOld(){
 				temp +='<td align="center">&nbsp;<?php echo $i; ?></td>';
 				temp +='<td>&nbsp;<?php echo $rs["stu_code"]; ?></td>';
 				temp +='<td style="min-width:100px; text-align:left; padding:0 1px;">'+'<?php echo $rs["stuKhName"]."<br />".$rs["stuEnName"]; ?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/></td>';
-				temp +='<td>&nbsp;'+gender(<?php echo $rs["sex"];?>)+'&nbsp;</td>';
+				temp +='<td>&nbsp;'+gender('<?php echo $rs["sex"];?>')+'&nbsp;</td>';
 				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ 
 					$result_score = $db_score->getStudentScoreBySubjectID($this->score_id, $rs["student_id"],$subj['subject_id']);
 					?>
-					temp += '<td id="score_<?php echo $index;?>"><input required="1" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['score'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
+					temp += '<td id="score_<?php echo $index;?>"><input required="true" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['score'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
 				<?php }?>
 				temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php echo $rs["amount_subject"]; ?>" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 				temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php echo $rs["note"]; ?>" type="text" ></td>';
@@ -376,7 +372,6 @@ function CheckSubjectExam(subject_id){
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
 			}
@@ -385,7 +380,6 @@ function CheckSubjectExam(subject_id){
 		if(rowId!=''){ 
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
-				//dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);

@@ -832,7 +832,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 // 		 		AND sd.`group_id`=$group_id 
 // 		   GROUP BY 
 // 		   		sd.`subject_id`	";
-   	return $db->getSubjectByGroup($group_id,$teacher_id=null,$exam_type);
+   	return $db->getSubjectScoreByGroup($group_id,$teacher_id=null,$exam_type);
    }
    
    public function getScoreBySubject($score_id,$student_id,$subject_id){

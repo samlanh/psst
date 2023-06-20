@@ -72,7 +72,7 @@ class IssuescoreController extends Zend_Controller_Action
 		$id = empty($id)?0:$id;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getGroupDetailByID($id);
+		$row = $dbExternal->getGroupDetailByIDExternal($id);
 		
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/dashboard");

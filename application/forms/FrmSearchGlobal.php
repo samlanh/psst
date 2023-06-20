@@ -249,7 +249,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_exam_type->setMultiOptions($_arr);
 		$_exam_type->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'placeholder'=>$this->tr->translate("SELECT_TYPE"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
@@ -260,7 +260,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_for_semester->setMultiOptions($_arr);
 		$_for_semester->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'placeholder'=>$this->tr->translate("SELECT_SEMESTER"),
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
@@ -273,7 +273,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_for_month->setMultiOptions($_opt_month);
 		$_for_month->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
+				'required'=>'false',
 				'autoComplete'=>'false',
 				'placeholder'=>$this->tr->translate("CHOOSE_MONTH"),
 				'queryExpr'=>'*${0}*',

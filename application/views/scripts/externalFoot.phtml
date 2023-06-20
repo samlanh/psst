@@ -137,6 +137,7 @@ function infoMessageAlert(msgTitle,msgDesc=''){
 	Swal.fire({
 		  icon: classMessage,
 		  title: msgTitle,
+		  reverseButtons:true,
 		  text: msgDesc,
 		  showConfirmButton: false,
 		  timer: 1000,
@@ -153,6 +154,7 @@ function comfirmingSubmit(frmID,msgTitle,msgDesc=''){
 	  title: msgTitle,
 	  text: msgDesc,
 	  icon: 'warning',
+	  reverseButtons:true,
 	  showCancelButton: true,
 	  confirmButtonColor: '#3085d6',
 	  cancelButtonColor: '#d33',

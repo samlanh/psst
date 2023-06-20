@@ -228,7 +228,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	
 	
 	
-	public function getGroupDetailByID($id){
+	public function getGroupDetailByIDExternal($id){
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();
 	   	$lang = $_db->currentlang();
@@ -269,6 +269,14 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	   	
 	   	$dbp = new Application_Model_DbTable_DbGlobal();
 	   	$sql.=$dbp->getAccessPermission("g.branch_id");
+	   	
+	   	$request=Zend_Controller_Front::getInstance()->getRequest();
+	   	$controllerName = $request->getControllerName();
+
+	   	if($controllerName=='assessment'){
+	   		$_db->getTeacherUserId();
+	   		$sql.= " AND g.teacher_id =".$dbp->getTeacherUserId();
+	   	}
 	   	$sql.="  LIMIT 1 ";
 	   	
 	   	return $db->fetchRow($sql);
@@ -542,7 +550,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$where.=' AND grd.teacherId='.$this->getUserExternalId();
 		$where.=' AND grd.id='.$gradingId;
 		$where.=' LIMIT 1 ';
-
 		
 		return $db->fetchRow($sql.$where);
 	}

@@ -11,7 +11,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		return $userId;
 	}
 	
-	
 	function getAllSubjectScoreByClass($search=null){
 		$db=$this->getAdapter();
 		
@@ -87,7 +86,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		if($search['for_semester']>0){
 			$where.= " AND grd.forSemester =".$search['for_semester'];
 		}
+		$where.= " AND grd.teacherId =".$dbp->getTeacherUserId();
 		$order=" ORDER BY grd.id DESC ";
+		
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function checkingDuplicate($_data){
@@ -168,7 +169,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$dbExternal = new Application_Model_DbTable_DbExternal();
-			$group_info = $dbExternal->getGroupDetailByID($_data['group']);
+			$group_info = $dbExternal->getGroupDetailByIDExternal($_data['group']);
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];
@@ -418,7 +419,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			
 			$status = empty($_data['status'])?0:1;
 			$dbExternal = new Application_Model_DbTable_DbExternal();
-			$group_info = $dbExternal->getGroupDetailByID($_data['group']);
+			$group_info = $dbExternal->getGroupDetailByIDExternal($_data['group']);
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];

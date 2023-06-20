@@ -243,6 +243,7 @@ dojo.ready(function(){
 							<td colspan="2">មុខវិជ្ជា <br />Subject</td>
 							<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
 							<td>ពិន្ទុ<br />score</td>
+							<td>មធ្យមភាគ<br />Avarage</td>
 							<td >និទ្ទេស<br />Grade</td>
 						</tr>
 						<?php 
@@ -250,8 +251,12 @@ dojo.ready(function(){
 						$totalSubjectMaxScore=0;
 						$i=0; 
 						if (!empty($this->subject)){ ?>
-							<?php foreach ($this->subject as $rs){ $i++;
+							<?php foreach ($this->subject as $rs){
 								$score = $db->getScoreBySubject($this->rs['id'],$this->rs['student_id'],$rs['subject_id']);
+								if(empty($score)){
+									continue;
+								}
+								$i++;
 								$rangsubje = $db->getRankSubjectMonthlyExam($this->rs['group_id'], $this->rs['student_id'], $rs['subject_id'], $this->rs['for_month_id']);
 								$totalscore = $totalscore+$score['score'];
 								$totalSubjectMaxScore = $totalSubjectMaxScore+$rangsubje['subjectMaxScore'];

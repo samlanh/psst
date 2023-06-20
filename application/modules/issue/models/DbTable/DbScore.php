@@ -32,7 +32,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'branch_id'=>$_data['branch_id'],
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
-					//'max_score'=>$_data['max_score'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],
@@ -86,10 +85,24 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$total_score = $total_score+$score;
 							$score_cut = $rs_scorebygroup['score_short'];
 						}
+						$dataScore = array(
+								'groupId'=>$_data['group'],
+								'examType'=>$_data['exam_type'],
+								'forMonth'=>$_data['for_month'],
+								'forSemester'=>$_data['for_semester'],
+								'subjectId'=>$subject,
+								'studentId'=>$_data['student_id'.$i],
+								);
+						$resultScore = $this->getGradingScoreData($dataScore);
+						$gradingId='';
+						if(!empty($resultScore)){
+							$gradingId=$resultScore['gradingId'];
+						}
 						
 						$arr=array(
 							'score_id'=>$id,
 							'group_id'=>$_data['group'],
+							'gradingTotalId'=>$gradingId,
 							'student_id'=>$_data['student_id'.$i],
 							'amount_subject'=>$_data['amount_subject'.$i],
 							'subject_id'=> $subject,
@@ -469,8 +482,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		
 		$resultSubject = $this->getSubjectByGroup($data['groupId'],null,$examType);
 		$results = array();
-// 		print_r($studentResult);
-// 		echo "========<br />";
 		if(!empty($studentResult)){
 			foreach($studentResult as $key=>$rs){
 				$results[$key]['stu_id'] = $rs['stu_id'];
@@ -688,18 +699,15 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	function getGradingScoreData($data){
-		$sql="
-			SELECT 
+		$sql="SELECT 
+				gt.gradingId,
 				gt.totalAverage 
 				FROM `rms_grading_total` gt,
 					`rms_grading` gd
-				 WHERE gd.id=gt.gradingId
-				 
-				";
+				 WHERE gd.id=gt.gradingId ";
 		if(!empty($data['groupId'])){
 			$sql.=" AND gd.groupId=".$data['groupId'];
 		}
-		
 		if(!empty($data['examType'])){
 			if($data['examType']==1){//month
 				if(!empty($data['forMonth'])){

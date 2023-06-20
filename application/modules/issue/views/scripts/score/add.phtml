@@ -334,18 +334,11 @@ function filterStudent(){
 					+'<td colspan="'+subject.length+'" class="tdheader header"><?php echo $tr->translate('SUBJECT');?></td>'
 					+'<td  rowspan="3" class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>'
 					+'<td  rowspan="3" class="tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr><tr>'
-					 
 					no=0;
 				
 				  for(j=0;j<subject.length;j++){
-					  /*if(exam_type==1){//for month
-						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_month);
-					  }else{//for year
-						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_semester);
-						}*/
 	      			  no++;
 		      		  amtsubject = subject[j].amount_subjectdivide;
-	      			  //stringsname = subject[j].name.replace(' ','');
 		      		  stringsname = subject[j].name;
 		      	      temp+='<td class="tdheader verites-col criterialTitle" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
@@ -353,7 +346,6 @@ function filterStudent(){
 					  no=0;
 					  for(j=0;j<subject.length;j++){
 		      			  no++;
-		      			  //stringsname = subject[j].subject_titleen.replace(' ','');
 			      		  stringsname = subject[j].subject_titleen;
 			      	      temp+='<td class="tdheader" title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/></td>';
 		              }
@@ -383,14 +375,9 @@ function filterStudent(){
 								totalAverage = data[i].gradingScore[j].totalAverage;
 							}
 						}
-						
 						temp += '<td id="score_'+j+'"><input value="'+totalAverage+'" data-dojo-props="constraints:{min:0,max:'+subject[j].max_subjectscore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
-					/*for(j=0;j<data[i].gradingScore.length;j++){
-						//maxValue = "'The value maximumn "+subject[j].max_subjectscore+"'";
-						//invalidesms = "rangeMessage:"+maxValue;
-						//temp += '<td id="score_'+j+'"><input value="0"  required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
-					}*/
+					
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					

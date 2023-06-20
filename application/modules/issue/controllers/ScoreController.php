@@ -80,15 +80,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	
 		$db = new Issue_Model_DbTable_DbScore();
 		$this->view-> month = $db->getAllMonth();
-// 		$param = array(
-// 				'sortStundent'=>1,
-// 				'groupId'=>4,
-// 				'examType'=>2,
-// 				'forSemester'=>1,
-// // 				'forMonth'=>9
-// 				);
-// 		$student = $db->getStudentByGroup(4,$param);
-// 		print_r($student);
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -127,7 +118,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		
 		$this->view->student= $_model->getStudentSccoreforEdit($id);
 		$this->view->rows_scor=$_model->getScoreStudents($id);

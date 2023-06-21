@@ -17,42 +17,26 @@
 		<div class="card-box">
 			<form  action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group"> 
-				    <div class="col-md-2 col-sm-2 col-xs-12"> 
-						<?php echo $frm->getElement("adv_search");?>
-					</div>
-				    <div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("branch_id");?>
-					</div>
-				    <div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("academic_year");?>
-					</div>
-				    <div class="col-md-2 col-sm-2 col-xs-12">
-						<input id="group" />
-					</div>
-				    <div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("degree");?>
-					</div>
-				    <div class="col-md-2 col-sm-2 col-xs-12">
-						<input id="grade" />
-					</div>
+				   
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<?php echo $frm->getElement("branch_id");?>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<?php echo $frm->getElement("academic_year");?>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<input id="group" />
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<?php echo $frm->getElement("start_date");?>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<?php echo $frm->getElement("end_date");?>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+						</div>
 				  </div>
-				  <div class="form-group"> 
-			  		<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("session");?>
-					</div>
-			  		<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("room");?>
-					</div>
-			  		<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("start_date");?>
-					</div>
-			 		<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("end_date");?>
-					</div>
-					<div class="col-md-4 col-sm-4 col-xs-12">
-						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-					</div>
-				</div>
 			</form>
 		</div>
 		<div class="card-box">
@@ -64,6 +48,8 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.TextBox");
+	dojo.require("dijit.form.FilteringSelect");
 
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
@@ -83,20 +69,6 @@
 				
 			}
 		}, "group");
-		
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                        
-			id: "grade",
-			name: "grade",  
-			class: 'fullside',  
-			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-			onChange: function() {  
-
-			}
-		}, "grade");
-		getallGrade();
 		
 		 var branch_id = dijit.byId('branch_id');
 		 branch_id.on('change', function(evt) {
@@ -119,22 +91,12 @@
 			dijit.byId('branch_id').focus();
 			return false;
 		}
-		degree = dijit.byId('degree').get('value');
-		if(degree=='' || degree==-1){
-			degree ="";
-		}
-		grade = dijit.byId('grade').get('value');
-		if(grade=='' || grade==-1){
-			grade ="";
-		}
 		academic_year = dijit.byId('academic_year').get('value');
 		if(academic_year=='' || academic_year==-1){academic_year ="";}
 		dojo.xhrPost({
 			url: url_getallgroup,
 			content:{
 				'branch_id':branch_id,
-				'degree':degree,
-				'grade':grade,
 				'academic_year':academic_year,
 				'noaddnew':1
 			},
@@ -149,31 +111,5 @@
 			error: function(err) {
 			}
 		});
-	}
-	
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
-	function getallGrade(){
-		getAllGroup();
-		dept_id = dijit.byId('degree').get('value');
-		if(dept_id=='' || dept_id==-1){return false;}
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id,
-					'noaddnew':1
-					},
-				handleAs:"json",
-				load: function(data) {
-					dijit.byId('grade').attr('value','');
-					grade_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('grade').set('store',grade_store); 
-				    <?php if (!empty($this->search['grade'])){?>
-					dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
-					<?php }?> 
-				},
-				error: function(err) {
-				}
-			});
 	}
 </script>

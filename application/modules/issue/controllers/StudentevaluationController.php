@@ -15,27 +15,22 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search'=>'',
 						'branch_id' => '',
 						'group' => '',
 						'academic_year'=> '',
-						'degree'=>0,
-						'grade'=> 0,
-						'session'=> 0,
-						'time'=> 0,
 						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'));
+						'end_date'=>date('Y-m-d')
+					);
 			}
 			$this->view->search = $search;
-			$rs_rows = $db->getAllStudentEvaluation($search);
+			$rs_rows = $db->getAllGroupStudentEvaluation($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_ID","STUDENT_NAME","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("BRANCH","STUDENT_GROUP","TYPE","FOR_SEMESTER","FOR_MONTH","TEACHER_COMMENT","CREATE_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'studentevaluation','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'for_type'=>$link,'name'=>$link,'stu_code'=>$link,
-					'for_semester'=>$link,'for_month'=>$link,'academic_id'=>$link,'group_id'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branchName'=>$link,'groupName'=>$link,'forType'=>$link,));
 		
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -95,19 +90,19 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		}
 		
 		$db = new Issue_Model_DbTable_DbStudentEvaluation();
-		$row = $db->getStudentEvaluationById($id);
+		$row = $db->getEvaluationById($id);
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/issue/studentevaluation");
 			exit();
 		}
 		$this->view->row = $row;
-		$this->view->row_detail = $db->getStudentEvaluationDetailById($id);
+		$this->view->row_evaluation = $db->getStudentEvaluationById($id);
+		//$this->view->row_detail = $db->getStudentEvaluationDetailById($id);
 		$this->view->rating = $db->getAllRating();
 		
 		if($row['is_pass']==1){
 			Application_Form_FrmMessage::Sucessfull("Can not edit because this group is finished !!!","/issue/studentevaluation");
 		}
-		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
 		

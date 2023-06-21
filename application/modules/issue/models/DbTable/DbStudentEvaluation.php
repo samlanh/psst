@@ -12,10 +12,9 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-		///////////////////////////// check before submit //////////////////////////////////	
+		
 			$branch=$_data['branch_id'];
 			$group=$_data['group'];
-			$student=$_data['student'];
 			$for_type=$_data['for_type'];
 			$for_month=$_data['for_month'];
 			$for_semester=$_data['for_semester'];
@@ -23,11 +22,10 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			$sql="select 
 						id 
 					from 
-						rms_student_evaluation 
+						rms_evaluation 
 					where 
 						branch_id = $branch
 						and group_id = $group
-						and student_id = $student
 						and for_type = $for_type
 						and for_month = $for_month
 						and for_semester = $for_semester
@@ -37,41 +35,56 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			if(!empty($result)){
 				return -1;
 			}
-			
-		/////////	
+
+		$_arr = array(
+				'branch_id'		=>$_data['branch_id'],
+				'group_id'		=>$_data['group'],
+				'for_type'		=>$_data['for_type'],
+				'for_month'		=>$_data['for_month'],
+				'for_semester'	=>$_data['for_semester'],
+				'issue_date'	=>$_data['issue_date'],
+			//	'return_date'	=>$_data['return_date'],
+				'note'			=>$_data['note'],
+				'status'		=>1,
+				'create_date'	=>date("Y-m-d H:i:s"),
+				'modify_date'	=>date("Y-m-d H:i:s"),
+				'user_id'		=>$this->getUserId(),
+		);
+		$this->_name='rms_evaluation';
+		$idev=$this->insert($_arr);
+
+		if(!empty($_data['identity'])){
+			$ids = explode(',', $_data['identity']);
+			foreach ($ids as $i){
+
 			$_arr = array(
-					'branch_id'		=>$_data['branch_id'],
-					'group_id'		=>$_data['group'],
-					'degree_id'		=>$_data['degree'],
-			        'student_id'	=>$_data['student'],
-					'for_type'		=>$_data['for_type'],
-					'for_month'		=>$_data['for_month'],
-					'for_semester'	=>$_data['for_semester'],
-					'issue_date'	=>$_data['issue_date'],
-					'return_date'	=>$_data['return_date'],
-					'teacher_comment'=>$_data['teacher_comment'],
-					'note'			=>$_data['note'],
+					'evalueId'	=>$idev,
+					'groupId'	=>$_data['group'],
+			        'student_id'	=>$_data['student_id'.$i],
+					'teacher_comment'=>$_data['coment_'.$i],
 					'status'		=>1,
 					'create_date'	=>date("Y-m-d H:i:s"),
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'user_id'		=>$this->getUserId(),
-					
 			);
-			$id=$this->insert($_arr);
+			$this->_name='rms_student_evaluation';
+			$idevd=$this->insert($_arr);
 			
-			if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				foreach ($ids as $i){
+			if(!empty($_data['identity_cmt'])){
+				$idcm = explode(',', $_data['identity_cmt']);
+				foreach ($idcm as $j){
 					$arr=array(
-							'evaluation_id'	=>$id,
-							'comment_id'	=>$_data['comment_id_'.$i],
-							'rating_id'		=>$_data['rating_id_'.$i],
-							'note'			=>$_data['remark'.$i],
+							'evalueId'	=>$idev,
+							'studentEvaluationId'=>$idevd,
+							'commentId'	=>$_data['comment_id_'.$i.'_'.$j],
+							'rating_id'		=>$_data['rating_id_'.$i.'_'.$j],
 					);
 					$this->_name='rms_student_evaluation_detail';
 					$this->insert($arr);
 				}
 			}
+		  }
+		}
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
@@ -124,106 +137,86 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
+
+   function getAllGroupStudentEvaluation($search=null){
+	$db=$this->getAdapter();
 	
-	function getAllStudentEvaluation($search=null){
-		$db=$this->getAdapter();
-		
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbp->currentlang();
-		if ($currentLang==1){// khmer
-			$title='title';
-			$view="name_kh";
-			$branch="school_namekh";
-			$student="stu_khname as name";
-		}else{
-			$title='title_en';
-			$view="name_en";
-			$branch="school_nameen";
-			$student="CONCAT(last_name,'',stu_enname) as name";
-		}
-		
-		$sql="SELECT se.id,
-					(SELECT $branch FROM `rms_branch` WHERE br_id = se.branch_id LIMIT 1) As branch_name,
-					(SELECT $view FROM `rms_view` WHERE TYPE=19 AND key_code = se.for_type LIMIT 1) as for_type,
-					se.for_semester,
-					(SELECT month_kh FROM `rms_month` WHERE rms_month.id = se.for_month  LIMIT 1) as for_month,
-					s.stu_code,
-					$student,
-					group_code AS  group_id,
-					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
-					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-					(SELECT CONCAT(name_en,'-',name_kh) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
-				
-			";
-		$sql.=$dbp->caseStatusShowImage("se.status");
-		$sql.=" FROM 
-					rms_student_evaluation AS se,
-					rms_group AS g,
-					rms_student as s
-				WHERE 
-					se.group_id=g.id 
-					and s.stu_id = se.student_id ";
-		$where ='';
-		$from_date =(empty($search['start_date']))? '1': " se.create_date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " se.create_date <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;
-		
-		if(!empty($search['adv_search'])){
-			$s_where = array();
-			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]=" s.stu_code LIKE '%{$s_search}%'";
-			$s_where[]=" s.last_name LIKE '%{$s_search}%'";
-			$s_where[]=" s.stu_khname LIKE '%{$s_search}%'";
-			$s_where[]=" s.stu_enname LIKE '%{$s_search}%'";
-			$where .=' AND ( '.implode(' OR ',$s_where).')';
-		}
-		if($search['degree']>0){
-			$where.= " AND g.degree =".$search['degree'];
-		}
-		if(!empty($search['academic_year'])){
-			$where.=" AND g.academic_year =".$search['academic_year'];
-		}
-		if(!empty($search['grade'])){
-			$where.=" AND `g`.`grade` =".$search['grade'];
-		}
-		if(!empty($search['session'])){
-			$where.=" AND `g`.`session` =".$search['session'];
-		}
-		if(!empty($search['room'])){
-			$where.=" AND `g`.`room_id` =".$search['room'];
-		}
-		if(!empty($search['group'])){
-			$where.=" AND `g`.`id` =".$search['group'];
-		}
-		$where.=$dbp->getAccessPermission('se.branch_id');
-		$order=" ORDER BY se.id DESC ";
-		return $db->fetchAll($sql.$where.$order);
+	$dbp = new Application_Model_DbTable_DbGlobal();
+	$currentLang = $dbp->currentlang();
+	if ($currentLang==1){// khmer
+		$title='title';
+		$view="name_kh";
+		$branch="branch_namekh";
+		$userName="CONCAT(first_name,' ',last_name) as name";
+	}else{
+		$title='title_en';
+		$view="name_en";
+		$branch="branch_nameen";
+		$userName="CONCAT(first_name,' ',last_name) as name";
 	}
 	
-	function getStudentEvaluationById($id){
+	$sql="SELECT e.id,
+		(SELECT $branch FROM `rms_branch` WHERE br_id = e.branch_id LIMIT 1) AS branchName,
+		(SELECT group_code FROM `rms_group` WHERE id = se.groupId LIMIT 1) AS groupName,
+		(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code = e.for_type LIMIT 1) AS forType,
+		CASE 
+			WHEN e.for_semester = 1 THEN 'ឆមាសទី១'
+			WHEN e.for_semester = 2 THEN 'ឆមាសទី២'
+		END AS semester, 
+		(SELECT month_kh FROM `rms_month` WHERE rms_month.id = e.for_month  LIMIT 1) AS forMonth,
+		se.teacher_comment, e.create_date,
+		(SELECT $userName FROM `rms_users` WHERE id = e.user_id LIMIT 1) AS userName,
+		 e.status
+		";
+		$sql.=$dbp->caseStatusShowImage("e.status");
+		$sql.="FROM  `rms_evaluation` AS e 
+				INNER JOIN `rms_student_evaluation` AS se 
+				WHERE e.id = se.evalueId 
+				";
+		$where ='';
+		$from_date =(empty($search['start_date']))? '1': " e.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " e.create_date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		
+		if(!empty($search['group'])){
+			$where.=" AND se.groupId =".$search['group'];
+		}
+		$where.=$dbp->getAccessPermission('e.branch_id');
+		$order=" GROUP BY e.id ORDER BY e.id DESC ";
+		return $db->fetchAll($sql.$where.$order);
+	}
+	function getEvaluationById($id){
 		$db=$this->getAdapter();
 		$sql="SELECT 
-					se.*,
-					(select is_pass from rms_group as g where g.id = se.group_id) as is_pass 
-				from 
-					rms_student_evaluation as se
-				where 
-					id = $id 
-				limit 1 
+				se.*,
+				(SELECT is_pass FROM rms_group AS g WHERE g.id = se.group_id) AS is_pass 
+			FROM 
+				rms_evaluation AS se
+			WHERE 
+				id = $id
+			LIMIT 1 
 			";
 		return $db->fetchRow($sql);
+	}
+	function getStudentEvaluationById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT *
+			FROM 
+			`rms_student_evaluation` 
+			WHERE 
+				evalueId = $id
+			";
+		return $db->fetchAll($sql);
 	}
 	function getStudentEvaluationDetailById($id){
 		$db=$this->getAdapter();
 		$sql="SELECT 
-					sed.*,
-					(select comment from rms_comment where rms_comment.id = sed.comment_id) as comment
-				from 
-					rms_student_evaluation_detail as sed
-				where 
-					sed.evaluation_id = $id 
+				sed.*,
+				(SELECT COMMENT FROM rms_comment WHERE rms_comment.id = sed.commentId) AS COMMENT
+				FROM 
+					rms_student_evaluation_detail AS sed
+				WHERE 
+				sed.evalueId= $id 
 			";
 		return $db->fetchAll($sql);
 	}

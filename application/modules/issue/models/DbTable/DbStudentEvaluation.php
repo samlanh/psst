@@ -20,58 +20,74 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			$for_month=$_data['for_month'];
 			$for_semester=$_data['for_semester'];
 			
-			$sql="select 
-						id 
-					from 
-						rms_student_evaluation 
-					where 
-						branch_id = $branch
-						and group_id = $group
-						and student_id = $student
-						and for_type = $for_type
-						and for_month = $for_month
-						and for_semester = $for_semester
-					limit 1	
-				";
-			$result = $db->fetchOne($sql);
-			if(!empty($result)){
-				return -1;
-			}
+			// $sql="select 
+			// 			id 
+			// 		from 
+			// 			rms_student_evaluation 
+			// 		where 
+			// 			branch_id = $branch
+			// 			and group_id = $group
+			// 			and student_id = $student
+			// 			and for_type = $for_type
+			// 			and for_month = $for_month
+			// 			and for_semester = $for_semester
+			// 		limit 1	
+			// 	";
+			// $result = $db->fetchOne($sql);
+			// if(!empty($result)){
+			// 	return -1;
+			// }
 			
 		/////////	
+		$_arr = array(
+				'branch_id'		=>$_data['branch_id'],
+				'group_id'		=>$_data['group'],
+				'for_type'		=>$_data['for_type'],
+				'for_month'		=>$_data['for_month'],
+				'for_semester'	=>$_data['for_semester'],
+				'issue_date'	=>$_data['issue_date'],
+			//	'return_date'	=>$_data['return_date'],
+				'note'			=>$_data['note'],
+				'status'		=>1,
+				'create_date'	=>date("Y-m-d H:i:s"),
+				'modify_date'	=>date("Y-m-d H:i:s"),
+				'user_id'		=>$this->getUserId(),
+		);
+		$this->_name='rms_evaluation';
+		$idev=$this->insert($_arr);
+
+		if(!empty($_data['identity'])){
+			$ids = explode(',', $_data['identity']);
+			foreach ($ids as $i){
+
 			$_arr = array(
-					'branch_id'		=>$_data['branch_id'],
-					'group_id'		=>$_data['group'],
-					'degree_id'		=>$_data['degree'],
-			        'student_id'	=>$_data['student'],
-					'for_type'		=>$_data['for_type'],
-					'for_month'		=>$_data['for_month'],
-					'for_semester'	=>$_data['for_semester'],
-					'issue_date'	=>$_data['issue_date'],
-					'return_date'	=>$_data['return_date'],
-					'teacher_comment'=>$_data['teacher_comment'],
-					'note'			=>$_data['note'],
+					'evalueId'	=>$idev,
+					'groupId'	=>$_data['group'],
+			        'student_id'	=>$_data['student_id'.$i],
+					'teacher_comment'=>$_data['coment_'.$i],
 					'status'		=>1,
 					'create_date'	=>date("Y-m-d H:i:s"),
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'user_id'		=>$this->getUserId(),
-					
 			);
-			$id=$this->insert($_arr);
+			$this->_name='rms_student_evaluation';
+			$idevd=$this->insert($_arr);
 			
-			if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				foreach ($ids as $i){
+			if(!empty($_data['identity_cmt'])){
+				$idcm = explode(',', $_data['identity_cmt']);
+				foreach ($idcm as $j){
 					$arr=array(
-							'evaluation_id'	=>$id,
-							'comment_id'	=>$_data['comment_id_'.$i],
-							'rating_id'		=>$_data['rating_id_'.$i],
-							'note'			=>$_data['remark'.$i],
+							'evalueId'	=>$idev,
+							'studentEvaluationId'=>$idevd,
+							'commentId'	=>$_data['comment_id_'.$i.'_'.$j],
+							'rating_id'		=>$_data['rating_id_'.$i.'_'.$j],
 					);
 					$this->_name='rms_student_evaluation_detail';
 					$this->insert($arr);
 				}
 			}
+		  }
+		}
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();

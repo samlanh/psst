@@ -332,7 +332,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC, (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 		return $db->fetchAll($sql.$order);
 	}
-	function getSubjectScoreByGroup($group_id,$teacher_id=null,$exam_type=1){
+	function getSubjectScoreByGroup($data){
 		$db=$this->getAdapter();
 		$sql="SELECT 
 					gsjd.*,
@@ -353,16 +353,22 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			 		rms_group as g
 				WHERE 
 					g.id = gsjd.group_id
-					and gsjd.group_id = ".$group_id;
-		
-		if($teacher_id!=null){
-			$sql.=" AND gsjd.teacher = ".$teacher_id;
+					";
+		if(!empty($data['group_id'])){
+			$sql.=" and gsjd.group_id = ".$data['group_id'];
 		}
-		if($exam_type==1){//for month
+		if(!empty($data['teacher_id'])){
+			$sql.=" AND gsjd.teacher = ".$data['teacher_id'];
+		}
+		if(!empty($data['teacher_id'])){
+			$sql.=" AND gsjd.teacher = ".$data['teacher_id'];
+		}
+		if(!empty($data['exam_type'])){
 			$sql.=" AND gsjd.amount_subject > 0 ";
-		}else{//for semester
+		}else{
 			$sql.=" AND gsjd.amount_subject_sem > 0 ";
 		}
+		
 		$sql.=' ORDER BY gsjd.id ASC ';
 		return $db->fetchAll($sql);
 	}

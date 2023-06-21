@@ -152,7 +152,7 @@ $html='<html>
 									if (!empty($this->subject)){
 										foreach ($this->subject as $rs){
 											$i++;
-											$score = $db->getScoreBySubject($this->rs['id'],$this->rs['student_id'],$rs['subject_id']);
+											$score = $db->getScoreBySubjectTranscript($this->rs['id'],$this->rs['student_id'],$rs['subject_id']);
 											$rangsubje = $db->getRankSubjectMonthlyExam($this->rs['group_id'], $this->rs['student_id'], $rs['subject_id'], $this->rs['for_month_id']);
 											$totalscore = $totalscore+$score['score'];
 											$totalSubjectMaxScore = $totalSubjectMaxScore+$rangsubje['subjectMaxScore'];

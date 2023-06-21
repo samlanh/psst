@@ -128,7 +128,7 @@ dojo.ready(function(){
 								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php $total_score =0; $subj = $db->getSubjectScoreGroup($rs['group_id']); if (!empty($subj)) foreach ($subj as $subject){?>
-								<td align="center"><?php $score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); echo number_format($score['score'],2); $total_score = $total_score + $score['score'];?></td>
+								<td align="center"><?php $score = $db->getScoreBySubjectTranscript($rs['id'],$rs['student_id'],$subject['subject_id']); echo number_format($score['score'],2); $total_score = $total_score + $score['score'];?></td>
 								<?php }?>
 								
 								<td align="center"><?php echo number_format($total_score,2);?></td>

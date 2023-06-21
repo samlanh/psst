@@ -219,11 +219,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							$arr=array(
 								'gradingId'			=>$id,
 								'studentId'			=>$old_studentid,
-									
 								'subjectId'			=> $subjectId,
 								'totalAverage'		=> number_format($totalScoreAverage,2),
 								'remark'			=> $_data['note_'.$i],
-								
 							);
 							$this->_name='rms_grading_total';
 							$this->insert($arr);
@@ -258,12 +256,11 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 									$arr=array(
 										'gradingId'				=>$id,
 										'studentId'				=>$old_studentid,
+										'subjectId'				=> $subjectId,
 										'criteriaId'			=> $criterialId,
 										'totalGrading'			=> $score,
 										'criteriaAmount'		=> $subcriteriaAmount,
 										'percentage'			=> $pecentageScore,
-										
-										
 										'subCriterialTitleKh'	=> $titleSubCriterial,
 										'subCriterialTitleEng'	=> $titleSubCriteriaEng,
 										);
@@ -290,15 +287,14 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 										$score = $_data['score_'.$i.'_'.$x.$criterialId];
 										$totalGrading = $totalGrading+$score;
 										
-										
 										$arr=array(
 											'gradingId'			=> $id,
 											'studentId'			=> $old_studentid,
+											'subjectId'			=> $subjectId,
 											'criteriaId'		=> $criterialId,
 											'criteriaAmount'	=> $subcriteriaAmount,
 											'totalGrading'		=> $score,
 											'percentage'		=> $pecentageScore,
-											
 											);
 										
 										$this->_name='rms_grading_detail';
@@ -317,6 +313,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 									$arr=array(
 										'gradingId'			=> $id,
 										'studentId'			=> $old_studentid,
+										'subjectId'			=> $subjectId,
 										'criteriaId'		=> $criterialId,
 										'criteriaAmount'	=> $subcriteriaAmount,
 										'totalGrading'		=> $score,
@@ -329,14 +326,11 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								
 								}
 								
-						
-								
 							}
 							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
 							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
 							
 							$totalScoreAverage = $totalScoreAverage+$totalGrading;
-							
 						}
 					
 					}

@@ -156,7 +156,7 @@ $document = new Dompdf();
 									if($this->data['scoreresulttye']==1){
 										$total_score = 0; 
 										if (!empty($subj)) foreach ($subj as $subject){
-											$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
+											$score = $db->getScoreBySubjectTranscript($rs['id'],$rs['student_id'],$subject['subject_id']); 
 											$tscore_subject = number_format($score['score'],2);
 											$total_score = $total_score + $tscore_subject;
 										 }

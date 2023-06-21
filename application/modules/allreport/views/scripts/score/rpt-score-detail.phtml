@@ -232,7 +232,7 @@
 								?>
 								<td align="center">
 									<?php 
-										$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
+										$score = $db->getScoreBySubjectTranscript($rs['id'],$rs['student_id'],$subject['subject_id']); 
 										
 										if($score['score_cut']>=$score['score']){
 											$tscore_subject = 0;

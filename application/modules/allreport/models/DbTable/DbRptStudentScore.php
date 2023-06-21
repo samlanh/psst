@@ -835,15 +835,17 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	return $db->getSubjectScoreByGroup($group_id,$teacher_id=null,$exam_type);
    }
    
-   public function getScoreBySubject($score_id,$student_id,$subject_id){
+   public function getScoreBySubjectTranscript($score_id,$student_id,$subject_id){
    	$db = $this->getAdapter();
    	$sql="SELECT
-     sd.`score`,
-     sd.score_cut,
-     sd.`subject_id`
-     ,sd.amount_subject
+	     sd.`score`,
+	     sd.score_cut,
+	     sd.`subject_id`
+	     ,sd.amount_subject
 	 FROM  `rms_score_detail` AS sd
-	 WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id ";
+	 	WHERE sd.`score_id`=$score_id 
+   		AND sd.`student_id`=$student_id  
+   		AND sd.`subject_id`=$subject_id ";
    	return $db->fetchRow($sql);
    }
    function getAllgroupStudyNotPass(){
@@ -1274,27 +1276,44 @@ function getExamByExamIdAndStudent($data){
 			LIMIT 1";
    		return $db->fetchRow($sql);
    }
-   function countStudentAttendenceBYtype($group_id,$student,$attendence_status,$monthly=null,$for_semester=null){
+   function countStudentAttendenceBYtype($group_id,$student,$attendence_status,$monthly=null,$for_semester=null,$data=null){
    		$db = $this->getAdapter();
    		$sql="SELECT 
-			COUNT(satd.id) AS attendence
+				COUNT(satd.id) AS attendence
 			FROM 
-			`rms_student_attendence` AS sat,
-			`rms_student_attendence_detail` AS satd
+				`rms_student_attendence` AS sat,
+				`rms_student_attendence_detail` AS satd
 			WHERE sat.id = satd.attendence_id
-			AND sat.type=1
-			AND satd.stu_id=$student 
-			AND sat.group_id =$group_id
-			AND satd.attendence_status=$attendence_status
+				AND sat.type=1
+				AND satd.stu_id=$student 
+				AND sat.group_id =$group_id
+				AND satd.attendence_status=$attendence_status
 			   		";
    		if (!empty($for_semester)){
    			$sql.= " AND sat.for_semester=".$for_semester;
    		}
+   		
+   		if(!empty($data['semester'])){
+   			$sql.=" AND sat.for_semester=".$data['semester'];
+   		}
+   		if(!empty($data['studentId'])){
+   			$sql.=" AND satd.stu_id=".$data['studentId'];
+   		}
+   		if(!empty($data['groupId'])){
+   			$sql.=" AND satd.group_id=".$data['groupId'];
+   		}
+   		if(!empty($data['attStatus'])){
+   			$sql.=" AND satd.attendence_status=".$data['attStatus'];
+   		}
+   		if(!empty($data['forMonth'])){
+   			$sql.=" AND EXTRACT(MONTH FROM sat.date_attendence)=".$data['forMonth'];
+   		}
+   		
    		if (!empty($monthly)){
    			$sql.= " AND EXTRACT(MONTH FROM sat.date_attendence)=".$monthly;
    		}
+   		
    		$sql.=" LIMIT 1";
-   		//echo $sql;
    		return $db->fetchOne($sql);
    }
    

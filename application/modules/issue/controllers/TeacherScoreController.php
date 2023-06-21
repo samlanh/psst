@@ -223,7 +223,12 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 			$db = new Foundation_Model_DbTable_DbScore();
 			$session_t=new Zend_Session_Namespace('authteacher');
 			$teacher_id = $session_t->teacher_id;
-			$data=$db->getSubjectScoreByGroup($data['group'],$teacher_id,$data['exam_type']);
+			$arr = array(
+			'group_id'=>$data['group'],
+			'teacher_id'=>$teacher_id,
+			'exam_type'=>$data['exam_type'],
+		);
+			$data=$db->getSubjectScoreByGroup($arr);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

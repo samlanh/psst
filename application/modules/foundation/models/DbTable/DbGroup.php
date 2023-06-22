@@ -63,6 +63,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'		=> $id,
 							'subject_id'	=> $_data['group_subject_study_'.$i],
+							'subject_lang'	=> $_data['subject_lang'.$i],
 							'max_score'		=> $_data['max_score'.$i],
 							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],
@@ -132,6 +133,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'		=> $_data['id'],
 							'subject_id'	=> $_data['group_subject_study_'.$i],
+							'subject_lang'	=> $_data['subject_lang'.$i],
 							'max_score'		=> $_data['max_score'.$i],
 							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],

@@ -76,11 +76,11 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			$_data['score_id']=$id;
+			$id = $_data['evaluatioId'];
 			try {
 				$dbs = new Issue_Model_DbTable_DbStudentEvaluation();//by subject
 				if(isset($_data['save_close'])){
-					$rs =  $dbs->updateStudentScore($_data,$id);
+					 $dbs->updateStudentEvaluation($_data,$id);
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/studentevaluation");
 				}
 			}catch(Exception $e){
@@ -97,7 +97,6 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		}
 		$this->view->row = $row;
 		$this->view->row_evaluation = $db->getStudentEvaluationById($id);
-		//$this->view->row_detail = $db->getStudentEvaluationDetailById($id);
 		$this->view->rating = $db->getAllRating();
 		
 		if($row['is_pass']==1){
@@ -122,8 +121,8 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbStudentEvaluation();
-			$data=$db->getCommentByDegree($data['degree']);
-			print_r(Zend_Json::encode($data));
+			$result=$db->getCommentByDegree($data);
+			print_r(Zend_Json::encode($result));
 			exit();
 		}
 	}

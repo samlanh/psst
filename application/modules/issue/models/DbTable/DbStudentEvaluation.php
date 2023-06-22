@@ -43,7 +43,6 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 				'for_month'		=>$_data['for_month'],
 				'for_semester'	=>$_data['for_semester'],
 				'issue_date'	=>$_data['issue_date'],
-			//	'return_date'	=>$_data['return_date'],
 				'note'			=>$_data['note'],
 				'status'		=>1,
 				'create_date'	=>date("Y-m-d H:i:s"),
@@ -60,6 +59,7 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'evalueId'	=>$idev,
 					'groupId'	=>$_data['group'],
+					'branch_id'		=>$_data['branch_id'],
 			        'student_id'	=>$_data['student_id'.$i],
 					'teacher_comment'=>$_data['coment_'.$i],
 					'status'		=>1,
@@ -76,6 +76,7 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 					$arr=array(
 							'evalueId'	=>$idev,
 							'studentEvaluationId'=>$idevd,
+							'student_id'	=>$_data['student_id'.$i],
 							'commentId'	=>$_data['comment_id_'.$i.'_'.$j],
 							'rating_id'		=>$_data['rating_id_'.$i.'_'.$j],
 					);
@@ -91,46 +92,70 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
-   public function updateStudentScore($_data,$id){
+   public function updateStudentEvaluation($_data,$id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{			
 			$_arr = array(
 					'branch_id'		=>$_data['branch_id'],
 					'group_id'		=>$_data['group'],
-			        'student_id'	=>$_data['student'],
 					'for_type'		=>$_data['for_type'],
 					'for_month'		=>$_data['for_month'],
 					'for_semester'	=>$_data['for_semester'],
 					'issue_date'	=>$_data['issue_date'],
-					'return_date'	=>$_data['return_date'],
-					'teacher_comment'=>$_data['teacher_comment'],
-					'feedback'		=>$_data['feedback'],
 					'note'			=>$_data['note'],
+					'status'		=>1,
+					'create_date'	=>date("Y-m-d H:i:s"),
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'user_id'		=>$this->getUserId(),
-					'status'		=>$_data['status']
 				);
+			$this->_name='rms_evaluation';
 			$where=" id = $id ";
 			$this->update($_arr, $where);
-			
+
 			$this->_name='rms_student_evaluation_detail';
-			$where = " evaluation_id = $id ";
+			$where = " evalueId = $id ";
+			$this->delete($where);
+
+			$this->_name='rms_student_evaluation';
+			$where = " evalueId = $id ";
 			$this->delete($where);
 		
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $i){
-					$arr=array(
-							'evaluation_id'	=>$id,
-							'comment_id'	=>$_data['comment_id_'.$i],
-							'rating_id'		=>$_data['rating_id_'.$i],
-							'note'			=>$_data['remark'.$i],
-					);
-					$this->_name='rms_student_evaluation_detail';
-					$this->insert($arr);
+	
+				$_arr = array(
+						'evalueId'	=>$id,
+						'groupId'	=>$_data['group'],
+						'branch_id'		=>$_data['branch_id'],
+						'student_id'	=>$_data['student_id'.$i],
+						'teacher_comment'=>$_data['coment_'.$i],
+						'status'		=>1,
+						'create_date'	=>date("Y-m-d H:i:s"),
+						'modify_date'	=>date("Y-m-d H:i:s"),
+						'user_id'		=>$this->getUserId(),
+				);
+				$this->_name='rms_student_evaluation';
+				$idevd=$this->insert($_arr);
+				
+				if(!empty($_data['identity_cmt'])){
+					$idcm = explode(',', $_data['identity_cmt']);
+					foreach ($idcm as $j){
+						$arr=array(
+								'evalueId'	=>$id,
+								'studentEvaluationId'=>$idevd,
+								'student_id'	=>$_data['student_id'.$i],
+								'commentId'	=>$_data['comment_id_'.$i.'_'.$j],
+								'rating_id'		=>$_data['rating_id_'.$i.'_'.$j],
+						);
+						$this->_name='rms_student_evaluation_detail';
+						$this->insert($arr);
+					}
 				}
+			  }
 			}
+
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
@@ -274,18 +299,28 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$order);
 	}
 	
-	function getCommentByDegree($degree){
+	function getCommentByDegree($data){
 		$db=$this->getAdapter();
+		$strRate='';
+		if(!empty($data['studentId']) AND !empty($data['evalueId'])){
+			$strRate="(SELECT ed.rating_id FROM `rms_student_evaluation_detail` AS ed WHERE c.id = ed.commentId AND ed.evalueId = ".$data['evalueId']." AND ed.student_id= ".$data['studentId']."  LIMIT 1) AS ratingId";
+		}
 		$sql="SELECT
 					dc.comment_id as id,
-					c.comment
-				FROM
+					c.comment ";
+			if(!empty($strRate)){
+				$sql.=','.$strRate;
+			}
+		$sql.=" FROM
 					rms_degree_comment as dc,
 					rms_comment as c
 				WHERE
 					dc.comment_id = c.id
-					and dc.degree_id = $degree
 			";
+		if(!empty($data['degree'])){
+           $sql.=" and dc.degree_id =".$data['degree'];
+		}
+
 		return $db->fetchAll($sql);
 	}
 	

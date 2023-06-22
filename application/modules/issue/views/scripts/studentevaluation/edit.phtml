@@ -2,9 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_EVALUATION"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	print_r($this->row);
-	print_r($this->rating);
-	
+
 ?>	
 <div class="card">
 	<div class="card-content collapse show">
@@ -73,7 +71,9 @@
 											<input id="group">
 										</div>
 									</div>
-								
+
+									<input type="hidden" name="evaluatioId" id="evaluatioId" dojoType="dijit.form.TextBox" value="<?php echo $this->row['id'];?>" >
+
 									<div class="form-group ">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -202,7 +202,7 @@
 	        <div class="clearfix"></div>
 	        <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button"  />
+					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button"  />
                	</div>
             </div>
 		</form>
@@ -233,29 +233,12 @@ dojo.ready(function(){
 		}, "group");
 		getAllGroupByBranch();
 		checkForType();
-		//getInfoBygroup();
-		//initialize();
-		
-		// dijit.byId('branch_id').set("readOnly",true);
-		// dijit.byId('group').set("readOnly",true);
-		// dijit.byId('student').set("readOnly",true);
+		dijit.byId('branch_id').set("readOnly",true);
+		dijit.byId('group').set("readOnly",true);
 		
 });
 
 
-
-
-// function deleteRecord(index) {
-// 	var identity = $('#identity').val();
-// 	var arrays = identity.split(',');
-// 	for(var i=0;i<arrays.length;i++) {
-// 		if(arrays[i] == index) arrays.splice(i,1);
-// 	}
-// 	var strings = arrays.join(',');
-// 	$('#identity').val(strings);
-// 	dojo.query("#row"+index).remove();
-// }
- //validate controll form 
 function checkForType(){
 	for_type = dijit.byId("for_type").get("value");
 	dijit.byId('for_month').set("readOnly",false);
@@ -354,6 +337,8 @@ function filterStudentBygroup(){
 	    content : { 
 		    'group':group,
 			'item_type':1,
+			'evalueId':'<?php echo $this->row['id'];?>',
+		
 			
 		},				    
 	   handleAs:"json", 
@@ -386,10 +371,11 @@ function filterStudentBygroup(){
 						 exspan="true";
 						 showRow="in";
 					}
+					studentId=data[i].stu_id;
 					str+='<tr  data-toggle="collapse" data-target="#demo_1'+column+'"  aria-expanded="'+exspan+'" class="accordion-toggle bg-secondary text-primary text-center '+classRow+'">';
 						str+='<td data-label="<?php echo $tr->translate("NUM");?>">'+inx+'</td>';
 						str+='<td data-label="<?php echo $tr->translate("STUDEN_CODE");?>">'+data[i].stu_code+'</td>';
-						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>" style="text-align: left;">&nbsp;'+data[i].stu_name+' <input type="hidden" name="student_id'+column+'" id="student_id'+column+'"  value="'+data[i].stu_id+'" ></td>';
+						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>" style="text-align: left;">&nbsp;'+data[i].stu_name+' <input type="hidden" name="student_id'+column+'" id="student_id'+column+'"  value="'+studentId+'" ></td>';
 						str+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+gender+'</td>';
 						str+='<td data-label="<?php echo $tr->translate("GO_RATING");?>"><input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-comment" label="<?php echo $tr->translate('GO_RATING');?>" dojoType="dijit.form.Button"/></td>';
 					str+='</tr>';
@@ -410,7 +396,7 @@ function filterStudentBygroup(){
 									str+='</table>';
 									str+='<div class="">';
 										str+='<input type="button" class="button-primary" iconClass="glyphicon glyphicon-comment" label="<?php echo $tr->translate('TEACHER_EVALUATION');?>" dojoType="dijit.form.Button"/><br>';
-										str+='<textarea id="coment_'+column+'" name="coment_'+column+'" data-dojo-type="dijit/form/Textarea" style="width:100%; height: 40px;" ></textarea>';
+										str+='<textarea id="coment_'+column+'" name="coment_'+column+'" value="'+data[i].teacherCmt+'" data-dojo-type="dijit/form/Textarea" style="width:100%; height: 40px;" ></textarea>';
 									str+='</div>';
 							str+='</div>';
 						
@@ -422,7 +408,8 @@ function filterStudentBygroup(){
 					} else {
 						$('#identity').val(column);
 					}
-					getCommentByDegree(column);
+					getCommentByDegree(column,studentId);
+					//initialize(column);
 				}
 				dojo.html.set(dojo.byId("table_row"),str, {
 					 parseContent: true,
@@ -443,7 +430,7 @@ var rowcmtId = 0;
 var no1 = 0;
 tmp1 = '';
 var url_degree_comment = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-comment')); ?>';
-function getCommentByDegree(recordId){
+function getCommentByDegree(recordId,studentId){
 var issetIdentComment=0;
 	var col1 = 0;
 	degree = dijit.byId('degree').get('value');
@@ -452,7 +439,9 @@ var issetIdentComment=0;
 		dojo.xhrPost({
 			url:url_degree_comment,
 			content:{
-				'degree':degree
+				'degree':degree,
+				'studentId':studentId,
+				'evalueId':'<?php echo $this->row['id'];?>',
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -468,9 +457,10 @@ var issetIdentComment=0;
 							template1+='<select queryExpr="*${0}*" autoComplete="false" name="rating_id_'+recordId+'_' + col1 +'" class="fullside" id="rating_id_'+recordId+'_' + col1 +'" dojoType="dijit.form.FilteringSelect" >';
 								template1+='<option value="-1"><?php echo $tr->translate("SELECT")?></option>';
 								<?php if($this->rating){foreach($this->rating as $rating){?>
-								template1+='<option value="<?php echo $rating['id']?>"><?php echo $rating['id'].'-'.$rating['rating']?></option>';
+								template1+='<option  value="<?php echo $rating['id']?>"><?php echo $rating['id'].'-'.$rating['rating']?></option>';
 								<?php }}?>
 							template1+='</select>';
+
 						template1+='</td>';
 						classRow='';
 						if(no1%2==0){
@@ -493,6 +483,9 @@ var issetIdentComment=0;
 						dojo.html.set(dojo.byId("row_cmt"+rowcmtId),template1 , {
 							 parseContent: true,
 						});
+						if(data[i]['ratingId']!=''){
+							dijit.byId('rating_id_'+recordId+'_' + col1).attr('value',data[i]['ratingId']);
+						}
 						
 					}
 					dijit.byId('identity_cmt').attr('value',cmtId);
@@ -505,34 +498,6 @@ var issetIdentComment=0;
 	}
 }
 
-// function initialize(){
-// 	<?php if(!empty($this->row_detail)){foreach($this->row_detail as $row){?>
-// 		template1='';
-// 		col1++;no1++;
-// 		label_comment = '<?php echo $row['comment']?>';
-// 		template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'</td>';
-// 		template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>"  align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+col1+'" name="comment_id_'+col1+'" value="<?php echo $row['comment_id']?>" /></td>';
-// 		template1+='<td data-label="<?php echo $tr->translate("RATING");?>" >';
-// 			template1+='<select name="rating_id_'+col1+'" class="fullside" id="rating_id_'+col1+'" dojoType="dijit.form.FilteringSelect" >';
-// 				template1+='<option value="-1"><?php echo $tr->translate("SELECT")?></option>';
-// 				<?php if($this->rating){foreach($this->rating as $rating){?>
-// 				template1+='<option value="<?php echo $rating['id']?>" <?php if($rating['id']==$row['rating_id']){echo "selected";}?>><?php echo $rating['id'].'-'.$rating['rating']?></option>';
-// 				<?php }}?>
-// 			template1+='</select>';
-// 		template1+='</td>';
-// 		template1+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input type="text" name="remark'+col1+'" class="fullside" id="remark'+col1+'" value="<?php echo $row['note']?>" dojoType="dijit.form.TextBox" placeholder="សម្គាល់"/></td>';
-// 		tmp1='<tr class="rowData" id="row'+col1+'">';
-// 		tmp1+="</tr>";
-// 		dojo.query("#table_row").append(tmp1);
-		
-// 		if($("#identity").val()!="") {
-// 			var identity = $("#identity").val();
-// 			$("#identity").val(identity+','+col1);
-// 		} else {$("#identity").val(col1);}
-// 		dojo.html.set(dojo.byId("row"+col1),template1 , {
-// 			 parseContent: true,
-// 		});
-// 	<?php }}?>	
-// }
+
 
 </script>

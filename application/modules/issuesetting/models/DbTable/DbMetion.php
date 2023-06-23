@@ -62,6 +62,7 @@ class Issuesetting_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 							'metion_grade'		=>$data['metion_grade'.$i],
 							'metion_in_khmer'	=>$data['metion_khmer'.$i],
 							'mention_in_english'=>$data['metion_eng'.$i],
+							'GPA'=>$data['gpa'.$i],
 						);
 					$this->_name='rms_metionscore_setting_detail';	
 					$this->insert($arr);
@@ -83,7 +84,7 @@ class Issuesetting_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 					'grade'			=>$data['grade'],
     				'title'			=>$data['title'],
     				'note'			=>$data['note'],
-    				'status'		=>1,
+					'status'		=>$data['status'],
     				'create_date'	=>date("Y-m-d H:i:s"),
     				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),
@@ -126,6 +127,7 @@ class Issuesetting_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 								'metion_grade'		=>$data['metion_grade'.$i],
 								'metion_in_khmer'	=>$data['metion_khmer'.$i],
 								'mention_in_english'=>$data['metion_eng'.$i],
+								'GPA'				=> $data['gpa'.$i],
 						);
 						$this->_name='rms_metionscore_setting_detail';
 						$where =" id =".$data['detailid'.$i];
@@ -137,6 +139,7 @@ class Issuesetting_Model_DbTable_DbMetion extends Zend_Db_Table_Abstract
 								'metion_grade'		=>$data['metion_grade'.$i],
 								'metion_in_khmer'	=>$data['metion_khmer'.$i],
 								'mention_in_english'=>$data['metion_eng'.$i],
+								'GPA'				=> $data['gpa'.$i],
 						);
 						$this->_name='rms_metionscore_setting_detail';
 						$this->insert($arr);

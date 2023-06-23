@@ -100,12 +100,6 @@
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TEACHER_COMMENT");?> </label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input class="fullside" dojoType="dijit.form.Textarea"  id="teacher_comment" name="teacher_comment" value="" type="text" style=" height: 70px !important;"  >
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -184,8 +178,8 @@
 											<tbody id="table_row" >
 													
 											</tbody>
-											<input type="text" name="identity" id="identity"  value="" >
-											<input type="text" name="identity_cmt" id="identity_cmt" dojoType="dijit.form.TextBox" value="" >
+											<input type="hidden" name="identity" id="identity"  value="" >
+											<input type="hidden" name="identity_cmt" id="identity_cmt" dojoType="dijit.form.TextBox" value="" >
 										</table>
 									</div>
 								</div>
@@ -314,10 +308,10 @@ function getAllGroupByBranch(){
 		}
 	});
 }
-
+var column = 0;
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(){
-	var column = 0;
+	
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	group = dijit.byId('group').get('value');
 	if(group==''){
@@ -338,7 +332,7 @@ function filterStudentBygroup(){
 				title=0;
 				temp='';
 				str='';
-				column = 0;
+			//	column = 0;
 				str='';
 				for(i=0;i<data.length;i++){
 					
@@ -365,7 +359,7 @@ function filterStudentBygroup(){
 					str+='<tr  data-toggle="collapse" data-target="#demo_1'+column+'"  aria-expanded="'+exspan+'" class="accordion-toggle bg-secondary text-primary text-center '+classRow+'">';
 						str+='<td data-label="<?php echo $tr->translate("NUM");?>">'+inx+'</td>';
 						str+='<td data-label="<?php echo $tr->translate("STUDEN_CODE");?>">'+data[i].stu_code+'</td>';
-						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>" style="text-align: left;">&nbsp;'+data[i].stu_name+' <input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
+						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>" style="text-align: left;">&nbsp;'+data[i].stu_name+' <input type="hidden" name="student_id'+column+'" id="student_id'+column+'"  value="'+data[i].stu_id+'" ></td>';
 						str+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+gender+'</td>';
 						str+='<td data-label="<?php echo $tr->translate("GO_RATING");?>"><input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-comment" label="<?php echo $tr->translate('GO_RATING');?>" dojoType="dijit.form.Button"/></td>';
 					str+='</tr>';
@@ -395,9 +389,9 @@ function filterStudentBygroup(){
 					
 				    if(inx!=1) {
 						var identity = $('#identity').val();
-						$('#identity').val(identity+','+inx);
+						$('#identity').val(identity+','+column);
 					} else {
-						$('#identity').val(inx);
+						$('#identity').val(column);
 					}
 					getCommentByDegree(column);
 				}
@@ -409,20 +403,21 @@ function filterStudentBygroup(){
 	       }else{
 	    	   $('#identity').val('');
 	    	   document.getElementById("table_row").innerHTML = '';
+			  
 	       }
+		   
 	   },		
 	    error: function(err) {
 	    }
 	});
 }
-
-
-var url_degree_comment = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-comment')); ?>';
-function getCommentByDegree(recordId){
-	var template1 = '';
+var cmtTime=0;
+var template1 = '';
 var rowcmtId = 0;
 var no1 = 0;
 tmp1 = '';
+var url_degree_comment = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-comment')); ?>';
+function getCommentByDegree(recordId){
 var issetIdentComment=0;
 	var col1 = 0;
 	degree = dijit.byId('degree').get('value');
@@ -461,6 +456,7 @@ var issetIdentComment=0;
 
 						dojo.query("#table_cmt_row_"+recordId).append(tmp1);
 						if(issetIdentComment==0){
+							cmtTime++;
 							if(i!=0) {
 								cmtId = cmtId+','+col1;
 							}else {

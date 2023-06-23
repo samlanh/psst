@@ -227,6 +227,10 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 	}
 	function getStudentByGroup($group_id,$data=null){
 		$db=$this->getAdapter();
+		$strCmt='';
+		if(!empty($data['evalueId'])){
+			$strCmt="(SELECT ed.teacher_comment FROM `rms_student_evaluation` AS ed WHERE s.stu_id = ed.student_id AND ed.evalueId = ".$data['evalueId']." AND ed.groupId= ".$group_id." LIMIT 1) AS teacherCmt";
+		}
 		if(!empty($data['checkescan'])){
 			$sql="SELECT
 					sgh.`stu_id`,
@@ -255,8 +259,11 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					 s.stu_code AS stu_code,
 					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
 					s.sex AS sex,
-					(SELECT name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS gender
-				 FROM 
+					(SELECT name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS gender";
+					if(!empty($strCmt)){
+						$sql.=','.$strCmt;
+					}
+		$sql.="	 FROM 
 				 	`rms_group_detail_student` AS sgh,
 				 	rms_student as s
 				WHERE 

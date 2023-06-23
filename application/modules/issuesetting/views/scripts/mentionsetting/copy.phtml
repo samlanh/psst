@@ -232,6 +232,7 @@
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_GRADE");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_KHMER");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_ENG");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("GPA");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -242,6 +243,7 @@
 		template+='<td data-label="<?php echo $tr->translate("METION_GRADE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_grade'+col+'" name="metion_grade'+col+'" placeholder="'+'<?php echo $tr->translate("METION_GRADE")." eg:A,B,C...";?> " value="" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_IN_KHMER");?>" ><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_khmer'+col+'" name="metion_khmer'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_KHMER");?> eg:ល្អ,បង្គួរ..." value="" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_IN_ENG");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." eg:Excellent,Good,Average... ";?> " value="" type="text"  ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("GPA");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="gpa'+col+'" name="gpa'+col+'" placeholder="'+'<?php echo $tr->translate("GPA")." eg:4,2.5";?> " value="" type="text"  ></td>';	
 		
 		tmp='<tr id="row'+col+'" class="rowData">';
 		tmp+="</tr>";
@@ -267,6 +269,7 @@
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_GRADE");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_KHMER");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_ENG");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("GPA");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -277,6 +280,7 @@
 		template+='<td data-label="<?php echo $tr->translate("METION_GRADE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_grade'+col+'" name="metion_grade'+col+'" placeholder="'+'<?php echo $tr->translate("METION_GRADE")." eg:A,B,C...";?> " value="<?php echo $rs['metion_grade'];?>" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_IN_KHMER");?>" ><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_khmer'+col+'" name="metion_khmer'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_KHMER")." eg:ល្អ,បង្គួរ...";?> " value="<?php echo $rs['metion_in_khmer'];?>" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_IN_ENG");?>" ><input  dojoType="dijit.form.TextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." eg:Excellent,Good,Average... ";?> " value="<?php echo $rs['mention_in_english'];?>" type="text"  ><input type="hidden" dojoType="dijit.form.TextBox" name="detailid'+col+'" id="detailid'+col+'" value="<?php echo $rs['id'];?>" ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("GPA");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="gpa'+col+'" name="gpa'+col+'" placeholder="'+'<?php echo $tr->translate("GPA")." eg:4,2.5";?> " value="<?php echo $rs['GPA'];?>" type="text"  ></td>';	
 		
 		tmp='<tr id="row'+col+'" class="rowData">';
 		tmp+="</tr>";

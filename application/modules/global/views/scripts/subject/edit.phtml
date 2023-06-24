@@ -97,7 +97,7 @@ span#message {
 											<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
 												<option value="0" <?php if($this->row['parent']==0  ) echo 'selected="selected"';?>></option>
 												<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-															<option value="<?php echo $row['id']?>" <?php echo 'selected="selected"';?>><?php echo $row['subject_titleen']?></option>
+															<option value="<?php echo $row['id']?>" <?php echo 'selected="selected"';?>><?php echo $row['name']?></option>
 												<?php }?>
 											</select>
 										</div>

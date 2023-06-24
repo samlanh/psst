@@ -542,7 +542,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			}else{//for semester
 				$sql.=" AND gsjd.amount_subject_sem >0 ";
 			}
-			$sql.=' ORDER BY gsjd.subject_id ASC ';
+			$sql.=' ORDER BY subject_lang ASC ,gsjd.id ASC ';
 			return $db->fetchAll($sql);
 	 	    
 	}

@@ -94,7 +94,7 @@ span#message {
 												dojoType="dijit.form.FilteringSelect" >
 												<option value="0"></option>
 												<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-														<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
+														<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
 												<?php }?>
 											</select>
 										</div>

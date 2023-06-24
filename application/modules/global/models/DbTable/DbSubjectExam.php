@@ -10,11 +10,20 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	
     public function getAllSubjectParent($opt=null){
     	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	
+    	if($lang==1){// khmer
+    		$label = "subject_titlekh";
+    	}else{ // English
+    		$label = "subject_titleen";
+    	}
+    	
     	if($opt!=null){
-    		$sql = "SELECT id,subject_titleen As name FROM rms_subject WHERE `status`=1 AND subject_titleen!=''";
+    		$sql = "SELECT id,$label As name FROM rms_subject WHERE `status`=1 AND subject_titleen!=''";
     		return $db->fetchAll($sql);
     	}else{
-	    	$sql = "SELECT id,subject_titleen FROM rms_subject WHERE  parent=0 AND is_parent=1 AND `status`=1 AND subject_titleen!='' AND parent=0";
+	    	$sql = "SELECT id,$label AS name FROM rms_subject WHERE  parent=0 AND is_parent=1 AND `status`=1 AND subject_titleen!='' AND parent=0";
 	    	return $db->fetchAll($sql);
     	}
     }

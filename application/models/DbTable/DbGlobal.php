@@ -1471,7 +1471,17 @@ function getAllgroupStudyNotPass($action=null){
   	if ($lang==1){
   		$field = 'subject_titlekh';
   	}
-  	$sql=" SELECT id ,$field AS name,shortcut FROM `rms_subject` WHERE status=1 AND subject_titlekh != ''  ";
+  	
+  	
+  	
+  	$sql=" SELECT id ,CONCAT($field,
+  		CASE
+		  	WHEN subject_lang =1 THEN '(ខ្មែរ)'
+		  	WHEN subject_lang =2 THEN '(English)'
+		  	ELSE ''
+		  	END) AS name,
+  			shortcut 
+  		FROM `rms_subject` WHERE status=1 AND subject_titlekh != '' ";
   	
   	$user = $this->getUserInfo();
   	$level = $user['level'];
@@ -1507,7 +1517,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql .=' AND type_subject=1 ';
   	}
   	
-  	$sql.=" ORDER BY $field ASC";
+  	$sql.=" ORDER BY subject_lang ASC, $field ASC ";
   	return $db->fetchAll($sql);
   }
   

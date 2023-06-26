@@ -234,7 +234,6 @@
                					<th scope="col" width="4%"><?php echo $tr->translate("DEL");?></th>
 								<th scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>
 								<th scope="col" width="15%" style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-								<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("STUDY_IN_LANG");?></th>
 								<th scope="col" width="20%">
 									<div class="custom-control custom-checkbox ">
 										<label class="float-start">
@@ -687,11 +686,6 @@ function Initailize() {
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>"	align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>"	align="center">'+no+'</td>';
 				template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subjectold+'</select></td>';
-				template+='<td data-label="<?php echo $tr->translate("STUDY_IN_LANG");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');"  class="fullside" id="subject_lang'+col+'" name="subject_lang'+col+'">';
-					template+='<option value=""><?php echo $tr->translate("SELECT");?></option>';
-					template+='<option value="1"><?php echo $tr->translate("STUDY_IN_KHMER");?></option>';
-					template+='<option value="2"><?php echo $tr->translate("STUDY_IN_ENGLISH");?></option>';
-				template+='</select></td>';
 				template+='<td data-label="<?php echo $tr->translate("TEACHER");?>"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 				template+=teacher_optionini;  
 				template+='</select></td>';
@@ -719,7 +713,6 @@ function Initailize() {
 			dijit.byId('amount_subject_semester'+col).attr('value','<?php echo $rows['amount_subject_sem'];?>');
 			dijit.byId('group_note_'+col).attr('value',"<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rows['note'])));?>");
 			dijit.byId('teacher_'+col).attr('value','<?php echo $rows['teacher'];?>');
-			dijit.byId('subject_lang'+col).attr('value','<?php echo $rows['subject_lang'];?>');
 	<?php }}?>
 	calculateTotalSubject();
 }
@@ -731,11 +724,6 @@ function addRow() {
 		template+='<td data-label="<?php echo $tr->translate("DEL");?>"	align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 		template+='<td data-label="<?php echo $tr->translate("N_O");?>"	align="center">'+no+'</td>';
 		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
-		template+='<td data-label="<?php echo $tr->translate("STUDY_IN_LANG");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="subject_lang'+col+'" name="subject_lang'+col+'">';
-			template+='<option value=""><?php echo $tr->translate("SELECT");?></option>';
-			template+='<option value="1"><?php echo $tr->translate("STUDY_IN_KHMER");?></option>';
-			template+='<option value="2"><?php echo $tr->translate("STUDY_IN_ENGLISH");?></option>';
-		template+='</select></td>';
 		template+='<td data-label="<?php echo $tr->translate("TEACHER");?>"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
@@ -774,12 +762,11 @@ function checkSubject(index){
 	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
 	current_subject = dijit.byId('group_subject_study_'+index).get('value');
-	currentLang = dijit.byId('subject_lang'+index).get('value');
 	for(var i=0;i<arrays.length;i++) {
 		if(arrays[i] == index){
 		}else{
 			old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
-			if(current_subject == old_subject && currentLangId==currentLang){
+			if(current_subject == old_subject){
 				alert("Can not add the same subject");
 				deleteRecord(index);
 			}

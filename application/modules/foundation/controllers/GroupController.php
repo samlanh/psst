@@ -73,16 +73,6 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		}
 		$_db = new Foundation_Model_DbTable_DbGroup();
 		$this->view->row_year=$_db->getAllYears();
-		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
-		
-		$this->view->parent_subject = $_db->getParentSubject();
-		$this->view->subject = $_db->getAllSubjectStudy();
-		
-		$model = new Application_Model_DbTable_DbGlobal();
-		$room = $model->getAllRoom();
-		array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
-		$this->view->room = $room;
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();

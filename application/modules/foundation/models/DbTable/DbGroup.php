@@ -36,9 +36,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'degree' 		=> $_data['degree'],
 					'grade' 		=> $_data['grade'],
 					'school_option' => $schoolOption,
-// 					'calture' 		=> $_data['calture'],
-// 					'start_date'	=> $_data['start_date'],
-// 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
 					'status'   		=> 1,
 					'teacher_id'   	=> $_data['teacher_id'],
@@ -63,7 +60,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'		=> $id,
 							'subject_id'	=> $_data['group_subject_study_'.$i],
-							'subject_lang'	=> $_data['subject_lang'.$i],
 							'max_score'		=> $_data['max_score'.$i],
 							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],
@@ -133,7 +129,6 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'		=> $_data['id'],
 							'subject_id'	=> $_data['group_subject_study_'.$i],
-							'subject_lang'	=> $_data['subject_lang'.$i],
 							'max_score'		=> $_data['max_score'.$i],
 							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],

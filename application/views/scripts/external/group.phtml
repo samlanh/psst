@@ -69,6 +69,7 @@
 									<div class="col-xs-4 pr-0">
 										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
 											<i class="mt-0 mb-0 mr-auto ml-auto glyphicon glyphicon-education icon-opacity text-white font-large-4"></i>
+											<strong><?php echo $row['group_code']; ?></strong>
 										</div>
 									</div>
 									<div class="col-xs-8 pl-0">
@@ -90,18 +91,33 @@
 											</ul>
 										  </li>
 										</ul>
-										<div class="p-1">
+										<div class="col-md-12 col-sm-12 col-xs-12">
 											<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
-											<div class="text-left">
-												<strong><?php echo $row['group_code']; ?></strong> <?php if(!empty($row['mainTeacher'])){ echo "(".$row['mainTeacher'].")";} ?>
-												<p class="mb-0"><?php echo $row['academicYear']; ?></p>
-												<h3 class="mb-0 mt-0 p-relative">
-													<span class="counting-num mr-1"><?php echo sprintf('%02d',$row['amountStudent']); ?></span>
-													<span class="adjustLineHeight material-icons-outlined">groups</span> 
-												</h3>
-												<p class="mb-0"><?php echo $row['groupStatus']; ?></p>
-												
-											</div>
+											<p class="mb-0"><?php echo $row['academicYear']; ?></p>
+											<p class="mb-0"><?php echo $row['groupStatus']; ?></p>
+											<h3 class="mb-0 mt-0 p-relative">
+												<span class="counting-num mr-1"><?php echo sprintf('%02d',$row['amountStudent']); ?></span>
+												<span class="adjustLineHeight material-icons-outlined">groups</span> 
+											</h3>
+											<p class="mb-0"><?php if(!empty($row['mainTeacher'])){ echo "(".$row['mainTeacher'].")";} ?></p>
+											<ul class="listSmallBtn">
+													<li>
+														<div class="form-group">
+															<a class="small-button-class" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$row['id'];?>">
+																<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_SCORE');?>
+															</a>
+														</div>
+													</li>
+													<?php if(!empty($row['mainTeacher'])){ ?>
+													<li>
+														<div class="form-group">
+															<a  class="small-button-class" href="<?php echo $this->baseUrl()."/assessment/add/id/".$row['id'];?>">
+																<i class="glyphicon glyphicon-baby-formula" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?>
+															</a>
+														</div>
+													</li>
+													<?php } ?>
+												</ul>
 										</div>
 									</div>
 								</div>

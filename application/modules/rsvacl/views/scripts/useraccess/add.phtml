@@ -10,6 +10,7 @@
 	table.user td{
 		vertical-align: top;   
 	}
+	tr.highlight{ background:#9bcef6c4;}
 </style>       
 <?php 
 	  $acl_name=($this->acl_name=='')? array(): $this->acl_name;
@@ -86,9 +87,20 @@
 												<td width="10%">
 													<?php echo $tr->translate("STATUS");?>
 												</td>
+												<td width="10%">
+													<?php echo $tr->translate("ACTION");?>
+												</td>
 											</tr>
 									<?php }?>
 								<?php  if($key>0){?>
+										<tr>
+											<td align="right"><button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"
+												type="button" onclick="">កំណត់សិទ្ធ</button></td>
+											<td colspan="3">
+												បើកសិទ្ធទាំងអស់ <input type="checkbox" name="allow_<?php echo $old_module;?>" id="allow_<?php echo $old_module;?>" onclick="checkStatus(1,'<?php echo $old_module;?>')"/>
+												បិទសិទ្ធទាំងអស់ <input type="checkbox" name="deny_<?php echo $old_module;?>" id="deny_<?php echo $old_module;?>" onclick="checkStatus(2,'<?php echo $old_module;?>');" />
+											<?php echo $module_str[$old_module];?></td>
+										</tr>
 										</table>
 								 	</div>
 								 	<div data-dojo-type="dijit/layout/ContentPane" title="<?php echo @$tr->translate($module_str[$rs['module']]);?>" >
@@ -103,6 +115,9 @@
 												<td width="10%">
 													<?php echo $tr->translate("STATUS");?>
 												</td>
+												<td width="10%">
+													<?php echo $tr->translate("ACTION");?>
+												</td>
 										</tr>
 								<?php }}?>
 										<?php if($rs['is_menu'] == 1){
@@ -114,7 +129,7 @@
 												}
 										?>
 									
-										<tr class="hover">
+										<tr class="hover <?php if($rs['is_menu'] == 1)echo"highlight";?>">
 											<td <?php echo $style;?>>
 												&nbsp;&nbsp; <?php echo $space.$tr->translate($rs['label']);?>
 											</td>
@@ -123,6 +138,9 @@
 											</td>
 											<td align="center">
 												<?php echo $rs['img']?>
+											</td>
+											<td align="center">
+												<input type="checkbox" name='permission_<?php echo $rs['module'];?>[]' id='permission_<?php echo $rs['module'];?>[]' />
 											</td>
 										</tr>
 								<?php 
@@ -162,6 +180,22 @@
 	}
 </style>
 <script>
+	function checkStatus(status,module){
+		if(status==1){
+			 if($("#allow_"+module).is(':checked')){
+				$("#deny_"+module).attr("checked",false);
+				// $('input[value="'+status+'"]').attr("checked",true);
+				 $('#permission_home').attr("checked",true);
+				 
+			}
+		}else{
+			 if($("#deny_"+module).is(':checked')){
+				$("#allow_"+module).attr("checked",false);
+				$('#permission_home').attr("checked",false);
+			}
+		}
+		
+	}
 dojo.require("dijit/layout/TabContainer");
 	
 	function changeStatus(id, user_type){

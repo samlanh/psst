@@ -1826,6 +1826,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
    			$stu_name="st.stu_khname";
    		}
    		$sql="SELECT sc.*,
+   				DATE_FORMAT(sc.date_input,'%d-%m-%Y') AS issueDate,
 		   		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sc.branch_id LIMIT 1) AS branch_name,
 		   		g.group_code as grade,
 		   		(SELECT fromYear FROM  rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS fromYear,

@@ -11,14 +11,14 @@
 			<style>
 				.certificate{
 					background-image: url('<?php echo $image;?>');
-					background-size: 99%;
+					background-size: 29.7cm 20.6cm;
 					background-repeat: no-repeat;
 					position: relative;
 					display:inline-block; 
 					line-height: 23px;   
 					top:2px;
 					width: 29.7cm; 
-					height:20.5cm;   
+					height:20.6cm;   
 					color: #3f3f95; 
 					font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
 				}
@@ -32,144 +32,129 @@
 				span.value{
 					 font-size: 17px;
 					 display: inline-block;
-					     color: #0070c0;
+					     color: #1e3b77;
 				}
 				span.student_name {
-				    position: absolute;
-				    top: 383px;
-				    left: 260px;
+				   position: absolute;
+				    top: 377px;
+				    left: 200px;
 				    min-width: 150px;
 				    text-align: center;
 				}
 				
 				span.gender {
 				   position: absolute;
-				    top: 383px;
-				    left: 482px;
+				    top: 377px;
+				    left: 382px;
 				    min-width: 75px;
 				    text-align: center;
 				}
 					
 				span.dob {
 				   position: absolute;
-				    top: 383px;
-				    right: 341px;
-				    min-width: 145px;
-				    text-align: center;
-				}
-				span.stu_code {
-				    position: absolute;
-				    top: 383px;
-				    right: 110px;
+				    top: 377px;
+				    right: 452px;
 				    min-width: 145px;
 				    text-align: center;
 				}
 									span.stu_code {
 					position: absolute;
-					top: 383px;
-					right: 176px;
+					top: 377px;
+					right: 285px;
 					min-width: 100px;
 					text-align: center;
 					font-weight: bold;
 				}	
 				span.rank {
 				   position: absolute;
-    top: 445px;
-    right: 748px;
+    top: 437px;
+    right: 760px;
     min-width: 70px;
     text-align: center;color:red !important;
     font-weight: bold;
 				}	
 				span.class {
 					position: absolute;
-				    top: 445px;
-				    right: 483px;
+				    top: 437px;
+				    right: 477px;
 				    min-width: 70px;
 				    text-align: center;
 				    font-weight: bold;
 				}
 				span.academic_year {
 					position: absolute;
-    top: 445px;
-    right: 138px;
+   top: 377px;
+    right: 100px;
     font-size: 17px;
     min-width: 120px;
     text-align: center;
     color:red !important;
 				}
-				span.issue_day {
-					position: absolute;
-					top: 472px;
-					right: 115px;
-					font-size: 17px;
-					min-width: 120px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
-				}
 				
 				span.issue_day {
 					position: absolute;
-					top: 549px;
-					right: 263px;
-					font-size: 17px;
-					min-width: 40px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
+   top: 533px;
+    right: 273px;
+    font-size: 17px;
+    min-width: 40px;
+    text-align: center;
+    font-family: 'Times New Roman','Khmer OS Battambang';
 				}
 				span.issue_month {
 					position: absolute;
-					top: 549px;
-					right: 179px;
+					top: 533px;
+    right: 181px;
 					font-size: 17px;
 					min-width: 70px;
 					text-align: center;
 					font-family: 'Times New Roman','Khmer OS Battambang';
 				}
 					span.noted{position: absolute;
-    top: 500px;
-    right: 303px;
-    font-size: 17px;
-    min-width: 40px;
-    text-align: center;color:#0070c0;font-family: 'Times New Roman','Khmer OS Battambang';
+						    top: 500px;
+						    right: 303px;
+						    font-size: 17px;
+						    min-width: 40px;
+						    text-align: center;color:#1e3b77;font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 				span.issue_year {
 					position: absolute;
-					top: 549px;
-					right: 110px;
-					font-size: 17px;
-					min-width: 40px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
+				    top: 533px;
+    right: 105px;
+				    font-size: 17px;
+				    min-width: 40px;
+				    text-align: center;
+				    font-family: 'Times New Roman','Khmer OS Battambang';
 				}
-		* {
-margin: 0;
-padding: 0;
-}	
+				* {
+				margin: 0;
+				padding: 0;
+				}	
 	
-			@media print {
+			
 							@page {
 								page: A4;
 								size: landscape;
-								margin:0cm;
-								pading:0cm;
+								margin:0.5cm;
+								pading:0.5cm;
+								background: red;
 	
 						}
-							@body{padding:0;margin:0}
-}</style>
+							body{padding:0;margin:0}
+				</style>
 			<div class="one-row-certif" >
 				<div class="certificate">
 					<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
 					<span class="value gender"><?php echo $this->rs['sex'];?></span>
 					<span class="value dob"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))."-".$month[date("m",strtotime($this->rs['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></span>
 					<span class="value stu_code"><?php echo $this->rs['stu_code'];?></span>
+					<span class="value academic_year"><?php echo $_dbgb->getNumberInkhmer($this->rs['fromYear'])."-".$_dbgb->getNumberInkhmer($this->rs['toYear']);?></span>
 					<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rank);?></span>
 					<span class="value class"><?php echo $_dbgb->getNumberInkhmer($this->rs['grade']);?></span>
-					<span class="value academic_year"><?php echo $_dbgb->getNumberInkhmer($this->rs['fromYear'])."-".$_dbgb->getNumberInkhmer($this->rs['toYear']);?></span>
-					<span class="value noted">ប័ណ្ណសរសើរនេះប្រគល់ជូនសាមីខ្លួនប្រើប្រាស់តាមការដែលអាចប្រើបាន ។</span>
-					<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
-					<span class="value issue_day"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span>
-					<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
-					<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
+					<span class="value noted">ប័ណ្ណសរសើរនេះប្រគល់ជូនសាមីខ្លួនប្រើប្រាស់តាមការដែលអាចប្រើបាន។</span>
+					<?php if(!empty($this->rs['issueDate']) AND $this->rs['issueDate'] != "0000-00-00"){ ?>
+					<span class="value issue_day"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issueDate'])));?></span>
+					<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issueDate']))];?></span>
+					<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issueDate'])));?></span>
 					<?php }?>
 					
 				</div>

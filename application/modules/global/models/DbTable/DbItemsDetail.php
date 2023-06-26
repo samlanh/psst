@@ -150,6 +150,7 @@
 						$arr = array(
 								'grade_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
+								'subject_lang'	=> $_data['subject_lang_'.$i],
 								'max_score'		=>$_data['max_score'.$i],
 								'cut_score'		=>$_data['score_cut_'.$i],
 								'date' 			=> date("Y-m-d"),
@@ -219,8 +220,9 @@
 						$arr = array(
 								'grade_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
-								'max_score'=>$_data['max_score'.$i],
-								'cut_score'	=>$_data['score_cut_'.$i],
+								'subject_lang'	=> $_data['subject_lang_'.$i],
+								'max_score'     =>$_data['max_score'.$i],
+								'cut_score'  	=>$_data['score_cut_'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,

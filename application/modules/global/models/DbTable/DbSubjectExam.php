@@ -13,6 +13,12 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
     	
+    	$strLang="CASE
+	    	WHEN subject_lang=1 THEN   '(ខ្មែរ)'
+	    	WHEN subject_lang=2 THEN  '(English)'
+    	END ";
+    	
+    	
     	if($lang==1){// khmer
     		$label = "subject_titlekh";
     	}else{ // English
@@ -20,10 +26,10 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
     	}
     	
     	if($opt!=null){
-    		$sql = "SELECT id,$label As name FROM rms_subject WHERE `status`=1 AND subject_titleen!=''";
+    		$sql = "SELECT id,CONCAT($label,$strLang) As name FROM rms_subject WHERE `status`=1 AND subject_titleen!='' ORDER BY subject_lang ASC ";
     		return $db->fetchAll($sql);
     	}else{
-	    	$sql = "SELECT id,$label AS name FROM rms_subject WHERE  parent=0 AND is_parent=1 AND `status`=1 AND subject_titleen!='' AND parent=0";
+	    	$sql = "SELECT id,CONCAT($label,$strLang) AS name FROM rms_subject WHERE  parent=0 AND is_parent=1 AND `status`=1 AND subject_titleen!='' AND parent=0 ORDER BY subject_lang ASC ";
 	    	return $db->fetchAll($sql);
     	}
     }
@@ -97,7 +103,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					subject_titlekh,
 					subject_titleen,
 					shortcut,
-					(select subject_titlekh from rms_subject as s where s.id = ide.parent limit 1) as parent,
+					(SELECT subject_titlekh from rms_subject as s where s.id = ide.parent limit 1) as parent,
 					
 					CASE 
 						WHEN subject_lang=1 THEN   '$sub_khmer'

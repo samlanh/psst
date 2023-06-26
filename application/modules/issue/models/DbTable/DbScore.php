@@ -526,7 +526,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				(gsjd.amount_subject) amtsubject_month,
 				(gsjd.amount_subject_sem) amtsubject_semester,
 				(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
-				(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
+				(SELECT CONCAT(sj.$colunmname,
+			  		CASE
+					  	WHEN subject_lang =1 THEN '(ខ្មែរ)'
+					  	WHEN subject_lang =2 THEN '(English)'
+					  ELSE ''
+				END) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
 			FROM 
 		 		rms_group_subject_detail AS gsjd ,
 		 		rms_group as g
@@ -543,6 +548,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$sql.=" AND gsjd.amount_subject_sem >0 ";
 			}
 			$sql.=' ORDER BY subject_lang ASC ,gsjd.id ASC ';
+			
 			return $db->fetchAll($sql);
 	 	    
 	}

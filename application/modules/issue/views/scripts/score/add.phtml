@@ -21,10 +21,10 @@
 	td.verites-col span.verites {
 	     margin: 0 -85%;
 	    display: inline-block;
-		
-		max-width: 130px;
+		max-width: 150px;
 		text-overflow: ellipsis;
 		overflow: hidden;
+		font-size: 10px;
 	}
 	tr.hover td.verites-col span.verites:before,
 	td.verites-col span.verites:before {
@@ -238,7 +238,7 @@
 		     <div class="card-box">
 				<div class="col-md-12 col-sm-12 col-xs-12">
 		    		<div class="form-group">
-		    			<input type="text" name="identity" id="identity"  value="" >
+		    			<input type="hidden" name="identity" id="identity"  value="" >
 		    			<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 						</table>
 		    		</div>
@@ -375,7 +375,7 @@ function filterStudent(){
 								totalAverage = data[i].gradingScore[j].totalAverage;
 							}
 						}
-						temp += '<td id="score_'+j+'"><input value="'+totalAverage+'" data-dojo-props="constraints:{min:0,max:'+subjectList[j].max_subjectscore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+j+'"  name="score_'+inx+'_'+j+'" /></td>';
+						temp += '<td id="score_'+j+'"><input value="'+totalAverage+'" data-dojo-props="constraints:{min:0,max:'+subjectList[j].max_subjectscore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subjectList[j].subject_id+'"  name="score_'+inx+'_'+subjectList[j].subject_id+'" /></td>';
 					}
 					
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';

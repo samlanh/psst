@@ -233,7 +233,6 @@ function getSubjectOpt(){
 		var iden = $("#identity").val();
 		var arrays = iden.split(',');
 		if(examtype_items==""){
-			alert("<?php echo $tr->translate("Please Select Items")?>");
 			 return false;
 		}
 
@@ -302,6 +301,7 @@ function getSubjectOpt(){
 			tmp='<tr class="rowData" id="row'+col+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
+			dijit.byId('examtype_items').attr('value','');
 	
 			if($("#identity").val()!="") {
 				var identity = $("#identity").val();

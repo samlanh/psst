@@ -174,7 +174,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		
 		$strSubjecMaxScore = " (SELECT max_score FROM `rms_group_subject_detail` WHERE
 		group_id=sd.group_id AND
-		subject_id=sd.subject_id LIMIT 1) ";
+		subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
 		
 		
 		$sql="SELECT
@@ -198,7 +198,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		if(!empty($data['subjectId'])){
 			$sql.=" AND sd.`subject_id`=".$data['subjectId'];
 		}
-		$sql.=" ORDER  BY $strSubjectLange ASC ";
+		$sql.=" ORDER  BY $strSubjectLange  ";
 		return $db->fetchAll($sql);
 	}
 	function getScoreInformation($data){

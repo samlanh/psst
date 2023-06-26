@@ -32,8 +32,6 @@
 		"12"=>"ធ្នូ"
 			);
 	$monthview = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-	$show=2;// 1 for hide evaluation,2 show evaluation
-	$type=3; //1 for elt/2 goodwill layout/3 PSIS layout
 ?>	
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
@@ -410,13 +408,12 @@ dojo.ready(function(){
 					<td>50-59%</td>
 					<td>E</td>
 					<td>ខ្សោយ Poor</td>
-					<td>មិនអនុវត្តកើត Not Applicable</td>
+					<td rowspan="2">មិនអនុវត្តកើត Not Applicable</td>
 				</tr>
 				<tr class="blue" align="center">
 					<td>0-49%</td>
 					<td>F</td>
 					<td>ធ្លាក់ Failed</td>
-					<td></td>
 				</tr>
 				
 				<tr class="cheader" align="center">

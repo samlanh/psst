@@ -454,44 +454,25 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->rating = $db->getRatingValuation();
     }
     function rptMonthlytranscriptAction(){
+    	$scoreId =$this->getRequest()->getParam("scoreid");
+    	$stu_id =$this->getRequest()->getParam("stuid");
     	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    	}else{
-    		$scoreId =$this->getRequest()->getParam("scoreid");
-    		$stu_id =$this->getRequest()->getParam("stuid");
-    	
-    		
-//     		$stu_id =$this->getRequest()->getParam("stu_id");
-//     		$group_id =$this->getRequest()->getParam("group_id");
-//     		$exam_type =$this->getRequest()->getParam("exam_type");
-//     		$for_semester =$this->getRequest()->getParam("for_semester");
-//     		$for_month =$this->getRequest()->getParam("for_month");
-    		
-//     		if (empty($stu_id)){
-//     			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-//     			exit();
-//     		}elseif (empty($group_id)){
-//     			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-//     			exit();
-//     		}elseif (empty($exam_type)){
-//     			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-//     			exit();
-//     		}elseif (empty($for_semester)){
-//     			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-//     			exit();
-//     		}elseif (empty($for_month)){
-//     			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-//     			exit();
-//     		}
+//     		$data=$this->getRequest()->getPost();
     		$data = array(
     				'scoreId'=>$scoreId,//use
     				'studentId'=>$stu_id,//use and all above not use
-    				
-//     				'stu_id'=>$stu_id,
-// 	    			'group_id'=>$group_id,
-// 	    			'exam_type'=>$exam_type,
-// 	    			'for_semester'=>$for_semester,
-// 	    			'for_month'=>$for_month,
+    		);
+    	}else{
+    		if (empty($scoreId)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
+    			exit();
+    		}elseif (empty($stu_id)){
+    			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
+    			exit();
+    		}
+    		$data = array(
+    				'scoreId'=>$scoreId,//use
+    				'studentId'=>$stu_id,//use and all above not use
     		);
     	}
     	$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
@@ -501,22 +482,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->search = $data;
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	
-//     	$rs = $db->getExamByExamIdAndStudent($data);
-//     	$this->view->rs = $rs;
-//     	if ($rs['exam_type']==2){
-//     		$monthlysemesterAverage = $db->getAverageMonthlyForSemester($rs['group_id'], $rs['for_semester'], $rs['student_id']);
-//     		$this->view->monthlySemester = $monthlysemesterAverage;
-//     		$semesterAverage = $db->getAverageSemesterFull($rs['group_id'], $rs['for_semester'], $rs['student_id']);
-//     		$this->view->Semester = $semesterAverage;
-//     	}
-    	 
     	$group = $db->getAllGroupOfStudent($data['studentId']);
     	$this->view->group = $group;
     	
     	$db = new Foundation_Model_DbTable_DbScore();
     	$this->view->month = $db->getAllMonth();
-//     	$db = new Application_Model_DbTable_DbGlobal();
-//     	$this->view->rating = $db->getRatingValuation();
     }   
     function rptAssessmenttermAction(){
     	$id=$this->getRequest()->getParam("id");

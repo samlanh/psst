@@ -1,8 +1,8 @@
 <?php 
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate('Letter of praise'));
-$_dbgb = new Application_Model_DbTable_DbGlobal();
-$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('Letter of praise'));
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 ?>
 <div style="margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -11,14 +11,14 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 			<style>
 				.certificate{
 					background-image: url('<?php echo $image;?>');
-					background-size: 100%;
+					background-size: 99%;
 					background-repeat: no-repeat;
 					position: relative;
 					display:inline-block; 
 					line-height: 23px;   
-					top:13px;
-					width: 28cm; 
-					height:20cm;   
+					top:2px;
+					width: 29.7cm; 
+					height:20.5cm;   
 					color: #3f3f95; 
 					font-family: 'Times New Roman', sans-serif,'Khmer OS Muol Light';
 				}
@@ -30,76 +30,76 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 				}
 					
 				span.value{
-					 font-size: 16px;
+					 font-size: 17px;
 					 display: inline-block;
-					     color: #283d84;
+					     color: #0070c0;
 				}
 				span.student_name {
 				    position: absolute;
-				    top: 364px;
+				    top: 383px;
 				    left: 260px;
 				    min-width: 150px;
 				    text-align: center;
 				}
 				
 				span.gender {
-				    position: absolute;
-				    top: 364px;
-				    left: 465px;
+				   position: absolute;
+				    top: 383px;
+				    left: 482px;
 				    min-width: 75px;
 				    text-align: center;
 				}
 					
 				span.dob {
-				    position: absolute;
-				    top: 364px;
-				    right: 310px;
+				   position: absolute;
+				    top: 383px;
+				    right: 341px;
 				    min-width: 145px;
 				    text-align: center;
 				}
 				span.stu_code {
 				    position: absolute;
-				    top: 364px;
+				    top: 383px;
 				    right: 110px;
 				    min-width: 145px;
 				    text-align: center;
 				}
 									span.stu_code {
 					position: absolute;
-					top: 364px;
-					right: 140px;
+					top: 383px;
+					right: 176px;
 					min-width: 100px;
 					text-align: center;
 					font-weight: bold;
 				}	
 				span.rank {
-				    position: absolute;
-				    top: 421px;
-				    left: 293px;
-				    min-width: 70px;
-				    text-align: center;
-				    font-weight: bold;
+				   position: absolute;
+    top: 445px;
+    right: 748px;
+    min-width: 70px;
+    text-align: center;color:red !important;
+    font-weight: bold;
 				}	
 				span.class {
 					position: absolute;
-					top: 421px;
-					right: 457px;
-					min-width: 70px;
-					text-align: center;
-					font-weight: bold;
+				    top: 445px;
+				    right: 483px;
+				    min-width: 70px;
+				    text-align: center;
+				    font-weight: bold;
 				}
 				span.academic_year {
 					position: absolute;
-					top: 423px;
-					right: 115px;
-					font-size: 17px;
-					min-width: 120px;
-					text-align: center;
-					font-family: 'Times New Roman','Khmer OS Battambang';
+    top: 445px;
+    right: 138px;
+    font-size: 17px;
+    min-width: 120px;
+    text-align: center;
+    color:red !important;
 				}
 				span.issue_day {
 					position: absolute;
-					top: 453px;
+					top: 472px;
 					right: 115px;
 					font-size: 17px;
 					min-width: 120px;
@@ -109,7 +109,7 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 				
 				span.issue_day {
 					position: absolute;
-					top: 530px;
+					top: 549px;
 					right: 263px;
 					font-size: 17px;
 					min-width: 40px;
@@ -118,23 +118,44 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 				}
 				span.issue_month {
 					position: absolute;
-					top: 530px;
+					top: 549px;
 					right: 179px;
 					font-size: 17px;
 					min-width: 70px;
 					text-align: center;
 					font-family: 'Times New Roman','Khmer OS Battambang';
 				}
+					span.noted{position: absolute;
+    top: 500px;
+    right: 303px;
+    font-size: 17px;
+    min-width: 40px;
+    text-align: center;color:#0070c0;font-family: 'Times New Roman','Khmer OS Battambang';
+					}
 				span.issue_year {
 					position: absolute;
-					top: 530px;
+					top: 549px;
 					right: 110px;
 					font-size: 17px;
 					min-width: 40px;
 					text-align: center;
 					font-family: 'Times New Roman','Khmer OS Battambang';
 				}
-			</style>
+		* {
+margin: 0;
+padding: 0;
+}	
+	
+			@media print {
+							@page {
+								page: A4;
+								size: landscape;
+								margin:0cm;
+								pading:0cm;
+	
+						}
+							@body{padding:0;margin:0}
+}</style>
 			<div class="one-row-certif" >
 				<div class="certificate">
 					<span class="value student_name"><?php echo $this->rs['stu_khname'];?></span>
@@ -143,12 +164,14 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					<span class="value stu_code"><?php echo $this->rs['stu_code'];?></span>
 					<span class="value rank"><?php echo $_dbgb->getNumberInkhmer($this->rank);?></span>
 					<span class="value class"><?php echo $_dbgb->getNumberInkhmer($this->rs['grade']);?></span>
-					<span class="value academic_year"><?php echo $_dbgb->getNumberInkhmer($this->rs['academic_year']);?></span>
+					<span class="value academic_year"><?php echo $_dbgb->getNumberInkhmer($this->rs['fromYear'])."-".$_dbgb->getNumberInkhmer($this->rs['toYear']);?></span>
+					<span class="value noted">ប័ណ្ណសរសើរនេះប្រគល់ជូនសាមីខ្លួនប្រើប្រាស់តាមការដែលអាចប្រើបាន ។</span>
 					<?php if(!empty($this->rs['issue_date']) AND $this->rs['issue_date'] != "0000-00-00"){ ?>
 					<span class="value issue_day"><?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($this->rs['issue_date'])));?></span>
 					<span class="value issue_month"><?php echo $month[date("m",strtotime($this->rs['issue_date']))];?></span>
 					<span class="value issue_year"><?php echo $_dbgb->getNumberInkhmer(date("Y",strtotime($this->rs['issue_date'])));?></span>
 					<?php }?>
+					
 				</div>
 			</div>
 		</div>

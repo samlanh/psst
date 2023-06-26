@@ -146,8 +146,7 @@
 												<tr class="head-td" align="center">
 													<th scope="col" width="4%" ><?php echo $tr->translate("DEL");?></th>
 													<th scope="col" width="4%" ><?php echo $tr->translate("N_O");?></th>
-													<th scope="col" width="15%"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-													<th scope="col" width="15%"><?php echo $tr->translate("STUDY_IN_LANG");?></th>
+													<th scope="col" width="30%"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
 													<th scope="col" width="10%"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
 													<th scope="col" width="10%"><?php echo $tr->translate("SCORE_SHORT");?></th>
 													<?php if($show==1){?>
@@ -234,11 +233,6 @@
 						template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 						template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 						template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject_opt+'</select></td>';
-						template+='<td data-label="<?php echo $tr->translate("STUDY_IN_LANG");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')"   class="fullside" id="subject_lang_'+col+'" name="subject_lang_'+col+'">';
-							template+='<option value=""><?php echo $tr->translate("SELECT");?></option>';
-							template+='<option value="1"><?php echo $tr->translate("STUDY_IN_KHMER");?></option>';
-							template+='<option value="2"><?php echo $tr->translate("STUDY_IN_ENGLISH");?></option>';
-						template+='</select></td>';
 						template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" onKeyUp="calculateTotalScore();" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  type="text"></td>';
 						template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" onKeyUp="calculateTotalScore();" class="fullside" name="score_cut_'+col+'" id="score_cut_'+col+'"  type="text"></td>';
 						<?php if($show==1){?>
@@ -270,11 +264,6 @@
 			template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 			template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 			template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject_opt+'</select></td>';
-			template+='<td data-label="<?php echo $tr->translate("STUDY_IN_LANG");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')"   class="fullside" id="subject_lang_'+col+'" name="subject_lang_'+col+'">';
-				template+='<option value=""><?php echo $tr->translate("SELECT");?></option>';
-				template+='<option value="1"><?php echo $tr->translate("STUDY_IN_KHMER");?></option>';
-				template+='<option value="2"><?php echo $tr->translate("STUDY_IN_ENGLISH");?></option>';
-			template+='</select></td>';
 			template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" onKeyUp="calculateTotalScore();" name="max_score'+col+'" id="max_score'+col+'"  type="text"></td>';
 			template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" onKeyUp="calculateTotalScore();" value="0" name="score_cut_'+col+'" id="score_cut_'+col+'"  type="text"></td>';
 			<?php if($show==1){?>
@@ -308,11 +297,6 @@
     				template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
     				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
     				template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject_opt+'</select></td>';
-					template+='<td data-label="<?php echo $tr->translate("STUDY_IN_LANG");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')"   class="fullside" id="subject_lang_'+col+'" name="subject_lang_'+col+'">';
-						template+='<option value=""><?php echo $tr->translate("SELECT");?></option>';
-						template+='<option value="1"><?php echo $tr->translate("STUDY_IN_KHMER");?></option>';
-						template+='<option value="2"><?php echo $tr->translate("STUDY_IN_ENGLISH");?></option>';
-					template+='</select></td>';
     	    		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>"><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" onKeyUp="calculateTotalScore();" name="max_score'+col+'" id="max_score'+col+'"  type="text"></td>';
     	    		template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>"><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" onKeyUp="calculateTotalScore();" name="score_cut_'+col+'" id="score_cut_'+col+'"  type="text"></td>';
     	    		<?php if($show==1){?>
@@ -330,7 +314,6 @@
     			dojo.html.set(dojo.byId("row"+col),template , {
     			     parseContent: true,
     			});
-				dijit.byId('subject_lang_'+col).attr('value','<?php echo $rows['subject_lang'];?>');
     			dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
     			dijit.byId('max_score'+col).attr('value','<?php echo $rows['max_score'];?>');
     			dijit.byId('score_cut_'+col).attr('value','<?php echo $rows['cut_score'];?>');
@@ -344,14 +327,12 @@
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		current_subject = dijit.byId('subject_study_'+index).get('value');
-		current_study_lang = dijit.byId('subject_lang_'+index).get('value');
 		for(var i=0;i<arrays.length;i++) {
 			if(arrays[i] == index){
 			}else{
 				old_subject = dijit.byId('subject_study_'+arrays[i]).get('value');
-				old_study_lang = dijit.byId('subject_lang_'+arrays[i]).get('value');
-				if(current_subject == old_subject && current_study_lang == old_study_lang){
-					alert("Can not add the same subject");
+				if(current_subject == old_subject){
+					alert("Can not add the same subject !!! ");
 					deleteRecord(index);
 				}
 			}

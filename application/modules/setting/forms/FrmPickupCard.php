@@ -13,6 +13,8 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 		$this->filter = 'dijit.form.FilteringSelect';
 		$this->text = 'dijit.form.TextBox';
 		$this->tarea = 'dijit.form.SimpleTextarea';
+		$this->t_num = 'dijit.form.NumberTextBox';
+		
 	}
 	public function FrmCardmg($data=null){
 		
@@ -140,6 +142,128 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				$status_search,
 				$_id,
 				$display_by,
+		));
+		
+		return $this;
+		
+	}
+
+	public function FrmCertificate($data=null){
+		
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$userid = $_dbgb->getUserId();
+    	$userinfo = $_dbuser->getUserInfo($userid);
+		
+		$title = new Zend_Dojo_Form_Element_ValidationTextBox('title');
+		$title->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+				));
+		
+		
+		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
+		$branch_id->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("BRANCH"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$branch_id->setValue($request->getParam("branch_id"));
+		
+		$rows= $_dbgb->getAllBranch();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_BRANCH")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$branch_id->setMultiOptions($opt);
+		
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$Option = $_dbgb->getAllSchoolOption($userinfo['branch_list']);
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_schoolOption = new Zend_Dojo_Form_Element_FilteringSelect("schoolOption");
+    	$_schoolOption->setMultiOptions($_arr_opt);
+    	$_schoolOption->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+				
+		$note = new Zend_Dojo_Form_Element_TextBox('note');
+		$note->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				));
+
+		$name_position = new Zend_Dojo_Form_Element_NumberTextBox('name_position');
+		$name_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+
+		$gender_position = new Zend_Dojo_Form_Element_NumberTextBox('gender_position');
+		$gender_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+
+		$date_position = new Zend_Dojo_Form_Element_NumberTextBox('date_position');
+		$date_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+
+		$code_position = new Zend_Dojo_Form_Element_NumberTextBox('code_position');
+		$code_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+
+		$year_position = new Zend_Dojo_Form_Element_NumberTextBox('year_position');
+		$year_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+
+		$rank_position = new Zend_Dojo_Form_Element_NumberTextBox('rank_position');
+		$rank_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+
+		$grade_position = new Zend_Dojo_Form_Element_NumberTextBox('grade_position');
+		$grade_position->setAttribs(array(
+			'dojoType'=>$this->t_num,
+			'class'=>'fullside',
+		));
+		
+		
+		
+		$_id = new Zend_Form_Element_Hidden('id');
+		if(!empty($data)){
+			$title->setValue($data['title']);
+			$branch_id->setValue($data['branch_id']);
+			$_schoolOption->setValue($data['schoolOption']);
+			$note->setValue($data['note']);
+			
+		}
+		
+		$this->addElements(array(
+				$title,
+				$branch_id,
+				$_schoolOption,
+				$note,
+				$name_position,
+				$gender_position,
+				$date_position,
+				$code_position,
+				$year_position,
+				$rank_position,
+				$grade_position,
+
+				
 		));
 		
 		return $this;

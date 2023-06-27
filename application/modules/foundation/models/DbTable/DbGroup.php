@@ -57,9 +57,13 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			if(!empty($_data['identity1'])){
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
+					$_dbmoddel = new Global_Model_DbTable_DbSubjectExam();
+					$subject_row = $_dbmoddel->getSubexamById($_data['group_subject_study_'.$i]);
+					$subject_lang = $subject_row['subject_lang'];
 					$arr = array(
 							'group_id'		=> $id,
 							'subject_id'	=> $_data['group_subject_study_'.$i],
+							'subject_lang'	=> $subject_lang,
 							'max_score'		=> $_data['max_score'.$i],
 							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],
@@ -70,6 +74,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 							'user_id'		=> $this->getUserId(),
 					);
 					$this->insert($arr);
+
 				}
 			}
 			$db->commit();
@@ -122,13 +127,18 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$this->_name='rms_group_subject_detail';
 			$where = 'group_id = '.$_data['id'];
 			$this->delete($where);
-			
+			$_dbmoddel = new Global_Model_DbTable_DbSubjectExam();
 			if(!empty($_data['identity1'])){
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
+				
+					$subject_row = $_dbmoddel->getSubexamById($_data['group_subject_study_'.$i]);
+					$subject_lang = $subject_row['subject_lang'];
+
 					$arr = array(
 							'group_id'		=> $_data['id'],
 							'subject_id'	=> $_data['group_subject_study_'.$i],
+							'subject_lang'	=> $subject_lang,
 							'max_score'		=> $_data['max_score'.$i],
 							'score_short'	=> $_data['scoreshort_'.$i],
 							'amount_subject'=> $_data['amount_subject'.$i],

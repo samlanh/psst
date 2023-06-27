@@ -78,6 +78,7 @@ span#message {
 										</div> 
 									</div>
 									<br />
+									
 									<div class="form-group">
 										<div class="custom-control custom-checkbox ">
 											<input type="checkbox" class="checkbox custom-control-input" checked="checked"  value="1" id="is_parent" onChange="getValue();" name="is_parent" >
@@ -100,6 +101,12 @@ span#message {
 										</div>
 									 </div>
 									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_STUDY_IN");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $subject_exam->getElement('subject_lang');?>
+										</div>
+									 </div>
+									 <div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_KH");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php  echo $subject_exam->getElement('subject_kh');?>
@@ -117,12 +124,7 @@ span#message {
 											<?php echo $subject_exam->getElement('score_percent');?>
 										</div>
 									 </div>
-									 <div class="form-group">
-										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_STUDY_IN");?> </label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $subject_exam->getElement('subject_lang');?>
-										</div>
-									 </div>
+									
 									 
 									 <div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHOOL_OPTION");?> </label>
@@ -159,6 +161,11 @@ require(["dojo/ready"], function(ready){
 		subject_kh.on('keyUp', function(evt) {
 			checkDuplicateRecord();
 		});
+
+		var subject_lang = dijit.byId('subject_lang');
+		subject_lang.on('change', function(evt) {
+			checkDuplicateRecord();
+		});
 	
 	});
 });
@@ -188,10 +195,18 @@ function checkDuplicateRecord(){
 		dijit.byId('subject_kh').focus();
 		return false;
 	}
+
+	subjectLang = dijit.byId('subject_lang').get('value');
+	if(subjectLang=='' || subjectLang==-1){
+		
+		return false;
+	}
+
 	dojo.xhrPost({
 		url: url_duplicate,
 		content:{
-			'subjectKhTitle':subjectKhTitle
+			'subjectKhTitle':subjectKhTitle,
+			'subjectLang':subjectLang
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -199,6 +214,7 @@ function checkDuplicateRecord(){
 				isDuplicate = 1;
 				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
 				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
+				dijit.byId('subject_kh').attr('value','');
 			}else{
 				isDuplicate=0;
 				$("#message").html('');
@@ -216,15 +232,11 @@ function langOption(){
 	type_sub = dijit.byId('type_subject').get('value');
 	if(type_sub == 2){
 		
-		dijit.byId("subject_lang").set('value','0');
+		dijit.byId("subject_lang").set('value','');
 		dijit.byId("subject_lang").set('readOnly',true);
 
 	}else{
 		dijit.byId("subject_lang").set('readOnly',false);
-		
-		
-		
-
 	}
 	
 }

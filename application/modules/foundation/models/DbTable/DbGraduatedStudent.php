@@ -105,35 +105,36 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		try{	
 			$identity = empty($_data['selector'])?null:implode(',', $_data['selector']);
 			$_arr= array(
-				'user_id'		=>$this->getUserId(),
-				'branch_id'		=>$_data['branch_id'],
-				'group_id'		=>$_data['group'],
-				'graduate_date'		=>$_data['graduate_date'],
-				'type'			=>$_data['type'],
-				'note'			=>$_data['note'],
-				'status'		=>1,
-				'array_checkbox'=>$identity,
-				'create_date'	=>date("Y-m-d H:i:s"),
-				'modify_date'	=>date("Y-m-d H:i:s"),
+				'branch_id'		=> $_data['branch_id'],
+				'group_id'		=> $_data['group'],
+				'graduate_date'	=> $_data['graduate_date'],
+				'type'			=> $_data['type'],
+				'note'			=> $_data['note'],
+				'status'		=> 1,
+				'array_checkbox'=> $identity,
+				'create_date'	=> date("Y-m-d H:i:s"),
+				'modify_date'	=> date("Y-m-d H:i:s"),
+				'user_id'		=> $this->getUserId(),
 			);
+		
 			$id = $this->insert($_arr);
 
 			
 			if (!empty($_data['selector'])){
 				foreach ($_data['selector'] as $rs){
 					$stu=array(
-						'stop_type'		=>3,// graduated
+						'stop_type'	=>4,// graduated
 					);
 					$where=" stu_id=".$rs." AND group_id=".$_data['group'];
 					$this->_name='rms_group_detail_student';
 					$this->update($stu, $where);
-
 				}
 			}
 			
 			$group=array(
 				'is_use'	=>1,//used
 				'is_pass'	=>1,//finish
+				'note'		=>'graduated'
 			);
 			$where=" id=".$_data['group'];
 			$this->_name = 'rms_group';
@@ -141,6 +142,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 			$_db->commit();
 			return true;
 		}catch(Exception $e){
+			echo $e->getMessage();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
 		}

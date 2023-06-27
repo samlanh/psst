@@ -46,10 +46,10 @@ class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$_add = new Foundation_Model_DbTable_DbGraduatedStudent();
  				$_add->addGraduatedStudent($data);
- 				if(!empty($data['save_close'])){
- 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent");
- 				}
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent/add");
+//  				if(!empty($data['save_close'])){
+//  					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent");
+//  				}
+// 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent/add");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

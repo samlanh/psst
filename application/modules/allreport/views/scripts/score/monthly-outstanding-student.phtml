@@ -40,14 +40,14 @@
 	$key = new Application_Model_DbTable_DbKeycode();
 	$data=$key->getKeyCodeMiniInv(TRUE);
 	//3=AHS
-	$templateSchool=2;//$data['hornorTableSetting']; //1=AHS
+	$templateSchool=1;//$data['hornorTableSetting']; //1=AHS
 	$imgSing = $this->baseUrl().'/images/agreementsign.jpg';
 ?>	
 		<script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
 		<?php if($templateSchool==1){ 
 			$backgroundImage = $this->baseUrl().'/images/photo/background/backgroundOutStandingStudent.jpg';
 		?>
-		<div id="divPrint" style="width: 21cm;height:28cm;text-align: center;margin: 0 auto;">
+		<div id="divPrint" style="width: 21cm;height:30cm;text-align: center;margin: 0 auto;">
 			<style type="text/css">
 				.style{
 					line-height: 20px; font-size: 12px !important;
@@ -63,14 +63,14 @@
 				}
 				.backgroundOutStanding{
 					background-image: url('<?php echo $backgroundImage;?>');
-					background-size: 100%;
+					background-size: contain;
 					background-repeat: no-repeat;
 					position: relative;
 					display:inline-block; 
 					line-height: 23px;   
 					top:2px;
 					width: 21cm; 
-					height:27.5cm;   
+					height:28.5cm;   
 					font-family: 'Times New Roman','Khmer OS Battambang';
 					margin: 0 auto;
 					text-align: center;
@@ -111,41 +111,13 @@
 				}
 				@page {
 							page: A4;
-							margin:0.8cm;
-							pading:0.8cm;
+							margin:0.3cm;
+							pading:0.3cm;
 						}
 			</style>
 			<div class="backgroundOutStanding" style="margin: 0 auto;">
 				<?php if(!empty($this->studentgroup)){?>
-					<table width="100%" style="white-space:nowrap;margin: 0 auto;">
-						<tbody>
-							<tr>
-								<td width="55%" valign="top">
-									<?php $logo = $this->baseUrl().'/images/logo.png';
-									if (!empty($this->studentgroup[0]['branch_logo'])){
-										$logo = $this->baseUrl().'/images/'.$this->studentgroup[0]['branch_logo'];
-									}
-									?>
-								</td>
-								<td width="20%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
-								</td>
-								<td width="25%" valign="top" style="font-family: 'Times New Roman','Khmer OS Muol Light';">
-									<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 70px;">
-										<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
-										<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 10px;">KINGDOM OF CAMBODIA</span></li>
-										<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
-										<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RALIGION KING</span></li>
-										<li><img style=" height: 12px; " src="<?php echo $imgSing;?>"></li>
-									</ul>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-		
-				<table width="100%" >
-					<tr>
-						<td>
-							<?php
+					<?php
 							 $show=1; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;$female=0;
 							 $duplicate=0;$count_pass=0;
 							 $rank="";
@@ -206,7 +178,18 @@
 								<?php }}?>			
 					
 
-							<table border="0" style="margin: 0 auto;width: 80%;margin-left: 86px;margin-top: -2px;">
+							<table style="margin: 0 auto;width: 80%;margin-left: 86px;margin-top: 80px;">
+								<tr>
+									<td>
+										<?php $logo = $this->baseUrl().'/images/logo.png';
+										if (!empty($this->studentgroup[0]['branch_logo'])){
+											$logo = $this->baseUrl().'/images/'.$this->studentgroup[0]['branch_logo'];
+										}
+										?>
+									</td>
+									<td></td>
+									<td ></td>
+								</tr>
 								<tr style="display:none;">
 									<td width="33%">&nbsp;</td>
 									<td width="34%">&nbsp;</td>	
@@ -333,38 +316,35 @@
 									</td>
 								</tr>
 							</table>
-						</td>
-					</tr>
-				</table>
-				<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto; color:#4839bd;">
-						<tbody>
-							<tr>
-								<td width="35%" align="center" style=" vertical-align: top;">
-									<span style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';display: inline-block;margin-top: 55px;"><?php echo "បានឃើញ ឯកភាព";//$tr->translate("CHECKANDAPPROVED");?></span><br />
-									<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
-								</td>
-								<td width="30%">&nbsp;</td>
-								<td width="35%" align="center" style=" vertical-align: top;">
-									<span style=" font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-									<span style=" font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("TEACHER_ROOM");?></span>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3"  align="center" style="height: 20px;">
-								&nbsp;
-								</td>
-							</tr>	
-							<tr>	
-								<td colspan="2">
-									&nbsp;
-								</td>
-								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
-									<?php echo $this->studentgroup[0]['teacher'];?>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				<?php }else{echo "No Result !!!";}?>	
+							<table width="100%" style="white-space:nowrap;width: 75%;margin: 0 auto; color:#4839bd;">
+								<tbody>
+									<tr>
+										<td width="35%" align="center" style=" vertical-align: top;">
+											<span style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';display: inline-block;margin-top: 55px;"><?php echo "បានឃើញ ឯកភាព";//$tr->translate("CHECKANDAPPROVED");?></span><br />
+											<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
+										</td>
+										<td width="30%">&nbsp;</td>
+										<td width="35%" align="center" style=" vertical-align: top;">
+											<span style=" font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+											<span style=" font-size: 16px;font-family:Times New Roman,Khmer OS Battambang;;"><?php echo $tr->translate("TEACHER_ROOM");?></span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3"  align="center" style="height: 50px;">
+										&nbsp;
+										</td>
+									</tr>	
+									<tr>	
+										<td colspan="2">
+											&nbsp;
+										</td>
+										<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
+											<?php echo $this->studentgroup[0]['teacher'];?>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+				<?php }else{echo "No Result";}?>	
 			</div>
 		</div>
 		<?php }else{ ?>

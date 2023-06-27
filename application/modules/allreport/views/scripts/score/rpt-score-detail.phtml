@@ -180,13 +180,12 @@
 					<tr>
 						<td align="center" class="khmerBold" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 								<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
-								<?php if($rs['exam_type']!=2){echo $tr->translate("MONTHLY");?> <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_month'];?></span><?php }?>
+								<?php if($rs['exam_type']!=2){echo $tr->translate("MONTHLY");?> <span><?php echo $rs['for_month'];?></span><?php }?>
 							<br />
 							<strong​​ style="color:#4839bd;">
 								ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> 
 								<br />
 								ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span>
-								
 							</strong>
 						</td>
 						<td align="center" valign="top"></td>
@@ -208,7 +207,7 @@
 								<?php }?>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("AVERAGE");?></td>
-								<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("MENTION");?></td>
+								<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("MENTION");?> និង មូលវិចារ</td>
 								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RANK");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RESULT");?></td>
 							</tr>
@@ -246,7 +245,6 @@
 										}else{
 											$tscore_subject = $score['score']-$score['score_cut'];
 										}
-										//echo number_format($tscore_subject,2);
 										echo (float) $tscore_subject;
 										$total_score = $total_score + $tscore_subject;
 									?>
@@ -263,7 +261,6 @@
 								?>
 								<td align="center">
 									<?php
-										//$total_score = number_format($total_score,2);
 										echo (float) $total_score;
 									?>
 								</td>
@@ -310,23 +307,24 @@
 										</tr>
 										<tr>
 											<td valign="top" width="33%" style="text-align: center;">សិស្សជាប់មធ្យមភាគ  : <?php if ($count_pass>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));}else{ echo $dbgb->getNumberInkhmer($count_pass);} echo " ".$tr->translate("STUDENT_UNIT")?></td>
-											<td width="33%" valign="top"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php if ($pass_female){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$pass_female));}else{ echo $dbgb->getNumberInkhmer($pass_female);} echo " ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
+											<td valign="top"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php if ($pass_female){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$pass_female));}else{ echo $dbgb->getNumberInkhmer($pass_female);} echo " ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
+											<td align="center" style="color:#1949d6;white-space: nowrap" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
 										</tr>
 										<tr>
 											<td valign="top" width="33%" style="text-align: center;">សិស្សក្រោមមធ្យមភាគ : <?php if ($count_fail>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));}else{ echo $dbgb->getNumberInkhmer($count_fail);} echo " ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top"><?php echo $tr->translate("FEMALE");?> : <?php if ($fail_female>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$fail_female));}else{ echo $dbgb->getNumberInkhmer($fail_female);} echo " ".$tr->translate("STUDENT_UNIT");?>&nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
+											<td valign="top"><?php echo $tr->translate("FEMALE");?> : <?php if ($fail_female>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$fail_female));}else{ echo $dbgb->getNumberInkhmer($fail_female);} echo " ".$tr->translate("STUDENT_UNIT");?>&nbsp;</td>
+											<td valign="top" style="color:#1949d6; text-align: center;">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
 										</tr>
 										<tr>
 											<td valign="top" width="33%" style="text-align: center;" class="khmerBold">បានឃើញ និងឯកភាព</td>
-											<td width="33%" valign="top">&nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
+											<td>&nbsp;</td>
+											<td></td>
 										</tr>
 										<tr>
 											<td valign="top" class="khmerBold" style="text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
-											<td valign="top">&nbsp;</td>
-											<td valign="top" style="color:#1949d6; text-align: center;">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
+											<td>&nbsp;</td>
+											<td></td>
+											
 										</tr>
 										<tr class="khmerBold">
 											<td valign="top"  style="text-align: center;">នាយករង</td>

@@ -3283,19 +3283,22 @@ function getAllgroupStudyNotPass($action=null){
   		}
   		
   		$order=" ORDER BY st.stu_khname ASC ";
-  		if(!empty($data['orderStucode'])){//
-  			$order.=" ORDER BY st.stu_code  ASC ";
+  		
+  		if(!empty($data['sortStundent'])){
+  			if($data['sortStundent']==1){
+  				$order=" ORDER BY st.stu_code  ASC ";
+  			}else if($data['sortStundent']==2){
+  				$order=" ORDER BY st.stu_khname ASC ";
+  			}else if($data['sortStundent']==3){
+  				$studentName="CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,''))";
+  				$order=" ORDER BY $studentName ASC ";
+  			}
   		}
-  		if(!empty($data['orderKhmerName'])){
-  			$order.=" ORDER BY st.stu_khname ASC ";
-  		}
-  		if(!empty($data['orderEnglishName'])){
-  			$studentName="CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,''))";
-  			$order.=" ORDER BY $studentName ASC ";
-  		}
+  		
   		if(!empty($data['orderitemType'])){
-  			$order.=" ORDER BY gs.`itemType` ASC ";
+  			$order=" ORDER BY gs.`itemType` ASC ";
   		}
+  		
   		return $db->fetchAll($sql.$order);
   }
   function getAllGroupName($data=null){

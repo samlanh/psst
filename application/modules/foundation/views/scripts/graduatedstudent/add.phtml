@@ -14,7 +14,7 @@
 	    		<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
-		<form action="<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit" >			
 				if(this.validate()) {
 					branch_id=dijit.byId('branch_id').get('value');
@@ -212,24 +212,14 @@
 var url_get_all_student_from_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>';
 function getStudentFromGroup(){
 	from_group = dijit.byId('group').get('value');
-	stringData='orderKhmerName';
 	shortData = dijit.byId('sortStundent').get('value');
-	if(shortData==1){
-		stringData='orderStucode';
-	}
-	else if(shortData==2){
-		stringData='orderKhmerName';
-	}
-	else if(shortData==3){
-		stringData='orderEnglishName';
-	}
-
+	
 	dojo.xhrPost({
 		url:url_get_all_student_from_group,
 		content:{
 			'groupId':from_group,
 			'isCurrent':1,
-			stringData:1
+			'sortStundent':shortData,
 			},
 		handleAs:"json",
 		load: function(respone) {

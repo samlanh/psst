@@ -73,6 +73,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		);
     		$resultScore = $db->getStundetScoreDetailGroup($search,$id,1);
     	}
+    	
     	$this->view->studentgroup = $resultScore;
     	$this->view->search=$search;
     	 
@@ -83,6 +84,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
     }
     function rptScoreResultAction(){ //ពិន្ទុសរុបតាមមុខ
     	$id=$this->getRequest()->getParam("id");

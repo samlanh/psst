@@ -515,7 +515,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
-			$result = $db->getGroupDetailByID($search['group']);
+			$groupId = (!empty($search['group']))?$search['group']:0;
+			$result = $db->getGroupDetailByID($groupId);
 		}
 		else{
 			$search = array(

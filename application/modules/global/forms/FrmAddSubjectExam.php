@@ -78,7 +78,7 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 				
 			));
 		$_subject_lang_opt = array(
-				0=>$this->tr->translate("PLEASE_SELECT"),
+				''=>$this->tr->translate("PLEASE_SELECT"),
 				1=>$this->tr->translate("STUDY_IN_KHMER"),
 				2=>$this->tr->translate("STUDY_IN_ENGLISH"));
 		$_subject_lang->setMultiOptions($_subject_lang_opt);

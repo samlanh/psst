@@ -25,7 +25,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'global','controller'=>'subject','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('shortcut'=>$link,'subject_titlekh'=>$link,'subject_titleen'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link,'subject_titlekh'=>$link,'subject_titleen'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -43,10 +43,8 @@ class Global_SubjectController extends Zend_Controller_Action {
 			try {
 					$sms="INSERT_SUCCESS";
 					$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
-					$subject_id = $_dbmodel->addNewSubjectExam($_data);
-				if ($subject_id==-1){
-					$sms="RECORD_EXIST";
-				}
+				 	$_dbmodel->addNewSubjectExam($_data);
+			
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,"/global/subject");
 				}else{
@@ -109,6 +107,39 @@ class Global_SubjectController extends Zend_Controller_Action {
 		$getRow = $parent->getAllSubjectParentByID($id);
 		$this->view->row = $getRow;		
 	}
+
+	function copyAction()
+	{
+		$id = $this->getRequest()->getParam("id");
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try{
+				$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
+				$_dbmodel->addNewSubjectExam($_data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/subject/index");
+			}catch(Exception $e) {
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				$err =$e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			}
+		}
+		$_dbmoddel = new Global_Model_DbTable_DbSubjectExam();
+		$row = $_dbmoddel->getSubexamById($id);
+		$this->view->rsRow = $row;
+		
+		$subject_exam = new Global_Form_FrmAddSubjectExam();
+		$frm_subject_exam = $subject_exam->FrmAddSubjectExam($row);
+		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
+		$this->view->frm_subject_exam = $frm_subject_exam;
+		
+		$parent = new Global_Model_DbTable_DbSubjectExam();
+		$is_parent = $parent->getAllSubjectParent();
+		$this->view->rs = $is_parent;
+		
+		$getRow = $parent->getAllSubjectParentByID($id);
+		$this->view->row = $getRow;		
+	}
+
 	function addsubjectajaxAction(){//At callecteral when click client
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -155,6 +186,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			if (!empty($schoolOption)){
 				$db = new Application_Model_DbTable_DbGlobal();
 				$subject = $db->getAllSubjectName($schoolOption,1);
+				array_unshift($subject, array ('id' => '', 'name' => $this->tr->translate("ADD_NEW")));
 				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 				print_r(Zend_Json::encode($subject));
 				exit();
@@ -175,9 +207,11 @@ class Global_SubjectController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     		$title = empty($data['subjectKhTitle'])?"":$data['subjectKhTitle'];
+			$subLang = empty($data['subjectLang'])?"":$data['subjectLang'];
     		$id = empty($data['id'])?"":$data['id'];
     		$arr  = array(
     				'title'=>$title,
+					'subLang'=>$subLang,
     				'id'=>$id,
     				);
     		

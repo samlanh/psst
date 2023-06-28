@@ -307,7 +307,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'studyday_schedule'";
 				$this->update($arr, $where);
 			}
-			
+	
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){
 				$this->_name="rms_schooloption";
@@ -379,6 +379,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+
 	function getAllSchoolOption(){
 		$db = $this->getAdapter();
 		$sql="SELECT * FROM `rms_schooloption` WHERE status = 1 ";

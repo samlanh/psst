@@ -140,7 +140,7 @@
 												<?php echo $rs['img']?>
 											</td>
 											<td align="center">
-												<input type="checkbox" name='permission_<?php echo $rs['module'];?>[]' id='permission_<?php echo $rs['module'];?>[]' />
+												<input class="permission_<?php echo $rs['module'];?>" type="checkbox" name='permission_<?php echo $rs['module'];?>[]' id='permission_<?php echo $rs['module'];?>[]' />
 											</td>
 										</tr>
 								<?php 
@@ -184,14 +184,20 @@
 		if(status==1){
 			 if($("#allow_"+module).is(':checked')){
 				$("#deny_"+module).attr("checked",false);
-				// $('input[value="'+status+'"]').attr("checked",true);
-				 $('#permission_home').attr("checked",true);
-				 
-			}
+				 $('.permission_'+module).each(function() { //loop through each checkbox
+		              this.checked = true;  
+		     	 });
+			}else{
+				$('.permission_'+module).each(function() { //loop through each checkbox
+		              this.checked = false;  
+		     	 });
+				}
 		}else{
 			 if($("#deny_"+module).is(':checked')){
 				$("#allow_"+module).attr("checked",false);
-				$('#permission_home').attr("checked",false);
+				 $('.permission_'+module).each(function() { //loop through each checkbox
+		              this.checked = false;  
+		      });
 			}
 		}
 		

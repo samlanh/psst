@@ -14,7 +14,7 @@
     			</div>
     		</div>
     	</div>
-		<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id="add_car" action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit" >			
 			if(this.validate()) {
 				branch_id=dijit.byId('branch_id').get('value');
@@ -72,6 +72,17 @@
 											<input dojoType="dijit.form.TextBox"  type="hidden" name="old_array_checkbox" id="old_array_checkbox" value="<?php echo $this->rs['array_checkbox'];?>" />
 										</div>
 									 </div>
+									 <div class="form-group">
+						                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+						                <div class="col-md-7 col-sm-7 col-xs-12">
+						                	<select onchange="getStudentFromGroup();" id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
+											   	<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+											   	<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+											   	<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+											   	<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+											</select>
+						                </div>
+						             </div>
 									 <div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADUATE_DATE");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -161,10 +172,12 @@
 
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
+
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.NumberTextBox");
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
+	
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
@@ -174,13 +187,14 @@
 			name: "group",  
 			class: 'fullside', 
 			required:false,
-			readOnly:true,
+			//readOnly:true,
 			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 			onChange:function(){
 				toStudentGroup(1);
 				getStudentFromGroup();			 						 						
 			}
 		},"group");
+		dijit.byId('type').set('readOnly','true');
 		getAllGroupByBranch();
 	}); 
 var oldbranch ='<?php echo $this->rs['branch_id']?>';
@@ -197,9 +211,9 @@ function getAllGroupByBranch(){
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'noaddnew':1,'forfilter':1
+			'branch_id':branch_id,
+			'noaddnew':1,
 		},
-		handleAs:"json",
 		load: function(data) {
 			group_store  = getDataStorefromJSON('id','name', data);
 			dijit.byId('group').set('store',group_store);   
@@ -221,13 +235,15 @@ function getStudentFromGroup(){
 			alert("Please Select Group");
 			return false;
 		}
+		shortData = dijit.byId('sortStundent').get('value');
 		dojo.xhrPost({
 			url:url_get_all_student_group_update,
 			content:{
 				'groupId':group,
 				'isCurrent':1,
 				'itemType':1,
-				'edit':1
+				'sortStundent':shortData,
+				//'edit':1
 				},
 			handleAs:"json",
 			load: function(respone) {
@@ -236,10 +252,10 @@ function getStudentFromGroup(){
 						+'<tr class="head-td" align="center" >'
 							+'<th scope="col" style="width: 20px;">&nbsp;</th>'
 							+'<th scope="col" style="width: 20px;"><?php echo $tr->translate('NUM');?></th>'
-							+'<th scope="col" ><?php echo $tr->translate('STUDENT_ID');?></th>'
-							+'<th scope="col" ><?php echo $tr->translate('STUDENT_NAMEKHMER');?></th>'
-							+'<th scope="col" ><?php echo $tr->translate('NAME_EN');?></th>'
-							+'<th scope="col" ><?php echo $tr->translate('SEX');?></th>'
+							+'<th scope="col"><?php echo $tr->translate('STUDENT_ID');?></th>'
+							+'<th scope="col"><?php echo $tr->translate('STUDENT_NAMEKHMER');?></th>'
+							+'<th scope="col"><?php echo $tr->translate('NAME_EN');?></th>'
+							+'<th scope="col"><?php echo $tr->translate('SEX');?></th>'
 						+'</tr>'
 						+'</thead>'
 						+'<tbody>';
@@ -247,20 +263,19 @@ function getStudentFromGroup(){
 					num=0;
 					for(var i=0;i<respone.length;i++){
 						inx = i+1;
-							tem += '<tr class="rowData" >';
-								tem += '<td data-label="<?php echo $tr->translate("CHECKING");?>" align="center" style="width: 20px;">
+							tem += '<tr class="rowData">';
+								tem += '<td align="center" style="width: 20px;">';
 									tem += '<div class="custom-control custom-checkbox ">';
 										tem += '<input type="checkbox" class="checkbox custom-control-input" id="checkbox'+inx+'" value="'+respone[i].stu_id+'"  name="selector[]" >';
 										tem += '<label class="custom-control-label" for="checkbox'+inx+'">';
 										tem += '</label>';
 									tem += '</div>';
-								
 								tem += '</td>';
 								tem += '<td data-label="<?php echo $tr->translate("NUM");?>" align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
 								tem += '<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+respone[i].stu_code+'</td>';
 								tem += '<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>">'+respone[i].stu_khname+'</td>';
-								tem += '<td data-label="<?php echo $tr->translate("NAME_EN");?>">'+respone[i].stu_enname+' '+respone[i].last_name+'</td>';
-								tem += '<td data-label="<?php echo $tr->translate("SEX");?>" align="center">'+respone[i].sex+'</td>';
+								tem += '<td data-label="<?php echo $tr->translate("NAME_EN");?>">'+respone[i].last_name+' '+respone[i].stu_enname+'</td>';
+								tem += '<td data-label="<?php echo $tr->translate("SEX");?>" align="center">'+respone[i].gender+'</td>';
 						    tem += '</tr>';
 						    if($("#identity").val()!="") {
 								var identity = $("#identity").val();
@@ -296,7 +311,6 @@ function CheckAll(index){
 	     });
 	}
 }
-//var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
 var url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
 function toStudentGroup(type){
 	togroup = dijit.byId('group').get('value');

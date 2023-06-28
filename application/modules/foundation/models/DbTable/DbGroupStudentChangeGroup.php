@@ -952,59 +952,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		return $db->fetchAll($sql);
 	}
 
-	public function AddNewGroupAjaxold($_data){
-		print_r($_data);exit();
-		$db = $this->getAdapter();
-		$db->beginTransaction();
-		try{
-			$_arr=array(
-					'group_code' 	=> $_data['group_code'],
-// 					'room_id' 		=> $_data['room'],
-// 					'academic_year' => $_data['academic_year'],
-// 					'semester' 		=> $_data['semester'],
-// 					'session' 		=> $_data['session'],
-// 					'degree' 		=> $_data['degree'],
-// 					'grade' 		=> $_data['grade'],
-// 					'start_date'	=> $_data['start_date'],
-// 					'expired_date'	=> $_data['end_date'],
-// 					'date' 			=> date("Y-m-d"),
-// 					'status'   		=> $_data['status'],
-// 					'note'   		=> $_data['note'],
-					'user_id'	 	=> $this->getUserId(),
-					'is_use' 		=> 0
-			);
-			$this->_name='rms_group';
-			return $this->insert($_arr);
-			return $db->commit();
-		}catch (Exception $e){
-			$db->rollBack();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
 	
-	public function AddNewGroupAjax($data){
-		//return  $data;
-		$db = $this->getAdapter();
-		$_arr=array(
-				'group_code' 	=> $data['group_code'],
-				'room_id' 		=> $data['room'],
-				'academic_year' => $data['academic_year'],
-				'semester' 		=> $data['semester'],
-				'session' 		=> $data['session_group'],
-				'degree' 		=> $data['degree_group'],
-				'grade' 		=> $data['grade_group'],
-				'start_date'	=> $data['start_date'],
-				'expired_date'	=> $data['end_date'],
-				'date' 			=> date("Y-m-d"),
-				'status'   		=> 1,
-				'time'			=> $data['time'],
-				'note'   		=> $data['note'],
-				'user_id'	 	=> $this->getUserId(),
-				'is_use' 		=> 0
-		);
-		$this->_name='rms_group';
-		return $this->insert($_arr);
-	}
+	
 	
 	public function getGroupNewAll(){
 		$db=$this->getAdapter();

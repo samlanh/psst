@@ -190,80 +190,202 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
     			'required'=>'true',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
-				
-		$note = new Zend_Dojo_Form_Element_TextBox('note');
-		$note->setAttribs(array(
+		
+
+		$name_left=new Zend_Dojo_Form_Element_NumberTextBox('name_left');
+		$name_left->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$name_top=new Zend_Dojo_Form_Element_NumberTextBox('name_top');
+		$name_top->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$gender_left = new Zend_Dojo_Form_Element_NumberTextBox('gender_left');
+		$gender_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>true,
+		));
+		$gender_top = new Zend_Dojo_Form_Element_NumberTextBox('gender_top');
+		$gender_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>true,
+		));
+
+		$date_left = new Zend_Dojo_Form_Element_NumberTextBox('date_left');
+		$date_left->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$date_top = new Zend_Dojo_Form_Element_NumberTextBox('date_top');
+		$date_top->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$code_left = new Zend_Dojo_Form_Element_NumberTextBox('code_left');
+		$code_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$code_top = new Zend_Dojo_Form_Element_NumberTextBox('code_top');
+		$code_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$academic_left = new Zend_Dojo_Form_Element_NumberTextBox('academic_left');
+		$academic_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$academic_top = new Zend_Dojo_Form_Element_NumberTextBox('academic_top');
+		$academic_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$rank_left = new Zend_Dojo_Form_Element_NumberTextBox('rank_left');
+		$rank_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$rank_top = new Zend_Dojo_Form_Element_NumberTextBox('rank_top');
+		$rank_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$grade_left = new Zend_Dojo_Form_Element_NumberTextBox('grade_left');
+		$grade_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$grade_top = new Zend_Dojo_Form_Element_NumberTextBox('grade_top');
+		$grade_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		
+		$certificate_note = new Zend_Dojo_Form_Element_TextBox('certificate_note');
+		$certificate_note->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
-				));
-
-		$name_position = new Zend_Dojo_Form_Element_NumberTextBox('name_position');
-		$name_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
 		));
 
-		$gender_position = new Zend_Dojo_Form_Element_NumberTextBox('gender_position');
-		$gender_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
+		$day_left = new Zend_Dojo_Form_Element_NumberTextBox('day_left');
+		$day_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
 		));
 
-		$date_position = new Zend_Dojo_Form_Element_NumberTextBox('date_position');
-		$date_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
+		$day_top = new Zend_Dojo_Form_Element_NumberTextBox('day_top');
+		$day_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
 		));
 
-		$code_position = new Zend_Dojo_Form_Element_NumberTextBox('code_position');
-		$code_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
+		$month_left = new Zend_Dojo_Form_Element_NumberTextBox('month_left');
+		$month_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
 		));
 
-		$year_position = new Zend_Dojo_Form_Element_NumberTextBox('year_position');
-		$year_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
+		$month_top = new Zend_Dojo_Form_Element_NumberTextBox('month_top');
+		$month_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
 		));
 
-		$rank_position = new Zend_Dojo_Form_Element_NumberTextBox('rank_position');
-		$rank_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
+		$year_left = new Zend_Dojo_Form_Element_NumberTextBox('year_left');
+		$year_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
 		));
-
-		$grade_position = new Zend_Dojo_Form_Element_NumberTextBox('grade_position');
-		$grade_position->setAttribs(array(
-			'dojoType'=>$this->t_num,
-			'class'=>'fullside',
+		$year_top = new Zend_Dojo_Form_Element_NumberTextBox('year_top');
+		$year_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
 		));
-		
-		
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
-			$title->setValue($data['title']);
-			$branch_id->setValue($data['branch_id']);
-			$_schoolOption->setValue($data['schoolOption']);
-			$note->setValue($data['note']);
-			
+
+			$certificate_note->setValue($data['certificate_note']['keyValue']);
+			$name_left->setValue($data['name_left']['keyValue']);
+			$gender_left->setValue($data['gender_left']['keyValue']);
+			$date_left->setValue($data['date_left']['keyValue']);
+			$code_left->setValue($data['code_left']['keyValue']);
+			$year_left->setValue($data['year_left']['keyValue']);
+			$rank_left->setValue($data['rank_left']['keyValue']);
+			$grade_left->setValue($data['grade_left']['keyValue']);
+			$academic_left->setValue($data['academic_left']['keyValue']);
+			$month_left->setValue($data['month_left']['keyValue']);
+			$day_left->setValue($data['day_left']['keyValue']);
+
+			$name_top->setValue($data['name_top']['keyValue']);
+			$gender_top->setValue($data['gender_top']['keyValue']);
+			$date_top->setValue($data['date_top']['keyValue']);
+			$code_top->setValue($data['code_top']['keyValue']);
+			$year_top->setValue($data['year_top']['keyValue']);
+			$rank_top->setValue($data['rank_top']['keyValue']);
+			$grade_top->setValue($data['grade_top']['keyValue']);
+			$academic_top->setValue($data['academic_top']['keyValue']);
+			$month_top->setValue($data['month_top']['keyValue']);
+			$day_top->setValue($data['day_top']['keyValue']);	
 		}
 		
 		$this->addElements(array(
 				$title,
 				$branch_id,
 				$_schoolOption,
-				$note,
-				$name_position,
-				$gender_position,
-				$date_position,
-				$code_position,
-				$year_position,
-				$rank_position,
-				$grade_position,
+				$certificate_note,
+				$name_left,
+				$gender_left,
+				$date_left,
+				$code_left,
+				$year_left,
+				$rank_left,
+				$grade_left,
+				$academic_left,
+				$month_left,
+				$day_left,
 
-				
+				$name_top,
+				$gender_top,
+				$date_top,
+				$code_top,
+				$year_top,
+				$rank_top,
+				$grade_top,
+				$academic_top,
+				$month_top,
+				$day_top,
 		));
 		
 		return $this;

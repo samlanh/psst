@@ -317,59 +317,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->frm = $frm_register;
 	}
 	
-	public function stutrandropAction(){
-		$id=$this->getRequest()->getParam("id");
-		$db= new Foundation_Model_DbTable_DbStudent();
-		$row = $db->getStudentById($id);
-		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
-		}
-// 		$rr = $db->getStudyHishotryById($id);
-// 		$this->view->rr = $rr;
-		if($this->getRequest()->isPost())
-		{
-			try{
-				$data = $this->getRequest()->getPost();
-				$data["id"]=$id;
-				$row=$db->addStudent($data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("EDIT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-		$group = $db->getAllgroup();
-		$this->view->group = $group;
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$row =$_db->getOccupation();
-		$this->view->occupation = $row;
-		
-		$row = $_db->getAllLangLevel(); // degree language
-		$this->view->lang_level = $row;
-		
-		$row = $_db->getAllKnowBy(); // degree language
-		$this->view->know_by = $row;
-		
-		$row = $_db->getAllDocumentType(); // degree language
-		$this->view->doc_type = $row;
-		
-		$this->view->degree = $_db->getAllItems(1,null);
-		
-		$this->view->province = $db->getProvince();
-		
-		$test =  $db->getStudentById($id);
-		$this->view->rs = $test;
-		$this->view->row = $db->getStudentDocumentById($id);
-		
-		$this->view->year = $_db->getAllAcademicYear();
-		$this->view->room = array();
-		
-		$tsub= new Foundation_Form_FrmStudentRegister();
-		$frm_register=$tsub->FrmStudentRegister($test);
-		Application_Model_Decorator::removeAllDecorator($frm_register);
-		$this->view->frm = $frm_register;
-	}
+	
 	function addLanglevelAction(){
 		if($this->getRequest()->isPost()){
 			try{

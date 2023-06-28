@@ -737,4 +737,44 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY gd.subjectId ASC ";
 		return $this->getAdapter()->fetchRow($sql);
 	}
+	function getSubjectScoreByGroup($data){
+		$db=$this->getAdapter();
+		$sql="SELECT
+		gsjd.*,
+		g.amount_subject AS amount_subjectdivide,
+		gsjd.max_score AS max_subjectscore,
+		gsjd.score_short as cut_score,
+		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+		(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
+		(SELECT CONCAT(sj.subject_titleen) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name_en,
+		(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+		(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+		(gsjd.amount_subject) amtsubject_month,
+		(gsjd.amount_subject_sem) amtsubject_semester,
+		(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
+		(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
+		FROM
+		rms_group_subject_detail AS gsjd ,
+		rms_group as g
+		WHERE
+		g.id = gsjd.group_id
+		";
+		if(!empty($data['group_id'])){
+			$sql.=" and gsjd.group_id = ".$data['group_id'];
+		}
+		if(!empty($data['teacher_id'])){
+			$sql.=" AND gsjd.teacher = ".$data['teacher_id'];
+		}
+		if(!empty($data['teacher_id'])){
+			$sql.=" AND gsjd.teacher = ".$data['teacher_id'];
+		}
+		if(!empty($data['exam_type'])){
+			$sql.=" AND gsjd.amount_subject > 0 ";
+		}else{
+			$sql.=" AND gsjd.amount_subject_sem > 0 ";
+		}
+	
+		$sql.=' ORDER BY gsjd.id ASC ';
+		return $db->fetchAll($sql);
+	}
 }

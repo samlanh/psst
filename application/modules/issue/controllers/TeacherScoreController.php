@@ -83,7 +83,7 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
-		$db = new Foundation_Model_DbTable_DbScore();
+		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
 	public	function editAction(){
@@ -137,7 +137,7 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
-		$db = new Foundation_Model_DbTable_DbScore();
+		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
 	public	function addscoreAction(){
@@ -176,7 +176,7 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
-		$db = new Foundation_Model_DbTable_DbScore();
+		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
 	public	function editscoreAction(){
@@ -213,14 +213,14 @@ class Issue_TeacherScoreController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
 		
-		$db = new Foundation_Model_DbTable_DbScore();
+		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
 	
 	function getSubjectbygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbScore();
+			$db = new Issue_Model_DbTable_DbScore();
 			$session_t=new Zend_Session_Namespace('authteacher');
 			$teacher_id = $session_t->teacher_id;
 			$arr = array(

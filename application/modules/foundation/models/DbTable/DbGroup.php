@@ -300,19 +300,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $_db->getAllItems(1,null);
 	}
 	
-	public function addNewRoom($_data){
-		$this->_name='rms_room';
-		$_arr=array(
-				'branch_id'	  => $_data['branch_id'],
-				'max_std'	  => $_data['max_std'],
-				'floor'	  	  => $_data['floor'],
-				'room_name'	  => $_data['room_name'],
-				'modify_date' => Zend_Date::now(),
-				'is_active'   => $_data['status_room'],
-				'user_id'	  => $this->getUserId(),
-		);
-		return  $this->insert($_arr);
-	}
+	
 	
 	public function getDeptSubjectById($id){
 		$db = $this->getAdapter();

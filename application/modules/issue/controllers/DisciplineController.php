@@ -99,56 +99,24 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 		$branch = $db_global->getAllBranch();
 		$this->view->branch = $branch;
 		
-		
-	}
-	
-	function getSubjectAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$_dbmodel = new Foundation_Model_DbTable_DbStudentAttendance();
-			$data=$_dbmodel->getSujectById($data['parent_id']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
-	function getStudentAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudentAttendance();
-			$data=$db->getStudent($data['year'],$data['grade'],$data['session']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
 	}
 	
 	function getStudentBygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudentAttendance();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
 			$data=$db->getStudentByGroup($data['group']);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}
 	}
-	
 	function getsubjectbygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudentAttendance();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
 			$result =$db->getSubjectBygroup($data['group']);
 			print_r(Zend_Json::encode($result));
 			exit();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
-

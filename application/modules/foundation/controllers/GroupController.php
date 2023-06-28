@@ -209,20 +209,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm_group);
 		$this->view->frm = $frm_group;
 	}
-	function addRoomAction(){
-		if($this->getRequest()->isPost()){
-			try{
-				$data=$this->getRequest()->getPost();
-				$db = new Foundation_Model_DbTable_DbGroup();
-				$room = $db->addNewRoom($data);
-				print_r(Zend_Json::encode($room));
-				exit();
-			}catch (Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-	}
+	
 	function getsubjectbydegreeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -232,40 +219,6 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
-	function addGraddjaxAction(){
-    	if($this->getRequest()->isPost()){
-    		try{
-    			$data = $this->getRequest()->getPost();
-    			$db = new Global_Model_DbTable_DbItemsDetail();
-    			$row = $db->AddGradeByAjax($data);
-    			print_r(Zend_Json::encode($row));
-    			exit();
-    		}catch(Exception $e){
-    			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		}
-    	}
-    }
-    function getgroupAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
-    		$model = new Application_Model_DbTable_DbGlobal();
-    		
-    		$group = $model->getAllGroupName($data);
-    		array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
-    		
-    		$degree = $model->getAllItems(1,null);
-    		$room = $model->getAllRoom($branch_id);
-    		array_unshift($room, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_ROOM")));
-    		
-    		$result = array('group'=>$group,'degree'=>$degree,'room'=>$room);
-    		print_r(Zend_Json::encode($result));
-    		exit();
-    	}
-    }
-    
     
     function getAcademicyearAction(){//year for study only
     	if($this->getRequest()->isPost()){

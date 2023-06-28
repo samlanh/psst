@@ -812,7 +812,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	   	return $this->getAdapter()->fetchRow($sql);
    }
    public function getSubjectScoreGroup($group_id,$teacher_id=null,$exam_type=1){
-   	$db = new Foundation_Model_DbTable_DbScore();
+   	$db = new Issue_Model_DbTable_DbScore();
    	return $db->getSubjectScoreByGroup($group_id,$teacher_id=null,$exam_type);
    }
    

@@ -164,7 +164,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$group = $db->getAllGroupOfStudent($data['studentId']);
     	$this->view->group = $group;
     	 
-    	$db = new Foundation_Model_DbTable_DbScore();
+    	$db = new Issue_Model_DbTable_DbScore();
     	$this->view->month = $db->getAllMonth();
     }
     
@@ -496,7 +496,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	
     	$group = $db->getAllGroupOfStudent($data['stu_id']);
     	$this->view->group = $group;
-    	$db = new Foundation_Model_DbTable_DbScore();
+    	$db = new Issue_Model_DbTable_DbScore();
 		$arr = array(
 			'group_id'=>$data['group_id'],
 			'exam_type'=>$data['exam_type'],
@@ -1029,7 +1029,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	 
     	$group = $db->getAllGroupOfStudent($data['stu_id']);
     	$this->view->group = $group;
-    	$db = new Foundation_Model_DbTable_DbScore();
+    	$db = new Issue_Model_DbTable_DbScore();
 		$arr = array(
 			'group_id'=>$data['group_id'],
 			'exam_type'=>$data['exam_type'],

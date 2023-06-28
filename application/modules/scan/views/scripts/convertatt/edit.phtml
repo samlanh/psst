@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_ATTENDENCE"));
 	$row_sub=$this->rows_sub;
-	$_model = new Foundation_Model_DbTable_DbStudentAttendance();
 ?>	
 <head>
   <meta charset="utf-8">
@@ -597,7 +596,7 @@ function initailize(){
 	str=""; 
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	<?php if (!empty($this->allstudentBygroup)) { foreach ($this->allstudentBygroup as $key=> $row){
-			//$student_att = $_model->getAttendeceStatus($this->row['id'],$row['stu_id']);
+			
 			$gender = $row['sex'];
 		?>
 			inx = parseFloat(<?php echo $key?>)+1;

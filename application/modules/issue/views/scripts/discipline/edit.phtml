@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_MISTAKE"));
 	$row_sub=$this->rows_sub;
-	$_model = new Foundation_Model_DbTable_DbStudentAttendance();
+	$_model = new Issue_Model_DbTable_DbStudentAttendance();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$payment_term = $this->payment_term;
 	$rs_sub=$this->rows_sub;

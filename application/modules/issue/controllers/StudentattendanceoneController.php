@@ -106,16 +106,5 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 		$this->view->grade = $db_global->getAllGrade();
 		$this->view->room = $db_global->getAllRoom();
 	}
-	
-	function getStudentbygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendanceOne();
-			$data=$db->getStudentByGroup($data['group']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
-	
 }
 

@@ -82,12 +82,12 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
-		$db = new Foundation_Model_DbTable_DbScore();
+		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
-		$_model = new Foundation_Model_DbTable_DbScore();
+		$_model = new Issue_Model_DbTable_DbScore();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['score_id']=$id;
@@ -120,22 +120,14 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
 		
-		$db = new Foundation_Model_DbTable_DbScore();
+		$db = new Issue_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
-	function getGradeAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbScore();
-			$grade = $db->getAllGrade($data['degree']);
-			print_r(Zend_Json::encode($grade));
-			exit();
-		}
-	}
+	
 	function getStudentAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbScore();
+			$db = new Issue_Model_DbTable_DbScore();
 			$data=$db->getStudentByGroup($data['group']);
 			print_r(Zend_Json::encode($data));
 			exit();
@@ -144,7 +136,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 	function getSubjectbygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbScore();
+			$db = new Issue_Model_DbTable_DbScore();
 			$arr = array(
 				'group_id'=>$data['group'],
 		    );
@@ -156,7 +148,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 	function getChildsubjectAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbScore();
+			$db = new Issue_Model_DbTable_DbScore();
 			$data=$db->getChildSubject($data['subject_id']);
 			print_r(Zend_Json::encode($data));
 			exit();

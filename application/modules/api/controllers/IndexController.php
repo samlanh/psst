@@ -200,8 +200,13 @@ class Api_IndexController extends Zend_Controller_Action
    		$semesterAverage = $dbApi->getAverageSemesterFull($rs['group_id'], $rs['for_semester'], $rs['student_id']);
    		$this->view->Semester = $semesterAverage;
    	}
-   	$db = new Foundation_Model_DbTable_DbScore();
-   	$subject =$db->getSubjectScoreByGroup($data['group_id'],null,$data['exam_type']);
+   	$db = new Issue_Model_DbTable_DbScore();
+	$data=array(
+	'group_id'=>$data['group_id'],
+	'exam_type'=>$data['exam_type'],
+	
+	);
+   	$subject =$db->getSubjectScoreByGroup($data);
    	$this->view->subject = $subject;
    	
    	$frmgb = new Application_Form_FrmGlobal();

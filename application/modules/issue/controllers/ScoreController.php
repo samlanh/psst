@@ -57,11 +57,8 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			if($dbset['scoreresulttye']==1){
-				$db = new Issue_Model_DbTable_DbScore();//by subject
-			}else{
-				$db = new Issue_Model_DbTable_DbScoreaverage();//by average 
-			}
+			$db = new Issue_Model_DbTable_DbScore();//by subject
+			
 			try {
 				if(isset($_data['save_new'])){
 					$rs =  $db->addStudentScore($_data);
@@ -104,11 +101,8 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			try {
 				$key = new Application_Model_DbTable_DbKeycode();
 				$dbset=$key->getKeyCodeMiniInv(TRUE);
-				if($dbset['scoreresulttye']==1){
-					$dbs = new Issue_Model_DbTable_DbScore();//by subject
-				}else{
-					$dbs = new Issue_Model_DbTable_DbScoreaverage();//by average
-				}
+				$dbs = new Issue_Model_DbTable_DbScore();//by subject
+				
 				if(isset($_data['save_close'])){
 					$rs =  $dbs->updateStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/score");

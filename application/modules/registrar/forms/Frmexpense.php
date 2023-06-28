@@ -83,14 +83,12 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 				'readonly'=>'readonly'
 		));
 		
-		
 		$total_income=new Zend_Dojo_Form_Element_NumberTextBox('total_income');
 		$total_income->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
 		));
-		
 		
 		$convert_to_dollar=new Zend_Dojo_Form_Element_NumberTextBox('convert_to_dollar');
 		$convert_to_dollar->setAttribs(array(

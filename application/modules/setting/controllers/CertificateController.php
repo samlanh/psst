@@ -10,7 +10,7 @@ class Setting_CertificateController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-		  $db = new Setting_Model_DbTable_DbPickupCard();
+		  $db = new Setting_Model_DbTable_DbCertificate();
 		   if($this->getRequest()->isPost()){
 			  $_data=$this->getRequest()->getPost();
 				 $search = array(
@@ -21,11 +21,11 @@ class Setting_CertificateController extends Zend_Controller_Action {
 					'adv_search' => '',
 					'status' => -1);   		
 				 }
-			 $rs_rows= $db->getAllBranch($search);
+			 $rs_rows= $db->getAllCertificate($search);
 			  $list = new Application_Form_Frmtable();
-			  $collumns = array("USING","TITLE","BRANCH","SCHOOL_OPTION","NOTE","STATUS");
+			  $collumns = array("USING","TITLE","BRANCH","SCHOOL_OPTION","CREATE_DATE","STATUS");
 			  $link=array(
-							'module'=>'setting','controller'=>'pickupcard','action'=>'edit',
+							'module'=>'setting','controller'=>'certificate','action'=>'edit',
 			  );
 			  $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'prefix'=>$link));
 		  }catch (Exception $e){
@@ -44,15 +44,15 @@ class Setting_CertificateController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();	
 			try {
 				$sms = "INSERT_SUCCESS";
-				$_dbmodel = new Setting_Model_DbTable_DbPickupCard();
-				$branch_id= $_dbmodel->addPickupCard($_data);
+				$_dbmodel = new Setting_Model_DbTable_DbCertificate();
+				$branch_id= $_dbmodel->addCertifSetting($_data);
 				if($branch_id==-1){
 					$sms = "RECORD_EXIST";
 				}
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/pickupcard/index");
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/certificate/index");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/pickupcard/add");
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/certificate/add");
 				}
 			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -69,21 +69,38 @@ class Setting_CertificateController extends Zend_Controller_Action {
 
 	public function editAction(){
 		
-		$db_gs = new Setting_Model_DbTable_DbGeneral();
-		if($this->getRequest()->isPost()){
+		$id=$this->getRequest()->getParam("id");
+		$_dbmodel = new Setting_Model_DbTable_DbCertificate();
+		
+		if($this->getRequest()->isPost()){//check condition return true click submit button
+			$_data = $this->getRequest()->getPost();	
 			try{
-				$data = $this->getRequest()->getPost();
-				//$db_gs->updateCertificatesetting($data);
-				//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/setting/certificate");
-			}catch (Exception $e){
-				Application_Form_FrmMessage::message("EDIT_FAILE");
+				$sms = "EDIT_SUCCESS";
+				
+				$branch_id= $_dbmodel->updateCardMG($_data);
+				if($branch_id==-1){
+					$sms = "RECORD_EXIST";
+				}
+				if(!empty($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/certificate/index");
+				}
+			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
 			}
+		}
+		$id = empty($id)?0:$id;
+		
+		$row=$_dbmodel->getCertifById($id);
+		
+		$this->view->rs = $row;
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/pickupcard/index");
+			exit();
 		}
 
 		$fm = new Setting_Form_FrmPickupCard();
-		$frm = $fm->FrmCertificate();
-		//$this->view->row = $row;
+		$frm = $fm->FrmCertificate($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
   

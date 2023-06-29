@@ -7,9 +7,9 @@
 $frm = $this->frm_branch;
 
 $defaultBackground = $this->baseUrl()."/images/Logo/Logo.png";
-if(!empty($this->row['certificate_bg']['keyValue'])){
-	if (file_exists(PUBLIC_PATH."/images/card/".$this->row['certificate_bg']['keyValue'])){
-		$defaultBackground = $this->baseUrl().'/images/card/'.$this->row['certificate_bg']['keyValue'];
+if(!empty($this->rs['background'])){
+	if (file_exists(PUBLIC_PATH."/images/card/".$this->rs['background'])){
+		$defaultBackground = $this->baseUrl().'/images/card/'.$this->rs['background'];
 	}
 }
 
@@ -70,18 +70,27 @@ if(!empty($this->row['certificate_bg']['keyValue'])){
 									   </div>
 									</div>
 									
-									 <div class="form-group">
-									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("School Option");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="schoolOption" />
-									   </div>
-									</div>
 									<div class="form-group">
 									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE");?> <span class="required">*</span>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("certificate_note");?>
+											<?php echo $frm->getElement("title");?>
+											<?php echo $frm->getElement("id");?>
+									   </div>
+									</div>
+									 <div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("School Option");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+										   <?php echo $frm->getElement("schoolOption");?>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CERTIFICATE_NOTE");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("certificate_describe");?>
 									   </div>
 									</div>
 									
@@ -264,7 +273,7 @@ if(!empty($this->row['certificate_bg']['keyValue'])){
             <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('EDIT');?>" dojoType="dijit.form.Button"  />
+					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_close" name="save_close"  id="save_close" label="<?php echo $tr->translate('EDIT');?>" dojoType="dijit.form.Button"  />
                	</div>
              </div>
 		</form>
@@ -370,18 +379,18 @@ function loadImage(){
 }
 
 
-// function readURLBack(input) {
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
+function readURLBack(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
         
-//         reader.onload = function (e) {
-//             $('#certificate_back_wiew').attr('src', e.target.result);
-//         }
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
-// $("#photo").change(function(){
-// 	readURLBack(this);
-// });
+        reader.onload = function (e) {
+            $('#certificate_back_wiew').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#photo").change(function(){
+	readURLBack(this);
+});
 
 </script>

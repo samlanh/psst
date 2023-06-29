@@ -286,8 +286,8 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				'required'=>true,
 		));
 		
-		$certificate_note = new Zend_Dojo_Form_Element_TextBox('certificate_note');
-		$certificate_note->setAttribs(array(
+		$certificate_describe = new Zend_Dojo_Form_Element_TextBox('certificate_describe');
+		$certificate_describe->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 		));
@@ -335,36 +335,41 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
+			$branch_id->setValue($data['branch_id']);
+			$title->setValue($data['title']);
+			$_schoolOption->setValue($data['schoolOption']);
+			$name_left->setValue($data['name_left']);
+			$gender_left->setValue($data['gender_left']);
+			$date_left->setValue($data['date_left']);
+			$code_left->setValue($data['code_left']);
+			$year_left->setValue($data['year_left']);
+			$rank_left->setValue($data['rank_left']);
+			$grade_left->setValue($data['grade_left']);
+			$academic_left->setValue($data['academic_left']);
+			$month_left->setValue($data['month_left']);
+			$day_left->setValue($data['day_left']);
 
-			$certificate_note->setValue($data['certificate_note']['keyValue']);
-			$name_left->setValue($data['name_left']['keyValue']);
-			$gender_left->setValue($data['gender_left']['keyValue']);
-			$date_left->setValue($data['date_left']['keyValue']);
-			$code_left->setValue($data['code_left']['keyValue']);
-			$year_left->setValue($data['year_left']['keyValue']);
-			$rank_left->setValue($data['rank_left']['keyValue']);
-			$grade_left->setValue($data['grade_left']['keyValue']);
-			$academic_left->setValue($data['academic_left']['keyValue']);
-			$month_left->setValue($data['month_left']['keyValue']);
-			$day_left->setValue($data['day_left']['keyValue']);
-
-			$name_top->setValue($data['name_top']['keyValue']);
-			$gender_top->setValue($data['gender_top']['keyValue']);
-			$date_top->setValue($data['date_top']['keyValue']);
-			$code_top->setValue($data['code_top']['keyValue']);
-			$year_top->setValue($data['year_top']['keyValue']);
-			$rank_top->setValue($data['rank_top']['keyValue']);
-			$grade_top->setValue($data['grade_top']['keyValue']);
-			$academic_top->setValue($data['academic_top']['keyValue']);
-			$month_top->setValue($data['month_top']['keyValue']);
-			$day_top->setValue($data['day_top']['keyValue']);	
+			$name_top->setValue($data['name_top']);
+			$gender_top->setValue($data['gender_top']);
+			$date_top->setValue($data['date_top']);
+			$code_top->setValue($data['code_top']);
+			$year_top->setValue($data['year_top']);
+			$rank_top->setValue($data['rank_top']);
+			$grade_top->setValue($data['grade_top']);
+			$academic_top->setValue($data['academic_top']);
+			$month_top->setValue($data['month_top']);
+			$day_top->setValue($data['day_top']);
+			$_id->setValue($data['id']);
+			$certificate_describe->setValue($data['certificate_describe']);
+			
 		}
 		
 		$this->addElements(array(
+				$_id,
 				$title,
 				$branch_id,
 				$_schoolOption,
-				$certificate_note,
+				$certificate_describe,
 				$name_left,
 				$gender_left,
 				$date_left,

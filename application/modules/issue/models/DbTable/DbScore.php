@@ -353,12 +353,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if(!empty($search['grade'])){
 			$where.=" AND `g`.`grade` =".$search['grade'];
 		}
-// 		if(!empty($search['session'])){
-// 			$where.=" AND `g`.`session` =".$search['session'];
-// 		}
-// 		if(!empty($search['room'])){
-// 			$where.=" AND `g`.`room_id` =".$search['room'];
-// 		}
 		if(!empty($search['group'])){
 			$where.=" AND `s`.`group_id` =".$search['group'];
 		}

@@ -100,7 +100,6 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 			$_schoolOption->setValue($data['schoolOption']);
 			$_type_subject->setValue($data['type_subject']);
 			$_subject_lang->setValue($data['subject_lang']);
-			//$_parent->setValue($data['parent']);
 			
 			$id->setValue($data["id"]);
 		}

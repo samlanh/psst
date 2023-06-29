@@ -66,9 +66,6 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 			$s_where[]=" com.commune_namekh LIKE '%{$s_search}%'";
 			$where .=' AND '.implode(' OR ',$s_where);
 		}
-// 		if(!empty($search['province_name'])){
-// 			$where.=" AND com.province_id=".$search['province_name'];
-// 		}
 		if(!empty($search['district_name'])){
 			$where.=" AND com.district_id=".$search['district_name'];
 		}
@@ -76,7 +73,6 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 			$where.=" AND com.status=".$search['search_status'];
 		}
 		$order = " ORDER BY com.com_id DESC ";
-// 		echo $sql.$where.$order;exit();
 		return $db->fetchAll($sql.$where.$order);	
 	}
         public function getCommuneBydistrict($distict_id){

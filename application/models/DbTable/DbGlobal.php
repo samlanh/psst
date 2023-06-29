@@ -2053,13 +2053,12 @@ function getAllgroupStudyNotPass($action=null){
   	$currentLang = $this->currentlang();
   	$userid = empty($user['user_id'])?0:$user['user_id'];
   	$sql="SELECT n.*,
-  	(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=n.branch_id LIMIT 1) AS branch_name,
-  		(SELECT nd.title FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS title,
-  		(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
-		(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
+	  		(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=n.branch_id LIMIT 1) AS branch_name,
+	  		(SELECT nd.title FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS title,
+	  		(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
+			(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
 		 FROM `ln_news` AS n
-		 WHERE n.status = 1 
-		 ";
+		 	WHERE n.status = 1 ";
   	
   	$dbp = new Application_Model_DbTable_DbGlobal();
   	$sql.=$dbp->getAccessPermission("n.branch_id");
@@ -2095,11 +2094,15 @@ function getAllgroupStudyNotPass($action=null){
   	$currentLang = $this->currentlang();
   	$userid = empty($user['user_id'])?0:$user['user_id'];
   	$sql="SELECT n.*,
-	  	(SELECT nd.title FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS title,
-	  	(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
-	  	(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
+		  	(SELECT nd.title FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS title,
+		  	(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
+		  	(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
 	  	FROM `ln_news` AS n
-	  	WHERE n.status = 1 AND n.id = $id LIMIT 1";
+	  		WHERE n.status = 1 
+  				AND n.id = $id ";
+	  	$dbp = new Application_Model_DbTable_DbGlobal();
+	  	$sql.=$dbp->getAccessPermission('n.branch_id');
+ 		$sql.="LIMIT 1";
 	  return $db->fetchRow($sql);
   }
   function getPrefixByDegree($degree){

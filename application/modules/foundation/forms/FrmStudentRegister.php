@@ -406,7 +406,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$pob->setValue($data['pob']);
 			$phone->setValue($data['tel']);
 			$home_note->setValue($data['home_num']);
-		//	$_stutype->setValue($data['stu_denttype']);
 			$way_note->setValue($data['street_num']);
 			$village_note->setValue($data['village_name']);
 			$_branch_id->setValue($data['branch_id']);
@@ -417,11 +416,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			if($request->getActionName()=='edit'){
 				$student_id->setValue($data['stu_code']);
 			}			
-// 			$_academic_year->setValue($data['academic_year']);
-// 			$session->setValue($data['session']);
-// 			$degree->setValue($data['degree']);
 			$degree_stu->setValue($data['calture']);
-// 			$room->setValue($data['room']);
 			$status->setValue($data['status']);
 			$remark->setValue($data['remark']);
 			$fa_name_en->setValue($data['father_enname']);

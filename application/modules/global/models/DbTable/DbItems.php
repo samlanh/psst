@@ -217,11 +217,11 @@
 					foreach ($ids as $i){
 						if (!empty($_data['detailid'.$i])){
 							$arr = array(
-									'dept_id'		=>$id,
-									'subject_id'	=>$_data['subject_study_'.$i],
-									'note'   		=> $_data['note_'.$i],
-									'date' 			=> date("Y-m-d"),
-									'user_id'		=> $this->getUserId()
+								'dept_id'		=>$id,
+								'subject_id'	=>$_data['subject_study_'.$i],
+								'note'   		=> $_data['note_'.$i],
+								'date' 			=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
 							);
 							
 							if($show==1){
@@ -235,11 +235,11 @@
 							$this->update($arr, $where);
 						}else{
 							$arr = array(
-									'dept_id'		=>$id,
-									'subject_id'	=>$_data['subject_study_'.$i],
-									'note'   		=> $_data['note_'.$i],
-									'date' 			=> date("Y-m-d"),
-									'user_id'		=> $this->getUserId()
+								'dept_id'		=>$id,
+								'subject_id'	=>$_data['subject_study_'.$i],
+								'note'   		=> $_data['note_'.$i],
+								'date' 			=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
 							);
 							if($show==1){
 								$arr['max_score']=$_data['max_score'.$i];
@@ -281,21 +281,21 @@
 					foreach ($ids1 as $k){
 						if (!empty($_data['old_id_'.$k])){
 							$arr = array(
-									'degree_id'		=> $id,
-									'comment_id'	=> $_data['comment_'.$k],
-									'note'   		=> $_data['remark'.$k],
-									'create_date' 	=> date("Y-m-d"),
-									'user_id'		=> $this->getUserId()
+								'degree_id'		=> $id,
+								'comment_id'	=> $_data['comment_'.$k],
+								'note'   		=> $_data['remark'.$k],
+								'create_date' 	=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
 							);
 							$where =" id =".$_data['old_id_'.$k];
 							$this->update($arr, $where);
 						}else{
 							$arr = array(
-									'degree_id'		=> $id,
-									'comment_id'	=> $_data['comment_'.$k],
-									'note'   		=> $_data['remark'.$k],
-									'create_date' 	=> date("Y-m-d"),
-									'user_id'		=> $this->getUserId()
+								'degree_id'		=> $id,
+								'comment_id'	=> $_data['comment_'.$k],
+								'note'   		=> $_data['remark'.$k],
+								'create_date' 	=> date("Y-m-d"),
+								'user_id'		=> $this->getUserId()
 							);
 							$this->insert($arr);
 						}
@@ -320,7 +320,6 @@
 				$this->update($_arr, $where);
 			}
 			
-		//// degree comment /////	
 			$this->updateItemsDetailByItems($_data);
 			return $id;
 		}catch(exception $e){
@@ -387,9 +386,10 @@
 	public function getGradeSubjectById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT *,
-			(SELECT total_score FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS total_max_score,
-			(SELECT amount_subject FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS divide_subject
-			FROM rms_grade_subject_detail WHERE grade_id = ".$db->quote($id);
+				(SELECT total_score FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS total_max_score,
+				(SELECT amount_subject FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS divide_subject
+			FROM rms_grade_subject_detail 
+				WHERE grade_id = ".$db->quote($id);
 		return $db->fetchAll($sql);
 	}
 	public function getDDegreeCommentById($id){

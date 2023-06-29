@@ -803,12 +803,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		return $_db->getAllProvince();
 	}
-	function getAllRoomFundation(){
-		$db = $this->getAdapter();
-		$sql ="SELECT room_name as name,room_id as id FROM rms_room WHERE is_active=1 ";
-		return $db->fetchAll($sql);
-		
-	}
+	
 	function getAllgroup(){
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		return $_dbgb->getAllGroupByBranch();

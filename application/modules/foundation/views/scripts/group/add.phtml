@@ -237,9 +237,13 @@
 										<div class="settings-main-icon ">
 											<i class="glyphicon glyphicon-th-list"></i>
 										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<div class="col-md-3 col-sm-3 col-xs-12"> 
 											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SUBJECT_INFO");?></p>
 										</div> 
+										<div class="col-md-5 col-sm-5 col-xs-12"> 
+											<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getSubject();"/>
+										</div> 
+										
 									</div>
 									<table class="collape responsiveTable" >
 										<thead  id="head-title">
@@ -582,12 +586,21 @@ function getSubject(){
 			    }
 		    }
 		    HideloadingBlock();
+			newoption(subject);
 		},
 		error: function(err) {
 			 HideloadingBlock();
 		}
 	});
 }
+
+function newoption(subject){
+	
+    option='<select name="group_subject_study" dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
+    dojo.html.set(dojo.byId("subject_option"),option , {
+         parseContent: true,
+    });
+  }
 
 var col = 0;
 var no = 0;
@@ -612,7 +625,7 @@ function addRow(){
 	}
 		template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
 		template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
@@ -622,7 +635,7 @@ function addRow(){
 		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 		
-	tmp='<tr class="rowData" id="row'+col+'">';
+	tmp='<tr class="rowData hover" id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 
@@ -719,7 +732,7 @@ function getSubjectByGrade(){
 							template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>"  ><input required="1" dojoType="dijit.form.NumberTextBox" onKeyUp="calculateTotalSubject()" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 							template+='<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 							
-						tmp='<tr class="rowData" id="row'+col+'">';
+						tmp='<tr class="rowData hover" id="row'+col+'">';
 						tmp+="</tr>";
 						dojo.query("#table_row").append(tmp);
 						if($("#identity1").val()!="") {

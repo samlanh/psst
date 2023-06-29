@@ -4107,4 +4107,83 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
     }
+	
+	function getCheckExistingRegisterStudent($_data){
+		$db = $this->getAdapter();
+		$_data['phoneNumber']=trim($_data['phoneNumber']);
+		$_data['countryCode']=trim($_data['countryCode']);
+		$_data['emailAddress']=trim($_data['emailAddress']);
+		
+		$_data['isCheckDuplicateRegister'] = empty($_data['isCheckDuplicateRegister'])?0:$_data['isCheckDuplicateRegister'];
+		try{
+			$sql =" SELECT
+				s.*
+				,s.stu_id AS id
+				,s.stu_code AS stuCode
+				,s.stu_khname AS stuNameKH
+				,s.stu_enname AS stuFirstName
+				,s.last_name AS stuLastName
+				,s.photo
+			FROM
+				rms_student AS s
+			WHERE s.status = 1 AND s.customer_type NOT IN (2,3) ";
+			
+			if($_data['isCheckDuplicateRegister']=="0"){
+				$sql.= " AND s.tel= '".$_data['phoneNumber']."'";
+				$sql.= " AND s.countryCode='".$_data['countryCode']."'";
+			}else if($_data['isCheckDuplicateRegister']=="1"){
+				$sql.= " AND s.email='".$_data['emailAddress']."'";
+			}
+			
+			$sql.=" LIMIT 1 ";
+			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	
+	function getSchoolBusLogin($_data){
+		$db = $this->getAdapter();
+		$_data['userName']=trim($_data['userName']);
+		$_data['password']=trim($_data['password']);
+		try{
+			/*
+			$sql =" SELECT
+				s.*
+			FROM
+				rms_student_bus AS s
+			WHERE s.status = 1 ";
+			$sql.= " AND ".$db->quoteInto('s.busCode=?', $_data['userName']);
+			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
+			$row = $db->fetchRow($sql);
+			*/
+			$row = array();
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 }

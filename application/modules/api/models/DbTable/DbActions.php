@@ -1251,4 +1251,63 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
+	
+	public function checkExistingStudentAction($_data){
+		try{
+			$db = new Systemapi_Model_DbTable_DbApi();
+			$_data['phoneNumber'] = empty($_data['phoneNumber'])?"":$_data['phoneNumber'];
+			$_data['countryCode'] = empty($_data['countryCode'])?"":$_data['countryCode'];
+			$_data['countryISOCode'] = empty($_data['countryISOCode'])?"":$_data['countryISOCode'];
+			$_data['emailAddress'] = empty($_data['emailAddress'])?"":$_data['emailAddress'];
+			
+			$row = $db->getCheckExistingRegisterStudent($_data);
+			if ($row['status']){
+				$arrResult = array(
+						"result" =>  $row['value'],
+						"code" => "SUCCESS",
+					);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function loginSchoolBusAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getSchoolBusLogin($_data);
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
 }

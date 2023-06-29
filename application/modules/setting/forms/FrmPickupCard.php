@@ -285,6 +285,19 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+
+		$describe_left = new Zend_Dojo_Form_Element_NumberTextBox('describe_left');
+		$describe_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$describe_top = new Zend_Dojo_Form_Element_NumberTextBox('describe_top');
+		$describe_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
 		
 		$certificate_describe = new Zend_Dojo_Form_Element_TextBox('certificate_describe');
 		$certificate_describe->setAttribs(array(
@@ -334,6 +347,7 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 		));
 		
 		$_id = new Zend_Form_Element_Hidden('id');
+		$old_photo = new Zend_Form_Element_Hidden('old_photo');
 		if(!empty($data)){
 			$branch_id->setValue($data['branch_id']);
 			$title->setValue($data['title']);
@@ -361,10 +375,15 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 			$day_top->setValue($data['day_top']);
 			$_id->setValue($data['id']);
 			$certificate_describe->setValue($data['certificate_describe']);
+
+			$describe_left->setValue($data['describe_left']);
+			$describe_top->setValue($data['describe_top']);
+			$old_photo->setValue($data['background']);
 			
 		}
 		
 		$this->addElements(array(
+				$old_photo ,
 				$_id,
 				$title,
 				$branch_id,
@@ -391,6 +410,8 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				$academic_top,
 				$month_top,
 				$day_top,
+				$describe_left,
+				$describe_top
 		));
 		
 		return $this;

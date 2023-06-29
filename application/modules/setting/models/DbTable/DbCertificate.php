@@ -30,25 +30,6 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
     			else
     				$string = "Image Upload failed";
     		}
-    		
-    		$sql="SELECT id FROM rms_certificate_setting WHERE 1";
-    		$sql.=" AND title='".$_data['title']."' AND branch_id=".$_data['branch_id'];
-    		if (!empty($_data['schoolOption'])){
-    			$sql." AND schoolOption =".$_data['schoolOption'];
-    		}
-    		$rs = $_db->fetchOne($sql);
-    		if(!empty($rs)){
-    			return -1;
-    		}
-    		
-			$_arrother = array(				
-				'default'	=>0,
-				'modify_date'	=>date("Y-m-d H:i:s"),
-				'user_id'	=>$this->getUserId(),		
-			);
-			$this->_name ="rms_certificate_setting";
-			$whereother=" branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
-			$this->update($_arrother, $whereother);
 			
 	    	$_arr = array(
 	    			'branch_id'	    =>$_data['branch_id'],
@@ -78,6 +59,9 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 					'grade_left'	=>$_data['grade_left'],
 					'grade_top'	=>$_data['grade_top'],
 
+					'describe_left'	=>$_data['describe_left'],
+					'describe_top'	=>$_data['describe_top'],
+
 					'month_left'	=>$_data['month_left'],
 					'month_top'	=>$_data['month_top'],
 
@@ -86,7 +70,7 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 
 					'year_left'	=>$_data['year_left'],
 					'year_top'	=>$_data['year_top'],
-					'default'		=>0,
+					'default'		=>1,
 	    			'status'		=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'create_date'	=>date("Y-m-d H:i:s"),
@@ -102,47 +86,17 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 	    	}
     }
 
-    public function updateCardMG($_data){
+    public function updateCertificate($_data){
     	$_db= $this->getAdapter();
     	$_db->beginTransaction();
     	try{
 			$id = $_data['id'];
-    		$part= PUBLIC_PATH.'/images/card/';
     		
-    		$name = $_FILES['photo']['name'];
-    		$size = $_FILES['photo']['size'];
-    		if (!file_exists($part)) {
-    			mkdir($part, 0777, true);
-    		}
-    		$photo='';
-    	
-			$sql="SELECT id FROM rms_certificate_setting WHERE 1";
-    		$sql.=" AND title='".$_data['title']."' AND branch_id=".$_data['branch_id']." AND id!=".$id;
-    		if (!empty($_data['schoolOption'])){
-    			$sql." AND schoolOption =".$_data['schoolOption'];
-    		}
-    		$rs = $_db->fetchOne($sql);
-    		if(!empty($rs)){
-    			return -1;
-    		}
-			$default=0;
-			if(!empty($_data['setdefault'])){
-				$_arrother = array(				
-					'default'	=>0,
-					'modify_date'	=>date("Y-m-d H:i:s"),
-					'user_id'	=>$this->getUserId(),		
-				);
-				$this->_name ="rms_certificate_setting";
-				$whereother="id!=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
-				$this->update($_arrother, $whereother);
-				
-				$default=1;
-			}
 			$_arr = array(
 					'branch_id'	    =>$_data['branch_id'],
-	    			'schoolOption'	=>$_data['schoolOption'],
-	    			'background' 	=>$photo,
-
+					'schoolOption'	=>$_data['schoolOption'],
+					'title'	=>$_data['title'],
+					'certificate_describe'	=>$_data['certificate_describe'],
 	    			'name_left'	=>$_data['name_left'],
 					'name_top'	=>$_data['name_top'],
 
@@ -164,6 +118,9 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 					'grade_left'	=>$_data['grade_left'],
 					'grade_top'	=>$_data['grade_top'],
 
+					'describe_left'	=>$_data['describe_left'],
+					'describe_top'	=>$_data['describe_top'],
+
 					'month_left'	=>$_data['month_left'],
 					'month_top'	=>$_data['month_top'],
 
@@ -178,14 +135,25 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 					'create_date'	=>date("Y-m-d H:i:s"),
 	    			'user_id'		=>$this->getUserId(),		
 			);
-    	
-			if (!empty($name)){
-				$ss = 	explode(".", $name);
-				$image_name = "background_certifcate_".date("Y").date("m").date("d").time().".".end($ss);
+			
+			$part = PUBLIC_PATH . '/images/card/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$photo_name = $_FILES['photo']['name'];
+			if (!empty($photo_name)) {
+				//unset old file here
+				$tem = explode(".", $photo_name);
+				$image_name = "background_certifcate_" . date("Y") . date("m") . date("d") . time() . "." . end($tem);
 				$tmp = $_FILES['photo']['tmp_name'];
-				if(move_uploaded_file($tmp, $part.$image_name)){
-					$_arr['background']=$image_name;
+				if (move_uploaded_file($tmp, $part . $image_name)) {
+					move_uploaded_file($tmp, $part . $image_name);
+					$photo = $image_name;
+					$_arr['background'] = $photo;
 				}
+			}
+			if (!empty($photo_name) and file_exists($part . $_data['old_photo'])) { //delelete old file
+				unlink($part . $_data['old_photo']);
 			}
 			
 			$this->_name ="rms_certificate_setting";
@@ -205,10 +173,10 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
     	$check = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
     	$uncheck = '<i class="fa fa-square-o" aria-hidden="true"></i>';
     	$sql = "SELECT b.id,
-    	CASE    
-				WHEN  b.default = 1 THEN '$check'
-				WHEN  b.default = 0 THEN '$uncheck'
-				END AS student_statustitle,
+    	-- CASE    
+		-- 		WHEN  b.default = 1 THEN '$check'
+		-- 		WHEN  b.default = 0 THEN '$uncheck'
+		-- 		END AS student_statustitle,
     	b.title,
     	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.branch_id LIMIT 1) as branch_name,
     	(SELECT sp.title FROM `rms_schooloption` AS sp WHERE sp.id = b.schoolOption LIMIT 1) AS schoolOption,

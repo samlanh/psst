@@ -23,7 +23,7 @@ class Setting_CertificateController extends Zend_Controller_Action {
 				 }
 			 $rs_rows= $db->getAllCertificate($search);
 			  $list = new Application_Form_Frmtable();
-			  $collumns = array("USING","TITLE","BRANCH","SCHOOL_OPTION","CREATE_DATE","STATUS");
+			  $collumns = array("TITLE","BRANCH","SCHOOL_OPTION","CREATE_DATE","STATUS");
 			  $link=array(
 							'module'=>'setting','controller'=>'certificate','action'=>'edit',
 			  );
@@ -77,7 +77,7 @@ class Setting_CertificateController extends Zend_Controller_Action {
 			try{
 				$sms = "EDIT_SUCCESS";
 				
-				$branch_id= $_dbmodel->updateCardMG($_data);
+				$branch_id= $_dbmodel->updateCertificate($_data);
 				if($branch_id==-1){
 					$sms = "RECORD_EXIST";
 				}

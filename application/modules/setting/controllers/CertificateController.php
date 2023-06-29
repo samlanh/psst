@@ -10,7 +10,7 @@ class Setting_CertificateController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-		  $db = new Setting_Model_DbTable_DbPickupCard();
+		  $db = new Setting_Model_DbTable_DbCertificate();
 		   if($this->getRequest()->isPost()){
 			  $_data=$this->getRequest()->getPost();
 				 $search = array(
@@ -44,15 +44,15 @@ class Setting_CertificateController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();	
 			try {
 				$sms = "INSERT_SUCCESS";
-				$_dbmodel = new Setting_Model_DbTable_DbPickupCard();
-				$branch_id= $_dbmodel->addPickupCard($_data);
+				$_dbmodel = new Setting_Model_DbTable_DbCertificate();
+				$branch_id= $_dbmodel->addCertifSetting($_data);
 				if($branch_id==-1){
 					$sms = "RECORD_EXIST";
 				}
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/pickupcard/index");
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/certificate/index");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/pickupcard/add");
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/certificate/add");
 				}
 			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -69,7 +69,7 @@ class Setting_CertificateController extends Zend_Controller_Action {
 
 	public function editAction(){
 		
-		$db_gs = new Setting_Model_DbTable_DbGeneral();
+		$db_gs = new Setting_Model_DbTable_DbCertificate();
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();

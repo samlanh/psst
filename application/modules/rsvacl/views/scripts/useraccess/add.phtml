@@ -76,49 +76,55 @@
 								   if($key==0){
 								?>
 									<div data-dojo-type="dijit/layout/ContentPane" title="<?php echo $tr->translate($module_str[$rs['module']]);?>" >
-										<table width="100%" border="1" style="white-space: nowrap;border: 1px solid #ccc;border-collapse: collapse;">
-											<tr class="headRow">
-												<td width="45%">
-													<?php echo $tr->translate("USER_ACCESS_PAGE");?>
-												</td>
-												<td width="45%">
-													<?php echo $tr->translate("URL");?>
-												</td>
-												<td width="10%">
-													<?php echo $tr->translate("STATUS");?>
-												</td>
-												<td width="10%">
-													<?php echo $tr->translate("ACTION");?>
-												</td>
-											</tr>
+										<form action="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'useraccess','action'=>'addaccess')); ?>"  method="post" enctype="application/x-www-form-urlencoded">
+											<table width="100%" border="1" style="white-space: nowrap;border: 1px solid #ccc;border-collapse: collapse;">
+												<tr class="headRow">
+													<td width="45%">
+														<?php echo $tr->translate("USER_ACCESS_PAGE");?>
+													</td>
+													<td width="45%">
+														<?php echo $tr->translate("URL");?>
+													</td>
+													<td width="10%">
+														<?php echo $tr->translate("STATUS");?>
+													</td>
+													<td width="10%">
+														<?php echo $tr->translate("ACTION");?>
+													</td>
+												</tr>
 									<?php }?>
 								<?php  if($key>0){?>
-										<tr>
-											<td align="right"><button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"
-												type="button" onclick="">កំណត់សិទ្ធ</button></td>
-											<td colspan="3">
-												បើកសិទ្ធទាំងអស់ <input type="checkbox" name="allow_<?php echo $old_module;?>" id="allow_<?php echo $old_module;?>" onclick="checkStatus(1,'<?php echo $old_module;?>')"/>
-												បិទសិទ្ធទាំងអស់ <input type="checkbox" name="deny_<?php echo $old_module;?>" id="deny_<?php echo $old_module;?>" onclick="checkStatus(2,'<?php echo $old_module;?>');" />
-											<?php echo $module_str[$old_module];?></td>
-										</tr>
+												<tr>
+													<td></td>
+													<td align="center" style="background: #9ab2ff;font-weight: bold;">
+														បើកសិទ្ធទាំងអស់ <input type="checkbox" name="allow_<?php echo $old_module;?>" id="allow_<?php echo $old_module;?>" onclick="checkStatus('<?php echo $old_module;?>')"/>
+													</td>
+													<td colspan="2">
+														<input type="hidden" name="userType" value="<?php echo $this->userType;?>" />
+														<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"
+															type="submit" name="btnSubmit"  value="<?php echo $old_module;?>" onclick="">កំណត់សិទ្ធ</button>
+													</td>
+												</tr>
+											</form>
 										</table>
 								 	</div>
 								 	<div data-dojo-type="dijit/layout/ContentPane" title="<?php echo @$tr->translate($module_str[$rs['module']]);?>" >
-									 	<table width="100%" border="1" style="white-space: nowrap;border: 1px solid #ccc;border-collapse: collapse;">
-									 		<tr class="headRow">
-												<td width="45%">
-													<?php echo $tr->translate("USER_ACCESS_PAGE");?>
-												</td>
-												<td width="45%">
-													<?php echo $tr->translate("URL");?>
-												</td>
-												<td width="10%">
-													<?php echo $tr->translate("STATUS");?>
-												</td>
-												<td width="10%">
-													<?php echo $tr->translate("ACTION");?>
-												</td>
-										</tr>
+									 	<form action="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'useraccess','action'=>'addaccess')); ?>"  method="post" enctype="application/x-www-form-urlencoded">
+										 	<table width="100%" border="1" style="white-space: nowrap;border: 1px solid #ccc;border-collapse: collapse;">
+										 		<tr class="headRow">
+													<td width="45%">
+														<?php echo $tr->translate("USER_ACCESS_PAGE");?>
+													</td>
+													<td width="45%">
+														<?php echo $tr->translate("URL");?>
+													</td>
+													<td width="10%">
+														<?php echo $tr->translate("STATUS");?>
+													</td>
+													<td width="10%">
+														<?php echo $tr->translate("ACTION");?>
+													</td>
+												</tr>
 								<?php }}?>
 										<?php if($rs['is_menu'] == 1){
 													$space="";
@@ -129,24 +135,37 @@
 												}
 										?>
 									
-										<tr class="hover <?php if($rs['is_menu'] == 1)echo"highlight";?>">
-											<td <?php echo $style;?>>
-												&nbsp;&nbsp; <?php echo $space.$tr->translate($rs['label']);?>
-											</td>
-											<td>
-												&nbsp;&nbsp; <?php echo $rs['url']?>
-											</td>
-											<td align="center">
-												<?php echo $rs['img']?>
-											</td>
-											<td align="center">
-												<input class="permission_<?php echo $rs['module'];?>" type="checkbox" name='permission_<?php echo $rs['module'];?>[]' id='permission_<?php echo $rs['module'];?>[]' />
-											</td>
-										</tr>
+											<tr class="hover <?php if($rs['is_menu'] == 1)echo"highlight";?>">
+												<td <?php echo $style;?>>
+													&nbsp;&nbsp; <?php echo $space.$tr->translate($rs['label']);?>
+												</td>
+												<td>
+													&nbsp;&nbsp; <?php echo $rs['url']?>
+												</td>
+												<td align="center">
+													<?php echo $rs['img']?>
+												</td>
+												<td align="center">
+													<input class="permission_<?php echo $rs['module'];?>" <?php if($rs['status']==1){echo "checked";}?> value="<?php echo $rs['acl_id'];?>" type="checkbox" name='permission[]' id='permission_<?php echo $rs['module'];?>[]' />
+												</td>
+											</tr>
 								<?php 
 									$old_module = $rs['module'];
 								?>
 							<?php }}?>
+										<tr>
+											<td>
+											</td>
+											<td align="center" style="background: #9ab2ff;font-weight: bold;">
+												បើកសិទ្ធទាំងអស់ <input type="checkbox" name="allow_<?php echo $old_module;?>" id="allow_<?php echo $old_module;?>" onclick="checkStatus('<?php echo $old_module;?>')"/>
+											</td>
+											<td colspan="2">
+												<input type="text" name="userType" value="<?php echo $this->userType;?>" />
+												<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"
+													type="submit" name="btnSubmit"  value="<?php echo $old_module;?>" onclick="">កំណត់សិទ្ធ</button>
+											</td>
+										</tr>
+									</form>
 								</table>
 							</div>
 						</div>
@@ -180,25 +199,15 @@
 	}
 </style>
 <script>
-	function checkStatus(status,module){
-		if(status==1){
-			 if($("#allow_"+module).is(':checked')){
-				$("#deny_"+module).attr("checked",false);
-				 $('.permission_'+module).each(function() { //loop through each checkbox
-		              this.checked = true;  
-		     	 });
-			}else{
-				$('.permission_'+module).each(function() { //loop through each checkbox
-		              this.checked = false;  
-		     	 });
-				}
+	function checkStatus(module){
+		 if($("#allow_"+module).is(':checked')){
+			 $('.permission_'+module).each(function() { //loop through each checkbox
+	              this.checked = true;  
+	     	 });
 		}else{
-			 if($("#deny_"+module).is(':checked')){
-				$("#allow_"+module).attr("checked",false);
-				 $('.permission_'+module).each(function() { //loop through each checkbox
-		              this.checked = false;  
-		      });
-			}
+			$('.permission_'+module).each(function() { //loop through each checkbox
+	              this.checked = false;  
+	     	 });
 		}
 		
 	}

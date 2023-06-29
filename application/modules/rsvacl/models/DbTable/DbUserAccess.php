@@ -161,12 +161,42 @@ class RsvAcl_Model_DbTable_DbUserAccess extends Zend_Db_Table_Abstract
     	//echo $sql;
     	return $db->fetchAll($sql);
     }
-    
-    
-    
-    
-    
-    
-    
+    function setPermissionUserType($data){
+    	$db = $this->getAdapter();
+    	
+    	$userTypeId =  $data['userType'];
+    	$btnSubmit = $data['btnSubmit'];
+    	
+    	$sql="SELECT GROUP_CONCAT(al.acl_id)
+	    	FROM
+		    	`rms_acl_acl` al,
+		    	`rms_acl_user_access` AS ua
+    	WHERE
+	    	al.acl_id=ua.acl_id
+	    	AND ua.user_type_id=$userTypeId
+	    	AND module='$btnSubmit'";
+    	$resultaclId = $db->fetchOne($sql);
+    	
+    	if(!empty($resultaclId)){
+    		$where="user_type_id=".$userTypeId." AND acl_id IN(".$resultaclId.")";
+    		$this->delete($where);
+    		
+    	}
+    	if(empty($data['permission'])){
+    		return 0;
+    	}
+    	$identity = $data['permission'];//if not select please not allow to submit
+    	
+    	if (!empty($identity)){
+    		foreach($identity as $aclId){
+    			$data=array(
+    				'acl_id'=>$aclId,
+    				'user_type_id'=>$userTypeId
+    			);
+    	
+    			$this->insert($data);
+    		}
+    	}
+    }
 }
 ?>

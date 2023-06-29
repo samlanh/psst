@@ -165,7 +165,15 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     			if(!empty($status) || $status === 0){
     				if($tmp_status !== $status) continue;
     			}
-    			$rows[] = array("acl_id"=>$com['acl_id'],"label"=>$tr->translate($com['label']), "url"=>$com['user_access'], "img"=>$img,"module"=>$com['module'] , "is_menu"=>$com['is_menu']) ;
+    			$rows[] = array(
+    					"acl_id"=>$com['acl_id'],
+    					"label"=>$tr->translate($com['label']), 
+    					"url"=>$com['user_access'], 
+    					"img"=>$img,
+    					"module"=>$com['module'] ,
+    					"is_menu"=>$com['is_menu'],
+    					"status"=>$tmp_status
+    				) ;
     		}
     		 
     		$this->view->rows = $rows;
@@ -173,6 +181,20 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		$columns=array("Label",$tr->translate('URL'), $tr->translate('STATUS'));
     		$this->view->list = $list->getCheckList('radio', $columns, $rows);
+    		$this->view->userType=$id;
     	}
+    	
+    	
+    }
+    function addaccessAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		
+    		$db = new RsvAcl_Model_DbTable_DbUserAccess();
+    		$db->setPermissionUserType($data);
+    		$userTypeId = $data['userType'];
+    		Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/rsvacl/useraccess/add/id/".$userTypeId);
+    	}
+    	exit();
     }
 }

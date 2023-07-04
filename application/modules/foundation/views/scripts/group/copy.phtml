@@ -242,26 +242,35 @@
 										</div>
 										<table  class="collape responsiveTable">
 											<thead  id="head-title">
-												<tr class="head-td" align="center">
-													<th scope="col" width="4%"><?php echo $tr->translate("DEL");?></th>
-													<th scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>
-													<th scope="col" width="15%" style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
-													<th scope="col" width="20%">
+												<tr class="head-td " align="center" style="border: 1px solid;">
+													<th rowspan="2" scope="col" width="4%" ><?php echo $tr->translate("DEL");?></th>
+													<th rowspan="2" scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>
+													<th rowspan="2" scope="col" width="15%"  style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+													<th scope="col" width="13%">
 														<div class="custom-control custom-checkbox ">
-															<label class="float-start">
-																<?php echo $tr->translate('TEACHER');?>&nbsp;&nbsp;&nbsp;|
+															<label class="center">
+																<?php echo $tr->translate('TEACHER');?>
 															</label>
+														</div>
+													</th>
+													<th colspan="3" scope="col" width="10%" ><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
+													<th colspan="2" scope="col" width="10%" ><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
+													<th rowspan="2" scope="col" width="20%"><?php echo $tr->translate("NOTE");?></th>
+												</tr>
+												<tr class="head-td " align="center">
+													<th scope="col" width="13%">
+														<div class="custom-control custom-checkbox ">
 															<input type="checkbox" class="checkbox custom-control-input" value="0" id="checking_teach"  name="checking_teach" onclick="check();" id="checkall" >
 															<label class="custom-control-label" for="checking_teach">
 																<?php echo $tr->translate('FOLLOW_TEACHER_ROOM');?>
 															</label>
 														</div>
 													</th>
-													<th scope="col" width="10%" id="lbl_titlemetion"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
+													<th scope="col" width="10%" ><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
 													<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("SCORE_SHORT");?></th>
-													<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
-													<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
-													<th scope="col" width="20%"><?php echo $tr->translate("NOTE");?></th>
+													<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MULTIPLY");?></th>
+													<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
+													<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MULTIPLY");?></th>
 												</tr>
 											</thead>
 											<tbody id="table_row"></tbody>

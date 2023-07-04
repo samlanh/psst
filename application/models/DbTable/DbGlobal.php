@@ -2505,7 +2505,7 @@ function getAllgroupStudyNotPass($action=null){
   		return 'Excellent';
   	}
   }
-  function getMentionScore($score,$academic,$degree,$mentiontype=1,$grade=null){
+  function getMentionScore($score,$academic,$degree,$mentiontype=1,$grade=null,$maxScore=0){
   	$db = $this->getAdapter();
   	$column="sd.metion_grade";
   	if ($mentiontype==1){//grade A/B/C
@@ -2516,13 +2516,15 @@ function getAllgroupStudyNotPass($action=null){
   		$column="sd.mention_in_english";
   	}//,sd.max_score
   	$score = empty($score)?0:$score;
+  	$scoreAverage = $score/$maxScore*100;
+  	
   	$sql="SELECT $column AS mention
 			FROM `rms_metionscore_setting_detail` AS sd,
 				`rms_metionscore_setting` AS s
 			WHERE s.id = sd.metion_score_id
 				AND s.academic_year=$academic
 				AND degree = $degree
-				AND $score>=sd.max_score
+				AND $scoreAverage>=sd.max_score
 				ORDER BY sd.max_score DESC
 				LIMIT 1";
   	return $db->fetchOne($sql);
@@ -2923,11 +2925,17 @@ function getAllgroupStudyNotPass($action=null){
   		return $row;
   	}
   }
-  function getSumCutScorebyGroup($group_id,$subject_id=null){
+  function getGroupSubjectDetail($data){
   	$db = $this->getAdapter();
-  	$sql="SELECT SUM(score_short) AS score_short FROM `rms_group_subject_detail` WHERE group_id=$group_id ";
-  	if($subject_id!=null){
-  		$sql.=" AND subject_id = $subject_id ";
+  	$sql="SELECT SUM(score_short) AS score_short,
+  		amount_subject AS totalSubjectMonth,
+  		amount_subject_sem AS totalSubjectSemester
+  				FROM `rms_group_subject_detail` WHERE 1";
+  	if($data['groupId']){
+  		$sql.=" AND group_id=".$data['groupId'];
+  	}
+  	if($data['subjectId']){
+  		$sql.=" AND subject_id =".$data['subjectId'];
   	}
   	$sql.=" LIMIT 1";
   	return $db->fetchRow($sql);

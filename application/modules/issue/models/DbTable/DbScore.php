@@ -43,48 +43,38 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
-			$rs_groupscore = $dbpush->getSumCutScorebyGroup($_data['group']);
-			$total_cutscore = $rs_groupscore['score_short'];
-			
 			$dbpush->pushNotification(null,$_data['group'],2,4);
 			
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$total_score = 0;
+				$totalMutiAll=0;
 				$rssubject = $_data['selector'];
 				$subject_amt = 1 ;
 				if(!empty($ids))foreach ($ids as $i){
 					
 					foreach ($rssubject as $subject){
 						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							$avg = $total_score/$totalMutiAll;
 							$arr = array(
 								'score_id'=>$id,
 								'student_id'=>$old_studentid,
+									
 								'total_score'=>$total_score,
-								'amount_subject'=>$subject_amt,
-								'total_avg' =>number_format(($total_score)/$subject_amt,2)
+								'amount_subject'=>$totalMutiAll,
+								'total_avg' =>$avg,
 							);
 							$this->_name='rms_score_monthly';
 							$this->insert($arr);
 							$total_score = 0;
+							$totalMutiAll=0;
+							
 						}
 						
 						$old_studentid=$_data['student_id'.$i];
 						$subject_amt = $_data['amount_subject'.$i];
-						if($total_cutscore<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
-							$total_score = $total_score+$_data["score_".$i."_".$subject];
-							$score_cut = 0;
-						}else{//ពិន្ទុកាត់តាមមុខវិជ្ជា
-							$rs_scorebygroup = $dbpush->getSumCutScorebyGroup($_data['group'],$subject);
-							if(($_data["score_".$i."_".$subject]-$rs_scorebygroup['score_short'])<=0){
-								$score = 0;
-							}else{
-								$score = $_data["score_".$i."_".$subject] - $rs_scorebygroup['score_short'];
-							}
-							$total_score = $total_score+$score;
-							$score_cut = $rs_scorebygroup['score_short'];
-						}
+						
 						$dataScore = array(
 								'groupId'=>$_data['group'],
 								'examType'=>$_data['exam_type'],
@@ -93,54 +83,76 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'subjectId'=>$subject,
 								'studentId'=>$_data['student_id'.$i],
 								);
+						
 						$resultScore = $this->getGradingScoreData($dataScore);
+						
 						$gradingId='';
 						if(!empty($resultScore)){
 							$gradingId=$resultScore['gradingId'];
 						}
 						
+						$param =array(
+								'groupId'=>$_data['group'],
+								'subjectId'=>$subject,
+						);
+						
+						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param);//// call cut score
+						
+						if($_data['exam_type']==1){//month
+							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
+							$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
+							$score_cut = 0;
+						}else{
+							$totalMulti = $rsGroupSubject['totalSubjectSemester'];
+							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
+								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
+								$score_cut = 0;
+							}else{
+								if(($_data["score_".$i."_".$subject]-$rsGroupSubject['score_short'])<=0){
+									$score = 0;
+								}else{
+									$score = $_data["score_".$i."_".$subject] - $rsGroupSubject['score_short'];
+								}
+								$total_score = $total_score+($score*$totalMulti);
+								$score_cut = $rsGroupSubject['score_short'];
+							}
+						}
+						
+						
+						$totalMutiAll=$totalMutiAll +$totalMulti;
 						$arr=array(
 							'score_id'=>$id,
 							'group_id'=>$_data['group'],
 							'gradingTotalId'=>$gradingId,
 							'student_id'=>$_data['student_id'.$i],
-							'amount_subject'=>$_data['amount_subject'.$i],
 							'subject_id'=> $subject,
-							'score'=> $_data["score_".$i."_".$subject],
+								
+							'orgScore'=>$_data["score_".$i."_".$subject],
+							'subjectExam'=>$_data['amount_subject'.$i],
+								
+							'score'=> $totalMulti*$_data["score_".$i."_".$subject],
+							'amount_subject'=>$totalMulti,
 							'score_cut'=> $score_cut,
 							'status'=>1,
-							'user_id'=>$this->getUserId(),
-							'is_parent'=> 1
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
 						
-// 						$where=" groupId=".$_data['group'];
-// 						$where.=" AND examType=".$_data['exam_type'];
-// 						$where.=" AND forSemester=".$_data['for_semester'];
-// 						if($_data['exam_type']==1){//formonth
-// 							$where.=" AND forMonth=".$_data['for_month'];
-// 						}
-// 						$where.=" AND subjectId=".$subject;
-						
-// 						$dataUpdate = array(
-// 								'isLock'=>1,
-// 								'lockBy'=>$this->getUserId()
-// 								);
-// 						$this->_name='rms_grading';
-// 						$this->update($dataUpdate, $where);;
 					}
 				}
 				
 				if(!empty($ids)){
 					if($total_score>0){
-						$arr = array(
+						
+						$avg = $total_score/$totalMutiAll;
+							$arr = array(
 								'score_id'=>$id,
 								'student_id'=>$old_studentid,
+									
 								'total_score'=>$total_score,
-								'amount_subject'=>$subject_amt,
-								'total_avg' =>number_format($total_score/$subject_amt,2)
-						);
+								'amount_subject'=>$totalMutiAll,
+								'total_avg' =>$avg,
+							);
 						$this->_name='rms_score_monthly';
 						$this->insert($arr);
 					}
@@ -160,6 +172,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			}
 		  $db->commit();
 		}catch (Exception $e){
+			echo $e->getMessage();exit();
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -201,7 +214,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$dbpush = new Application_Model_DbTable_DbGlobal();
 		$dbpush->pushNotification(null,$_data['group'],2,4);
 		
-		$rs_groupscore = $dbpush->getSumCutScorebyGroup($_data['group']);
+		$param =array(
+				'groupId'=>$_data['group'],
+		);
+		$rs_groupscore = $dbpush->getGroupSubjectDetail($param);//// call cut score
 		
 		$total_cutscore = $rs_groupscore['score_short'];
 		
@@ -234,7 +250,11 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$total_score = $total_score+$_data["score_".$i."_".$subject];
 							$score_cut = 0;
 						}else{//ពិន្ទុកាត់តាមមុខវិជ្ជា
-							$rs_scorebygroup = $dbpush->getSumCutScorebyGroup($_data['group'],$subject);
+							$param =array(
+									'groupId'=>$_data['group'],
+									'subjectId'=>$subject,
+									);
+							$rs_scorebygroup = $dbpush->getGroupSubjectDetail($param);
 								
 							if(($_data["score_".$i."_".$subject]-$rs_scorebygroup['score_short'])<=0){
 								$score = 0;
@@ -254,8 +274,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'score'=> $_data["score_".$i."_".$subject],
 								'score_cut'=> $score_cut,
 								'status'=>1,
-								'user_id'=>$this->getUserId(),
-								'is_parent'=> 1
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
@@ -413,7 +431,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 	function studentScore($id){
 		$db=$this->getAdapter();
-		$sql="SELECT s.id,s.subject_titleen,s.is_parent
+		$sql="SELECT s.id,s.subject_titleen
 		FROM rms_subject AS s,rms_score_detail AS sd WHERE s.id=sd.subject_id AND sd.score_id=$id";
 		//echo $sql;
 		return $db->fetchAll($sql);
@@ -542,7 +560,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$sql.=" AND gsjd.amount_subject_sem >0 ";
 			}
 			$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
-						s.id=sd.subject_id LIMIT 1) ";
+						s.id=gsjd.subject_id LIMIT 1) ";
 						
 			$sql.=" ORDER BY $strSubjectLange ASC ,gsjd.id ASC ";
 			
@@ -606,8 +624,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
 		(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
 		(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-		sd.score ,
-		sd.`is_parent`
+		sd.score 
 		FROM
 		rms_score_detail AS sd
 		WHERE sd.score_id =$id ";
@@ -637,8 +654,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				  (SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
 				  (SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
 				  (SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-				  sd.score ,
-  				  sd.`is_parent`
+				  sd.score 
 				FROM
 				  rms_score_detail AS sd 
 				WHERE sd.score_id = $score_id
@@ -667,8 +683,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			sd.subject_id,
 			(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
 			(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-			sd.score ,
-			sd.`is_parent`
+			sd.score 
 			FROM
 			rms_score_detail AS sd
 			WHERE sd.score_id =$score_id	
@@ -683,17 +698,16 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}
 		$db = $this->getAdapter();
 		$sql="SELECT
-		sd.student_id,
-		(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-		(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-		(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-		sd.subject_id,
-		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
-		(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-		(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-		(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-		sd.score ,
-		sd.`is_parent`
+			sd.student_id,
+			(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
+			(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
+			(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
+			sd.subject_id,
+			(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
+			(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
+			(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
+			(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
+			sd.score 
 		FROM
 		rms_score_detail AS sd
 		WHERE sd.score_id = $score_id

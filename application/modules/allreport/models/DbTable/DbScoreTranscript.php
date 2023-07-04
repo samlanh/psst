@@ -19,7 +19,8 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		
 		$resultScoreArr = array(
 				'scoreId'=>$scoreId,
-				'studentId'=>$studentId
+				'studentId'=>$studentId,
+				'examType'=>$scoreInfo['exam_type']
 				);
 		$scoreSubjectInfo =  $this->getSubjectScoreTranscript($resultScoreArr);
 		
@@ -36,6 +37,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 						'subjectLang'=>$result['subjectLang'],
 						'sub_name_en'=>$result['sub_name_en'],
 						'maxScore'	=>$result['maxScore'],
+						'multiSubject'=>$result['multiSubject'],
 						'amount_subject'=>$result['amount_subject'],
 						'gradingTotalId'=>$result['gradingTotalId'],
 						'innerSubject'=>0
@@ -94,14 +96,31 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
 						s.id=sd.subject_id LIMIT 1) ";
 		
-		$strSubjecMaxScore = " (SELECT max_score FROM `rms_group_subject_detail` WHERE
+		//amount_subject_sem
+		//amount_subject
+		
+		
+		
+		$strCollect='amount_subject';
+		$strMaxScore='max_score';
+		if($data['examType']==2){//semester
+			$strCollect='amount_subject_sem';
+			$strMaxScore='semester_max_score';
+		}
+		
+		$strSubjecMaxScore = " (SELECT $strMaxScore FROM `rms_group_subject_detail` WHERE
 		group_id=sd.group_id AND
 		subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
+		
+		$strMultiSubject = " (SELECT $strCollect FROM `rms_group_subject_detail` WHERE
+		group_id=sd.group_id AND subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
+		//need to check this score is monthly or semester?
 		
 		
 		$sql="SELECT
 					$strSubjectLange AS subjectLang,
 					$strSubjecMaxScore AS maxScore,
+					$strMultiSubject AS multiSubject,
 					sd.`subject_id`,
 					sd.gradingTotalId,
 					sd.`score` AS totalAverage,

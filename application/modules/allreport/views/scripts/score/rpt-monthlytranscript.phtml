@@ -199,14 +199,20 @@ dojo.ready(function(){
 					<table class="header"  cellpadding="2"​ border="1"  style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;" >
 						<?php 
 						$totalAveragescore=0; 
-						$totalSubjectMaxScore=0;
-						$countAverage = 0;
+						$totalMaxScore=0;
+						$totalSubMaxScore=0;
+						$totalmultiAllSubject=0;
+						$totalmultiSubSubject=0;
 						$i=0; 
 						$currentLang = 0;
 						if (!empty($scoreSubjectList)){ ?>
 							<?php foreach ($scoreSubjectList as $keyLang => $resultScore){
 								$i++;
-								$grade = $dbgb->getMentionScore($resultScore['totalAverage'],$academicId,$scoreInfo['degreeId'],1);
+								$maxScore=$resultScore['maxScore']*$resultScore['multiSubject'];
+								
+								$totalMaxScore = $totalMaxScore+$maxScore;
+								
+								$grade = $dbgb->getMentionScore($resultScore['totalAverage'],$academicId,$scoreInfo['degreeId'],1,null,$maxScore);
 								if($currentLang!=$resultScore['subjectLang']){
 								?>
 								<?php if($keyLang>0){?>	
@@ -223,15 +229,16 @@ dojo.ready(function(){
 										<td align="center">
 											<strong>
 											<?php 
-											$totalKhmerAverage = $totalAveragescore/$countAverage;
+											$totalKhmerAverage = $totalAveragescore/$totalmultiSubSubject;
 											echo number_format($totalKhmerAverage,2); ?>
 											</strong>
 										</td>
-										<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalKhmerAverage, $academicId,$scoreInfo['degreeId'],1); ?></strong>&nbsp;</td>
+										<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore); ?></strong>&nbsp;</td>
 									</tr>
 								<?php 
 									$totalAveragescore=0;
-									$countAverage=0;
+									$totalSubMaxScore=0;
+									$totalmultiSubSubject=0;
 									$i=1;
 								}?>
 									
@@ -244,10 +251,13 @@ dojo.ready(function(){
 										<td >និទ្ទេស<br />Grade</td>
 									</tr>
 							<?php }
-							   $currentLang = $resultScore['subjectLang'];
-								$totalAveragescore = $totalAveragescore+$resultScore['totalAverage'];
+							    $currentLang = $resultScore['subjectLang'];
 								
-								$countAverage=$countAverage+1;
+								$totalmultiSubSubject = $totalmultiSubSubject+$resultScore['multiSubject'];//មេគុណសរុប
+								$totalSubMaxScore=$totalSubMaxScore+$maxScore;
+								
+								$totalmultiAllSubject = $totalmultiAllSubject+$resultScore['multiSubject'];
+								$totalAveragescore = $totalAveragescore+$resultScore['totalAverage'];
 								if($resultScore['innerSubject']==0){
 									
 								?>
@@ -255,7 +265,7 @@ dojo.ready(function(){
 										<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
 										<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 										<td align="left" >&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
-										<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $resultScore['maxScore']; ?>&nbsp;</td>
+										<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
 										<td class="border-right-none"></td>
 										<td align="center"><?php echo $resultScore['totalAverage']; ?></td>
 										<td align="center" class="colorRed"><?php echo $grade?></td>
@@ -270,7 +280,7 @@ dojo.ready(function(){
 									<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
 									<td align="left">&nbsp;<?php echo $resultSubList['subCriterialTitleKh']; ?>&nbsp;</td>
 									<td align="left" >&nbsp;<?php echo $resultSubList['subCriterialTitleEng']; ?>&nbsp;</td>
-									<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $resultScore['maxScore']; ?>&nbsp;</td>
+									<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
 									<td align="center"><?php echo $resultSubList['totalGrading']; ?></td>
 									<?php if($issetMerge==0){?>
 									<td rowspan="<?php echo $rowspan;?>" align="center"><?php echo $resultScore['totalAverage']; ?></td>
@@ -296,11 +306,11 @@ dojo.ready(function(){
 							<td align="center">
 								<strong>
 								<?php 
-									$totalKhmerAverage = $totalAveragescore/$countAverage;
+									$totalKhmerAverage = $totalAveragescore/$totalmultiSubSubject;
 									echo number_format($totalKhmerAverage,2); ?>
 								</strong>
 							</td>
-							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalKhmerAverage, $academicId,$scoreInfo['degreeId'],1); ?></strong>&nbsp;</td>
+							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore); ?></strong>&nbsp;</td>
 						</tr>
 			
 						<tr class="style hover doubleBorder" style=" line-height: 20px;">
@@ -320,7 +330,7 @@ dojo.ready(function(){
 								មធ្យមភាគពិន្ទុ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 							</td>
 							<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
-							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalAvg'], $academicId,$scoreInfo['degreeId'],1); ?>&nbsp;&nbsp;&nbsp;<?php echo $scoreInfo['rank'].'/'.$scoreInfo['amountStudent'];?></strong>&nbsp;</td>
+							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId,$scoreInfo['degreeId'],1,null,$totalMaxScore); ?>&nbsp;&nbsp;&nbsp;<?php echo $scoreInfo['rank'].'/'.$scoreInfo['amountStudent'];?></strong>&nbsp;</td>
 						</tr>
 						<tr class="cheader doubleBorder">
 							<td colspan="7" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;

@@ -274,7 +274,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		WHERE
 		   	st.`stu_id`=sd.`student_id`
 		   	AND g.`id` = s.`group_id`
-		   	AND sd.`is_parent`=1
 		   	AND s.`id`=sd.`score_id`
 		   	AND s.status = 1 ";
    	if (!empty($id)){
@@ -633,7 +632,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	s.`id`=sd.`score_id`
 	   	AND st.`stu_id`=sd.`student_id`
 	   	AND g.`id`=s.`group_id`
-	   	AND sd.`is_parent`=1
 	   	AND s.status = 1
 	   	AND g.id= $group_id
 	   	AND sd.student_id=$student_id ";
@@ -655,7 +653,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 					AND ss.for_semester= $semester_id
 					AND ss.group_id= $group_id
 					AND dd.subject_id=$subject_id 
-					AND dd.`is_parent`=1
 				 	)
 				) AS rank
 				FROM 
@@ -664,7 +661,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	`rms_group` AS g
 				WHERE s.`id`=sd.`score_id` 
 					AND g.`id`=s.`group_id`
-				   	AND sd.`is_parent`=1
 				   	AND s.status = 1
 				   	AND g.id= $group_id
 				   	AND s.for_semester= $semester_id
@@ -686,7 +682,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				AND ss.exam_type=2
 				AND ss.for_semester=$semester
 				AND ss.group_id= $group_id
-				AND dd.`is_parent`=1
 			 	)
 			) AS rank
 			FROM 
@@ -695,7 +690,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			   	`rms_group` AS g
 			WHERE s.`id`=sd.`score_id` 
 				AND g.`id`=s.`group_id`
-			   	AND sd.`is_parent`=1
 			   	AND s.status = 1
 			   	AND g.id= $group_id
 			   	AND s.for_semester=$semester
@@ -739,7 +733,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			   	AND sc.group_id=$group_id
 			   	AND sc.for_semester =$semester
 			   	AND sc.exam_type=2
-			   	AND sdd.`is_parent`=1
 			   	AND sdd.student_id = $student_id
 			   	GROUP BY sdd.student_id LIMIT 1
 			) AS avg_exam
@@ -750,7 +743,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		   	WHERE
 		   	s.`id`=sd.`score_id`
 		   	AND g.`id`=s.`group_id`
-		   	AND sd.`is_parent`=1
 		   	AND s.status = 1
 		   	AND g.id= $group_id
 		   	AND s.for_semester=$semester
@@ -762,27 +754,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    		return $db->fetchRow($sql.$where.$order);
    }
    function getRankingSemesterByStudent($group_id,$semester_id,$student_id){//ចំណាត់ថ្នាក់សំរាប់ឆមាសនីមួយៗ
-   	//is good for ranks but it now replace duplicate rank
-// 	   	$sql="SELECT * FROM (
-// 			  SELECT s.*, @rank := @rank + 1 rank FROM (
-// 			    SELECT student_id, SUM(score) totalPoints 
-// 				FROM 
-// 				`rms_score_detail` AS sd,
-// 				 `rms_score` AS s
-// 				WHERE 
-// 						s.`id`=sd.`score_id`
-// 					   	AND s.`group_id`=$group_id
-// 					   	AND sd.`is_parent`=1
-// 					   	AND s.status = 1
-// 					   	
-// 					   	AND s.for_semester=$semester
-// 					   	AND s.exam_type=2
-// 				GROUP BY student_id 	
-// 			  ) s, 
-// 			  (SELECT @rank := 0) init
-// 			  ORDER BY TotalPoints DESC
-// 			) r
-// 			WHERE student_id=$student_id	";
+
 		$sql="SELECT 
    			 FIND_IN_SET( total_score, (    
 			SELECT GROUP_CONCAT( total_score
@@ -792,7 +764,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				AND ss.exam_type=1
 				AND ss.for_semester= $semester_id
 				AND ss.group_id= $group_id
-				AND dd.`is_parent`=1
 			 	)
 			) AS rank,
 			SUM(score) as total_score
@@ -802,7 +773,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			   	`rms_group` AS g
 			WHERE s.`id`=sd.`score_id` 
 				AND g.`id`=s.`group_id`
-			   	AND sd.`is_parent`=1
 			   	AND s.status = 1
 			   	AND g.id=$group_id
 			   	AND s.for_semester= $semester_id
@@ -847,7 +817,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	   	`rms_score_detail` AS sd,
 	   	`rms_subject` AS sj
 	   	WHERE s.`id`=sd.`score_id`
-	   	AND sj.`id`=sd.`subject_id` AND sd.`is_parent`=1
+	   	AND sj.`id`=sd.`subject_id`
 	   	AND sd.`group_id`=$group_id
 	   	";
 	   	if($type_score==2 || $type_score==3){
@@ -1091,7 +1061,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		   		AND s.`id`=sd.`score_id` 
 		   		AND s.exam_type=2
 		 		AND sj.`id`=sd.`subject_id` 
-		 		AND sd.`is_parent`=1
 		 		AND g.`id`=s.`group_id`
 		 		AND sd.`group_id`=$group_id 
 		 		AND st.`stu_id`=$student_id 
@@ -1196,7 +1165,6 @@ function getExamByExamIdAndStudent($data){
 					AND ss.exam_type=1
 					AND ss.group_id= $group_id
 					AND dd.subject_id=$subject_id
-					AND dd.`is_parent`=1
 					AND ss.for_month=$formonth
 					)
 				) AS rank,
@@ -1207,7 +1175,6 @@ function getExamByExamIdAndStudent($data){
 					`rms_group` AS g
 				 WHERE s.`id`=sd.`score_id` 
 					AND g.`id`=s.`group_id`
-					AND sd.`is_parent`=1
 					AND s.status = 1
 					AND s.exam_type=1
 					AND g.id= $group_id

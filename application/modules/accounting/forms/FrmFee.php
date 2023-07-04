@@ -153,6 +153,21 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		$options= array(0=>$this->tr->translate("ONE_PROGRAM_ONLY"),1=>$this->tr->translate("MULTY_PROGRAM"),);
 		$ismulty_study->setMultiOptions($options);
 		
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$_degree->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("DEGREE"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>'false',
+				'onchange'=>'getallGrade();'
+		));
+		$_degree->setValue($request->getParam('degree'));
+		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
+		$opt_degree = $db->getAllItems(1);//degree
+		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
+		$_degree->setMultiOptions($opt_deg);
+		
 		if($data!=null){
 			$_branch_id->setValue($data['branch_id']);
 			$_from_academic->setValue($data['academic_year']);
@@ -166,6 +181,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 			$_is_finished->setValue($data['is_finished']);
 		}
 		$this->addElements(array($_branch_id,
+			$_degree,
 			$ismulty_study,
 			$_from_academic,
 			$type_study,

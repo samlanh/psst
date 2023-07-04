@@ -69,7 +69,7 @@ class Issuesetting_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$_examtype_items->setMultiOptions($_arr_opt_exam);
     	$_examtype_items->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     			'onChange'=>'addRow()',

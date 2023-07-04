@@ -64,25 +64,45 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 				$this->_name='rms_scoreengsettingdetail';
 				if(!empty($ids))foreach ($ids as $i){
 					$forExamType = empty($_data['forExamType'.$i])?1:2;
-					$arr=array(
-						'score_setting_id'		=>$id,
-						'criteriaId'			=>$_data['examtype_name_'.$i],
-						'pecentage_score'		=>$_data['percentage'.$i],
-						'timeInput'				=>$_data['timeInput'.$i],
-						'subjectId'				=>$_data['subjectId'.$i],
-						'subCriterialTitleKh'	=>$_data['subCriterialTitleKh'.$i],
-						'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
-						'note'					=>$_data['note_'.$i],
-						'forExamType'			=>$forExamType,
-					);
-					$this->insert($arr);
-					
-					if(!empty($_data['forMonth'.$i]) AND $_data['subjectId'.$i]>0){
-						$arr['subCriterialTitleKh']=$_data['subCriterialTitleKhMonth'.$i];
-						$arr['subCriterialTitleEng']=$_data['subCriterialTitleEngMonth'.$i];
-						$arr['forExamType']=1;
+					if($_data['subjectId'.$i]>0){
+						$arr=array(
+							'score_setting_id'		=>$id,
+							'criteriaId'			=>$_data['examtype_name_'.$i],
+							'pecentage_score'		=>$_data['percentage'.$i],
+							'timeInput'				=>$_data['timeInput'.$i],
+							'subjectId'				=>$_data['subjectId'.$i],
+							'note'					=>$_data['note_'.$i],
+							'forExamType'			=>$forExamType,
+						);
+						
+						if(!empty($_data['forMonth'.$i])){// for month
+							$arr['subCriterialTitleKh']=$_data['subCriterialTitleKhMonth'.$i];
+							$arr['subCriterialTitleEng']=$_data['subCriterialTitleEngMonth'.$i];
+							$arr['forExamType']=1;
+							$this->insert($arr);
+						}
+						
+						if(!empty($_data['forExamType'.$i])){//for semester
+							$arr['subCriterialTitleKh']=$_data['subCriterialTitleKh'.$i];
+							$arr['subCriterialTitleEng']=$_data['subCriterialTitleEng'.$i];
+							$arr['forExamType']=2;
+							$this->insert($arr);
+						}
+					}else{
+						$arr=array(
+								'score_setting_id'		=>$id,
+								'criteriaId'			=>$_data['examtype_name_'.$i],
+								'pecentage_score'		=>$_data['percentage'.$i],
+								'timeInput'				=>$_data['timeInput'.$i],
+								'subjectId'				=>$_data['subjectId'.$i],
+								'subCriterialTitleKh'	=>$_data['subCriterialTitleKh'.$i],
+								'subCriterialTitleEng'	=>$_data['subCriterialTitleEng'.$i],
+								'note'					=>$_data['note_'.$i],
+								'forExamType'			=>$forExamType,
+						);
 						$this->insert($arr);
 					}
+					
 				}
 			}
 		  $db->commit();
@@ -101,17 +121,17 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    }
    function getGradingSystemDetail($id){
    	$db = $this->getAdapter();
-   	$sql="SELECT s.*,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS exam_typetitle FROM `rms_scoreengsettingdetail` AS s WHERE s.score_setting_id=$id";
+   	$sql="SELECT s.*,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS exam_typetitle 
+   		FROM `rms_scoreengsettingdetail` AS s 
+   		WHERE s.score_setting_id=$id ORDER BY criteriaId ASC,forExamType ASC  ";
    	
    	$result =  $db->fetchAll($sql);
    	$resultOpt = array();
    	if(!empty($result)){
    		$key=0;
    		$criteriaId=0;
-   		$subjectId=0;
-   		foreach($result as $rs){
+   		foreach($result as $key=> $rs){
    			if($criteriaId!=$rs['criteriaId']){
-   				
 	   			$resultOpt[$key]['id']=$rs['id'];
 	   			$resultOpt[$key]['score_setting_id']=$rs['score_setting_id'];
 	   			$resultOpt[$key]['criteriaId']=$rs['criteriaId'];
@@ -120,25 +140,50 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 	   			$resultOpt[$key]['timeInput']=$rs['timeInput'];
 	   			
 	   			$resultOpt[$key]['subjectId']=$rs['subjectId'];
-	   			$resultOpt[$key]['subCriterialTitleKh']=$rs['subCriterialTitleKh'];
-	   			$resultOpt[$key]['subCriterialTitleEng']=$rs['subCriterialTitleEng'];
+	   			
 	   			
 	   			$resultOpt[$key]['forExamType']=$rs['forExamType'];
+	   			
+	   			$resultOpt[$key]['forExamTypeSemester']=($rs['forExamType']==2)?2:0;
+	   			
+	   			
 	   			$resultOpt[$key]['exam_typetitle']=$rs['exam_typetitle'];
 	   			
-	   			$resultOpt[$key]['subCriterialTitleKhMonth']='';
-	   			$resultOpt[$key]['subCriterialTitleEngMonth']='';
+	   			
 	   			$resultOpt[$key]['duplicateRow']=0;
+	   			
+	   			if($rs['forExamType']==1){
+	   				$resultOpt[$key]['subCriterialTitleKhMonth']=$rs['subCriterialTitleKh'];
+	   				$resultOpt[$key]['subCriterialTitleEngMonth']=$rs['subCriterialTitleEng'];
+	   				
+	   				$resultOpt[$key]['subCriterialTitleKh']='';
+	   				$resultOpt[$key]['subCriterialTitleEng']='';
+	   				
+	   				$resultOpt[$key]['forExamTypeMonth']=1;
+	   				$resultOpt[$key]['forExamTypeSemester']=0;
+	   				
+	   			}else{
+	   				$resultOpt[$key]['subCriterialTitleKh']=$rs['subCriterialTitleKh'];
+	   				$resultOpt[$key]['subCriterialTitleEng']=$rs['subCriterialTitleEng'];
+	   				
+	   				$resultOpt[$key]['subCriterialTitleKhMonth']='';
+	   				$resultOpt[$key]['subCriterialTitleEngMonth']='';
+	   				
+	   				$resultOpt[$key]['forExamTypeMonth']=0;
+	   				$resultOpt[$key]['forExamTypeSemester']=2;
+	   			}
+	   			
 	   			
 	   			$key_old=$key;
    				$key++;
    			}else{
-   				$resultOpt[$key_old]['subCriterialTitleKhMonth']=$rs['subCriterialTitleKh'];
-   				$resultOpt[$key_old]['subCriterialTitleEngMonth']=$rs['subCriterialTitleEng'];
+   				$resultOpt[$key_old]['forExamTypeSemester']=($rs['forExamType']==2)?2:0;
+   				
+   				$resultOpt[$key_old]['subCriterialTitleKh']=$rs['subCriterialTitleKh'];
+   				$resultOpt[$key_old]['subCriterialTitleEng']=$rs['subCriterialTitleEng'];
    				$resultOpt[$key_old]['duplicateRow']=$rs['id'];
    			}
    			$criteriaId=$rs['criteriaId'];
-   			$subjectId=$rs['subjectId'];
    		}
    	}
    	return $resultOpt;

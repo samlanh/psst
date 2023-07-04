@@ -243,8 +243,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);//okay
 						
 						$is_maingrade = empty($rsOldGroup['is_maingrade'])?0:$rsOldGroup['is_maingrade'];
-						
-// 						$group_detail = $this->getGroupDetailInStudentChangeGroup($_data['groupId']);
 					
 						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);
 						if(!empty($rsexist)){//old infor
@@ -263,7 +261,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'groupId'		=>$_data['groupId'],
 									'oldGroup'		=>$_data['from_group'],
 									'academicYear'	=>$_data['study_year'],
-									'feeId'			=>0,
+									'feeId'			=>$_data['academic_year'],//feeId
 									'schoolOption'  =>$schoolOption,
 									'degree'		=>$degreeId,
 									'grade'			=>$gradeId,
@@ -353,7 +351,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'remark'	=>'ឆ្លងភូមិសិក្សា'
 						);
 						$db = $dbg->AddItemToGroupDetailStudent($arr);
-						
 						
 					}
 				}

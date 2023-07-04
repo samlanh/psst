@@ -312,14 +312,14 @@ tr.rowData {
 				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input <?php echo $readOnly;?> class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['timeInput'];?>" />';
 
 				template+='<div class="form-group"><div class="col-md-6 col-sm-6 col-xs-12">';
-				template+='<div class="custom-control custom-checkbox "><input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['duplicateRow']>0 AND $rs['subjectId']>0){ echo "checked";}?> class="custom-control-input" name="forMonth'+col+'" id="forMonth'+col+'"  ><input class="fullside" type="hidden" value="<?php if($rs['duplicateRow']>0 AND $rs['subjectId']>0){echo $rs['duplicateRow'];}?>" name="duplicateRecord'+col+'" id="duplicateRecord'+col+'" dojoType="dijit.form.TextBox" />';
+				template+='<div class="custom-control custom-checkbox "><input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamTypeMonth']==1 AND $rs['subjectId']>0){ echo "checked";}?> class="custom-control-input" name="forMonth'+col+'" id="forMonth'+col+'"  ><input class="fullside" type="hidden" value="<?php if($rs['duplicateRow']>0 AND $rs['subjectId']>0){echo $rs['duplicateRow'];}?>" name="duplicateRecord'+col+'" id="duplicateRecord'+col+'" dojoType="dijit.form.TextBox" />';
 				template+='<label class="custom-control-label" for="forMonth'+col+'" >';
 				template+='<?php echo $tr->translate('MONTHLY');?>';
 				template+='</label>';
 				template+='</div></div></div>';	
 
 				template+='<div class="custom-control custom-checkbox ">';
-				template+='<input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamType']==2){ echo "checked";}?> class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
+				template+='<input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamTypeSemester']==2 AND $rs['subjectId']>0){ echo "checked";}?> class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
 				template+='<label class="custom-control-label" for="forExamType'+col+'" >';
 					template+='<?php echo $tr->translate('FOR_SEMESTER');?>';
 				template+='</label>';
@@ -406,35 +406,6 @@ tr.rowData {
 				 dijit.byId('subCriterialTitleKhMonth'+rowIndex).set('required',false);
 				 dijit.byId('subCriterialTitleEngMonth'+rowIndex).set('required',false);
 			}
-		 <?php if(!empty($this->checking)){ ?>
-			/*dijit.byId('timeInput'+rowIndex).set('readOnly',true);
-			dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',true);
-			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',true);*/
-		 <?php }else{ ?>
-		 
-		 /*if(subjectId>0){
-			dijit.byId('timeInput'+rowIndex).set('value',1);
-			dijit.byId('timeInput'+rowIndex).set('readOnly',true); 
-			
-			dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',false); 
-			dijit.byId('subCriterialTitleKh'+rowIndex).set('required',true);
-			
-			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',false); 
-			dijit.byId('subCriterialTitleEng'+rowIndex).set('required',true);
-		 }else{
-			 
-			dijit.byId('timeInput'+rowIndex).set('value',1);
-			dijit.byId('timeInput'+rowIndex).set('readOnly',false); 
-
-			dijit.byId('subCriterialTitleKh'+rowIndex).set('value',"");
-			dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',true); 
-			dijit.byId('subCriterialTitleKh'+rowIndex).set('required',false);
-			
-			dijit.byId('subCriterialTitleEng'+rowIndex).set('value',"");
-			dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',true); 
-			dijit.byId('subCriterialTitleEng'+rowIndex).set('required',false);
-		 }*/
-		 <?php } ?>
 	 }
 	 
 	function totalPercent(){

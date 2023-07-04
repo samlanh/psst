@@ -1,4 +1,3 @@
-
 <?php
 class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
     public function init()
@@ -83,7 +82,7 @@ class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
 			try{
 				$_data = $this->getRequest()->getPost();
 				$db = new Accounting_Model_DbTable_DbUpdateStudenFee();
-				$db->addStudentGroup($_data);
+				$db->addStudentFee($_data);
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				if(isset($_data['save_close'])){
 					$this->_redirect('/accounting/updatestudentfee');

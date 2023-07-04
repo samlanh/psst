@@ -41,14 +41,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	public function addNewSubjectExam($_data){
 		$db = $this->getAdapter();
 		try{
-			// $sql="SELECT id FROM rms_subject WHERE parent =".$_data['parent'];
-			// $sql.=" AND subject_titlekh='".$_data['subject_kh']."'";
-			// $sql.=" AND subject_titleen='".$_data['subject_en']."'";
-			// $sql.=" AND subject_lang= ".$_data['subject_lang']." ";
-			// $rs = $db->fetchOne($sql);
-			// if(!empty($rs)){
-			// 	return -1;
-			// }
+			
 			$_arr=array(
 					'parent' 			=> $_data['parent'],
 					'subject_titlekh' 	=> $_data['subject_kh'],

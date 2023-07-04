@@ -143,6 +143,14 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->setReadNotificationAction($postData);
 				}else if ($GetData['url']=="removeTokenApp"){
     				$_dbAction->removeTokenAction($postData);
+				
+				}else if ($GetData['url']=="checkExistingStudent"){
+    				$_dbAction->checkExistingStudentAction($postData);
+				}else if ($GetData['url']=="registerStudentTest"){
+    				$_dbAction->checkExistingStudentAction($postData);
+				}else if ($GetData['url']=="loginSchoolBus"){
+    				$_dbAction->loginSchoolBusAction($postData);
+					
     			}
     			else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);
@@ -200,13 +208,8 @@ class Api_IndexController extends Zend_Controller_Action
    		$semesterAverage = $dbApi->getAverageSemesterFull($rs['group_id'], $rs['for_semester'], $rs['student_id']);
    		$this->view->Semester = $semesterAverage;
    	}
-   	$db = new Issue_Model_DbTable_DbScore();
-	$data=array(
-	'group_id'=>$data['group_id'],
-	'exam_type'=>$data['exam_type'],
-	
-	);
-   	$subject =$db->getSubjectScoreByGroup($data);
+   	$db = new Foundation_Model_DbTable_DbScore();
+   	$subject =$db->getSubjectScoreByGroup($data['group_id'],null,$data['exam_type']);
    	$this->view->subject = $subject;
    	
    	$frmgb = new Application_Form_FrmGlobal();

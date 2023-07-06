@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
-	$show_subject=1;//1=subject name,0 shortcut
+	$show_subject=1;
 	
 	$session_lang=new Zend_Session_Namespace('lang');
 	$lang_id=$session_lang->lang_id;
@@ -23,6 +23,7 @@
 		"11"=>"វិច្ឆិកា",
 		"12"=>"ធ្នូ"
 	);
+	$link = "/allreport/score/rpt-monthlytranscript";
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
@@ -200,6 +201,7 @@
 						<table cellpadding="2"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: 2px solid #5a71b5;"  border="1" >
 							<tr class="header" align="center" >
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("NUM");?></td>
+								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("STUDENT_ID");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("SEX");?></td>
 								<?php if($this->data['scoreresulttye']==1){?>
@@ -226,8 +228,9 @@
 								</tr>
 							<?php }?>
 							<?php } $i++;?>
-							<tr class="style hover" style=" line-height: 20px;">
+							<tr class="style hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id'];?>','<?php echo $rs['student_id'];?>','<?php echo $i;?>','<?php echo $rs['group_id'];?>','<?php echo $rs['exam_type'];?>','<?php echo $rs['for_semester'];?>','<?php echo $rs['for_month'];?>');return false;" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+								<td align="center"><a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl().$link."/scoreid/".$rs['id']."/stuid/".$rs['student_id'];?>">&nbsp;<?php echo $rs['stu_code'];?></a>&nbsp;</td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
@@ -269,13 +272,13 @@
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
 								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade']);?>
+								<?php  echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade'],$rs['totalMaxScore']);?>
 								&nbsp;</td>
 								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade']);?>
+								<?php  echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade'],$rs['totalMaxScore']);?>
 								&nbsp;</td>
 								<td class="red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],3,$rs['grade']);?>
+								<?php  echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'],$rs['degree_id'],3,$rs['grade'],$rs['totalMaxScore']);?>
 								&nbsp;
 								</td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
@@ -348,11 +351,50 @@
 			</table>
 		</div>
 </div>
+<?php 
+	$urlOutStanding = $this->baseUrl()."/allreport/score/certificate-letterofpraisenew/id/";
+	$urlOutStandingNoPhoto = $this->baseUrl().$link;
+?>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
-
 	dojo.require("dojo.data.ItemFileWriteStore");
-	  
+	
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="letterofprais"){
+					url='<?php echo $urlOutStanding;?>';
+					gotoAction();
+				}else if(key=="transcript"){
+					url='<?php echo $urlOutStandingNoPhoto;?>';
+					gotoAction1();
+				}
+				
+			},
+			items: {
+				"transcript": {name: "<?php echo $tr->translate("TRANSCRIPT");?>", icon: "fa-file",},
+				"letterofprais": {name: "<?php echo $tr->translate("HORNOR_CERTIFICATE");?>", icon: "fa-file",},
+			}
+		});
+	});
+	function setrowdata(id,stu_id,index,group,exam_type,for_semester,for_month){
+		rank = dijit.byId('rank'+index).get("value");
+		row = id;
+		student_id = stu_id;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row+'/stu_id/'+student_id+'/rank/'+rank);
+	}
+	function gotoAction1(){
+		window.open(url+'/scoreid/'+row+'/stuid/'+student_id);
+	}
+	
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){

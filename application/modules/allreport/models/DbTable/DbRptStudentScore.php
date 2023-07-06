@@ -257,15 +257,15 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
 		   	s.exam_type,
 		   	s.for_semester,
+		   	s.for_month,
 		   	s.reportdate,
 		   	s.title_score,
 		   	s.max_score,
 		   	(SELECT sm.total_score FROM rms_score_monthly AS sm WHERE sm.score_id=s.id AND sm.student_id=st.stu_id LIMIT 1 ) AS total_score,
 		   	g.total_score AS total_scoreallsubject,
 		    (SELECT sm.total_avg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS average,
-		    g.max_average/2 as pass_avrage,
-		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
-		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem 
+ 			(SELECT sm.totalMaxScore FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS totalMaxScore,
+		    (g.max_average/2) as pass_avrage
    		FROM 
    			`rms_score` AS s,
 		   	`rms_score_detail` AS sd,
@@ -321,7 +321,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
-   public function getStundetScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
+   public function getStundetScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
    	$db = $this->getAdapter();
    	$_db = new Application_Model_DbTable_DbGlobal();
    	$lang = $_db->currentlang();
@@ -338,6 +338,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$branch = "b.branch_nameen";
    		$month = "month_en";
    	}
+//    	 (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+//    	(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+//    	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
+//    	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
+//    	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass
+
    	$sql="SELECT
 		   	s.`id`,
 		   	st.`stu_id`,
@@ -357,10 +363,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		  
 			(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-		   
 		   	`g`.`semester` AS `semester`,
-		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-		   	(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+		   	
+		   	
 		   	(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
 		   	(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
 		   	sm.`student_id`,
@@ -380,10 +385,10 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.max_score,
 		   	sm.total_score,
 		    sm.total_avg,
-		    g.max_average/2 as pass_avrage,
-		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
-		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
-		   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass
+		    sm.totalMaxScore,
+		    (g.max_average/2) as pass_avrage
+		   
+		   
    		FROM
 		   	`rms_score` AS s,
 		   	`rms_score_monthly` AS sm,

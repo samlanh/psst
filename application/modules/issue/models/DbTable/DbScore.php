@@ -52,6 +52,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$totalMutiAll=0;
 				$rssubject = $_data['selector'];
 				$subject_amt = 1 ;
+				$totalMaxScore=0;
 				if(!empty($ids))foreach ($ids as $i){
 					
 					foreach ($rssubject as $subject){
@@ -64,11 +65,14 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'total_score'=>$total_score,
 								'amount_subject'=>$totalMutiAll,
 								'total_avg' =>$avg,
+									
+								'totalMaxScore' =>$totalMaxScore,
 							);
 							$this->_name='rms_score_monthly';
 							$this->insert($arr);
 							$total_score = 0;
 							$totalMutiAll=0;
+							$totalMaxScore=0;
 							
 						}
 						
@@ -99,10 +103,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param);//// call cut score
 						
 						if($_data['exam_type']==1){//month
+							$maxScore = $rsGroupSubject['maxScoreMonth'];
 							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
 							$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
 							$score_cut = 0;
 						}else{
+							$maxScore = $rsGroupSubject['maxScoreSemester'];
 							$totalMulti = $rsGroupSubject['totalSubjectSemester'];
 							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
 								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
@@ -118,8 +124,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							}
 						}
 						
+						$totalMaxScore = $totalMaxScore+($maxScore*$totalMulti);
 						
 						$totalMutiAll=$totalMutiAll +$totalMulti;
+						
 						$arr=array(
 							'score_id'=>$id,
 							'group_id'=>$_data['group'],
@@ -152,6 +160,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'total_score'=>$total_score,
 								'amount_subject'=>$totalMutiAll,
 								'total_avg' =>$avg,
+								'totalMaxScore' =>$totalMaxScore,
 							);
 						$this->_name='rms_score_monthly';
 						$this->insert($arr);

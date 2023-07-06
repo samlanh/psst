@@ -24,7 +24,7 @@ class Global_NewsController extends Zend_Controller_Action {
 			}
 			$rs_rows= $db->getAllArticle($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","TITLE","PUBLISH_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","TITLE","PUBLISH_DATE","CREATE_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'news','action'=>'edit',
 			);

@@ -136,7 +136,7 @@ dojo.ready(function(){
 				@page {
 					page: A4;
 					size: portrait;;
-					margin: 0.8cm;
+					margin: 0.8cm 0.8cm 0.2cm 0.8cm;
 				}
 			}
 	
@@ -332,7 +332,7 @@ dojo.ready(function(){
 							<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId,$scoreInfo['degreeId'],1,null,$totalMaxScore); ?>&nbsp;&nbsp;&nbsp;<?php echo $scoreInfo['rank'].'/'.$scoreInfo['amountStudent'];?></strong>&nbsp;</td>
 						</tr>
-						<tr class="cheader doubleBorder">
+						<tr class="doubleBorder">
 							<td colspan="7" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
 								អវត្តមាន ABSENCE RECORD
 							</td>
@@ -413,7 +413,7 @@ dojo.ready(function(){
 					<td>មិនទាន់ពេញចិត្ត Unsatisfactory</td>
 				</tr>
 				<tr class="blue" align="center">
-					<td align="left" rowspan="2">&nbsp;TOTAL</td>
+					<td align="left" rowspan="2">&nbsp;TOTAL SCORE</td>
 					<td rowspan="2">100%</td>
 					<td>50-59%</td>
 					<td>E</td>
@@ -426,14 +426,19 @@ dojo.ready(function(){
 					<td>ធ្លាក់ Failed</td>
 				</tr>
 				
-				<tr class="cheader" align="center">
-					<td colspan="6" class="blue doubleBorder">&nbsp;ទម្លាប់សិក្សាភាពជាពលរដ្ឋល្អ និងការវិវឌ្ឍក្នុងសង្គម STUDY HABITS , CITIZENSHIP AND SOCIAL GROWTH</td>
-				</tr>
 				<?php
 					$teacherComment='';
+					$commentType='';
 					if(!empty($evalueationList))foreach($evalueationList as $keycom => $rsComment){
 						if($keycom==0){$teacherComment=$rsComment['teacherComment'];}
 					?>
+				<?php if($commentType!=$rsComment['commentType']){?>
+					<tr align="center">
+						<td colspan="6" class="blue doubleBorder khmerBoldFont"><?php echo $rsComment['commentType'];?></td>
+					</tr>
+				<?php } 
+					$commentType = $rsComment['commentType'];
+				?>
 				<tr>
 					<td align="left" colspan="5" class="blue">&nbsp;<?php echo $rsComment['commentLabel'];?></td>
 					<td align="center"><?php echo $rsComment['ratingLabel'];?></td>
@@ -441,7 +446,7 @@ dojo.ready(function(){
 				<?php }?>
 		</table>
 			<table class="header"   width="100%" style="width:100%; border-collapse:collapse;" >
-				<tr class="cheader" align="left">
+				<tr  align="left">
 					<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT'S COMMENT AND SUGGESTION:</td>
 				</tr>
 				<?php for($i=0;$i<=3;$i++){?>
@@ -471,7 +476,7 @@ dojo.ready(function(){
 					<td colspan="4" >&nbsp;</td>
 					<td class="borderSolidBottom blue">&nbsp;</td>
 				</tr>
-				<tr height="120px;">
+				<tr height="100px;">
 					<td valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបង្ទុកថ្នាក់ Teacher in Charge</td>
 					<td colspan="4" >&nbsp;</td>
 					<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>

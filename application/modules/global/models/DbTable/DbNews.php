@@ -25,16 +25,16 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
 		    	(CASE WHEN branch_id=0 THEN '$label' ELSE (SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = act.branch_id LIMIT 1) END) AS branch_name,
 		    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
 		    	act.`publish_date`,
-		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
-		    	";
+		    	act.created_date,
+		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name ";
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->caseStatusShowImage("act.`status`");
     	$sql.=" FROM `ln_news` AS act WHERE 1 ";
     	
     	$where='';
-    	$from_date =(empty($search['start_date']))? '1': " act.publish_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " act.publish_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " act.created_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " act.created_date <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search['adv_search'])){
@@ -46,6 +46,9 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     	if($search['branch_id_search']>-1){
     		$where.=' AND act.branch_id='.$search['branch_id_search'];
     	}
+    	
+    	$where=$dbp->getAccessPermission("act.branch_id");
+    	
     	$order = "  ORDER BY act.`id` DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -168,6 +171,10 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     function getArticleById($id){
     	$db= $this->getAdapter();
     	$sql="SELECT * FROM $this->_name WHERE id =".$id;
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission("branch_id");
+    	
     	return $db->fetchRow($sql);
     }
     function getArticleTitleByLang($article_id,$lang){

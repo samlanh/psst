@@ -2059,11 +2059,15 @@ function getAllgroupStudyNotPass($action=null){
 			(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
 		 FROM `ln_news` AS n
 		 	WHERE n.status = 1 ";
-  	
   	$dbp = new Application_Model_DbTable_DbGlobal();
-  	$sql.=$dbp->getAccessPermission("n.branch_id");
+  	$where=$dbp->getAccessPermission("n.branch_id");
+  	if(!empty($where)){
+  		$where = str_replace('AND',' AND (',$where);
+	 	$sql.=" $where OR  n.branch_id=0)";
+	 }
   	
-  	$sql.=" OR n.branch_id=0 ";
+  	$sql.=" AND n.publish_date<='".date('Y-m-d')."'";
+  	
   	$sql.="  ORDER BY 
 		 (SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) ASC,
 		 n.publish_date DESC, n.created_date DESC ";
@@ -2101,7 +2105,14 @@ function getAllgroupStudyNotPass($action=null){
 	  		WHERE n.status = 1 
   				AND n.id = $id ";
 	  	$dbp = new Application_Model_DbTable_DbGlobal();
-	  	$sql.=$dbp->getAccessPermission('n.branch_id');
+	  	
+	  	$where=$dbp->getAccessPermission("n.branch_id");
+	  	if(!empty($where)){
+	  		$where = str_replace('AND',' AND (',$where);
+	 		$sql.=" $where OR  n.branch_id=0)";
+	  	}
+	  	$sql.=" AND n.publish_date<='".date('Y-m-d')."'";
+	  	
  		$sql.="LIMIT 1";
 	  return $db->fetchRow($sql);
   }
@@ -2412,19 +2423,7 @@ function getAllgroupStudyNotPass($action=null){
   		return $db->fetchAll($sql);
   }
   
-//   function getAllGroupByAcademic($academic=null){
-//   	$db = $this->getAdapter();
-//   	$sql ="SELECT `g`.`id`,
-//   		 CONCAT(`g`.`group_code`,' ',(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-//   	FROM `rms_group` AS `g` 
-//   		where (g.is_pass=0 OR g.is_pass=2) 
-//   		and status=1 ";
-//   	if (!empty($academic)){
-//   		$sql.=" AND g.academic_year = $academic";
-//   	}
-//   	$sql.=" ORDER BY `g`.`id` DESC ";
-//   	return $db->fetchAll($sql);
-//   }
+
   function getNumberInkhmer($number){
   	$khmernumber = array("០","១","២","៣","៤","៥","៦","៧","៨","៩");
   	$spp = str_split($number);
@@ -2928,9 +2927,12 @@ function getAllgroupStudyNotPass($action=null){
   function getGroupSubjectDetail($data){
   	$db = $this->getAdapter();
   	$sql="SELECT SUM(score_short) AS score_short,
-  		amount_subject AS totalSubjectMonth,
-  		amount_subject_sem AS totalSubjectSemester
-  				FROM `rms_group_subject_detail` WHERE 1";
+			  		amount_subject AS totalSubjectMonth,
+			  		amount_subject_sem AS totalSubjectSemester,
+			  		max_score AS maxScoreMonth,
+			  		semester_max_score AS maxScoreSemester
+  				FROM 
+  			`rms_group_subject_detail` WHERE 1";
   	if($data['groupId']){
   		$sql.=" AND group_id=".$data['groupId'];
   	}

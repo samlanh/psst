@@ -653,7 +653,7 @@ function getSubject(col){
 
 function newoption(subject, col){
 	
-    option='<select   name="group_subject_study_'+col+'" placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>" onchange="checkSubject('+col+')"  dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
+    option='<select   name="group_subject_study_'+col+'"  placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>"  dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
     dojo.html.set(dojo.byId("subject_option"+col),option , {
          parseContent: true,
     });
@@ -721,6 +721,8 @@ function checkSubject(index){
 	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
 	current_subject = dijit.byId('group_subject_study_'+index).get('value');
+	// subject_name = $("input[name='group_subject_study_'+index]").val();
+	// alert(subject_name);
 	if(current_subject==''){
 		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/subject/add?rightclick=true";?>','_blank');
 	}

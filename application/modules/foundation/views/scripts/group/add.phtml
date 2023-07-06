@@ -491,7 +491,7 @@ dojo.ready(function(){
 		}
 	}, "gradingId");
 
-	addRow();
+	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllDegreeByBranch();
@@ -499,7 +499,8 @@ dojo.ready(function(){
 		 getRefreshRoom();
 		 getRefreshTeacher();
 		 dojo.query("#table_row").append("");
-		    $("#identity1").val("");
+		 $("#identity1").val("");
+			
     });
 });
 
@@ -587,8 +588,7 @@ function getRefreshTeacher(){
 		    		teacher_option+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 			    }
 		    }
-		    // dojo.query("#table_row").append("");
-		    // $("#identity1").val("");
+		   
 		    HideloadingBlock();
 		},
 		error: function(err){
@@ -653,7 +653,7 @@ function getSubject(col){
 
 function newoption(subject, col){
 	
-    option='<select  name="group_subject_study_'+col+'" dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
+    option='<select   name="group_subject_study_'+col+'" placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>" onchange="checkSubject('+col+')"  dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
     dojo.html.set(dojo.byId("subject_option"+col),option , {
          parseContent: true,
     });
@@ -665,6 +665,13 @@ var title = 1;
 tmp = '';
 temp='';
 function addRow(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		alert('Please Select Branch!');
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+
 	col++;no++;
 	template='';
 		template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
@@ -910,6 +917,13 @@ function calculateTotalSubject(){
 		dijit.byId("total_subject_semester").attr("value",total_amt_subject_semester);
 		dijit.byId("total_convert_semester").attr("value",total_semester_converted_score);
 		dijit.byId("total_score_cut").attr("value",total_score_cut);
+
+		dijit.byId("total_max_score").attr("value",total_month_converted_score);
+		dijit.byId("divide_subject").attr("value",total_amt_subject_month);
+
+		dijit.byId("semesterTotalScore").attr("value",total_semester_converted_score);
+		dijit.byId("semesterTotalSubject").attr("value",total_amt_subject_semester);
+
 		CulculateAverage();
 		CulculateSemesterAverage();
 	}

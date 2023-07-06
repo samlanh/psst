@@ -496,6 +496,8 @@ dojo.ready(function(){
 		 getSubject();
 		 getRefreshRoom();
 		 getRefreshTeacher();
+		 dojo.query("#table_row").append("");
+		    $("#identity1").val("");
     });
 });
 
@@ -583,8 +585,8 @@ function getRefreshTeacher(){
 		    		teacher_option+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 			    }
 		    }
-		    dojo.query("#table_row").append("");
-		    $("#identity1").val("");
+		    // dojo.query("#table_row").append("");
+		    // $("#identity1").val("");
 		    HideloadingBlock();
 		},
 		error: function(err){

@@ -35,7 +35,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$group = $db->getAllgroupStudyNotPass();
     	array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));
     	$this->view->g_all_name=$group;
-    	$this->view->month = $db->getAllMonth();
+    	
+    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
@@ -50,6 +51,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$forms=$form->FrmSearch();
     	Application_Model_Decorator::removeAllDecorator($forms);
     	$this->view->form_search=$form;
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->month = $db->getAllMonth();
     }
     
     function rptScoreResultAction(){ //ពិន្ទុសរុបតាមមុខ
@@ -80,7 +84,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->search=$search;
     	 
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	$this->view->month = $db->getAllMonth();
+    	
     	 
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
@@ -96,7 +100,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	 
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->branchInfo = $db->getBranchInfo($branch_id);
-    	 
+    	$this->view->month = $db->getAllMonth();
     }
     function rptScoreDetailAction(){//តាមមុខវិជ្ជាលម្អិត
     	$id=$this->getRequest()->getParam("id");
@@ -124,14 +128,13 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->studentgroup = $resultScore;
     	$this->view->search=$search;
     
-    	$this->view->month = $db->getAllMonth();
+    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	 
     }
     
     function rptMonthlytranscriptAction(){
@@ -165,7 +168,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$group = $db->getAllGroupOfStudent($data['studentId']);
     	$this->view->group = $group;
     	 
-    	$db = new Issue_Model_DbTable_DbScore();
+    	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->month = $db->getAllMonth();
     }
     
@@ -208,11 +211,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->all_student = $db->getStundetScoreDetailGroup($search,$id,1);
     	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+		
     }
     function monthlyOutstandingStudentNophotoAction(){
     	$id=$this->getRequest()->getParam("id");
@@ -236,7 +239,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->all_student = $db->getStundetScoreDetailGroup($search,$id,1);
     	 
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
@@ -265,10 +267,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$rs= $db->getGroupDetailReport($search);
     	$this->view->rs = $rs;
     	$this->view->search=$search;
-    	    
-    	$_db = new Global_Model_DbTable_DbGroup();
-    	$teacher = $_db->getAllTeacher();
-    	$this->view->teacher = $teacher;
     	
     	$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
     	$frm = new Application_Form_FrmGlobal();
@@ -353,32 +351,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->studentgroup = $result_year;
     }
     
-    function rptScoreGepAction(){
-    	if($this->getRequest()->isPost()){
-    		$search=$this->getRequest()->getPost();
-    		$this->view->g_name=$search;
-    	}
-    	else{
-    		$search = array(
-    				'group_name' => '',
-    				'study_year'=> '',
-    				'grade_english'=> '',
-    				'degree_english'=>'',
-    				'session'=> '',
-    				'time'=> '',
-    				'start_date'=> date('Y-m-d'),
-    				'end_date'=>date('Y-m-d'));
-    	}
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundentEnglishMonthlyScore($search);
-    	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	 
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
-    }
-    
     
     function rptSemesterEvaluationAction(){
     	if($this->getRequest()->isPost()){
@@ -404,110 +376,6 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    }
-    function veiwAction(){
-    }
-    function rptScoreListMonthlyAction(){
-    	if($this->getRequest()->isPost()){
-    		$search=$this->getRequest()->getPost();
-    	}
-    	else{
-    		$search = array(
-    				'title',
-    				'room'=>0,
-    				'group_name' => 0,
-    				'study_year'=> 0,
-    				'grade'=> 0,
-    				'degree'=>0,
-    				'session'=> 0,
-    				'for_month'=>date('m'),
-    		);
-    	}
-    	 
-    	$this->view->search=$search;
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreList($search);
-    	 
-    	$group = $db->getAllgroupStudyNotPass();
-    	array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));
-    	 
-    	$this->view->g_all_name=$group;
-    	$this->view->month = $db->getAllMonth();
-    	 
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
-    	
-    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-    	$frm = new Application_Form_FrmGlobal();
-    	$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
-    }
-   
-    
-    function rptMonthlyScoreStudentAction(){//old
-    	
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    	}else{
-	    	$stu_id =$this->getRequest()->getParam("stu_id");
-	    	$group_id =$this->getRequest()->getParam("group_id");
-	    	$exam_type =$this->getRequest()->getParam("exam_type");
-	    	$for_semester =$this->getRequest()->getParam("for_semester");
-	    	$for_month =$this->getRequest()->getParam("for_month");
-	    	
-	    	if (empty($stu_id)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-	    		exit();
-	    	}elseif (empty($group_id)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-	    		exit();
-	    	}elseif (empty($exam_type)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-	    		exit();
-	    	}elseif (empty($for_semester)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-	    		exit();
-	    	}elseif (empty($for_month)){
-	    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score");
-	    		exit();
-	    	}
-	    	$data = array(
-	    			'stu_id'=>$stu_id,
-	    			'group_id'=>$group_id,
-	    			'exam_type'=>$exam_type,
-	    			'for_semester'=>$for_semester,
-	    			'for_month'=>$for_month,
-	    			);
-    	}
-    	$this->view->search = $data;
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$rs = $db->getExamByExamIdAndStudent($data);
-    	$this->view->rs = $rs;
-    	
-    	$evaluation = array();//$db->getStudentEvaluation($data);
-    	$this->view->evaluation = $evaluation;
-    	if ($rs['exam_type']==2){
-    		$monthlysemesterAverage = $db->getAverageMonthlyForSemester($rs['group_id'], $rs['for_semester'], $rs['student_id']);
-    		$this->view->monthlySemester = $monthlysemesterAverage;
-    		
-    		$semesterAverage = $db->getAverageSemesterFull($rs['group_id'], $rs['for_semester'], $rs['student_id']);
-    		$this->view->Semester = $semesterAverage;
-    	}
-    	
-    	$group = $db->getAllGroupOfStudent($data['stu_id']);
-    	$this->view->group = $group;
-    	$db = new Issue_Model_DbTable_DbScore();
-		$arr = array(
-			'group_id'=>$data['group_id'],
-			'exam_type'=>$data['exam_type'],
-		);
-    	$subject =$db->getSubjectScoreByGroup($arr);
-    	$this->view->subject = $subject;
-    	$this->view-> month = $db->getAllMonth();
-    	
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rating = $db->getRatingValuation();
     }
      
     function rptAssessmenttermAction(){
@@ -984,7 +852,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     }
     
     
-    function rptStudentEvaluationletterAction(){
+    function rptStudentEvaluationletterAction(){//
     	 
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -1037,10 +905,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
 		);
     	$subject =$db->getSubjectScoreByGroup($arr);
     	$this->view->subject = $subject;
-    	$this->view-> month = $db->getAllMonth();
     	 
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->rating = $db->getRatingValuation();
+		$this->view-> month = $db->getAllMonth();
     }
    
     public function rptStudentGroupAction()//to right click show score result or hornor script

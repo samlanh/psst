@@ -98,7 +98,7 @@ class Issue_MonthlyprogressController extends Zend_Controller_Action {
 		$this->view->subjectareasettingdetail = $scoresetting;
 		
 		$db = new Issue_Model_DbTable_DbScore();
-		$this->view->subject = $db->getSubjectByGroup($row['group_id'],null,1);
+		$this->view->subject = $db->getSubjectByGroupScore($row['group_id'],null,1);
 		
 		$frm = new Issue_Form_FrmMonthlyProgress();
 		$frm->FrmAddMonthlyProgress($row);

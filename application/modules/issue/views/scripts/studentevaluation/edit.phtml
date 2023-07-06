@@ -88,7 +88,7 @@
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
 												<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-													<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->row['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+													<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->row['for_month']){echo "selected='selected'";}?>><?php echo $month['name']?></option>
 												<?php }}?>
 											</select>
 										</div>

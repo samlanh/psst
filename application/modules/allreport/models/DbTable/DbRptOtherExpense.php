@@ -94,7 +94,6 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
     		$s_where[] = " e.invoice LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	//echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
 }    

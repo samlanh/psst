@@ -155,85 +155,7 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
-	function getStudyYears(){
-		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(from_academic,'-',to_academic) AS name FROM rms_group WHERE `status`=1";
-		$order=" ORDER BY id DESC";
-		return $db->fetchAll($sql.$order);
-	}
-	function getGroupAll(){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_code AS `name` FROM rms_group WHERE `status`=1";
-		$order=" ORDER BY id DESC";
-		return $db->fetchAll($sql.$order);
-	}
-	
-
-	function getAllYears(){
-		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
-		GROUP BY academic_year";
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
-
-	function getGroupName($academic,$session){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
-		return $db->fetchAll($sql);
-	}
-	function getSubjectById($id){
-		$db = $this->getAdapter();
-		$sql =" SELECT 
-				  sd.student_id,
-				  (SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-				  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-				  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-				  sd.subject_id,
-				  (SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-				  (SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-				  sd.score ,
-  				  sd.`is_parent`
-				FROM
-				  rms_score_detail AS sd 
-				WHERE sd.score_id =$id ";
-		return $db->fetchAll($sql);
-	}
-
-	
-	
-	function getStudent($year,$grade,$session){
-		$db=$this->getAdapter();
-		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex
-	    	FROM rms_student AS s WHERE academic_year = $year and grade=$grade and session=$session";
-		$order=" ORDER BY stu_code DESC";
-		return $db->fetchAll($sql.$order);
-	}
-	
-	function getStudentByGroup($group_id){
-		$db=$this->getAdapter();
-		$sql="SELECT 
-			sgh.`stu_id`,
-			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-			(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
-			(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-			FROM `rms_group_detail_student` AS sgh
-			WHERE 
-				sgh.itemType=1 
-				AND sgh.`group_id`=".$group_id;
-		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
-		return $db->fetchAll($sql.$order);
-	}
-	
-	function getSubjectBygroup($group_id){
-		$db=$this->getAdapter();
-		$sql="SELECT gsd.`subject_id` as id,
-		(SELECT CONCAT(sj.subject_titleen,' - ',sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsd.`subject_id` LIMIT 1) AS name
-		FROM `rms_group_subject_detail` AS gsd
-		WHERE gsd.`group_id`= $group_id";
-		return $db->fetchAll($sql);
-	}
-	function getAttendencetByID($id){
+	function getAttendencetByIDDiscipline($id){
 		$db=$this->getAdapter();
 		$sql="SELECT 
 					sad.*,
@@ -251,12 +173,4 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getAccessPermission('sa.branch_id');
 		return $db->fetchRow($sql);
 	}
-	
-	function getAttendeceStatus($attendence_id,$stu_id){
-		$db = $this->getAdapter();
-		$sql="SELECT sad.`attendence_status`,sad.`stu_id`,sad.`description`  FROM `rms_student_attendence_detail` AS sad WHERE sad.`attendence_id`=$attendence_id AND sad.`stu_id`=$stu_id";
-		return $db->fetchRow($sql);
-	}
-	
 }
-

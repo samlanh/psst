@@ -86,7 +86,7 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$result = $_model->getAttendencetByID($id);
+		$result = $_model->getAttendencetByIDDiscipline($id);
 		if (empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issue/discipline");
 			exit();

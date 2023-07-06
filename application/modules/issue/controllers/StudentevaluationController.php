@@ -67,9 +67,7 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
-		
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view->month = $db->getAllMonth();
+		$this->view->month = $db_global->getAllMonth();
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -104,9 +102,7 @@ class Issue_StudentevaluationController extends Zend_Controller_Action {
 		}
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
-		
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view->month = $db->getAllMonth();
+		$this->view->month = $db_global->getAllMonth();
 	}
 	function getStudentbygroupAction(){
 		if($this->getRequest()->isPost()){

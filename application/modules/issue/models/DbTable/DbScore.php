@@ -7,18 +7,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
     }
-	
-    public function getAllSubjectParent(){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT id,subject_titleen FROM rms_subject WHERE is_parent=1";
-    	return $db->fetchAll($sql);
-    }
-    
-    public function getAllSubjectParentByID($id){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM rms_subject WHERE id=".$id;
-    	return $db->fetchRow($sql);
-    }
     
 	public function addStudentScore($_data){
 		$db = $this->getAdapter();
@@ -48,10 +36,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
+				$rssubject = $_data['selector'];
 				$total_score = 0;
 				$totalMutiAll=0;
-				$rssubject = $_data['selector'];
-				$subject_amt = 1 ;
 				$totalMaxScore=0;
 				if(!empty($ids))foreach ($ids as $i){
 					
@@ -73,11 +60,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$total_score = 0;
 							$totalMutiAll=0;
 							$totalMaxScore=0;
-							
 						}
 						
 						$old_studentid=$_data['student_id'.$i];
-						$subject_amt = $_data['amount_subject'.$i];
 						
 						$dataScore = array(
 								'groupId'=>$_data['group'],
@@ -194,12 +179,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			
-			//$_data['status']= empty($_data['status'])?1:$_data['status'];
 			$_arr = array(
 				'branch_id'=>$_data['branch_id'],
 				'title_score'=>$_data['title'],
 				'group_id'=>$_data['group'],
-				//'max_score'=>$_data['max_score'],
 		        'exam_type'=>$_data['exam_type'],
 				'date_input'=>date("Y-m-d"),
 				'note'=>$_data['note'],
@@ -227,7 +210,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'groupId'=>$_data['group'],
 		);
 		$rs_groupscore = $dbpush->getGroupSubjectDetail($param);//// call cut score
-		
 		$total_cutscore = $rs_groupscore['score_short'];
 		
 		if(!empty($_data['identity'])){
@@ -238,88 +220,140 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				
 				if(!empty($ids))foreach ($ids as $i){
 					
+					$totalMutiAll=0;
+					$totalMaxScore=0;
+					
 					foreach ($rssubject as $subject){
 						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							
+							$avg = $total_score/$totalMutiAll;
+							
 							$arr = array(
 									'score_id'=>$id,
 									'student_id'=>$old_studentid,
+									
 									'total_score'=>$total_score,
-									'amount_subject'=>$subject_amt,
-									'total_avg' =>number_format($total_score/$subject_amt,2)
+									'amount_subject'=>$totalMutiAll,
+									'total_avg' =>$avg,
+									
+									'totalMaxScore' =>$totalMaxScore,
 							);
 							$this->_name='rms_score_monthly';
 							$this->insert($arr);
+							
 							$total_score = 0;
+							$totalMutiAll=0;
+						    $totalMaxScore=0;
 						}
 							
 						$old_studentid=$_data['student_id'.$i];
-						$subject_amt = $_data['amount_subject'.$i];
 						
-						if($total_cutscore<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
-							$total_score = $total_score+$_data["score_".$i."_".$subject];
-							$score_cut = 0;
-						}else{//ពិន្ទុកាត់តាមមុខវិជ្ជា
-							$param =array(
-									'groupId'=>$_data['group'],
-									'subjectId'=>$subject,
-									);
-							$rs_scorebygroup = $dbpush->getGroupSubjectDetail($param);
-								
-							if(($_data["score_".$i."_".$subject]-$rs_scorebygroup['score_short'])<=0){
-								$score = 0;
-							}else{
-								$score = $_data["score_".$i."_".$subject] - $rs_scorebygroup['score_short'];
-							}
-							$total_score = $total_score+$score;
-							$score_cut = $rs_scorebygroup['score_short'];
+						$dataScore = array(
+								'groupId'=>$_data['group'],
+								'examType'=>$_data['exam_type'],
+								'forMonth'=>$_data['for_month'],
+								'forSemester'=>$_data['for_semester'],
+								'subjectId'=>$subject,
+								'studentId'=>$_data['student_id'.$i],
+						);
+						
+						$resultScore = $this->getGradingScoreData($dataScore);
+						
+						$gradingId='';
+						if(!empty($resultScore)){
+							$gradingId=$resultScore['gradingId'];
 						}
+						
+						$param =array(
+								'groupId'=>$_data['group'],
+								'subjectId'=>$subject,
+						);
+						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param);//// call cut score
+						
+						if($_data['exam_type']==1){//month
+							$maxScore = $rsGroupSubject['maxScoreMonth'];
+							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
+							$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
+							$score_cut = 0;
+						}else{
+							$maxScore = $rsGroupSubject['maxScoreSemester'];
+							$totalMulti = $rsGroupSubject['totalSubjectSemester'];
+							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
+								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
+								$score_cut = 0;
+							}else{
+								if(($_data["score_".$i."_".$subject]-$rsGroupSubject['score_short'])<=0){
+									$score = 0;
+								}else{
+									$score = $_data["score_".$i."_".$subject] - $rsGroupSubject['score_short'];
+								}
+								$total_score = $total_score+($score*$totalMulti);
+								$score_cut = $rsGroupSubject['score_short'];
+							}
+						}
+						
+						$totalMaxScore = $totalMaxScore+($maxScore*$totalMulti);
+						$totalMutiAll=$totalMutiAll +$totalMulti;
 						
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
+								'gradingTotalId'=>$gradingId,
 								'student_id'=>$_data['student_id'.$i],
-								'amount_subject'=>$_data['amount_subject'.$i],
 								'subject_id'=> $subject,
-								'score'=> $_data["score_".$i."_".$subject],
+						
+								'orgScore'=>$_data["score_".$i."_".$subject],
+								'subjectExam'=>$_data['amount_subject'.$i],
+						
+								'score'=> $totalMulti*$_data["score_".$i."_".$subject],
+								'amount_subject'=>$totalMulti,
 								'score_cut'=> $score_cut,
 								'status'=>1,
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
+						
+						
 					}
 				}
 			}
 			if(!empty($ids)){
 				if($total_score>0){
-					$arr = array(
-						'score_id'=>$id,
-						'student_id'=>$old_studentid,
-						'total_score'=>$total_score,
-						'amount_subject'=>$subject_amt,
-						'total_avg' =>number_format($total_score/$subject_amt,2)
-					);
+					$avg = $total_score/$totalMutiAll;
+						$arr = array(
+							'score_id'=>$id,
+							'student_id'=>$old_studentid,
+								
+							'total_score'=>$total_score,
+							'amount_subject'=>$totalMutiAll,
+							'total_avg' =>$avg,
+							'totalMaxScore' =>$totalMaxScore,
+						);
 					$this->_name='rms_score_monthly';
 					$this->insert($arr);
 				}
 			}
+			
+			$this->_name='rms_grading';
+			foreach ($rssubject as $subject){
+				$where='groupId='.$_data['group'].' AND subjectId='.$subject.' AND forSemester='.$_data['for_semester'].' AND examType ='.$_data['exam_type'];
+				if($_data['exam_type']==1){
+					$where.=' AND formonth='.$_data['for_month'];
+				}
+				$arr = array(
+						'isLock'=>1,
+						'lockBy'=>$this->getUserId()
+				);
+				$this->update($arr, $where);
+			}
+			
 		  $db->commit();
 		}catch (Exception $e){
-			$db->rollBack();
+			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
 		}
    }
-	function getStudyYears(){
-		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(from_academic,'-',to_academic) AS name FROM rms_group WHERE `status`=1";
-		$order=" ORDER BY id DESC";
-		return $db->fetchAll($sql.$order);
-	}
-	function getGroupAll(){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_code AS `name` FROM rms_group WHERE `status`=1";
-		$order=" ORDER BY id DESC";
-		return $db->fetchAll($sql.$order);
-	}
 	
 	function getAllScore($search=null){
 		$db=$this->getAdapter();
@@ -402,60 +436,16 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getScoreById($score_id){
 		$db=$this->getAdapter();
-		$sql="SELECT s.*,(SELECT g.is_pass FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) as is_pass FROM rms_score AS s WHERE s.id=$score_id ";
-// 		$sql.=" AND (SELECT g.is_pass FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1)=2"; // only group studying
+		$sql="SELECT s.*,
+				(SELECT g.is_pass 
+					FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) as is_pass 
+			FROM rms_score AS s 
+			WHERE s.id=$score_id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 
-	function getGroupName($academic,$session){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
-		return $db->fetchAll($sql);
-	}
-	function getParentNameByGroupId($group_id){
-		$db=$this->getAdapter();
-		$sql="SELECT subject_id AS id,(SELECT CONCAT(subject_titleen,' - ',subject_titlekh)
-		        FROM rms_subject WHERE rms_subject.id= rms_group_subject_detail.subject_id) AS `name`
-		        FROM rms_group_subject_detail WHERE group_id=$group_id";
-		return $db->fetchAll($sql);
-	}
-	function getGroupSearch(){
-		$db=$this->getAdapter();
-		$sql="SELECT group_id AS id,(SELECT group_code FROM rms_group WHERE id=rms_score.group_id AND rms_group.degree IN (1,2)) AS `name` 
-		               FROM  rms_score  WHERE  `status`=1 GROUP BY group_id";
-		return $db->fetchAll($sql);
-	}
-	///get subject id all 
-	function getSubjectId(){
-		$db=$this->getAdapter();
-		$sql="SELECT id,parent,CONCAT(subject_titleen,'-',subject_titlekh) AS sub_name FROM rms_subject  WHERE `status` =1";
-		return $db->fetchAll($sql);
-	}
-	function countScore($id){
-		$db = $this->getAdapter();
-		$sql ="SELECT s.`score_id` FROM `rms_score_detail` AS s WHERE s.`score_id`=$id GROUP BY s.`student_id`";
-		return $db->fetchAll($sql);
-	}
-	function studentScore($id){
-		$db=$this->getAdapter();
-		$sql="SELECT s.id,s.subject_titleen
-		FROM rms_subject AS s,rms_score_detail AS sd WHERE s.id=sd.subject_id AND sd.score_id=$id";
-		//echo $sql;
-		return $db->fetchAll($sql);
-	}
-	
-	
-	
-	
-	function getStudent($year,$grade,$session){//not use
-		$db=$this->getAdapter();
-		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex
-	    	FROM rms_student AS s WHERE academic_year = $year and grade=$grade and session=$session";
-		$order=" ORDER BY stu_code DESC";
-		return $db->fetchAll($sql.$order);
-	}
 	function getStudentByGroup($group_id,$data=array()){
 		$db=$this->getAdapter();
 		
@@ -495,13 +485,13 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$studentResult =  $db->fetchAll($sql.$order);
 		if(!empty($data['groupId'])){
 			$groupId = $data['groupId'];
-			$this->getSubjectByGroup($data['groupId'],$teacher_id=null,$exam_type=1);
+			$this->getSubjectByGroupScore($data['groupId'],$teacher_id=null,$exam_type=1);
 		}
 		if(!empty($data['examType'])){
 			$examType = $data['examType'];
 		}
 		
-		$resultSubject = $this->getSubjectByGroup($data['groupId'],null,$examType);
+		$resultSubject = $this->getSubjectByGroupScore($data['groupId'],null,$examType);
 		$results = array();
 		if(!empty($studentResult)){
 			foreach($studentResult as $key=>$rs){
@@ -526,7 +516,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}
 		return $results ;
 	}
-	function getSubjectByGroup($groupId,$teacher_id=null,$exam_type=1){
+	function getSubjectByGroupScore($groupId,$teacher_id=null,$exam_type=1){
 		$db=$this->getAdapter();
 		
 			$dbgb = new Application_Model_DbTable_DbGlobal();
@@ -538,8 +528,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				gsjd.*,
 				gsjd.subject_id,
-				g.amount_subject AS amount_subjectdivide,
-				gsjd.max_score AS max_subjectscore,
+				CASE
+					  	WHEN $exam_type =1 THEN max_score
+					  	WHEN $exam_type =2 THEN semester_max_score
+					  ELSE ''
+				END max_subjectscore,
+				
 				(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
 				(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 				(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
@@ -576,21 +570,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			return $db->fetchAll($sql);
 	 	    
 	}
-	function getChildSubject($subject_id){
-		$db=$this->getAdapter();
-		$sql="SELECT 
-					sj.`id`,
-					CONCAT(sj.subject_titlekh) AS sub_name,
-					sj.`parent`,
-					sj.`is_parent`,
-					sj.`subject_titleen`
-		 	  FROM 
-					`rms_subject` AS sj 
-			  WHERE 
-					sj.`parent`=".$subject_id;
-		
-		return $db->fetchAll($sql);
-	}
+	
 	
 	function getStudentSccoreforEdit($score_id){
 		$db = $this->getAdapter();
@@ -604,86 +584,29 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}
 		
 		$sql="SELECT 
-			sd.student_id,
-					(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS student_name,
-					(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuKhName,
-					(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuEnName,
-					
-					
-		  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-		  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-		  total_score,score,note,sd.amount_subject				
+			  sd.student_id,
+			 (SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS student_name,
+			 (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuKhName,
+			 (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuEnName,
+			  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
+			  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
+			  score,note,
+			  (SELECT amount_subject FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS amount_subject
 		FROM
-	 	 rms_score_detail AS sd 
+	 	 	rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 
-		GROUP BY sd.`student_id` order by 
-		(SELECT ".$studentEnName." FROM `rms_student`AS s 
-		WHERE s.`stu_id`=sd.`student_id`) ASC ";
+			GROUP BY sd.`student_id` order by 
+			(SELECT ".$studentEnName." FROM `rms_student`AS s 
+			WHERE s.`stu_id`=sd.`student_id`) ASC ";
 		return $db->fetchAll($sql);
 	}
-	function getSubjectById($id){
-		$db = $this->getAdapter();
-		$sql =" SELECT
-		sd.student_id,
-		(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-		(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-		(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-		sd.subject_id,
-		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
-		(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-		(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-		(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-		sd.score 
-		FROM
-		rms_score_detail AS sd
-		WHERE sd.score_id =$id ";
-		return $db->fetchAll($sql);
-	}
-	function getScoreStudents($id){
-		$db=$this->getAdapter();
-		$sql="SELECT id,score_id,student_id,subject_id,score 
-		FROM rms_score_detail WHERE score_id=".$id;
-		return $db->fetchAll($sql);
-	}
+	
+	
 	function getGroupStudent($id){
 		$db=$this->getAdapter();
 		$sql="SELECT id,group_id,status FROM rms_score WHERE id=$id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	function getStudentScoreChildSubj($score_id,$student_id,$parent_suj_id){
-		if($student_id==null){return false;}
-		$db = $this->getAdapter();
-		$sql="SELECT 
-				  sd.student_id,
-				  (SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-				  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-				  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-				  sd.subject_id,
-				  (SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
-				  (SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-				  (SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-				  (SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
-				  sd.score 
-				FROM
-				  rms_score_detail AS sd 
-				WHERE sd.score_id = $score_id
-				AND sd.`student_id`= $student_id ORDER BY sd.subject_id ASC ";
-		return $db->fetchAll($sql);
-	}
-	
-
-	function getAllMonth(){
-		$db = $this->getAdapter();
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$lang = $_db->currentlang();
-		if($lang==1){// khmer
-			$month = "month_kh";
-		}else{ // English
-			$month = "month_en";
-		}
-		$sql="select id , $month as month_kh from rms_month where status=1 ";
-		return $db->fetchAll($sql);
-	}	
 	
 	function checkSubjectScore($score_id,$subject){
 		$db = $this->getAdapter();
@@ -716,6 +639,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
 			(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
 			(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
+			sd.orgScore,
 			sd.score 
 		FROM
 		rms_score_detail AS sd
@@ -760,19 +684,19 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	function getSubjectScoreByGroup($data){
 		$db=$this->getAdapter();
 		$sql="SELECT
-		gsjd.*,
-		g.amount_subject AS amount_subjectdivide,
-		gsjd.max_score AS max_subjectscore,
-		gsjd.score_short as cut_score,
-		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
-		(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
-		(SELECT CONCAT(sj.subject_titleen) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name_en,
-		(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
-		(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
-		(gsjd.amount_subject) amtsubject_month,
-		(gsjd.amount_subject_sem) amtsubject_semester,
-		(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
-		(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
+			gsjd.*,
+			g.amount_subject AS amount_subjectdivide,
+			gsjd.max_score AS max_subjectscore,
+			gsjd.score_short as cut_score,
+			(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+			(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
+			(SELECT CONCAT(sj.subject_titleen) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name_en,
+			(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+			(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+			(gsjd.amount_subject) amtsubject_month,
+			(gsjd.amount_subject_sem) amtsubject_semester,
+			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
+			(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
 		FROM
 		rms_group_subject_detail AS gsjd ,
 		rms_group as g

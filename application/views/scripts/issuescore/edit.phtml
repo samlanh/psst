@@ -76,7 +76,7 @@
 													<div class="col-md-4 col-sm-4 col-xs-12">
 														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rs['forMonth']){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
+																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rs['forMonth']){echo "selected='selected'";}?>><?php echo $month['name'];?></option>
 															<?php }}?>
 														</select>
 													</div>

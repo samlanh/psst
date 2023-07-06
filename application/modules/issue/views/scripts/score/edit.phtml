@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_SCORE"));
-	$score = $this->rows_detail;
 	$student = $this->student;
 	$db_score = new Issue_Model_DbTable_DbScore();	 
 ?>	
@@ -79,6 +78,7 @@
 							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input type="hidden" name="score_id" id="score_id" value="<?php echo $this->score_id;?>"  dojoType="dijit.form.TextBox" />
 									<select class="fullside" tabindex="15" readonly="readonly" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllGroupByBranch();">
 										<?php if(!empty($this->row_branch))foreach ($this->row_branch as $row){?>
 										<option value="<?php echo $row['id'];?>" <?php if($this->score['branch_id']==$row['id']){echo "selected";} ?>><?php echo $row['name']?></option>
@@ -127,7 +127,7 @@
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
 										<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-											<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->score['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+											<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->score['for_month']){echo "selected='selected'";}?>><?php echo $month['name']?></option>
 										<?php }}?>
 									</select>
 								</div>
@@ -187,12 +187,6 @@
 							</div>
 							<div class="card-body"></div>
 							<div id="gr-info" style="min-height:90px; background: #3b7acc2b;padding: 10px;border-radius: 5px;border: 1px solid #3b7accc4;padding:10px;border-radius:5px;"></div>
-							<input class="fullside" dojoType="dijit.form.TextBox"  id="year_study" name="year_study" value="" type="hidden"  >
-							<input class="fullside" dojoType="dijit.form.TextBox"  id="degree" name="degree" value="" type="hidden"  >
-							<input class="fullside" dojoType="dijit.form.TextBox"  id="grade" name="grade" value="" type="hidden"  >
-							<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
-							<input class="fullside" dojoType="dijit.form.TextBox"  id="session" name="session" value="" type="hidden"  >
-								
 							<div class="form-group">
 								<label class="control-label col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 							</div>
@@ -342,7 +336,7 @@ function filterStudentOld(){
 				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ 
 					$result_score = $db_score->getStudentScoreBySubjectID($this->score_id, $rs["student_id"],$subj['subject_id']);
 					?>
-					temp += '<td id="score_<?php echo $index;?>"><input required="true" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['score'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
+					temp += '<td id="score_<?php echo $index;?>"><input required="true" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['orgScore'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
 				<?php }?>
 				temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php echo $rs["amount_subject"]; ?>" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 				temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php echo $rs["note"]; ?>" type="text" ></td>';

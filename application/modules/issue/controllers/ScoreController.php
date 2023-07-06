@@ -9,7 +9,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	public function indexAction(){
 		try{
 			$db = new Issue_Model_DbTable_DbScore();
-			$this->view->g_all_name=$db->getGroupSearch();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
@@ -74,16 +73,29 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
-	
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view-> month = $db->getAllMonth();
+		$this->view-> month = $db_global->getAllMonth();
 	}
 	public	function editAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try {
+				
+				$dbs = new Issue_Model_DbTable_DbScore();//by subject
+				if(isset($_data['save_close'])){
+					$rs =  $dbs->updateStudentScore($_data);
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/score");
+				}
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
 		$id=$this->getRequest()->getParam('id');
 		$id = empty($id)?0:$id;
-		$_model = new Issue_Model_DbTable_DbScore();
 		
 		$this->view->score_id = $id;
+		
+		$_model = new Issue_Model_DbTable_DbScore();
 		$row = $_model->getScoreById($id);
 		if (empty($row)){
 			Application_Form_FrmMessage::MessageBacktoOldHistory("NO_RECORD");
@@ -95,42 +107,16 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 		$this->view->score = $row;
 		
-		if($this->getRequest()->isPost()){
-			$_data = $this->getRequest()->getPost();
-			$_data['score_id']=$id;
-			try {
-				$key = new Application_Model_DbTable_DbKeycode();
-				$dbset=$key->getKeyCodeMiniInv(TRUE);
-				$dbs = new Issue_Model_DbTable_DbScore();//by subject
-				
-				if(isset($_data['save_close'])){
-					$rs =  $dbs->updateStudentScore($_data);
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/score");
-				}
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("EDIT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
 		
 		$this->view->student= $_model->getStudentSccoreforEdit($id);
-		$this->view->rows_scor=$_model->getScoreStudents($id);
-		$data=$this->view->rows_detail=$_model->getSubjectById($id);
 		$this->view->row_g=$_model->getGroupStudent($id);
-		
-		$this->view->subjectGroup = $_model->getSubjectByGroup($row['group_id'],null,$row['exam_type']);
+		$this->view->subjectGroup = $_model->getSubjectByGroupScore($row['group_id'],null,$row['exam_type']);
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
-		$this->view->row_year=$db_global->getAllYear();
-		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
 	
-		$db_global=new Application_Model_DbTable_DbGlobal();
-		$this->view->room = $row =$db_global->getAllRoom();		
-		
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view->month = $db->getAllMonth();
+		$this->view->month = $db_global->getAllMonth();
 	}
 	
 	function getStudentAction(){
@@ -147,16 +133,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbScore();
-			$data=$db->getSubjectByGroup($data['groupId'],null,$data['exam_type']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
-	function getChildsubjectAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbScore();
-			$data=$db->getChildSubject($data['subject_id']);
+			$data=$db->getSubjectByGroupScore($data['groupId'],null,$data['exam_type']);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

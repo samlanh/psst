@@ -25,40 +25,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
     	$sql="select key_code,name_en from rms_view where type=4";
     	return $db->fetchAll($sql);
     }
-    function getAllYearGeneration(){
-    	$db= $this->getAdapter();
-    	$sql="	SELECT  tf.id as id,tf.`from_academic`, tf.`to_academic`,tf.`generation`,tf.`time`,s.`stu_id`
-				FROM
-				  `rms_tuitionfee` AS tf,
-				  `rms_student` AS s,
-				  `rms_group_detail_student` AS gds 
-				WHERE 
-					gds.itemType=1 
-					AND s.`stu_id` = gds.`stu_id` 
-				  AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
-    	$row = $db->fetchAll($sql);
-    	if($row){
-    		return $row;
-    	}
-    }
-   function getParentName(){
-   		$db=$this->getAdapter();
-   		$sql="select 
-   				(select subject_titleen from rms_subject where rms_subject.id=rms_score.parent_id) As parent_id
-   			  from 
-   			  	rms_score,
-   			  	rms_score_detail as sd 
-              where 
-   				sd.score_id=rms_score.id
-   			  GROUP BY 
-   				rms_score.academic_id,
-   				rms_score.session_id,
-   				rms_score.group_id,
-   				rms_score.parent_id 
-   				
-   			";
-        return $db->fetchAll($sql);
-   } 
+    
+   
    function getSubjectdByParent(){
    	$db=$this->getAdapter();
    		$sql="SELECT subject_id,parent_id,(SELECT subject_titleen FROM rms_subject WHERE rms_subject.id=rms_score.subject_id) AS subject_name 
@@ -831,70 +799,13 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	   	$sql.=' GROUP BY sd.`subject_id`';
    	return $db->fetchAll($sql);
    }
-   public function getStundentEnglishMonthlyScore($search){ // for rpt-gep-monthlyscore
-   	$db = $this->getAdapter();
-   	$sql="SELECT
-		s.`id`,sd.`group_id`,g.`group_code`,
-		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-		(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-		
-		`g`.`semester` AS `semester`, 
-		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-		sd.`student_id`,st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`,s.`reportdate`,DATE_FORMAT(s.`reportdate`,'%Y-%m') AS month_of_semester,
-		g.`start_date`
-		 FROM `rms_score` AS s, 
-		 `rms_score_detail` AS sd,
-		 `rms_student` AS st,
-		 `rms_group` AS g
-		 WHERE s.`id`=sd.`score_id` AND st.`stu_id`=sd.`student_id`
-		 AND g.`id`=sd.`group_id` AND s.status = 1  AND `g`.`degree` NOT IN (1,2)
-   	";
-   	$where='';
-   	$from_date =(empty($search['start_date']))? '1': " s.reportdate >= '".$search['start_date']." 00:00:00'";
-   	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
-   	$where = " AND ".$from_date." AND ".$to_date;
    
-   	if(!empty($search['group_name'])){
-   		$where.= " AND sd.group_id =".$search['group_name'];
-   	}
-   	if(!empty($search['degree_english'])){
-   		$where.=" AND `g`.`degree` =".$search['degree_english'];
-   	}
-   	if(!empty($search['study_year'])){
-   		$where.=" AND g.academic_year =".$search['study_year'];
-   	}
-   	if(!empty($search['grade_english'])){
-   		$where.=" AND `g`.`grade` =".$search['grade_english'];
-   	}
-   	if(!empty($search['session'])){
-   		$where.=" AND `g`.`session` =".$search['session'];
-   	}
-   	$order = "  GROUP BY sd.`student_id`, DATE_FORMAT(s.`reportdate`,'%Y-%m') ORDER BY s.`reportdate`,sd.`group_id`,sd.`student_id` ASC";
-   	return $db->fetchAll($sql.$where.$order);
-   }
-   public function getTotalWeeklyScoreBySubject($group_id,$student_id,$subject_id,$score_type,$report_date){
-   	$db = $this->getAdapter();
-   	$sql="SELECT
-   	 sd.`student_id`,sd.`subject_id`,SUM(sd.`score`) AS score,DATE_FORMAT(s.`reportdate`,'%Y-%m') AS DATE
-	 FROM  `rms_score_detail` AS sd,`rms_score` AS s
-	WHERE 
-	s.id=sd.`score_id` AND
-	s.`type_score`=$score_type AND sd.`student_id`=$student_id AND s.`group_id`=$group_id AND sd.`subject_id`=$subject_id
-	AND DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$report_date','%Y-%m')
-	GROUP BY DATE_FORMAT(s.`reportdate`,'%Y-%m')
-   	";
-   	return $db->fetchRow($sql);
-   }
    
    function getAmountWeeklyscoreByGroup($group_id,$monthly_score){
    	$db = $this->getAdapter();
    	$sql= "SELECT COUNT(s.id) AS amount_weeklyscore
 	 FROM  	`rms_score` AS s 
 	 WHERE s.`group_id`=$group_id  AND DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$monthly_score','%Y-%m')"; 
-//    	echo $sql;exit();
    	return $db->fetchOne($sql);
    }
    
@@ -945,100 +856,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	return $db->fetchAll($sql.$where.$order);
    }
    
-   public function getStundetScoreList($search){ // fro rpt-score
-   	$db = $this->getAdapter();
-   	$sql="SELECT 
-   			s.`id`, 
-   			g.`branch_id`,
-   			s.`group_id`, 
-   			g.`group_code`,
-   			title_score,
-   			s.for_month,
-   			s.for_semester,
-   			s.note,
-   			
-   			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
-   			(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-	   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1)  LIMIT 1 )AS grade,
-	   	`g`.`semester` AS `semester`,
-	   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-	   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`, (SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month, s.for_semester,
-	   	s.reportdate
-	   	FROM `rms_teacherscore` AS s, 
-   			`rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 ";
-   	$where='';
-   	if(!empty($search['title'])){
-   		$s_where=array();
-   		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
-   		$s_where[]=" REPLACE(s.title_score,' ','') LIKE '%{$s_search}%'";
-   		$s_where[]=" REPLACE(s.note,' ','') LIKE '%{$s_search}%'";
-   		$s_where[]=" REPLACE(s.for_semester,' ','') LIKE '%{$s_search}%'";
-   		$where.=' AND ('.implode(' OR ', $s_where).')';
-   	}
-   	if(!empty($search['group_name'])){
-   		$where.= " AND g.id =".$search['group_name'];
-   	}
-   	if($search['degree']>0){
-   		$where.=" AND `g`.`degree` =".$search['degree'];
-   	}
-   	if($search['for_month']>0){
-   		$where.=" AND s.for_month =".$search['for_month'];
-   	}
-   	if($search['study_year']>0){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
-   	}
-   	if($search['grade']>0){
-   		$where.=" AND `g`.`grade` =".$search['grade'];
-   	}
-   	if($search['session']>0){
-   		$where.=" AND `g`.`session` =".$search['session'];
-   	}
-   	if($search['room']>0){
-   		$where.=" AND `g`.`room_id` =".$search['room'];
-   	}
-   	if($search['for_month']>0){
-   		$where.= " AND s.for_month =".$search['for_month'];
-   	}
-   	
-   	$_db = new Application_Model_DbTable_DbGlobal();
-   	$where.= $_db->getAccessPermission('s.branch_id');
-   	
-   	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
-   	return $db->fetchAll($sql.$where.$order);
-   }
-   
-   /*public function getStundetScoreDetail($id,$group_id){ // fro student score by teacher input
-   	$db = $this->getAdapter();
-   	$sql="SELECT tsd.*,
-		ts.`academic_id`,
-		ts.`group_id`,
-		g.`group_code`,
-		ts.`for_academic_year`,
-		(SELECT month_kh FROM rms_month WHERE rms_month.id = ts.for_month LIMIT 1) AS for_month,
-		ts.`for_month`,ts.`for_semester`,ts.`for_year`,
-		ts.`date_input`,
-		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,
-		(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title,
-		(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id= ts.`teacher_id` LIMIT 1) AS teacher_name
-		FROM `rms_teacherscore_detail` AS tsd,
-		`rms_teacherscore` AS ts,
-		`rms_student` AS st,
-		`rms_group` AS g,
-		`rms_subject` AS sj
-		WHERE ts.`id`=tsd.`score_id`
-		AND st.`stu_id`=tsd.`student_id`
-		AND g.`id`=ts.`group_id`
-		AND sj.`id` = tsd.`subject_id`
-		AND tsd.`student_id` = $id and tsd.group_id = $group_id";
-   	$where='';
-   	$order = "  GROUP BY sj.id ASC 	";
-//    	if($limit==2){
-//    		$limit = " limit 5";
-//    	}else{
-//    		$limit = " ";
-//    	}
-   	return $db->fetchAll($sql.$where.$order);
-   }*/
+  
    function getSubjectScorebystudentandgroup($group_id,$student_id){//certificate of foundation year
    	$db = $this->getAdapter();
    	$sql ="SELECT

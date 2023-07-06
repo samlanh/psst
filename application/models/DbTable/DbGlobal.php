@@ -1474,17 +1474,17 @@ function getAllgroupStudyNotPass($action=null){
   	
   	
   	
-  	$sql=" SELECT id ,CONCAT($field,
-  		CASE
-		  	WHEN subject_lang =1 THEN '(ខ្មែរ)'
-		  	WHEN subject_lang =2 THEN '(English)'
-		  	ELSE ''
-		  	END) AS name,
+  	$sql=" SELECT id ,CONCAT($field,CASE WHEN subject_lang =1 THEN '(ខ្មែរ)' WHEN subject_lang =2 THEN '(English)' ELSE '' END) AS name,
   			shortcut 
   		FROM `rms_subject` WHERE status=1 AND subject_titlekh != '' ";
   	
+  	if ($typesubject==1){
+  		$sql .=' AND type_subject=1 ';
+  	}
+  	
   	$user = $this->getUserInfo();
   	$level = $user['level'];
+  	
   	if ($level!=1){
   		$SchoolOptionarr = $this->getAllSchoolOption();
   		if (!empty($SchoolOptionarr)){
@@ -1513,9 +1513,7 @@ function getAllgroupStudyNotPass($action=null){
   		}
   		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
   	}
-  	if ($typesubject==1){
-  		$sql .=' AND type_subject=1 ';
-  	}
+  	
   	
   	$sql.=" ORDER BY subject_lang ASC, $field ASC ";
   	return $db->fetchAll($sql);
@@ -2754,7 +2752,7 @@ function getAllgroupStudyNotPass($action=null){
   	}else{ // English
   		$month = "month_en";
   	}
-  	$sql="SELECT id , $month as name from rms_month where status=1 ";
+  	$sql="SELECT id , $month as name,month_kh from rms_month where status=1 ";
   	return $db->fetchAll($sql);
   }
   function getAllCardFormat(){

@@ -82,8 +82,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view->month = $db->getAllMonth();
+		
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -105,8 +104,6 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$this->view->score_id = $id;
 		$this->view->score = $_model->getScoreById($id);
 		$this->view->student= $_model->getStudentSccoreforEdit($id);
-		$this->view->rows_scor=$_model->getScoreStudents($id);
-		$data=$this->view->rows_detail=$_model->getSubjectById($id);
 		$this->view->row_g=$_model->getGroupStudent($id);
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
@@ -119,9 +116,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
-		
-		$db = new Issue_Model_DbTable_DbScore();
-		$this->view->month = $db->getAllMonth();
+	
 	}
 	
 	function getStudentAction(){
@@ -133,25 +128,6 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getSubjectbygroupAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbScore();
-			$arr = array(
-				'group_id'=>$data['group'],
-		    );
-			$data=$db->getSubjectScoreByGroup($arr);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
-	function getChildsubjectAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbScore();
-			$data=$db->getChildSubject($data['subject_id']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+	
+	
 }

@@ -246,20 +246,14 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 		WHERE gsd.`group_id`= $group_id";
 		return $db->fetchAll($sql);
 	}
-	function getAttendencetByID($id){
+	function getAttendencetByIDDiscipline($id){
 		$db=$this->getAdapter();
-// 		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id;
 		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id." AND sd.type=2";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('sd.`branch_id`');
 		return $db->fetchRow($sql);
 	}
 	
-	function getAttendeceStatus($attendence_id,$stu_id){
-		$db = $this->getAdapter();
-		$sql="SELECT sad.`attendence_status`,sad.`stu_id`,sad.`description`  FROM `rms_student_attendence_detail` AS sad WHERE sad.`attendence_id`=$attendence_id AND sad.`stu_id`=$stu_id";
-		return $db->fetchRow($sql);
-	}
 	
 }
 

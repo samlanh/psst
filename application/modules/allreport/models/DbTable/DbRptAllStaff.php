@@ -68,7 +68,6 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.= $dbp->getAccessPermission('g.branch_id');
-//     	echo $sql.$where.$order_by;exit();
     	return $db->fetchAll($sql.$where.$order_by);
     }
 	function getAllTeacher($search){

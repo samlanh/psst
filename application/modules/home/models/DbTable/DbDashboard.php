@@ -73,24 +73,26 @@
     		$colunmname='title';
     	}
     	$sql="SELECT d.*,
-			(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = d.branch_id LIMIT 1) AS branch_name,
-			(SELECT photo FROM `rms_branch` WHERE rms_branch.br_id = d.branch_id LIMIT 1) AS branch_photo,			
-			s.stu_code,
-			s.stu_khname,
-			s.stu_enname,
-			s.last_name,
-			s.tel,
-			s.sex,
-			s.photo,
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = d.academic_year LIMIT 1) AS academic,
-			(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=d.degree AND TYPE=1 LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=d.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=d.group LIMIT 1 ) AS group_name,
-			(SELECT $title AS `name` FROM rms_view AS v WHERE v.type=5 AND v.key_code=d.type LIMIT 1) AS type_drop
-			FROM `rms_student_drop` AS d,
-			`rms_student` AS s
-			WHERE s.stu_id = d.stu_id and d.status=1 
-			AND d.id NOT IN ((SELECT rr.notification_id FROM `rms_read_unread_notif` AS rr WHERE rr.notif_type=1))
+				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = d.branch_id LIMIT 1) AS branch_name,
+				(SELECT photo FROM `rms_branch` WHERE rms_branch.br_id = d.branch_id LIMIT 1) AS branch_photo,			
+				s.stu_code,
+				s.stu_khname,
+				s.stu_enname,
+				s.last_name,
+				s.tel,
+				s.sex,
+				s.photo,
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = d.academic_year LIMIT 1) AS academic,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=d.degree AND TYPE=1 LIMIT 1) AS degree,
+				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=d.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=d.group LIMIT 1 ) AS group_name,
+				(SELECT $title AS `name` FROM rms_view AS v WHERE v.type=5 AND v.key_code=d.type LIMIT 1) AS type_drop
+			FROM 
+				`rms_student_drop` AS d,
+				`rms_student` AS s
+			WHERE s.stu_id = d.stu_id 
+				AND d.status=1 
+				AND d.id NOT IN ((SELECT rr.notification_id FROM `rms_read_unread_notif` AS rr WHERE rr.notif_type=1))
 			";
     	$sql.=$dbgb->getAccessPermission('d.branch_id');
     	$order =" ORDER BY d.id DESC";

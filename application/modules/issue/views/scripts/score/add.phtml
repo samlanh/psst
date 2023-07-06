@@ -131,7 +131,7 @@
 						                <div class="col-md-7 col-sm-7 col-xs-12">
 						                	<select dojoType="dijit.form.FilteringSelect" onchange="getInfoData();" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
 												<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-													<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+													<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['name']?></option>
 												<?php }}?>
 											</select>
 						                </div>
@@ -378,7 +378,7 @@ function filterStudent(){
 						temp += '<td id="score_'+j+'"><input value="'+totalAverage+'" data-dojo-props="constraints:{min:0,max:'+subjectList[j].max_subjectscore+'},'+invalidesms+'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subjectList[j].subject_id+'"  name="score_'+inx+'_'+subjectList[j].subject_id+'" /></td>';
 					}
 					
-					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
+					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+j+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					
 					temp+= '</tr>';

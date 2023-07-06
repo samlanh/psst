@@ -9,24 +9,14 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	return $session_user->user_id;
     	 
     }
-    public function getAllCar($search){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT carid,carname,drivername,tel,zone,note,status FROM rms_car ";
-    	$where=' where 1';
-    	$order=" order by id DESC";
-    	
-
-    	return $db->fetchAll($sql.$where.$order);
-    	 
-    }
    
 
     
-    function getAllSession(){
-    	$db=$this->getAdapter();
-    	$sql="select key_code,name_en from rms_view where type=4";
-    	return $db->fetchAll($sql);
-    }
+//     function getAllSession(){
+//     	$db=$this->getAdapter();
+//     	$sql="select key_code,name_en from rms_view where type=4";
+//     	return $db->fetchAll($sql);
+//     }
     
     function getAllStu($search){
     	$db= $this->getAdapter();
@@ -118,22 +108,7 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     		return $row;
     	}
     }
-    function getAllYearGeneration(){
-    	$db= $this->getAdapter();
-    	$sql="	SELECT  tf.id as id,tf.`from_academic`, tf.`to_academic`,tf.`generation`,tf.`time`,s.`stu_id`
-				FROM
-				  `rms_tuitionfee` AS tf,
-				  `rms_student` AS s,
-				  `rms_group_detail_student` AS gds 
-				WHERE 
-					gds.itemType=1 
-					AND s.`stu_id` = gds.`stu_id` 
-				  AND s.`academic_year` = tf.`id` GROUP BY tf.`from_academic`,tf.`to_academic`,tf.`generation`";
-    	$row = $db->fetchAll($sql);
-    	if($row){
-    		return $row;
-    	}
-    }
+    
     
     public function getChangeType(){
     	$db=$this->getAdapter();

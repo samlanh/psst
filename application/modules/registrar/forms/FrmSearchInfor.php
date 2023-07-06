@@ -227,10 +227,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 			'itemsType'=>2
 		);
 		
-// 		$ser_rows = $db->getAllItemDetail($param);
-// 		if(!empty($ser_rows))foreach($ser_rows As $row)$opt_ser[$row['id']]=$row['name'];
-// 		$service->setMultiOptions($opt_ser);
-		
 		$pay_term = new Zend_Dojo_Form_Element_FilteringSelect('pay_term');
 		$pay_term->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("PAYMENT_TERM"),

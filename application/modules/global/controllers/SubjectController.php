@@ -187,7 +187,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 				$db = new Application_Model_DbTable_DbGlobal();
 				$subject = $db->getAllSubjectName($schoolOption,1);
 				array_unshift($subject, array ('id' => '', 'name' => $this->tr->translate("ADD_NEW")));
-				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+				array_unshift($subject, array ('id' => 0, 'name' => ''));
 				print_r(Zend_Json::encode($subject));
 				exit();
 			}
